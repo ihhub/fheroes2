@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,45 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MAGEGUILD_H
-#define H2MAGEGUILD_H
+#pragma once
 
-#include "gamedefs.h"
-#include "spell_storage.h"
+#include "image.h"
 
-class Castle;
-class HeroBase;
-
-class MageGuild
+namespace fheroes2
 {
-public:
-    MageGuild(){};
-
-    void initialize( int race, bool libraryCap );
-    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
-    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
-
-private:
-    friend StreamBase & operator<<( StreamBase &, const MageGuild & );
-    friend StreamBase & operator>>( StreamBase &, MageGuild & );
-
-    SpellStorage general;
-    SpellStorage library;
-};
-
-StreamBase & operator<<( StreamBase &, const MageGuild & );
-StreamBase & operator>>( StreamBase &, MageGuild & );
-
-class RowSpells
-{
-public:
-    RowSpells( const Point &, const Castle &, int );
-    void Redraw( void );
-    bool QueueEventProcessing( void );
-
-private:
-    Rects coords;
-    SpellStorage spells;
-};
-
-#endif
+    // Save an image into file. 'background' represents palette index from the original palette
+    bool Save( const Image & image, const std::string & path, uint8_t background = 23 );
+}

@@ -75,7 +75,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -84,11 +84,14 @@ int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Her
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) { // it's a hack for now
+                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
                     strs->append( _( "Graveyard robber" ) );
                 }
-                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) { // and it is a hack too
+                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
                     strs->append( _( "Shipwreck robber" ) );
+                }
+                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
+                    strs->append( _( "Pyramid raided" ) );
                 }
                 else {
                     strs->append( MP2::StringObject( objs[ii] ) );
@@ -492,6 +495,30 @@ int Heroes::GetManaIndexSprite( void ) const
     return 25 >= r ? r : 25;
 }
 
+int Heroes::getStatsValue() const
+{
+    // experience and artifacts don't matter here, only natural stats
+    return attack + defense + power + knowledge + secondary_skills.GetTotalLevel();
+}
+
+double Heroes::getRecruitValue() const
+{
+    return army.GetStrength() + ( ( bag_artifacts.getArtifactValue() * 2.0 + getStatsValue() ) * SKILL_VALUE );
+}
+
+double Heroes::getMeetingValue( const Heroes & recievingHero ) const
+{
+    const uint32_t artCount = bag_artifacts.CountArtifacts();
+    const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
+
+    double artifactValue = bag_artifacts.getArtifactValue() * 2.0;
+    if ( artCount > canFit ) {
+        artifactValue = canFit * ( artifactValue / artCount );
+    }
+
+    return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
+}
+
 int Heroes::GetAttack( void ) const
 {
     return GetAttack( NULL );
@@ -594,8 +621,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             point += acount * 1000;
 
         // visited object
-        if ( isObjectTypeVisited( MP2::OBJ_LIGHTHOUSE ) )
-            point += 500;
+        point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
         Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
@@ -911,7 +937,7 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
 
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isObject ), object ) );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 /* set visited cell */
@@ -951,6 +977,17 @@ void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
+}
+
+void Heroes::markHeroMeeting( int heroID )
+{
+    if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
+        visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+bool Heroes::hasMetWithHero( int heroID ) const
+{
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( heroID, MP2::OBJ_HEROES ) );
 }
 
 int Heroes::GetSpriteIndex( void ) const
@@ -1001,7 +1038,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
             art() == Artifact::MAGIC_BOOK ? Dialog::Message(
-                "",
+                GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
                                           : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
@@ -1169,7 +1206,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
         if ( isControlHuman() ) {
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::Message( "", header, Font::BIG, Dialog::OK );
+            Dialog::Message( GetName(), header, Font::BIG, Dialog::OK );
         }
         return false;
     }
@@ -1257,12 +1294,12 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
-int Heroes::lastGroundRegion() const
+uint32_t Heroes::lastGroundRegion() const
 {
     return _lastGroundRegion;
 }
 
-void Heroes::setLastGroundRegion( int regionID )
+void Heroes::setLastGroundRegion( uint32_t regionID )
 {
     _lastGroundRegion = regionID;
 }
@@ -1325,6 +1362,12 @@ u32 Heroes::GetVisionsDistance( void ) const
 int Heroes::GetDirection( void ) const
 {
     return direction;
+}
+
+void Heroes::setDirection( int directionToSet )
+{
+    if ( directionToSet != Direction::UNKNOWN )
+        direction = directionToSet;
 }
 
 /* return route range in days */
@@ -1821,22 +1864,6 @@ struct InCastleAndGuardian : public std::binary_function<const Castle *, Heroes 
     }
 };
 
-struct InCastleNotGuardian : public std::binary_function<const Castle *, Heroes *, bool>
-{
-    bool operator()( const Castle * castle, Heroes * hero ) const
-    {
-        return castle->GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN );
-    }
-};
-
-struct InJailMode : public std::binary_function<s32, Heroes *, bool>
-{
-    bool operator()( s32 index, Heroes * hero ) const
-    {
-        return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex();
-    }
-};
-
 AllHeroes::AllHeroes()
 {
     reserve( HEROESMAXCOUNT + 2 );
@@ -1928,13 +1955,16 @@ Heroes * VecHeroes::Get( const Point & center ) const
 
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind1st( InCastleNotGuardian(), &castle ) );
+    const_iterator it
+        = std::find_if( begin(), end(), [castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
     return end() != it ? *it : NULL;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(), std::bind1st( InCastleAndGuardian(), &castle ) ) : end();
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians()
+                            ? std::find_if( begin(), end(), [castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
+                            : end();
     return end() != it ? *it : NULL;
 }
 
@@ -2016,7 +2046,7 @@ void AllHeroes::Scoute( int colors ) const
 
 Heroes * AllHeroes::FromJail( s32 index ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind1st( InJailMode(), index ) );
+    const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : NULL;
 }
 

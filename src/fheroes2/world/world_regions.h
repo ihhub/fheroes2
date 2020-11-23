@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,45 +18,54 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2MAGEGUILD_H
-#define H2MAGEGUILD_H
+#pragma once
 
-#include "gamedefs.h"
-#include "spell_storage.h"
+#include <set>
+#include <vector>
 
-class Castle;
-class HeroBase;
-
-class MageGuild
+enum
 {
-public:
-    MageGuild(){};
-
-    void initialize( int race, bool libraryCap );
-    void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;
-    SpellStorage GetSpells( int guildLevel, bool hasLibrary, int spellLevel = -1 ) const;
-
-private:
-    friend StreamBase & operator<<( StreamBase &, const MageGuild & );
-    friend StreamBase & operator>>( StreamBase &, MageGuild & );
-
-    SpellStorage general;
-    SpellStorage library;
+    REGION_NODE_BLOCKED = 0,
+    REGION_NODE_OPEN = 1,
+    REGION_NODE_BORDER = 2,
+    REGION_NODE_FOUND = 3
 };
 
-StreamBase & operator<<( StreamBase &, const MageGuild & );
-StreamBase & operator>>( StreamBase &, MageGuild & );
-
-class RowSpells
+struct MapRegionNode
 {
-public:
-    RowSpells( const Point &, const Castle &, int );
-    void Redraw( void );
-    bool QueueEventProcessing( void );
+    int index = -1;
+    uint32_t type = REGION_NODE_BLOCKED;
+    uint16_t mapObject = 0;
+    uint16_t passable = 0;
+    bool isWater = false;
 
-private:
-    Rects coords;
-    SpellStorage spells;
+    MapRegionNode() {}
+    MapRegionNode( int index )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+    {}
+    MapRegionNode( int index, uint16_t pass, bool water )
+        : index( index )
+        , type( REGION_NODE_OPEN )
+        , passable( pass )
+        , isWater( water )
+    {}
 };
 
-#endif
+struct MapRegion
+{
+public:
+    uint32_t _id = REGION_NODE_FOUND;
+    bool _isWater = false;
+    std::set<int> _neighbours;
+    std::vector<MapRegionNode> _nodes;
+    size_t _lastProcessedNode = 0;
+
+    MapRegion(){};
+    MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
+    std::vector<int> getNeighbours() const;
+    size_t getNeighboursCount() const;
+    std::vector<IndexObject> getObjectList() const;
+    int getObjectCount() const;
+    double getFogRatio( int color ) const;
+};

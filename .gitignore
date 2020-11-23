@@ -45,6 +45,7 @@
 *.tmp
 # visual studio directory
 .vs
+.vscode
 
 # Ignore Heroes of Might & Magic II game files
 *.agg

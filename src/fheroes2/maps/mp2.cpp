@@ -117,6 +117,10 @@ int MP2::GetICNObject( int tileset )
     case 38:
         return ICN::OBJNTWRD;
 
+    // mine guardians (elementals)
+    case 39:
+        return ICN::OBJNXTRA;
+
     // water object
     case 40:
         return ICN::OBJNWAT2;
@@ -745,6 +749,7 @@ bool MP2::isWeekLife( int obj )
 
     // for AI
     case OBJ_COAST:
+    case OBJ_HEROES:
 
         return true;
 
@@ -950,6 +955,40 @@ bool MP2::isHeroUpgradeObject( int obj )
     case MP2::OBJ_SHRINE3:
     case MP2::OBJ_WITCHSHUT:
     case MP2::OBJ_XANADU:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+bool MP2::isMonsterDwelling( int obj )
+{
+    switch ( obj ) {
+    case OBJ_WATCHTOWER:
+    case OBJ_EXCAVATION:
+    case OBJ_CAVE:
+    case OBJ_TREEHOUSE:
+    case OBJ_ARCHERHOUSE:
+    case OBJ_GOBLINHUT:
+    case OBJ_DWARFCOTT:
+    case OBJ_HALFLINGHOLE:
+    case OBJ_PEASANTHUT:
+    case OBJ_THATCHEDHUT:
+    case OBJ_RUINS:
+    case OBJ_TREECITY:
+    case OBJ_WAGONCAMP:
+    case OBJ_DESERTTENT:
+    case OBJ_WATERALTAR:
+    case OBJ_AIRALTAR:
+    case OBJ_FIREALTAR:
+    case OBJ_EARTHALTAR:
+    case OBJ_BARROWMOUNDS:
+    case OBJ_CITYDEAD:
+    case OBJ_TROLLBRIDGE:
+    case OBJ_DRAGONCITY:
         return true;
 
     default:

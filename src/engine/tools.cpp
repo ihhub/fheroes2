@@ -162,19 +162,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( str.end() == std::find_if( str.begin(), str.end(), std::not1( std::ptr_fun<int, int>( std::isdigit ) ) ) ) {
+    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && str.end() == std::find_if( str.begin() + 1, str.end(), std::not1( std::ptr_fun<int, int>( std::isdigit ) ) ) ) {
+              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && str.end() == std::find_if( str.begin() + 2, str.end(), std::not1( std::ptr_fun<int, int>( std::isxdigit ) ) ) ) {
+             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char & c ) { return !std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -808,11 +808,8 @@ std::string EncodeString( const std::string & str, const char * charset )
     char * outbuf1 = new char[outbytesleft];
     char * outbuf2 = outbuf1;
 
-#if defined( __MINGW32__ ) || defined( __MINGW64__ )
-    size_t reslen = iconv( cd, &inbuf, &inbytesleft, &outbuf1, &outbytesleft );
-#else
     size_t reslen = iconv( cd, const_cast<char **>( &inbuf ), &inbytesleft, &outbuf1, &outbytesleft );
-#endif
+
     iconv_close( cd );
 
     if ( reslen != ( size_t )( -1 ) )

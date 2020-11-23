@@ -96,7 +96,7 @@ void Battle::Board::SetPositionQuality( const Unit & b )
         const Unit * unit = *it1;
 
         if ( unit && unit->isValid() ) {
-            const s32 unitStrength = GetCell( unit->GetHeadIndex() )->GetQuality();
+            const s32 unitStrength = unit->GetScoreQuality( b );
             const Indexes around = GetAroundIndexes( *unit );
 
             for ( Indexes::const_iterator it2 = around.begin(); it2 != around.end(); ++it2 ) {
@@ -156,7 +156,7 @@ s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
 
 void Battle::Board::SetScanPassability( const Unit & b )
 {
-    std::for_each( begin(), end(), std::mem_fun_ref( &Cell::ResetDirection ) );
+    std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
 
     at( b.GetHeadIndex() ).SetDirection( CENTER );
 
@@ -358,14 +358,6 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-struct IndexDistanceEqualDistance : std::binary_function<IndexDistance, u32, bool>
-{
-    bool operator()( const IndexDistance & id, u32 dist ) const
-    {
-        return id.second == dist;
-    };
-};
-
 Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * black ) const
 {
     Indexes result;
@@ -387,7 +379,8 @@ Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * 
 
     if ( 1 < dists.size() ) {
         std::sort( dists.begin(), dists.end(), IndexDistance::Shortest );
-        dists.resize( std::count_if( dists.begin(), dists.end(), std::bind2nd( IndexDistanceEqualDistance(), dists.front().second ) ) );
+        const uint32_t distFront = dists.front().second;
+        dists.resize( std::count_if( dists.begin(), dists.end(), [distFront]( const IndexDistance & v ) { return v.second == distFront; } ) );
     }
 
     if ( dists.size() ) {

@@ -286,7 +286,7 @@ void Players::Init( const Maps::FileInfo & fi )
             player->SetControl( CONTROL_AI );
             player->SetFriends( *it | fi.unions[Color::GetIndex( *it )] );
 
-            if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().GameType( Game::TYPE_MULTI ) )
+            if ( ( *it & fi.HumanOnlyColors() ) && Settings::Get().IsGameType( Game::TYPE_MULTI ) )
                 player->SetControl( CONTROL_HUMAN );
             else if ( *it & fi.AllowHumanColors() )
                 player->SetControl( player->GetControl() | CONTROL_HUMAN );
@@ -318,7 +318,7 @@ Player * Players::Get( int color )
 bool Players::isFriends( int player, int colors )
 {
     const Player * ptr = Get( player );
-    return ptr ? ptr->GetFriends() & colors : false;
+    return ptr ? ( ptr->GetFriends() & colors ) != 0 : false;
 }
 
 void Players::SetPlayerRace( int color, int race )
@@ -403,9 +403,9 @@ void Players::SetPlayerInGame( int color, bool f )
 void Players::SetStartGame( void )
 {
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFocusReset ) );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFixRandomRace ) );
-    for_each( begin(), end(), std::ptr_fun( &PlayerFixMultiControl ) );
+    for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
+    for_each( begin(), end(), []( Player * player ) { PlayerFixRandomRace( player ); } );
+    for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
     current_color = Color::NONE;
     human_colors = Color::NONE;

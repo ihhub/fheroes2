@@ -122,8 +122,6 @@ public:
     static bool isspace( int );
     static int CharWidth( int, int ft );
     static int CharHeight( int ft );
-    static int CharAscent( int ft );
-    static int CharDescent( int ft );
 
 private:
     std::vector<u16> message;

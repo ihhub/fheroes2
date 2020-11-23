@@ -85,10 +85,12 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
             if ( !result.second )
                 result.second = Board::GetCell( head, b.isReflect() ? RIGHT : LEFT );
 
-            if ( result.second )
+            if ( result.second ) {
                 std::swap( result.first, result.second );
-            else
+            }
+            else {
                 DEBUG( DBG_BATTLE, DBG_WARN, "NULL pointer, " << b.String() << ", dst: " << head );
+            }
         }
     }
 
@@ -103,6 +105,11 @@ bool Battle::Position::isReflect( void ) const
 bool Battle::Position::isValid( void ) const
 {
     return first && ( !second || ( ( LEFT | RIGHT ) & Board::GetDirection( first->GetIndex(), second->GetIndex() ) ) );
+}
+
+bool Battle::Position::contains( int cellIndex ) const
+{
+    return ( first && first->GetIndex() == cellIndex ) || ( second && second->GetIndex() == cellIndex );
 }
 
 Battle::Cell::Cell()

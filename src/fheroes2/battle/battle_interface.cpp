@@ -211,9 +211,9 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool f ) override
+        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool ) override
         {
-            Text text( str, Font::BIG );
+            const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
@@ -1052,7 +1052,6 @@ void Battle::Interface::RedrawPartialStart()
     Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
-    RedrawOpponents();
     if ( castle )
         RedrawCastle3( *castle );
     RedrawArmies();
@@ -1123,6 +1122,11 @@ void Battle::Interface::RedrawArmies( void )
 
             if ( _movingUnit != b && b->isValid() )
                 RedrawTroopCount( *b );
+        }
+
+        // Draw heroes now, because their position must be between second and third rows.
+        if ( ii == 2 * ARENAW - 1 ) {
+            RedrawOpponents();
         }
     }
 
@@ -1309,14 +1313,16 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const fheroes2::Sprite & bar = fheroes2::AGG::GetICN( ICN::TEXTBAR, GetIndexIndicator( unit ) );
     const bool isReflected = unit.isReflect();
 
-    const int tileInFront = Board::GetIndexDirection( unit.GetHeadIndex(), isReflected ? Battle::LEFT : Battle::RIGHT );
+    const int32_t monsterIndex = unit.GetHeadIndex();
+    const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
+    const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
 
     s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
     const s32 sy = rt.y + rt.h - bar.height() - ( isReflected ? 23 : 11 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
-    if ( xOffset > 0 && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
+    if ( xOffset > 0 && isValidFrontMonster && Board::isValidIndex( tileInFront ) && Board::GetCell( tileInFront )->GetUnit() != NULL )
         xOffset = 0;
 
     sx += isReflected ? -xOffset : xOffset;
@@ -1854,9 +1860,12 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
 
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
-        const s32 index_new = board.GetIndexAbsPosition( GetMouseCursor() );
-        if ( index_pos != index_new ) {
-            index_pos = index_new;
+        int32_t indexNew = -1;
+        if ( le.MouseCursor( Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.w, _interfacePosition.h - status.h ) ) ) {
+            indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
+        }
+        if ( index_pos != indexNew ) {
+            index_pos = indexNew;
             humanturn_redraw = true;
         }
 
@@ -2107,7 +2116,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
 }
 
-void Battle::Interface::HumanCastSpellTurn( const Unit & b, Actions & a, std::string & msg )
+void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std::string & msg )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -2286,7 +2295,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
 {
     const s32 index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
@@ -2863,6 +2872,10 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     const s32 destIndex = pos.GetHead()->GetIndex();
+    // check if we're already there
+    if ( unit.GetPosition().contains( destIndex ) )
+        return;
+
     const Rect & pos1 = unit.GetRectPosition();
     const Rect & pos2 = Board::GetCell( destIndex )->GetPos();
 
@@ -2987,7 +3000,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
         RedrawTargetsWithFrameAnimation( dst, targets, ICN::FIREBAL2, M82::FromSpell( spell() ) );
         break;
     case Spell::METEORSHOWER:
-        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ) );
+        RedrawTargetsWithFrameAnimation( dst, targets, ICN::METEOR, M82::FromSpell( spell() ), 1 );
         break;
     case Spell::COLDRING:
         RedrawActionColdRingSpell( dst, targets );
@@ -4062,8 +4075,8 @@ void Battle::Interface::RedrawActionArmageddonSpell()
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
-            const int16_t offsetX = Rand::Get( -7, 7 );
-            const int16_t offsetY = Rand::Get( -7, 7 );
+            const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const Rect initialArea( area.x, area.y, area.w, area.h );
             Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
@@ -4113,8 +4126,8 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
-            const int16_t offsetX = Rand::Get( -7, 7 );
-            const int16_t offsetY = Rand::Get( -7, 7 );
+            const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
+            const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const Rect initialArea( area.x, area.y, area.w, area.h );
             const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
@@ -4180,11 +4193,11 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
 }
 
-void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsInfo & targets, int icn, int m82 )
+void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
@@ -4197,7 +4210,9 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
-    while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
+    uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
+
+    while ( le.HandleEvents() && frame < frameCount ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
@@ -4211,6 +4226,11 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( s32 dst, const TargetsI
                 if ( ( *it ).defender && ( *it ).damage )
                     ( *it ).defender->IncreaseAnimFrame( false );
             ++frame;
+
+            if ( frame == frameCount && repeatCount > 0 ) {
+                --repeatCount;
+                frame = 0;
+            }
         }
     }
 
@@ -4566,7 +4586,7 @@ void Battle::PopupDamageInfo::Reset( void )
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
+void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 {
     if ( redraw ) {
         Cursor::Get().Hide();
@@ -4625,7 +4645,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int maxh )
     }
 }
 
-bool Battle::Interface::NetworkTurn( Result & result )
+bool Battle::Interface::NetworkTurn( Result & /*result*/ )
 {
     return false;
 }

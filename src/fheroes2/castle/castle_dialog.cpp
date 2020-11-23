@@ -467,45 +467,49 @@ int Castle::OpenDialog( bool readonly )
 
         for ( CastleDialog::CacheBuildings::const_iterator it = cacheBuildings.begin(); it != cacheBuildings.end(); ++it ) {
             if ( BUILD_MAGEGUILD & ( *it ).id ) {
-                for ( u32 id = BUILD_MAGEGUILD5; id >= BUILD_MAGEGUILD1; id >>= 1 )
-                    if ( isBuild( id ) && id == ( *it ).id ) {
-                        if ( le.MouseClickLeft( ( *it ).coord ) ) {
-                            fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                            bool noFreeSpaceForMagicBook = false;
+                const int mageGuildLevel = GetLevelMageGuild();
+                if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
+                    if ( le.MouseClickLeft( ( *it ).coord ) ) {
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        bool noFreeSpaceForMagicBook = false;
 
-                            if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-                                if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                                    noFreeSpaceForMagicBook = true;
-                                }
-                                else if ( heroes.Guard()->BuySpellBook( this ) ) {
-                                    need_redraw = true;
-                                }
+                        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+                            if ( heroes.Guard()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
                             }
-
-                            if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-                                if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                                    noFreeSpaceForMagicBook = true;
-                                }
-                                else if ( heroes.Guest()->BuySpellBook( this ) ) {
-                                    need_redraw = true;
-                                }
+                            else if ( heroes.Guard()->BuySpellBook( this ) ) {
+                                need_redraw = true;
                             }
-
-                            if ( noFreeSpaceForMagicBook ) {
-                                Dialog::Message(
-                                    "",
-                                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                                    Font::BIG, Dialog::OK );
-                            }
-
-                            OpenMageGuild( heroes );
                         }
-                        else if ( le.MousePressRight( ( *it ).coord ) )
-                            Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
 
-                        if ( le.MouseCursor( ( *it ).coord ) )
-                            msg_status = GetStringBuilding( ( *it ).id );
+                        if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
+                            if ( heroes.Guest()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
+                            }
+                            else if ( heroes.Guest()->BuySpellBook( this ) ) {
+                                need_redraw = true;
+                            }
+                        }
+
+                        if ( noFreeSpaceForMagicBook ) {
+                            Heroes * hero = heroes.Guard();
+                            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
+                                hero = heroes.Guest();
+
+                            Dialog::Message(
+                                hero->GetName(),
+                                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                                Font::BIG, Dialog::OK );
+                        }
+
+                        OpenMageGuild( heroes );
                     }
+                    else if ( le.MousePressRight( ( *it ).coord ) )
+                        Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
+
+                    if ( le.MouseCursor( ( *it ).coord ) )
+                        msg_status = GetStringBuilding( ( *it ).id );
+                }
             }
             else if ( isBuild( ( *it ).id ) ) {
                 if ( le.MouseClickLeft( ( *it ).coord ) ) {
@@ -551,10 +555,30 @@ int Castle::OpenDialog( bool readonly )
                                     if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
                                         cursor.Hide();
 
-                                        const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
-                                        fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
-                                        const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
-                                        fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                        const uint32_t castleAnimationFrame = Game::CastleAnimationFrame();
+
+                                        for ( CastleDialog::CacheBuildings::const_iterator buildingIt = cacheBuildings.begin(); buildingIt != cacheBuildings.end();
+                                              ++buildingIt ) {
+                                            const uint32_t currentBuildId = it->id;
+                                            if ( isBuild( currentBuildId ) ) {
+                                                if ( currentBuildId == BUILD_SHIPYARD ) {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
+                                                    const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
+                                                    fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
+                                                    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
+                                                    fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
+                                                }
+                                                else {
+                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
+                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, currentBuildId, castleAnimationFrame );
+                                                    if ( CastleDialog::RoadConnectionNeeded( *this, currentBuildId, false ) ) {
+                                                        CastleDialog::RedrawRoadConnection( *this, cur_pt, currentBuildId );
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        CastleRedrawTownName( *this, cur_pt );
 
                                         cursor.Show();
                                         display.render();
@@ -694,9 +718,9 @@ int Castle::OpenDialog( bool readonly )
 
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
-            msg_status = isCastle() ? _( "Exit castle" ) : _( "Exit town" );
+            msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
         else if ( le.MouseCursor( rectResource ) )
-            msg_status = _( "Show income" );
+            msg_status = _( "Show Income" );
         else
             // status message prev castle
             if ( buttonPrevCastle.isEnabled() && le.MouseCursor( buttonPrevCastle.area() ) )
@@ -725,7 +749,7 @@ int Castle::OpenDialog( bool readonly )
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, BUILD_NOTHING );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
             cursor.Show();
             display.render();
 

@@ -22,11 +22,20 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
+#include "pairs.h"
 #include "world_pathfinding.h"
 
 namespace AI
 {
-    using MapObjectNode = std::pair<int, int>;
+    struct RegionStats
+    {
+        double highestThreat = -1;
+        double averageMonster = -1;
+        int friendlyHeroCount = 0;
+        int monsterCount = 0;
+        int fogCount = 0;
+        std::vector<IndexObject> validObjects;
+    };
 
     class Normal : public Base
     {
@@ -39,12 +48,17 @@ namespace AI
 
         void revealFog( const Maps::Tiles & tile );
 
-        void HeroesActionComplete( Heroes & hero, int index );
-        int GetPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
+        void HeroesActionComplete( Heroes & hero );
+
+        double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
+        int getPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder();
 
     private:
-        std::vector<MapObjectNode> _mapObjects;
+        // following data won't be saved/serialized
+        double _combinedHeroStrength = 0;
+        std::vector<IndexObject> _mapObjects;
+        std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
     };
 }

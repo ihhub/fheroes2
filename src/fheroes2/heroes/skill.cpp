@@ -621,31 +621,43 @@ Skill::SecSkills::SecSkills( int race )
 
 int Skill::SecSkills::GetLevel( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
 
     return it == end() ? Level::NONE : ( *it ).Level();
 }
 
 u32 Skill::SecSkills::GetValues( int skill ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
 
     return it == end() ? 0 : ( *it ).GetValues();
 }
 
 int Skill::SecSkills::Count( void ) const
 {
-    return std::count_if( begin(), end(), std::mem_fun_ref( &Secondary::isValid ) );
+    return std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } );
+}
+
+int Skill::SecSkills::GetTotalLevel() const
+{
+    int result = 0;
+    for ( const Skill::Secondary & skill : *this ) {
+        if ( skill.isValid() ) {
+            result += skill.Level();
+        }
+    }
+    return result;
 }
 
 void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill.Skill() ) );
+        const int skillValue = skill.Skill();
+        iterator it = std::find_if( begin(), end(), [skillValue]( const Secondary & v ) { return v.isSkill( skillValue ); } );
         if ( it != end() )
             ( *it ).SetLevel( skill.Level() );
         else {
-            it = std::find_if( begin(), end(), std::not1( std::mem_fun_ref( &Secondary::isValid ) ) );
+            it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isValid(); } );
             if ( it != end() )
                 ( *it ).Set( skill );
             else if ( size() < HEROESMAXSKILL )
@@ -656,7 +668,7 @@ void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 
 Skill::Secondary * Skill::SecSkills::FindSkill( int skill )
 {
-    iterator it = std::find_if( begin(), end(), std::bind2nd( std::mem_fun_ref( &Secondary::isSkill ), skill ) );
+    iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
     return it != end() ? &( *it ) : NULL;
 }
 
@@ -773,7 +785,7 @@ void Skill::SecSkills::FindSkillsForLevelUp( int race, Secondary & sec1, Seconda
         sec2.NextLevel();
     }
     else if ( Settings::Get().ExtHeroAllowBannedSecSkillsUpgrade() ) {
-        const_iterator it = std::find_if( begin(), end(), std::not1( std::bind2nd( std::mem_fun_ref( &Secondary::isLevel ), static_cast<int>( Level::EXPERT ) ) ) );
+        const_iterator it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isLevel( static_cast<int>( Level::EXPERT ) ); } );
         if ( it != end() ) {
             sec1.SetSkill( ( *it ).Skill() );
             sec1.SetLevel( GetLevel( sec1.Skill() ) );

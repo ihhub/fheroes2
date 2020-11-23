@@ -148,7 +148,7 @@ namespace
     };
 
     Monster::monstersprite_t monsters_info[] = {
-        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},
+        {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},      {0, 0},
          {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
 
         // icn_file    static  idle     move     fly1     fly2     fly3     shot0          shot1          shot2          shot3
@@ -315,17 +315,6 @@ namespace
         {ICN::UNKNOWN, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0},       {0, 0},       {0, 0},       {0, 0},      {0, 0},
          {0, 0},       {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN},
     };
-
-    bool isValidAnimationFrame( const Monster::animframe_t & frameInfo )
-    {
-        return ( frameInfo.count > 0 ) && ( frameInfo.start > 0 );
-    }
-
-    void verifyValidAnimationFrame( const Monster::animframe_t & frameInfo )
-    {
-        if ( !isValidAnimationFrame( frameInfo ) )
-            Error::Except( __FUNCTION__, "animframe_t should not be empty" );
-    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const monstats_t & obj )
@@ -338,7 +327,7 @@ StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
     return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
 }
 
-StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & obj )
+StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size = ARRAY_COUNT( monsters );
     msg << monsters_size;
@@ -347,7 +336,7 @@ StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & obj )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, MonsterStaticData & obj )
+StreamBase & operator>>( StreamBase & msg, MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size;
     msg >> monsters_size;
@@ -383,7 +372,7 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     case Monster::TROLL:
         return ICN::TROLLMSL;
     case Monster::WAR_TROLL:
-        return ICN::TROLLMSL;
+        return ICN::TROLL2MSL;
     case Monster::ELF:
         return ICN::ELF__MSL;
     case Monster::GRAND_ELF:
@@ -2184,12 +2173,12 @@ MonsterStaticData & MonsterStaticData::Get( void )
     return mgds;
 }
 
-StreamBase & operator<<( StreamBase & msg, const Monster & obj )
+StreamBase & operator<<( StreamBase & msg, const Monster & /*obj*/ )
 {
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, Monster & obj )
+StreamBase & operator>>( StreamBase & msg, Monster & /*obj*/ )
 {
     return msg;
 }

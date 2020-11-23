@@ -32,14 +32,15 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    HeroesIndicator( const Heroes & );
+    HeroesIndicator( const Heroes * h = nullptr );
 
     const Rect & GetArea( void ) const;
     const std::string & GetDescriptions( void ) const;
-    void SetPos( const Point &, bool skip_back = false );
+    void SetPos( const Point & );
+    void SetHero( const Heroes * hero );
 
 protected:
-    const Heroes & hero;
+    const Heroes * hero;
     Rect area;
     fheroes2::ImageRestorer back;
     std::string descriptions;
@@ -48,7 +49,7 @@ protected:
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    LuckIndicator( const Heroes & );
+    LuckIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( LuckIndicator & );
@@ -60,7 +61,7 @@ private:
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    MoraleIndicator( const Heroes & );
+    MoraleIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( MoraleIndicator & );
@@ -72,7 +73,7 @@ private:
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    ExperienceIndicator( const Heroes & );
+    ExperienceIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     void QueueEventProcessing( void );
@@ -81,7 +82,7 @@ public:
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    SpellPointsIndicator( const Heroes & );
+    SpellPointsIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     void QueueEventProcessing( void );

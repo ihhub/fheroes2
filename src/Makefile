@@ -1,6 +1,5 @@
 # makefile
-# project: Free Heroes2
-#
+# project: Free Heroes of Might and Magic II (https://github.com/ihhub/fheroes2)
 
 TARGET := fheroes2
 
@@ -18,7 +17,8 @@ LIBS :=
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion
+# Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic
 
 ifdef WITH_SDL2
 SDL_LIBS := $(shell sdl2-config --libs)
@@ -56,9 +56,8 @@ endif
 endif
 
 ifndef WITHOUT_XML
-ifndef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) -DWITH_XML
-else
+ifdef WITHOUT_BUNDLED_LIBS
 CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
 LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
 endif

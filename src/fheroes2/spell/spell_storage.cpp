@@ -61,6 +61,16 @@ bool SpellStorage::isPresentSpell( const Spell & spell ) const
     return end() != std::find( begin(), end(), spell );
 }
 
+bool SpellStorage::hasAdventureSpell( const int lvl ) const
+{
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it ).Level() == lvl && ( *it ).isAdventure() )
+            return true;
+    }
+
+    return false;
+}
+
 std::string SpellStorage::String( void ) const
 {
     std::ostringstream os;

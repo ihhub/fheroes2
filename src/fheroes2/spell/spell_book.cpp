@@ -43,14 +43,6 @@ namespace
     const fheroes2::Point bookmarkCloseOffset( 416, 280 );
 }
 
-struct SpellFiltered : std::binary_function<Spell, int, bool>
-{
-    bool operator()( Spell s, int f ) const
-    {
-        return ( ( SpellBook::ADVN & f ) && s.isCombat() ) || ( ( SpellBook::CMBT & f ) && !s.isCombat() );
-    }
-};
-
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, int only, const HeroBase & hero );
 void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
@@ -332,7 +324,9 @@ SpellStorage SpellBook::SetFilter( int filter, const HeroBase * hero ) const
         res.Append( hero->GetBagArtifacts() );
 
     if ( filter != SpellBook::ALL ) {
-        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), std::bind2nd( SpellFiltered(), filter ) ) ) );
+        res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s ) {
+                                       return ( ( SpellBook::ADVN & filter ) && s.isCombat() ) || ( ( SpellBook::CMBT & filter ) && !s.isCombat() );
+                                   } ) ) );
     }
 
     // check on water: disable portal spells
@@ -354,11 +348,11 @@ void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
         mp = 999; // just in case of broken code
     }
 
-    Text text( mp > 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
+    Text text( mp >= 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
-    text.Set( mp > 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
+    text.Set( mp >= 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
@@ -400,31 +394,26 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
 
 void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t cur, s32 px, s32 py, const HeroBase & hero )
 {
-    s32 ox = 0;
-    s32 oy = 0;
-
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
-    for ( u32 ii = 0; ii < SPELL_PER_PAGE; ++ii )
-        if ( spells.size() > cur + ii ) {
-            if ( 0 == ( ii % ( SPELL_PER_PAGE / 2 ) ) ) {
-                oy = 50;
-                ox += 80;
-            }
+    for ( int32_t i = 0; i < SPELL_PER_PAGE; ++i ) {
+        if ( spells.size() <= cur + i )
+            return;
 
-            const Spell & spell = spells[ii + cur];
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
-            fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
+        const int32_t ox = 80 + 80 * ( i & 1 );
+        const int32_t oy = 50 + 80 * ( i >> 1 );
 
-            const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+        const Spell & spell = spells[i + cur];
+        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+        const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
+        fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 
-            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
-            box.Blit( px + ox - 40, py + oy + 25 );
+        const uint32_t spellCost = spell.SpellPoint( &hero );
+        const bool isAvailable = heroSpellPoints >= spellCost;
 
-            oy += 80;
+        TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
+        box.Blit( px + ox - 40, py + oy + 25 );
 
-            coords.push_back( rect );
-        }
+        coords.push_back( rect );
+    }
 }

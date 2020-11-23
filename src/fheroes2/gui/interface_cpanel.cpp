@@ -48,7 +48,7 @@ Interface::ControlPanel::ControlPanel( Basic & basic )
 
 void Interface::ControlPanel::ResetTheme( void )
 {
-    int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
+    const int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
     // Make a copy of Surface
     btn_radr = fheroes2::AGG::GetICN( icn, 4 );

@@ -35,6 +35,144 @@
 #include "skill_bar.h"
 #include "text.h"
 
+class MeetingArmyBar : public ArmyBar
+{
+public:
+    explicit MeetingArmyBar( Army * army )
+        : ArmyBar( army, true, false, false )
+    {}
+
+    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    {
+        if ( _cachedBackground.empty() ) {
+            _cachedBackground.resize( roi.w, roi.h );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+        }
+
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+    }
+
+    virtual void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    {
+        if ( !troop.isValid() )
+            return;
+
+        Text text( GetString( troop.GetCount() ), Font::SMALL );
+
+        const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+        fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
+
+        if ( mons32.width() > roi.w ) {
+            srcrt.x = ( mons32.width() - roi.w ) / 2;
+            srcrt.width = roi.w;
+        }
+
+        if ( mons32.height() > roi.h ) {
+            srcrt.y = ( mons32.height() - roi.h ) / 2;
+            srcrt.height = roi.h;
+        }
+
+        int32_t offsetX = ( roi.w - mons32.width() ) / 2;
+        int32_t offsetY = roi.h - mons32.height() - 3;
+
+        if ( offsetX < 1 )
+            offsetX = 1;
+
+        if ( offsetY < 1 )
+            offsetY = 1;
+
+        fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
+
+        text.Blit( roi.x + ( roi.w - text.w() ) / 2, roi.y + roi.h - 1, image );
+
+        if ( isSelected ) {
+            spcursor.setPosition( roi.x, roi.y );
+            spcursor.show();
+        }
+    }
+
+private:
+    fheroes2::Image _cachedBackground;
+};
+
+class MeetingArtifactBar : public ArtifactsBar
+{
+public:
+    explicit MeetingArtifactBar( const Heroes * hero )
+        : ArtifactsBar( hero, true, false, false )
+    {}
+
+    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    {
+        if ( _cachedBackground.empty() ) {
+            _cachedBackground.resize( roi.w, roi.h );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+        }
+
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+    }
+
+    virtual void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    {
+        if ( !arifact.isValid() )
+            return;
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, arifact.IndexSprite32() ), image, roi.x + 1, roi.y + 1 );
+
+        if ( isSelected ) {
+            spcursor.setPosition( roi.x, roi.y );
+            spcursor.show();
+        }
+    }
+
+private:
+    fheroes2::Image _cachedBackground;
+};
+
+class MeetingPrimarySkillsBar : public PrimarySkillsBar
+{
+public:
+    explicit MeetingPrimarySkillsBar( const Heroes * hero )
+        : PrimarySkillsBar( hero, true )
+    {}
+
+    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    {
+        // Just do nothing
+    }
+};
+
+class MeetingSecondarySkillsBar : public SecondarySkillsBar
+{
+public:
+    explicit MeetingSecondarySkillsBar() {}
+
+    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    {
+        if ( _cachedBackground.empty() ) {
+            _cachedBackground.resize( roi.w, roi.h );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+        }
+
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+    }
+
+    virtual void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
+    {
+        if ( !skill.isValid() )
+            return;
+
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
+        fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
+
+        Text text( GetString( skill.Level() ), Font::SMALL );
+        text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
+    }
+
+private:
+    fheroes2::Image _cachedBackground;
+};
+
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
@@ -64,7 +202,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", heroes2.GetName() );
     Text text( message, Font::BIG );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 26 );
+    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
     // portrait
     dst_pt.x = cur_pt.x + 93;
@@ -81,38 +219,38 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     dst_pt.x = cur_pt.x + 34;
     dst_pt.y = cur_pt.y + 75;
-    MoraleIndicator moraleIndicator1( *this );
+    MoraleIndicator moraleIndicator1( this );
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
     dst_pt.x = cur_pt.x + 34;
     dst_pt.y = cur_pt.y + 115;
-    LuckIndicator luckIndicator1( *this );
+    LuckIndicator luckIndicator1( this );
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
     dst_pt.x = cur_pt.x + 566;
     dst_pt.y = cur_pt.y + 75;
-    MoraleIndicator moraleIndicator2( heroes2 );
+    MoraleIndicator moraleIndicator2( &heroes2 );
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
     dst_pt.x = cur_pt.x + 566;
     dst_pt.y = cur_pt.y + 115;
-    LuckIndicator luckIndicator2( heroes2 );
+    LuckIndicator luckIndicator2( &heroes2 );
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 
     // primary skill
     fheroes2::ImageRestorer backPrimary( display, cur_pt.x + 255, cur_pt.y + 50, 130, 135 );
 
-    PrimarySkillsBar primskill_bar1( this, true );
+    MeetingPrimarySkillsBar primskill_bar1( this );
     primskill_bar1.SetColRows( 1, 4 );
     primskill_bar1.SetVSpace( -1 );
     primskill_bar1.SetTextOff( 70, -25 );
     primskill_bar1.SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-    PrimarySkillsBar primskill_bar2( &heroes2, true );
+    MeetingPrimarySkillsBar primskill_bar2( &heroes2 );
     primskill_bar2.SetColRows( 1, 4 );
     primskill_bar2.SetVSpace( -1 );
     primskill_bar2.SetTextOff( -70, -25 );
@@ -121,14 +259,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
-    SecondarySkillsBar secskill_bar1;
+    MeetingSecondarySkillsBar secskill_bar1;
     secskill_bar1.SetColRows( 8, 1 );
     secskill_bar1.SetHSpace( -1 );
     secskill_bar1.SetContent( secondary_skills.ToVector() );
     secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
     secskill_bar1.Redraw();
 
-    SecondarySkillsBar secskill_bar2;
+    MeetingSecondarySkillsBar secskill_bar2;
     secskill_bar2.SetColRows( 8, 1 );
     secskill_bar2.SetHSpace( -1 );
     secskill_bar2.SetContent( heroes2.GetSecondarySkills().ToVector() );
@@ -139,7 +277,9 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 36;
     dst_pt.y = cur_pt.y + 267;
 
-    ArmyBar selectArmy1( &GetArmy(), true, false );
+    fheroes2::ImageRestorer armyCountBackgroundRestorer( display, cur_pt.x + 36, cur_pt.y + 310, 567, 20 );
+
+    MeetingArmyBar selectArmy1( &GetArmy() );
     selectArmy1.SetColRows( 5, 1 );
     selectArmy1.SetPos( dst_pt.x, dst_pt.y );
     selectArmy1.SetHSpace( 2 );
@@ -148,7 +288,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 381;
     dst_pt.y = cur_pt.y + 267;
 
-    ArmyBar selectArmy2( &heroes2.GetArmy(), true, false );
+    MeetingArmyBar selectArmy2( &heroes2.GetArmy() );
     selectArmy2.SetColRows( 5, 1 );
     selectArmy2.SetPos( dst_pt.x, dst_pt.y );
     selectArmy2.SetHSpace( 2 );
@@ -158,7 +298,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 23;
     dst_pt.y = cur_pt.y + 347;
 
-    ArtifactsBar selectArtifacts1( this, true, false );
+    MeetingArtifactBar selectArtifacts1( this );
     selectArtifacts1.SetColRows( 7, 2 );
     selectArtifacts1.SetHSpace( 2 );
     selectArtifacts1.SetVSpace( 2 );
@@ -169,7 +309,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 367;
     dst_pt.y = cur_pt.y + 347;
 
-    ArtifactsBar selectArtifacts2( &heroes2, true, false );
+    MeetingArtifactBar selectArtifacts2( &heroes2 );
     selectArtifacts2.SetColRows( 7, 2 );
     selectArtifacts2.SetHSpace( 2 );
     selectArtifacts2.SetVSpace( 2 );
@@ -212,6 +352,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             else if ( selectArtifacts2.isSelected() )
                 selectArtifacts2.ResetSelected();
 
+            armyCountBackgroundRestorer.restore();
+
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
@@ -232,6 +374,10 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
+
+            if ( bag_artifacts.MakeBattleGarb() || heroes2.bag_artifacts.MakeBattleGarb() ) {
+                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+            }
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
@@ -312,23 +458,6 @@ void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, Prim
         bar2->Redraw();
 }
 
-// spell_book.cpp
-struct HeroesCanTeachSpell : std::binary_function<const HeroBase *, Spell, bool>
-{
-    bool operator()( const HeroBase * hero, Spell spell ) const
-    {
-        return hero->CanTeachSpell( spell );
-    };
-};
-
-struct HeroesHaveSpell : std::binary_function<const HeroBase *, Spell, bool>
-{
-    bool operator()( const HeroBase * hero, Spell spell ) const
-    {
-        return hero->HaveSpell( spell );
-    };
-};
-
 void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 {
     if ( !hero1.HaveSpellBook() || !hero2.HaveSpellBook() ) {
@@ -368,23 +497,23 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 
     // remove_if for learn spells
     if ( learn.size() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), std::bind1st( HeroesHaveSpell(), teacher ) );
+        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     if ( learn.size() ) {
-        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), std::not1( std::bind1st( HeroesCanTeachSpell(), teacher ) ) );
+        SpellStorage::iterator res = std::remove_if( learn.begin(), learn.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         learn.resize( std::distance( learn.begin(), res ) );
     }
 
     // remove_if for teach spells
     if ( teach.size() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), std::bind1st( HeroesHaveSpell(), learner ) );
+        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [learner]( const Spell & spell ) { return learner->HaveSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 
     if ( teach.size() ) {
-        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), std::not1( std::bind1st( HeroesCanTeachSpell(), teacher ) ) );
+        SpellStorage::iterator res = std::remove_if( teach.begin(), teach.end(), [teacher]( const Spell & spell ) { return !teacher->CanTeachSpell( spell ); } );
         teach.resize( std::distance( teach.begin(), res ) );
     }
 

@@ -41,10 +41,10 @@ namespace Battle
 
         // ArenaNode uses different default values
         ArenaNode()
-            : PathfindingNode( -1, MAX_MOVE_COST )
+            : PathfindingNode( -1, MAX_MOVE_COST, 0 )
         {}
         ArenaNode( int node, uint16_t cost, bool isOpen )
-            : PathfindingNode( node, cost )
+            : PathfindingNode( node, cost, 0 )
             , _isOpen( isOpen )
         {}
         // Override the base version of the call to use proper values

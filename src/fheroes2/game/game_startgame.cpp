@@ -544,7 +544,7 @@ int Interface::Basic::StartGame( void )
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
-                    if ( conf.GameType( Game::TYPE_HOTSEAT ) ) {
+                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         cursor.Hide();
                         iconsPanel.HideIcons();
                         statusWindow.Reset();
@@ -677,6 +677,8 @@ int Interface::Basic::HumanTurn( bool isload )
     int heroAnimationFrameCount = 0;
     Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
+
+    bool isCursorOverButtons = false;
 
     // startgame loop
     while ( Game::CANCEL == res ) {
@@ -837,6 +839,8 @@ int Interface::Basic::HumanTurn( bool isload )
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
         const bool isHiddenInterface = conf.ExtGameHideInterface();
+        const bool prevIsCursorOverButtons = isCursorOverButtons;
+        isCursorOverButtons = false;
         // Stop moving hero first
         if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
             stopHero = true;
@@ -858,6 +862,7 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
+            isCursorOverButtons = true;
         }
         // cursor over status area
         else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
@@ -879,6 +884,10 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
+        }
+
+        if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
+            buttonsArea.ResetButtons();
         }
 
         // fast scroll

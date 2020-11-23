@@ -131,7 +131,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_LOW_MEMORY = 0x10800000,
         POCKETPC_TAP_MODE = 0x11000000,
         POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
         POCKETPC_LOW_RESOLUTION = 0x14000000,
@@ -140,7 +139,6 @@ public:
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
         WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        WORLD_NOREQ_FOR_ARTIFACTS = 0x20000010,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
@@ -162,7 +160,6 @@ public:
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
-        WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
@@ -179,7 +176,6 @@ public:
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_MERGE_ARMIES = 0x40100000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
         BATTLE_OBJECTS_ARCHERS_PENALTY = 0x42000000,
 
@@ -269,7 +265,6 @@ public:
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
-    bool ExtWorldNoRequirementsForArtifacts( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
     bool ExtWorldOnlyFirstMonsterAttack( void ) const;
     bool ExtWorldEyeEagleAsScholar( void ) const;
@@ -277,7 +272,6 @@ public:
     bool ExtWorldBanWeekOf( void ) const;
     bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
-    bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
     bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
@@ -294,7 +288,6 @@ public:
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
     bool ExtBattleObjectsArchersPenalty( void ) const;
-    bool ExtBattleMergeArmies( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
@@ -307,7 +300,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketLowMemory( void ) const;
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
@@ -342,7 +334,7 @@ public:
     int MusicVolume( void ) const;
     MusicSource MusicType() const;
 
-    bool GameType( int ) const;
+    bool IsGameType( int type ) const;
     int GameType( void ) const;
     void SetGameType( int );
 

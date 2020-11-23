@@ -72,6 +72,22 @@ void updatePlayers( Players & players, const int humanPlayerCount )
     }
 }
 
+size_t GetSelectedMapId( MapsFileInfoList & lists )
+{
+    Settings & conf = Settings::Get();
+
+    const std::string & mapName = conf.CurrentFileInfo().name;
+    const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
+    size_t mapId = 0;
+    for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
+        if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
+            return mapId;
+        }
+    }
+
+    return 0;
+}
+
 int Game::ScenarioInfo( void )
 {
     Settings & conf = Settings::Get();
@@ -79,7 +95,7 @@ int Game::ScenarioInfo( void )
     AGG::PlayMusic( MUS::MAINMENU );
 
     MapsFileInfoList lists;
-    if ( !PrepareMapsFileInfoList( lists, ( conf.GameType( Game::TYPE_MULTI ) ) ) ) {
+    if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
         return MAINMENU;
     }
@@ -125,7 +141,6 @@ int Game::ScenarioInfo( void )
     fheroes2::Copy( back, display );
 
     bool resetStartingSettings = conf.MapsFile().empty();
-    size_t mapId = 0;
     Players & players = conf.GetPlayers();
     Interface::PlayersInfo playersInfo( true, true, true );
 
@@ -135,13 +150,11 @@ int Game::ScenarioInfo( void )
         resetStartingSettings = true;
         const std::string & mapName = conf.CurrentFileInfo().name;
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        size_t tempId = 0;
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++tempId ) {
+        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file != conf.CurrentFileInfo().file )
                     conf.SetCurrentFileInfo( *mapIter );
 
-                mapId = tempId;
                 resetStartingSettings = false;
                 break;
             }
@@ -209,7 +222,7 @@ int Game::ScenarioInfo( void )
 
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, mapId );
+            const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
             if ( fi ) {
                 conf.SetCurrentFileInfo( *fi );
                 updatePlayers( players, humanPlayerCount );
@@ -298,7 +311,7 @@ int Game::ScenarioInfo( void )
         players.SetStartGame();
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
-        Game::ShowLoadMapsText();
+        Game::ShowMapLoadingText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
 

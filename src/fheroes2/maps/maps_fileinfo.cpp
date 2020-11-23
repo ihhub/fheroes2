@@ -672,12 +672,12 @@ int Maps::FileInfo::ComputerOnlyColors( void ) const
     return allow_comp_colors & ~( allow_human_colors );
 }
 
-bool Maps::FileInfo::isAllowCountPlayers( u32 colors ) const
+bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
 {
-    u32 human_only = Color::Count( HumanOnlyColors() );
-    u32 comp_human = Color::Count( AllowCompHumanColors() );
+    const int humanOnly = Color::Count( HumanOnlyColors() );
+    const int compHuman = Color::Count( AllowCompHumanColors() );
 
-    return human_only <= colors && colors <= human_only + comp_human;
+    return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
 bool Maps::FileInfo::isMultiPlayerMap( void ) const
@@ -753,16 +753,16 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     lists.resize( std::unique( lists.begin(), lists.end(), Maps::FileInfo::NameCompare ) - lists.begin() );
 
     if ( multi == false ) {
-        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), std::mem_fun_ref( &Maps::FileInfo::isMultiPlayerMap ) );
+        MapsFileInfoList::iterator it = std::remove_if( lists.begin(), lists.end(), []( const Maps::FileInfo & info ) { return info.isMultiPlayerMap(); } );
         if ( it != lists.begin() )
             lists.resize( std::distance( lists.begin(), it ) );
     }
 
     // set preferably count filter
-    if ( conf.PreferablyCountPlayers() ) {
+    const int prefPlayerCount = conf.PreferablyCountPlayers();
+    if ( prefPlayerCount > 0 ) {
         MapsFileInfoList::iterator it
-            = std::remove_if( lists.begin(), lists.end(),
-                              std::not1( std::bind2nd( std::mem_fun_ref( &Maps::FileInfo::isAllowCountPlayers ), conf.PreferablyCountPlayers() ) ) );
+            = std::remove_if( lists.begin(), lists.end(), [prefPlayerCount]( const Maps::FileInfo & info ) { return !info.isAllowCountPlayers( prefPlayerCount ); } );
         if ( it != lists.begin() )
             lists.resize( std::distance( lists.begin(), it ) );
     }

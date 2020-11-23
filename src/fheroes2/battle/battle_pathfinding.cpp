@@ -88,6 +88,7 @@ namespace Battle
     {
         _from = -1;
         _cost = MAX_MOVE_COST;
+        _objectID = 0;
         _isOpen = true;
     }
 
@@ -120,7 +121,7 @@ namespace Battle
         int currentNode = targetCell;
         while ( currentNode != targetCell && _cache[currentNode]._cost != 0 ) {
             const ArenaNode & node = _cache[currentNode];
-            path.emplace_front( node._from, Board::GetDirection( node._from, currentNode ), 1 );
+            path.emplace_front( currentNode, node._from, Board::GetDirection( node._from, currentNode ), 1 );
             currentNode = node._from;
         }
 
@@ -175,11 +176,11 @@ namespace Battle
 
                     const Indexes & around = board.GetAroundIndexes( unitIdx );
                     for ( const int cell : around ) {
-                        if ( hexIsPassable( cell ) ) {
+                        const uint32_t flyingDist = static_cast<uint32_t>( board.GetDistance( headIdx, cell ) );
+                        if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
-                            unitNode._from = headIdx;
-                            unitNode._cost = board.GetDistance( headIdx, cell );
-                            break;
+                            unitNode._from = cell;
+                            unitNode._cost = flyingDist;
                         }
                     }
                 }

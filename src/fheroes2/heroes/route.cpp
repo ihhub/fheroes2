@@ -32,7 +32,7 @@
 
 s32 Route::Step::GetIndex( void ) const
 {
-    return from < 0 ? -1 : Maps::GetDirectionIndex( from, direction );
+    return currentIndex;
 }
 
 s32 Route::Step::GetFrom( void ) const
@@ -546,7 +546,9 @@ StreamBase & Route::operator<<( StreamBase & msg, const Path & path )
 
 StreamBase & Route::operator>>( StreamBase & msg, Step & step )
 {
-    return msg >> step.from >> step.direction >> step.penalty;
+    msg >> step.from >> step.direction >> step.penalty;
+    step.currentIndex = Maps::GetDirectionIndex( step.from, step.direction );
+    return msg;
 }
 
 StreamBase & Route::operator>>( StreamBase & msg, Path & path )

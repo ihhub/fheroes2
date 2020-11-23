@@ -91,8 +91,7 @@ namespace Game
         VIEW_HEROES = 2,
         VIEW_TELESCOPE = 3,
         VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5,
-        VIEW_LIGHT_HOUSE = 6
+        VIEW_MAGI_EYES = 5
     };
 
     enum
@@ -247,7 +246,7 @@ namespace Game
     u32 GetViewDistance( u32 );
     u32 GetWhirlpoolPercent( void );
     u32 SelectCountPlayers( void );
-    void ShowLoadMapsText( void );
+    void ShowMapLoadingText( void );
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
