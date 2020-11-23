@@ -356,15 +356,9 @@ namespace
 
         virtual void transformCoordinates( int & x, int & y ) override
         {
-            if ( isFullScreen() && _transformVals._isScalingNeeded ) {
-                if ( _transformVals._isLandscape ) {
-                    x = static_cast<int>( ( x - _transformVals._offset ) / _transformVals._aspect );
-                    y = static_cast<int>( y / _transformVals._aspect );
-                }
-                else {
-                    x = static_cast<int>( x / _transformVals._aspect );
-                    y = static_cast<int>( ( y - _transformVals._offset ) / _transformVals._aspect );
-                }
+            if ( isFullScreen() ) {
+                x = static_cast<int>( ( x - _transformVals.offsetX ) / _transformVals.scaleX );
+                y = static_cast<int>( ( y - _transformVals.offsetY ) / _transformVals.scaleY );
             }
         }
 
@@ -572,11 +566,11 @@ namespace
 
         struct
         {
-            bool _isScalingNeeded;
-            bool _isLandscape;
-            float _aspect;
-            float _offset;
-        } _transformVals = {false, false, 1., 0.};
+            float offsetX;
+            float offsetY;
+            float scaleX;
+            float scaleY;
+        } _transformVals;
 
         int renderFlags() const
         {
@@ -624,15 +618,16 @@ namespace
             const float displayAspect = static_cast<float>( width ) / height;
             const float precission = .001;
             if ( deviceAspect - displayAspect > precission ) {
-                const float outputAspect = static_cast<float>( dm.h ) / height;
-                _transformVals = {true, true, outputAspect, ( dm.w - outputAspect * width ) / 2};
+                const float scale = static_cast<float>( dm.h ) / height;
+                _transformVals = {( dm.w - scale * width ) / 2, 0., scale, scale};
             }
             else if ( deviceAspect - displayAspect < -precission ) {
-                const float outputAspect = static_cast<float>( dm.w ) / width;
-                _transformVals = {true, false, outputAspect, ( dm.h - outputAspect * height ) / 2};
+                const float scale = static_cast<float>( dm.w ) / width;
+                _transformVals = {0., ( dm.h - scale * height ) / 2, scale, scale};
             }
             else {
-                _transformVals = {false, false, 1., 0.};
+                const float scale = static_cast<float>( dm.w ) / width;
+                _transformVals = {0., 0., scale, scale};
             }
         }
     };
