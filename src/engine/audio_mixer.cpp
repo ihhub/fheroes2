@@ -192,7 +192,7 @@ void Mixer::Reset( void )
 
 u8 Mixer::isPlaying( int channel )
 {
-    return Mix_Playing( channel );
+    return ( Mix_Volume( channel, -1 ) > 0 ) ? Mix_Playing( channel ) : 0;
 }
 
 u8 Mixer::isPaused( int channel )
@@ -433,9 +433,16 @@ void Mixer::Resume( int ch )
     }
 }
 
-u8 Mixer::isPlaying( int ch )
+u8 Mixer::isPlaying( int chunkNum )
 {
-    return 0 <= ch && ch < static_cast<int>( chunks.size() ) && ( chunks[ch].state & MIX_PLAY );
+    const bool isValidChunk = ( 0 <= chunkNum ) && ( chunkNum < static_cast<int>( chunks.size() ) );
+    if ( !isValidChunk ) {
+        return 0;
+    }
+
+    const chunk_t & chunk = chunks[chunkNum];
+    const bool isSilence = ( chunk.volume1 <= 0 ) || ( chunk.volume2 <= 0 );
+    return isSilence ? 0 : ( chunk.state & MIX_PLAY );
 }
 
 u8 Mixer::isPaused( int ch )
