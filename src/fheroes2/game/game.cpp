@@ -126,7 +126,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     else {
         it->second.clear();
     }
-    for ( const Player & p : players ) {
+    for ( const Player * p : players ) {
         Player player = Player( p->GetColor() );
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
