@@ -106,7 +106,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     auto it = mapPlayers.find( mapFileName );
     if ( it != mapPlayers.end() ) {
         players.clear();
-        for ( auto p : it->second ) {
+        for ( const Player & p : it->second ) {
             Player * player = new Player( p.GetColor() );
             player->SetRace( p.GetRace() );
             player->SetControl( p.GetControl() );
@@ -126,7 +126,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     else {
         it->second.clear();
     }
-    for ( auto p : players ) {
+    for ( const Player & p : players ) {
         Player player = Player( p->GetColor() );
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
