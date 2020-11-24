@@ -136,16 +136,16 @@ void Castle::OpenWell( void )
 
         // extended version (click - buy dialog monster)
         if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) ) {
-            dwellings_t results;
+            std::vector<Troop> results;
             Funds cur, total;
             u32 can_recruit;
             std::string str;
 
             for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
                 if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
-                    results.push_back( dwelling_t( *it, can_recruit ) );
-                    total += cur;
                     const Monster ms( race, GetActualDwelling( *it ) );
+                    results.emplace_back( ms, can_recruit );
+                    total += cur;
                     str.append( ms.GetPluralName( can_recruit ) );
                     str.append( " - " );
                     str.append( GetString( can_recruit ) );
@@ -168,12 +168,9 @@ void Castle::OpenWell( void )
                     Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else {
-                if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
-                    for ( dwellings_t::const_iterator it = results.begin(); it != results.end(); ++it ) {
-                        const dwelling_t & dw = *it;
-                        RecruitMonsterFromDwelling( dw.first, dw.second );
-                    }
+            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
+                for ( const Troop & troop : results ) {
+                    RecruitMonster( troop, false );
                 }
             }
         }

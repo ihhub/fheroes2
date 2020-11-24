@@ -35,6 +35,7 @@ struct PathfindingNode
         , _cost( cost )
         , _objectID( object )
     {}
+    virtual ~PathfindingNode() = default;
     // Sets node values back to the defaults; used before processing new path
     virtual void resetNode()
     {

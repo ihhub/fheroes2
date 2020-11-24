@@ -537,7 +537,7 @@ void World::NewDay( void )
 
     // remove deprecated events
     if ( day )
-        vec_eventsday.remove_if( std::bind2nd( std::mem_fun_ref( &EventDate::isDeprecated ), day - 1 ) );
+        vec_eventsday.remove_if( [&]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
 void World::NewWeek( void )
@@ -643,20 +643,13 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 {
     MapsIndexes result;
 
-    if ( MP2::OBJ_STONELITHS == GetTiles( center ).GetObject( false ) ) {
-        const MapsIndexes allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, false );
-
-        if ( 2 > allTeleporters.size() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "is empty" );
-        }
-        else {
-            const Maps::Tiles & entrance = GetTiles( center );
-
-            for ( MapsIndexes::const_iterator it = allTeleporters.begin(); it != allTeleporters.end(); ++it ) {
-                const Maps::Tiles & tile = GetTiles( *it );
-                if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.isWater() == entrance.isWater() ) {
-                    result.push_back( *it );
-                }
+    const Maps::Tiles & entrance = GetTiles( center );
+    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
+        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
+                 && tile.isWater() == entrance.isWater() ) {
+                result.push_back( *it );
             }
         }
     }
@@ -668,8 +661,9 @@ MapsIndexes World::GetTeleportEndPoints( s32 center ) const
 s32 World::NextTeleport( s32 index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
-    if ( teleports.empty() )
+    if ( teleports.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
+    }
 
     return teleports.size() ? *Rand::Get( teleports ) : index;
 }
@@ -711,8 +705,9 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 s32 World::NextWhirlpool( s32 index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
-    if ( whilrpools.empty() )
+    if ( whilrpools.empty() ) {
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
+    }
 
     return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
 }
@@ -943,7 +938,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), std::bind2nd( HeroHasArtifact(), art ) ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 
@@ -1054,6 +1049,18 @@ void World::resetPathfinder()
 {
     _pathfinder.reset();
     AI::Get().resetPathfinder();
+}
+
+void World::PostLoad()
+{
+    // update tile passable
+    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdatePassable(); } );
+
+    // cache data that's accessed often
+    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+
+    resetPathfinder();
+    ComputeStaticAnalysis();
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1192,16 +1199,10 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
-    // update tile passable
-    std::for_each( w.vec_tiles.begin(), w.vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
-
-    w.resetPathfinder();
-    w.ComputeStaticAnalysis();
+    w.PostLoad();
 
     // heroes postfix
     std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
-
-    world._pathfinder.reset();
 
     return msg;
 }
@@ -1258,8 +1259,9 @@ void EventDate::LoadFromMP2( StreamBuf st )
                "event"
                    << ": " << message );
     }
-    else
+    else {
         DEBUG( DBG_GAME, DBG_WARN, "unknown id" );
+    }
 }
 
 bool EventDate::isDeprecated( u32 date ) const

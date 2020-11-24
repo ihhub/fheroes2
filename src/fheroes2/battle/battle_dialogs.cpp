@@ -397,7 +397,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
-        TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
+        TextBox box( title, Font::BIG, bsTextWidth );
         box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
         messageYOffset = bsTextIndent;
     }

@@ -60,7 +60,7 @@ int Interface::StatusWindow::GetState( void ) const
     return state;
 }
 
-u32 Interface::StatusWindow::ResetResourceStatus( u32 tick, void * ptr )
+u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
 {
     if ( ptr ) {
         Interface::StatusWindow * status = reinterpret_cast<Interface::StatusWindow *>( ptr );

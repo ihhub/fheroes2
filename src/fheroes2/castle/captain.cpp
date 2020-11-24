@@ -23,6 +23,7 @@
 #include "captain.h"
 #include "agg.h"
 #include "castle.h"
+#include "interface_icons.h"
 #include "luck.h"
 #include "morale.h"
 #include "race.h"
@@ -262,5 +263,35 @@ fheroes2::Image Captain::GetPortrait( int type ) const
 
 void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
 {
-    fheroes2::Blit( GetPortrait( type ), dstsf, px, py );
+    if ( !isValid() )
+        return;
+
+    const fheroes2::Image & port = GetPortrait( type );
+    if ( PORT_SMALL != type ) { // a normal portrait in a castle or in battle
+        fheroes2::Blit( port, dstsf, px, py );
+        return;
+    }
+
+    const int iconWidth = Interface::IconsBar::GetItemWidth();
+    const int iconHeight = Interface::IconsBar::GetItemHeight();
+    const int barWidth = 7;
+
+    fheroes2::Image blackBG( iconWidth, iconHeight );
+    blackBG.fill( 0 );
+    fheroes2::Image blueBG( barWidth, iconHeight );
+    blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
+
+    // background
+    fheroes2::Blit( blackBG, dstsf, px, py );
+
+    // mobility is always 0
+    fheroes2::Blit( blueBG, dstsf, px, py );
+
+    // portrait
+    fheroes2::Blit( port, dstsf, px + barWidth + 1, py );
+
+    // spell points
+    fheroes2::Blit( blueBG, dstsf, px + barWidth + port.width() + 2, py );
+    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
+    fheroes2::Blit( mana, dstsf, px + barWidth + port.width() + 2, py + mana.y() );
 }

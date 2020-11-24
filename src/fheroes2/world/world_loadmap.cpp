@@ -108,7 +108,7 @@ namespace Maps
     }
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & tiles )
+TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
 {
     TiXmlElement * xml_tile = doc.FirstChildElement( "tile" );
     for ( ; xml_tile; xml_tile = xml_tile->NextSiblingElement( "tile" ) ) {
@@ -363,7 +363,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     return doc;
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & heroes )
+TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
 {
     TiXmlElement * xml_hero = doc.FirstChildElement( "hero" );
     for ( ; xml_hero; xml_hero = xml_hero->NextSiblingElement( "hero" ) ) {
@@ -668,10 +668,6 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
         // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
         // 15 - spell
         cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
-
-        // always available
-        if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-            cond = 0;
     }
 
     obj.condition = cond;
@@ -875,7 +871,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     TiXmlElement * xml_rumors = doc.FirstChildElement( "rumors" );
     if ( xml_rumors )
         *xml_rumors >> w.vec_rumors;
-    w.PostLoad();
+    w.ProcessNewMap();
 
     return doc;
 }
@@ -1400,13 +1396,13 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
-    PostLoad();
+    ProcessNewMap();
 
     DEBUG( DBG_GAME, DBG_INFO, "end load" );
     return true;
 }
 
-void World::PostLoad( void )
+void World::ProcessNewMap()
 {
     // modify other objects
     for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
@@ -1522,11 +1518,7 @@ void World::PostLoad( void )
         }
     }
 
-    // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), std::mem_fun_ref( &Maps::Tiles::UpdatePassable ) );
-
-    resetPathfinder();
-    ComputeStaticAnalysis();
+    PostLoad();
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
@@ -1552,7 +1544,7 @@ void World::PostLoad( void )
 
     // set ultimate
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           std::bind2nd( std::mem_fun_ref( &Maps::Tiles::isObject ), static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ) );
+                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
     Point ultimate_pos;
 
     // not found

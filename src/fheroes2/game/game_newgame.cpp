@@ -146,7 +146,7 @@ int Game::NewHotSeat( void )
 
     conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
 
-    if ( conf.GameType( Game::TYPE_BATTLEONLY ) ) {
+    if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
         return StartBattleOnly();
@@ -324,7 +324,7 @@ int Game::NewCampain( void )
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
-            Game::ShowLoadMapsText();
+            Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( campaignMap[0].file ) ) {
@@ -504,7 +504,7 @@ int Game::NewMulti( void )
 {
     Settings & conf = Settings::Get();
 
-    if ( !( conf.GameType( Game::TYPE_BATTLEONLY ) ) )
+    if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
     // cursor

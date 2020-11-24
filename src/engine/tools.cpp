@@ -162,19 +162,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( str.end() == std::find_if( str.begin(), str.end(), std::not1( std::ptr_fun<int, int>( std::isdigit ) ) ) ) {
+    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && str.end() == std::find_if( str.begin() + 1, str.end(), std::not1( std::ptr_fun<int, int>( std::isdigit ) ) ) ) {
+              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && str.end() == std::find_if( str.begin() + 2, str.end(), std::not1( std::ptr_fun<int, int>( std::isxdigit ) ) ) ) {
+             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char & c ) { return !std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -509,6 +509,12 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
             else
                 res.erase( pos - 1, 1 );
             --pos;
+        }
+    } break;
+    case KEY_DELETE: {
+        if ( res.size() ) {
+            if ( pos < res.size() )
+                res.erase( pos, 1 );
         }
     } break;
 

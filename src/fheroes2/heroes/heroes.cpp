@@ -75,7 +75,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int type, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -937,7 +937,7 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
 
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), std::bind2nd( std::mem_fun_ref( &IndexObject::isObject ), object ) );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 /* set visited cell */
@@ -1038,7 +1038,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     if ( !bag_artifacts.PushArtifact( art ) ) {
         if ( isControlHuman() ) {
             art() == Artifact::MAGIC_BOOK ? Dialog::Message(
-                "",
+                GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
                                           : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
@@ -1206,7 +1206,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
         if ( isControlHuman() ) {
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::Message( "", header, Font::BIG, Dialog::OK );
+            Dialog::Message( GetName(), header, Font::BIG, Dialog::OK );
         }
         return false;
     }
@@ -1294,12 +1294,12 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
-int Heroes::lastGroundRegion() const
+uint32_t Heroes::lastGroundRegion() const
 {
     return _lastGroundRegion;
 }
 
-void Heroes::setLastGroundRegion( int regionID )
+void Heroes::setLastGroundRegion( uint32_t regionID )
 {
     _lastGroundRegion = regionID;
 }
@@ -1362,6 +1362,12 @@ u32 Heroes::GetVisionsDistance( void ) const
 int Heroes::GetDirection( void ) const
 {
     return direction;
+}
+
+void Heroes::setDirection( int directionToSet )
+{
+    if ( directionToSet != Direction::UNKNOWN )
+        direction = directionToSet;
 }
 
 /* return route range in days */
@@ -1858,22 +1864,6 @@ struct InCastleAndGuardian : public std::binary_function<const Castle *, Heroes 
     }
 };
 
-struct InCastleNotGuardian : public std::binary_function<const Castle *, Heroes *, bool>
-{
-    bool operator()( const Castle * castle, Heroes * hero ) const
-    {
-        return castle->GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN );
-    }
-};
-
-struct InJailMode : public std::binary_function<s32, Heroes *, bool>
-{
-    bool operator()( s32 index, Heroes * hero ) const
-    {
-        return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex();
-    }
-};
-
 AllHeroes::AllHeroes()
 {
     reserve( HEROESMAXCOUNT + 2 );
@@ -1965,13 +1955,16 @@ Heroes * VecHeroes::Get( const Point & center ) const
 
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind1st( InCastleNotGuardian(), &castle ) );
+    const_iterator it
+        = std::find_if( begin(), end(), [castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
     return end() != it ? *it : NULL;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(), std::bind1st( InCastleAndGuardian(), &castle ) ) : end();
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians()
+                            ? std::find_if( begin(), end(), [castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
+                            : end();
     return end() != it ? *it : NULL;
 }
 
@@ -2053,7 +2046,7 @@ void AllHeroes::Scoute( int colors ) const
 
 Heroes * AllHeroes::FromJail( s32 index ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind1st( InJailMode(), index ) );
+    const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : NULL;
 }
 

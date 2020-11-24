@@ -42,11 +42,6 @@ namespace
         LEFT = 7
     };
 
-    uint8_t ReflectDirectionIndex( uint8_t direction )
-    {
-        return ( direction + 4 ) % 8;
-    }
-
     uint16_t GetDirectionBitmask( uint8_t direction, bool reflect = false )
     {
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
@@ -138,17 +133,22 @@ namespace
 }
 
 MapRegion::MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize )
-    : _id( REGION_NODE_FOUND + regionIndex )
+    : _id( regionIndex )
     , _isWater( water )
 {
     _nodes.reserve( expectedSize );
     _nodes.emplace_back( mapIndex );
-    _nodes[0].type = _id;
+    _nodes[0].type = regionIndex;
 }
 
 std::vector<int> MapRegion::getNeighbours() const
 {
     return std::vector<int>( _neighbours.begin(), _neighbours.end() );
+}
+
+size_t MapRegion::getNeighboursCount() const
+{
+    return _neighbours.size();
 }
 
 std::vector<IndexObject> MapRegion::getObjectList() const
@@ -183,7 +183,12 @@ double MapRegion::getFogRatio( int color ) const
     return static_cast<double>( fogCount ) / _nodes.size();
 }
 
-const MapRegion & World::getRegion( size_t id )
+size_t World::getRegionCount() const
+{
+    return _regions.size();
+}
+
+const MapRegion & World::getRegion( size_t id ) const
 {
     if ( id < _regions.size() )
         return _regions[id];
@@ -278,7 +283,7 @@ void World::ComputeStaticAnalysis()
         // Check if a lot of players next to each other? (Slugfest map)
         // GetCastle( Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
-        AppendIfFarEnough( regionCenters, ( castleIndex > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
+        AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }
 
     // Step 4. Add missing region centres based on distance (for water or if there's big chunks of space without castles)
@@ -297,7 +302,7 @@ void World::ComputeStaticAnalysis()
                 else {
                     for ( uint8_t direction = 0; direction < 8; ++direction ) {
                         const int newIndex = tileIndex + directionOffsets[direction];
-                        if ( newIndex >= 0 && newIndex < totalMapTiles ) {
+                        if ( newIndex >= 0 && static_cast<size_t>( newIndex ) < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
                             if ( newTile.GetPassable() && tile.isWater() == static_cast<bool>( waterOrGround ) ) {
                                 centerIndex = newIndex;
@@ -339,11 +344,14 @@ void World::ComputeStaticAnalysis()
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
     _regions.clear();
+    for ( size_t baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
+        _regions.emplace_back( baseIDX, 0, false, 0 );
+    }
 
-    for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
-        const int tileIndex = regionCenters[regionID];
-        _regions.emplace_back( static_cast<int>( regionID ), tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
-        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = REGION_NODE_FOUND + regionID;
+    for ( const int tileIndex : regionCenters ) {
+        const size_t regionID = _regions.size();
+        _regions.emplace_back( regionID, tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
+        data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
@@ -351,7 +359,7 @@ void World::ComputeStaticAnalysis()
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
-        for ( size_t regionID = 0; regionID < regionCenters.size(); ++regionID ) {
+        for ( size_t regionID = REGION_NODE_FOUND; regionID < regionCenters.size(); ++regionID ) {
             MapRegion & region = _regions[regionID];
             RegionExpansion( data, extendedWidth, region, offsets );
             if ( region._lastProcessedNode != region._nodes.size() )
@@ -362,10 +370,22 @@ void World::ComputeStaticAnalysis()
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
     FindMissingRegions( data, Size( width, height ), _regions );
 
-    // Assign regions to the map tiles
-    for ( const MapRegion & reg : _regions ) {
+    // Step 9. Assign regions to the map tiles and finalize the data
+    for ( MapRegion & reg : _regions ) {
+        if ( reg._id < REGION_NODE_FOUND )
+            continue;
+
         for ( const MapRegionNode & node : reg._nodes ) {
             vec_tiles[node.index].UpdateRegion( node.type );
+
+            // connect regions through teleporters
+            if ( node.mapObject == MP2::OBJ_STONELITHS ) {
+                const MapsIndexes & exits = GetTeleportEndPoints( node.index );
+                for ( const int exitIndex : exits ) {
+                    // neighbours is a set that will force the uniqness
+                    reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
+                }
+            }
         }
     }
 }

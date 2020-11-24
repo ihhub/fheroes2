@@ -267,7 +267,7 @@ namespace Battle
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
-        void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
+        void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );

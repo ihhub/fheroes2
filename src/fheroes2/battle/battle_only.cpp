@@ -110,17 +110,21 @@ StreamBase & operator>>( StreamBase & msg, Battle::Only & b )
 
     msg >> id;
     b.hero1 = world.GetHeroes( id );
-    if ( b.hero1 )
+    if ( b.hero1 ) {
         msg >> *b.hero1;
-    else
+    }
+    else {
         DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+    }
 
     msg >> id;
     b.hero2 = world.GetHeroes( id );
-    if ( b.hero2 )
+    if ( b.hero2 ) {
         msg >> *b.hero2;
-    else
+    }
+    else {
         DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+    }
 
     msg >> b.player1 >> b.player2;
 
@@ -166,7 +170,7 @@ bool Battle::Only::ChangeSettings( void )
     rtKnowledge1 = Rect( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
     rtKnowledge2 = Rect( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
 
-    if ( conf.GameType( Game::TYPE_NETWORK ) ) {
+    if ( conf.IsGameType( Game::TYPE_NETWORK ) ) {
         player2.SetColor( Color::RED );
 
         player1.SetControl( CONTROL_REMOTE );
@@ -460,16 +464,6 @@ bool Battle::Only::ChangeSettings( void )
 
 void Battle::Only::UpdateHero1( const Point & cur_pt )
 {
-    if ( moraleIndicator1 ) {
-        delete moraleIndicator1;
-        moraleIndicator1 = NULL;
-    }
-
-    if ( luckIndicator1 ) {
-        delete luckIndicator1;
-        luckIndicator1 = NULL;
-    }
-
     if ( primskill_bar1 ) {
         delete primskill_bar1;
         primskill_bar1 = NULL;
@@ -494,11 +488,21 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         player1.SetColor( Color::BLUE );
         player1.SetRace( hero1->GetRace() );
 
-        moraleIndicator1 = new MoraleIndicator( *hero1 );
-        moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ), true );
+        if ( moraleIndicator1 == NULL ) {
+            moraleIndicator1 = new MoraleIndicator( hero1 );
+            moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ) );
+        }
+        else {
+            moraleIndicator1->SetHero( hero1 );
+        }
 
-        luckIndicator1 = new LuckIndicator( *hero1 );
-        luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ), true );
+        if ( luckIndicator1 == NULL ) {
+            luckIndicator1 = new LuckIndicator( hero1 );
+            luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ) );
+        }
+        else {
+            luckIndicator1->SetHero( hero1 );
+        }
 
         primskill_bar1 = new PrimarySkillsBar( hero1, true );
         primskill_bar1->SetColRows( 1, 4 );
@@ -530,16 +534,6 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 
 void Battle::Only::UpdateHero2( const Point & cur_pt )
 {
-    if ( moraleIndicator2 ) {
-        delete moraleIndicator2;
-        moraleIndicator2 = NULL;
-    }
-
-    if ( luckIndicator2 ) {
-        delete luckIndicator2;
-        luckIndicator2 = NULL;
-    }
-
     if ( primskill_bar2 ) {
         delete primskill_bar2;
         primskill_bar2 = NULL;
@@ -564,11 +558,21 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         player2.SetColor( Color::RED );
         player2.SetRace( hero2->GetRace() );
 
-        moraleIndicator2 = new MoraleIndicator( *hero2 );
-        moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ), true );
+        if ( moraleIndicator2 == NULL ) {
+            moraleIndicator2 = new MoraleIndicator( hero2 );
+            moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ) );
+        }
+        else {
+            moraleIndicator2->SetHero( hero2 );
+        }
 
-        luckIndicator2 = new LuckIndicator( *hero2 );
-        luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ), true );
+        if ( luckIndicator2 == NULL ) {
+            luckIndicator2 = new LuckIndicator( hero2 );
+            luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ) );
+        }
+        else {
+            luckIndicator2->SetHero( hero2 );
+        }
 
         primskill_bar2 = new PrimarySkillsBar( hero2, true );
         primskill_bar2->SetColRows( 1, 4 );

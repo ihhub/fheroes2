@@ -44,7 +44,7 @@ public:
         SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
     };
 
-    void RedrawBackground( const Point & dst )
+    virtual void RedrawBackground( const Point & dst ) override
     {
         Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 10 ) );
 
@@ -56,18 +56,18 @@ public:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 8 ), display, dst.x + area.w - 24, dst.y + 44 + ( ii * 19 ) );
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.w - 24, dst.y + area.h - 74 );
-    };
+    }
 
-    void ActionListDoubleClick( int & index )
+    virtual void ActionListDoubleClick( int & /*index*/ ) override
     {
         ok = true;
-    };
+    }
 
-    void RedrawItem( const int &, s32, s32, bool ){};
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListSingleClick( int & ){};
-    void ActionListPressRight( int & ){};
+    virtual void RedrawItem( const int &, s32, s32, bool ) override {}
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListSingleClick( int & ) override {}
+    virtual void ActionListPressRight( int & ) override {}
 
     Rect area;
     bool ok;

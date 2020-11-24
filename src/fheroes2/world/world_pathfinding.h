@@ -60,7 +60,7 @@ public:
     virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 };
 
 class AIWorldPathfinder : public WorldPathfinder
@@ -83,15 +83,11 @@ public:
     // Override builds path to the nearest valid object
     virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
 
-    // Faster, but does not re-evaluate the map
-    // Base class implementation is hidden by finicky override logic, expose it
-    virtual uint32_t getDistance( int targetIndex )
-    {
-        return Pathfinder::getDistance( targetIndex );
-    }
+    // Faster, but does not re-evaluate the map (expose base class method)
+    using Pathfinder::getDistance;
 
 private:
-    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater );
+    void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 
     int _currentColor = Color::NONE;
     double _armyStrength = -1;

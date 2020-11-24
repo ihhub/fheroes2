@@ -53,7 +53,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
 
-    TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
+    TextBox recruitHeroText( _( "Recruit Hero" ), Font::BIG, BOXAREA_WIDTH );
 
     u32 count = hero->GetCountArtifacts();
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
@@ -503,10 +503,12 @@ u32 Castle::OpenTown( void )
             }
         }
 
-        // right
-        if ( le.MousePressRight( rectSpreadArmyFormat ) )
+        const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
+
+        // Right click
+        if ( le.MousePressRight( rectSpreadArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
-        else if ( le.MousePressRight( rectGroupedArmyFormat ) )
+        else if ( le.MousePressRight( rectGroupedArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             hero1->OpenDialog( true );
@@ -578,9 +580,9 @@ u32 Castle::OpenTown( void )
                 statusBar.ShowMessage( str );
             }
         }
-        else if ( le.MouseCursor( rectSpreadArmyFormat ) )
+        else if ( le.MouseCursor( rectSpreadArmyFormat ) && isCaptainBuilt )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
-        else if ( le.MouseCursor( rectGroupedArmyFormat ) )
+        else if ( le.MouseCursor( rectGroupedArmyFormat ) && isCaptainBuilt )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
         else if ( le.MouseCursor( buttonExit.area() ) )
             statusBar.ShowMessage( _( "Exit Castle Options" ) );

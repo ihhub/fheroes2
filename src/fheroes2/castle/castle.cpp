@@ -356,7 +356,7 @@ bool Castle::isCapital( void ) const
 
 u32 Castle::CountBuildings( void ) const
 {
-    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : 0 ) : BUILD_TAVERN );
+    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -437,10 +437,22 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
+    // we don't spend actual funds, so make a copy here
+    Funds potentialFunds = GetKingdom().GetFunds();
     Troops reinforcement;
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) )
-            reinforcement.PushBack( Monster( race, GetActualDwelling( dw ) ), getMonstersInDwelling( dw ) );
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t available = getMonstersInDwelling( dw );
+
+            uint32_t couldRecruit = potentialFunds.getLowestQuotient( monster.GetCost() );
+            if ( available < couldRecruit )
+                couldRecruit = available;
+
+            potentialFunds -= ( monster.GetCost() * couldRecruit );
+
+            reinforcement.PushBack( monster, couldRecruit );
+        }
     }
 
     return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
@@ -952,6 +964,9 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( kingdom.GetLastLostHero() == hero )
         kingdom.ResetLastLostHero();
 
+    // actually update available heroes to recruit
+    kingdom.GetRecruits();
+
     kingdom.OddFundsResource( PaymentConditions::RecruitHero( hero->GetLevel() ) );
 
     // update spell book
@@ -970,129 +985,125 @@ Heroes * Castle::RecruitHero( Heroes * hero )
 }
 
 /* recruit monster from building to castle army */
-bool Castle::RecruitMonster( const Troop & troop )
+bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
 {
     if ( !troop.isValid() )
         return false;
 
-    int dw_index = 0;
+    int dwellingIndex = 0;
 
     switch ( troop.GetDwelling() ) {
     case DWELLING_MONSTER1:
-        dw_index = 0;
+        dwellingIndex = 0;
         break;
     case DWELLING_UPGRADE2:
     case DWELLING_MONSTER2:
-        dw_index = 1;
+        dwellingIndex = 1;
         break;
     case DWELLING_UPGRADE3:
     case DWELLING_MONSTER3:
-        dw_index = 2;
+        dwellingIndex = 2;
         break;
     case DWELLING_UPGRADE4:
     case DWELLING_MONSTER4:
-        dw_index = 3;
+        dwellingIndex = 3;
         break;
     case DWELLING_UPGRADE5:
     case DWELLING_MONSTER5:
-        dw_index = 4;
+        dwellingIndex = 4;
         break;
     case DWELLING_UPGRADE7:
     case DWELLING_UPGRADE6:
     case DWELLING_MONSTER6:
-        dw_index = 5;
+        dwellingIndex = 5;
         break;
     default:
         return false;
     }
 
-    Monster ms = troop;
-    u32 count = troop.GetCount();
+    Monster monster = troop;
+    uint32_t count = troop.GetCount();
 
     // fix count
-    if ( dwelling[dw_index] < count )
-        count = dwelling[dw_index];
+    if ( dwelling[dwellingIndex] < count )
+        count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = ms.GetCost() * count;
+    const payment_t paymentCosts = monster.GetCost() * count;
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
         return false;
 
     // first: guard army join
-    if ( !GetArmy().JoinTroop( ms, count ) ) {
+    if ( !GetArmy().JoinTroop( monster, count ) ) {
         CastleHeroes heroes = world.GetHeroes( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( ms, count ) ) {
-            Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
+        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( monster, count ) ) {
+            if ( showDialog ) {
+                Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
+            }
             return false;
         }
     }
 
     kingdom.OddFundsResource( paymentCosts );
-    dwelling[dw_index] -= count;
+    dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_INFO, name << " recruit: " << ms.GetMultiName() << "(" << count << ")" );
+    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << monster.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
 
-bool Castle::RecruitMonsterFromDwelling( u32 dw, u32 count )
+bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force )
 {
-    int dw_index = 0;
+    Monster monster( race, GetActualDwelling( dw ) );
+    Troop troop( monster, std::min( count, getRecruitLimit( monster, GetKingdom().GetFunds() ) ) );
 
-    switch ( dw ) {
-    case DWELLING_MONSTER1:
-        dw_index = 0;
-        break;
-    case DWELLING_UPGRADE2:
-    case DWELLING_MONSTER2:
-        dw_index = 1;
-        break;
-    case DWELLING_UPGRADE3:
-    case DWELLING_MONSTER3:
-        dw_index = 2;
-        break;
-    case DWELLING_UPGRADE4:
-    case DWELLING_MONSTER4:
-        dw_index = 3;
-        break;
-    case DWELLING_UPGRADE5:
-    case DWELLING_MONSTER5:
-        dw_index = 4;
-        break;
-    case DWELLING_UPGRADE7:
-    case DWELLING_UPGRADE6:
-    case DWELLING_MONSTER6:
-        dw_index = 5;
-        break;
-    default:
+    if ( !RecruitMonster( troop, false ) ) {
+        if ( force ) {
+            Troop * weak = GetArmy().GetWeakestTroop();
+            if ( weak && weak->GetStrength() < troop.GetStrength() ) {
+                DEBUG( DBG_GAME, DBG_INFO,
+                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() );
+                weak->Set( troop );
+                return true;
+            }
+        }
+
         return false;
     }
-
-    const Monster ms( race, GetActualDwelling( dw ) );
-
-    // fix count
-    if ( dwelling[dw_index] < count )
-        count = dwelling[dw_index];
-
-    // buy
-    const payment_t paymentCosts = ms.GetCost() * count;
-    Kingdom & kingdom = GetKingdom();
-
-    // may be guardian present
-    Army & army2 = GetArmy();
-
-    if ( !kingdom.AllowPayment( paymentCosts ) || !army2.JoinTroop( ms, count ) )
-        return false;
-
-    kingdom.OddFundsResource( paymentCosts );
-    dwelling[dw_index] -= count;
-
-    DEBUG( DBG_GAME, DBG_INFO, name << " recruit: " << ms.GetMultiName() << "(" << count << ")" );
-
     return true;
+}
+
+void Castle::recruitBestAvailable( Funds budget )
+{
+    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
+        if ( isBuild( dw ) ) {
+            const Monster monster( race, GetActualDwelling( dw ) );
+            const uint32_t willRecruit = getRecruitLimit( monster, budget );
+
+            if ( RecruitMonsterFromDwelling( dw, willRecruit, true ) ) {
+                // success, reduce the budget
+                budget -= ( monster.GetCost() * willRecruit );
+            }
+        }
+    }
+}
+
+uint32_t Castle::getRecruitLimit( const Monster & monster, const Funds & budget ) const
+{
+    // validate that monster is from the current castle
+    if ( monster.GetRace() != race )
+        return 0;
+
+    const uint32_t available = getMonstersInDwelling( monster.GetDwelling() );
+
+    uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
+    if ( available < willRecruit )
+        return available;
+
+    return willRecruit;
 }
 
 /* return current count monster in dwelling */
@@ -1582,7 +1593,7 @@ bool Castle::BuyBuilding( u32 build )
 }
 
 /* draw image castle to position */
-void Castle::DrawImageCastle( const Point & pt )
+void Castle::DrawImageCastle( const Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
@@ -2377,39 +2388,6 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-void Castle::RecruitAllMonsters( void )
-{
-    bool skip_recruit = false;
-
-    // skip recruit: AI with customization of empty army
-    if ( Modes( CUSTOMARMY ) && isControlAI() && !army.isValid() && !army.HasMonster( Monster( Monster::UNKNOWN ) ) )
-        skip_recruit = true;
-
-    if ( !skip_recruit )
-        for ( u32 dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 )
-            if ( isBuild( dw ) )
-                RecruitMonsterFromDwelling( dw, getMonstersInDwelling( dw ) );
-}
-
-void Castle::recruitBestAvailable( Funds budget )
-{
-    for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
-        if ( isBuild( dw ) ) {
-            const Monster monster( race, GetActualDwelling( dw ) );
-            const uint32_t available = getMonstersInDwelling( dw );
-
-            uint32_t willRecruit = budget.getLowestQuotient( monster.GetCost() );
-            if ( available < willRecruit )
-                willRecruit = available;
-
-            if ( RecruitMonsterFromDwelling( dw, willRecruit ) ) {
-                // success, reduce the budget
-                budget -= ( monster.GetCost() * willRecruit );
-            }
-        }
-    }
-}
-
 const Army & Castle::GetArmy( void ) const
 {
     const CastleHeroes heroes = world.GetHeroes( *this );
@@ -2586,17 +2564,9 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-struct CastleHavePoint : public std::binary_function<const Castle *, const Point *, bool>
-{
-    bool operator()( const Castle * castle, const Point * pt ) const
-    {
-        return castle->isPosition( *pt );
-    }
-};
-
 Castle * VecCastles::Get( const Point & position ) const
 {
-    const_iterator it = std::find_if( begin(), end(), std::bind2nd( CastleHavePoint(), &position ) );
+    const_iterator it = std::find_if( begin(), end(), [position]( const Castle * castle ) { return castle->isPosition( position ); } );
     return end() != it ? *it : NULL;
 }
 
@@ -2604,6 +2574,15 @@ Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : NULL;
+}
+
+void VecCastles::SortByBuildingValue()
+{
+    std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
+        if ( left && right )
+            return left->getBuildingValue() > right->getBuildingValue();
+        return right == NULL;
+    } );
 }
 
 void VecCastles::ChangeColors( int col1, int col2 )

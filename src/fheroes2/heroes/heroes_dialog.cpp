@@ -86,7 +86,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.x = cur_pt.x + 514;
     dst_pt.y = cur_pt.y + 35;
 
-    MoraleIndicator moraleIndicator( *this );
+    MoraleIndicator moraleIndicator( this );
     moraleIndicator.SetPos( dst_pt );
     moraleIndicator.Redraw();
 
@@ -94,7 +94,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.x = cur_pt.x + 552;
     dst_pt.y = cur_pt.y + 35;
 
-    LuckIndicator luckIndicator( *this );
+    LuckIndicator luckIndicator( this );
     luckIndicator.SetPos( dst_pt );
     luckIndicator.Redraw();
 
@@ -125,12 +125,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
-    ExperienceIndicator experienceInfo( *this );
+    ExperienceIndicator experienceInfo( this );
     experienceInfo.SetPos( Point( cur_pt.x + 512, cur_pt.y + 86 ) );
     experienceInfo.Redraw();
 
     // spell points
-    SpellPointsIndicator spellPointsInfo( *this );
+    SpellPointsIndicator spellPointsInfo( this );
     spellPointsInfo.SetPos( Point( cur_pt.x + 550, cur_pt.y + 88 ) );
     spellPointsInfo.Redraw();
 

@@ -26,7 +26,7 @@
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 8
-#define INTERMEDIATE_VERSION 2
+#define INTERMEDIATE_VERSION 3
 
 #ifdef WITH_XML
 #include "tinyxml.h"
