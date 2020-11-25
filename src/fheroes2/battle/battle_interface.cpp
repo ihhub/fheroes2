@@ -741,7 +741,7 @@ void Battle::Status::Redraw( void )
     fheroes2::Blit( back2, display, x, y + back1.height() );
 
     if ( bar1.Size() )
-        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 1 );
+        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
     if ( bar2.Size() )
         bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
 }
