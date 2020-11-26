@@ -226,7 +226,7 @@ int Game::NewCampain( void )
 
     if ( !campaignMap.empty() ) {
         const std::string & desc = campaignMap[0].description;
-        TextBox mapName( desc.substr( 1, desc.length() - 2), Font::BIG, 200 );
+        TextBox mapName( desc.substr( 1, desc.length() - 2 ), Font::BIG, 200 );
         mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( "1", Font::BIG );
