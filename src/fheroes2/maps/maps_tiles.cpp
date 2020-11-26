@@ -1523,7 +1523,7 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, bool 
             const Point mp = Maps::GetPoint( GetIndex() );
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, 255, withShadow );
+            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
             const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
@@ -1639,17 +1639,17 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
                 const u8 & index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
 
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp, false );
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
 
                 // possible anime
                 if ( it->object & 1 ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp, false );
+                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
                 }
             }
         }
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-            RedrawObjects( dst, false, false );
+            RedrawObjects( dst );
             RedrawMonstersAndBoat( dst, false );
         }
     }
