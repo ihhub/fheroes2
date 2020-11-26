@@ -2415,7 +2415,7 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool & combineWithAnd )
+bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
 {
     const std::string combTypeAnd = " and ";
     const std::string combTypeComma = ", ";
@@ -2435,32 +2435,26 @@ bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1,
 
 void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 {
-    const size_t monstersLimit = 3;
-
     std::string monsters;
     std::string monsters_upgrade;
     std::string msg1;
     std::string msg2;
-
     std::vector<Monster> mons;
-    mons.reserve( monstersLimit );
 
     hero.MovePointsScaleFixed();
 
-    const std::vector<Monster> * monsToUpgrade = nullptr;
-    const std::vector<Monster> hillfortMonsToUpgrade( {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )} );
-    const std::vector<Monster> freemansfoundryMonsToUpgrade( {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )} );
+    std::vector<Monster> monsToUpgrade;
 
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
-        monsToUpgrade = &hillfortMonsToUpgrade;
+        monsToUpgrade = {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )};
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
         msg2 = _( "An unusual alliance of Orcs, Ogres, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
     } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
-        monsToUpgrade = &freemansfoundryMonsToUpgrade;
+        monsToUpgrade = {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )};
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
         msg2 = _(
@@ -2472,16 +2466,20 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         return;
     }
 
-    if ( monsToUpgrade != nullptr && !monsToUpgrade->empty() ) {
-        Army & heroArmy = hero.GetArmy();
+    if ( monsToUpgrade.empty() ) {
+        DEBUG( DBG_GAME, DBG_WARN, "Something gonna wrong, because monsToUpgrade is empty" );
+        return;
+    }
 
-        for ( std::size_t i = 0; i < monsToUpgrade->size(); ++i ) {
-            if ( !heroArmy.HasMonster( monsToUpgrade->at( i ) ) )
-                continue;
-            const bool combineWithAnd = i == ( monsToUpgrade->size() - 1 ) && !mons.empty();
-            if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade->at( i ), monsters, monsters_upgrade, combineWithAnd ) )
-                mons.emplace_back( monsToUpgrade->at( i ) );
-        }
+    Army & heroArmy = hero.GetArmy();
+    mons.reserve( monsToUpgrade.size() );
+
+    for ( auto i = 0; i < monsToUpgrade.size(); ++i ) {
+        if ( !heroArmy.HasMonster( monsToUpgrade[i] ) )
+            continue;
+        const bool combineWithAnd = i == ( monsToUpgrade.size() - 1 ) && !mons.empty();
+        if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
+            mons.emplace_back( monsToUpgrade[i] );
     }
 
     if ( !mons.empty() ) {
