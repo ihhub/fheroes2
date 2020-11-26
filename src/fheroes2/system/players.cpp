@@ -310,6 +310,11 @@ void Players::Init( const Maps::FileInfo & fi )
     }
 }
 
+void Players::Set( int color, Player * player )
+{
+    _players[color] = player;
+}
+
 Player * Players::Get( int color )
 {
     return _players[Color::GetIndex( color )];
@@ -495,7 +500,7 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     for ( u32 ii = 0; ii < vcolors.size(); ++ii ) {
         Player * player = new Player();
         msg >> *player;
-        Players::_players[Color::GetIndex( player->GetColor() )] = player;
+        Players::Set( Color::GetIndex( player->GetColor() ), player );
         players.push_back( player );
     }
 

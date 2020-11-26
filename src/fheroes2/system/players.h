@@ -161,6 +161,7 @@ public:
     Player * GetCurrent( void );
     const Player * GetCurrent( void ) const;
 
+    static void Set( int color, Player * player );
     static Player * Get( int color );
     static int GetPlayerControl( int color );
     static int GetPlayerRace( int color );
@@ -175,6 +176,7 @@ public:
 
     int current_color;
 
+private:
     static Player * _players[KINGDOMMAX + 1];
     static int human_colors;
 };

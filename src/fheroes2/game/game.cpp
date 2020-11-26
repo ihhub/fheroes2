@@ -70,6 +70,8 @@ namespace Game
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
     std::map<std::string, std::vector<Player>> mapPlayers;
+    std::string lastMapFileName = "";
+    std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -103,35 +105,30 @@ namespace Game
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
-    auto it = mapPlayers.find( mapFileName );
-    if ( it != mapPlayers.end() ) {
-        players.clear();
-        for ( const Player & p : it->second ) {
-            Player * player = new Player( p.GetColor() );
-            player->SetRace( p.GetRace() );
-            player->SetControl( p.GetControl() );
-            player->SetFriends( p.GetFriends() );
-            players.push_back( player );
-            Players::_players[Color::GetIndex( p.GetColor() )] = players.back();
-        }
+    if ( lastMapFileName != mapFileName || savedPlayers.empty() ) {
+        return;
+    }
+    players.clear();
+    for ( const Player & p : savedPlayers ) {
+        Player * player = new Player( p.GetColor() );
+        player->SetRace( p.GetRace() );
+        player->SetControl( p.GetControl() );
+        player->SetFriends( p.GetFriends() );
+        players.push_back( player );
+        Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
 }
 
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
 {
-    auto it = mapPlayers.lower_bound( mapFileName );
-    if ( it == mapPlayers.end() || mapPlayers.key_comp()( mapFileName, it->first ) ) {
-        it = mapPlayers.insert( it, std::map<std::string, std::vector<Player> >::value_type( mapFileName, std::vector<Player>() ) );
-    }
-    else {
-        it->second.clear();
-    }
+    lastMapFileName = mapFileName;
+    savedPlayers.clear();
     for ( const Player * p : players ) {
         Player player = Player( p->GetColor() );
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
-        it->second.push_back( player );
+        savedPlayers.push_back( player );
     }
 }
 
