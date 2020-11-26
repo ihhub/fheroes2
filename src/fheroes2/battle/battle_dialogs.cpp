@@ -48,6 +48,8 @@ namespace
     const int bsTextYOffset = 175;
     const int bsTextIndent = 30;
 
+    const std::string msgAGloriousVictory = "A Glorious Victory!";
+
     class LoopedAnimation
     {
     public:
@@ -286,7 +288,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
         else if ( res2 & RESULT_RETREAT )
             title.append( _( "The enemy has fled!" ) );
         else
-            title.append( _( "A glorious victory!" ) );
+            title.append( _( msgAGloriousVictory ) );
 
         if ( hero.isHeroes() ) {
             msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
@@ -365,7 +367,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
             // Human wins
             if ( res.army2 & RESULT_WINS ) {
             sequence.push( ICN::WINCMBT, true );
-            msg.append( _( "A glorious victory!" ) );
+            msg.append( _( msgAGloriousVictory ) );
         }
     }
 
