@@ -349,6 +349,10 @@ bool ActionSpellIdentifyHero( Heroes & hero )
     return true;
 }
 
+u32 GetSummonBoatChance( const Heroes & hero );
+s32 FindNearestWater( s32 center );
+bool TrySummonAnyBoat( s32 center, u32 chance, s32 dst_water );
+
 bool ActionSpellSummonBoat( Heroes & hero )
 {
     if ( hero.isShipMaster() ) {
@@ -358,21 +362,21 @@ bool ActionSpellSummonBoat( Heroes & hero )
 
     const s32 center = hero.GetIndex();
 
-    // find water
-    s32 dst_water = -1;
-    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
-            break;
-        }
-    }
-
+    const s32 dst_water = FindNearestWater( center );
     if ( !Maps::isValidAbsIndex( dst_water ) ) {
         Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
         return false;
     }
 
+    if ( !TrySummonAnyBoat( center, GetSummonBoatChance( hero ), dst_water ) ) {
+        DialogSpellFailed( Spell::SUMMONBOAT );
+        return false;
+    }
+    return true;
+}
+
+u32 GetSummonBoatChance( const Heroes & hero )
+{
     u32 chance = 0;
 
     switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
@@ -390,6 +394,24 @@ bool ActionSpellSummonBoat( Heroes & hero )
         break;
     }
 
+    return chance;
+}
+
+s32 FindNearestWater( s32 center )
+{
+    s32 dst_water = -1;
+    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+        if ( world.GetTiles( *it ).isWater() ) {
+            dst_water = *it;
+            break;
+        }
+    }
+    return dst_water;
+}
+
+bool TrySummonAnyBoat( s32 center, u32 chance, s32 dst_water )
+{
     const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
     for ( size_t i = 0; i < boats.size(); ++i ) {
         const s32 boat = boats[i];
@@ -403,9 +425,7 @@ bool ActionSpellSummonBoat( Heroes & hero )
             break;
         }
     }
-
-    DialogSpellFailed( Spell::SUMMONBOAT );
-    return true;
+    return false;
 }
 
 bool ActionSpellDimensionDoor( Heroes & hero )
