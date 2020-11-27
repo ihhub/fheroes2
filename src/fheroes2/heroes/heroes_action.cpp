@@ -2439,7 +2439,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     std::string monsters_upgrade;
     std::string msg1;
     std::string msg2;
-    std::vector<Monster> mons;
+
+    std::vector<Monster *> mons;
 
     hero.MovePointsScaleFixed();
 
@@ -2463,23 +2464,25 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     default:
         ERROR( "Incorrect object type passed to ActionToUpgradeArmyObject" );
+        assert( 0 );
         return;
     }
 
     if ( monsToUpgrade.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "Something gonna wrong, because monsToUpgrade is empty" );
+        ERROR( "monsToUpgrade mustn't be empty." );
+        assert( 0 );
         return;
     }
 
     Army & heroArmy = hero.GetArmy();
     mons.reserve( monsToUpgrade.size() );
 
-    for ( auto i = 0; i < monsToUpgrade.size(); ++i ) {
+    for ( size_t i = 0; i < monsToUpgrade.size(); ++i ) {
         if ( !heroArmy.HasMonster( monsToUpgrade[i] ) )
             continue;
         const bool combineWithAnd = i == ( monsToUpgrade.size() - 1 ) && !mons.empty();
         if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
-            mons.emplace_back( monsToUpgrade[i] );
+            mons.emplace_back( &monsToUpgrade[i] );
     }
 
     if ( !mons.empty() ) {
@@ -2494,11 +2497,11 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         StringReplace( msg1, "%{monsters}", monsters );
         StringReplace( msg1, "%{monsters2}", monsters_upgrade );
 
-        for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
+        for ( std::vector<Monster *>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
             // border
             fheroes2::Blit( border, surface, offsetX, 0 );
             // background scenary for each race
-            switch ( Monster( *it ).GetRace() ) {
+            switch ( ( *it )->GetRace() ) {
             case Race::KNGT:
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, 6 );
                 break;
@@ -2522,7 +2525,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
                 break;
             }
             // upgraded troop
-            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
+            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it )->GetUpgrade().ICNMonh(), 0 );
             fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() );
             offsetX += border.width() + 4;
         }
