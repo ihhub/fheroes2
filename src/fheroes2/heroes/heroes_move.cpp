@@ -503,15 +503,33 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     }
 
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM_LEFT ) ) {
-        const Maps::Tiles & tileBottomLeft = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_LEFT ) );
-        tileBottomLeft.RedrawBottom( dst );
-        tileBottomLeft.RedrawObjects( dst );
+        bool redrawNear = true;
+        if ( Maps::isValidDirection( centerIndex, Direction::LEFT ) ) {
+            const Maps::Tiles & tileLeft = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::LEFT ) );
+            redrawNear = ( tileLeft.GetHeroes() == NULL );
+            if ( redrawNear && Maps::isValidDirection( tileLeft.GetIndex(), Direction::LEFT ) ) {
+                const Maps::Tiles & tileLeftLeft = world.GetTiles( Maps::GetDirectionIndex( tileLeft.GetIndex(), Direction::LEFT ) );
+                redrawNear = ( tileLeftLeft.GetHeroes() == NULL );
+            }
+        }
+        if ( redrawNear ) {
+            const Maps::Tiles & tileBottomLeft = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_LEFT ) );
+            tileBottomLeft.RedrawBottom( dst );
+            tileBottomLeft.RedrawObjects( dst );
+        }
     }
 
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM_RIGHT ) ) {
-        const Maps::Tiles & tileBottomRight = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_RIGHT ) );
-        tileBottomRight.RedrawBottom( dst );
-        tileBottomRight.RedrawObjects( dst );
+        bool redrawNear = true;
+        if ( Maps::isValidDirection( centerIndex, Direction::RIGHT ) ) {
+            const Maps::Tiles & tileRight = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::RIGHT ) );
+            redrawNear = ( tileRight.GetHeroes() == NULL );
+        }
+        if ( redrawNear ) {
+            const Maps::Tiles & tileBottomRight = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_RIGHT ) );
+            tileBottomRight.RedrawBottom( dst );
+            tileBottomRight.RedrawObjects( dst );
+        }
     }
     /*
     if ( 45 > GetSpriteIndex() ) {
