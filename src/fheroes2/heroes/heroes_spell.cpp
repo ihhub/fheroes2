@@ -349,9 +349,9 @@ bool ActionSpellIdentifyHero( Heroes & hero )
     return true;
 }
 
-u32 GetSummonBoatChance( const Heroes & hero );
-s32 FindNearestWater( s32 center );
-bool TrySummonAnyBoat( s32 center, u32 chance, s32 dst_water );
+u32 GetSummonBoatChancePercents( const Heroes & hero );
+s32 FindNearestWaterIndex( s32 center );
+bool TrySummonAnyBoat( s32 center, u32 chance, s32 dstWater );
 
 bool ActionSpellSummonBoat( Heroes & hero )
 {
@@ -362,63 +362,57 @@ bool ActionSpellSummonBoat( Heroes & hero )
 
     const s32 center = hero.GetIndex();
 
-    const s32 dst_water = FindNearestWater( center );
-    if ( !Maps::isValidAbsIndex( dst_water ) ) {
+    const s32 dstWater = FindNearestWaterIndex( center );
+    if ( !Maps::isValidAbsIndex( dstWater ) ) {
         Dialog::Message( "", _( "This spell can be casted only nearby water." ), Font::BIG, Dialog::OK );
         return false;
     }
 
-    if ( !TrySummonAnyBoat( center, GetSummonBoatChance( hero ), dst_water ) ) {
+    if ( !TrySummonAnyBoat( center, GetSummonBoatChancePercents( hero ), dstWater ) ) {
         DialogSpellFailed( Spell::SUMMONBOAT );
         return false;
     }
     return true;
 }
 
-u32 GetSummonBoatChance( const Heroes & hero )
+u32 GetSummonBoatChancePercents( const Heroes & hero )
 {
-    u32 chance = 0;
-
+    u32 result = 30;
     switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
     case Skill::Level::BASIC:
-        chance = 50;
+        result = 50;
         break;
     case Skill::Level::ADVANCED:
-        chance = 75;
+        result = 75;
         break;
     case Skill::Level::EXPERT:
-        chance = 100;
-        break;
-    default:
-        chance = 30;
+        result = 100;
         break;
     }
-
-    return chance;
+    return result;
 }
 
-s32 FindNearestWater( s32 center )
+s32 FindNearestWaterIndex( s32 center )
 {
-    s32 dst_water = -1;
-    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        if ( world.GetTiles( *it ).isWater() ) {
-            dst_water = *it;
-            break;
+    const MapsIndexes & indexes = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    for ( s32 index : indexes ) {
+        const Maps::Tiles tiles = world.GetTiles( index );
+        if ( tiles.isWater() ) {
+            return index;
         }
     }
-    return dst_water;
+    return -1;
 }
 
 bool TrySummonAnyBoat( s32 center, u32 chance, s32 dst_water )
 {
     const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( size_t i = 0; i < boats.size(); ++i ) {
-        const s32 boat = boats[i];
-        if ( Maps::isValidAbsIndex( boat ) ) {
+    for ( s32 boatIndex : boats ) {
+        if ( Maps::isValidAbsIndex( boatIndex ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
-                world.GetTiles( boat ).RemoveObjectSprite();
-                world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
+                Maps::Tiles tiles = world.GetTiles( boatIndex );
+                tiles.RemoveObjectSprite();
+                tiles.SetObject( MP2::OBJ_ZERO );
                 Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
                 return true;
             }
