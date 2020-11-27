@@ -1509,7 +1509,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
 #endif
 }
 
-void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, bool withShadow ) const
+void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) const
 {
     int object = GetObject();
 

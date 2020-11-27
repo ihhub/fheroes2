@@ -488,7 +488,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
 
     // redraw dependences tiles
-    Maps::Tiles & tile = world.GetTiles( center.x, center.y );
+    const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
     tile.RedrawTop( dst );
@@ -497,11 +497,23 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, skipGround );
 
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM ) ) {
-        Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
-        tile_bottom.RedrawBottom4Hero( dst );
-        tile_bottom.RedrawTop( dst );
+        const Maps::Tiles & tileBottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
+        tileBottom.RedrawBottom( dst );
+        tileBottom.RedrawObjects( dst );
     }
 
+    if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM_LEFT ) ) {
+        const Maps::Tiles & tileBottomLeft = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_LEFT ) );
+        tileBottomLeft.RedrawBottom( dst );
+        tileBottomLeft.RedrawObjects( dst );
+    }
+
+    if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM_RIGHT ) ) {
+        const Maps::Tiles & tileBottomRight = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_RIGHT ) );
+        tileBottomRight.RedrawBottom( dst );
+        tileBottomRight.RedrawObjects( dst );
+    }
+    /*
     if ( 45 > GetSpriteIndex() ) {
         if ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) ) {
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
@@ -522,13 +534,13 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
                 tile_bottom.RedrawObjects( dst );
         }
     }
-
     if ( Maps::isValidDirection( centerIndex, direction ) ) {
         if ( Direction::TOP == direction )
             world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop4Hero( dst, skipGround );
         else
             world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop( dst );
     }
+*/
 }
 
 void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )

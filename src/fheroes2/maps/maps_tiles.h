@@ -159,7 +159,7 @@ namespace Maps
         void RedrawBottom4Hero( fheroes2::Image & ) const;
         void RedrawTop( fheroes2::Image & dst ) const;
         void RedrawTop4Hero( fheroes2::Image &, bool skip_ground ) const;
-        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw = false, bool withShadow = true ) const;
+        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw = false ) const;
         void RedrawMonstersAndBoat( fheroes2::Image & dst, bool withShadow = true ) const;
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image &, int ) const;

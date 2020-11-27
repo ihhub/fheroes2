@@ -78,9 +78,8 @@ namespace Interface
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255,
-                         bool transform = true ) const;
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp, bool transform = true ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const;
 
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const Point & mp ) const;

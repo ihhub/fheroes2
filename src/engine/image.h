@@ -145,7 +145,7 @@ namespace fheroes2
     void AlphaBlit( const Image & in, Image & out, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, Image & out, int32_t outX, int32_t outY, uint8_t alphaValue, bool flip = false );
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue,
-                    bool flip = false, bool transform = true );
+                    bool flip = false );
 
     // inPos must contain non-negative values
     void AlphaBlit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
@@ -162,8 +162,7 @@ namespace fheroes2
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );
-    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip = false,
-               bool transform = true );
+    void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip = false );
 
     // inPos must contain non-negative values
     void Blit( const Image & in, const Point & inPos, Image & out, const Point & outPos, const Size & size, bool flip = false );
