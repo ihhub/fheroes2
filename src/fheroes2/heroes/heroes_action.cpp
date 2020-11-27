@@ -2415,15 +2415,18 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2 )
+bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
 {
+    const std::string combTypeAnd = " and ";
+    const std::string combTypeComma = ", ";
+
     if ( army.HasMonster( mons ) ) {
         army.UpgradeMonsters( mons );
-        if ( str1.size() )
-            str1 += ", ";
+        if ( !str1.empty() )
+            str1 += combineWithAnd ? combTypeAnd : combTypeComma;
         str1 += mons.GetMultiName();
-        if ( str2.size() )
-            str2 += ", ";
+        if ( !str2.empty() )
+            str2 += combineWithAnd ? combTypeAnd : combTypeComma;
         str2 += mons.GetUpgrade().GetMultiName();
         return true;
     }
@@ -2437,46 +2440,52 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     std::string msg1;
     std::string msg2;
 
-    std::vector<Monster> mons;
-    mons.reserve( 3 );
+    std::vector<Monster *> mons;
 
     hero.MovePointsScaleFixed();
 
+    std::vector<Monster> monsToUpgrade;
+
     switch ( obj ) {
-    case MP2::OBJ_HILLFORT:
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::DWARF ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::DWARF ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::ORC ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::ORC ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::OGRE ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::OGRE ) );
+    case MP2::OBJ_HILLFORT: {
+        monsToUpgrade = {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )};
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
-        msg2 = _( "An unusual alliance of Orcs, Ogres, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
-        break;
+        msg2 = _( "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
+    } break;
 
-    case MP2::OBJ_FREEMANFOUNDRY:
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::PIKEMAN ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::PIKEMAN ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::SWORDSMAN ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::SWORDSMAN ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::IRON_GOLEM ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::IRON_GOLEM ) );
+    case MP2::OBJ_FREEMANFOUNDRY: {
+        monsToUpgrade = {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )};
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _(
-            "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems.  Unfortunately, you have none of these troops in your army, so he can't help you." );
-        break;
+            "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
+    } break;
 
     default:
-        break;
+        ERROR( "Incorrect object type passed to ActionToUpgradeArmyObject" );
+        assert( 0 );
+        return;
     }
 
-    if ( mons.size() ) {
+    if ( monsToUpgrade.empty() ) {
+        ERROR( "monsToUpgrade mustn't be empty." );
+        assert( 0 );
+        return;
+    }
+
+    Army & heroArmy = hero.GetArmy();
+    mons.reserve( monsToUpgrade.size() );
+
+    for ( size_t i = 0; i < monsToUpgrade.size(); ++i ) {
+        if ( !heroArmy.HasMonster( monsToUpgrade[i] ) )
+            continue;
+        const bool combineWithAnd = i == ( monsToUpgrade.size() - 1 ) && !mons.empty();
+        if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
+            mons.emplace_back( &monsToUpgrade[i] );
+    }
+
+    if ( !mons.empty() ) {
         // composite sprite
         u32 offsetX = 0;
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
@@ -2485,11 +2494,14 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
         fheroes2::Image surface( border.width() * monsterCount + ( monsterCount - 1 ) * 4, border.height() );
         surface.reset();
 
-        for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
+        StringReplace( msg1, "%{monsters}", monsters );
+        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
+
+        for ( std::vector<Monster *>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
             // border
             fheroes2::Blit( border, surface, offsetX, 0 );
             // background scenary for each race
-            switch ( Monster( *it ).GetRace() ) {
+            switch ( ( *it )->GetRace() ) {
             case Race::KNGT:
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, 6 );
                 break;
@@ -2513,7 +2525,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
                 break;
             }
             // upgraded troop
-            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
+            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it )->GetUpgrade().ICNMonh(), 0 );
             fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() );
             offsetX += border.width() + 4;
         }

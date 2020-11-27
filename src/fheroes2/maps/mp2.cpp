@@ -374,7 +374,7 @@ const char * MP2::StringObject( int object )
         return _( "Observation Tower" );
     case OBJN_FREEMANFOUNDRY:
     case OBJ_FREEMANFOUNDRY:
-        return _( "Freeman Foundry" );
+        return _( "Freeman's Foundry" );
     case OBJN_WATERINGHOLE:
     case OBJ_WATERINGHOLE:
         return _( "Watering Hole" );
