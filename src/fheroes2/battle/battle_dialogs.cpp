@@ -48,7 +48,7 @@ namespace
     const int bsTextYOffset = 175;
     const int bsTextIndent = 30;
 
-    const std::string msgAGloriousVictory = "A Glorious Victory!";
+    const std::string msgAGloriousVictory = "A glorious victory!";
 
     class LoopedAnimation
     {
