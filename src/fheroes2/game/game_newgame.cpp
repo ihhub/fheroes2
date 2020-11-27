@@ -46,23 +46,9 @@ namespace
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
         " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
-    std::string ConvertToString( int value )
+    void DrawCampaignScenarioIcon( int icnId, int iconId, const fheroes2::Point & offset, const fheroes2::Point & pos )
     {
-        std::ostringstream ostr;
-        ostr << value;
-        return ostr.str();
-    }
-
-    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, const fheroes2::Point & offset )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Sprite & campaignMapIcon = fheroes2::AGG::GetICN( ICN::CAMPXTRG, icnId );
-        fheroes2::Blit( campaignMapIcon, display, offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler - 0.5 ) );
-
-        Text campaignMapText( ConvertToString( id ), Font::YELLOW_BIG );
-        campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.width(),
-                              offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler + 0.5 ) - campaignMapText.h(), display );
+        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconId ), fheroes2::Display::instance(), offset.x + pos.x, offset.y + pos.y );
     }
 
     bool hasEnding( std::string const & fullString, std::string const & ending )
@@ -236,20 +222,18 @@ int Game::NewCampain( void )
     thirdChoice.draw();
 
     Text textDaysSpent( "0", Font::BIG );
-    textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
+    textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     if ( !campaignMap.empty() ) {
-        TextBox mapName( campaignMap[0].description, Font::BIG, 200 );
-        mapName.Blit( top.x + 200, top.y + 97 - mapName.h() / 2 );
+        const std::string & desc = campaignMap[0].description;
+        TextBox mapName( desc.substr( 1, desc.length() - 2 ), Font::BIG, 200 );
+        mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( "1", Font::BIG );
-        campaignMapId.Blit( top.x + 175 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+        campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
         TextBox mapDescription( goodCampaign ? rolandCampaignDescription[0] : archibaldCampaignDescription[0], Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
-
-        TextBox awards( _( "None" ), Font::BIG, 180 );
-        awards.Blit( top.x + 425, top.y + 100 );
 
         Text choice1( _( "2000 Gold" ), Font::BIG );
         choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
@@ -266,30 +250,33 @@ int Game::NewCampain( void )
         textDescription.Blit( top.x + 40, top.y + 200 );
     }
 
+    const int iconsId = goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+    const fheroes2::Point trackOffset = fheroes2::Point( top.x + 39, top.y + 294 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( goodCampaign ? ICN::CTRACK00 : ICN::CTRACK03, 0 ), display, top.x + 39, top.y + 294 );
     if ( goodCampaign ) {
-        DrawCampaignScenarioIcon( 1, 0, 0, 14, top );
-        DrawCampaignScenarioIcon( 2, 1, 0, 15, top );
-        DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
-        DrawCampaignScenarioIcon( 4, 2, 0, 15, top );
-        DrawCampaignScenarioIcon( 5, 3, 0, 15, top );
-        DrawCampaignScenarioIcon( 6, 4, 0, 15, top );
-        DrawCampaignScenarioIcon( 7, 5, 0, 15, top );
-        DrawCampaignScenarioIcon( 8, 6, -1, 15, top );
-        DrawCampaignScenarioIcon( 9, 6, 1, 15, top );
-        DrawCampaignScenarioIcon( 10, 7, 0, 15, top );
+        DrawCampaignScenarioIcon( iconsId, 14, trackOffset, {-2, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {72, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {109, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {220, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {294, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {516, 40} );
     }
     else {
-        DrawCampaignScenarioIcon( 1, 0, 0, 17, top );
-        DrawCampaignScenarioIcon( 2, 1, 0, 18, top );
-        DrawCampaignScenarioIcon( 3, 2, -1, 18, top );
-        DrawCampaignScenarioIcon( 4, 2, 1, 18, top );
-        DrawCampaignScenarioIcon( 5, 3, 0, 18, top );
-        DrawCampaignScenarioIcon( 6, 4, 0, 18, top );
-        DrawCampaignScenarioIcon( 7, 4.5, -1, 18, top );
-        DrawCampaignScenarioIcon( 8, 5, 0, 18, top );
-        DrawCampaignScenarioIcon( 9, 6, -1, 18, top );
-        DrawCampaignScenarioIcon( 10, 6, 1, 18, top );
-        DrawCampaignScenarioIcon( 11, 7, 0, 18, top );
+        DrawCampaignScenarioIcon( iconsId, 17, trackOffset, {-2, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {72, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {220, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {294, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {331, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {516, 40} );
     }
 
     LocalEvent & le = LocalEvent::Get();
