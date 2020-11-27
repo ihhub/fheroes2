@@ -266,7 +266,8 @@ namespace
                 flags = SDL_WINDOW_FULLSCREEN;
 #else
                 flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-                _calculateTransformVals();
+                const fheroes2::Display & display = fheroes2::Display::instance();
+                _calculateTransformVals( display.width(), display.height() );
 #endif
             }
 
@@ -566,9 +567,9 @@ namespace
 
         struct
         {
-            float offsetX;
-            float offsetY;
-            float scale;
+            double offsetX;
+            double offsetY;
+            double scale;
         } _transformVals;
 
         int renderFlags() const
@@ -602,31 +603,23 @@ namespace
             }
         }
 
-        void _calculateTransformVals()
-        {
-            const fheroes2::Display & display = fheroes2::Display::instance();
-            _calculateTransformVals( display.width(), display.height() );
-        }
-
         void _calculateTransformVals( int width, int height )
         {
             SDL_DisplayMode dm;
             SDL_GetCurrentDisplayMode( 0, &dm );
 
-            const float deviceAspect = static_cast<float>( dm.w ) / dm.h;
-            const float displayAspect = static_cast<float>( width ) / height;
-            const float precission = .001;
-            if ( deviceAspect - displayAspect > precission ) {
-                const float scale = static_cast<float>( dm.h ) / height;
-                _transformVals = {( dm.w - scale * width ) / 2, 0., scale};
+            const double aspectsDiff = static_cast<double>( dm.w ) / dm.h - static_cast<double>( width ) / height;
+            _transformVals.scale = std::min( static_cast<double>( dm.h ) / height, static_cast<double>( dm.w ) / width );
+            if ( aspectsDiff > 0 ) {
+                _transformVals.offsetX = ( dm.w - _transformVals.scale * width ) / 2;
+                _transformVals.offsetY = 0;
             }
-            else if ( deviceAspect - displayAspect < -precission ) {
-                const float scale = static_cast<float>( dm.w ) / width;
-                _transformVals = {0., ( dm.h - scale * height ) / 2, scale};
+            else if ( aspectsDiff < 0 ) {
+                _transformVals.offsetX = 0;
+                _transformVals.offsetY = ( dm.h - _transformVals.scale * height ) / 2;
             }
             else {
-                const float scale = static_cast<float>( dm.w ) / width;
-                _transformVals = {0., 0., scale};
+                _transformVals.offsetX = _transformVals.offsetY = 0;
             }
         }
     };
