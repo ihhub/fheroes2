@@ -36,7 +36,7 @@ namespace
     };
 }
 
-Player * Players::_players[KINGDOMMAX + 1] = { NULL };
+Player * Players::_players[KINGDOMMAX + 1] = {NULL};
 int Players::human_colors = 0;
 
 void PlayerFocusReset( Player * player )
