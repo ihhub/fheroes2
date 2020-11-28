@@ -166,33 +166,26 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                     tile.RedrawTile( dst );
 
-                    bool redrawNear = true;
-                    if ( Maps::isValidDirection( tile.GetIndex(), Direction::TOP ) ) {
-                        const Maps::Tiles & tileTop = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP ) );
-                        if ( tileTop.GetHeroes() ) {
-                            redrawNear = false;
+                    // bottom and objects
+                    if ( drawBottom ) {
+                        const s32 tileIndex = tile.GetIndex();
+                        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
+                            const Maps::Tiles & tileTop = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) );
+                            if ( tileTop.GetHeroes() != NULL )
+                                continue;
                         }
-                    }
-                    if ( redrawNear && Maps::isValidDirection( tile.GetIndex(), Direction::TOP_LEFT ) ) {
-                        const Maps::Tiles & tileTopLeft = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP_LEFT ) );
-                        if ( tileTopLeft.GetHeroes() ) {
-                            redrawNear = false;
+                        if ( Maps::isValidDirection( tileIndex, Direction::TOP_LEFT ) ) {
+                            const Maps::Tiles & tileTopLeft = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP_LEFT ) );
+                            if ( tileTopLeft.GetHeroes() != NULL )
+                                continue;
                         }
-                    }
-                    if ( redrawNear && Maps::isValidDirection( tile.GetIndex(), Direction::TOP_RIGHT ) ) {
-                        const Maps::Tiles & tileTopRight = world.GetTiles( Maps::GetDirectionIndex( tile.GetIndex(), Direction::TOP_RIGHT ) );
-                        if ( tileTopRight.GetHeroes() ) {
-                            redrawNear = false;
+                        if ( Maps::isValidDirection( tileIndex, Direction::TOP_RIGHT ) ) {
+                            const Maps::Tiles & tileTopRight = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP_RIGHT ) );
+                            if ( tileTopRight.GetHeroes() != NULL )
+                                continue;
                         }
-                    }
-                    if ( redrawNear ) {
-                        // bottom and objects
-                        if ( drawBottom ) {
-                            if ( redrawNear ) {
-                                tile.RedrawBottom( dst, isPuzzleDraw );
-                                tile.RedrawObjects( dst, isPuzzleDraw );
-                            }
-                        }
+                        tile.RedrawBottom( dst, isPuzzleDraw );
+                        tile.RedrawObjects( dst, isPuzzleDraw );
                     }
                 }
             }
