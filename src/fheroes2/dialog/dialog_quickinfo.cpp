@@ -527,9 +527,6 @@ void Dialog::QuickInfo( const Castle & castle )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-
     const int qwiktown = ICN::QWIKTOWN;
 
     // image box
@@ -651,10 +648,13 @@ void Dialog::QuickInfo( const Castle & castle )
     const Heroes * from_hero = Interface::GetFocusHeroes();
     const Heroes * guardian = castle.GetHeroes().Guard();
 
+    const int currentColor = conf.CurrentColor();
+    const int thievesGuildCount = world.GetKingdom( currentColor ).GetCountThievesGuild();
+
     // draw guardian portrait
     if ( guardian &&
          // my  colors
-         ( castle.isFriends( conf.CurrentColor() ) ||
+         ( castle.GetColor() == currentColor ||
            // show guardians (scouting: advanced)
            ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
         // heroes name
@@ -679,14 +679,22 @@ void Dialog::QuickInfo( const Castle & castle )
         dst_pt.y += 45;
         text.Blit( dst_pt.x, dst_pt.y );
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) )
+    else if ( castle.isFriends( currentColor ) ) {
         // show all
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, false );
-    else
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, true, true );
+    }
+    // draw enemy castle defenders, dependent on thieves guild count
+    else if ( thievesGuildCount == 0 ) {
+        text.Set( _( "Unknown" ) );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        dst_pt.y += 45;
+        text.Blit( dst_pt.x, dst_pt.y );
+    }
+    else {
         // show limited
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, thievesGuildCount, false, false );
+    }
 
-    cursor.Show();
     display.render();
 
     // quick info loop
@@ -694,9 +702,7 @@ void Dialog::QuickInfo( const Castle & castle )
         ;
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.Show();
     display.render();
 }
 
@@ -900,7 +906,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
     else {
         // show limited
-        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
     }
 
     cursor.Show();

@@ -306,7 +306,8 @@ u32 Kingdom::GetCountTown( void ) const
 
 u32 Kingdom::GetCountMarketplace( void ) const
 {
-    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildMarketplace ) );
+    return static_cast<uint32_t>(
+        std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE ); } ) );
 }
 
 u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
@@ -317,6 +318,12 @@ u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
 u32 Kingdom::GetCountBuilding( u32 build ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
+}
+
+uint32_t Kingdom::GetCountThievesGuild() const
+{
+    return static_cast<uint32_t>(
+        std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD ); } ) );
 }
 
 bool Kingdom::AllowPayment( const Funds & funds ) const
