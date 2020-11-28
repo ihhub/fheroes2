@@ -69,8 +69,7 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-    std::map<std::string, std::vector<Player>> mapPlayers;
-    std::string lastMapFileName = "";
+    std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
