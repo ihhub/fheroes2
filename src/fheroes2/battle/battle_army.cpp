@@ -237,7 +237,7 @@ bool Battle::Force::isValid( void ) const
     return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
 }
 
-u32 Battle::Force::GetSurrenderCost( void ) const
+uint32_t Battle::Force::GetSurrenderCost( void ) const
 {
     float res = 0;
 
@@ -275,11 +275,7 @@ u32 Battle::Force::GetSurrenderCost( void ) const
             res -= res * art.ExtraValue() / 100;
     }
 
-    // limit
-    if ( res < 100 )
-        res = 100.0;
-
-    return static_cast<u32>( res );
+    return static_cast<uint32_t>( res );
 }
 
 void Battle::Force::NewTurn( void )
