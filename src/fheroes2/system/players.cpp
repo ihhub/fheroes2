@@ -30,14 +30,14 @@
 
 namespace
 {
+    Player * _players[KINGDOMMAX + 1] = {NULL};
+    int human_colors = 0;
+
     enum
     {
         ST_INGAME = 0x2000
     };
 }
-
-Player * Players::_players[KINGDOMMAX + 1] = {NULL};
-int Players::human_colors = 0;
 
 void PlayerFocusReset( Player * player )
 {
@@ -310,7 +310,7 @@ void Players::Init( const Maps::FileInfo & fi )
     }
 }
 
-void Players::Set( int color, Player * player )
+void Players::Set( const int color, Player * player )
 {
     _players[color] = player;
 }
