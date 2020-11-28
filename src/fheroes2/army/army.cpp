@@ -1253,10 +1253,10 @@ double Army::GetStrength( void ) const
 
 double Army::getReinforcementValue( const Troops & reinforcement ) const
 {
-    Troops combined;
-    combined.Assign( *this );
+    // NB items that are added in this vector are all of Troop* type, and not ArmyTroop* type
+    // So the GetStrength() computation will be done based on troop strength only (not based on hero bonuses)
+    Troops combined( *this );
     const double initialValue = combined.GetStrength();
-
     combined.Insert( reinforcement.GetOptimized() );
     combined.MergeTroops();
     combined.SortStrongest();
