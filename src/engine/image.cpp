@@ -857,6 +857,7 @@ namespace fheroes2
                     if ( *transformInX == 1 ) { // skip pixel
                         continue;
                     }
+
                     if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
                         *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
@@ -888,6 +889,7 @@ namespace fheroes2
                     if ( *transformInX == 1 ) { // skip pixel
                         continue;
                     }
+
                     if ( *transformInX > 0 && *transformOutX == 0 ) { // apply a transformation
                         *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
                     }
