@@ -374,7 +374,8 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     return MP2::isNeedStayFront( next.GetObject() );
 }
 
-bool Heroes::IsInROI() const {
+bool Heroes::IsInROI() const
+{
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
