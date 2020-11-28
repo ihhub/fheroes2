@@ -915,7 +915,6 @@ namespace ICN
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
-
         LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
 
         LASTICN, // just a marker, indicating end of the enumeration
