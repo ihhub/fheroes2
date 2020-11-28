@@ -184,6 +184,7 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            AGG::PlaySound( M82::KILLFADE );
             hero.FadeOut();
         }
 
@@ -533,12 +534,10 @@ namespace AI
 
                 castle->ActionAfterBattle( res.AttackerWins() );
 
-                // loss defender
-                if ( !res.DefenderWins() && defender )
+                if ( res.AttackerWins() && defender )
                     AIBattleLose( *defender, res, false, hero.GetColor() );
 
-                // loss attacker
-                if ( !res.AttackerWins() )
+                if ( res.DefenderWins() )
                     AIBattleLose( hero, res, true, castle->GetColor() );
 
                 // wins attacker

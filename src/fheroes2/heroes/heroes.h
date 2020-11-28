@@ -279,6 +279,7 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
+    bool IsInROI() const;
     void Redraw( fheroes2::Image &, s32, s32, bool ) const;
     void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;

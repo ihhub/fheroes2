@@ -374,15 +374,23 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     return MP2::isNeedStayFront( next.GetObject() );
 }
 
-void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) const
-{
+bool Heroes::IsInROI() const {
     const Point & mp = GetCenter();
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     if ( !( gamearea.GetVisibleTileROI() & mp ) )
+        return false;
+
+    return true;
+}
+
+void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) const
+{
+    if ( !IsInROI() )
         return;
 
     const s32 centerIndex = GetIndex();
     const bool reflect = ReflectSprite( direction );
+    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
@@ -761,11 +769,10 @@ void Heroes::AngleStep( int to_direct )
 
 void Heroes::FadeOut( const Point & offset ) const
 {
-    const Point & mp = GetCenter();
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
+    if ( !IsInROI() )
         return;
+
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
     if ( multiplier < 1 )
@@ -798,11 +805,10 @@ void Heroes::FadeOut( const Point & offset ) const
 
 void Heroes::FadeIn( const Point & offset ) const
 {
-    const Point & mp = GetCenter();
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
+    if ( !IsInROI() )
         return;
+
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
     if ( multiplier < 1 )
