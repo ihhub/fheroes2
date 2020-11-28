@@ -534,7 +534,7 @@ void Castle::ActionNewWeek( void )
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
                 if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
-                    if ( mons.isValid() && mons() == world.GetWeekType().GetMonster() ) {
+                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                         *dw += GetGrownWeekOf( mons );
                         break;
                     }
@@ -569,7 +569,7 @@ void Castle::ActionNewMonth( void )
         for ( u32 ii = 0; dwellings[ii]; ++ii )
             if ( NULL != ( dw = GetDwelling( dwellings[ii] ) ) ) {
                 const Monster mons( race, dwellings[ii] );
-                if ( mons.isValid() && mons() == world.GetWeekType().GetMonster() ) {
+                if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                     *dw += *dw * GetGrownMonthOf() / 100;
                     break;
                 }
