@@ -53,7 +53,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
 
-    TextBox recruitHeroText( _( "Recruit Hero" ), Font::BIG, BOXAREA_WIDTH );
+    TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
     u32 count = hero->GetCountArtifacts();
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
