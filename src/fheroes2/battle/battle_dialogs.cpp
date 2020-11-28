@@ -634,7 +634,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
 
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
     fheroes2::Blit( window, display, pos_rt.x + 54, pos_rt.y + 30 );
-    hero.PortraitRedraw( pos_rt.x + 58, pos_rt.y + 38, PORT_BIG, display );
+    hero.PortraitRedraw( pos_rt.x + 59, pos_rt.y + 36, PORT_BIG, display );
 
     std::string str = _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
