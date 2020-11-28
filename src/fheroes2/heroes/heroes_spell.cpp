@@ -526,7 +526,8 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     listbox.SetScrollButtonUp( conf.ExtGameEvilInterface() ? ICN::LISTBOX_EVIL : ICN::LISTBOX, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
     listbox.SetScrollButtonDn( conf.ExtGameEvilInterface() ? ICN::LISTBOX_EVIL : ICN::LISTBOX, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::LISTBOX_EVIL : ICN::LISTBOX, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 120 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::LISTBOX_EVIL : ICN::LISTBOX, 10 ),
+                                fheroes2::Rect( area.x + 260, area.y + 68, 14, 120 ) );
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
