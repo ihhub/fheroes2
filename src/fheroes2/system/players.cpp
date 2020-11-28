@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
-#incldue <assert.h>
+#include <assert.h>
 
 #include "game.h"
 #include "maps_fileinfo.h"
