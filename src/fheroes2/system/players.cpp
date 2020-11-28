@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#incldue <assert.h>
 
 #include "game.h"
 #include "maps_fileinfo.h"
@@ -30,7 +31,8 @@
 
 namespace
 {
-    Player * _players[KINGDOMMAX + 1] = {NULL};
+    const int playersSize = KINGDOMMAX + 1;
+    Player * _players[playersSize] = {NULL};
     int human_colors = 0;
 
     enum
@@ -312,6 +314,7 @@ void Players::Init( const Maps::FileInfo & fi )
 
 void Players::Set( const int color, Player * player )
 {
+    assert( color >= 0 && color < playersSize );
     _players[color] = player;
 }
 
