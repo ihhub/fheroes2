@@ -1220,6 +1220,12 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::LISTBOX_EVIL:
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::GRAY );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    ApplyPalette( _icnVsSprite[id][i], 2 );
+                }
+                return true;
             default:
                 break;
             }

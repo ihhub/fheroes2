@@ -916,7 +916,9 @@ namespace ICN
 
         TROLL2MSL,
 
-        LASTICN
+        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
+
+        LASTICN, // just a marker, indicating end of the enumeration
     };
 
     const char * GetString( int );
