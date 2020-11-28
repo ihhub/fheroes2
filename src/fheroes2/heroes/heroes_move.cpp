@@ -510,7 +510,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
                 if ( tileLeftLeft.GetHeroes() == NULL ) {
                     const Maps::Tiles & tileBottomLeft = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_LEFT ) );
                     tileBottomLeft.RedrawBottom( dst );
-                    tileBottomLeft.RedrawObjects( dst );                
+                    tileBottomLeft.RedrawObjects( dst );
                 }
             }
         }
@@ -522,7 +522,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
             if ( tileRight.GetHeroes() == NULL ) {
                 const Maps::Tiles & tileBottomRight = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM_RIGHT ) );
                 tileBottomRight.RedrawBottom( dst );
-                tileBottomRight.RedrawObjects( dst );            
+                tileBottomRight.RedrawObjects( dst );
             }
         }
     }
