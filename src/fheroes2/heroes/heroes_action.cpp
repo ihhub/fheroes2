@@ -1777,8 +1777,6 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
             Army army( tile );
             Troop * troop = army.GetFirstValid();
 
-            AGG::PlaySound( M82::EXPERNCE );
-
             if ( troop ) {
                 if ( Monster::ROGUE == troop->GetID() )
                     Dialog::Message( "",
@@ -1796,6 +1794,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
                 // new battle
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                 if ( res.AttackerWins() ) {
+                    AGG::PlaySound( M82::EXPERNCE );
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
