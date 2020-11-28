@@ -310,6 +310,9 @@ int Castle::OpenDialog( bool readonly )
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
+    int alphaHero = 255;
+    fheroes2::Image surfaceHero( 552, 107 );
+
     // dialog menu loop
     while ( le.HandleEvents() ) {
         // exit
@@ -653,36 +656,19 @@ int Castle::OpenDialog( bool readonly )
                                 AGG::PlaySound( M82::BUILDTWN );
 
                                 // animate fade in for hero army bar
-                                const Rect rt( 0, 100, 552, 107 );
-                                fheroes2::Image sf( 552, 107 );
-                                sf.reset();
-                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, sf, 0, 0, 552, 107 );
+                                surfaceHero.reset();
+                                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
                                 fheroes2::Image port = heroes.Guest()->GetPortrait( PORT_BIG );
                                 if ( !port.empty() )
-                                    fheroes2::Blit( port, sf, 5, 5 );
+                                    fheroes2::Blit( port, surfaceHero, 5, 5 );
 
                                 const fheroes2::Point savept = selectArmy2.GetPos();
                                 selectArmy2.SetPos( 112, 5 );
-                                selectArmy2.Redraw( sf );
+                                selectArmy2.Redraw( surfaceHero );
                                 selectArmy2.SetPos( savept.x, savept.y );
 
                                 RedrawResourcePanel( cur_pt );
-
-                                int alpha = 0;
-                                while ( le.HandleEvents() && alpha < 240 ) {
-                                    if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
-                                        cursor.Hide();
-                                        fheroes2::AlphaBlit( sf, display, cur_pt.x, cur_pt.y + 356, alpha );
-                                        cursor.Show();
-                                        display.render();
-                                        alpha += 10;
-                                    }
-                                }
-
-                                fheroes2::Blit( sf, display, cur_pt.x, cur_pt.y + 356 );
-
-                                RedrawIcons( *this, heroes, cur_pt );
-                                need_redraw = true;
+                                alphaHero = 0;
                             }
                         } break;
 
@@ -696,6 +682,22 @@ int Castle::OpenDialog( bool readonly )
                 if ( le.MouseCursor( ( *it ).coord ) )
                     msg_status = GetStringBuilding( ( *it ).id );
             }
+        }
+
+        if ( alphaHero < 240 ) {
+            if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
+                fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, alphaHero );
+                if ( !need_redraw ) {
+                    display.render();
+                }
+                alphaHero += 10;
+            }
+        }
+        else if ( alphaHero == 240 ) {
+            fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+            RedrawIcons( *this, heroes, cur_pt );
+            alphaHero += 10;
+            need_redraw = true;
         }
 
         if ( need_redraw ) {
