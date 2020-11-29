@@ -1082,7 +1082,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
             else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe scroll" );
             else {
-                msg = _( "View %{name}" );
+                msg = _( "View %{name} Info" );
                 StringReplace( msg, "%{name}", art.GetName() );
             }
         }
