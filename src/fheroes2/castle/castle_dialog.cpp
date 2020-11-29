@@ -782,6 +782,10 @@ int Castle::OpenDialog( bool readonly )
         }
     }
 
+    if ( alphaBuilding.build != BUILD_NOTHING ) {
+        BuyBuilding( alphaBuilding.build );
+    }
+
     if ( heroes.Guest() && conf.ExtHeroRecalculateMovement() )
         heroes.Guest()->RecalculateMovePoints();
 
