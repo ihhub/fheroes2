@@ -226,6 +226,9 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
             cursor.Show();
             display.render();
         }
+        else if ( le.MousePressRight( button_hero.area() ) ) {
+            Dialog::Message( "", _( "View Hero" ), Font::BIG );
+        }
     }
 
     cursor.Hide();
