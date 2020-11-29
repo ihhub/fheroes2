@@ -1198,13 +1198,11 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     const payment_t payment = PaymentConditions::BuySpellBook( shrine );
     Kingdom & kingdom = GetKingdom();
-
     std::string header = _( "To cast spells, you must first buy a spell book for %{gold} gold." );
     StringReplace( header, "%{gold}", payment.gold );
-    
+
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
     fheroes2::Image sprite = border;
-
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
 
     if ( !kingdom.AllowPayment( payment ) ) {
