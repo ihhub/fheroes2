@@ -1241,15 +1241,29 @@ namespace fheroes2
                 if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
                     Sprite & modified = _icnVsSprite[id][4];
 
-                    Sprite temp = _icnVsSprite[id][3];
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
                     Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
                     modified = temp;
-                    if ( modified.width() > 8 ) {
-                        modified.image()[7] = 36;
-                        modified.image()[8] = 36;
-                        modified.transform()[7] = 0;
-                        modified.transform()[8] = 0;
-                    }
+                    Fill( modified, 7, 0, 4, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                    Sprite & modified = _icnVsSprite[id][6];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 2, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                    Sprite & modified = _icnVsSprite[id][8];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 12, 0, 5, 1, 36 );
                 }
                 if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
                     Sprite & modified = _icnVsSprite[id][44];
