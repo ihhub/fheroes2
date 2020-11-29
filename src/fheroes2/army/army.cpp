@@ -769,7 +769,7 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                     const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, spriteIndex );
                     const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 35 ) ? 35 - monster.height() : 0;
 
-                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2, cy + offsetY );
+                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
 
                     const std::string countText
                         = isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower );
