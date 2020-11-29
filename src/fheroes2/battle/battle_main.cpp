@@ -111,7 +111,9 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         AGG::ResetMixer();
 
         // fade arena
-        arena.FadeArena();
+        const bool clearMessageLog = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) ||
+                                     ( result.army2 & RESULT_SURRENDER );
+        arena.FadeArena( clearMessageLog );
 
         // dialog summary
         arena.DialogBattleSummary( result );

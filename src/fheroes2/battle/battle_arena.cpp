@@ -693,10 +693,10 @@ const Battle::Unit * Battle::Arena::GetEnemyMaxQuality( int my_color ) const
     return res;
 }
 
-void Battle::Arena::FadeArena( void ) const
+void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
     if ( interface )
-        interface->FadeArena();
+        interface->FadeArena( clearMessageLog );
 }
 
 const SpellStorage & Battle::Arena::GetUsageSpells( void ) const

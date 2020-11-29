@@ -131,6 +131,8 @@ namespace Battle
         void Redraw( void );
         const std::string & GetMessage( void ) const;
 
+        void clear();
+
     private:
         Text bar1;
         Text bar2;
@@ -194,7 +196,7 @@ namespace Battle
 
         void SetStatus( const std::string &, bool = false );
         void SetArmiesOrder( const Units * );
-        void FadeArena( void );
+        void FadeArena( bool clearMessageLog );
 
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
