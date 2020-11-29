@@ -157,24 +157,6 @@ enum KeySym
     KEY_KP_ENTER = SDLK_KP_ENTER,
     KEY_KP_EQUALS = SDLK_KP_EQUALS,
 
-#ifdef _WIN32_WCE
-    KEY_APP01 = 0xC1,
-    KEY_APP02 = 0xC2,
-    KEY_APP03 = 0xC3,
-    KEY_APP04 = 0xC4,
-    KEY_APP05 = 0xC5,
-    KEY_APP06 = 0xC6,
-    KEY_APP07 = 0xC7,
-    KEY_APP08 = 0xC8,
-    KEY_APP09 = 0xC9,
-    KEY_APP10 = 0xCA,
-    KEY_APP11 = 0xCB,
-    KEY_APP12 = 0xCC,
-    KEY_APP13 = 0xCD,
-    KEY_APP14 = 0xCE,
-    KEY_APP15 = 0xCF,
-#endif
-
     KEY_LAST
 };
 

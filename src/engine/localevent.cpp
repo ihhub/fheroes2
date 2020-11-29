@@ -391,39 +391,6 @@ KeySym GetKeySym( int key )
         return KEY_KP_ENTER;
     case SDLK_KP_EQUALS:
         return KEY_KP_EQUALS;
-
-#ifdef _WIN32_WCE
-    case 0xC1:
-        return KEY_APP01;
-    case 0xC2:
-        return KEY_APP02;
-    case 0xC3:
-        return KEY_APP03;
-    case 0xC4:
-        return KEY_APP04;
-    case 0xC5:
-        return KEY_APP05;
-    case 0xC6:
-        return KEY_APP06;
-    case 0xC7:
-        return KEY_APP07;
-    case 0xC8:
-        return KEY_APP08;
-    case 0xC9:
-        return KEY_APP09;
-    case 0xCA:
-        return KEY_APP10;
-    case 0xCB:
-        return KEY_APP11;
-    case 0xCC:
-        return KEY_APP12;
-    case 0xCD:
-        return KEY_APP13;
-    case 0xCE:
-        return KEY_APP14;
-    case 0xCF:
-        return KEY_APP15;
-#endif
     }
 
     return KEY_NONE;
