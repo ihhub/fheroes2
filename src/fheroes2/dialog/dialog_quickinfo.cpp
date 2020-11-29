@@ -755,7 +755,7 @@ void Dialog::QuickInfo( const Heroes & hero )
 
     // heroes name
     if ( showFullInfo ) {
-        message = _( "%{name} ( Level %{level} )" );
+        message = _( "%{name} (Level %{level})" );
         StringReplace( message, "%{name}", hero.GetName() );
         StringReplace( message, "%{level}", hero.GetLevel() );
     }
