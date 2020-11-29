@@ -388,7 +388,7 @@ KeySym GetKeySym( int key )
     case SDLK_KP_PLUS:
         return KEY_KP_PLUS;
     case SDLK_KP_ENTER:
-        return KEY_KP_ENTER;
+        return KEY_RETURN; // repath to the normal Enter
     case SDLK_KP_EQUALS:
         return KEY_KP_EQUALS;
 
