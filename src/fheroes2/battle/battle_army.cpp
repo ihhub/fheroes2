@@ -429,7 +429,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), [mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
+    return end() != std::find_if( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const
