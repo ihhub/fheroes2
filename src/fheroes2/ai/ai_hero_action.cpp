@@ -167,13 +167,8 @@ namespace AI
         return Skill::Primary::UNKNOWN;
     }
 
-    // heroA - hero attacker
-    // heroD - hero defender
-    void AIBattleLose( Heroes & heroA, Heroes & heroD, s32 dst_index )
+    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
     {
-        Battle::Result res = Battle::Loader( heroA.GetArmy(), heroD.GetArmy(), dst_index );
-        bool attacker = 0;
-
         u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
         if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
@@ -189,22 +184,11 @@ namespace AI
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
-            AGG::PlaySound( M82::KILLFADE );
             hero.FadeOut();
         }
 
         hero.SetKillerColor( color );
         hero.SetFreeman( reason );
-
-        // wins attacker
-        if ( res.AttackerWins() ) {
-            heroA.IncreaseExperience( res.GetExperienceAttacker() );
-        }
-        else
-            // wins defender
-            if ( res.DefenderWins() ) {
-            heroD.IncreaseExperience( res.GetExperienceDefender() );
-        }
     }
 
     void HeroesAction( Heroes & hero, s32 dst_index )
@@ -487,7 +471,26 @@ namespace AI
 
             DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
-            AIBattleLose( hero, *other_hero, hero.GetColor() );
+            // new battle
+            Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
+
+            // loss defender
+            if ( !res.DefenderWins() )
+                AIBattleLose( *other_hero, res, false, hero.GetColor() );
+
+            // loss attacker
+            if ( !res.AttackerWins() )
+                AIBattleLose( hero, res, true, other_hero->GetColor() );
+
+            // wins attacker
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+            }
+            else
+                // wins defender
+                if ( res.DefenderWins() ) {
+                other_hero->IncreaseExperience( res.GetExperienceDefender() );
+            }
         }
     }
 
@@ -530,7 +533,13 @@ namespace AI
 
                 castle->ActionAfterBattle( res.AttackerWins() );
 
-                AIBattleLose( hero, *defender, dst_index );
+                // loss defender
+                if ( !res.DefenderWins() && defender )
+                    AIBattleLose( *defender, res, false, hero.GetColor() );
+
+                // loss attacker
+                if ( !res.AttackerWins() )
+                    AIBattleLose( hero, res, true, castle->GetColor() );
 
                 // wins attacker
                 if ( res.AttackerWins() ) {
@@ -612,7 +621,7 @@ namespace AI
                 // allow_move = true;
             }
             else {
-                AIBattleLose( hero, army, dst_index );
+                AIBattleLose( hero, res, true );
                 tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
