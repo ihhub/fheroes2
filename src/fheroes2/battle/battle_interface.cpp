@@ -751,6 +751,12 @@ const std::string & Battle::Status::GetMessage( void ) const
     return message;
 }
 
+void Battle::Status::clear()
+{
+    bar1.Clear();
+    bar2.Clear();
+}
+
 Battle::ArmiesOrder::ArmiesOrder()
     : orders( NULL )
     , army_color2( 0 )
@@ -2178,9 +2184,14 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     }
 }
 
-void Battle::Interface::FadeArena( void )
+void Battle::Interface::FadeArena( bool clearMessageLog )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( clearMessageLog ) {
+        status.clear();
+        status.Redraw();
+    }
 
     Redraw();
 

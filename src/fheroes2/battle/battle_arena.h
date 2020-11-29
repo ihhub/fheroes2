@@ -100,7 +100,7 @@ namespace Battle
         void DialogBattleSummary( const Result & ) const;
         int DialogBattleHero( const HeroBase &, bool ) const;
 
-        void FadeArena( void ) const;
+        void FadeArena( bool clearMessageLog ) const;
 
         // returns pair with move cell index and distance
         std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
