@@ -80,7 +80,8 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
     text.Blit( dst_pt );
 }
 
-void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding )
+void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+                                  const CastleDialog::AlphaBuilding & alphaBuilding )
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 
