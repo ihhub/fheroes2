@@ -1226,6 +1226,38 @@ namespace fheroes2
                     ApplyPalette( _icnVsSprite[id][i], 2 );
                 }
                 return true;
+            case ICN::MONS32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
+                    const Sprite & source = _icnVsSprite[id][1];
+                    Sprite & modified = _icnVsSprite[id][2];
+                    Sprite temp( source.width(), source.height() + 1 );
+                    temp.reset();
+                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                    modified.setPosition( 0, 1 );
+                }
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+                    Sprite & modified = _icnVsSprite[id][4];
+
+                    Sprite temp = _icnVsSprite[id][3];
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    if ( modified.width() > 8 ) {
+                        modified.image()[7] = 36;
+                        modified.image()[8] = 36;
+                        modified.transform()[7] = 0;
+                        modified.transform()[8] = 0;
+                    }
+                }
+                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
+                    Sprite & modified = _icnVsSprite[id][44];
+                    Sprite temp = _icnVsSprite[id][43];
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                }
+                return true;
             default:
                 break;
             }
