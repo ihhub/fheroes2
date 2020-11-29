@@ -239,7 +239,7 @@ bool Battle::Force::isValid( void ) const
 
 uint32_t Battle::Force::GetSurrenderCost( void ) const
 {
-    float res = 0;
+    double res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() ) {
@@ -250,32 +250,24 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
     const HeroBase * commander = GetCommander();
 
     if ( commander ) {
+        const Artifact art( Artifact::STATESMAN_QUILL );
+        double mod = commander->HasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
-        // 40%
         case Skill::Level::BASIC:
-            res = res * 40 / 100;
+            mod *= 0.8;
             break;
-        // 30%
         case Skill::Level::ADVANCED:
-            res = res * 30 / 100;
+            mod *= 0.6;
             break;
-        // 20%
         case Skill::Level::EXPERT:
-            res = res * 20 / 100;
-            break;
-        // 50%
-        default:
-            res = res * 50 / 100;
+            mod *= 0.4;
             break;
         }
-
-        Artifact art( Artifact::STATESMAN_QUILL );
-
-        if ( commander->HasArtifact( art ) )
-            res -= res * art.ExtraValue() / 100;
+        res = std::round( res * mod );
     }
-
-    return static_cast<uint32_t>( res );
+    // if total cost with all modifiers less 1 then give something
+    return res >= 1 ? static_cast<uint32_t>( res ) : 1;
 }
 
 void Battle::Force::NewTurn( void )
