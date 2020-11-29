@@ -1204,9 +1204,13 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     if ( !kingdom.AllowPayment( payment ) ) {
         if ( isControlHuman() ) {
+            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+            fheroes2::Image sprite = border;
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
+
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::Message( GetName(), header, Font::BIG, Dialog::OK );
+            Dialog::SpriteInfo( "", header, sprite, Dialog::OK );
         }
         return false;
     }
