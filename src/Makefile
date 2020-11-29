@@ -21,6 +21,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic
 
 ifdef WITH_SDL2
+CFLAGS := $(CFLAGS) -Werror
 SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 else
