@@ -171,8 +171,10 @@ public:
     bool operator==( const Monster & ) const;
     bool operator!=( const Monster & ) const;
 
-    int operator()( void ) const;
-    int GetID( void ) const;
+    int GetID( void ) const
+    {
+        return id;
+    }
 
     void Upgrade( void );
     Monster GetUpgrade( void ) const;

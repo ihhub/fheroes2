@@ -271,7 +271,7 @@ u32 Troops::GetCount( void ) const
 
 bool Troops::HasMonster( const Monster & mons ) const
 {
-    const int monsterID = mons();
+    const int monsterID = mons.GetID();
     for ( const_iterator it = begin(); it != end(); ++it ) {
         if ( ( *it )->isMonster( monsterID ) )
             return true;
@@ -300,7 +300,7 @@ bool Troops::AllTroopsAreUndead() const
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
+    const_iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); } );
     if ( it == end() )
         it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 
@@ -310,7 +310,7 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
 bool Troops::JoinTroop( const Monster & mons, u32 count )
 {
     if ( mons.isValid() && count ) {
-        iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons() ); } );
+        iterator it = std::find_if( begin(), end(), [mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); } );
         if ( it == end() )
             it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 

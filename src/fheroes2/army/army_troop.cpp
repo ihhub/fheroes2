@@ -73,7 +73,7 @@ void Troop::Set( const Monster & m, u32 c )
 
 void Troop::SetMonster( const Monster & m )
 {
-    id = m();
+    id = m.GetID();
 }
 
 void Troop::SetCount( u32 c )
