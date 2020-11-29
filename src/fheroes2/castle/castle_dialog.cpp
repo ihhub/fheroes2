@@ -288,8 +288,12 @@ int Castle::OpenDialog( bool readonly )
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
 
+    CastleDialog::AlphaBuilding alphaBuilding;
+    alphaBuilding.alpha = 256;
+    alphaBuilding.build = BUILD_NOTHING;
+
     // draw building
-    CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
+    CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
 
     if ( 2 > world.GetKingdom( GetColor() ).GetCastles().size() || readonly ) {
         buttonPrevCastle.disable();
@@ -310,7 +314,7 @@ int Castle::OpenDialog( bool readonly )
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
-    int alphaHero = 255;
+    int alphaHero = 241;
     fheroes2::Image surfaceHero( 552, 107 );
 
     // dialog menu loop
@@ -614,10 +618,8 @@ int Castle::OpenDialog( bool readonly )
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
                                 AGG::PlaySound( M82::BUILDTWN );
 
-                                CastleDialog::RedrawAnimationBuilding( *this, cur_pt, cacheBuildings, BUILD_CASTLE );
-                                BuyBuilding( BUILD_CASTLE );
-
-                                need_redraw = true;
+                                alphaBuilding.alpha = 0;
+                                alphaBuilding.build = BUILD_CASTLE;
                             }
                             break;
                         }
@@ -631,13 +633,8 @@ int Castle::OpenDialog( bool readonly )
                             if ( BUILD_NOTHING != build ) {
                                 AGG::PlaySound( M82::BUILDTWN );
 
-                                CastleDialog::RedrawAnimationBuilding( *this, cur_pt, cacheBuildings, build );
-                                BuyBuilding( build );
-
-                                if ( BUILD_CAPTAIN == build )
-                                    RedrawIcons( *this, heroes, cur_pt );
-
-                                need_redraw = true;
+                                alphaBuilding.alpha = 0;
+                                alphaBuilding.build = build;
                             }
 
                             if ( buyhero ) {
@@ -696,7 +693,7 @@ int Castle::OpenDialog( bool readonly )
         else if ( alphaHero == 240 ) {
             fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
             RedrawIcons( *this, heroes, cur_pt );
-            alphaHero += 10;
+            alphaHero = 241;
             need_redraw = true;
         }
 
@@ -747,15 +744,41 @@ int Castle::OpenDialog( bool readonly )
             msg_status.clear();
         }
 
+        if ( alphaBuilding.alpha < 255 ) {
+            if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
+                alphaBuilding.alpha += 15;
+                need_redraw = true;
+            }
+        }
+        else if ( alphaBuilding.alpha == 255 ) {
+            BuyBuilding( alphaBuilding.build );
+            if ( BUILD_CAPTAIN == alphaBuilding.build )
+                RedrawIcons( *this, heroes, cur_pt );
+            cursor.Hide();
+            CastleRedrawTownName( *this, cur_pt );
+            RedrawResourcePanel( cur_pt );
+            cursor.Show();
+            display.render();
+            alphaBuilding.build = BUILD_NOTHING;
+            alphaBuilding.alpha = 256;
+        }
+
         // animation sprite
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
             cursor.Show();
             display.render();
 
             Game::CastleAnimationFrame() += 1; // this function returns variable by reference
+        }
+        else if ( need_redraw ) {
+            cursor.Hide();
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
+            cursor.Show();
+            display.render();
+            need_redraw = false;
         }
     }
 

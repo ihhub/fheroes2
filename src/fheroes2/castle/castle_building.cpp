@@ -31,7 +31,8 @@
 #include "text.h"
 
 void CastleRedrawTownName( const Castle &, const Point & );
-void CastleRedrawCurrentBuilding( const Castle &, const Point &, const CastleDialog::CacheBuildings &, u32 build );
+void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+                                  const CastleDialog::AlphaBuilding & alphaBuilding );
 fheroes2::Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
@@ -61,15 +62,9 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
     return it != end() ? ( *it ).coord : back().coord;
 }
 
-void CastleDialog::RedrawAnimationBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, u32 build )
+void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding )
 {
-    Cursor::Get().Hide();
-    CastleRedrawCurrentBuilding( castle, dst_pt, orders, build );
-}
-
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders )
-{
-    CastleRedrawCurrentBuilding( castle, dst_pt, orders, BUILD_NOTHING );
+    CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding );
     CastleRedrawTownName( castle, dst_pt );
 }
 
@@ -85,7 +80,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
     text.Blit( dst_pt );
 }
 
-void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, u32 build )
+void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding )
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 
@@ -171,7 +166,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     }
 
     // redraw all builds
-    if ( BUILD_NOTHING == build ) {
+    if ( BUILD_NOTHING == alphaBuilding.build ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             const uint32_t currentBuildId = it->id;
             if ( castle.isBuild( currentBuildId ) ) {
@@ -184,46 +179,26 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         }
     }
     // redraw build with alpha
-    else if ( orders.end() != std::find( orders.begin(), orders.end(), build ) ) {
-        LocalEvent & le = LocalEvent::Get();
-        int alpha = 1;
-        uint32_t buildFrame = 0;
+    else if ( orders.end() != std::find( orders.begin(), orders.end(), alphaBuilding.build ) ) {
+        for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
+            const uint32_t currentBuildId = it->id;
 
-        while ( le.HandleEvents() && alpha < 255 ) {
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
-                cursor.Hide();
-
-                for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
-                    const uint32_t currentBuildId = it->id;
-
-                    if ( castle.isBuild( currentBuildId ) ) {
-                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
-                        CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
-                        if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
-                            CastleDialog::RedrawRoadConnection( castle, dst_pt, build, alpha );
-                            CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
-                        }
-                    }
-                    else if ( currentBuildId == build ) {
-                        CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, buildFrame, alpha );
-                        CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, alpha );
-                        if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, true ) ) {
-                            CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, alpha );
-                        }
-                    }
+            if ( castle.isBuild( currentBuildId ) ) {
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, alphaBuilding.build, alphaBuilding.alpha );
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
                 }
-
-                alpha += 15;
-
-                CastleRedrawTownName( castle, dst_pt );
-
-                cursor.Show();
-                display.render();
             }
-            ++buildFrame;
+            else if ( currentBuildId == alphaBuilding.build ) {
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame, alphaBuilding.alpha );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, alphaBuilding.alpha );
+                if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, true ) ) {
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, alphaBuilding.alpha );
+                }
+            }
         }
-
-        cursor.Hide();
     }
 }
 

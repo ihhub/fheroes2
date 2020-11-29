@@ -250,6 +250,12 @@ private:
 
 namespace CastleDialog
 {
+    struct AlphaBuilding
+    {
+        uint32_t alpha;
+        uint32_t build;
+    };
+
     struct builds_t
     {
         builds_t( building_t b, const Rect & r )
@@ -271,8 +277,7 @@ namespace CastleDialog
         const Rect & GetRect( building_t ) const;
     };
 
-    void RedrawAllBuilding( const Castle &, const Point &, const CacheBuildings & );
-    void RedrawAnimationBuilding( const Castle &, const Point &, const CacheBuildings &, u32 build );
+    void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding );
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 
     void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
