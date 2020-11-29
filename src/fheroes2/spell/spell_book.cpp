@@ -154,6 +154,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             const std::string str = _( "View Combat Spells" );
             Dialog::Message( "", str, Font::BIG );
         }
+        else if ( le.MousePressRight( prev_list ) ) {
+            Dialog::Message( "", _( "View previous page" ), Font::BIG );
+        }
+        else if ( le.MousePressRight( next_list ) ) {
+            Dialog::Message( "", _( "View next page" ), Font::BIG );
+        }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
