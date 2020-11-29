@@ -374,19 +374,14 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     return MP2::isNeedStayFront( next.GetObject() );
 }
 
-bool Heroes::IsInROI() const
+bool Heroes::isInVisibleMapArea() const
 {
-    const Point & mp = GetCenter();
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
-        return false;
-
-    return true;
+    return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
 void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) const
 {
-    if ( !IsInROI() )
+    if ( !isInVisibleMapArea() )
         return;
 
     const s32 centerIndex = GetIndex();
@@ -770,7 +765,7 @@ void Heroes::AngleStep( int to_direct )
 
 void Heroes::FadeOut( const Point & offset ) const
 {
-    if ( !IsInROI() )
+    if ( !isInVisibleMapArea() )
         return;
 
     Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
@@ -806,7 +801,7 @@ void Heroes::FadeOut( const Point & offset ) const
 
 void Heroes::FadeIn( const Point & offset ) const
 {
-    if ( !IsInROI() )
+    if ( !isInVisibleMapArea() )
         return;
 
     Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
