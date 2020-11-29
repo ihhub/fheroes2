@@ -128,14 +128,6 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     }
 }
 
-Battle::Unit::~Unit()
-{
-    // reset summon elemental and mirror image
-    if ( Modes( CAP_SUMMONELEM ) || Modes( CAP_MIRRORIMAGE ) ) {
-        SetCount( 0 );
-    }
-}
-
 void Battle::Unit::SetPosition( s32 pos )
 {
     if ( position.GetHead() )

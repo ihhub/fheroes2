@@ -165,7 +165,6 @@ public:
     Monster( int = UNKNOWN );
     Monster( const Spell & );
     Monster( int race, u32 dw );
-    virtual ~Monster() {}
 
     bool operator<( const Monster & ) const;
     bool operator==( const Monster & ) const;

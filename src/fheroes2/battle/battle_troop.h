@@ -74,7 +74,6 @@ namespace Battle
     {
     public:
         Unit( const Troop &, s32 pos, bool reflect );
-        ~Unit();
 
         bool isModes( u32 ) const;
         bool isBattle( void ) const;
