@@ -35,11 +35,11 @@ namespace fheroes2
     public:
         Image( int32_t width_ = 0, int32_t height_ = 0 );
         Image( const Image & image_ );
-        Image( Image && image_ );
+        Image( Image && image_ ) noexcept;
         virtual ~Image();
 
         Image & operator=( const Image & image_ );
-        Image & operator=( Image && image_ );
+        Image & operator=( Image && image_ ) noexcept;
 
         virtual void resize( int32_t width_, int32_t height_ );
 
@@ -67,7 +67,7 @@ namespace fheroes2
 
         void fill( uint8_t value ); // fill 'image' layer with given value, setting 'transform' layer set to 0
 
-        void swap( Image & image );
+        void swap( Image & image ) noexcept;
 
     private:
         int32_t _width;
@@ -82,11 +82,11 @@ namespace fheroes2
         Sprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & image );
-        Sprite( Sprite && image );
+        Sprite( Sprite && image ) noexcept;
         virtual ~Sprite();
 
         Sprite & operator=( const Sprite & image );
-        Sprite & operator=( Sprite && image );
+        Sprite & operator=( Sprite && image ) noexcept;
 
         int32_t x() const
         {
@@ -100,7 +100,7 @@ namespace fheroes2
 
         virtual void setPosition( int32_t x_, int32_t y_ );
 
-        void swap( Sprite & image );
+        void swap( Sprite & image ) noexcept;
 
     private:
         int32_t _x;

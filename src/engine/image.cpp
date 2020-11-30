@@ -373,16 +373,14 @@ namespace fheroes2
         memcpy( transform(), image_.transform(), totalSize );
     }
 
-    Image::Image( Image && image_ )
-        : _width( 0 )
-        , _height( 0 )
+    Image::Image( Image && image_ ) noexcept : _width( 0 ), _height( 0 )
     {
         swap( image_ );
     }
 
     Image::~Image()
     {
-        clear();
+
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -394,7 +392,7 @@ namespace fheroes2
         return *this;
     }
 
-    Image & Image::operator=( Image && image_ )
+    Image & Image::operator=( Image && image_ ) noexcept
     {
         swap( image_ );
         return *this;
@@ -466,7 +464,7 @@ namespace fheroes2
         }
     }
 
-    void Image::swap( Image & image )
+    void Image::swap( Image & image ) noexcept
     {
         std::swap( _width, image._width );
         std::swap( _height, image._height );
@@ -493,7 +491,7 @@ namespace fheroes2
         , _y( image._y )
     {}
 
-    Sprite::Sprite( Sprite && image )
+    Sprite::Sprite( Sprite && image ) noexcept
     {
         swap( image );
     }
@@ -508,7 +506,7 @@ namespace fheroes2
         return *this;
     }
 
-    Sprite & Sprite::operator=( Sprite && image )
+    Sprite & Sprite::operator=( Sprite && image ) noexcept
     {
         swap( image );
         return *this;
@@ -520,7 +518,7 @@ namespace fheroes2
         _y = y_;
     }
 
-    void Sprite::swap( Sprite & image )
+    void Sprite::swap( Sprite & image ) noexcept
     {
         Image::swap( image );
         std::swap( _x, image._x );
