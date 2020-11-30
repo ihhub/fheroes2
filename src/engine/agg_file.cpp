@@ -1,3 +1,23 @@
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2020                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include <cctype>
 #include <iterator>
 #include <string>
@@ -22,67 +42,71 @@ namespace fheroes2
 
     bool AGGFile::isGood() const
     {
-        return !stream.fail() && files.size();
+        return !_stream.fail() && _files.size();
     }
 
-    bool AGGFile::Open( const std::string & filename )
+    bool AGGFile::open( const std::string & filename )
     {
-        if ( !stream.open( filename, "rb" ) )
+        if ( !_stream.open( filename, "rb" ) )
             return false;
 
-        const size_t size = stream.size();
-        const size_t count = stream.getLE16();
-        if ( count * ( sizeof( uint32_t ) * 3 + maxFilenameSize ) >= size )
+        const size_t size = _stream.size();
+        const size_t count = _stream.getLE16();
+        const size_t fileRecordSize = sizeof( uint32_t ) * 3;
+
+        if ( count * ( fileRecordSize + _maxFilenameSize ) >= size )
             return false;
-        StreamBuf fileEntries = stream.toStreamBuf( count * sizeof( uint32_t ) * 3 );
-        stream.seek( size - maxFilenameSize * count );
-        StreamBuf nameEntries = stream.toStreamBuf( maxFilenameSize * count );
+
+        StreamBuf fileEntries = _stream.toStreamBuf( count * fileRecordSize );
+        const size_t nameEntriesSize = _maxFilenameSize * count;
+        _stream.seek( size - nameEntriesSize );
+        StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
         for ( uint16_t i = 0; i < count; ++i ) {
             const uint32_t hash = fileEntries.getLE32();
-            const std::string & name = nameEntries.toString( maxFilenameSize );
-            if ( hash == aggFilenameHash( name ) && !files.count( hash ) ) {
-                auto s1 = fileEntries.getLE32();
-                auto s2 = fileEntries.getLE32();
-                files[hash] = std::make_pair( s2, s1 );
-                names[name] = hash;
+            const std::string & name = nameEntries.toString( _maxFilenameSize );
+            if ( hash == aggFilenameHash( name ) && !_files.count( hash ) ) {
+                const uint32_t fileOffset = fileEntries.getLE32();
+                const uint32_t fileSize = fileEntries.getLE32();
+                _files[hash] = std::make_pair( fileSize, fileOffset );
+                _names[name] = hash;
             }
             else {
-                files.clear();
-                names.clear();
+                _files.clear();
+                _names.clear();
                 return false;
             }
         }
-        return !stream.fail();
+        return !_stream.fail();
     }
 
-    const std::vector<uint8_t> & AGGFile::Read( uint32_t hash )
+    const std::vector<uint8_t> & AGGFile::read( uint32_t hash )
     {
-        auto it = files.find( hash );
-        if ( it != files.end() ) {
+        auto it = _files.find( hash );
+        if ( it != _files.end() ) {
             auto f = it->second;
             if ( f.first ) {
-                stream.seek( f.second );
-                body = stream.getRaw( f.first );
-                return body;
+                _stream.seek( f.second );
+                _body = _stream.getRaw( f.first );
+                return _body;
             }
         }
-        body.clear();
-        key.clear();
-        return body;
+        _body.clear();
+        _key.clear();
+        return _body;
     }
 
-    const std::vector<uint8_t> & AGGFile::Read( const std::string & str )
+    const std::vector<uint8_t> & AGGFile::read( const std::string & str )
     {
-        if ( key != str ) {
-            auto it = names.find( str );
-            if ( it != names.end() ) {
-                key = str;
-                return Read( it->second );
+        if ( _key != str ) {
+            auto it = _names.find( str );
+            if ( it != _names.end() ) {
+                _key = str;
+                return read( it->second );
             }
         }
-        body.clear();
-        key.clear();
-        return body;
+        _body.clear();
+        _key.clear();
+        return _body;
     }
 }

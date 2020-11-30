@@ -380,7 +380,6 @@
     <ClInclude Include="src\engine\audio_mixer.h" />
     <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />
-    <ClInclude Include="src\engine\endian_h2.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\error.h" />
     <ClInclude Include="src\engine\font.h" />

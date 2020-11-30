@@ -146,9 +146,9 @@ bool AGG::ReadDataDir( void )
     for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
         std::string lower = StringLower( *it );
         if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() )
-            heroes2_agg.Open( *it );
+            heroes2_agg.open( *it );
         if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() )
-            heroes2x_agg.Open( *it );
+            heroes2x_agg.open( *it );
     }
 
     conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
@@ -159,12 +159,12 @@ bool AGG::ReadDataDir( void )
 const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.Read( key );
+        const std::vector<u8> & buf = heroes2x_agg.read( key );
         if ( buf.size() )
             return buf;
     }
 
-    return heroes2_agg.Read( key );
+    return heroes2_agg.read( key );
 }
 
 struct ICNHeader
