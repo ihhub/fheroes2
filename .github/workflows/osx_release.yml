@@ -63,6 +63,7 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
         cp doc/README.txt .

@@ -20,8 +20,11 @@ CXXFLAGS_TP := $(CXXFLAGS)
 # Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
 CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic
 
-ifdef WITH_SDL2
+ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
+endif
+
+ifdef WITH_SDL2
 SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 else
