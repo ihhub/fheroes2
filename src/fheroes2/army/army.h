@@ -146,8 +146,12 @@ public:
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
                                   bool isScouteView = true );
 
-    Army( HeroBase * s = NULL );
+    Army( HeroBase * s = nullptr );
     Army( const Maps::Tiles & );
+    Army( const Army & ) = delete;
+    Army( Army && ) = delete;
+    Army & operator=( const Army & ) = delete;
+    Army & operator=( Army && ) = delete;
     ~Army();
 
     void Reset( bool = false ); // reset: soft or hard
@@ -198,12 +202,6 @@ protected:
     HeroBase * commander;
     bool combat_format;
     int color;
-
-private:
-    Army & operator=( const Army & )
-    {
-        return *this;
-    }
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );
