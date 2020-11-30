@@ -434,7 +434,9 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
+#ifndef __WIN32__
                     SDL_RenderClear( _renderer );
+#endif
                     if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
@@ -488,10 +490,10 @@ namespace
             }
 
             _createPalette();
-
+#ifndef __WIN32__
             SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
             SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-
+#endif
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
                 clear();
