@@ -309,7 +309,6 @@ protected:
     void put8( char );
 
 private:
-
     std::FILE * fp;
 
     template <typename T>
