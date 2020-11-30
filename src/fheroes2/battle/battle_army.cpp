@@ -20,14 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
 #include "settings.h"
 #include "speed.h"
-
-#include <algorithm>
-#include <cmath>
 
 #define CAPACITY 16
 
