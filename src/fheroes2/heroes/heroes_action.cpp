@@ -261,20 +261,21 @@ u32 DialogMorale( const std::string & hdr, const std::string & msg, bool good, u
     return Dialog::SpriteInfo( hdr, msg, image );
 }
 
-u32 DialogLuck( const std::string & hdr, const std::string & msg, bool good, u32 count )
+uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good, uint32_t count )
 {
     if ( 1 > count )
         count = 1;
-    if ( 3 < count )
+    else if ( 3 < count )
         count = 3;
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 0 : 1 ) );
-    u32 offset = sprite.width() * 4 / 3;
+    const uint32_t offset = sprite.width() * 2;
 
     fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
     image.reset();
 
-    for ( u32 ii = 0; ii < count; ++ii )
-        fheroes2::Blit( sprite, image, offset * ii, 0 );
+    for ( uint32_t i = 0; i < count; ++i )
+        fheroes2::Blit( sprite, image, offset * i, 0 );
 
     return Dialog::SpriteInfo( hdr, msg, image );
 }
