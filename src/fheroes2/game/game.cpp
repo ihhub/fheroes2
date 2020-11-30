@@ -104,7 +104,7 @@ namespace Game
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
-    if ( lastMapFileName != mapFileName || savedPlayers.empty() ) {
+    if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
         return;
     }
     players.clear();
