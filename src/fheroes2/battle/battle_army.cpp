@@ -244,12 +244,11 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetCost();
+            const payment_t & payment = ( *it )->GetCost();
             res += payment.gold;
         }
 
     const HeroBase * commander = GetCommander();
-
     if ( commander ) {
         const Artifact art( Artifact::STATESMAN_QUILL );
         double mod = commander->HasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
