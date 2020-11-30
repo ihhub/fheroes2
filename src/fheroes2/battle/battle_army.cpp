@@ -264,10 +264,10 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
             mod *= 0.4;
             break;
         }
-        res = std::round( res * mod );
+        res *= mod;
     }
     // if total cost with all modifiers less 1 then give something
-    return res >= 1 ? static_cast<uint32_t>( res ) : 1;
+    return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }
 
 void Battle::Force::NewTurn( void )
