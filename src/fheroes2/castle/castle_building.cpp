@@ -32,7 +32,7 @@
 
 void CastleRedrawTownName( const Castle &, const Point & );
 void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
-                                  const CastleDialog::AlphaBuilding & alphaBuilding );
+                                  const CastleDialog::FadeBuilding & alphaBuilding );
 fheroes2::Rect CastleGetCoordBuilding( int, building_t, const Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
 Rect CastleGetMaxArea( const Castle &, const Point & );
@@ -62,7 +62,47 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
     return it != end() ? ( *it ).coord : back().coord;
 }
 
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding )
+void CastleDialog::FadeBuilding::StartFadeBuilding( uint32_t build )
+{
+    this->alpha = 0;
+    this->build = build;
+}
+
+bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
+{
+    if ( alpha < 255 ) {
+        if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
+            alpha += 15;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CastleDialog::FadeBuilding::IsFadeDone() const
+{
+    return ( alpha == 255 );
+}
+
+void CastleDialog::FadeBuilding::StopFadeBuilding()
+{
+    if ( build != BUILD_NOTHING ) {
+        build = BUILD_NOTHING;
+        alpha = 256;
+    }
+}
+
+uint32_t CastleDialog::FadeBuilding::GetAlpha() const
+{
+    return alpha;
+}
+
+uint32_t CastleDialog::FadeBuilding::GetBuild() const
+{
+    return build;
+}
+
+void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding )
 {
     CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding );
     CastleRedrawTownName( castle, dst_pt );
@@ -81,7 +121,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
 }
 
 void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
-                                  const CastleDialog::AlphaBuilding & alphaBuilding )
+                                  const CastleDialog::FadeBuilding & fadeBuilding )
 {
     const uint32_t frame = Game::CastleAnimationFrame();
 
@@ -167,7 +207,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     }
 
     // redraw all builds
-    if ( BUILD_NOTHING == alphaBuilding.build ) {
+    if ( BUILD_NOTHING == fadeBuilding.GetBuild() ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             const uint32_t currentBuildId = it->id;
             if ( castle.isBuild( currentBuildId ) ) {
@@ -180,7 +220,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         }
     }
     // redraw build with alpha
-    else if ( orders.end() != std::find( orders.begin(), orders.end(), alphaBuilding.build ) ) {
+    else if ( orders.end() != std::find( orders.begin(), orders.end(), fadeBuilding.GetBuild() ) ) {
         for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
             const uint32_t currentBuildId = it->id;
 
@@ -188,15 +228,15 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
                 CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
                 if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, alphaBuilding.build, alphaBuilding.alpha );
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
                     CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
                 }
             }
-            else if ( currentBuildId == alphaBuilding.build ) {
-                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame, alphaBuilding.alpha );
-                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, alphaBuilding.alpha );
+            else if ( currentBuildId == fadeBuilding.GetBuild() ) {
+                CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
+                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
                 if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, true ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, alphaBuilding.alpha );
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId, fadeBuilding.GetAlpha() );
                 }
             }
         }

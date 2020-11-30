@@ -250,8 +250,20 @@ private:
 
 namespace CastleDialog
 {
-    struct AlphaBuilding
+    class FadeBuilding
     {
+    public:
+        FadeBuilding()
+            : alpha( 0 )
+            , build( BUILD_NOTHING ){};
+        void StartFadeBuilding( uint32_t build );
+        bool UpdateFadeBuilding();
+        bool IsFadeDone() const;
+        void StopFadeBuilding();
+        uint32_t GetAlpha() const;
+        uint32_t GetBuild() const;
+
+    private:
         uint32_t alpha;
         uint32_t build;
     };
@@ -277,7 +289,7 @@ namespace CastleDialog
         const Rect & GetRect( building_t ) const;
     };
 
-    void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::AlphaBuilding & alphaBuilding );
+    void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
     void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
 
     void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );

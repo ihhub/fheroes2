@@ -288,12 +288,10 @@ int Castle::OpenDialog( bool readonly )
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
 
-    CastleDialog::AlphaBuilding alphaBuilding;
-    alphaBuilding.alpha = 256;
-    alphaBuilding.build = BUILD_NOTHING;
+    CastleDialog::FadeBuilding fadeBuilding;
 
     // draw building
-    CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
+    CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );
 
     if ( 2 > world.GetKingdom( GetColor() ).GetCastles().size() || readonly ) {
         buttonPrevCastle.disable();
@@ -617,24 +615,31 @@ int Castle::OpenDialog( bool readonly )
                                 Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
                                 AGG::PlaySound( M82::BUILDTWN );
-
-                                alphaBuilding.alpha = 0;
-                                alphaBuilding.build = BUILD_CASTLE;
+                                fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
                             break;
                         }
 
                         case BUILD_CASTLE: {
+                            uint32_t build = fadeBuilding.GetBuild();
+                            if ( build != BUILD_NOTHING ) {
+                                BuyBuilding( build );
+                                if ( BUILD_CAPTAIN == build ) {
+                                    cursor.Hide();
+                                    RedrawIcons( *this, heroes, cur_pt );
+                                    cursor.Show();
+                                    display.render();
+                                }
+                            }
+                            fadeBuilding.StopFadeBuilding();
                             const Heroes * prev = heroes.Guest();
-                            const u32 build = OpenTown();
+                            build = OpenTown();
                             heroes = world.GetHeroes( *this );
                             bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
 
                             if ( BUILD_NOTHING != build ) {
                                 AGG::PlaySound( M82::BUILDTWN );
-
-                                alphaBuilding.alpha = 0;
-                                alphaBuilding.build = build;
+                                fadeBuilding.StartFadeBuilding( build );
                             }
 
                             if ( buyhero ) {
@@ -744,30 +749,26 @@ int Castle::OpenDialog( bool readonly )
             msg_status.clear();
         }
 
-        if ( alphaBuilding.alpha < 255 ) {
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
-                alphaBuilding.alpha += 15;
-                need_redraw = true;
+        need_redraw = fadeBuilding.UpdateFadeBuilding();
+        if ( fadeBuilding.IsFadeDone() ) {
+            const uint32_t build = fadeBuilding.GetBuild();
+            if ( build != BUILD_NOTHING ) {
+                BuyBuilding( build );
+                if ( BUILD_CAPTAIN == build )
+                    RedrawIcons( *this, heroes, cur_pt );
+                cursor.Hide();
+                CastleRedrawTownName( *this, cur_pt );
+                RedrawResourcePanel( cur_pt );
+                cursor.Show();
+                display.render();
             }
+            fadeBuilding.StopFadeBuilding();
         }
-        else if ( alphaBuilding.alpha == 255 ) {
-            BuyBuilding( alphaBuilding.build );
-            if ( BUILD_CAPTAIN == alphaBuilding.build )
-                RedrawIcons( *this, heroes, cur_pt );
-            cursor.Hide();
-            CastleRedrawTownName( *this, cur_pt );
-            RedrawResourcePanel( cur_pt );
-            cursor.Show();
-            display.render();
-            alphaBuilding.build = BUILD_NOTHING;
-            alphaBuilding.alpha = 256;
-        }
-
         // animation sprite
         if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );
             cursor.Show();
             display.render();
 
@@ -775,15 +776,16 @@ int Castle::OpenDialog( bool readonly )
         }
         else if ( need_redraw ) {
             cursor.Hide();
-            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, alphaBuilding );
+            CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );
             cursor.Show();
             display.render();
             need_redraw = false;
         }
     }
 
-    if ( alphaBuilding.build != BUILD_NOTHING ) {
-        BuyBuilding( alphaBuilding.build );
+    const uint32_t build = fadeBuilding.GetBuild();
+    if ( build != BUILD_NOTHING ) {
+        BuyBuilding( build );
     }
 
     if ( heroes.Guest() && conf.ExtHeroRecalculateMovement() )
