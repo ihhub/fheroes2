@@ -266,7 +266,7 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
         }
         res *= mod;
     }
-    // if total cost with all modifiers less 1 then give something
+    // Total cost should always be at least 1 gold
     return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }
 
