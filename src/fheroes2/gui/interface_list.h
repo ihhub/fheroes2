@@ -348,7 +348,7 @@ namespace Interface
 
                 if ( id < _size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
-                    const int32_t offsetY = ( id  - _topId ) * rtAreaItems.height / maxItems;
+                    const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
                     if ( ActionListCursor( item, position ) )
                         return true;

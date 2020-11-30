@@ -107,7 +107,7 @@ public:
     StatsHeroesList( const Point & pt, KingdomHeroes & );
 
     virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & )  override;
+    virtual void RedrawBackground( const Point & ) override;
 
     virtual void ActionCurrentUp() override {}
     virtual void ActionCurrentDn() override {}
