@@ -168,7 +168,7 @@ void Castle::OpenWell( void )
                     Dialog::Message( "", _( "No monsters available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters:" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Monsters" ), str, total, Dialog::YES | Dialog::NO ) ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }
