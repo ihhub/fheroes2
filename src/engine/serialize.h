@@ -261,8 +261,6 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    std::FILE * fp;
-
     StreamFile( const StreamFile & ) {}
 
 public:
@@ -281,17 +279,17 @@ public:
     void seek( size_t );
     void skip( size_t );
 
-    u16 getBE16();
-    u16 getLE16();
-    u32 getBE32();
-    u32 getLE32();
+    uint16_t getBE16();
+    uint16_t getLE16();
+    uint32_t getBE32();
+    uint32_t getLE32();
 
-    void putBE32( u32 );
-    void putLE32( u32 );
-    void putBE16( u16 );
-    void putLE16( u16 );
+    void putBE16( uint16_t );
+    void putLE16( uint16_t );
+    void putBE32( uint32_t );
+    void putLE32( uint32_t );
 
-    std::vector<u8> getRaw( size_t = 0 /* all data */ );
+    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ );
     void putRaw( const char *, size_t );
 
     std::string toString( size_t = 0 /* all data */ );
@@ -311,17 +309,21 @@ protected:
     void put8( char );
 
 private:
+
+    std::FILE * fp;
+
     template <typename T>
     T getUint()
     {
-        T val = 0;
-        if ( fp )
-            std::fread( &val, sizeof( T ), 1, fp );
+        if ( !fp )
+            return 0;
+        T val;
+        std::fread( &val, sizeof( T ), 1, fp );
         return val;
     }
 
     template <typename T>
-    void putUint( T val )
+    void putUint( const T val )
     {
         if ( fp )
             std::fwrite( &val, sizeof( T ), 1, fp );

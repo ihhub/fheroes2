@@ -551,26 +551,26 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
     fp = std::fopen( fn.c_str(), mode.c_str() );
     if ( !fp )
         ERROR( fn );
-    return fp;
+    return fp != NULL;
 }
 
 void StreamFile::close( void )
 {
-    if ( fp )
+    if ( fp ) {
         std::fclose( fp );
-    fp = NULL;
+        fp = NULL;
+    }
 }
 
 size_t StreamFile::size( void ) const
 {
-    if ( fp ) {
-        long pos = std::ftell( fp );
-        std::fseek( fp, 0, SEEK_END );
-        long len = std::ftell( fp );
-        std::fseek( fp, pos, SEEK_SET );
-        return static_cast<size_t>( len );
-    }
-    return 0;
+    if ( !fp )
+        return 0;
+    long pos = std::ftell( fp );
+    std::fseek( fp, 0, SEEK_END );
+    long len = std::ftell( fp );
+    std::fseek( fp, pos, SEEK_SET );
+    return static_cast<size_t>( len );
 }
 
 size_t StreamFile::tell( void ) const
@@ -586,14 +586,13 @@ void StreamFile::seek( size_t pos )
 
 size_t StreamFile::sizeg( void ) const
 {
-    if ( fp ) {
-        const long pos = std::ftell( fp );
-        std::fseek( fp, 0, SEEK_END );
-        const long len = std::ftell( fp );
-        std::fseek( fp, pos, SEEK_SET );
-        return static_cast<size_t>( len - pos );
-    }
-    return 0;
+    if ( !fp )
+        return 0;
+    const long pos = std::ftell( fp );
+    std::fseek( fp, 0, SEEK_END );
+    const long len = std::ftell( fp );
+    std::fseek( fp, pos, SEEK_SET );
+    return static_cast<size_t>( len - pos );
 }
 
 size_t StreamFile::tellg( void ) const
@@ -647,16 +646,6 @@ uint32_t StreamFile::getLE32()
     return le32toh( getUint<uint32_t>() );
 }
 
-void StreamFile::putBE32( uint32_t val )
-{
-    putUint<uint32_t>( htobe32( val ) );
-}
-
-void StreamFile::putLE32( uint32_t val )
-{
-    putUint<uint32_t>( htole32( val ) );
-}
-
 void StreamFile::putBE16( uint16_t val )
 {
     putUint<uint16_t>( htobe16( val ) );
@@ -665,6 +654,16 @@ void StreamFile::putBE16( uint16_t val )
 void StreamFile::putLE16( uint16_t val )
 {
     putUint<uint16_t>( htole16( val ) );
+}
+
+void StreamFile::putBE32( uint32_t val )
+{
+    putUint<uint32_t>( htobe32( val ) );
+}
+
+void StreamFile::putLE32( uint32_t val )
+{
+    putUint<uint32_t>( htole32( val ) );
 }
 
 std::vector<uint8_t> StreamFile::getRaw( size_t sz )
