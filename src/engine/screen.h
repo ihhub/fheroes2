@@ -52,8 +52,6 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
-        virtual void transformCoordinates( int &, int & ) {}
-
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

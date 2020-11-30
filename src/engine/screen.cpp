@@ -266,8 +266,6 @@ namespace
                 flags = SDL_WINDOW_FULLSCREEN;
 #else
                 flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
-                const fheroes2::Display & display = fheroes2::Display::instance();
-                _calculateTransformVals( display.width(), display.height() );
 #endif
             }
 
@@ -353,14 +351,6 @@ namespace
             SDL_SetWindowIcon( _window, surface );
 
             SDL_FreeSurface( surface );
-        }
-
-        virtual void transformCoordinates( int & x, int & y ) override
-        {
-            if ( isFullScreen() ) {
-                x = static_cast<int>( ( x - _transformVals.offsetX ) / _transformVals.scale );
-                y = static_cast<int>( ( y - _transformVals.offsetY ) / _transformVals.scale );
-            }
         }
 
         static RenderEngine * create()
@@ -469,7 +459,6 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN;
 #else
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-                _calculateTransformVals( width_, height_ );
 #endif
             }
 
@@ -487,9 +476,6 @@ namespace
                 return false;
             }
 
-            SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
-            SDL_RenderSetLogicalSize( _renderer, width_, height_ );
-
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
@@ -502,6 +488,9 @@ namespace
             }
 
             _createPalette();
+
+            SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+            SDL_RenderSetLogicalSize( _renderer, width_, height_ );
 
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
@@ -565,13 +554,6 @@ namespace
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
 
-        struct
-        {
-            double offsetX;
-            double offsetY;
-            double scale;
-        } _transformVals;
-
         int renderFlags() const
         {
 #if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
@@ -600,26 +582,6 @@ namespace
 
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
-            }
-        }
-
-        void _calculateTransformVals( int width, int height )
-        {
-            SDL_DisplayMode dm;
-            SDL_GetCurrentDisplayMode( 0, &dm );
-
-            const double aspectsDiff = static_cast<double>( dm.w ) / dm.h - static_cast<double>( width ) / height;
-            _transformVals.scale = std::min( static_cast<double>( dm.h ) / height, static_cast<double>( dm.w ) / width );
-            if ( aspectsDiff > 0 ) {
-                _transformVals.offsetX = ( dm.w - _transformVals.scale * width ) / 2;
-                _transformVals.offsetY = 0;
-            }
-            else if ( aspectsDiff < 0 ) {
-                _transformVals.offsetX = 0;
-                _transformVals.offsetY = ( dm.h - _transformVals.scale * height ) / 2;
-            }
-            else {
-                _transformVals.offsetX = _transformVals.offsetY = 0;
             }
         }
     };
