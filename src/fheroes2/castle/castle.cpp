@@ -2566,7 +2566,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
 
 Castle * VecCastles::Get( const Point & position ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [position]( const Castle * castle ) { return castle->isPosition( position ); } );
+    const_iterator it = std::find_if( begin(), end(), [&position]( const Castle * castle ) { return castle->isPosition( position ); } );
     return end() != it ? *it : NULL;
 }
 
