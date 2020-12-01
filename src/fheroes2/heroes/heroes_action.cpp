@@ -1132,7 +1132,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
                 Dialog::Message( "", message, Font::BIG, Dialog::OK );
             }
             else {
-                Game::PlayPickupSound();
+                AGG::PlaySound( M82::EXPERNCE );
                 message.append( "\n" );
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
@@ -1142,7 +1142,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            Game::PlayPickupSound();
+            AGG::PlaySound( M82::EXPERNCE );
             message.append( "\n" );
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
             Dialog::ResourceInfo( "", message, funds );
