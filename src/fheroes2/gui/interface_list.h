@@ -62,19 +62,21 @@ namespace Interface
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
 
-        // Original code had Item & item, const Point & cursor, s32 ox, s32 oy
-        virtual void ActionListDoubleClick( Item & item, const Point &, s32, s32 )
+        virtual void ActionListDoubleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListDoubleClick( item );
         }
-        virtual void ActionListSingleClick( Item & item, const Point &, s32, s32 )
+
+        virtual void ActionListSingleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListSingleClick( item );
         }
-        virtual void ActionListPressRight( Item & item, const Point &, s32, s32 )
+
+        virtual void ActionListPressRight( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListPressRight( item );
         }
+
         virtual bool ActionListCursor( Item &, const Point & )
         {
             return false;
@@ -346,22 +348,23 @@ namespace Interface
 
                 if ( id < _size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
+                    const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, le.GetMouseCursor() ) )
+                    if ( ActionListCursor( item, position ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListDoubleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                            ActionListSingleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( item, le.GetMouseCursor(), rtAreaItems.x, mousePos.y );
+                        ActionListPressRight( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }
                 }

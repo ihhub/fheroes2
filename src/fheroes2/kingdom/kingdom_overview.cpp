@@ -106,19 +106,19 @@ class StatsHeroesList : public Interface::ListBox<HeroRow>
 public:
     StatsHeroesList( const Point & pt, KingdomHeroes & );
 
-    void RedrawItem( const HeroRow &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListSingleClick( HeroRow & ){};
-    void ActionListDoubleClick( HeroRow & ){};
-    void ActionListPressRight( HeroRow & ){};
+    virtual void ActionCurrentUp() override {}
+    virtual void ActionCurrentDn() override {}
+    virtual void ActionListSingleClick( HeroRow & ) override {}
+    virtual void ActionListDoubleClick( HeroRow & ) override {}
+    virtual void ActionListPressRight( HeroRow & ) override {}
 
-    void ActionListSingleClick( HeroRow &, const Point &, s32, s32 );
-    void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 );
-    void ActionListPressRight( HeroRow &, const Point &, s32, s32 );
-    bool ActionListCursor( HeroRow &, const Point & );
+    virtual void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
+    virtual bool ActionListCursor( HeroRow &, const Point & ) override;
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -318,19 +318,19 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 public:
     StatsCastlesList( const Point & pt, KingdomCastles & );
 
-    void RedrawItem( const CstlRow &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( CstlRow & ){};
-    void ActionListSingleClick( CstlRow & ){};
-    void ActionListPressRight( CstlRow & ){};
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListDoubleClick( CstlRow & ) override {}
+    virtual void ActionListSingleClick( CstlRow & ) override {}
+    virtual void ActionListPressRight( CstlRow & ) override {}
 
-    void ActionListSingleClick( CstlRow &, const Point &, s32, s32 );
-    void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 );
-    void ActionListPressRight( CstlRow &, const Point &, s32, s32 );
-    bool ActionListCursor( CstlRow &, const Point & );
+    virtual void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
+    virtual bool ActionListCursor( CstlRow &, const Point & ) override;
 };
 
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
