@@ -70,7 +70,7 @@ matrix:
         - sudo apt-get install -y libsdl2-ttf-dev
         - sudo apt-get install -y libsdl2-mixer-dev
         - sudo apt-get install -y libsdl2-image-dev
-        - export WITH_SDL2="ON"
+        - export WITH_SDL2="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
         - zip fheroes2_linux_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
@@ -125,7 +125,7 @@ matrix:
         - sudo apt-get install -y libsdl2-image-dev
         - sudo apt-get install -y gettext
         - sudo apt-get install -y zip
-        - export WITH_SDL2="ON"
+        - export WITH_SDL2="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
         - zip fheroes2_linux_arm_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
