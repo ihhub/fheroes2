@@ -639,7 +639,7 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 int Maps::TileIsCoast( s32 center, int filter )
 {
     int result = 0;
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
 
     for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
         if ( ( *it & filter ) && isValidDirection( center, *it ) && world.GetTiles( GetDirectionIndex( center, *it ) ).isWater() )

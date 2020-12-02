@@ -458,7 +458,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     }
 
     if ( isShipMaster() ) {
-        const Directions directions = Direction::All();
+        const Directions & directions = Direction::All();
         const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
 
         bool ocean = true;

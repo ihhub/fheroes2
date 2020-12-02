@@ -2383,7 +2383,7 @@ void Maps::Tiles::ClearFog( int colors )
 int Maps::Tiles::GetFogDirections( int color ) const
 {
     int around = 0;
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
 
     for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
         if ( !Maps::isValidDirection( GetIndex(), *it ) || world.GetTiles( Maps::GetDirectionIndex( GetIndex(), *it ) ).isFog( color ) )
