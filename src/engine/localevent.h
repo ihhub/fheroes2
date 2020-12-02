@@ -204,7 +204,11 @@ public:
     bool MouseMotion( void ) const;
     bool MouseMotion( const Rect & rt ) const;
 
-    const Point & GetMouseCursor( void );
+    const Point & GetMouseCursor( void )
+    {
+        return mouse_cu;
+    }
+
     const Point & GetMousePressLeft( void ) const;
     const Point & GetMousePressMiddle( void ) const;
     const Point & GetMousePressRight( void ) const;

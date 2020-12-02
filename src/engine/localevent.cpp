@@ -957,11 +957,6 @@ bool LocalEvent::MouseCursor( const Rect & rt ) const
     return rt & mouse_cu;
 }
 
-const Point & LocalEvent::GetMouseCursor( void )
-{
-    return mouse_cu;
-}
-
 int LocalEvent::KeyMod( void ) const
 {
     return SDL_GetModState();
