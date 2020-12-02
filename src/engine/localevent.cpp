@@ -924,27 +924,6 @@ bool LocalEvent::MouseCursor( const Rect & rt ) const
     return rt & mouse_cu;
 }
 
-const Point & LocalEvent::GetMouseCursor( void )
-{
-#ifdef WITHOUT_MOUSE
-    if ( !emulate_mouse )
-#endif
-    {
-        int x, y;
-
-        SDL_PumpEvents();
-        SDL_GetMouseState( &x, &y );
-
-        mouse_cu.x = x;
-        mouse_cu.y = y;
-    }
-
-    if ( modes & MOUSE_OFFSET )
-        mouse_cu += mouse_st;
-
-    return mouse_cu;
-}
-
 int LocalEvent::KeyMod( void ) const
 {
     return SDL_GetModState();

@@ -23,6 +23,7 @@
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
@@ -433,7 +434,7 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                    if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                    if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
                 }
@@ -486,7 +487,11 @@ namespace
             }
 
             _createPalette();
-
+            SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+            if ( SDL_RenderSetLogicalSize( _renderer, width_, height_ ) ) {
+                clear();
+                return false;
+            }
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
                 clear();
