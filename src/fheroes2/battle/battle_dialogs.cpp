@@ -623,8 +623,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
 
     const int icn = conf.ExtGameEvilInterface() ? ICN::SURRENDE : ICN::SURRENDR;
 
-    fheroes2::Button btnAccept( pos_rt.x + 90, pos_rt.y + 150, icn, 0, 1 );
-    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 150, icn, 2, 3 );
+    fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
+    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
     fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
     Rect marketRect = btnAccept.area();
 
@@ -648,8 +648,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     btnDecline.draw();
 
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
-    fheroes2::Blit( window, display, pos_rt.x + 54, pos_rt.y + 30 );
-    hero.PortraitRedraw( pos_rt.x + 58, pos_rt.y + 38, PORT_BIG, display );
+    fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
+    hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );
 
     std::string str = _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
