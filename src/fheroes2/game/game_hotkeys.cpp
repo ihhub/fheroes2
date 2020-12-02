@@ -279,6 +279,9 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
+    // split
+    key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
+    key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
