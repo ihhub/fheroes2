@@ -552,47 +552,7 @@ int Castle::OpenDialog( bool readonly )
                             fheroes2::ButtonRestorer exitRestorer( buttonExit );
                             if ( Dialog::OK == Dialog::BuyBoat( AllowBuyBoat() ) ) {
                                 BuyBoat();
-
-                                int alpha = 1;
-                                uint32_t buildFrame = 0;
-                                const int boatICN = GetICNBoat( GetRace() );
-                                while ( le.HandleEvents() && alpha < 255 ) {
-                                    if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
-                                        cursor.Hide();
-
-                                        const uint32_t castleAnimationFrame = Game::CastleAnimationFrame();
-
-                                        for ( CastleDialog::CacheBuildings::const_iterator buildingIt = cacheBuildings.begin(); buildingIt != cacheBuildings.end();
-                                              ++buildingIt ) {
-                                            const uint32_t currentBuildId = it->id;
-                                            if ( isBuild( currentBuildId ) ) {
-                                                if ( currentBuildId == BUILD_SHIPYARD ) {
-                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
-                                                    const fheroes2::Sprite & shipyardSprite = fheroes2::AGG::GetICN( boatICN, 0 );
-                                                    fheroes2::AlphaBlit( shipyardSprite, display, cur_pt.x + shipyardSprite.x(), cur_pt.y + shipyardSprite.y(), alpha );
-                                                    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( boatICN, 1 );
-                                                    fheroes2::AlphaBlit( boatSprite, display, cur_pt.x + boatSprite.x(), cur_pt.y + boatSprite.y(), alpha );
-                                                }
-                                                else {
-                                                    CastleDialog::CastleRedrawBuilding( *this, cur_pt, currentBuildId, castleAnimationFrame );
-                                                    CastleDialog::CastleRedrawBuildingExtended( *this, cur_pt, currentBuildId, castleAnimationFrame );
-                                                    if ( CastleDialog::RoadConnectionNeeded( *this, currentBuildId, false ) ) {
-                                                        CastleDialog::RedrawRoadConnection( *this, cur_pt, currentBuildId );
-                                                    }
-                                                }
-                                            }
-                                        }
-
-                                        CastleRedrawTownName( *this, cur_pt );
-
-                                        cursor.Show();
-                                        display.render();
-                                        alpha += 15;
-                                    }
-                                    ++buildFrame;
-                                }
-
-                                need_redraw = true;
+                                fadeBuilding.StartFadeBuilding( BUILD_SHIPYARD );
                             }
                             break;
                         }

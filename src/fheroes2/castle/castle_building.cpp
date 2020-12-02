@@ -226,9 +226,13 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
             if ( castle.isBuild( currentBuildId ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
-                CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                if ( currentBuildId == BUILD_SHIPYARD ) {
+                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
+                }
+                else {
+                    CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
+                }
                 if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
-                    CastleDialog::RedrawRoadConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
                     CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
                 }
             }
