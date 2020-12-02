@@ -107,6 +107,14 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
         return;
     }
+
+    int newHumanCount = std::count_if( players.begin(), players.end(), []( const Player * player ) { return player->GetControl() == CONTROL_HUMAN; } );
+    int savedHumanCount = std::count_if( savedPlayers.begin(), savedPlayers.end(), []( const Player & player ) { return player.GetControl() == CONTROL_HUMAN; } );
+
+    if ( newHumanCount != savedHumanCount ) {
+        return;
+    }
+
     players.clear();
     for ( const Player & p : savedPlayers ) {
         Player * player = new Player( p.GetColor() );
