@@ -168,21 +168,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                     // bottom and objects
                     if ( drawBottom ) {
-                        const s32 tileIndex = tile.GetIndex();
-                        if ( Maps::isValidDirection( tileIndex, Direction::TOP ) ) {
-                            const Maps::Tiles & tileTop = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP ) );
+                        if ( offset.y > 0 ) {
+                            const Maps::Tiles & tileTop = world.GetTiles( offset.x, offset.y - 1 );
                             if ( tileTop.GetHeroes() != NULL )
                                 continue;
-                        }
-                        if ( Maps::isValidDirection( tileIndex, Direction::TOP_LEFT ) ) {
-                            const Maps::Tiles & tileTopLeft = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP_LEFT ) );
-                            if ( tileTopLeft.GetHeroes() != NULL )
-                                continue;
-                        }
-                        if ( Maps::isValidDirection( tileIndex, Direction::TOP_RIGHT ) ) {
-                            const Maps::Tiles & tileTopRight = world.GetTiles( Maps::GetDirectionIndex( tileIndex, Direction::TOP_RIGHT ) );
-                            if ( tileTopRight.GetHeroes() != NULL )
-                                continue;
+
+                            if ( offset.x > 0 ) {
+                                const Maps::Tiles & tileTopLeft = world.GetTiles( offset.x - 1, offset.y - 1 );
+                                if ( tileTopLeft.GetHeroes() != NULL )
+                                    continue;
+                            }
+
+                            if ( offset.x < world.w() - 1 ) {
+                                const Maps::Tiles & tileTopRight = world.GetTiles( offset.x + 1, offset.y - 1 );
+                                if ( tileTopRight.GetHeroes() != NULL )
+                                    continue;
+                            }
                         }
                         tile.RedrawBottom( dst, isPuzzleDraw );
                         tile.RedrawObjects( dst, isPuzzleDraw );
