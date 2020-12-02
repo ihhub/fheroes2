@@ -290,6 +290,12 @@ bool Game::HotKeyPressEvent( int evnt )
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
 }
 
+bool Game::HotKeyHoldEvent( int evnt )
+{
+    LocalEvent & le = LocalEvent::Get();
+    return le.KeyHold() && le.KeyValue() == key_events[evnt];
+}
+
 void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );

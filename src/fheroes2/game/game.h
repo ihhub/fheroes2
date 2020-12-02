@@ -166,6 +166,7 @@ namespace Game
     };
 
     bool HotKeyPressEvent( int );
+    bool HotKeyHoldEvent( int );
 
     enum
     {

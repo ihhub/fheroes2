@@ -653,7 +653,16 @@ bool LocalEvent::MouseReleaseRight( void ) const
 void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
-        ( event.type == SDL_KEYDOWN ) ? SetModes( KEY_PRESSED ) : ResetModes( KEY_PRESSED );
+        switch ( event.type ) 
+        {
+        case SDL_KEYDOWN:
+            SetModes( KEY_PRESSED );
+            SetModes( KEY_HOLD );
+            break;
+        case SDL_KEYUP:
+            ResetModes( KEY_PRESSED );
+            ResetModes( KEY_HOLD );
+        }
 
 #ifdef WITHOUT_MOUSE
         if ( emulate_mouse && EmulateMouseAction( GetKeySym( event.keysym.sym ) ) )
@@ -963,6 +972,11 @@ bool LocalEvent::KeyPress( void ) const
 bool LocalEvent::KeyPress( KeySym key ) const
 {
     return key == key_value && ( modes & KEY_PRESSED );
+}
+
+bool LocalEvent::KeyHold() const
+{
+    return modes & KEY_HOLD;
 }
 
 void LocalEvent::SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
