@@ -29,6 +29,9 @@
 #include "race.h"
 #include "text.h"
 #include "world.h"
+#include "game.h"
+
+using namespace Game;
 
 void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */ )
 {
@@ -72,6 +75,23 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
             break;
         }
     }
+}
+
+void RedistributeArmyCTRL( ArmyTroop & troop1 /* from */)
+{
+    // can't split up a stack with just 1 unit...
+    if ( troop1.GetCount() <= 1 )
+        return;
+
+    const Army * army1 = troop1.GetArmy();
+    const u32 free_slots = army1->Size() - army1->GetCount();
+
+    if ( free_slots == 0 )
+        return;
+
+    const Troop troop( troop1 );
+    const_cast<Army *>( army1 )->SplitTroopIntoFirstFreeSlot( troop, 1 );
+    troop1.SetCount( troop1.GetCount() - 1 );
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
@@ -312,6 +332,13 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
+            LocalEvent & le = LocalEvent::Get();
+
+            if ( HotKeyHoldEvent( EVENT_STACKSPLIT_CTRL ) ) {
+                RedistributeArmyCTRL( troop );
+                return false;
+            }
+
             Cursor::Get().Hide();
             spcursor.hide();
         }
