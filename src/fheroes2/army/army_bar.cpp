@@ -339,8 +339,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
-            LocalEvent & le = LocalEvent::Get();
-
             if ( HotKeyHoldEvent( EVENT_STACKSPLIT_CTRL ) ) {
                 RedistributeArmyByOne( troop );
                 return false;
