@@ -654,12 +654,11 @@ bool LocalEvent::MouseReleaseRight( void ) const
 void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
-        switch ( event.type ) {
-        case SDL_KEYDOWN:
+        if ( event.type == SDL_KEYDOWN ) {
             SetModes( KEY_PRESSED );
             SetModes( KEY_HOLD );
-            break;
-        case SDL_KEYUP:
+        }
+        else if ( event.type == SDL_KEYUP ) {
             ResetModes( KEY_PRESSED );
             ResetModes( KEY_HOLD );
         }
