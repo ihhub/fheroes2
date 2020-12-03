@@ -26,10 +26,10 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "game.h"
 #include "race.h"
 #include "text.h"
 #include "world.h"
-#include "game.h"
 
 using namespace Game;
 

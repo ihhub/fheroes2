@@ -478,6 +478,7 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( CLICK_RIGHT );
     le.ResetModes( CLICK_MIDDLE );
     le.ResetModes( CLICK_MIDDLE );
+    le.ResetModes( KEY_HOLD );
     return le;
 }
 
@@ -653,8 +654,7 @@ bool LocalEvent::MouseReleaseRight( void ) const
 void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
-        switch ( event.type ) 
-        {
+        switch ( event.type ) {
         case SDL_KEYDOWN:
             SetModes( KEY_PRESSED );
             SetModes( KEY_HOLD );
