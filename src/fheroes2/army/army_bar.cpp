@@ -77,7 +77,7 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
     }
 }
 
-void RedistributeArmyCTRL( ArmyTroop & troop1 /* from */)
+void RedistributeArmyByOne( ArmyTroop & troop1 /* from */ )
 {
     // can't split up a stack with just 1 unit...
     if ( troop1.GetCount() <= 1 )
@@ -316,16 +316,23 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop1, ArmyTroop & troop2 /* selecte
 bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
-        ArmyTroop * troop2 = GetSelectedItem();
+        ArmyTroop * selectedTroop = GetSelectedItem();
+
+        if ( selectedTroop && selectedTroop->isValid() && !troop.isValid() && HotKeyHoldEvent( EVENT_STACKSPLIT_SHIFT ) ) {
+            ResetSelected();
+            RedistributeArmy( *selectedTroop, troop );
+
+            return false;
+        }
 
         // combine
-        if ( troop.GetID() == troop2->GetID() ) {
-            troop.SetCount( troop.GetCount() + troop2->GetCount() );
-            troop2->Reset();
+        if ( selectedTroop && troop.GetID() == selectedTroop->GetID() ) {
+            troop.SetCount( troop.GetCount() + selectedTroop->GetCount() );
+            selectedTroop->Reset();
         }
         // exchange
         else
-            Army::SwapTroops( troop, *troop2 );
+            Army::SwapTroops( troop, *selectedTroop );
 
         return false; // reset cursor
     }
@@ -335,7 +342,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
             LocalEvent & le = LocalEvent::Get();
 
             if ( HotKeyHoldEvent( EVENT_STACKSPLIT_CTRL ) ) {
-                RedistributeArmyCTRL( troop );
+                RedistributeArmyByOne( troop );
                 return false;
             }
 
