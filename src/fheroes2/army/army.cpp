@@ -816,13 +816,10 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, u32 slots )
 
 void Troops::SplitTroopIntoFirstFreeSlot( const Troop & troop, uint32_t splitCount )
 {
-    std::vector<iterator> iters;
-
     for ( iterator it = begin(); it != end(); ++it ) {
         if ( ( *it )->isValid() )
             continue;
 
-        iters.push_back( it );
         ( *it )->Set( troop.GetMonster(), splitCount );
         break;
     }
