@@ -126,7 +126,6 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     const uint32_t frame = Game::CastleAnimationFrame();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
     int townIcnId = -1;
 
