@@ -104,18 +104,18 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     // button upgrade
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
-    dst_pt.x = pos_rt.x + 284;
-    dst_pt.y = pos_rt.y + 190;
+    dst_pt.x = pos_rt.x + 280;
+    dst_pt.y = pos_rt.y + 192;
     fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
 
     // button dismiss
-    dst_pt.x = pos_rt.x + 284;
-    dst_pt.y = pos_rt.y + 222;
+    dst_pt.x = pos_rt.x + 280;
+    dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, viewarmy, 1, 2 );
 
     // button exit
     dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + ( ( UPGRADE & flags ) ? 222 : 225 ); // in case of battle we shouldn't move this button up
+    dst_pt.y = pos_rt.y + 221; //( ( UPGRADE & flags ) ? 222 : 225 ); // in case of battle we shouldn't move this button up
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
 
     if ( READONLY & flags ) {
