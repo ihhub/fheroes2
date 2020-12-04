@@ -316,7 +316,7 @@ int Castle::OpenDialog( bool readonly )
     fheroes2::Image surfaceHero( 552, 107 );
 
     // dialog menu loop
-    while ( le.HandleEvents(true, true) ) {
+    while ( le.HandleEvents( true, true ) ) {
         // exit
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
             result = Dialog::CANCEL;
