@@ -5,14 +5,24 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup>
-    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <PreprocessorDefinitions>BUILD_RELEASE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
