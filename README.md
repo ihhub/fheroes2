@@ -55,8 +55,6 @@ Use "fullscreen = on" option to scale game area to native Vita resolution or "fu
 
 Native resolution is supported (set "videomode = 960x544" option in config file or just click on the left door in main menu and select resolution manually. Game restart is required after resolution change).
 
-If "ux0:data/fheroes2/fheroes2.cfg" file is missing, just copy the default one from "ux0:app/FHOMM0002/" to "ux0:data/fheroes2"
-
 fheroes2
 ======
 [![Github Downloads (monthly)](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases) [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ) [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2) [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2) [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
