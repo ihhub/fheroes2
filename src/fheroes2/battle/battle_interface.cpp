@@ -741,14 +741,20 @@ void Battle::Status::Redraw( void )
     fheroes2::Blit( back2, display, x, y + back1.height() );
 
     if ( bar1.Size() )
-        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 3 );
+        bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
     if ( bar2.Size() )
-        bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() );
+        bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
 }
 
 const std::string & Battle::Status::GetMessage( void ) const
 {
     return message;
+}
+
+void Battle::Status::clear()
+{
+    bar1.Clear();
+    bar2.Clear();
 }
 
 Battle::ArmiesOrder::ArmiesOrder()
@@ -2178,9 +2184,14 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     }
 }
 
-void Battle::Interface::FadeArena( void )
+void Battle::Interface::FadeArena( bool clearMessageLog )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    if ( clearMessageLog ) {
+        status.clear();
+        status.Redraw();
+    }
 
     Redraw();
 

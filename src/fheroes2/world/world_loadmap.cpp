@@ -612,7 +612,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
         }
     }
 
-    if ( obj.monster() == Monster::GHOST || obj.monster.isElemental() )
+    if ( obj.monster.GetID() == Monster::GHOST || obj.monster.isElemental() )
         cond = 0;
 
     if ( count == 0 ) {

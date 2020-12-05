@@ -46,7 +46,7 @@ void Castle::OpenTavern( void )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Text text( tavern, Font::BIG );
+    Text text( tavern, Font::YELLOW_BIG );
     const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
     TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );

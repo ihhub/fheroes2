@@ -537,6 +537,9 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
             cursor.Show();
             display.render();
         }
+        else if ( le.MousePressRight( btnHeroes.area() ) ) {
+            Dialog::Message( "", _( "View Hero" ), Font::BIG );
+        }
     }
 
     cursor.Hide();

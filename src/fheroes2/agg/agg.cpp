@@ -1220,6 +1220,58 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::LISTBOX_EVIL:
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::GRAY );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    ApplyPalette( _icnVsSprite[id][i], 2 );
+                }
+                return true;
+            case ICN::MONS32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
+                    const Sprite & source = _icnVsSprite[id][1];
+                    Sprite & modified = _icnVsSprite[id][2];
+                    Sprite temp( source.width(), source.height() + 1 );
+                    temp.reset();
+                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                    modified.setPosition( 0, 1 );
+                }
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+                    Sprite & modified = _icnVsSprite[id][4];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 7, 0, 4, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                    Sprite & modified = _icnVsSprite[id][6];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 2, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                    Sprite & modified = _icnVsSprite[id][8];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 12, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
+                    Sprite & modified = _icnVsSprite[id][44];
+                    Sprite temp = _icnVsSprite[id][43];
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                }
+                return true;
             default:
                 break;
             }

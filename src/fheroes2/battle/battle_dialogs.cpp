@@ -42,6 +42,12 @@
 
 namespace
 {
+    // DialogBattleSummary text related values
+    const int bsTextWidth = 270;
+    const int bsTextXOffset = 25;
+    const int bsTextYOffset = 175;
+    const int bsTextIndent = 30;
+
     class LoopedAnimation
     {
     public:
@@ -143,7 +149,7 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg );
+    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
     void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas );
     void RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
@@ -271,19 +277,18 @@ void Battle::DialogBattleSettings( void )
     }
 }
 
-void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & msg )
+void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
         if ( res2 & RESULT_SURRENDER )
-            msg.append( _( "The enemy has surrendered!" ) );
+            title.append( _( "The enemy has surrendered!" ) );
         else if ( res2 & RESULT_RETREAT )
-            msg.append( _( "The enemy has fled!" ) );
+            title.append( _( "The enemy has fled!" ) );
         else
-            msg.append( _( "A glorious victory!" ) );
+            title.append( _( "A glorious victory!" ) );
 
         if ( hero.isHeroes() ) {
-            msg.append( "\n \n" );
             msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{exp}", exp );
@@ -323,25 +328,26 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     cursor.SetThemes( Cursor::POINTER );
 
     std::string msg;
+    std::string title;
     LoopedAnimationSequence sequence;
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, msg );
+        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, msg );
+        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
         if ( conf.Music() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
@@ -372,10 +378,10 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
     const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
-    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH );
+    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
     const fheroes2::Rect pos_rt( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
 
-    fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH );
+    fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int anime_ox = 47;
@@ -389,8 +395,17 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
 
     fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
 
-    TextBox box( msg, Font::BIG, 270 );
-    box.Blit( pos_rt.x + 25, pos_rt.y + 175 );
+    int32_t messageYOffset = 0;
+    if ( !title.empty() ) {
+        TextBox box( title, Font::YELLOW_BIG, bsTextWidth );
+        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
+        messageYOffset = bsTextIndent;
+    }
+
+    if ( !msg.empty() ) {
+        TextBox box( msg, Font::BIG, bsTextWidth );
+        box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset + messageYOffset );
+    }
 
     // battlefield casualties
     Text text( _( "Battlefield Casualties" ), Font::SMALL );
@@ -608,8 +623,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
 
     const int icn = conf.ExtGameEvilInterface() ? ICN::SURRENDE : ICN::SURRENDR;
 
-    fheroes2::Button btnAccept( pos_rt.x + 90, pos_rt.y + 150, icn, 0, 1 );
-    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 150, icn, 2, 3 );
+    fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
+    fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
     fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
     Rect marketRect = btnAccept.area();
 
@@ -633,8 +648,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     btnDecline.draw();
 
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
-    fheroes2::Blit( window, display, pos_rt.x + 54, pos_rt.y + 30 );
-    hero.PortraitRedraw( pos_rt.x + 58, pos_rt.y + 38, PORT_BIG, display );
+    fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
+    hero.PortraitRedraw( pos_rt.x + 60, pos_rt.y + 38, PORT_BIG, display );
 
     std::string str = _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );

@@ -1204,9 +1204,13 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     if ( !kingdom.AllowPayment( payment ) ) {
         if ( isControlHuman() ) {
+            const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+            fheroes2::Image sprite = border;
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
+
             header.append( " " );
             header.append( _( "Unfortunately, you seem to be a little short of cash at the moment." ) );
-            Dialog::Message( GetName(), header, Font::BIG, Dialog::OK );
+            Dialog::SpriteInfo( "", header, sprite, Dialog::OK );
         }
         return false;
     }
@@ -1956,14 +1960,14 @@ Heroes * VecHeroes::Get( const Point & center ) const
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
     const_iterator it
-        = std::find_if( begin(), end(), [castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
+        = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
     return end() != it ? *it : NULL;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
     const_iterator it = Settings::Get().ExtCastleAllowGuardians()
-                            ? std::find_if( begin(), end(), [castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
+                            ? std::find_if( begin(), end(), [&castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
                             : end();
     return end() != it ? *it : NULL;
 }
