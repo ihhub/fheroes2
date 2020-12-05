@@ -38,7 +38,6 @@
 
 #ifdef VITA
 #include <vita2d.h>
-#include "memcpy_neon.h"
 #endif
 
 namespace
@@ -1023,7 +1022,7 @@ namespace
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            memcpy_neon( palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            memcpy( palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
             vita2d_draw_texture_scale( texBuffer, destRect.x, destRect.y, static_cast<float>( destRect.w ) / width, static_cast<float>( destRect.h ) / height );

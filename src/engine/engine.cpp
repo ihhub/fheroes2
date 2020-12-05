@@ -70,6 +70,10 @@ bool SDL::Init( const u32 system )
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
 
+#ifdef VITA
+    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+#endif
+
     System::CreateTrayIcon( true );
     System::PowerManagerOff( true );
     Surface::SetDefaultColorKey( 0xFF, 0, 0xFF );

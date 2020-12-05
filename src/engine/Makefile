@@ -7,7 +7,7 @@ CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 
 all: $(TARGET).a
 
-$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) $(patsubst %.S, %.o, $(wildcard *.S)) 
+$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	$(AR) crvs $@ $^
 
 %.o: %.cpp

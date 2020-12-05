@@ -429,14 +429,14 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
-    int heroes_speed;
-    int ai_speed;
-    int scroll_speed;
-    int battle_speed;
     int gamepad_pointer_speed;
 #ifdef VITA
     int vita_keep_aspect_ratio;
 #endif
+    int heroes_speed;
+    int ai_speed;
+    int scroll_speed;
+    int battle_speed;
     int game_type;
     int preferably_count_players;
 
