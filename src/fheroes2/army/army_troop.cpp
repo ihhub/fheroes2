@@ -228,12 +228,12 @@ int ArmyTroop::GetLuck( void ) const
     return army ? army->GetLuck() : Troop::GetLuck();
 }
 
-void ArmyTroop::SetArmy( Army & a )
+void ArmyTroop::SetArmy( const Army & a )
 {
     army = &a;
 }
 
-Army * ArmyTroop::GetArmy() const
+const Army * ArmyTroop::GetArmy( void ) const
 {
     return army;
 }

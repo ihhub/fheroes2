@@ -94,14 +94,14 @@ public:
     int GetMorale( void ) const;
     int GetLuck( void ) const;
 
-    void SetArmy( Army & );
-    Army * GetArmy() const;
+    void SetArmy( const Army & );
+    const Army * GetArmy( void ) const;
 
     std::string GetAttackString( void ) const;
     std::string GetDefenseString( void ) const;
 
 protected:
-    Army * army;
+    const Army * army;
 };
 
 #endif
