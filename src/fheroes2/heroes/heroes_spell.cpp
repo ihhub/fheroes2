@@ -519,7 +519,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<Dialog::FrameBorder> frameborder( new Dialog::FrameBorder(Size( 280, 250 ) ) );
+    std::unique_ptr<Dialog::FrameBorder> frameborder( new Dialog::FrameBorder( Size( 280, 250 ) ) );
 
     const Rect & area = frameborder->GetArea();
     int result = Dialog::ZERO;
