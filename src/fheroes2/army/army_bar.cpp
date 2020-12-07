@@ -75,19 +75,19 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
     }
 }
 
-void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyFrom )
+void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
 {
     // can't split up a stack with just 1 unit...
     if ( troopFrom.GetCount() <= 1 )
         return;
 
-    const uint32_t freeSlots = armyFrom->Size() - armyFrom->GetCount();
+    const uint32_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
 
     if ( freeSlots == 0 )
         return;
 
     const Troop troop( troopFrom );
-    armyFrom->SplitTroopIntoFirstFreeSlot( troop, 1 );
+    armyTarget->SplitTroopIntoFirstFreeSlot( troop, 1 );
     troopFrom.SetCount( troopFrom.GetCount() - 1 );
 }
 
