@@ -36,6 +36,7 @@
 #include "world.h"
 
 #include <assert.h>
+#include <memory>
 
 namespace
 {
@@ -518,48 +519,47 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
+    std::unique_ptr<Dialog::FrameBorder> frameborder( new Dialog::FrameBorder(Size( 280, 250 ) ) );
+
+    const Rect & area = frameborder->GetArea();
     int result = Dialog::ZERO;
-    int castleIndex;
-    {
-        Dialog::FrameBorder frameborder( Size( 280, 250 ) );
-        const Rect & area = frameborder.GetArea();
-        CastleIndexListBox listbox( area, result );
-        const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
 
-        listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
-        listbox.SetScrollButtonDn( listId, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
-        listbox.SetScrollSplitter( fheroes2::AGG::GetICN( listId, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 120 ) );
-        listbox.SetAreaMaxItems( 5 );
-        listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
-        listbox.SetListContent( castles );
-        listbox.RedrawBackground( area );
-        listbox.Redraw();
+    CastleIndexListBox listbox( area, result );
 
-        fheroes2::ButtonGroup btnGroups;
-        const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+    const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
+    listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
+    listbox.SetScrollButtonDn( listId, 5, 6, fheroes2::Point( area.x + 256, area.y + 190 ) );
+    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( listId, 10 ), fheroes2::Rect( area.x + 260, area.y + 68, 14, 120 ) );
+    listbox.SetAreaMaxItems( 5 );
+    listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
+    listbox.SetListContent( castles );
+    listbox.RedrawBackground( area );
+    listbox.Redraw();
 
-        btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
-        btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );
-        btnGroups.draw();
+    fheroes2::ButtonGroup btnGroups;
+    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
 
-        cursor.Show();
-        display.render();
+    btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );
+    btnGroups.draw();
 
-        while ( result == Dialog::ZERO && le.HandleEvents() ) {
-            result = btnGroups.processEvents();
-            listbox.QueueEventProcessing();
+    cursor.Show();
+    display.render();
 
-            if ( !cursor.isVisible() ) {
-                listbox.Redraw();
-                cursor.Show();
-                display.render();
-            }
+    while ( result == Dialog::ZERO && le.HandleEvents() ) {
+        result = btnGroups.processEvents();
+        listbox.QueueEventProcessing();
+
+        if ( !cursor.isVisible() ) {
+            listbox.Redraw();
+            cursor.Show();
+            display.render();
         }
-        castleIndex = listbox.GetCurrent();
     }
+    frameborder.reset();
     // store
     if ( result == Dialog::OK )
-        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( castleIndex ) ) );
+        return HeroesTownGate( hero, world.GetCastle( Maps::GetPoint( listbox.GetCurrent() ) ) );
 
     return false;
 }
