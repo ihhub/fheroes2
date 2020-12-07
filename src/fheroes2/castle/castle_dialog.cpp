@@ -329,7 +329,7 @@ int Castle::OpenDialog( bool readonly )
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( rectResource ) ) {
+        else if ( le.MousePressRight( rectResource ) && !le.MousePressRight( buttonExit.area() ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
