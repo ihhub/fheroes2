@@ -75,21 +75,21 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
     }
 }
 
-void RedistributeArmyByOne( ArmyTroop & troop1 /* from */ )
+void RedistributeArmyByOne( ArmyTroop & troopFrom )
 {
     // can't split up a stack with just 1 unit...
-    if ( troop1.GetCount() <= 1 )
+    if ( troopFrom.GetCount() <= 1 )
         return;
 
-    const Army * army1 = troop1.GetArmy();
-    const u32 free_slots = army1->Size() - army1->GetCount();
+    Army * armyFrom = troopFrom.GetArmy();
+    const uint32_t freeSlots = armyFrom->Size() - armyFrom->GetCount();
 
-    if ( free_slots == 0 )
+    if ( freeSlots == 0 )
         return;
 
-    const Troop troop( troop1 );
-    const_cast<Army *>( army1 )->SplitTroopIntoFirstFreeSlot( troop, 1 );
-    troop1.SetCount( troop1.GetCount() - 1 );
+    const Troop troop( troopFrom );
+    armyFrom->SplitTroopIntoFirstFreeSlot( troop, 1 );
+    troopFrom.SetCount( troopFrom.GetCount() - 1 );
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
