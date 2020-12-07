@@ -31,8 +31,6 @@
 #include "text.h"
 #include "world.h"
 
-using namespace Game;
-
 void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */ )
 {
     const Army * army1 = troop1.GetArmy();
@@ -318,7 +316,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     if ( isSelected() ) {
         ArmyTroop * selectedTroop = GetSelectedItem();
 
-        if ( selectedTroop && selectedTroop->isValid() && !troop.isValid() && HotKeyHoldEvent( EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( selectedTroop && selectedTroop->isValid() && !troop.isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
             ResetSelected();
             RedistributeArmy( *selectedTroop, troop );
 
@@ -339,7 +337,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
-            if ( HotKeyHoldEvent( EVENT_STACKSPLIT_CTRL ) ) {
+            if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
                 RedistributeArmyByOne( troop );
                 return false;
             }
