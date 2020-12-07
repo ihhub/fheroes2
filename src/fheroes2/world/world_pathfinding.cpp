@@ -117,7 +117,7 @@ void WorldPathfinder::checkWorldSize()
         _cache.clear();
         _cache.resize( worldSize );
 
-        const Directions directions = Direction::All();
+        const Directions & directions = Direction::All();
         _mapOffset.resize( directions.size() );
         for ( size_t i = 0; i < directions.size(); ++i ) {
             _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
@@ -169,7 +169,7 @@ void WorldPathfinder::processWorldMap( int pathStart )
 
 void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
     const PathfindingNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
@@ -362,7 +362,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     reEvaluateIfNeeded( hero );
     const int start = hero.GetIndex();
 
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
     std::vector<bool> tilesVisited( world.getSize(), false );
     std::vector<int> nodesToExplore;
 
@@ -402,7 +402,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
         return result;
 
     const Kingdom & kingdom = world.GetKingdom( _currentColor );
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
 
     std::set<int> uniqueIndicies;
     auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, int object ) {
