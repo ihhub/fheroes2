@@ -564,7 +564,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     if ( troop.GetCount() == 1 ) {
         message = _( "The %{monster} is swayed by your diplomatic tongue, and offers to join your army for the sum of %{gold} gold.\nDo you accept?" );
-        StringReplace( message, "%{monster}", StringLower( troop.GetName( join ) ) );
     }
     else {
         message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n \n" );
