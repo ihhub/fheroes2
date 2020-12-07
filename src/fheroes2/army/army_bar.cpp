@@ -75,13 +75,12 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
     }
 }
 
-void RedistributeArmyByOne( ArmyTroop & troopFrom )
+void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyFrom )
 {
     // can't split up a stack with just 1 unit...
     if ( troopFrom.GetCount() <= 1 )
         return;
 
-    Army * armyFrom = troopFrom.GetArmy();
     const uint32_t freeSlots = armyFrom->Size() - armyFrom->GetCount();
 
     if ( freeSlots == 0 )
@@ -338,7 +337,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
         if ( !read_only ) // select
         {
             if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-                RedistributeArmyByOne( troop );
+                RedistributeArmyByOne( troop, army );
                 return false;
             }
 
