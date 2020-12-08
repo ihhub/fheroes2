@@ -84,10 +84,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         pos_rt.y -= 1;
     }
 
-    const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
+    const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 37 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 181 : 190 ) );
+    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 180 : 190 ) );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -115,7 +115,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     // button exit
     dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + 221;
+    dst_pt.y = pos_rt.y + ( !troop.isBattle() ? 221 : 223 ); // in case of battle we shouldn't move this button up
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
 
     if ( READONLY & flags ) {
