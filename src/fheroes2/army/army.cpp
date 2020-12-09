@@ -814,7 +814,7 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, u32 slots )
     }
 }
 
-void Troops::SplitTroopIntoFirstFreeSlot( const Troop & troop, const uint32_t splitCount )
+void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCount )
 {
     for ( iterator it = begin(); it != end(); ++it ) {
         if ( ( *it )->isValid() )
