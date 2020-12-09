@@ -586,14 +586,14 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
 }
 
 // TODO well, there should be some kind of optional type instead of returning -1 on empty vector
-int Battle::Arena::pickRandomVulnerableBySpell( const Indexes & troops, const HeroBase * hero, const Spell & spell )
+int Battle::Arena::PickRandomVulnerableByChainLightning( const Indexes & troops, const HeroBase * hero ) const
 {
     Indexes vulnerable;
     for ( s32 troop : troops ) {
         const Unit * target = GetTroopBoard( troop );
         if ( target != NULL ) {
             const int power = hero ? hero->GetPower() : 0;
-            const bool isVulnerable = target->GetMagicResist( spell, power ) < 100;
+            const bool isVulnerable = target->GetMagicResist( Spell::CHAINLIGHTNING, power ) < 100;
             if ( isVulnerable ) {
                 vulnerable.push_back( troop );
             }
@@ -607,10 +607,9 @@ int Battle::Arena::pickRandomVulnerableBySpell( const Indexes & troops, const He
     return *Rand::Get( vulnerable );
 }
 
-// TODO do not pass spell
-Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst )
+Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * hero, s32 attackedTroop ) const
 {
-    uint32_t currentTarget = dst;
+    uint32_t currentTarget = attackedTroop;
 
     Indexes result;
     result.reserve( 12 ); // TODO magic number
@@ -624,7 +623,7 @@ Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase *
         if ( nearestTroops.empty() )
             break;
 
-        const int chosenTroopPos = pickRandomVulnerableBySpell( nearestTroops, hero, spell );
+        const int chosenTroopPos = PickRandomVulnerableByChainLightning( nearestTroops, hero );
         if ( chosenTroopPos == -1 ) {
             break;
         }
@@ -637,10 +636,10 @@ Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase *
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, s32 attackedTroop )
 {
     TargetsInfo targets;
-    const Indexes targetIndexes = findChainLightningTargetIndexes( hero, spell, dst );
+    const Indexes targetIndexes = FindChainLightningTargetIdexes( hero, attackedTroop );
     TargetInfo res;
     for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
@@ -653,13 +652,6 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
         }
     }
     return targets;
-}
-
-// TODO move to TargetsInfo
-void addAll( Battle::TargetsInfo & left, const Battle::TargetsInfo & right )
-{
-    left.reserve( left.size() + right.size() );
-    left.insert( left.end(), right.begin(), right.end() );
 }
 
 Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, s32 dst )
@@ -701,8 +693,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
-            TargetsInfo sad = TargetsForChainLightning( hero, spell, dst );
-            addAll( targets, sad );
+            TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
+            targets.addAll( targetsForSpell );
         } break;
 
         // check abroads

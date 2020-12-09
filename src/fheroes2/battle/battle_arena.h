@@ -161,9 +161,9 @@ namespace Battle
 
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
-        int Battle::Arena::pickRandomVulnerableBySpell( const Indexes & nearestTroops, const HeroBase * hero, const Spell & spell );
-        TargetsInfo TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst );
-        Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst );
+        int PickRandomVulnerableByChainLightning( const Indexes &, const HeroBase * ) const;
+        TargetsInfo TargetsForChainLightning( const HeroBase *, s32 );
+        Indexes FindChainLightningTargetIdexes( const HeroBase *, s32 ) const;
 
         void ApplyActionRetreat( Command & );
         void ApplyActionSurrender( Command & );
