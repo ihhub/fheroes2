@@ -585,49 +585,30 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-// TODO well, there should be some kind of optional type instead of returning -1 on empty vector
-int Battle::Arena::PickRandomVulnerableByChainLightning( const Indexes & troops, const HeroBase * hero ) const
+bool Battle::Arena::IsImmuneToChainLightning( Index troop, const HeroBase * hero ) const
 {
-    Indexes vulnerable;
-    for ( s32 troop : troops ) {
-        const Unit * target = GetTroopBoard( troop );
-        if ( target != NULL ) {
-            const int power = hero ? hero->GetPower() : 0;
-            const bool isVulnerable = target->GetMagicResist( Spell::CHAINLIGHTNING, power ) < 100;
-            if ( isVulnerable ) {
-                vulnerable.push_back( troop );
-            }
-        }
+    const Unit * target = GetTroopBoard( troop );
+    if ( !target ) {
+        return true;
     }
-
-    if ( vulnerable.empty() ) {
-        return -1;
-    }
-
-    return *Rand::Get( vulnerable );
+    const int power = hero ? hero->GetPower() : 0;
+    return target->GetMagicResist( Spell::CHAINLIGHTNING, power ) == 100;
 }
 
-Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * hero, s32 attackedTroop ) const
+Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * hero, Index attackedTroop ) const
 {
-    uint32_t currentTarget = attackedTroop;
+    Index currentTarget = attackedTroop;
+    Indexes result = { currentTarget };
+    Indexes ignoredTroops = { currentTarget };
 
-    Indexes result;
-    result.reserve( 12 ); // TODO magic number
-    result.push_back( currentTarget );
-
-    Indexes ignoredTroops;
-    ignoredTroops.push_back( currentTarget );
-
+    auto predicate = [hero, this]( Index index ) { return IsImmuneToChainLightning( index, hero ); };
     while ( result.size() < /* TODO magic number */ 4 ) {
-        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredTroops );
+        Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredTroops );
+        std::remove_if( nearestTroops.begin(), nearestTroops.end(), predicate );
         if ( nearestTroops.empty() )
             break;
 
-        const int chosenTroopPos = PickRandomVulnerableByChainLightning( nearestTroops, hero );
-        if ( chosenTroopPos == -1 ) {
-            break;
-        }
-
+        const Index chosenTroopPos = *Rand::Get( nearestTroops );
         result.push_back( chosenTroopPos );
         ignoredTroops.push_back( chosenTroopPos );
         currentTarget = chosenTroopPos;
@@ -636,7 +617,7 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * 
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, s32 attackedTroop )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, Index attackedTroop )
 {
     TargetsInfo targets;
     const Indexes targetIndexes = FindChainLightningTargetIdexes( hero, attackedTroop );
@@ -900,8 +881,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
-    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );
