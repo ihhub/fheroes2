@@ -195,7 +195,7 @@ namespace fheroes2
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
-    // This function does NOT check transform layer
+    // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
 
     // Use this function only when you need to convert pixel value into transform layer
