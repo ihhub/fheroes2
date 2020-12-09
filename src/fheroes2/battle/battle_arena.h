@@ -161,6 +161,7 @@ namespace Battle
 
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
+        int Battle::Arena::pickDamageableBySpell( const Indexes & nearestTroops, const HeroBase * hero, const Spell & spell );
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst );
         Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst );
 

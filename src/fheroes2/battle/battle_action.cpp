@@ -585,43 +585,52 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst )
+// TODO well, there should be some kind of optional type
+int Battle::Arena::pickDamageableBySpell( const Indexes & nearestTroops, const HeroBase * hero, const Spell & spell )
 {
-    uint32_t currentMonsterPos = dst;
-
-    Indexes targetIndexes;
-    targetIndexes.reserve( 12 );
-    targetIndexes.push_back( currentMonsterPos );
-
-    Indexes ignoredMonster;
-    ignoredMonster.push_back( currentMonsterPos );
-
-    // find targets
-    while ( targetIndexes.size() < 4 ) {
-        const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
-        if ( nearestPosIds.empty() )
-            break;
-
-        Indexes sortedIds;
-
-        for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
-            Unit * target = GetTroopBoard( nearestPosIds[monsterId] );
-            if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
-                sortedIds.push_back( nearestPosIds[monsterId] );
-            }
-            ignoredMonster.push_back( nearestPosIds[monsterId] );
+    Indexes sortedIds;
+    for ( size_t monsterId = 0; monsterId < nearestTroops.size(); ++monsterId ) {
+        Unit * target = GetTroopBoard( nearestTroops[monsterId] );
+        if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
+            sortedIds.push_back( nearestTroops[monsterId] );
         }
-
-        if ( sortedIds.empty() ) {
-            continue;
-        }
-
-        const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
-        targetIndexes.push_back( chosenMonsterPos );
-        currentMonsterPos = chosenMonsterPos;
     }
 
-    return targetIndexes;
+    if ( sortedIds.empty() ) {
+        return -1;
+    }
+
+    const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
+    return chosenMonsterPos;
+}
+
+Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst )
+{
+    uint32_t currentTarget = dst;
+
+    Indexes result;
+    result.reserve( 12 );
+    result.push_back( currentTarget );
+
+    Indexes ignoredMonsters;
+    ignoredMonsters.push_back( currentTarget );
+
+    while ( result.size() < 4 ) {
+        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredMonsters );
+        if ( nearestTroops.empty() )
+            break;
+
+        const int chosenMonsterPos = pickDamageableBySpell( nearestTroops, hero, spell );
+        if ( chosenMonsterPos == -1 ) {
+            break;
+        }
+
+        result.push_back( chosenMonsterPos );
+        ignoredMonsters.push_back( chosenMonsterPos );
+        currentTarget = chosenMonsterPos;
+    }
+
+    return result;
 }
 
 Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst )
