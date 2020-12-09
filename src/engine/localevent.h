@@ -240,7 +240,7 @@ public:
     bool KeyPress( void ) const;
     bool KeyPress( KeySym key ) const;
 
-    bool KeyHold() const 
+    bool KeyHold() const
     {
         return modes & KEY_HOLD;
     }
