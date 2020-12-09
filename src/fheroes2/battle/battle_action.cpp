@@ -585,25 +585,30 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-// TODO well, there should be some kind of optional type
-int Battle::Arena::pickDamageableBySpell( const Indexes & nearestTroops, const HeroBase * hero, const Spell & spell )
+// TODO well, there should be some kind of optional type instead of returning -1 on empty vector
+int Battle::Arena::pickRandomVulnerableBySpell( const Indexes & troops, const HeroBase * hero, const Spell & spell )
 {
-    Indexes sortedIds;
-    for ( size_t monsterId = 0; monsterId < nearestTroops.size(); ++monsterId ) {
-        Unit * target = GetTroopBoard( nearestTroops[monsterId] );
-        if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
-            sortedIds.push_back( nearestTroops[monsterId] );
+    Indexes vulnerable;
+
+    for ( s32 troop : troops ) {
+        Unit * target = GetTroopBoard( troop );
+        if ( target != NULL ) {
+            int power = hero ? hero->GetPower() : 0;
+            bool isVulnerable = target->GetMagicResist( spell, power ) < 100;
+            if ( isVulnerable ) {
+                vulnerable.push_back( troop );
+            }
         }
     }
 
-    if ( sortedIds.empty() ) {
+    if ( vulnerable.empty() ) {
         return -1;
     }
 
-    const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
-    return chosenMonsterPos;
+    return *Rand::Get( vulnerable );
 }
 
+// TODO do not pass spell
 Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst )
 {
     uint32_t currentTarget = dst;
@@ -620,7 +625,7 @@ Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase *
         if ( nearestTroops.empty() )
             break;
 
-        const int chosenMonsterPos = pickDamageableBySpell( nearestTroops, hero, spell );
+        const int chosenMonsterPos = pickRandomVulnerableBySpell( nearestTroops, hero, spell );
         if ( chosenMonsterPos == -1 ) {
             break;
         }
