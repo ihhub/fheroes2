@@ -290,10 +290,10 @@ bool Game::HotKeyPressEvent( int evnt )
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
 }
 
-bool Game::HotKeyHoldEvent( int evnt )
+bool Game::HotKeyHoldEvent( const int eventID )
 {
     LocalEvent & le = LocalEvent::Get();
-    return le.KeyHold() && le.KeyValue() == key_events[evnt];
+    return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )
