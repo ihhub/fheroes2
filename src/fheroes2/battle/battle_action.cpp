@@ -589,12 +589,11 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
 int Battle::Arena::pickRandomVulnerableBySpell( const Indexes & troops, const HeroBase * hero, const Spell & spell )
 {
     Indexes vulnerable;
-
     for ( s32 troop : troops ) {
-        Unit * target = GetTroopBoard( troop );
+        const Unit * target = GetTroopBoard( troop );
         if ( target != NULL ) {
-            int power = hero ? hero->GetPower() : 0;
-            bool isVulnerable = target->GetMagicResist( spell, power ) < 100;
+            const int power = hero ? hero->GetPower() : 0;
+            const bool isVulnerable = target->GetMagicResist( spell, power ) < 100;
             if ( isVulnerable ) {
                 vulnerable.push_back( troop );
             }
@@ -614,25 +613,25 @@ Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase *
     uint32_t currentTarget = dst;
 
     Indexes result;
-    result.reserve( 12 );
+    result.reserve( 12 ); // TODO magic number
     result.push_back( currentTarget );
 
-    Indexes ignoredMonsters;
-    ignoredMonsters.push_back( currentTarget );
+    Indexes ignoredTroops;
+    ignoredTroops.push_back( currentTarget );
 
-    while ( result.size() < 4 ) {
-        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredMonsters );
+    while ( result.size() < /* TODO magic number */ 4 ) {
+        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredTroops );
         if ( nearestTroops.empty() )
             break;
 
-        const int chosenMonsterPos = pickRandomVulnerableBySpell( nearestTroops, hero, spell );
-        if ( chosenMonsterPos == -1 ) {
+        const int chosenTroopPos = pickRandomVulnerableBySpell( nearestTroops, hero, spell );
+        if ( chosenTroopPos == -1 ) {
             break;
         }
 
-        result.push_back( chosenMonsterPos );
-        ignoredMonsters.push_back( chosenMonsterPos );
-        currentTarget = chosenMonsterPos;
+        result.push_back( chosenTroopPos );
+        ignoredTroops.push_back( chosenTroopPos );
+        currentTarget = chosenTroopPos;
     }
 
     return result;
@@ -641,9 +640,9 @@ Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase *
 Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst )
 {
     TargetsInfo targets;
-    Indexes targetIndexes = findChainLightningTargetIndexes( hero, spell, dst );
+    const Indexes targetIndexes = findChainLightningTargetIndexes( hero, spell, dst );
     TargetInfo res;
-    for ( Indexes::iterator it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
+    for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
 
         if ( target ) {
