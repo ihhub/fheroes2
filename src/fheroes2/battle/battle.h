@@ -96,6 +96,12 @@ namespace Battle
     struct TargetsInfo : public std::vector<TargetInfo>
     {
         TargetsInfo() {}
+
+        void addAll( const Battle::TargetsInfo & rhs )
+        {
+            reserve( size() + rhs.size() );
+            insert( end(), rhs.begin(), rhs.end() );
+        }
     };
 
     StreamBase & operator<<( StreamBase &, const TargetsInfo & );
