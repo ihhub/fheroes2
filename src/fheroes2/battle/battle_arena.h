@@ -161,6 +161,7 @@ namespace Battle
 
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
+        TargetsInfo TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst, TargetsInfo & targets );
 
         void ApplyActionRetreat( Command & );
         void ApplyActionSurrender( Command & );

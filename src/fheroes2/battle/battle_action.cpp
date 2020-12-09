@@ -585,6 +585,57 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst, TargetsInfo & targets )
+{
+    uint32_t currentMonsterPos = dst;
+
+    Indexes trgts;
+    trgts.reserve( 12 );
+    trgts.push_back( currentMonsterPos );
+
+    Indexes ignoredMonster;
+    ignoredMonster.push_back( currentMonsterPos );
+
+    // find targets
+    while ( trgts.size() < 4 ) {
+        const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
+        if ( nearestPosIds.empty() )
+            break;
+
+        Indexes sortedIds;
+
+        for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
+            Unit * target = GetTroopBoard( nearestPosIds[monsterId] );
+            if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
+                sortedIds.push_back( nearestPosIds[monsterId] );
+            }
+            ignoredMonster.push_back( nearestPosIds[monsterId] );
+        }
+
+        if ( sortedIds.empty() ) {
+            continue;
+        }
+
+        const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
+        trgts.push_back( chosenMonsterPos );
+        currentMonsterPos = chosenMonsterPos;
+    }
+
+    // save targets
+    TargetInfo res;
+    for ( Indexes::iterator it = trgts.begin(); it != trgts.end(); ++it ) {
+        Unit * target = GetTroopBoard( *it );
+
+        if ( target ) {
+            res.defender = target;
+            // store temp priority for calculate damage
+            res.damage = std::distance( trgts.begin(), it );
+            targets.push_back( res );
+        }
+    }
+    return targets;
+}
+
 Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, s32 dst )
 {
     TargetsInfo targets;
@@ -624,51 +675,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
-            uint32_t currentMonsterPos = dst;
-
-            Indexes trgts;
-            trgts.reserve( 12 );
-            trgts.push_back( currentMonsterPos );
-
-            Indexes ignoredMonster;
-            ignoredMonster.push_back( currentMonsterPos );
-
-            // find targets
-            while ( trgts.size() < 4 ) {
-                const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
-                if ( nearestPosIds.empty() )
-                    break;
-
-                Indexes sortedIds;
-
-                for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
-                    Unit * target = GetTroopBoard( nearestPosIds[monsterId] );
-                    if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
-                        sortedIds.push_back( nearestPosIds[monsterId] );
-                    }
-                    ignoredMonster.push_back( nearestPosIds[monsterId] );
-                }
-
-                if ( sortedIds.empty() ) {
-                    continue;
-                }
-
-                const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
-                trgts.push_back( chosenMonsterPos );
-                currentMonsterPos = chosenMonsterPos;
-            }
-
-            // save targets
-            for ( Indexes::iterator it = trgts.begin(); it != trgts.end(); ++it ) {
-                Unit * target = GetTroopBoard( *it );
-
-                if ( target ) {
-                    res.defender = target;
-                    // store temp priority for calculate damage
-                    res.damage = std::distance( trgts.begin(), it );
-                    targets.push_back( res );
-                }
-            }
+            targets = TargetsForChainLightning( hero, spell, dst, targets );
         } break;
 
         // check abroads
@@ -874,8 +881,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
-    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );
