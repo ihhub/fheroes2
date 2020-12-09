@@ -952,11 +952,6 @@ bool LocalEvent::KeyPress( KeySym key ) const
     return key == key_value && ( modes & KEY_PRESSED );
 }
 
-bool LocalEvent::KeyHold() const
-{
-    return modes & KEY_HOLD;
-}
-
 void LocalEvent::SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
 {
     redraw_cursor_func = pf;
