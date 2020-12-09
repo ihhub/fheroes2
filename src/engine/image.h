@@ -123,6 +123,7 @@ namespace fheroes2
         int32_t height() const;
 
         void restore();
+        void reset();
 
     private:
         Image & _image;

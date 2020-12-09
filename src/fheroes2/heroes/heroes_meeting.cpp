@@ -430,6 +430,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         heroes2.RecalculateMovePoints();
     }
 
+    backPrimary.reset();
+    armyCountBackgroundRestorer.reset();
     restorer.restore();
     display.render();
 }

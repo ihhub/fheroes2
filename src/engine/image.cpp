@@ -599,6 +599,11 @@ namespace fheroes2
         Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
     }
 
+    void ImageRestorer::reset()
+    {
+        _isRestored = true;
+    }
+
     void ImageRestorer::_updateRoi()
     {
         if ( _width < 0 )
