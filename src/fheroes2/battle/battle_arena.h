@@ -162,7 +162,7 @@ namespace Battle
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
         TargetsInfo TargetsForChainLightning( const HeroBase *, Index );
-        Indexes FindChainLightningTargetIdexes( const HeroBase *, Index ) const;
+        Indexes FindChainLightningTargetIndexes( const HeroBase *, Index ) const;
         bool IsImmuneToChainLightning( Index troop, const HeroBase * hero ) const;
 
         void ApplyActionRetreat( Command & );

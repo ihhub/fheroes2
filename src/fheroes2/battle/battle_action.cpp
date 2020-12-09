@@ -595,7 +595,7 @@ bool Battle::Arena::IsImmuneToChainLightning( Index troop, const HeroBase * hero
     return target->GetMagicResist( Spell::CHAINLIGHTNING, power ) == 100;
 }
 
-Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * hero, Index attackedTroop ) const
+Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Index attackedTroop ) const
 {
     Index currentTarget = attackedTroop;
     Indexes result = { currentTarget };
@@ -620,7 +620,7 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIdexes( const HeroBase * 
 Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, Index attackedTroop )
 {
     TargetsInfo targets;
-    const Indexes targetIndexes = FindChainLightningTargetIdexes( hero, attackedTroop );
+    const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroop );
     TargetInfo res;
     for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
@@ -881,8 +881,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
-    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
+    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );
