@@ -86,8 +86,7 @@ void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
     if ( freeSlots == 0 )
         return;
 
-    const Troop troop( troopFrom );
-    armyTarget->SplitTroopIntoFirstFreeSlot( troop, 1 );
+    armyTarget->AssignToFirstFreeSlot( troopFrom, 1 );
     troopFrom.SetCount( troopFrom.GetCount() - 1 );
 }
 
