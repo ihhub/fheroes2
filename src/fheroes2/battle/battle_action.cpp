@@ -585,19 +585,19 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst, TargetsInfo & targets )
+Battle::Indexes Battle::Arena::findChainLightningTargetIndexes( const HeroBase * hero, const Spell & spell, s32 dst )
 {
     uint32_t currentMonsterPos = dst;
 
-    Indexes trgts;
-    trgts.reserve( 12 );
-    trgts.push_back( currentMonsterPos );
+    Indexes targetIndexes;
+    targetIndexes.reserve( 12 );
+    targetIndexes.push_back( currentMonsterPos );
 
     Indexes ignoredMonster;
     ignoredMonster.push_back( currentMonsterPos );
 
     // find targets
-    while ( trgts.size() < 4 ) {
+    while ( targetIndexes.size() < 4 ) {
         const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
         if ( nearestPosIds.empty() )
             break;
@@ -617,23 +617,36 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
         }
 
         const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
-        trgts.push_back( chosenMonsterPos );
+        targetIndexes.push_back( chosenMonsterPos );
         currentMonsterPos = chosenMonsterPos;
     }
 
-    // save targets
+    return targetIndexes;
+}
+
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, const Spell & spell, s32 dst )
+{
+    TargetsInfo targets;
+    Indexes targetIndexes = findChainLightningTargetIndexes( hero, spell, dst );
     TargetInfo res;
-    for ( Indexes::iterator it = trgts.begin(); it != trgts.end(); ++it ) {
+    for ( Indexes::iterator it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
 
         if ( target ) {
             res.defender = target;
             // store temp priority for calculate damage
-            res.damage = std::distance( trgts.begin(), it );
+            res.damage = std::distance( targetIndexes.begin(), it );
             targets.push_back( res );
         }
     }
     return targets;
+}
+
+// TODO move to TargetsInfo
+void addAll( Battle::TargetsInfo & left, const Battle::TargetsInfo & right )
+{
+    left.reserve( left.size() + right.size() );
+    left.insert( left.end(), right.begin(), right.end() );
 }
 
 Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, s32 dst )
@@ -675,7 +688,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
-            targets = TargetsForChainLightning( hero, spell, dst, targets );
+            TargetsInfo sad = TargetsForChainLightning( hero, spell, dst );
+            addAll( targets, sad );
         } break;
 
         // check abroads
