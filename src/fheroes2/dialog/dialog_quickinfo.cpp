@@ -282,7 +282,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * hero )
 {
-    std::string str = Maps::Ground::String( tile.GetGround() );
+    std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
 
     if ( show && hero ) {
         int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
