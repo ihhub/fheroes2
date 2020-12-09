@@ -65,9 +65,11 @@ bool ActionSpellSetGuardian( Heroes &, const Spell & );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
-    CastleIndexListBox( const Point & pt, int & res )
+    CastleIndexListBox( const Point & pt, int & res, const bool isEvilInterface )
         : Interface::ListBox<s32>( pt )
         , result( res )
+        , _townFrameIcnId( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD )
+        , _listBoxIcnId( isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX )
     {}
 
     virtual void RedrawItem( const s32 &, s32, s32, bool ) override;
@@ -94,6 +96,10 @@ public:
     }
 
     int & result;
+
+private:
+    int _townFrameIcnId;
+    int _listBoxIcnId;
 };
 
 void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool current )
@@ -101,7 +107,7 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
 
     if ( castle ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ADVBORD, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( _townFrameIcnId, 0 ), 481, 177, fheroes2::Display::instance(), dstx, dsty, 54, 30 );
         Interface::RedrawCastleIcon( *castle, dstx + 4, dsty + 4 );
         Text text( castle->GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
 
@@ -119,7 +125,6 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
 void CastleIndexListBox::RedrawBackground( const Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     Text text( _( "Town Portal" ), Font::YELLOW_BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 5 );
@@ -127,10 +132,9 @@ void CastleIndexListBox::RedrawBackground( const Point & dst )
     text.Set( _( "Select town to port to." ), Font::BIG );
     text.Blit( dst.x + 140 - text.w() / 2, dst.y + 25 );
 
-    const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( listId, 0 );
-    const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( listId, 1 );
-    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( listId, 2 );
+    const fheroes2::Sprite & upperPart = fheroes2::AGG::GetICN( _listBoxIcnId, 0 );
+    const fheroes2::Sprite & middlePart = fheroes2::AGG::GetICN( _listBoxIcnId, 1 );
+    const fheroes2::Sprite & lowerPart = fheroes2::AGG::GetICN( _listBoxIcnId, 2 );
 
     int32_t offsetY = 45;
     fheroes2::Blit( upperPart, display, dst.x + 2, dst.y + offsetY );
@@ -141,20 +145,20 @@ void CastleIndexListBox::RedrawBackground( const Point & dst )
     int32_t middlePartCount = ( totalHeight - upperPart.height() - lowerPart.height() + middlePart.height() - 1 ) / middlePart.height();
 
     for ( int32_t i = 0; i < middlePartCount; ++i ) {
-        fheroes2::Blit( fheroes2::AGG::GetICN( listId, 1 ), display, dst.x + 2, dst.y + offsetY );
+        fheroes2::Blit( fheroes2::AGG::GetICN( _listBoxIcnId, 1 ), display, dst.x + 2, dst.y + offsetY );
         offsetY += middlePart.height();
     }
 
     fheroes2::Blit( lowerPart, display, dst.x + 2, dst.y + totalHeight - lowerPart.height() + 45 );
 
-    const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( listId, 3 );
-    const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( listId, 5 );
+    const fheroes2::Sprite & upperScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 3 );
+    const fheroes2::Sprite & lowerScrollbarArrow = fheroes2::AGG::GetICN( _listBoxIcnId, 5 );
 
     totalHeight = rtAreaItems.height + 8 - upperScrollbarArrow.height() - lowerScrollbarArrow.height();
 
-    const fheroes2::Sprite & upperScrollbar = fheroes2::AGG::GetICN( listId, 7 );
-    const fheroes2::Sprite & middleScrollbar = fheroes2::AGG::GetICN( listId, 8 );
-    const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( listId, 9 );
+    const fheroes2::Sprite & upperScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 7 );
+    const fheroes2::Sprite & middleScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 8 );
+    const fheroes2::Sprite & lowerScrollbar = fheroes2::AGG::GetICN( _listBoxIcnId, 9 );
 
     offsetY = upperScrollbarArrow.height() + 44;
     fheroes2::Blit( upperScrollbar, display, dst.x + 256, dst.y + offsetY );
@@ -524,7 +528,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     const Rect & area = frameborder->GetArea();
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( area, result );
+    CastleIndexListBox listbox( area, result, isEvilInterface );
 
     const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
     listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
