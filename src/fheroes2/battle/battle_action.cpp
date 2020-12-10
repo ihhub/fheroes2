@@ -585,9 +585,9 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-bool Battle::Arena::IsImmuneToChainLightning( Index troop, const HeroBase * hero ) const
+bool Battle::Arena::IsImmuneToChainLightning( s32 troopIndex, const HeroBase * hero ) const
 {
-    const Unit * target = GetTroopBoard( troop );
+    const Unit * target = GetTroopBoard( troopIndex );
     if ( !target ) {
         return true;
     }
@@ -595,37 +595,39 @@ bool Battle::Arena::IsImmuneToChainLightning( Index troop, const HeroBase * hero
     return target->GetMagicResist( Spell::CHAINLIGHTNING, power ) == 100;
 }
 
-Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Index attackedTroop ) const
+Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, s32 attackedTroopIndex ) const
 {
-    Index currentTarget = attackedTroop;
-    Indexes result = { currentTarget };
-    Indexes ignoredTroops = { currentTarget };
+    s32 currentTargetIndex = attackedTroopIndex;
+    Indexes result = { currentTargetIndex };
+    Indexes ignoredTroops = { currentTargetIndex };
 
-    auto predicate = [hero, this]( Index index ) { return IsImmuneToChainLightning( index, hero ); };
-    while ( result.size() < /* TODO magic number */ 4 ) {
-        Indexes nearestTroops = board.GetNearestTroopIndexes( currentTarget, &ignoredTroops );
+    auto predicate = [hero, this]( s32 index ) { return IsImmuneToChainLightning( index, hero ); };
+    while ( result.size() < CHAIN_LIGHTNING_CREATURE_COUNT ) {
+        Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
         std::remove_if( nearestTroops.begin(), nearestTroops.end(), predicate );
         if ( nearestTroops.empty() )
             break;
 
-        const Index chosenTroopPos = *Rand::Get( nearestTroops );
-        result.push_back( chosenTroopPos );
-        ignoredTroops.push_back( chosenTroopPos );
-        currentTarget = chosenTroopPos;
+        const s32 chosenTroopIndex = *Rand::Get( nearestTroops );
+        result.push_back( chosenTroopIndex );
+        ignoredTroops.push_back( chosenTroopIndex );
+        currentTargetIndex = chosenTroopIndex;
     }
 
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, Index attackedTroop )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, s32 attackedTroopIndex )
 {
     TargetsInfo targets;
-    const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroop );
-    TargetInfo res;
+    const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroopIndex );
     for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
 
         if ( target ) {
+            targets.emplace_back();
+            TargetInfo & res = targets.back();
+
             res.defender = target;
             // store temp priority for calculate damage
             res.damage = std::distance( targetIndexes.begin(), it );
@@ -675,7 +677,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
-            targets.addAll( targetsForSpell );
+            targets.append( std::move( targetsForSpell ) );
         } break;
 
         // check abroads
@@ -881,8 +883,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
-    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );

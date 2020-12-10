@@ -161,9 +161,9 @@ namespace Battle
 
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
-        TargetsInfo TargetsForChainLightning( const HeroBase *, Index );
-        Indexes FindChainLightningTargetIndexes( const HeroBase *, Index ) const;
-        bool IsImmuneToChainLightning( Index troop, const HeroBase * hero ) const;
+        TargetsInfo TargetsForChainLightning( const HeroBase * hero, s32 attackedTroopIndex );
+        Indexes FindChainLightningTargetIndexes( const HeroBase * hero, s32 attackedTroopIndex ) const;
+        bool IsImmuneToChainLightning( s32 troopIndex, const HeroBase * hero ) const;
 
         void ApplyActionRetreat( Command & );
         void ApplyActionSurrender( Command & );
@@ -214,6 +214,11 @@ namespace Battle
             SECOND_WALL_HEX_POSITION = 29,
             THIRD_WALL_HEX_POSITION = 73,
             FORTH_WALL_HEX_POSITION = 96
+        };
+
+        enum
+        {
+            CHAIN_LIGHTNING_CREATURE_COUNT = 4
         };
     };
 

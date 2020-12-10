@@ -97,10 +97,12 @@ namespace Battle
     {
         TargetsInfo() {}
 
-        void addAll( const Battle::TargetsInfo & rhs )
+        void append( TargetsInfo && rhs )
         {
             reserve( size() + rhs.size() );
-            insert( end(), rhs.begin(), rhs.end() );
+            for ( TargetInfo info : rhs ) {
+                push_back( info );
+            }
         }
     };
 
