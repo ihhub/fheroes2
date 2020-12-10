@@ -154,6 +154,7 @@ int Game::ScenarioInfo( void )
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
                 if ( mapIter->file == conf.CurrentFileInfo().file ) {
                     conf.SetCurrentFileInfo( *mapIter );
+                    updatePlayers( players, humanPlayerCount );
                     LoadPlayers( mapIter->file, players );
                     resetStartingSettings = false;
                     break;
@@ -165,10 +166,10 @@ int Game::ScenarioInfo( void )
     // set first map's settings
     if ( resetStartingSettings ) {
         conf.SetCurrentFileInfo( lists.front() );
+        updatePlayers( players, humanPlayerCount );
         LoadPlayers( lists.front().file, players );
     }
 
-    updatePlayers( players, humanPlayerCount );
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
     RedrawScenarioStaticInfo( rectPanel, true );
