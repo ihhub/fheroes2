@@ -314,13 +314,18 @@ int GameOver::Result::LocalCheckGameOver( void )
     if ( continue_game )
         return Game::CANCEL;
 
+    int res = Game::CANCEL;
+    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+
     const int humanColors = Players::HumanColors();
     int activeHumanColors = 0;
     int activeColors = 0;
     const Colors colors2( colors );
     for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
         if ( !world.GetKingdom( *it ).isPlay() ) {
-            Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
+            if ( !isSinglePlayer || ( *it & humanColors ) == 0 ) {
+                Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
+            }
             colors &= ( ~*it );
         }
         else {
@@ -330,9 +335,6 @@ int GameOver::Result::LocalCheckGameOver( void )
             }
         }
     }
-
-    int res = Game::CANCEL;
-    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
     if ( isSinglePlayer ) {
         const Settings & conf = Settings::Get();
