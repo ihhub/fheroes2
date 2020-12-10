@@ -314,8 +314,27 @@ int GameOver::Result::LocalCheckGameOver( void )
     if ( continue_game )
         return Game::CANCEL;
 
-    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
     int res = Game::CANCEL;
+    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+
+    const int humanColors = Players::HumanColors();
+    int activeHumanColors = 0;
+    int activeColors = 0;
+    const Colors colors2( colors );
+    for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
+        if ( !world.GetKingdom( *it ).isPlay() ) {
+            if ( !isSinglePlayer || ( *it & humanColors ) == 0 ) {
+                Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
+            }
+            colors &= ( ~*it );
+        }
+        else {
+            ++activeColors;
+            if ( *it & humanColors ) {
+                ++activeHumanColors;
+            }
+        }
+    }
 
     if ( isSinglePlayer ) {
         const Settings & conf = Settings::Get();
@@ -344,23 +363,6 @@ int GameOver::Result::LocalCheckGameOver( void )
         }
     }
     else {
-        const int humanColors = Players::HumanColors();
-        int activeHumanColors = 0;
-        int activeColors = 0;
-        const Colors colors2( colors );
-        for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
-            if ( !world.GetKingdom( *it ).isPlay() ) {
-                Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
-                colors &= ( ~*it );
-            }
-            else {
-                ++activeColors;
-                if ( *it & humanColors ) {
-                    ++activeHumanColors;
-                }
-            }
-        }
-
         if ( activeHumanColors == 0 || ( activeHumanColors == 1 && activeHumanColors == activeColors ) ) {
             res = Game::MAINMENU;
         }
