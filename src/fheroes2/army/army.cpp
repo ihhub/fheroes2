@@ -1257,6 +1257,7 @@ double Army::getReinforcementValue( const Troops & reinforcement ) const
     // So the GetStrength() computation will be done based on troop strength only (not based on hero bonuses)
     Troops combined( *this );
     const double initialValue = combined.GetStrength();
+
     combined.Insert( reinforcement.GetOptimized() );
     combined.MergeTroops();
     combined.SortStrongest();
