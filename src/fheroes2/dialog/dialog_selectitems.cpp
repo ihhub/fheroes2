@@ -79,28 +79,28 @@ public:
     SelectEnumMonster( const Rect & rt )
         : SelectEnum( rt ){};
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current )
+    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
 
         Text text( mons.GetName(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 10 );
-    };
+    }
 
-    void RedrawBackground( const Point & dst )
+    virtual void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Monster:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
 
         SelectEnum::RedrawBackground( dst );
-    };
+    }
 
-    void ActionListPressRight( int & index )
+    virtual void ActionListPressRight( int & index ) override
     {
         Troop troop( Monster( index ), 1 );
         Dialog::ArmyInfo( troop, 0 );
-    };
+    }
 };
 
 class SelectEnumHeroes : public SelectEnum

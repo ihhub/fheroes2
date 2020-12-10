@@ -172,7 +172,7 @@ namespace AI
         u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
         if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-            const u32 & exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
+            const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
 
             if ( hero.isControlHuman() ) {
                 std::string msg = _( "Hero %{name} also got a %{count} experience." );

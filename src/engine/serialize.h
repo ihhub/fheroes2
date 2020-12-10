@@ -107,15 +107,15 @@ public:
     StreamBase & operator>>( Point & );
     StreamBase & operator>>( Size & );
 
-    StreamBase & operator<<( const bool & );
-    StreamBase & operator<<( const char & );
-    StreamBase & operator<<( const u8 & );
-    StreamBase & operator<<( const s8 & );
-    StreamBase & operator<<( const u16 & );
-    StreamBase & operator<<( const s16 & );
-    StreamBase & operator<<( const u32 & );
-    StreamBase & operator<<( const s32 & );
-    StreamBase & operator<<( const float & );
+    StreamBase & operator<<( const bool );
+    StreamBase & operator<<( const char );
+    StreamBase & operator<<( const u8 );
+    StreamBase & operator<<( const s8 );
+    StreamBase & operator<<( const u16 );
+    StreamBase & operator<<( const s16 );
+    StreamBase & operator<<( const u32 );
+    StreamBase & operator<<( const s32 );
+    StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
 
     StreamBase & operator<<( const Rect & );

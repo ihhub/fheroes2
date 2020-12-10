@@ -285,7 +285,7 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int c
     u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-        const u32 & exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
+        const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
 
         if ( hero.isControlHuman() ) {
             std::string msg = _( "Hero %{name} also got a %{count} experience." );
@@ -2258,7 +2258,7 @@ void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     // yet no one captured.
-    const bool & battle = Color::NONE == tile.QuantityColor();
+    const bool battle = Color::NONE == tile.QuantityColor();
     const Troop & troop = tile.QuantityTroop();
 
     const char * str_empty = NULL;

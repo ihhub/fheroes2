@@ -922,7 +922,7 @@ Castle * Heroes::inCastle( void )
 /* is visited cell */
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
-    const s32 & index = tile.GetIndex();
+    const int32_t index = tile.GetIndex();
     int object = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
@@ -1716,7 +1716,7 @@ void Heroes::RecalculateMovePoints( void )
 }
 
 // Move hero to a new position. This function applies no action and no penalty
-void Heroes::Move2Dest( const s32 & dstIndex )
+void Heroes::Move2Dest( const int32_t dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );

@@ -35,7 +35,7 @@
 class ArmyCell : public Rect
 {
 public:
-    ArmyCell( const Troop & t, const Point & pt, const bool & ro )
+    ArmyCell( const Troop & t, const Point & pt, const bool ro )
         : Rect( pt.x, pt.y, 43, 53 )
         , troop( t )
         , select( false )

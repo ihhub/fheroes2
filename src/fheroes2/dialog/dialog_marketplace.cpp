@@ -409,7 +409,7 @@ void Dialog::Marketplace( bool fromTradingPost )
         else
             // click max
             if ( buttonMax.width && max_buy && le.MouseClickLeft( buttonMax ) ) {
-            const u32 & max = splitter.Max();
+            const uint32_t max = splitter.Max();
 
             count_buy = max * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );
             count_sell = max * ( Resource::GOLD == resourceTo ? 1 : GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) );
