@@ -325,7 +325,7 @@ void World::ComputeStaticAnalysis()
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
-            const size_t index = rowIndex + x;
+            const int index = rowIndex + x;
             const Maps::Tiles & tile = vec_tiles[index];
             MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
@@ -344,12 +344,12 @@ void World::ComputeStaticAnalysis()
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
     _regions.clear();
-    for ( size_t baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
+    for ( int baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
         _regions.emplace_back( baseIDX, 0, false, 0 );
     }
 
     for ( const int tileIndex : regionCenters ) {
-        const size_t regionID = _regions.size();
+        const int regionID = static_cast<int>( _regions.size() ); // Safe to do as we can't have so many regions
         _regions.emplace_back( regionID, tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
     }

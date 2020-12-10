@@ -3881,7 +3881,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     Rect area = GetArea();
     area.h -= 36;
 
-    fheroes2::Image copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.w, area.h );
+    const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.w, area.h );
     const int waveLength = strength * 2 + 10;
 
     AGG::PlaySound( M82::MNRDEATH );

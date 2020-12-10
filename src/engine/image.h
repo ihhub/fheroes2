@@ -60,7 +60,10 @@ namespace fheroes2
         uint8_t * transform();
         const uint8_t * transform() const;
 
-        bool empty() const;
+        bool empty() const
+        {
+            return _image.empty();
+        }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
