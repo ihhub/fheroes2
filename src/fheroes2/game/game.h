@@ -29,6 +29,7 @@
 #include "rect.h"
 #include "types.h"
 
+class Players;
 class Heroes;
 class Castle;
 
@@ -253,6 +254,8 @@ namespace Game
     void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
+    void LoadPlayers( const std::string & mapFileName, Players & players );
+    void SavePlayers( const std::string & mapFileName, const Players & players );
 
     namespace ObjectFadeAnimation
     {

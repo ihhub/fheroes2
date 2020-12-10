@@ -152,20 +152,24 @@ int Game::ScenarioInfo( void )
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                if ( mapIter->file != conf.CurrentFileInfo().file )
+                if ( mapIter->file == conf.CurrentFileInfo().file ) {
                     conf.SetCurrentFileInfo( *mapIter );
-
-                resetStartingSettings = false;
-                break;
+                    updatePlayers( players, humanPlayerCount );
+                    LoadPlayers( mapIter->file, players );
+                    resetStartingSettings = false;
+                    break;
+                }
             }
         }
     }
 
     // set first map's settings
-    if ( resetStartingSettings )
+    if ( resetStartingSettings ) {
         conf.SetCurrentFileInfo( lists.front() );
+        updatePlayers( players, humanPlayerCount );
+        LoadPlayers( lists.front().file, players );
+    }
 
-    updatePlayers( players, humanPlayerCount );
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
     RedrawScenarioStaticInfo( rectPanel, true );
@@ -224,7 +228,10 @@ int Game::ScenarioInfo( void )
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
             if ( fi ) {
+                SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
+                LoadPlayers( fi->file, players );
+
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
@@ -304,6 +311,8 @@ int Game::ScenarioInfo( void )
                 playersInfo.QueueEventProcessing();
         }
     }
+
+    SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
 
     cursor.Hide();
 

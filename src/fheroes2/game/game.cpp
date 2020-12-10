@@ -70,6 +70,8 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+    std::string lastMapFileName;
+    std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -98,6 +100,43 @@ namespace Game
         }
 
         Info removeInfo;
+    }
+}
+
+void Game::LoadPlayers( const std::string & mapFileName, Players & players )
+{
+    if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
+        return;
+    }
+
+    const int newHumanCount = std::count_if( players.begin(), players.end(), []( const Player * player ) { return player->GetControl() == CONTROL_HUMAN; } );
+    const int savedHumanCount = std::count_if( savedPlayers.begin(), savedPlayers.end(), []( const Player & player ) { return player.GetControl() == CONTROL_HUMAN; } );
+
+    if ( newHumanCount != savedHumanCount ) {
+        return;
+    }
+
+    players.clear();
+    for ( const Player & p : savedPlayers ) {
+        Player * player = new Player( p.GetColor() );
+        player->SetRace( p.GetRace() );
+        player->SetControl( p.GetControl() );
+        player->SetFriends( p.GetFriends() );
+        players.push_back( player );
+        Players::Set( Color::GetIndex( p.GetColor() ), player );
+    }
+}
+
+void Game::SavePlayers( const std::string & mapFileName, const Players & players )
+{
+    lastMapFileName = mapFileName;
+    savedPlayers.clear();
+    for ( const Player * p : players ) {
+        Player player( p->GetColor() );
+        player.SetRace( p->GetRace() );
+        player.SetControl( p->GetControl() );
+        player.SetFriends( p->GetFriends() );
+        savedPlayers.push_back( player );
     }
 }
 
