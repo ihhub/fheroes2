@@ -1064,6 +1064,7 @@ bool MP2::isNeedStayFront( int obj )
     case OBJ_JAIL:
     case OBJ_SHIPWRECK:
     case OBJ_BUOY:
+    case OBJ_SKELETON:
         return true;
 
     default:
