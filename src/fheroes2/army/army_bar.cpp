@@ -65,7 +65,12 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
             break;
 
         case 2:
-            troop2.Set( troop1, redistr_count );
+            // this logic is used when splitting to a stack with the same unit
+            if ( troop1.GetID() == troop2.GetID() )
+                troop2.SetCount( troop2.GetCount() + redistr_count );
+            else
+                troop2.Set( troop1, redistr_count );
+
             troop1.SetCount( troop1.GetCount() - redistr_count );
             break;
 
@@ -314,11 +319,15 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     if ( isSelected() ) {
         ArmyTroop * selectedTroop = GetSelectedItem();
 
-        if ( selectedTroop && selectedTroop->isValid() && !troop.isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-            ResetSelected();
-            RedistributeArmy( *selectedTroop, troop );
+        if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
 
-            return false;
+            // redistribute when clicked troop is empty or is the same one as the selected troop
+            if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
+                ResetSelected();
+                RedistributeArmy( *selectedTroop, troop );
+
+                return false;
+            }
         }
 
         // combine
