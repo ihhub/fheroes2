@@ -53,10 +53,10 @@ namespace Network
         bool Send( const char *, int );
 
         bool Recv32( u32 & );
-        bool Send32( const u32 & );
+        bool Send32( const uint32_t );
 
         bool Recv16( u16 & );
-        bool Send16( const u16 & );
+        bool Send16( const uint16_t );
 
         u32 Host( void ) const;
         u16 Port( void ) const;

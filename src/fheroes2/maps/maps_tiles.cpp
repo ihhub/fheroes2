@@ -1635,8 +1635,8 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
     if ( ( area.GetVisibleTileROI() & mp ) ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             if ( !SkipRedrawTileBottom4Hero( it->object, it->index, tilePassable ) ) {
-                const u8 & object = ( *it ).object;
-                const u8 & index = ( *it ).index;
+                const uint8_t object = ( *it ).object;
+                const uint8_t index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
 
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
@@ -1691,8 +1691,8 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, bool skip_ground ) cons
             if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
                 continue;
 
-            const u8 & object = ( *it ).object;
-            const u8 & index = ( *it ).index;
+            const uint8_t object = ( *it ).object;
+            const uint8_t index = ( *it ).index;
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::HighlyObjectSprite( icn, index ) ) {

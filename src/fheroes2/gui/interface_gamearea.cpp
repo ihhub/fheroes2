@@ -274,7 +274,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
-            const s32 & from = ( *currentStep ).GetIndex();
+            const int32_t from = ( *currentStep ).GetIndex();
             const Point & mp = Maps::GetPoint( from );
 
             ++nextStep;

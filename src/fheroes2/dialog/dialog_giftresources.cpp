@@ -90,7 +90,7 @@ struct SelectRecipientsColors
         const s32 index = GetIndexClick();
 
         if ( index >= 0 ) {
-            const int & cols = colors[index];
+            const int cols = colors[index];
 
             if ( recipients & cols )
                 recipients &= ~cols;

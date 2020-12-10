@@ -268,7 +268,7 @@ public:
     void markHeroMeeting( int heroID );
 
     bool Move( bool fast = false );
-    void Move2Dest( const s32 & destination );
+    void Move2Dest( const int32_t destination );
     bool isMoveEnabled( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );

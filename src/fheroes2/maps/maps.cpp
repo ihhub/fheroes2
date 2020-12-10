@@ -36,16 +36,16 @@
 
 struct ComparsionDistance
 {
-    ComparsionDistance( const s32 & index )
+    ComparsionDistance( const int32_t index )
         : center( index )
     {}
 
-    bool operator()( const s32 & index1, const s32 & index2 ) const
+    bool operator()( const int32_t index1, const int32_t index2 ) const
     {
         return Maps::GetApproximateDistance( center, index1 ) < Maps::GetApproximateDistance( center, index2 );
     }
 
-    s32 center;
+    int32_t center;
 };
 
 Maps::IndexesDistance::IndexesDistance( s32 from, s32 center, u32 dist, int sort )

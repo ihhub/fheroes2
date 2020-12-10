@@ -177,55 +177,55 @@ void StreamBase::put32( u32 v )
     bigendian() ? putBE32( v ) : putLE32( v );
 }
 
-StreamBase & StreamBase::operator<<( const bool & v )
+StreamBase & StreamBase::operator<<( const bool v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const char & v )
+StreamBase & StreamBase::operator<<( const char v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u8 & v )
+StreamBase & StreamBase::operator<<( const u8 v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s8 & v )
+StreamBase & StreamBase::operator<<( const s8 v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u16 & v )
+StreamBase & StreamBase::operator<<( const u16 v )
 {
     put16( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s16 & v )
+StreamBase & StreamBase::operator<<( const s16 v )
 {
     put16( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s32 & v )
+StreamBase & StreamBase::operator<<( const s32 v )
 {
     put32( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u32 & v )
+StreamBase & StreamBase::operator<<( const u32 v )
 {
     put32( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const float & v )
+StreamBase & StreamBase::operator<<( const float v )
 {
     s32 intpart = static_cast<s32>( v );
     float decpart = ( v - intpart ) * 100000000;

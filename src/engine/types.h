@@ -25,15 +25,14 @@
 
 #include <SDL.h>
 
-typedef Sint8 s8;
-typedef Uint8 u8;
-typedef Sint16 s16;
-typedef Uint16 u16;
-typedef Sint32 s32;
-typedef Uint32 u32;
+typedef int8_t s8;
+typedef uint8_t u8;
+typedef int16_t s16;
+typedef uint16_t u16;
+typedef int32_t s32;
+typedef uint32_t u32;
 
 #define MAXU16 0xFFFF
-#define MAXU32 0xFFFFFFFF
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
 #define ARRAY_COUNT_END( A ) A + ARRAY_COUNT( A )
