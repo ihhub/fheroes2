@@ -320,7 +320,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
         ArmyTroop * selectedTroop = GetSelectedItem();
 
         if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-
             // redistribute when clicked troop is empty or is the same one as the selected troop
             if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
                 ResetSelected();
