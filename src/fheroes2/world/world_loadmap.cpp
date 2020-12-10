@@ -51,7 +51,7 @@ namespace GameStatic
 
 #ifdef WITH_ZLIB
 #include "zzlib.h"
-std::vector<u8> DecodeBase64AndUncomress( std::string base64 )
+std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 {
     std::vector<u8> zdata = decodeBase64( base64 );
     StreamBuf sb( zdata );

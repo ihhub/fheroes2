@@ -438,11 +438,6 @@ namespace fheroes2
         }
     }
 
-    bool Image::empty() const
-    {
-        return _image.empty();
-    }
-
     void Image::resize( int32_t width_, int32_t height_ )
     {
         if ( width_ <= 0 || height_ <= 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
