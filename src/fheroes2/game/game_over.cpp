@@ -340,15 +340,17 @@ int GameOver::Result::LocalCheckGameOver( void )
         const Settings & conf = Settings::Get();
         const int currentColor = conf.CurrentColor();
         const Kingdom & myKingdom = world.GetKingdom( currentColor );
-        if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
-            GameOver::DialogWins( result );
-            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "WIN.SMK" ), false );
-            res = Game::HIGHSCORES;
-        }
-        else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
-            GameOver::DialogLoss( result );
-            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "LOSE.SMK" ), true );
-            res = Game::MAINMENU;
+        if ( myKingdom.isControlHuman() ) {
+            if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
+                GameOver::DialogWins( result );
+                Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "WIN.SMK" ), false );
+                res = Game::HIGHSCORES;
+            }
+            else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
+                GameOver::DialogLoss( result );
+                Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "LOSE.SMK" ), true );
+                res = Game::MAINMENU;
+            }
         }
 
         // set: continue after victory
