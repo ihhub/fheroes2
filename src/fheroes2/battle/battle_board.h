@@ -27,6 +27,7 @@
 
 #include "battle.h"
 #include "battle_cell.h"
+#include "pairs.h"
 
 #define ARENAW 11
 #define ARENAH 9
@@ -93,6 +94,9 @@ namespace Battle
         static bool isValidMirrorImageIndex( s32, const Unit * );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
+
+    private:
+        IndexDistance DistanceToUnit( s32 position, const Battle::Unit * unit ) const;
     };
 
     struct ShortestDistance : public std::binary_function<s32, s32, bool>
