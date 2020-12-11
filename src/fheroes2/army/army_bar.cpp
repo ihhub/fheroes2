@@ -87,7 +87,6 @@ void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
         return;
 
     const uint32_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
-
     if ( freeSlots == 0 )
         return;
 
