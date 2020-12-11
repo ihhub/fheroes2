@@ -833,11 +833,34 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
 
 bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) const
 {
-    const HeroBase * hero = GetCurrentCommander();
-    const Unit * killed = GetTroopUID( graveyard.GetLastTroopUID( index ) );
-    const Unit * tail = killed && killed->isWide() ? GetTroopUID( graveyard.GetLastTroopUID( killed->GetTailIndex() ) ) : NULL;
+    if ( !spell.isResurrect() )
+        return false;
 
-    return killed && ( !killed->isWide() || killed == tail ) && hero && spell.isResurrect() && killed->AllowApplySpell( spell, hero, NULL );
+    const HeroBase * hero = GetCurrentCommander();
+    if ( hero == NULL )
+        return false;
+
+    const Unit * killed = GetTroopUID( graveyard.GetLastTroopUID( index ) );
+    if ( killed == NULL )
+        return false;
+
+    if ( !killed->AllowApplySpell( spell, hero, NULL ) )
+        return false;
+
+    if ( Board::GetCell( index )->GetUnit() != NULL )
+        return false;
+
+    if ( !killed->isWide() )
+        return true;
+
+    const int tailIndex = killed->GetTailIndex();
+    const int headIndex = killed->GetHeadIndex();
+    const int secondIndex = tailIndex == index ? headIndex : tailIndex;
+
+    if ( Board::GetCell( secondIndex )->GetUnit() != NULL )
+        return false;
+
+    return true;
 }
 
 const Battle::Unit * Battle::Arena::GraveyardLastTroop( s32 index ) const
