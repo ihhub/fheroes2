@@ -871,7 +871,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
 
         Army & army = castle->GetActualArmy();
 
-        if ( army.isValid() ) {
+        if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
 
             Heroes * defender = heroes.GuardFirst();

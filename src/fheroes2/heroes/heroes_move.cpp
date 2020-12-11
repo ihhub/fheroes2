@@ -40,10 +40,6 @@ namespace
     const int heroFrameCount = 9;
 }
 
-bool ReflectSprite( int from );
-void PlayWalkSound( int ground );
-bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
-
 void PlayWalkSound( int ground )
 {
     int wav = M82::UNKNOWN;
@@ -364,7 +360,7 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     if ( next.GetObject() == MP2::OBJ_CASTLE ) {
         const Castle * castle = world.GetCastle( next.GetCenter() );
 
-        return ( castle && !hero.isFriends( castle->GetColor() ) );
+        return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
     else
         // to coast action
