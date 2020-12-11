@@ -41,7 +41,7 @@
 
 namespace Battle
 {
-    void PickupArtifactsAction( HeroBase &, HeroBase &, bool );
+    void PickupArtifactsAction( HeroBase &, HeroBase & );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool );
     void NecromancySkillAction( HeroBase &, u32, bool );
 }
@@ -128,7 +128,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     if ( !artifactsTransferred ) {
-        PickupArtifactsAction( *hero_wins, *hero_loss, isWinnerHuman );
+        PickupArtifactsAction( *hero_wins, *hero_loss );
     }
 
     // save count troop
@@ -181,7 +181,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     return result;
 }
 
-void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2, bool local )
+void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
 {
     BagArtifacts & bag1 = hero1.GetBagArtifacts();
     BagArtifacts & bag2 = hero2.GetBagArtifacts();
@@ -196,10 +196,6 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2, bool loc
             BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
             if ( bag1.end() != it ) {
                 *it = art;
-                if ( local ) {
-                    Game::PlayPickupSound();
-                    Dialog::ArtifactInfo( _( "You have captured an enemy artifact!" ), "", art );
-                }
             }
             art = Artifact::UNKNOWN;
         }
