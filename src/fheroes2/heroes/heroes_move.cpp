@@ -457,6 +457,13 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         dst_pt4.y += oy;
     }
 
+    const bool isValidBottomDirection = Maps::isValidDirection( centerIndex, Direction::BOTTOM );
+
+    if ( isValidBottomDirection ) {
+        const Maps::Tiles & tileBottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
+        tileBottom.RedrawBottom( dst );
+    }
+
     if ( isShipMaster() ) {
         const Directions directions = Direction::All();
         const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
@@ -496,9 +503,8 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     if ( Maps::isValidDirection( centerIndex, Direction::TOP ) )
         world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, skipGround );
 
-    if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM ) ) {
+    if ( isValidBottomDirection ) {
         const Maps::Tiles & tileBottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
-        tileBottom.RedrawBottom( dst );
         tileBottom.RedrawObjects( dst );
 
         if ( Maps::isValidDirection( centerIndex, Direction::LEFT ) ) {
