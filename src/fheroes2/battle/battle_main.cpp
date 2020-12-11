@@ -108,7 +108,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
     const bool isWinnerHuman = hero_wins->isControlHuman();
-    const bool transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+    const bool transferArtifacts
+        = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
     bool artifactsTransferred = !transferArtifacts;
 
     if ( local ) {
@@ -125,7 +126,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
         arena.DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
     }
-    
+
     if ( !artifactsTransferred ) {
         PickupArtifactsAction( *hero_wins, *hero_loss, isWinnerHuman );
     }
