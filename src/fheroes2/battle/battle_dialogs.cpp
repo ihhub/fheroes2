@@ -315,7 +315,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
     }
 }
 
-void Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts  ) const
+void Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
