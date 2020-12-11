@@ -358,37 +358,34 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * black ) const
+Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes & black ) const
 {
-    Indexes result;
-    std::vector<IndexDistance> dists;
-    dists.reserve( 15 );
+    std::vector<IndexDistance> distances;
+    distances.reserve( 15 /* TODO magic numbber */ );
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Battle::Unit * b = ( *it ).GetUnit();
-
-        if ( b ) {
-            // check black list
-            if ( black && black->end() != std::find( black->begin(), black->end(), b->GetHeadIndex() ) )
+    for ( Cell cell : *this ) {
+        const Battle::Unit * unit = cell.GetUnit();
+        if ( unit ) {
+            if ( black.end() != std::find( black.begin(), black.end(), unit->GetHeadIndex() ) ) {
                 continue;
-            // added
-            if ( pos != b->GetHeadIndex() )
-                dists.push_back( IndexDistance( b->GetHeadIndex(), GetDistance( pos, b->GetHeadIndex() ) ) );
+            }
+            if ( pos != unit->GetHeadIndex() ) {
+                distances.push_back( IndexDistance( unit->GetHeadIndex(), GetDistance( pos, unit->GetHeadIndex() ) ) );
+            }
         }
     }
 
-    if ( 1 < dists.size() ) {
-        std::sort( dists.begin(), dists.end(), IndexDistance::Shortest );
-        const uint32_t distFront = dists.front().second;
-        dists.resize( std::count_if( dists.begin(), dists.end(), [distFront]( const IndexDistance & v ) { return v.second == distFront; } ) );
+    if ( distances.size() > 1 ) {
+        std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
+        const uint32_t smallestDistance = distances.front().second;
+        const auto predicate = [smallestDistance]( const IndexDistance & distance ) { return distance.second == smallestDistance; };
+        distances.resize( std::count_if( distances.begin(), distances.end(), predicate ) );
     }
 
-    if ( dists.size() ) {
-        result.reserve( dists.size() );
-        for ( std::vector<IndexDistance>::const_iterator it = dists.begin(); it != dists.end(); ++it )
-            result.push_back( ( *it ).first );
+    Indexes result;
+    for ( IndexDistance distance : distances ) {
+        result.push_back( distance.first );
     }
-
     return result;
 }
 

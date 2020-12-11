@@ -602,7 +602,7 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase *
     Indexes result = { currentTargetIndex };
 
     Indexes ignoredTroops = { currentTargetIndex };
-    const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
+    const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
     for ( s32 troopIndex : allTroops ) {
         if ( IsImmuneToChainLightning( troopIndex, hero ) ) {
             ignoredTroops.push_back( troopIndex );
@@ -610,7 +610,7 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase *
     }
 
     while ( result.size() < CHAIN_LIGHTNING_CREATURE_COUNT ) {
-        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
+        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
         if ( nearestTroops.empty() ) {
             break;
         }
