@@ -361,16 +361,27 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes & black ) const
 {
     std::vector<IndexDistance> distances;
-    distances.reserve( 15 /* TODO magic numbber */ );
+    distances.reserve( 15 /* TODO magic number */ );
 
     for ( Cell cell : *this ) {
         const Battle::Unit * unit = cell.GetUnit();
         if ( unit ) {
-            if ( black.end() != std::find( black.begin(), black.end(), unit->GetHeadIndex() ) ) {
-                continue;
+            const Position & position = unit->GetPosition();
+
+            bool isBlackListed = black.end() != std::find( black.begin(), black.end(), unit->GetHeadIndex() );
+            if ( unit->GetTailIndex() != -1 ) {
+                isBlackListed |= black.end() != std::find( black.begin(), black.end(), unit->GetTailIndex() );
             }
-            if ( pos != unit->GetHeadIndex() ) {
-                distances.push_back( IndexDistance( unit->GetHeadIndex(), GetDistance( pos, unit->GetHeadIndex() ) ) );
+
+            if ( !isBlackListed && !position.contains( pos ) ) {
+                IndexDistance distance = IndexDistance( unit->GetHeadIndex(), GetDistance( pos, unit->GetHeadIndex() ) );
+                if ( unit->GetTailIndex() != -1 ) {
+                    const IndexDistance distanceToTail = IndexDistance( unit->GetTailIndex(), GetDistance( pos, unit->GetTailIndex() ) );
+                    if ( distanceToTail.second < distance.second ) {
+                        distance = distanceToTail;
+                    }
+                }
+                distances.push_back( distance );
             }
         }
     }
