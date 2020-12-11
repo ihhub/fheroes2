@@ -48,10 +48,13 @@ public:
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
         , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )
+        , _singlePlayer( false )
     {
+        Settings & conf = Settings::Get();
+
         back.update( rt.x - 5, rt.y + 15, rt.width + 10, 160 );
 
-        buttonGift.setICNInfo( Settings::Get().ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
+        buttonGift.setICNInfo( conf.ExtGameEvilInterface() ? ICN::BTNGIFT_EVIL : ICN::BTNGIFT_GOOD, 0, 1 );
         buttonTrade.setICNInfo( tradpost, 15, 16 );
         buttonLeft.setICNInfo( tradpost, 3, 4 );
         buttonRight.setICNInfo( tradpost, 5, 6 );
@@ -70,6 +73,19 @@ public:
 
         textSell.SetFont( Font::SMALL );
         textBuy.SetFont( Font::SMALL );
+
+        const std::vector<Player *> players = conf.GetPlayers();
+        int playerCount = 0;
+        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it ) {
+            if ( *it ) {
+                const Player & player = ( **it );
+                Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+                if ( kingdom.isPlay() )
+                    ++playerCount;
+            }
+        }
+
+        _singlePlayer = playerCount == 1;
     };
 
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
@@ -90,6 +106,7 @@ private:
 
     TextSprite textSell;
     TextSprite textBuy;
+    bool _singlePlayer;
 };
 
 void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost )
@@ -105,7 +122,10 @@ void TradeWindowGUI::ShowTradeArea( int resourceFrom, int resourceTo, u32 max_bu
         fheroes2::Rect dst_rt( pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 );
         const TextBox displayMesssage( _( "You have received quite a bargain. I expect to make no profit on the deal. Can I interest you in any of my other wares?" ),
                                        Font::BIG, dst_rt );
-        buttonGift.enable();
+
+        if ( !_singlePlayer ) {
+            buttonGift.enable();
+        }
         buttonTrade.disable();
         buttonLeft.disable();
         buttonRight.disable();
