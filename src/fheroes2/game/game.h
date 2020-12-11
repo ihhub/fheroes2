@@ -161,10 +161,13 @@ namespace Game
         EVENT_SHOWICONS,
         EVENT_SWITCHGROUP,
         EVENT_EMULATETOGGLE,
-        EVENT_LAST
+        EVENT_STACKSPLIT_SHIFT,
+        EVENT_STACKSPLIT_CTRL,
+        EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
+    bool HotKeyHoldEvent( const int eventID );
 
     enum
     {

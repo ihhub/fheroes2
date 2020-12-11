@@ -814,6 +814,17 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, u32 slots )
     }
 }
 
+void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCount )
+{
+    for ( iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            continue;
+
+        ( *it )->Set( troop.GetMonster(), splitCount );
+        break;
+    }
+}
+
 Army::Army( HeroBase * s )
     : commander( s )
     , combat_format( true )

@@ -279,12 +279,21 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
+    // split
+    key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
+    key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
 {
     LocalEvent & le = LocalEvent::Get();
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
+}
+
+bool Game::HotKeyHoldEvent( const int eventID )
+{
+    LocalEvent & le = LocalEvent::Get();
+    return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )
