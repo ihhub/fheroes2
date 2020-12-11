@@ -592,21 +592,28 @@ bool Battle::Arena::IsImmuneToChainLightning( s32 troopIndex, const HeroBase * h
         return true;
     }
     const int power = hero ? hero->GetPower() : 0;
-    return target->GetMagicResist( Spell::CHAINLIGHTNING, power ) == 100;
+    const u32 resist = target->GetMagicResist( Spell::CHAINLIGHTNING, power );
+    return ( resist == 100 ) ? true : Rand::Get( 0, 1 );
 }
 
 Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, s32 attackedTroopIndex ) const
 {
     s32 currentTargetIndex = attackedTroopIndex;
     Indexes result = { currentTargetIndex };
-    Indexes ignoredTroops = { currentTargetIndex };
 
-    auto predicate = [hero, this]( s32 index ) { return IsImmuneToChainLightning( index, hero ); };
+    Indexes ignoredTroops = { currentTargetIndex };
+    const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
+    for ( s32 troopIndex : allTroops ) {
+        if ( IsImmuneToChainLightning( troopIndex, hero ) ) {
+            ignoredTroops.push_back( troopIndex );
+        }
+    }
+
     while ( result.size() < CHAIN_LIGHTNING_CREATURE_COUNT ) {
-        Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
-        std::remove_if( nearestTroops.begin(), nearestTroops.end(), predicate );
-        if ( nearestTroops.empty() )
+        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, &ignoredTroops );
+        if ( nearestTroops.empty() ) {
             break;
+        }
 
         const s32 chosenTroopIndex = *Rand::Get( nearestTroops );
         result.push_back( chosenTroopIndex );
@@ -883,8 +890,8 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
-    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
+    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );
