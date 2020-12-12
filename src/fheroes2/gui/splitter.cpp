@@ -147,7 +147,7 @@ void Splitter::MoveToPos( const Point & pos )
         else if ( posX > maxXPos )
             posX = maxXPos;
 
-         cur = ( ( posX - area.x ) * 100 + step / 2 ) / step;
+        cur = ( ( posX - area.x ) * 100 + step / 2 ) / step;
         const int32_t posY = area.y + ( area.height - height() ) / 2;
         setPosition( posX, posY );
     }
