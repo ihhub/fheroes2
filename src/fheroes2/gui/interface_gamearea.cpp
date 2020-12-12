@@ -204,7 +204,23 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const int32_t offsetX = tileROI.x + x;
                 if ( offsetX < 0 || offsetX >= world.w() )
                     continue;
+                if ( offsetY > 0 ) {
+                    const Maps::Tiles & tileTop = world.GetTiles( offsetX, offsetY - 1 );
+                    if ( tileTop.GetHeroes() != NULL )
+                        continue;
 
+                    if ( offsetX > 0 ) {
+                        const Maps::Tiles & tileTopLeft = world.GetTiles( offsetX - 1, offsetY - 1 );
+                        if ( tileTopLeft.GetHeroes() != NULL )
+                            continue;
+                    }
+
+                    if ( offsetX < world.w() - 1 ) {
+                        const Maps::Tiles & tileTopRight = world.GetTiles( offsetX + 1, offsetY - 1 );
+                        if ( tileTopRight.GetHeroes() != NULL )
+                            continue;
+                    }
+                }
                 const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
                 tile.RedrawMonstersAndBoat( dst );
             }
@@ -227,16 +243,38 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
 
-            // top
-            if ( drawTop )
-                tile.RedrawTop( dst );
-
             // heroes will be drawn later
             if ( tile.GetObject() == MP2::OBJ_HEROES && drawHeroes ) {
                 const Heroes * hero = tile.GetHeroes();
                 if ( hero ) {
                     heroList.emplace_back( GetRelativeTilePosition( Point( offsetX, offsetY ) ), hero );
                 }
+            }
+
+            // top
+            if ( drawTop ) {
+                if ( offsetY > 0 ) {
+                    const Maps::Tiles & tileTop = world.GetTiles( offsetX, offsetY - 1 );
+                    if ( tileTop.GetHeroes() != NULL )
+                        continue;
+
+                    if ( offsetX > 0 ) {
+                        const Maps::Tiles & tileTopLeft = world.GetTiles( offsetX - 1, offsetY - 1 );
+                        if ( tileTopLeft.GetHeroes() != NULL )
+                            continue;
+                    }
+
+                    if ( offsetX < world.w() - 1 ) {
+                        const Maps::Tiles & tileRight = world.GetTiles( offsetX + 1, offsetY );
+                        if ( tileRight.GetHeroes() != NULL )
+                            continue;
+
+                        const Maps::Tiles & tileTopRight = world.GetTiles( offsetX + 1, offsetY - 1 );
+                        if ( tileTopRight.GetHeroes() != NULL )
+                            continue;
+                    }
+                }
+                tile.RedrawTop( dst );
             }
         }
     }
