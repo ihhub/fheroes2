@@ -263,23 +263,28 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
     // drag drop - redistribute troops
     LocalEvent & le = LocalEvent::Get();
-    ArmyTroop * troop_p = GetItem( le.GetMousePressLeft() );
+    ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
-    if ( !troop.isValid() && troop_p && troop_p->isValid() ) {
+    // drag logic will start working as long as the pressed troop is valid
+    if ( troopPress && troopPress->isValid() ) {
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             Cursor::Get().Show();
             fheroes2::Display::instance().render();
             DELAY( 1 );
         };
-        ArmyTroop * troop_r = GetItem( le.GetMouseReleaseLeft() );
+        ArmyTroop * troopRelease = GetItem( le.GetMouseReleaseLeft() );
 
-        if ( troop_r && !troop_r->isValid() ) {
-            RedistributeArmy( *troop_p, *troop_r );
+        if ( !troopRelease || troopPress == troopRelease )
+            return false;
+
+        if ( troopPress->GetMonster() == troopRelease->GetMonster() || !troopRelease->isValid() ) {
+            RedistributeArmy( *troopPress, *troopRelease );
             if ( isSelected() )
                 ResetSelected();
             le.ResetPressLeft();
             return true;
         }
+
         le.ResetPressLeft();
     }
 
@@ -467,20 +472,22 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
-    if ( troop.isValid() ) {
+    // empty troops - redistribute troops
+    if ( isSelected() ) {
+        ArmyTroop & selectedTroop = *GetSelectedItem();
+
+        if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
+            ResetSelected();
+            RedistributeArmy( selectedTroop, troop );
+        }
+    }
+    else if ( troop.isValid() ) {
         ResetSelected();
 
         if ( can_change && !army->SaveLastTroop() )
             troop.Reset();
         else
             Dialog::ArmyInfo( troop, 0 );
-    }
-    // empty troops - redistribute troops
-    if ( isSelected() ) {
-        ArmyTroop & troop2 = *GetSelectedItem();
-        ResetSelected();
-
-        RedistributeArmy( troop2, troop );
     }
 
     return true;
