@@ -331,12 +331,9 @@ namespace Interface
             else if ( le.MousePressLeft( splitter.GetRect() ) && ( _size() > maxItems ) ) {
                 cursor.Hide();
                 UpdateSplitterRange();
-                _topId = ( le.GetMouseCursor().y - splitter.GetRect().y ) * 100 / splitter.GetStep();
-                if ( _topId < splitter.Min() )
-                    _topId = splitter.Min();
-                else if ( _topId > splitter.Max() )
-                    _topId = splitter.Max();
-                splitter.MoveIndex( _topId );
+
+                splitter.MoveToPos( le.GetMouseCursor() );
+                _topId = splitter.GetCurrent();
                 return true;
             }
 

@@ -122,6 +122,37 @@ void Splitter::MoveIndex( int num )
     }
 }
 
+void Splitter::MoveToPos( const Point & pos )
+{
+    if ( isVertical() ) {
+        int32_t posY = pos.y;
+        const int32_t maxYPos = area.y + ( max - min ) * step / 100;
+
+        if ( posY < area.y )
+            posY = area.y;
+        else if ( posY > maxYPos )
+            posY = maxYPos;
+
+        cur = ( ( posY - area.y ) * 100 + step / 2 ) / step;
+
+        const int32_t posX = area.x + ( area.width - width() ) / 2;
+        setPosition( posX, posY );
+    }
+    else {
+        int32_t posX = pos.x;
+        const int32_t maxXPos = area.x + ( max - min ) * step / 100;
+
+        if ( posX < area.x )
+            posX = area.x;
+        else if ( posX > maxXPos )
+            posX = maxXPos;
+
+         cur = ( ( posX - area.x ) * 100 + step / 2 ) / step;
+        const int32_t posY = area.y + ( area.height - height() ) / 2;
+        setPosition( posX, posY );
+    }
+}
+
 /* forward spliter */
 void Splitter::Forward( void )
 {

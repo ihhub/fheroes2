@@ -34,6 +34,7 @@ public:
     void Forward( void );
     void Backward( void );
     void MoveIndex( int );
+    void MoveToPos( const Point & pos ); // the position will be corrected to be within specified for splitter area
     void MoveCenter( void );
 
     void RedrawCursor( void );

@@ -467,7 +467,7 @@ void BuildingInfo::Redraw( void )
         if ( bcond == ALREADY_BUILT )
             fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
         else if ( bcond == BUILD_DISABLE ) {
-            fheroes2::Image disabledSprite( sprite_deny );
+            fheroes2::Sprite disabledSprite( sprite_deny );
             fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
             fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::DARKENING ) );
             fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
