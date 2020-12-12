@@ -457,11 +457,14 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
         dst_pt4.y += oy;
     }
 
+    const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool isValidBottomDirection = Maps::isValidDirection( centerIndex, Direction::BOTTOM );
 
     if ( isValidBottomDirection ) {
         const Maps::Tiles & tileBottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
         tileBottom.RedrawBottom( dst );
+        if ( tile.GetObject( false ) == MP2::OBJ_CASTLE )
+            tileBottom.RedrawObjects( dst );
     }
 
     if ( isShipMaster() ) {
@@ -495,7 +498,6 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
 
     // redraw dependences tiles
-    const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
     tile.RedrawTop( dst );
@@ -505,7 +507,8 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
 
     if ( isValidBottomDirection ) {
         const Maps::Tiles & tileBottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
-        tileBottom.RedrawObjects( dst );
+        if ( tile.GetObject( false ) != MP2::OBJ_CASTLE )
+            tileBottom.RedrawObjects( dst );
         tileBottom.RedrawMonstersAndBoat( dst );
         tileBottom.RedrawTop( dst );
 
