@@ -265,8 +265,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
     LocalEvent & le = LocalEvent::Get();
     ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
-    // drag logic will start working as long as the pressed troop is valid
-    if ( troopPress && troopPress->isValid() ) {
+    if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             Cursor::Get().Show();
             fheroes2::Display::instance().render();
@@ -274,10 +273,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
         };
         ArmyTroop * troopRelease = GetItem( le.GetMouseReleaseLeft() );
 
-        if ( !troopRelease || troopPress == troopRelease )
-            return false;
-
-        if ( troopPress->GetMonster() == troopRelease->GetMonster() || !troopRelease->isValid() ) {
+        if ( troopRelease && !troopRelease->isValid() ) {
             RedistributeArmy( *troopPress, *troopRelease );
             if ( isSelected() )
                 ResetSelected();
