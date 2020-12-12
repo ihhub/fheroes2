@@ -472,7 +472,7 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
-    // empty troops - redistribute troops
+    // try to redistribute troops if we have a selected troop
     if ( isSelected() ) {
         ArmyTroop & selectedTroop = *GetSelectedItem();
 
