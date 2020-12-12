@@ -249,6 +249,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( hero ) {
                     heroList.emplace_back( GetRelativeTilePosition( Point( offsetX, offsetY ) ), hero );
                 }
+                continue;
             }
 
             // top
@@ -259,6 +260,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         continue;
 
                     if ( offsetX > 0 ) {
+                        const Maps::Tiles & tileLeft = world.GetTiles( offsetX - 1, offsetY );
+                        if ( tileLeft.GetHeroes() != NULL )
+                            continue;
+
                         const Maps::Tiles & tileTopLeft = world.GetTiles( offsetX - 1, offsetY - 1 );
                         if ( tileTopLeft.GetHeroes() != NULL )
                             continue;
