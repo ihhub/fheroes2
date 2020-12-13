@@ -38,8 +38,7 @@ namespace fheroes2
         , _currentIndex( 0 )
     {}
 
-    Scrollbar::~Scrollbar()
-    {}
+    Scrollbar::~Scrollbar() {}
 
     void Scrollbar::setImage( const Image & image )
     {
@@ -140,7 +139,7 @@ namespace fheroes2
             else if ( posX > maxXPos )
                 posX = maxXPos;
 
-             _currentIndex = ( posX - _area.x ) * ( _maxIndex - _minIndex ) / roiWidth;
+            _currentIndex = ( posX - _area.x ) * ( _maxIndex - _minIndex ) / roiWidth;
             const int32_t posY = _area.y + roiHeight / 2;
             setPosition( posX, posY );
         }
