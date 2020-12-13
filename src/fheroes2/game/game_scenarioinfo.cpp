@@ -38,7 +38,6 @@
 #include "player_info.h"
 #include "race.h"
 #include "settings.h"
-#include "splitter.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
