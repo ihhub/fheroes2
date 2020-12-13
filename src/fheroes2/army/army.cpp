@@ -1290,17 +1290,17 @@ void Army::Reset( bool soft )
         if ( soft ) {
             const Monster mons2( commander->GetRace(), DWELLING_MONSTER2 );
 
-            switch ( Rand::Get( 1, 3 ) ) {
-            case 1:
-                JoinTroop( mons1, 3 * mons1.GetGrown() );
-                break;
-            case 2:
-                JoinTroop( mons2, mons2.GetGrown() + mons2.GetGrown() / 2 );
-                break;
-            default:
-                JoinTroop( mons1, 2 * mons1.GetGrown() );
-                JoinTroop( mons2, mons2.GetGrown() );
-                break;
+            int mons1Count = round( mons1.GetGrown() * Rand::Get( 8, 12 ) * 0.1 );
+            int mons2Count = round( mons2.GetGrown() * Rand::Get( 4, 6 ) * 0.1 );
+
+            if ( mons1.GetID() == Monster::PEASANT ) {
+                mons1Count += 30;
+            }
+
+            JoinTroop( mons1, mons1Count );
+
+            if ( Rand::Get( 1, 10 ) != 1 ) {
+                JoinTroop( mons2, mons2Count );
             }
         }
         else {
