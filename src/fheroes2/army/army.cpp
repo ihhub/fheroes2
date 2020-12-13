@@ -1154,13 +1154,8 @@ int Army::GetMoraleModificator( std::string * strs ) const
                 }
             }
         }
-        else {
-            if ( strs ) {
-                strs->append( _( "Entire army is undead, so morale does not apply." ) );
-                strs->append( "\n" );
-            }
+        else
             return 0;
-        }
         break;
     case 3:
         result -= 1;
