@@ -85,25 +85,25 @@ int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const
 
             if ( strs ) {
                 switch ( objs[ii] ) {
-                    case MP2::OBJ_GRAVEYARD:
-                    case MP2::OBJN_GRAVEYARD:
-                    case MP2::OBJ_SHIPWRECK:
-                    case MP2::OBJN_SHIPWRECK:
-                    case MP2::OBJ_DERELICTSHIP:
-                    case MP2::OBJN_DERELICTSHIP: {
-                        std::string modRobber = _( "%{object} robber" );
-                        StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
-                        strs->append( modRobber );
-                    } break;
-                    case MP2::OBJ_PYRAMID:
-                    case MP2::OBJN_PYRAMID: {
-                        std::string modRaided = _( "%{object} raided" );
-                        StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
-                        strs->append( modRaided );
-                    } break;
-                    default:
-                        strs->append( _( MP2::StringObject( objs[ii] ) ) );
-                        break;
+                case MP2::OBJ_GRAVEYARD:
+                case MP2::OBJN_GRAVEYARD:
+                case MP2::OBJ_SHIPWRECK:
+                case MP2::OBJN_SHIPWRECK:
+                case MP2::OBJ_DERELICTSHIP:
+                case MP2::OBJN_DERELICTSHIP: {
+                    std::string modRobber = _( "%{object} robber" );
+                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRobber );
+                } break;
+                case MP2::OBJ_PYRAMID:
+                case MP2::OBJN_PYRAMID: {
+                    std::string modRaided = _( "%{object} raided" );
+                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRaided );
+                } break;
+                default:
+                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
+                    break;
                 }
 
                 StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
