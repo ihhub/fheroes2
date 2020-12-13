@@ -438,7 +438,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
         if ( hero ) {
             Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
             char skillValues[64];
-            sprintf(skillValues, "%d-%d-%d-%d", hero->GetAttack(), hero->GetDefense(), hero->GetPower(), hero->GetKnowledge());
+            sprintf( skillValues, "%d-%d-%d-%d", hero->GetAttack(), hero->GetDefense(), hero->GetPower(), hero->GetKnowledge() );
             text.Set( skillValues );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
