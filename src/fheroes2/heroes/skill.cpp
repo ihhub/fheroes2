@@ -825,12 +825,12 @@ int Skill::GetLuckModifiers( int level, std::string * strs = NULL )
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
 {
-    return msg << skill.attack << skill.defense << skill.power << skill.knowledge;
+    return msg << skill.attack << skill.defense << skill.knowledge << skill.power;
 }
 
 StreamBase & Skill::operator>>( StreamBase & msg, Primary & skill )
 {
-    return msg >> skill.attack >> skill.defense >> skill.power >> skill.knowledge;
+    return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
 }
 
 StreamBase & Skill::operator>>( StreamBase & sb, Secondary & st )
