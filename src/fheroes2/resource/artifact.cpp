@@ -1078,7 +1078,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )
-                msg = _( "Open book" );
+                msg = _( "View Spells" );
             else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe scroll" );
             else {
