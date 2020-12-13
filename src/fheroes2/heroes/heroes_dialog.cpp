@@ -262,6 +262,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
+            spellPointsInfo.Redraw();
             redrawMorale = true;
             redrawLuck = true;
         }
