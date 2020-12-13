@@ -27,6 +27,9 @@
 
 #include "gamedefs.h"
 
+const char * LuckString( int luck );
+const char * MoraleString( int morale );
+
 class Heroes;
 
 class HeroesIndicator
