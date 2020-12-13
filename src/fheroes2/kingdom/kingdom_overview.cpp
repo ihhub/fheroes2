@@ -37,11 +37,6 @@
 #include "ui_button.h"
 #include "world.h"
 
-namespace
-{
-    const std::string sep = "-";
-}
-
 struct HeroRow
 {
     Heroes * hero;
@@ -442,6 +437,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 
         if ( hero ) {
             Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
+            const std::string sep = "-";
             text.Set( GetString( hero->GetAttack() ) + sep + GetString( hero->GetDefense() ) + sep + GetString( hero->GetPower() ) + sep
                       + GetString( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
