@@ -220,13 +220,6 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
     return res;
 }
 
-std::string Skill::Primary::StringSkills( const std::string & sep ) const
-{
-    std::ostringstream os;
-    os << GetString( attack ) << sep << GetString( defense ) << sep << GetString( knowledge ) << sep << GetString( power );
-    return os.str();
-}
-
 const char * Skill::Level::String( int level )
 {
     const char * str_level[] = {"None", _( "skill|Basic" ), _( "skill|Advanced" ), _( "skill|Expert" )};
@@ -832,12 +825,12 @@ int Skill::GetLuckModifiers( int level, std::string * strs = NULL )
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
 {
-    return msg << skill.attack << skill.defense << skill.knowledge << skill.power;
+    return msg << skill.attack << skill.defense << skill.power << skill.knowledge;
 }
 
 StreamBase & Skill::operator>>( StreamBase & msg, Primary & skill )
 {
-    return msg >> skill.attack >> skill.defense >> skill.knowledge >> skill.power;
+    return msg >> skill.attack >> skill.defense >> skill.power >> skill.knowledge;
 }
 
 StreamBase & Skill::operator>>( StreamBase & sb, Secondary & st )
