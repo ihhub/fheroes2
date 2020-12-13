@@ -67,7 +67,7 @@ public:
     bool HasMonster( const Monster & ) const;
 
     bool AllTroopsIsRace( int ) const;
-    bool AllTroopsAreUndead() const;
+    bool AllTroopsAreUndead() const; // unused method
     u32 GetUniqueCount( void ) const;
 
     bool JoinTroop( const Troop & );

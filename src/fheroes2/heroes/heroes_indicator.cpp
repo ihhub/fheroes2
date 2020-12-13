@@ -175,7 +175,7 @@ void MoraleIndicator::Redraw( void )
     descriptions.append( Morale::Description( morale ) );
     descriptions.append( "\n \n" );
     descriptions.append( _( "Current Morale Modifiers:" ) );
-    descriptions.append( "\n \n" );
+    descriptions.append( "\n" );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
