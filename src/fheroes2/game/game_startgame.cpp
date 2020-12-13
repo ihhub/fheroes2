@@ -46,7 +46,6 @@
 #include "mus.h"
 #include "route.h"
 #include "settings.h"
-#include "splitter.h"
 #include "system.h"
 #include "world.h"
 
