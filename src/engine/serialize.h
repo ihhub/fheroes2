@@ -309,23 +309,23 @@ protected:
     void put8( char );
 
 private:
-    std::FILE * fp;
+    std::FILE * _file;
 
     template <typename T>
     T getUint()
     {
-        if ( !fp )
+        if ( !_file )
             return 0;
         T val;
-        std::fread( &val, sizeof( T ), 1, fp );
+        std::fread( &val, sizeof( T ), 1, _file );
         return val;
     }
 
     template <typename T>
     void putUint( const T val )
     {
-        if ( fp )
-            std::fwrite( &val, sizeof( T ), 1, fp );
+        if ( _file )
+            std::fwrite( &val, sizeof( T ), 1, _file );
     }
 };
 
