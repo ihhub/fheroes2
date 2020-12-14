@@ -87,7 +87,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 37 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 180 : 190 ) );
+    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 184 );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -115,7 +115,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     // button exit
     dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + ( !troop.isBattle() ? 221 : 223 ); // in case of battle we shouldn't move this button up
+    dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
 
     if ( READONLY & flags ) {
@@ -367,49 +367,49 @@ fheroes2::Sprite GetModesSprite( u32 mod )
     return fheroes2::Sprite();
 }
 
-bool SortSpells( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second )
-{
-    return first.second > 0 && first.second < second.second;
-}
-
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    const u32 modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
                          Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
                          Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
     // accumulate width
     int32_t ow = 0;
-    std::vector<std::pair<uint32_t, uint32_t> > spellVsDuration;
+    std::vector<std::tuple<uint32_t, uint32_t, int> > spellsInfo;
 
-    for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
-        if ( b.isModes( modes[ii] ) ) {
-            const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
-            if ( !sprite.empty() ) {
-                ow += sprite.width() + 4;
-                spellVsDuration.push_back( std::make_pair( modes[ii], b.GetAffectedDuration( modes[ii] ) ) );
-            }
-        }
-
-    ow -= 4;
+    for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii ) {
+        if ( !b.isModes( modes[ii] ) ) continue;
+        const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
+        if ( sprite.empty() ) continue;
+	const uint32_t duration = b.GetAffectedDuration( modes[ii] );
+	const int textOffset = modes[ii] >= Battle::SP_BLESS && modes[ii] <= Battle::SP_DRAGONSLAYER ? -5 : 0;
+	ow += sprite.width() + ( duration > 0 ? 12 + textOffset : 0 ) + 5;
+        spellsInfo.push_back( std::make_tuple( modes[ii], duration, textOffset ) );
+    }
+    ow -= 5;
     ow = dst.x - ow / 2;
 
-    std::sort( spellVsDuration.begin(), spellVsDuration.end(), SortSpells );
+    std::sort( spellsInfo.begin(), spellsInfo.end(),
+	[]( const std::tuple<uint32_t, uint32_t, int> & first, const std::tuple<uint32_t, uint32_t, int> & second)
+	{
+	    return std::get<1>(first) > 0 && std::get<1>(first) < std::get<1>(second);
+	} );
 
     Text text;
 
     // blit centered
-    for ( size_t i = 0; i < spellVsDuration.size(); ++i ) {
-        const fheroes2::Sprite & sprite = GetModesSprite( spellVsDuration[i].first );
-        fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y );
+    for ( size_t i = 0; i < spellsInfo.size(); ++i ) {
+        const fheroes2::Sprite & sprite = GetModesSprite( std::get<0>(spellsInfo[i]) );
+        fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + 32 - sprite.height() );
 
-        const uint32_t duration = spellVsDuration[i].second;
+        const uint32_t duration = std::get<1>(spellsInfo[i]);
         if ( duration > 0 ) {
             text.Set( GetString( duration ), Font::SMALL );
-            text.Blit( ow + ( sprite.width() - text.w() ) / 2, dst.y + sprite.height() + 1 );
+	    ow += sprite.width() + 12 + std::get<2>( spellsInfo[i] );
+            text.Blit( ow - text.w(), dst.y + sprite.height() - text.h() + 1 );
         }
 
-        ow += sprite.width() + 4;
+        ow += 5;
     }
 }
 
