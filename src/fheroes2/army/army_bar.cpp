@@ -287,28 +287,28 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
     return false;
 }
 
-bool ArmyBar::ActionBarCursor( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
+bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    bool save_last_troop = troop2.GetArmy()->SaveLastTroop();
+    bool save_last_troop = selectedTroop.GetArmy()->SaveLastTroop();
 
-    if ( troop1.isValid() ) {
-        if ( troop1.GetID() != troop2.GetID() ) {
+    if ( destTroop.isValid() ) {
+        if ( destTroop.GetID() != selectedTroop.GetID() ) {
             msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", troop1.GetName() );
-            StringReplace( msg, "%{name2}", troop2.GetName() );
+            StringReplace( msg, "%{name}", destTroop.GetName() );
+            StringReplace( msg, "%{name2}", selectedTroop.GetName() );
         }
         else if ( save_last_troop )
             msg = _( "Cannot move last troop" );
         else {
             msg = _( "Combine %{name} armies" );
-            StringReplace( msg, "%{name}", troop1.GetName() );
+            StringReplace( msg, "%{name}", destTroop.GetName() );
         }
     }
     else if ( save_last_troop )
         msg = _( "Cannot move last troop" );
     else {
         msg = _( "Move or right click to redistribute %{name}" );
-        StringReplace( msg, "%{name}", troop2.GetName() );
+        StringReplace( msg, "%{name}", selectedTroop.GetName() );
     }
 
     return false;
@@ -399,15 +399,28 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
+    if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
+            ResetSelected();
+            RedistributeArmy( selectedTroop, destTroop );
+        }
+
+        return false;
+    }
+
     // destination troop is empty, source army would be emptied by moving all
     if ( destTroop.isEmpty() && selectedTroop.GetArmy()->SaveLastTroop() ) {
         // move all but one units into the empty destination slot
         destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
         selectedTroop.SetCount( 1 );
+
         return false;
     }
 
-    if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) { // destination troop has units and both troops are the same creature type
+    const bool isShiftKeyHeld = Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT );
+
+    // destination troop has units and both troops are the same creature type
+    if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) {
         if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
             // move all but one units to destination
             destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
@@ -423,9 +436,8 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
         return false;
     }
 
-    // no risk of emptying selected troop's army, swap the troops
+    // no risk of emptying selected troop's army, swap the troops or split if shift key is held
     Army::SwapTroops( destTroop, selectedTroop );
-
     return false; // reset cursor
 }
 
@@ -489,7 +501,7 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
             Dialog::ArmyInfo( troop, 0 );
     }
 
-    return true;
+    return false;
 }
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
