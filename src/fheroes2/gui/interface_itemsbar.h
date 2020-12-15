@@ -343,7 +343,7 @@ namespace Interface
 
         virtual bool ActionBarRightMouseRelease( Item & )
         {
-            return false;
+            return true;
         }
 
         // body
