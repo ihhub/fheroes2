@@ -440,8 +440,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
         return false;
     }
 
-    const bool isShiftKeyHeld = Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT );
-
     // destination troop has units and both troops are the same creature type
     if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) {
         if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
