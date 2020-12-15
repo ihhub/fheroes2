@@ -41,6 +41,7 @@ namespace Interface
         typedef std::pair<ItemsIterator, Rect> ItemIterPos;
 
         Items items;
+        Item * rightClickedItem;
 
     public:
         ItemsBar()
@@ -336,12 +337,22 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarSingleRightClick( Item & )
+        virtual bool ActionBarSingleRightClick( Item & item )
         {
             return false;
         }
 
-        virtual bool ActionBarRightMouseRelease( Item & )
+        virtual bool ActionBarSingleRightClick( Item & item, Item & itemOther ) 
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseRelease( Item & item )
+        {
+            return true;
+        }
+
+        virtual bool ActionBarRightMouseRelease( Item & item, Item & itemOther ) 
         {
             return true;
         }
@@ -464,9 +475,17 @@ namespace Interface
                     other.ResetSelected();
                     return true;
                 }
-                else if ( le.MousePressRight( iterPos1.second ) ) {
+                else if ( le.MouseClickRight( iterPos1.second ) ) {
                     other.ResetSelected();
+                    return ActionBarSingleRightClick( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MousePressRight( iterPos1.second ) ) {
+                    if ( rightClickedItem == nullptr && other.rightClickedItem != nullptr )
+                        rightClickedItem = other.rightClickedItem;
                     return ActionBarPressRight( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MouseReleaseRight( iterPos1.second ) ) {
+                    return ActionBarRightMouseRelease( **iterPos1.first, **iterPos2.first );
                 }
             }
 

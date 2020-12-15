@@ -223,7 +223,6 @@ void ArmyBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
     spcursor.hide();
-    right_clicked_troop = nullptr;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
@@ -455,7 +454,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
         return false;
     }
 
-     // no risk of emptying selected troop's army, swap the troops
+    // no risk of emptying selected troop's army, swap the troops
     Army::SwapTroops( destTroop, selectedTroop );
 
     return false; // reset cursor
@@ -500,27 +499,22 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
-    if ( !troop.isValid() || right_clicked_troop != nullptr )
-        return false;
+    if ( troop.isValid() && rightClickedItem == nullptr ) {
+        ResetSelected();
 
-    ResetSelected();
+        if ( can_change && !army->SaveLastTroop() )
+            troop.Reset();
+        else
+            Dialog::ArmyInfo( troop, 0 );
+    }
 
-    if ( can_change && !army->SaveLastTroop() )
-        troop.Reset();
-    else
-        Dialog::ArmyInfo( troop, 0 );
-
-    return false;
+    return true;
 }
 
-bool ArmyBar::ActionBarPressRight( ArmyTroop & troop1, ArmyTroop & troop2 /* selected */ )
+bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    ResetSelected();
-
-    if ( troop1.isValid() )
-        Dialog::ArmyInfo( troop1, 0 );
-    else
-        RedistributeArmy( troop2, troop1 );
+    if ( destTroop.isValid() && rightClickedItem == nullptr )
+        Dialog::ArmyInfo( destTroop, 0 );
 
     return true;
 }
@@ -540,7 +534,19 @@ bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & troop )
         ResetSelected();
         RedistributeArmy( selectedTroop, troop );
 
-        right_clicked_troop = &troop;
+        rightClickedItem = &troop;
+    }
+
+    return true;
+}
+
+bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+{
+    if ( !destTroop.isValid() || destTroop.GetMonster() == selectedTroop.GetMonster() ) {
+        ResetSelected();
+        RedistributeArmy( selectedTroop, destTroop );
+
+        rightClickedItem = &destTroop;
     }
 
     return true;
@@ -548,7 +554,13 @@ bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop )
 {
-    right_clicked_troop = nullptr;
+    rightClickedItem = nullptr;
+    return true;
+}
+
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+{
+    rightClickedItem = nullptr;
     return true;
 }
 

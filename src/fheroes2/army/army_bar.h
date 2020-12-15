@@ -51,8 +51,10 @@ public:
     virtual bool ActionBarDoubleClick( ArmyTroop & ) override;
     virtual bool ActionBarPressRight( ArmyTroop & ) override;
     virtual bool ActionBarPressRight( ArmyTroop &, ArmyTroop & ) override;
-    virtual bool ActionBarSingleRightClick( ArmyTroop & ) override;
-    virtual bool ActionBarRightMouseRelease( ArmyTroop & ) override;
+    virtual bool ActionBarSingleRightClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarSingleRightClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
     virtual bool ActionBarCursor( ArmyTroop & ) override;
     virtual bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
@@ -68,7 +70,6 @@ protected:
     bool read_only;
     bool can_change;
     std::string msg;
-    ArmyTroop * right_clicked_troop;
 };
 
 #endif
