@@ -336,6 +336,16 @@ namespace Interface
             return false;
         }
 
+        virtual bool ActionBarSingleRightClick( Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseRelease( Item & )
+        {
+            return false;
+        }
+
         // body
         Item * GetSelectedItem( void )
         {
@@ -420,8 +430,14 @@ namespace Interface
                         return true;
                     }
                 }
+                else if ( le.MouseClickRight( iterPos.second ) ) {
+                    return ActionBarSingleRightClick( **iterPos.first );
+                }
                 else if ( le.MousePressRight( iterPos.second ) ) {
                     return ActionBarPressRight( **iterPos.first );
+                }
+                else if ( le.MouseReleaseRight( iterPos.second ) ) {
+                    return ActionBarRightMouseRelease( **iterPos.first );
                 }
             }
 
