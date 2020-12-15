@@ -223,6 +223,7 @@ void ArmyBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
     spcursor.hide();
+    right_clicked_troop = nullptr;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
@@ -309,6 +310,28 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     else {
         msg = _( "Move or right click to redistribute %{name}" );
         StringReplace( msg, "%{name}", selectedTroop.GetName() );
+    }
+
+    LocalEvent & le = LocalEvent::Get();
+    ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
+
+    if ( !destTroop.isValid() && troopPress && troopPress->isValid() ) {
+        while ( le.HandleEvents() && le.MousePressLeft() ) {
+            Cursor::Get().Show();
+            fheroes2::Display::instance().render();
+            DELAY( 1 );
+        };
+        ArmyTroop * troopRelease = GetItem( le.GetMouseReleaseLeft() );
+
+        if ( troopRelease && !troopRelease->isValid() ) {
+            RedistributeArmy( *troopPress, *troopRelease );
+            if ( isSelected() )
+                ResetSelected();
+            le.ResetPressLeft();
+            return true;
+        }
+
+        le.ResetPressLeft();
     }
 
     return false;
@@ -480,26 +503,15 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
-    // try to redistribute troops if we have a selected troop
-    if ( isSelected() ) {
-        ArmyTroop & selectedTroop = *GetSelectedItem();
+    if ( !troop.isValid() || right_clicked_troop != nullptr )
+        return false;
 
-        if ( troop.GetID() == selectedTroop.GetID() )
-            return false;
+    ResetSelected();
 
-        if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
-            ResetSelected();
-            RedistributeArmy( selectedTroop, troop );
-        }
-    }
-    else if ( troop.isValid() ) {
-        ResetSelected();
-
-        if ( can_change && !army->SaveLastTroop() )
-            troop.Reset();
-        else
-            Dialog::ArmyInfo( troop, 0 );
-    }
+    if ( can_change && !army->SaveLastTroop() )
+        troop.Reset();
+    else
+        Dialog::ArmyInfo( troop, 0 );
 
     return false;
 }
@@ -513,6 +525,33 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop1, ArmyTroop & troop2 /* sel
     else
         RedistributeArmy( troop2, troop1 );
 
+    return true;
+}
+
+bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & troop )
+{
+    // try to redistribute troops if we have a selected troop
+    if ( !isSelected() )
+        return false;
+
+    ArmyTroop & selectedTroop = *GetSelectedItem();
+
+    if ( troop.GetID() == selectedTroop.GetID() )
+        return false;
+
+    if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
+        ResetSelected();
+        RedistributeArmy( selectedTroop, troop );
+
+        right_clicked_troop = &troop;
+    }
+
+    return true;
+}
+
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop )
+{
+    right_clicked_troop = nullptr;
     return true;
 }
 
