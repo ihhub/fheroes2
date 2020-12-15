@@ -499,7 +499,7 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 {
-    if ( troop.isValid() && rightClickedItem == nullptr ) {
+    if ( troop.isValid() && rightClickedItem == NULL ) {
         ResetSelected();
 
         if ( can_change && !army->SaveLastTroop() )
@@ -513,7 +513,7 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    if ( destTroop.isValid() && rightClickedItem == nullptr )
+    if ( destTroop.isValid() && rightClickedItem == NULL )
         Dialog::ArmyInfo( destTroop, 0 );
 
     return true;
@@ -554,13 +554,13 @@ bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & destTroop, ArmyTroop & sele
 
 bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop )
 {
-    rightClickedItem = nullptr;
+    rightClickedItem = NULL;
     return true;
 }
 
 bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    rightClickedItem = nullptr;
+    rightClickedItem = NULL;
     return true;
 }
 

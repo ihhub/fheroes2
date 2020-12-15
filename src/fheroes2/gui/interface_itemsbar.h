@@ -337,22 +337,22 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarSingleRightClick( Item & item )
+        virtual bool ActionBarSingleRightClick( Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarSingleRightClick( Item & item, Item & itemOther )
+        virtual bool ActionBarSingleRightClick( Item &, Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarRightMouseRelease( Item & item )
+        virtual bool ActionBarRightMouseRelease( Item & )
         {
             return true;
         }
 
-        virtual bool ActionBarRightMouseRelease( Item & item, Item & itemOther )
+        virtual bool ActionBarRightMouseRelease( Item &, Item & )
         {
             return true;
         }
@@ -480,11 +480,12 @@ namespace Interface
                     return ActionBarSingleRightClick( **iterPos1.first, **iterPos2.first );
                 }
                 else if ( le.MousePressRight( iterPos1.second ) ) {
-                    if ( rightClickedItem == nullptr && other.rightClickedItem != nullptr )
+                    if ( rightClickedItem == NULL && other.rightClickedItem != NULL )
                         rightClickedItem = other.rightClickedItem;
                     return ActionBarPressRight( **iterPos1.first, **iterPos2.first );
                 }
                 else if ( le.MouseReleaseRight( iterPos1.second ) ) {
+                    other.rightClickedItem = NULL;
                     return ActionBarRightMouseRelease( **iterPos1.first, **iterPos2.first );
                 }
             }
