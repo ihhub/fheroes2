@@ -342,7 +342,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarSingleRightClick( Item & item, Item & itemOther ) 
+        virtual bool ActionBarSingleRightClick( Item & item, Item & itemOther )
         {
             return false;
         }
@@ -352,7 +352,7 @@ namespace Interface
             return true;
         }
 
-        virtual bool ActionBarRightMouseRelease( Item & item, Item & itemOther ) 
+        virtual bool ActionBarRightMouseRelease( Item & item, Item & itemOther )
         {
             return true;
         }
