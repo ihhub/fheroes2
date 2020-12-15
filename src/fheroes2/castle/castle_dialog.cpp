@@ -270,6 +270,7 @@ int Castle::OpenDialog( bool readonly )
 
     // resource
     const Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const Rect & resActiveArea = Rect( rectResource, rectResource.w, 165 );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
@@ -325,11 +326,11 @@ int Castle::OpenDialog( bool readonly )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( rectResource ) ) {
+        if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( rectResource ) && !le.MousePressRight( buttonExit.area() ) ) {
+        else if ( le.MousePressRight( resActiveArea ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
