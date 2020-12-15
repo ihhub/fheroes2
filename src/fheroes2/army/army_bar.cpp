@@ -472,6 +472,9 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
     if ( isSelected() ) {
         ArmyTroop & selectedTroop = *GetSelectedItem();
 
+        if ( troop.GetID() == selectedTroop.GetID() )
+            return false;
+
         if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
             ResetSelected();
             RedistributeArmy( selectedTroop, troop );
