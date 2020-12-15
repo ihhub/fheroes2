@@ -459,18 +459,4 @@ namespace Interface
     };
 }
 
-namespace Interface
-{
-    template <class Item>
-    class ItemsScroll : public ItemsActionBar<Item>
-    {
-    protected:
-        fheroes2::Button buttonPgUp;
-        fheroes2::Button buttonPgDn;
-
-    public:
-        ItemsScroll() {}
-    };
-}
-
 #endif

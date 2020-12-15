@@ -42,8 +42,8 @@ namespace Interface
     {
     public:
         IconsBar( u32 count, const fheroes2::Image & sf )
-            : iconsCount( count )
-            , marker( sf )
+            : marker( sf )
+            , iconsCount( count )
             , show( true )
         {}
 
@@ -73,8 +73,8 @@ namespace Interface
         static bool IsVisible( void );
 
     protected:
-        u32 iconsCount;
         const fheroes2::Image & marker;
+        u32 iconsCount;
         bool show;
     };
 
