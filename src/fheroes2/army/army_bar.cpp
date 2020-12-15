@@ -457,8 +457,9 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
         return false;
     }
 
-    // no risk of emptying selected troop's army, swap the troops or split if shift key is held
+     // no risk of emptying selected troop's army, swap the troops
     Army::SwapTroops( destTroop, selectedTroop );
+
     return false; // reset cursor
 }
 
