@@ -136,7 +136,8 @@ class SelectEnumArtifact : public SelectEnum
 {
 public:
     SelectEnumArtifact( const Rect & rt )
-        : SelectEnum( rt ){}
+        : SelectEnum( rt )
+    {}
 
     virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
