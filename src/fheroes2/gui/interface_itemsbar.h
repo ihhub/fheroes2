@@ -41,7 +41,6 @@ namespace Interface
         typedef std::pair<ItemsIterator, Rect> ItemIterPos;
 
         Items items;
-        Item * rightClickedItem;
 
     public:
         ItemsBar()
@@ -290,6 +289,7 @@ namespace Interface
 
         ItemsIterator topItem;
         ItemIterPos curItemPos;
+        Item * rightClickedItem;
 
     public:
         ItemsActionBar()
