@@ -382,6 +382,7 @@ namespace Interface
         {
             topItem = ItemsBar<Item>::GetBeginItemIter();
             curItemPos = ItemIterPos( ItemsBar<Item>::items.end(), Rect() );
+            rightClickedItem = NULL;
         }
 
         bool QueueEventProcessing( void )
