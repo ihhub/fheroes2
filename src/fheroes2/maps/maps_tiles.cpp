@@ -2369,12 +2369,6 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     return spriteIndices;
 }
 
-bool Maps::Tiles::isFog( int colors ) const
-{
-    // colors may be the union friends
-    return ( fog_colors & colors ) == colors;
-}
-
 void Maps::Tiles::ClearFog( int colors )
 {
     fog_colors &= ~colors;

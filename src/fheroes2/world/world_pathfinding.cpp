@@ -305,7 +305,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     PathfindingNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
-    auto protectionCheck = [this]( int index ) {
+    auto protectionCheck = [this]( const int index ) {
         const Maps::Tiles & tile = world.GetTiles( index );
         if ( MP2::isProtectedObject( tile.GetObject() ) ) {
             _temporaryArmy.setFromTile( tile );
@@ -318,8 +318,8 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     if ( !isProtected ) {
         const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
         for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-            isProtected = protectionCheck( *it );
-            if ( isProtected ) {
+            if ( protectionCheck( *it ) ) {
+                isProtected = true;
                 break;
             }
         }

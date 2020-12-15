@@ -2923,7 +2923,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     // Take off animation is 30% length on average (original value)
-    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
+    AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
 
     _movingUnit = NULL;
     _flyingUnit = &unit;
