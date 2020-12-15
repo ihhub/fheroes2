@@ -511,7 +511,7 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & /*selectedTroop*/ )
 {
     if ( destTroop.isValid() && rightClickedItem == NULL )
         Dialog::ArmyInfo( destTroop, 0 );
@@ -552,13 +552,13 @@ bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & destTroop, ArmyTroop & sele
     return true;
 }
 
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop )
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*troop*/ )
 {
     rightClickedItem = NULL;
     return true;
 }
 
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ )
 {
     rightClickedItem = NULL;
     return true;
