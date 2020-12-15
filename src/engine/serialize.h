@@ -317,8 +317,7 @@ private:
         if ( !_file )
             return 0;
         T val;
-        std::fread( &val, sizeof( T ), 1, _file );
-        return val;
+        return std::fread( &val, sizeof( T ), 1, _file ) == sizeof( T ) ? val : 0;
     }
 
     template <typename T>
