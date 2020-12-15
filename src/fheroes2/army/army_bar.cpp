@@ -427,7 +427,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
             ResetSelected();
             RedistributeArmy( selectedTroop, destTroop );
         }
-
         return false;
     }
 
@@ -436,7 +435,6 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
         // move all but one units into the empty destination slot
         destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
         selectedTroop.SetCount( 1 );
-
         return false;
     }
 
