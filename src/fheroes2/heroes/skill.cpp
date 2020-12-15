@@ -220,13 +220,6 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
     return res;
 }
 
-std::string Skill::Primary::StringSkills( const std::string & sep ) const
-{
-    std::ostringstream os;
-    os << GetString( attack ) << sep << GetString( defense ) << sep << GetString( knowledge ) << sep << GetString( power );
-    return os.str();
-}
-
 const char * Skill::Level::String( int level )
 {
     const char * str_level[] = {"None", _( "skill|Basic" ), _( "skill|Advanced" ), _( "skill|Expert" )};
