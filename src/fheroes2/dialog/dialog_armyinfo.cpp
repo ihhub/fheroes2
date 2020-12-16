@@ -378,9 +378,11 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
     std::vector<std::tuple<uint32_t, uint32_t, int, int> > spellsInfo; // sprite, duration, text right border, space
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii ) {
-        if ( !b.isModes( modes[ii] ) ) continue;
+        if ( !b.isModes( modes[ii] ) )
+            continue;
         const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
-        if ( sprite.empty() ) continue;
+        if ( sprite.empty() )
+            continue;
         const uint32_t duration = b.GetAffectedDuration( modes[ii] );
         int textRightOffset = 0;
         if ( duration > 0 ) {
@@ -393,10 +395,10 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         ow += sprite.width() + textRightOffset + space;
     }
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-        []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second)
-        {
-            return std::get<1>(first) > 0 && std::get<1>(first) < std::get<1>(second);
-        } );
+            []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second )
+            {
+                return std::get<1>( first ) > 0 && std::get<1>( first ) < std::get<1>( second );
+            } );
     if ( spellsInfo.size() )
         ow -= std::get<3>( spellsInfo.back() );
     ow = dst.x - ow / 2;
