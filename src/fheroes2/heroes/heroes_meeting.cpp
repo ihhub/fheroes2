@@ -415,11 +415,27 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
         if ( le.MouseClickLeft( hero1Area ) ) {
             OpenDialog( true, true );
+
+            armyCountBackgroundRestorer.restore();
+            selectArtifacts1.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            luckIndicator1.Redraw();
+
             cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
             heroes2.OpenDialog( true, true );
+
+            armyCountBackgroundRestorer.restore();
+            selectArtifacts2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator2.Redraw();
+
             cursor.Show();
             display.render();
         }
