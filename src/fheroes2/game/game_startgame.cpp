@@ -82,6 +82,8 @@ int Game::StartGame( void )
     cursor.Hide();
     AGG::ResetMixer();
 
+    Interface::Basic::Get().Reset();
+
     return Interface::Basic::Get().StartGame();
 }
 
