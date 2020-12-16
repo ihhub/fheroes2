@@ -326,11 +326,11 @@ int Castle::OpenDialog( bool readonly )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( Rect( resActiveArea ) ) ) {
+        if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( Rect( resActiveArea ) ) ) {
+        else if ( le.MousePressRight( resActiveArea ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
@@ -720,7 +720,7 @@ int Castle::OpenDialog( bool readonly )
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
             msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
-        else if ( le.MouseCursor( Rect( resActiveArea ) ) )
+        else if ( le.MouseCursor( resActiveArea ) )
             msg_status = _( "Show Income" );
         else
             // status message prev castle
