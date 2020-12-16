@@ -174,18 +174,17 @@ void MoraleIndicator::Redraw( void )
     descriptions.clear();
     descriptions.append( Morale::Description( morale ) );
     descriptions.append( "\n \n" );
+    descriptions.append( _( "Current Morale Modifiers:" ) );
+    descriptions.append( "\n \n" );
 
-    if ( !modificators.empty() ) {
-        descriptions.append( _( "Current Morale Modifiers:" ) );
-        descriptions.append( "\n \n" );
+    if ( modificators.empty() )
+        descriptions.append( _( "None" ) );
+    else
         descriptions.append( modificators );
-    }
 
+    descriptions.append( "\n \n" );
     if ( hero->GetArmy().AllTroopsAreUndead() ) {
-        if ( !modificators.empty() )
-            descriptions.append( "\n \n" );
         descriptions.append( _( "Entire army is undead, so morale does not apply." ) );
-        descriptions.append( "\n" );
     }
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
