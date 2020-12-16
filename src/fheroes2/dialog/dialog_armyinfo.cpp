@@ -87,7 +87,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 37 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + 184 );
+    const fheroes2::Point battleStatOffset( pos_rt.x + 395, pos_rt.y + 184 );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -370,46 +370,54 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
     const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                         Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                         Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
+                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
     // accumulate width
     int32_t ow = 0;
-    std::vector<std::tuple<uint32_t, uint32_t, int> > spellsInfo;
+    std::vector<std::tuple<uint32_t, uint32_t, int, int> > spellsInfo; // sprite, duration, text right border, space
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii ) {
         if ( !b.isModes( modes[ii] ) ) continue;
         const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
         if ( sprite.empty() ) continue;
-	const uint32_t duration = b.GetAffectedDuration( modes[ii] );
-	const int textOffset = modes[ii] >= Battle::SP_BLESS && modes[ii] <= Battle::SP_DRAGONSLAYER ? -5 : 0;
-	ow += sprite.width() + ( duration > 0 ? 12 + textOffset : 0 ) + 5;
-        spellsInfo.push_back( std::make_tuple( modes[ii], duration, textOffset ) );
+        const uint32_t duration = b.GetAffectedDuration( modes[ii] );
+        int textRightOffset = 0;
+        if ( duration > 0 ) {
+            textRightOffset = duration >= 10 ? 12 : 7;
+            if ( modes[ii] >= Battle::SP_BLESS && modes[ii] <= Battle::SP_DRAGONSLAYER )
+                textRightOffset -= 5;
+        }
+        int space = textRightOffset == 2 ? 10 : 5;
+        spellsInfo.push_back( std::make_tuple( modes[ii], duration, textRightOffset, space ) );
+        ow += sprite.width() + textRightOffset + space;
     }
-    ow -= 5;
-    ow = dst.x - ow / 2;
-
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-	[]( const std::tuple<uint32_t, uint32_t, int> & first, const std::tuple<uint32_t, uint32_t, int> & second)
-	{
-	    return std::get<1>(first) > 0 && std::get<1>(first) < std::get<1>(second);
-	} );
+        []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second)
+        {
+            return std::get<1>(first) > 0 && std::get<1>(first) < std::get<1>(second);
+        } );
+    if ( spellsInfo.size() )
+        ow -= std::get<3>( spellsInfo.back() );
+    ow = dst.x - ow / 2;
 
     Text text;
 
     // blit centered
     for ( size_t i = 0; i < spellsInfo.size(); ++i ) {
-        const fheroes2::Sprite & sprite = GetModesSprite( std::get<0>(spellsInfo[i]) );
+        uint32_t spriteId, duration;
+        int offset, space;
+        std::tie( spriteId, duration, offset, space ) = spellsInfo[i];
+        const fheroes2::Sprite & sprite = GetModesSprite( spriteId );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + 32 - sprite.height() );
 
-        const uint32_t duration = std::get<1>(spellsInfo[i]);
         if ( duration > 0 ) {
             text.Set( GetString( duration ), Font::SMALL );
-	    ow += sprite.width() + 12 + std::get<2>( spellsInfo[i] );
+            ow += sprite.width() + offset;
             text.Blit( ow - text.w(), dst.y + sprite.height() - text.h() + 1 );
         }
 
-        ow += 5;
+        ow += space;
     }
 }
 
