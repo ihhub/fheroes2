@@ -337,6 +337,8 @@ private:
     // when initial hero's sprite is set incorrectly. This function fixes it
     void SetValidDirectionSprite();
 
+    uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
+
     enum
     {
         SKILL_VALUE = 100

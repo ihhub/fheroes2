@@ -3056,7 +3056,14 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetMapsObject( MP2::OBJ_ZERO );
         AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_HEROES );
+        // TODO: fix pathfinding
+        if ( tile.GetIndex() == hero.GetIndex() ) {
+            tile.SetObject( MP2::OBJ_HEROES );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+            hero.SetMapsObject( MP2::OBJ_HEROES );
+        }
     }
     else {
         Dialog::Message(

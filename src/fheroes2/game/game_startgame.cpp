@@ -46,7 +46,6 @@
 #include "mus.h"
 #include "route.h"
 #include "settings.h"
-#include "splitter.h"
 #include "system.h"
 #include "world.h"
 
@@ -82,6 +81,8 @@ int Game::StartGame( void )
 
     cursor.Hide();
     AGG::ResetMixer();
+
+    Interface::Basic::Get().Reset();
 
     return Interface::Basic::Get().StartGame();
 }

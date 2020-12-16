@@ -120,10 +120,25 @@ namespace fheroes2
 
         void update( int32_t x_, int32_t y_, int32_t width, int32_t height );
 
-        int32_t x() const;
-        int32_t y() const;
-        int32_t width() const;
-        int32_t height() const;
+        int32_t x() const
+        {
+            return _x;
+        }
+
+        int32_t y() const
+        {
+            return _y;
+        }
+
+        int32_t width() const
+        {
+            return _width;
+        }
+
+        int32_t height() const
+        {
+            return _height;
+        }
 
         void restore();
         void reset();

@@ -181,7 +181,12 @@ namespace Maps
 
         std::string String( void ) const;
 
-        bool isFog( int color ) const;
+        bool isFog( const int colors ) const
+        {
+            // colors may be the union friends
+            return ( fog_colors & colors ) == colors;
+        }
+
         void ClearFog( int color );
 
         /* monster operation */

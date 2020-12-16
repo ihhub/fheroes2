@@ -38,7 +38,6 @@
 #include "player_info.h"
 #include "race.h"
 #include "settings.h"
-#include "splitter.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -238,6 +237,7 @@ int Game::ScenarioInfo( void )
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
+                playersInfo.resetSelection();
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
                 levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );

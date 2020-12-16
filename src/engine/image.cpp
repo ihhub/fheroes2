@@ -568,26 +568,6 @@ namespace fheroes2
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
-    int32_t ImageRestorer::x() const
-    {
-        return _x;
-    }
-
-    int32_t ImageRestorer::y() const
-    {
-        return _y;
-    }
-
-    int32_t ImageRestorer::width() const
-    {
-        return _width;
-    }
-
-    int32_t ImageRestorer::height() const
-    {
-        return _height;
-    }
-
     void ImageRestorer::restore()
     {
         _isRestored = true;

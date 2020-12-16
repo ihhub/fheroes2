@@ -299,10 +299,10 @@
     <ClCompile Include="src\fheroes2\gui\interface_status.cpp" />
     <ClCompile Include="src\fheroes2\gui\player_info.cpp" />
     <ClCompile Include="src\fheroes2\gui\skill_bar.cpp" />
-    <ClCompile Include="src\fheroes2\gui\splitter.cpp" />
     <ClCompile Include="src\fheroes2\gui\statusbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
@@ -458,10 +458,10 @@
     <ClInclude Include="src\fheroes2\gui\interface_status.h" />
     <ClInclude Include="src\fheroes2\gui\player_info.h" />
     <ClInclude Include="src\fheroes2\gui\skill_bar.h" />
-    <ClInclude Include="src\fheroes2\gui\splitter.h" />
     <ClInclude Include="src\fheroes2\gui\statusbar.h" />
     <ClInclude Include="src\fheroes2\gui\text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />

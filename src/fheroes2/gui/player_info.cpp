@@ -218,6 +218,11 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
     }
 }
 
+void Interface::PlayersInfo::resetSelection()
+{
+    currentSelectedPlayer = nullptr;
+}
+
 bool Interface::PlayersInfo::QueueEventProcessing( void )
 {
     Settings & conf = Settings::Get();
