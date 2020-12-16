@@ -396,10 +396,9 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         spritesWidth += sprite.width();
     }
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-        []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second )
-        {
-            return std::get<1>( first ) > 0 && std::get<1>( first ) < std::get<1>( second );
-        } );
+               []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second ) {
+                   return std::get<1>( first ) > 0 && std::get<1>( first ) < std::get<1>( second );
+               } );
     if ( spellsInfo.size() )
         ow -= std::get<3>( spellsInfo.back() );
 
