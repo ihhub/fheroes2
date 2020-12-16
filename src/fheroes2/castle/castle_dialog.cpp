@@ -268,9 +268,14 @@ int Castle::OpenDialog( bool readonly )
         selectArmy2.Redraw();
     }
 
+    // button exit
+    dst_pt.x = cur_pt.x + 553;
+    dst_pt.y = cur_pt.y + 428;
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
+
     // resource
     const Rect & rectResource = RedrawResourcePanel( cur_pt );
-    const Rect & resActiveArea = Rect( rectResource, rectResource.w, 165 );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, rectResource.h - buttonExit.area().height - 2 );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
@@ -280,11 +285,6 @@ int Castle::OpenDialog( bool readonly )
         buttonSwap.draw();
         buttonMeeting.draw();
     }
-
-    // button exit
-    dst_pt.x = cur_pt.x + 553;
-    dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
@@ -326,11 +326,11 @@ int Castle::OpenDialog( bool readonly )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( resActiveArea ) ) {
+        if ( le.MouseClickLeft( Rect( resActiveArea ) ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( resActiveArea ) ) {
+        else if ( le.MousePressRight( Rect( resActiveArea ) ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
@@ -720,7 +720,7 @@ int Castle::OpenDialog( bool readonly )
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
             msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
-        else if ( le.MouseCursor( rectResource ) )
+        else if ( le.MouseCursor( Rect( resActiveArea ) ) )
             msg_status = _( "Show Income" );
         else
             // status message prev castle
