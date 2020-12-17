@@ -429,7 +429,7 @@ namespace
                 if ( _renderer != NULL )
                     SDL_DestroyRenderer( _renderer );
 
-                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+                _renderer = SDL_CreateRenderer( _window, -1, _renderFlags );
             }
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
@@ -469,7 +469,7 @@ namespace
 
             SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
-            _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
+            _renderer = SDL_CreateRenderer( _window, -1, _renderFlags );
             if ( _renderer == NULL ) {
                 clear();
                 return false;
@@ -554,16 +554,7 @@ namespace
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
 
-        int renderFlags() const
-        {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_RENDERER_SOFTWARE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
-            return SDL_RENDERER_ACCELERATED;
-#else
-            return SDL_RENDERER_ACCELERATED;
-#endif
-        }
+        const int _renderFlags = SDL_RENDERER_ACCELERATED;
 
         void _createPalette()
         {
@@ -826,9 +817,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_SWSURFACE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ ) || defined( ANDROID )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;

@@ -576,7 +576,7 @@ void AGG::LoadTTFChar( u32 ch )
     fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
 
     // medium
-    if ( !( conf.QVGA() && !conf.Unicode() ) ) {
+    if ( !conf.Unicode() ) {
         fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
         fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
     }
