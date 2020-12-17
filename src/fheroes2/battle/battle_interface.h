@@ -98,7 +98,7 @@ namespace Battle
 
         enum
         {
-            HERO_X_OFFSET = 32,
+            HERO_X_OFFSET = 30,
             LEFT_HERO_Y_OFFSET = 183,
             RIGHT_HERO_Y_OFFSET = 148,
             CAPTAIN_X_OFFSET = 6,
