@@ -107,7 +107,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
     const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    const bool isWinnerHuman = hero_wins->isControlHuman();
+    const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
     const bool transferArtifacts
         = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
     bool artifactsTransferred = !transferArtifacts;
