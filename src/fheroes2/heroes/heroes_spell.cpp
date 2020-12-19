@@ -368,17 +368,16 @@ bool ActionSpellSummonBoat( Heroes & hero )
     // find water
     s32 dst_water = -1;
     MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right )
-        {
-            const Point & leftPoint = Maps::GetPoint( left );
-            const Point & rightPoint = Maps::GetPoint( right );
-            const int32_t leftDiffX = leftPoint.x - centerPoint.x;
-            const int32_t leftDiffY = leftPoint.y - centerPoint.y;
-            const int32_t rightDiffX = rightPoint.x - centerPoint.x;
-            const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+        const Point & leftPoint = Maps::GetPoint( left );
+        const Point & rightPoint = Maps::GetPoint( right );
+        const int32_t leftDiffX = leftPoint.x - centerPoint.x;
+        const int32_t leftDiffY = leftPoint.y - centerPoint.y;
+        const int32_t rightDiffX = rightPoint.x - centerPoint.x;
+        const int32_t rightDiffY = rightPoint.y - centerPoint.y;
 
-            return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
-        } );
+        return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+    } );
     for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
