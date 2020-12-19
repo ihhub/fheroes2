@@ -293,8 +293,8 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center )
     const int x = center % width;
     const int y = center / width;
 
-    if ( y > 1 ) {
-        if ( x > 1 )
+    if ( y > 0 ) {
+        if ( x > 0 )
             result.push_back( center - width - 1 );
 
         result.push_back( center - width );
@@ -303,13 +303,13 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center )
             result.push_back( center - width + 1 );
     }
 
-    if ( x > 1 )
+    if ( x > 0 )
         result.push_back( center - 1 );
     if ( x < width - 1 )
         result.push_back( center + 1 );
 
     if ( y < world.h() - 1 ) {
-        if ( x > 1 )
+        if ( x > 0 )
             result.push_back( center + width - 1 );
 
         result.push_back( center + width );
