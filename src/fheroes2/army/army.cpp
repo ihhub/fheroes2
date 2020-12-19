@@ -1154,8 +1154,9 @@ int Army::GetMoraleModificator( std::string * strs ) const
                 }
             }
         }
-        else
+        else {
             return 0;
+        }
         break;
     case 3:
         result -= 1;
