@@ -1023,7 +1023,7 @@ int Interface::Basic::HumanTurn( bool isload )
                     objectTile.SetObject( fadeInfo.object );
                     // TODO: we need to expand the logic to all objects.
                     if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-                        objectTile.SetObjectSpriteIndex( fadeInfo.index ); 
+                        objectTile.SetObjectSpriteIndex( fadeInfo.index );
                     }
                     fadeInfo.object = MP2::OBJ_ZERO;
                 }
