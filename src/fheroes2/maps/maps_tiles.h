@@ -111,7 +111,10 @@ namespace Maps
         Point GetCenter( void ) const;
         int GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
+
         uint8_t GetObjectSpriteIndex() const;
+        void SetObjectSpriteIndex( const uint8_t index );
+
         u32 GetObjectUID() const;
         int GetQuantity1() const;
         int GetQuantity2() const;
