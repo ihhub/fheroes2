@@ -66,11 +66,11 @@ u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
         Interface::StatusWindow * status = reinterpret_cast<Interface::StatusWindow *>( ptr );
         if ( STATUS_RESOURCE == status->state ) {
             status->state = status->oldState;
-            Cursor::Get().Hide();
             Interface::Basic::Get().SetRedraw( REDRAW_STATUS );
         }
-        else
+        else {
             status->timerShowLastResource.Remove();
+        }
     }
 
     return 0;
