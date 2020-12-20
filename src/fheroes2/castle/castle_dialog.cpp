@@ -251,7 +251,7 @@ int Castle::OpenDialog( bool readonly )
     dst_pt.x = cur_pt.x + 5;
     dst_pt.y = cur_pt.y + 361;
 
-    const Rect rectSign2( dst_pt.x, dst_pt.y, 100, 92 );
+    const fheroes2::Rect rectSign2( dst_pt.x, dst_pt.y, 100, 92 );
 
     // castle_heroes troops background
     dst_pt.x = cur_pt.x + 112;
