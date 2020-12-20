@@ -44,6 +44,8 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     , state( STATUS_UNKNOWN )
     , oldState( STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
+    , countLastResource( 0 )
+    , turn_progress( 0 )
 {}
 
 void Interface::StatusWindow::Reset( void )
