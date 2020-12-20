@@ -57,6 +57,8 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
+    const bool isActive = !readonly || conf.CanChangeInGame( item );
+
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
     const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
@@ -64,7 +66,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), Font::SMALL, 250 );
+    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
