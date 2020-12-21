@@ -522,7 +522,7 @@ namespace AI
             Army & army = castle->GetActualArmy();
             // bool allow_enter = false;
 
-            if ( army.isValid() ) {
+            if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
 
                 Heroes * defender = heroes.GuardFirst();

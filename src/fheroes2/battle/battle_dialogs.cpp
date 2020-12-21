@@ -315,7 +315,7 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
     }
 }
 
-void Battle::Arena::DialogBattleSummary( const Result & res ) const
+void Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
@@ -453,6 +453,73 @@ void Battle::Arena::DialogBattleSummary( const Result & res ) const
             fheroes2::Blit( base, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
             fheroes2::Blit( sequenceCurrent, display, pos_rt.x + anime_ox + sequenceCurrent.x(), pos_rt.y + anime_oy + sequenceCurrent.y() );
             display.render();
+        }
+    }
+
+    if ( transferArtifacts ) {
+        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : NULL ) );
+        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : NULL ) );
+
+        BagArtifacts & bag1 = hero1->GetBagArtifacts();
+        BagArtifacts & bag2 = hero2->GetBagArtifacts();
+
+        for ( size_t i = 0; i < bag2.size(); ++i ) {
+            Artifact & art = bag2[i];
+
+            if ( art.isUltimate() ) {
+                art = Artifact::UNKNOWN;
+                continue;
+            }
+
+            if ( art() == Artifact::UNKNOWN || art() == Artifact::MAGIC_BOOK ) {
+                continue;
+            }
+
+            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
+            if ( bag1.end() != it ) {
+                *it = art;
+
+                back.restore();
+                back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
+                fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
+                fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+
+                Game::PlayPickupSound();
+
+                TextBox box( _( "You have captured an enemy artifact!" ), Font::YELLOW_BIG, bsTextWidth );
+                box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
+                messageYOffset = bsTextIndent;
+
+                const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
+                const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+
+                fheroes2::Image image = border;
+                fheroes2::Blit( artifact, image, 5, 5 );
+
+                fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );
+
+                TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
+                artName.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + 310 + image.height() + 5 );
+
+                while ( le.HandleEvents() ) {
+                    le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+
+                    // exit
+                    if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
+                        break;
+
+                    // animation
+                    if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+                        const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
+                        const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
+
+                        fheroes2::Blit( base, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
+                        fheroes2::Blit( sequenceCurrent, display, pos_rt.x + anime_ox + sequenceCurrent.x(), pos_rt.y + anime_oy + sequenceCurrent.y() );
+                        display.render();
+                    }
+                }
+            }
+            art = Artifact::UNKNOWN;
         }
     }
 }

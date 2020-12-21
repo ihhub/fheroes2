@@ -328,7 +328,11 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const u32 min = 1;
     const int spacer = 10;
 
-    FrameBox box( free_slots > 2 ? 90 + spacer : 45, true );
+    const int defaultYPosition = 160;
+    const int boxHeight = free_slots > 2 ? 90 + spacer : 45;
+    const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
+
+    NonFixedFrameBox box( boxHeight, boxYPosition, true );
     SelectValue sel( min, max, cur, 1 );
     Text text;
 

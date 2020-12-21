@@ -47,9 +47,8 @@ namespace
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
     }
 
-    std::vector<int> GetDirectionOffsets( uint32_t mapWidth )
+    std::vector<int> GetDirectionOffsets( const int width )
     {
-        const int width = static_cast<int>( mapWidth );
         std::vector<int> offsets( 8 );
         offsets[TOP_LEFT] = -width - 1;
         offsets[TOP] = -width;
@@ -70,7 +69,7 @@ namespace
 
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
-        for ( int & current : dataSet ) {
+        for ( const int current : dataSet ) {
             if ( Maps::GetApproximateDistance( current, value ) < distance )
                 return false;
         }
@@ -116,7 +115,7 @@ namespace
 
         MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
         MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
-        const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+        const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
 
         for ( ; currentTile != mapEnd; ++currentTile ) {
             if ( currentTile->type == REGION_NODE_OPEN ) {
@@ -355,7 +354,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
-    const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+    const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;

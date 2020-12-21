@@ -127,7 +127,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() - 2 ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
@@ -246,7 +246,7 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
     text.Set( _( "Artifacts" ) );
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
-    // splitter background
+    // scrollbar background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
@@ -339,7 +339,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() - 2 ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
@@ -437,7 +437,9 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 
         if ( hero ) {
             Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
-            text.Set( hero->StringSkills( "-" ) );
+            const std::string sep = "-";
+            text.Set( GetString( hero->GetAttack() ) + sep + GetString( hero->GetDefense() ) + sep + GetString( hero->GetPower() ) + sep
+                      + GetString( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
         else {
@@ -480,7 +482,7 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
     text.Set( _( "Available" ) );
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
-    // splitter background
+    // scrollbar background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background

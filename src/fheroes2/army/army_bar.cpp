@@ -399,6 +399,14 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
+    if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
+            ResetSelected();
+            RedistributeArmy( selectedTroop, destTroop );
+        }
+        return false;
+    }
+
     // destination troop is empty, source army would be emptied by moving all
     if ( destTroop.isEmpty() && selectedTroop.GetArmy()->SaveLastTroop() ) {
         // move all but one units into the empty destination slot
@@ -472,7 +480,10 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
     if ( isSelected() ) {
         ArmyTroop & selectedTroop = *GetSelectedItem();
 
-        if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
+        if ( GetSelectedItem() == &troop )
+            return false;
+
+        if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
             ResetSelected();
             RedistributeArmy( selectedTroop, troop );
         }

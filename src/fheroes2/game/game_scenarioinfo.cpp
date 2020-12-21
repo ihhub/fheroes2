@@ -38,7 +38,6 @@
 #include "player_info.h"
 #include "race.h"
 #include "settings.h"
-#include "splitter.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -238,6 +237,7 @@ int Game::ScenarioInfo( void )
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
+                playersInfo.resetSelection();
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
                 levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
@@ -368,6 +368,9 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
     // image panel
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
     fheroes2::Blit( panel, display, rt.x, rt.y );
+
+    // Redraw select button as the original image has a wrong position of it
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
     // text scenario
     Text text( _( "Scenario:" ), Font::BIG );
