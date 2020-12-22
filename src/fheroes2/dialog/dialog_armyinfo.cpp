@@ -44,6 +44,28 @@ namespace
     const int offsetYAmountBox = 223;
     const int widthAmountBox = 125;
     const int heightAmountBox = 23;
+
+    struct SpellInfo
+    {
+        SpellInfo()
+            : spriteId( 0 )
+            , duration( 0 )
+            , offset( 0 )
+            , space( 0 )
+        {}
+
+        SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
+            : spriteId( spriteId_ )
+            , duration( duration_ )
+            , offset( offset_ )
+            , space( space_ )
+        {}
+
+        uint32_t spriteId;
+        uint32_t duration;
+        int32_t offset;
+        int32_t space;
+    };
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
@@ -369,23 +391,15 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    static const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                                     Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                                     Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
-
-    typedef struct
-    {
-        uint32_t spriteId;
-        uint32_t duration;
-        int offset;
-        int space;
-    } spellInfo_t;
+    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
     int32_t ow = 0;
     int32_t spritesWidth = 0;
 
-    std::vector<spellInfo_t> spellsInfo;
-    for ( uint32_t mode : modes ) {
+    std::vector<SpellInfo> spellsInfo;
+    for ( const uint32_t mode : modes ) {
         if ( !b.isModes( mode ) )
             continue;
 
@@ -400,18 +414,20 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
             if ( mode >= Battle::SP_BLESS && mode <= Battle::SP_DRAGONSLAYER )
                 offset -= 5;
         }
-        const int space = offset == 2 ? 10 : 5;
+        const int space = ( offset == 2 ) ? 10 : 5;
 
-        const spellInfo_t spell = {mode, duration, offset, space};
-        spellsInfo.push_back( spell );
+        spellsInfo.emplace_back( mode, duration, offset, space );
         ow += sprite.width() + offset + space;
         spritesWidth += sprite.width();
     }
 
+    if ( spellsInfo.empty() )
+        return;
+
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-               []( const spellInfo_t & first, const spellInfo_t & second ) { return first.duration > 0 && first.duration < second.duration; } );
-    if ( !spellsInfo.empty() )
-        ow -= spellsInfo.back().space;
+               []( const SpellInfo & first, const SpellInfo & second ) { return first.duration > 0 && first.duration < second.duration; } );
+
+    ow -= spellsInfo.back().space;
 
     const int maxSpritesWidth = 212;
     const int maxSpriteHeight = 32;
@@ -430,8 +446,8 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
             ow += spell.space;
         }
     }
-    // too many sprites
     else {
+        // Too many spells
         const int widthDiff = maxSpritesWidth - spritesWidth;
         int space = widthDiff / static_cast<int>( spellsInfo.size() - 1 );
         if ( widthDiff > 0 ) {
@@ -442,11 +458,12 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         else {
             ow = dst.x + maxSpritesWidth / 2;
         }
-        for ( auto cri = spellsInfo.crbegin(); cri != spellsInfo.crend(); ++cri ) {
-            const fheroes2::Sprite & sprite = GetModesSprite( cri->spriteId );
+
+        for ( auto spellIt = spellsInfo.crbegin(); spellIt != spellsInfo.crend(); ++spellIt ) {
+            const fheroes2::Sprite & sprite = GetModesSprite( spellIt->spriteId );
             fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
-            if ( cri->duration > 0 ) {
-                text.Set( GetString( cri->duration ), Font::SMALL );
+            if ( spellIt->duration > 0 ) {
+                text.Set( GetString( spellIt->duration ), Font::SMALL );
                 text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
             }
             ow -= sprite.width() + space;
