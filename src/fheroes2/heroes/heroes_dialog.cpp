@@ -338,11 +338,11 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             message = _( "View Stats" );
         else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
             message = _( "View %{morale} Info" );
-            StringReplace( message, "%{morale}", MoraleString( army.GetMorale() ) );
+            StringReplace( message, "%{morale}", fheroes2::MoraleString( army.GetMorale() ) );
         }
         else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
             message = _( "View %{luck} Info" );
-            StringReplace( message, "%{luck}", LuckString( army.GetLuck() ) );
+            StringReplace( message, "%{luck}", fheroes2::LuckString( army.GetLuck() ) );
         }
         else if ( le.MouseCursor( experienceInfo.GetArea() ) )
             message = _( "View Experience Info" );
