@@ -328,12 +328,27 @@ namespace Interface
             return ActionBarLeftMouseSingleClick( item );
         }
 
+        virtual bool ActionBarLeftMouseRelease( Item & ) 
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseRelease( Item &, Item & ) 
+        {
+            return false;
+        }
+
         virtual bool ActionBarRightMouseHold( Item &, Item & )
         {
             return false;
         }
 
         virtual bool ActionBarLeftMouseHold( Item & ) 
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseHold( Item &, Item & ) 
         {
             return false;
         }
@@ -449,6 +464,12 @@ namespace Interface
                         return true;
                     }
                 }
+                else if ( le.MousePressLeft( iterPos.second ) ) {
+                    return ActionBarLeftMouseHold( **iterPos.first );
+                }
+                else if ( le.MouseReleaseLeft( iterPos.second ) ) {
+                    return ActionBarLeftMouseRelease( **iterPos.first );
+                }
                 else if ( le.MouseClickRight( iterPos.second ) ) {
                     return ActionBarRightMouseSingleClick( **iterPos.first );
                 }
@@ -482,6 +503,12 @@ namespace Interface
 
                     other.ResetSelected();
                     return true;
+                }
+                else if ( le.MousePressLeft( iterPos1.second ) ) {
+                    return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+                    return ActionBarLeftMouseRelease( **iterPos1.first, **iterPos2.first );
                 }
                 else if ( le.MouseClickRight( iterPos1.second ) ) {
                     other.ResetSelected();
