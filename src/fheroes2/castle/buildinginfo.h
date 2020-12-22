@@ -74,8 +74,8 @@ public:
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarSingleClick( DwellingItem & ) override;
-    virtual bool ActionBarPressRight( DwellingItem & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( DwellingItem & ) override;
+    virtual bool ActionBarRightMouseHold( DwellingItem & ) override;
 
 protected:
     Castle & castle;

@@ -336,7 +336,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     return false;
 }
 
-bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
+bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
         ArmyTroop * selectedTroop = GetSelectedItem();
@@ -419,7 +419,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
         if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
@@ -460,7 +460,7 @@ bool ArmyBar::ActionBarSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedT
     return false; // reset cursor
 }
 
-bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
+bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     ArmyTroop * troop2 = GetSelectedItem();
 
@@ -497,7 +497,7 @@ bool ArmyBar::ActionBarDoubleClick( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
+bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
     if ( troop.isValid() && rightClickedItem == NULL ) {
         ResetSelected();
@@ -511,7 +511,7 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & /*selectedTroop*/ )
+bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & destTroop, ArmyTroop & /*selectedTroop*/ )
 {
     if ( destTroop.isValid() && rightClickedItem == NULL )
         Dialog::ArmyInfo( destTroop, 0 );
@@ -519,7 +519,7 @@ bool ArmyBar::ActionBarPressRight( ArmyTroop & destTroop, ArmyTroop & /*selected
     return true;
 }
 
-bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & troop )
+bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 {
     // try to redistribute troops if we have a selected troop
     if ( !isSelected() )
@@ -540,7 +540,7 @@ bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarSingleRightClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
     if ( !destTroop.isValid() || destTroop.GetMonster() == selectedTroop.GetMonster() ) {
         ResetSelected();
