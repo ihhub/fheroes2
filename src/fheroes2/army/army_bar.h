@@ -46,11 +46,13 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & ) override;
-    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop &, ArmyTroop & ) override;
-    virtual bool ActionBarLeftMouseDoubleClick( ArmyTroop & ) override;
-    virtual bool ActionBarRightMouseHold( ArmyTroop & ) override;
-    virtual bool ActionBarRightMouseHold( ArmyTroop &, ArmyTroop & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseHold( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
     virtual bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
     virtual bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
     virtual bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
