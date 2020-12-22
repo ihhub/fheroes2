@@ -369,82 +369,87 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+    static const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
                               Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
                               Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
-    // accumulate width
+    typedef struct
+    {
+        uint32_t spriteId;
+        uint32_t duration;
+        int offset;
+        int space;
+    } spellInfo_t;
+
     int32_t ow = 0;
-    int spritesWidth = 0;
-    std::vector<std::tuple<uint32_t, uint32_t, int, int> > spellsInfo; // sprite, duration, text right border, space
-    for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii ) {
-        if ( !b.isModes( modes[ii] ) )
+    int32_t spritesWidth = 0;
+
+    std::vector<spellInfo_t> spellsInfo;
+    for ( uint32_t mode : modes ) {
+        if ( !b.isModes( mode ) )
             continue;
-        const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
+
+        const fheroes2::Sprite & sprite = GetModesSprite( mode );
         if ( sprite.empty() )
             continue;
-        const uint32_t duration = b.GetAffectedDuration( modes[ii] );
-        int textRightOffset = 0;
+
+        const uint32_t duration = b.GetAffectedDuration( mode );
+        int offset = 0;
         if ( duration > 0 ) {
-            textRightOffset = duration >= 10 ? 12 : 7;
-            if ( modes[ii] >= Battle::SP_BLESS && modes[ii] <= Battle::SP_DRAGONSLAYER )
-                textRightOffset -= 5;
+            offset = duration >= 10 ? 12 : 7;
+            if ( mode >= Battle::SP_BLESS && mode <= Battle::SP_DRAGONSLAYER )
+                offset -= 5;
         }
-        int space = textRightOffset == 2 ? 10 : 5;
-        spellsInfo.push_back( std::make_tuple( modes[ii], duration, textRightOffset, space ) );
-        ow += sprite.width() + textRightOffset + space;
+        const int space = offset == 2 ? 10 : 5;
+
+        const spellInfo_t spell = { mode, duration, offset, space };
+        spellsInfo.push_back( spell );
+        ow += sprite.width() + offset + space;
         spritesWidth += sprite.width();
     }
+
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-               []( const std::tuple<uint32_t, uint32_t, int, int> & first, const std::tuple<uint32_t, uint32_t, int, int> & second ) {
-                   return std::get<1>( first ) > 0 && std::get<1>( first ) < std::get<1>( second );
+               []( const spellInfo_t & first, const spellInfo_t & second ) {
+                   return first.duration > 0 && first.duration < second.duration;
                } );
-    if ( spellsInfo.size() )
-        ow -= std::get<3>( spellsInfo.back() );
+    if ( !spellsInfo.empty() )
+        ow -= spellsInfo.back().space;
 
     const int maxSpritesWidth = 212;
+    const int maxSpriteHeight = 32;
+
+    Text text;
     if ( ow <= maxSpritesWidth ) {
         ow = dst.x - ow / 2;
-        Text text;
-
-        // blit centered
-        for ( size_t i = 0; i < spellsInfo.size(); ++i ) {
-            uint32_t spriteId, duration;
-            int offset, space;
-            std::tie( spriteId, duration, offset, space ) = spellsInfo[i];
-            const fheroes2::Sprite & sprite = GetModesSprite( spriteId );
-            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + 32 - sprite.height() );
-
-            if ( duration > 0 ) {
-                text.Set( GetString( duration ), Font::SMALL );
-                ow += sprite.width() + offset;
-                text.Blit( ow - text.w(), dst.y + sprite.height() - text.h() + 1 );
+        for ( const auto & spell : spellsInfo ) {
+            const fheroes2::Sprite & sprite = GetModesSprite( spell.spriteId );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + maxSpriteHeight - sprite.height() );
+            if ( spell.duration > 0 ) {
+                text.Set( GetString( spell.duration ), Font::SMALL );
+                ow += sprite.width() + spell.offset;
+                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
             }
-
-            ow += space;
+            ow += spell.space;
         }
     }
     // too many sprites
     else {
         const int widthDiff = maxSpritesWidth - spritesWidth;
-        int space = widthDiff / spellsInfo.size();
+        int space = widthDiff / static_cast<int>( spellsInfo.size() - 1 );
         if ( widthDiff > 0 ) {
             if ( space > 10 )
                 space = 10;
             ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
         }
-        else
+        else {
             ow = dst.x + maxSpritesWidth / 2;
-
-        Text text;
+        }
         for ( auto cri = spellsInfo.crbegin(); cri != spellsInfo.crend(); ++cri ) {
-            uint32_t spriteId, duration;
-            std::tie( spriteId, duration, std::ignore, std::ignore ) = *cri;
-            const fheroes2::Sprite & sprite = GetModesSprite( spriteId );
-            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + 32 - sprite.height() );
-            if ( duration > 0 ) {
-                text.Set( GetString( duration ), Font::SMALL );
-                text.Blit( ow - text.w(), dst.y );
+            const fheroes2::Sprite & sprite = GetModesSprite( cri->spriteId );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
+            if ( cri->duration > 0 ) {
+                text.Set( GetString( cri->duration ), Font::SMALL );
+                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1);
             }
             ow -= sprite.width() + space;
         }
