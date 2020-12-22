@@ -30,48 +30,51 @@
 #include "morale.h"
 #include "text.h"
 
-const char * MoraleString( int morale )
+namespace fheroes2
 {
-    switch ( morale ) {
-    case Morale::TREASON:
-    case Morale::AWFUL:
-    case Morale::POOR:
-        return _( "Bad Morale" );
+    const char * MoraleString( const int morale )
+    {
+        switch ( morale ) {
+        case Morale::TREASON:
+        case Morale::AWFUL:
+        case Morale::POOR:
+            return _( "Bad Morale" );
 
-    case Morale::NORMAL:
-        return _( "Neutral Morale" );
+        case Morale::NORMAL:
+            return _( "Neutral Morale" );
 
-    case Morale::GOOD:
-    case Morale::GREAT:
-    case Morale::BLOOD:
-        return _( "Good Morale" );
+        case Morale::GOOD:
+        case Morale::GREAT:
+        case Morale::BLOOD:
+            return _( "Good Morale" );
 
-    default:
-        break;
+        default:
+            break;
+        }
+        return NULL;
     }
-    return NULL;
-}
 
-const char * LuckString( int luck )
-{
-    switch ( luck ) {
-    case Luck::CURSED:
-    case Luck::AWFUL:
-    case Luck::BAD:
-        return _( "Bad Luck" );
+    const char * LuckString( const int luck )
+    {
+        switch ( luck ) {
+        case Luck::CURSED:
+        case Luck::AWFUL:
+        case Luck::BAD:
+            return _( "Bad Luck" );
 
-    case Luck::NORMAL:
-        return _( "Neutral Luck" );
+        case Luck::NORMAL:
+            return _( "Neutral Luck" );
 
-    case Luck::GOOD:
-    case Luck::GREAT:
-    case Luck::IRISH:
-        return _( "Good Luck" );
+        case Luck::GOOD:
+        case Luck::GREAT:
+        case Luck::IRISH:
+            return _( "Good Luck" );
 
-    default:
-        break;
+        default:
+            break;
+        }
+        return NULL;
     }
-    return NULL;
 }
 
 HeroesIndicator::HeroesIndicator( const Heroes * h )
@@ -149,9 +152,9 @@ void LuckIndicator::QueueEventProcessing( LuckIndicator & indicator )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( LuckString( indicator.luck ), indicator.descriptions, Font::BIG, Dialog::OK );
+        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
+        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
 }
 
 MoraleIndicator::MoraleIndicator( const Heroes * h )
@@ -205,9 +208,9 @@ void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( MoraleString( indicator.morale ), indicator.descriptions, Font::BIG, Dialog::OK );
+        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
+        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
 }
 
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
