@@ -27,8 +27,11 @@
 
 #include "gamedefs.h"
 
-const char * LuckString( int luck );
-const char * MoraleString( int morale );
+namespace fheroes2
+{
+    const char * LuckString( const int luck );
+    const char * MoraleString( const int morale );
+}
 
 class Heroes;
 
