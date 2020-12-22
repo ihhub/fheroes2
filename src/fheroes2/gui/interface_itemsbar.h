@@ -289,8 +289,6 @@ namespace Interface
 
         ItemsIterator topItem;
         ItemIterPos curItemPos;
-        Item * leftClickedItem;
-        Item * rightClickedItem;
 
     public:
         ItemsActionBar()
@@ -403,8 +401,6 @@ namespace Interface
         {
             topItem = ItemsBar<Item>::GetBeginItemIter();
             curItemPos = ItemIterPos( ItemsBar<Item>::items.end(), Rect() );
-            leftClickedItem = NULL;
-            rightClickedItem = NULL;
         }
 
         bool QueueEventProcessing( void )
@@ -419,6 +415,7 @@ namespace Interface
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
                 return false;
 
+            //return ActionCursorItemIter( cursor, other );
             return other.isSelected() ? ActionCursorItemIter( cursor, other ) : ActionCursorItemIter( cursor, ItemsBar<Item>::GetItemIterPos( cursor ) );
         }
 
@@ -515,12 +512,9 @@ namespace Interface
                     return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
                 }
                 else if ( le.MousePressRight( iterPos1.second ) ) {
-                    if ( rightClickedItem == NULL && other.rightClickedItem != NULL )
-                        rightClickedItem = other.rightClickedItem;
                     return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
                 }
                 else if ( le.MouseReleaseRight( iterPos1.second ) ) {
-                    other.rightClickedItem = NULL;
                     return ActionBarRightMouseRelease( **iterPos1.first, **iterPos2.first );
                 }
             }
