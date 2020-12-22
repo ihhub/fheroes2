@@ -1,4 +1,7 @@
 version 0.8.4 (23 December 2020)
+- add extra info in first game message about F4 key
+- fix moral and luck indicator messages
+- fix elements' layout at monster info dialog
 - disable monster attack using Dimension Door
 - remove click area around "exit" button in castle dialog
 - make elements gray for inactive game settings
