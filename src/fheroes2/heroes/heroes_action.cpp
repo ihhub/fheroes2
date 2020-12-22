@@ -2487,46 +2487,62 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     if ( !mons.empty() ) {
         // composite sprite
-        u32 offsetX = 0;
+        uint32_t offsetX = 0;
+        uint32_t offsetY = 0;
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
         const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
-        fheroes2::Image surface( border.width() * monsterCount + ( monsterCount - 1 ) * 4, border.height() );
+
+        const int32_t monsterPerX = monsterCount > 1 ? 2 : 1;
+        const int32_t monsterPerY = monsterCount == 1 ? 1 : ( monsterCount + ( monsterCount - 1 ) ) / 2;
+
+        fheroes2::Image surface( border.width() * monsterPerX + ( monsterPerX - 1 ) * 4, border.height() * monsterPerY + ( monsterPerY - 1 ) * 4 );
         surface.reset();
 
         StringReplace( msg1, "%{monsters}", monsters );
         StringReplace( msg1, "%{monsters2}", monsters_upgrade );
 
-        for ( std::vector<Monster *>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
+        for ( size_t i = 0; i < mons.size(); ++i ) {
+            if ( i > 0 && ( i & 1 ) == 0 ) {
+                if ( i == mons.size() - 1 ) {
+                    offsetX = border.width() / 2 + 2;
+                }
+                else {
+                    offsetX = 0;
+                }
+                offsetY += border.height() + 4;
+            }
+
             // border
-            fheroes2::Blit( border, surface, offsetX, 0 );
+            fheroes2::Blit( border, surface, offsetX, offsetY );
             // background scenary for each race
-            switch ( ( *it )->GetRace() ) {
+            switch ( mons[i]->GetRace() ) {
             case Race::KNGT:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::BARB:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::SORC:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::WRLK:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::WZRD:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::NECR:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             default:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             }
             // upgraded troop
-            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it )->GetUpgrade().ICNMonh(), 0 );
-            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() );
+            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( mons[i]->GetUpgrade().ICNMonh(), 0 );
+
+            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
@@ -3056,7 +3072,14 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetMapsObject( MP2::OBJ_ZERO );
         AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_HEROES );
+        // TODO: fix pathfinding
+        if ( tile.GetIndex() == hero.GetIndex() ) {
+            tile.SetObject( MP2::OBJ_HEROES );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+            hero.SetMapsObject( MP2::OBJ_HEROES );
+        }
     }
     else {
         Dialog::Message(

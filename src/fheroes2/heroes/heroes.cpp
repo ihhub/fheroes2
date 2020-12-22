@@ -613,7 +613,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = 1500;
 
         // skill navigation
-        point += point * GetSecondaryValues( Skill::Secondary::NAVIGATION ) / 100;
+        point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
         acount = HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY );
@@ -654,7 +654,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             }
 
         // skill logistics
-        point += point * GetSecondaryValues( Skill::Secondary::LOGISTICS ) / 100;
+        point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
         acount = HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY );
@@ -1350,6 +1350,24 @@ int Heroes::GetScoute( void ) const
 
     return ( acount ? acount * Game::GetViewDistance( Game::VIEW_TELESCOPE ) : 0 ) + Game::GetViewDistance( Game::VIEW_HEROES )
            + GetSecondaryValues( Skill::Secondary::SCOUTING );
+}
+
+uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
+{
+    const int level = GetLevelSkill( skill );
+    if ( level == Skill::Level::NONE )
+        return movePoints;
+
+    const uint32_t skillValue = GetSecondaryValues( skill );
+
+    if ( skillValue == 33 ) {
+        return movePoints * 4 / 3;
+    }
+    else if ( skillValue == 66 ) {
+        return movePoints * 5 / 3;
+    }
+
+    return movePoints + skillValue * movePoints / 100;
 }
 
 u32 Heroes::GetVisionsDistance( void ) const

@@ -369,6 +369,9 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
     fheroes2::Blit( panel, display, rt.x, rt.y );
 
+    // Redraw select button as the original image has a wrong position of it
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
+
     // text scenario
     Text text( _( "Scenario:" ), Font::BIG );
     text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 23 );

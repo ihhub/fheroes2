@@ -48,6 +48,8 @@
 
 namespace
 {
+    const int32_t cellYOffset = -9;
+
     struct LightningPoint
     {
         explicit LightningPoint( const Point & p = Point(), uint32_t thick = 1 )
@@ -1225,15 +1227,31 @@ void Battle::Interface::RedrawOpponentsFlags( void )
     }
 }
 
-fheroes2::Point GetTroopPosition( const Battle::Unit & b, const fheroes2::Sprite & sprite )
+fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Sprite & sprite )
 {
-    const Rect & rt = b.GetRectPosition();
+    const Rect & rt = unit.GetRectPosition();
 
-    const s32 sx
-        = b.isReflect() ? rt.x + ( b.isWide() ? rt.w / 2 + rt.w / 4 : rt.w / 2 ) - sprite.width() - sprite.x() : rt.x + ( b.isWide() ? rt.w / 4 : rt.w / 2 ) + sprite.x();
-    const s32 sy = rt.y + rt.h + sprite.y() - 10;
+    int32_t offsetX = 0;
+    if ( unit.isReflect() ) {
+        if ( unit.isWide() ) {
+            offsetX = rt.x + ( rt.w / 2 + rt.w / 4 ) - sprite.width() - sprite.x() + 1;
+        }
+        else {
+            offsetX = rt.x + ( rt.w / 2 ) - sprite.width() - sprite.x() + 1;
+        }
+    }
+    else {
+        if ( unit.isWide() ) {
+            offsetX = rt.x + ( rt.w / 4 ) + sprite.x();
+        }
+        else {
+            offsetX = rt.x + ( rt.w / 2 ) + sprite.x();
+        }
+    }
 
-    return fheroes2::Point( sx, sy );
+    const int32_t offsetY = rt.y + rt.h + sprite.y() + cellYOffset;
+
+    return fheroes2::Point( offsetX, offsetY );
 }
 
 void Battle::Interface::RedrawTroopSprite( const Unit & b )
@@ -1323,7 +1341,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
 
     s32 sx = rt.x + ( isReflected ? -7 : rt.w - 13 );
-    const s32 sy = rt.y + rt.h - bar.height() - ( isReflected ? 23 : 11 );
+    const s32 sy = rt.y + rt.h - bar.height() - ( isReflected ? 21 : 9 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
@@ -1459,7 +1477,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
     if ( 77 == cell_index ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
         const Rect & pos = Board::GetCell( cell_index )->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h - 10 );
+        fheroes2::Blit( sprite, _mainSurface, sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h + cellYOffset );
     }
     else
         // castle gate
@@ -1594,7 +1612,7 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index )
 
     if ( !sprite.empty() ) {
         const Rect & pt = cell->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() - 10 );
+        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() + cellYOffset );
     }
 }
 
@@ -1695,7 +1713,7 @@ void Battle::Interface::RedrawHighObjects( s32 cell_index )
     if ( !sprite.empty() ) {
         // const Point & topleft = border.GetArea();
         const Rect & pt = cell->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() - 10 );
+        fheroes2::Blit( sprite, _mainSurface, pt.x + pt.w / 2 + sprite.x(), pt.y + pt.h + sprite.y() + cellYOffset );
     }
 }
 
@@ -2923,7 +2941,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     // Take off animation is 30% length on average (original value)
-    AnimateUnitWithDelay( unit, frameDelay * 0.3 );
+    AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
 
     _movingUnit = NULL;
     _flyingUnit = &unit;
@@ -3271,7 +3289,7 @@ void Battle::Interface::RedrawActionLuck( Unit & unit )
     }
     else {
         const int maxHeight = fheroes2::AGG::GetAbsoluteICNHeight( ICN::CLOUDLUK );
-        int y = pos.y + pos.h - 10;
+        int y = pos.y + pos.h + cellYOffset;
 
         // move drawing position if it will clip outside of the battle window
         if ( y - maxHeight < 0 )
@@ -4257,7 +4275,7 @@ fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellIC
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
 
     // Bottom-left corner (default) position with spell offset applied
-    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.h - 10 + spellSprite.y() );
+    fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.h + cellYOffset + spellSprite.y() );
 
     switch ( spellICN ) {
     case ICN::SHIELD:

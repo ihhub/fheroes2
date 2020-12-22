@@ -82,6 +82,8 @@ int Game::StartGame( void )
     cursor.Hide();
     AGG::ResetMixer();
 
+    Interface::Basic::Get().Reset();
+
     return Interface::Basic::Get().StartGame();
 }
 
@@ -1017,7 +1019,12 @@ int Interface::Basic::HumanTurn( bool isload )
                     fadeInfo.object = MP2::OBJ_ZERO;
                 }
                 else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
-                    world.GetTiles( fadeInfo.tile ).SetObject( fadeInfo.object );
+                    Maps::Tiles & objectTile = world.GetTiles( fadeInfo.tile );
+                    objectTile.SetObject( fadeInfo.object );
+                    // TODO: we need to expand the logic to all objects.
+                    if ( fadeInfo.object == MP2::OBJ_BOAT ) {
+                        objectTile.SetObjectSpriteIndex( fadeInfo.index );
+                    }
                     fadeInfo.object = MP2::OBJ_ZERO;
                 }
                 else {

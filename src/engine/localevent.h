@@ -242,7 +242,7 @@ public:
 
     bool KeyHold() const
     {
-        return modes & KEY_HOLD;
+        return ( modes & KEY_HOLD ) != 0;
     }
 
     KeySym KeyValue( void ) const;
