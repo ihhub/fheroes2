@@ -370,8 +370,8 @@ fheroes2::Sprite GetModesSprite( u32 mod )
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
     static const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
+                                     Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                                     Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
     typedef struct
     {
@@ -402,16 +402,14 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         }
         const int space = offset == 2 ? 10 : 5;
 
-        const spellInfo_t spell = { mode, duration, offset, space };
+        const spellInfo_t spell = {mode, duration, offset, space};
         spellsInfo.push_back( spell );
         ow += sprite.width() + offset + space;
         spritesWidth += sprite.width();
     }
 
     std::sort( spellsInfo.begin(), spellsInfo.end(),
-               []( const spellInfo_t & first, const spellInfo_t & second ) {
-                   return first.duration > 0 && first.duration < second.duration;
-               } );
+               []( const spellInfo_t & first, const spellInfo_t & second ) { return first.duration > 0 && first.duration < second.duration; } );
     if ( !spellsInfo.empty() )
         ow -= spellsInfo.back().space;
 
@@ -449,7 +447,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
             fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
             if ( cri->duration > 0 ) {
                 text.Set( GetString( cri->duration ), Font::SMALL );
-                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1);
+                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
             }
             ow -= sprite.width() + space;
         }
