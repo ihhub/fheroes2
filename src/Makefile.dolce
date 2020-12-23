@@ -1,9 +1,9 @@
-AR := $(DOLCESDK)/arm-dolce-eabi/bin/ar
+AR := arm-dolce-eabi-gcc-ar
 CC := arm-dolce-eabi-gcc
 CXX := arm-dolce-eabi-g++
 
-CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize
-LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib -Wl,-q
+CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -flto=jobserver 
+LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib -Wl,-q -Wl,-flto 
 
 ifdef WITH_SDL2
 SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lvita2d -lpib -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \

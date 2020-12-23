@@ -54,6 +54,22 @@
 #define be32toh( x ) OSSwapBigToHostInt32( x )
 #define le32toh( x ) OSSwapLittleToHostInt32( x )
 
+#elif defined( VITA )
+#include "SDL_endian.h"
+
+#define BIG_ENDIAN 4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
+
+#define htobe16( x ) SDL_Swap16( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) SDL_Swap16( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) SDL_Swap32( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) SDL_Swap32( x )
+#define le32toh( x ) ( x )
+
 #else
 #error "Unsupported platform"
 #endif
