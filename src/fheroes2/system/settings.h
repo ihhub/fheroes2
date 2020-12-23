@@ -437,6 +437,7 @@ private:
     int ai_speed;
     int scroll_speed;
     int battle_speed;
+
     int game_type;
     int preferably_count_players;
 

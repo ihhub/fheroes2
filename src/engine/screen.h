@@ -53,10 +53,7 @@ namespace fheroes2
         virtual void setIcon( const Image & ) {}
 
 #ifdef VITA
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-        virtual void SetVitaKeepAspectRatio( bool keepAspect ) {}
-#pragma GCC diagnostic pop
+        virtual void SetVitaKeepAspectRatio( bool ) {}
         virtual bool GetVitaKeepAspectRatio() const
         {
             return false;

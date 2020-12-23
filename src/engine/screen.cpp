@@ -480,7 +480,6 @@ namespace
             }
 
             _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
-
             if ( _surface == NULL ) {
                 clear();
                 return false;

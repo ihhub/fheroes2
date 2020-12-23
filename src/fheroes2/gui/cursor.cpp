@@ -36,7 +36,9 @@ Cursor::Cursor()
     , offset_y( 0 )
 {}
 
-Cursor::~Cursor() {}
+Cursor::~Cursor()
+{
+}
 
 Cursor & Cursor::Get( void )
 {

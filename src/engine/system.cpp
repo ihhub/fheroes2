@@ -35,8 +35,8 @@
 #include <SDL.h>
 
 #if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
-#include <shellapi.h>
 #include <windows.h>
+#include <shellapi.h>
 #endif
 
 #if !defined( __MINGW32CE__ ) && !defined( _MSC_VER )
@@ -323,7 +323,7 @@ std::string System::GetTime( void )
 {
     time_t raw;
     struct tm * tmi;
-    char buf[13] = { 0 };
+    char buf[13] = {0};
 
     std::time( &raw );
     tmi = std::localtime( &raw );
@@ -385,7 +385,7 @@ int System::Unlink( const std::string & file )
 int System::CreateTrayIcon( bool fl )
 {
 #if defined( __MINGW32CE__ ) && defined( ID_ICON )
-    NOTIFYICONDATA nid = { 0 };
+    NOTIFYICONDATA nid = {0};
     nid.cbSize = sizeof( nid );
     nid.uID = ID_ICON;
     nid.hWnd = SDL_Window;

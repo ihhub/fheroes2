@@ -386,7 +386,7 @@ const settings_t settingsFHeroes2[] = {
         _( "pocketpc: drag&drop gamearea as scroll" ),
     },
 
-    { 0, NULL },
+    {0, NULL},
 };
 
 std::string Settings::GetVersion( void )
