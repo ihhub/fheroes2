@@ -1,4 +1,5 @@
 version 0.8.4 (23 December 2020)
+- speed up sprites allocation and deallocation (noticeable for low-profile devices)
 - add extra info in first game message about F4 key
 - fix moral and luck indicator messages
 - fix elements' layout at monster info dialog
