@@ -459,28 +459,6 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop ) 
 {
-    /*LocalEvent & le = LocalEvent::Get();
-    ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
-
-    if ( !destTroop.isValid() && troopPress && troopPress->isValid() ) {
-        while ( le.HandleEvents() && le.MousePressLeft() ) {
-            Cursor::Get().Show();
-            fheroes2::Display::instance().render();
-            DELAY( 1 );
-        };
-        ArmyTroop * troopRelease = GetItem( le.GetMouseReleaseLeft() );
-
-        if ( troopRelease && !troopRelease->isValid() ) {
-            RedistributeArmy( *troopPress, *troopRelease );
-            if ( isSelected() )
-                ResetSelected();
-            le.ResetPressLeft();
-            return true;
-        }
-
-        le.ResetPressLeft();
-    }*/
-
     // drag drop - redistribute troops
     LocalEvent & le = LocalEvent::Get();
     ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
@@ -496,19 +474,10 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) 
+bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ ) 
 {
-    // drag drop - redistribute troops
-    LocalEvent & le = LocalEvent::Get();
-    ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
-
-    if ( !destTroop.isValid() && troopPress && troopPress->isValid() ) {
-        RedistributeArmy( *troopPress, destTroop );
-        le.ResetPressLeft();
-
-        if ( isSelected() )
-            ResetSelected();
-    }
+    if ( isSelected() )
+        ResetSelected();
 
     return true;
 }

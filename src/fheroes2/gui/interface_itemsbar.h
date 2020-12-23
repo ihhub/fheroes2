@@ -415,7 +415,6 @@ namespace Interface
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
                 return false;
 
-            //return ActionCursorItemIter( cursor, other );
             return other.isSelected() ? ActionCursorItemIter( cursor, other ) : ActionCursorItemIter( cursor, ItemsBar<Item>::GetItemIterPos( cursor ) );
         }
 
