@@ -326,12 +326,12 @@ namespace Interface
             return ActionBarLeftMouseSingleClick( item );
         }
 
-        virtual bool ActionBarLeftMouseRelease( Item & ) 
+        virtual bool ActionBarLeftMouseRelease( Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarLeftMouseRelease( Item &, Item & ) 
+        virtual bool ActionBarLeftMouseRelease( Item &, Item & )
         {
             return false;
         }
@@ -341,12 +341,12 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( Item & ) 
+        virtual bool ActionBarLeftMouseHold( Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarLeftMouseHold( Item &, Item & ) 
+        virtual bool ActionBarLeftMouseHold( Item &, Item & )
         {
             return false;
         }

@@ -31,7 +31,7 @@
 #include "text.h"
 #include "world.h"
 
-void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */, std::function<void()> const& onSwap = NULL )
+void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */, std::function<void()> const & onSwap = NULL )
 {
     const Army * army1 = troop1.GetArmy();
     const Army * army2 = troop2.GetArmy();
@@ -457,7 +457,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop ) 
+bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 {
     // drag drop - redistribute troops
     LocalEvent & le = LocalEvent::Get();
@@ -474,7 +474,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ ) 
+bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ )
 {
     if ( isSelected() )
         ResetSelected();
