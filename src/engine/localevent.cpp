@@ -513,8 +513,8 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     ResetModes( MOUSE_MOTION );
 #ifdef WITH_GAMEPAD
-    //fast map scroll with dpad
-    if (!dpadScrollActive || dpadInputActive)
+    // fast map scroll with dpad
+    if ( !dpadScrollActive || dpadInputActive )
         ResetModes( KEY_PRESSED );
 #else
     ResetModes( KEY_PRESSED );
@@ -834,7 +834,7 @@ void LocalEvent::HandleJoyButtonEvent( const SDL_ControllerButtonEvent & button 
         else {
             dpadScrollActive = false;
         }
-        
+
         if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
             key_value = KEY_SHIFT;
         }

@@ -71,7 +71,7 @@ bool SDL::Init( const u32 system )
 #endif
 
 #ifdef VITA
-    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+    SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
 
     System::CreateTrayIcon( true );

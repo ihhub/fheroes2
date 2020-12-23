@@ -971,7 +971,7 @@ namespace
             memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
             palettedTexturePointer = (uint8_t *)vita2d_texture_get_datap( texBuffer );
             SDL_memset( palettedTexturePointer, '\0', width_ * height_ * sizeof( uint8_t ) );
-            //linkRenderSurface( palettedTexturePointer );
+            // linkRenderSurface( palettedTexturePointer );
 
             // screen scaling calculation
             destRect.x = 0;
