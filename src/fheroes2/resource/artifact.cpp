@@ -1018,7 +1018,7 @@ bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
             payment_t cost = spell.GetCost();
             u32 answer = 0;
             std::string text = _(
-                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your spell book?\nThe Scroll will be consumed.\n Spell point: %{sp}" );
+                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell point: %{sp}" );
 
             StringReplace( text, "%{spell}", spell.GetName() );
             StringReplace( text, "%{sp}", spell.SpellPoint() );
@@ -1029,10 +1029,12 @@ bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
                 StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
+            const std::string title = _( "Transcribe Spell Scroll" );
+
             if ( cost.GetValidItemsCount() )
-                answer = Dialog::ResourceInfo( "", text, cost, Dialog::YES | Dialog::NO );
+                answer = Dialog::ResourceInfo( title, text, cost, Dialog::YES | Dialog::NO );
             else
-                answer = Dialog::Message( "", text, Font::BIG, Dialog::YES | Dialog::NO );
+                answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
 
             if ( answer == Dialog::YES )
                 const_cast<Heroes *>( hero )->TranscribeScroll( art );
@@ -1078,9 +1080,9 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )
-                msg = _( "Open book" );
+                msg = _( "View Spells" );
             else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) )
-                msg = _( "Transcribe scroll" );
+                msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
                 StringReplace( msg, "%{name}", art.GetName() );

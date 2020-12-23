@@ -220,13 +220,6 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
     return res;
 }
 
-std::string Skill::Primary::StringSkills( const std::string & sep ) const
-{
-    std::ostringstream os;
-    os << GetString( attack ) << sep << GetString( defense ) << sep << GetString( knowledge ) << sep << GetString( power );
-    return os.str();
-}
-
 const char * Skill::Level::String( int level )
 {
     const char * str_level[] = {"None", _( "skill|Basic" ), _( "skill|Advanced" ), _( "skill|Expert" )};
@@ -731,17 +724,6 @@ int Skill::SecondaryGetWeightSkillFromRace( int race, int skill )
 
     return 0;
 }
-
-/*
-std::vector<int> Skill::SecondarySkills(void)
-{
-    const int vals[] = { Secondary::PATHFINDING, Secondary::ARCHERY, Secondary::LOGISTICS, Secondary::SCOUTING,
-            Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP, Secondary::WISDOM, Secondary::MYSTICISM,
-            Secondary::LUCK, Secondary::BALLISTICS, Secondary::EAGLEEYE, Secondary::NECROMANCY, Secondary::ESTATES };
-
-    return std::vector<int>(vals, ARRAY_COUNT_END(vals));
-}
-*/
 
 int Skill::SecondaryPriorityFromRace( int race, const std::vector<int> & exclude )
 {

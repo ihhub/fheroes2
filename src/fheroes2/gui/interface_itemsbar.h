@@ -26,8 +26,8 @@
 #include <algorithm>
 #include <utility>
 
+#include "gamedefs.h"
 #include "screen.h"
-#include "splitter.h"
 #include "ui_button.h"
 
 namespace Interface
@@ -456,21 +456,6 @@ namespace Interface
 
             return false;
         }
-    };
-}
-
-namespace Interface
-{
-    template <class Item>
-    class ItemsScroll : public ItemsActionBar<Item>
-    {
-    protected:
-        fheroes2::Button buttonPgUp;
-        fheroes2::Button buttonPgDn;
-        Splitter splitterIndicator;
-
-    public:
-        ItemsScroll() {}
     };
 }
 

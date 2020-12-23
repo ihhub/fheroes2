@@ -26,8 +26,8 @@
 #include <algorithm>
 
 #include "cursor.h"
-#include "splitter.h"
 #include "ui_button.h"
+#include "ui_scrollbar.h"
 
 namespace Interface
 {
@@ -99,15 +99,15 @@ namespace Interface
             buttonPgDn.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollSplitter( const fheroes2::Image & image, const fheroes2::Rect & area )
+        void SetScrollBar( const fheroes2::Image & image, const fheroes2::Rect & area )
         {
-            splitter.SetArea( area );
-            splitter.SetSprite( image );
+            _scrollbar.setArea( area );
+            _scrollbar.setImage( image );
         }
 
-        Splitter & GetSplitter( void )
+        fheroes2::Scrollbar & GetScrollbar( void )
         {
-            return splitter;
+            return _scrollbar;
         }
 
         void SetAreaMaxItems( int maxValue )
@@ -135,20 +135,17 @@ namespace Interface
             if ( content == NULL || content->empty() ) { // empty content. Must be non-initialized array
                 _currentId = -1;
                 _topId = -1;
-                splitter.SetRange( 0, 0 );
-                splitter.MoveCenter();
+                _scrollbar.setRange( 0, 0 );
             }
             else {
                 _currentId = -1; // no selection
                 _topId = 0;
 
                 if ( maxItems < _size() ) {
-                    splitter.MoveIndex( 0 );
-                    splitter.SetRange( 0, _size() - maxItems );
+                    _scrollbar.setRange( 0, _size() - maxItems );
                 }
                 else {
-                    splitter.MoveCenter();
-                    splitter.SetRange( 0, 0 );
+                    _scrollbar.setRange( 0, 0 );
                 }
             }
         }
@@ -166,7 +163,7 @@ namespace Interface
 
             buttonPgUp.draw();
             buttonPgDn.draw();
-            splitter.RedrawCursor();
+            _scrollbar.redraw();
 
             Verify(); // reset values if they are wrong
 
@@ -225,18 +222,15 @@ namespace Interface
             }
 
             if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
-                if ( _currentId + maxItems < _size() ) {
-                    _topId = ( _currentId / maxItems ) * maxItems;
+                if ( _topId > _currentId ) { // scroll up, put current id on top
+                    _topId = _currentId;
                 }
-                else if ( maxItems < _size() ) {
-                    _topId = _size() - maxItems;
-                }
-                else {
-                    _topId = 0;
+                else if ( _topId + maxItems <= _currentId ) { // scroll down, put current id at bottom
+                    _topId = _currentId + 1 - maxItems;
                 }
 
-                UpdateSplitterRange();
-                splitter.MoveIndex( _topId );
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
             }
         }
 
@@ -287,8 +281,8 @@ namespace Interface
                 else
                     _topId = 0;
 
-                UpdateSplitterRange();
-                splitter.MoveIndex( _topId );
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( _topId + maxItems < _size() ) ) {
@@ -297,8 +291,8 @@ namespace Interface
                 if ( _topId + maxItems >= _size() )
                     _topId = _size() - maxItems;
 
-                UpdateSplitterRange();
-                splitter.MoveIndex( _topId );
+                UpdateScrollbarRange();
+                _scrollbar.moveToIndex( _topId );
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( _currentId > 0 ) ) {
@@ -315,28 +309,26 @@ namespace Interface
                 ActionCurrentDn();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( splitter.GetRect() ) ) && ( _topId > 0 ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) ) && ( _topId > 0 ) ) {
                 cursor.Hide();
                 --_topId;
-                splitter.Backward();
+                _scrollbar.backward();
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( splitter.GetRect() ) )
+            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
                       && ( _topId + maxItems < _size() ) ) {
                 cursor.Hide();
                 ++_topId;
-                splitter.Forward();
+                _scrollbar.forward();
                 return true;
             }
-            else if ( le.MousePressLeft( splitter.GetRect() ) && ( _size() > maxItems ) ) {
+            else if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                 cursor.Hide();
-                UpdateSplitterRange();
-                _topId = ( le.GetMouseCursor().y - splitter.GetRect().y ) * 100 / splitter.GetStep();
-                if ( _topId < splitter.Min() )
-                    _topId = splitter.Min();
-                else if ( _topId > splitter.Max() )
-                    _topId = splitter.Max();
-                splitter.MoveIndex( _topId );
+                UpdateScrollbarRange();
+
+                const Point & mousePos = le.GetMouseCursor();
+                _scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
+                _topId = _scrollbar.currentIndex();
                 return true;
             }
 
@@ -381,7 +373,7 @@ namespace Interface
         fheroes2::Button buttonPgUp;
         fheroes2::Button buttonPgDn;
 
-        Splitter splitter;
+        fheroes2::Scrollbar _scrollbar;
 
         int VisibleItemCount() const
         {
@@ -417,11 +409,11 @@ namespace Interface
             return content == NULL ? 0 : static_cast<int>( content->size() );
         }
 
-        void UpdateSplitterRange( void )
+        void UpdateScrollbarRange()
         {
             const int maxValue = ( content != NULL && maxItems < _size() ) ? static_cast<int>( _size() - maxItems ) : 0;
-            if ( splitter.Max() != maxValue )
-                splitter.SetRange( 0, maxValue );
+            if ( _scrollbar.maxIndex() != maxValue )
+                _scrollbar.setRange( 0, maxValue );
         }
     };
 }

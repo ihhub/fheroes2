@@ -20,42 +20,54 @@
 
 #pragma once
 
-#include "players.h"
+#include "ui_tool.h"
 
-namespace Interface
+namespace fheroes2
 {
-    struct PlayerInfo
+    class Scrollbar : public fheroes2::MovableSprite
     {
-        PlayerInfo()
-            : player( NULL )
-        {}
+    public:
+        Scrollbar();
+        Scrollbar( const Image & image, const Rect & area );
 
-        bool operator==( const Player * ) const;
+        virtual ~Scrollbar();
 
-        Player * player;
-        Rect rect1; // opponent
-        Rect rect2; // class
-        Rect rect3; // change
-    };
+        void setImage( const Image & image );
+        void setArea( const Rect & area );
+        void setRange( const int minIndex, const int maxIndex );
 
-    struct PlayersInfo : std::vector<PlayerInfo>
-    {
-        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
+        void forward();
+        void backward();
 
-        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+        void moveToIndex( const int indexId );
+        void moveToPos( const Point & position );
 
-        Player * GetFromOpponentClick( const Point & pt );
-        Player * GetFromOpponentNameClick( const Point & pt );
-        Player * GetFromOpponentChangeClick( const Point & pt );
-        Player * GetFromClassClick( const Point & pt );
+        int currentIndex() const
+        {
+            return _currentIndex;
+        }
 
-        void RedrawInfo( bool show_play_info = false ) const;
-        void resetSelection();
-        bool QueueEventProcessing( void );
+        int minIndex() const
+        {
+            return _minIndex;
+        }
 
-        bool show_name;
-        bool show_race;
-        bool show_swap;
-        Player * currentSelectedPlayer;
+        int maxIndex() const
+        {
+            return _maxIndex;
+        }
+
+        const Rect & getArea() const
+        {
+            return _area;
+        }
+
+    private:
+        fheroes2::Rect _area;
+        int _minIndex;
+        int _maxIndex;
+        int _currentIndex;
+
+        bool _isVertical() const;
     };
 }

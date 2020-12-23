@@ -84,17 +84,26 @@ int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
-                    strs->append( _( "Graveyard robber" ) );
-                }
-                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
-                    strs->append( _( "Shipwreck robber" ) );
-                }
-                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
-                    strs->append( _( "Pyramid raided" ) );
-                }
-                else {
-                    strs->append( MP2::StringObject( objs[ii] ) );
+                switch ( objs[ii] ) {
+                case MP2::OBJ_GRAVEYARD:
+                case MP2::OBJN_GRAVEYARD:
+                case MP2::OBJ_SHIPWRECK:
+                case MP2::OBJN_SHIPWRECK:
+                case MP2::OBJ_DERELICTSHIP:
+                case MP2::OBJN_DERELICTSHIP: {
+                    std::string modRobber = _( "%{object} robber" );
+                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRobber );
+                } break;
+                case MP2::OBJ_PYRAMID:
+                case MP2::OBJN_PYRAMID: {
+                    std::string modRaided = _( "%{object} raided" );
+                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRaided );
+                } break;
+                default:
+                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
+                    break;
                 }
 
                 StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
@@ -613,7 +622,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = 1500;
 
         // skill navigation
-        point += point * GetSecondaryValues( Skill::Secondary::NAVIGATION ) / 100;
+        point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
         acount = HasArtifact( Artifact::SAILORS_ASTROLABE_MOBILITY );
@@ -654,7 +663,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
             }
 
         // skill logistics
-        point += point * GetSecondaryValues( Skill::Secondary::LOGISTICS ) / 100;
+        point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
         acount = HasArtifact( Artifact::NOMAD_BOOTS_MOBILITY );
@@ -688,9 +697,6 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
-    if ( army.AllTroopsAreUndead() )
-        return Morale::NORMAL;
-
     int result = Morale::NORMAL;
 
     // bonus artifact
@@ -922,7 +928,7 @@ Castle * Heroes::inCastle( void )
 /* is visited cell */
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
-    const s32 & index = tile.GetIndex();
+    const int32_t index = tile.GetIndex();
     int object = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
@@ -1352,6 +1358,24 @@ int Heroes::GetScoute( void ) const
            + GetSecondaryValues( Skill::Secondary::SCOUTING );
 }
 
+uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
+{
+    const int level = GetLevelSkill( skill );
+    if ( level == Skill::Level::NONE )
+        return movePoints;
+
+    const uint32_t skillValue = GetSecondaryValues( skill );
+
+    if ( skillValue == 33 ) {
+        return movePoints * 4 / 3;
+    }
+    else if ( skillValue == 66 ) {
+        return movePoints * 5 / 3;
+    }
+
+    return movePoints + skillValue * movePoints / 100;
+}
+
 u32 Heroes::GetVisionsDistance( void ) const
 {
     int dist = Spell( Spell::VISIONS ).ExtraValue();
@@ -1716,7 +1740,7 @@ void Heroes::RecalculateMovePoints( void )
 }
 
 // Move hero to a new position. This function applies no action and no penalty
-void Heroes::Move2Dest( const s32 & dstIndex )
+void Heroes::Move2Dest( const int32_t dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );

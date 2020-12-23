@@ -389,8 +389,7 @@ namespace fheroes2
     {
         _width = image_.width();
         _height = image_.height();
-        _image = image_._image;
-        _transform = image_._transform;
+        _data = image_._data;
         return *this;
     }
 
@@ -402,28 +401,27 @@ namespace fheroes2
 
     uint8_t * Image::image()
     {
-        return _image.data();
+        return _data.data();
     }
 
     const uint8_t * Image::image() const
     {
-        return _image.data();
+        return _data.data();
     }
 
     uint8_t * Image::transform()
     {
-        return _transform.data();
+        return _data.data() + _width * _height;
     }
 
     const uint8_t * Image::transform() const
     {
-        return _transform.data();
+        return _data.data() + _width * _height;
     }
 
     void Image::clear()
     {
-        _image.clear();
-        _transform.clear();
+        _data.clear();
 
         _width = 0;
         _height = 0;
@@ -438,11 +436,6 @@ namespace fheroes2
         }
     }
 
-    bool Image::empty() const
-    {
-        return _image.empty();
-    }
-
     void Image::resize( int32_t width_, int32_t height_ )
     {
         if ( width_ <= 0 || height_ <= 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
@@ -454,15 +447,15 @@ namespace fheroes2
         _height = height_;
 
         const size_t totalSize = static_cast<size_t>( _width * _height );
-        _image.resize( totalSize );
-        _transform.resize( totalSize );
+        _data.resize( totalSize * 2 );
     }
 
     void Image::reset()
     {
         if ( !empty() ) {
-            std::fill( _image.begin(), _image.end(), 0 );
-            std::fill( _transform.begin(), _transform.end(), 1 ); // skip all data
+            const size_t totalSize = static_cast<size_t>( _width * _height );
+            std::fill( image(), image() + totalSize, 0 );
+            std::fill( transform(), transform() + totalSize, 1 ); // skip all data
         }
     }
 
@@ -471,8 +464,7 @@ namespace fheroes2
         std::swap( _width, image._width );
         std::swap( _height, image._height );
 
-        std::swap( _image, image._image );
-        std::swap( _transform, image._transform );
+        std::swap( _data, image._data );
     }
 
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
@@ -573,30 +565,15 @@ namespace fheroes2
         Copy( _image, _x, _y, _copy, 0, 0, _width, _height );
     }
 
-    int32_t ImageRestorer::x() const
-    {
-        return _x;
-    }
-
-    int32_t ImageRestorer::y() const
-    {
-        return _y;
-    }
-
-    int32_t ImageRestorer::width() const
-    {
-        return _width;
-    }
-
-    int32_t ImageRestorer::height() const
-    {
-        return _height;
-    }
-
     void ImageRestorer::restore()
     {
         _isRestored = true;
         Copy( _copy, 0, 0, _image, _x, _y, _width, _height );
+    }
+
+    void ImageRestorer::reset()
+    {
+        _isRestored = true;
     }
 
     void ImageRestorer::_updateRoi()

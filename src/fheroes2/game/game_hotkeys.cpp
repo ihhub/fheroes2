@@ -286,12 +286,21 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_SCROLLUP] = KEY_KP8;
     key_events[EVENT_SCROLLDOWN] = KEY_KP2;
 #endif
+    // split
+    key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
+    key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
 {
     LocalEvent & le = LocalEvent::Get();
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
+}
+
+bool Game::HotKeyHoldEvent( const int eventID )
+{
+    LocalEvent & le = LocalEvent::Get();
+    return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )

@@ -60,7 +60,10 @@ namespace fheroes2
         uint8_t * transform();
         const uint8_t * transform() const;
 
-        bool empty() const;
+        bool empty() const
+        {
+            return _data.empty();
+        }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
@@ -72,8 +75,7 @@ namespace fheroes2
     private:
         int32_t _width;
         int32_t _height;
-        std::vector<uint8_t> _image;
-        std::vector<uint8_t> _transform;
+        std::vector<uint8_t> _data; // holds 2 image layers
     };
 
     class Sprite : public Image
@@ -117,12 +119,28 @@ namespace fheroes2
 
         void update( int32_t x_, int32_t y_, int32_t width, int32_t height );
 
-        int32_t x() const;
-        int32_t y() const;
-        int32_t width() const;
-        int32_t height() const;
+        int32_t x() const
+        {
+            return _x;
+        }
+
+        int32_t y() const
+        {
+            return _y;
+        }
+
+        int32_t width() const
+        {
+            return _width;
+        }
+
+        int32_t height() const
+        {
+            return _height;
+        }
 
         void restore();
+        void reset();
 
     private:
         Image & _image;
@@ -194,7 +212,7 @@ namespace fheroes2
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
-    // This function does NOT check transform layer
+    // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
 
     // Use this function only when you need to convert pixel value into transform layer

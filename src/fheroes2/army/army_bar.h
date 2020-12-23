@@ -26,6 +26,7 @@
 #include "army_troop.h"
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "ui_tool.h"
 
 class Army;
 

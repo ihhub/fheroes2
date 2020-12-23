@@ -72,7 +72,7 @@ namespace Battle
             return type == msg;
         }
 
-        Command & operator<<( const int & );
+        Command & operator<<( const int );
         Command & operator>>( int & );
     };
 }

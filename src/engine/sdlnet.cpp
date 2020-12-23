@@ -137,7 +137,7 @@ bool Network::Socket::Recv16( u16 & v )
     return false;
 }
 
-bool Network::Socket::Send32( const u32 & v0 )
+bool Network::Socket::Send32( const uint32_t v0 )
 {
     u32 v = v0;
     SwapBE32( v );
@@ -145,7 +145,7 @@ bool Network::Socket::Send32( const u32 & v0 )
     return Send( reinterpret_cast<char *>( &v ), sizeof( v ) );
 }
 
-bool Network::Socket::Send16( const u16 & v0 )
+bool Network::Socket::Send16( const uint16_t v0 )
 {
     u16 v = v0;
     SwapBE16( v );

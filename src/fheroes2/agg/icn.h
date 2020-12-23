@@ -926,9 +926,6 @@ namespace ICN
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );
 
-    bool isBattleMonsterICN( int );
-    bool SkipLocalAlpha( int );
-
     int Get4Captain( int race );
     int Get4Building( int race );
     int Get4Castle( int race );

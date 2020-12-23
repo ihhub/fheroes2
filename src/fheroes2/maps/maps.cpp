@@ -36,16 +36,16 @@
 
 struct ComparsionDistance
 {
-    ComparsionDistance( const s32 & index )
+    ComparsionDistance( const int32_t index )
         : center( index )
     {}
 
-    bool operator()( const s32 & index1, const s32 & index2 ) const
+    bool operator()( const int32_t index1, const int32_t index2 ) const
     {
         return Maps::GetApproximateDistance( center, index1 ) < Maps::GetApproximateDistance( center, index2 );
     }
 
-    s32 center;
+    int32_t center;
 };
 
 Maps::IndexesDistance::IndexesDistance( s32 from, s32 center, u32 dist, int sort )
@@ -293,8 +293,8 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center )
     const int x = center % width;
     const int y = center / width;
 
-    if ( y > 1 ) {
-        if ( x > 1 )
+    if ( y > 0 ) {
+        if ( x > 0 )
             result.push_back( center - width - 1 );
 
         result.push_back( center - width );
@@ -303,13 +303,13 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center )
             result.push_back( center - width + 1 );
     }
 
-    if ( x > 1 )
+    if ( x > 0 )
         result.push_back( center - 1 );
     if ( x < width - 1 )
         result.push_back( center + 1 );
 
     if ( y < world.h() - 1 ) {
-        if ( x > 1 )
+        if ( x > 0 )
             result.push_back( center + width - 1 );
 
         result.push_back( center + width );
@@ -639,7 +639,7 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
 int Maps::TileIsCoast( s32 center, int filter )
 {
     int result = 0;
-    const Directions directions = Direction::All();
+    const Directions & directions = Direction::All();
 
     for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it )
         if ( ( *it & filter ) && isValidDirection( center, *it ) && world.GetTiles( GetDirectionIndex( center, *it ) ).isWater() )

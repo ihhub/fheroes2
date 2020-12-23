@@ -29,6 +29,7 @@
 #include "rect.h"
 #include "types.h"
 
+class Players;
 class Heroes;
 class Castle;
 
@@ -160,10 +161,13 @@ namespace Game
         EVENT_SHOWICONS,
         EVENT_SWITCHGROUP,
         EVENT_EMULATETOGGLE,
-        EVENT_LAST
+        EVENT_STACKSPLIT_SHIFT,
+        EVENT_STACKSPLIT_CTRL,
+        EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
+    bool HotKeyHoldEvent( const int eventID );
 
     enum
     {
@@ -253,6 +257,8 @@ namespace Game
     void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
+    void LoadPlayers( const std::string & mapFileName, Players & players );
+    void SavePlayers( const std::string & mapFileName, const Players & players );
 
     namespace ObjectFadeAnimation
     {

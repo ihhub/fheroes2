@@ -111,7 +111,10 @@ namespace Maps
         Point GetCenter( void ) const;
         int GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
+
         uint8_t GetObjectSpriteIndex() const;
+        void SetObjectSpriteIndex( const uint8_t index );
+
         u32 GetObjectUID() const;
         int GetQuantity1() const;
         int GetQuantity2() const;
@@ -181,7 +184,12 @@ namespace Maps
 
         std::string String( void ) const;
 
-        bool isFog( int color ) const;
+        bool isFog( const int colors ) const
+        {
+            // colors may be the union friends
+            return ( fog_colors & colors ) == colors;
+        }
+
         void ClearFog( int color );
 
         /* monster operation */
