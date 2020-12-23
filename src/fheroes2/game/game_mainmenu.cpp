@@ -64,8 +64,10 @@ int Game::MainMenu( bool isFirstGameRun )
             fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
         }
 
-        Dialog::Message( "Please remember", "You can always change game resolution by clicking on the door on the left side of main menu. Enjoy the game!", Font::BIG,
-                         Dialog::OK );
+        Dialog::Message( "Please remember",
+                         "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
+                         "and full screen modes press 'F4' key on the keyboard. Enjoy the game!",
+                         Font::BIG, Dialog::OK );
     }
 
     LocalEvent & le = LocalEvent::Get();
