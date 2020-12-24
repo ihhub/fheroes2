@@ -188,7 +188,7 @@ struct bcell_t
     {}
 };
 
-Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & dst, bool debug )
+Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & dst, bool debug ) const
 {
     Indexes result;
     const bool isWide = b.isWide();
@@ -214,7 +214,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            Cell & cell = at( *it );
+            const Cell & cell = at( *it );
 
             if ( list[*it].open && cell.isPassable4( b, center ) &&
                  // check bridge
@@ -282,8 +282,15 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             }
         }
 
-        if ( result.size() > b.GetSpeed() )
-            result.resize( b.GetSpeed() );
+        uint32_t maximumMoveDistance = b.GetSpeed();
+
+        if ( isWide && !result.empty() ) {
+            if ( result.front() == b.GetTailIndex() )
+                ++maximumMoveDistance;
+        }
+
+        if ( result.size() > maximumMoveDistance )
+            result.resize( maximumMoveDistance );
 
         // skip moat position
         if ( castle && castle->isBuild( BUILD_MOAT ) && !Board::isMoatIndex( b.GetHeadIndex() ) ) {
