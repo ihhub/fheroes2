@@ -239,7 +239,7 @@ namespace Battle
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
         void RedrawCastle2( const Castle &, s32 );
-        void RedrawCastle3( const Castle & );
+        void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
         void RedrawOpponents( void );

@@ -174,8 +174,8 @@ public:
     void SetGlobalFilter( bool );
     void SetTapMode( bool );
     void SetTapDelayForRightClickEmulation( u32 );
-    void SetMouseOffsetX( s16 );
-    void SetMouseOffsetY( s16 );
+    void SetMouseOffsetX( int16_t );
+    void SetMouseOffsetY( int16_t );
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );

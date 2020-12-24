@@ -158,7 +158,7 @@ u16 Mixer::MaxVolume( void )
     return MIX_MAX_VOLUME;
 }
 
-u16 Mixer::Volume( int channel, s16 vol )
+u16 Mixer::Volume( int channel, int16_t vol )
 {
     if ( !valid )
         return 0;
@@ -230,8 +230,8 @@ struct chunk_t
     const u8 * data;
     u32 length;
     u32 position;
-    s16 volume1;
-    s16 volume2;
+    int16_t volume1;
+    int16_t volume2;
     u8 state;
 };
 
@@ -330,7 +330,7 @@ u16 Mixer::MaxVolume( void )
     return SDL_MIX_MAXVOLUME;
 }
 
-u16 Mixer::Volume( int ch, s16 vol )
+u16 Mixer::Volume( int ch, int16_t vol )
 {
     if ( !valid )
         return 0;

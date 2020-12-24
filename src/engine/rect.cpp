@@ -33,7 +33,7 @@ Point::Point()
     , y( 0 )
 {}
 
-Point::Point( s16 px, s16 py )
+Point::Point( int16_t px, int16_t py )
     : x( px )
     , y( py )
 {}
@@ -152,7 +152,7 @@ Size Size::operator-( const Size & sz ) const
 
 Rect::Rect() {}
 
-Rect::Rect( s16 rx, s16 ry, u16 rw, u16 rh )
+Rect::Rect( int16_t rx, int16_t ry, u16 rw, u16 rh )
     : Point( rx, ry )
     , Size( rw, rh )
 {}

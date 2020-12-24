@@ -91,7 +91,7 @@ void Music::SetFadeOut( int f )
     fadeout = f;
 }
 
-u16 Music::Volume( s16 vol )
+u16 Music::Volume( int16_t vol )
 {
     return Mixer::isValid() ? ( Mix_VolumeMusic( vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol ) ) : 0;
 }
@@ -302,7 +302,7 @@ void Music::SetFadeIn( int f ) {}
 
 void Music::SetFadeOut( int f ) {}
 
-u16 Music::Volume( s16 vol )
+u16 Music::Volume( int16_t vol )
 {
     return 0;
 }
