@@ -62,8 +62,8 @@ Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj,
 Maps::Indexes MapsIndexesObject( int obj, bool ignoreHeroes = true )
 {
     Maps::Indexes result;
-    const s32 size = static_cast<s32>( world.getSize() );
-    for ( s32 idx = 0; idx < size; ++idx ) {
+    const int32_t size = static_cast<int32_t>( world.getSize() );
+    for ( int32_t idx = 0; idx < size; ++idx ) {
         if ( world.GetTiles( idx ).GetObject( ignoreHeroes ) == obj ) {
             result.push_back( idx );
         }
@@ -393,9 +393,8 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
     if ( objs.empty() )
         return result;
 
-    const s32 size = static_cast<s32>( world.getSize() );
-
-    for ( s32 idx = 0; idx < size; ++idx ) {
+    const int32_t size = static_cast<int32_t>( world.getSize() );
+    for ( int32_t idx = 0; idx < size; ++idx ) {
         const int objectID = world.GetTiles( idx ).GetObject( true );
 
         for ( const auto & obj : objs ) {
