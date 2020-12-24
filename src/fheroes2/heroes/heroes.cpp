@@ -1980,12 +1980,13 @@ Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians()
-                            ? std::find_if( begin(), end(), [&castle]( const Heroes * hero ) {
-        const Point & cpt = castle.GetCenter();
-        const Point & hpt = hero->GetCenter();
-        return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN ); } )
-                            : end();
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(),
+                                                                                  [&castle]( const Heroes * hero ) {
+                                                                                      const Point & cpt = castle.GetCenter();
+                                                                                      const Point & hpt = hero->GetCenter();
+                                                                                      return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
+                                                                                  } )
+                                                                  : end();
     return end() != it ? *it : NULL;
 }
 

@@ -919,8 +919,9 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
         Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
         const int32_t centerIndex = troop->GetHeadIndex();
-        std::sort( distances.begin(), distances.end(), [centerIndex](const int32_t index1, const int32_t index2 ){
-            return Battle::Board::GetDistance( centerIndex, index1 ) < Battle::Board::GetDistance( centerIndex, index2 ); } );
+        std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
+            return Battle::Board::GetDistance( centerIndex, index1 ) < Battle::Board::GetDistance( centerIndex, index2 );
+        } );
 
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
