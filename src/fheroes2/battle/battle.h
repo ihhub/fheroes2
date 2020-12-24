@@ -96,14 +96,6 @@ namespace Battle
     struct TargetsInfo : public std::vector<TargetInfo>
     {
         TargetsInfo() {}
-
-        void append( TargetsInfo && rhs )
-        {
-            reserve( size() + rhs.size() );
-            for ( TargetInfo info : rhs ) {
-                push_back( info );
-            }
-        }
     };
 
     StreamBase & operator<<( StreamBase &, const TargetsInfo & );

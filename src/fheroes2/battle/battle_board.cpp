@@ -374,7 +374,7 @@ bool contains( const Battle::Indexes & indexes, const Battle::Unit * unit )
     return result;
 }
 
-IndexDistance Battle::Board::DistanceToUnit( s32 position, const Battle::Unit * unit ) const
+IndexDistance Battle::Board::DistanceToUnit( int32_t position, const Battle::Unit * unit ) const
 {
     assert( unit );
 
@@ -406,7 +406,7 @@ Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances
     return result;
 }
 
-Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 position, const Indexes & blackList ) const
+Battle::Indexes Battle::Board::GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const
 {
     std::vector<IndexDistance> distances;
     distances.reserve( 15 /* TODO magic number */ );

@@ -585,25 +585,25 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-bool Battle::Arena::IsImmuneToChainLightning( s32 troopIndex, const HeroBase * hero ) const
+bool Battle::Arena::IsImmuneToChainLightning( int32_t troopIndex, const HeroBase * hero ) const
 {
     const Unit * target = GetTroopBoard( troopIndex );
     if ( !target ) {
         return true;
     }
     const int power = hero ? hero->GetPower() : 0;
-    const u32 resist = target->GetMagicResist( Spell::CHAINLIGHTNING, power );
+    const uint32_t resist = target->GetMagicResist( Spell::CHAINLIGHTNING, power );
     return ( resist == 100 ) ? true : Rand::Get( 0, 1 );
 }
 
-Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, s32 attackedTroopIndex ) const
+Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, int32_t attackedTroopIndex ) const
 {
-    s32 currentTargetIndex = attackedTroopIndex;
+    int32_t currentTargetIndex = attackedTroopIndex;
     Indexes result = { currentTargetIndex };
 
     Indexes ignoredTroops = { currentTargetIndex };
     const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
-    for ( s32 troopIndex : allTroops ) {
+    for ( const int32_t troopIndex : allTroops ) {
         if ( IsImmuneToChainLightning( troopIndex, hero ) ) {
             ignoredTroops.push_back( troopIndex );
         }
@@ -615,7 +615,7 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase *
             break;
         }
 
-        const s32 chosenTroopIndex = *Rand::Get( nearestTroops );
+        const int32_t chosenTroopIndex = *Rand::Get( nearestTroops );
         result.push_back( chosenTroopIndex );
         ignoredTroops.push_back( chosenTroopIndex );
         currentTargetIndex = chosenTroopIndex;
@@ -624,22 +624,23 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase *
     return result;
 }
 
-Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, s32 attackedTroopIndex )
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
 {
     TargetsInfo targets;
     const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroopIndex );
     for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
         Unit * target = GetTroopBoard( *it );
-
-        if ( target ) {
-            targets.emplace_back();
-            TargetInfo & res = targets.back();
-
-            res.defender = target;
-            // store temp priority for calculate damage
-            res.damage = std::distance( targetIndexes.begin(), it );
-            targets.push_back( res );
+        if ( target == nullptr ) {
+            continue;
         }
+
+        targets.emplace_back();
+        TargetInfo & res = targets.back();
+
+        res.defender = target;
+        // store temp priority for calculate damage
+        res.damage = std::distance( targetIndexes.begin(), it );
+        targets.push_back( res );
     }
     return targets;
 }
@@ -684,7 +685,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
-            targets.append( std::move( targetsForSpell ) );
+            targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
         } break;
 
         // check abroads
