@@ -62,8 +62,8 @@ Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, int obj,
 Maps::Indexes MapsIndexesObject( int obj, bool ignoreHeroes = true )
 {
     Maps::Indexes result;
-    const int size = world.getSize();
-    for ( int idx = 0; idx < size; ++idx ) {
+    const s32 size = static_cast<s32>( world.getSize() );
+    for ( s32 idx = 0; idx < size; ++idx ) {
         if ( world.GetTiles( idx ).GetObject( ignoreHeroes ) == obj ) {
             result.push_back( idx );
         }
@@ -383,24 +383,26 @@ Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool ignoreHeroes )
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const u8 * objs )
+Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
 {
+    if ( objs.size() == 1 ) {
+        return MapsIndexesObject( objs[0], true );
+    }
+
     Maps::Indexes result;
-    if ( !objs || !*objs )
+    if ( objs.empty() )
         return result;
 
-    const u8 * const objStart = objs;
-    const int size = world.getSize();
+    const s32 size = static_cast<s32>( world.getSize() );
 
-    for ( int idx = 0; idx < size; ++idx ) {
+    for ( s32 idx = 0; idx < size; ++idx ) {
         const int objectID = world.GetTiles( idx ).GetObject( true );
-        objs = objStart;
-        while ( *objs ) {
-            if ( *objs == objectID ) {
+
+        for ( const auto & obj : objs ) {
+            if ( obj == objectID ) {
                 result.push_back( idx );
                 break;
             }
-            ++objs;
         }
     }
     return result;

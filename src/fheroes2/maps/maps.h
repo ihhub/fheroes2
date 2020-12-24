@@ -74,7 +74,7 @@ namespace Maps
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
     Indexes GetObjectPositions( s32, int obj, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const u8 * objs );
+    Indexes GetObjectsPositions( const std::vector<u8> & objs );
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
 
