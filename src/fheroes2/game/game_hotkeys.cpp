@@ -279,6 +279,13 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
+#ifdef WITH_CONTROLLER
+    // scroll
+    key_events[EVENT_SCROLLLEFT] = KEY_KP4;
+    key_events[EVENT_SCROLLRIGHT] = KEY_KP6;
+    key_events[EVENT_SCROLLUP] = KEY_KP8;
+    key_events[EVENT_SCROLLDOWN] = KEY_KP2;
+#endif
     // split
     key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
     key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;

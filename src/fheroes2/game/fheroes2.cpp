@@ -111,6 +111,11 @@ int main( int argc, char ** argv )
     if ( conf.MusicCD() )
         subsystem |= INIT_CDROM | INIT_AUDIO;
 #endif
+
+#ifdef WITH_CONTROLLER
+    subsystem |= INIT_GAMECONTROLLER;
+#endif
+
     if ( SDL::Init( subsystem ) )
 #ifndef ANDROID
         try

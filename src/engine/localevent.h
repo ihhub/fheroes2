@@ -26,6 +26,9 @@
 #include "rect.h"
 #include "thread.h"
 #include "types.h"
+#ifdef WITH_CONTROLLER
+#include "SDL.h"
+#endif
 
 enum KeySym
 {
@@ -267,6 +270,16 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+#ifdef WITH_CONTROLLER
+    void OpenController();
+    void CloseController();
+
+    void SetControllerPointerSpeed( float newSpeed )
+    {
+        controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+    }
+#endif
+
 private:
     LocalEvent();
 
@@ -340,6 +353,35 @@ private:
     int emulate_mouse_step;
     KeySym emulate_press_left;
     KeySym emulate_press_right;
+#endif
+
+#ifdef WITH_CONTROLLER
+    enum
+    {
+        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_R_DEADZONE = 25000
+    };
+
+    SDL_GameController * gameController = nullptr;
+
+    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessControllerAxisMotion( void );
+
+    const float CONTROLLER_SPEED_MOD = 2000000.0f;
+    const float CONTROLLER_AXIS_SPEEDUP = 1.03f;
+
+    float controllerPointerSpeed = 10.0f / CONTROLLER_SPEED_MOD;
+
+    float xAxisFloat = 0;
+    float yAxisFloat = 0;
+    int16_t xAxisLValue = 0;
+    int16_t yAxisLValue = 0;
+    int16_t xAxisRValue = 0;
+    int16_t yAxisRValue = 0;
+    uint32_t lastControllerTime = 0;
+    bool controllerScrollActive = false;
+    bool dpadScrollActive = false;
 #endif
 };
 

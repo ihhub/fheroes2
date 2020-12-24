@@ -408,6 +408,9 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+#ifdef WITH_CONTROLLER
+    , controller_pointer_speed( 10 )
+#endif
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -731,6 +734,17 @@ bool Settings::Read( const std::string & filename )
     }
 #endif
 
+#ifdef WITH_CONTROLLER
+    if ( config.Exists( "controller_pointer_speed" ) ) {
+        controller_pointer_speed = config.IntParams( "controller_pointer_speed" );
+        if ( controller_pointer_speed > 100 )
+            controller_pointer_speed = 100;
+        else if ( controller_pointer_speed < 0 )
+            controller_pointer_speed = 0;
+        le.SetControllerPointerSpeed( controller_pointer_speed );
+    }
+#endif
+
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -883,6 +897,11 @@ std::string Settings::String( void ) const
        << "unicode = " << ( opt_global.Modes( GLOBAL_USEUNICODE ) ? "on" : "off" ) << std::endl;
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
+#endif
+
+#ifdef WITH_CONTROLLER
+    os << std::endl << "# controller pointer speed" << std::endl;
+    os << "controller_pointer_speed = " << controller_pointer_speed << std::endl;
 #endif
 
     return os.str();
