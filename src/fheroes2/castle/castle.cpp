@@ -2564,12 +2564,6 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-Castle * VecCastles::Get( const Point & position ) const
-{
-    const_iterator it = std::find_if( begin(), end(), [&position]( const Castle * castle ) { return castle->isPosition( position ); } );
-    return end() != it ? *it : NULL;
-}
-
 Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
@@ -2595,32 +2589,95 @@ void VecCastles::ChangeColors( int col1, int col2 )
 AllCastles::AllCastles()
 {
     // reserve memory
-    reserve( MAXCASTLES );
+    castles.reserve( MAXCASTLES );
 }
 
 AllCastles::~AllCastles()
 {
-    AllCastles::clear();
+    Clear();
 }
 
 void AllCastles::Init( void )
 {
-    if ( size() )
-        AllCastles::clear();
+    Clear();
 }
 
-void AllCastles::clear( void )
+void AllCastles::Clear( void )
 {
-    for ( iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         delete *it;
-    std::vector<Castle *>::clear();
+    castles.clear();
+    castleTiles.clear();
+}
+
+void AllCastles::AddCastle( Castle * castle )
+{
+    castles.push_back( castle );
+
+    /* Register position of all castle elements on the map
+
+                -
+               ---
+              -+++-
+              ++X++
+
+    */
+
+    // allocate one slot per map tile, at the first call of AddCastle() that occured after a reset
+    if ( castleTiles.empty() ) {
+        castleTiles.resize( world.w() * world.h(), -1 );
+    }
+
+    static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
+
+    // put the index of the castle for all relevant tiles
+    int8_t idx = static_cast<int8_t>( castles.size() - 1 );
+    int32_t w = world.w();
+
+    Point p = castle->GetCenter() + Point( -1, -1 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( 0, -1 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( +1, -1 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( -2, 0 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( -1, 0 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( 0, 0 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( 1, 0 );
+    castleTiles[p.y * w + p.x] = idx;
+    p = castle->GetCenter() + Point( 2, 0 );
+    castleTiles[p.y * w + p.x] = idx;
+}
+
+Castle * AllCastles::Get( const Point & position ) const
+{
+    int8_t idx = castleTiles[position.y * world.w() + position.x];
+    return ( idx == -1 ) ? NULL : castles[idx];
 }
 
 void AllCastles::Scoute( int colors ) const
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
             ( *it )->Scoute();
+}
+
+std::vector<Castle *>::const_iterator AllCastles::begin() const
+{
+    return castles.begin();
+}
+
+std::vector<Castle *>::const_iterator AllCastles::end() const
+{
+    return castles.end();
+}
+
+size_t AllCastles::Size() const
+{
+    return castles.size();
 }
 
 /* pack castle */
@@ -2659,7 +2716,7 @@ StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
 {
     msg << static_cast<u32>( castles.size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
+    for ( auto it = castles.begin(); it != castles.end(); ++it )
         msg << ( *it ? ( *it )->GetIndex() : static_cast<s32>( -1 ) );
 
     return msg;
@@ -2673,7 +2730,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     castles.resize( size, NULL );
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
         *it = ( index < 0 ? NULL : world.GetCastle( Maps::GetPoint( index ) ) );
     }
@@ -2683,10 +2740,10 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
 StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
-    msg << static_cast<u32>( castles.size() );
+    msg << static_cast<u32>( castles.Size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
-        msg << **it;
+    for ( auto & castle : castles )
+        msg << *castle;
 
     return msg;
 }
@@ -2696,12 +2753,12 @@ StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
     u32 size;
     msg >> size;
 
-    castles.clear();
-    castles.resize( size, NULL );
+    castles.Clear();
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
-        *it = new Castle();
-        msg >> **it;
+    for ( u32 i = 0; i < size; ++i ) {
+        auto castle = new Castle();
+        msg >> *castle;
+        castles.AddCastle( castle );
     }
 
     return msg;

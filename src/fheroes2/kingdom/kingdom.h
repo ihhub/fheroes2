@@ -36,7 +36,7 @@ class Castle;
 class Heroes;
 struct AllHeroes;
 struct VecHeroes;
-struct AllCastles;
+class AllCastles;
 struct VecCastles;
 struct CapturedObjects;
 
