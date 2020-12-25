@@ -35,6 +35,29 @@
 #include "spell.h"
 #include "world.h"
 
+namespace
+{
+    std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
+    {
+        const int spellPower = commander->GetPower();
+        if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
+            return std::make_pair( 0, 1 );
+        }
+        else if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
+            return std::make_pair( 0, 2 );
+        }
+        else if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
+            return std::make_pair( 0, 3 );
+        }
+        else if ( spellPower >= 10 ) {
+            return std::make_pair( 1, 3 );
+        }
+
+        DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander );
+        return std::make_pair( 0, 0 );
+    }
+}
+
 void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, int dir )
 {
     if ( 0 > dst )
@@ -200,10 +223,10 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
 {
-    u32 uid1 = cmd.GetValue();
-    u32 uid2 = cmd.GetValue();
-    s32 dst = cmd.GetValue();
-    int dir = cmd.GetValue();
+    const uint32_t uid1 = cmd.GetValue();
+    const uint32_t uid2 = cmd.GetValue();
+    const int32_t dst = cmd.GetValue();
+    const int32_t dir = cmd.GetValue();
 
     Battle::Unit * b1 = GetTroopUID( uid1 );
     Battle::Unit * b2 = GetTroopUID( uid2 );
@@ -257,9 +280,9 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
 void Battle::Arena::ApplyActionMove( Command & cmd )
 {
-    u32 uid = cmd.GetValue();
-    s32 dst = cmd.GetValue();
-    int path_size = cmd.GetValue();
+    const uint32_t uid = cmd.GetValue();
+    const int32_t dst = cmd.GetValue();
+    const int32_t path_size = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
     Cell * cell = Board::GetCell( dst );
@@ -350,8 +373,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
 void Battle::Arena::ApplyActionSkip( Command & cmd )
 {
-    u32 uid = cmd.GetValue();
-    int hard = cmd.GetValue();
+    const uint32_t uid = cmd.GetValue();
+    const int32_t hard = cmd.GetValue();
 
     Battle::Unit * battle = GetTroopUID( uid );
     if ( battle && battle->isValid() ) {
@@ -385,7 +408,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
 
 void Battle::Arena::ApplyActionEnd( Command & cmd )
 {
-    u32 uid = cmd.GetValue();
+    const uint32_t uid = cmd.GetValue();
 
     Battle::Unit * battle = GetTroopUID( uid );
 
@@ -413,8 +436,8 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
 
 void Battle::Arena::ApplyActionMorale( Command & cmd )
 {
-    u32 uid = cmd.GetValue();
-    int morale = cmd.GetValue();
+    const uint32_t uid = cmd.GetValue();
+    const int32_t morale = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
 
@@ -493,9 +516,7 @@ void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
 
 void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & /*defender*/, TargetsInfo & targets )
 {
-    TargetsInfo::iterator it = targets.begin();
-
-    for ( ; it != targets.end(); ++it ) {
+    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
         TargetInfo & target = *it;
         if ( target.defender )
             target.killed = target.defender->ApplyDamage( attacker, target.damage );
@@ -740,8 +761,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
 void Battle::Arena::ApplyActionTower( Command & cmd )
 {
-    u32 type = cmd.GetValue();
-    u32 uid = cmd.GetValue();
+    const uint32_t type = cmd.GetValue();
+    const uint32_t uid = cmd.GetValue();
 
     Tower * tower = GetTower( type );
     Battle::Unit * b2 = GetTroopUID( uid );
@@ -795,22 +816,21 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
 
 void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 {
-    int color = cmd.GetValue();
+    const int color = cmd.GetValue();
+    if ( current_color != color ) {
+        DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+        return;
+    }
 
-    if ( current_color == color ) {
-        if ( auto_battle & color ) {
-            if ( interface )
-                interface->SetStatus( _( "Set auto battle off" ), true );
-            auto_battle &= ~color;
-        }
-        else {
-            if ( interface )
-                interface->SetStatus( _( "Set auto battle on" ), true );
-            auto_battle |= color;
-        }
+    if ( auto_battle & color ) {
+        if ( interface )
+            interface->SetStatus( _( "Set auto battle off" ), true );
+        auto_battle &= ~color;
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_WARN, "incorrect param" );
+        if ( interface )
+            interface->SetStatus( _( "Set auto battle on" ), true );
+        auto_battle |= color;
     }
 }
 
@@ -827,7 +847,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
     if ( !current_commander )
         return;
 
-    s32 dst = cmd.GetValue();
+    const int32_t dst = cmd.GetValue();
 
     TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst );
     if ( interface )
@@ -840,8 +860,8 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
 void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
 {
-    s32 src = cmd.GetValue();
-    s32 dst = cmd.GetValue();
+    const int32_t src = cmd.GetValue();
+    const int32_t dst = cmd.GetValue();
 
     Unit * b = GetTroopBoard( src );
     const Spell spell( Spell::TELEPORT );
@@ -863,8 +883,6 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
         DEBUG( DBG_BATTLE, DBG_WARN, "spell: " << spell.GetName() << " false" );
     }
 }
-
-std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander );
 
 void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
 {
@@ -890,36 +908,20 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
 }
 
-std::pair<int, int> getEarthquakeDamageRange( const HeroBase * commander )
-{
-    const int spellPower = commander->GetPower();
-    if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
-        return std::make_pair( 0, 1 );
-    }
-    else if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
-        return std::make_pair( 0, 2 );
-    }
-    else if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
-        return std::make_pair( 0, 3 );
-    }
-    else if ( spellPower >= 10 ) {
-        return std::make_pair( 1, 3 );
-    }
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander );
-    return std::make_pair( 0, 0 );
-}
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
-    const s32 who = cmd.GetValue();
+    const int32_t who = cmd.GetValue();
     Unit * troop = GetTroopBoard( who );
 
     if ( troop != NULL ) {
         Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
-        ShortestDistance SortingDistance( troop->GetHeadIndex() );
-        std::sort( distances.begin(), distances.end(), SortingDistance );
+        const int32_t centerIndex = troop->GetHeadIndex();
+        std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
+            return Battle::Board::GetDistance( centerIndex, index1 ) < Battle::Board::GetDistance( centerIndex, index2 );
+        } );
 
         Indexes::const_iterator it
             = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );

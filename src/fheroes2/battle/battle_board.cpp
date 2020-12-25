@@ -324,19 +324,6 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
     return result;
 }
 
-std::string Battle::Board::AllUnitsInfo( void ) const
-{
-    std::ostringstream os;
-
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Unit * b = ( *it ).GetUnit();
-        if ( b )
-            os << "\t" << b->String( true ) << std::endl;
-    }
-
-    return os.str();
-}
-
 Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 {
     Indexes result;
