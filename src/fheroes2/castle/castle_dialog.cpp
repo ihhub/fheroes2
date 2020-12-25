@@ -312,7 +312,7 @@ int Castle::OpenDialog( bool readonly )
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
-    int alphaHero = 241;
+    int alphaHero = 255;
     fheroes2::Image surfaceHero( 552, 107 );
 
     // dialog menu loop
@@ -646,20 +646,19 @@ int Castle::OpenDialog( bool readonly )
             }
         }
 
-        if ( alphaHero < 240 ) {
+        if ( alphaHero != 255 ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
+                if ( alphaHero > 255 ) {
+                    alphaHero = 255;
+                }
+                else {
+                    alphaHero += 10;
+                }
                 fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, alphaHero );
                 if ( !need_redraw ) {
                     display.render();
                 }
-                alphaHero += 10;
-            }
-        }
-        else if ( alphaHero == 240 ) {
-            fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
-            RedrawIcons( *this, heroes, cur_pt );
-            alphaHero = 241;
-            need_redraw = true;
+            }        
         }
 
         if ( need_redraw ) {

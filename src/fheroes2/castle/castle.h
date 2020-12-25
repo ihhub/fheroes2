@@ -254,18 +254,25 @@ namespace CastleDialog
     {
     public:
         FadeBuilding()
-            : alpha( 0 )
-            , build( BUILD_NOTHING ){};
-        void StartFadeBuilding( uint32_t build );
+            : _alpha( 0 )
+            , _build( BUILD_NOTHING )
+        {}
+        void StartFadeBuilding( const uint32_t build );
         bool UpdateFadeBuilding();
-        bool IsFadeDone() const;
+        bool IsFadeDone() const {
+            return _alpha >= 255;
+        }
         void StopFadeBuilding();
-        uint32_t GetAlpha() const;
-        uint32_t GetBuild() const;
+        uint32_t GetAlpha() const {
+            return _alpha;
+        }
+        uint32_t GetBuild() const {
+            return _build;
+        }
 
     private:
-        uint32_t alpha;
-        uint32_t build;
+        uint32_t _alpha;
+        uint32_t _build;
     };
 
     struct builds_t

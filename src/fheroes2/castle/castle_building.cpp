@@ -62,44 +62,29 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
     return it != end() ? ( *it ).coord : back().coord;
 }
 
-void CastleDialog::FadeBuilding::StartFadeBuilding( uint32_t build )
+void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
-    this->alpha = 0;
-    this->build = build;
+    this->_alpha = 0;
+    this->_build = build;
 }
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( alpha < 255 ) {
+    if ( _alpha < 255 ) {
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
-            alpha += 15;
+            _alpha += 15;
             return true;
         }
     }
     return false;
 }
 
-bool CastleDialog::FadeBuilding::IsFadeDone() const
-{
-    return ( alpha == 255 );
-}
-
 void CastleDialog::FadeBuilding::StopFadeBuilding()
 {
-    if ( build != BUILD_NOTHING ) {
-        build = BUILD_NOTHING;
-        alpha = 256;
+    if ( _build != BUILD_NOTHING ) {
+        _build = BUILD_NOTHING;
+        _alpha = 256;
     }
-}
-
-uint32_t CastleDialog::FadeBuilding::GetAlpha() const
-{
-    return alpha;
-}
-
-uint32_t CastleDialog::FadeBuilding::GetBuild() const
-{
-    return build;
 }
 
 void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding )
