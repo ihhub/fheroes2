@@ -397,7 +397,7 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
     for ( int32_t idx = 0; idx < size; ++idx ) {
         const int objectID = world.GetTiles( idx ).GetObject( true );
 
-        for ( const auto & obj : objs ) {
+        for ( const uint8_t obj : objs ) {
             if ( obj == objectID ) {
                 result.push_back( idx );
                 break;
