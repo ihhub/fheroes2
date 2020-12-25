@@ -153,6 +153,12 @@ namespace fheroes2
             _image = fheroes2::Sprite( image, offsetX, offsetY );
         }
 
+        void saveOffset( int32_t offsetX, int32_t offsetY )
+        {
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+        }
+
         void setPosition( int32_t offsetX, int32_t offsetY )
         {
             _image.setPosition( offsetX, offsetY );
@@ -168,6 +174,8 @@ namespace fheroes2
 
     protected:
         Sprite _image;
+        int32_t _offsetX;
+        int32_t _offsetY;
         bool _emulation;
         bool _show;
 

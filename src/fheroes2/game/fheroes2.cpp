@@ -105,15 +105,15 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO | INIT_TIMER;
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    subsystem |= INIT_GAMECONTROLLER;
+#endif
+
     if ( conf.Sound() || conf.Music() )
         subsystem |= INIT_AUDIO;
 #ifdef WITH_AUDIOCD
     if ( conf.MusicCD() )
         subsystem |= INIT_CDROM | INIT_AUDIO;
-#endif
-
-#ifdef WITH_CONTROLLER
-    subsystem |= INIT_GAMECONTROLLER;
 #endif
 
     if ( SDL::Init( subsystem ) )

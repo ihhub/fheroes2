@@ -26,9 +26,6 @@
 #include "rect.h"
 #include "thread.h"
 #include "types.h"
-#ifdef WITH_CONTROLLER
-#include "SDL.h"
-#endif
 
 enum KeySym
 {
@@ -270,15 +267,13 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
-#ifdef WITH_CONTROLLER
     void OpenController();
     void CloseController();
 
-    void SetControllerPointerSpeed( float newSpeed )
+    void SetControllerPointerSpeed( double newSpeed )
     {
-        controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
     }
-#endif
 
 private:
     LocalEvent();
@@ -290,6 +285,9 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessControllerAxisMotion();
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -355,34 +353,31 @@ private:
     KeySym emulate_press_right;
 #endif
 
-#ifdef WITH_CONTROLLER
     enum
     {
         CONTROLLER_L_DEADZONE = 3000,
         CONTROLLER_R_DEADZONE = 25000
     };
 
-    SDL_GameController * gameController = nullptr;
+    // used to convert user-friendly pointer speed values into more useable ones
+    const double CONTROLLER_SPEED_MOD = 2000000.0;
+    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
 
-    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
-    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
-    void ProcessControllerAxisMotion( void );
-
-    const float CONTROLLER_SPEED_MOD = 2000000.0f;
-    const float CONTROLLER_AXIS_SPEEDUP = 1.03f;
-
-    float controllerPointerSpeed = 10.0f / CONTROLLER_SPEED_MOD;
-
-    float xAxisFloat = 0;
-    float yAxisFloat = 0;
-    int16_t xAxisLValue = 0;
-    int16_t yAxisLValue = 0;
-    int16_t xAxisRValue = 0;
-    int16_t yAxisRValue = 0;
-    uint32_t lastControllerTime = 0;
-    bool controllerScrollActive = false;
-    bool dpadScrollActive = false;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    SDL_GameController * _gameController = nullptr;
 #endif
+
+    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
+    double _controllerPointerPosX = 0;
+    double _controllerPointerPosY = 0;
+    int16_t _controllerLeftXAxis = 0;
+    int16_t _controllerLeftYAxis = 0;
+    int16_t _controllerRightXAxis = 0;
+    int16_t _controllerRightYAxis = 0;
+    uint32_t _lastControllerTime = 0;
+    bool _controllerScrollActive = false;
+    bool _dpadScrollActive = false;
 };
 
 #endif

@@ -429,9 +429,7 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
-#ifdef WITH_CONTROLLER
-    int controller_pointer_speed;
-#endif
+    int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;

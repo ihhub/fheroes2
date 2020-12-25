@@ -12,7 +12,6 @@
 # WITHOUT_IMAGE: build without SDL_image library (disable cache image, icn2png)
 # WITHOUT_XML: skip build tinyxml, used for load alt. resources
 # WITH_TOOLS: build tools
-# WITH_CONTROLLER: build with game controller support (SDL2 only)
 # WITHOUT_BUNDLED_LIBS: do not build XML third party library
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
 #

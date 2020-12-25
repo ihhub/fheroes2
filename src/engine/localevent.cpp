@@ -55,13 +55,14 @@ LocalEvent::LocalEvent()
 #endif
 }
 
-#ifdef WITH_CONTROLLER
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OpenController()
 {
     for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
         if ( SDL_IsGameController( i ) ) {
-            gameController = SDL_GameControllerOpen( i );
-            if ( gameController != nullptr ) {
+            _gameController = SDL_GameControllerOpen( i );
+            if ( _gameController != nullptr ) {
+                fheroes2::cursor().enableSoftwareEmulation( true );
                 break;
             }
         }
@@ -70,8 +71,8 @@ void LocalEvent::OpenController()
 
 void LocalEvent::CloseController()
 {
-    if ( SDL_GameControllerGetAttached( gameController ) ) {
-        SDL_GameControllerClose( gameController );
+    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+        SDL_GameControllerClose( _gameController );
     }
 }
 #endif
@@ -512,10 +513,14 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );
-#ifdef WITH_CONTROLLER
-    // fast map scroll with dpad
-    if ( !dpadScrollActive )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+        // fast map scroll with dpad
+        if ( !_dpadScrollActive )
+            ResetModes( KEY_PRESSED );
+    } else {
         ResetModes( KEY_PRESSED );
+    }
 #else
     ResetModes( KEY_PRESSED );
 #endif
@@ -595,19 +600,22 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
             break;
-#ifdef WITH_CONTROLLER
         case SDL_CONTROLLERDEVICEREMOVED:
-            if ( gameController != nullptr ) {
+            if ( _gameController != nullptr ) {
                 SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
-                if ( removedController == gameController ) {
-                    SDL_GameControllerClose( gameController );
-                    gameController = nullptr;
+                if ( removedController == _gameController ) {
+                    SDL_GameControllerClose( _gameController );
+                    _gameController = nullptr;
+                    fheroes2::cursor().enableSoftwareEmulation( false );
                 }
             }
             break;
         case SDL_CONTROLLERDEVICEADDED:
-            if ( gameController == nullptr ) {
-                gameController = SDL_GameControllerOpen( event.jdevice.which );
+            if ( _gameController == nullptr ) {
+                _gameController = SDL_GameControllerOpen( event.jdevice.which );
+                if ( _gameController != nullptr ) {
+                    fheroes2::cursor().enableSoftwareEmulation( true );
+                }
             }
             break;
         case SDL_CONTROLLERAXISMOTION:
@@ -617,7 +625,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
             break;
-#endif
 #endif
 
         // exit
@@ -655,8 +662,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         }
     }
 
-#ifdef WITH_CONTROLLER
-    ProcessControllerAxisMotion();
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+        ProcessControllerAxisMotion();
+    }
 #endif
 
     if ( delay )
@@ -665,32 +674,32 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     return true;
 }
 
-#ifdef WITH_CONTROLLER
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
 {
     if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {
         if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
-            xAxisLValue = motion.value;
+            _controllerLeftXAxis = motion.value;
         else
-            xAxisLValue = 0;
+            _controllerLeftXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTY ) {
         if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
-            yAxisLValue = motion.value;
+            _controllerLeftYAxis = motion.value;
         else
-            yAxisLValue = 0;
+            _controllerLeftYAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTX ) {
         if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
-            xAxisRValue = motion.value;
+            _controllerRightXAxis = motion.value;
         else
-            xAxisRValue = 0;
+            _controllerRightXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTY ) {
         if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
-            yAxisRValue = motion.value;
+            _controllerRightYAxis = motion.value;
         else
-            yAxisRValue = 0;
+            _controllerRightYAxis = 0;
     }
 }
 
@@ -729,7 +738,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-        dpadScrollActive = true;
+        _dpadScrollActive = true;
 
         if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
             key_value = KEY_KP4;
@@ -744,7 +753,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             key_value = KEY_KP2;
         }
         else {
-            dpadScrollActive = false;
+            _dpadScrollActive = false;
         }
 
         if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
@@ -761,33 +770,33 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
 
 void LocalEvent::ProcessControllerAxisMotion()
 {
-    uint32_t currentTime = SDL_GetTicks();
-    uint32_t deltaTime = currentTime - lastControllerTime;
-    lastControllerTime = currentTime;
+    const uint32_t currentTime = SDL_GetTicks();
+    const uint32_t deltaTime = currentTime - _lastControllerTime;
+    _lastControllerTime = currentTime;
 
-    if ( xAxisLValue != 0 || yAxisLValue != 0 ) {
+    if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
         SetModes( MOUSE_MOTION );
 
-        int16_t xSign = ( xAxisLValue > 0 ) - ( xAxisLValue < 0 );
-        int16_t ySign = ( yAxisLValue > 0 ) - ( yAxisLValue < 0 );
+        const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
+        const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
-        xAxisFloat += pow( abs( xAxisLValue ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * controllerPointerSpeed;
-        yAxisFloat += pow( abs( yAxisLValue ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * controllerPointerSpeed;
+        _controllerPointerPosX += pow( abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
+        _controllerPointerPosY += pow( abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( xAxisFloat < 0 )
-            xAxisFloat = 0;
-        else if ( xAxisFloat > display.width() )
-            xAxisFloat = display.width();
+        if ( _controllerPointerPosX < 0 )
+            _controllerPointerPosX = 0;
+        else if ( _controllerPointerPosX > display.width() )
+            _controllerPointerPosX = display.width();
 
-        if ( yAxisFloat < 0 )
-            yAxisFloat = 0;
-        else if ( yAxisFloat > display.height() )
-            yAxisFloat = display.height();
+        if ( _controllerPointerPosY < 0 )
+            _controllerPointerPosY = 0;
+        else if ( _controllerPointerPosY > display.height() )
+            _controllerPointerPosY = display.height();
 
-        mouse_cu.x = static_cast<int16_t>( xAxisFloat );
-        mouse_cu.y = static_cast<int16_t>( yAxisFloat );
+        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -798,22 +807,22 @@ void LocalEvent::ProcessControllerAxisMotion()
     }
 
     // map scroll with right stick
-    if ( xAxisRValue != 0 || yAxisRValue != 0 ) {
-        controllerScrollActive = true;
+    if ( _controllerRightXAxis != 0 || _controllerRightYAxis != 0 ) {
+        _controllerScrollActive = true;
         SetModes( KEY_PRESSED );
 
-        if ( xAxisRValue < 0 )
+        if ( _controllerRightXAxis < 0 )
             key_value = KEY_KP4;
-        else if ( xAxisRValue > 0 )
+        else if ( _controllerRightXAxis > 0 )
             key_value = KEY_KP6;
-        else if ( yAxisRValue < 0 )
+        else if ( _controllerRightYAxis < 0 )
             key_value = KEY_KP8;
-        else if ( yAxisRValue > 0 )
+        else if ( _controllerRightYAxis > 0 )
             key_value = KEY_KP2;
     }
-    else if ( controllerScrollActive ) {
+    else if ( _controllerScrollActive ) {
         ResetModes( KEY_PRESSED );
-        controllerScrollActive = false;
+        _controllerScrollActive = false;
     }
 }
 #endif
@@ -885,10 +894,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     SetModes( MOUSE_MOTION );
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
-#ifdef WITH_CONTROLLER
-    xAxisFloat = mouse_cu.x;
-    yAxisFloat = mouse_cu.y;
-#endif
+    _controllerPointerPosX = mouse_cu.x;
+    _controllerPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 }
@@ -900,10 +907,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
-#ifdef WITH_CONTROLLER
-    xAxisFloat = mouse_cu.x;
-    yAxisFloat = mouse_cu.y;
-#endif
+    _controllerPointerPosX = mouse_cu.x;
+    _controllerPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 
@@ -1228,15 +1233,9 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_MOUSEBUTTONUP, true );
     SetState( SDL_QUIT, true );
 
-#ifdef WITH_CONTROLLER
     SetState( SDL_JOYAXISMOTION, true );
     SetState( SDL_JOYBUTTONUP, true );
     SetState( SDL_JOYBUTTONDOWN, true );
-#else
-    SetState( SDL_JOYAXISMOTION, false );
-    SetState( SDL_JOYBUTTONUP, false );
-    SetState( SDL_JOYBUTTONDOWN, false );
-#endif
 
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );

@@ -112,9 +112,11 @@ namespace
     const uint8_t * currentPalette = PALPAlette();
 }
 
+#include "SDL.h"
+
 namespace
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( WITH_CONTROLLER )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     class RenderCursor : public fheroes2::Cursor
     {
     public:
@@ -137,6 +139,8 @@ namespace
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
+
+            _image = fheroes2::Sprite( image, offsetX, offsetY );
 
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
@@ -173,6 +177,7 @@ namespace
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
             SDL_ShowCursor( 1 );
+            SDL_FreeSurface( surface );
 
             clear();
             std::swap( _cursor, tempCursor );
@@ -185,11 +190,13 @@ namespace
 
             if ( enable ) {
                 clear();
+                SDL_ShowCursor( 0 );
                 _emulation = true;
+                update( _image, _image.x(), _image.y() );
             }
             else {
                 _emulation = false;
-                update( _image, _image.x(), _image.y() );
+                update( _image, _offsetX, _offsetY );
             }
         }
 
@@ -901,7 +908,7 @@ namespace fheroes2
 
     void Display::render()
     {
-        if ( _cursor->isVisible() && !_cursor->_image.empty() ) {
+        if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
             const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
             Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
