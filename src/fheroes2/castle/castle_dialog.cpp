@@ -658,7 +658,7 @@ int Castle::OpenDialog( bool readonly )
                 if ( !need_redraw ) {
                     display.render();
                 }
-            }        
+            }
         }
 
         if ( need_redraw ) {

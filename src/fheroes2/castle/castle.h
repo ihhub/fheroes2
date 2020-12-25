@@ -259,14 +259,17 @@ namespace CastleDialog
         {}
         void StartFadeBuilding( const uint32_t build );
         bool UpdateFadeBuilding();
-        bool IsFadeDone() const {
+        bool IsFadeDone() const
+        {
             return _alpha >= 255;
         }
         void StopFadeBuilding();
-        uint32_t GetAlpha() const {
+        uint32_t GetAlpha() const
+        {
             return _alpha;
         }
-        uint32_t GetBuild() const {
+        uint32_t GetBuild() const
+        {
             return _build;
         }
 
