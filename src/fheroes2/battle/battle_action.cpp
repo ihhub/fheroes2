@@ -325,14 +325,14 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( interface )
                 interface->RedrawActionMove( *b, path );
             else if ( bridge ) {
-                for ( Indexes::const_iterator dst = path.begin(); dst != path.end(); ++dst ) {
+                for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
                     bool doMovement = false;
 
-                    if ( bridge && bridge->NeedDown( *b, *dst ) )
-                        bridge->Action( *b, *dst );
+                    if ( bridge && bridge->NeedDown( *b, *pathIt ) )
+                        bridge->Action( *b, *pathIt );
 
                     if ( b->isWide() ) {
-                        if ( b->GetTailIndex() == *dst )
+                        if ( b->GetTailIndex() == *pathIt )
                             b->SetReflection( !b->isReflect() );
                         else
                             doMovement = true;
@@ -342,11 +342,11 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                     }
 
                     if ( doMovement )
-                        b->SetPosition( *dst );
+                        b->SetPosition( *pathIt );
 
                     // check for possible bridge close action, after unit's end of movement
                     if ( bridge && bridge->AllowUp() )
-                        bridge->Action( *b, *dst );
+                        bridge->Action( *b, *pathIt );
                 }
             }
 
@@ -663,8 +663,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                 Indexes sortedIds;
 
                 for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
-                    Unit * target = GetTroopBoard( nearestPosIds[monsterId] );
-                    if ( target != NULL && ( target->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
+                    Unit * targetUnit = GetTroopBoard( nearestPosIds[monsterId] );
+                    if ( targetUnit != NULL && ( targetUnit->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
                         sortedIds.push_back( nearestPosIds[monsterId] );
                     }
                     ignoredMonster.push_back( nearestPosIds[monsterId] );
@@ -681,10 +681,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             // save targets
             for ( Indexes::iterator it = trgts.begin(); it != trgts.end(); ++it ) {
-                Unit * target = GetTroopBoard( *it );
+                Unit * targetDefender = GetTroopBoard( *it );
 
-                if ( target ) {
-                    res.defender = target;
+                if ( targetDefender ) {
+                    res.defender = targetDefender;
                     // store temp priority for calculate damage
                     res.damage = std::distance( trgts.begin(), it );
                     targets.push_back( res );
@@ -700,9 +700,9 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             const Indexes positions = Board::GetDistanceIndexes( dst, ( spell == Spell::FIREBLAST ? 2 : 1 ) );
 
             for ( Indexes::const_iterator it = positions.begin(); it != positions.end(); ++it ) {
-                Unit * target = GetTroopBoard( *it );
-                if ( target && target->AllowApplySpell( spell, hero ) ) {
-                    res.defender = target;
+                Unit * targetUnit = GetTroopBoard( *it );
+                if ( targetUnit && targetUnit->AllowApplySpell( spell, hero ) ) {
+                    res.defender = targetUnit;
                     targets.push_back( res );
                 }
             }
