@@ -203,45 +203,45 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
     const Castle * castle = Arena::GetCastle();
     const Bridge * bridge = Arena::GetBridge();
 
-    std::map<s32, bcell_t> list;
-    list[cur].prnt = -1;
-    list[cur].cost = 0;
-    list[cur].open = false;
+    std::map<s32, bcell_t> cellMap;
+    cellMap[cur].prnt = -1;
+    cellMap[cur].cost = 0;
+    cellMap[cur].open = false;
 
     while ( cur != dst.GetHead()->GetIndex() ) {
         const Cell & center = at( cur );
         Indexes around
-            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
+            = isWide ? GetMoveWideIndexes( cur, ( 0 > cellMap[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, cellMap[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
             const Cell & cell = at( *it );
 
-            if ( list[*it].open && cell.isPassable4( b, center ) &&
-                 // check bridge
-                 ( !bridge || !Board::isBridgeIndex( *it ) || bridge->isPassable( b.GetColor() ) ) ) {
-                const s32 cost = 100 * Board::GetDistance( *it, dst.GetHead()->GetIndex() )
-                                 + ( isWide && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
-                                 + ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( *it ) ? 100 : 0 );
+            if ( cellMap[*it].open && cell.isPassable4( b, center ) && ( !bridge || !Board::isBridgeIndex( *it ) || bridge->isPassable( b.GetColor() ) ) ) {
+                int32_t cost = 100 * Board::GetDistance( *it, dst.GetHead()->GetIndex() );
+                if ( isWide && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) )
+                     cost += 100;
+                if ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( *it ) )
+                    cost += 100;
 
                 // new cell
-                if ( 0 > list[*it].prnt ) {
-                    list[*it].prnt = cur;
-                    list[*it].cost = cost + list[cur].cost;
+                if ( 0 > cellMap[*it].prnt ) {
+                    cellMap[*it].prnt = cur;
+                    cellMap[*it].cost = cost + cellMap[cur].cost;
                 }
                 else
                     // change parent
-                    if ( list[*it].cost > cost + list[cur].cost ) {
-                    list[*it].prnt = cur;
-                    list[*it].cost = cost + list[cur].cost;
+                    if ( cellMap[*it].cost > cost + cellMap[cur].cost ) {
+                    cellMap[*it].prnt = cur;
+                    cellMap[*it].cost = cost + cellMap[cur].cost;
                 }
             }
         }
 
-        list[cur].open = false;
+        cellMap[cur].open = false;
         s32 cost = MAXU16;
 
         // find min cost opens
-        for ( std::map<s32, bcell_t>::const_iterator it = list.begin(); it != list.end(); ++it )
+        for ( std::map<s32, bcell_t>::const_iterator it = cellMap.begin(); it != cellMap.end(); ++it )
             if ( ( *it ).second.open && cost > ( *it ).second.cost ) {
                 cur = ( *it ).first;
                 cost = ( *it ).second.cost;
@@ -257,7 +257,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
     if ( cur == dst.GetHead()->GetIndex() ) {
         while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {
             result.push_back( cur );
-            cur = list[cur].prnt;
+            cur = cellMap[cur].prnt;
         }
 
         std::reverse( result.begin(), result.end() );
@@ -269,13 +269,13 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
             const s32 prev = 1 < result.size() ? result[result.size() - 2] : b.GetHeadIndex();
 
             if ( result.back() == head ) {
-                int side = RIGHT == GetDirection( head, tail ) ? RIGHT_SIDE : LEFT_SIDE;
+                const int side = RIGHT == GetDirection( head, tail ) ? RIGHT_SIDE : LEFT_SIDE;
 
                 if ( !( side & GetDirection( head, prev ) ) )
                     result.push_back( tail );
             }
             else if ( result.back() == tail ) {
-                int side = RIGHT == GetDirection( head, tail ) ? LEFT_SIDE : RIGHT_SIDE;
+                const int side = RIGHT == GetDirection( head, tail ) ? LEFT_SIDE : RIGHT_SIDE;
 
                 if ( !( side & GetDirection( tail, prev ) ) )
                     result.push_back( head );
@@ -540,16 +540,7 @@ bool Battle::Board::isImpassableIndex( s32 index )
 
 bool Battle::Board::isBridgeIndex( s32 index )
 {
-    switch ( index ) {
-    case 49:
-    case 50:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    return index == 49 || index == 50;
 }
 
 bool Battle::Board::isMoatIndex( s32 index )
@@ -823,9 +814,8 @@ void Battle::Board::SetCovrObjects( int icn )
 
 Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 {
-    Board * board = Arena::GetBoard();
-
     if ( isValidIndex( position ) && dir != UNKNOWN ) {
+        Board * board = Arena::GetBoard();
         if ( dir == CENTER )
             return &board->at( position );
         else if ( Board::isValidDirection( position, dir ) )
@@ -838,9 +828,10 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
 {
     Indexes result;
-    result.reserve( 8 );
 
     if ( isValidIndex( center ) ) {
+        result.reserve( 4 );
+
         if ( reflect ) {
             if ( isValidDirection( center, LEFT ) )
                 result.push_back( GetIndexDirection( center, LEFT ) );
@@ -868,9 +859,10 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
 Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 {
     Indexes result;
-    result.reserve( 12 );
 
     if ( isValidIndex( center ) ) {
+        result.reserve( 12 );
+
         for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
             if ( isValidDirection( center, dir ) && GetIndexDirection( center, dir ) != ignore )
                 result.push_back( GetIndexDirection( center, dir ) );
