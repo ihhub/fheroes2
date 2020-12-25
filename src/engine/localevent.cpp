@@ -518,7 +518,8 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         // fast map scroll with dpad
         if ( !_dpadScrollActive )
             ResetModes( KEY_PRESSED );
-    } else {
+    }
+    else {
         ResetModes( KEY_PRESSED );
     }
 #else

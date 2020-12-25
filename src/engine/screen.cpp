@@ -112,8 +112,6 @@ namespace
     const uint8_t * currentPalette = PALPAlette();
 }
 
-#include "SDL.h"
-
 namespace
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
