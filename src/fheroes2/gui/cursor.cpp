@@ -26,10 +26,6 @@
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( WITH_CONTROLLER )
-#define USE_SDL_CURSOR
-#endif
-
 Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
@@ -85,17 +81,14 @@ bool Cursor::SetThemes( int name, bool force )
 /* redraw cursor wrapper for local event */
 void Cursor::Redraw( s32 x, s32 y )
 {
-#if !defined( USE_SDL_CURSOR )
-    Cursor & cur = Cursor::Get();
-    cur.Move( x, y );
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        Cursor & cur = Cursor::Get();
+        cur.Move( x, y );
 
-    if ( fheroes2::cursor().isVisible() ) {
-        fheroes2::Display::instance().render();
+        if ( fheroes2::cursor().isVisible() ) {
+            fheroes2::Display::instance().render();
+        }
     }
-#else
-    (void)x;
-    (void)y;
-#endif
 }
 
 /* move cursor */

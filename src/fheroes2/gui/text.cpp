@@ -165,13 +165,13 @@ void TextAscii::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetLetter( *it, font );
         if ( sprite.empty() )
-            return;
+            continue;
 
         const int updatedWidth = ax + sprite.width();
         if ( maxw && ( updatedWidth - sx ) >= maxw )
             break;
 
-        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + 2 + sprite.y() );
+        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + sprite.y() + 2 );
         ax = updatedWidth;
     }
 }
@@ -315,11 +315,11 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
             continue;
         }
 
-        const fheroes2::Image & sprite = fheroes2::AGG::GetUnicodeLetter( *it, font );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetUnicodeLetter( *it, font );
         if ( sprite.empty() )
-            return;
+            continue;
 
-        fheroes2::Blit( sprite, dst, ax, ay );
+        fheroes2::Blit( sprite, dst, ax + sprite.x(), ay + sprite.y() + 2 );
         ax += sprite.width();
     }
 }
@@ -664,13 +664,21 @@ void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width_ )
         if ( www + char_w >= width_ ) {
             www = 0;
             fheroes2::Rect::height += TextUnicode::CharHeight( ft );
-            if ( pos3 != space )
-                pos2 = space + 1;
 
-            if ( pos3 != space )
-                messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft ) );
-            else
+            if ( pos3 != space ) {
+                if ( space == msg.begin() ) {
+                    if ( pos2 - pos1 < 1 ) // this should never happen!
+                        return;
+                    messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft ) );
+                }
+                else {
+                    pos2 = space + 1;
+                    messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft ) );
+                }
+            }
+            else {
                 messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1, ft ) );
+            }
 
             pos1 = pos2;
             space = pos3;

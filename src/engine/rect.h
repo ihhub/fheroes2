@@ -32,10 +32,10 @@
 
 struct Point
 {
-    s16 x, y;
+    int16_t x, y;
 
     Point();
-    Point( s16, s16 );
+    Point( int16_t, int16_t );
 
     bool operator==( const Point & ) const;
     bool operator!=( const Point & ) const;
@@ -73,7 +73,7 @@ struct Size
 struct Rect : Point, Size
 {
     Rect();
-    Rect( s16, s16, u16, u16 );
+    Rect( int16_t, int16_t, u16, u16 );
     Rect( const Point &, u16, u16 );
     Rect( const Point &, const Size & );
 
