@@ -229,8 +229,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     if ( isWideUnit ) {
         int32_t currentTailCellId = unit.isReflect() ? currentCellId + 1 : currentCellId - 1;
 
-        while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId ) &&
-                !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
+        while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
+                && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
             const Cell & center = at( currentCellId );
             Indexes aroundCellIds;
             if ( cellMap[currentCellId].parentCellId < 0 )
@@ -416,7 +416,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     if ( debug && result.empty() ) {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "Path is not found for " << unit.String() << ", destination: "
-                                  << "(head: " << destination.GetHead()->GetIndex() << ", tail: " << ( destination.GetTail() ? destination.GetTail()->GetIndex() : -1 ) << ")" );
+                                        << "(head: " << destination.GetHead()->GetIndex()
+                                        << ", tail: " << ( destination.GetTail() ? destination.GetTail()->GetIndex() : -1 ) << ")" );
     }
 
     return result;
