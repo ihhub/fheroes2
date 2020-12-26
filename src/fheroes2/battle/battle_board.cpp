@@ -391,9 +391,15 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
         // Skip moat position
         if ( isMoatBuilt && !Board::isMoatIndex( startCellId ) ) {
-            Indexes::iterator moatIt = std::find_if( result.begin(), result.end(), Board::isMoatIndex );
-            if ( moatIt != result.end() )
-                result.resize( std::distance( result.begin(), ++moatIt ) );
+            for ( size_t i = 0; i < result.size(); ++i ) {
+                if ( isWideUnit && result[i] == unit.GetTailIndex() )
+                    continue;
+
+                if ( Board::isMoatIndex( result[i] ) ) {
+                    result.resize( i + 1 );
+                    break;
+                }
+            }
         }
 
         // set passable info
