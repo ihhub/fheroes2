@@ -1,0 +1,6 @@
+add_subdirectory(thirdparty)
+add_subdirectory(engine)
+add_subdirectory(fheroes2)
+if(ENABLE_TOOLS)
+	add_subdirectory(tools)
+endif()
