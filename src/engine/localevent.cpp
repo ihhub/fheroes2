@@ -477,7 +477,6 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( CLICK_LEFT );
     le.ResetModes( CLICK_RIGHT );
     le.ResetModes( CLICK_MIDDLE );
-    le.ResetModes( CLICK_MIDDLE );
     le.ResetModes( KEY_HOLD );
     return le;
 }
@@ -492,6 +491,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     ResetModes( MOUSE_MOTION );
     ResetModes( KEY_PRESSED );
+    ResetModes( CLICK_LEFT );
+    ResetModes( CLICK_MIDDLE );
+    ResetModes( CLICK_RIGHT );
 
     mouse_wm = Point();
 
@@ -725,7 +727,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
-    else
+    else // mouse button released
         switch ( button.button ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
@@ -736,6 +738,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 #endif
 
         case SDL_BUTTON_LEFT:
+            SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
 
             // emulate press right
@@ -745,10 +748,12 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
             break;
 
         case SDL_BUTTON_MIDDLE:
+            SetModes( CLICK_MIDDLE );
             mouse_rm = mouse_cu;
             break;
 
         case SDL_BUTTON_RIGHT:
+            SetModes( CLICK_RIGHT );
             mouse_rr = mouse_cu;
             break;
 
