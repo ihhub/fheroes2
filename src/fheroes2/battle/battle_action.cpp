@@ -76,8 +76,9 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
                 defender.UpdateDirection( board[attacker.GetHeadIndex()].GetPos() );
         }
     }
-    else
+    else {
         attacker.UpdateDirection( board[dst].GetPos() );
+    }
 
     // check luck right before the attack
     attacker.SetRandomLuck();
