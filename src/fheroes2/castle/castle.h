@@ -301,19 +301,29 @@ public:
 
     void AddCastle( Castle * castle );
 
-    Castle * Get( const Point & ) const;
+    Castle * Get( const Point & position ) const;
 
     void Scoute( int ) const;
 
     // begin/end methods so we can iterate through the elements
-    std::vector<Castle *>::const_iterator begin() const;
-    std::vector<Castle *>::const_iterator end() const;
+    std::vector<Castle *>::const_iterator begin() const
+    {
+        return _castles.begin();
+    }
 
-    size_t Size() const;
+    std::vector<Castle *>::const_iterator end() const
+    {
+        return _castles.end();
+    }
+
+    size_t Size() const
+    {
+        return _castles.size();
+    }
 
 private:
-    std::vector<Castle *> castles;
-    std::vector<int8_t> castleTiles;
+    std::vector<Castle *> _castles;
+    std::vector<int8_t> _castleTiles;
 };
 
 StreamBase & operator<<( StreamBase &, const VecCastles & );

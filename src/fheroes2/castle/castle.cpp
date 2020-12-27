@@ -2589,7 +2589,7 @@ void VecCastles::ChangeColors( int col1, int col2 )
 AllCastles::AllCastles()
 {
     // reserve memory
-    castles.reserve( MAXCASTLES );
+    _castles.reserve( MAXCASTLES );
 }
 
 AllCastles::~AllCastles()
@@ -2606,56 +2606,69 @@ void AllCastles::Clear( void )
 {
     for ( auto it = begin(); it != end(); ++it )
         delete *it;
-    castles.clear();
-    castleTiles.clear();
+    _castles.clear();
+    _castleTiles.clear();
 }
 
 void AllCastles::AddCastle( Castle * castle )
 {
-    castles.push_back( castle );
+    // allocate one slot per map tile, at the first call to AddCastle() that occured after a reset (eg when there is a map change)
+    if ( _castles.empty() ) {
+        _castleTiles.resize( world.w() * world.h(), -1 );
+    }
+
+    _castles.push_back( castle );
 
     /* Register position of all castle elements on the map
-
+    Castle element positions are:
                 -
                ---
               -+++-
               ++X++
 
-    */
+     where
+     X is the main castle position
+     + are tiles that are considered part of the castle for the Get() method
+     - are tiles where there is a castle sprite, but not used in the Get() method
 
-    // allocate one slot per map tile, at the first call of AddCastle() that occured after a reset
-    if ( castleTiles.empty() ) {
-        castleTiles.resize( world.w() * world.h(), -1 );
-    }
+    */
 
     static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
 
     // put the index of the castle for all relevant tiles
-    int8_t idx = static_cast<int8_t>( castles.size() - 1 );
-    int32_t w = world.w();
+    const int8_t idx = static_cast<int8_t>( _castles.size() - 1 );
+    const int32_t width = world.w();
 
-    Point p = castle->GetCenter() + Point( -1, -1 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( 0, -1 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( +1, -1 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( -2, 0 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( -1, 0 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( 0, 0 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( 1, 0 );
-    castleTiles[p.y * w + p.x] = idx;
-    p = castle->GetCenter() + Point( 2, 0 );
-    castleTiles[p.y * w + p.x] = idx;
+    int32_t position = castle->GetCenter().x + castle->GetCenter().y * width;
+
+    _castleTiles[position] = idx; // (0, 0)
+
+    position -= 2;
+    _castleTiles[position] = idx; // (-2, 0)
+
+    position += 1;
+    _castleTiles[position] = idx; // (-1, 0)
+
+    position -= width;
+    _castleTiles[position] = idx; // (-1, -1)
+
+    position += 1;
+    _castleTiles[position] = idx; // (0, -1)
+
+    position += 1;
+    _castleTiles[position] = idx; // (+1, -1)
+
+    position += width;
+    _castleTiles[position] = idx; // (+1, 0)
+
+    position += 1;
+    _castleTiles[position] = idx; // (+2, 0)
 }
 
 Castle * AllCastles::Get( const Point & position ) const
 {
-    int8_t idx = castleTiles[position.y * world.w() + position.x];
-    return ( idx == -1 ) ? NULL : castles[idx];
+    const int8_t idx = _castleTiles[position.y * world.w() + position.x];
+    return ( idx < 0 ) ? NULL : _castles[idx];
 }
 
 void AllCastles::Scoute( int colors ) const
@@ -2663,21 +2676,6 @@ void AllCastles::Scoute( int colors ) const
     for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
             ( *it )->Scoute();
-}
-
-std::vector<Castle *>::const_iterator AllCastles::begin() const
-{
-    return castles.begin();
-}
-
-std::vector<Castle *>::const_iterator AllCastles::end() const
-{
-    return castles.end();
-}
-
-size_t AllCastles::Size() const
-{
-    return castles.size();
 }
 
 /* pack castle */
@@ -2742,7 +2740,7 @@ StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
     msg << static_cast<u32>( castles.Size() );
 
-    for ( auto & castle : castles )
+    for ( const auto & castle : castles )
         msg << *castle;
 
     return msg;
@@ -2750,13 +2748,13 @@ StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 
 StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
     castles.Clear();
 
-    for ( u32 i = 0; i < size; ++i ) {
-        auto castle = new Castle();
+    for ( uint32_t i = 0; i < size; ++i ) {
+        Castle * castle = new Castle();
         msg >> *castle;
         castles.AddCastle( castle );
     }
