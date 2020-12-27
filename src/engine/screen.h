@@ -180,8 +180,8 @@ namespace fheroes2
         bool _show;
 
         Cursor()
-            : _offsetX ( 0 )
-            , _offsetY ( 0 )
+            : _offsetX( 0 )
+            , _offsetY( 0 )
             , _emulation( true )
             , _show( false )
         {}
