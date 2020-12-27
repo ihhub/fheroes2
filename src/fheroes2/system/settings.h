@@ -339,7 +339,7 @@ public:
     int GameType( void ) const;
     void SetGameType( int );
 
-    void SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & );
+    void SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus );
     void SetCurrentCampaignScenarioID( const int scenarioID );
     void SetCurrentCampaignID( const int campaignID );
     void AddCurrentCampaignMapToFinished();
