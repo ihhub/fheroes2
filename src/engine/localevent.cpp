@@ -514,7 +514,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     ResetModes( MOUSE_MOTION );
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+    if ( _gameController != nullptr ) {
         // fast map scroll with dpad
         if ( !_dpadScrollActive )
             ResetModes( KEY_PRESSED );
@@ -664,7 +664,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+    if ( _gameController != nullptr ) {
         ProcessControllerAxisMotion();
     }
 #endif
@@ -679,25 +679,25 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
 {
     if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {
-        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
+        if ( abs( motion.value ) > CONTROLLER_L_DEADZONE )
             _controllerLeftXAxis = motion.value;
         else
             _controllerLeftXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTY ) {
-        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
+        if ( abs( motion.value ) > CONTROLLER_L_DEADZONE )
             _controllerLeftYAxis = motion.value;
         else
             _controllerLeftYAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTX ) {
-        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
+        if ( abs( motion.value ) > CONTROLLER_R_DEADZONE )
             _controllerRightXAxis = motion.value;
         else
             _controllerRightXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTY ) {
-        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
+        if ( abs( motion.value ) > CONTROLLER_R_DEADZONE )
             _controllerRightYAxis = motion.value;
         else
             _controllerRightYAxis = 0;

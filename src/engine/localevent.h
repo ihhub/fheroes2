@@ -270,7 +270,7 @@ public:
     void OpenController();
     void CloseController();
 
-    void SetControllerPointerSpeed( const double newSpeed )
+    void SetControllerPointerSpeed( const int newSpeed )
     {
         _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
     }
@@ -371,11 +371,11 @@ private:
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _controllerPointerPosX = 0;
     double _controllerPointerPosY = 0;
-    int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
     uint32_t _lastControllerTime = 0;
+    int16_t _controllerLeftXAxis = 0;
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
 };
