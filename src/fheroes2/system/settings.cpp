@@ -895,7 +895,7 @@ std::string Settings::String( void ) const
         os << "lang = " << force_lang << std::endl;
 #endif
 
-    os << std::endl << "# controller pointer speed" << std::endl;
+    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller_pointer_speed = " << _controllerPointerSpeed << std::endl;
 
     return os.str();

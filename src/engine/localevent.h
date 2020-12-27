@@ -270,7 +270,7 @@ public:
     void OpenController();
     void CloseController();
 
-    void SetControllerPointerSpeed( double newSpeed )
+    void SetControllerPointerSpeed( const double newSpeed )
     {
         _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
     }
