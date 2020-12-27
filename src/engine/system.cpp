@@ -223,6 +223,8 @@ int System::SetEnvironment( const char * name, const char * value )
     // SDL 1.2.12 (char *)
     return SDL_putenv( &str[0] );
 #endif
+#elif defined( __SWITCH__ )
+    return SDL_setenv( name, value, 1 );
 #else
     return setenv( name, value, 1 );
 #endif

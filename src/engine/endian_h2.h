@@ -54,6 +54,20 @@
 #define be32toh( x ) OSSwapBigToHostInt32( x )
 #define le32toh( x ) OSSwapLittleToHostInt32( x )
 
+#elif defined( __SWITCH__ )
+#include <machine/endian.h>
+#define	LITTLE_ENDIAN	_LITTLE_ENDIAN
+#define	BIG_ENDIAN	_BIG_ENDIAN
+#define	BYTE_ORDER	_BYTE_ORDER
+#define htobe16( x ) __bswap16( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) __bswap16( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) __bswap32( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) __bswap32( x )
+#define le32toh( x ) ( x )
+
 #else
 #error "Unsupported platform"
 #endif
