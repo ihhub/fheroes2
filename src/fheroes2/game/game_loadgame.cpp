@@ -134,6 +134,7 @@ int Game::LoadGame( void )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Cursor & cursor = Cursor::Get();
+    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
@@ -169,6 +170,7 @@ int Game::LoadGame( void )
     buttons.back().setPosition( buttonXPos, buttonYPos + buttonYStep * 5 );
     buttons.back().draw();
 
+    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
