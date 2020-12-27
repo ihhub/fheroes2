@@ -220,6 +220,12 @@ int main( int argc, char ** argv )
                 case Game::LOADMULTI:
                     rs = Game::LoadMulti();
                     break;
+                case Game::LOADHOTSEAT:
+                    rs = Game::LoadHotseat();
+                    break;
+                case Game::LOADNETWORK:
+                    rs = Game::LoadNetwork();
+                    break;
                 case Game::SCENARIOINFO:
                     rs = Game::ScenarioInfo();
                     break;
