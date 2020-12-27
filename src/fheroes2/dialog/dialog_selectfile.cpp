@@ -239,10 +239,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             if ( ( *it ).file == lastfile )
                 break;
 
-        if ( it != lists.end() )
+        if ( it != lists.end() ) {
             listbox.SetCurrent( std::distance( lists.begin(), it ) );
-        else
+        }
+        else {
+            filename.clear();
+            charInsertPos = 0;
             listbox.Unselect();
+        }
     }
 
     if ( !editor && lists.empty() )
