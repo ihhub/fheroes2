@@ -243,8 +243,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             listbox.SetCurrent( std::distance( lists.begin(), it ) );
         }
         else {
-            filename.clear();
-            charInsertPos = 0;
+            if ( !editor ) {
+                filename.clear();
+                charInsertPos = 0;
+            }
             listbox.Unselect();
         }
     }
