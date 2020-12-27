@@ -232,6 +232,7 @@
     <ClCompile Include="src\fheroes2\battle\battle_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_tower.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_troop.cpp" />
+    <ClCompile Include="src\fheroes2\campaign\campaign_data.cpp" />
     <ClCompile Include="src\fheroes2\castle\buildinginfo.cpp" />
     <ClCompile Include="src\fheroes2\castle\captain.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle.cpp" />
@@ -428,6 +429,7 @@
     <ClInclude Include="src\fheroes2\battle\battle_pathfinding.h" />
     <ClInclude Include="src\fheroes2\battle\battle_tower.h" />
     <ClInclude Include="src\fheroes2\battle\battle_troop.h" />
+    <ClInclude Include="src\fheroes2\campaign\campaign_data.h" />
     <ClInclude Include="src\fheroes2\castle\buildinginfo.h" />
     <ClInclude Include="src\fheroes2\castle\captain.h" />
     <ClInclude Include="src\fheroes2\castle\castle.h" />
