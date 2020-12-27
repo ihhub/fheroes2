@@ -222,14 +222,11 @@ namespace Interface
             }
 
             if ( _currentId >= 0 && ( _topId > _currentId || _topId + maxItems <= _currentId ) ) { // out of view
-                if ( _currentId + maxItems < _size() ) {
-                    _topId = ( _currentId / maxItems ) * maxItems;
+                if ( _topId > _currentId ) { // scroll up, put current id on top
+                    _topId = _currentId;
                 }
-                else if ( maxItems < _size() ) {
-                    _topId = _size() - maxItems;
-                }
-                else {
-                    _topId = 0;
+                else if ( _topId + maxItems <= _currentId ) { // scroll down, put current id at bottom
+                    _topId = _currentId + 1 - maxItems;
                 }
 
                 UpdateScrollbarRange();

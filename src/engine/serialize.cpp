@@ -112,7 +112,7 @@ StreamBase & StreamBase::operator>>( u16 & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( s16 & v )
+StreamBase & StreamBase::operator>>( int16_t & v )
 {
     v = get16();
     return *this;
@@ -208,7 +208,7 @@ StreamBase & StreamBase::operator<<( const u16 v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s16 v )
+StreamBase & StreamBase::operator<<( const int16_t v )
 {
     put16( v );
     return *this;

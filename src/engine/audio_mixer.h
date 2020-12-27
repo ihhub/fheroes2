@@ -47,7 +47,7 @@ namespace Mixer
 
     void SetChannels( u8 );
     u16 MaxVolume( void );
-    u16 Volume( int ch, s16 = -1 );
+    u16 Volume( int ch, int16_t = -1 );
 
     void Pause( int ch = -1 );
     void Resume( int ch = -1 );

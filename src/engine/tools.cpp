@@ -911,7 +911,7 @@ Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step )
     const u16 dx = std::abs( pt2.x - pt1.x );
     const u16 dy = std::abs( pt2.y - pt1.y );
 
-    s16 ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
+    int16_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
     Point pt( pt1 );
 
     for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {

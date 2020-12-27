@@ -101,13 +101,13 @@ void LocalEvent::SetTapDelayForRightClickEmulation( u32 d )
     clock_delay = d < 200 ? TAP_DELAY_EMULATE : d;
 }
 
-void LocalEvent::SetMouseOffsetX( s16 x )
+void LocalEvent::SetMouseOffsetX( int16_t x )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.x = x;
 }
 
-void LocalEvent::SetMouseOffsetY( s16 y )
+void LocalEvent::SetMouseOffsetY( int16_t y )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.y = y;

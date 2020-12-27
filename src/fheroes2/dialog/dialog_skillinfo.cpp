@@ -166,7 +166,7 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 4 );
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), Dialog::OK );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), true );
     fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )

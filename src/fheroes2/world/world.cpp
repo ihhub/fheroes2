@@ -596,7 +596,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         excld.reserve( vec_tiles.size() / 2 );
 
         const u32 dist = 2;
-        const u8 objs[] = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE, 0};
+        const std::vector<uint8_t> objs = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE};
 
         // create exclude list
         {

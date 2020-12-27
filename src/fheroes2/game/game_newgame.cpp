@@ -23,7 +23,9 @@
 #include <sstream>
 
 #include "agg.h"
+#include "assert.h"
 #include "audio_music.h"
+#include "campaign_data.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -35,6 +37,21 @@
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
+
+std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
+{
+    assert( scenarioId >= 0 );
+    std::vector<Campaign::ScenarioBonusData> bonus;
+
+    // TODO: apply use of campaignID
+    if ( scenarioId == 0 ) {
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 ) );
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 ) );
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 ) );
+    }
+
+    return bonus;
+}
 
 namespace
 {
@@ -130,7 +147,7 @@ int Game::NewHotSeat( void )
     if ( conf.GameType() == Game::TYPE_CAMPAIGN )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
-    conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
+    conf.SetGameType( Game::TYPE_HOTSEAT );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
@@ -197,16 +214,24 @@ int Game::NewCampain( void )
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    fheroes2::ButtonSprite firstChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + top.y, releaseButton, pressedButton );
-    fheroes2::ButtonSprite secondChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep + top.y, releaseButton, pressedButton );
-    fheroes2::ButtonSprite thirdChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * 2 + top.y, releaseButton, pressedButton );
+    const std::vector<Campaign::ScenarioBonusData> bonusChoices = getCampaignBonusData( chosenCampaign, 0 );
+    const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
 
-    firstChoice.press();
+    fheroes2::ButtonGroup buttonChoices;
+    fheroes2::OptionButtonGroup optionButtonGroup;
 
-    fheroes2::OptionButtonGroup buttonGroup;
-    buttonGroup.addButton( &firstChoice );
-    buttonGroup.addButton( &secondChoice );
-    buttonGroup.addButton( &thirdChoice );
+    for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+        buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
+        optionButtonGroup.addButton( &buttonChoices.button( i ) );
+    }
+
+    Campaign::ScenarioBonusData scenarioBonus;
+
+    // in case there's no bonus for the map
+    if ( bonusChoiceCount > 0 ) {
+        scenarioBonus = bonusChoices[0];
+        buttonChoices.button( 0 ).press();
+    }
 
     const std::vector<Maps::FileInfo> & campaignMap = goodCampaign ? GetRolandCampaign() : GetArchibaldCampaign();
 
@@ -217,9 +242,8 @@ int Game::NewCampain( void )
     buttonOk.draw();
     buttonCancel.draw();
 
-    firstChoice.draw();
-    secondChoice.draw();
-    thirdChoice.draw();
+    for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
+        buttonChoices.button( i ).draw();
 
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
@@ -235,12 +259,11 @@ int Game::NewCampain( void )
         TextBox mapDescription( goodCampaign ? rolandCampaignDescription[0] : archibaldCampaignDescription[0], Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
-        Text choice1( _( "2000 Gold" ), Font::BIG );
-        choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
-        Text choice2( goodCampaign ? _( "Thunder Mace" ) : _( "Mage's Ring" ), Font::BIG );
-        choice2.Blit( top.x + 425, top.y + 209 + 22 - choice2.h() / 2 );
-        Text choice3( goodCampaign ? _( "Gauntlets" ) : _( "Minor Scroll" ), Font::BIG );
-        choice3.Blit( top.x + 425, top.y + 209 + 44 - choice3.h() / 2 );
+        const int textChoiceWidth = 150;
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            Text choice( bonusChoices[i].ToString(), Font::BIG );
+            choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
+        }
     }
     else {
         TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
@@ -290,17 +313,14 @@ int Game::NewCampain( void )
         if ( !buttonOk.isDisabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MousePressLeft( firstChoice.area() ) ) {
-            firstChoice.press();
-            buttonGroup.draw();
-        }
-        if ( le.MousePressLeft( secondChoice.area() ) ) {
-            secondChoice.press();
-            buttonGroup.draw();
-        }
-        if ( le.MousePressLeft( thirdChoice.area() ) ) {
-            thirdChoice.press();
-            buttonGroup.draw();
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
+                buttonChoices.button( i ).press();
+                optionButtonGroup.draw();
+                scenarioBonus = bonusChoices[i];
+
+                break;
+            }
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
@@ -318,6 +338,36 @@ int Game::NewCampain( void )
                 Dialog::Message( "Campaign Game loading failure", "Please make sure that campaign files are correct and present", Font::SMALL, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
+            }
+
+            conf.SetCurrentCampaignScenarioBonus( scenarioBonus );
+            conf.SetCurrentCampaignScenarioID( 0 );
+            conf.SetCurrentCampaignID( chosenCampaign );
+
+            const Players & sortedPlayers = conf.GetPlayers();
+            for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+                if ( !*it )
+                    continue;
+
+                const Player & player = ( **it );
+                if ( !player.isControlHuman() )
+                    continue;
+
+                Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+
+                switch ( scenarioBonus._type ) {
+                case Campaign::ScenarioBonusData::RESOURCES:
+                    kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+                    break;
+                case Campaign::ScenarioBonusData::ARTIFACT:
+                    kingdom.GetBestHero()->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                    break;
+                case Campaign::ScenarioBonusData::TROOP:
+                    kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+                    break;
+                default:
+                    assert( 0 );
+                }
             }
 
             return Game::STARTGAME;
