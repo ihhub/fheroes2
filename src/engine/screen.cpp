@@ -134,6 +134,7 @@ namespace
         virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
+                SDL_ShowCursor( 0 );
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
@@ -188,7 +189,6 @@ namespace
 
             if ( enable ) {
                 clear();
-                SDL_ShowCursor( 0 );
                 _emulation = true;
                 update( _image, _image.x(), _image.y() );
             }
