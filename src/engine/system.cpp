@@ -100,7 +100,7 @@ std::string System::GetHomeDirectory( const std::string & prog )
     std::string res;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const char * path = SDL_GetPrefPath( "", prog.c_str() );
+    char * path = SDL_GetPrefPath( "", prog.c_str() );
     if ( path ) {
         res = path;
         SDL_free( path );
