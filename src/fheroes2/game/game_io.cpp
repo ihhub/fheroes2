@@ -305,7 +305,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         fs >> header;
     }
 
-    if ( ( Settings::Get().GameType() & fileGameType ) != fileGameType )
+    if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
 
 #ifndef WITH_ZLIB
