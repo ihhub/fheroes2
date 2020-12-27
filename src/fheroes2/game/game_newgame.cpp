@@ -147,7 +147,7 @@ int Game::NewHotSeat( void )
     if ( conf.GameType() == Game::TYPE_CAMPAIGN )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
-    conf.SetGameType( Game::TYPE_HOTSEAT );
+    conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
