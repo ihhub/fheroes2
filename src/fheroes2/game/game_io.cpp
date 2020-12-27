@@ -210,6 +210,11 @@ bool Game::Load( const std::string & fn )
 
     size_t offset = fs.tell();
     fs.close();
+    
+    if ( ( conf.GameType() & fileGameType ) == 0 ) {
+        Dialog::Message( "Warning", _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
+        return false;
+    }
 
 #ifndef WITH_ZLIB
     if ( header.status & HeaderSAV::IS_COMPRESS ) {
