@@ -165,6 +165,7 @@ namespace Game
         EVENT_EMULATETOGGLE,
         EVENT_STACKSPLIT_SHIFT,
         EVENT_STACKSPLIT_CTRL,
+        EVENT_JOINSTACKS,
         EVENT_LAST,
     };
 
