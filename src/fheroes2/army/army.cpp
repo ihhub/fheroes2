@@ -825,14 +825,14 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
-void Troops::JoinAllTroopsOfType( const int monsterID ) 
+void Troops::JoinAllTroopsOfType( const int monsterID )
 {
     if ( monsterID == Monster::UNKNOWN )
         return;
 
     bool hasJoinedTroops = false;
     for ( iterator it = begin(); it != end(); ++it ) {
-        if ( !( *it )->isValid() || (*it)->GetID() != monsterID )
+        if ( !( *it )->isValid() || ( *it )->GetID() != monsterID )
             continue;
 
         if ( !hasJoinedTroops ) {
