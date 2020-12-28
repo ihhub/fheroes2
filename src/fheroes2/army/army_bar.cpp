@@ -526,13 +526,13 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop &
     return true;
 }
 
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop )
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*troop*/ )
 {
     _isTroopInfoVisible = true;
     return true;
 }
 
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ )
 {
     _isTroopInfoVisible = true;
     return true;
