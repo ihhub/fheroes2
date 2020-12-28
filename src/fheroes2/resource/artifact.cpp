@@ -977,7 +977,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
     }
 }
 
-bool ArtifactsBar::ActionBarSingleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 {
     if ( isSelected() ) {
         if ( !read_only )
@@ -1000,7 +1000,7 @@ bool ArtifactsBar::ActionBarSingleClick( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
@@ -1049,7 +1049,7 @@ bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarPressRight( Artifact & art )
+bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
 {
     ResetSelected();
 
@@ -1063,7 +1063,7 @@ bool ArtifactsBar::ActionBarPressRight( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarSingleClick( Artifact & art1, Artifact & art2 )
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art1, Artifact & art2 )
 {
     if ( art1() != Artifact::MAGIC_BOOK && art2() != Artifact::MAGIC_BOOK ) {
         std::swap( art1, art2 );
