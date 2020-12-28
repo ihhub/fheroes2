@@ -288,6 +288,11 @@ public:
     }
 #endif
 
+#ifdef WITH_TOUCHPAD
+    void SetVitaTouchControlType(int newType) { vita_touchcontrol_type = newType; }
+    void SetVitaTouchControlSpeed(int newSpeed) { vita_touchcontrol_speed = newSpeed; }
+#endif
+
 private:
     LocalEvent();
 
@@ -363,9 +368,14 @@ private:
     KeySym emulate_press_right;
 #endif
 
-#if defined( VITA ) || defined( WITH_GAMEPAD )
+#if defined( WITH_TOUCHPAD ) || defined( WITH_GAMEPAD )
     float xAxisFloat = 0;
     float yAxisFloat = 0;
+#endif
+
+#ifdef WITH_TOUCHPAD
+    int vita_touchcontrol_type = 1;
+    int vita_touchcontrol_speed = 15;
 #endif
 
 #ifdef WITH_GAMEPAD
@@ -395,7 +405,7 @@ private:
     bool dpadScrollActive = false;
 #endif
 
-#if VITA
+#if WITH_TOUCHPAD
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
     bool secondTouchDown = false;
     bool dpadInputActive = false;

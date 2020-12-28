@@ -70,7 +70,7 @@ bool SDL::Init( const u32 system )
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
 
-#ifdef VITA
+#ifdef WITH_TOUCHPAD
     SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
 

@@ -597,7 +597,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             HandleJoyButtonEvent( event.cbutton );
             break;
 #endif
-#ifdef VITA
+#ifdef WITH_TOUCHPAD
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
@@ -672,10 +672,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     return true;
 }
 
-#ifdef VITA
+#ifdef WITH_TOUCHPAD
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( event.touchId != 0 )
+    if ( event.touchId != 0 || vita_touchcontrol_type == 0 )
         return;
 
     // doesn't really work at this point..
@@ -687,26 +687,45 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
+    if (event.type == SDL_FINGERDOWN)
+    {
+        xaxis_starting = event.x * (float)960;
+        yaxis_starting = event.y * (float)544;
+        xcursor_starting = xaxis_float;
+        ycursor_starting = yaxis_float;
+    }
+
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
     SetModes( MOUSE_MOTION );
 
-    float w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
-    float h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
+    if (vita_touchcontrol_type == 1)
+    {
+        float w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
+        float h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
 
-    // cursor position with scaled images
-    if ( fheroes2::engine().isFullScreen() ) {
-        w = display.width();
-        h = display.height();
+        // cursor position with scaled images
+        if ( fheroes2::engine().isFullScreen() ) {
+            w = display.width();
+            h = display.height();
 
-        if ( fheroes2::engine().GetVitaKeepAspectRatio() ) {
-            w *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / vitaDestRect.width );
-            h *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / vitaDestRect.height );
+            if ( fheroes2::engine().GetVitaKeepAspectRatio() ) {
+                w *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / vitaDestRect.width );
+                h *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / vitaDestRect.height );
+            }
         }
-    }
 
-    xAxisFloat = event.x * w - vitaDestRect.x;
-    yAxisFloat = event.y * h - vitaDestRect.y;
+        xAxisFloat = event.x * w - vitaDestRect.x;
+        yAxisFloat = event.y * h - vitaDestRect.y;
+    }
+    else if (vita_touchcontrol_type == 2)
+    {
+        float deltaX = ((event.x * (float)960) - xaxis_starting) * (vita_touchcontrol_speed / 10.0f);
+        float deltaY = ((event.y * (float)544) - yaxis_starting) * (vita_touchcontrol_speed / 10.0f);
+        xaxis_float = xcursor_starting + deltaX;
+        yaxis_float = ycursor_starting + deltaY;
+    }
+    
 
     if ( xAxisFloat < 0 )
         xAxisFloat = 0;
@@ -1318,7 +1337,7 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_JOYBUTTONDOWN, false );
 #endif
 
-#if VITA
+#if WITH_TOUCHPAD
     SetState( SDL_FINGERMOTION, true );
     SetState( SDL_FINGERDOWN, true );
     SetState( SDL_FINGERUP, true );
@@ -1326,7 +1345,6 @@ void LocalEvent::SetStateDefaults( void )
 
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );
-    SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );
