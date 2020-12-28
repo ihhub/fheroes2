@@ -56,9 +56,9 @@
 
 #elif defined( __SWITCH__ )
 #include <machine/endian.h>
-#define	LITTLE_ENDIAN	_LITTLE_ENDIAN
-#define	BIG_ENDIAN	_BIG_ENDIAN
-#define	BYTE_ORDER	_BYTE_ORDER
+#define LITTLE_ENDIAN _LITTLE_ENDIAN
+#define BIG_ENDIAN _BIG_ENDIAN
+#define BYTE_ORDER _BYTE_ORDER
 #define htobe16( x ) __bswap16( x )
 #define htole16( x ) ( x )
 #define be16toh( x ) __bswap16( x )
