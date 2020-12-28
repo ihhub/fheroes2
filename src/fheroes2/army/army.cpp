@@ -825,6 +825,26 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
+void Troops::JoinAllTroopsOfType( const int monsterID ) 
+{
+    if ( monsterID == Monster::UNKNOWN )
+        return;
+
+    bool hasJoinedTroops = false;
+    for ( iterator it = begin(); it != end(); ++it ) {
+        if ( !( *it )->isValid() || (*it)->GetID() != monsterID )
+            continue;
+
+        if ( !hasJoinedTroops ) {
+            ( *it )->SetCount( GetCountMonsters( monsterID ) );
+            hasJoinedTroops = true;
+        }
+        else {
+            ( *it )->Reset();
+        }
+    }
+}
+
 Army::Army( HeroBase * s )
     : commander( s )
     , combat_format( true )
