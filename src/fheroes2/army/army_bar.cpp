@@ -239,6 +239,11 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
+    if ( troop.isValid() && LocalEvent::Get().MouseClickMiddle() ) {
+        RedistributeArmyByOne( troop, army );
+        return true;
+    }
+
     if ( isSelected() ) {
         ArmyTroop * troop2 = GetSelectedItem();
 
