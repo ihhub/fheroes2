@@ -244,10 +244,10 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarLeftMouseSingleClick( Artifact & ) override;
-    virtual bool ActionBarLeftMouseSingleClick( Artifact &, Artifact & ) override;
-    virtual bool ActionBarLeftMouseDoubleClick( Artifact & ) override;
-    virtual bool ActionBarRightMouseHold( Artifact & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
+    virtual bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
