@@ -328,6 +328,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 RedistributeArmyByOne( troop, army );
                 return false;
             }
+            else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+                army->JoinAllTroopsOfType( troop.GetID() );
+                return false;
+            }
 
             Cursor::Get().Hide();
             spcursor.hide();
@@ -421,6 +425,17 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
 bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
+    if ( troop.isValid() && !read_only ) {
+        if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
+            RedistributeArmyByOne( troop, army );
+            return false;
+        }
+        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+            army->JoinAllTroopsOfType( troop.GetID() );
+            return false;
+        }
+    }
+
     ArmyTroop * troop2 = GetSelectedItem();
 
     if ( &troop == troop2 ) {
