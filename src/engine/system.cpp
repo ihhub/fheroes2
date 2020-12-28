@@ -107,8 +107,10 @@ std::string System::GetHomeDirectory( const std::string & prog )
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     char * path = SDL_GetPrefPath( "", prog.c_str() );
-    res = path;
-    SDL_free( path );
+    if ( path ) {
+        res = path;
+        SDL_free( path );
+    }
 #endif
 
     if ( System::GetEnvironment( "HOME" ) )

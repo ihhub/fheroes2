@@ -230,7 +230,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), OK | CANCEL );
+    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     // text

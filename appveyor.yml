@@ -46,7 +46,7 @@ install:
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
-  - cmd: 7z a fheroes2_windows_%platform%_%deploy_conf_name%.zip fheroes2.exe SDL*.dll lib*.dll
+  - cmd: 7z a fheroes2_windows_%platform%_%deploy_conf_name%.zip fheroes2.exe SDL*.dll lib*.dll zlib*.dll
   - cmd: cd C:\projects\fheroes2
   - cmd: xcopy /Y /s /Q "doc\README.txt" "."
   - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip script\demo\demo_windows.bat LICENSE fheroes2.key changelog.txt README.txt

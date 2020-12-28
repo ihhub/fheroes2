@@ -91,7 +91,7 @@ public:
     Heroes * GetLastLostHero( void ) const;
 
     const Heroes * GetFirstHeroStartCondLoss( void ) const;
-    const Heroes * GetBestHero( void ) const;
+    Heroes * GetBestHero();
 
     int GetControl( void ) const;
     int GetColor( void ) const;

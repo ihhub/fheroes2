@@ -165,7 +165,7 @@ namespace Battle
         {}
 
         Point coord;
-        s32 index;
+        int32_t index;
     };
 
     class StatusListBox : public ::Interface::ListBox<std::string>
@@ -177,12 +177,12 @@ namespace Battle
 
         void SetPosition( u32 px, u32 py )
         {
-            const u32 mx = 6;
-            const u32 sw = fheroes2::Display::DEFAULT_WIDTH;
-            const u32 sh = mx * 20;
+            const uint32_t mx = 6;
+            const uint32_t sw = fheroes2::Display::DEFAULT_WIDTH;
+            const uint32_t sh = mx * 20;
             border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
             const Rect & area = border.GetArea();
-            const u32 ax = area.x + area.w - 20;
+            const int32_t ax = area.x + area.w - 20;
 
             SetTopLeft( area );
             SetAreaMaxItems( mx );
@@ -197,7 +197,7 @@ namespace Battle
             _scrollbar.show();
         }
 
-        const Rect & GetArea( void ) const
+        const Rect & GetArea() const
         {
             return border.GetRect();
         }
@@ -212,7 +212,7 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, s32 px, s32 py, bool ) override
+        virtual void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
         {
             const Text text( str, Font::BIG );
             text.Blit( px, py );
@@ -226,14 +226,14 @@ namespace Battle
             const fheroes2::Sprite & sp1 = fheroes2::AGG::GetICN( ICN::DROPLISL, 10 );
             const fheroes2::Sprite & sp2 = fheroes2::AGG::GetICN( ICN::DROPLISL, 12 );
             const fheroes2::Sprite & sp3 = fheroes2::AGG::GetICN( ICN::DROPLISL, 11 );
-            const u32 ax = buttonPgUp.area().x;
-            const u32 ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
+            const int32_t ax = buttonPgUp.area().x;
+            const int32_t ah = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height );
 
             const Rect & borderRect = border.GetRect();
             Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ), fheroes2::Rect( borderRect.x, borderRect.y, borderRect.w, borderRect.h ) );
 
-            for ( u32 ii = 0; ii < ( ah / sp3.height() ); ++ii )
-                fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * ii ) );
+            for ( int32_t i = 0; i < ( ah / sp3.height() ); ++i )
+                fheroes2::Blit( sp3, display, ax, buttonPgUp.area().y + buttonPgUp.area().height + ( sp3.height() * i ) );
 
             fheroes2::Blit( sp1, display, ax, buttonPgUp.area().y + buttonPgUp.area().height );
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
@@ -245,11 +245,12 @@ namespace Battle
         virtual void ActionListSingleClick( std::string & ) override {}
         virtual void ActionListPressRight( std::string & ) override {}
 
-        void SetOpenLog( bool f )
+        void SetOpenLog( const bool f )
         {
             openlog = f;
         }
-        bool isOpenLog( void ) const
+
+        bool isOpenLog() const
         {
             return openlog;
         }
@@ -355,12 +356,10 @@ bool CursorAttack( u32 theme )
 
 fheroes2::Image DrawHexagon( const uint8_t colorId )
 {
-    int r, l, w, h;
-
-    r = 22;
-    l = 10;
-    w = CELLW;
-    h = CELLH;
+    const int r = 22;
+    const int l = 10;
+    const int w = CELLW;
+    const int h = CELLH;
 
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
@@ -1060,7 +1059,7 @@ void Battle::Interface::RedrawPartialStart()
     RedrawBorder();
     RedrawCover();
     if ( castle )
-        RedrawCastle3( *castle );
+        RedrawCastleMainTower( *castle );
     RedrawArmies();
 }
 
@@ -1575,7 +1574,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, s32 cell_index )
         fheroes2::Blit( fheroes2::AGG::GetICN( icn_castle, 17 ), _mainSurface, 375, 205 );
 }
 
-void Battle::Interface::RedrawCastle3( const Castle & castle )
+void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( castle.GetRace() ), ( Arena::GetTower( TWR_CENTER )->isValid() ? 20 : 26 ) );
 
@@ -2212,7 +2211,7 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 
     Redraw();
 
-    Rect srt = border.GetArea();
+    const Rect srt = border.GetArea();
     fheroes2::Image top( srt.w, srt.h );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.w, srt.h );
     fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 5 );
@@ -2325,7 +2324,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
 
 void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
 {
-    const s32 index = cell.GetIndex();
+    const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
     if ( b ) {
@@ -2357,7 +2356,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
 
 void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell, Actions & a )
 {
-    const s32 index = cell.GetIndex();
+    const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
     if ( Settings::Get().ExtPocketTapMode() && !_currentUnit->isArchers() ) // archers always attack
@@ -2502,8 +2501,9 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
         if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
             msg.append( _( ", and get +2 defense" ) );
     }
-    else
+    else {
         msg = _( "%{name} waiting turn" );
+    }
 
     StringReplace( msg, "%{name}", attacker.GetName() );
     status.SetMessage( msg, true );
@@ -2701,7 +2701,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     LocalEvent & le = LocalEvent::Get();
 
     // targets damage animation
-    int py = 50;
     int finish = 0;
     int deathColor = Color::UNUSED;
 
@@ -2797,8 +2796,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                     }
                 }
             }
-
-            py += 10;
         }
     }
 
@@ -2899,7 +2896,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
-    const s32 destIndex = pos.GetHead()->GetIndex();
+    const int32_t destIndex = pos.GetHead()->GetIndex();
     // check if we're already there
     if ( unit.GetPosition().contains( destIndex ) )
         return;
@@ -3173,8 +3170,8 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
-        u32 killed = 0;
-        u32 damage = 0;
+        uint32_t killed = 0;
+        uint32_t damage = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
             if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
@@ -3424,7 +3421,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
     }
 
     // clod
-    u32 frame = 0;
+    uint32_t frame = 0;
     int icn = target == CAT_MISS ? ICN::SMALCLOD : ICN::LICHCLOD;
     AGG::PlaySound( M82::CATSND02 );
 
@@ -3926,7 +3923,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
 
     const int icn = ICN::COLDRING;
     const int m82 = M82::FromSpell( Spell::COLDRING );
-    u32 frame = 0;
+    uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
@@ -4136,7 +4133,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     LocalEvent & le = LocalEvent::Get();
     Rect area = GetArea();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
     area.h -= 38;
 
     cursor.SetThemes( Cursor::WAR_NONE );
@@ -4318,7 +4315,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
 
@@ -4367,7 +4364,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = 0;
+    uint32_t frame = 0;
     const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
@@ -4419,7 +4416,7 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    u32 frame = down ? 23 : 21;
+    uint32_t frame = down ? 23 : 21;
 
     if ( down )
         AGG::PlaySound( M82::DRAWBRG );
@@ -4619,18 +4616,15 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
     if ( redraw ) {
         Cursor::Get().Hide();
 
-        Text text1, text2;
-        std::string str;
+        uint32_t tmp1 = attacker->CalculateMinDamage( *defender );
+        uint32_t tmp2 = attacker->CalculateMaxDamage( *defender );
 
-        u32 tmp1 = attacker->CalculateMinDamage( *defender );
-        u32 tmp2 = attacker->CalculateMaxDamage( *defender );
-
-        str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
+        std::string str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
         StringReplace( str, "%{min}", tmp1 );
         StringReplace( str, "%{max}", tmp2 );
 
-        text1.Set( str, Font::SMALL );
+        Text text1( str, Font::SMALL );
 
         tmp1 = defender->HowManyWillKilled( tmp1 );
         tmp2 = defender->HowManyWillKilled( tmp2 );
@@ -4645,7 +4639,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
         StringReplace( str, "%{min}", tmp1 );
         StringReplace( str, "%{max}", tmp2 );
 
-        text2.Set( str, Font::SMALL );
+        Text text2( str, Font::SMALL );
 
         int tw = 5 + ( text1.w() > text2.w() ? text1.w() : text2.w() );
         int th = ( text1.h() + text2.h() );

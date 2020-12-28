@@ -122,13 +122,13 @@ void LocalEvent::SetTapDelayForRightClickEmulation( u32 d )
     clock_delay = d < 200 ? TAP_DELAY_EMULATE : d;
 }
 
-void LocalEvent::SetMouseOffsetX( s16 x )
+void LocalEvent::SetMouseOffsetX( int16_t x )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.x = x;
 }
 
-void LocalEvent::SetMouseOffsetY( s16 y )
+void LocalEvent::SetMouseOffsetY( int16_t y )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.y = y;
@@ -424,10 +424,15 @@ namespace
     public:
         ColorCycling()
             : _counter( 0 )
+            , _preRenderDrawing( nullptr )
+            , _posRenderDrawing( nullptr )
         {}
 
         bool applyCycling( std::vector<uint8_t> & palette )
         {
+            if ( _preRenderDrawing != nullptr )
+                _preRenderDrawing();
+
             _timer.Stop();
             if ( _timer.Get() >= 220 ) {
                 _timer.Start();
@@ -440,6 +445,9 @@ namespace
         void reset()
         {
             _prevDraw.Start();
+
+            if ( _posRenderDrawing != nullptr )
+                _posRenderDrawing();
         }
 
         bool isRedrawRequired()
@@ -448,10 +456,22 @@ namespace
             return _prevDraw.Get() >= 220;
         }
 
+        void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
+        {
+            if ( preRenderDrawing != nullptr )
+                _preRenderDrawing = preRenderDrawing;
+
+            if ( postRenderDrawing != nullptr )
+                _posRenderDrawing = postRenderDrawing;
+        }
+
     private:
         SDL::Time _timer;
         SDL::Time _prevDraw;
         uint32_t _counter;
+
+        void ( *_preRenderDrawing )();
+        void ( *_posRenderDrawing )();
     };
 
     ColorCycling colorCycling;
@@ -474,8 +494,10 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling() const
+void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
 {
+    colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
+
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
@@ -498,7 +520,6 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( CLICK_LEFT );
     le.ResetModes( CLICK_RIGHT );
     le.ResetModes( CLICK_MIDDLE );
-    le.ResetModes( CLICK_MIDDLE );
     le.ResetModes( KEY_HOLD );
     return le;
 }
@@ -518,7 +539,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         ResetModes( KEY_PRESSED );
 #else
     ResetModes( KEY_PRESSED );
-#endif
+    ResetModes( CLICK_LEFT );
+    ResetModes( CLICK_MIDDLE );
+    ResetModes( CLICK_RIGHT );
 
     mouse_wm = Point();
 
@@ -1039,7 +1062,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
-    else
+    else // mouse button released
         switch ( button.button ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
@@ -1050,6 +1073,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 #endif
 
         case SDL_BUTTON_LEFT:
+            SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
 
             // emulate press right
@@ -1059,10 +1083,12 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
             break;
 
         case SDL_BUTTON_MIDDLE:
+            SetModes( CLICK_MIDDLE );
             mouse_rm = mouse_cu;
             break;
 
         case SDL_BUTTON_RIGHT:
+            SetModes( CLICK_RIGHT );
             mouse_rr = mouse_cu;
             break;
 

@@ -1128,11 +1128,6 @@ std::string Settings::GetWriteableDir( const char * subdir )
     return "";
 }
 
-std::string Settings::GetSaveDir( void )
-{
-    return GetWriteableDir( "save" );
-}
-
 bool Settings::MusicExt( void ) const
 {
     return opt_global.Modes( GLOBAL_MUSIC_EXT );
@@ -1377,6 +1372,26 @@ int Settings::GameType( void ) const
 void Settings::SetGameType( int type )
 {
     game_type = type;
+}
+
+void Settings::SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus )
+{
+    campaignData.setCurrentScenarioBonus( bonus );
+}
+
+void Settings::SetCurrentCampaignScenarioID( const int scenarioID )
+{
+    campaignData.setCurrentScenarioID( scenarioID );
+}
+
+void Settings::SetCurrentCampaignID( const int campaignID )
+{
+    campaignData.setCampaignID( campaignID );
+}
+
+void Settings::AddCurrentCampaignMapToFinished()
+{
+    campaignData.addCurrentMapToFinished();
 }
 
 const Players & Settings::GetPlayers( void ) const
@@ -1929,7 +1944,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1941,7 +1956,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1973,14 +1988,14 @@ bool Settings::ChangeFullscreenResolution( void ) const
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg <<
-           // lang
-           conf.force_lang <<
-           // current maps
-           conf.current_maps_file <<
-           // game config
-           conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game << conf.opt_world << conf.opt_battle << conf.opt_addons
-               << conf.players;
+    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+        << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
+
+    // TODO: add verification logic
+    if ( conf.game_type & Game::TYPE_CAMPAIGN )
+        msg << conf.campaignData;
+
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
@@ -2003,6 +2018,9 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
+
+    if ( conf.game_type & Game::TYPE_CAMPAIGN )
+        msg >> conf.campaignData;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

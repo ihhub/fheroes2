@@ -178,8 +178,8 @@ public:
     void SetGlobalFilter( bool );
     void SetTapMode( bool );
     void SetTapDelayForRightClickEmulation( u32 );
-    void SetMouseOffsetX( s16 );
-    void SetMouseOffsetY( s16 );
+    void SetMouseOffsetX( int16_t );
+    void SetMouseOffsetY( int16_t );
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );
@@ -265,7 +265,7 @@ public:
     bool EmulateMouseAction( KeySym );
 #endif
 
-    void RegisterCycling() const;
+    void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
     void PauseCycling();
@@ -313,9 +313,9 @@ private:
         MOUSE_MOTION = 0x0002,
         MOUSE_PRESSED = 0x0004,
         GLOBAL_FILTER = 0x0008,
-        CLICK_LEFT = 0x0010,
-        CLICK_RIGHT = 0x0020,
-        CLICK_MIDDLE = 0x0040,
+        CLICK_LEFT = 0x0010, // either there is a click on left button or it was just released
+        CLICK_RIGHT = 0x0020, // either there is a click on right button or it was just released
+        CLICK_MIDDLE = 0x0040, // either there is a click on middle button or it was just released
         TAP_MODE = 0x0080,
         MOUSE_OFFSET = 0x0100,
         CLOCK_ON = 0x0200,
