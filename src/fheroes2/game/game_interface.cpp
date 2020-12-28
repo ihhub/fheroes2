@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <ctime>
 #include <sstream>
 
 #include "agg.h"
@@ -199,33 +198,10 @@ void Interface::Basic::Redraw( int force )
     if ( hideInterface && conf.ShowControlPanel() && ( redraw & REDRAW_GAMEAREA ) )
         controlPanel.Redraw();
 
-    // show system info
-    if ( conf.ExtGameShowSystemInfo() )
-        RedrawSystemInfo( ( hideInterface ? 10 : 26 ), display.height() - ( hideInterface ? 14 : 30 ), System::GetMemoryUsage() );
-
     if ( combinedRedraw & REDRAW_BORDER )
         GameBorderRedraw();
 
     redraw = 0;
-}
-
-void Interface::Basic::RedrawSystemInfo( s32 cx, s32 cy, u32 usage )
-{
-    std::ostringstream os;
-
-    os << "mem. usage: " << usage / 1024 << "Kb"
-       << ", cur. time: ";
-
-    time_t rawtime;
-    std::time( &rawtime );
-    // strtime format: Www Mmm dd hh:mm:ss yyyy
-    const char * strtime = std::ctime( &rawtime );
-
-    // draw info
-    os << std::string( &strtime[11], 8 );
-
-    system_info.Set( os.str() );
-    system_info.Blit( cx, cy );
 }
 
 s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool water ) const

@@ -403,10 +403,15 @@ namespace
     public:
         ColorCycling()
             : _counter( 0 )
+            , _preRenderDrawing( nullptr )
+            , _posRenderDrawing( nullptr )
         {}
 
         bool applyCycling( std::vector<uint8_t> & palette )
         {
+            if ( _preRenderDrawing != nullptr )
+                _preRenderDrawing();
+
             _timer.Stop();
             if ( _timer.Get() >= 220 ) {
                 _timer.Start();
@@ -419,6 +424,9 @@ namespace
         void reset()
         {
             _prevDraw.Start();
+
+            if ( _posRenderDrawing != nullptr )
+                _posRenderDrawing();
         }
 
         bool isRedrawRequired()
@@ -427,10 +435,22 @@ namespace
             return _prevDraw.Get() >= 220;
         }
 
+        void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
+        {
+            if ( preRenderDrawing != nullptr )
+                _preRenderDrawing = preRenderDrawing;
+
+            if ( postRenderDrawing != nullptr )
+                _posRenderDrawing = postRenderDrawing;
+        }
+
     private:
         SDL::Time _timer;
         SDL::Time _prevDraw;
         uint32_t _counter;
+
+        void ( *_preRenderDrawing )();
+        void ( *_posRenderDrawing )();
     };
 
     ColorCycling colorCycling;
@@ -453,8 +473,10 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling() const
+void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
 {
+    colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
+
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
