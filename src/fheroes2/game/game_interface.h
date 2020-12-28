@@ -151,7 +151,6 @@ namespace Interface
 
     private:
         Basic();
-        void RedrawSystemInfo( s32, s32, u32 );
         void ShowPathOrStartMoveHero( Heroes *, s32 );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         int HumanTurn( bool );

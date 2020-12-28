@@ -261,7 +261,7 @@ public:
     bool EmulateMouseAction( KeySym );
 #endif
 
-    void RegisterCycling() const;
+    void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
     void PauseCycling();
