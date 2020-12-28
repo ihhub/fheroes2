@@ -56,8 +56,6 @@ void Interface::Basic::Reset()
     scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
     scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
     scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
-
-    system_info.Set( Font::YELLOW_SMALL );
 }
 
 Interface::GameArea & Interface::Basic::GetGameArea( void )

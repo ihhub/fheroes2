@@ -37,24 +37,21 @@ class LuckIndicator;
 
 namespace Battle
 {
-    struct ControlInfo
-    {
-        ControlInfo( const Point & pt, int ctrl )
-            : result( ctrl )
-            , rtLocal( pt.x, pt.y, 24, 24 )
-            , rtAI( pt.x + 75, pt.y, 24, 24 ){};
-
-        void Redraw( void );
-
-        int result;
-
-        const Rect rtLocal;
-        const Rect rtAI;
-    };
+    struct ControlInfo;
 
     class Only
     {
     public:
+        Only();
+
+        bool ChangeSettings( void );
+        void RedrawBaseInfo( const Point & );
+        void StartBattle( void );
+        void UpdateHero1( const Point & );
+        void UpdateHero2( const Point & );
+
+        static Recruits GetHeroesFromStreamBuf( StreamBuf & );
+
         Heroes * hero1;
         Heroes * hero2;
 
@@ -65,6 +62,7 @@ namespace Battle
         Army * army2;
         Army monsters;
 
+    private:
         MoraleIndicator * moraleIndicator1;
         MoraleIndicator * moraleIndicator2;
 
@@ -87,34 +85,6 @@ namespace Battle
 
         Rect rtPortrait1;
         Rect rtPortrait2;
-
-        Rect rtAttack1;
-        Rect rtAttack2;
-        Rect rtDefense1;
-        Rect rtDefense2;
-        Rect rtPower1;
-        Rect rtPower2;
-        Rect rtKnowledge1;
-        Rect rtKnowledge2;
-
-        const Rect rt1;
-        fheroes2::Image sfb1;
-        fheroes2::Image sfc1;
-
-        const Rect rt2;
-        fheroes2::Image sfb2;
-        fheroes2::Image sfc2;
-
-        bool ChangeSettings( void );
-        void RedrawBaseInfo( const Point & );
-        void StartBattle( void );
-        void UpdateHero1( const Point & );
-        void UpdateHero2( const Point & );
-
-        static Only & Get( void );
-        static Recruits GetHeroesFromStreamBuf( StreamBuf & );
-
-        Only();
     };
 }
 
