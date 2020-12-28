@@ -5,8 +5,8 @@ CXX = $(PREFIX)g++
 AR = $(PREFIX)ar
 
 ARCH = -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
-CFLAGS := $(CFLAGS) $(ARCH) -D__SWITCH__ -DWITHOUT_MOUSE
-CXXFLAGS := $(CXXFLAGS) $(ARCH) -D__SWITCH__ -DWITHOUT_MOUSE
+CFLAGS := $(CFLAGS) $(ARCH) -D__SWITCH__
+CXXFLAGS := $(CXXFLAGS) $(ARCH) -D__SWITCH__
 CFLAGS_TP := $(CFLAGS_TP) $(ARCH)
 CXXFLAGS_TP := $(CXXFLAGS_TP) $(ARCH)
 
