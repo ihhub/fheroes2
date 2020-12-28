@@ -168,8 +168,6 @@ namespace Interface
         fheroes2::Rect scrollRight;
         fheroes2::Rect scrollBottom;
         fheroes2::Rect scrollTop;
-
-        Text system_info;
     };
 }
 
