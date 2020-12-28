@@ -147,14 +147,13 @@ int Game::NewHotSeat( void )
     if ( conf.GameType() == Game::TYPE_CAMPAIGN )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
-    conf.SetGameType( Game::TYPE_HOTSEAT );
-
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
         return StartBattleOnly();
     }
     else {
+        conf.SetGameType( Game::TYPE_HOTSEAT );
         const u32 select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
