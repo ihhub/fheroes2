@@ -334,7 +334,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
                 return false;
             }
             else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-                army->JoinAllTroopsOfType( troop.GetID() );
+                army->JoinAllTroopsOfType( troop );
                 return false;
             }
 
@@ -436,7 +436,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
             return false;
         }
         else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-            army->JoinAllTroopsOfType( troop.GetID() );
+            army->JoinAllTroopsOfType( troop );
             return false;
         }
     }

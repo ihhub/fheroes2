@@ -825,19 +825,15 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
-void Troops::JoinAllTroopsOfType( const int monsterID )
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
 {
-    if ( monsterID == Monster::UNKNOWN )
-        return;
-
-    bool hasJoinedTroops = false;
+    const int totalMonsterCount = GetCountMonsters( targetTroop.GetID() );
     for ( iterator it = begin(); it != end(); ++it ) {
-        if ( !( *it )->isValid() || ( *it )->GetID() != monsterID )
+        if ( !( *it )->isValid() || ( *it )->GetID() != targetTroop.GetID() )
             continue;
 
-        if ( !hasJoinedTroops ) {
-            ( *it )->SetCount( GetCountMonsters( monsterID ) );
-            hasJoinedTroops = true;
+        if ( ( *it ) == &targetTroop ) {
+            ( *it )->SetCount( totalMonsterCount );
         }
         else {
             ( *it )->Reset();
