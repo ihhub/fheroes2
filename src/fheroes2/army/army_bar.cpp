@@ -31,7 +31,7 @@
 #include "text.h"
 #include "world.h"
 
-void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */, std::function<void()> const & onSwap = NULL )
+void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */, bool & isTroopInfoVisible )
 {
     const Army * army1 = troop1.GetArmy();
     const Army * army2 = troop2.GetArmy();
@@ -41,9 +41,7 @@ void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to *
     if ( 2 > troop1.GetCount() ) {
         if ( !save_last_troop || troop2.isValid() ) {
             Army::SwapTroops( troop1, troop2 );
-
-            if ( onSwap != NULL )
-                onSwap();
+            isTroopInfoVisible = false;
         }
     }
     else {
@@ -104,6 +102,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _isTroopInfoVisible( true )
 {
     if ( use_mini_sprite )
         SetBackground( Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
@@ -227,7 +226,7 @@ void ArmyBar::ResetSelected( void )
 {
     Cursor::Get().Hide();
     spcursor.hide();
-    can_see_troop_info = true;
+    _isTroopInfoVisible = true;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
@@ -305,7 +304,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             // redistribute when clicked troop is empty or is the same one as the selected troop
             if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
                 ResetSelected();
-                RedistributeArmy( *selectedTroop, troop );
+                RedistributeArmy( *selectedTroop, troop, _isTroopInfoVisible );
 
                 return false;
             }
@@ -384,7 +383,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
         if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
             ResetSelected();
-            RedistributeArmy( selectedTroop, destTroop );
+            RedistributeArmy( selectedTroop, destTroop, _isTroopInfoVisible );
         }
         return false;
     }
@@ -464,13 +463,14 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
     ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
     if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
-        RedistributeArmy( *troopPress, troop );
+        RedistributeArmy( *troopPress, troop, _isTroopInfoVisible );
         le.ResetPressLeft();
 
         if ( isSelected() )
             ResetSelected();
     }
 
+    _isTroopInfoVisible = true;
     return true;
 }
 
@@ -479,12 +479,13 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & 
     if ( isSelected() )
         ResetSelected();
 
+    _isTroopInfoVisible = true;
     return true;
 }
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
-    if ( troop.isValid() && can_see_troop_info ) {
+    if ( troop.isValid() && _isTroopInfoVisible ) {
         ResetSelected();
 
         if ( can_change && !army->SaveLastTroop() )
@@ -509,7 +510,7 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 
     if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
         ResetSelected();
-        RedistributeArmy( selectedTroop, troop, [&]() { can_see_troop_info = false; } );
+        RedistributeArmy( selectedTroop, troop, _isTroopInfoVisible );
     }
 
     return true;
@@ -519,9 +520,21 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop &
 {
     if ( !destTroop.isValid() || destTroop.GetMonster() == selectedTroop.GetMonster() ) {
         ResetSelected();
-        RedistributeArmy( selectedTroop, destTroop, [&]() { can_see_troop_info = false; } );
+        RedistributeArmy( selectedTroop, destTroop, _isTroopInfoVisible );
     }
 
+    return true;
+}
+
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & troop ) 
+{
+    _isTroopInfoVisible = true;
+    return true;
+}
+
+bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) 
+{
+    _isTroopInfoVisible = true;
     return true;
 }
 
