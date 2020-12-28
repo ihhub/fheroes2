@@ -53,6 +53,8 @@ namespace Game
         LOADSTANDARD,
         LOADCAMPAIN,
         LOADMULTI,
+        LOADHOTSEAT,
+        LOADNETWORK,
         SCENARIOINFO,
         SELECTSCENARIO,
         STARTGAME,
@@ -229,12 +231,15 @@ namespace Game
     int LoadStandard( void );
     int LoadCampain( void );
     int LoadMulti( void );
+    int LoadHotseat();
+    int LoadNetwork();
     int ScenarioInfo( void );
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
+    int DisplayLoadGameDialog();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
@@ -259,6 +264,10 @@ namespace Game
     std::string GetEncodeString( const std::string & );
     void LoadPlayers( const std::string & mapFileName, Players & players );
     void SavePlayers( const std::string & mapFileName, const Players & players );
+
+    std::string GetSaveDir();
+    std::string GetSaveFileExtension();
+    std::string GetSaveFileExtension( const int gameType );
 
     namespace ObjectFadeAnimation
     {

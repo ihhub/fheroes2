@@ -649,7 +649,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // autosave
         if ( conf.ExtGameAutosaveOn() && conf.ExtGameAutosaveBeginOfDay() )
-            Game::Save( System::ConcatePath( conf.GetSaveDir(), "AUTOSAVE.sav" ) );
+            Game::AutoSave();
     }
 
     // check game over
@@ -1059,7 +1059,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
-            Game::Save( System::ConcatePath( conf.GetSaveDir(), "AUTOSAVE.sav" ) );
+            Game::AutoSave();
     }
 
     return res;
