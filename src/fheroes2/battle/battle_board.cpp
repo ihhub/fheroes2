@@ -465,26 +465,33 @@ bool contains( const Battle::Indexes & indexes, const Battle::Unit * unit )
     const auto begin = indexes.begin();
     const auto end = indexes.end();
 
-    bool result = end != std::find( begin, end, unit->GetHeadIndex() );
-    const s32 tailIndex = unit->GetTailIndex();
-    if ( tailIndex != -1 ) {
-        result |= end != std::find( begin, end, tailIndex );
+    const bool result = end != std::find( begin, end, unit->GetHeadIndex() );
+    if ( !result ) {
+        return false;
     }
-    return result;
+
+    const int32_t tailIndex = unit->GetTailIndex();
+    if ( tailIndex == -1 ) {
+        return true;
+    }
+
+    return end != std::find( begin, end, tailIndex );
 }
 
 IndexDistance Battle::Board::DistanceToUnit( int32_t position, const Battle::Unit * unit ) const
 {
     assert( unit );
 
-    const s32 headIndex = unit->GetHeadIndex();
+    const int32_t headIndex = unit->GetHeadIndex();
+    const int32_t tailIndex = unit->GetTailIndex();
     IndexDistance distance = IndexDistance( headIndex, GetDistance( position, headIndex ) );
-    const s32 tailIndex = unit->GetTailIndex();
-    if ( tailIndex != -1 ) {
-        const IndexDistance distanceToTail = IndexDistance( tailIndex, GetDistance( position, tailIndex ) );
-        if ( distanceToTail.second < distance.second ) {
-            distance = distanceToTail;
-        }
+    if ( tailIndex == -1 ) {
+        return distance;
+    }
+
+    const IndexDistance distanceToTail = IndexDistance( tailIndex, GetDistance( position, tailIndex ) );
+    if ( distanceToTail.second < distance.second ) {
+        return distanceToTail;
     }
     return distance;
 }
@@ -494,12 +501,16 @@ Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances
     if ( distances.size() > 1 ) {
         std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
         const uint32_t smallestDistance = distances.front().second;
-        const auto predicate = [smallestDistance]( const IndexDistance & distance ) { return distance.second == smallestDistance; };
-        distances.resize( std::count_if( distances.begin(), distances.end(), predicate ) );
+        for ( size_t i = 1; i < distances.size(); ++i ) {
+            if ( distances[i].second != smallestDistance ) {
+                distances.resize( i );
+                break;
+            }
+        }
     }
 
     Battle::Indexes result;
-    for ( IndexDistance distance : distances ) {
+    for ( const IndexDistance & distance : distances ) {
         result.push_back( distance.first );
     }
     return result;
@@ -510,7 +521,7 @@ Battle::Indexes Battle::Board::GetNearestTroopIndexes( int32_t position, const I
     std::vector<IndexDistance> distances;
     distances.reserve( 15 /* TODO magic number */ );
 
-    for ( Cell cell : *this ) {
+    for ( const Cell & cell : *this ) {
         const Battle::Unit * unit = cell.GetUnit();
         if ( unit ) {
             const bool isBlackListed = contains( blackList, unit );

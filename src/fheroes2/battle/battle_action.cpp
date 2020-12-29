@@ -650,8 +650,8 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 {
     TargetsInfo targets;
     const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroopIndex );
-    for ( auto it = targetIndexes.begin(); it != targetIndexes.end(); ++it ) {
-        Unit * target = GetTroopBoard( *it );
+    for ( size_t i = 0; i < targetIndexes.size(); ++i ) {
+        Unit * target = GetTroopBoard( targetIndexes[i] );
         if ( target == nullptr ) {
             continue;
         }
@@ -661,7 +661,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
         res.defender = target;
         // store temp priority for calculate damage
-        res.damage = std::distance( targetIndexes.begin(), it );
+        res.damage = i;
         targets.push_back( res );
     }
     return targets;
@@ -925,8 +925,6 @@ void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
 }
-
-
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {

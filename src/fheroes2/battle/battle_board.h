@@ -95,7 +95,7 @@ namespace Battle
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
     private:
-        IndexDistance DistanceToUnit( s32 position, const Battle::Unit * unit ) const;
+        IndexDistance DistanceToUnit( const int32_t position, const Battle::Unit * unit ) const;
     };
 }
 
