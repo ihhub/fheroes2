@@ -58,7 +58,7 @@ namespace Battle
 
         s32 GetIndexAbsPosition( const Point & ) const;
         Indexes GetPassableQualityPositions( const Unit & b );
-        Indexes GetNearestTroopIndexes( s32, const Indexes * ) const;
+        Indexes GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const;
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
         void SetEnemyQuality( const Unit & );
