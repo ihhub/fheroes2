@@ -66,6 +66,15 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, int scoute )
         str = Maps::GetMinesName( tile.QuantityResourceCount().first );
         str.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
     }
+    else if ( tile.GetObject() == MP2::OBJN_ABANDONEDMINE || tile.GetObject() == MP2::OBJ_ABANDONEDMINE ) {
+        const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
+        if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+            str = MP2::StringObject( tile.GetObject() );
+        }
+        else {
+            str = Maps::GetMinesName( tile.QuantityResourceCount().first );
+        }
+    }
     else {
         str = MP2::StringObject( tile.GetObject() );
     }
@@ -282,7 +291,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * hero )
 {
-    std::string str = Maps::Ground::String( tile.GetGround() );
+    std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
 
     if ( show && hero ) {
         int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );

@@ -35,7 +35,7 @@ Battle::Command::Command( int cmd )
     : type( cmd )
 {}
 
-Battle::Command & Battle::Command::operator<<( const int & val )
+Battle::Command & Battle::Command::operator<<( const int val )
 {
     push_back( val );
     return *this;

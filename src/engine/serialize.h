@@ -23,6 +23,7 @@
 #ifndef H2SERIALIZE_H
 #define H2SERIALIZE_H
 
+#include <cstdio>
 #include <list>
 #include <map>
 #include <string>
@@ -97,7 +98,7 @@ public:
     StreamBase & operator>>( u8 & );
     StreamBase & operator>>( s8 & );
     StreamBase & operator>>( u16 & );
-    StreamBase & operator>>( s16 & );
+    StreamBase & operator>>( int16_t & );
     StreamBase & operator>>( u32 & );
     StreamBase & operator>>( s32 & );
     StreamBase & operator>>( float & );
@@ -107,15 +108,15 @@ public:
     StreamBase & operator>>( Point & );
     StreamBase & operator>>( Size & );
 
-    StreamBase & operator<<( const bool & );
-    StreamBase & operator<<( const char & );
-    StreamBase & operator<<( const u8 & );
-    StreamBase & operator<<( const s8 & );
-    StreamBase & operator<<( const u16 & );
-    StreamBase & operator<<( const s16 & );
-    StreamBase & operator<<( const u32 & );
-    StreamBase & operator<<( const s32 & );
-    StreamBase & operator<<( const float & );
+    StreamBase & operator<<( const bool );
+    StreamBase & operator<<( const char );
+    StreamBase & operator<<( const u8 );
+    StreamBase & operator<<( const s8 );
+    StreamBase & operator<<( const u16 );
+    StreamBase & operator<<( const int16_t );
+    StreamBase & operator<<( const u32 );
+    StreamBase & operator<<( const s32 );
+    StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
 
     StreamBase & operator<<( const Rect & );
@@ -260,8 +261,6 @@ protected:
 
 class StreamFile : public StreamBase
 {
-    SDL_RWops * rw;
-
     StreamFile( const StreamFile & ) {}
 
 public:
@@ -272,7 +271,7 @@ public:
     size_t size( void ) const;
     size_t tell( void ) const;
 
-    bool open( const std::string &, const char * mode );
+    bool open( const std::string &, const std::string & mode );
     void close( void );
 
     StreamBuf toStreamBuf( size_t = 0 /* all data */ );
@@ -280,17 +279,17 @@ public:
     void seek( size_t );
     void skip( size_t );
 
-    u16 getBE16();
-    u16 getLE16();
-    u32 getBE32();
-    u32 getLE32();
+    uint16_t getBE16();
+    uint16_t getLE16();
+    uint32_t getBE32();
+    uint32_t getLE32();
 
-    void putBE32( u32 );
-    void putLE32( u32 );
-    void putBE16( u16 );
-    void putLE16( u16 );
+    void putBE16( uint16_t );
+    void putLE16( uint16_t );
+    void putBE32( uint32_t );
+    void putLE32( uint32_t );
 
-    std::vector<u8> getRaw( size_t = 0 /* all data */ );
+    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ );
     void putRaw( const char *, size_t );
 
     std::string toString( size_t = 0 /* all data */ );
@@ -308,6 +307,25 @@ protected:
 
     u8 get8();
     void put8( char );
+
+private:
+    std::FILE * _file;
+
+    template <typename T>
+    T getUint()
+    {
+        if ( !_file )
+            return 0;
+        T val;
+        return std::fread( &val, sizeof( T ), 1, _file ) == 1 ? val : 0;
+    }
+
+    template <typename T>
+    void putUint( const T val )
+    {
+        if ( _file )
+            std::fwrite( &val, sizeof( T ), 1, _file );
+    }
 };
 
 #endif

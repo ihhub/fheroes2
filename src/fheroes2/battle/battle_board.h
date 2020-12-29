@@ -58,9 +58,8 @@ namespace Battle
 
         s32 GetIndexAbsPosition( const Point & ) const;
         Indexes GetPassableQualityPositions( const Unit & b );
-        Indexes GetNearestTroopIndexes( s32, const Indexes & ) const;
-        Indexes GetAStarPath( const Unit &, const Position &, bool debug = true );
-        std::string AllUnitsInfo( void ) const;
+        Indexes GetNearestTroopIndexes( s32, const Indexes * ) const;
+        Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
         void SetEnemyQuality( const Unit & );
         void SetPositionQuality( const Unit & );
@@ -97,20 +96,6 @@ namespace Battle
 
     private:
         IndexDistance DistanceToUnit( s32 position, const Battle::Unit * unit ) const;
-    };
-
-    struct ShortestDistance : public std::binary_function<s32, s32, bool>
-    {
-        ShortestDistance( s32 index )
-            : center( index )
-        {}
-
-        bool operator()( s32 index1, s32 index2 ) const
-        {
-            return Board::GetDistance( center, index1 ) < Board::GetDistance( center, index2 );
-        }
-
-        s32 center;
     };
 }
 

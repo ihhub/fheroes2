@@ -690,7 +690,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     if ( killed )
         switch ( enemy.GetID() ) {
         case Monster::GHOST:
-            resurrect = killed * static_cast<Monster>( enemy ).GetHitPoints();
+            resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
             DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
             // grow troop
             enemy.Resurrect( resurrect, true, false );

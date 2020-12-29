@@ -268,7 +268,7 @@ public:
     void markHeroMeeting( int heroID );
 
     bool Move( bool fast = false );
-    void Move2Dest( const s32 & destination );
+    void Move2Dest( const int32_t destination );
     bool isMoveEnabled( void ) const;
     bool CanMove( void ) const;
     void SetMove( bool );
@@ -330,11 +330,14 @@ private:
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 to, bool newpos );
     static uint32_t GetStartingXp();
+    bool isInVisibleMapArea() const;
 
     // This function is useful only in a situation when AI hero moves out of the fog
     // we don't update his direction during movement under the fog so there is a situation
     // when initial hero's sprite is set incorrectly. This function fixes it
     void SetValidDirectionSprite();
+
+    uint32_t UpdateMovementPoints( const uint32_t movePoints, const int skill ) const;
 
     enum
     {

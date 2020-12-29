@@ -1109,18 +1109,26 @@ namespace fheroes2
                 // Sprite 23 has incorrect colors, we need to replace them
                 if ( _icnVsSprite[id].size() >= 23 ) {
                     Sprite & out = _icnVsSprite[id][23];
-                    ReplaceColorId( out, 69, 187 );
-                    ReplaceColorId( out, 71, 195 );
-                    ReplaceColorId( out, 73, 188 );
-                    ReplaceColorId( out, 74, 190 );
-                    ReplaceColorId( out, 75, 193 );
-                    ReplaceColorId( out, 76, 191 );
-                    ReplaceColorId( out, 77, 195 );
-                    ReplaceColorId( out, 80, 195 );
-                    ReplaceColorId( out, 81, 196 );
-                    ReplaceColorId( out, 83, 196 );
-                    ReplaceColorId( out, 84, 197 );
-                    ReplaceColorId( out, 151, 197 );
+
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[69] = 187;
+                    indexes[71] = 195;
+                    indexes[73] = 188;
+                    indexes[74] = 190;
+                    indexes[75] = 193;
+                    indexes[76] = 191;
+                    indexes[77] = 195;
+                    indexes[80] = 195;
+                    indexes[81] = 196;
+                    indexes[83] = 196;
+                    indexes[84] = 197;
+                    indexes[151] = 197;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::TROLLMSL:
@@ -1154,32 +1162,39 @@ namespace fheroes2
                         out.image()[188] = 24;
                     }
 
-                    ReplaceColorId( out, 10, 152 );
-                    ReplaceColorId( out, 11, 153 );
-                    ReplaceColorId( out, 12, 154 );
-                    ReplaceColorId( out, 13, 155 );
-                    ReplaceColorId( out, 14, 155 );
-                    ReplaceColorId( out, 15, 156 );
-                    ReplaceColorId( out, 16, 157 );
-                    ReplaceColorId( out, 17, 158 );
-                    ReplaceColorId( out, 18, 159 );
-                    ReplaceColorId( out, 19, 160 );
-                    ReplaceColorId( out, 20, 160 );
-                    ReplaceColorId( out, 21, 161 );
-                    ReplaceColorId( out, 22, 162 );
-                    ReplaceColorId( out, 23, 163 );
-                    ReplaceColorId( out, 24, 164 );
-                    ReplaceColorId( out, 25, 165 );
-                    ReplaceColorId( out, 26, 166 );
-                    ReplaceColorId( out, 27, 166 );
-                    ReplaceColorId( out, 28, 167 );
-                    ReplaceColorId( out, 29, 168 );
-                    ReplaceColorId( out, 30, 169 );
-                    ReplaceColorId( out, 31, 170 );
-                    ReplaceColorId( out, 32, 171 );
-                    ReplaceColorId( out, 33, 172 );
-                    ReplaceColorId( out, 34, 172 );
-                    ReplaceColorId( out, 35, 173 );
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[10] = 152;
+                    indexes[11] = 153;
+                    indexes[12] = 154;
+                    indexes[13] = 155;
+                    indexes[14] = 155;
+                    indexes[15] = 156;
+                    indexes[16] = 157;
+                    indexes[17] = 158;
+                    indexes[18] = 159;
+                    indexes[19] = 160;
+                    indexes[20] = 160;
+                    indexes[21] = 161;
+                    indexes[22] = 162;
+                    indexes[23] = 163;
+                    indexes[24] = 164;
+                    indexes[25] = 165;
+                    indexes[26] = 166;
+                    indexes[27] = 166;
+                    indexes[28] = 167;
+                    indexes[29] = 168;
+                    indexes[30] = 169;
+                    indexes[31] = 170;
+                    indexes[32] = 171;
+                    indexes[33] = 172;
+                    indexes[34] = 172;
+                    indexes[35] = 173;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::LOCATORE:

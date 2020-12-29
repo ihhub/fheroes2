@@ -1635,8 +1635,8 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
     if ( ( area.GetVisibleTileROI() & mp ) ) {
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             if ( !SkipRedrawTileBottom4Hero( it->object, it->index, tilePassable ) ) {
-                const u8 & object = ( *it ).object;
-                const u8 & index = ( *it ).index;
+                const uint8_t object = ( *it ).object;
+                const uint8_t index = ( *it ).index;
                 const int icn = MP2::GetICNObject( object );
 
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
@@ -1691,8 +1691,8 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, bool skip_ground ) cons
             if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
                 continue;
 
-            const u8 & object = ( *it ).object;
-            const u8 & index = ( *it ).index;
+            const uint8_t object = ( *it ).object;
+            const uint8_t index = ( *it ).index;
             const int icn = MP2::GetICNObject( object );
 
             if ( ICN::HighlyObjectSprite( icn, index ) ) {
@@ -1936,6 +1936,11 @@ uint8_t Maps::Tiles::GetObjectSpriteIndex() const
     return objectIndex;
 }
 
+void Maps::Tiles::SetObjectSpriteIndex( const uint8_t index )
+{
+    objectIndex = index;
+}
+
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isFlag32 );
@@ -2046,10 +2051,10 @@ void Maps::Tiles::CorrectFlags32( u32 index, bool up )
         taddon->index = index;
     else if ( up )
         // or new flag
-        addons_level2.push_back( TilesAddon( TilesAddon::UPPER, world.GetUniq(), 0x38, index ) );
+        addons_level2.emplace_back( TilesAddon::UPPER, world.GetUniq(), 0x38, index );
     else
         // or new flag
-        addons_level1.push_back( TilesAddon( TilesAddon::UPPER, world.GetUniq(), 0x38, index ) );
+        addons_level1.emplace_back( TilesAddon::UPPER, world.GetUniq(), 0x38, index );
 }
 
 void Maps::Tiles::FixedPreload( Tiles & tile )
@@ -2367,12 +2372,6 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
         spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % ARRAY_COUNT( monsterAnimationSequence )];
     }
     return spriteIndices;
-}
-
-bool Maps::Tiles::isFog( int colors ) const
-{
-    // colors may be the union friends
-    return ( fog_colors & colors ) == colors;
 }
 
 void Maps::Tiles::ClearFog( int colors )

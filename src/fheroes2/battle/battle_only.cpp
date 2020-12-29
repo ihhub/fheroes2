@@ -43,6 +43,24 @@
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
+namespace Battle
+{
+    struct ControlInfo
+    {
+        ControlInfo( const Point & pt, int ctrl )
+            : result( ctrl )
+            , rtLocal( pt.x, pt.y, 24, 24 )
+            , rtAI( pt.x + 75, pt.y, 24, 24 ){};
+
+        void Redraw( void );
+
+        int result;
+
+        const Rect rtLocal;
+        const Rect rtAI;
+    };
+}
+
 void Battle::ControlInfo::Redraw( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -82,21 +100,9 @@ Battle::Only::Only()
     , selectArtifacts1( NULL )
     , selectArtifacts2( NULL )
     , cinfo2( NULL )
-    , rt1( 36, 267, 43, 53 )
-    , sfb1( rt1.w, rt1.h )
-    , rt2( 23, 347, 34, 34 )
-    , sfb2( rt2.w, rt2.h )
 {
     player1.SetControl( CONTROL_HUMAN );
     player2.SetControl( CONTROL_AI );
-
-    const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-
-    fheroes2::Blit( backSprite, rt1.x, rt1.y, sfb1, 0, 0, rt1.w, rt1.h );
-    fheroes2::Blit( backSprite, rt2.x, rt2.y, sfb2, 0, 0, rt2.w, rt2.h );
-
-    fheroes2::DrawBorder( sfb1, fheroes2::GetColorId( 0xb0, 0xb0, 0xb0 ) );
-    fheroes2::DrawBorder( sfb2, fheroes2::GetColorId( 0xb0, 0xb0, 0xb0 ) );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Battle::Only & b )
@@ -158,17 +164,17 @@ bool Battle::Only::ChangeSettings( void )
     rtPortrait1 = Rect( cur_pt.x + 93, cur_pt.y + 72, 101, 93 );
     rtPortrait2 = Rect( cur_pt.x + 445, cur_pt.y + 72, 101, 93 );
 
-    rtAttack1 = Rect( cur_pt.x + 215, cur_pt.y + 50, 33, 33 );
-    rtAttack2 = Rect( cur_pt.x + 390, cur_pt.y + 50, 33, 33 );
+    const Rect rtAttack1 = Rect( cur_pt.x + 215, cur_pt.y + 50, 33, 33 );
+    const Rect rtAttack2 = Rect( cur_pt.x + 390, cur_pt.y + 50, 33, 33 );
 
-    rtDefense1 = Rect( cur_pt.x + 215, cur_pt.y + 83, 33, 33 );
-    rtDefense2 = Rect( cur_pt.x + 390, cur_pt.y + 83, 33, 33 );
+    const Rect rtDefense1 = Rect( cur_pt.x + 215, cur_pt.y + 83, 33, 33 );
+    const Rect rtDefense2 = Rect( cur_pt.x + 390, cur_pt.y + 83, 33, 33 );
 
-    rtPower1 = Rect( cur_pt.x + 215, cur_pt.y + 116, 33, 33 );
-    rtPower2 = Rect( cur_pt.x + 390, cur_pt.y + 116, 33, 33 );
+    const Rect rtPower1 = Rect( cur_pt.x + 215, cur_pt.y + 116, 33, 33 );
+    const Rect rtPower2 = Rect( cur_pt.x + 390, cur_pt.y + 116, 33, 33 );
 
-    rtKnowledge1 = Rect( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
-    rtKnowledge2 = Rect( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
+    const Rect rtKnowledge1 = Rect( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
+    const Rect rtKnowledge2 = Rect( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
 
     if ( conf.IsGameType( Game::TYPE_NETWORK ) ) {
         player2.SetColor( Color::RED );

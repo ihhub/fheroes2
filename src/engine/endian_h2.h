@@ -18,44 +18,45 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#ifndef ENDIAN_H2_H
+#define ENDIAN_H2_H
 
-#include "players.h"
+#if defined( __linux__ ) || defined( __MINGW32__ )
+#include <endian.h>
 
-namespace Interface
-{
-    struct PlayerInfo
-    {
-        PlayerInfo()
-            : player( NULL )
-        {}
+#elif defined( __FreeBSD__ )
+#include <sys/endian.h>
 
-        bool operator==( const Player * ) const;
+#elif defined( _WIN32 ) || defined( _WIN64 )
+#include <stdlib.h>
 
-        Player * player;
-        Rect rect1; // opponent
-        Rect rect2; // class
-        Rect rect3; // change
-    };
+#define BIG_ENDIAN 4321
+#define LITTLE_ENDIAN 1234
+#define BYTE_ORDER LITTLE_ENDIAN
 
-    struct PlayersInfo : std::vector<PlayerInfo>
-    {
-        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
+#define htobe16( x ) _byteswap_ushort( x )
+#define htole16( x ) ( x )
+#define be16toh( x ) _byteswap_ushort( x )
+#define le16toh( x ) ( x )
+#define htobe32( x ) _byteswap_ulong( x )
+#define htole32( x ) ( x )
+#define be32toh( x ) _byteswap_ulong( x )
+#define le32toh( x ) ( x )
 
-        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+#elif defined( __APPLE__ )
+#include <libkern/OSByteOrder.h>
+#define htobe16( x ) OSSwapHostToBigInt16( x )
+#define htole16( x ) OSSwapHostToLittleInt16( x )
+#define be16toh( x ) OSSwapBigToHostInt16( x )
+#define le16toh( x ) OSSwapLittleToHostInt16( x )
+#define htobe32( x ) OSSwapHostToBigInt32( x )
+#define htole32( x ) OSSwapHostToLittleInt32( x )
+#define be32toh( x ) OSSwapBigToHostInt32( x )
+#define le32toh( x ) OSSwapLittleToHostInt32( x )
 
-        Player * GetFromOpponentClick( const Point & pt );
-        Player * GetFromOpponentNameClick( const Point & pt );
-        Player * GetFromOpponentChangeClick( const Point & pt );
-        Player * GetFromClassClick( const Point & pt );
+#else
+#error "Unsupported platform"
+#endif
 
-        void RedrawInfo( bool show_play_info = false ) const;
-        void resetSelection();
-        bool QueueEventProcessing( void );
-
-        bool show_name;
-        bool show_race;
-        bool show_swap;
-        Player * currentSelectedPlayer;
-    };
-}
+#define IS_BIGENDIAN ( BYTE_ORDER == BIG_ENDIAN )
+#endif

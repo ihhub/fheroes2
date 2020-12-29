@@ -27,6 +27,7 @@
 #include <list>
 
 #include "bitmodes.h"
+#include "campaign_data.h"
 #include "dir.h"
 #include "gamedefs.h"
 #include "maps_fileinfo.h"
@@ -40,7 +41,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_082_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -338,6 +339,11 @@ public:
     int GameType( void ) const;
     void SetGameType( int );
 
+    void SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus );
+    void SetCurrentCampaignScenarioID( const int scenarioID );
+    void SetCurrentCampaignID( const int campaignID );
+    void AddCurrentCampaignMapToFinished();
+
     Players & GetPlayers( void );
     const Players & GetPlayers( void ) const;
 
@@ -379,7 +385,6 @@ public:
     static ListDirs GetRootDirs( void );
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetWriteableDir( const char * );
-    static std::string GetSaveDir( void );
     static std::string GetLangDir( void );
 
     // deprecated
@@ -447,6 +452,8 @@ private:
     Point pos_stat;
 
     Players players;
+
+    Campaign::CampaignData campaignData;
 };
 
 StreamBase & operator<<( StreamBase &, const Settings & );

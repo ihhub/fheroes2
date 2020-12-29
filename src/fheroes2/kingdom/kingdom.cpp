@@ -602,7 +602,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     return totalIncome;
 }
 
-const Heroes * Kingdom::GetBestHero( void ) const
+Heroes * Kingdom::GetBestHero()
 {
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
 }

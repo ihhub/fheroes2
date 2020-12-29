@@ -98,7 +98,7 @@ namespace Battle
 
         enum
         {
-            HERO_X_OFFSET = 32,
+            HERO_X_OFFSET = 30,
             LEFT_HERO_Y_OFFSET = 183,
             RIGHT_HERO_Y_OFFSET = 148,
             CAPTAIN_X_OFFSET = 6,
@@ -239,7 +239,7 @@ namespace Battle
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
         void RedrawCastle2( const Castle &, s32 );
-        void RedrawCastle3( const Castle & );
+        void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
         void RedrawOpponents( void );
