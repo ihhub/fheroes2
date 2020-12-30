@@ -50,7 +50,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#ifdef __WIN32__
+#if defined( __WIN32__ )
 #define SEPARATOR '\\'
 #else
 #define SEPARATOR '/'
@@ -190,7 +190,7 @@ std::string System::GetBasename( const std::string & str )
 
 const char * System::GetEnvironment( const char * name )
 {
-#ifdef __MINGW32__
+#if defined( __MINGW32__ )
     return SDL_getenv( name );
 #else
     return getenv( name );
@@ -250,7 +250,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
-#ifdef _MSC_VER
+#if defined( _MSC_VER )
     (void)argc;
     (void)argv;
     (void)optstring;
@@ -262,7 +262,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 
 char * System::GetOptionsArgument( void )
 {
-#ifdef _MSC_VER
+#if defined( _MSC_VER )
     return NULL;
 #else
     return optarg;
@@ -271,7 +271,7 @@ char * System::GetOptionsArgument( void )
 
 size_t System::GetMemoryUsage( void )
 {
-#ifdef __WIN32__
+#if defined( __WIN32__ )
     static MEMORYSTATUS ms;
 
     ZeroMemory( &ms, sizeof( ms ) );
@@ -361,7 +361,7 @@ int System::Unlink( const std::string & file )
 
 bool System::isEmbededDevice( void )
 {
-#ifdef ANDROID
+#if defined( ANDROID )
     return true;
 #endif
     return false;
