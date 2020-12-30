@@ -173,8 +173,6 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
-    case EVENT_EMULATETOGGLE:
-        return "emulate mouse toggle";
     case EVENT_SWITCHGROUP:
         return "switch group";
     default:
@@ -275,8 +273,6 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_SHOWSTATUS] = KEY_4;
     key_events[EVENT_SHOWICONS] = KEY_5;
     // system:
-    // emulate mouse
-    // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
     // split
@@ -299,7 +295,6 @@ bool Game::HotKeyHoldEvent( const int eventID )
 void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
-    // const Tiny::Entry* entry = NULL;
 
     if ( config.Load( hotkeys.c_str() ) ) {
         int ival = 0;
@@ -315,34 +310,6 @@ void Game::HotKeysLoad( const std::string & hotkeys )
                 }
             }
         }
-
-#ifdef WITHOUT_MOUSE
-        LocalEvent & le = LocalEvent::Get();
-
-        ival = config.IntParams( "emulate mouse up" );
-        if ( ival )
-            le.SetEmulateMouseUpKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse down" );
-        if ( ival )
-            le.SetEmulateMouseDownKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse left" );
-        if ( ival )
-            le.SetEmulateMouseLeftKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse right" );
-        if ( ival )
-            le.SetEmulateMouseRightKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate press left" );
-        if ( ival )
-            le.SetEmulatePressLeftKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate press right" );
-        if ( ival )
-            le.SetEmulatePressRightKey( GetKeySym( ival ) );
-#endif
     }
 }
 
@@ -369,10 +336,6 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 //         if ( display.Save( stream.str().c_str() ) )
 //             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
 //     }
-#ifdef WITHOUT_MOUSE
-    else if ( sym == key_events[EVENT_EMULATETOGGLE] )
-        LocalEvent::Get().ToggleEmulateMouse();
-#endif
     else
         // reserved
         if ( sym == key_events[EVENT_SWITCHGROUP] )

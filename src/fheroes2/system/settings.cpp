@@ -720,17 +720,6 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-#ifdef WITHOUT_MOUSE
-    ival = config.IntParams( "emulate mouse" );
-    if ( ival ) {
-        le.SetEmulateMouse( ival );
-
-        ival = config.IntParams( "emulate mouse step" );
-        if ( ival )
-            le.SetEmulateMouseStep( ival );
-    }
-#endif
-
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -755,11 +744,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( QVGA() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( GAME_HIDE_INTERFACE );
-    }
-
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
@@ -1167,12 +1151,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-/* return full screen */
-bool Settings::QVGA( void ) const
-{
-    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const

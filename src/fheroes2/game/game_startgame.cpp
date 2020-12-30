@@ -663,11 +663,6 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
         myKingdom.HeroesActionNewPosition();
 
-    // auto hide status
-    bool autohide_status = conf.QVGA() && conf.ShowStatus();
-    if ( autohide_status )
-        Game::AnimateResetDelay( Game::AUTOHIDE_STATUS_DELAY );
-
     int fastScrollRepeatCount = 0;
     const int fastScrollThreshold = 2;
     bool isOngoingFastScrollEvent = false;
@@ -688,11 +683,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 res = Game::QUITGAME;
                 break;
             }
-        }
-        // for pocketpc: auto hide status if start turn
-        if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
-            EventSwitchShowStatus();
-            autohide_status = false;
         }
 
         if ( !isOngoingFastScrollEvent )
