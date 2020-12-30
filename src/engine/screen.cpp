@@ -420,7 +420,7 @@ namespace
                 if ( _renderer != NULL )
                     SDL_DestroyRenderer( _renderer );
 
-                _renderer = SDL_CreateRenderer( _window, -1, _renderFlags );
+                _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             }
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
@@ -460,7 +460,7 @@ namespace
 
             SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
-            _renderer = SDL_CreateRenderer( _window, -1, _renderFlags );
+            _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             if ( _renderer == NULL ) {
                 clear();
                 return false;
@@ -545,7 +545,10 @@ namespace
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
 
-        const int _renderFlags = SDL_RENDERER_ACCELERATED;
+        int renderFlags() const
+        {
+            return SDL_RENDERER_ACCELERATED;
+        }
 
         void _createPalette()
         {
