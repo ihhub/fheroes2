@@ -28,7 +28,7 @@
 #include <sstream>
 #include <string>
 
-#ifdef ANDROID
+#if defined( ANDROID )
 #include <android/log.h>
 namespace std
 {
