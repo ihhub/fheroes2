@@ -85,8 +85,8 @@ namespace Dialog
     std::string SelectFileSave( void );
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile );
-    void QuickInfo( const Castle & );
-    void QuickInfo( const Heroes & hero );
+    void QuickInfo( const Castle & castle, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Heroes & hero, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
