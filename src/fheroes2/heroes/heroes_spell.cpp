@@ -363,11 +363,22 @@ bool ActionSpellSummonBoat( Heroes & hero )
     }
 
     const s32 center = hero.GetIndex();
+    const Point & centerPoint = Maps::GetPoint( center );
 
     // find water
     s32 dst_water = -1;
-    const MapsIndexes & v = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
+    MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
+        const Point & leftPoint = Maps::GetPoint( left );
+        const Point & rightPoint = Maps::GetPoint( right );
+        const int32_t leftDiffX = leftPoint.x - centerPoint.x;
+        const int32_t leftDiffY = leftPoint.y - centerPoint.y;
+        const int32_t rightDiffX = rightPoint.x - centerPoint.x;
+        const int32_t rightDiffY = rightPoint.y - centerPoint.y;
+
+        return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
+    } );
+    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
             break;
@@ -401,8 +412,9 @@ bool ActionSpellSummonBoat( Heroes & hero )
         const s32 boat = boats[i];
         if ( Maps::isValidAbsIndex( boat ) ) {
             if ( Rand::Get( 1, 100 ) <= chance ) {
-                world.GetTiles( boat ).RemoveObjectSprite();
-                world.GetTiles( boat ).SetObject( MP2::OBJ_ZERO );
+                Maps::Tiles & boatFile = world.GetTiles( boat );
+                boatFile.RemoveObjectSprite();
+                boatFile.SetObject( MP2::OBJ_ZERO );
                 Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
                 return true;
             }
@@ -450,7 +462,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
 
-        hero.ActionNewPosition();
+        // No action is being made. Uncomment this code if the logic will be changed
+        // hero.ActionNewPosition();
 
         Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
 

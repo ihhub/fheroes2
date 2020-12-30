@@ -62,7 +62,7 @@ namespace fheroes2
 
         bool empty() const
         {
-            return _image.empty();
+            return _data.empty();
         }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
@@ -75,8 +75,7 @@ namespace fheroes2
     private:
         int32_t _width;
         int32_t _height;
-        std::vector<uint8_t> _image;
-        std::vector<uint8_t> _transform;
+        std::vector<uint8_t> _data; // holds 2 image layers
     };
 
     class Sprite : public Image

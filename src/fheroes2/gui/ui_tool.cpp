@@ -21,9 +21,84 @@
 #include "ui_tool.h"
 #include "localevent.h"
 #include "screen.h"
+#include "settings.h"
+#include "text.h"
 #include "types.h"
 
+#include <chrono>
 #include <cstring>
+#include <ctime>
+#include <deque>
+
+namespace
+{
+    // Renderer of current time and FPS on screen
+    class SystemInfoRenderer
+    {
+    public:
+        SystemInfoRenderer()
+            : _startTime( std::chrono::high_resolution_clock::now() )
+        {}
+
+        void preRender()
+        {
+            if ( !Settings::Get().ExtGameShowSystemInfo() )
+                return;
+
+            const int32_t offsetX = 26;
+            const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+
+            time_t rawtime;
+            std::time( &rawtime );
+            // strtime format: Www Mmm dd hh:mm:ss yyyy
+            const char * timeFormat = std::ctime( &rawtime );
+
+            std::string info( &timeFormat[11], 8 );
+
+            std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+            const std::chrono::duration<double> time = endTime - _startTime;
+            _startTime = endTime;
+
+            const double totalTime = time.count() * 1000.0;
+            const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
+
+            _fps.push_front( fps );
+            while ( _fps.size() > 10 )
+                _fps.pop_back();
+
+            double averageFps = 0;
+            for ( const double value : _fps )
+                averageFps += value;
+
+            averageFps /= static_cast<double>( _fps.size() );
+            const int currentFps = static_cast<int>( averageFps );
+
+            info += ", FPS: ";
+            info += std::to_string( currentFps );
+            if ( averageFps < 10 ) {
+                info += ".";
+                info += std::to_string( static_cast<int>( ( averageFps - currentFps ) * 10 ) );
+            }
+
+            _text.SetPos( offsetX, offsetY );
+            _text.SetText( info );
+            _text.Show();
+        }
+
+        void postRender()
+        {
+            if ( _text.isShow() )
+                _text.Hide();
+        }
+
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        TextSprite _text;
+        std::deque<double> _fps;
+    };
+
+    SystemInfoRenderer systemInfoRenderer;
+}
 
 namespace fheroes2
 {
@@ -280,5 +355,15 @@ namespace fheroes2
 
             DELAY( stepDelay );
         }
+    }
+
+    void PreRenderSystemInfo()
+    {
+        systemInfoRenderer.preRender();
+    }
+
+    void PostRenderSystemInfo()
+    {
+        systemInfoRenderer.postRender();
     }
 }

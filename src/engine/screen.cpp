@@ -123,18 +123,21 @@ namespace
             clear();
         }
 
-        virtual void show( bool enable ) override
-        {
-            _show = enable;
-        }
-
         virtual bool isVisible() const override
         {
-            return _show && ( SDL_ShowCursor( -1 ) == 1 );
+            if ( _emulation )
+                return fheroes2::Cursor::isVisible();
+            else
+                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
         }
 
         virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
+            if ( _emulation ) {
+                fheroes2::Cursor::update( image, offsetX, offsetY );
+                return;
+            }
+
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
                 return;
@@ -175,6 +178,21 @@ namespace
             std::swap( _cursor, tempCursor );
         }
 
+        virtual void enableSoftwareEmulation( const bool enable ) override
+        {
+            if ( enable == _emulation )
+                return;
+
+            if ( enable ) {
+                clear();
+                _emulation = true;
+            }
+            else {
+                _emulation = false;
+                update( _image, _image.x(), _image.y() );
+            }
+        }
+
         static RenderCursor * create()
         {
             return new RenderCursor;
@@ -183,12 +201,13 @@ namespace
     protected:
         RenderCursor()
             : _cursor( NULL )
-            , _show( false )
-        {}
+        {
+            // SDL 2 handles mouse properly without any emulation.
+            _emulation = false;
+        }
 
     private:
         SDL_Cursor * _cursor;
-        bool _show; // TODO: remove this member!
 
         void clear()
         {
@@ -199,42 +218,14 @@ namespace
         }
     };
 #else
+    // SDL 1 doesn't support hardware level cursor.
     class RenderCursor : public fheroes2::Cursor
     {
     public:
-        RenderCursor()
-            : _show( false )
-        {}
-
-        virtual ~RenderCursor() {}
-
-        virtual void show( bool enable ) override
-        {
-            _show = enable;
-        }
-
-        virtual bool isVisible() const override
-        {
-            return _show;
-        }
-
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
-        {
-            _image = fheroes2::Sprite( image, offsetX, offsetY );
-        }
-
-        virtual void setPosition( int32_t offsetX, int32_t offsetY ) override
-        {
-            _image.setPosition( offsetX, offsetY );
-        }
-
         static RenderCursor * create()
         {
             return new RenderCursor;
         }
-
-    private:
-        bool _show;
     };
 #endif
 }

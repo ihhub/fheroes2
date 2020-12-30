@@ -151,7 +151,6 @@ namespace Interface
 
     private:
         Basic();
-        void RedrawSystemInfo( s32, s32, u32 );
         void ShowPathOrStartMoveHero( Heroes *, s32 );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         int HumanTurn( bool );
@@ -169,8 +168,6 @@ namespace Interface
         fheroes2::Rect scrollRight;
         fheroes2::Rect scrollBottom;
         fheroes2::Rect scrollTop;
-
-        Text system_info;
     };
 }
 

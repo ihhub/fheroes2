@@ -1936,6 +1936,11 @@ uint8_t Maps::Tiles::GetObjectSpriteIndex() const
     return objectIndex;
 }
 
+void Maps::Tiles::SetObjectSpriteIndex( const uint8_t index )
+{
+    objectIndex = index;
+}
+
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isFlag32 );

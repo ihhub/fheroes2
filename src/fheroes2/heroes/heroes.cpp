@@ -84,17 +84,26 @@ int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const
             result += GameStatic::ObjectVisitedModifiers( objs[ii] );
 
             if ( strs ) {
-                if ( objs[ii] == MP2::OBJ_GRAVEYARD || objs[ii] == MP2::OBJN_GRAVEYARD ) {
-                    strs->append( _( "Graveyard robber" ) );
-                }
-                else if ( objs[ii] == MP2::OBJ_SHIPWRECK || objs[ii] == MP2::OBJN_SHIPWRECK ) {
-                    strs->append( _( "Shipwreck robber" ) );
-                }
-                else if ( objs[ii] == MP2::OBJ_PYRAMID || objs[ii] == MP2::OBJN_PYRAMID ) {
-                    strs->append( _( "Pyramid raided" ) );
-                }
-                else {
-                    strs->append( MP2::StringObject( objs[ii] ) );
+                switch ( objs[ii] ) {
+                case MP2::OBJ_GRAVEYARD:
+                case MP2::OBJN_GRAVEYARD:
+                case MP2::OBJ_SHIPWRECK:
+                case MP2::OBJN_SHIPWRECK:
+                case MP2::OBJ_DERELICTSHIP:
+                case MP2::OBJN_DERELICTSHIP: {
+                    std::string modRobber = _( "%{object} robber" );
+                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRobber );
+                } break;
+                case MP2::OBJ_PYRAMID:
+                case MP2::OBJN_PYRAMID: {
+                    std::string modRaided = _( "%{object} raided" );
+                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
+                    strs->append( modRaided );
+                } break;
+                default:
+                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
+                    break;
                 }
 
                 StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
@@ -688,9 +697,6 @@ int Heroes::GetMorale( void ) const
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
-    if ( army.AllTroopsAreUndead() )
-        return Morale::NORMAL;
-
     int result = Morale::NORMAL;
 
     // bonus artifact
@@ -1876,16 +1882,6 @@ std::string Heroes::String( void ) const
     return os.str();
 }
 
-struct InCastleAndGuardian : public std::binary_function<const Castle *, Heroes *, bool>
-{
-    bool operator()( const Castle * castle, Heroes * hero ) const
-    {
-        const Point & cpt = castle->GetCenter();
-        const Point & hpt = hero->GetCenter();
-        return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
-    }
-};
-
 AllHeroes::AllHeroes()
 {
     reserve( HEROESMAXCOUNT + 2 );
@@ -1984,9 +1980,13 @@ Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
 {
-    const_iterator it = Settings::Get().ExtCastleAllowGuardians()
-                            ? std::find_if( begin(), end(), [&castle]( Heroes * hero ) { return InCastleAndGuardian()( &castle, hero ); } )
-                            : end();
+    const_iterator it = Settings::Get().ExtCastleAllowGuardians() ? std::find_if( begin(), end(),
+                                                                                  [&castle]( const Heroes * hero ) {
+                                                                                      const Point & cpt = castle.GetCenter();
+                                                                                      const Point & hpt = hero->GetCenter();
+                                                                                      return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
+                                                                                  } )
+                                                                  : end();
     return end() != it ? *it : NULL;
 }
 

@@ -33,6 +33,7 @@
 #include "engine.h"
 #include "error.h"
 #include "game.h"
+#include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "screen.h"
@@ -143,7 +144,7 @@ int main( int argc, char ** argv )
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Ensure the mouse position is updated to prevent bad initial values.
-            LocalEvent::Get().RegisterCycling();
+            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
             LocalEvent::Get().GetMouseCursor();
 
 #ifdef WITH_ZLIB
@@ -219,6 +220,12 @@ int main( int argc, char ** argv )
                     break;
                 case Game::LOADMULTI:
                     rs = Game::LoadMulti();
+                    break;
+                case Game::LOADHOTSEAT:
+                    rs = Game::LoadHotseat();
+                    break;
+                case Game::LOADNETWORK:
+                    rs = Game::LoadNetwork();
                     break;
                 case Game::SCENARIOINFO:
                     rs = Game::ScenarioInfo();
