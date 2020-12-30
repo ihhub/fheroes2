@@ -195,8 +195,8 @@ namespace
                 _emulation = false;
             }
 
-            if ( cursorUpdater != nullptr )
-                ( *cursorUpdater )();
+            if ( _cursorUpdater != nullptr )
+                ( *_cursorUpdater )();
         }
 
         static RenderCursor * create()

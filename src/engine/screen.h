@@ -168,14 +168,14 @@ namespace fheroes2
 
         void registerUpdater( void ( *cursorUpdater )() )
         {
-            this->cursorUpdater = cursorUpdater;
+            _cursorUpdater = cursorUpdater;
         }
 
     protected:
         Sprite _image;
         bool _emulation;
         bool _show;
-        void ( *cursorUpdater )();
+        void ( *_cursorUpdater )();
 
         Cursor()
             : _emulation( true )

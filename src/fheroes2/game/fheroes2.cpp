@@ -150,7 +150,7 @@ int main( int argc, char ** argv )
             // Ensure the mouse position is updated to prevent bad initial values.
             LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
             LocalEvent::Get().GetMouseCursor();
-            
+
             // Update mouse cursor when switching between hardware and software mouse
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
