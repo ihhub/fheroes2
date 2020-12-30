@@ -40,9 +40,6 @@ namespace Cdrom
 
 bool SDL::Init( const u32 system )
 {
-    if ( System::isRunning() )
-        return false;
-
     if ( 0 > SDL_Init( system ) ) {
         ERROR( SDL_GetError() );
         return false;
@@ -70,8 +67,6 @@ bool SDL::Init( const u32 system )
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
 
-    System::CreateTrayIcon( true );
-    System::PowerManagerOff( true );
     Surface::SetDefaultColorKey( 0xFF, 0, 0xFF );
 
     return true;
@@ -79,9 +74,6 @@ bool SDL::Init( const u32 system )
 
 void SDL::Quit( void )
 {
-    System::CreateTrayIcon( false );
-    System::PowerManagerOff( false );
-
 #ifdef WITH_NET
     Network::Quit();
 #endif

@@ -28,9 +28,7 @@
 #include <sstream>
 #include <string>
 
-#if defined( __SYMBIAN32__ )
-#define VERBOSE( x )
-#elif defined( ANDROID )
+#if defined( ANDROID )
 #include <android/log.h>
 namespace std
 {
@@ -89,12 +87,6 @@ namespace System
     int Unlink( const std::string & );
 
     bool isEmbededDevice( void );
-    bool isRunning( void );
-    int CreateTrayIcon( bool );
-    void PowerManagerOff( bool );
-
-    int ShellCommand( const char * );
-    int GetRenderFlags( void );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 }
