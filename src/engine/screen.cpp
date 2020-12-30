@@ -190,12 +190,13 @@ namespace
             if ( enable ) {
                 clear();
                 _emulation = true;
-                update( _image, _image.x(), _image.y() );
             }
             else {
                 _emulation = false;
-                update( _image, _offsetX, _offsetY );
             }
+
+            if ( cursorUpdater != nullptr )
+                ( *cursorUpdater )();
         }
 
         static RenderCursor * create()
