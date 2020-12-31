@@ -194,7 +194,7 @@ namespace
             }
 
             if ( _cursorUpdater != nullptr )
-                ( *_cursorUpdater )();
+                _cursorUpdater();
         }
 
         static RenderCursor * create()
