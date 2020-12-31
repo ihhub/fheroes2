@@ -180,6 +180,7 @@ namespace fheroes2
         Cursor()
             : _emulation( true )
             , _show( false )
+            , _cursorUpdater( nullptr )
         {}
     };
 
