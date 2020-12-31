@@ -63,8 +63,6 @@ bool SDL::Init( const u32 system )
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
 #endif
 
-    Surface::SetDefaultColorKey( 0xFF, 0, 0xFF );
-
     return true;
 }
 
