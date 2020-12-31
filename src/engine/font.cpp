@@ -99,7 +99,7 @@ int FontTTF::LineSkip( void ) const
 //
 //     return Surface( solid ? TTF_RenderUTF8_Solid( ptr, buf, clr() ) : TTF_RenderUTF8_Blended( ptr, buf, clr() ) );
 // }
-// 
+//
 // Surface FontTTF::RenderUnicodeText( const std::vector<u16> & msg, const RGBA & clr, bool solid )
 // {
 //     return Surface( solid ? TTF_RenderUNICODE_Solid( ptr, &msg[0], clr() ) : TTF_RenderUNICODE_Blended( ptr, &msg[0], clr() ) );
