@@ -122,7 +122,7 @@ namespace AGG
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
-    void LoadTTFChar( u32 );
+    // void LoadTTFChar( u32 );
 #endif
 
     const std::vector<u8> & GetWAV( int m82 );
@@ -589,22 +589,22 @@ void AGG::PlayMusic( int mus, bool loop )
 }
 
 #ifdef WITH_TTF
-void AGG::LoadTTFChar( u32 ch )
-{
-    const Settings & conf = Settings::Get();
-    // const RGBA white( 0xFF, 0xFF, 0xFF );
-    // const RGBA yellow( 0xFF, 0xFF, 0x00 );
-
-    // small
-    // fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-    // fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-
-    // medium
-    // fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-    // fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-
-    DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-}
+// void AGG::LoadTTFChar( u32 ch )
+// {
+//     const Settings & conf = Settings::Get();
+//      const RGBA white( 0xFF, 0xFF, 0xFF );
+//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
+// 
+//      small
+//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
+//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
+// 
+//      medium
+//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
+//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
+// 
+//     DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
+// }
 
 void AGG::LoadFNT( void )
 {
