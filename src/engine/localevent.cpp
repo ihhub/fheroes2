@@ -62,6 +62,7 @@ void LocalEvent::CloseController()
 {
     if ( SDL_GameControllerGetAttached( _gameController ) ) {
         SDL_GameControllerClose( _gameController );
+        _gameController = nullptr;
     }
 }
 #endif
