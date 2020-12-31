@@ -140,13 +140,13 @@ namespace AGG
     // Surface GetUnicodeLetter( u32 ch, u32 ft )
     // {
     //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-    // 
+    //
     //     if ( !ttf_valid )
     //         return Surface();
-    // 
+    //
     //     if ( !fnt_cache[ch].sfs[0].isValid() )
     //         LoadTTFChar( ch );
-    // 
+    //
     //     switch ( ft ) {
     //     case Font::YELLOW_SMALL:
     //         return fnt_cache[ch].sfs[1];
@@ -157,7 +157,7 @@ namespace AGG
     //     default:
     //         break;
     //     }
-    // 
+    //
     //     return fnt_cache[ch].sfs[0];
     // }
 }
@@ -609,17 +609,17 @@ void AGG::LoadTTFChar( u32 ch )
 void AGG::LoadFNT( void )
 {
     // const Settings & conf = Settings::Get();
-    // 
+    //
     // if ( !conf.Unicode() ) {
     //     DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
     // }
     // else if ( fnt_cache.empty() ) {
     //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
     //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-    // 
+    //
     //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
     //         LoadTTFChar( *it );
-    // 
+    //
     //     if ( fnt_cache.empty() ) {
     //         DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
     //     }
