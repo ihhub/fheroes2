@@ -139,8 +139,6 @@ namespace
                 return;
             }
 
-            _image = fheroes2::Sprite( image, offsetX, offsetY );
-
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
                 return;
