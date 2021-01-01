@@ -439,8 +439,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     if ( debug && result.empty() ) {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "Path is not found for " << unit.String() << ", destination: "
-                                        << "(head cell ID: " << targetHeadCellId
-                                        << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
+                                        << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
     }
 
     return result;
