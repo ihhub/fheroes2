@@ -331,6 +331,7 @@
     <ClCompile Include="src\fheroes2\kingdom\puzzle.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
+    <ClCompile Include="src\fheroes2\kingdom\view_world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
@@ -491,6 +492,7 @@
     <ClInclude Include="src\fheroes2\kingdom\puzzle.h" />
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
+    <ClInclude Include="src\fheroes2\kingdom\view_world.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />

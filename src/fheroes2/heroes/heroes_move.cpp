@@ -375,14 +375,13 @@ bool Heroes::isInVisibleMapArea() const
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
-void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow ) const
+void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gamearea ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
         return;
 
     const s32 centerIndex = GetIndex();
     const bool reflect = ReflectSprite( direction );
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
@@ -491,27 +490,27 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
     const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
-    tile.RedrawTop( dst, visibleTileROI );
+    tile.RedrawTop( dst, visibleTileROI, gamearea );
 
     if ( Maps::isValidDirection( centerIndex, Direction::TOP ) )
-        world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround );
+        world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround, gamearea );
 
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM ) ) {
         const Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
-        tile_bottom.RedrawBottom4Hero( dst, visibleTileROI );
-        tile_bottom.RedrawTop( dst, visibleTileROI );
+        tile_bottom.RedrawBottom4Hero( dst, visibleTileROI, gamearea );
+        tile_bottom.RedrawTop( dst, visibleTileROI, gamearea );
     }
 
     if ( 45 > GetSpriteIndex() ) {
         if ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) ) {
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
                 const Maps::Tiles & tile_dir_bottom = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) );
-                tile_dir_bottom.RedrawBottom4Hero( dst, visibleTileROI );
-                tile_dir_bottom.RedrawTop( dst, visibleTileROI );
+                tile_dir_bottom.RedrawBottom4Hero( dst, visibleTileROI, gamearea );
+                tile_dir_bottom.RedrawTop( dst, visibleTileROI, gamearea );
             }
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {
                 const Maps::Tiles & tile_dir_top = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) );
-                tile_dir_top.RedrawTop4Hero( dst, visibleTileROI, skipGround );
+                tile_dir_top.RedrawTop4Hero( dst, visibleTileROI, skipGround, gamearea );
             }
         }
 
@@ -519,15 +518,15 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
             const Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
 
             if ( tile_bottom.GetObject() == MP2::OBJ_BOAT )
-                tile_bottom.RedrawObjects( dst, false );
+                tile_bottom.RedrawObjects( dst, false, gamearea );
         }
     }
 
     if ( Maps::isValidDirection( centerIndex, direction ) ) {
         if ( Direction::TOP == direction )
-            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround );
+            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround, gamearea );
         else
-            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop( dst, visibleTileROI );
+            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop( dst, visibleTileROI, gamearea );
     }
 }
 

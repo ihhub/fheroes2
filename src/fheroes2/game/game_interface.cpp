@@ -202,7 +202,7 @@ void Interface::Basic::Redraw( int force )
         controlPanel.Redraw();
 
     if ( combinedRedraw & REDRAW_BORDER )
-        GameBorderRedraw();
+        GameBorderRedraw( false );
 
     redraw = 0;
 }

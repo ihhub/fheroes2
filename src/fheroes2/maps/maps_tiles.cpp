@@ -1397,12 +1397,12 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( visibleTileROI & mp ) {
-        Interface::Basic::Get().GetGameArea().DrawTile( dst, GetTileSurface(), mp );
+        gameArea.DrawTile( dst, GetTileSurface(), mp );
     }
 }
 
@@ -1430,7 +1430,7 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, cons
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     if ( addon.empty() ) {
         return;
@@ -1439,7 +1439,6 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( visibleTileROI & mp ) ) {
-        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
@@ -1458,9 +1457,9 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
     }
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
-    RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw );
+    RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw, area );
 }
 
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Rect & visibleTileROI ) const
@@ -1487,7 +1486,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Rect & visibleTil
 #endif
 }
 
-void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     int object = GetObject();
 
@@ -1497,7 +1496,6 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) cons
         const int icn = MP2::GetICNObject( objectTileset );
 
         if ( ICN::UNKNOWN != icn ) {
-            const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
             const Point mp = Maps::GetPoint( GetIndex() );
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
@@ -1514,28 +1512,26 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) cons
     }
 }
 
-void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow ) const
+void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gameArea ) const
 {
     switch ( GetObject() ) {
     case MP2::OBJ_BOAT:
-        RedrawBoat( dst, visibleTileROI, withShadow );
+        RedrawBoat( dst, visibleTileROI, withShadow, gameArea );
         break;
     case MP2::OBJ_MONSTER:
-        RedrawMonster( dst, visibleTileROI );
+        RedrawMonster( dst, visibleTileROI, gameArea );
         break;
     default:
         break;
     }
 }
 
-void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( !( visibleTileROI & mp ) )
         return;
-
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     const Monster & monster = QuantityMonster();
     const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
@@ -1549,12 +1545,11 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTile
     }
 }
 
-void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow ) const
+void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( visibleTileROI & mp ) {
-        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
         if ( withShadow ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
@@ -1606,12 +1601,11 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
     return false;
 }
 
-void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( visibleTileROI & mp ) {
-        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             const uint8_t object = it->object;
             const uint8_t index = it->index;
@@ -1628,20 +1622,19 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
         }
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-            RedrawObjects( dst, false );
-            RedrawMonstersAndBoat( dst, visibleTileROI, false );
+            RedrawObjects( dst, false, area );
+            RedrawMonstersAndBoat( dst, visibleTileROI, false, area );
         }
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( !( visibleTileROI & mp ) )
         return;
 
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const int objectID = GetObject( false );
     // animate objects
     if ( objectID == MP2::OBJ_ABANDONEDMINE ) {
@@ -1657,15 +1650,14 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI 
         }
     }
 
-    RedrawAddon( dst, addons_level2, visibleTileROI, false );
+    RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
 }
 
-void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground ) const
+void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( visibleTileROI & mp ) && !addons_level2.empty() ) {
-        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
             if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
                 continue;
@@ -2374,9 +2366,8 @@ int Maps::Tiles::GetFogDirections( int color ) const
     return around;
 }
 
-void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
+void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & gameArea ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
     const int around = GetFogDirections( color );
@@ -2384,7 +2375,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
-        area.DrawTile( dst, sf, mp );
+        gameArea.DrawTile( dst, sf, mp );
     }
     else {
         u32 index = 0;
@@ -2630,12 +2621,12 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
         else {
             DEBUG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
-            area.DrawTile( dst, sf, mp );
+            gameArea.DrawTile( dst, sf, mp );
             return;
         }
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
-        area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
+        gameArea.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
     }
 }
 
