@@ -116,7 +116,7 @@ namespace Interface
         int scrollDirection;
         bool updateCursor;
 
-        SDL::Time scrollTime;
+        fheroes2::Time scrollTime;
 
         Point _middlePoint() const; // returns middle point of window ROI
         Point _getStartTileId() const;

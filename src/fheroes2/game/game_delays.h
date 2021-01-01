@@ -21,9 +21,9 @@
 #ifndef H2GAME_DELAYS_H
 #define H2GAME_DELAYS_H
 
-#include <thread.h>
+#include "timing.h"
 
-struct TimeDelay : std::pair<SDL::Time, uint32_t>
+struct TimeDelay : std::pair<fheroes2::Time, uint32_t>
 {
     TimeDelay( uint32_t dl );
     uint32_t operator()( void ) const;
