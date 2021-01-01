@@ -105,25 +105,3 @@ bool Timer::IsValid( void ) const
 {
     return id;
 }
-
-Time::Time() {}
-
-void Time::Start( void )
-{
-    tick2 = tick1 = SDL_GetTicks();
-}
-
-void Time::Stop( void )
-{
-    tick2 = SDL_GetTicks();
-}
-
-u32 Time::Get( void ) const
-{
-    return tick2 > tick1 ? tick2 - tick1 : 0;
-}
-
-void Time::Print( const char * header ) const
-{
-    ERROR( ( header ? header : "time: " ) << Get() << " ms" );
-}

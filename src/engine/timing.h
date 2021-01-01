@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,48 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLTHREAD_H
-#define SDLTHREAD_H
+#pragma once
 
-#include "types.h"
-#include <SDL_thread.h>
+#include <chrono>
+#include <stdint.h>
 
-namespace SDL
+namespace fheroes2
 {
-    class Thread
+    class Time
     {
     public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
+        Time();
 
-        Thread & operator=( const Thread & );
-
-        void Create( int ( * )( void * ), void * param = NULL );
-        int Wait( void );
-        void Kill( void );
-
-        bool IsRun( void ) const;
-
-        u32 GetID( void ) const;
+        void reset();
+        double get() const; // returns time in microseconds
+        uint64_t getMs() const; // returns rounded time in milliseconds
 
     private:
-        SDL_Thread * thread;
-    };
-
-    class Timer
-    {
-    public:
-        Timer();
-
-        bool IsValid( void ) const;
-
-        void Run( u32, u32 ( * )( u32, void * ), void * param = NULL );
-        void Remove( void );
-
-    private:
-        SDL_TimerID id;
+        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
     };
 }
-
-#endif
