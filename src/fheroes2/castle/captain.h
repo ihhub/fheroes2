@@ -49,18 +49,28 @@ public:
 
     const Castle * inCastle( void ) const;
 
-    int GetLevelSkill( int ) const;
-    u32 GetSecondaryValues( int ) const;
+    virtual int GetLevelSkill( int ) const override
+    {
+        return 0;
+    }
+
+    virtual uint32_t GetSecondaryValues( int ) const override
+    {
+        return 0;
+    }
 
     const Army & GetArmy( void ) const;
     Army & GetArmy( void );
 
-    u32 GetMaxSpellPoints( void ) const;
+    virtual uint32_t GetMaxSpellPoints() const override
+    {
+        return knowledge * 10;
+    }
 
     void ActionPreBattle( void );
     void ActionAfterBattle( void );
 
-    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
+    virtual void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const override;
     fheroes2::Image GetPortrait( int type ) const;
 
 private:

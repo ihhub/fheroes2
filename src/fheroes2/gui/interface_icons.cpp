@@ -117,18 +117,13 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
 void Interface::IconsBar::RedrawBackground( const Point & pos )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 1 );
-    fheroes2::Rect srcrt;
-    fheroes2::Point dstpt;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
-    srcrt.y = RADARWIDTH + 2 * BORDERWIDTH;
-    srcrt.width = RADARWIDTH / 2;
-    srcrt.height = 32;
+    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 );
+    fheroes2::Rect srcrt( icnadv.width() - RADARWIDTH - BORDERWIDTH, RADARWIDTH + 2 * BORDERWIDTH, RADARWIDTH / 2, 32 );
 
-    dstpt.x = pos.x;
-    dstpt.y = pos.y;
+    fheroes2::Point dstpt( pos.x, pos.y );
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     srcrt.y = srcrt.y + srcrt.height;
@@ -136,7 +131,7 @@ void Interface::IconsBar::RedrawBackground( const Point & pos )
     srcrt.height = 32;
 
     if ( 2 < iconsCount ) {
-        for ( u32 ii = 0; ii < iconsCount - 2; ++ii ) {
+        for ( uint32_t i = 0; i < iconsCount - 2; ++i ) {
             fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
             dstpt.y += srcrt.height;
         }
