@@ -754,7 +754,7 @@ bool Settings::Read( const std::string & filename )
 	int vita_pointer_speed = config.IntParams("vita_pointer_speed");
 	if (vita_pointer_speed > 100) vita_pointer_speed = 100;
         if (vita_pointer_speed < 0) vita_pointer_speed = 0;
-        LocalEvent::Get().SetVitaPointerSpeed(vita_pointer_speed);
+        LocalEvent::Get().SetVitaTouchControlSpeed(vita_pointer_speed);
     }
     
     if(config.Exists("vita_touchcontrol_type"))

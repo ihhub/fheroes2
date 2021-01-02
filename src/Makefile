@@ -78,6 +78,12 @@ CFLAGS := $(CFLAGS) -DWITH_GAMEPAD
 endif
 endif
 
+ifdef WITH_TOUCHPAD
+ifdef WITH_SDL2
+CFLAGS := $(CFLAGS) -DWITH_TOUCHPAD
+endif
+endif
+
 ifdef RELEASE
 CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif
