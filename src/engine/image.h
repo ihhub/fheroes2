@@ -72,6 +72,8 @@ namespace fheroes2
 
         void swap( Image & image );
 
+        // This is an optional indicator for image processing functions.
+        // The whole image still consists of 2 layers but transform layer could be ignored in computations.
         bool singleLayer() const
         {
             return _singleLayer;

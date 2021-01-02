@@ -391,6 +391,7 @@ namespace fheroes2
 
     Image & Image::operator=( const Image & image_ )
     {
+        // We shouldn't copy different types of images.
         assert( _singleLayer == image_._singleLayer );
 
         _width = image_.width();
@@ -467,6 +468,7 @@ namespace fheroes2
 
     void Image::swap( Image & image )
     {
+        // We shouldn't swap different types of images.
         assert( _singleLayer == image._singleLayer );
 
         std::swap( _width, image._width );
