@@ -54,7 +54,7 @@ namespace Route
         friend StreamBase & operator>>( StreamBase &, Step & );
 
         int currentIndex = -1;
-        s32 from = -1;
+        int32_t from = -1;
         int direction = Direction::CENTER;
         uint32_t penalty = 0;
     };
