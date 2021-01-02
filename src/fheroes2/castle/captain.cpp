@@ -172,16 +172,6 @@ int Captain::GetType( void ) const
     return HeroBase::CAPTAIN;
 }
 
-int Captain::GetLevelSkill( int ) const
-{
-    return 0;
-}
-
-u32 Captain::GetSecondaryValues( int ) const
-{
-    return 0;
-}
-
 const Army & Captain::GetArmy( void ) const
 {
     return home.GetArmy();
@@ -190,11 +180,6 @@ const Army & Captain::GetArmy( void ) const
 Army & Captain::GetArmy( void )
 {
     return home.GetArmy();
-}
-
-u32 Captain::GetMaxSpellPoints( void ) const
-{
-    return knowledge * 10;
 }
 
 int Captain::GetControl( void ) const
@@ -276,22 +261,18 @@ void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf 
     const int iconHeight = Interface::IconsBar::GetItemHeight();
     const int barWidth = 7;
 
-    fheroes2::Image blackBG( iconWidth, iconHeight );
-    blackBG.fill( 0 );
-    fheroes2::Image blueBG( barWidth, iconHeight );
-    blueBG.fill( fheroes2::GetColorId( 15, 30, 120 ) );
-
     // background
-    fheroes2::Blit( blackBG, dstsf, px, py );
+    fheroes2::Fill( dstsf, px, py, iconWidth, iconHeight, 0 );
 
     // mobility is always 0
-    fheroes2::Blit( blueBG, dstsf, px, py );
+    const uint8_t blueColor = fheroes2::GetColorId( 15, 30, 120 );
+    fheroes2::Fill( dstsf, px, py, barWidth, iconHeight, blueColor );
 
     // portrait
     fheroes2::Blit( port, dstsf, px + barWidth + 1, py );
 
     // spell points
-    fheroes2::Blit( blueBG, dstsf, px + barWidth + port.width() + 2, py );
+    fheroes2::Fill( dstsf, px + barWidth + port.width() + 2, py, barWidth, iconHeight, blueColor );
     const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
     fheroes2::Blit( mana, dstsf, px + barWidth + port.width() + 2, py + mana.y() );
 }

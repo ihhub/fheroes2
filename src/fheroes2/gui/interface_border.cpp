@@ -57,19 +57,19 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     srcrt.x = 223;
     srcrt.width = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = 0;
     for ( int32_t i = 0; i < count_w + 1; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.x += TILEWIDTH;
     }
     srcrt.x += TILEWIDTH;
     srcrt.width = icnadv.width() - srcrt.x;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // LEFT BORDER
     srcrt.x = 0;
@@ -78,18 +78,18 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = 255;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = srcrt.y;
     for ( int32_t i = 0; i < count_h + 1; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
     srcrt.height = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // MIDDLE BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - 2 * BORDERWIDTH;
@@ -98,18 +98,18 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = 255;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
     for ( int32_t i = 0; i < count_h + 1; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
     srcrt.height = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // RIGHT BORDER
     srcrt.x = icnadv.width() - BORDERWIDTH;
@@ -118,18 +118,18 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = 255;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.y = 255;
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - BORDERWIDTH;
     dstpt.y = srcrt.y;
     for ( int32_t i = 0; i < count_h + 1; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
     srcrt.y += TILEWIDTH;
     srcrt.height = icnadv.height() - srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // BOTTOM BORDER
     srcrt.x = 0;
@@ -138,18 +138,18 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = BORDERWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     srcrt.x = 223;
     srcrt.width = TILEWIDTH;
     dstpt.x = srcrt.x;
     dstpt.y = displayHeight - BORDERWIDTH;
     for ( int32_t i = 0; i < count_w + 1; ++i ) {
-        fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+        fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.x += TILEWIDTH;
     }
     srcrt.x += TILEWIDTH;
     srcrt.width = icnadv.width() - srcrt.x;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     // ICON BORDER
     srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
@@ -158,10 +158,10 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = BORDERWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - BORDERWIDTH;
     dstpt.y = srcrt.y;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Copy( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 }
 
 Interface::BorderWindow::BorderWindow( const Rect & rt )
