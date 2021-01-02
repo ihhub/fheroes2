@@ -551,13 +551,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_RENDERER_SOFTWARE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
             return SDL_RENDERER_ACCELERATED;
-#else
-            return SDL_RENDERER_ACCELERATED;
-#endif
         }
 
         void _createPalette()
@@ -821,9 +815,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_SWSURFACE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ ) || defined( ANDROID )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;
@@ -1083,7 +1075,9 @@ namespace fheroes2
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )
-    {}
+    {
+        disableTransformLayer();
+    }
 
     Display::~Display()
     {

@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,48 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef SDLTHREAD_H
-#define SDLTHREAD_H
+#include "timing.h"
 
-#include "types.h"
-#include <SDL_thread.h>
-
-namespace SDL
+namespace fheroes2
 {
-    class Thread
+    Time::Time()
+        : _startTime( std::chrono::high_resolution_clock::now() )
+    {}
+
+    void Time::reset()
     {
-    public:
-        Thread();
-        ~Thread();
-        Thread( const Thread & );
+        _startTime = std::chrono::high_resolution_clock::now();
+    }
 
-        Thread & operator=( const Thread & );
-
-        void Create( int ( * )( void * ), void * param = NULL );
-        int Wait( void );
-        void Kill( void );
-
-        bool IsRun( void ) const;
-
-        u32 GetID( void ) const;
-
-    private:
-        SDL_Thread * thread;
-    };
-
-    class Timer
+    double Time::get() const
     {
-    public:
-        Timer();
+        const std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        return time.count();
+    }
 
-        bool IsValid( void ) const;
-
-        void Run( u32, u32 ( * )( u32, void * ), void * param = NULL );
-        void Remove( void );
-
-    private:
-        SDL_TimerID id;
-    };
+    uint64_t Time::getMs() const
+    {
+        return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
 }
-
-#endif

@@ -42,18 +42,7 @@ LocalEvent::LocalEvent()
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
     , _isSoundPaused( false )
-{
-#ifdef WITHOUT_MOUSE
-    emulate_mouse = false;
-    emulate_mouse_up = KEY_UP;
-    emulate_mouse_down = KEY_DOWN;
-    emulate_mouse_left = KEY_LEFT;
-    emulate_mouse_right = KEY_RIGHT;
-    emulate_mouse_step = 10;
-    emulate_press_left = KEY_NONE;
-    emulate_press_right = KEY_NONE;
-#endif
-}
+{}
 
 #ifdef WITH_GAMEPAD
 void LocalEvent::OpenGamepad()
@@ -113,7 +102,6 @@ void LocalEvent::SetTapMode( bool f )
     else {
         ResetModes( TAP_MODE );
         ResetModes( CLOCK_ON );
-        clock.Stop();
     }
 }
 
@@ -433,9 +421,8 @@ namespace
             if ( _preRenderDrawing != nullptr )
                 _preRenderDrawing();
 
-            _timer.Stop();
-            if ( _timer.Get() >= 220 ) {
-                _timer.Start();
+            if ( _timer.getMs() >= 220 ) {
+                _timer.reset();
                 palette = PAL::GetCyclingPalette( _counter++ );
                 return true;
             }
@@ -444,7 +431,7 @@ namespace
 
         void reset()
         {
-            _prevDraw.Start();
+            _prevDraw.reset();
 
             if ( _posRenderDrawing != nullptr )
                 _posRenderDrawing();
@@ -452,8 +439,7 @@ namespace
 
         bool isRedrawRequired()
         {
-            _prevDraw.Stop();
-            return _prevDraw.Get() >= 220;
+            return _prevDraw.getMs() >= 220;
         }
 
         void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
@@ -466,8 +452,8 @@ namespace
         }
 
     private:
-        SDL::Time _timer;
-        SDL::Time _prevDraw;
+        fheroes2::Time _timer;
+        fheroes2::Time _prevDraw;
         uint32_t _counter;
 
         void ( *_preRenderDrawing )();
@@ -676,8 +662,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     // emulate press right
     if ( ( modes & TAP_MODE ) && ( modes & CLOCK_ON ) ) {
-        clock.Stop();
-        if ( clock_delay < clock.Get() ) {
+        if ( clock_delay < clock.getMs() ) {
             ResetModes( CLICK_LEFT );
             ResetModes( CLOCK_ON );
             mouse_pr = mouse_cu;
@@ -1009,11 +994,6 @@ void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
             ResetModes( KEY_HOLD );
         }
 
-#ifdef WITHOUT_MOUSE
-        if ( emulate_mouse && EmulateMouseAction( GetKeySym( event.keysym.sym ) ) )
-            return;
-#endif
-
         key_value = GetKeySym( event.keysym.sym );
     }
 }
@@ -1053,7 +1033,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
             // emulate press right
             if ( modes & TAP_MODE ) {
-                clock.Start();
+                clock.reset();
                 SetModes( CLOCK_ON );
             }
             break;
@@ -1395,124 +1375,3 @@ void LocalEvent::SetStateDefaults( void )
     SDL_SetEventFilter( GlobalFilterEvents );
 #endif
 }
-
-#ifdef WITHOUT_MOUSE
-void LocalEvent::ToggleEmulateMouse( void )
-{
-    emulate_mouse = emulate_mouse ? false : true;
-}
-
-void LocalEvent::SetEmulateMouse( bool f )
-{
-    emulate_mouse = f;
-    if ( f )
-        mouse_cu = Point( 0, 0 );
-}
-
-void LocalEvent::SetEmulateMouseUpKey( KeySym k )
-{
-    emulate_mouse_up = k;
-}
-
-void LocalEvent::SetEmulateMouseDownKey( KeySym k )
-{
-    emulate_mouse_down = k;
-}
-
-void LocalEvent::SetEmulateMouseLeftKey( KeySym k )
-{
-    emulate_mouse_left = k;
-}
-
-void LocalEvent::SetEmulateMouseRightKey( KeySym k )
-{
-    emulate_mouse_right = k;
-}
-
-void LocalEvent::SetEmulateMouseStep( u8 s )
-{
-    emulate_mouse_step = s;
-}
-
-void LocalEvent::SetEmulatePressLeftKey( KeySym k )
-{
-    emulate_press_left = k;
-}
-
-void LocalEvent::SetEmulatePressRightKey( KeySym k )
-{
-    emulate_press_right = k;
-}
-
-bool LocalEvent::EmulateMouseAction( KeySym key )
-{
-    if ( ( key == emulate_mouse_up || key == emulate_mouse_down || key == emulate_mouse_left || key == emulate_mouse_right || key == emulate_press_left
-           || key == emulate_press_right ) ) {
-        if ( emulate_mouse_up == key ) {
-            mouse_cu.y -= emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_down == key ) {
-            mouse_cu.y += emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_left == key ) {
-            mouse_cu.x -= emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_right == key ) {
-            mouse_cu.x += emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-
-        const fheroes2::Display & display = fheroes2::Display::instance();
-
-        if ( mouse_cu.x < 0 )
-            mouse_cu.x = 0;
-        if ( mouse_cu.y < 0 )
-            mouse_cu.y = 0;
-        if ( mouse_cu.x > display.width() )
-            mouse_cu.x = display.width();
-        if ( mouse_cu.y > display.height() )
-            mouse_cu.y = display.height();
-
-        if ( emulate_press_left == key ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pl = mouse_cu;
-                SetModes( MOUSE_PRESSED );
-                SetModes( CLICK_LEFT );
-            }
-            else {
-                mouse_rl = mouse_cu;
-                ResetModes( MOUSE_PRESSED );
-            }
-            mouse_button = SDL_BUTTON_LEFT;
-        }
-        else if ( emulate_press_right == key ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pr = mouse_cu;
-                SetModes( MOUSE_PRESSED );
-            }
-            else {
-                mouse_rr = mouse_cu;
-                ResetModes( MOUSE_PRESSED );
-            }
-            mouse_button = SDL_BUTTON_RIGHT;
-        }
-
-        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            if ( modes & MOUSE_OFFSET )
-                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
-            else
-                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
-        }
-
-        ResetModes( KEY_PRESSED );
-
-        return true;
-    }
-
-    return false;
-}
-
-#endif

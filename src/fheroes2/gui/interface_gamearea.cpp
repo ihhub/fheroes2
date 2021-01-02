@@ -468,7 +468,7 @@ void Interface::GameArea::SetScroll( int direct )
         }
     }
 
-    scrollTime.Start();
+    scrollTime.reset();
 }
 
 void Interface::GameArea::SetUpdateCursor( void )
@@ -551,8 +551,7 @@ void Interface::GameArea::QueueEventProcessing( void )
         }
 
         // fixed pocket pc: click on maps after scroll (pause: ~800 ms)
-        scrollTime.Stop();
-        if ( 800 > scrollTime.Get() )
+        if ( 800 > scrollTime.getMs() )
             return;
     }
 

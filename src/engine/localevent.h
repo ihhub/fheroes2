@@ -24,7 +24,7 @@
 #define H2LOCALEVENT_H
 
 #include "rect.h"
-#include "thread.h"
+#include "timing.h"
 #include "types.h"
 
 #ifdef WITH_GAMEPAD
@@ -252,19 +252,6 @@ public:
     KeySym KeyValue( void ) const;
     int KeyMod( void ) const;
 
-#ifdef WITHOUT_MOUSE
-    void ToggleEmulateMouse( void );
-    void SetEmulateMouse( bool );
-    void SetEmulateMouseUpKey( KeySym );
-    void SetEmulateMouseDownKey( KeySym );
-    void SetEmulateMouseLeftKey( KeySym );
-    void SetEmulateMouseRightKey( KeySym );
-    void SetEmulateMouseStep( u8 );
-    void SetEmulatePressLeftKey( KeySym );
-    void SetEmulatePressRightKey( KeySym );
-    bool EmulateMouseAction( KeySym );
-#endif
-
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
@@ -348,7 +335,7 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    SDL::Time clock;
+    fheroes2::Time clock;
     u32 clock_delay;
     uint32_t loop_delay;
 
@@ -356,17 +343,6 @@ private:
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
-
-#ifdef WITHOUT_MOUSE
-    bool emulate_mouse;
-    KeySym emulate_mouse_up;
-    KeySym emulate_mouse_down;
-    KeySym emulate_mouse_left;
-    KeySym emulate_mouse_right;
-    int emulate_mouse_step;
-    KeySym emulate_press_left;
-    KeySym emulate_press_right;
-#endif
 
 #if defined( WITH_TOUCHPAD ) || defined( WITH_GAMEPAD )
     float xAxisFloat = 0;

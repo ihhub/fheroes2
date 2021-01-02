@@ -19,7 +19,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#if defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ )
+#if defined( _MSC_VER ) || defined( __MINGW32__ )
 #include <windows.h>
 #elif defined( VITA )
 #include <psp2/kernel/iofilemgr.h>
@@ -38,7 +38,7 @@ void ListFiles::Append( const ListFiles & list )
 
 void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )
 {
-#if defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ )
+#if defined( _MSC_VER ) || defined( __MINGW32__ )
     (void)sensitive;
 
     std::string pattern( path + "\\*" + filter );
