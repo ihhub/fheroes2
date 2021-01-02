@@ -854,7 +854,9 @@ namespace fheroes2
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )
-    {}
+    {
+        disableTransformLayer();
+    }
 
     Display::~Display()
     {
