@@ -79,7 +79,7 @@ namespace Battle
         bool isModes( u32 ) const;
         bool isBattle( void ) const;
         std::string GetShotString( void ) const;
-        std::string GetSpeedString( void ) const;
+        virtual std::string GetSpeedString( void ) const override;
         u32 GetHitPointsLeft( void ) const;
         u32 GetAffectedDuration( u32 ) const;
         u32 GetSpeed( void ) const;
