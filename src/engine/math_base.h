@@ -201,7 +201,7 @@ namespace fheroes2
         // Check whether rectangles are intersecting each other
         bool operator&( const RectBase2D & rect ) const
         {
-            return x <= rect.x + rect.width && rect.x <= x + width  && y <= rect.y + rect.height && rect.y <= y + height;
+            return x <= rect.x + rect.width && rect.x <= x + width && y <= rect.y + rect.height && rect.y <= y + height;
         }
 
         // Find intersection rectangle
