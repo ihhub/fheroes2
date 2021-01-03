@@ -25,11 +25,6 @@
 
 #include "gamedefs.h"
 
-class Heroes;
-class Castle;
-class Troop;
-class Kingdom;
-
 namespace PocketPC
 {
     void KeyboardDialog( std::string & );
