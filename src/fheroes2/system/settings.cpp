@@ -880,7 +880,7 @@ std::string Settings::String( void ) const
 #endif
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
-    os << "controller_pointer_speed = " << _controllerPointerSpeed << std::endl;
+    os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     return os.str();
 }
