@@ -254,6 +254,14 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+    void OpenController();
+    void CloseController();
+
+    void SetControllerPointerSpeed( const int newSpeed )
+    {
+        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+    }
+
 private:
     LocalEvent();
 
@@ -264,6 +272,9 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessControllerAxisMotion();
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -317,6 +328,32 @@ private:
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
+
+    enum
+    {
+        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_R_DEADZONE = 25000
+    };
+
+    // used to convert user-friendly pointer speed values into more useable ones
+    const double CONTROLLER_SPEED_MOD = 2000000.0;
+    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    SDL_GameController * _gameController = nullptr;
+#endif
+
+    fheroes2::Time _controllerTimer;
+    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
+    double _controllerPointerPosX = 0;
+    double _controllerPointerPosY = 0;
+    int16_t _controllerLeftXAxis = 0;
+    int16_t _controllerLeftYAxis = 0;
+    int16_t _controllerRightXAxis = 0;
+    int16_t _controllerRightYAxis = 0;
+    bool _controllerScrollActive = false;
+    bool _dpadScrollActive = false;
 };
 
 #endif

@@ -82,9 +82,7 @@ bool Cursor::SetThemes( int name, bool force )
 void Cursor::Redraw( s32 x, s32 y )
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
-        Cursor & cur = Cursor::Get();
-        cur.Move( x, y );
-
+        Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
             fheroes2::Display::instance().render();
         }
@@ -175,6 +173,11 @@ void Cursor::Hide( void )
 bool Cursor::isVisible( void ) const
 {
     return fheroes2::cursor().isVisible();
+}
+
+void Cursor::Refresh()
+{
+    Get().SetThemes( Get().Themes(), true );
 }
 
 int Cursor::DistanceThemes( int theme, u32 dist )

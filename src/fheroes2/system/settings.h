@@ -433,6 +433,7 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
+    int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;

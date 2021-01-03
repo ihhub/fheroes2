@@ -261,11 +261,6 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
     // open focus
     // key_events[EVENT_OPENFOCUS] = KEY_NONE;
-    // scroll
-    // key_events[EVENT_SCROLLLEFT] = KEY_NONE;
-    // key_events[EVENT_SCROLLRIGHT] = KEY_NONE;
-    // key_events[EVENT_SCROLLUP] = KEY_NONE;
-    // key_events[EVENT_SCROLLDOWN] = KEY_NONE;
     // control panel
     key_events[EVENT_CTRLPANEL] = KEY_1;
     key_events[EVENT_SHOWRADAR] = KEY_2;
@@ -275,6 +270,11 @@ void Game::HotKeysDefaults( void )
     // system:
     // switch group
     // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
+    // gamepad scroll bindings
+    key_events[EVENT_SCROLLLEFT] = KEY_KP4;
+    key_events[EVENT_SCROLLRIGHT] = KEY_KP6;
+    key_events[EVENT_SCROLLUP] = KEY_KP8;
+    key_events[EVENT_SCROLLDOWN] = KEY_KP2;
     // split
     key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
     key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
