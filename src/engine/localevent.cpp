@@ -712,8 +712,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         return;
     }
 
-    if (event.type == SDL_FINGERDOWN)
-    {
+    if (event.type == SDL_FINGERDOWN) {
         xaxis_starting = event.x * (float)960;
         yaxis_starting = event.y * (float)544;
         xcursor_starting = _controllerPointerPosX;
@@ -724,8 +723,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
     SetModes( MOUSE_MOTION );
 
-    if (vita_touchcontrol_type == 1)
-    {
+    if (vita_touchcontrol_type == 1) {
         float w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
         float h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
 
@@ -743,14 +741,12 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         _controllerPointerPosX = event.x * w - vitaDestRect.x;
         _controllerPointerPosY = event.y * h - vitaDestRect.y;
     }
-    else if (vita_touchcontrol_type == 2)
-    {
-        float deltaX = ((event.x * (float)960) - xaxis_starting) * (vita_touchcontrol_speed / 10.0f);
-        float deltaY = ((event.y * (float)544) - yaxis_starting) * (vita_touchcontrol_speed / 10.0f);
+    else if ( vita_touchcontrol_type == 2 ) {
+        float deltaX = ( ( event.x * (float)960 ) - xaxis_starting ) * ( vita_touchcontrol_speed / 10.0f );
+        float deltaY = ( ( event.y * (float)544 ) - yaxis_starting ) * ( vita_touchcontrol_speed / 10.0f );
         _controllerPointerPosX = xcursor_starting + deltaX;
         _controllerPointerPosY = ycursor_starting + deltaY;
     }
-    
 
     if ( _controllerPointerPosX < 0 )
         _controllerPointerPosX = 0;

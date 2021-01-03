@@ -118,7 +118,7 @@ namespace
 
 namespace
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 ) && !defined( WITH_GAMEPAD )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     class RenderCursor : public fheroes2::Cursor
     {
     public:

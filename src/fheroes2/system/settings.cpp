@@ -722,22 +722,24 @@ bool Settings::Read( const std::string & filename )
     }
 
 #ifdef WITH_TOUCHPAD
-    if(config.Exists("vita_pointer_speed"))
-    {
-	int vita_pointer_speed = config.IntParams("vita_pointer_speed");
-	if (vita_pointer_speed > 100) vita_pointer_speed = 100;
-        if (vita_pointer_speed < 0) vita_pointer_speed = 0;
-        LocalEvent::Get().SetVitaTouchControlSpeed(vita_pointer_speed);
+    if ( config.Exists( "vita_pointer_speed" ) ) {
+        int vita_pointer_speed = config.IntParams( "vita_pointer_speed" );
+        if ( vita_pointer_speed > 100 )
+            vita_pointer_speed = 100;
+        if ( vita_pointer_speed < 0 )
+            vita_pointer_speed = 0;
+        LocalEvent::Get().SetVitaTouchControlSpeed( vita_pointer_speed );
     }
-    
-    if(config.Exists("vita_touchcontrol_type"))
-    {
-	int vita_touchcontrol_type = config.IntParams("vita_touchcontrol_type");
-	if (vita_touchcontrol_type > 2) vita_touchcontrol_type = 2;
-        if (vita_touchcontrol_type < 0) vita_touchcontrol_type = 0;
-        LocalEvent::Get().SetVitaTouchControlType(vita_touchcontrol_type);
-    }
-#endif
+
+    if ( config.Exists( "vita_touchcontrol_type" ) ) {
+        int vita_touchcontrol_type = config.IntParams( "vita_touchcontrol_type" );
+        if ( vita_touchcontrol_type > 2 )
+            vita_touchcontrol_type = 2;
+        if ( vita_touchcontrol_type < 0 )
+            vita_touchcontrol_type = 0;
+        LocalEvent::Get().SetVitaTouchControlType( vita_touchcontrol_type );
+     }
+ #endif
 
 #ifdef VITA
     if ( config.Exists( "vita_keep_aspect_ratio" ) ) {

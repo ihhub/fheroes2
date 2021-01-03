@@ -27,10 +27,6 @@
 #include "timing.h"
 #include "types.h"
 
-#ifdef WITH_GAMEPAD
-#include "SDL.h"
-#endif
-
 enum KeySym
 {
     KEY_NONE = -1,
@@ -274,8 +270,15 @@ public:
 #endif
 
 #ifdef WITH_TOUCHPAD
-    void SetVitaTouchControlType(int newType) { vita_touchcontrol_type = newType; }
-    void SetVitaTouchControlSpeed(int newSpeed) { vita_touchcontrol_speed = newSpeed; }
+    void SetVitaTouchControlType( int newType )
+    {
+        vita_touchcontrol_type = newType;
+    }
+    
+    void SetVitaTouchControlSpeed( int newSpeed )
+    {
+        vita_touchcontrol_speed = newSpeed;
+    }
 #endif
 
 private:

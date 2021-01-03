@@ -52,7 +52,7 @@ $(PROJECT).velf: $(PROJECT).elf
 	dolce-elf-create $< $@
 
 $(PROJECT).elf:
-	$(MAKE) -f Makefile -C src VITA=true WITH_SDL2=true RELEASE=true WITHOUT_UNICODE=true WITH_GAMEPAD=true WITH_TOUCHPAD=true
+	$(MAKE) -f Makefile -C src VITA=true WITH_SDL2=true RELEASE=true WITHOUT_UNICODE=true WITH_TOUCHPAD=true
 	$(MAKE) -f files/lang/Makefile
 	@cp src/dist/$(TARGET) ./$(PROJECT).elf
 

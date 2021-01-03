@@ -132,10 +132,6 @@ int main( int argc, char ** argv )
         subsystem |= INIT_CDROM | INIT_AUDIO;
 #endif
 
-#ifdef WITH_GAMEPAD
-    subsystem |= INIT_GAMECONTROLLER;
-#endif
-
     if ( SDL::Init( subsystem ) )
 #ifndef ANDROID
         try
