@@ -241,36 +241,6 @@ bool Rect::operator&( const Rect & rt ) const
     return !( x > rt.x + rt.w || x + w < rt.x || y > rt.y + rt.h || y + h < rt.y );
 }
 
-Rect Rect::operator^( const Rect & other ) const
-{
-    Rect temp = other;
-    if ( temp.x < x ) {
-        const int16_t diff = x - temp.x;
-        temp.x = x;
-        temp.w -= diff;
-    }
-    if ( temp.y < y ) {
-        const int16_t diff = y - temp.y;
-        temp.y = y;
-        temp.h -= diff;
-    }
-
-    if ( temp.x > x + w || temp.y > y + h )
-        return Rect();
-
-    if ( temp.x + temp.w > x + w ) {
-        const int16_t diff = temp.x + temp.w - ( x + w );
-        temp.w -= diff;
-    }
-
-    if ( temp.y + temp.h > y + h ) {
-        const int16_t diff = temp.y + temp.h - ( y + h );
-        temp.h -= diff;
-    }
-
-    return temp;
-}
-
 const Point & Rect::getPosition() const
 {
     return *this;
