@@ -693,25 +693,25 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
 {
     if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {
-        if ( abs( motion.value ) > CONTROLLER_L_DEADZONE )
+        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
             _controllerLeftXAxis = motion.value;
         else
             _controllerLeftXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTY ) {
-        if ( abs( motion.value ) > CONTROLLER_L_DEADZONE )
+        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
             _controllerLeftYAxis = motion.value;
         else
             _controllerLeftYAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTX ) {
-        if ( abs( motion.value ) > CONTROLLER_R_DEADZONE )
+        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
             _controllerRightXAxis = motion.value;
         else
             _controllerRightXAxis = 0;
     }
     else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTY ) {
-        if ( abs( motion.value ) > CONTROLLER_R_DEADZONE )
+        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
             _controllerRightYAxis = motion.value;
         else
             _controllerRightYAxis = 0;
@@ -794,8 +794,8 @@ void LocalEvent::ProcessControllerAxisMotion()
         const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
         const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
-        _controllerPointerPosX += pow( abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
-        _controllerPointerPosY += pow( abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
+        _controllerPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
+        _controllerPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
