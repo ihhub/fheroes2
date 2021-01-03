@@ -344,14 +344,14 @@ private:
     SDL_GameController * _gameController = nullptr;
 #endif
 
+    fheroes2::Time _controllerTimer;
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _controllerPointerPosX = 0;
     double _controllerPointerPosY = 0;
+    int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
     int16_t _controllerRightYAxis = 0;
-    uint32_t _lastControllerTime = 0;
-    int16_t _controllerLeftXAxis = 0;
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
 };

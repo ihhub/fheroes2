@@ -780,9 +780,8 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
 
 void LocalEvent::ProcessControllerAxisMotion()
 {
-    const uint32_t currentTime = SDL_GetTicks();
-    const uint32_t deltaTime = currentTime - _lastControllerTime;
-    _lastControllerTime = currentTime;
+    const uint64_t deltaTime = _controllerTimer.getMs();
+    _controllerTimer.reset();
 
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
         SetModes( MOUSE_MOTION );

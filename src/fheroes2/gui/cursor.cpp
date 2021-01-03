@@ -81,10 +81,8 @@ bool Cursor::SetThemes( int name, bool force )
 /* redraw cursor wrapper for local event */
 void Cursor::Redraw( s32 x, s32 y )
 {
-    Cursor & cur = Cursor::Get();
-    cur.Move( x, y );
-
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
             fheroes2::Display::instance().render();
         }
