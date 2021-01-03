@@ -274,7 +274,7 @@ public:
     {
         vita_touchcontrol_type = newType;
     }
-    
+
     void SetVitaTouchControlSpeed( int newSpeed )
     {
         vita_touchcontrol_speed = newSpeed;

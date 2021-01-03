@@ -738,8 +738,8 @@ bool Settings::Read( const std::string & filename )
         if ( vita_touchcontrol_type < 0 )
             vita_touchcontrol_type = 0;
         LocalEvent::Get().SetVitaTouchControlType( vita_touchcontrol_type );
-     }
- #endif
+    }
+#endif
 
 #ifdef VITA
     if ( config.Exists( "vita_keep_aspect_ratio" ) ) {
