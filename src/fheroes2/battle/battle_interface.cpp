@@ -4102,10 +4102,10 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
             const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
-            const Rect initialArea( area.x, area.y, area.w, area.h );
-            Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
+            const fheroes2::Rect initialArea( area.x, area.y, area.w, area.h );
+            fheroes2::Rect original = initialArea ^ fheroes2::Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.width, original.height );
             if ( shifted.x < 0 ) {
                 const int32_t offset = -shifted.x;
                 shifted.x = 0;
@@ -4153,10 +4153,25 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
             const int16_t offsetX = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
             const int16_t offsetY = static_cast<int16_t>( Rand::Get( 0, 14 ) ) - 7;
-            const Rect initialArea( area.x, area.y, area.w, area.h );
-            const Rect original = initialArea ^ Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
+            const fheroes2::Rect initialArea( area.x, area.y, area.w, area.h );
+            fheroes2::Rect original = initialArea ^ fheroes2::Rect( area.x + offsetX, area.y + offsetY, area.w, area.h );
 
-            const fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.w, original.h );
+            fheroes2::Rect shifted( initialArea.x - original.x, initialArea.y - original.y, original.width, original.height );
+            if ( shifted.x < 0 ) {
+                const int32_t offset = -shifted.x;
+                shifted.x = 0;
+                original.x += offset;
+                shifted.width -= offset;
+                shifted.x = 0;
+            }
+            if ( shifted.y < 0 ) {
+                const int32_t offset = -shifted.y;
+                shifted.y = 0;
+                original.y += offset;
+                shifted.height -= offset;
+                shifted.y = 0;
+            }
+
             fheroes2::Blit( sprite, shifted.x, shifted.y, _mainSurface, original.x, original.y, shifted.width, shifted.height );
 
             RedrawPartialFinish();
