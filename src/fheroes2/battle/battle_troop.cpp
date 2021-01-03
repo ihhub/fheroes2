@@ -215,7 +215,7 @@ std::string Battle::Unit::GetShotString( void ) const
     return os.str();
 }
 
-std::string Battle::Unit::GetSpeedString( void ) const
+std::string Battle::Unit::GetSpeedString() const
 {
     std::ostringstream os;
     const uint32_t speedValue = GetSpeed( true );
