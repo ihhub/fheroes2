@@ -3,8 +3,8 @@ CC := arm-dolce-eabi-gcc
 CXX := arm-dolce-eabi-g++
 
 CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize \
--flto=jobserver \
--fgraphite-identity -floop-nest-optimize -floop-interchange -ftree-loop-distribution
+          -flto=jobserver \
+          -fgraphite-identity -floop-nest-optimize -floop-interchange -ftree-loop-distribution
 LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib -Wl,-q -Wl,-flto -Wl,-O1 -Wl,--as-needed -Wl,--hash-style=gnu -Wl,--sort-common
 
 ifdef WITH_SDL2
