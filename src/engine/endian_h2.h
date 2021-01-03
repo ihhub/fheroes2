@@ -68,6 +68,7 @@
 #define htobe32( x ) SDL_Swap32( x )
 #define htole32( x ) ( x )
 #define be32toh( x ) SDL_Swap32( x )
+#define le32toh( x ) ( x )
 
 #elif defined( __SWITCH__ )
 #include <machine/endian.h>
