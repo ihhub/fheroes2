@@ -408,12 +408,7 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
-#ifdef WITH_GAMEPAD
-    , gamepad_pointer_speed( 10 )
-#endif
-#ifdef VITA
-    , vita_keep_aspect_ratio( 1 )
-#endif
+    , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -726,17 +721,6 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-#ifdef WITH_GAMEPAD
-    if ( config.Exists( "gamepad_pointer_speed" ) ) {
-        gamepad_pointer_speed = config.IntParams( "gamepad_pointer_speed" );
-        if ( gamepad_pointer_speed > 100 )
-            gamepad_pointer_speed = 100;
-        else if ( gamepad_pointer_speed < 0 )
-            gamepad_pointer_speed = 0;
-        le.SetGamepadPointerSpeed( gamepad_pointer_speed );
-    }
-#endif
-
 #ifdef WITH_TOUCHPAD
     if(config.Exists("vita_pointer_speed"))
     {
@@ -761,6 +745,14 @@ bool Settings::Read( const std::string & filename )
         fheroes2::engine().SetVitaKeepAspectRatio( vita_keep_aspect_ratio );
     }
 #endif
+    if ( config.Exists( "controller_pointer_speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+        if ( _controllerPointerSpeed > 100 )
+            _controllerPointerSpeed = 100;
+        else if ( _controllerPointerSpeed < 0 )
+            _controllerPointerSpeed = 0;
+        le.SetControllerPointerSpeed( _controllerPointerSpeed );
+    }
 
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
@@ -916,10 +908,8 @@ std::string Settings::String( void ) const
         os << "lang = " << force_lang << std::endl;
 #endif
 
-#ifdef WITH_GAMEPAD
-    os << std::endl << "# gamepad pointer speed" << std::endl;
-    os << "gamepad_pointer_speed = " << gamepad_pointer_speed << std::endl;
-#endif
+    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
+    os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
 #ifdef VITA
     os << std::endl << "# vita keep aspect ratio" << std::endl;

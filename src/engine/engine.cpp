@@ -47,13 +47,13 @@ bool SDL::Init( const u32 system )
 
     if ( SDL_INIT_AUDIO & system )
         Mixer::Init();
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( SDL_INIT_GAMECONTROLLER & system )
+        LocalEvent::Get().OpenController();
+#endif
 #ifdef WITH_AUDIOCD
     if ( SDL_INIT_CDROM & system )
         Cdrom::Open();
-#endif
-#ifdef WITH_GAMEPAD
-    if ( SDL_INIT_GAMECONTROLLER & system )
-        LocalEvent::Get().OpenGamepad();
 #endif
 #ifdef WITH_TTF
     FontTTF::Init();
@@ -86,9 +86,9 @@ void SDL::Quit( void )
     if ( SubSystem( SDL_INIT_CDROM ) )
         Cdrom::Close();
 #endif
-#ifdef WITH_GAMEPAD
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) )
-        LocalEvent::Get().CloseGamepad();
+        LocalEvent::Get().CloseController();
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
         Mixer::Quit();

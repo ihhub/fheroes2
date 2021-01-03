@@ -258,15 +258,13 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
-#ifdef WITH_GAMEPAD
-    void OpenGamepad();
-    void CloseGamepad();
+    void OpenController();
+    void CloseController();
 
-    void SetGamepadPointerSpeed( float newSpeed )
+    void SetControllerPointerSpeed( const int newSpeed )
     {
-        gamepadPointerSpeed = newSpeed / GAMEPAD_SPEED_MOD;
+        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
     }
-#endif
 
 #ifdef VITA
     void DPadTextInputActive( bool active )
@@ -290,6 +288,9 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessControllerAxisMotion();
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -344,47 +345,41 @@ private:
     bool _isMusicPaused;
     bool _isSoundPaused;
 
-#if defined( WITH_TOUCHPAD ) || defined( WITH_GAMEPAD )
-    float xAxisFloat = 0;
-    float yAxisFloat = 0;
+    enum
+    {
+        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_R_DEADZONE = 25000
+    };
+
+    // used to convert user-friendly pointer speed values into more useable ones
+    const double CONTROLLER_SPEED_MOD = 2000000.0;
+    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    SDL_GameController * _gameController = nullptr;
+#endif
+
+    fheroes2::Time _controllerTimer;
+    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
+    double _controllerPointerPosX = 0;
+    double _controllerPointerPosY = 0;
+    int16_t _controllerLeftXAxis = 0;
+    int16_t _controllerLeftYAxis = 0;
+    int16_t _controllerRightXAxis = 0;
+    int16_t _controllerRightYAxis = 0;
+    bool _controllerScrollActive = false;
+    bool _dpadScrollActive = false;
+
+#ifdef VITA
+    bool dpadInputActive = false;
 #endif
 
 #ifdef WITH_TOUCHPAD
-    int vita_touchcontrol_type = 1;
-    int vita_touchcontrol_speed = 15;
-#endif
-
-#ifdef WITH_GAMEPAD
-    enum
-    {
-        JOY_L_DEADZONE = 1000,
-        JOY_R_DEADZONE = 25000
-    };
-
-    SDL_GameController * gameController = nullptr;
-
-    void HandleJoyAxisEvent( const SDL_ControllerAxisEvent & motion );
-    void HandleJoyButtonEvent( const SDL_ControllerButtonEvent & button );
-    void ProcessAxisMotion( void );
-
-    const float GAMEPAD_SPEED_MOD = 2000000.0f;
-    const float GAMEPAD_AXIS_SPEEDUP = 1.03f;
-
-    float gamepadPointerSpeed = 10.0f / GAMEPAD_SPEED_MOD;
-
-    int16_t xAxisLValue = 0;
-    int16_t yAxisLValue = 0;
-    int16_t xAxisRValue = 0;
-    int16_t yAxisRValue = 0;
-    uint32_t lastTime = 0;
-    bool gamepadScrollActive = false;
-    bool dpadScrollActive = false;
-#endif
-
-#if WITH_TOUCHPAD
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
     bool secondTouchDown = false;
-    bool dpadInputActive = false;
+    int vita_touchcontrol_type = 1;
+    int vita_touchcontrol_speed = 15;
 #endif
 };
 

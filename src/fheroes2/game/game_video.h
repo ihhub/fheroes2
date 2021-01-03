@@ -28,5 +28,5 @@
 namespace Video
 {
     // Returns 0 by default if roi is empty
-    size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    size_t ShowVideo( const std::string & fileName, bool isLooped, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
 }

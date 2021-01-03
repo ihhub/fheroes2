@@ -124,6 +124,13 @@ namespace PAL
            197, 197, 197, 197, 197, 197, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 213, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 225, 226,
            227, 228, 229, 230, 230, 230, 230, 73,  75,  77,  79,  81,  76,  78,  74,  76,  78,  80,  244, 245, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
 
+    struct CyclingColorSet
+    {
+        uint8_t start;
+        uint8_t length;
+        bool forward;
+    };
+
     const std::vector<CyclingColorSet> & GetCyclingColors()
     {
         static const std::vector<CyclingColorSet> cycleSet = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}};
