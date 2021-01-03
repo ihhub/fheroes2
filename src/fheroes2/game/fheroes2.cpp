@@ -151,7 +151,7 @@ int main( int argc, char ** argv )
             LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
             LocalEvent::Get().GetMouseCursor();
 
-            // Update mouse cursor when switching between hardware and software mouse
+            // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
