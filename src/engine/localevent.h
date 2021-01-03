@@ -24,7 +24,7 @@
 #define H2LOCALEVENT_H
 
 #include "rect.h"
-#include "thread.h"
+#include "timing.h"
 #include "types.h"
 
 enum KeySym
@@ -320,7 +320,7 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    SDL::Time clock;
+    fheroes2::Time clock;
     u32 clock_delay;
     int loop_delay;
 

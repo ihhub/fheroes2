@@ -401,15 +401,15 @@ u32 Castle::OpenTown( void )
     StatusBar statusBar;
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
-    // redraw resource panel
-    const Rect & rectResource = RedrawResourcePanel( cur_pt );
-
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
-
     buttonExit.draw();
+
+    // redraw resource panel
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y );
 
     cursor.Show();
     display.render();
@@ -423,11 +423,11 @@ u32 Castle::OpenTown( void )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
-        if ( le.MouseClickLeft( rectResource ) ) {
+        if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( rectResource ) ) {
+        else if ( le.MousePressRight( resActiveArea ) ) {
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
@@ -586,7 +586,7 @@ u32 Castle::OpenTown( void )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
         else if ( le.MouseCursor( buttonExit.area() ) )
             statusBar.ShowMessage( _( "Exit Castle Options" ) );
-        else if ( le.MouseCursor( rectResource ) )
+        else if ( le.MouseCursor( resActiveArea ) )
             statusBar.ShowMessage( _( "Show Income" ) );
         else
             // clear all

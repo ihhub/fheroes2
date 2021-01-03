@@ -279,8 +279,8 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( fheroes2::Image &, s32, s32, bool ) const;
-    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow ) const;
+    void PortraitRedraw( int32_t, int32_t, int type, fheroes2::Image & ) const;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!

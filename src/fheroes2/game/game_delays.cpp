@@ -32,7 +32,7 @@ TimeDelay::TimeDelay( uint32_t dl )
     second = dl;
 }
 
-uint32_t TimeDelay::operator()( void ) const
+uint32_t TimeDelay::operator()() const
 {
     return second;
 }
@@ -43,19 +43,19 @@ TimeDelay & TimeDelay::operator=( uint32_t dl )
     return *this;
 }
 
-void TimeDelay::Reset( void )
+void TimeDelay::Reset()
 {
-    first.Start();
+    first.reset();
 }
 
 bool TimeDelay::Trigger( uint32_t customDelay )
 {
-    first.Stop();
-    const uint32_t expected = ( customDelay > 0 ) ? customDelay : second;
-    if ( first.Get() < expected )
+    const uint64_t expected = ( customDelay > 0 ) ? customDelay : second;
+    const uint64_t current = first.getMs();
+    if ( current < expected )
         return false;
 
-    first.Start();
+    first.reset();
     return true;
 }
 

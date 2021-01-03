@@ -104,7 +104,6 @@ void LocalEvent::SetTapMode( bool f )
     else {
         ResetModes( TAP_MODE );
         ResetModes( CLOCK_ON );
-        clock.Stop();
     }
 }
 
@@ -424,9 +423,8 @@ namespace
             if ( _preRenderDrawing != nullptr )
                 _preRenderDrawing();
 
-            _timer.Stop();
-            if ( _timer.Get() >= 220 ) {
-                _timer.Start();
+            if ( _timer.getMs() >= 220 ) {
+                _timer.reset();
                 palette = PAL::GetCyclingPalette( _counter++ );
                 return true;
             }
@@ -435,7 +433,7 @@ namespace
 
         void reset()
         {
-            _prevDraw.Start();
+            _prevDraw.reset();
 
             if ( _posRenderDrawing != nullptr )
                 _posRenderDrawing();
@@ -443,8 +441,7 @@ namespace
 
         bool isRedrawRequired()
         {
-            _prevDraw.Stop();
-            return _prevDraw.Get() >= 220;
+            return _prevDraw.getMs() >= 220;
         }
 
         void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
@@ -457,8 +454,8 @@ namespace
         }
 
     private:
-        SDL::Time _timer;
-        SDL::Time _prevDraw;
+        fheroes2::Time _timer;
+        fheroes2::Time _prevDraw;
         uint32_t _counter;
 
         void ( *_preRenderDrawing )();
@@ -667,8 +664,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     // emulate press right
     if ( ( modes & TAP_MODE ) && ( modes & CLOCK_ON ) ) {
-        clock.Stop();
-        if ( clock_delay < clock.Get() ) {
+        if ( clock_delay < clock.getMs() ) {
             ResetModes( CLICK_LEFT );
             ResetModes( CLOCK_ON );
             mouse_pr = mouse_cu;
@@ -936,7 +932,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
             // emulate press right
             if ( modes & TAP_MODE ) {
-                clock.Start();
+                clock.reset();
                 SetModes( CLOCK_ON );
             }
             break;

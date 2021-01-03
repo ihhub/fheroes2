@@ -30,19 +30,7 @@
 
 #include "image.h"
 #include "serialize.h"
-#include "surface.h"
 #include "types.h"
-
-class ZSurface : public Surface
-{
-public:
-    ZSurface() {}
-
-    bool Load( int w, int h, int b, int pitch, u32 rmask, u32 gmask, u32 bmask, u32 amask, const u8 * p, size_t s );
-
-private:
-    std::vector<u8> buf;
-};
 
 std::vector<u8> zlibCompress( const u8 *, size_t srcsz );
 std::vector<u8> zlibDecompress( const u8 *, size_t srcsz, size_t realsz = 0 );

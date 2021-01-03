@@ -216,7 +216,7 @@ void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
@@ -253,7 +253,7 @@ void ExperienceIndicator::QueueEventProcessing( void )
 SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _(

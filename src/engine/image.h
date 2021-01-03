@@ -72,10 +72,25 @@ namespace fheroes2
 
         void swap( Image & image );
 
+        // This is an optional indicator for image processing functions.
+        // The whole image still consists of 2 layers but transform layer could be ignored in computations.
+        bool singleLayer() const
+        {
+            return _singleLayer;
+        }
+
+    protected:
+        void disableTransformLayer() // disable transform layer usage. Be careful! Use only for display related images!
+        {
+            _singleLayer = true;
+        }
+
     private:
         int32_t _width;
         int32_t _height;
         std::vector<uint8_t> _data; // holds 2 image layers
+
+        bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
     };
 
     class Sprite : public Image
