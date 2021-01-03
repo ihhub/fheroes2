@@ -780,7 +780,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
 
 void LocalEvent::ProcessControllerAxisMotion()
 {
-    const uint64_t deltaTime = _controllerTimer.getMs();
+    const double deltaTime = _controllerTimer.get() / 1000.0;
     _controllerTimer.reset();
 
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
