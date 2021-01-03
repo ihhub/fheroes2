@@ -177,7 +177,7 @@ bool Cursor::isVisible( void ) const
     return fheroes2::cursor().isVisible();
 }
 
-void Cursor::Refresh( void )
+void Cursor::Refresh()
 {
     Get().SetThemes( Get().Themes(), true );
 }
