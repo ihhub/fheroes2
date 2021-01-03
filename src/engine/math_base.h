@@ -220,7 +220,7 @@ namespace fheroes2
             }
 
             if ( output.x > x + width || output.y > y + height )
-                return Rect();
+                return RectBase2D();
 
             if ( output.x + output.width > x + width ) {
                 const _TypePoint diff = output.x + output.width - ( x + width );
