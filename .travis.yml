@@ -1,5 +1,3 @@
-sudo: required
-
 git:
   depth: false
 
@@ -14,8 +12,7 @@ branches:
 
 matrix:
   include:
-    - if: branch = master
-      os: linux
+    - os: linux
       addons:
         sonarcloud:
           organization: "ihhub"
@@ -25,12 +22,13 @@ matrix:
       dist: trusty
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl1.2-dev
-        - sudo apt-get install -y libsdl-ttf2.0-dev
-        - sudo apt-get install -y libsdl-mixer1.2-dev
-        - sudo apt-get install -y libsdl-image1.2-dev
+        - sudo apt-get install -y libsdl2-dev
+        - sudo apt-get install -y libsdl2-ttf-dev
+        - sudo apt-get install -y libsdl2-mixer-dev
+        - sudo apt-get install -y libsdl2-image-dev
         - sudo apt-get install -y gettext
         - sudo apt-get install -y zip
+        - export WITH_SDL2="ON" FHEROES2_STRICT_COMPILATION="ON"
       script:
         # Wraps the compilation with the Build Wrapper to generate configuration (used
         # later by the SonarScanner) into the "bw-output" folder
@@ -55,7 +53,6 @@ matrix:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_ubuntu_sdl1.zip"
-        skip_cleanup: true
         name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
@@ -80,7 +77,6 @@ matrix:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_ubuntu_sdl2.zip"
-        skip_cleanup: true
         name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
@@ -107,7 +103,6 @@ matrix:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_ubuntu_arm_sdl1.zip"
-        skip_cleanup: true
         name: Ubuntu (Linux) ARM build with SDL 1.2 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
@@ -135,7 +130,6 @@ matrix:
         provider: releases
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_ubuntu_arm_sdl2.zip"
-        skip_cleanup: true
         name: Ubuntu (Linux) ARM build with SDL 2.0 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
