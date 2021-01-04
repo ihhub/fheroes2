@@ -22,13 +22,12 @@ matrix:
       dist: trusty
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl2-dev
-        - sudo apt-get install -y libsdl2-ttf-dev
-        - sudo apt-get install -y libsdl2-mixer-dev
-        - sudo apt-get install -y libsdl2-image-dev
+        - sudo apt-get install -y libsdl1.2-dev
+        - sudo apt-get install -y libsdl-ttf2.0-dev
+        - sudo apt-get install -y libsdl-mixer1.2-dev
+        - sudo apt-get install -y libsdl-image1.2-dev
         - sudo apt-get install -y gettext
         - sudo apt-get install -y zip
-        - export WITH_SDL2="ON" FHEROES2_STRICT_COMPILATION="ON"
       script:
         # Wraps the compilation with the Build Wrapper to generate configuration (used
         # later by the SonarScanner) into the "bw-output" folder
