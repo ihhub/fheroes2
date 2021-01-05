@@ -138,8 +138,8 @@ namespace Interface
 
         u32 CountIcons( void ) const;
 
-        void Select( const Heroes & );
-        void Select( const Castle & );
+        void Select( Heroes * const );
+        void Select( Castle * const );
 
         bool IsSelected( icons_t ) const;
         void ResetIcons( icons_t = ICON_ANY );

@@ -125,8 +125,8 @@ namespace AI
         double enemyArmyStrength = 0;
         double myShooterStr = 0;
         double enemyShooterStr = 0;
-        double averageAllyDefense = 0;
-        double averageEnemyAttack = 0;
+        // double averageAllyDefense = 0;
+        // double averageEnemyAttack = 0;
         int highestDamageExpected = 0;
 
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
@@ -142,7 +142,7 @@ namespace AI
             if ( dmg > highestDamageExpected )
                 highestDamageExpected = dmg;
 
-            averageEnemyAttack += unit.GetAttack();
+            // averageEnemyAttack += unit.GetAttack();
         }
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
@@ -154,13 +154,13 @@ namespace AI
                 myShooterStr += unitStr;
             }
 
-            averageAllyDefense += unit.GetDefense();
+            // averageAllyDefense += unit.GetDefense();
         }
 
         const double enemyArcherRatio = enemyShooterStr / enemyArmyStrength;
         // Will be used for better unit strength heuristic
-        averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
-        averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
+        // averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
+        // averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
 
         // Step 2. Add castle siege (and battle arena) modifiers
         bool attackingCastle = false;

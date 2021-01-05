@@ -624,9 +624,16 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     text.Blit( top.x + 320 - text.w() / 2, top.y + 26 );
 
     // portrait
-    const fheroes2::Sprite & port1 = hero1->GetPortrait( PORT_BIG );
-    if ( !port1.empty() )
-        fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
+    if ( hero1 ) {
+        const fheroes2::Sprite & port1 = hero1->GetPortrait( PORT_BIG );
+        if ( !port1.empty() )
+            fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
+    }
+    else {
+        fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.w, rtPortrait1.h, 0 );
+        text.Set( "N/A", Font::BIG );
+        text.Blit( rtPortrait1.x + ( rtPortrait1.w - text.w() ) / 2, rtPortrait1.y + rtPortrait1.h / 2 - 8 );
+    }
 
     if ( hero2 ) {
         const fheroes2::Sprite & port2 = hero2->GetPortrait( PORT_BIG );
