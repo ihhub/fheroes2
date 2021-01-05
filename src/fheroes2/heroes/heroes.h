@@ -130,7 +130,7 @@ public:
         UNKNOWN
     };
 
-    static fheroes2::Image GetPortrait( int heroid, int type );
+    static const fheroes2::Sprite & GetPortrait( int heroid, int type );
     static const char * GetName( int heroid );
 
     enum flags_t
@@ -280,7 +280,7 @@ public:
     bool ActionSpellCast( const Spell & );
 
     void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow ) const;
-    void PortraitRedraw( int32_t, int32_t, int type, fheroes2::Image & ) const;
+    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
@@ -305,7 +305,7 @@ public:
     bool AllowBattle( bool attacker ) const;
 
     std::string String( void ) const;
-    fheroes2::Image GetPortrait( int type ) const;
+    const fheroes2::Sprite & GetPortrait( int type ) const;
 
     static int GetLevelFromExperience( u32 );
     static u32 GetExperienceFromLevel( int );

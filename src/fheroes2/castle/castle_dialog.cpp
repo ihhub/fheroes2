@@ -126,7 +126,8 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
-    fheroes2::Image icon1, icon2;
+    fheroes2::Sprite icon1;
+    fheroes2::Sprite icon2;
 
     if ( hero1 )
         icon1 = hero1->GetPortrait( PORT_BIG );
@@ -658,7 +659,7 @@ int Castle::OpenDialog( bool readonly )
                                 fheroes2::Image sf( 552, 107 );
                                 sf.reset();
                                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, sf, 0, 0, 552, 107 );
-                                fheroes2::Image port = heroes.Guest()->GetPortrait( PORT_BIG );
+                                const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, sf, 5, 5 );
 

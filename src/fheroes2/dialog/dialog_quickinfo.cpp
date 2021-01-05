@@ -673,7 +673,7 @@ void Dialog::QuickInfo( const Castle & castle )
         text.Blit( dst_pt.x, dst_pt.y );
 
         // mini port heroes
-        fheroes2::Image port = guardian->GetPortrait( PORT_SMALL );
+        const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
             dst_pt.y += 15;
@@ -776,7 +776,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // mini port heroes
-    fheroes2::Image port = hero.GetPortrait( PORT_SMALL );
+    const fheroes2::Sprite & port = hero.GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
         dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;

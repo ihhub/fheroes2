@@ -70,8 +70,8 @@ public:
     virtual void ActionPreBattle() override;
     virtual void ActionAfterBattle() override;
 
-    virtual void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const override;
-    fheroes2::Image GetPortrait( int type ) const;
+    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    fheroes2::Sprite GetPortrait( const PortraitType type ) const;
 
 private:
     Castle & home;

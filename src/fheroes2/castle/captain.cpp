@@ -28,6 +28,8 @@
 #include "morale.h"
 #include "race.h"
 
+#include <cassert>
+
 namespace
 {
     int GetPortraitIcnId( int race )
@@ -207,7 +209,7 @@ const Castle * Captain::inCastle( void ) const
     return &home;
 }
 
-fheroes2::Image Captain::GetPortrait( int type ) const
+fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
 {
     switch ( type ) {
     case PORT_BIG: {
@@ -215,7 +217,7 @@ fheroes2::Image Captain::GetPortrait( int type ) const
         if ( portraitIcnId < 0 )
             return fheroes2::Image();
 
-        fheroes2::Image portait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
+        fheroes2::Sprite portait = fheroes2::AGG::GetICN( portraitIcnId, 0 );
         const fheroes2::Image & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( GetColor() ), 0 );
 
         const fheroes2::Point & offset = GetFlagOffset( GetRace() );
@@ -243,15 +245,17 @@ fheroes2::Image Captain::GetPortrait( int type ) const
         break;
     }
 
-    return fheroes2::Image();
+    // We shouldn't even reach this code!
+    assert( 0 );
+    return fheroes2::AGG::GetICN( -1, 0 );
 }
 
-void Captain::PortraitRedraw( s32 px, s32 py, int type, fheroes2::Image & dstsf ) const
+void Captain::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
 {
     if ( !isValid() )
         return;
 
-    const fheroes2::Image & port = GetPortrait( type );
+    const fheroes2::Sprite & port = GetPortrait( type );
     if ( PORT_SMALL != type ) { // a normal portrait in a castle or in battle
         fheroes2::Blit( port, dstsf, px, py );
         return;
