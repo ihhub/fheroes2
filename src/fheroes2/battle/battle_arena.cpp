@@ -558,13 +558,11 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
 {
     Indexes result = board.GetAStarPath( b, dst );
 
-    if ( result.size() ) {
-        if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
-            std::stringstream ss;
-            for ( u32 ii = 0; ii < result.size(); ++ii )
-                ss << result[ii] << ", ";
-            DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
-        }
+    if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
+        std::stringstream ss;
+        for ( u32 ii = 0; ii < result.size(); ++ii )
+            ss << result[ii] << ", ";
+        DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
     }
 
     return result;
@@ -715,10 +713,13 @@ s32 Battle::Arena::GetFreePositionNearHero( int color ) const
     else if ( army2->GetColor() == color )
         cells = cells2;
 
-    if ( cells )
-        for ( u32 ii = 0; ii < 3; ++ii )
-            if ( board[cells[ii]].isPassable1( true ) && NULL == board[cells[ii]].GetUnit() )
+    if ( cells ) {
+        for ( u32 ii = 0; ii < 3; ++ii ) {
+            if ( board[cells[ii]].isPassable1( true ) && NULL == board[cells[ii]].GetUnit() ) {
                 return cells[ii];
+            }
+        }
+    }
 
     return -1;
 }

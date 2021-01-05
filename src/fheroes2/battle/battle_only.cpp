@@ -249,7 +249,7 @@ bool Battle::Only::ChangeSettings( void )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1->GetID() );
+            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
@@ -263,7 +263,7 @@ bool Battle::Only::ChangeSettings( void )
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
-            if ( hid == hero1->GetID() ) {
+            if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
@@ -617,7 +617,7 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     // header
     std::string message = "%{name1} vs %{name2}";
 
-    StringReplace( message, "%{name1}", std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() );
+    StringReplace( message, "%{name1}", ( hero1 ? std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() : "Monsters" ) );
     StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : "Monsters" ) );
 
     Text text( message, Font::BIG );

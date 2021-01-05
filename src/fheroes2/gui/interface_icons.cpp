@@ -417,13 +417,13 @@ void Interface::IconsPanel::QueueEventProcessing( void )
 void Interface::IconsPanel::Select( const Heroes & hr )
 {
     castleIcons.Unselect();
-    heroesIcons.SetCurrent( (const HEROES)&hr );
+    heroesIcons.SetCurrent( const_cast<Heroes * const>( &hr ) );
 }
 
 void Interface::IconsPanel::Select( const Castle & cs )
 {
     heroesIcons.Unselect();
-    castleIcons.SetCurrent( (const CASTLE)&cs );
+    castleIcons.SetCurrent( const_cast<Castle * const>( &cs ) );
 }
 
 void Interface::IconsPanel::ResetIcons( icons_t type )
