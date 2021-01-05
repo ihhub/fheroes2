@@ -25,4 +25,3 @@ jobs:
       run: scan-build -v make -j 2
       env:
         WITH_SDL2: "ON"
-        FHEROES2_STRICT_COMPILATION: "ON"
