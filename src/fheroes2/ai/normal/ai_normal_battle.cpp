@@ -118,7 +118,7 @@ namespace AI
         // This should filter out all invalid units
         const Units friendly( friendlyForce, true );
         const Units enemies( enemyForce, true );
-        const size_t enemiesCount = enemies.size();
+        // const size_t enemiesCount = enemies.size();
 
         // Step 1. Friendly and enemy army analysis
         double myArmyStrength = 0;
