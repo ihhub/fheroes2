@@ -158,27 +158,27 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
 
-    bool isValid( void ) const;
+    virtual bool isValid() const override;
     bool isFreeman( void ) const;
     void SetFreeman( int reason );
 
-    const Castle * inCastle( void ) const;
-    Castle * inCastle( void );
+    virtual const Castle * inCastle() const override;
+    Castle * inCastle();
 
     void LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf );
     void PostLoad( void );
 
-    int GetRace( void ) const;
-    const std::string & GetName( void ) const;
-    int GetColor( void ) const;
-    int GetType( void ) const;
-    int GetControl( void ) const;
+    virtual int GetRace() const override;
+    virtual const std::string & GetName() const override;
+    virtual int GetColor() const override;
+    virtual int GetType() const override;
+    virtual int GetControl() const override;
 
     int GetKillerColor( void ) const;
     void SetKillerColor( int );
 
-    const Army & GetArmy( void ) const;
-    Army & GetArmy( void );
+    virtual const Army & GetArmy() const override;
+    virtual Army & GetArmy() override;
 
     int GetID( void ) const;
 
@@ -186,10 +186,10 @@ public:
     double getRecruitValue() const;
     int getStatsValue() const;
 
-    int GetAttack( void ) const;
-    int GetDefense( void ) const;
-    int GetPower( void ) const;
-    int GetKnowledge( void ) const;
+    virtual int GetAttack() const override;
+    virtual int GetDefense() const override;
+    virtual int GetPower() const override;
+    virtual int GetKnowledge() const override;
 
     int GetAttack( std::string * ) const;
     int GetDefense( std::string * ) const;
@@ -198,8 +198,8 @@ public:
 
     void IncreasePrimarySkill( int skill );
 
-    int GetMorale( void ) const;
-    int GetLuck( void ) const;
+    virtual int GetMorale() const override;
+    virtual int GetLuck() const override;
     int GetMoraleWithModificators( std::string * str = NULL ) const;
     int GetLuckWithModificators( std::string * str = NULL ) const;
     int GetLevel( void ) const;
@@ -211,8 +211,8 @@ public:
     void SetCenterPatrol( const Point & );
     int GetSquarePatrol( void ) const;
 
-    u32 GetMaxSpellPoints( void ) const;
-    u32 GetMaxMovePoints( void ) const;
+    virtual u32 GetMaxSpellPoints() const override;
+    u32 GetMaxMovePoints() const;
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );
@@ -223,8 +223,8 @@ public:
 
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill( void ) const;
-    int GetLevelSkill( int ) const;
-    u32 GetSecondaryValues( int ) const;
+    virtual int GetLevelSkill( int ) const override;
+    virtual u32 GetSecondaryValues( int ) const override;
     void LearnSkill( const Skill::Secondary & );
     Skill::SecSkills & GetSecondarySkills( void );
 
@@ -245,8 +245,8 @@ public:
     void ActionNewDay( void );
     void ActionNewWeek( void );
     void ActionNewMonth( void );
-    void ActionAfterBattle( void );
-    void ActionPreBattle( void );
+    virtual void ActionAfterBattle() override;
+    virtual void ActionPreBattle() override;
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
