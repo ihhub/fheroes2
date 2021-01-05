@@ -215,7 +215,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
                 const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
-                fheroes2::Image icon = hero->GetPortrait( PORT_SMALL );
+                const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
                 if ( !icon.empty() )
                     fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
             }
