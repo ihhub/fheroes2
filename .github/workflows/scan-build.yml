@@ -1,0 +1,22 @@
+name: scan-build analyzer
+
+jobs:
+  sdl2:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install SDL 2 and clang-tools
+      run: |
+        apt-get update
+        apt-get install -y libsdl2-dev
+        apt-get install -y libsdl2-ttf-dev
+        apt-get install -y libsdl2-mixer-dev
+        apt-get install -y libsdl2-image-dev
+        apt-get install -y clang-tools
+    - name: compile
+      run: scan-build make -j 2
+      env:
+        WITH_SDL2: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
