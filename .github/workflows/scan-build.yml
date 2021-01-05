@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  sdl2:
+  scan-build:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
         sudo apt-get install -y libsdl2-image-dev
         sudo apt-get install -y clang-tools
     - name: compile
-      run: scan-build make -j 2
+      run: scan-build -vvv make -j 2
       env:
         WITH_SDL2: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
