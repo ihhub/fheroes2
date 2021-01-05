@@ -665,7 +665,7 @@ s32 World::NextTeleport( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
     }
 
-    return teleports.size() ? *Rand::Get( teleports ) : index;
+    return !teleports.empty() ? *Rand::Get( teleports ) : index;
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
@@ -709,7 +709,7 @@ s32 World::NextWhirlpool( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
     }
 
-    return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
+    return !whilrpools.empty() ? *Rand::Get( whilrpools ) : index;
 }
 
 /* return message from sign */

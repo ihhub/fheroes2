@@ -4033,12 +4033,14 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
-                const int idX = frame + x * 3;
-                const int offsetX = x * spriteSize;
-                for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
-                    const fheroes2::Sprite & sprite = spriteCache[( idX + y ) % icnCount];
-                    fheroes2::Blit( sprite, _mainSurface, offsetX + sprite.x(), y * spriteSize + sprite.y() );
+            if ( icnCount > 0 ) {
+                for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
+                    const int idX = frame + x * 3;
+                    const int offsetX = x * spriteSize;
+                    for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
+                        const fheroes2::Sprite & sprite = spriteCache[( idX + y ) % icnCount];
+                        fheroes2::Blit( sprite, _mainSurface, offsetX + sprite.x(), y * spriteSize + sprite.y() );
+                    }
                 }
             }
 

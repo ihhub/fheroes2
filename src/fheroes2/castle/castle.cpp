@@ -1021,7 +1021,6 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         return false;
     }
 
-    Monster monster = troop;
     uint32_t count = troop.GetCount();
 
     // fix count
@@ -1029,17 +1028,17 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = monster.GetCost() * count;
+    const payment_t paymentCosts = troop.GetCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
         return false;
 
     // first: guard army join
-    if ( !GetArmy().JoinTroop( monster, count ) ) {
+    if ( !GetArmy().JoinTroop( troop ) ) {
         CastleHeroes heroes = world.GetHeroes( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( monster, count ) ) {
+        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( troop ) ) {
             if ( showDialog ) {
                 Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
             }
@@ -1050,7 +1049,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     kingdom.OddFundsResource( paymentCosts );
     dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << monster.GetMultiName() << "(" << count << ")" );
+    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
