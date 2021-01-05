@@ -376,7 +376,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 {
     const int l = 13;
     const int w = CELLW;
@@ -384,14 +384,14 @@ fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
-        rt.h += 2;
+        rt.height += 2;
         rt.x += 2;
-        rt.w -= 4;
-        for ( int x = 0; x < rt.w; ++x ) {
-            for ( int y = 0; y < rt.h; ++y ) {
+        rt.width -= 4;
+        for ( int x = 0; x < rt.width; ++x ) {
+            for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }

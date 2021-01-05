@@ -147,7 +147,6 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
 {
     switch ( difficulty ) {
     case Difficulty::EXPERT:
-        return 75;
     case Difficulty::IMPOSSIBLE:
         return 75;
     default:

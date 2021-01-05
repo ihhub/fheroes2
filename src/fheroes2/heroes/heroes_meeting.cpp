@@ -207,13 +207,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // portrait
     dst_pt.x = cur_pt.x + 93;
     dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait1 = GetPortrait( PORT_BIG );
+    const fheroes2::Sprite & portrait1 = GetPortrait( PORT_BIG );
     fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 445;
     dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait2 = heroes2.GetPortrait( PORT_BIG );
+    const fheroes2::Sprite & portrait2 = heroes2.GetPortrait( PORT_BIG );
     fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
     heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 

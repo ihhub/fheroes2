@@ -1211,7 +1211,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
     if ( !kingdom.AllowPayment( payment ) ) {
         if ( isControlHuman() ) {
             const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-            fheroes2::Image sprite = border;
+            fheroes2::Sprite sprite = border;
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
 
             header.append( " " );
@@ -1223,7 +1223,7 @@ bool Heroes::BuySpellBook( const Castle * castle, int shrine )
 
     if ( isControlHuman() ) {
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-        fheroes2::Image sprite = border;
+        fheroes2::Sprite sprite = border;
 
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, Artifact( Artifact::MAGIC_BOOK ).IndexSprite64() ), sprite, 5, 5 );
 
@@ -1750,7 +1750,7 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     }
 }
 
-fheroes2::Image Heroes::GetPortrait( int id, int type )
+const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
 {
     if ( Heroes::UNKNOWN != id )
         switch ( type ) {
@@ -1764,17 +1764,17 @@ fheroes2::Image Heroes::GetPortrait( int id, int type )
             break;
         }
 
-    return fheroes2::Image();
+    return fheroes2::AGG::GetICN( -1, 0 );
 }
 
-fheroes2::Image Heroes::GetPortrait( int type ) const
+const fheroes2::Sprite & Heroes::GetPortrait( int type ) const
 {
     return Heroes::GetPortrait( portrait, type );
 }
 
-void Heroes::PortraitRedraw( int32_t px, int32_t py, int type, fheroes2::Image & dstsf ) const
+void Heroes::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const
 {
-    fheroes2::Image port = GetPortrait( portrait, type );
+    const fheroes2::Sprite & port = GetPortrait( portrait, type );
     fheroes2::Point mp;
 
     if ( !port.empty() ) {
