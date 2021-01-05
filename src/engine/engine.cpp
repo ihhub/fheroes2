@@ -50,6 +50,7 @@ bool SDL::Init( const u32 system )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SDL_INIT_GAMECONTROLLER & system )
         LocalEvent::Get().OpenController();
+    SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
 #ifdef WITH_AUDIOCD
     if ( SDL_INIT_CDROM & system )
@@ -65,10 +66,6 @@ bool SDL::Init( const u32 system )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
-#endif
-
-#ifdef WITH_TOUCHPAD
-    SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
 
     return true;

@@ -637,13 +637,11 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
             break;
-#ifdef WITH_TOUCHPAD
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
             HandleTouchEvent( event.tfinger );
             break;
-#endif
 #endif
 
         // exit
@@ -692,38 +690,34 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     return true;
 }
 
-#ifdef WITH_TOUCHPAD
-float xaxis_starting;
-float yaxis_starting;
-float xcursor_starting;
-float ycursor_starting;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <psp2/kernel/clib.h>
 
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
-    if ( event.touchId != 0 || vita_touchcontrol_type == 0 )
+    if ( event.touchId != 0 )
         return;
 
-    // doesn't really work at this point..
-    if ( event.fingerId == 1 ) {
-        if ( event.type == SDL_FINGERDOWN )
-            secondTouchDown = true;
-        else if ( event.type == SDL_FINGERUP )
-            secondTouchDown = false;
-        return;
+    if ( event.type == SDL_FINGERDOWN )
+    {
+        ++_numTouches;
+        if (_numTouches == 1) {
+            _firstFingerId = event.fingerId;
+        } else if (_numTouches == 2) {
+            _secondFingerId = event.fingerId;
+        }
+    }
+    else if ( event.type == SDL_FINGERUP ) {
+        --_numTouches;
     }
 
-    if ( event.type == SDL_FINGERDOWN ) {
-        xaxis_starting = event.x * (float)960;
-        yaxis_starting = event.y * (float)544;
-        xcursor_starting = _controllerPointerPosX;
-        ycursor_starting = _controllerPointerPosY;
-    }
+    sceClibPrintf( "%d\n", _numTouches );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
-    SetModes( MOUSE_MOTION );
+    if ( _firstFingerId == event.fingerId ) {
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
+        SetModes( MOUSE_MOTION );
 
-    if ( vita_touchcontrol_type == 1 ) {
         float w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
         float h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
 
@@ -740,34 +734,26 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         _controllerPointerPosX = event.x * w - vitaDestRect.x;
         _controllerPointerPosY = event.y * h - vitaDestRect.y;
-    }
-    else if ( vita_touchcontrol_type == 2 ) {
-        float deltaX = ( ( event.x * (float)960 ) - xaxis_starting ) * ( vita_touchcontrol_speed / 10.0f );
-        float deltaY = ( ( event.y * (float)544 ) - yaxis_starting ) * ( vita_touchcontrol_speed / 10.0f );
-        _controllerPointerPosX = xcursor_starting + deltaX;
-        _controllerPointerPosY = ycursor_starting + deltaY;
-    }
 
-    if ( _controllerPointerPosX < 0 )
-        _controllerPointerPosX = 0;
-    if ( _controllerPointerPosY < 0 )
-        _controllerPointerPosY = 0;
-    if ( _controllerPointerPosX > vitaDestRect.width )
-        _controllerPointerPosX = vitaDestRect.width;
-    if ( _controllerPointerPosY > vitaDestRect.height )
-        _controllerPointerPosY = vitaDestRect.height;
+        if ( _controllerPointerPosX < 0 )
+            _controllerPointerPosX = 0;
+        if ( _controllerPointerPosY < 0 )
+            _controllerPointerPosY = 0;
+        if ( _controllerPointerPosX > vitaDestRect.width )
+            _controllerPointerPosX = vitaDestRect.width;
+        if ( _controllerPointerPosY > vitaDestRect.height )
+            _controllerPointerPosY = vitaDestRect.height;
 
-    mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
-    mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
+        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
 
-    if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-        if ( modes & MOUSE_OFFSET )
-            ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
-        else
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
-    }
+        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+            if ( modes & MOUSE_OFFSET )
+                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
+            else
+                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+        }
 
-    if ( !secondTouchDown ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pl = mouse_cu;
             SetModes( CLICK_LEFT );
@@ -779,22 +765,21 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             ResetModes( MOUSE_PRESSED );
         }
         mouse_button = SDL_BUTTON_LEFT;
-    }
-    else {
+    } else if ( _secondFingerId == event.fingerId ) {
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pr = mouse_cu;
+            SetModes( CLICK_RIGHT );
             SetModes( MOUSE_PRESSED );
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rr = mouse_cu;
+            SetModes( CLICK_RIGHT );
             ResetModes( MOUSE_PRESSED );
         }
         mouse_button = SDL_BUTTON_RIGHT;
     }
 }
-#endif
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
 {
     if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {

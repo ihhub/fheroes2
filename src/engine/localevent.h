@@ -269,18 +269,6 @@ public:
     }
 #endif
 
-#ifdef WITH_TOUCHPAD
-    void SetVitaTouchControlType( int newType )
-    {
-        vita_touchcontrol_type = newType;
-    }
-
-    void SetVitaTouchControlSpeed( int newSpeed )
-    {
-        vita_touchcontrol_speed = newSpeed;
-    }
-#endif
-
 private:
     LocalEvent();
 
@@ -294,6 +282,7 @@ private:
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
+    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -373,16 +362,12 @@ private:
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
+    int16_t _numTouches = 0;
+    SDL_FingerID _firstFingerId;
+    SDL_FingerID _secondFingerId;
 
 #ifdef VITA
     bool dpadInputActive = false;
-#endif
-
-#ifdef WITH_TOUCHPAD
-    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
-    bool secondTouchDown = false;
-    int vita_touchcontrol_type = 1;
-    int vita_touchcontrol_speed = 15;
 #endif
 };
 

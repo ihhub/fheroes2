@@ -72,12 +72,6 @@ CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
 endif
 
-ifdef WITH_TOUCHPAD
-ifdef WITH_SDL2
-CFLAGS := $(CFLAGS) -DWITH_TOUCHPAD
-endif
-endif
-
 ifdef RELEASE
 CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif

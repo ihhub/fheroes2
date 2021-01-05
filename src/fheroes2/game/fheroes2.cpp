@@ -131,7 +131,6 @@ int main( int argc, char ** argv )
     if ( conf.MusicCD() )
         subsystem |= INIT_CDROM | INIT_AUDIO;
 #endif
-
     if ( SDL::Init( subsystem ) )
 #ifndef ANDROID
         try
