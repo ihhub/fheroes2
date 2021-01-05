@@ -316,8 +316,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             selectedTroop->Reset();
         }
         // exchange
-        else
+        else if ( selectedTroop ) {
             Army::SwapTroops( troop, *selectedTroop );
+        }
 
         return false; // reset cursor
     }

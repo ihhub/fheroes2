@@ -249,7 +249,7 @@ bool Battle::Only::ChangeSettings( void )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
-            int hid = Dialog::SelectHeroes( hero1->GetID() );
+            int hid = Dialog::SelectHeroes( hero1 ? hero1->GetID() : Heroes::UNKNOWN );
             if ( hero2 && hid == hero2->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
@@ -263,7 +263,7 @@ bool Battle::Only::ChangeSettings( void )
         }
         else if ( allow2 && le.MouseClickLeft( rtPortrait2 ) ) {
             int hid = Dialog::SelectHeroes( hero2 ? hero2->GetID() : Heroes::UNKNOWN );
-            if ( hid == hero1->GetID() ) {
+            if ( hero1 && hid == hero1->GetID() ) {
                 Dialog::Message( "Error", "Please, select other hero.", Font::BIG, Dialog::OK );
             }
             else if ( Heroes::UNKNOWN != hid ) {
@@ -617,16 +617,23 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     // header
     std::string message = "%{name1} vs %{name2}";
 
-    StringReplace( message, "%{name1}", std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() );
+    StringReplace( message, "%{name1}", ( hero1 ? std::string( Race::String( hero1->GetRace() ) ) + " " + hero1->GetName() : "Monsters" ) );
     StringReplace( message, "%{name2}", ( hero2 ? std::string( Race::String( hero2->GetRace() ) ) + " " + hero2->GetName() : "Monsters" ) );
 
     Text text( message, Font::BIG );
     text.Blit( top.x + 320 - text.w() / 2, top.y + 26 );
 
     // portrait
-    const fheroes2::Sprite & port1 = hero1->GetPortrait( PORT_BIG );
-    if ( !port1.empty() )
-        fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
+    if ( hero1 ) {
+        const fheroes2::Sprite & port1 = hero1->GetPortrait( PORT_BIG );
+        if ( !port1.empty() )
+            fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
+    }
+    else {
+        fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.w, rtPortrait1.h, 0 );
+        text.Set( "N/A", Font::BIG );
+        text.Blit( rtPortrait1.x + ( rtPortrait1.w - text.w() ) / 2, rtPortrait1.y + rtPortrait1.h / 2 - 8 );
+    }
 
     if ( hero2 ) {
         const fheroes2::Sprite & port2 = hero2->GetPortrait( PORT_BIG );

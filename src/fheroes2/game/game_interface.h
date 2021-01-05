@@ -138,7 +138,7 @@ namespace Interface
 
         int StartGame( void );
 
-        void MouseCursorAreaClickLeft( s32 );
+        void MouseCursorAreaClickLeft( const int32_t index_maps );
         void MouseCursorAreaPressRight( s32 );
 
         static int GetCursorTileIndex( s32 );
