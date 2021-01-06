@@ -184,8 +184,7 @@ namespace AI
         }
 
         if ( centerOn != nullptr ) {
-            Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-            gamearea.SetCenter( *centerOn );
+            Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
