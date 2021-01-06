@@ -48,7 +48,7 @@ Interface::Basic::Basic()
 void Interface::Basic::Reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get().Get();
+    Settings & conf = Settings::Get();
 
     SetHideInterface( conf.ExtGameHideInterface() );
 
@@ -91,7 +91,7 @@ Interface::ControlPanel & Interface::Basic::GetControlPanel( void )
 void Interface::Basic::SetHideInterface( bool f )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get().Get();
+    Settings & conf = Settings::Get();
     const u32 px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     conf.SetHideInterface( f );

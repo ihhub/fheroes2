@@ -320,7 +320,8 @@ struct smk_huff16_t* _smk_huff16_build(struct smk_bit_t* bs)
 	if (bit)
 	{
 		fputs("libsmacker::smk_huff16_build(bs) - ERROR: final get_bit returned 1\n", stderr);
-		goto error;
+        smk_huff16_free(big);
+		return NULL;
 	}
 
 	return big;

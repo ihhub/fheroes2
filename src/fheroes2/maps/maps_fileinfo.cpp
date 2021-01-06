@@ -709,14 +709,13 @@ std::string Maps::FileInfo::String( void ) const
 
 ListFiles GetMapsFiles( const char * suffix )
 {
-    const Settings & conf = Settings::Get();
-    ListFiles maps = conf.GetListFiles( "maps", suffix );
-    const ListDirs & list = conf.GetMapsParams();
+    ListFiles maps = Settings::GetListFiles( "maps", suffix );
+    const ListDirs & list = Settings::Get().GetMapsParams();
 
     if ( !list.empty() ) {
         for ( ListDirs::const_iterator it = list.begin(); it != list.end(); ++it )
             if ( *it != "maps" )
-                maps.Append( conf.GetListFiles( *it, suffix ) );
+                maps.Append( Settings::GetListFiles( *it, suffix ) );
     }
 
     return maps;

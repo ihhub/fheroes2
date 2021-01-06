@@ -460,6 +460,10 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : NULL ) );
         HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : NULL ) );
 
+        // Can't transfer artifacts
+        if ( hero1 == nullptr || hero2 == nullptr )
+            return;
+
         BagArtifacts & bag1 = hero1->GetBagArtifacts();
         BagArtifacts & bag2 = hero2->GetBagArtifacts();
 

@@ -545,8 +545,8 @@ void Interface::Basic::EventDebug1( void )
 
         if(hero)
         {
-        int level = hero->GetLevelFromExperience(hero->GetExperience());
-        u32 exp = hero->GetExperienceFromLevel(level + 1);
+        int level = Heroes::GetLevelFromExperience(hero->GetExperience());
+        u32 exp = Heroes::GetExperienceFromLevel(level + 1);
 
         hero->IncreaseExperience(exp - hero->GetExperience() + 100);
         }

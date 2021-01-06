@@ -262,7 +262,7 @@ int main( int argc, char ** argv )
 bool ReadConfigs( void )
 {
     Settings & conf = Settings::Get();
-    const ListFiles & files = conf.GetListFiles( "", "fheroes2.cfg" );
+    const ListFiles & files = Settings::GetListFiles( "", "fheroes2.cfg" );
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {

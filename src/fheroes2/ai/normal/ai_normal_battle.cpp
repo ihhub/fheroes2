@@ -165,15 +165,15 @@ namespace AI
         // Step 2. Add castle siege (and battle arena) modifiers
         bool attackingCastle = false;
         bool defendingCastle = false;
-        const Castle * castle = arena.GetCastle();
+        const Castle * castle = Arena::GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
-            double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
+            double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
             DEBUG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
@@ -387,7 +387,7 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     const Indexes & around = Board::GetAroundIndexes( *enemy );
                     for ( const int cell : around ) {
-                        const int quality = board.GetCell( cell )->GetQuality();
+                        const int quality = Board::GetCell( cell )->GetQuality();
                         const uint32_t dist = arena.CalculateMoveDistance( cell );
                         if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
                             highestValue = quality;
