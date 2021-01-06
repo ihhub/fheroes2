@@ -261,7 +261,7 @@ bool AGG::ReadDataDir( void )
         aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
 
     // not found agg, exit
-    if ( 0 == aggs.size() )
+    if ( aggs.empty() )
         return false;
 
     // attach agg files

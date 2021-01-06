@@ -476,7 +476,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( interface.GetCursorTileIndex( index ) );
+        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }

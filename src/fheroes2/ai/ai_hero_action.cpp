@@ -791,7 +791,7 @@ namespace AI
             if ( capture ) {
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
-                    tile.UpdateAbandoneMineSprite( tile );
+                    Maps::Tiles::UpdateAbandoneMineSprite( tile );
                     tile.SetHeroes( &hero );
                 }
 
@@ -1894,13 +1894,13 @@ namespace AI
             const Colors vcolors( Players::HumanColors() );
 
             for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
-                const Player * player = conf.GetPlayers().Get( *it );
+                const Player * player = Players::Get( *it );
                 if ( player )
                     colors |= player->GetFriends();
             }
         }
         else {
-            const Player * player = conf.GetPlayers().Get( Players::HumanColors() );
+            const Player * player = Players::Get( Players::HumanColors() );
             if ( player )
                 colors = player->GetFriends();
         }

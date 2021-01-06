@@ -479,7 +479,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 continue;
             }
 
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
+            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
             if ( bag1.end() != it ) {
                 *it = art;
 

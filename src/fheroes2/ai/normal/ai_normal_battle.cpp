@@ -294,7 +294,7 @@ namespace AI
         }
         else {
             // Melee unit decision tree (both flyers and walkers)
-            Board & board = *arena.GetBoard();
+            Board & board = *Battle::Arena::GetBoard();
             board.SetPositionQuality( currentUnit );
 
             if ( defensiveTactics ) {

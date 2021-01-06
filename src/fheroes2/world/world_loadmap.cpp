@@ -540,7 +540,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventsDate & events )
 {
     TiXmlElement * xml_event = doc.FirstChildElement( "event" );
     for ( ; xml_event; xml_event = xml_event->NextSiblingElement( "event" ) ) {
-        events.push_back( EventDate() );
+        events.emplace_back( EventDate() );
         *xml_event >> events.back();
     }
 
@@ -1379,7 +1379,7 @@ bool World::LoadMapMP2( const std::string & filename )
         else if ( 0x00 == pblock[0] ) {
             // add event day
             if ( SIZEOFMP2EVENT - 1 < pblock.size() && 1 == pblock[42] ) {
-                vec_eventsday.push_back( EventDate() );
+                vec_eventsday.emplace_back( EventDate() );
                 vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
             }
             // add rumors

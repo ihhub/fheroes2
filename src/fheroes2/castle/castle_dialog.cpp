@@ -114,7 +114,7 @@ fheroes2::Sprite GetActualSpriteBuilding( const Castle & castle, u32 build )
         break;
     }
 
-    return fheroes2::AGG::GetICN( castle.GetICNBuilding( build, castle.GetRace() ), index );
+    return fheroes2::AGG::GetICN( Castle::GetICNBuilding( build, castle.GetRace() ), index );
 }
 
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Point & pt )

@@ -89,7 +89,7 @@ int Game::StartGame( void )
 
 void Game::DialogPlayers( int color, std::string str )
 {
-    const Player * player = Settings::Get().GetPlayers().Get( color );
+    const Player * player = Players::Get( color );
     StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
