@@ -54,17 +54,17 @@ namespace fheroes2
 
 #ifdef VITA
         virtual void SetVitaKeepAspectRatio( bool ) {}
-        virtual bool GetVitaKeepAspectRatio() const
+#endif
+
+        virtual fheroes2::Rect GetWindowDestRect() const
         {
-            return false;
+            return fheroes2::Rect();
         }
 
-        virtual fheroes2::Rect GetVitaDestRect() const
+        virtual std::pair<int, int> GetScreenResolution() const
         {
-            fheroes2::Rect rect;
-            return rect;
+            return std::pair<int, int>();
         }
-#endif
 
     protected:
         BaseRenderEngine()
@@ -101,13 +101,6 @@ namespace fheroes2
             DEFAULT_WIDTH = 640,
             DEFAULT_HEIGHT = 480
         };
-#ifdef VITA
-        enum
-        {
-            VITA_FULLSCREEN_WIDTH = 960,
-            VITA_FULLSCREEN_HEIGHT = 544
-        };
-#endif
 
         static Display & instance();
 

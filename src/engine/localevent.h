@@ -256,6 +256,7 @@ public:
 
     void OpenController();
     void CloseController();
+    void OpenTouchpad();
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
@@ -362,9 +363,9 @@ private:
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
+    bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
     SDL_FingerID _firstFingerId;
-    SDL_FingerID _secondFingerId;
 
 #ifdef VITA
     bool dpadInputActive = false;

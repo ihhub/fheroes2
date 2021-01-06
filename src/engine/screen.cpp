@@ -352,6 +352,24 @@ namespace
             SDL_FreeSurface( surface );
         }
 
+        virtual fheroes2::Rect GetWindowDestRect() const override
+        {
+            fheroes2::Rect rect;
+            SDL_GetWindowPosition( _window, &rect.x, &rect.y );
+            SDL_GetWindowSize( _window, &rect.width, &rect.height );
+            return rect;
+        }
+
+        virtual std::pair<int, int> GetScreenResolution() const override
+        {
+            std::pair<int, int> resolution;
+            SDL_DisplayMode displayMode;
+            SDL_GetWindowDisplayMode( _window, &displayMode );
+            resolution.first = displayMode.w;
+            resolution.second = displayMode.h;
+            return resolution;
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;
@@ -862,7 +880,7 @@ namespace
             return new VitaRenderEngine;
         }
 
-        fheroes2::Rect GetVitaDestRect() const override
+        fheroes2::Rect GetWindowDestRect() const override
         {
             fheroes2::Rect rect;
             rect.x = destRect.x;
@@ -872,9 +890,12 @@ namespace
             return rect;
         }
 
-        bool GetVitaKeepAspectRatio() const override
+        virtual std::pair<int, int> GetScreenResolution() const override
         {
-            return keepAspectRatio;
+            std::pair<int, int> resolution;
+            resolution.first = VITA_FULLSCREEN_WIDTH;
+            resolution.second = VITA_FULLSCREEN_HEIGHT;
+            return resolution;
         }
 
         void SetVitaKeepAspectRatio( bool keepAspect ) override
@@ -888,13 +909,19 @@ namespace
 
             if ( filteredResolutions.empty() ) {
                 filteredResolutions.push_back( std::make_pair( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-                filteredResolutions.push_back( std::make_pair( fheroes2::Display::VITA_FULLSCREEN_WIDTH, fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) );
+                filteredResolutions.push_back( std::make_pair( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT ) );
             }
 
             return filteredResolutions;
         }
 
     protected:
+        enum
+        {
+            VITA_FULLSCREEN_WIDTH = 960,
+            VITA_FULLSCREEN_HEIGHT = 544
+        };
+
         std::vector<uint32_t> _palette32Bit;
         SDL_Rect destRect;
         vita2d_texture * texBuffer = nullptr;
@@ -966,34 +993,34 @@ namespace
             destRect.w = width_;
             destRect.h = height_;
 
-            if ( width_ != fheroes2::Display::VITA_FULLSCREEN_WIDTH || height_ != fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) {
+            if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
                     vita2d_texture_set_filters( texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
 
                     if ( keepAspectRatio ) {
-                        if ( ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / fheroes2::Display::VITA_FULLSCREEN_HEIGHT )
+                        if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT )
                              >= ( static_cast<float>( width_ ) / height_ ) ) {
-                            float scale = static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / height_;
+                            float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
                             destRect.w = width_ * scale;
-                            destRect.h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
-                            destRect.x = ( fheroes2::Display::VITA_FULLSCREEN_WIDTH - destRect.w ) / 2;
+                            destRect.h = VITA_FULLSCREEN_HEIGHT;
+                            destRect.x = ( VITA_FULLSCREEN_WIDTH - destRect.w ) / 2;
                         }
                         else {
-                            float scale = static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / width_;
-                            destRect.w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
+                            float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
+                            destRect.w = VITA_FULLSCREEN_WIDTH;
                             destRect.h = height_ * scale;
-                            destRect.y = ( fheroes2::Display::VITA_FULLSCREEN_HEIGHT - destRect.h ) / 2;
+                            destRect.y = ( VITA_FULLSCREEN_HEIGHT - destRect.h ) / 2;
                         }
                     }
                     else {
-                        destRect.w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
-                        destRect.h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
+                        destRect.w = VITA_FULLSCREEN_WIDTH;
+                        destRect.h = VITA_FULLSCREEN_HEIGHT;
                     }
                 }
                 else {
                     // center game area
-                    destRect.x = ( fheroes2::Display::VITA_FULLSCREEN_WIDTH - width_ ) / 2;
-                    destRect.y = ( fheroes2::Display::VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                    destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                    destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
                 }
             }
 

@@ -65,6 +65,16 @@ void LocalEvent::CloseController()
         _gameController = nullptr;
     }
 }
+
+void LocalEvent::OpenTouchpad()
+{
+    int touchNumber = SDL_GetNumTouchDevices();
+    if ( touchNumber > 0 ) {
+        _touchpadAvailable = true;
+        fheroes2::cursor().enableSoftwareEmulation( true );
+        SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
+    }
+}
 #endif
 
 const Point & LocalEvent::GetMousePressLeft( void ) const
@@ -618,7 +628,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
-                    fheroes2::cursor().enableSoftwareEmulation( false );
+                    if ( !_touchpadAvailable ) {
+                        fheroes2::cursor().enableSoftwareEmulation( false );
+                    }
                 }
             }
             break;
@@ -691,8 +703,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#include <psp2/kernel/clib.h>
-
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
     if ( event.touchId != 0 )
@@ -703,46 +713,22 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         ++_numTouches;
         if (_numTouches == 1) {
             _firstFingerId = event.fingerId;
-        } else if (_numTouches == 2) {
-            _secondFingerId = event.fingerId;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
         --_numTouches;
     }
 
-    sceClibPrintf( "%d\n", _numTouches );
-
     if ( _firstFingerId == event.fingerId ) {
-        fheroes2::Display & display = fheroes2::Display::instance();
-        fheroes2::Rect vitaDestRect = fheroes2::engine().GetVitaDestRect();
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        const std::pair<int, int> screenResolution = fheroes2::engine().GetScreenResolution(); // current resolution of screen
+        const std::pair<int, int> gameSurfaceRes ( display.width(), display.height() ); // native game (surface) resolution
+        const fheroes2::Rect windowRect = fheroes2::engine().GetWindowDestRect(); // scaled (logical) resolution
+
         SetModes( MOUSE_MOTION );
 
-        float w = fheroes2::Display::VITA_FULLSCREEN_WIDTH;
-        float h = fheroes2::Display::VITA_FULLSCREEN_HEIGHT;
-
-        // cursor position with scaled images
-        if ( fheroes2::engine().isFullScreen() ) {
-            w = display.width();
-            h = display.height();
-
-            if ( fheroes2::engine().GetVitaKeepAspectRatio() ) {
-                w *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_WIDTH ) / vitaDestRect.width );
-                h *= ( static_cast<float>( fheroes2::Display::VITA_FULLSCREEN_HEIGHT ) / vitaDestRect.height );
-            }
-        }
-
-        _controllerPointerPosX = event.x * w - vitaDestRect.x;
-        _controllerPointerPosY = event.y * h - vitaDestRect.y;
-
-        if ( _controllerPointerPosX < 0 )
-            _controllerPointerPosX = 0;
-        if ( _controllerPointerPosY < 0 )
-            _controllerPointerPosY = 0;
-        if ( _controllerPointerPosX > vitaDestRect.width )
-            _controllerPointerPosX = vitaDestRect.width;
-        if ( _controllerPointerPosY > vitaDestRect.height )
-            _controllerPointerPosY = vitaDestRect.height;
+        _controllerPointerPosX = ((screenResolution.first * event.x) - (screenResolution.first - windowRect.width - windowRect.x)) * (static_cast<double>(gameSurfaceRes.first) / windowRect.width);
+	    _controllerPointerPosY = ((screenResolution.second * event.y) - (screenResolution.second - windowRect.height - windowRect.y)) * (static_cast<double>(gameSurfaceRes.second) / windowRect.height);
 
         mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
         mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
@@ -765,18 +751,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             ResetModes( MOUSE_PRESSED );
         }
         mouse_button = SDL_BUTTON_LEFT;
-    } else if ( _secondFingerId == event.fingerId ) {
-        if ( event.type == SDL_FINGERDOWN ) {
-            mouse_pr = mouse_cu;
-            SetModes( CLICK_RIGHT );
-            SetModes( MOUSE_PRESSED );
-        }
-        else if ( event.type == SDL_FINGERUP ) {
-            mouse_rr = mouse_cu;
-            SetModes( CLICK_RIGHT );
-            ResetModes( MOUSE_PRESSED );
-        }
-        mouse_button = SDL_BUTTON_RIGHT;
     }
 }
 
