@@ -26,7 +26,7 @@
 
 namespace
 {
-    const std::vector<uint8_t> PALPAlette()
+    std::vector<uint8_t> PALPAlette()
     {
         std::vector<uint8_t> palette;
         if ( palette.empty() ) {

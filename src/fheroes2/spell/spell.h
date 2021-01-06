@@ -29,7 +29,6 @@
 
 class HeroBase;
 class StreamBase;
-class StreamBase;
 
 class Spell
 {

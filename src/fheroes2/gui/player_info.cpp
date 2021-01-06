@@ -330,8 +330,8 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             iterator it = std::find_if( begin(), end(), [player]( const PlayerInfo & pi ) { return pi.player == player; } );
             if ( it != end() && ( it + 1 ) != end() ) {
                 Players & players = conf.GetPlayers();
-                Players::iterator it1 = std::find_if( players.begin(), players.end(), [it]( Player * p ) { return p == ( *it ).player; } );
-                Players::iterator it2 = std::find_if( players.begin(), players.end(), [it]( Player * p ) { return p == ( *( it + 1 ) ).player; } );
+                Players::iterator it1 = std::find_if( players.begin(), players.end(), [&it]( Player * p ) { return p == ( *it ).player; } );
+                Players::iterator it2 = std::find_if( players.begin(), players.end(), [&it]( Player * p ) { return p == ( *( it + 1 ) ).player; } );
 
                 if ( it1 != players.end() && it2 != players.end() ) {
                     std::swap( ( *it ).player, ( *( it + 1 ) ).player );
