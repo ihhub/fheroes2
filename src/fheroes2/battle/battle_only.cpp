@@ -654,17 +654,16 @@ void Battle::Only::StartBattle( void )
 {
     Settings & conf = Settings::Get();
 
-    Players & players = conf.GetPlayers();
-    players.Init( player1.GetColor() | player2.GetColor() );
+    conf.GetPlayers().Init( player1.GetColor() | player2.GetColor() );
     world.InitKingdoms();
 
-    players.SetPlayerRace( player1.GetColor(), player1.GetRace() );
-    players.SetPlayerRace( player2.GetColor(), player2.GetRace() );
+    Players::SetPlayerRace( player1.GetColor(), player1.GetRace() );
+    Players::SetPlayerRace( player2.GetColor(), player2.GetRace() );
 
     conf.SetCurrentColor( player1.GetColor() );
 
-    players.SetPlayerControl( player1.GetColor(), CONTROL_AI );
-    players.SetPlayerControl( player2.GetColor(), CONTROL_AI );
+    Players::SetPlayerControl( player1.GetColor(), CONTROL_AI );
+    Players::SetPlayerControl( player2.GetColor(), CONTROL_AI );
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
@@ -675,8 +674,8 @@ void Battle::Only::StartBattle( void )
             hero2->Recruit( player2.GetColor(), Point( 5, 6 ) );
         }
 
-        players.SetPlayerControl( player1.GetColor(), player1.GetControl() );
-        players.SetPlayerControl( player2.GetColor(), player2.GetControl() );
+        Players::SetPlayerControl( player1.GetColor(), player1.GetControl() );
+        Players::SetPlayerControl( player2.GetColor(), player2.GetControl() );
 
         Battle::Loader( hero1->GetArmy(), ( hero2 ? hero2->GetArmy() : monsters ), hero1->GetIndex() + 1 );
     }

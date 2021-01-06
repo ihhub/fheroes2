@@ -675,7 +675,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                     continue;
                 }
 
-                const uint32_t chosenMonsterPos = sortedIds.size() > 1 ? *Rand::Get( sortedIds ) : sortedIds.front();
+                const int32_t * monsterPos = Rand::Get( sortedIds );
+                const uint32_t chosenMonsterPos = monsterPos ? *monsterPos : sortedIds.front();
                 trgts.push_back( chosenMonsterPos );
                 currentMonsterPos = chosenMonsterPos;
             }

@@ -265,11 +265,11 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                     else if ( player->isControlAI() != currentSelectedPlayer->isControlAI() ) {
                         if ( !( humans & player->GetColor() ) ) {
                             player->SetControl( CONTROL_HUMAN );
-                            players.SetPlayerControl( currentSelectedPlayer->GetColor(), CONTROL_AI | CONTROL_HUMAN );
+                            Players::SetPlayerControl( currentSelectedPlayer->GetColor(), CONTROL_AI | CONTROL_HUMAN );
                         }
                         else {
                             currentSelectedPlayer->SetControl( CONTROL_HUMAN );
-                            players.SetPlayerControl( player->GetColor(), CONTROL_AI | CONTROL_HUMAN );
+                            Players::SetPlayerControl( player->GetColor(), CONTROL_AI | CONTROL_HUMAN );
                         }
 
                         currentSelectedPlayer = nullptr;
@@ -278,7 +278,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 else
                 // single play
                 {
-                    players.SetPlayerControl( humans, CONTROL_AI | CONTROL_HUMAN );
+                    Players::SetPlayerControl( humans, CONTROL_AI | CONTROL_HUMAN );
                     player->SetControl( CONTROL_HUMAN );
                 }
             }

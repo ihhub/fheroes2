@@ -78,7 +78,7 @@ namespace
 
     std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames )
     {
-        const ListFiles files = Settings::Get().GetListFiles( "maps", ".h2c" );
+        const ListFiles files = Settings::GetListFiles( "maps", ".h2c" );
 
         std::vector<Maps::FileInfo> maps;
 
