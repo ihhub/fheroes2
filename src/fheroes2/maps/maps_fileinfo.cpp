@@ -380,6 +380,7 @@ bool Maps::FileInfo::ReadMAP( const std::string & filename )
     else
         VERBOSE( filename << ": " << doc.ErrorDesc() );
 #else
+    (void)filename;
     DEBUG( DBG_GAME, DBG_WARN,
            filename << ", "
                     << "unsupported map format" );
