@@ -45,9 +45,9 @@ std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campa
 
     // TODO: apply use of campaignID
     if ( scenarioId == 0 ) {
-        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 ) );
-        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 ) );
-        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 ) );
+        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
     }
 
     return bonus;
