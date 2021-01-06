@@ -26,6 +26,7 @@
 #include "army_troop.h"
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "ui_tool.h"
 
 class Army;
 
@@ -45,11 +46,16 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarSingleClick( ArmyTroop & ) override;
-    virtual bool ActionBarSingleClick( ArmyTroop &, ArmyTroop & ) override;
-    virtual bool ActionBarDoubleClick( ArmyTroop & ) override;
-    virtual bool ActionBarPressRight( ArmyTroop & ) override;
-    virtual bool ActionBarPressRight( ArmyTroop &, ArmyTroop & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
     virtual bool ActionBarCursor( ArmyTroop & ) override;
     virtual bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
@@ -64,6 +70,7 @@ protected:
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
+    bool _isTroopInfoVisible;
     std::string msg;
 };
 

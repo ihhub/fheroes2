@@ -42,7 +42,7 @@ Troop::Troop( const Monster & m, u32 c )
 
 bool Troop::operator==( const Monster & m ) const
 {
-    return static_cast<Monster>( *this ) == m;
+    return Monster::operator==( m );
 }
 
 bool Troop::isMonster( int mons ) const
@@ -73,7 +73,7 @@ void Troop::Set( const Monster & m, u32 c )
 
 void Troop::SetMonster( const Monster & m )
 {
-    id = m();
+    id = m.GetID();
 }
 
 void Troop::SetCount( u32 c )

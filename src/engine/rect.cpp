@@ -33,7 +33,7 @@ Point::Point()
     , y( 0 )
 {}
 
-Point::Point( s16 px, s16 py )
+Point::Point( int16_t px, int16_t py )
     : x( px )
     , y( py )
 {}
@@ -152,7 +152,7 @@ Size Size::operator-( const Size & sz ) const
 
 Rect::Rect() {}
 
-Rect::Rect( s16 rx, s16 ry, u16 rw, u16 rh )
+Rect::Rect( int16_t rx, int16_t ry, u16 rw, u16 rh )
     : Point( rx, ry )
     , Size( rw, rh )
 {}
@@ -239,36 +239,6 @@ bool Rect::operator&( const Point & pt ) const
 bool Rect::operator&( const Rect & rt ) const
 {
     return !( x > rt.x + rt.w || x + w < rt.x || y > rt.y + rt.h || y + h < rt.y );
-}
-
-Rect Rect::operator^( const Rect & other ) const
-{
-    Rect temp = other;
-    if ( temp.x < x ) {
-        const int16_t diff = x - temp.x;
-        temp.x = x;
-        temp.w -= diff;
-    }
-    if ( temp.y < y ) {
-        const int16_t diff = y - temp.y;
-        temp.y = y;
-        temp.h -= diff;
-    }
-
-    if ( temp.x > x + w || temp.y > y + h )
-        return Rect();
-
-    if ( temp.x + temp.w > x + w ) {
-        const int16_t diff = temp.x + temp.w - ( x + w );
-        temp.w -= diff;
-    }
-
-    if ( temp.y + temp.h > y + h ) {
-        const int16_t diff = temp.y + temp.h - ( y + h );
-        temp.h -= diff;
-    }
-
-    return temp;
 }
 
 const Point & Rect::getPosition() const

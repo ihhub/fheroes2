@@ -71,4 +71,10 @@ namespace fheroes2
 
     void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
                                   int frameCount );
+
+    // Display pre-render function to show screen system info
+    void PreRenderSystemInfo();
+
+    // Display post-render function to hide screen system info
+    void PostRenderSystemInfo();
 }

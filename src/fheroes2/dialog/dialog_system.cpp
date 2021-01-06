@@ -44,7 +44,6 @@ int Dialog::SystemOptions( void )
     // cursor
     Cursor & cursor = Cursor::Get();
     const int oldcursor = cursor.Themes();
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
@@ -94,7 +93,6 @@ int Dialog::SystemOptions( void )
     fheroes2::Button buttonOkay( buttonOffset.x, buttonOffset.y, isEvilInterface ? ICN::SPANBTNE : ICN::SPANBTN, 0, 1 );
     buttonOkay.draw();
 
-    cursor.Show();
     display.render();
 
     int result = 0;
@@ -183,11 +181,9 @@ int Dialog::SystemOptions( void )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
             DrawSystemInfo( rects );
             buttonOkay.draw();
-            cursor.Show();
             display.render();
             redraw = false;
         }

@@ -42,18 +42,30 @@ LocalEvent::LocalEvent()
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
     , _isSoundPaused( false )
+{}
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void LocalEvent::OpenController()
 {
-#ifdef WITHOUT_MOUSE
-    emulate_mouse = false;
-    emulate_mouse_up = KEY_UP;
-    emulate_mouse_down = KEY_DOWN;
-    emulate_mouse_left = KEY_LEFT;
-    emulate_mouse_right = KEY_RIGHT;
-    emulate_mouse_step = 10;
-    emulate_press_left = KEY_NONE;
-    emulate_press_right = KEY_NONE;
-#endif
+    for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
+        if ( SDL_IsGameController( i ) ) {
+            _gameController = SDL_GameControllerOpen( i );
+            if ( _gameController != nullptr ) {
+                fheroes2::cursor().enableSoftwareEmulation( true );
+                break;
+            }
+        }
+    }
 }
+
+void LocalEvent::CloseController()
+{
+    if ( SDL_GameControllerGetAttached( _gameController ) ) {
+        SDL_GameControllerClose( _gameController );
+        _gameController = nullptr;
+    }
+}
+#endif
 
 const Point & LocalEvent::GetMousePressLeft( void ) const
 {
@@ -92,7 +104,6 @@ void LocalEvent::SetTapMode( bool f )
     else {
         ResetModes( TAP_MODE );
         ResetModes( CLOCK_ON );
-        clock.Stop();
     }
 }
 
@@ -101,13 +112,13 @@ void LocalEvent::SetTapDelayForRightClickEmulation( u32 d )
     clock_delay = d < 200 ? TAP_DELAY_EMULATE : d;
 }
 
-void LocalEvent::SetMouseOffsetX( s16 x )
+void LocalEvent::SetMouseOffsetX( int16_t x )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.x = x;
 }
 
-void LocalEvent::SetMouseOffsetY( s16 y )
+void LocalEvent::SetMouseOffsetY( int16_t y )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.y = y;
@@ -388,42 +399,9 @@ KeySym GetKeySym( int key )
     case SDLK_KP_PLUS:
         return KEY_KP_PLUS;
     case SDLK_KP_ENTER:
-        return KEY_KP_ENTER;
+        return KEY_RETURN; // repath to the normal Enter
     case SDLK_KP_EQUALS:
         return KEY_KP_EQUALS;
-
-#ifdef _WIN32_WCE
-    case 0xC1:
-        return KEY_APP01;
-    case 0xC2:
-        return KEY_APP02;
-    case 0xC3:
-        return KEY_APP03;
-    case 0xC4:
-        return KEY_APP04;
-    case 0xC5:
-        return KEY_APP05;
-    case 0xC6:
-        return KEY_APP06;
-    case 0xC7:
-        return KEY_APP07;
-    case 0xC8:
-        return KEY_APP08;
-    case 0xC9:
-        return KEY_APP09;
-    case 0xCA:
-        return KEY_APP10;
-    case 0xCB:
-        return KEY_APP11;
-    case 0xCC:
-        return KEY_APP12;
-    case 0xCD:
-        return KEY_APP13;
-    case 0xCE:
-        return KEY_APP14;
-    case 0xCF:
-        return KEY_APP15;
-#endif
     }
 
     return KEY_NONE;
@@ -436,13 +414,17 @@ namespace
     public:
         ColorCycling()
             : _counter( 0 )
+            , _preRenderDrawing( nullptr )
+            , _posRenderDrawing( nullptr )
         {}
 
         bool applyCycling( std::vector<uint8_t> & palette )
         {
-            _timer.Stop();
-            if ( _timer.Get() >= 220 ) {
-                _timer.Start();
+            if ( _preRenderDrawing != nullptr )
+                _preRenderDrawing();
+
+            if ( _timer.getMs() >= 220 ) {
+                _timer.reset();
                 palette = PAL::GetCyclingPalette( _counter++ );
                 return true;
             }
@@ -451,19 +433,33 @@ namespace
 
         void reset()
         {
-            _prevDraw.Start();
+            _prevDraw.reset();
+
+            if ( _posRenderDrawing != nullptr )
+                _posRenderDrawing();
         }
 
         bool isRedrawRequired()
         {
-            _prevDraw.Stop();
-            return _prevDraw.Get() >= 220;
+            return _prevDraw.getMs() >= 220;
+        }
+
+        void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
+        {
+            if ( preRenderDrawing != nullptr )
+                _preRenderDrawing = preRenderDrawing;
+
+            if ( postRenderDrawing != nullptr )
+                _posRenderDrawing = postRenderDrawing;
         }
 
     private:
-        SDL::Time _timer;
-        SDL::Time _prevDraw;
+        fheroes2::Time _timer;
+        fheroes2::Time _prevDraw;
         uint32_t _counter;
+
+        void ( *_preRenderDrawing )();
+        void ( *_posRenderDrawing )();
     };
 
     ColorCycling colorCycling;
@@ -486,8 +482,10 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling() const
+void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
 {
+    colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
+
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
@@ -510,7 +508,7 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( CLICK_LEFT );
     le.ResetModes( CLICK_RIGHT );
     le.ResetModes( CLICK_MIDDLE );
-    le.ResetModes( CLICK_MIDDLE );
+    le.ResetModes( KEY_HOLD );
     return le;
 }
 
@@ -523,7 +521,21 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( _gameController != nullptr ) {
+        // fast map scroll with dpad
+        if ( !_dpadScrollActive )
+            ResetModes( KEY_PRESSED );
+    }
+    else {
+        ResetModes( KEY_PRESSED );
+    }
+#else
     ResetModes( KEY_PRESSED );
+#endif
+    ResetModes( CLICK_LEFT );
+    ResetModes( CLICK_MIDDLE );
+    ResetModes( CLICK_RIGHT );
 
     mouse_wm = Point();
 
@@ -600,6 +612,31 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
             break;
+        case SDL_CONTROLLERDEVICEREMOVED:
+            if ( _gameController != nullptr ) {
+                SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
+                if ( removedController == _gameController ) {
+                    SDL_GameControllerClose( _gameController );
+                    _gameController = nullptr;
+                    fheroes2::cursor().enableSoftwareEmulation( false );
+                }
+            }
+            break;
+        case SDL_CONTROLLERDEVICEADDED:
+            if ( _gameController == nullptr ) {
+                _gameController = SDL_GameControllerOpen( event.jdevice.which );
+                if ( _gameController != nullptr ) {
+                    fheroes2::cursor().enableSoftwareEmulation( true );
+                }
+            }
+            break;
+        case SDL_CONTROLLERAXISMOTION:
+            HandleControllerAxisEvent( event.caxis );
+            break;
+        case SDL_CONTROLLERBUTTONDOWN:
+        case SDL_CONTROLLERBUTTONUP:
+            HandleControllerButtonEvent( event.cbutton );
+            break;
 #endif
 
         // exit
@@ -627,8 +664,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
     // emulate press right
     if ( ( modes & TAP_MODE ) && ( modes & CLOCK_ON ) ) {
-        clock.Stop();
-        if ( clock_delay < clock.Get() ) {
+        if ( clock_delay < clock.getMs() ) {
             ResetModes( CLICK_LEFT );
             ResetModes( CLOCK_ON );
             mouse_pr = mouse_cu;
@@ -637,11 +673,168 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         }
     }
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    if ( _gameController != nullptr ) {
+        ProcessControllerAxisMotion();
+    }
+#endif
+
     if ( delay )
         SDL_Delay( loop_delay );
 
     return true;
 }
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
+{
+    if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {
+        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
+            _controllerLeftXAxis = motion.value;
+        else
+            _controllerLeftXAxis = 0;
+    }
+    else if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTY ) {
+        if ( std::abs( motion.value ) > CONTROLLER_L_DEADZONE )
+            _controllerLeftYAxis = motion.value;
+        else
+            _controllerLeftYAxis = 0;
+    }
+    else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTX ) {
+        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
+            _controllerRightXAxis = motion.value;
+        else
+            _controllerRightXAxis = 0;
+    }
+    else if ( motion.axis == SDL_CONTROLLER_AXIS_RIGHTY ) {
+        if ( std::abs( motion.value ) > CONTROLLER_R_DEADZONE )
+            _controllerRightYAxis = motion.value;
+        else
+            _controllerRightYAxis = 0;
+    }
+}
+
+void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button )
+{
+    if ( button.state == SDL_PRESSED )
+        SetModes( KEY_PRESSED );
+    else if ( button.state == SDL_RELEASED )
+        ResetModes( KEY_PRESSED );
+
+    if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
+        SetModes( CLICK_LEFT );
+        if ( modes & KEY_PRESSED ) {
+            mouse_pl = mouse_cu;
+            SetModes( MOUSE_PRESSED );
+        }
+        else {
+            mouse_rl = mouse_cu;
+            ResetModes( MOUSE_PRESSED );
+        }
+        mouse_button = SDL_BUTTON_LEFT;
+        ResetModes( KEY_PRESSED );
+    }
+    else if ( button.button == SDL_CONTROLLER_BUTTON_B ) {
+        SetModes( CLICK_RIGHT );
+        if ( modes & KEY_PRESSED ) {
+            mouse_pr = mouse_cu;
+            SetModes( MOUSE_PRESSED );
+        }
+        else {
+            mouse_rr = mouse_cu;
+            ResetModes( MOUSE_PRESSED );
+        }
+        mouse_button = SDL_BUTTON_RIGHT;
+        ResetModes( KEY_PRESSED );
+    }
+    else if ( modes & KEY_PRESSED ) {
+        _dpadScrollActive = true;
+
+        if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
+            key_value = KEY_KP4;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
+            key_value = KEY_KP6;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
+            key_value = KEY_KP8;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
+            key_value = KEY_KP2;
+        }
+        else {
+            _dpadScrollActive = false;
+        }
+
+        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            key_value = KEY_SHIFT;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_BACK ) {
+            key_value = KEY_f;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
+            key_value = KEY_RETURN;
+        }
+    }
+}
+
+void LocalEvent::ProcessControllerAxisMotion()
+{
+    const double deltaTime = _controllerTimer.get() * 1000.0;
+    _controllerTimer.reset();
+
+    if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
+        SetModes( MOUSE_MOTION );
+
+        const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
+        const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
+
+        _controllerPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
+        _controllerPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
+
+        const fheroes2::Display & display = fheroes2::Display::instance();
+
+        if ( _controllerPointerPosX < 0 )
+            _controllerPointerPosX = 0;
+        else if ( _controllerPointerPosX > display.width() )
+            _controllerPointerPosX = display.width();
+
+        if ( _controllerPointerPosY < 0 )
+            _controllerPointerPosY = 0;
+        else if ( _controllerPointerPosY > display.height() )
+            _controllerPointerPosY = display.height();
+
+        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
+
+        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+            if ( modes & MOUSE_OFFSET )
+                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
+            else
+                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+        }
+    }
+
+    // map scroll with right stick
+    if ( _controllerRightXAxis != 0 || _controllerRightYAxis != 0 ) {
+        _controllerScrollActive = true;
+        SetModes( KEY_PRESSED );
+
+        if ( _controllerRightXAxis < 0 )
+            key_value = KEY_KP4;
+        else if ( _controllerRightXAxis > 0 )
+            key_value = KEY_KP6;
+        else if ( _controllerRightYAxis < 0 )
+            key_value = KEY_KP8;
+        else if ( _controllerRightYAxis > 0 )
+            key_value = KEY_KP2;
+    }
+    else if ( _controllerScrollActive ) {
+        ResetModes( KEY_PRESSED );
+        _controllerScrollActive = false;
+    }
+}
+#endif
 
 bool LocalEvent::MouseMotion( void ) const
 {
@@ -686,12 +879,14 @@ bool LocalEvent::MouseReleaseRight( void ) const
 void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
-        ( event.type == SDL_KEYDOWN ) ? SetModes( KEY_PRESSED ) : ResetModes( KEY_PRESSED );
-
-#ifdef WITHOUT_MOUSE
-        if ( emulate_mouse && EmulateMouseAction( GetKeySym( event.keysym.sym ) ) )
-            return;
-#endif
+        if ( event.type == SDL_KEYDOWN ) {
+            SetModes( KEY_PRESSED );
+            SetModes( KEY_HOLD );
+        }
+        else if ( event.type == SDL_KEYUP ) {
+            ResetModes( KEY_PRESSED );
+            ResetModes( KEY_HOLD );
+        }
 
         key_value = GetKeySym( event.keysym.sym );
     }
@@ -703,6 +898,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     SetModes( MOUSE_MOTION );
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
+    _controllerPointerPosX = mouse_cu.x;
+    _controllerPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 }
@@ -714,6 +911,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
+    _controllerPointerPosX = mouse_cu.x;
+    _controllerPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 
@@ -732,7 +931,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
             // emulate press right
             if ( modes & TAP_MODE ) {
-                clock.Start();
+                clock.reset();
                 SetModes( CLOCK_ON );
             }
             break;
@@ -750,7 +949,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         default:
             break;
         }
-    else
+    else // mouse button released
         switch ( button.button ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
@@ -761,6 +960,7 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 #endif
 
         case SDL_BUTTON_LEFT:
+            SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
 
             // emulate press right
@@ -770,10 +970,12 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
             break;
 
         case SDL_BUTTON_MIDDLE:
+            SetModes( CLICK_MIDDLE );
             mouse_rm = mouse_cu;
             break;
 
         case SDL_BUTTON_RIGHT:
+            SetModes( CLICK_RIGHT );
             mouse_rr = mouse_cu;
             break;
 
@@ -957,27 +1159,6 @@ bool LocalEvent::MouseCursor( const Rect & rt ) const
     return rt & mouse_cu;
 }
 
-const Point & LocalEvent::GetMouseCursor( void )
-{
-#ifdef WITHOUT_MOUSE
-    if ( !emulate_mouse )
-#endif
-    {
-        int x, y;
-
-        SDL_PumpEvents();
-        SDL_GetMouseState( &x, &y );
-
-        mouse_cu.x = x;
-        mouse_cu.y = y;
-    }
-
-    if ( modes & MOUSE_OFFSET )
-        mouse_cu += mouse_st;
-
-    return mouse_cu;
-}
-
 int LocalEvent::KeyMod( void ) const
 {
     return SDL_GetModState();
@@ -1059,11 +1240,12 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_MOUSEBUTTONUP, true );
     SetState( SDL_QUIT, true );
 
-    SetState( SDL_JOYAXISMOTION, false );
+    SetState( SDL_JOYAXISMOTION, true );
+    SetState( SDL_JOYBUTTONUP, true );
+    SetState( SDL_JOYBUTTONDOWN, true );
+
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );
-    SetState( SDL_JOYBUTTONUP, false );
-    SetState( SDL_JOYBUTTONDOWN, false );
     SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1080,124 +1262,3 @@ void LocalEvent::SetStateDefaults( void )
     SDL_SetEventFilter( GlobalFilterEvents );
 #endif
 }
-
-#ifdef WITHOUT_MOUSE
-void LocalEvent::ToggleEmulateMouse( void )
-{
-    emulate_mouse = emulate_mouse ? false : true;
-}
-
-void LocalEvent::SetEmulateMouse( bool f )
-{
-    emulate_mouse = f;
-    if ( f )
-        mouse_cu = Point( 0, 0 );
-}
-
-void LocalEvent::SetEmulateMouseUpKey( KeySym k )
-{
-    emulate_mouse_up = k;
-}
-
-void LocalEvent::SetEmulateMouseDownKey( KeySym k )
-{
-    emulate_mouse_down = k;
-}
-
-void LocalEvent::SetEmulateMouseLeftKey( KeySym k )
-{
-    emulate_mouse_left = k;
-}
-
-void LocalEvent::SetEmulateMouseRightKey( KeySym k )
-{
-    emulate_mouse_right = k;
-}
-
-void LocalEvent::SetEmulateMouseStep( u8 s )
-{
-    emulate_mouse_step = s;
-}
-
-void LocalEvent::SetEmulatePressLeftKey( KeySym k )
-{
-    emulate_press_left = k;
-}
-
-void LocalEvent::SetEmulatePressRightKey( KeySym k )
-{
-    emulate_press_right = k;
-}
-
-bool LocalEvent::EmulateMouseAction( KeySym key )
-{
-    if ( ( key == emulate_mouse_up || key == emulate_mouse_down || key == emulate_mouse_left || key == emulate_mouse_right || key == emulate_press_left
-           || key == emulate_press_right ) ) {
-        if ( emulate_mouse_up == key ) {
-            mouse_cu.y -= emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_down == key ) {
-            mouse_cu.y += emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_left == key ) {
-            mouse_cu.x -= emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-        else if ( emulate_mouse_right == key ) {
-            mouse_cu.x += emulate_mouse_step;
-            SetModes( MOUSE_MOTION );
-        }
-
-        const fheroes2::Display & display = fheroes2::Display::instance();
-
-        if ( mouse_cu.x < 0 )
-            mouse_cu.x = 0;
-        if ( mouse_cu.y < 0 )
-            mouse_cu.y = 0;
-        if ( mouse_cu.x > display.width() )
-            mouse_cu.x = display.width();
-        if ( mouse_cu.y > display.height() )
-            mouse_cu.y = display.height();
-
-        if ( emulate_press_left == key ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pl = mouse_cu;
-                SetModes( MOUSE_PRESSED );
-                SetModes( CLICK_LEFT );
-            }
-            else {
-                mouse_rl = mouse_cu;
-                ResetModes( MOUSE_PRESSED );
-            }
-            mouse_button = SDL_BUTTON_LEFT;
-        }
-        else if ( emulate_press_right == key ) {
-            if ( modes & KEY_PRESSED ) {
-                mouse_pr = mouse_cu;
-                SetModes( MOUSE_PRESSED );
-            }
-            else {
-                mouse_rr = mouse_cu;
-                ResetModes( MOUSE_PRESSED );
-            }
-            mouse_button = SDL_BUTTON_RIGHT;
-        }
-
-        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            if ( modes & MOUSE_OFFSET )
-                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
-            else
-                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
-        }
-
-        ResetModes( KEY_PRESSED );
-
-        return true;
-    }
-
-    return false;
-}
-
-#endif

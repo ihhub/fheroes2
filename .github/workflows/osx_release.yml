@@ -13,13 +13,7 @@ jobs:
         fetch-depth: 50
     - name: install SDL 1
       run: |
-        brew uninstall openssl@1.0.2t
-        brew uninstall python@2.7.17
-        brew untap local/openssl
-        brew untap local/python2
-        brew cask install xquartz
         brew update
-        brew upgrade
         brew install sdl
         brew install sdl_ttf
         brew install sdl_mixer
@@ -48,13 +42,7 @@ jobs:
         fetch-depth: 50
     - name: install SDL 2
       run: |
-        brew uninstall openssl@1.0.2t
-        brew uninstall python@2.7.17
-        brew untap local/openssl
-        brew untap local/python2
-        brew cask install xquartz
         brew update
-        brew upgrade
         brew install sdl2
         brew install sdl2_ttf
         brew install sdl2_mixer
@@ -63,6 +51,7 @@ jobs:
       run: make -j 2
       env:
         WITH_SDL2: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
         cp doc/README.txt .

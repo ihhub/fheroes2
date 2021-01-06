@@ -25,15 +25,13 @@
 
 #include <SDL.h>
 
-typedef Sint8 s8;
-typedef Uint8 u8;
-typedef Sint16 s16;
-typedef Uint16 u16;
-typedef Sint32 s32;
-typedef Uint32 u32;
+typedef int8_t s8;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef int32_t s32;
+typedef uint32_t u32;
 
 #define MAXU16 0xFFFF
-#define MAXU32 0xFFFFFFFF
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
 #define ARRAY_COUNT_END( A ) A + ARRAY_COUNT( A )
@@ -42,20 +40,6 @@ typedef Uint32 u32;
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
-#endif
-
-#if defined __SYMBIAN32__
-namespace std
-{
-    int c_abs( int x );
-    float c_abs( float x );
-    double c_abs( double x );
-    int c_isspace( char c );
-
-#define isspace( c ) c_isspace( c )
-#define abs( x ) c_abs( x )
-}
-using namespace std;
 #endif
 
 #endif

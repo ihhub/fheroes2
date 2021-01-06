@@ -106,19 +106,19 @@ class StatsHeroesList : public Interface::ListBox<HeroRow>
 public:
     StatsHeroesList( const Point & pt, KingdomHeroes & );
 
-    void RedrawItem( const HeroRow &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListSingleClick( HeroRow & ){};
-    void ActionListDoubleClick( HeroRow & ){};
-    void ActionListPressRight( HeroRow & ){};
+    virtual void ActionCurrentUp() override {}
+    virtual void ActionCurrentDn() override {}
+    virtual void ActionListSingleClick( HeroRow & ) override {}
+    virtual void ActionListDoubleClick( HeroRow & ) override {}
+    virtual void ActionListPressRight( HeroRow & ) override {}
 
-    void ActionListSingleClick( HeroRow &, const Point &, s32, s32 );
-    void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 );
-    void ActionListPressRight( HeroRow &, const Point &, s32, s32 );
-    bool ActionListCursor( HeroRow &, const Point & );
+    virtual void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
+    virtual bool ActionListCursor( HeroRow &, const Point & ) override;
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -127,7 +127,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() - 2 ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
@@ -246,7 +246,7 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
     text.Set( _( "Artifacts" ) );
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
-    // splitter background
+    // scrollbar background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
@@ -318,19 +318,19 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 public:
     StatsCastlesList( const Point & pt, KingdomCastles & );
 
-    void RedrawItem( const CstlRow &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    virtual void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( CstlRow & ){};
-    void ActionListSingleClick( CstlRow & ){};
-    void ActionListPressRight( CstlRow & ){};
+    virtual void ActionCurrentUp( void ) override {}
+    virtual void ActionCurrentDn( void ) override {}
+    virtual void ActionListDoubleClick( CstlRow & ) override {}
+    virtual void ActionListSingleClick( CstlRow & ) override {}
+    virtual void ActionListPressRight( CstlRow & ) override {}
 
-    void ActionListSingleClick( CstlRow &, const Point &, s32, s32 );
-    void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 );
-    void ActionListPressRight( CstlRow &, const Point &, s32, s32 );
-    bool ActionListCursor( CstlRow &, const Point & );
+    virtual void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
+    virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
+    virtual bool ActionListCursor( CstlRow &, const Point & ) override;
 };
 
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
@@ -339,7 +339,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( pt );
-    SetScrollSplitter( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() ) );
+    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( pt.x + 629, pt.y + 18, back.width(), back.height() - 2 ) );
     SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( pt.x + 626, pt.y ) );
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
@@ -437,8 +437,13 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 
         if ( hero ) {
             Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
-            text.Set( hero->StringSkills( "-" ) );
+            const std::string sep = "-";
+            text.Set( GetString( hero->GetAttack() ) + sep + GetString( hero->GetDefense() ) + sep + GetString( hero->GetPower() ) + sep
+                      + GetString( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
+        }
+        else {
+            row.castle->GetCaptain().PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
         }
 
         text.Set( row.castle->GetName() );
@@ -477,7 +482,7 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
     text.Set( _( "Available" ) );
     text.Blit( dst.x + 500 - text.w() / 2, dst.y + 1 );
 
-    // splitter background
+    // scrollbar background
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 ), display, dst.x + 628, dst.y + 17 );
 
     // items background
@@ -662,9 +667,9 @@ void Kingdom::OverviewDialog( void )
         listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) )
-            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
         else if ( le.MousePressRight( rectIncome ) )
-            Dialog::ResourceInfo( "", _( "Income:" ), GetIncome( INCOME_ALL ), 0 );
+            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
         // redraw
         if ( !cursor.isVisible() || redraw ) {

@@ -142,7 +142,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
     }
 }
 
-bool PrimarySkillsBar::ActionBarSingleClick( int & skill )
+bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG, Dialog::OK );
@@ -152,7 +152,7 @@ bool PrimarySkillsBar::ActionBarSingleClick( int & skill )
     return false;
 }
 
-bool PrimarySkillsBar::ActionBarPressRight( int & skill )
+bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG );
@@ -224,7 +224,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
     }
 }
 
-bool SecondarySkillsBar::ActionBarSingleClick( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         Dialog::SecondarySkillInfo( skill, true );
@@ -242,7 +242,7 @@ bool SecondarySkillsBar::ActionBarSingleClick( Skill::Secondary & skill )
     return false;
 }
 
-bool SecondarySkillsBar::ActionBarPressRight( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         if ( can_change )

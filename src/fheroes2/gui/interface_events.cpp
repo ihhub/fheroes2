@@ -54,8 +54,12 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
-        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
-        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
+        const Point mousePos = le.GetMouseCursor();
+        if ( gameArea.GetROI() & mousePos ) {
+            const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
+            Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
+        }
+
         Interface::Basic::Get().buttonsArea.Redraw();
     }
 }
@@ -138,7 +142,13 @@ void Interface::Basic::EventNextHero( void )
         } while ( it != currentHero );
     }
     else {
-        ResetFocus( GameFocus::HEROES );
+        const size_t heroesCount = myHeroes.size();
+        for ( size_t i = 0; i < heroesCount; ++i ) {
+            if ( myHeroes[i]->MayStillMove() ) {
+                SetFocus( myHeroes[i] );
+                break;
+            }
+        }
     }
     RedrawFocus();
 }
@@ -539,8 +549,8 @@ void Interface::Basic::EventDebug1( void )
 
         if(hero)
         {
-        int level = hero->GetLevelFromExperience(hero->GetExperience());
-        u32 exp = hero->GetExperienceFromLevel(level + 1);
+        int level = Heroes::GetLevelFromExperience(hero->GetExperience());
+        u32 exp = Heroes::GetExperienceFromLevel(level + 1);
 
         hero->IncreaseExperience(exp - hero->GetExperience() + 100);
         }

@@ -40,10 +40,6 @@ namespace
     const int heroFrameCount = 9;
 }
 
-bool ReflectSprite( int from );
-void PlayWalkSound( int ground );
-bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next );
-
 void PlayWalkSound( int ground )
 {
     int wav = M82::UNKNOWN;
@@ -364,7 +360,7 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     if ( next.GetObject() == MP2::OBJ_CASTLE ) {
         const Castle * castle = world.GetCastle( next.GetCenter() );
 
-        return ( castle && !hero.isFriends( castle->GetColor() ) );
+        return castle && !hero.isFriends( castle->GetColor() ) && castle->GetActualArmy().isValid();
     }
     else
         // to coast action
@@ -374,15 +370,19 @@ bool isNeedStayFrontObject( const Heroes & hero, const Maps::Tiles & next )
     return MP2::isNeedStayFront( next.GetObject() );
 }
 
-void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) const
+bool Heroes::isInVisibleMapArea() const
 {
-    const Point & mp = GetCenter();
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
+    return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
+}
+
+void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow ) const
+{
+    if ( !( visibleTileROI & GetCenter() ) )
         return;
 
     const s32 centerIndex = GetIndex();
     const bool reflect = ReflectSprite( direction );
+    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
@@ -458,7 +458,7 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     }
 
     if ( isShipMaster() ) {
-        const Directions directions = Direction::All();
+        const Directions & directions = Direction::All();
         const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
 
         bool ocean = true;
@@ -491,27 +491,27 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
     Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
 
-    tile.RedrawTop( dst );
+    tile.RedrawTop( dst, visibleTileROI );
 
     if ( Maps::isValidDirection( centerIndex, Direction::TOP ) )
-        world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, skipGround );
+        world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround );
 
     if ( Maps::isValidDirection( centerIndex, Direction::BOTTOM ) ) {
         Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
-        tile_bottom.RedrawBottom4Hero( dst );
-        tile_bottom.RedrawTop( dst );
+        tile_bottom.RedrawBottom4Hero( dst, visibleTileROI );
+        tile_bottom.RedrawTop( dst, visibleTileROI );
     }
 
     if ( 45 > GetSpriteIndex() ) {
         if ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) ) {
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
                 Maps::Tiles & tile_dir_bottom = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) );
-                tile_dir_bottom.RedrawBottom4Hero( dst );
-                tile_dir_bottom.RedrawTop( dst );
+                tile_dir_bottom.RedrawBottom4Hero( dst, visibleTileROI );
+                tile_dir_bottom.RedrawTop( dst, visibleTileROI );
             }
             if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {
                 Maps::Tiles & tile_dir_top = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) );
-                tile_dir_top.RedrawTop4Hero( dst, skipGround );
+                tile_dir_top.RedrawTop4Hero( dst, visibleTileROI, skipGround );
             }
         }
 
@@ -519,15 +519,15 @@ void Heroes::Redraw( fheroes2::Image & dst, s32 dx, s32 dy, bool withShadow ) co
             Maps::Tiles & tile_bottom = world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::BOTTOM ) );
 
             if ( tile_bottom.GetObject() == MP2::OBJ_BOAT )
-                tile_bottom.RedrawObjects( dst );
+                tile_bottom.RedrawObjects( dst, false );
         }
     }
 
     if ( Maps::isValidDirection( centerIndex, direction ) ) {
         if ( Direction::TOP == direction )
-            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop4Hero( dst, skipGround );
+            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround );
         else
-            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop( dst );
+            world.GetTiles( Maps::GetDirectionIndex( centerIndex, direction ) ).RedrawTop( dst, visibleTileROI );
     }
 }
 
@@ -761,11 +761,10 @@ void Heroes::AngleStep( int to_direct )
 
 void Heroes::FadeOut( const Point & offset ) const
 {
-    const Point & mp = GetCenter();
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
+    if ( !isInVisibleMapArea() )
         return;
+
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
     if ( multiplier < 1 )
@@ -798,11 +797,10 @@ void Heroes::FadeOut( const Point & offset ) const
 
 void Heroes::FadeIn( const Point & offset ) const
 {
-    const Point & mp = GetCenter();
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-
-    if ( !( gamearea.GetVisibleTileROI() & mp ) )
+    if ( !isInVisibleMapArea() )
         return;
+
+    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
 
     int multiplier = std::max( std::abs( offset.x ), std::abs( offset.y ) );
     if ( multiplier < 1 )

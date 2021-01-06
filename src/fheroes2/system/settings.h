@@ -27,6 +27,7 @@
 #include <list>
 
 #include "bitmodes.h"
+#include "campaign_data.h"
 #include "dir.h"
 #include "gamedefs.h"
 #include "maps_fileinfo.h"
@@ -40,7 +41,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_082_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -131,7 +132,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_LOW_MEMORY = 0x10800000,
         POCKETPC_TAP_MODE = 0x11000000,
         POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
         POCKETPC_LOW_RESOLUTION = 0x14000000,
@@ -140,7 +140,6 @@ public:
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
         WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        WORLD_NOREQ_FOR_ARTIFACTS = 0x20000010,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
@@ -162,7 +161,6 @@ public:
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
-        WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
@@ -226,7 +224,6 @@ public:
     bool FullScreen( void ) const;
     bool KeepAspectRatio( void ) const;
     bool ChangeFullscreenResolution( void ) const;
-    bool QVGA( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -268,7 +265,6 @@ public:
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
-    bool ExtWorldNoRequirementsForArtifacts( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
     bool ExtWorldOnlyFirstMonsterAttack( void ) const;
     bool ExtWorldEyeEagleAsScholar( void ) const;
@@ -276,7 +272,6 @@ public:
     bool ExtWorldBanWeekOf( void ) const;
     bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
-    bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
     bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
@@ -305,7 +300,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketLowMemory( void ) const;
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
@@ -343,6 +337,11 @@ public:
     bool IsGameType( int type ) const;
     int GameType( void ) const;
     void SetGameType( int );
+
+    void SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus );
+    void SetCurrentCampaignScenarioID( const int scenarioID );
+    void SetCurrentCampaignID( const int campaignID );
+    void AddCurrentCampaignMapToFinished();
 
     Players & GetPlayers( void );
     const Players & GetPlayers( void ) const;
@@ -385,7 +384,6 @@ public:
     static ListDirs GetRootDirs( void );
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetWriteableDir( const char * );
-    static std::string GetSaveDir( void );
     static std::string GetLangDir( void );
 
     // deprecated
@@ -435,6 +433,7 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
+    int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;
@@ -453,6 +452,8 @@ private:
     Point pos_stat;
 
     Players players;
+
+    Campaign::CampaignData campaignData;
 };
 
 StreamBase & operator<<( StreamBase &, const Settings & );

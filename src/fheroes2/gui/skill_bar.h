@@ -32,9 +32,9 @@ public:
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( int &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarSingleClick( int & ) override;
-    virtual bool ActionBarPressRight( int & ) override;
-    virtual bool ActionBarCursor( int & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( int & skill ) override;
+    virtual bool ActionBarRightMouseHold( int & skill ) override;
+    virtual bool ActionBarCursor( int & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 
@@ -55,9 +55,9 @@ public:
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarSingleClick( Skill::Secondary & ) override;
-    virtual bool ActionBarPressRight( Skill::Secondary & ) override;
-    virtual bool ActionBarCursor( Skill::Secondary & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
+    virtual bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
+    virtual bool ActionBarCursor( Skill::Secondary & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 

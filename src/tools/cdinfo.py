@@ -191,7 +191,8 @@ def actHTTPcmd(client, data):
     elements = data.split(' ')
     parts = elements[1].split('&')
     parts[0] = parts[0][5:]
-    cmd = parts[0].replace('+', ' ')
+    parts[0].replace('+', ' ')
+    # cmd = parts[0].replace('+', ' ')
     client.http = True
     #return parseMessage(client, cmd)
     return False

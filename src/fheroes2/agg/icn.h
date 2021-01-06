@@ -915,8 +915,9 @@ namespace ICN
         GRAY_SMALL_FONT,
 
         TROLL2MSL,
+        LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
 
-        LASTICN
+        LASTICN, // just a marker, indicating end of the enumeration
     };
 
     const char * GetString( int );
@@ -924,9 +925,6 @@ namespace ICN
     u32 AnimationFrame( int icn, u32, u32, bool = false );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );
-
-    bool isBattleMonsterICN( int );
-    bool SkipLocalAlpha( int );
 
     int Get4Captain( int race );
     int Get4Building( int race );

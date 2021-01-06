@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,62 +17,29 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPLITTER_H
-#define H2SPLITTER_H
 
-#include "gamedefs.h"
-#include "ui_tool.h"
+#include "timing.h"
 
-class Splitter : protected fheroes2::MovableSprite
+namespace fheroes2
 {
-public:
-    Splitter();
-    Splitter( const fheroes2::Image & image, const fheroes2::Rect & );
+    Time::Time()
+        : _startTime( std::chrono::high_resolution_clock::now() )
+    {}
 
-    void Forward( void );
-    void Backward( void );
-    void MoveIndex( int );
-    void MoveCenter( void );
-
-    void RedrawCursor( void );
-    void HideCursor( void );
-    void ShowCursor( void );
-
-    void SetSprite( const fheroes2::Image & image );
-    void SetArea( const fheroes2::Rect & );
-    void SetRange( int smin, int smax );
-
-    bool isVertical( void ) const;
-    int GetCurrent( void ) const
+    void Time::reset()
     {
-        return cur;
-    }
-    int GetStep( void ) const
-    {
-        return step;
-    }
-    int Max( void ) const
-    {
-        return max;
-    }
-    int Min( void ) const
-    {
-        return min;
+        _startTime = std::chrono::high_resolution_clock::now();
     }
 
-    const fheroes2::Rect & GetRect( void ) const
+    double Time::get() const
     {
-        return area;
+        const std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        return time.count();
     }
 
-private:
-    fheroes2::Point GetPositionCursor();
-
-    fheroes2::Rect area;
-    int step;
-    int min;
-    int max;
-    int cur;
-};
-
-#endif
+    uint64_t Time::getMs() const
+    {
+        return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
+}

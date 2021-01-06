@@ -46,8 +46,8 @@ private:
 
     void MakeSurface( void );
 
-    s32 index;
     fheroes2::Image puzzlemap;
+    s32 index;
     bool isfound;
 };
 

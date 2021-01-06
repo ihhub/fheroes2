@@ -136,6 +136,7 @@ public:
     static void Redraw( s32, s32 );
     static int DistanceThemes( int, u32 );
     static int WithoutDistanceThemes( int );
+    static void Refresh();
 
     int Themes( void );
     bool SetThemes( int, bool force = false );

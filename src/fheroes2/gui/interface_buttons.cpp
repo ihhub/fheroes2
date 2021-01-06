@@ -114,6 +114,22 @@ void Interface::ButtonsArea::Redraw( void )
     }
 }
 
+void Interface::ButtonsArea::ResetButtons( void )
+{
+    if ( buttonNextHero.isEnabled() )
+        buttonNextHero.drawOnRelease();
+    buttonMovement.drawOnRelease();
+    buttonKingdom.drawOnRelease();
+    if ( buttonSpell.isEnabled() )
+        buttonSpell.drawOnRelease();
+    buttonEndTurn.drawOnRelease();
+    buttonAdventure.drawOnRelease();
+    buttonFile.drawOnRelease();
+    buttonSystem.drawOnRelease();
+    LocalEvent & le = LocalEvent::Get();
+    le.ResetPressLeft();
+}
+
 int Interface::ButtonsArea::QueueEventProcessing( void )
 {
     Settings & conf = Settings::Get();

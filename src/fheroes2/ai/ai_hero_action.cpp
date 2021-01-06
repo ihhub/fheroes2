@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -91,6 +92,7 @@ namespace AI
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
     uint32_t AIGetAllianceColors();
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero );
 
     int AISelectPrimarySkill( Heroes & hero )
     {
@@ -170,7 +172,7 @@ namespace AI
         u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
         if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-            const u32 & exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
+            const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
 
             if ( hero.isControlHuman() ) {
                 std::string msg = _( "Hero %{name} also got a %{count} experience." );
@@ -520,7 +522,7 @@ namespace AI
             Army & army = castle->GetActualArmy();
             // bool allow_enter = false;
 
-            if ( army.isValid() ) {
+            if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
 
                 Heroes * defender = heroes.GuardFirst();
@@ -901,10 +903,7 @@ namespace AI
         hero.FadeOut();
         hero.Move2Dest( index_to );
 
-        Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-        if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() )
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+        AIWhirlpoolTroopLooseEffect( hero );
 
         hero.GetPath().Reset();
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -1076,14 +1075,9 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
-
-            if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-                hero.SetVisited( dst_index, Visit::LOCAL );
-            else
-                // fix double action tile
-                hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+            hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
         }
 
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
@@ -1251,7 +1245,7 @@ namespace AI
                 if ( funds.GetValidItemsCount() )
                     hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
-                hero.IncreaseExperience( hero.GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+                hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
             }
         }
 
@@ -2030,6 +2024,28 @@ namespace AI
         else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
                 hero.Action( hero.GetIndex() );
+        }
+    }
+
+    static void AIWhirlpoolTroopLooseEffect( Heroes & hero )
+    {
+        Troop * troop = hero.GetArmy().GetWeakestTroop();
+        assert( troop );
+        if ( !troop )
+            return;
+
+        // Whirlpool effect affects heroes only with more than one creature in more than one slot
+        if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+            return;
+        }
+
+        if ( 1 == Rand::Get( 1, 3 ) ) {
+            if ( troop->GetCount() == 1 ) {
+                troop->Reset();
+            }
+            else {
+                troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            }
         }
     }
 }

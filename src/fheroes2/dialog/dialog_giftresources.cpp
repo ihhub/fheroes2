@@ -90,7 +90,7 @@ struct SelectRecipientsColors
         const s32 index = GetIndexClick();
 
         if ( index >= 0 ) {
-            const int & cols = colors[index];
+            const int cols = colors[index];
 
             if ( recipients & cols )
                 recipients &= ~cols;
@@ -107,12 +107,10 @@ struct SelectRecipientsColors
 struct ResourceBar
 {
     Funds & resource;
-    Point pos;
     std::vector<fheroes2::Rect> positions;
 
     ResourceBar( Funds & funds, s32 posx, s32 posy )
         : resource( funds )
-        , pos( posx, posy )
     {
         positions.reserve( 7 );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );

@@ -596,7 +596,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         excld.reserve( vec_tiles.size() / 2 );
 
         const u32 dist = 2;
-        const u8 objs[] = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE, 0};
+        const std::vector<uint8_t> objs = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE};
 
         // create exclude list
         {
@@ -665,7 +665,9 @@ s32 World::NextTeleport( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
     }
 
-    return teleports.size() ? *Rand::Get( teleports ) : index;
+    const int32_t * randValue = Rand::Get( teleports );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
@@ -709,7 +711,9 @@ s32 World::NextWhirlpool( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
     }
 
-    return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
+    const int32_t * randValue = Rand::Get( whilrpools );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 /* return message from sign */

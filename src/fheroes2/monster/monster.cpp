@@ -540,16 +540,6 @@ bool Monster::operator!=( const Monster & m ) const
     return id != m.id;
 }
 
-int Monster::operator()( void ) const
-{
-    return id;
-}
-
-int Monster::GetID( void ) const
-{
-    return id;
-}
-
 void Monster::Upgrade( void )
 {
     id = GetUpgrade().id;

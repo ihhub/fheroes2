@@ -82,12 +82,19 @@ int Dialog::FileOptions( void )
             }
         }
         else if ( le.MouseClickLeft( buttonLoad.area() ) ) {
-            if ( ListFiles::IsEmpty( Settings::GetSaveDir(), ".sav", false ) ) {
+            if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
                 if ( Interface::Basic::Get().EventLoadGame() == Game::LOADGAME ) {
-                    result = Game::LOADGAME;
+                    const int gameType = Settings::Get().GameType();
+
+                    if ( gameType & Game::TYPE_STANDARD )
+                        result = Game::LOADSTANDARD;
+                    else if ( gameType & Game::TYPE_CAMPAIGN )
+                        result = Game::LOADCAMPAIN;
+                    else
+                        result = Game::LOADGAME;
                     break;
                 }
             }

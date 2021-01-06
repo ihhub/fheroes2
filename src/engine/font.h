@@ -27,13 +27,12 @@
 #include <vector>
 
 #include "image.h"
-#include "surface.h"
 #include "types.h"
-
-class RGBA;
 
 #ifdef WITH_TTF
 #include <SDL_ttf.h>
+
+class RGBA;
 
 class FontTTF
 {
@@ -58,10 +57,10 @@ public:
     int Descent( void ) const;
     int LineSkip( void ) const;
 
-    Surface RenderText( const std::string &, const RGBA &, bool solid /* or blended */ );
-    Surface RenderChar( char, const RGBA &, bool solid /* or blended */ );
-    Surface RenderUnicodeText( const std::vector<u16> &, const RGBA &, bool solid /* or blended */ );
-    Surface RenderUnicodeChar( u16, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderText( const std::string &, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderChar( char, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderUnicodeText( const std::vector<u16> &, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderUnicodeChar( u16, const RGBA &, bool solid /* or blended */ );
 
 protected:
     TTF_Font * ptr;

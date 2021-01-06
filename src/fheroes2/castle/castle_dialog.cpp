@@ -126,7 +126,8 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), display, pt.x, pt.y + 256 );
 
-    fheroes2::Image icon1, icon2;
+    fheroes2::Sprite icon1;
+    fheroes2::Sprite icon2;
 
     if ( hero1 )
         icon1 = hero1->GetPortrait( PORT_BIG );
@@ -251,7 +252,7 @@ int Castle::OpenDialog( bool readonly )
     dst_pt.x = cur_pt.x + 5;
     dst_pt.y = cur_pt.y + 361;
 
-    const Rect rectSign2( dst_pt.x, dst_pt.y, 100, 92 );
+    const fheroes2::Rect rectSign2( dst_pt.x, dst_pt.y, 100, 92 );
 
     // castle_heroes troops background
     dst_pt.x = cur_pt.x + 112;
@@ -268,8 +269,14 @@ int Castle::OpenDialog( bool readonly )
         selectArmy2.Redraw();
     }
 
+    // button exit
+    dst_pt.x = cur_pt.x + 553;
+    dst_pt.y = cur_pt.y + 428;
+    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
+
     // resource
     const Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
@@ -279,11 +286,6 @@ int Castle::OpenDialog( bool readonly )
         buttonSwap.draw();
         buttonMeeting.draw();
     }
-
-    // button exit
-    dst_pt.x = cur_pt.x + 553;
-    dst_pt.y = cur_pt.y + 428;
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
 
     // fill cache buildings
     CastleDialog::CacheBuildings cacheBuildings( *this, cur_pt );
@@ -330,12 +332,12 @@ int Castle::OpenDialog( bool readonly )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( rectResource ) ) {
+        if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( rectResource ) ) {
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        else if ( le.MousePressRight( resActiveArea ) ) {
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
         // selector troops event
@@ -618,9 +620,8 @@ int Castle::OpenDialog( bool readonly )
                                 AGG::PlaySound( M82::BUILDTWN );
 
                                 // animate fade in for hero army bar
-                                surfaceHero.reset();
                                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
-                                fheroes2::Image port = heroes.Guest()->GetPortrait( PORT_BIG );
+                                const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
                                 if ( !port.empty() )
                                     fheroes2::Blit( port, surfaceHero, 5, 5 );
 
@@ -682,7 +683,7 @@ int Castle::OpenDialog( bool readonly )
         // status message exit
         if ( le.MouseCursor( buttonExit.area() ) )
             msg_status = isCastle() ? _( "Exit Castle" ) : _( "Exit Town" );
-        else if ( le.MouseCursor( rectResource ) )
+        else if ( le.MouseCursor( resActiveArea ) )
             msg_status = _( "Show Income" );
         else
             // status message prev castle

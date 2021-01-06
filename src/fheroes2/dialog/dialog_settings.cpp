@@ -57,6 +57,8 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
+    const bool isActive = !readonly || conf.CanChangeInGame( item );
+
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
     const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
@@ -64,7 +66,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), Font::SMALL, 250 );
+    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
@@ -174,9 +176,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
-    states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_ARTSPRING_SEPARATELY_VISIT );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
@@ -216,7 +216,6 @@ void Dialog::ExtSettings( bool readonly )
 
     if ( conf.PocketPC() ) {
         states.push_back( Settings::POCKETPC_TAP_MODE );
-        states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
 
@@ -232,7 +231,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );

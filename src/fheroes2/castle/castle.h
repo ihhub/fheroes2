@@ -203,8 +203,8 @@ public:
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsBuildMarketplace( const Castle * );
     static bool PredicateIsCapital( const Castle * );
+    static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
     static u32 GetGrownWell( void );
     static u32 GetGrownWel2( void );

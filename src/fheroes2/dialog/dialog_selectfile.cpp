@@ -41,7 +41,7 @@
 #include "ui_button.h"
 #include "world.h"
 
-std::string SelectFileListSimple( const std::string &, const std::string &, bool );
+std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
 bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
@@ -83,9 +83,12 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
 
     if ( savname.size() ) {
         Text text;
-        const size_t dotpos = savname.size() - 4;
-        if ( StringLower( savname.substr( dotpos ) ) == ".sav" )
-            savname.erase( dotpos );
+
+        const std::string saveExtension = Game::GetSaveFileExtension();
+        const size_t dotPos = savname.size() - saveExtension.size();
+
+        if ( StringLower( savname.substr( dotPos ) ) == saveExtension )
+            savname.erase( dotPos );
 
         text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 5, dsty, 155 );
@@ -149,7 +152,7 @@ size_t GetInsertPosition( const std::string & name, s32 cx, s32 posx )
 MapsFileInfoList GetSortedMapsFileInfoList( void )
 {
     ListFiles list1;
-    list1.ReadDir( Settings::GetSaveDir(), ".sav", false );
+    list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
 
     MapsFileInfoList list2( list1.size() );
     int ii = 0;
@@ -173,9 +176,9 @@ std::string Dialog::SelectFileSave( void )
     std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
 
-    os << System::ConcatePath( Settings::GetSaveDir(), base ) <<
+    os << System::ConcatePath( Game::GetSaveDir(), base ) <<
         // add postfix:
-        '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay() << ".sav";
+        '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay() << Game::GetSaveFileExtension();
     std::string lastfile = os.str();
     return SelectFileListSimple( _( "File to Save:" ), lastfile, true );
 }
@@ -186,7 +189,7 @@ std::string Dialog::SelectFileLoad( void )
     return SelectFileListSimple( _( "File to Load:" ), ( lastfile.size() ? lastfile : "" ), false );
 }
 
-std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, bool editor )
+std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool editor )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
@@ -219,7 +222,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     listbox.RedrawBackground( Point( rt.x, rt.y ) );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
     listbox.SetAreaMaxItems( 11 );
     listbox.SetAreaItems( fheroes2::Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
     listbox.SetListContent( lists );
@@ -236,10 +239,16 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             if ( ( *it ).file == lastfile )
                 break;
 
-        if ( it != lists.end() )
+        if ( it != lists.end() ) {
             listbox.SetCurrent( std::distance( lists.begin(), it ) );
-        else
+        }
+        else {
+            if ( !editor ) {
+                filename.clear();
+                charInsertPos = 0;
+            }
             listbox.Unselect();
+        }
     }
 
     if ( !editor && lists.empty() )
@@ -270,7 +279,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
-                result = System::ConcatePath( Settings::GetSaveDir(), filename + ".sav" );
+                result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( listbox.isSelected() )
                 result = listbox.GetCurrent().file;
         }
@@ -286,7 +295,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 buttonOk.disable();
             cursor.Hide();
         }
-        else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() ) ) {
+        else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             if ( filename.empty() )
                 buttonOk.disable();
@@ -294,7 +303,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 buttonOk.enable();
             cursor.Hide();
         }
-        if ( le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
+        if ( !edit_mode && le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );

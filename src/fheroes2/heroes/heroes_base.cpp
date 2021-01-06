@@ -162,14 +162,14 @@ void HeroBase::LoadDefaults( int type, int race )
 
             Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() )
-                AppendSpellToBook( spell, true );
+                spell_book.Append( spell );
         } break;
 
         case HeroBase::HEROES: {
             Spell spell = Skill::Primary::GetInitialSpell( race );
             if ( spell.isValid() ) {
                 SpellBookActivate();
-                AppendSpellToBook( spell, true );
+                spell_book.Append( spell );
             }
         } break;
 

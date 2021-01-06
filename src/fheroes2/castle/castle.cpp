@@ -534,7 +534,7 @@ void Castle::ActionNewWeek( void )
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
                 if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
-                    if ( mons.isValid() && mons() == world.GetWeekType().GetMonster() ) {
+                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                         *dw += GetGrownWeekOf( mons );
                         break;
                     }
@@ -569,7 +569,7 @@ void Castle::ActionNewMonth( void )
         for ( u32 ii = 0; dwellings[ii]; ++ii )
             if ( NULL != ( dw = GetDwelling( dwellings[ii] ) ) ) {
                 const Monster mons( race, dwellings[ii] );
-                if ( mons.isValid() && mons() == world.GetWeekType().GetMonster() ) {
+                if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                     *dw += *dw * GetGrownMonthOf() / 100;
                     break;
                 }
@@ -1021,7 +1021,6 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         return false;
     }
 
-    Monster monster = troop;
     uint32_t count = troop.GetCount();
 
     // fix count
@@ -1029,17 +1028,17 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = monster.GetCost() * count;
+    const payment_t paymentCosts = troop.GetCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
         return false;
 
     // first: guard army join
-    if ( !GetArmy().JoinTroop( monster, count ) ) {
+    if ( !GetArmy().JoinTroop( troop ) ) {
         CastleHeroes heroes = world.GetHeroes( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( monster, count ) ) {
+        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( troop ) ) {
             if ( showDialog ) {
                 Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
             }
@@ -1050,7 +1049,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     kingdom.OddFundsResource( paymentCosts );
     dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << monster.GetMultiName() << "(" << count << ")" );
+    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
@@ -2268,9 +2267,9 @@ bool Castle::PredicateIsTown( const Castle * castle )
     return castle && !castle->isCastle();
 }
 
-bool Castle::PredicateIsBuildMarketplace( const Castle * castle )
+bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t building )
 {
-    return castle && castle->isBuild( BUILD_MARKETPLACE );
+    return castle && castle->isBuild( building );
 }
 
 std::string Castle::String( void ) const
@@ -2566,7 +2565,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
 
 Castle * VecCastles::Get( const Point & position ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [position]( const Castle * castle ) { return castle->isPosition( position ); } );
+    const_iterator it = std::find_if( begin(), end(), [&position]( const Castle * castle ) { return castle->isPosition( position ); } );
     return end() != it ? *it : NULL;
 }
 

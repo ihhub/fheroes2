@@ -117,18 +117,13 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
 void Interface::IconsBar::RedrawBackground( const Point & pos )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 1 );
-    fheroes2::Rect srcrt;
-    fheroes2::Point dstpt;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    srcrt.x = icnadv.width() - RADARWIDTH - BORDERWIDTH;
-    srcrt.y = RADARWIDTH + 2 * BORDERWIDTH;
-    srcrt.width = RADARWIDTH / 2;
-    srcrt.height = 32;
+    const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
+    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 );
+    fheroes2::Rect srcrt( icnadv.width() - RADARWIDTH - BORDERWIDTH, RADARWIDTH + 2 * BORDERWIDTH, RADARWIDTH / 2, 32 );
 
-    dstpt.x = pos.x;
-    dstpt.y = pos.y;
+    fheroes2::Point dstpt( pos.x, pos.y );
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 
     srcrt.y = srcrt.y + srcrt.height;
@@ -136,7 +131,7 @@ void Interface::IconsBar::RedrawBackground( const Point & pos )
     srcrt.height = 32;
 
     if ( 2 < iconsCount ) {
-        for ( u32 ii = 0; ii < iconsCount - 2; ++ii ) {
+        for ( uint32_t i = 0; i < iconsCount - 2; ++i ) {
             fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
             dstpt.y += srcrt.height;
         }
@@ -154,10 +149,10 @@ void Interface::IconsBar::RedrawBackground( const Point & pos )
 void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bool current )
 {
     if ( item && show ) {
-        RedrawCastleIcon( *item, ox, oy );
+        RedrawCastleIcon( *item, ox + 5, oy + 5 );
 
         if ( current )
-            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox, oy );
     }
 }
 
@@ -207,9 +202,9 @@ void Interface::CastleIcons::SetShow( bool f )
 
     if ( IconsBar::IsVisible() ) {
         if ( f )
-            GetSplitter().ShowCursor();
+            GetScrollbar().show();
         else
-            GetSplitter().HideCursor();
+            GetScrollbar().hide();
     }
 }
 
@@ -218,11 +213,11 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
     SetTopLeft( Point( px, py ) );
-    SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
+    SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
     SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( fheroes2::Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
+    SetAreaItems( fheroes2::Rect( px, py, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
 
     SetListContent( world.GetKingdom( Settings::Get().CurrentColor() ).GetCastles() );
@@ -233,10 +228,10 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
 void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bool current )
 {
     if ( item && show ) {
-        RedrawHeroesIcon( *item, ox, oy );
+        RedrawHeroesIcon( *item, ox + 5, oy + 5 );
 
         if ( current )
-            fheroes2::Blit( marker, fheroes2::Display::instance(), ox - 5, oy - 5 );
+            fheroes2::Blit( marker, fheroes2::Display::instance(), ox, oy );
     }
 }
 
@@ -293,9 +288,9 @@ void Interface::HeroesIcons::SetShow( bool f )
 
     if ( IconsBar::IsVisible() ) {
         if ( f )
-            GetSplitter().ShowCursor();
+            GetScrollbar().show();
         else
-            GetSplitter().HideCursor();
+            GetScrollbar().hide();
     }
 }
 
@@ -304,11 +299,11 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
     SetTopLeft( Point( px, py ) );
-    SetScrollSplitter( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 37 ) );
+    SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
     SetScrollButtonDn( icnscroll, 2, 3, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + iconsCount * ICONS_CURSOR_HEIGHT - 15 ) );
     SetAreaMaxItems( iconsCount );
-    SetAreaItems( fheroes2::Rect( px + 5, py + 5, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
+    SetAreaItems( fheroes2::Rect( px, py, ICONS_CURSOR_WIDTH, iconsCount * ICONS_CURSOR_HEIGHT ) );
     DisableHotkeys( true );
 
     SetListContent( world.GetKingdom( Settings::Get().CurrentColor() ).GetHeroes() );
@@ -419,16 +414,16 @@ void Interface::IconsPanel::QueueEventProcessing( void )
     }
 }
 
-void Interface::IconsPanel::Select( const Heroes & hr )
+void Interface::IconsPanel::Select( Heroes * const hr )
 {
     castleIcons.Unselect();
-    heroesIcons.SetCurrent( (const HEROES)&hr );
+    heroesIcons.SetCurrent( hr );
 }
 
-void Interface::IconsPanel::Select( const Castle & cs )
+void Interface::IconsPanel::Select( Castle * const cs )
 {
     heroesIcons.Unselect();
-    castleIcons.SetCurrent( (const CASTLE)&cs );
+    castleIcons.SetCurrent( cs );
 }
 
 void Interface::IconsPanel::ResetIcons( icons_t type )

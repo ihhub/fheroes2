@@ -27,14 +27,17 @@ bool Visit::isDayLife( const IndexObject & visit )
 {
     return MP2::isDayLife( visit.second );
 }
+
 bool Visit::isWeekLife( const IndexObject & visit )
 {
     return MP2::isWeekLife( visit.second );
 }
+
 bool Visit::isMonthLife( const IndexObject & visit )
 {
     return MP2::isMonthLife( visit.second );
 }
+
 bool Visit::isBattleLife( const IndexObject & visit )
 {
     return MP2::isBattleLife( visit.second );
