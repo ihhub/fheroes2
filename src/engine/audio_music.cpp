@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdlib>
 #include <iostream>
 
 #include "audio_mixer.h"
@@ -163,7 +164,7 @@ struct info_t
 
 int callbackPlayMusic( void * ptr )
 {
-    if ( ptr && System::ShellCommand( NULL ) ) {
+    if ( ptr && std::system( NULL ) ) {
         info_t * info = reinterpret_cast<info_t *>( ptr );
         std::ostringstream os;
         os << Music::command << " " << info->file;
@@ -171,7 +172,7 @@ int callbackPlayMusic( void * ptr )
         info->status |= Music::PLAY;
 
         do {
-            System::ShellCommand( os.str().c_str() );
+            std::system( os.str().c_str() );
             DELAY( 100 );
         } while ( info->status & Music::LOOP );
 
@@ -213,7 +214,7 @@ struct play_t : std::pair<SDL::Thread, info_t>
     {
         std::ostringstream os;
         os << System::GetEnvironment( "MUSIC_WRAPPER" ) << " " << action << " " << second.file;
-        System::ShellCommand( os.str().c_str() );
+        std::system( os.str().c_str() );
     }
 
     void Pause( void )

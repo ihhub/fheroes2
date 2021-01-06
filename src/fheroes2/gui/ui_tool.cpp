@@ -48,12 +48,11 @@ namespace
             const int32_t offsetX = 26;
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
-            time_t rawtime;
-            std::time( &rawtime );
-            // strtime format: Www Mmm dd hh:mm:ss yyyy
-            const char * timeFormat = std::ctime( &rawtime );
+            std::time_t rawtime = std::time( nullptr );
+            char mbstr[10] = {0};
+            std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", std::localtime( &rawtime ) );
 
-            std::string info( &timeFormat[11], 8 );
+            std::string info( mbstr );
 
             std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
             const std::chrono::duration<double> time = endTime - _startTime;

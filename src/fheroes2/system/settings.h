@@ -224,7 +224,6 @@ public:
     bool FullScreen( void ) const;
     bool KeepAspectRatio( void ) const;
     bool ChangeFullscreenResolution( void ) const;
-    bool QVGA( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -434,6 +433,7 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
+    int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;

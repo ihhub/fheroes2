@@ -914,6 +914,11 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
+
+            Mixer::Reduce();
+            castle->MageGuildEducateHero( hero );
+            Game::OpenCastleDialog( *castle );
+            Mixer::Enhance();
         }
     }
 }
@@ -2692,7 +2697,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
         if ( conditions ) {
             hero.GetKingdom().OddFundsResource( funds );
             hero.SetVisited( dst_index );
-            hero.IncreaseExperience( hero.GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+            hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
         }
     }
 

@@ -93,7 +93,7 @@ void Game::DialogPlayers( int color, std::string str )
     StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
-    fheroes2::Image sign = border;
+    fheroes2::Sprite sign = border;
 
     switch ( color ) {
     case Color::BLUE:
@@ -663,11 +663,6 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
         myKingdom.HeroesActionNewPosition();
 
-    // auto hide status
-    bool autohide_status = conf.QVGA() && conf.ShowStatus();
-    if ( autohide_status )
-        Game::AnimateResetDelay( Game::AUTOHIDE_STATUS_DELAY );
-
     int fastScrollRepeatCount = 0;
     const int fastScrollThreshold = 2;
     bool isOngoingFastScrollEvent = false;
@@ -688,11 +683,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 res = Game::QUITGAME;
                 break;
             }
-        }
-        // for pocketpc: auto hide status if start turn
-        if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
-            EventSwitchShowStatus();
-            autohide_status = false;
         }
 
         if ( !isOngoingFastScrollEvent )
@@ -1065,7 +1055,7 @@ int Interface::Basic::HumanTurn( bool isload )
     return res;
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
+void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
 {
     Heroes * from_hero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( index_maps );
@@ -1093,8 +1083,6 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         Castle * to_castle = world.GetCastle( tile.GetCenter() );
         if ( to_castle == NULL )
             break;
-
-        index_maps = to_castle->GetIndex();
 
         Castle * from_castle = GetFocusCastle();
         if ( !from_castle || from_castle != to_castle ) {

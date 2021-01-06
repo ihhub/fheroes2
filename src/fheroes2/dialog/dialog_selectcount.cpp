@@ -346,9 +346,9 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
-    fheroes2::Image sp3;
-    fheroes2::Image sp4;
-    fheroes2::Image sp5;
+    fheroes2::Sprite sp3;
+    fheroes2::Sprite sp4;
+    fheroes2::Sprite sp5;
 
     std::vector<fheroes2::Rect> vrts( 3 );
 

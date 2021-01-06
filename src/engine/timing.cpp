@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,41 +18,28 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2POSITION_H
-#define H2POSITION_H
+#include "timing.h"
 
-#include "gamedefs.h"
-
-class MapPosition
+namespace fheroes2
 {
-public:
-    MapPosition( const Point & = Point( -1, -1 ) );
+    Time::Time()
+        : _startTime( std::chrono::high_resolution_clock::now() )
+    {}
 
-    bool operator==( s32 ) const;
-
-    const Point & GetCenter() const
+    void Time::reset()
     {
-        return center;
+        _startTime = std::chrono::high_resolution_clock::now();
     }
 
-    s32 GetIndex( void ) const;
-
-    void SetCenter( const Point & );
-    void SetIndex( const int32_t index );
-
-    bool isPosition( const Point & pt ) const
+    double Time::get() const
     {
-        return pt == center;
+        const std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        return time.count();
     }
 
-protected:
-    friend StreamBase & operator<<( StreamBase &, const MapPosition & );
-    friend StreamBase & operator>>( StreamBase &, MapPosition & );
-
-    Point center;
-};
-
-StreamBase & operator<<( StreamBase &, const MapPosition & );
-StreamBase & operator>>( StreamBase &, MapPosition & );
-
-#endif
+    uint64_t Time::getMs() const
+    {
+        return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
+}

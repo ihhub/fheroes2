@@ -153,9 +153,9 @@ namespace fheroes2
             _image = fheroes2::Sprite( image, offsetX, offsetY );
         }
 
-        void setPosition( int32_t offsetX, int32_t offsetY )
+        void setPosition( int32_t x, int32_t y )
         {
-            _image.setPosition( offsetX, offsetY );
+            _image.setPosition( x, y );
         }
 
         // Default implementation of Cursor uses software emulation.
@@ -166,14 +166,21 @@ namespace fheroes2
             return _emulation;
         }
 
+        void registerUpdater( void ( *cursorUpdater )() )
+        {
+            _cursorUpdater = cursorUpdater;
+        }
+
     protected:
         Sprite _image;
         bool _emulation;
         bool _show;
+        void ( *_cursorUpdater )();
 
         Cursor()
             : _emulation( true )
             , _show( false )
+            , _cursorUpdater( nullptr )
         {}
     };
 

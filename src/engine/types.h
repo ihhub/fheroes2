@@ -42,18 +42,4 @@ typedef uint32_t u32;
 #define M_PI 3.14159265358979323846
 #endif
 
-#if defined __SYMBIAN32__
-namespace std
-{
-    int c_abs( int x );
-    float c_abs( float x );
-    double c_abs( double x );
-    int c_isspace( char c );
-
-#define isspace( c ) c_isspace( c )
-#define abs( x ) c_abs( x )
-}
-using namespace std;
-#endif
-
 #endif

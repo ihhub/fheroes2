@@ -134,6 +134,7 @@ namespace
         virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
+                SDL_ShowCursor( 0 );
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
@@ -173,6 +174,7 @@ namespace
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
             SDL_ShowCursor( 1 );
+            SDL_FreeSurface( surface );
 
             clear();
             std::swap( _cursor, tempCursor );
@@ -189,8 +191,10 @@ namespace
             }
             else {
                 _emulation = false;
-                update( _image, _image.x(), _image.y() );
             }
+
+            if ( _cursorUpdater != nullptr )
+                _cursorUpdater();
         }
 
         static RenderCursor * create()
@@ -547,13 +551,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_RENDERER_SOFTWARE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
             return SDL_RENDERER_ACCELERATED;
-#else
-            return SDL_RENDERER_ACCELERATED;
-#endif
         }
 
         void _createPalette()
@@ -817,9 +815,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_SWSURFACE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ ) || defined( ANDROID )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;
@@ -862,7 +858,9 @@ namespace fheroes2
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )
-    {}
+    {
+        disableTransformLayer();
+    }
 
     Display::~Display()
     {
@@ -901,7 +899,7 @@ namespace fheroes2
 
     void Display::render()
     {
-        if ( _cursor->isVisible() && !_cursor->_image.empty() ) {
+        if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
             const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
             Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );

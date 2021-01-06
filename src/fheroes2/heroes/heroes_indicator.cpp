@@ -216,14 +216,14 @@ void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
     if ( hero ) {
         const uint32_t experience = hero->GetExperience();
         StringReplace( descriptions, "%{exp1}", experience );
-        StringReplace( descriptions, "%{exp2}", hero->GetExperienceFromLevel( hero->GetLevelFromExperience( experience ) ) );
+        StringReplace( descriptions, "%{exp2}", Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( experience ) ) );
     }
 }
 
@@ -253,7 +253,7 @@ void ExperienceIndicator::QueueEventProcessing( void )
 SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _(

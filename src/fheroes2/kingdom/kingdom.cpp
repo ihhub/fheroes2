@@ -151,10 +151,11 @@ void Kingdom::ActionNewDay( void )
     if ( castles.empty() )
         --lost_town_days;
 
-    // skip incomes for first day
+    // castle New Day
+    std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+
+    // skip incomes for first day, and heroes New Day too because it would do nothing
     if ( 1 < world.CountDay() ) {
-        // castle New Day
-        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
 
         // heroes New Day
         std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewDay(); } );

@@ -24,7 +24,7 @@
 #define H2LOCALEVENT_H
 
 #include "rect.h"
-#include "thread.h"
+#include "timing.h"
 #include "types.h"
 
 enum KeySym
@@ -248,24 +248,19 @@ public:
     KeySym KeyValue( void ) const;
     int KeyMod( void ) const;
 
-#ifdef WITHOUT_MOUSE
-    void ToggleEmulateMouse( void );
-    void SetEmulateMouse( bool );
-    void SetEmulateMouseUpKey( KeySym );
-    void SetEmulateMouseDownKey( KeySym );
-    void SetEmulateMouseLeftKey( KeySym );
-    void SetEmulateMouseRightKey( KeySym );
-    void SetEmulateMouseStep( u8 );
-    void SetEmulatePressLeftKey( KeySym );
-    void SetEmulatePressRightKey( KeySym );
-    bool EmulateMouseAction( KeySym );
-#endif
-
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
     void PauseCycling();
     void ResumeCycling();
+
+    void OpenController();
+    void CloseController();
+
+    void SetControllerPointerSpeed( const int newSpeed )
+    {
+        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+    }
 
 private:
     LocalEvent();
@@ -277,6 +272,9 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+    void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
+    void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
+    void ProcessControllerAxisMotion();
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -322,7 +320,7 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    SDL::Time clock;
+    fheroes2::Time clock;
     u32 clock_delay;
     int loop_delay;
 
@@ -331,16 +329,31 @@ private:
     bool _isMusicPaused;
     bool _isSoundPaused;
 
-#ifdef WITHOUT_MOUSE
-    bool emulate_mouse;
-    KeySym emulate_mouse_up;
-    KeySym emulate_mouse_down;
-    KeySym emulate_mouse_left;
-    KeySym emulate_mouse_right;
-    int emulate_mouse_step;
-    KeySym emulate_press_left;
-    KeySym emulate_press_right;
+    enum
+    {
+        CONTROLLER_L_DEADZONE = 3000,
+        CONTROLLER_R_DEADZONE = 25000
+    };
+
+    // used to convert user-friendly pointer speed values into more useable ones
+    const double CONTROLLER_SPEED_MOD = 2000000.0;
+    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    SDL_GameController * _gameController = nullptr;
 #endif
+
+    fheroes2::Time _controllerTimer;
+    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
+    double _controllerPointerPosX = 0;
+    double _controllerPointerPosY = 0;
+    int16_t _controllerLeftXAxis = 0;
+    int16_t _controllerLeftYAxis = 0;
+    int16_t _controllerRightXAxis = 0;
+    int16_t _controllerRightYAxis = 0;
+    bool _controllerScrollActive = false;
+    bool _dpadScrollActive = false;
 };
 
 #endif

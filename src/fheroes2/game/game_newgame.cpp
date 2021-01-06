@@ -78,7 +78,7 @@ namespace
 
     std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames )
     {
-        const ListFiles files = Settings::Get().GetListFiles( "maps", ".h2c" );
+        const ListFiles files = Settings::GetListFiles( "maps", ".h2c" );
 
         std::vector<Maps::FileInfo> maps;
 
@@ -183,9 +183,9 @@ int Game::NewCampain( void )
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "INTRO.SMK" ), false );
-    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSEW.SMK" ), false );
-    const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
+    Video::ShowVideo( "INTRO.SMK", false );
+    Video::ShowVideo( "CHOOSEW.SMK", false );
+    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
     const bool goodCampaign = chosenCampaign == 0;
 
     AGG::PlayMusic( MUS::VICTORY );
