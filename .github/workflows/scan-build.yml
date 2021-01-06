@@ -27,3 +27,4 @@ jobs:
       env:
         WITH_SDL2: "ON"
         WITHOUT_XML: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
