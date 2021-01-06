@@ -378,7 +378,7 @@ Text::~Text()
 
 Text::Text( const Text & t )
 {
-    if ( t.message ) {
+    assert( t.message != nullptr );
 #ifdef WITH_TTF
     const TextUnicode * unicodeText = dynamic_cast<const TextUnicode *>( t.message );
     if ( unicodeText )
@@ -386,16 +386,6 @@ Text::Text( const Text & t )
     else
 #endif
         message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
-    }
-    else {
-        assert( 0 ); // we shouldn't even reach this code!
-#ifdef WITH_TTF
-        if ( Settings::Get().Unicode() )
-            message = new TextUnicode();
-        else
-#endif
-            message = new TextAscii();
-    }
 
     gw = t.gw;
     gh = t.gh;
@@ -403,9 +393,13 @@ Text::Text( const Text & t )
 
 Text & Text::operator=( const Text & t )
 {
+    if ( &t == this )
+        return *this;
+
+    assert( t.message != nullptr );
+
     delete message;
 
-    if ( t.message ) {
 #ifdef WITH_TTF
     const TextUnicode * unicodeText = dynamic_cast<const TextUnicode *>( t.message );
     if ( unicodeText )
@@ -413,16 +407,6 @@ Text & Text::operator=( const Text & t )
     else
 #endif
         message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
-    }
-    else {
-        assert( 0 ); // we shouldn't even reach this code!
-#ifdef WITH_TTF
-        if ( Settings::Get().Unicode() )
-            message = new TextUnicode();
-        else
-#endif
-            message = new TextAscii();
-    }
 
     gw = t.gw;
     gh = t.gh;
