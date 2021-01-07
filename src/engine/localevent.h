@@ -351,6 +351,7 @@ private:
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_GameController * _gameController = nullptr;
+    SDL_FingerID _firstFingerId;
 #endif
 
     fheroes2::Time _controllerTimer;
@@ -365,7 +366,6 @@ private:
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
-    SDL_FingerID _firstFingerId;
 
 #ifdef VITA
     bool dpadInputActive = false;

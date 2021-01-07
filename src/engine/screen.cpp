@@ -363,8 +363,9 @@ namespace
         virtual std::pair<int, int> GetScreenResolution() const override
         {
             std::pair<int, int> resolution;
+            int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
             SDL_DisplayMode displayMode;
-            SDL_GetWindowDisplayMode( _window, &displayMode );
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
             resolution.first = displayMode.w;
             resolution.second = displayMode.h;
             return resolution;
