@@ -341,18 +341,17 @@ private:
 
     // used to convert user-friendly pointer speed values into more useable ones
     const double CONTROLLER_SPEED_MOD = 2000000.0;
-    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
-    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    SDL_GameController * _gameController = nullptr;
-    SDL_FingerID _firstFingerId = 0;
-#endif
-
-    fheroes2::Time _controllerTimer;
     double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
     double _emulatedPointerPosX = 0;
     double _emulatedPointerPosY = 0;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
+    const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+
+    SDL_GameController * _gameController = nullptr;
+    SDL_FingerID _firstFingerId = 0;
+    fheroes2::Time _controllerTimer;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
@@ -361,6 +360,7 @@ private:
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
+#endif
 };
 
 #endif
