@@ -157,7 +157,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
     pt.y = box.GetArea().y + box.GetArea().height - 36;
 
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
     fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );

@@ -179,7 +179,7 @@ void Game::DisableChangeMusic( bool /*f*/ )
 
 void Game::Init( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // update all global defines
@@ -275,7 +275,7 @@ u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
 
 u32 Game::GetRating( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     u32 rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
@@ -315,7 +315,7 @@ u32 Game::GetRating( void )
 
 u32 Game::GetGameOverScores( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     u32 k_size = 0;
 

@@ -282,13 +282,13 @@ void Game::HotKeysDefaults( void )
 
 bool Game::HotKeyPressEvent( int evnt )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
 }
 
 bool Game::HotKeyHoldEvent( const int eventID )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 

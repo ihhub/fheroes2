@@ -130,7 +130,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
     }
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        Unit * enemy = *it;
+        const Unit * enemy = *it;
 
         if ( enemy && enemy->isValid() ) {
             const s32 score = enemy->GetScoreQuality( unit );
@@ -1092,7 +1092,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int mod = y % 2;
 
     auto validateAndInsert = [&result, &currentColor]( const int index ) {
-        Unit * unit = GetCell( index )->GetUnit();
+        const Unit * unit = GetCell( index )->GetUnit();
         if ( unit && currentColor != unit->GetArmyColor() )
             result.push_back( index );
     };

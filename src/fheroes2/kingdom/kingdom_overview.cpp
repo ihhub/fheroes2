@@ -385,7 +385,7 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor
             Dialog::QuickInfo( *row.castle );
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() )
                   & fheroes2::Point( cursor.x, cursor.y ) ) {
-            Heroes * hero = row.castle->GetHeroes().GuardFirst();
+            const Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero )
                 Dialog::QuickInfo( *hero );
         }

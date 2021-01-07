@@ -286,7 +286,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const int32_t path_size = cmd.GetValue();
 
     Battle::Unit * b = GetTroopUID( uid );
-    Cell * cell = Board::GetCell( dst );
+    const Cell * cell = Board::GetCell( dst );
 
     if ( b && b->isValid() && cell && cell->isPassable3( *b, false ) ) {
         Position pos1, pos2;
@@ -664,7 +664,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
                 Indexes sortedIds;
 
                 for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
-                    Unit * targetUnit = GetTroopBoard( nearestPosIds[monsterId] );
+                    const Unit * targetUnit = GetTroopBoard( nearestPosIds[monsterId] );
                     if ( targetUnit != NULL && ( targetUnit->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
                         sortedIds.push_back( nearestPosIds[monsterId] );
                     }

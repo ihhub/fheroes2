@@ -1076,7 +1076,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art1, Artifact & ar
 bool ArtifactsBar::ActionBarCursor( Artifact & art )
 {
     if ( isSelected() ) {
-        Artifact * art2 = GetSelectedItem();
+        const Artifact * art2 = GetSelectedItem();
 
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )

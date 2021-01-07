@@ -45,7 +45,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
 
-    Route::Path & path = hero->GetPath();
+    const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
@@ -69,7 +69,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
     if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
-    Route::Path & path = hero->GetPath();
+    const Route::Path & path = hero->GetPath();
 
     // show path
     if ( path.GetDestinedIndex() != destinationIdx && path.GetDestinationIndex() != destinationIdx ) {
