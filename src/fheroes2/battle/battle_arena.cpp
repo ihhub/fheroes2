@@ -496,7 +496,7 @@ void Battle::Arena::Turns( void )
         if ( army2->GetCommander() )
             result_game.exp1 += 500;
 
-        Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
+        const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
 }

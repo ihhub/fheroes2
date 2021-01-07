@@ -250,7 +250,7 @@ int main( int argc, char ** argv )
             }
         }
 #ifndef ANDROID
-        catch ( Error::Exception & ) {
+        catch ( const Error::Exception & ) {
             VERBOSE( std::endl << conf.String() );
         }
 #endif

@@ -494,7 +494,7 @@ int Castle::OpenDialog( bool readonly )
                         }
 
                         if ( noFreeSpaceForMagicBook ) {
-                            Heroes * hero = heroes.Guard();
+                            const Heroes * hero = heroes.Guard();
                             if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
                                 hero = heroes.Guest();
 

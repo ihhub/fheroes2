@@ -157,7 +157,7 @@ namespace Battle
 void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     // Speed setting
     const Text speedTitle( _( "Speed" ), Font::SMALL );
@@ -320,7 +320,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     const Troops killed1 = army1->GetKilledTroops();
     const Troops killed2 = army2->GetKilledTroops();
@@ -532,7 +532,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     cursor.SetThemes( Cursor::POINTER );
 
@@ -678,7 +678,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );

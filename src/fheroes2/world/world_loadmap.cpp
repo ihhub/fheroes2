@@ -394,7 +394,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
 
         if ( !jail ) {
             colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-            Kingdom & kingdom = world.GetKingdom( colorRace.first );
+            const Kingdom & kingdom = world.GetKingdom( colorRace.first );
 
             if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                 colorRace.second = kingdom.GetRace();
@@ -462,7 +462,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
     riddle.valid = true;
 
-    TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
+    const TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
     if ( xml_answers ) {
         TiXmlElement * xml_answer = doc.FirstChildElement( "answer" );
         for ( ; xml_answer; xml_answer = xml_answer->NextSiblingElement( "answer" ) )
@@ -474,7 +474,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     if ( xml_resources )
         *xml_resources >> riddle.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         riddle.message = xml_msg->GetText();
 
@@ -504,7 +504,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
     if ( xml_resources )
         *xml_resources >> event.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -529,7 +529,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventDate & event )
     if ( xml_resources )
         *xml_resources >> event.resource;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -1323,7 +1323,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-                    Kingdom & kingdom = GetKingdom( colorRace.first );
+                    const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                         colorRace.second = kingdom.GetRace();
@@ -1507,7 +1507,7 @@ void World::ProcessNewMap()
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & Settings::Get().ConditionWins() ) {
-        Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
+        const Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
     if ( GameOver::LOSS_HERO & Settings::Get().ConditionLoss() ) {

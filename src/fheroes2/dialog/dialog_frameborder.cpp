@@ -44,7 +44,7 @@ Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
     : restorer( fheroes2::Display::instance() )
     , border( BORDERWIDTH )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
     const Rect & currentArea = GetRect();
     RenderOther( sf, fheroes2::Rect( currentArea.x, currentArea.y, currentArea.w, currentArea.h ) );
@@ -54,7 +54,7 @@ Dialog::FrameBorder::FrameBorder( const Size & sz )
     : restorer( fheroes2::Display::instance() )
     , border( BORDERWIDTH )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
     RenderRegular( GetRect() );
 }

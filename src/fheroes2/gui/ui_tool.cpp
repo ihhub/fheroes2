@@ -213,7 +213,7 @@ namespace fheroes2
 
             uint8_t * outImageY = outImageX + offsetOut;
             uint8_t * outTransformY = outTransformX + offsetOut;
-            uint8_t * outImageYEnd = outImageX + offsetOutEnd;
+            const uint8_t * outImageYEnd = outImageX + offsetOutEnd;
 
             const int32_t offsetIn = offsetY >= 0 ? 0 : -offsetY * width;
 

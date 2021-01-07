@@ -879,7 +879,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     Cursor::Get().Hide();
 
     // border
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     _interfacePosition = Rect( ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
                                _surfaceInnerArea.w, _surfaceInnerArea.h );
@@ -1930,7 +1930,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     if ( le.KeyPress() ) {
         // skip
@@ -2678,7 +2678,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             }
         }
         else {
-            TargetInfo & target = targets.front();
+            const TargetInfo & target = targets.front();
             StringReplace( msg, "%{damage}", target.damage );
 
             if ( target.killed ) {

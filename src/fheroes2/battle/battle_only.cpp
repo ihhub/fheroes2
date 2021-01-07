@@ -150,7 +150,7 @@ Recruits Battle::Only::GetHeroesFromStreamBuf( StreamBuf & msg )
 bool Battle::Only::ChangeSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
