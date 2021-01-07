@@ -348,6 +348,25 @@ namespace
             SDL_FreeSurface( surface );
         }
 
+        virtual fheroes2::Rect getWindowDestRect() const override
+        {
+            fheroes2::Rect rect;
+            SDL_GetWindowPosition( _window, &rect.x, &rect.y );
+            SDL_GetWindowSize( _window, &rect.width, &rect.height );
+            return rect;
+        }
+
+        virtual std::pair<int, int> getScreenResolution() const override
+        {
+            std::pair<int, int> resolution;
+            int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            SDL_DisplayMode displayMode;
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
+            resolution.first = displayMode.w;
+            resolution.second = displayMode.h;
+            return resolution;
+        }
+
         static RenderEngine * create()
         {
             return new RenderEngine;

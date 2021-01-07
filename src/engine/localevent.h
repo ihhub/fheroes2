@@ -254,8 +254,11 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void OpenController();
     void CloseController();
+    void OpenTouchpad();
+#endif
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
@@ -275,6 +278,7 @@ private:
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
+    void HandleTouchEvent( const SDL_TouchFingerEvent & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -342,6 +346,7 @@ private:
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_GameController * _gameController = nullptr;
+    SDL_FingerID _firstFingerId = 0;
 #endif
 
     fheroes2::Time _controllerTimer;
@@ -354,6 +359,8 @@ private:
     int16_t _controllerRightYAxis = 0;
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
+    bool _touchpadAvailable = false;
+    int16_t _numTouches = 0;
 };
 
 #endif

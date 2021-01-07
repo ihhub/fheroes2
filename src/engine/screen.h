@@ -52,6 +52,16 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
+        virtual fheroes2::Rect getWindowDestRect() const
+        {
+            return fheroes2::Rect();
+        }
+
+        virtual std::pair<int, int> getScreenResolution() const
+        {
+            return std::pair<int, int>();
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

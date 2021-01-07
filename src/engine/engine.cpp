@@ -85,6 +85,7 @@ void SDL::Quit( void )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) )
         LocalEvent::Get().CloseController();
+    LocalEvent::Get().OpenTouchpad();
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
         Mixer::Quit();
