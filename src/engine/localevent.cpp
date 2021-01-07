@@ -726,11 +726,11 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         SetModes( MOUSE_MOTION );
 
-        _controllerPointerPosX = ((screenResolution.first * event.x) - (screenResolution.first - windowRect.width - windowRect.x)) * (static_cast<double>(gameSurfaceRes.first) / windowRect.width);
-	    _controllerPointerPosY = ((screenResolution.second * event.y) - (screenResolution.second - windowRect.height - windowRect.y)) * (static_cast<double>(gameSurfaceRes.second) / windowRect.height);
+        _emulatedPointerPosX = ((screenResolution.first * event.x) - (screenResolution.first - windowRect.width - windowRect.x)) * (static_cast<double>(gameSurfaceRes.first) / windowRect.width);
+        _emulatedPointerPosY = ((screenResolution.second * event.y) - (screenResolution.second - windowRect.height - windowRect.y)) * (static_cast<double>(gameSurfaceRes.second) / windowRect.height);
 
-        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
-        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
+        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -855,23 +855,23 @@ void LocalEvent::ProcessControllerAxisMotion()
         const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
         const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
-        _controllerPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
-        _controllerPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( _controllerPointerPosX < 0 )
-            _controllerPointerPosX = 0;
-        else if ( _controllerPointerPosX > display.width() )
-            _controllerPointerPosX = display.width();
+        if ( _emulatedPointerPosX < 0 )
+            _emulatedPointerPosX = 0;
+        else if ( _emulatedPointerPosX > display.width() )
+            _emulatedPointerPosX = display.width();
 
-        if ( _controllerPointerPosY < 0 )
-            _controllerPointerPosY = 0;
-        else if ( _controllerPointerPosY > display.height() )
-            _controllerPointerPosY = display.height();
+        if ( _emulatedPointerPosY < 0 )
+            _emulatedPointerPosY = 0;
+        else if ( _emulatedPointerPosY > display.height() )
+            _emulatedPointerPosY = display.height();
 
-        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
-        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
+        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -964,8 +964,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     SetModes( MOUSE_MOTION );
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
-    _controllerPointerPosX = mouse_cu.x;
-    _controllerPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = mouse_cu.x;
+    _emulatedPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 }
@@ -977,8 +977,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
-    _controllerPointerPosX = mouse_cu.x;
-    _controllerPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = mouse_cu.x;
+    _emulatedPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 
