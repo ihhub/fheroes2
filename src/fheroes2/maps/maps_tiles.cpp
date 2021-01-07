@@ -1602,7 +1602,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( visibleTileROI & mp ) ) {
+    if ( visibleTileROI & mp ) {
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             const uint8_t object = it->object;

@@ -82,7 +82,7 @@ namespace MUS
                   {VICTORY, "Scenario Victory"},
                   {UNKNOWN, "UNKNOWN"}};
 
-    const std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
+    std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
     {
         std::stringstream sstream;
         if ( musicType == MAPPED ) {

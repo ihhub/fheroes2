@@ -384,7 +384,7 @@ void Heroes::Action( s32 dst_index )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
 
     if ( MP2::isActionObject( object, isShipMaster() ) ) {
-        Interface::Basic::Get().GetStatusWindow().ResetTimer();
+        Interface::StatusWindow::ResetTimer();
         SetModes( ACTION );
     }
 
@@ -2117,7 +2117,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             // update abandone mine
             if ( obj == MP2::OBJ_ABANDONEDMINE ) {
-                tile.UpdateAbandoneMineSprite( tile );
+                Maps::Tiles::UpdateAbandoneMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
             }
 

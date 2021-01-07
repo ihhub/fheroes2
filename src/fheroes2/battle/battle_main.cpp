@@ -193,7 +193,7 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
             art = Artifact::UNKNOWN;
         }
         else if ( art() != Artifact::UNKNOWN && art() != Artifact::MAGIC_BOOK ) {
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
+            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
             if ( bag1.end() != it ) {
                 *it = art;
             }

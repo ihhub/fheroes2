@@ -187,7 +187,7 @@ void Game::Init( void )
         LoadExternalResource();
 
     // default events
-    le.SetStateDefaults();
+    LocalEvent::SetStateDefaults();
 
     // set global events
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );

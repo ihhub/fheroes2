@@ -736,7 +736,7 @@ DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
     , backsf( sz.w, sz.h )
 {
     for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
-        content.push_back( DwellingItem( castle, dw ) );
+        content.emplace_back( castle, dw );
 
     SetContent( content );
 

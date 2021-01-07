@@ -70,7 +70,7 @@ namespace Campaign
         , _currentScenarioBonus()
     {}
 
-    const std::string ScenarioBonusData::ToString() const
+    std::string ScenarioBonusData::ToString() const
     {
         std::string objectName;
 
