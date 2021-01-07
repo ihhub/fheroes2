@@ -540,24 +540,3 @@ void Interface::Basic::EventKeyArrowPress( int dir )
             break;
         }
 }
-
-void Interface::Basic::EventDebug1( void )
-{
-    VERBOSE( "" );
-    /*
-        Heroes* hero = GetFocusHeroes();
-
-        if(hero)
-        {
-        int level = Heroes::GetLevelFromExperience(hero->GetExperience());
-        u32 exp = Heroes::GetExperienceFromLevel(level + 1);
-
-        hero->IncreaseExperience(exp - hero->GetExperience() + 100);
-        }
-    */
-}
-
-void Interface::Basic::EventDebug2( void )
-{
-    VERBOSE( "" );
-}
