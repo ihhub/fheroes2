@@ -14,6 +14,7 @@ if not exist "..\sdl2\lib"     mkdir "..\sdl2\lib"
 
 xcopy /Y /s /Q "sdl\SDL-1.2.15\include"  "..\sdl\include"
 xcopy /Y /s /Q "sdl\SDL-1.2.15\lib"      "..\sdl\lib"
+
 xcopy /Y /s /Q "sdl\SDL2-2.0.12\include" "..\sdl2\include"
 xcopy /Y /s /Q "sdl\SDL2-2.0.12\lib"     "..\sdl2\lib"
 
@@ -28,6 +29,7 @@ xcopy /Y /s /Q "sdl_mixer\SDL_mixer-1.2.12\lib\x64\SDL_mixer.lib"       "..\sdl\
 xcopy /Y /s /Q "sdl_mixer\SDL_mixer-1.2.12\lib\x64\libogg-0.dll"        "..\sdl\lib\x64"
 xcopy /Y /s /Q "sdl_mixer\SDL_mixer-1.2.12\lib\x64\libvorbis-0.dll"     "..\sdl\lib\x64"
 xcopy /Y /s /Q "sdl_mixer\SDL_mixer-1.2.12\lib\x64\libvorbisfile-3.dll" "..\sdl\lib\x64"
+
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\include"                     "..\sdl2\include"
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x86\SDL2_mixer.dll"      "..\sdl2\lib\x86"
 xcopy /Y /s /Q "sdl_mixer\SDL2_mixer-2.0.4\lib\x86\SDL2_mixer.lib"      "..\sdl2\lib\x86"
@@ -49,6 +51,22 @@ xcopy /Y /s /Q "sdl_ttf\SDL2_ttf-2.0.15\lib\x64\libfreetype-6.dll" "..\sdl2\lib\
 xcopy /Y /s /Q "sdl_ttf\SDL2_ttf-2.0.15\lib\x64\SDL2_ttf.dll"      "..\sdl2\lib\x64"
 xcopy /Y /s /Q "sdl_ttf\SDL2_ttf-2.0.15\lib\x64\zlib1.dll"         "..\sdl2\lib\x64"
 xcopy /Y /s /Q "sdl_ttf\SDL2_ttf-2.0.15\lib\x64\SDL2_ttf.lib"      "..\sdl2\lib\x64"
+
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\include"                 "..\sdl2\include"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\libjpeg-9.dll"   "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\libpng16-16.dll" "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\libtiff-5.dll"   "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\libwebp-7.dll"   "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\SDL2_image.dll"  "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\SDL2_image.lib"  "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x86\zlib1.dll"       "..\sdl2\lib\x86"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\libjpeg-9.dll"   "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\libpng16-16.dll" "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\libtiff-5.dll"   "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\libwebp-7.dll"   "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\SDL2_image.dll"  "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\SDL2_image.lib"  "..\sdl2\lib\x64"
+xcopy /Y /s /Q "sdl_image\SDL2_image-2.0.5\lib\x64\zlib1.dll"       "..\sdl2\lib\x64"
 
 xcopy /Y /s /Q "zlib\include" "..\zlib\include"
 xcopy /Y /s /Q "zlib\lib\x86" "..\zlib\lib\x86"
