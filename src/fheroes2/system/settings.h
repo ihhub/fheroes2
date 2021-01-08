@@ -342,6 +342,8 @@ public:
     void SetCurrentCampaignScenarioID( const int scenarioID );
     void SetCurrentCampaignID( const int campaignID );
     void AddCurrentCampaignMapToFinished();
+    int GetCampaignID() const;
+    int GetLastCompletedCampaignScenarioID() const;
 
     Players & GetPlayers( void );
     const Players & GetPlayers( void ) const;

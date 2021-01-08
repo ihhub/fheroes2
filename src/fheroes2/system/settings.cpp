@@ -1323,6 +1323,16 @@ void Settings::AddCurrentCampaignMapToFinished()
     campaignData.addCurrentMapToFinished();
 }
 
+int Settings::GetLastCompletedCampaignScenarioID() const
+{
+    return campaignData.getLastCompletedScenarioID();
+}
+
+int Settings::GetCampaignID() const
+{
+    return campaignData.getCampaignID();
+}
+
 const Players & Settings::GetPlayers( void ) const
 {
     return players;
