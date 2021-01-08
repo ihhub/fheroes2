@@ -229,12 +229,15 @@ namespace Game
     int LoadHotseat();
     int LoadNetwork();
     int ScenarioInfo( void );
+    int SelectCampaignScenario();
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
+
+    bool IsCampaignPresent();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
