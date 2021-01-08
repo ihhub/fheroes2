@@ -202,8 +202,8 @@ int main( int argc, char ** argv )
                 case Game::NEWSTANDARD:
                     rs = Game::NewStandard();
                     break;
-                case Game::NEWCAMPAIN:
-                    rs = Game::NewCampain();
+                case Game::NEWCAMPAIGN:
+                    rs = Game::NewCampaign();
                     break;
                 case Game::NEWMULTI:
                     rs = Game::NewMulti();

@@ -163,7 +163,7 @@ int Game::NewHotSeat( void )
     return Game::MAINMENU;
 }
 
-int Game::NewCampain( void )
+int Game::NewCampaign()
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -506,8 +506,8 @@ int Game::NewGame( void )
 
         if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame.area() ) )
             return NEWSTANDARD;
-        if ( buttonCampainGame.isEnabled() && ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) || le.MouseClickLeft( buttonCampainGame.area() ) ) )
-            return NEWCAMPAIN;
+        if ( buttonCampainGame.isEnabled() && ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) || le.MouseClickLeft( buttonCampainGame.area() ) ) )
+            return NEWCAMPAIGN;
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
             return NEWMULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
