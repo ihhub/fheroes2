@@ -376,7 +376,7 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     return sf;
 }
 
-fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
+fheroes2::Image DrawHexagonShadow( const uint8_t alphaValue )
 {
     const int l = 13;
     const int w = CELLW;
@@ -384,14 +384,14 @@ fheroes2::Image DrawHexagonShadow( uint8_t alphaValue )
 
     fheroes2::Image sf( w, h );
     sf.reset();
-    Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
+    fheroes2::Rect rt( 0, l - 1, w + 1, 2 * l + 3 );
     for ( int i = 0; i < w / 2; i += 2 ) {
         --rt.y;
-        rt.h += 2;
+        rt.height += 2;
         rt.x += 2;
-        rt.w -= 4;
-        for ( int x = 0; x < rt.w; ++x ) {
-            for ( int y = 0; y < rt.h; ++y ) {
+        rt.width -= 4;
+        for ( int x = 0; x < rt.width; ++x ) {
+            for ( int y = 0; y < rt.height; ++y ) {
                 fheroes2::SetTransformPixel( sf, rt.x + x, rt.y + y, alphaValue );
             }
         }
@@ -879,7 +879,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     Cursor::Get().Hide();
 
     // border
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
 
     _interfacePosition = Rect( ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
                                _surfaceInnerArea.w, _surfaceInnerArea.h );
@@ -950,7 +950,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( ( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) ) );
+    sf_hexagon = DrawHexagon( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) );
     sf_cursor = DrawHexagonShadow( 2 );
     sf_shadow = DrawHexagonShadow( 4 );
 
@@ -1930,7 +1930,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     if ( le.KeyPress() ) {
         // skip
@@ -2678,7 +2678,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
             }
         }
         else {
-            TargetInfo & target = targets.front();
+            const TargetInfo & target = targets.front();
             StringReplace( msg, "%{damage}", target.damage );
 
             if ( target.killed ) {
@@ -4033,12 +4033,14 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
-            for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
-                const int idX = frame + x * 3;
-                const int offsetX = x * spriteSize;
-                for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
-                    const fheroes2::Sprite & sprite = spriteCache[( idX + y ) % icnCount];
-                    fheroes2::Blit( sprite, _mainSurface, offsetX + sprite.x(), y * spriteSize + sprite.y() );
+            if ( icnCount > 0 ) {
+                for ( int x = 0; x * spriteSize < _surfaceInnerArea.w; ++x ) {
+                    const int idX = frame + x * 3;
+                    const int offsetX = x * spriteSize;
+                    for ( int y = 0; y * spriteSize < _surfaceInnerArea.h; ++y ) {
+                        const fheroes2::Sprite & sprite = spriteCache[( idX + y ) % icnCount];
+                        fheroes2::Blit( sprite, _mainSurface, offsetX + sprite.x(), y * spriteSize + sprite.y() );
+                    }
                 }
             }
 

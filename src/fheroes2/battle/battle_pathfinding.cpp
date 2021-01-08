@@ -162,7 +162,7 @@ namespace Battle
                 if ( it->isPassable1( true ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
-                    node._cost = board.GetDistance( headIdx, idx );
+                    node._cost = Battle::Board::GetDistance( headIdx, idx );
                 }
                 else {
                     node._isOpen = false;
@@ -174,9 +174,9 @@ namespace Battle
                     const int unitIdx = it->GetIndex();
                     ArenaNode & unitNode = _cache[unitIdx];
 
-                    const Indexes & around = board.GetAroundIndexes( unitIdx );
+                    const Indexes & around = Battle::Board::GetAroundIndexes( unitIdx );
                     for ( const int cell : around ) {
-                        const uint32_t flyingDist = static_cast<uint32_t>( board.GetDistance( headIdx, cell ) );
+                        const uint32_t flyingDist = static_cast<uint32_t>( Battle::Board::GetDistance( headIdx, cell ) );
                         if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = cell;

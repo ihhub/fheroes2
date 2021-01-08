@@ -47,7 +47,7 @@ namespace AI
         const Maps::Tiles & tile = world.GetTiles( index );
 
         if ( objectID == MP2::OBJ_CASTLE ) {
-            Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( !castle )
                 return valueToIgnore;
 

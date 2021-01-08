@@ -40,7 +40,6 @@ namespace Game
     void KeyboardGlobalFilter( int, int );
 
     KeySym key_events[EVENT_LAST];
-    int key_groups = 0;
 }
 
 const char * Game::EventsName( int evnt )
@@ -88,10 +87,6 @@ const char * Game::EventsName( int evnt )
         return "system fullscreen";
     case EVENT_SYSTEM_SCREENSHOT:
         return "system screenshot";
-    case EVENT_SYSTEM_DEBUG1:
-        return "system debug1";
-    case EVENT_SYSTEM_DEBUG2:
-        return "system debug2";
 
     case EVENT_SLEEPHERO:
         return "sleep hero";
@@ -173,8 +168,6 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
-    case EVENT_SWITCHGROUP:
-        return "switch group";
     default:
         break;
     }
@@ -210,8 +203,6 @@ void Game::HotKeysDefaults( void )
     // system
     key_events[EVENT_SYSTEM_FULLSCREEN] = KEY_F4;
     key_events[EVENT_SYSTEM_SCREENSHOT] = KEY_PRINT;
-    key_events[EVENT_SYSTEM_DEBUG1] = KEY_NONE;
-    key_events[EVENT_SYSTEM_DEBUG2] = KEY_NONE;
 
     // battle
     key_events[EVENT_BATTLE_CASTSPELL] = KEY_c;
@@ -268,8 +259,6 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_SHOWSTATUS] = KEY_4;
     key_events[EVENT_SHOWICONS] = KEY_5;
     // system:
-    // switch group
-    // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
     // gamepad scroll bindings
     key_events[EVENT_SCROLLLEFT] = KEY_KP4;
     key_events[EVENT_SCROLLRIGHT] = KEY_KP6;
@@ -282,13 +271,13 @@ void Game::HotKeysDefaults( void )
 
 bool Game::HotKeyPressEvent( int evnt )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
 }
 
 bool Game::HotKeyHoldEvent( const int eventID )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
@@ -336,14 +325,4 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 //         if ( display.Save( stream.str().c_str() ) )
 //             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
 //     }
-    else
-        // reserved
-        if ( sym == key_events[EVENT_SWITCHGROUP] )
-        ++key_groups;
-    else if ( sym == key_events[EVENT_SYSTEM_DEBUG1] ) {
-        Interface::Basic::Get().EventDebug1();
-    }
-    else if ( sym == key_events[EVENT_SYSTEM_DEBUG2] ) {
-        Interface::Basic::Get().EventDebug2();
-    }
 }

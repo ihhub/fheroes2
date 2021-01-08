@@ -955,7 +955,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
     default:
         if ( isCaptureObject ) {
             CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
-            Troop & troop = co.GetTroop();
+            const Troop & troop = co.GetTroop();
 
             switch ( co.GetSplit() ) {
             case 3:
@@ -986,7 +986,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            MapMonster * map_troop = NULL;
+            const MapMonster * map_troop = NULL;
             if ( tile.GetObject() == MP2::OBJ_MONSTER )
                 map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
@@ -1443,7 +1443,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    MapMonster * map_troop = NULL;
+    const MapMonster * map_troop = NULL;
     if ( tile.GetObject() == MP2::OBJ_MONSTER )
         map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 

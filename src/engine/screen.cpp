@@ -489,7 +489,19 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
+            bool isPaletteModeSupported = false;
+
+            SDL_RendererInfo rendererInfo;
+            if ( SDL_GetRenderDriverInfo( 0, &rendererInfo ) == 0 ) {
+                for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
+                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        isPaletteModeSupported = true;
+                        break;
+                    }
+                }
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
                 return false;

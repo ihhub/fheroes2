@@ -157,7 +157,7 @@ namespace Battle
 void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     // Speed setting
     const Text speedTitle( _( "Speed" ), Font::SMALL );
@@ -320,7 +320,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     const Troops killed1 = army1->GetKilledTroops();
     const Troops killed2 = army2->GetKilledTroops();
@@ -460,6 +460,10 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : NULL ) );
         HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : NULL ) );
 
+        // Can't transfer artifacts
+        if ( hero1 == nullptr || hero2 == nullptr )
+            return;
+
         BagArtifacts & bag1 = hero1->GetBagArtifacts();
         BagArtifacts & bag2 = hero2->GetBagArtifacts();
 
@@ -475,7 +479,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 continue;
             }
 
-            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
+            BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( Artifact::UNKNOWN ) );
             if ( bag1.end() != it ) {
                 *it = art;
 
@@ -488,7 +492,6 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                 TextBox box( _( "You have captured an enemy artifact!" ), Font::YELLOW_BIG, bsTextWidth );
                 box.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + bsTextYOffset );
-                messageYOffset = bsTextIndent;
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
@@ -529,7 +532,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     cursor.SetThemes( Cursor::POINTER );
 
@@ -675,7 +678,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );

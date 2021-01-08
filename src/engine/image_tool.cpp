@@ -24,9 +24,13 @@
 #include <SDL_version.h>
 #include <SDL_video.h>
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_image.h>
+#endif
+
 namespace
 {
-    const std::vector<uint8_t> PALPAlette()
+    std::vector<uint8_t> PALPAlette()
     {
         std::vector<uint8_t> palette;
         if ( palette.empty() ) {
@@ -72,7 +76,19 @@ namespace
             }
         }
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        int res = 0;
+        const std::string pngExtension(".png");
+        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) ) {
+            res = IMG_SavePNG( surface, path.c_str() );
+        }
+        else {
+            res = SDL_SaveBMP( surface, path.c_str() );
+        }
+#else
         const int res = SDL_SaveBMP( surface, path.c_str() );
+#endif
+
         SDL_FreeSurface( surface );
 
         return res == 0;

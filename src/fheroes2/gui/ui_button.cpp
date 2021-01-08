@@ -419,7 +419,7 @@ namespace fheroes2
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
             if ( sender == _button[i] ) {
-                ButtonBase * button = _button[i];
+                const ButtonBase * button = _button[i];
                 if ( button->isPressed() ) {
                     unsubscribeAll();
 

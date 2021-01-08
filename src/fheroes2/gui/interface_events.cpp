@@ -45,7 +45,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
     hero->ResetModes( Heroes::SLEEPER );
     hero->SetMove( false );
 
-    Route::Path & path = hero->GetPath();
+    const Route::Path & path = hero->GetPath();
     if ( destinationIdx == -1 )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
@@ -54,8 +54,12 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
-        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( le.GetMouseCursor() );
-        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
+        const Point mousePos = le.GetMouseCursor();
+        if ( gameArea.GetROI() & mousePos ) {
+            const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
+            Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
+        }
+
         Interface::Basic::Get().buttonsArea.Redraw();
     }
 }
@@ -65,7 +69,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
     if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
-    Route::Path & path = hero->GetPath();
+    const Route::Path & path = hero->GetPath();
 
     // show path
     if ( path.GetDestinedIndex() != destinationIdx && path.GetDestinationIndex() != destinationIdx ) {
@@ -535,25 +539,4 @@ void Interface::Basic::EventKeyArrowPress( int dir )
         default:
             break;
         }
-}
-
-void Interface::Basic::EventDebug1( void )
-{
-    VERBOSE( "" );
-    /*
-        Heroes* hero = GetFocusHeroes();
-
-        if(hero)
-        {
-        int level = hero->GetLevelFromExperience(hero->GetExperience());
-        u32 exp = hero->GetExperienceFromLevel(level + 1);
-
-        hero->IncreaseExperience(exp - hero->GetExperience() + 100);
-        }
-    */
-}
-
-void Interface::Basic::EventDebug2( void )
-{
-    VERBOSE( "" );
 }

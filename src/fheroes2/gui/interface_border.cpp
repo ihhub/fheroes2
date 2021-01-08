@@ -194,7 +194,7 @@ void Interface::BorderWindow::SetPosition( s32 px, s32 py, u32 pw, u32 ph )
 void Interface::BorderWindow::SetPosition( s32 px, s32 py )
 {
     if ( Settings::Get().ExtGameHideInterface() ) {
-        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( px + area.w < 0 )
             px = 0;
@@ -220,7 +220,7 @@ void Interface::BorderWindow::SetPosition( s32 px, s32 py )
 
 bool Interface::BorderWindow::QueueEventProcessing( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     if ( conf.ExtGameHideInterface() && le.MousePressLeft( border.GetTop() ) ) {

@@ -204,40 +204,44 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
+    const int iconsH1XOffset = 34;
+    const int iconsH2XOffset = 566;
+    const int portraitYOffset = 72;
+
     // portrait
     dst_pt.x = cur_pt.x + 93;
-    dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait1 = GetPortrait( PORT_BIG );
+    dst_pt.y = cur_pt.y + portraitYOffset;
+    const fheroes2::Sprite & portrait1 = GetPortrait( PORT_BIG );
     fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 445;
-    dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait2 = heroes2.GetPortrait( PORT_BIG );
+    dst_pt.y = cur_pt.y + portraitYOffset;
+    const fheroes2::Sprite & portrait2 = heroes2.GetPortrait( PORT_BIG );
     fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
     heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
-    dst_pt.x = cur_pt.x + 34;
-    dst_pt.y = cur_pt.y + 75;
     MoraleIndicator moraleIndicator1( this );
+    dst_pt.x = cur_pt.x + iconsH1XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().h / 3;
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
-    dst_pt.x = cur_pt.x + 34;
-    dst_pt.y = cur_pt.y + 115;
     LuckIndicator luckIndicator1( this );
+    dst_pt.x = cur_pt.x + iconsH1XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().h * 4 / 3;
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
-    dst_pt.x = cur_pt.x + 566;
-    dst_pt.y = cur_pt.y + 75;
     MoraleIndicator moraleIndicator2( &heroes2 );
+    dst_pt.x = cur_pt.x + iconsH2XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().h / 3;
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
-    dst_pt.x = cur_pt.x + 566;
-    dst_pt.y = cur_pt.y + 115;
     LuckIndicator luckIndicator2( &heroes2 );
+    dst_pt.x = cur_pt.x + iconsH2XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().h * 4 / 3;
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 

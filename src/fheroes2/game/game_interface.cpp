@@ -48,7 +48,7 @@ Interface::Basic::Basic()
 void Interface::Basic::Reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get().Get();
+    const Settings & conf = Settings::Get();
 
     SetHideInterface( conf.ExtGameHideInterface() );
 
@@ -91,7 +91,7 @@ Interface::ControlPanel & Interface::Basic::GetControlPanel( void )
 void Interface::Basic::SetHideInterface( bool f )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get().Get();
+    Settings & conf = Settings::Get();
     const u32 px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     conf.SetHideInterface( f );
@@ -169,7 +169,7 @@ void Interface::Basic::SetRedraw( int f )
 void Interface::Basic::Redraw( int force )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     const int combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
@@ -207,7 +207,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 

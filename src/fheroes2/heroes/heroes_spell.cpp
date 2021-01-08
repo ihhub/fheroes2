@@ -589,7 +589,7 @@ bool ActionSpellVisions( Heroes & hero )
     if ( monsters.size() ) {
         for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
             const Maps::Tiles & tile = world.GetTiles( *it );
-            MapMonster * map_troop = NULL;
+            const MapMonster * map_troop = NULL;
             if ( tile.GetObject() == MP2::OBJ_MONSTER )
                 map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 

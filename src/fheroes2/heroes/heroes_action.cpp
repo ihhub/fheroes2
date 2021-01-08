@@ -108,7 +108,7 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
 
     std::string perday = _( "%{count} / day" );
     payment_t info = ProfitConditions::FromMine( res );
-    s32 * current = NULL;
+    const s32 * current = NULL;
 
     switch ( res ) {
     case Resource::MERCURY:
@@ -384,7 +384,7 @@ void Heroes::Action( s32 dst_index )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
 
     if ( MP2::isActionObject( object, isShipMaster() ) ) {
-        Interface::Basic::Get().GetStatusWindow().ResetTimer();
+        Interface::StatusWindow::ResetTimer();
         SetModes( ACTION );
     }
 
@@ -703,7 +703,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
     JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
-    Interface::StatusWindow & statusWindow = Interface::Basic::Get().GetStatusWindow();
+    const Interface::StatusWindow & statusWindow = Interface::Basic::Get().GetStatusWindow();
 
     // free join
     if ( JOIN_FREE == join.first ) {
@@ -811,7 +811,7 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
         DEBUG( DBG_GAME, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
     }
     else {
-        Castle * other_hero_castle = other_hero->inCastle();
+        const Castle * other_hero_castle = other_hero->inCastle();
         if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
             ActionToCastle( hero, dst_index );
             return;
@@ -980,13 +980,13 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
 void ActionToPickupResource( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapResource * map_resource = NULL;
+    const MapResource * map_resource = NULL;
 
     if ( tile.GetObject() == obj )
         map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
-        MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
+        const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
@@ -1402,7 +1402,7 @@ void ActionToPyramid( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToSign( Heroes & hero, s32 dst_index )
 {
-    MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
+    const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
     Dialog::Message( _( "Sign" ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
 
     (void)hero;
@@ -1698,7 +1698,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
 void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapArtifact * map_artifact = NULL;
+    const MapArtifact * map_artifact = NULL;
 
     if ( tile.GetObject() == obj )
         map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
@@ -1781,7 +1781,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
             if ( 5 < cond && cond < 14 ) {
             bool battle = true;
             Army army( tile );
-            Troop * troop = army.GetFirstValid();
+            const Troop * troop = army.GetFirstValid();
 
             if ( troop ) {
                 if ( Monster::ROGUE == troop->GetID() )
@@ -2117,7 +2117,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
 
             // update abandone mine
             if ( obj == MP2::OBJ_ABANDONEDMINE ) {
-                tile.UpdateAbandoneMineSprite( tile );
+                Maps::Tiles::UpdateAbandoneMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
             }
 
@@ -2697,7 +2697,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
         if ( conditions ) {
             hero.GetKingdom().OddFundsResource( funds );
             hero.SetVisited( dst_index );
-            hero.IncreaseExperience( hero.GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+            hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
         }
     }
 
@@ -2930,7 +2930,7 @@ void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToJail( Heroes & hero, u32 obj, s32 dst_index )
 {
-    Kingdom & kingdom = hero.GetKingdom();
+    const Kingdom & kingdom = hero.GetKingdom();
 
     if ( kingdom.AllowRecruitHero( false, 0 ) ) {
         Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -3065,7 +3065,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    Kingdom & kingdom = hero.GetKingdom();
+    const Kingdom & kingdom = hero.GetKingdom();
 
     if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
         Dialog::Message(

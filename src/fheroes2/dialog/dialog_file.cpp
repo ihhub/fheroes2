@@ -104,7 +104,7 @@ int Dialog::FileOptions( void )
             break;
         }
         else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::Get().EventExit() == Game::QUITGAME ) {
+            if ( Interface::Basic::EventExit() == Game::QUITGAME ) {
                 result = Game::QUITGAME;
                 break;
             }

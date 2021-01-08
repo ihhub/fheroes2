@@ -54,7 +54,7 @@ int DialogOneSecondary( const std::string & name, const std::string & primary, c
     const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
 
     // Create a surface with no alpha mode to fix SDL 1
-    fheroes2::Image drawSurface = sprite_frame;
+    fheroes2::Sprite drawSurface = sprite_frame;
 
     // sprite
     const fheroes2::Sprite & sprite_skill = fheroes2::AGG::GetICN( ICN::SECSKILL, sec.GetIndexSprite1() );
@@ -157,7 +157,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
     pt.y = box.GetArea().y + box.GetArea().height - 36;
 
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
     fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );

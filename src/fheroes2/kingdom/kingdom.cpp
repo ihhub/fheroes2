@@ -220,7 +220,7 @@ void Kingdom::AddHeroes( Heroes * hero )
         if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) )
             heroes.push_back( hero );
 
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
+        const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
@@ -272,7 +272,7 @@ void Kingdom::AddCastle( const Castle * castle )
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) )
             castles.push_back( const_cast<Castle *>( castle ) );
 
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
+        const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
 
@@ -485,7 +485,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     bool foundHeroes = false;
 
     for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-        Castle * castle = *it;
+        const Castle * castle = *it;
         if ( castle == nullptr )
             continue;
 
@@ -514,7 +514,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 
     if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
         // get first castle
-        Castle * first = castles.GetFirstCastle();
+        const Castle * first = castles.GetFirstCastle();
         if ( NULL == first )
             first = castles.front();
 

@@ -180,7 +180,7 @@ void Interface::StatusWindow::NextState( void )
 void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
 {
     const Rect & pos = GetArea();
-    Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     // sprite all resource
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), fheroes2::Display::instance(), pos.x + 6, pos.y + 3 + oh );

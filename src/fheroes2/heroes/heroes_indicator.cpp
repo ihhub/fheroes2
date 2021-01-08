@@ -223,7 +223,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     if ( hero ) {
         const uint32_t experience = hero->GetExperience();
         StringReplace( descriptions, "%{exp1}", experience );
-        StringReplace( descriptions, "%{exp2}", hero->GetExperienceFromLevel( hero->GetLevelFromExperience( experience ) ) );
+        StringReplace( descriptions, "%{exp2}", Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( experience ) ) );
     }
 }
 

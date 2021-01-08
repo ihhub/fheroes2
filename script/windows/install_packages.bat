@@ -5,19 +5,22 @@ if not exist "..\..\..\packages\zlib"      mkdir "..\..\..\packages\zlib"
 if not exist "..\..\..\packages\sdl"       mkdir "..\..\..\packages\sdl"
 if not exist "..\..\..\packages\sdl_mixer" mkdir "..\..\..\packages\sdl_mixer"
 if not exist "..\..\..\packages\sdl_ttf"   mkdir "..\..\..\packages\sdl_ttf"
+if not exist "..\..\..\packages\sdl_image" mkdir "..\..\..\packages\sdl_image"
 
-echo copying packages [1/6]
+echo [1/7] Copying packages
 xcopy /Y /s /Q "..\..\VisualStudio\packages\zlib1.2.11.zip"  "..\..\..\packages\zlib"
-echo downloading packages [2/6]
+echo [2/7] Downloading packages
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip', '..\..\..\packages\sdl\sdl.zip')"
-echo downloading packages [3/6]
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer.zip')"
-echo downloading packages [4/6]
+echo [3/7] Downloading packages
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.12-VC.zip', '..\..\..\packages\sdl\sdl2.zip')"
-echo downloading packages [5/6]
+echo [4/7] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer.zip')"
+echo [5/7] Downloading packages
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '..\..\..\packages\sdl_mixer\sdl_mixer2.zip')"
-echo downloading packages [6/6]
+echo [6/7] Downloading packages
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip', '..\..\..\packages\sdl_ttf\sdl_ttf2.zip')"
+echo [7/7] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '..\..\..\packages\sdl_image\sdl_image2.zip')"
 
 xcopy /Y /s /Q "setup_packages.bat" "..\..\..\packages"
 cd "..\..\..\packages"
@@ -34,29 +37,33 @@ if %errorlevel% == 0 (
 )
 
 if not "%sevenZipPath%" == "" (
-    echo unpacking packages [1/6]
+    echo [1/7] Unpacking packages
     cd zlib
     "%sevenZipPath%" x zlib1.2.11.zip -aoa > nul
 
-    echo unpacking packages [2/6]
+    echo [2/7] Unpacking packages
     cd ..\sdl
     "%sevenZipPath%" x sdl.zip -aoa > nul
 
-    echo unpacking packages [3/6]
-    cd ..\sdl_mixer
-    "%sevenZipPath%" x sdl_mixer.zip -aoa > nul
-
-    echo unpacking packages [4/6]
+    echo [3/7] Unpacking packages
     cd ..\sdl
     "%sevenZipPath%" x sdl2.zip -aoa > nul
 
-    echo unpacking packages [5/6]
+    echo [4/7] Unpacking packages
+    cd ..\sdl_mixer
+    "%sevenZipPath%" x sdl_mixer.zip -aoa > nul
+
+    echo [5/7] Unpacking packages
     cd ..\sdl_mixer
     "%sevenZipPath%" x sdl_mixer2.zip -aoa > nul
 
-    echo unpacking packages [6/6]
+    echo [6/7] Unpacking packages
     cd ..\sdl_ttf
     "%sevenZipPath%" x sdl_ttf2.zip -aoa > nul
+
+    echo [7/7] Unpacking packages
+    cd ..\sdl_image
+    "%sevenZipPath%" x sdl_image2.zip -aoa > nul
 
     cd ..
     call "setup_packages.bat"

@@ -92,7 +92,7 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
 void Puzzle::ShowMapsDialog( void ) const
 {
     Cursor & cursor = Cursor::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     int old_cursor = cursor.Themes();
 
     if ( !Settings::Get().MusicMIDI() )
@@ -143,7 +143,7 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
@@ -195,7 +195,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Blit( background, display, blitArea.x, blitArea.y );
     fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
 
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 

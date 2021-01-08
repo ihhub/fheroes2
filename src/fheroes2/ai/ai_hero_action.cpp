@@ -460,7 +460,7 @@ namespace AI
             DEBUG( DBG_AI, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
         }
         else {
-            Castle * other_hero_castle = other_hero->inCastle();
+            const Castle * other_hero_castle = other_hero->inCastle();
             if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
                 AIToCastle( hero, dst_index );
                 return;
@@ -650,7 +650,7 @@ namespace AI
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapResource * map_resource = NULL;
+        const MapResource * map_resource = NULL;
         if ( tile.GetObject() == obj ) {
             map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
         }
@@ -791,7 +791,7 @@ namespace AI
             if ( capture ) {
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
-                    tile.UpdateAbandoneMineSprite( tile );
+                    Maps::Tiles::UpdateAbandoneMineSprite( tile );
                     tile.SetHeroes( &hero );
                 }
 
@@ -1245,7 +1245,7 @@ namespace AI
                 if ( funds.GetValidItemsCount() )
                     hero.GetKingdom().OddFundsResource( funds );
                 hero.SetVisited( dst_index );
-                hero.IncreaseExperience( hero.GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+                hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
             }
         }
 
@@ -1331,7 +1331,7 @@ namespace AI
     void AIToBarrier( Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        Kingdom & kingdom = hero.GetKingdom();
+        const Kingdom & kingdom = hero.GetKingdom();
 
         if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             tile.RemoveObjectSprite();
@@ -1369,7 +1369,7 @@ namespace AI
     void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapArtifact * map_artifact = NULL;
+        const MapArtifact * map_artifact = NULL;
         if ( tile.GetObject() == obj ) {
             map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
         }
@@ -1521,7 +1521,7 @@ namespace AI
 
     bool HeroesValidObject( const Heroes & hero, s32 index )
     {
-        Maps::Tiles & tile = world.GetTiles( index );
+        const Maps::Tiles & tile = world.GetTiles( index );
         const u32 obj = tile.GetObject();
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
@@ -1894,13 +1894,13 @@ namespace AI
             const Colors vcolors( Players::HumanColors() );
 
             for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
-                const Player * player = conf.GetPlayers().Get( *it );
+                const Player * player = Players::Get( *it );
                 if ( player )
                     colors |= player->GetFriends();
             }
         }
         else {
-            const Player * player = conf.GetPlayers().Get( Players::HumanColors() );
+            const Player * player = Players::Get( Players::HumanColors() );
             if ( player )
                 colors = player->GetFriends();
         }
@@ -1929,7 +1929,7 @@ namespace AI
 
     void HeroesMove( Heroes & hero )
     {
-        Route::Path & path = hero.GetPath();
+        const Route::Path & path = hero.GetPath();
 
         if ( path.isValid() ) {
             hero.SetMove( true );
@@ -1938,7 +1938,7 @@ namespace AI
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 
-            Settings & conf = Settings::Get();
+            const Settings & conf = Settings::Get();
 
             const uint32_t colors = AIGetAllianceColors();
             bool recenterNeeded = true;
