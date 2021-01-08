@@ -164,7 +164,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
 
             const int32_t maximumTextWidth = playerIcon.width() - 4;
             const int32_t fitWidth = Text::getFitWidth( player.GetName(), Font::SMALL, maximumTextWidth );
-            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.h, maximumTextWidth );
+            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.h - 1, maximumTextWidth );
         }
 
         // 2. redraw class
