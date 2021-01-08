@@ -41,7 +41,7 @@ namespace GameStatic
     };
 
     StreamBase & operator<<( StreamBase &, const Data & );
-    StreamBase & operator>>( StreamBase &, Data & );
+    StreamBase & operator>>( StreamBase &, const Data & );
 
     u32 GetLostOnWhirlpoolPercent( void );
     u32 GetGameOverLostDays( void );

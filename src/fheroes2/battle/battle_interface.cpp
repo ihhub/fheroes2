@@ -2643,7 +2643,8 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
-        attacker.SwitchAnimation( ++attackStart );
+        attackStart++;
+        attacker.SwitchAnimation( attackStart );
     }
 
     // targets damage animation
@@ -3242,7 +3243,7 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
     }
 }
 
-void Battle::Interface::RedrawActionLuck( Unit & unit )
+void Battle::Interface::RedrawActionLuck( const Unit & unit )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3330,7 +3331,7 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
     }
 }
 
-void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
+void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit & defender )
 {
     Cursor::Get().SetThemes( Cursor::WAR_NONE );
     _currentUnit = NULL;
@@ -3345,7 +3346,7 @@ void Battle::Interface::RedrawActionTowerPart1( Tower & tower, Unit & defender )
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
-void Battle::Interface::RedrawActionTowerPart2( TargetInfo & target )
+void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
 {
     TargetsInfo targets;
     targets.push_back( target );
@@ -3669,7 +3670,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
     }
 }
 
-void Battle::Interface::RedrawActionLightningBoltSpell( Unit & target )
+void Battle::Interface::RedrawActionLightningBoltSpell( const Unit & target )
 {
     _currentUnit = NULL;
 
@@ -3698,7 +3699,7 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
     RedrawLightningOnTargets( points, _surfaceInnerArea );
 }
 
-void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
+void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3758,7 +3759,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( Unit & target )
     b_current_sprite = NULL;
 }
 
-void Battle::Interface::RedrawActionStoneSpell( Unit & target )
+void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3852,7 +3853,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     }
 }
 
-void Battle::Interface::RedrawActionDisruptingRaySpell( Unit & target )
+void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -4684,7 +4685,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
     }
 }
 
-bool Battle::Interface::NetworkTurn( Result & /*result*/ )
+bool Battle::Interface::NetworkTurn( const Result & /*result*/ )
 {
     return false;
 }

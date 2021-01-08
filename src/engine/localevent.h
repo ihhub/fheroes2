@@ -267,7 +267,7 @@ private:
 
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
-    void HandleKeyboardEvent( SDL_KeyboardEvent & );
+    void HandleKeyboardEvent( const SDL_KeyboardEvent & );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );

@@ -695,7 +695,7 @@ Kingdom & Kingdoms::GetKingdom( int color )
     return kingdoms[6];
 }
 
-void Kingdom::SetLastLostHero( Heroes & hero )
+void Kingdom::SetLastLostHero( const Heroes & hero )
 {
     lost_hero.id = hero.GetID();
     lost_hero.date = world.CountDay();

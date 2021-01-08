@@ -316,7 +316,7 @@ void Battle::Force::UpdateOrderUnits( const Force & army1, const Force & army2, 
     }
 }
 
-Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force & army2, Unit * last, bool part1 )
+Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force & army2, const Unit * last, bool part1 )
 {
     Units units1( army1, true );
     Units units2( army2, true );
