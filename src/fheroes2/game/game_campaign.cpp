@@ -51,17 +51,17 @@ std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campa
 
 namespace
 {
-    const std::string rolandCampaignDescription[] = { _(
+    const std::string rolandCampaignDescription[] = {_(
         "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-        " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ) };
+        " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." )};
 
-    const std::string archibaldCampaignDescription[] = { _(
+    const std::string archibaldCampaignDescription[] = {_(
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-        " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ) };
+        " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
-    void DrawCampaignScenarioIcon( int icnId, int iconId, const fheroes2::Point & offset, const fheroes2::Point & pos )
+    void DrawCampaignScenarioIcon( int icnId, int iconId, const fheroes2::Point & offset, int posX, int posY )
     {
-        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconId ), fheroes2::Display::instance(), offset.x + pos.x, offset.y + pos.y );
+        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconId ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
     bool hasEnding( std::string const & fullString, std::string const & ending )
@@ -99,16 +99,16 @@ namespace
 
     std::vector<Maps::FileInfo> GetRolandCampaign()
     {
-        const std::vector<std::string> maps = { "CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
-                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C" };
+        const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
+                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
 
         return GetCampaignMaps( maps );
     }
 
     std::vector<Maps::FileInfo> GetArchibaldCampaign()
     {
-        const std::vector<std::string> maps = { "CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
-                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C" };
+        const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
+                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
 
         return GetCampaignMaps( maps );
     }
@@ -243,29 +243,29 @@ int Game::SelectCampaignScenario()
     fheroes2::Blit( fheroes2::AGG::GetICN( goodCampaign ? ICN::CTRACK00 : ICN::CTRACK03, 0 ), display, top.x + 39, top.y + 294 );
 
     if ( goodCampaign ) {
-        DrawCampaignScenarioIcon( iconsId, 14, trackOffset, { -2, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 72, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 109, -2 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 146, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 220, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 294, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 368, 82 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 368, -2 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 442, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 516, 40 } );
+        DrawCampaignScenarioIcon( iconsId, 14, trackOffset, -2, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 72, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 109, -2 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 220, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 294, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, 82 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, -2 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 516, 40 );
     }
     else {
-        DrawCampaignScenarioIcon( iconsId, 17, trackOffset, { -2, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 72, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 146, -2 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 146, 82 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 220, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 294, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 331, -2 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 368, 40 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 442, -2 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 442, 82 } );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, { 516, 40 } );
+        DrawCampaignScenarioIcon( iconsId, 17, trackOffset, -2, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 72, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, -2 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, 82 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 220, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 294, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 331, -2 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, 40 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, -2 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, 82 );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 516, 40 );
     }
 
     LocalEvent & le = LocalEvent::Get();

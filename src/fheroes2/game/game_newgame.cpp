@@ -104,7 +104,7 @@ int Game::NewCampaign()
     Settings::Get().SetCurrentCampaignID( chosenCampaign );
 
     AGG::PlayMusic( MUS::VICTORY );
-    
+
     return SelectCampaignScenario();
 }
 

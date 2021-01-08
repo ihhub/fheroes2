@@ -74,12 +74,12 @@ namespace Campaign
             return _campaignID;
         }
 
-        int getCurrentScenarioID() const 
+        int getCurrentScenarioID() const
         {
             return _currentScenarioID;
         }
 
-        int getLastCompletedScenarioID() const 
+        int getLastCompletedScenarioID() const
         {
             return _finishedMaps.back();
         }
