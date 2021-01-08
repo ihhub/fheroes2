@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg.h"
 #include "army.h"
@@ -204,6 +205,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
+    assert( arena == nullptr );
     arena = this;
     army1 = new Force( a1, false );
     army2 = new Force( a2, true );
@@ -307,22 +309,16 @@ Battle::Arena::~Arena()
 {
     delete army1;
     delete army2;
+    delete towers[0];
+    delete towers[1];
+    delete towers[2];
+    delete catapult;
+    delete interface;
+    delete armies_order;
+    delete bridge;
 
-    if ( towers[0] )
-        delete towers[0];
-    if ( towers[1] )
-        delete towers[1];
-    if ( towers[2] )
-        delete towers[2];
-
-    if ( catapult )
-        delete catapult;
-    if ( interface )
-        delete interface;
-    if ( armies_order )
-        delete armies_order;
-    if ( bridge )
-        delete bridge;
+    assert( arena == this );
+    arena = nullptr;
 }
 
 void Battle::Arena::TurnTroop( Unit * current_troop )

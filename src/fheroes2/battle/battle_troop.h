@@ -83,6 +83,7 @@ namespace Battle
         virtual u32 GetHitPointsLeft() const override;
         virtual u32 GetAffectedDuration( u32 ) const override;
         virtual u32 GetSpeed() const override;
+        virtual int GetMorale() const override;
 
         Unit * GetMirror();
         void SetMirror( Unit * );
