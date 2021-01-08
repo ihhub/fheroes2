@@ -76,6 +76,7 @@ namespace GameStatic
 }
 
 #ifdef WITH_XML
+class TiXmlElement;
 namespace Game
 {
     void CastleUpdateGrowth( const TiXmlElement * );

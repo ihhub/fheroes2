@@ -28,7 +28,6 @@
 
 #include "gamedefs.h"
 #include "screen.h"
-#include "ui_button.h"
 
 namespace Interface
 {

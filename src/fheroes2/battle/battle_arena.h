@@ -25,7 +25,6 @@
 
 #include <list>
 
-#include "ai.h"
 #include "battle_board.h"
 #include "battle_grave.h"
 #include "battle_pathfinding.h"

@@ -32,6 +32,10 @@
 #include "skill.h"
 #include "skill_static.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 namespace Skill
 {
     stats_t _stats[] = {{"knight",

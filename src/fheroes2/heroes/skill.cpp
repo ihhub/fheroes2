@@ -24,10 +24,7 @@
 #include <cstring>
 #include <sstream>
 
-#include "agg.h"
 #include "cursor.h"
-#include "dialog.h"
-#include "dialog_selectitems.h"
 #include "game.h"
 #include "game_static.h"
 #include "heroes.h"

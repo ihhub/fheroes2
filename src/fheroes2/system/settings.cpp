@@ -27,7 +27,6 @@
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
-#include "maps.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"

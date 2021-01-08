@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "campaign_data.h"
+#include "artifact.h"
 #include "assert.h"
 #include "monster.h"
 #include "resource.h"
