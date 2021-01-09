@@ -134,7 +134,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Army & army )
         xml_troop->Attribute( "type", &type );
         xml_troop->Attribute( "count", &count );
         Troop * troop = army.GetTroop( position );
-        position++;
+        ++position;
         if ( troop )
             troop->Set( type, count );
     }

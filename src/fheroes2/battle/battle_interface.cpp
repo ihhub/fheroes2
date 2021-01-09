@@ -2643,7 +2643,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
     if ( attackStart >= Monster_Info::MELEE_TOP && attackStart <= Monster_Info::RANG_BOT ) {
-        attackStart++;
+        ++attackStart;
         attacker.SwitchAnimation( attackStart );
     }
 

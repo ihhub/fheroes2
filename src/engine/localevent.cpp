@@ -426,7 +426,7 @@ namespace
             if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
                 palette = PAL::GetCyclingPalette( _counter );
-                _counter++;
+                ++_counter;
                 return true;
             }
             return false;
