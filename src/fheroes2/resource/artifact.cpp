@@ -1018,7 +1018,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             payment_t cost = spell.GetCost();
             u32 answer = 0;
             std::string text = _(
-                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell point: %{sp}" );
+                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
 
             StringReplace( text, "%{spell}", spell.GetName() );
             StringReplace( text, "%{sp}", spell.SpellPoint() );
