@@ -470,7 +470,7 @@ uint32_t AnimationReference::getShootingSpeed() const
     return _monsterInfo.shootSpeed;
 }
 
-size_t AnimationReference::getProjectileID( float angle ) const
+size_t AnimationReference::getProjectileID( const double angle ) const
 {
     return _monsterInfo.getProjectileID( angle );
 }

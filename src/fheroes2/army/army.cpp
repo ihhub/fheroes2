@@ -1447,7 +1447,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     if ( tile.GetObject() == MP2::OBJ_MONSTER )
         map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-    const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
+    const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();

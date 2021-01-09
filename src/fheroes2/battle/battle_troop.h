@@ -134,7 +134,7 @@ namespace Battle
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
         u32 CalculateMinDamage( const Unit & ) const;
         u32 CalculateMaxDamage( const Unit & ) const;
-        u32 CalculateDamageUnit( const Unit &, float ) const;
+        u32 CalculateDamageUnit( const Unit & enemy, double dmg ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         void PostAttackAction( Unit & );

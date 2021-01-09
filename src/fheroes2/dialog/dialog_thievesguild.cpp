@@ -154,7 +154,7 @@ void GetArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        const int value = world.GetKingdom( *color ).GetArmiesStrength();
+        const int value = static_cast<int>( world.GetKingdom( *color ).GetArmiesStrength() );
         UpdateValuesColors( v, value, *color );
     }
 
