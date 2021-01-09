@@ -100,7 +100,7 @@ void Castle::OpenTavern( void )
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
             if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame ) ) {
-                frame++;
+                ++frame;
                 const fheroes2::Sprite & s22 = fheroes2::AGG::GetICN( tavwin, index );
                 fheroes2::Blit( s22, display, dst_pt.x + s22.x(), dst_pt.y + s22.y() );
             }
