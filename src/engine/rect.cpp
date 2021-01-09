@@ -96,7 +96,7 @@ Point Point::rotate( double angle ) const
     const double sinValue = sin( angle );
     const double cosValue = cos( angle );
 
-    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+    return Point( static_cast<int16_t>( x * cosValue - y * sinValue ), static_cast<int16_t>( x * sinValue + y * cosValue ) );
 }
 
 double Point::getAngle( const Point & point ) const

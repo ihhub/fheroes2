@@ -489,7 +489,7 @@ u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
 
-u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
+u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
 {
     if ( isArchers() ) {
         if ( !isHandFighting() ) {

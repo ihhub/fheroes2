@@ -102,8 +102,8 @@ namespace
 
                 if ( Rand::Get( 1, 4 ) == 1 ) { // 25%
                     offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
-                    const int x = ( middle.x - oldLines[i].first.point.x ) * 0.7 + middle.x;
-                    const int y = ( middle.y - oldLines[i].first.point.y ) * 0.7 + middle.y + ( isPositive ? offsetY : -offsetY );
+                    const int16_t x = static_cast<int16_t>( ( middle.x - oldLines[i].first.point.x ) * 0.7 ) + middle.x;
+                    const int16_t y = int16_t( ( middle.y - oldLines[i].first.point.y ) * 0.7 ) + middle.y + ( isPositive ? offsetY : -offsetY );
                     lines.push_back( std::make_pair( middlePoint, LightningPoint( Point( x, y ), 1 ) ) );
                 }
             }
@@ -1296,25 +1296,27 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
             const s32 ox = spmon1.x() - spmon0.x();
 
             if ( _movingUnit->animation.animationLength() ) {
-                const s32 cx = _movingPos.x - rt.x;
-                const s32 cy = _movingPos.y - rt.y;
+                const int32_t cx = _movingPos.x - rt.x;
+                const int32_t cy = _movingPos.y - rt.y;
 
                 // TODO: use offset X from bin file for ground movement
                 // cx/cy is sprite size
                 // Frame count: one tile of movement goes through all stages of animation
                 // sp is sprite drawing offset
-                sp.y += _movingUnit->animation.movementProgress() * cy;
+                sp.y += static_cast<int32_t>( _movingUnit->animation.movementProgress() * cy );
                 if ( 0 != Sign( cy ) )
                     sp.x -= Sign( cx ) * ox / 2;
             }
         }
         // fly offset
         else if ( _flyingUnit == &b ) {
-            const s32 cx = _flyingPos.x - rt.x;
-            const s32 cy = _flyingPos.y - rt.y;
+            const int32_t cx = _flyingPos.x - rt.x;
+            const int32_t cy = _flyingPos.y - rt.y;
 
-            sp.x += cx + ( _movingPos.x - _flyingPos.x ) * _flyingUnit->animation.movementProgress();
-            sp.y += cy + ( _movingPos.y - _flyingPos.y ) * _flyingUnit->animation.movementProgress();
+            const double movementProgress = _flyingUnit->animation.movementProgress();
+
+            sp.x += cx + static_cast<int32_t>( ( _movingPos.x - _flyingPos.x ) * movementProgress );
+            sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
         }
 
         if ( applyPalette != PAL::STANDARD ) {

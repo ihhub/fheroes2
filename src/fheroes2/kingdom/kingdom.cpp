@@ -597,7 +597,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        totalIncome.gold *= Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() );
+        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() ) );
     }
 
     return totalIncome;

@@ -76,7 +76,7 @@ namespace Bin_Info
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;
         std::vector<Point> projectileOffset;
-        std::vector<float> projectileAngles;
+        std::vector<double> projectileAngles;
         std::vector<float> idlePriority;
         std::vector<uint32_t> unusedIdleDelays;
         uint32_t idleAnimationCount;
@@ -86,7 +86,7 @@ namespace Bin_Info
         MonsterAnimInfo( int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
-        size_t getProjectileID( float angle ) const;
+        size_t getProjectileID( const double angle ) const;
     };
 
     void InitBinInfo();

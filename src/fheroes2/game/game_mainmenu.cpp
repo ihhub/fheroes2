@@ -97,7 +97,8 @@ int Game::MainMenu( bool isFirstGameRun )
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
     const double scaleY = static_cast<double>( display.height() ) / fheroes2::Display::DEFAULT_HEIGHT;
-    const Rect resolutionArea( 63 * scaleX, 202 * scaleY, 90 * scaleX, 160 * scaleY );
+    const fheroes2::Rect resolutionArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
+                                         static_cast<int32_t>( 160 * scaleY ) );
 
     u32 lantern_frame = 0;
 
