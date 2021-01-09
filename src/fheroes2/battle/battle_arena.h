@@ -147,6 +147,12 @@ namespace Battle
         static Graveyard * GetGraveyard( void );
 
     private:
+        Arena( const Arena & ) = delete;
+        Arena & operator=( const Arena & ) = delete;
+
+        Arena( const Arena && ) = delete;
+        Arena & operator=( const Arena && ) = delete;
+
         friend StreamBase & operator<<( StreamBase &, const Arena & );
         friend StreamBase & operator>>( StreamBase &, Arena & );
 
