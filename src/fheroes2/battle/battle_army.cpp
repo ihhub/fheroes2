@@ -169,10 +169,7 @@ void Battle::Units::SortWeakest( void )
 
 void Battle::Units::SortArchers( void )
 {
-    std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 )
-    {
-        return t1->isArchers() && !t2->isArchers();
-    });
+    std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
 Battle::Unit * Battle::Units::FindUID( u32 pid )
