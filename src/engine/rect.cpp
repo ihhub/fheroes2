@@ -110,8 +110,8 @@ Size::Size( u16 width, u16 height )
 {}
 
 Size::Size( const Point & pt )
-    : w( std::abs( pt.x ) )
-    , h( std::abs( pt.y ) )
+    : w( pt.x < 0 ? -pt.x : pt.x )
+    , h( pt.y < 0 ? -pt.y : pt.y )
 {}
 
 bool Size::operator==( const Size & sz ) const
