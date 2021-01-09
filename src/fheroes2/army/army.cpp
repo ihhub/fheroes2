@@ -1495,11 +1495,6 @@ bool Army::FastestTroop( const Troop * t1, const Troop * t2 )
     return t1->GetSpeed() > t2->GetSpeed();
 }
 
-bool Army::ArchersFirst( const Troop * t1, const Troop * t2 )
-{
-    return t1->isArchers() && !t2->isArchers();
-}
-
 void Army::SwapTroops( Troop & t1, Troop & t2 )
 {
     std::swap( t1, t2 );

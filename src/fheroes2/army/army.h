@@ -135,7 +135,6 @@ public:
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
-    static bool ArchersFirst( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
