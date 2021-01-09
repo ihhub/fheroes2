@@ -296,7 +296,7 @@ s32 Battle::Unit::GetTailIndex( void ) const
 
 void Battle::Unit::SetRandomMorale( void )
 {
-    int morale = GetMorale();
+    const int morale = GetMorale();
 
     if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
