@@ -21,6 +21,7 @@ jobs:
     - name: compile
       run: make -j 2
       env:
+        FHEROES2_SDL1: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
@@ -52,7 +53,6 @@ jobs:
     - name: compile
       run: make -j 2
       env:
-        WITH_SDL2: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
