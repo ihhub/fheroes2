@@ -3374,7 +3374,7 @@ void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
         msg.append( " " );
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
-        StringReplace( msg, "%{defender}", target.defender->GetName() );
+        StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
     }
 
     if ( !isMirror ) {
