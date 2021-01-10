@@ -1111,9 +1111,10 @@ void Battle::Interface::RedrawArmies()
 {
     const Castle * castle = Arena::GetCastle();
 
-    const int32_t wallCellIds[ARENAH] = {Board::CASTLE_FIRST_TOP_WALL_POS, Board::CASTLE_TOP_ARCHER_TOWER_POS, Board::CASTLE_SECOND_TOP_WALL_POS,
-                                         Board::CASTLE_TOP_GATE_TOWER_POS, Board::CASTLE_GATE_POS, Board::CASTLE_BOTTOM_GATE_TOWER_POS, Board::CASTLE_THIRD_TOP_WALL_POS,
-                                         Board::CASTLE_BOTTOM_ARCHER_TOWER_POS, Board::CASTLE_FORTH_TOP_WALL_POS};
+    const int32_t wallCellIds[ARENAH]
+        = {Board::CASTLE_FIRST_TOP_WALL_POS, Board::CASTLE_TOP_ARCHER_TOWER_POS,  Board::CASTLE_SECOND_TOP_WALL_POS, Board::CASTLE_TOP_GATE_TOWER_POS,
+           Board::CASTLE_GATE_POS,           Board::CASTLE_BOTTOM_GATE_TOWER_POS, Board::CASTLE_THIRD_TOP_WALL_POS,  Board::CASTLE_BOTTOM_ARCHER_TOWER_POS,
+           Board::CASTLE_FORTH_TOP_WALL_POS};
 
     if ( castle == nullptr ) {
         RedrawKilled();
@@ -1130,7 +1131,8 @@ void Battle::Interface::RedrawArmies()
             // Redraw main tower.
             if ( cellRowId == 5 ) {
                 RedrawCastleMainTower( *castle );
-            } else if ( cellRowId == 7 ) { // Redraw catapult.
+            }
+            else if ( cellRowId == 7 ) { // Redraw catapult.
                 RedrawCastle2( *castle, Board::CATAPULT_POS );
             }
 
