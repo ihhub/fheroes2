@@ -1120,11 +1120,19 @@ void Battle::Interface::RedrawArmies()
             RedrawHighObjects( cellId );
         }
 
+        std::vector<const Unit *> troopCounter;
+
         // Redraw castle and monsters.
         for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
             const int32_t cellId = cellRowId * ARENAW + cellColumnId;
             if ( castle
                  && ( 8 == cellId || 19 == cellId || 29 == cellId || 40 == cellId || 50 == cellId || 62 == cellId || 85 == cellId || 73 == cellId || 77 == cellId ) ) {
+
+                for ( size_t i = 0; i < troopCounter.size(); ++i ) {
+                    RedrawTroopCount( *troopCounter[i] );
+                }
+                troopCounter.clear();
+
                 RedrawCastle2( *castle, cellId );
             }
 
@@ -1133,9 +1141,13 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *unitOnCell );
 
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                    RedrawTroopCount( *unitOnCell );
+                    troopCounter.emplace_back( unitOnCell );
                 }
             }
+        }
+
+        for ( size_t i = 0; i < troopCounter.size(); ++i ) {
+            RedrawTroopCount( *troopCounter[i] );
         }
 
         // Redraw heroes.
