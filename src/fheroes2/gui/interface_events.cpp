@@ -294,10 +294,27 @@ int Interface::Basic::EventNewGame( void )
 
 int Interface::Basic::EventSaveGame( void )
 {
-    std::string filename = Dialog::SelectFileSave();
-    if ( filename.size() && Game::Save( filename ) )
-        Dialog::Message( "", _( "Game saved successfully." ), Font::BIG, Dialog::OK );
-    return Game::CANCEL;
+    while ( true ) {
+        std::string filename = Dialog::SelectFileSave();
+        if ( filename.empty() ) {
+            return Game::CANCEL;
+        }
+
+        // ask overwrite?
+        const Settings & conf = Settings::Get();
+        if ( System::IsFile( filename ) && conf.ExtGameRewriteConfirm()
+             && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            continue;
+        }
+
+        if ( Game::Save( filename ) ) {
+            Dialog::Message( "", _( "Game saved successfully." ), Font::BIG, Dialog::OK );
+        }
+        else {
+            Dialog::Message( "", _( "There was an issue during saving." ), Font::BIG, Dialog::OK );
+        }
+        return Game::CANCEL;
+    }
 }
 
 int Interface::Basic::EventLoadGame( void )
