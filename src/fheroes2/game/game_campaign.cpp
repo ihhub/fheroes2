@@ -82,7 +82,7 @@ namespace
                 // check if the obtained file's name matches the one we want
                 if ( !hasEnding( *file, fileNames[i] ) )
                     continue;
-                
+
                 Maps::FileInfo fi;
                 if ( fi.ReadMP2( *file ) ) {
                     maps.push_back( fi );
