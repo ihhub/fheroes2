@@ -22,15 +22,14 @@
 #ifndef H2GAMEDEFS_H
 #define H2GAMEDEFS_H
 
-#include "engine.h"
+#include "rand.h"
+#include "serialize.h"
+#include "tools.h"
+#include "types.h"
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 8
 #define INTERMEDIATE_VERSION 4
-
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
 
 #include "translations.h"
 #define _( s ) Translation::gettext( s )

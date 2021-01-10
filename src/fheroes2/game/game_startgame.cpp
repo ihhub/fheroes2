@@ -38,7 +38,6 @@
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "ground.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "m82.h"

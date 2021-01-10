@@ -23,7 +23,6 @@
 #include <sstream>
 
 #include "direction.h"
-#include "maps.h"
 
 std::string Direction::String( int direct )
 {

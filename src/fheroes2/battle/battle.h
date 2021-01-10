@@ -28,7 +28,6 @@
 
 #include "army.h"
 #include "gamedefs.h"
-#include "icn.h"
 #include "m82.h"
 
 namespace Battle

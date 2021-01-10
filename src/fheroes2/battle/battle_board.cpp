@@ -32,6 +32,7 @@
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
 #include "settings.h"
 #include "world.h"
 

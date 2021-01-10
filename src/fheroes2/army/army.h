@@ -31,6 +31,10 @@
 #include "bitmodes.h"
 #include "players.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Castle;
 class HeroBase;
 class Heroes;
