@@ -713,6 +713,9 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
             btnMarket.draw();
         }
     }
+    else {
+        btnMarket.disable();
+    }
 
     btnAccept.draw();
     btnDecline.draw();
