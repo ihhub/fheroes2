@@ -1127,7 +1127,6 @@ void Battle::Interface::RedrawArmies()
             const int32_t cellId = cellRowId * ARENAW + cellColumnId;
             if ( castle
                  && ( 8 == cellId || 19 == cellId || 29 == cellId || 40 == cellId || 50 == cellId || 62 == cellId || 85 == cellId || 73 == cellId || 77 == cellId ) ) {
-
                 for ( size_t i = 0; i < troopCounter.size(); ++i ) {
                     RedrawTroopCount( *troopCounter[i] );
                 }
