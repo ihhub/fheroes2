@@ -1109,38 +1109,47 @@ void Battle::Interface::RedrawInterface( void )
         listlog->Redraw();
 }
 
-void Battle::Interface::RedrawArmies( void )
+void Battle::Interface::RedrawArmies()
 {
     const Castle * castle = Arena::GetCastle();
 
-    for ( s32 ii = 0; ii < ARENASIZE; ++ii ) {
-        RedrawHighObjects( ii );
-
-        if ( castle )
-            if ( 8 == ii || 19 == ii || 29 == ii || 40 == ii || 50 == ii || 62 == ii || 85 == ii || 73 == ii || 77 == ii )
-                RedrawCastle2( *castle, ii );
-
-        const Cell * cell = Board::GetCell( ii );
-        const Unit * b = cell->GetUnit();
-
-        if ( b && _flyingUnit != b && ii != b->GetTailIndex() ) {
-            RedrawTroopSprite( *b );
-
-            if ( _movingUnit != b && b->isValid() )
-                RedrawTroopCount( *b );
+    for ( int32_t cellRowId = 0; cellRowId < ARENAH; ++cellRowId ) {
+        // Redraw objects.
+        for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
+            const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            RedrawHighObjects( cellId );
         }
 
-        // Draw heroes now, because their position must be between second and third rows.
-        if ( ii == 2 * ARENAW - 1 ) {
+        // Redraw castle and monsters.
+        for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
+            const int32_t cellId = cellRowId * ARENAW + cellColumnId;
+            if ( castle
+                 && ( 8 == cellId || 19 == cellId || 29 == cellId || 40 == cellId || 50 == cellId || 62 == cellId || 85 == cellId || 73 == cellId || 77 == cellId ) ) {
+                RedrawCastle2( *castle, cellId );
+            }
+
+            const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+            if ( unitOnCell && _flyingUnit != unitOnCell && cellId != unitOnCell->GetTailIndex() ) {
+                RedrawTroopSprite( *unitOnCell );
+
+                if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
+                    RedrawTroopCount( *unitOnCell );
+                }
+            }
+        }
+
+        // Redraw heroes.
+        if ( cellRowId == 2 ) {
             RedrawOpponents();
         }
     }
 
     if ( castle ) {
         RedrawCastle2( *castle, 96 );
-        const Unit * b = Board::GetCell( 96 )->GetUnit();
-        if ( b )
-            RedrawTroopSprite( *b );
+        const Unit * unitOnCell = Board::GetCell( 96 )->GetUnit();
+        if ( unitOnCell ) {
+            RedrawTroopSprite( *unitOnCell );
+        }
     }
 
     if ( _flyingUnit ) {
@@ -1256,7 +1265,8 @@ fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Spr
 void Battle::Interface::RedrawTroopSprite( const Unit & b )
 {
     const Monster::monstersprite_t & msi = b.GetMonsterSprite();
-    fheroes2::Sprite spmon1, spmon2;
+    fheroes2::Sprite spmon1;
+    fheroes2::Sprite spmon2;
 
     uint8_t applyPalette = PAL::STANDARD;
 
