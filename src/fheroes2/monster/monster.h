@@ -282,9 +282,9 @@ struct MonsterStaticData
 };
 
 StreamBase & operator<<( StreamBase &, const Monster & );
-StreamBase & operator>>( StreamBase &, Monster & );
+StreamBase & operator>>( StreamBase &, const Monster & );
 
 StreamBase & operator<<( StreamBase &, const MonsterStaticData & );
-StreamBase & operator>>( StreamBase &, MonsterStaticData & );
+StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
 
 #endif

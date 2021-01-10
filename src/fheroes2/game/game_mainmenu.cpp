@@ -205,7 +205,8 @@ int Game::MainMenu( bool isFirstGameRun )
 
         if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
-            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame++ ) );
+            const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
+            ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             cursor.Show();
             display.render();

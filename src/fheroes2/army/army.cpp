@@ -1050,7 +1050,7 @@ int Army::GetLuck( void ) const
     return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator( NULL );
 }
 
-int Army::GetLuckModificator( std::string * ) const
+int Army::GetLuckModificator( const std::string * ) const
 {
     return Luck::NORMAL;
 }
@@ -1493,11 +1493,6 @@ bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )
 bool Army::FastestTroop( const Troop * t1, const Troop * t2 )
 {
     return t1->GetSpeed() > t2->GetSpeed();
-}
-
-bool Army::ArchersFirst( const Troop * t1, const Troop * t2 )
-{
-    return t1->isArchers() > t2->isArchers();
 }
 
 void Army::SwapTroops( Troop & t1, Troop & t2 )

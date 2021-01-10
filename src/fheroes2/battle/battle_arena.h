@@ -112,8 +112,8 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( Unit &, Unit &, s32 );
-        void TargetsApplyDamage( Unit &, Unit &, TargetsInfo & );
+        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 );
+        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & );
         TargetsInfo GetTargetsForSpells( const HeroBase *, const Spell &, s32 );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
 
@@ -128,10 +128,10 @@ namespace Battle
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
 
-        void ApplyActionSpellSummonElemental( Command &, const Spell & );
+        void ApplyActionSpellSummonElemental( const Command &, const Spell & );
         void ApplyActionSpellMirrorImage( Command & );
         void ApplyActionSpellTeleport( Command & );
-        void ApplyActionSpellEarthQuake( Command & );
+        void ApplyActionSpellEarthQuake( const Command & );
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
         u32 GetObstaclesPenalty( const Unit &, const Unit & ) const;
@@ -168,8 +168,8 @@ namespace Battle
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
 
-        void ApplyActionRetreat( Command & );
-        void ApplyActionSurrender( Command & );
+        void ApplyActionRetreat( const Command & );
+        void ApplyActionSurrender( const Command & );
         void ApplyActionAttack( Command & );
         void ApplyActionMove( Command & );
         void ApplyActionEnd( Command & );

@@ -425,7 +425,8 @@ namespace
 
             if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
-                palette = PAL::GetCyclingPalette( _counter++ );
+                palette = PAL::GetCyclingPalette( _counter );
+                ++_counter;
                 return true;
             }
             return false;
@@ -876,7 +877,7 @@ bool LocalEvent::MouseReleaseRight( void ) const
     return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
+void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
         if ( event.type == SDL_KEYDOWN ) {

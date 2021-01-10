@@ -336,7 +336,7 @@ StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & /*obj*/ )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, MonsterStaticData & /*obj*/ )
+StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size;
     msg >> monsters_size;
@@ -2168,7 +2168,7 @@ StreamBase & operator<<( StreamBase & msg, const Monster & /*obj*/ )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, Monster & /*obj*/ )
+StreamBase & operator>>( StreamBase & msg, const Monster & /*obj*/ )
 {
     return msg;
 }

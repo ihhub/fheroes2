@@ -147,7 +147,7 @@ void LuckIndicator::Redraw( void )
     }
 }
 
-void LuckIndicator::QueueEventProcessing( LuckIndicator & indicator )
+void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -203,7 +203,7 @@ void MoraleIndicator::Redraw( void )
     }
 }
 
-void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
+void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 

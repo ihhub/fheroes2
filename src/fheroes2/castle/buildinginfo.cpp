@@ -725,7 +725,7 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     bar.ShowMessage( str );
 }
 
-DwellingItem::DwellingItem( Castle & castle, u32 dw )
+DwellingItem::DwellingItem( const Castle & castle, u32 dw )
 {
     type = castle.GetActualDwelling( dw );
     mons = Monster( castle.GetRace(), type );

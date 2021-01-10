@@ -470,7 +470,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionRetreat( Command & /*cmd*/ )
+void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
 {
     if ( CanRetreatOpponent( current_color ) ) {
         if ( army1->GetColor() == current_color ) {
@@ -486,7 +486,7 @@ void Battle::Arena::ApplyActionRetreat( Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
+void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
 {
     if ( CanSurrenderOpponent( current_color ) ) {
         Funds cost;
@@ -515,7 +515,7 @@ void Battle::Arena::ApplyActionSurrender( Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & /*defender*/, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender*/, TargetsInfo & targets )
 {
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
         TargetInfo & target = *it;
@@ -524,7 +524,7 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, Unit & /*defender*/, Ta
     }
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( Unit & attacker, Unit & defender, s32 dst )
+Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, s32 dst )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -836,7 +836,7 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionSpellSummonElemental( Command & /*cmd*/, const Spell & spell )
+void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
 {
     Unit * elem = CreateElemental( spell );
     if ( interface )
@@ -886,7 +886,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionSpellEarthQuake( Command & /*cmd*/ )
+void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 {
     std::vector<int> targets = GetCastleTargets();
     if ( interface ) {
