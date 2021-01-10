@@ -1123,7 +1123,8 @@ void Battle::Interface::RedrawArmies()
         // Redraw castle and monsters.
         for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
             const int32_t cellId = cellRowId * ARENAW + cellColumnId;
-            if ( castle && ( 8 == cellId || 19 == cellId || 29 == cellId || 40 == cellId || 50 == cellId || 62 == cellId || 85 == cellId || 73 == cellId || 77 == cellId ) ) {
+            if ( castle
+                 && ( 8 == cellId || 19 == cellId || 29 == cellId || 40 == cellId || 50 == cellId || 62 == cellId || 85 == cellId || 73 == cellId || 77 == cellId ) ) {
                 RedrawCastle2( *castle, cellId );
             }
 
