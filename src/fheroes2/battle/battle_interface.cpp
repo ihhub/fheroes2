@@ -1367,7 +1367,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
-void Battle::Interface::RedrawCover( void )
+void Battle::Interface::RedrawCover()
 {
     const Settings & conf = Settings::Get();
 
@@ -1379,8 +1379,8 @@ void Battle::Interface::RedrawCover( void )
     const Bridge * bridge = Arena::GetBridge();
     // bridge
     if ( bridge && bridge->isDown() ) {
-        const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), bridge->isDestroy() ? 24 : 21 );
-        fheroes2::Blit( sprite3, _mainSurface, sprite3.x(), sprite3.y() );
+        const fheroes2::Sprite & bridgeImage = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), bridge->isDestroy() ? 24 : 21 );
+        fheroes2::Blit( bridgeImage, _mainSurface, bridgeImage.x(), bridgeImage.y() );
     }
 
     // cursor
@@ -1412,8 +1412,8 @@ void Battle::Interface::RedrawCoverStatic()
     }
 
     // ground obstacles
-    for ( u32 ii = 0; ii < ARENASIZE; ++ii ) {
-        RedrawLowObjects( ii );
+    for ( int32_t cellId = 0; cellId < ARENASIZE; ++cellId ) {
+        RedrawLowObjects( cellId );
     }
 
     const Castle * castle = Arena::GetCastle();
@@ -1424,9 +1424,9 @@ void Battle::Interface::RedrawCoverStatic()
 void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & board )
 {
     if ( conf.BattleShowGrid() ) { // grid
-        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it )
-            if ( ( *it ).GetObject() == 0 )
-                fheroes2::Blit( sf_hexagon, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+        for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
+            fheroes2::Blit( sf_hexagon, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+        }
     }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
