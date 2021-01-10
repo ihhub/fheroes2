@@ -64,8 +64,8 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
 
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
-    this->_alpha = 0;
-    this->_build = build;
+    _alpha = 0;
+    _build = build;
 }
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
@@ -217,6 +217,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
                     CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame );
                 }
                 if ( CastleDialog::RoadConnectionNeeded( castle, currentBuildId, false ) ) {
+                    CastleDialog::RedrawRoadConnection( castle, dst_pt, fadeBuilding.GetBuild(), fadeBuilding.GetAlpha() );
                     CastleDialog::RedrawRoadConnection( castle, dst_pt, currentBuildId );
                 }
             }
