@@ -101,7 +101,7 @@ int Game::NewCampaign()
     Video::ShowVideo( "INTRO.SMK", false );
     Video::ShowVideo( "CHOOSEW.SMK", false );
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
-    Settings::Get().SetCurrentCampaignID( chosenCampaign );
+    Campaign::CampaignData::Get().setCampaignID( chosenCampaign );
 
     AGG::PlayMusic( MUS::VICTORY );
 

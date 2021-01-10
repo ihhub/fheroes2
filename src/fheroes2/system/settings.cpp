@@ -1303,36 +1303,6 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
-void Settings::SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus )
-{
-    campaignData.setCurrentScenarioBonus( bonus );
-}
-
-void Settings::SetCurrentCampaignScenarioID( const int scenarioID )
-{
-    campaignData.setCurrentScenarioID( scenarioID );
-}
-
-void Settings::SetCurrentCampaignID( const int campaignID )
-{
-    campaignData.setCampaignID( campaignID );
-}
-
-void Settings::AddCurrentCampaignMapToFinished()
-{
-    campaignData.addCurrentMapToFinished();
-}
-
-int Settings::GetLastCompletedCampaignScenarioID() const
-{
-    return campaignData.getLastCompletedScenarioID();
-}
-
-int Settings::GetCampaignID() const
-{
-    return campaignData.getCampaignID();
-}
-
 const Players & Settings::GetPlayers( void ) const
 {
     return players;
@@ -1930,10 +1900,6 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
     msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
 
-    // TODO: add verification logic
-    if ( conf.game_type & Game::TYPE_CAMPAIGN )
-        msg << conf.campaignData;
-
     return msg;
 }
 
@@ -1957,9 +1923,6 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
-
-    if ( conf.game_type & Game::TYPE_CAMPAIGN )
-        msg >> conf.campaignData;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

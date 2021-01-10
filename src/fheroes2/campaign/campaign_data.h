@@ -54,6 +54,12 @@ namespace Campaign
     public:
         CampaignData();
 
+        static CampaignData & Get()
+        {
+            static CampaignData _campaignData;
+            return _campaignData;
+        }
+
         const ScenarioBonusData & getCurrentScenarioBonus() const
         {
             return _currentScenarioBonus;

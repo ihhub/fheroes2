@@ -154,7 +154,8 @@ int Game::SelectCampaignScenario()
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const size_t chosenCampaign = conf.GetCampaignID();
+    Campaign::CampaignData & campaignData = Campaign::CampaignData::Get();
+    const size_t chosenCampaign = campaignData.getCampaignID();
     const bool goodCampaign = chosenCampaign == 0;
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
@@ -302,8 +303,8 @@ int Game::SelectCampaignScenario()
                 continue;
             }
 
-            conf.SetCurrentCampaignScenarioBonus( scenarioBonus );
-            conf.SetCurrentCampaignScenarioID( chosenScenarioID );
+            campaignData.setCurrentScenarioBonus( scenarioBonus );
+            campaignData.setCurrentScenarioID( chosenScenarioID );
 
             SetScenarioBonus( scenarioBonus );
 
