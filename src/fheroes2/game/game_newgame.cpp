@@ -209,7 +209,7 @@ int Game::NewGame( void )
     fheroes2::Button buttonSettings( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
     fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
-    if ( !IsCampaignPresent() ) {
+    if ( !IsOriginalCampaignPresent() ) {
         buttonCampainGame.disable();
     }
 

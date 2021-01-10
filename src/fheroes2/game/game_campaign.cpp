@@ -59,12 +59,12 @@ namespace
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
         " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
-    void DrawCampaignScenarioIcon( int icnId, int iconId, const fheroes2::Point & offset, int posX, int posY )
+    void DrawCampaignScenarioIcon( const int icnId, int const iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
-        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconId ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
+        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconIdx ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
-    bool hasEnding( std::string const & fullString, std::string const & ending )
+    bool hasEnding( const std::string & fullString, const std::string & ending )
     {
         if ( fullString.length() >= ending.length() )
             return ( 0 == fullString.compare( fullString.length() - ending.length(), ending.length(), ending ) );
@@ -72,49 +72,45 @@ namespace
             return false;
     }
 
-    std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames )
+    std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames, const std::string & fileExtension )
     {
-        const ListFiles files = Settings::GetListFiles( "maps", ".h2c" );
-
+        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
         std::vector<Maps::FileInfo> maps;
 
         for ( size_t i = 0; i < fileNames.size(); ++i ) {
-            bool isPresent = false;
             for ( ListFiles::const_iterator file = files.begin(); file != files.end(); ++file ) {
-                if ( hasEnding( *file, fileNames[i] ) ) {
-                    Maps::FileInfo fi;
-                    if ( fi.ReadMP2( *file ) ) {
-                        maps.push_back( fi );
-                        isPresent = true;
-                        break;
-                    }
+                // check if the obtained file's name matches the one we want
+                if ( !hasEnding( *file, fileNames[i] ) )
+                    continue;
+                
+                Maps::FileInfo fi;
+                if ( fi.ReadMP2( *file ) ) {
+                    maps.push_back( fi );
                 }
             }
-            if ( !isPresent )
-                return std::vector<Maps::FileInfo>();
         }
 
         return maps;
     }
 
-    std::vector<Maps::FileInfo> GetRolandCampaign()
+    const std::vector<Maps::FileInfo> & GetRolandCampaign()
     {
         const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
 
-        return GetCampaignMaps( maps );
+        return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
     }
 
-    std::vector<Maps::FileInfo> GetArchibaldCampaign()
+    const std::vector<Maps::FileInfo> & GetArchibaldCampaign()
     {
         const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
 
-        return GetCampaignMaps( maps );
+        return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
     }
 }
 
-void SetScenarioBonus( Campaign::ScenarioBonusData scenarioBonus )
+void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
 {
     const Players & sortedPlayers = Settings::Get().GetPlayers();
     for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
@@ -143,7 +139,7 @@ void SetScenarioBonus( Campaign::ScenarioBonusData scenarioBonus )
     }
 }
 
-bool Game::IsCampaignPresent()
+bool Game::IsOriginalCampaignPresent()
 {
     return !GetRolandCampaign().empty() && !GetArchibaldCampaign().empty();
 }
