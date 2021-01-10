@@ -25,6 +25,7 @@
 #include <sstream>
 
 #include "army.h"
+#include "campaign_data.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
@@ -154,7 +155,12 @@ bool Game::Save( const std::string & fn )
     fz.setbigendian( true );
 
     // zip game data content
-    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get() << SAV2ID3; // eof marker
+    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
+
+    if ( conf.GameType() | Game::TYPE_CAMPAIGN )
+        fz << Campaign::CampaignData::Get();
+
+    fz << SAV2ID3; // eof marker
 
     return !fz.fail() && fz.write( fn, true );
 }
@@ -251,7 +257,12 @@ bool Game::Load( const std::string & fn )
     SetLoadVersion( binver );
     u16 end_check = 0;
 
-    fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get() >> end_check;
+    fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+
+    if ( fileGameType | Game::TYPE_CAMPAIGN )
+        fz >> Campaign::CampaignData::Get();
+
+    fz >> end_check;
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
         DEBUG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );
