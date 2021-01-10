@@ -93,7 +93,7 @@ namespace
         return maps;
     }
 
-    const std::vector<Maps::FileInfo> & GetRolandCampaign()
+    const std::vector<Maps::FileInfo> GetRolandCampaign()
     {
         const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
@@ -101,7 +101,7 @@ namespace
         return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
     }
 
-    const std::vector<Maps::FileInfo> & GetArchibaldCampaign()
+    const std::vector<Maps::FileInfo> GetArchibaldCampaign()
     {
         const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
