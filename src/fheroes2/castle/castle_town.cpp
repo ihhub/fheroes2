@@ -53,7 +53,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
 
-    Text text( _( "Recruit Hero" ), Font::BIG );
+    TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
     u32 count = hero->GetCountArtifacts();
     if ( hero->HasArtifact( Artifact::MAGIC_BOOK ) )
@@ -74,22 +74,22 @@ int Castle::DialogBuyHero( const Heroes * hero )
     StringReplace( str, "%{race}", Race::String( hero->GetRace() ) );
     StringReplace( str, "%{count}", count );
 
-    TextBox box2( str, Font::BIG, BOXAREA_WIDTH );
+    TextBox heroDescriptionText( str, Font::BIG, BOXAREA_WIDTH );
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
-    Dialog::FrameBox box( text.h() + spacer + portrait_frame.height() + spacer + box2.h() + spacer + rbs.GetArea().h, true );
+    Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().h, true );
     const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Point dst_pt;
 
-    dst_pt.x = box_rt.x + ( box_rt.width - text.w() ) / 2;
+    dst_pt.x = box_rt.x + ( box_rt.width - recruitHeroText.w() ) / 2;
     dst_pt.y = box_rt.y;
-    text.Blit( dst_pt.x, dst_pt.y );
+    recruitHeroText.Blit( dst_pt.x, dst_pt.y );
 
     // portrait and frame
     dst_pt.x = box_rt.x + ( box_rt.width - portrait_frame.width() ) / 2;
-    dst_pt.y = dst_pt.y + text.h() + spacer;
+    dst_pt.y = dst_pt.y + recruitHeroText.h() + spacer;
     fheroes2::Blit( portrait_frame, display, dst_pt.x, dst_pt.y );
 
     dst_pt.x = dst_pt.x + 5;
@@ -98,9 +98,9 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     dst_pt.x = box_rt.x;
     dst_pt.y = dst_pt.y + portrait_frame.height() + spacer;
-    box2.Blit( dst_pt.x, dst_pt.y );
+    heroDescriptionText.Blit( dst_pt.x, dst_pt.y );
 
-    rbs.SetPos( dst_pt.x, dst_pt.y + box2.h() + spacer );
+    rbs.SetPos( dst_pt.x, dst_pt.y + heroDescriptionText.h() + spacer );
     rbs.Redraw();
 
     dst_pt.x = box_rt.x;
@@ -401,15 +401,15 @@ u32 Castle::OpenTown( void )
     StatusBar statusBar;
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 12 );
 
-    // redraw resource panel
-    const Rect & rectResource = RedrawResourcePanel( cur_pt );
-
     // button exit
     dst_pt.x = cur_pt.x + 553;
     dst_pt.y = cur_pt.y + 428;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::TREASURY, 1, 2 );
-
     buttonExit.draw();
+
+    // redraw resource panel
+    const Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y );
 
     cursor.Show();
     display.render();
@@ -423,12 +423,12 @@ u32 Castle::OpenTown( void )
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
-        if ( le.MouseClickLeft( rectResource ) ) {
+        if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
         }
-        else if ( le.MousePressRight( rectResource ) ) {
-            Dialog::ResourceInfo( "", _( "Income:" ), world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+        else if ( le.MousePressRight( resActiveArea ) ) {
+            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
         // click left
@@ -503,10 +503,12 @@ u32 Castle::OpenTown( void )
             }
         }
 
-        // right
-        if ( le.MousePressRight( rectSpreadArmyFormat ) )
+        const bool isCaptainBuilt = isBuild( BUILD_CAPTAIN );
+
+        // Right click
+        if ( le.MousePressRight( rectSpreadArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
-        else if ( le.MousePressRight( rectGroupedArmyFormat ) )
+        else if ( le.MousePressRight( rectGroupedArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             hero1->OpenDialog( true );
@@ -578,13 +580,13 @@ u32 Castle::OpenTown( void )
                 statusBar.ShowMessage( str );
             }
         }
-        else if ( le.MouseCursor( rectSpreadArmyFormat ) )
+        else if ( le.MouseCursor( rectSpreadArmyFormat ) && isCaptainBuilt )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Spread'" ) );
-        else if ( le.MouseCursor( rectGroupedArmyFormat ) )
+        else if ( le.MouseCursor( rectGroupedArmyFormat ) && isCaptainBuilt )
             statusBar.ShowMessage( _( "Set garrison combat formation to 'Grouped'" ) );
         else if ( le.MouseCursor( buttonExit.area() ) )
             statusBar.ShowMessage( _( "Exit Castle Options" ) );
-        else if ( le.MouseCursor( rectResource ) )
+        else if ( le.MouseCursor( resActiveArea ) )
             statusBar.ShowMessage( _( "Show Income" ) );
         else
             // clear all

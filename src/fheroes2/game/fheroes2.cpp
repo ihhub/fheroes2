@@ -33,6 +33,7 @@
 #include "engine.h"
 #include "error.h"
 #include "game.h"
+#include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "screen.h"
@@ -105,6 +106,10 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO | INIT_TIMER;
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    subsystem |= INIT_GAMECONTROLLER;
+#endif
+
     if ( conf.Sound() || conf.Music() )
         subsystem |= INIT_AUDIO;
 #ifdef WITH_AUDIOCD
@@ -143,8 +148,11 @@ int main( int argc, char ** argv )
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Ensure the mouse position is updated to prevent bad initial values.
-            LocalEvent::Get().RegisterCycling();
+            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
             LocalEvent::Get().GetMouseCursor();
+
+            // Update mouse cursor when switching between software emulation and OS mouse modes.
+            fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
@@ -171,7 +179,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "H2XINTRO.SMK" ), false );
+            Video::ShowVideo( "H2XINTRO.SMK", false );
 
             for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
@@ -220,6 +228,12 @@ int main( int argc, char ** argv )
                 case Game::LOADMULTI:
                     rs = Game::LoadMulti();
                     break;
+                case Game::LOADHOTSEAT:
+                    rs = Game::LoadHotseat();
+                    break;
+                case Game::LOADNETWORK:
+                    rs = Game::LoadNetwork();
+                    break;
                 case Game::SCENARIOINFO:
                     rs = Game::ScenarioInfo();
                     break;
@@ -248,7 +262,7 @@ int main( int argc, char ** argv )
 bool ReadConfigs( void )
 {
     Settings & conf = Settings::Get();
-    const ListFiles & files = conf.GetListFiles( "", "fheroes2.cfg" );
+    const ListFiles & files = Settings::GetListFiles( "", "fheroes2.cfg" );
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {

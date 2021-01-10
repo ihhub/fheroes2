@@ -98,7 +98,7 @@ namespace Battle
 
         enum
         {
-            HERO_X_OFFSET = 32,
+            HERO_X_OFFSET = 30,
             LEFT_HERO_Y_OFFSET = 183,
             RIGHT_HERO_Y_OFFSET = 148,
             CAPTAIN_X_OFFSET = 6,
@@ -130,6 +130,8 @@ namespace Battle
         void SetMessage( const std::string &, bool = false );
         void Redraw( void );
         const std::string & GetMessage( void ) const;
+
+        void clear();
 
     private:
         Text bar1;
@@ -194,7 +196,7 @@ namespace Battle
 
         void SetStatus( const std::string &, bool = false );
         void SetArmiesOrder( const Units * );
-        void FadeArena( void );
+        void FadeArena( bool clearMessageLog );
 
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
@@ -237,7 +239,7 @@ namespace Battle
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
         void RedrawCastle2( const Castle &, s32 );
-        void RedrawCastle3( const Castle & );
+        void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
         void RedrawOpponents( void );
@@ -267,7 +269,7 @@ namespace Battle
         void AnimateUnitWithDelay( Unit & unit, uint32_t delay );
         void RedrawTroopDefaultDelay( Unit & unit );
         void RedrawTroopWithFrameAnimation( Unit & b, int icn, int m82, CreatueSpellAnimation animation );
-        void RedrawTargetsWithFrameAnimation( s32, const TargetsInfo &, int, int );
+        void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
         bool IdleTroopsAnimation( void );

@@ -374,7 +374,7 @@ const char * MP2::StringObject( int object )
         return _( "Observation Tower" );
     case OBJN_FREEMANFOUNDRY:
     case OBJ_FREEMANFOUNDRY:
-        return _( "Freeman Foundry" );
+        return _( "Freeman's Foundry" );
     case OBJN_WATERINGHOLE:
     case OBJ_WATERINGHOLE:
         return _( "Watering Hole" );
@@ -1064,6 +1064,7 @@ bool MP2::isNeedStayFront( int obj )
     case OBJ_JAIL:
     case OBJ_SHIPWRECK:
     case OBJ_BUOY:
+    case OBJ_SKELETON:
         return true;
 
     default:

@@ -41,7 +41,7 @@
 
 namespace Battle
 {
-    void PickupArtifactsAction( HeroBase &, HeroBase &, bool );
+    void PickupArtifactsAction( HeroBase &, HeroBase & );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool );
     void NecromancySkillAction( HeroBase &, u32, bool );
 }
@@ -107,14 +107,28 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
     const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
+    const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+    const bool transferArtifacts
+        = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+    bool artifactsTransferred = !transferArtifacts;
+
     if ( local ) {
         AGG::ResetMixer();
 
         // fade arena
-        arena.FadeArena();
+        const bool clearMessageLog
+            = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
+        arena.FadeArena( clearMessageLog );
 
         // dialog summary
-        arena.DialogBattleSummary( result );
+        if ( isWinnerHuman ) {
+            artifactsTransferred = true;
+        }
+        arena.DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
+    }
+
+    if ( !artifactsTransferred ) {
+        PickupArtifactsAction( *hero_wins, *hero_loss );
     }
 
     // save count troop
@@ -136,10 +150,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         else
             army2.GetCommander()->ActionAfterBattle();
     }
-
-    // pickup artifact
-    if ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() )
-        PickupArtifactsAction( *hero_wins, *hero_loss, hero_wins->isControlHuman() );
 
     // eagle eye capability
     if ( hero_wins && hero_loss && hero_wins->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && hero_loss->isHeroes() )
@@ -171,7 +181,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     return result;
 }
 
-void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2, bool local )
+void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2 )
 {
     BagArtifacts & bag1 = hero1.GetBagArtifacts();
     BagArtifacts & bag2 = hero2.GetBagArtifacts();
@@ -186,10 +196,6 @@ void Battle::PickupArtifactsAction( HeroBase & hero1, HeroBase & hero2, bool loc
             BagArtifacts::iterator it = std::find( bag1.begin(), bag1.end(), Artifact( ( Artifact::UNKNOWN ) ) );
             if ( bag1.end() != it ) {
                 *it = art;
-                if ( local ) {
-                    Game::PlayPickupSound();
-                    Dialog::ArtifactInfo( _( "You have captured an enemy artifact!" ), "", art );
-                }
             }
             art = Artifact::UNKNOWN;
         }

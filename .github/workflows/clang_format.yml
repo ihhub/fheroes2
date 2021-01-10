@@ -1,4 +1,4 @@
-name: Clang-format
+name: Code style check
 
 on: [pull_request]
 

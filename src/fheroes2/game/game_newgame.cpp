@@ -23,7 +23,9 @@
 #include <sstream>
 
 #include "agg.h"
+#include "assert.h"
 #include "audio_music.h"
+#include "campaign_data.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -36,6 +38,21 @@
 #include "ui_tool.h"
 #include "world.h"
 
+std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
+{
+    assert( scenarioId >= 0 );
+    std::vector<Campaign::ScenarioBonusData> bonus;
+
+    // TODO: apply use of campaignID
+    if ( scenarioId == 0 ) {
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 ) );
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 ) );
+        bonus.emplace_back( Campaign::ScenarioBonusData( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 ) );
+    }
+
+    return bonus;
+}
+
 namespace
 {
     const std::string rolandCampaignDescription[] = {_(
@@ -46,23 +63,9 @@ namespace
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
         " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
-    std::string ConvertToString( int value )
+    void DrawCampaignScenarioIcon( int icnId, int iconId, const fheroes2::Point & offset, const fheroes2::Point & pos )
     {
-        std::ostringstream ostr;
-        ostr << value;
-        return ostr.str();
-    }
-
-    void DrawCampaignScenarioIcon( int id, double offsetXMultipler, double offsetYMultipler, int icnId, const fheroes2::Point & offset )
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Sprite & campaignMapIcon = fheroes2::AGG::GetICN( ICN::CAMPXTRG, icnId );
-        fheroes2::Blit( campaignMapIcon, display, offset.x + 40 + 73 * offsetXMultipler, offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler - 0.5 ) );
-
-        Text campaignMapText( ConvertToString( id ), Font::YELLOW_BIG );
-        campaignMapText.Blit( offset.x + 40 + 73 * offsetXMultipler + campaignMapIcon.width(),
-                              offset.y + 356 + campaignMapIcon.height() * ( offsetYMultipler + 0.5 ) - campaignMapText.h(), display );
+        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconId ), fheroes2::Display::instance(), offset.x + pos.x, offset.y + pos.y );
     }
 
     bool hasEnding( std::string const & fullString, std::string const & ending )
@@ -75,7 +78,7 @@ namespace
 
     std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames )
     {
-        const ListFiles files = Settings::Get().GetListFiles( "maps", ".h2c" );
+        const ListFiles files = Settings::GetListFiles( "maps", ".h2c" );
 
         std::vector<Maps::FileInfo> maps;
 
@@ -144,14 +147,13 @@ int Game::NewHotSeat( void )
     if ( conf.GameType() == Game::TYPE_CAMPAIGN )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
-    conf.SetGameType( conf.GameType() | Game::TYPE_HOTSEAT );
-
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
         conf.SetPreferablyCountPlayers( 2 );
         world.NewMaps( 10, 10 );
         return StartBattleOnly();
     }
     else {
+        conf.SetGameType( Game::TYPE_HOTSEAT );
         const u32 select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
@@ -181,9 +183,9 @@ int Game::NewCampain( void )
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "INTRO.SMK" ), false );
-    Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSEW.SMK" ), false );
-    const size_t chosenCampaign = Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "CHOOSE.SMK" ), true, campaignRoi );
+    Video::ShowVideo( "INTRO.SMK", false );
+    Video::ShowVideo( "CHOOSEW.SMK", false );
+    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
     const bool goodCampaign = chosenCampaign == 0;
 
     AGG::PlayMusic( MUS::VICTORY );
@@ -211,16 +213,24 @@ int Game::NewCampain( void )
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    fheroes2::ButtonSprite firstChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + top.y, releaseButton, pressedButton );
-    fheroes2::ButtonSprite secondChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep + top.y, releaseButton, pressedButton );
-    fheroes2::ButtonSprite thirdChoice( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * 2 + top.y, releaseButton, pressedButton );
+    const std::vector<Campaign::ScenarioBonusData> bonusChoices = getCampaignBonusData( chosenCampaign, 0 );
+    const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
 
-    firstChoice.press();
+    fheroes2::ButtonGroup buttonChoices;
+    fheroes2::OptionButtonGroup optionButtonGroup;
 
-    fheroes2::OptionButtonGroup buttonGroup;
-    buttonGroup.addButton( &firstChoice );
-    buttonGroup.addButton( &secondChoice );
-    buttonGroup.addButton( &thirdChoice );
+    for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+        buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
+        optionButtonGroup.addButton( &buttonChoices.button( i ) );
+    }
+
+    Campaign::ScenarioBonusData scenarioBonus;
+
+    // in case there's no bonus for the map
+    if ( bonusChoiceCount > 0 ) {
+        scenarioBonus = bonusChoices[0];
+        buttonChoices.button( 0 ).press();
+    }
 
     const std::vector<Maps::FileInfo> & campaignMap = goodCampaign ? GetRolandCampaign() : GetArchibaldCampaign();
 
@@ -231,32 +241,28 @@ int Game::NewCampain( void )
     buttonOk.draw();
     buttonCancel.draw();
 
-    firstChoice.draw();
-    secondChoice.draw();
-    thirdChoice.draw();
+    for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
+        buttonChoices.button( i ).draw();
 
     Text textDaysSpent( "0", Font::BIG );
-    textDaysSpent.Blit( top.x + 570 + textDaysSpent.w() / 2, top.y + 31 );
+    textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     if ( !campaignMap.empty() ) {
-        TextBox mapName( campaignMap[0].description, Font::BIG, 200 );
-        mapName.Blit( top.x + 200, top.y + 97 - mapName.h() / 2 );
+        const std::string & desc = campaignMap[0].description;
+        TextBox mapName( desc.substr( 1, desc.length() - 2 ), Font::BIG, 200 );
+        mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( "1", Font::BIG );
-        campaignMapId.Blit( top.x + 175 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+        campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
         TextBox mapDescription( goodCampaign ? rolandCampaignDescription[0] : archibaldCampaignDescription[0], Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
-        TextBox awards( _( "None" ), Font::BIG, 180 );
-        awards.Blit( top.x + 425, top.y + 100 );
-
-        Text choice1( _( "2000 Gold" ), Font::BIG );
-        choice1.Blit( top.x + 425, top.y + 209 - choice1.h() / 2 );
-        Text choice2( goodCampaign ? _( "Thunder Mace" ) : _( "Mage's Ring" ), Font::BIG );
-        choice2.Blit( top.x + 425, top.y + 209 + 22 - choice2.h() / 2 );
-        Text choice3( goodCampaign ? _( "Gauntlets" ) : _( "Minor Scroll" ), Font::BIG );
-        choice3.Blit( top.x + 425, top.y + 209 + 44 - choice3.h() / 2 );
+        const int textChoiceWidth = 150;
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            Text choice( bonusChoices[i].ToString(), Font::BIG );
+            choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
+        }
     }
     else {
         TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
@@ -266,30 +272,33 @@ int Game::NewCampain( void )
         textDescription.Blit( top.x + 40, top.y + 200 );
     }
 
+    const int iconsId = goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+    const fheroes2::Point trackOffset = fheroes2::Point( top.x + 39, top.y + 294 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( goodCampaign ? ICN::CTRACK00 : ICN::CTRACK03, 0 ), display, top.x + 39, top.y + 294 );
     if ( goodCampaign ) {
-        DrawCampaignScenarioIcon( 1, 0, 0, 14, top );
-        DrawCampaignScenarioIcon( 2, 1, 0, 15, top );
-        DrawCampaignScenarioIcon( 3, 1.5, -1, 15, top );
-        DrawCampaignScenarioIcon( 4, 2, 0, 15, top );
-        DrawCampaignScenarioIcon( 5, 3, 0, 15, top );
-        DrawCampaignScenarioIcon( 6, 4, 0, 15, top );
-        DrawCampaignScenarioIcon( 7, 5, 0, 15, top );
-        DrawCampaignScenarioIcon( 8, 6, -1, 15, top );
-        DrawCampaignScenarioIcon( 9, 6, 1, 15, top );
-        DrawCampaignScenarioIcon( 10, 7, 0, 15, top );
+        DrawCampaignScenarioIcon( iconsId, 14, trackOffset, {-2, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {72, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {109, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {220, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {294, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {516, 40} );
     }
     else {
-        DrawCampaignScenarioIcon( 1, 0, 0, 17, top );
-        DrawCampaignScenarioIcon( 2, 1, 0, 18, top );
-        DrawCampaignScenarioIcon( 3, 2, -1, 18, top );
-        DrawCampaignScenarioIcon( 4, 2, 1, 18, top );
-        DrawCampaignScenarioIcon( 5, 3, 0, 18, top );
-        DrawCampaignScenarioIcon( 6, 4, 0, 18, top );
-        DrawCampaignScenarioIcon( 7, 4.5, -1, 18, top );
-        DrawCampaignScenarioIcon( 8, 5, 0, 18, top );
-        DrawCampaignScenarioIcon( 9, 6, -1, 18, top );
-        DrawCampaignScenarioIcon( 10, 6, 1, 18, top );
-        DrawCampaignScenarioIcon( 11, 7, 0, 18, top );
+        DrawCampaignScenarioIcon( iconsId, 17, trackOffset, {-2, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {72, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {146, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {220, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {294, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {331, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {368, 40} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, -2} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {442, 82} );
+        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, {516, 40} );
     }
 
     LocalEvent & le = LocalEvent::Get();
@@ -303,17 +312,14 @@ int Game::NewCampain( void )
         if ( !buttonOk.isDisabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MousePressLeft( firstChoice.area() ) ) {
-            firstChoice.press();
-            buttonGroup.draw();
-        }
-        if ( le.MousePressLeft( secondChoice.area() ) ) {
-            secondChoice.press();
-            buttonGroup.draw();
-        }
-        if ( le.MousePressLeft( thirdChoice.area() ) ) {
-            thirdChoice.press();
-            buttonGroup.draw();
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
+                buttonChoices.button( i ).press();
+                optionButtonGroup.draw();
+                scenarioBonus = bonusChoices[i];
+
+                break;
+            }
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
@@ -331,6 +337,36 @@ int Game::NewCampain( void )
                 Dialog::Message( "Campaign Game loading failure", "Please make sure that campaign files are correct and present", Font::SMALL, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
+            }
+
+            conf.SetCurrentCampaignScenarioBonus( scenarioBonus );
+            conf.SetCurrentCampaignScenarioID( 0 );
+            conf.SetCurrentCampaignID( chosenCampaign );
+
+            const Players & sortedPlayers = conf.GetPlayers();
+            for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+                if ( !*it )
+                    continue;
+
+                const Player & player = ( **it );
+                if ( !player.isControlHuman() )
+                    continue;
+
+                Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+
+                switch ( scenarioBonus._type ) {
+                case Campaign::ScenarioBonusData::RESOURCES:
+                    kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+                    break;
+                case Campaign::ScenarioBonusData::ARTIFACT:
+                    kingdom.GetBestHero()->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                    break;
+                case Campaign::ScenarioBonusData::TROOP:
+                    kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+                    break;
+                default:
+                    assert( 0 );
+                }
             }
 
             return Game::STARTGAME;

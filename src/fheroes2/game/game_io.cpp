@@ -46,7 +46,9 @@ static u16 SAV2ID3 = 0xFF03;
 
 namespace Game
 {
-    struct HeaderSAV
+    // This was default structure prior 0.9 version so all save files were under the same category. We added a game type format which is stored
+    // in HeaderSAV structure. By default all old saves are under single-player save type.
+    struct HeaderSAVBase
     {
         enum
         {
@@ -54,11 +56,11 @@ namespace Game
             IS_LOYALTY = 0x4000
         };
 
-        HeaderSAV()
+        HeaderSAVBase()
             : status( 0 )
         {}
 
-        HeaderSAV( const Maps::FileInfo & fi, bool loyalty )
+        HeaderSAVBase( const Maps::FileInfo & fi, const bool loyalty )
             : status( 0 )
             , info( fi )
         {
@@ -74,25 +76,55 @@ namespace Game
 #endif
         }
 
-        u16 status;
+        uint16_t status;
         Maps::FileInfo info;
+
+        friend StreamBase & operator<<( StreamBase & msg, const HeaderSAVBase & hdr )
+        {
+            return msg << hdr.status << hdr.info;
+        }
+
+        friend StreamBase & operator>>( StreamBase & msg, HeaderSAVBase & hdr )
+        {
+            return msg >> hdr.status >> hdr.info;
+        }
+    };
+
+    struct HeaderSAV : HeaderSAVBase
+    {
+        HeaderSAV()
+            : HeaderSAVBase()
+            , gameType( 0 )
+        {}
+
+        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType )
+            : HeaderSAVBase( fi, loyalty )
+            , gameType( gameType )
+        {}
+
+        int gameType;
     };
 
     StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
     {
-        return msg << hdr.status << hdr.info;
+        return msg << hdr.status << hdr.info << hdr.gameType;
     }
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info;
+        return msg >> hdr.status >> hdr.info >> hdr.gameType;
     }
+}
+
+bool Game::AutoSave()
+{
+    return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
 }
 
 bool Game::Save( const std::string & fn )
 {
     DEBUG( DBG_GAME, DBG_INFO, fn );
-    const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE.sav" );
+    const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE" + GetSaveFileExtension() );
     const Settings & conf = Settings::Get();
 
     // ask overwrite?
@@ -115,7 +147,7 @@ bool Game::Save( const std::string & fn )
 
     // raw info content
     fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << GetString( loadver ) << loadver
-       << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion() );
+       << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion(), conf.GameType() );
     fs.close();
 
     ZStreamFile fz;
@@ -154,12 +186,35 @@ bool Game::Load( const std::string & fn )
 
     std::string strver;
     u16 binver = 0;
-    HeaderSAV header;
 
     // read raw info
-    fs >> strver >> binver >> header;
+    fs >> strver >> binver;
+
+    // hide: unsupported version
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+        return false;
+
+    int fileGameType = Game::TYPE_STANDARD;
+    HeaderSAVBase header;
+    // starting from 0.9.0, headers also include gameType
+    if ( binver >= FORMAT_VERSION_090_RELEASE ) {
+        HeaderSAV currentFormatHeader;
+        fs >> currentFormatHeader;
+
+        header = currentFormatHeader;
+        fileGameType = currentFormatHeader.gameType;
+    }
+    else {
+        fs >> header;
+    }
+
     size_t offset = fs.tell();
     fs.close();
+
+    if ( ( conf.GameType() & fileGameType ) == 0 ) {
+        Dialog::Message( "Warning", _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
+        return false;
+    }
 
 #ifndef WITH_ZLIB
     if ( header.status & HeaderSAV::IS_COMPRESS ) {
@@ -233,13 +288,29 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     std::string strver;
     u16 binver = 0;
-    HeaderSAV header;
 
     // read raw info
-    fs >> strver >> binver >> header;
+    fs >> strver >> binver;
 
     // hide: unsupported version
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+        return false;
+
+    int fileGameType = Game::TYPE_STANDARD;
+    HeaderSAVBase header;
+    // starting from 0.9.0, headers also include gameType
+    if ( binver >= FORMAT_VERSION_090_RELEASE ) {
+        HeaderSAV currentFormatHeader;
+        fs >> currentFormatHeader;
+
+        header = currentFormatHeader;
+        fileGameType = currentFormatHeader.gameType;
+    }
+    else {
+        fs >> header;
+    }
+
+    if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
 
 #ifndef WITH_ZLIB
@@ -254,4 +325,27 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     finfo.file = fn;
 
     return true;
+}
+
+std::string Game::GetSaveDir()
+{
+    const char * dir = "save";
+    return Settings::GetWriteableDir( dir );
+}
+
+std::string Game::GetSaveFileExtension()
+{
+    return GetSaveFileExtension( Settings::Get().GameType() );
+}
+
+std::string Game::GetSaveFileExtension( const int gameType )
+{
+    if ( gameType & Game::TYPE_STANDARD )
+        return ".sav";
+    else if ( gameType & Game::TYPE_CAMPAIGN )
+        return ".savc";
+    else if ( gameType & Game::TYPE_HOTSEAT )
+        return ".savh";
+
+    return ".savm";
 }

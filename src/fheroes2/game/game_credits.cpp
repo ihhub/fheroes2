@@ -95,7 +95,7 @@ void Game::ShowCredits()
     title.Blit( screenOffset.x + 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY );
     offsetY += title.h();
 
-    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nAndrey Starodubtsev\nVasilenko Alexey\neos428\nOroty\nKrzysztof Gorecki\nemotionalamoeba\n"
+    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nAndrey Starodubtsev\neos428\nVasilenko Alexey\nvincent-grosbois\nemotionalamoeba\nOroty\n"
                                     "and many other contributors!" );
 
     name.Set( contributors, Font::BIG, textWidth );
@@ -112,7 +112,6 @@ void Game::ShowCredits()
 
     name.Set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", Font::SMALL, textWidth );
     name.Blit( screenOffset.x + 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY );
-    offsetY += name.h();
 
     const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
     fheroes2::Blit( goblin, display, screenOffset.x + ( display.DEFAULT_WIDTH - goblin.width() ) / 2, screenOffset.y + ( display.DEFAULT_HEIGHT - goblin.height() ) / 2 );

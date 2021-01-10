@@ -38,7 +38,6 @@
 #include "player_info.h"
 #include "race.h"
 #include "settings.h"
-#include "splitter.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -152,20 +151,24 @@ int Game::ScenarioInfo( void )
         const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
         for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter ) {
             if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                if ( mapIter->file != conf.CurrentFileInfo().file )
+                if ( mapIter->file == conf.CurrentFileInfo().file ) {
                     conf.SetCurrentFileInfo( *mapIter );
-
-                resetStartingSettings = false;
-                break;
+                    updatePlayers( players, humanPlayerCount );
+                    LoadPlayers( mapIter->file, players );
+                    resetStartingSettings = false;
+                    break;
+                }
             }
         }
     }
 
     // set first map's settings
-    if ( resetStartingSettings )
+    if ( resetStartingSettings ) {
         conf.SetCurrentFileInfo( lists.front() );
+        updatePlayers( players, humanPlayerCount );
+        LoadPlayers( lists.front().file, players );
+    }
 
-    updatePlayers( players, humanPlayerCount );
     playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
     RedrawScenarioStaticInfo( rectPanel, true );
@@ -224,13 +227,17 @@ int Game::ScenarioInfo( void )
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
             if ( fi ) {
+                SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
+                LoadPlayers( fi->file, players );
+
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
                 cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
+                playersInfo.resetSelection();
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
                 levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
@@ -305,6 +312,8 @@ int Game::ScenarioInfo( void )
         }
     }
 
+    SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
+
     cursor.Hide();
 
     if ( result == STARTGAME ) {
@@ -359,6 +368,9 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
     // image panel
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
     fheroes2::Blit( panel, display, rt.x, rt.y );
+
+    // Redraw select button as the original image has a wrong position of it
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
     // text scenario
     Text text( _( "Scenario:" ), Font::BIG );

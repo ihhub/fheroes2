@@ -65,11 +65,18 @@ namespace Interface
             return _windowROI;
         }
 
+        // Do NOT use this method directly in heavy computation loops
         Rect GetVisibleTileROI( void ) const;
+
         void ShiftCenter( const Point & offset ); // in pixels
 
         int GetScrollCursor( void ) const;
-        bool NeedScroll( void ) const;
+
+        bool NeedScroll() const
+        {
+            return scrollDirection != 0;
+        }
+
         void Scroll( void );
         void SetScroll( int );
 
@@ -84,7 +91,11 @@ namespace Interface
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const Point & mp ) const;
 
-        void SetUpdateCursor( void );
+        void SetUpdateCursor( void )
+        {
+            updateCursor = true;
+        }
+
         void QueueEventProcessing( void );
 
         Rect RectFixed( Point & dst, int rw, int rh ) const;
@@ -94,7 +105,10 @@ namespace Interface
         int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
 
-        void ResetCursorPosition();
+        void ResetCursorPosition()
+        {
+            _prevIndexPos = -1;
+        }
 
     private:
         void SetAreaPosition( s32, s32, u32, u32 );
@@ -116,7 +130,7 @@ namespace Interface
         int scrollDirection;
         bool updateCursor;
 
-        SDL::Time scrollTime;
+        fheroes2::Time scrollTime;
 
         Point _middlePoint() const; // returns middle point of window ROI
         Point _getStartTileId() const;

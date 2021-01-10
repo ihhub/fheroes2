@@ -59,3 +59,9 @@
 
 # build directory
 build
+
+# fheroes2 related files
+fheroes2.cfg
+
+# demo directory
+script/demo/demo

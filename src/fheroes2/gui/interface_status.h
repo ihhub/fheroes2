@@ -75,10 +75,11 @@ namespace Interface
         int state;
         int oldState;
         int lastResource;
-        u32 countLastResource;
+        uint32_t countLastResource;
+        uint32_t turn_progress;
+
         SDL::Timer timerShowLastResource;
         SDL::Timer timerRedrawAIStatus;
-        u32 turn_progress;
     };
 }
 

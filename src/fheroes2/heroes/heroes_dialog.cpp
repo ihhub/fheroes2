@@ -69,7 +69,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     // name
-    message = _( "%{name} the %{race} ( Level %{level} )" );
+    message = _( "%{name} the %{race} (Level %{level})" );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( race ) );
     StringReplace( message, "%{level}", GetLevel() );
@@ -262,6 +262,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
+            spellPointsInfo.Redraw();
             redrawMorale = true;
             redrawLuck = true;
         }
@@ -335,10 +336,14 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         // status message
         if ( le.MouseCursor( portPos ) )
             message = _( "View Stats" );
-        else if ( le.MouseCursor( moraleIndicator.GetArea() ) )
-            message = _( "View Morale Info" );
-        else if ( le.MouseCursor( luckIndicator.GetArea() ) )
-            message = _( "View Luck Info" );
+        else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
+            message = _( "View %{morale} Info" );
+            StringReplace( message, "%{morale}", fheroes2::MoraleString( army.GetMorale() ) );
+        }
+        else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
+            message = _( "View %{luck} Info" );
+            StringReplace( message, "%{luck}", fheroes2::LuckString( army.GetLuck() ) );
+        }
         else if ( le.MouseCursor( experienceInfo.GetArea() ) )
             message = _( "View Experience Info" );
         else if ( le.MouseCursor( spellPointsInfo.GetArea() ) )

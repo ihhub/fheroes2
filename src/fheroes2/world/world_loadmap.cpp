@@ -51,7 +51,7 @@ namespace GameStatic
 
 #ifdef WITH_ZLIB
 #include "zzlib.h"
-std::vector<u8> DecodeBase64AndUncomress( std::string base64 )
+std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 {
     std::vector<u8> zdata = decodeBase64( base64 );
     StreamBuf sb( zdata );
@@ -612,7 +612,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
         }
     }
 
-    if ( obj.monster() == Monster::GHOST || obj.monster.isElemental() )
+    if ( obj.monster.GetID() == Monster::GHOST || obj.monster.isElemental() )
         cond = 0;
 
     if ( count == 0 ) {
@@ -668,10 +668,6 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
         // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
         // 15 - spell
         cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
-
-        // always available
-        if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-            cond = 0;
     }
 
     obj.condition = cond;

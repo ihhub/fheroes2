@@ -210,10 +210,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: allow set guardian to objects" ),
     },
     {
-        Settings::WORLD_NOREQ_FOR_ARTIFACTS,
-        _( "world: no in-built requirements or guardians for placed artifacts" ),
-    },
-    {
         Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
         _( "world: only the first monster will attack (H2 bug)." ),
     },
@@ -240,10 +236,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
         _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-    },
-    {
-        Settings::WORLD_ARTSPRING_SEPARATELY_VISIT,
-        _( "world: Artesian Springs have two separately visitable squares (h3 ver)" ),
     },
     {
         Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
@@ -393,10 +385,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::POCKETPC_DRAG_DROP_SCROLL,
         _( "pocketpc: drag&drop gamearea as scroll" ),
     },
-    {
-        Settings::POCKETPC_LOW_MEMORY,
-        _( "pocketpc: low memory" ),
-    },
 
     {0, NULL},
 };
@@ -420,6 +408,7 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+    , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -732,16 +721,14 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-#ifdef WITHOUT_MOUSE
-    ival = config.IntParams( "emulate mouse" );
-    if ( ival ) {
-        le.SetEmulateMouse( ival );
-
-        ival = config.IntParams( "emulate mouse step" );
-        if ( ival )
-            le.SetEmulateMouseStep( ival );
+    if ( config.Exists( "controller_pointer_speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+        if ( _controllerPointerSpeed > 100 )
+            _controllerPointerSpeed = 100;
+        else if ( _controllerPointerSpeed < 0 )
+            _controllerPointerSpeed = 0;
+        le.SetControllerPointerSpeed( _controllerPointerSpeed );
     }
-#endif
 
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
@@ -767,16 +754,10 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( QVGA() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( GAME_HIDE_INTERFACE );
-    }
-
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
         ExtResetModes( POCKETPC_TAP_MODE );
-        ExtResetModes( POCKETPC_LOW_MEMORY );
     }
 
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
@@ -897,6 +878,9 @@ std::string Settings::String( void ) const
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
 #endif
+
+    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
+    os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     return os.str();
 }
@@ -1079,11 +1063,6 @@ std::string Settings::GetWriteableDir( const char * subdir )
     return "";
 }
 
-std::string Settings::GetSaveDir( void )
-{
-    return GetWriteableDir( "save" );
-}
-
 bool Settings::MusicExt( void ) const
 {
     return opt_global.Modes( GLOBAL_MUSIC_EXT );
@@ -1185,12 +1164,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-/* return full screen */
-bool Settings::QVGA( void ) const
-{
-    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const
@@ -1328,6 +1301,26 @@ int Settings::GameType( void ) const
 void Settings::SetGameType( int type )
 {
     game_type = type;
+}
+
+void Settings::SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus )
+{
+    campaignData.setCurrentScenarioBonus( bonus );
+}
+
+void Settings::SetCurrentCampaignScenarioID( const int scenarioID )
+{
+    campaignData.setCurrentScenarioID( scenarioID );
+}
+
+void Settings::SetCurrentCampaignID( const int campaignID )
+{
+    campaignData.setCampaignID( campaignID );
+}
+
+void Settings::AddCurrentCampaignMapToFinished()
+{
+    campaignData.addCurrentMapToFinished();
 }
 
 const Players & Settings::GetPlayers( void ) const
@@ -1624,11 +1617,6 @@ bool Settings::ExtWorldAllowSetGuardian( void ) const
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
 }
 
-bool Settings::ExtWorldNoRequirementsForArtifacts( void ) const
-{
-    return ExtModes( WORLD_NOREQ_FOR_ARTIFACTS );
-}
-
 bool Settings::ExtWorldArtifactCrystalBall( void ) const
 {
     return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
@@ -1749,11 +1737,6 @@ bool Settings::ExtGameHideInterface( void ) const
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtPocketLowMemory( void ) const
-{
-    return ExtModes( POCKETPC_LOW_MEMORY );
-}
-
 bool Settings::ExtPocketTapMode( void ) const
 {
     return ExtModes( POCKETPC_TAP_MODE );
@@ -1777,11 +1760,6 @@ bool Settings::ExtWorldBanWeekOf( void ) const
 bool Settings::ExtWorldBanMonthOfMonsters( void ) const
 {
     return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
-}
-
-bool Settings::ExtWorldArtesianSpringSeparatelyVisit( void ) const
-{
-    return ExtModes( WORLD_ARTSPRING_SEPARATELY_VISIT );
 }
 
 bool Settings::ExtWorldBanPlagues( void ) const
@@ -1895,7 +1873,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1907,7 +1885,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1939,14 +1917,14 @@ bool Settings::ChangeFullscreenResolution( void ) const
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg <<
-           // lang
-           conf.force_lang <<
-           // current maps
-           conf.current_maps_file <<
-           // game config
-           conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game << conf.opt_world << conf.opt_battle << conf.opt_addons
-               << conf.players;
+    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+        << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
+
+    // TODO: add verification logic
+    if ( conf.game_type & Game::TYPE_CAMPAIGN )
+        msg << conf.campaignData;
+
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
@@ -1969,6 +1947,9 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
+
+    if ( conf.game_type & Game::TYPE_CAMPAIGN )
+        msg >> conf.campaignData;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

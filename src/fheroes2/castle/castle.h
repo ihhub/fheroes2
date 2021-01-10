@@ -203,8 +203,8 @@ public:
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
-    static bool PredicateIsBuildMarketplace( const Castle * );
     static bool PredicateIsCapital( const Castle * );
+    static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
     static u32 GetGrownWell( void );
     static u32 GetGrownWel2( void );
@@ -257,17 +257,23 @@ namespace CastleDialog
             : _alpha( 0 )
             , _build( BUILD_NOTHING )
         {}
+
         void StartFadeBuilding( const uint32_t build );
+
         bool UpdateFadeBuilding();
+
         bool IsFadeDone() const
         {
             return _alpha >= 255;
         }
+
         void StopFadeBuilding();
+
         uint32_t GetAlpha() const
         {
             return _alpha;
         }
+
         uint32_t GetBuild() const
         {
             return _build;

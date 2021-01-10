@@ -76,13 +76,13 @@ namespace Battle
         Unit( const Troop &, s32 pos, bool reflect );
         ~Unit();
 
-        bool isModes( u32 ) const;
-        bool isBattle( void ) const;
-        std::string GetShotString( void ) const;
-        std::string GetSpeedString( void ) const;
-        u32 GetHitPointsLeft( void ) const;
-        u32 GetAffectedDuration( u32 ) const;
-        u32 GetSpeed( void ) const;
+        virtual bool isModes( u32 ) const override;
+        virtual bool isBattle() const override;
+        virtual std::string GetShotString() const override;
+        virtual std::string GetSpeedString() const override;
+        virtual u32 GetHitPointsLeft() const override;
+        virtual u32 GetAffectedDuration( u32 ) const override;
+        virtual u32 GetSpeed() const override;
 
         Unit * GetMirror();
         void SetMirror( Unit * );
@@ -90,7 +90,7 @@ namespace Battle
         void SetRandomLuck( void );
         void NewTurn( void );
 
-        bool isValid( void ) const;
+        virtual bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
@@ -116,14 +116,14 @@ namespace Battle
         void SetPosition( const Position & );
         void SetReflection( bool );
 
-        u32 GetAttack( void ) const;
-        u32 GetDefense( void ) const;
+        virtual u32 GetAttack() const override;
+        virtual u32 GetDefense() const override;
         int GetArmyColor( void ) const;
-        int GetColor( void ) const;
+        virtual int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
         int GetCurrentControl() const;
         u32 GetSpeed( bool skip_standing_check ) const;
-        int GetControl( void ) const;
+        virtual int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
         u32 GetDead( void ) const;
@@ -183,7 +183,6 @@ namespace Battle
 
         u32 GetMagicResist( const Spell &, u32 ) const;
         int GetSpellMagic( bool force = false ) const;
-        u32 GetObstaclesPenalty( const Unit & ) const;
 
         const HeroBase * GetCommander( void ) const;
 

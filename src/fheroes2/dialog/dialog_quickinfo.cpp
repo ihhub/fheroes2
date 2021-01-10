@@ -66,6 +66,15 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, int scoute )
         str = Maps::GetMinesName( tile.QuantityResourceCount().first );
         str.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
     }
+    else if ( tile.GetObject() == MP2::OBJN_ABANDONEDMINE || tile.GetObject() == MP2::OBJ_ABANDONEDMINE ) {
+        const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
+        if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+            str = MP2::StringObject( tile.GetObject() );
+        }
+        else {
+            str = Maps::GetMinesName( tile.QuantityResourceCount().first );
+        }
+    }
     else {
         str = MP2::StringObject( tile.GetObject() );
     }
@@ -282,7 +291,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * hero )
 {
-    std::string str = Maps::Ground::String( tile.GetGround() );
+    std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
 
     if ( show && hero ) {
         int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
@@ -302,8 +311,10 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
+    const int objectType = tile.GetObject( false );
+
     // check
-    switch ( tile.GetObject() ) {
+    switch ( objectType ) {
     case MP2::OBJN_MINES:
     case MP2::OBJN_ABANDONEDMINE:
     case MP2::OBJN_SAWMILL:
@@ -312,9 +323,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         const Maps::Tiles & right = world.GetTiles( tile.GetIndex() + 1 );
         const Maps::Tiles * center = NULL;
 
-        if ( MP2::isGroundObject( left.GetObject() ) )
+        if ( MP2::isGroundObject( left.GetObject( false ) ) )
             center = &left;
-        else if ( MP2::isGroundObject( right.GetObject() ) )
+        else if ( MP2::isGroundObject( right.GetObject( false ) ) )
             center = &right;
 
         if ( center ) {
@@ -374,11 +385,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         name_object = _( "Unchartered Territory" );
     else
         // check guardians mine
-        if ( MP2::OBJ_ABANDONEDMINE == tile.GetObject() || tile.CaptureObjectIsProtection() ) {
+        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
         name_object = ShowGuardiansInfo( tile, ( settings.CurrentColor() == tile.QuantityColor() ? Skill::Level::EXPERT : scoute ) );
     }
     else
-        switch ( tile.GetObject() ) {
+        switch ( objectType ) {
         case MP2::OBJ_MONSTER:
             name_object = ShowMonsterInfo( tile, scoute );
             break;
@@ -402,7 +413,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
-            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( tile.GetObject() ) : ShowGlobalVisitInfo( tile, kingdom, show );
+            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( objectType ) : ShowGlobalVisitInfo( tile, kingdom, show );
             break;
 
         case MP2::OBJ_CAMPFIRE:
@@ -425,7 +436,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
         case MP2::OBJ_ALCHEMYLAB:
         case MP2::OBJ_SAWMILL:
-            name_object = MP2::StringObject( tile.GetObject() );
+            name_object = MP2::StringObject( objectType );
             if ( settings.CurrentColor() == tile.QuantityColor() )
                 name_object.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
             break;
@@ -459,9 +470,12 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-        case MP2::OBJ_ARTESIANSPRING:
         case MP2::OBJ_TREEKNOWLEDGE:
             name_object = ShowLocalVisitTileInfo( tile, from_hero );
+            break;
+
+        case MP2::OBJ_ARTESIANSPRING:
+            name_object = ShowGlobalVisitInfo( tile, kingdom );
             break;
 
         case MP2::OBJ_MAGICWELL:
@@ -499,7 +513,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         default:
-            name_object = MP2::StringObject( tile.GetObject() );
+            name_object = MP2::StringObject( objectType );
             break;
         }
 
@@ -521,9 +535,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 void Dialog::QuickInfo( const Castle & castle )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
 
     const int qwiktown = ICN::QWIKTOWN;
 
@@ -646,10 +657,13 @@ void Dialog::QuickInfo( const Castle & castle )
     const Heroes * from_hero = Interface::GetFocusHeroes();
     const Heroes * guardian = castle.GetHeroes().Guard();
 
+    const int currentColor = conf.CurrentColor();
+    const int thievesGuildCount = world.GetKingdom( currentColor ).GetCountThievesGuild();
+
     // draw guardian portrait
     if ( guardian &&
          // my  colors
-         ( castle.isFriends( conf.CurrentColor() ) ||
+         ( castle.GetColor() == currentColor ||
            // show guardians (scouting: advanced)
            ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
         // heroes name
@@ -659,7 +673,7 @@ void Dialog::QuickInfo( const Castle & castle )
         text.Blit( dst_pt.x, dst_pt.y );
 
         // mini port heroes
-        fheroes2::Image port = guardian->GetPortrait( PORT_SMALL );
+        const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
             dst_pt.y += 15;
@@ -674,14 +688,22 @@ void Dialog::QuickInfo( const Castle & castle )
         dst_pt.y += 45;
         text.Blit( dst_pt.x, dst_pt.y );
     }
-    else if ( castle.isFriends( conf.CurrentColor() ) )
+    else if ( castle.isFriends( currentColor ) ) {
         // show all
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, false );
-    else
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::EXPERT, true, true );
+    }
+    // draw enemy castle defenders, dependent on thieves guild count
+    else if ( thievesGuildCount == 0 ) {
+        text.Set( _( "Unknown" ) );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        dst_pt.y += 45;
+        text.Blit( dst_pt.x, dst_pt.y );
+    }
+    else {
         // show limited
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, thievesGuildCount, false, false );
+    }
 
-    cursor.Show();
     display.render();
 
     // quick info loop
@@ -689,9 +711,7 @@ void Dialog::QuickInfo( const Castle & castle )
         ;
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.Show();
     display.render();
 }
 
@@ -744,7 +764,7 @@ void Dialog::QuickInfo( const Heroes & hero )
 
     // heroes name
     if ( showFullInfo ) {
-        message = _( "%{name} ( Level %{level} )" );
+        message = _( "%{name} (Level %{level})" );
         StringReplace( message, "%{name}", hero.GetName() );
         StringReplace( message, "%{level}", hero.GetLevel() );
     }
@@ -756,7 +776,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // mini port heroes
-    fheroes2::Image port = hero.GetPortrait( PORT_SMALL );
+    const fheroes2::Sprite & port = hero.GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
         dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;
@@ -895,7 +915,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     }
     else {
         // show limited
-        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false );
+        Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
     }
 
     cursor.Show();

@@ -29,6 +29,7 @@
 #include "rect.h"
 #include "types.h"
 
+class Players;
 class Heroes;
 class Castle;
 
@@ -52,6 +53,8 @@ namespace Game
         LOADSTANDARD,
         LOADCAMPAIN,
         LOADMULTI,
+        LOADHOTSEAT,
+        LOADNETWORK,
         SCENARIOINFO,
         SELECTSCENARIO,
         STARTGAME,
@@ -159,11 +162,13 @@ namespace Game
         EVENT_SHOWSTATUS,
         EVENT_SHOWICONS,
         EVENT_SWITCHGROUP,
-        EVENT_EMULATETOGGLE,
-        EVENT_LAST
+        EVENT_STACKSPLIT_SHIFT,
+        EVENT_STACKSPLIT_CTRL,
+        EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
+    bool HotKeyHoldEvent( const int eventID );
 
     enum
     {
@@ -193,7 +198,6 @@ namespace Game
         BATTLE_POPUP_DELAY,
         BATTLE_COLOR_CYCLE_DELAY,
         BATTLE_SELECTED_UNIT_DELAY,
-        AUTOHIDE_STATUS_DELAY,
         //
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
@@ -225,12 +229,15 @@ namespace Game
     int LoadStandard( void );
     int LoadCampain( void );
     int LoadMulti( void );
+    int LoadHotseat();
+    int LoadNetwork();
     int ScenarioInfo( void );
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
+    int DisplayLoadGameDialog();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
@@ -253,6 +260,12 @@ namespace Game
     void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
     void OpenCastleDialog( Castle & );
     std::string GetEncodeString( const std::string & );
+    void LoadPlayers( const std::string & mapFileName, Players & players );
+    void SavePlayers( const std::string & mapFileName, const Players & players );
+
+    std::string GetSaveDir();
+    std::string GetSaveFileExtension();
+    std::string GetSaveFileExtension( const int gameType );
 
     namespace ObjectFadeAnimation
     {
@@ -283,7 +296,8 @@ namespace Game
     }
 
     u32 GetStep4Player( u32, u32, u32 );
-    std::string CountScoute( u32 count, int scoute, bool shorts = false );
+    std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
+    std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }
 
 #define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )

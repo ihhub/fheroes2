@@ -34,25 +34,13 @@
 #include "system.h"
 #include <SDL.h>
 
-#if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
 #include <windows.h>
 #include <shellapi.h>
 #endif
 
-#if !defined( __MINGW32CE__ ) && !defined( _MSC_VER )
+#if !defined( _MSC_VER )
 #include <unistd.h>
-#endif
-
-#if defined( __MINGW32CE__ )
-#undef Shell_NotifyIcon
-extern "C" {
-BOOL WINAPI Shell_NotifyIcon( DWORD, PNOTIFYICONDATAW );
-}
-
-// wincommon/SDL_sysevents.c
-extern HICON screen_icn;
-extern HINSTANCE SDL_Instance;
-extern HWND SDL_Window;
 #endif
 
 #if defined( __WIN32__ )
@@ -62,15 +50,13 @@ extern HWND SDL_Window;
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#if defined( __SYMBIAN32__ )
-#define SEPARATOR '\\'
-#elif defined( __WIN32__ )
+#if defined( __WIN32__ )
 #define SEPARATOR '\\'
 #else
 #define SEPARATOR '/'
 #endif
 
-#if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
+#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
 #include <dirent.h>
 #endif
 
@@ -79,9 +65,7 @@ extern HWND SDL_Window;
 
 int System::MakeDirectory( const std::string & path )
 {
-#if defined( __SYMBIAN32__ )
-    return mkdir( path.c_str(), S_IRWXU );
-#elif defined( __WIN32__ ) && defined( _MSC_VER )
+#if defined( __WIN32__ ) && defined( _MSC_VER )
     return CreateDirectoryA( path.c_str(), NULL );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
@@ -101,8 +85,10 @@ std::string System::GetHomeDirectory( const std::string & prog )
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     char * path = SDL_GetPrefPath( "", prog.c_str() );
-    res = path;
-    SDL_free( path );
+    if ( path ) {
+        res = path;
+        SDL_free( path );
+    }
 #endif
 
     if ( System::GetEnvironment( "HOME" ) )
@@ -204,7 +190,7 @@ std::string System::GetBasename( const std::string & str )
 
 const char * System::GetEnvironment( const char * name )
 {
-#if defined( __MINGW32CE__ ) || defined( __MINGW32__ )
+#if defined( __MINGW32__ )
     return SDL_getenv( name );
 #else
     return getenv( name );
@@ -213,7 +199,7 @@ const char * System::GetEnvironment( const char * name )
 
 int System::SetEnvironment( const char * name, const char * value )
 {
-#if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
     std::string str( std::string( name ) + "=" + std::string( value ) );
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     return _putenv( str.c_str() );
@@ -221,6 +207,8 @@ int System::SetEnvironment( const char * name, const char * value )
     // SDL 1.2.12 (char *)
     return SDL_putenv( &str[0] );
 #endif
+#elif defined( __SWITCH__ )
+    return SDL_setenv( name, value, 1 );
 #else
     return setenv( name, value, 1 );
 #endif
@@ -238,7 +226,7 @@ void System::SetLocale( int category, const char * locale )
 std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
-#if defined( __MINGW32CE__ ) || defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
     char * clocale = std::setlocale( LC_MONETARY, NULL );
 #elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
     char * clocale = setlocale( LC_MESSAGES, NULL );
@@ -262,7 +250,7 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
-#if defined( __MINGW32CE__ ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
     (void)argc;
     (void)argv;
     (void)optstring;
@@ -274,7 +262,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 
 char * System::GetOptionsArgument( void )
 {
-#if defined( __MINGW32CE__ ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
     return NULL;
 #else
     return optarg;
@@ -283,9 +271,7 @@ char * System::GetOptionsArgument( void )
 
 size_t System::GetMemoryUsage( void )
 {
-#if defined( __SYMBIAN32__ )
-    return 0;
-#elif defined( __WIN32__ )
+#if defined( __WIN32__ )
     static MEMORYSTATUS ms;
 
     ZeroMemory( &ms, sizeof( ms ) );
@@ -373,154 +359,15 @@ int System::Unlink( const std::string & file )
 #endif
 }
 
-int System::CreateTrayIcon( bool fl )
-{
-#if defined( __MINGW32CE__ ) && defined( ID_ICON )
-    NOTIFYICONDATA nid = {0};
-    nid.cbSize = sizeof( nid );
-    nid.uID = ID_ICON;
-    nid.hWnd = SDL_Window;
-
-    if ( fl ) {
-        nid.uFlags = NIF_ICON | NIF_MESSAGE;
-        nid.uCallbackMessage = WM_USER;
-        nid.hIcon = ::LoadIcon( SDL_Instance, MAKEINTRESOURCE( ID_ICON ) );
-        return Shell_NotifyIcon( NIM_ADD, &nid );
-    }
-
-    return Shell_NotifyIcon( NIM_DELETE, &nid );
-#else
-    (void)fl;
-#endif
-    return 0;
-}
-
-void System::PowerManagerOff( bool fl )
-{
-#if defined( __MINGW32CE__ )
-    // power manager control
-    const wchar_t lpGlobalSubKeyPM[] = TEXT( "System\\CurrentControlSet\\Control\\Power\\Timeouts" );
-    const wchar_t lpNamePM[] = TEXT( "BattSuspendTimeout" );
-    static DWORD origValuePM = 0;
-
-    HKEY hKey;
-
-    if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, lpGlobalSubKeyPM, 0, KEY_ALL_ACCESS, &hKey ) ) {
-        DWORD dwType = REG_DWORD;
-        DWORD value = 0;
-
-        // save orig value
-        if ( fl ) {
-            DWORD valueLen = sizeof( origValuePM );
-
-            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, lpNamePM, 0, &dwType, (LPBYTE)&origValuePM, &valueLen ) )
-                RegSetValueEx( hKey, lpNamePM, 0, dwType, (const BYTE *)&value, sizeof( value ) );
-        }
-        else if ( origValuePM )
-            RegSetValueEx( hKey, lpNamePM, 0, dwType, (const BYTE *)&origValuePM, sizeof( origValuePM ) );
-
-        RegCloseKey( hKey );
-    }
-
-    HANDLE hEvent = CreateEvent( NULL, FALSE, FALSE, TEXT( "PowerManager/ReloadActivityTimeouts" ) );
-
-    if ( hEvent != NULL ) {
-        SetEvent( hEvent );
-        CloseHandle( hEvent );
-    }
-
-    // backlight control
-    const wchar_t lpGlobalSubKeyBL[] = TEXT( "\\ControlPanel\\Backlight" );
-    const wchar_t lpNameBL[] = TEXT( "BatteryTimeout" );
-    static DWORD origValueBL = 0;
-
-    if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, lpGlobalSubKeyBL, 0, KEY_ALL_ACCESS, &hKey ) ) {
-        DWORD dwType = REG_DWORD;
-        DWORD value = 0;
-
-        // save orig value
-        if ( fl ) {
-            DWORD valueLen = sizeof( origValueBL );
-
-            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, lpNameBL, 0, &dwType, (LPBYTE)&origValueBL, &valueLen ) )
-                RegSetValueEx( hKey, lpNameBL, 0, dwType, (const BYTE *)&value, sizeof( value ) );
-        }
-        else if ( origValueBL )
-            RegSetValueEx( hKey, lpNameBL, 0, dwType, (const BYTE *)&origValueBL, sizeof( origValueBL ) );
-
-        RegCloseKey( hKey );
-    }
-
-    hEvent = CreateEvent( NULL, FALSE, FALSE, TEXT( "BackLightChangeEvent" ) );
-
-    if ( hEvent != NULL ) {
-        SetEvent( hEvent );
-        CloseHandle( hEvent );
-    }
-#else
-    (void)fl;
-#endif
-}
-
-bool System::isRunning( void )
-{
-#if defined( __MINGW32CE__ )
-    SetEnvironment( "DEBUG_VIDEO", "1" );
-    SetEnvironment( "DEBUG_VIDEO_GAPI", "1" );
-
-    HWND hwnd = FindWindow( NULL, L"SDL_app" );
-
-    if ( hwnd ) {
-        ShowWindow( hwnd, SW_SHOW );
-        SetForegroundWindow( hwnd );
-    }
-
-    return hwnd;
-#endif
-
-    return false;
-}
-
-int System::ShellCommand( const char * cmd )
-{
-#if defined( __MINGW32CE__ )
-    return cmd ? 0 : -1;
-#else
-    return system( cmd );
-#endif
-}
-
 bool System::isEmbededDevice( void )
 {
-#if defined( __MINGW32CE__ ) || defined( ANDROID ) || defined( __SYMBIAN32__ )
+#if defined( ANDROID )
     return true;
 #endif
     return false;
 }
 
-int System::GetRenderFlags( void )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-    return SDL_RENDERER_SOFTWARE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
-    return SDL_RENDERER_ACCELERATED;
-#else
-    return SDL_RENDERER_ACCELERATED;
-    // return SDL_RENDERER_SOFTWARE;
-#endif
-#else
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-    return SDL_SWSURFACE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
-    return SDL_HWSURFACE;
-#else
-    return SDL_SWSURFACE;
-#endif
-#endif
-}
-
-#if !( defined( _MSC_VER ) || defined( __MINGW32CE__ ) || defined( __MINGW32__ ) )
+#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
 // splitUnixPath - function for splitting strings by delimiter
 std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
 {

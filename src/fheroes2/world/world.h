@@ -127,10 +127,10 @@ struct CapturedObjects : std::map<s32, CapturedObject>
 struct EventDate
 {
     EventDate()
-        : computer( false )
-        , first( 0 )
+        : first( 0 )
         , subsequent( 0 )
         , colors( 0 )
+        , computer( false )
     {}
 
     void LoadFromMP2( StreamBuf );
@@ -139,10 +139,10 @@ struct EventDate
     bool isDeprecated( u32 date ) const;
 
     Funds resource;
-    bool computer;
     u32 first;
     u32 subsequent;
     int colors;
+    bool computer;
     std::string message;
 };
 

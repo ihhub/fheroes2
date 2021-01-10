@@ -162,19 +162,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
+    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
+              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char & c ) { return !std::isxdigit( c ); } ) ) {
+             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char c ) { return !std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -511,6 +511,12 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
             --pos;
         }
     } break;
+    case KEY_DELETE: {
+        if ( res.size() ) {
+            if ( pos < res.size() )
+                res.erase( pos, 1 );
+        }
+    } break;
 
     case KEY_LEFT:
         if ( pos )
@@ -840,7 +846,7 @@ std::string cp1251_to_utf8( const std::string & in )
             const size_t index = *it & 0x7f;
 
             if ( index < ARRAY_COUNT( table_1251 ) ) {
-                const u32 & v = table_1251[index];
+                const uint32_t v = table_1251[index];
                 res.append( 1, v );
                 res.append( 1, v >> 8 );
                 if ( v & 0xFFFF0000 )
@@ -905,7 +911,7 @@ Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step )
     const u16 dx = std::abs( pt2.x - pt1.x );
     const u16 dy = std::abs( pt2.y - pt1.y );
 
-    s16 ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
+    int16_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
     Point pt( pt1 );
 
     for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {

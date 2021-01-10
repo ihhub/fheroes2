@@ -28,7 +28,6 @@
 
 #include "gamedefs.h"
 #include "icn.h"
-#include "surface.h"
 #include "til.h"
 
 namespace AGG
@@ -38,7 +37,6 @@ namespace AGG
 
     std::vector<u8> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
-    Surface GetUnicodeLetter( u32 ch, u32 ft );
     u32 GetFontHeight( bool small );
 #endif
     void LoadLOOPXXSounds( const std::vector<int> & );

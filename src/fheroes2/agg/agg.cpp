@@ -90,10 +90,10 @@ namespace AGG
         std::vector<u8> body;
     };
 
-    struct fnt_cache_t
-    {
-        Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
-    };
+    // struct fnt_cache_t
+    // {
+    //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
+    // };
 
     struct loop_sound_t
     {
@@ -117,13 +117,12 @@ namespace AGG
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
-    std::map<u32, fnt_cache_t> fnt_cache;
+    // std::map<u32, fnt_cache_t> fnt_cache;
 
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
-    void LoadTTFChar( u32 );
-    Surface GetFNT( u32, u32 );
+    // void LoadTTFChar( u32 );
 #endif
 
     const std::vector<u8> & GetWAV( int m82 );
@@ -136,6 +135,31 @@ namespace AGG
 
     bool ReadDataDir( void );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
+
+    /* return letter sprite */
+    // Surface GetUnicodeLetter( u32 ch, u32 ft )
+    // {
+    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
+    //
+    //     if ( !ttf_valid )
+    //         return Surface();
+    //
+    //     if ( !fnt_cache[ch].sfs[0].isValid() )
+    //         LoadTTFChar( ch );
+    //
+    //     switch ( ft ) {
+    //     case Font::YELLOW_SMALL:
+    //         return fnt_cache[ch].sfs[1];
+    //     case Font::BIG:
+    //         return fnt_cache[ch].sfs[2];
+    //     case Font::YELLOW_BIG:
+    //         return fnt_cache[ch].sfs[3];
+    //     default:
+    //         break;
+    //     }
+    //
+    //     return fnt_cache[ch].sfs[0];
+    // }
 }
 
 /*AGG::File constructor */
@@ -230,11 +254,11 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = conf.GetListFiles( "data", ".agg" );
+    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
     const std::string & other_data = conf.GetDataParams();
 
     if ( other_data.size() && other_data != "data" )
-        aggs.Append( conf.GetListFiles( other_data, ".agg" ) );
+        aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
 
     // not found agg, exit
     if ( 0 == aggs.size() )
@@ -565,48 +589,46 @@ void AGG::PlayMusic( int mus, bool loop )
 }
 
 #ifdef WITH_TTF
-void AGG::LoadTTFChar( u32 ch )
-{
-    const Settings & conf = Settings::Get();
-    const RGBA white( 0xFF, 0xFF, 0xFF );
-    const RGBA yellow( 0xFF, 0xFF, 0x00 );
-
-    // small
-    fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-    fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-
-    // medium
-    if ( !( conf.QVGA() && !conf.Unicode() ) ) {
-        fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-        fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-    }
-
-    DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-}
+// void AGG::LoadTTFChar( u32 ch )
+// {
+//     const Settings & conf = Settings::Get();
+//      const RGBA white( 0xFF, 0xFF, 0xFF );
+//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
+//
+//      small
+//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
+//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
+//
+//      medium
+//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
+//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
+//
+//     DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
+// }
 
 void AGG::LoadFNT( void )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( !conf.Unicode() ) {
-        DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    }
-    else if ( fnt_cache.empty() ) {
-        const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-
-        for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-            LoadTTFChar( *it );
-
-        if ( fnt_cache.empty() ) {
-            DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-        }
-        else {
-            DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-        }
-    }
+    // const Settings & conf = Settings::Get();
+    //
+    // if ( !conf.Unicode() ) {
+    //     DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    // }
+    // else if ( fnt_cache.empty() ) {
+    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
+    //
+    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
+    //         LoadTTFChar( *it );
+    //
+    //     if ( fnt_cache.empty() ) {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    //     }
+    //     else {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
+    //     }
+    // }
 }
 
 u32 AGG::GetFontHeight( bool small )
@@ -614,30 +636,6 @@ u32 AGG::GetFontHeight( bool small )
     return small ? fonts[0].Height() : fonts[1].Height();
 }
 
-/* return letter sprite */
-Surface AGG::GetUnicodeLetter( u32 ch, u32 ft )
-{
-    bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-
-    if ( !ttf_valid )
-        return Surface();
-
-    if ( !fnt_cache[ch].sfs[0].isValid() )
-        LoadTTFChar( ch );
-
-    switch ( ft ) {
-    case Font::YELLOW_SMALL:
-        return fnt_cache[ch].sfs[1];
-    case Font::BIG:
-        return fnt_cache[ch].sfs[2];
-    case Font::YELLOW_BIG:
-        return fnt_cache[ch].sfs[3];
-    default:
-        break;
-    }
-
-    return fnt_cache[ch].sfs[0];
-}
 #else
 void AGG::LoadFNT( void )
 {
@@ -706,7 +704,7 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    fnt_cache.clear();
+    // fnt_cache.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;
@@ -1109,18 +1107,26 @@ namespace fheroes2
                 // Sprite 23 has incorrect colors, we need to replace them
                 if ( _icnVsSprite[id].size() >= 23 ) {
                     Sprite & out = _icnVsSprite[id][23];
-                    ReplaceColorId( out, 69, 187 );
-                    ReplaceColorId( out, 71, 195 );
-                    ReplaceColorId( out, 73, 188 );
-                    ReplaceColorId( out, 74, 190 );
-                    ReplaceColorId( out, 75, 193 );
-                    ReplaceColorId( out, 76, 191 );
-                    ReplaceColorId( out, 77, 195 );
-                    ReplaceColorId( out, 80, 195 );
-                    ReplaceColorId( out, 81, 196 );
-                    ReplaceColorId( out, 83, 196 );
-                    ReplaceColorId( out, 84, 197 );
-                    ReplaceColorId( out, 151, 197 );
+
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[69] = 187;
+                    indexes[71] = 195;
+                    indexes[73] = 188;
+                    indexes[74] = 190;
+                    indexes[75] = 193;
+                    indexes[76] = 191;
+                    indexes[77] = 195;
+                    indexes[80] = 195;
+                    indexes[81] = 196;
+                    indexes[83] = 196;
+                    indexes[84] = 197;
+                    indexes[151] = 197;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::TROLLMSL:
@@ -1154,32 +1160,39 @@ namespace fheroes2
                         out.image()[188] = 24;
                     }
 
-                    ReplaceColorId( out, 10, 152 );
-                    ReplaceColorId( out, 11, 153 );
-                    ReplaceColorId( out, 12, 154 );
-                    ReplaceColorId( out, 13, 155 );
-                    ReplaceColorId( out, 14, 155 );
-                    ReplaceColorId( out, 15, 156 );
-                    ReplaceColorId( out, 16, 157 );
-                    ReplaceColorId( out, 17, 158 );
-                    ReplaceColorId( out, 18, 159 );
-                    ReplaceColorId( out, 19, 160 );
-                    ReplaceColorId( out, 20, 160 );
-                    ReplaceColorId( out, 21, 161 );
-                    ReplaceColorId( out, 22, 162 );
-                    ReplaceColorId( out, 23, 163 );
-                    ReplaceColorId( out, 24, 164 );
-                    ReplaceColorId( out, 25, 165 );
-                    ReplaceColorId( out, 26, 166 );
-                    ReplaceColorId( out, 27, 166 );
-                    ReplaceColorId( out, 28, 167 );
-                    ReplaceColorId( out, 29, 168 );
-                    ReplaceColorId( out, 30, 169 );
-                    ReplaceColorId( out, 31, 170 );
-                    ReplaceColorId( out, 32, 171 );
-                    ReplaceColorId( out, 33, 172 );
-                    ReplaceColorId( out, 34, 172 );
-                    ReplaceColorId( out, 35, 173 );
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[10] = 152;
+                    indexes[11] = 153;
+                    indexes[12] = 154;
+                    indexes[13] = 155;
+                    indexes[14] = 155;
+                    indexes[15] = 156;
+                    indexes[16] = 157;
+                    indexes[17] = 158;
+                    indexes[18] = 159;
+                    indexes[19] = 160;
+                    indexes[20] = 160;
+                    indexes[21] = 161;
+                    indexes[22] = 162;
+                    indexes[23] = 163;
+                    indexes[24] = 164;
+                    indexes[25] = 165;
+                    indexes[26] = 166;
+                    indexes[27] = 166;
+                    indexes[28] = 167;
+                    indexes[29] = 168;
+                    indexes[30] = 169;
+                    indexes[31] = 170;
+                    indexes[32] = 171;
+                    indexes[33] = 172;
+                    indexes[34] = 172;
+                    indexes[35] = 173;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::LOCATORE:
@@ -1218,6 +1231,58 @@ namespace fheroes2
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                     }
+                }
+                return true;
+            case ICN::LISTBOX_EVIL:
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::GRAY );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    ApplyPalette( _icnVsSprite[id][i], 2 );
+                }
+                return true;
+            case ICN::MONS32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
+                    const Sprite & source = _icnVsSprite[id][1];
+                    Sprite & modified = _icnVsSprite[id][2];
+                    Sprite temp( source.width(), source.height() + 1 );
+                    temp.reset();
+                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                    modified.setPosition( 0, 1 );
+                }
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+                    Sprite & modified = _icnVsSprite[id][4];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 7, 0, 4, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                    Sprite & modified = _icnVsSprite[id][6];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 2, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                    Sprite & modified = _icnVsSprite[id][8];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 12, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
+                    Sprite & modified = _icnVsSprite[id][44];
+                    Sprite temp = _icnVsSprite[id][43];
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
                 }
                 return true;
             default:

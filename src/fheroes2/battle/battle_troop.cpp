@@ -215,10 +215,11 @@ std::string Battle::Unit::GetShotString( void ) const
     return os.str();
 }
 
-std::string Battle::Unit::GetSpeedString( void ) const
+std::string Battle::Unit::GetSpeedString() const
 {
     std::ostringstream os;
-    os << Speed::String( GetSpeed() ) << " (" << GetSpeed() << ")";
+    const uint32_t speedValue = GetSpeed( true );
+    os << Speed::String( speedValue ) << " (" << speedValue << ")";
     return os.str();
 }
 
@@ -690,7 +691,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     if ( killed )
         switch ( enemy.GetID() ) {
         case Monster::GHOST:
-            resurrect = killed * static_cast<Monster>( enemy ).GetHitPoints();
+            resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
             DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
             // grow troop
             enemy.Resurrect( resurrect, true, false );

@@ -26,6 +26,7 @@
 
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "ui_tool.h"
 
 class Spell;
 class Heroes;
@@ -243,10 +244,10 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarSingleClick( Artifact & ) override;
-    virtual bool ActionBarSingleClick( Artifact &, Artifact & ) override;
-    virtual bool ActionBarDoubleClick( Artifact & ) override;
-    virtual bool ActionBarPressRight( Artifact & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
+    virtual bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );

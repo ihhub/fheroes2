@@ -151,10 +151,11 @@ void Kingdom::ActionNewDay( void )
     if ( castles.empty() )
         --lost_town_days;
 
-    // skip incomes for first day
+    // castle New Day
+    std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
+
+    // skip incomes for first day, and heroes New Day too because it would do nothing
     if ( 1 < world.CountDay() ) {
-        // castle New Day
-        std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
 
         // heroes New Day
         std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
@@ -306,7 +307,8 @@ u32 Kingdom::GetCountTown( void ) const
 
 u32 Kingdom::GetCountMarketplace( void ) const
 {
-    return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsBuildMarketplace ) );
+    return static_cast<uint32_t>(
+        std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE ); } ) );
 }
 
 u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
@@ -317,6 +319,12 @@ u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
 u32 Kingdom::GetCountBuilding( u32 build ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
+}
+
+uint32_t Kingdom::GetCountThievesGuild() const
+{
+    return static_cast<uint32_t>(
+        std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD ); } ) );
 }
 
 bool Kingdom::AllowPayment( const Funds & funds ) const
@@ -487,9 +495,14 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 
         // and move manual set hero to castle
         if ( hero && hero->GetColor() == GetColor() ) {
-            bool patrol = hero->Modes( Heroes::PATROL );
-            hero->SetFreeman( 0 );
-            hero->Recruit( *castle );
+            const bool patrol = hero->Modes( Heroes::PATROL );
+            if ( hero->isValid() ) {
+                hero->Move2Dest( Maps::GetIndexFromAbsPoint( cp ) );
+            }
+            else {
+                hero->SetFreeman( 0 );
+                hero->Recruit( *castle );
+            }
 
             if ( patrol ) {
                 hero->SetModes( Heroes::PATROL );
@@ -590,7 +603,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     return totalIncome;
 }
 
-const Heroes * Kingdom::GetBestHero( void ) const
+Heroes * Kingdom::GetBestHero()
 {
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
 }

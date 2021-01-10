@@ -33,7 +33,7 @@ int Dialog::ArtifactInfo( const std::string & hdr, const std::string & msg, cons
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
     const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
 
-    fheroes2::Image image = border;
+    fheroes2::Sprite image = border;
     fheroes2::Blit( artifact, image, 5, 5 );
 
     std::string ext = msg;

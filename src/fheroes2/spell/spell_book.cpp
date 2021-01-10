@@ -154,6 +154,12 @@ Spell SpellBook::Open( const HeroBase & hero, int filt, bool canselect ) const
             const std::string str = _( "View Combat Spells" );
             Dialog::Message( "", str, Font::BIG );
         }
+        else if ( le.MousePressRight( prev_list ) ) {
+            Dialog::Message( "", _( "View previous page" ), Font::BIG );
+        }
+        else if ( le.MousePressRight( next_list ) ) {
+            Dialog::Message( "", _( "View next page" ), Font::BIG );
+        }
         else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
@@ -394,31 +400,26 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
 
 void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t cur, s32 px, s32 py, const HeroBase & hero )
 {
-    s32 ox = 0;
-    s32 oy = 0;
-
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
-    for ( u32 ii = 0; ii < SPELL_PER_PAGE; ++ii )
-        if ( spells.size() > cur + ii ) {
-            if ( 0 == ( ii % ( SPELL_PER_PAGE / 2 ) ) ) {
-                oy = 50;
-                ox += 80;
-            }
+    for ( int32_t i = 0; i < SPELL_PER_PAGE; ++i ) {
+        if ( spells.size() <= cur + i )
+            return;
 
-            const Spell & spell = spells[ii + cur];
-            const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
-            fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
+        const int32_t ox = 80 + 80 * ( i & 1 );
+        const int32_t oy = 50 + 80 * ( i >> 1 );
 
-            const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+        const Spell & spell = spells[i + cur];
+        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+        const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
+        fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 
-            TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
-            box.Blit( px + ox - 40, py + oy + 25 );
+        const uint32_t spellCost = spell.SpellPoint( &hero );
+        const bool isAvailable = heroSpellPoints >= spellCost;
 
-            oy += 80;
+        TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
+        box.Blit( px + ox - 40, py + oy + 25 );
 
-            coords.push_back( rect );
-        }
+        coords.push_back( rect );
+    }
 }

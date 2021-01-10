@@ -193,7 +193,7 @@ int Game::HighScores()
     HGSData hgs;
 
     std::ostringstream stream;
-    stream << System::ConcatePath( Settings::Get().GetSaveDir(), "fheroes2.hgs" );
+    stream << System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
     cursor.SetThemes( cursor.POINTER );
     Mixer::Pause();

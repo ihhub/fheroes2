@@ -22,6 +22,7 @@
 
 #include "agg.h"
 #include "ai.h"
+#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -260,20 +261,21 @@ u32 DialogMorale( const std::string & hdr, const std::string & msg, bool good, u
     return Dialog::SpriteInfo( hdr, msg, image );
 }
 
-u32 DialogLuck( const std::string & hdr, const std::string & msg, bool good, u32 count )
+uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good, uint32_t count )
 {
     if ( 1 > count )
         count = 1;
-    if ( 3 < count )
+    else if ( 3 < count )
         count = 3;
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 0 : 1 ) );
-    u32 offset = sprite.width() * 4 / 3;
+    const uint32_t offset = sprite.width() * 2;
 
     fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
     image.reset();
 
-    for ( u32 ii = 0; ii < count; ++ii )
-        fheroes2::Blit( sprite, image, offset * ii, 0 );
+    for ( uint32_t i = 0; i < count; ++i )
+        fheroes2::Blit( sprite, image, offset * i, 0 );
 
     return Dialog::SpriteInfo( hdr, msg, image );
 }
@@ -283,7 +285,7 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int c
     u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-        const u32 & exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
+        const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
 
         if ( hero.isControlHuman() ) {
             std::string msg = _( "Hero %{name} also got a %{count} experience." );
@@ -340,6 +342,31 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
                 hero.RecalculateMovePoints();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
+        }
+    }
+}
+
+static void WhirlpoolTroopLooseEffect( Heroes & hero )
+{
+    Troop * troop = hero.GetArmy().GetWeakestTroop();
+    assert( troop );
+    if ( !troop )
+        return;
+
+    // Whirlpool effect affects heroes only with more than one creature in more than one slot
+    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+        return;
+    }
+
+    if ( 1 == Rand::Get( 1, 3 ) ) {
+        // TODO: Do we really have this dialog in-game in OG?
+        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
+
+        if ( troop->GetCount() == 1 ) {
+            troop->Reset();
+        }
+        else {
+            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
     }
 }
@@ -844,7 +871,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
 
         Army & army = castle->GetActualArmy();
 
-        if ( army.isValid() ) {
+        if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
             DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
 
             Heroes * defender = heroes.GuardFirst();
@@ -887,6 +914,11 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
             Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
+
+            Mixer::Reduce();
+            castle->MageGuildEducateHero( hero );
+            Game::OpenCastleDialog( *castle );
+            Mixer::Enhance();
         }
     }
 }
@@ -1105,7 +1137,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
                 Dialog::Message( "", message, Font::BIG, Dialog::OK );
             }
             else {
-                Game::PlayPickupSound();
+                AGG::PlaySound( M82::EXPERNCE );
                 message.append( "\n" );
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
@@ -1115,7 +1147,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            Game::PlayPickupSound();
+            AGG::PlaySound( M82::EXPERNCE );
             message.append( "\n" );
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
             Dialog::ResourceInfo( "", message, funds );
@@ -1751,8 +1783,6 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
             Army army( tile );
             Troop * troop = army.GetFirstValid();
 
-            AGG::PlaySound( M82::EXPERNCE );
-
             if ( troop ) {
                 if ( Monster::ROGUE == troop->GetID() )
                     Dialog::Message( "",
@@ -1770,6 +1800,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
                 // new battle
                 Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
                 if ( res.AttackerWins() ) {
+                    AGG::PlaySound( M82::EXPERNCE );
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
@@ -1977,12 +2008,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-
-    if ( troop && Rand::Get( 1 ) && 1 < troop->GetCount() ) {
-        Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
-        troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
-    }
+    WhirlpoolTroopLooseEffect( hero );
 
     hero.GetPath().Reset();
     hero.ActionNewPosition();
@@ -2237,7 +2263,7 @@ void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
     // yet no one captured.
-    const bool & battle = Color::NONE == tile.QuantityColor();
+    const bool battle = Color::NONE == tile.QuantityColor();
     const Troop & troop = tile.QuantityTroop();
 
     const char * str_empty = NULL;
@@ -2321,7 +2347,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.isObjectTypeVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
@@ -2338,11 +2364,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
 
-        if ( Settings::Get().ExtWorldArtesianSpringSeparatelyVisit() )
-            hero.SetVisited( dst_index, Visit::LOCAL );
-        else
-            // fix double action tile
-            hero.SetVisitedWideTile( dst_index, obj, Visit::LOCAL );
+        hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
 
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2398,15 +2420,18 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2 )
+bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
 {
+    const std::string combTypeAnd = " and ";
+    const std::string combTypeComma = ", ";
+
     if ( army.HasMonster( mons ) ) {
         army.UpgradeMonsters( mons );
-        if ( str1.size() )
-            str1 += ", ";
+        if ( !str1.empty() )
+            str1 += combineWithAnd ? combTypeAnd : combTypeComma;
         str1 += mons.GetMultiName();
-        if ( str2.size() )
-            str2 += ", ";
+        if ( !str2.empty() )
+            str2 += combineWithAnd ? combTypeAnd : combTypeComma;
         str2 += mons.GetUpgrade().GetMultiName();
         return true;
     }
@@ -2420,84 +2445,109 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     std::string msg1;
     std::string msg2;
 
-    std::vector<Monster> mons;
-    mons.reserve( 3 );
+    std::vector<Monster *> mons;
 
     hero.MovePointsScaleFixed();
 
+    std::vector<Monster> monsToUpgrade;
+
     switch ( obj ) {
-    case MP2::OBJ_HILLFORT:
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::DWARF ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::DWARF ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::ORC ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::ORC ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::OGRE ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::OGRE ) );
+    case MP2::OBJ_HILLFORT: {
+        monsToUpgrade = {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )};
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
-        msg2 = _( "An unusual alliance of Orcs, Ogres, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
-        break;
+        msg2 = _( "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
+    } break;
 
-    case MP2::OBJ_FREEMANFOUNDRY:
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::PIKEMAN ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::PIKEMAN ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::SWORDSMAN ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::SWORDSMAN ) );
-        if ( ActionToUpgradeArmy( hero.GetArmy(), Monster( Monster::IRON_GOLEM ), monsters, monsters_upgrade ) )
-            mons.push_back( Monster( Monster::IRON_GOLEM ) );
+    case MP2::OBJ_FREEMANFOUNDRY: {
+        monsToUpgrade = {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )};
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
-        StringReplace( msg1, "%{monsters}", monsters );
-        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
         msg2 = _(
-            "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems.  Unfortunately, you have none of these troops in your army, so he can't help you." );
-        break;
+            "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
+    } break;
 
     default:
-        break;
+        ERROR( "Incorrect object type passed to ActionToUpgradeArmyObject" );
+        assert( 0 );
+        return;
     }
 
-    if ( mons.size() ) {
+    if ( monsToUpgrade.empty() ) {
+        ERROR( "monsToUpgrade mustn't be empty." );
+        assert( 0 );
+        return;
+    }
+
+    Army & heroArmy = hero.GetArmy();
+    mons.reserve( monsToUpgrade.size() );
+
+    for ( size_t i = 0; i < monsToUpgrade.size(); ++i ) {
+        if ( !heroArmy.HasMonster( monsToUpgrade[i] ) )
+            continue;
+        const bool combineWithAnd = i == ( monsToUpgrade.size() - 1 ) && !mons.empty();
+        if ( ActionToUpgradeArmy( heroArmy, monsToUpgrade[i], monsters, monsters_upgrade, combineWithAnd ) )
+            mons.emplace_back( &monsToUpgrade[i] );
+    }
+
+    if ( !mons.empty() ) {
         // composite sprite
-        u32 offsetX = 0;
+        uint32_t offsetX = 0;
+        uint32_t offsetY = 0;
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
         const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
-        fheroes2::Image surface( border.width() * monsterCount + ( monsterCount - 1 ) * 4, border.height() );
+
+        const int32_t monsterPerX = monsterCount > 1 ? 2 : 1;
+        const int32_t monsterPerY = monsterCount == 1 ? 1 : ( monsterCount + ( monsterCount - 1 ) ) / 2;
+
+        fheroes2::Image surface( border.width() * monsterPerX + ( monsterPerX - 1 ) * 4, border.height() * monsterPerY + ( monsterPerY - 1 ) * 4 );
         surface.reset();
 
-        for ( std::vector<Monster>::const_iterator it = mons.begin(); it != mons.end(); ++it ) {
+        StringReplace( msg1, "%{monsters}", monsters );
+        StringReplace( msg1, "%{monsters2}", monsters_upgrade );
+
+        for ( size_t i = 0; i < mons.size(); ++i ) {
+            if ( i > 0 && ( i & 1 ) == 0 ) {
+                if ( i == mons.size() - 1 ) {
+                    offsetX = border.width() / 2 + 2;
+                }
+                else {
+                    offsetX = 0;
+                }
+                offsetY += border.height() + 4;
+            }
+
             // border
-            fheroes2::Blit( border, surface, offsetX, 0 );
+            fheroes2::Blit( border, surface, offsetX, offsetY );
             // background scenary for each race
-            switch ( Monster( *it ).GetRace() ) {
+            switch ( mons[i]->GetRace() ) {
             case Race::KNGT:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::BARB:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::SORC:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::WRLK:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::WZRD:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             case Race::NECR:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             default:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, 6 );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, offsetY + 6 );
                 break;
             }
             // upgraded troop
-            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( ( *it ).GetUpgrade().ICNMonh(), 0 );
-            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() );
+            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( mons[i]->GetUpgrade().ICNMonh(), 0 );
+
+            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
@@ -2647,7 +2697,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
         if ( conditions ) {
             hero.GetKingdom().OddFundsResource( funds );
             hero.SetVisited( dst_index );
-            hero.IncreaseExperience( hero.GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+            hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
         }
     }
 
@@ -2790,7 +2840,12 @@ void ActionToAlchemistsTower( Heroes & hero )
             if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
-                bag.resize( std::distance( bag.begin(), std::remove_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) ) );
+
+                for ( BagArtifacts::iterator it = bag.begin(); it != bag.end(); ++it ) {
+                    if ( it->isAlchemistRemove() ) {
+                        *it = Artifact::UNKNOWN;
+                    }
+                }
             }
         }
         else
@@ -3018,9 +3073,18 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        tile.SetObject( hero.GetMapsObject() );
+        hero.SetMapsObject( MP2::OBJ_ZERO );
         AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_ZERO );
+        // TODO: fix pathfinding
+        if ( tile.GetIndex() == hero.GetIndex() ) {
+            tile.SetObject( MP2::OBJ_HEROES );
+        }
+        else {
+            tile.SetObject( MP2::OBJ_ZERO );
+            hero.SetMapsObject( MP2::OBJ_HEROES );
+        }
     }
     else {
         Dialog::Message(
