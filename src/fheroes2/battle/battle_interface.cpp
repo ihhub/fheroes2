@@ -1053,8 +1053,6 @@ void Battle::Interface::Redraw( void )
 
 void Battle::Interface::RedrawPartialStart()
 {
-    const Castle * castle = Arena::GetCastle();
-
     Cursor::Get().Hide();
     RedrawBorder();
     RedrawCover();
