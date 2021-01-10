@@ -683,7 +683,9 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( isEvilInterface ? ICN::SURDRBKE : ICN::SURDRBKG, 0 );
 
     fheroes2::Rect pos_rt( ( display.width() - dialog.width() + 16 ) / 2, ( display.height() - dialog.height() + 16 ) / 2, dialog.width(), dialog.height() );
 
@@ -691,25 +693,42 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
 
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
-    const int icn = conf.ExtGameEvilInterface() ? ICN::SURRENDE : ICN::SURRENDR;
+    const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
 
     fheroes2::Button btnAccept( pos_rt.x + 91, pos_rt.y + 152, icn, 0, 1 );
     fheroes2::Button btnDecline( pos_rt.x + 295, pos_rt.y + 152, icn, 2, 3 );
-    fheroes2::Button btnMarket( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145, ( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS ), 4, 5 );
-    Rect marketRect = btnAccept.area();
+
+    fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
+    fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
+    fheroes2::AddTransparency( marketButtonReleased, 36 );
+    fheroes2::AddTransparency( marketButtonPressed, 36 );
+
+    const fheroes2::Point buttonMarketPos( pos_rt.x + ( pos_rt.width - 16 ) / 2, pos_rt.y + 145 );
+
+    fheroes2::Sprite marketButtonReleasedBack( marketButtonReleased.width(), marketButtonReleased.height(), marketButtonReleased.x(), marketButtonReleased.y() );
+    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, 0, 0, marketButtonReleasedBack.width(), marketButtonReleasedBack.height() );
+    fheroes2::Blit( marketButtonReleased, marketButtonReleasedBack );
+
+    fheroes2::Sprite marketButtonPressedBack( marketButtonPressed.width(), marketButtonPressed.height(), marketButtonPressed.x(), marketButtonPressed.y() );
+    fheroes2::Copy( display, buttonMarketPos.x, buttonMarketPos.y, marketButtonPressedBack, 0, 0, marketButtonPressedBack.width(), marketButtonPressedBack.height() );
+    fheroes2::Blit( marketButtonPressed, marketButtonPressedBack );
+
+    fheroes2::ButtonSprite btnMarket( buttonMarketPos.x, buttonMarketPos.y, marketButtonReleasedBack, marketButtonPressedBack );
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
         btnAccept.disable();
     }
 
     if ( kingdom.GetCountMarketplace() ) {
-        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) )
+        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
             btnMarket.disable();
+        }
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", cost - kingdom.GetFunds().Get( Resource::GOLD ) );
-            Text text( msg, Font::SMALL );
-            text.Blit( marketRect.x + ( marketRect.w - text.w() ) / 2, marketRect.y - 15 );
+            const Text text( msg, Font::SMALL );
+            const fheroes2::Rect marketRect = btnAccept.area();
+            text.Blit( marketRect.x + ( marketRect.width - text.w() ) / 2, marketRect.y - 15 );
             btnMarket.draw();
         }
     }
@@ -745,12 +764,12 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
         le.MousePressLeft( btnDecline.area() ) ? btnDecline.drawOnPress() : btnDecline.drawOnRelease();
 
         if ( btnMarket.isEnabled() )
-            le.MousePressLeft( marketRect ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
+            le.MousePressLeft( btnMarket.area() ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
 
         if ( btnAccept.isEnabled() && le.MouseClickLeft( btnAccept.area() ) )
             result = true;
 
-        if ( btnMarket.isEnabled() && le.MouseClickLeft( marketRect ) ) {
+        if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarket.area() ) ) {
             Dialog::Marketplace( false );
 
             if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
