@@ -1,13 +1,12 @@
 # makefile
 # project: Free Heroes2 Tools
-#
 
-ifdef WITH_SDL2
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-else
+ifdef FHEROES2_SDL1
 SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
+else
+SDL_LIBS := $(shell sdl2-config --libs)
+SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
 TARGETS := extractor 82m2wav til2img icn2img xmi2mid bin2txt
