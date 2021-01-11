@@ -1150,7 +1150,7 @@ void Battle::Interface::RedrawArmies()
 
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * ARENAW + cellColumnId;
-                
+
                 bool isCellBefore = true;
                 if ( cellRowId < 5 ) {
                     isCellBefore = cellId < wallCellId;
