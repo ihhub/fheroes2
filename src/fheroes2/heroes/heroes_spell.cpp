@@ -355,6 +355,28 @@ bool ActionSpellIdentifyHero( const Heroes & hero )
     return true;
 }
 
+bool SummonAnyBoat( s32 center, u32 chance, s32 destinationOnWater )
+{
+    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
+    for ( size_t i = boats.size() - 1; i >= 0; --i ) {
+        const s32 boat = boats[i];
+        if ( Maps::isValidAbsIndex( boat ) ) {
+            if ( chance >= Rand::Get( 1, 100 ) ) {
+                Maps::Tiles & boatFile = world.GetTiles( boat );
+                boatFile.RemoveObjectSprite();
+                boatFile.SetObject( MP2::OBJ_ZERO );
+                Game::ObjectFadeAnimation::Info info = Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, /* TODO magic number */ 18, destinationOnWater, 0, false );
+                Game::ObjectFadeAnimation::Set( info );
+                return true;
+            }
+            break;
+        }
+    }
+
+    DialogSpellFailed( Spell::SUMMONBOAT );
+    return true;
+}
+
 bool ActionSpellSummonBoat( const Heroes & hero )
 {
     if ( hero.isShipMaster() ) {
@@ -407,23 +429,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         break;
     }
 
-    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( size_t i = 0; i < boats.size(); ++i ) {
-        const s32 boat = boats[i];
-        if ( Maps::isValidAbsIndex( boat ) ) {
-            if ( Rand::Get( 1, 100 ) <= chance ) {
-                Maps::Tiles & boatFile = world.GetTiles( boat );
-                boatFile.RemoveObjectSprite();
-                boatFile.SetObject( MP2::OBJ_ZERO );
-                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
-                return true;
-            }
-            break;
-        }
-    }
-
-    DialogSpellFailed( Spell::SUMMONBOAT );
-    return true;
+    return SummonAnyBoat( center, chance, dst_water );
 }
 
 bool ActionSpellDimensionDoor( Heroes & hero )
