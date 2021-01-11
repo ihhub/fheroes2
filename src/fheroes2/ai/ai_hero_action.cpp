@@ -167,7 +167,7 @@ namespace AI
         return Skill::Primary::UNKNOWN;
     }
 
-    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
+    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE, const Point * centerOn = nullptr )
     {
         u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
@@ -181,6 +181,10 @@ namespace AI
                 Dialog::Message( "", msg, Font::BIG, Dialog::OK );
             }
             hero.IncreaseExperience( exp );
+        }
+
+        if ( centerOn != nullptr ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -480,7 +484,7 @@ namespace AI
 
             // loss attacker
             if ( !res.AttackerWins() )
-                AIBattleLose( hero, res, true, other_hero->GetColor() );
+                AIBattleLose( hero, res, true, other_hero->GetColor(), &( other_hero->GetCenter() ) );
 
             // wins attacker
             if ( res.AttackerWins() ) {
@@ -539,7 +543,7 @@ namespace AI
 
                 // loss attacker
                 if ( !res.AttackerWins() )
-                    AIBattleLose( hero, res, true, castle->GetColor() );
+                    AIBattleLose( hero, res, true, castle->GetColor(), &( castle->GetCenter() ) );
 
                 // wins attacker
                 if ( res.AttackerWins() ) {
