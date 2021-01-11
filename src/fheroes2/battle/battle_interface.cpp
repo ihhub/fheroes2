@@ -1143,84 +1143,59 @@ void Battle::Interface::RedrawArmies()
             std::vector<const Unit *> troopBeforeWall;
             std::vector<const Unit *> troopAfterWall;
 
+            std::vector<const Unit *> movingTroopBeforeWall;
+            std::vector<const Unit *> movingTroopAfterWall;
+
             const int32_t wallCellId = wallCellIds[cellRowId];
 
-            if ( cellRowId < 5 ) {
-                for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                    const int32_t cellId = cellRowId * ARENAW + cellColumnId;
-                    const bool isCellBefore = cellId < wallCellId;
+            for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
+                const int32_t cellId = cellRowId * ARENAW + cellColumnId;
 
-                    const std::vector<const Unit *> & deadUnits = arena.GetGraveyardTroops( cellId );
-                    for ( size_t i = 0; i < deadUnits.size(); ++i ) {
-                        if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
-                            if ( isCellBefore ) {
-                                deadTroopBeforeWall.emplace_back( deadUnits[i] );
-                            }
-                            else {
-                                deadTroopAfterWall.emplace_back( deadUnits[i] );
-                            }
-                        }
+                bool isCellBefore = true;
+                if ( cellRowId < 5 ) {
+                    isCellBefore = cellId < wallCellId;
+                }
+                else {
+                    isCellBefore = cellId > wallCellId;
+                    if ( ( wallCellId == Board::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Board::CASTLE_FORTH_TOP_WALL_POS )
+                         && Board::GetCell( wallCellId )->GetObject() == 0 ) {
+                        isCellBefore = false;
                     }
+                }
 
-                    const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
-                    if ( unitOnCell && _flyingUnit != unitOnCell && cellId != unitOnCell->GetTailIndex() ) {
-                        if ( cellId < wallCellId ) {
-                            troopBeforeWall.emplace_back( unitOnCell );
+                const std::vector<const Unit *> & deadUnits = arena.GetGraveyardTroops( cellId );
+                for ( size_t i = 0; i < deadUnits.size(); ++i ) {
+                    if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
+                        if ( isCellBefore ) {
+                            deadTroopBeforeWall.emplace_back( deadUnits[i] );
                         }
                         else {
-                            troopAfterWall.emplace_back( unitOnCell );
-                        }
-                        RedrawTroopSprite( *unitOnCell );
-
-                        if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                            if ( cellId < wallCellId ) {
-                                troopCounterBeforeWall.emplace_back( unitOnCell );
-                            }
-                            else {
-                                troopCounterAfterWall.emplace_back( unitOnCell );
-                            }
+                            deadTroopAfterWall.emplace_back( deadUnits[i] );
                         }
                     }
                 }
-            }
-            else {
-                for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
-                    const int32_t cellId = cellRowId * ARENAW + cellColumnId;
-                    bool isCellBefore = cellId > wallCellId;
-                    if ( ( wallCellId == Board::CASTLE_THIRD_TOP_WALL_POS || wallCellId == Board::CASTLE_FORTH_TOP_WALL_POS )
-                         && Board::GetCell( wallCellId )->GetObject() == 0 )
-                        isCellBefore = false;
 
-                    const std::vector<const Unit *> & deadUnits = arena.GetGraveyardTroops( cellId );
-                    for ( size_t i = 0; i < deadUnits.size(); ++i ) {
-                        if ( deadUnits[i] && cellId != deadUnits[i]->GetTailIndex() ) {
-                            if ( isCellBefore ) {
-                                deadTroopBeforeWall.emplace_back( deadUnits[i] );
-                            }
-                            else {
-                                deadTroopAfterWall.emplace_back( deadUnits[i] );
-                            }
-                        }
+                const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
+                if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
+                    continue;
+                }
+
+                if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
+                    if ( isCellBefore ) {
+                        troopCounterBeforeWall.emplace_back( unitOnCell );
+                        troopBeforeWall.emplace_back( unitOnCell );
                     }
-
-                    const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
-                    if ( unitOnCell && _flyingUnit != unitOnCell && cellId != unitOnCell->GetTailIndex() ) {
-                        if ( isCellBefore ) {
-                            troopBeforeWall.emplace_back( unitOnCell );
-                        }
-                        else {
-                            troopAfterWall.emplace_back( unitOnCell );
-                        }
-                        RedrawTroopSprite( *unitOnCell );
-
-                        if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                            if ( isCellBefore ) {
-                                troopCounterBeforeWall.emplace_back( unitOnCell );
-                            }
-                            else {
-                                troopCounterAfterWall.emplace_back( unitOnCell );
-                            }
-                        }
+                    else {
+                        troopCounterAfterWall.emplace_back( unitOnCell );
+                        troopAfterWall.emplace_back( unitOnCell );
+                    }
+                }
+                else {
+                    if ( isCellBefore ) {
+                        movingTroopBeforeWall.emplace_back( unitOnCell );
+                    }
+                    else {
+                        movingTroopAfterWall.emplace_back( unitOnCell );
                     }
                 }
             }
@@ -1237,6 +1212,10 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopCount( *troopCounterBeforeWall[i] );
             }
 
+            for ( size_t i = 0; i < movingTroopBeforeWall.size(); ++i ) {
+                RedrawTroopSprite( *movingTroopBeforeWall[i] );
+            }
+
             RedrawCastle2( *castle, wallCellId );
 
             for ( size_t i = 0; i < deadTroopAfterWall.size(); ++i ) {
@@ -1250,27 +1229,45 @@ void Battle::Interface::RedrawArmies()
             for ( size_t i = 0; i < troopCounterAfterWall.size(); ++i ) {
                 RedrawTroopCount( *troopCounterAfterWall[i] );
             }
+
+            for ( size_t i = 0; i < movingTroopAfterWall.size(); ++i ) {
+                RedrawTroopSprite( *movingTroopAfterWall[i] );
+            }
         }
         else {
             std::vector<const Unit *> troopCounter;
+            std::vector<const Unit *> troop;
+            std::vector<const Unit *> movingTroop;
 
             // Redraw monsters.
             for ( int32_t cellColumnId = 0; cellColumnId < ARENAW; ++cellColumnId ) {
                 const int32_t cellId = cellRowId * ARENAW + cellColumnId;
 
                 const Unit * unitOnCell = Board::GetCell( cellId )->GetUnit();
-                if ( unitOnCell && _flyingUnit != unitOnCell && cellId != unitOnCell->GetTailIndex() ) {
-                    RedrawTroopSprite( *unitOnCell );
+                if ( unitOnCell == nullptr || _flyingUnit == unitOnCell || cellId == unitOnCell->GetTailIndex() ) {
+                    continue;
+                }
 
-                    if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                        troopCounter.emplace_back( unitOnCell );
-                    }
+                if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
+                    troopCounter.emplace_back( unitOnCell );
+                    troop.emplace_back( unitOnCell );
+                }
+                else {
+                    movingTroop.emplace_back( unitOnCell );
                 }
             }
 
             // Redraw monster counters.
             for ( size_t i = 0; i < troopCounter.size(); ++i ) {
                 RedrawTroopCount( *troopCounter[i] );
+            }
+
+            for ( size_t i = 0; i < troop.size(); ++i ) {
+                RedrawTroopSprite( *troop[i] );
+            }
+
+            for ( size_t i = 0; i < movingTroop.size(); ++i ) {
+                RedrawTroopSprite( *movingTroop[i] );
             }
         }
 
