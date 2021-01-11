@@ -295,7 +295,7 @@ int Interface::Basic::EventNewGame( void )
 int Interface::Basic::EventSaveGame( void )
 {
     while ( true ) {
-        std::string filename = Dialog::SelectFileSave();
+        const std::string filename = Dialog::SelectFileSave();
         if ( filename.empty() ) {
             return Game::CANCEL;
         }
