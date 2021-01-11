@@ -260,26 +260,10 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
     if ( 0 == killed || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
         return;
 
-    // check necromancy shrine build
-    u32 percent = 10 * world.GetKingdom( army.GetColor() ).GetCountNecromancyShrineBuild();
-
-    // check artifact
-    u32 acount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
-    if ( acount )
-        percent += acount * 10;
-
-    // fix over 60%
-    if ( percent > 60 )
-        percent = 60;
-
-    percent += hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
-
-    // hard fix overflow
-    if ( percent > 90 )
-        percent = 90;
+    const uint32_t necromancyPercent = GetNecromancyPercent( hero );
 
     const Monster mons( Monster::SKELETON );
-    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * percent / 100 );
+    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * necromancyPercent / 100 );
     if ( count == 0u )
         count = 1;
     army.JoinTroop( mons, count );

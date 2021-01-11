@@ -152,7 +152,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     selectArmy.Redraw();
 
     // secskill
-    SecondarySkillsBar secskill_bar( false );
+    SecondarySkillsBar secskill_bar( *this, false );
     secskill_bar.SetColRows( 8, 1 );
     secskill_bar.SetHSpace( 5 );
     secskill_bar.SetContent( secondary_skills.ToVector() );

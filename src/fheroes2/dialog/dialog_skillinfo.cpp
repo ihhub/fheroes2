@@ -30,12 +30,12 @@
 #include "text.h"
 #include "ui_button.h"
 
-void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const bool ok_button )
+void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const Heroes & hero, const bool ok_button )
 {
-    SecondarySkillInfo( skill.GetName(), skill.GetDescription(), skill, ok_button );
+    SecondarySkillInfo( skill.GetNameWithBonus( hero ), skill.GetDescription( hero ), skill, hero, ok_button );
 }
 
-void Dialog::SecondarySkillInfo( const std::string & header, const std::string & message, const Skill::Secondary & skill, const bool ok_button )
+void Dialog::SecondarySkillInfo( const std::string & header, const std::string & message, const Skill::Secondary & skill, const Heroes & hero, const bool ok_button )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
@@ -78,7 +78,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 3 );
 
-    text.Set( Skill::Level::String( skill.Level() ) );
+    text.Set( Skill::Level::StringWithBonus( hero, skill.Skill(), skill.Level() ) );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 55 );
 
@@ -110,7 +110,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
         }
 
         if ( button && le.MousePressRight( skillInfoArea ) ) {
-            SecondarySkillInfo( skill, false );
+            SecondarySkillInfo( skill, hero, false );
         }
 
         if ( HotKeyCloseWindow ) {
@@ -118,8 +118,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
         }
     }
 
-    if ( button )
-        delete button;
+    delete button;
 }
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )

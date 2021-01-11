@@ -30,11 +30,16 @@
 void StringAppendModifiers( std::string &, int );
 
 class Heroes;
+class HeroBase;
 
 namespace Skill
 {
     int GetLeadershipModifiers( int level, std::string * strs );
     int GetLuckModifiers( int level, std::string * strs );
+
+    uint32_t GetNecromancyBonus( const HeroBase & hero );
+    uint32_t GetNecromancyPercent( const HeroBase & hero );
+
     void UpdateStats( const std::string & );
 
     namespace Level
@@ -48,6 +53,7 @@ namespace Skill
         };
 
         const char * String( int level );
+        std::string StringWithBonus( const Heroes & hero, int skill, int level );
     }
 
     class Secondary : public std::pair<int, int>
@@ -90,8 +96,9 @@ namespace Skill
         bool isSkill( int ) const;
         bool isValid( void ) const;
 
-        const char * GetName( void ) const;
-        std::string GetDescription( void ) const;
+        std::string GetName( void ) const;
+        std::string GetNameWithBonus( const Heroes & hero ) const;
+        std::string GetDescription( const Heroes & hero ) const;
         u32 GetValues( void ) const;
 
         /* index sprite from SECSKILL */

@@ -33,6 +33,7 @@
 #include "skill.h"
 #include "skill_static.h"
 #include "text.h"
+#include "world.h"
 
 namespace Skill
 {
@@ -235,6 +236,15 @@ const char * Skill::Level::String( int level )
     return str_level[0];
 }
 
+std::string Skill::Level::StringWithBonus( const Heroes & hero, int skill, int level )
+{
+    const std::string levelStr = String( level );
+    if ( skill == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
+        return levelStr + "+" + std::to_string( Skill::GetNecromancyBonus( hero ) );
+    }
+    return levelStr;
+}
+
 Skill::Secondary::Secondary()
     : std::pair<int, int>( UNKNOWN, Level::NONE )
 {}
@@ -406,7 +416,7 @@ const char * Skill::Secondary::String( int skill )
     return str_skill[14];
 }
 
-const char * Skill::Secondary::GetName( void ) const
+std::string Skill::Secondary::GetName( void ) const
 {
     const char * name_skill[]
         = {_( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
@@ -422,7 +432,15 @@ const char * Skill::Secondary::GetName( void ) const
     return isValid() ? name_skill[( Level() - 1 ) + ( Skill() - 1 ) * 3] : "unknown";
 }
 
-std::string Skill::Secondary::GetDescription( void ) const
+std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
+{
+    if ( Skill() == NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
+        return GetName() + " (+" + std::to_string( Skill::GetNecromancyBonus( hero ) ) + ")";
+    }
+    return GetName();
+}
+
+std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 {
     u32 count = GetValues();
     std::string str = "unknown";
@@ -546,9 +564,12 @@ std::string Skill::Secondary::GetDescription( void ) const
         }
         break;
     case NECROMANCY: {
-        const std::string tmpDescription( std::string( GetName() )
-                                          + std::string( " allows %{count} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
-        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), count );
+        const uint32_t necroCount = Skill::GetNecromancyPercent( hero );
+        const std::string tmpDescription(
+            std::string( GetNameWithBonus( hero ) )
+            + std::string( " allows %{necrocount} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
+        str = _n( tmpDescription.c_str(), tmpDescription.c_str(), necroCount );
+        StringReplace( str, "%{necrocount}", necroCount );
         break;
     }
     case ESTATES:
@@ -807,6 +828,26 @@ int Skill::GetLuckModifiers( int level, std::string * strs = NULL )
     }
 
     return skill.GetValues();
+}
+
+uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
+{
+    const uint32_t shrineCount = world.GetKingdom( hero.GetColor() ).GetCountNecromancyShrineBuild();
+    const uint32_t artifactCount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
+    // cap bonus at 6
+    return std::min( 6u, shrineCount + artifactCount );
+}
+
+uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
+{
+    uint32_t percent = hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
+    percent += 10 * GetNecromancyBonus( hero );
+
+    // hard fix overflow
+    if ( percent > 90 )
+        percent = 90;
+
+    return percent;
 }
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )
