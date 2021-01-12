@@ -57,9 +57,9 @@ namespace fheroes2
             return fheroes2::Rect();
         }
 
-        virtual std::pair<int, int> getScreenResolution() const
+        virtual fheroes2::Size getScreenResolution() const
         {
-            return std::pair<int, int>();
+            return fheroes2::Size();
         }
 
     protected:

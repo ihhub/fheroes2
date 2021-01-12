@@ -68,7 +68,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-    int touchNumber = SDL_GetNumTouchDevices();
+    const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
         fheroes2::cursor().enableSoftwareEmulation( true );
@@ -722,16 +722,16 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     if ( _firstFingerId == event.fingerId ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
-        const std::pair<int, int> screenResolution = fheroes2::engine().getScreenResolution(); // current resolution of screen
-        const std::pair<int, int> gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
+        const fheroes2::Size screenResolution = fheroes2::engine().getScreenResolution(); // current resolution of screen
+        const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
         const fheroes2::Rect windowRect = fheroes2::engine().getWindowDestRect(); // scaled (logical) resolution
 
         SetModes( MOUSE_MOTION );
 
-        _emulatedPointerPosX = ( ( screenResolution.first * event.x ) - ( screenResolution.first - windowRect.width - windowRect.x ) )
-                               * ( static_cast<double>( gameSurfaceRes.first ) / windowRect.width );
-        _emulatedPointerPosY = ( ( screenResolution.second * event.y ) - ( screenResolution.second - windowRect.height - windowRect.y ) )
-                               * ( static_cast<double>( gameSurfaceRes.second ) / windowRect.height );
+        _emulatedPointerPosX = ( ( screenResolution.width * event.x ) - ( screenResolution.width - windowRect.width - windowRect.x ) )
+                               * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
+        _emulatedPointerPosY = ( ( screenResolution.height * event.y ) - ( screenResolution.height - windowRect.height - windowRect.y ) )
+                               * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
 
         mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );

@@ -265,6 +265,7 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
+            cacheScreenWindowRect();
         }
 
         virtual bool isFullScreen() const override
@@ -350,21 +351,12 @@ namespace
 
         virtual fheroes2::Rect getWindowDestRect() const override
         {
-            fheroes2::Rect rect;
-            SDL_GetWindowPosition( _window, &rect.x, &rect.y );
-            SDL_GetWindowSize( _window, &rect.width, &rect.height );
-            return rect;
+            return _windowRectangle;
         }
 
-        virtual std::pair<int, int> getScreenResolution() const override
+        virtual fheroes2::Size getScreenResolution() const override
         {
-            std::pair<int, int> resolution;
-            int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
-            SDL_DisplayMode displayMode;
-            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
-            resolution.first = displayMode.w;
-            resolution.second = displayMode.h;
-            return resolution;
+            return _screenResolution;
         }
 
         static RenderEngine * create()
@@ -524,6 +516,8 @@ namespace
                 return false;
             }
 
+            cacheScreenWindowRect();
+
             return true;
         }
 
@@ -568,6 +562,18 @@ namespace
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
+        virtual void cacheScreenWindowRect()
+        {
+            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            SDL_DisplayMode displayMode;
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
+            _screenResolution.width = displayMode.w;
+            _screenResolution.height = displayMode.h;
+            
+            SDL_GetWindowPosition( _window, &_windowRectangle.x, &_windowRectangle.y );
+            SDL_GetWindowSize( _window, &_windowRectangle.width, &_windowRectangle.height );
+        }
+
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
@@ -579,6 +585,8 @@ namespace
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
+        fheroes2::Size _screenResolution;
+        fheroes2::Rect _windowRectangle;
 
         int renderFlags() const
         {
