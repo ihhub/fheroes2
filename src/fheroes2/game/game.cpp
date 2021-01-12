@@ -36,7 +36,6 @@
 #include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "ground.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "monster.h"

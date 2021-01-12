@@ -437,7 +437,8 @@ namespace
 
             if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
-                palette = PAL::GetCyclingPalette( _counter++ );
+                palette = PAL::GetCyclingPalette( _counter );
+                ++_counter;
                 return true;
             }
             return false;
@@ -867,13 +868,13 @@ void LocalEvent::ProcessControllerAxisMotion()
 
         if ( _emulatedPointerPosX < 0 )
             _emulatedPointerPosX = 0;
-        else if ( _emulatedPointerPosX > display.width() )
-            _emulatedPointerPosX = display.width();
+        else if ( _emulatedPointerPosX >= display.width() )
+            _emulatedPointerPosX = display.width() - 1;
 
         if ( _emulatedPointerPosY < 0 )
             _emulatedPointerPosY = 0;
-        else if ( _emulatedPointerPosY > display.height() )
-            _emulatedPointerPosY = display.height();
+        else if ( _emulatedPointerPosY >= display.height() )
+            _emulatedPointerPosY = display.height() - 1;
 
         mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
         mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
@@ -947,7 +948,7 @@ bool LocalEvent::MouseReleaseRight( void ) const
     return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
+void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
         if ( event.type == SDL_KEYDOWN ) {

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "engine.h"
+#include "font.h"
 #include "sdlnet.h"
 #include "system.h"
 

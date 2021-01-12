@@ -517,7 +517,7 @@ void Castle::ActionNewWeek( void )
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth *= Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
@@ -2310,12 +2310,12 @@ std::string Castle::String( void ) const
     return os.str();
 }
 
-int Castle::GetAttackModificator( std::string * ) const
+int Castle::GetAttackModificator( const std::string * ) const
 {
     return 0;
 }
 
-int Castle::GetDefenseModificator( std::string * ) const
+int Castle::GetDefenseModificator( const std::string * ) const
 {
     return 0;
 }
@@ -2336,7 +2336,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
     return result;
 }
 
-int Castle::GetKnowledgeModificator( std::string * ) const
+int Castle::GetKnowledgeModificator( const std::string * ) const
 {
     return 0;
 }

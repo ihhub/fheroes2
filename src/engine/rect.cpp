@@ -96,7 +96,7 @@ Point Point::rotate( double angle ) const
     const double sinValue = sin( angle );
     const double cosValue = cos( angle );
 
-    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+    return Point( static_cast<int16_t>( x * cosValue - y * sinValue ), static_cast<int16_t>( x * sinValue + y * cosValue ) );
 }
 
 double Point::getAngle( const Point & point ) const
@@ -110,8 +110,8 @@ Size::Size( u16 width, u16 height )
 {}
 
 Size::Size( const Point & pt )
-    : w( std::abs( pt.x ) )
-    , h( std::abs( pt.y ) )
+    : w( pt.x < 0 ? -pt.x : pt.x )
+    , h( pt.y < 0 ? -pt.y : pt.y )
 {}
 
 bool Size::operator==( const Size & sz ) const

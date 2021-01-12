@@ -25,6 +25,5 @@ jobs:
     - name: compile
       run: scan-build -v make -j 2
       env:
-        WITH_SDL2: "ON"
         WITHOUT_XML: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"

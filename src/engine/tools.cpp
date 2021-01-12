@@ -887,7 +887,7 @@ Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
 {
     const int dx = pt2.x - pt1.x;
     const int dy = pt2.y - pt1.y;
-    const uint32_t dist = hypot( std::abs( dx ), std::abs( dy ) );
+    const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
     // round up the integer division
     const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
     const double moveX = dx / static_cast<double>( length );

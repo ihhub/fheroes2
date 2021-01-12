@@ -56,7 +56,7 @@ namespace AI
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
     void AIToCaptureObject( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToFlotSam( Heroes & hero, s32 dst_index );
+    void AIToFlotSam( const Heroes & hero, s32 dst_index );
     void AIToObservationTower( Heroes & hero, s32 dst_index );
     void AIToMagellanMaps( Heroes & hero, s32 dst_index );
     void AIToTeleports( Heroes & hero, s32 dst_index );
@@ -84,8 +84,8 @@ namespace AI
     void AIToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index );
     void AIToStables( Heroes & hero, u32 obj, s32 dst_index );
     void AIToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToBarrier( Heroes & hero, s32 dst_index );
-    void AIToTravellersTent( Heroes & hero, s32 dst_index );
+    void AIToBarrier( const Heroes & hero, s32 dst_index );
+    void AIToTravellersTent( const Heroes & hero, s32 dst_index );
     void AIToShipwreckSurvivor( Heroes & hero, u32 obj, s32 dst_index );
     void AIToBoat( Heroes & hero, s32 dst_index );
     void AIToCoast( Heroes & hero, s32 dst_index );
@@ -94,7 +94,7 @@ namespace AI
     bool AIHeroesShowAnimation( const Heroes & hero, uint32_t colors );
     static void AIWhirlpoolTroopLooseEffect( Heroes & hero );
 
-    int AISelectPrimarySkill( Heroes & hero )
+    int AISelectPrimarySkill( const Heroes & hero )
     {
         switch ( hero.GetRace() ) {
         case Race::KNGT: {
@@ -167,7 +167,7 @@ namespace AI
         return Skill::Primary::UNKNOWN;
     }
 
-    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
+    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE, const Point * centerOn = nullptr )
     {
         u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
@@ -181,6 +181,10 @@ namespace AI
                 Dialog::Message( "", msg, Font::BIG, Dialog::OK );
             }
             hero.IncreaseExperience( exp );
+        }
+
+        if ( centerOn != nullptr ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -480,7 +484,7 @@ namespace AI
 
             // loss attacker
             if ( !res.AttackerWins() )
-                AIBattleLose( hero, res, true, other_hero->GetColor() );
+                AIBattleLose( hero, res, true, other_hero->GetColor(), &( other_hero->GetCenter() ) );
 
             // wins attacker
             if ( res.AttackerWins() ) {
@@ -539,7 +543,7 @@ namespace AI
 
                 // loss attacker
                 if ( !res.AttackerWins() )
-                    AIBattleLose( hero, res, true, castle->GetColor() );
+                    AIBattleLose( hero, res, true, castle->GetColor(), &( castle->GetCenter() ) );
 
                 // wins attacker
                 if ( res.AttackerWins() ) {
@@ -802,7 +806,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( obj ) );
     }
 
-    void AIToFlotSam( Heroes & hero, s32 dst_index )
+    void AIToFlotSam( const Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1328,7 +1332,7 @@ namespace AI
         AIToCaptureObject( hero, obj, dst_index );
     }
 
-    void AIToBarrier( Heroes & hero, s32 dst_index )
+    void AIToBarrier( const Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Kingdom & kingdom = hero.GetKingdom();
@@ -1341,7 +1345,7 @@ namespace AI
         DEBUG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToTravellersTent( Heroes & hero, s32 dst_index )
+    void AIToTravellersTent( const Heroes & hero, s32 dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         Kingdom & kingdom = hero.GetKingdom();

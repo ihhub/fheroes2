@@ -102,7 +102,8 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     // compose sound track
     for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( !soundBuffer[i].empty() ) {
-            std::vector<uint8_t> & wavData = _audioChannel[channelCount++];
+            std::vector<uint8_t> & wavData = _audioChannel[channelCount];
+            ++channelCount;
 
             // set up WAV header
             StreamBuf wavHeader( 44 );

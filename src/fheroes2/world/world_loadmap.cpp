@@ -108,7 +108,7 @@ namespace Maps
     }
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const MapsTiles & /*tiles*/ )
 {
     TiXmlElement * xml_tile = doc.FirstChildElement( "tile" );
     for ( ; xml_tile; xml_tile = xml_tile->NextSiblingElement( "tile" ) ) {
@@ -127,14 +127,14 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
 TiXmlElement & operator>>( TiXmlElement & doc, Army & army )
 {
     army.Clean();
-    int position = 0;
 
     TiXmlElement * xml_troop = doc.FirstChildElement( "troop" );
-    for ( ; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
+    for ( int position = 0; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
         int type, count;
         xml_troop->Attribute( "type", &type );
         xml_troop->Attribute( "count", &count );
-        Troop * troop = army.GetTroop( position++ );
+        Troop * troop = army.GetTroop( position );
+        ++position;
         if ( troop )
             troop->Set( type, count );
     }
@@ -363,7 +363,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     return doc;
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const AllHeroes & /*heroes*/ )
 {
     TiXmlElement * xml_hero = doc.FirstChildElement( "hero" );
     for ( ; xml_hero; xml_hero = xml_hero->NextSiblingElement( "hero" ) ) {

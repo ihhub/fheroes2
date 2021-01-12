@@ -32,6 +32,7 @@
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
 #include "settings.h"
 #include "world.h"
 
@@ -1092,8 +1093,8 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int mod = y % 2;
 
     auto validateAndInsert = [&result, &currentColor]( const int index ) {
-        const Unit * unit = GetCell( index )->GetUnit();
-        if ( unit && currentColor != unit->GetArmyColor() )
+        const Unit * vUnit = GetCell( index )->GetUnit();
+        if ( vUnit && currentColor != vUnit->GetArmyColor() )
             result.push_back( index );
     };
 

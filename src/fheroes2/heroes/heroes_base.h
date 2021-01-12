@@ -31,6 +31,10 @@
 #include "skill.h"
 #include "spell_book.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Army;
 class Castle;
 

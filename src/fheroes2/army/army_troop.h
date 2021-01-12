@@ -83,8 +83,8 @@ StreamBase & operator>>( StreamBase &, Troop & );
 class ArmyTroop : public Troop
 {
 public:
-    ArmyTroop( Army * );
-    ArmyTroop( Army *, const Troop & );
+    ArmyTroop( const Army * );
+    ArmyTroop( const Army *, const Troop & );
 
     ArmyTroop & operator=( const Troop & );
 

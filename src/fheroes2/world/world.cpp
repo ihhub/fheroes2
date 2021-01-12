@@ -24,7 +24,6 @@
 #include <assert.h>
 #include <functional>
 
-#include "agg.h"
 #include "ai.h"
 #include "artifact.h"
 #include "castle.h"

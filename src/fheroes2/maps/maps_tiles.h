@@ -32,6 +32,10 @@
 #include "resource.h"
 #include "skill.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Heroes;
 class Spell;
 class Monster;

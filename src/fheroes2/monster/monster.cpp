@@ -336,7 +336,7 @@ StreamBase & operator<<( StreamBase & msg, const MonsterStaticData & /*obj*/ )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, MonsterStaticData & /*obj*/ )
+StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size;
     msg >> monsters_size;
@@ -630,7 +630,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         attack = GetAttack();
 
     if ( defense == -1 )
-        attack = GetDefense();
+        defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
     const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );
@@ -2168,7 +2168,7 @@ StreamBase & operator<<( StreamBase & msg, const Monster & /*obj*/ )
     return msg;
 }
 
-StreamBase & operator>>( StreamBase & msg, Monster & /*obj*/ )
+StreamBase & operator>>( StreamBase & msg, const Monster & /*obj*/ )
 {
     return msg;
 }

@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "game_video.h"
+#include "audio_mixer.h"
 #include "cursor.h"
 #include "game.h"
 #include "screen.h"
