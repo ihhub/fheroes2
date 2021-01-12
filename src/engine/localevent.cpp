@@ -797,13 +797,13 @@ void LocalEvent::ProcessControllerAxisMotion()
 
         if ( _controllerPointerPosX < 0 )
             _controllerPointerPosX = 0;
-        else if ( _controllerPointerPosX > display.width() )
-            _controllerPointerPosX = display.width();
+        else if ( _controllerPointerPosX >= display.width() )
+            _controllerPointerPosX = display.width() - 1;
 
         if ( _controllerPointerPosY < 0 )
             _controllerPointerPosY = 0;
-        else if ( _controllerPointerPosY > display.height() )
-            _controllerPointerPosY = display.height();
+        else if ( _controllerPointerPosY >= display.height() )
+            _controllerPointerPosY = display.height() - 1;
 
         mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
         mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
