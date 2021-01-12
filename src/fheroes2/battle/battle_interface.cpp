@@ -1258,12 +1258,12 @@ void Battle::Interface::RedrawArmies()
             }
 
             // Redraw monster counters.
-            for ( size_t i = 0; i < troopCounter.size(); ++i ) {
-                RedrawTroopCount( *troopCounter[i] );
-            }
-
             for ( size_t i = 0; i < troop.size(); ++i ) {
                 RedrawTroopSprite( *troop[i] );
+            }
+
+            for ( size_t i = 0; i < troopCounter.size(); ++i ) {
+                RedrawTroopCount( *troopCounter[i] );
             }
 
             for ( size_t i = 0; i < movingTroop.size(); ++i ) {
