@@ -50,6 +50,7 @@
 #include "race.h"
 #include "settings.h"
 #include "spell.h"
+#include "til.h"
 #include "trees.h"
 #include "world.h"
 

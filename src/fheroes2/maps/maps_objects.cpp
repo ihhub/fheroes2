@@ -24,7 +24,6 @@
 
 #include "army_troop.h"
 #include "color.h"
-#include "dialog.h"
 #include "game.h"
 #include "maps_objects.h"
 #include "mp2.h"

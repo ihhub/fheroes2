@@ -188,11 +188,11 @@ u32 Troop::GetAffectedDuration( u32 ) const
 }
 
 /* ArmyTroop */
-ArmyTroop::ArmyTroop( Army * a )
+ArmyTroop::ArmyTroop( const Army * a )
     : army( a )
 {}
 
-ArmyTroop::ArmyTroop( Army * a, const Troop & t )
+ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     : Troop( t )
     , army( a )
 {}

@@ -29,6 +29,7 @@
 
 #include "audio_music.h"
 #include "engine.h"
+#include "serialize.h"
 #include "system.h"
 
 #define TAG_FORM 0x464F524D

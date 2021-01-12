@@ -1050,7 +1050,7 @@ int Army::GetLuck( void ) const
     return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator( NULL );
 }
 
-int Army::GetLuckModificator( std::string * ) const
+int Army::GetLuckModificator( const std::string * ) const
 {
     return Luck::NORMAL;
 }
@@ -1447,7 +1447,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     if ( tile.GetObject() == MP2::OBJ_MONSTER )
         map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-    const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
+    const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
@@ -1493,11 +1493,6 @@ bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )
 bool Army::FastestTroop( const Troop * t1, const Troop * t2 )
 {
     return t1->GetSpeed() > t2->GetSpeed();
-}
-
-bool Army::ArchersFirst( const Troop * t1, const Troop * t2 )
-{
-    return t1->isArchers() > t2->isArchers();
 }
 
 void Army::SwapTroops( Troop & t1, Troop & t2 )

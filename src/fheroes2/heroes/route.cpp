@@ -22,7 +22,6 @@
 
 #include <iostream>
 
-#include "agg.h"
 #include "game.h"
 #include "heroes.h"
 #include "maps.h"

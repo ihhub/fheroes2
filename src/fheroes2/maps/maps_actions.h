@@ -77,7 +77,7 @@ struct ActionMessage : public ActionSimple
     ActionMessage()
         : ActionSimple( ACTION_MESSAGE )
     {}
-    static bool Action( ActionMessage * );
+    static bool Action( const ActionMessage * );
 };
 
 struct ActionDefault : public ActionSimple
@@ -89,7 +89,7 @@ struct ActionDefault : public ActionSimple
         : ActionSimple( ACTION_DEFAULT )
         , enabled( true )
     {}
-    static bool Action( ActionDefault * );
+    static bool Action( const ActionDefault * );
 };
 
 struct ActionAccess : public ActionSimple
@@ -105,7 +105,7 @@ struct ActionAccess : public ActionSimple
         , allowComputer( true )
         , cancelAfterFirstVisit( false )
     {}
-    static bool Action( ActionAccess *, s32, Heroes & );
+    static bool Action( const ActionAccess *, s32, Heroes & );
 };
 
 struct ActionArtifact : public ActionSimple
@@ -127,7 +127,7 @@ struct ActionResources : public ActionSimple
     ActionResources()
         : ActionSimple( ACTION_RESOURCES )
     {}
-    static bool Action( ActionResources *, Heroes & );
+    static bool Action( ActionResources *, const Heroes & );
 };
 
 #endif
