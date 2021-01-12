@@ -630,7 +630,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         attack = GetAttack();
 
     if ( defense == -1 )
-        attack = GetDefense();
+        defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
     const double effectiveHP = GetHitPoints() * ( ignoreRetaliation() ? 1.4 : 1 );

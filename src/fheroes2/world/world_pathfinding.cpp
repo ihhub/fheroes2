@@ -31,9 +31,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
     const bool toWater = tile.isWater();
     const int object = tile.GetObject();
 
-    if ( object == MP2::OBJ_BOAT )
-        return true;
-
+    // Special cases: check if we can defeat the Hero/Monster and pass through
     if ( object == MP2::OBJ_HEROES ) {
         const Heroes * otherHero = tile.GetHeroes();
         if ( otherHero ) {
@@ -46,6 +44,14 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
 
     if ( object == MP2::OBJ_MONSTER || ( object == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
         return Army( tile ).GetStrength() > armyStrength;
+
+    // check if AI has the key for the barrier
+    if ( object == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
+        return false;
+
+    // if none of the special cases apply, check if tile can be moved on
+    if ( MP2::isNeedStayFront( object ) )
+        return true;
 
     return ( fromWater && !toWater && object == MP2::OBJ_COAST );
 }
