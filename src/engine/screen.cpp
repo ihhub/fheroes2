@@ -569,7 +569,7 @@ namespace
             SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
             _screenResolution.width = displayMode.w;
             _screenResolution.height = displayMode.h;
-            
+
             SDL_GetWindowPosition( _window, &_windowRectangle.x, &_windowRectangle.y );
             SDL_GetWindowSize( _window, &_windowRectangle.width, &_windowRectangle.height );
         }
