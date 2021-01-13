@@ -73,6 +73,26 @@ namespace Battle
 
         return end != std::find( begin, end, tailIndex );
     }
+
+    Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances )
+    {
+        if ( distances.size() > 1 ) {
+            std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
+            const uint32_t smallestDistance = distances.front().second;
+            for ( size_t i = 1; i < distances.size(); ++i ) {
+                if ( distances[i].second != smallestDistance ) {
+                    distances.resize( i );
+                    break;
+                }
+            }
+        }
+
+        Indexes result;
+        for ( const IndexDistance & distance : distances ) {
+            result.emplace_back( distance.first );
+        }
+        return result;
+    }
 }
 
 Battle::Board::Board()
@@ -510,26 +530,6 @@ IndexDistance Battle::Board::DistanceToUnit( int32_t position, const Battle::Uni
         return distanceToTail;
     }
     return distance;
-}
-
-Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances )
-{
-    if ( distances.size() > 1 ) {
-        std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
-        const uint32_t smallestDistance = distances.front().second;
-        for ( size_t i = 1; i < distances.size(); ++i ) {
-            if ( distances[i].second != smallestDistance ) {
-                distances.resize( i );
-                break;
-            }
-        }
-    }
-
-    Battle::Indexes result;
-    for ( const IndexDistance & distance : distances ) {
-        result.push_back( distance.first );
-    }
-    return result;
 }
 
 Battle::Indexes Battle::Board::GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const
