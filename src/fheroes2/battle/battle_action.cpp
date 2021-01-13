@@ -615,7 +615,7 @@ bool Battle::Arena::IsImmuneToChainLightning( int32_t troopIndex, const HeroBase
     }
     const int power = hero ? hero->GetPower() : 0;
     const uint32_t resist = target->GetMagicResist( Spell::CHAINLIGHTNING, power );
-    return ( resist == 100 ) ? true : Rand::Get( 0, 1 );
+    return ( resist >= 100 ) ? true : Rand::Get( 1, 100 ) > resist;
 }
 
 Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, int32_t attackedTroopIndex ) const
