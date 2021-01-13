@@ -621,9 +621,9 @@ bool Battle::Arena::IsImmuneToChainLightning( int32_t troopIndex, const HeroBase
 Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, int32_t attackedTroopIndex ) const
 {
     int32_t currentTargetIndex = attackedTroopIndex;
-    Indexes result = { currentTargetIndex };
+    Indexes result = {currentTargetIndex};
 
-    Indexes ignoredTroops = { currentTargetIndex };
+    Indexes ignoredTroops = {currentTargetIndex};
     const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
     for ( const int32_t troopIndex : allTroops ) {
         if ( IsImmuneToChainLightning( troopIndex, hero ) ) {
@@ -911,7 +911,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
     const HeroBase * commander = GetCurrentCommander();
     const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
-    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
+    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );
