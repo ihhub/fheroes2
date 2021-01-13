@@ -25,7 +25,7 @@
 
 namespace Campaign
 {
-    static CampaignData & Get()
+    CampaignData & Campaign::CampaignData::Get()
     {
         static CampaignData instance;
         return instance;
