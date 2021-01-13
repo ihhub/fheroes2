@@ -818,7 +818,7 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
         if ( hero->HasArtifact( Artifact::CRYSTAL_BALL ) ) {
-            const int crystalBallDistance = hero->GetVisionsDistance();
+            const uint32_t crystalBallDistance = hero->GetVisionsDistance();
             if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
             }

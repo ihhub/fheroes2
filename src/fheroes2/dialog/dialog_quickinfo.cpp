@@ -86,7 +86,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
         str.append( _( "guarded by %{count} of %{monster}" ) );
 
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isOwned ? Skill::Level::EXPERT : scoutingLevel ) );
+        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
     }
 
     return str;
@@ -98,7 +98,7 @@ std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystal
 
     if ( isVisibleFromCrystalBall || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
         std::string str = "%{count} %{monster}";
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? Skill::Level::EXPERT : scoutingLevel ) );
+        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
         return str;
     }
@@ -165,7 +165,7 @@ std::string ShowDwellingInfo( const Maps::Tiles & tile, bool owned, bool extende
         const Troop & troop = tile.QuantityTroop();
         if ( troop.isValid() ) {
             str.append( _( "(available: %{count})" ) );
-            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? Skill::Level::EXPERT : scoutingLevel ) );
+            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
         }
         else
             str.append( "(empty)" );
@@ -373,7 +373,7 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
         }
     }
     else if ( Settings::Get().ExtWorldScouteExtended() ) {
-        int dist = hero->GetScoute();
+        uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
         if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
             dist = hero->GetVisionsDistance();
 
@@ -439,7 +439,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const bool isVisibleFromCrystalBall = kingdom.IsTileVisibleFromCrystalBall( tile.GetIndex() );
 
     // This value is only relevant for the "Extended Scouting" option
-    const uint32_t scoutingLevelForTile = isVisibleFromCrystalBall ? Skill::Level::EXPERT : GetHeroScoutingLevelForTile( from_hero, tile.GetIndex() );
+    const uint32_t scoutingLevelForTile = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : GetHeroScoutingLevelForTile( from_hero, tile.GetIndex() );
 
     const bool showVisitedOption = settings.ExtWorldShowVisitedContent();
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
@@ -708,7 +708,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     const bool isVisibleCrystalBall = kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
     const bool isFriend = castle.isFriends( currentColor );
 
-    uint32_t scoutSkillLevel = thievesGuildCount > Skill::Level::EXPERT ? Skill::Level::EXPERT : thievesGuildCount;
+    uint32_t scoutSkillLevel = thievesGuildCount > Skill::Level::EXPERT ? static_cast<int>( Skill::Level::EXPERT ) : thievesGuildCount;
     if ( isFriend || isVisibleCrystalBall ) {
         scoutSkillLevel = Skill::Level::EXPERT;
     }
