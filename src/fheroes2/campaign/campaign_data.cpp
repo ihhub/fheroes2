@@ -56,6 +56,14 @@ namespace Campaign
         _finishedMaps.emplace_back( _currentScenarioID );
     }
 
+    void CampaignData::Reset() 
+    {
+        _finishedMaps.clear();
+        _earnedCampaignAwards.clear();
+        _currentScenarioID = 0;
+        _campaignID = 0;
+    }
+
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
