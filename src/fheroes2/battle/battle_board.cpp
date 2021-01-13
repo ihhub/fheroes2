@@ -536,17 +536,18 @@ Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances
 Battle::Indexes Battle::Board::GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const
 {
     std::vector<IndexDistance> distances;
-    distances.reserve( 15 /* TODO magic number */ );
+    distances.reserve( 15 ); // TODO: replace this magic number or explain it
 
     for ( const Cell & cell : *this ) {
-        const Battle::Unit * unit = cell.GetUnit();
-        if ( unit ) {
-            const bool isBlackListed = contains( blackList, unit );
-            const Position & currentPosition = unit->GetPosition();
-            if ( !isBlackListed && !currentPosition.contains( position ) ) {
-                const IndexDistance distance = DistanceToUnit( position, unit );
-                distances.push_back( distance );
-            }
+        const Unit * unit = cell.GetUnit();
+        if ( unit == nullptr ) {
+            continue;
+        }
+
+        const bool isBlackListed = contains( blackList, unit );
+        const Position & currentPosition = unit->GetPosition();
+        if ( !isBlackListed && !currentPosition.contains( position ) ) {
+            distances.emplace_back( DistanceToUnit( position, unit ) );
         }
     }
 
