@@ -53,7 +53,7 @@ namespace Battle
         else
             return endX < startX;
     }
-    
+
     bool contains( const Indexes & indexes, const Unit * unit )
     {
         assert( unit );
