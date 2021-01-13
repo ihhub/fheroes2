@@ -30,6 +30,8 @@
 
 namespace
 {
+    const std::string priceOfLoyaltyCampaignExtension( "h2c" );
+
     std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
     {
         assert( scenarioId >= 0 );
@@ -92,7 +94,7 @@ namespace
         const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
                                                "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
 
-        return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
+        return GetCampaignMaps( maps, priceOfLoyaltyCampaignExtension );
     }
 
     const std::vector<Maps::FileInfo> GetArchibaldCampaign()
@@ -100,7 +102,7 @@ namespace
         const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
                                                "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
 
-        return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
+        return GetCampaignMaps( maps, priceOfLoyaltyCampaignExtension );
     }
 
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )

@@ -33,8 +33,6 @@ class Players;
 class Heroes;
 class Castle;
 
-constexpr auto PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION = "h2c";
-
 namespace Game
 {
     enum
