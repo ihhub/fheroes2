@@ -56,7 +56,7 @@ namespace Campaign
         _finishedMaps.emplace_back( _currentScenarioID );
     }
 
-    void CampaignData::Reset() 
+    void CampaignData::Reset()
     {
         _finishedMaps.clear();
         _earnedCampaignAwards.clear();
