@@ -229,7 +229,7 @@ namespace Game
     int LoadHotseat();
     int LoadNetwork();
     int ScenarioInfo( void );
-    int SelectCampaignScenario();
+    int SelectCampaignScenario( const bool isStarting );
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );

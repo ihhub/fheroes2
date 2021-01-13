@@ -140,7 +140,7 @@ bool Game::IsOriginalCampaignPresent()
     return !GetRolandCampaign().empty() && !GetArchibaldCampaign().empty();
 }
 
-int Game::SelectCampaignScenario()
+int Game::SelectCampaignScenario( const bool isStarting )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
@@ -171,7 +171,7 @@ int Game::SelectCampaignScenario()
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    const int chosenScenarioID = 0;
+    const int chosenScenarioID = isStarting ? 0 : campaignData.getCurrentScenarioID();
     const std::vector<Campaign::ScenarioBonusData> bonusChoices = getCampaignBonusData( chosenCampaign, chosenScenarioID );
     const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
 
