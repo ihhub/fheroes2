@@ -94,7 +94,8 @@ namespace Battle
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
 
-    private:
+        IndexDistance DistanceToUnit( const int32_t position, const Battle::Unit * unit ) const;
+
         enum
         {
             CATAPULT_POS = 77,
@@ -108,8 +109,6 @@ namespace Battle
             CASTLE_TOP_GATE_TOWER_POS = 40,
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
-
-        IndexDistance DistanceToUnit( const int32_t position, const Battle::Unit * unit ) const;
     };
 }
 
