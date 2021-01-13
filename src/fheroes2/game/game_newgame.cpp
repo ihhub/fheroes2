@@ -101,11 +101,15 @@ int Game::NewCampaign()
     Video::ShowVideo( "INTRO.SMK", false );
     Video::ShowVideo( "CHOOSEW.SMK", false );
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
-    Campaign::CampaignData::Get().setCampaignID( chosenCampaign );
+
+    Campaign::CampaignData & campaignData = Campaign::CampaignData::Get();
+    campaignData.Reset();
+    campaignData.setCampaignID( chosenCampaign );
+    campaignData.setCurrentScenarioID( 0 );
 
     AGG::PlayMusic( MUS::VICTORY );
 
-    return SelectCampaignScenario( true );
+    return SelectCampaignScenario();
 }
 
 #ifdef NETWORK_ENABLE
