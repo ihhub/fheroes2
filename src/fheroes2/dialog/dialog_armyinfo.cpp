@@ -771,11 +771,12 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         if ( allowPayment && enoughRoom ) {
             btnGroup.button( 0 ).enable();
-            btnGroup.draw();
         }
         else {
             btnGroup.button( 0 ).disable();
         }
+
+        btnGroup.draw();
 
         if ( allowPayment ) {
             tsNotEnoughGold.Hide();
