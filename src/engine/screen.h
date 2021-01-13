@@ -52,12 +52,12 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
-        virtual fheroes2::Rect getWindowDestRect() const
+        virtual fheroes2::Rect getActiveWindowROI() const
         {
             return fheroes2::Rect();
         }
 
-        virtual fheroes2::Size getScreenResolution() const
+        virtual fheroes2::Size getCurrentScreenResolution() const
         {
             return fheroes2::Size();
         }

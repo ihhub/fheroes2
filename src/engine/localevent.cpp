@@ -723,9 +723,9 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     if ( _firstFingerId == event.fingerId ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Size screenResolution = fheroes2::engine().getScreenResolution(); // current resolution of screen
+        const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
-        const fheroes2::Rect windowRect = fheroes2::engine().getWindowDestRect(); // scaled (logical) resolution
+        const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
 
         SetModes( MOUSE_MOTION );
 

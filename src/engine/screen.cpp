@@ -265,7 +265,7 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
-            cacheScreenWindowRect();
+            _retrieveWindowInfo();
         }
 
         virtual bool isFullScreen() const override
@@ -349,14 +349,14 @@ namespace
             SDL_FreeSurface( surface );
         }
 
-        virtual fheroes2::Rect getWindowDestRect() const override
+        virtual fheroes2::Rect getActiveWindowROI() const override
         {
-            return _windowRectangle;
+            return _activeWindowROI;
         }
 
-        virtual fheroes2::Size getScreenResolution() const override
+        virtual fheroes2::Size getCurrentScreenResolution() const override
         {
-            return _screenResolution;
+            return _currentScreenResolution;
         }
 
         static RenderEngine * create()
@@ -516,8 +516,7 @@ namespace
                 return false;
             }
 
-            cacheScreenWindowRect();
-
+            _retrieveWindowInfo();
             return true;
         }
 
@@ -562,18 +561,6 @@ namespace
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
-        virtual void cacheScreenWindowRect()
-        {
-            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
-            SDL_DisplayMode displayMode;
-            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
-            _screenResolution.width = displayMode.w;
-            _screenResolution.height = displayMode.h;
-
-            SDL_GetWindowPosition( _window, &_windowRectangle.x, &_windowRectangle.y );
-            SDL_GetWindowSize( _window, &_windowRectangle.width, &_windowRectangle.height );
-        }
-
     private:
         SDL_Window * _window;
         SDL_Surface * _surface;
@@ -585,8 +572,8 @@ namespace
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
-        fheroes2::Size _screenResolution;
-        fheroes2::Rect _windowRectangle;
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
 
         int renderFlags() const
         {
@@ -611,6 +598,18 @@ namespace
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
             }
+        }
+
+        void _retrieveWindowInfo()
+        {
+            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            SDL_DisplayMode displayMode;
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
+            _currentScreenResolution.width = displayMode.w;
+            _currentScreenResolution.height = displayMode.h;
+
+            SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
+            SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
         }
     };
 #else
