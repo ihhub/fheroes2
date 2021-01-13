@@ -100,12 +100,12 @@ void Castle::OpenWell( void )
     buttonExit.draw();
 
     std::vector<RandomMonsterAnimation> monsterAnimInfo;
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, DWELLING_MONSTER1 ) ) );
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) ) );
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) ) );
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) ) );
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) ) );
-    monsterAnimInfo.push_back( RandomMonsterAnimation( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) ) );
+    monsterAnimInfo.emplace_back( Monster( race, DWELLING_MONSTER1 ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ) );
 
     WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 

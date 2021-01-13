@@ -825,6 +825,25 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
+{
+    const int troopID = targetTroop.GetID();
+    const int totalMonsterCount = GetCountMonsters( troopID );
+
+    for ( iterator it = begin(); it != end(); ++it ) {
+        Troop * troop = *it;
+        if ( !troop->isValid() || troop->GetID() != troopID )
+            continue;
+
+        if ( troop == &targetTroop ) {
+            troop->SetCount( totalMonsterCount );
+        }
+        else {
+            troop->Reset();
+        }
+    }
+}
+
 Army::Army( HeroBase * s )
     : commander( s )
     , combat_format( true )
@@ -955,7 +974,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
     default:
         if ( isCaptureObject ) {
             CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
-            Troop & troop = co.GetTroop();
+            const Troop & troop = co.GetTroop();
 
             switch ( co.GetSplit() ) {
             case 3:
@@ -986,7 +1005,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            MapMonster * map_troop = NULL;
+            const MapMonster * map_troop = NULL;
             if ( tile.GetObject() == MP2::OBJ_MONSTER )
                 map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
@@ -1050,7 +1069,7 @@ int Army::GetLuck( void ) const
     return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator( NULL );
 }
 
-int Army::GetLuckModificator( std::string * ) const
+int Army::GetLuckModificator( const std::string * ) const
 {
     return Luck::NORMAL;
 }
@@ -1443,11 +1462,11 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    MapMonster * map_troop = NULL;
+    const MapMonster * map_troop = NULL;
     if ( tile.GetObject() == MP2::OBJ_MONSTER )
         map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-    const u32 ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
+    const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
@@ -1493,11 +1512,6 @@ bool Army::SlowestTroop( const Troop * t1, const Troop * t2 )
 bool Army::FastestTroop( const Troop * t1, const Troop * t2 )
 {
     return t1->GetSpeed() > t2->GetSpeed();
-}
-
-bool Army::ArchersFirst( const Troop * t1, const Troop * t2 )
-{
-    return t1->isArchers() > t2->isArchers();
 }
 
 void Army::SwapTroops( Troop & t1, Troop & t2 )

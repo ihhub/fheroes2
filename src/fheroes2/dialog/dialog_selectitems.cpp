@@ -114,7 +114,7 @@ public:
 
     virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
-        fheroes2::Image port = Heroes::GetPortrait( index, PORT_SMALL );
+        const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
         if ( !port.empty() )
             fheroes2::Blit( port, fheroes2::Display::instance(), dstx + 5, dsty + 3 );

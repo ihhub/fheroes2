@@ -180,7 +180,6 @@
     <ClCompile Include="src\engine\font.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
-    <ClCompile Include="src\engine\IMG_savepng.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
@@ -189,9 +188,9 @@
     <ClCompile Include="src\engine\sdlnet.cpp" />
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
-    <ClCompile Include="src\engine\surface.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
     <ClCompile Include="src\engine\thread.cpp" />
+    <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
     <ClCompile Include="src\engine\translations.cpp" />
@@ -382,7 +381,6 @@
     <ClInclude Include="src\engine\font.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_tool.h" />
-    <ClInclude Include="src\engine\IMG_savepng.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
@@ -394,9 +392,9 @@
     <ClInclude Include="src\engine\sdlnet.h" />
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
-    <ClInclude Include="src\engine\surface.h" />
     <ClInclude Include="src\engine\system.h" />
     <ClInclude Include="src\engine\thread.h" />
+    <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
     <ClInclude Include="src\engine\translations.h" />
@@ -443,6 +441,7 @@
     <ClInclude Include="src\fheroes2\game\difficulty.h" />
     <ClInclude Include="src\fheroes2\game\game.h" />
     <ClInclude Include="src\fheroes2\game\game_credits.h" />
+    <ClInclude Include="src\fheroes2\game\game_delays.h" />
     <ClInclude Include="src\fheroes2\game\game_interface.h" />
     <ClInclude Include="src\fheroes2\game\game_io.h" />
     <ClInclude Include="src\fheroes2\game\game_over.h" />

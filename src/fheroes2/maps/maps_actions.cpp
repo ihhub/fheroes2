@@ -180,7 +180,7 @@ StreamBase & operator>>( StreamBase & sb, ListActions & st )
     return sb;
 }
 
-bool ActionAccess::Action( ActionAccess * act, s32 index, Heroes & hero )
+bool ActionAccess::Action( const ActionAccess * act, s32 index, Heroes & hero )
 {
     if ( act ) {
         if ( act->cancelAfterFirstVisit && hero.isVisited( world.GetTiles( index ), Visit::GLOBAL ) )
@@ -202,7 +202,7 @@ bool ActionAccess::Action( ActionAccess * act, s32 index, Heroes & hero )
     return false;
 }
 
-bool ActionDefault::Action( ActionDefault * act )
+bool ActionDefault::Action( const ActionDefault * act )
 {
     if ( act ) {
         if ( !act->message.empty() )
@@ -226,7 +226,7 @@ bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
     return false;
 }
 
-bool ActionResources::Action( ActionResources * act, Heroes & hero )
+bool ActionResources::Action( ActionResources * act, const Heroes & hero )
 {
     if ( act && 0 < act->resources.GetValidItems() ) {
         Dialog::ResourceInfo( "", act->message, act->resources );
@@ -238,7 +238,7 @@ bool ActionResources::Action( ActionResources * act, Heroes & hero )
     return false;
 }
 
-bool ActionMessage::Action( ActionMessage * act )
+bool ActionMessage::Action( const ActionMessage * act )
 {
     if ( act ) {
         if ( !act->message.empty() )

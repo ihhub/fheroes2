@@ -343,12 +343,12 @@ int GameOver::Result::LocalCheckGameOver( void )
         if ( myKingdom.isControlHuman() ) {
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
-                Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "WIN.SMK" ), false );
+                Video::ShowVideo( "WIN.SMK", false );
                 res = Game::HIGHSCORES;
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );
-                Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "LOSE.SMK" ), true );
+                Video::ShowVideo( "LOSE.SMK", true );
                 res = Game::MAINMENU;
             }
         }

@@ -127,12 +127,6 @@ bool Game::Save( const std::string & fn )
     const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE" + GetSaveFileExtension() );
     const Settings & conf = Settings::Get();
 
-    // ask overwrite?
-    if ( System::IsFile( fn ) && !autosave && conf.ExtGameRewriteConfirm()
-         && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
-        return false;
-    }
-
     StreamFile fs;
     fs.setbigendian( true );
 

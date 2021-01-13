@@ -215,10 +215,11 @@ std::string Battle::Unit::GetShotString( void ) const
     return os.str();
 }
 
-std::string Battle::Unit::GetSpeedString( void ) const
+std::string Battle::Unit::GetSpeedString() const
 {
     std::ostringstream os;
-    os << Speed::String( GetSpeed() ) << " (" << GetSpeed() << ")";
+    const uint32_t speedValue = GetSpeed( true );
+    os << Speed::String( speedValue ) << " (" << speedValue << ")";
     return os.str();
 }
 
@@ -240,6 +241,17 @@ u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 u32 Battle::Unit::GetSpeed( void ) const
 {
     return GetSpeed( false );
+}
+
+int Battle::Unit::GetMorale() const
+{
+    int armyTroopMorale = ArmyTroop::GetMorale();
+
+    // enemy Bone dragons affect morale
+    if ( isAffectedByMorale() && GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
+        --armyTroopMorale;
+
+    return armyTroopMorale;
 }
 
 bool Battle::Unit::isUID( u32 v ) const
@@ -284,11 +296,7 @@ s32 Battle::Unit::GetTailIndex( void ) const
 
 void Battle::Unit::SetRandomMorale( void )
 {
-    s32 morale = GetMorale();
-
-    // Bone dragon affects morale, not luck
-    if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && morale > Morale::TREASON )
-        --morale;
+    const int morale = GetMorale();
 
     if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
@@ -488,7 +496,7 @@ u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
 
-u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
+u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
 {
     if ( isArchers() ) {
         if ( !isHandFighting() ) {

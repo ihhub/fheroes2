@@ -27,7 +27,6 @@
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
-#include "maps.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -408,6 +407,7 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+    , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -720,16 +720,14 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-#ifdef WITHOUT_MOUSE
-    ival = config.IntParams( "emulate mouse" );
-    if ( ival ) {
-        le.SetEmulateMouse( ival );
-
-        ival = config.IntParams( "emulate mouse step" );
-        if ( ival )
-            le.SetEmulateMouseStep( ival );
+    if ( config.Exists( "controller_pointer_speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+        if ( _controllerPointerSpeed > 100 )
+            _controllerPointerSpeed = 100;
+        else if ( _controllerPointerSpeed < 0 )
+            _controllerPointerSpeed = 0;
+        le.SetControllerPointerSpeed( _controllerPointerSpeed );
     }
-#endif
 
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
@@ -755,11 +753,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( QVGA() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( GAME_HIDE_INTERFACE );
-    }
-
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
@@ -884,6 +877,9 @@ std::string Settings::String( void ) const
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
 #endif
+
+    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
+    os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     return os.str();
 }
@@ -1167,12 +1163,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-/* return full screen */
-bool Settings::QVGA( void ) const
-{
-    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const

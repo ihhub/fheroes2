@@ -166,7 +166,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     dst_pt.y = area.y + 5;
     fheroes2::Blit( window, display, dst_pt.x, dst_pt.y );
 
-    fheroes2::Image port = hero.GetPortrait( PORT_MEDIUM );
+    const fheroes2::Sprite & port = hero.GetPortrait( PORT_MEDIUM );
     if ( !port.empty() )
         fheroes2::Blit( port, display, dst_pt.x + 4, dst_pt.y + 4 );
 

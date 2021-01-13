@@ -96,7 +96,7 @@ Point Point::rotate( double angle ) const
     const double sinValue = sin( angle );
     const double cosValue = cos( angle );
 
-    return Point( x * cosValue - y * sinValue, x * sinValue + y * cosValue );
+    return Point( static_cast<int16_t>( x * cosValue - y * sinValue ), static_cast<int16_t>( x * sinValue + y * cosValue ) );
 }
 
 double Point::getAngle( const Point & point ) const
@@ -110,8 +110,8 @@ Size::Size( u16 width, u16 height )
 {}
 
 Size::Size( const Point & pt )
-    : w( std::abs( pt.x ) )
-    , h( std::abs( pt.y ) )
+    : w( pt.x < 0 ? -pt.x : pt.x )
+    , h( pt.y < 0 ? -pt.y : pt.y )
 {}
 
 bool Size::operator==( const Size & sz ) const
@@ -239,36 +239,6 @@ bool Rect::operator&( const Point & pt ) const
 bool Rect::operator&( const Rect & rt ) const
 {
     return !( x > rt.x + rt.w || x + w < rt.x || y > rt.y + rt.h || y + h < rt.y );
-}
-
-Rect Rect::operator^( const Rect & other ) const
-{
-    Rect temp = other;
-    if ( temp.x < x ) {
-        const int16_t diff = x - temp.x;
-        temp.x = x;
-        temp.w -= diff;
-    }
-    if ( temp.y < y ) {
-        const int16_t diff = y - temp.y;
-        temp.y = y;
-        temp.h -= diff;
-    }
-
-    if ( temp.x > x + w || temp.y > y + h )
-        return Rect();
-
-    if ( temp.x + temp.w > x + w ) {
-        const int16_t diff = temp.x + temp.w - ( x + w );
-        temp.w -= diff;
-    }
-
-    if ( temp.y + temp.h > y + h ) {
-        const int16_t diff = temp.y + temp.h - ( y + h );
-        temp.h -= diff;
-    }
-
-    return temp;
 }
 
 const Point & Rect::getPosition() const

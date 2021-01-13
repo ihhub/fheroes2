@@ -33,6 +33,7 @@
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
 #include "settings.h"
 #include "world.h"
 
@@ -131,7 +132,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
     }
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        Unit * enemy = *it;
+        const Unit * enemy = *it;
 
         if ( enemy && enemy->isValid() ) {
             const s32 score = enemy->GetScoreQuality( unit );
@@ -161,24 +162,30 @@ s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
     return 0;
 }
 
-void Battle::Board::SetScanPassability( const Unit & b )
+void Battle::Board::SetScanPassability( const Unit & unit )
 {
     std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
 
-    at( b.GetHeadIndex() ).SetDirection( CENTER );
+    at( unit.GetHeadIndex() ).SetDirection( CENTER );
 
-    if ( b.isFlying() ) {
+    if ( unit.isFlying() ) {
         for ( iterator it = begin(); it != end(); ++it )
-            if ( ( *it ).isPassable3( b, false ) )
+            if ( ( *it ).isPassable3( unit, false ) )
                 ( *it ).SetDirection( CENTER );
     }
     else {
-        Indexes indexes = GetDistanceIndexes( b.GetHeadIndex(), b.GetSpeed() );
+        Indexes indexes = GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() );
+        if ( unit.isWide() ) {
+            const Indexes & tailIndexes = GetDistanceIndexes( unit.GetTailIndex(), unit.GetSpeed() );
+            std::set<int32_t> filteredIndexed( indexes.begin(), indexes.end() );
+            filteredIndexed.insert( tailIndexes.begin(), tailIndexes.end() );
+            indexes = std::vector<int32_t>( filteredIndexed.begin(), filteredIndexed.end() );
+        }
         indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ) ) );
 
-        // set pasable
+        // Set passable cells.
         for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )
-            GetAStarPath( b, Position::GetCorrect( b, *it ), false );
+            GetAStarPath( unit, Position::GetCorrect( unit, *it ), false );
     }
 }
 
@@ -187,7 +194,7 @@ struct CellNode
     int32_t cost;
     int32_t parentCellId;
     bool open;
-    bool leftDirection; // this is useful for wide unit to know the position of tail
+    bool leftDirection; // this is used for a wide unit movement to know the current position of tail
 
     CellNode()
         : cost( MAXU16 )
@@ -232,18 +239,20 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
         while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
                 && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
+            CellNode & currentCellNode = cellMap[currentCellId];
+
             const Cell & center = at( currentCellId );
             Indexes aroundCellIds;
-            if ( cellMap[currentCellId].parentCellId < 0 )
+            if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
-                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, cellMap[currentCellId].parentCellId ) ) );
+                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) );
 
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );
 
                 if ( cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId ) ) ) {
-                    const bool isLeftDirection = IsLeftDirection( currentCellId, cellId, cellMap[currentCellId].leftDirection );
+                    const bool isLeftDirection = IsLeftDirection( currentCellId, cellId, currentCellNode.leftDirection );
                     const int32_t tailCellId = isLeftDirection ? cellId + 1 : cellId - 1;
 
                     int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
@@ -251,25 +260,25 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                         cost += 100;
 
                     // Turn back. No movement at all.
-                    if ( isLeftDirection != cellMap[currentCellId].leftDirection )
+                    if ( isLeftDirection != currentCellNode.leftDirection )
                         cost = 0;
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
                         cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
+                        cellMap[cellId].cost = cost + currentCellNode.cost;
                         cellMap[cellId].leftDirection = isLeftDirection;
                     }
-                    else if ( cellMap[cellId].cost > cost + cellMap[currentCellId].cost ) {
+                    else if ( cellMap[cellId].cost > cost + currentCellNode.cost ) {
                         // Found a better path. Update the existing node.
                         cellMap[cellId].parentCellId = currentCellId;
-                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
+                        cellMap[cellId].cost = cost + currentCellNode.cost;
                         cellMap[cellId].leftDirection = isLeftDirection;
                     }
                 }
             }
 
-            cellMap[currentCellId].open = false;
+            currentCellNode.open = false;
             int32_t cost = MAXU16;
 
             const int32_t prevCellId = currentCellId;
@@ -283,12 +292,21 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                 }
             }
 
+            // Find alternative path if there is any.
+            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
+                const CellNode & cellNode = cellInfoIt->second;
+                if ( cellNode.open && cost == cellNode.cost && cellInfoIt->first != currentCellId && cellNode.parentCellId == prevCellId ) {
+                    currentCellId = cellInfoIt->first;
+                    break;
+                }
+            }
+
             if ( MAXU16 == cost ) {
                 reachedDestination = false;
                 break;
             }
 
-            currentTailCellId = IsLeftDirection( prevCellId, currentCellId, cellMap[prevCellId].leftDirection ) ? currentCellId + 1 : currentCellId - 1;
+            currentTailCellId = IsLeftDirection( prevCellId, currentCellId, currentCellNode.leftDirection ) ? currentCellId + 1 : currentCellId - 1;
         }
     }
     else {
@@ -349,7 +367,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
         std::reverse( result.begin(), result.end() );
 
-        // Correct wide position.
+        // Correct wide creature position.
         if ( isWideUnit && !result.empty() ) {
             const int32_t prev = 1 < result.size() ? result[result.size() - 2] : startCellId;
 
@@ -373,7 +391,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             uint32_t cellToMoveLeft = unit.GetSpeed();
             bool prevIsLeftDirection = unit.isReflect();
             for ( size_t i = 0; i < result.size(); ++i ) {
-                if ( !isWideUnit || prevIsLeftDirection == cellMap[result[i]].leftDirection ) {
+                if ( prevIsLeftDirection == cellMap[result[i]].leftDirection ) {
                     --cellToMoveLeft;
                     if ( cellToMoveLeft == 0 ) {
                         result.resize( i + 1 );
@@ -423,8 +441,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     if ( debug && result.empty() ) {
         DEBUG( DBG_BATTLE, DBG_WARN,
                "Path is not found for " << unit.String() << ", destination: "
-                                        << "(head: " << destination.GetHead()->GetIndex()
-                                        << ", tail: " << ( destination.GetTail() ? destination.GetTail()->GetIndex() : -1 ) << ")" );
+                                        << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
     }
 
     return result;
@@ -1121,8 +1138,8 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int mod = y % 2;
 
     auto validateAndInsert = [&result, &currentColor]( const int index ) {
-        Unit * unit = GetCell( index )->GetUnit();
-        if ( unit && currentColor != unit->GetArmyColor() )
+        const Unit * vUnit = GetCell( index )->GetUnit();
+        if ( vUnit && currentColor != vUnit->GetArmyColor() )
             result.push_back( index );
     };
 

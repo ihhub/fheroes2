@@ -23,7 +23,6 @@
 #include <cmath>
 #include <cstring>
 
-#include "agg.h"
 #include "heroes.h"
 #include "icn.h"
 #include "objcrck.h"

@@ -17,7 +17,6 @@
 #
 # -DCONFIGURE_FHEROES2_LOCALEDIR: system locale dir
 # -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
-#
 
 TARGET	:= fheroes2
 

@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "spell.h"
-#include "army.h"
 #include "artifact.h"
 #include "game.h"
 #include "game_static.h"

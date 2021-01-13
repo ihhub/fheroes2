@@ -23,7 +23,6 @@
 #define H2RECT_H
 
 #include <functional>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -90,9 +89,6 @@ struct Rect : Point, Size
     bool operator&(const Point &)const;
     // rect intersects rect
     bool operator&(const Rect &)const;
-
-    // calculate intersection rectangle
-    Rect operator^( const Rect & other ) const;
 
     // explicit conversion
     const Point & getPosition() const;

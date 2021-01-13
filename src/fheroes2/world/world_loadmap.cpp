@@ -108,7 +108,7 @@ namespace Maps
     }
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const MapsTiles & /*tiles*/ )
 {
     TiXmlElement * xml_tile = doc.FirstChildElement( "tile" );
     for ( ; xml_tile; xml_tile = xml_tile->NextSiblingElement( "tile" ) ) {
@@ -127,14 +127,14 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
 TiXmlElement & operator>>( TiXmlElement & doc, Army & army )
 {
     army.Clean();
-    int position = 0;
 
     TiXmlElement * xml_troop = doc.FirstChildElement( "troop" );
-    for ( ; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
+    for ( int position = 0; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
         int type, count;
         xml_troop->Attribute( "type", &type );
         xml_troop->Attribute( "count", &count );
-        Troop * troop = army.GetTroop( position++ );
+        Troop * troop = army.GetTroop( position );
+        ++position;
         if ( troop )
             troop->Set( type, count );
     }
@@ -363,7 +363,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     return doc;
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const AllHeroes & /*heroes*/ )
 {
     TiXmlElement * xml_hero = doc.FirstChildElement( "hero" );
     for ( ; xml_hero; xml_hero = xml_hero->NextSiblingElement( "hero" ) ) {
@@ -394,7 +394,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
 
         if ( !jail ) {
             colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-            Kingdom & kingdom = world.GetKingdom( colorRace.first );
+            const Kingdom & kingdom = world.GetKingdom( colorRace.first );
 
             if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                 colorRace.second = kingdom.GetRace();
@@ -462,7 +462,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
     riddle.valid = true;
 
-    TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
+    const TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
     if ( xml_answers ) {
         TiXmlElement * xml_answer = doc.FirstChildElement( "answer" );
         for ( ; xml_answer; xml_answer = xml_answer->NextSiblingElement( "answer" ) )
@@ -474,7 +474,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     if ( xml_resources )
         *xml_resources >> riddle.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         riddle.message = xml_msg->GetText();
 
@@ -504,7 +504,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
     if ( xml_resources )
         *xml_resources >> event.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -529,7 +529,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventDate & event )
     if ( xml_resources )
         *xml_resources >> event.resource;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -540,7 +540,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventsDate & events )
 {
     TiXmlElement * xml_event = doc.FirstChildElement( "event" );
     for ( ; xml_event; xml_event = xml_event->NextSiblingElement( "event" ) ) {
-        events.push_back( EventDate() );
+        events.emplace_back( EventDate() );
         *xml_event >> events.back();
     }
 
@@ -1323,7 +1323,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-                    Kingdom & kingdom = GetKingdom( colorRace.first );
+                    const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                         colorRace.second = kingdom.GetRace();
@@ -1379,7 +1379,7 @@ bool World::LoadMapMP2( const std::string & filename )
         else if ( 0x00 == pblock[0] ) {
             // add event day
             if ( SIZEOFMP2EVENT - 1 < pblock.size() && 1 == pblock[42] ) {
-                vec_eventsday.push_back( EventDate() );
+                vec_eventsday.emplace_back( EventDate() );
                 vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
             }
             // add rumors
@@ -1507,7 +1507,7 @@ void World::ProcessNewMap()
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & Settings::Get().ConditionWins() ) {
-        Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
+        const Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
     if ( GameOver::LOSS_HERO & Settings::Get().ConditionLoss() ) {

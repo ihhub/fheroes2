@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,41 +18,23 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2POSITION_H
-#define H2POSITION_H
+#pragma once
 
-#include "gamedefs.h"
+#include <chrono>
+#include <stdint.h>
 
-class MapPosition
+namespace fheroes2
 {
-public:
-    MapPosition( const Point & = Point( -1, -1 ) );
-
-    bool operator==( s32 ) const;
-
-    const Point & GetCenter() const
+    class Time
     {
-        return center;
-    }
+    public:
+        Time();
 
-    s32 GetIndex( void ) const;
+        void reset();
+        double get() const; // returns time in seconds
+        uint64_t getMs() const; // returns rounded time in milliseconds
 
-    void SetCenter( const Point & );
-    void SetIndex( const int32_t index );
-
-    bool isPosition( const Point & pt ) const
-    {
-        return pt == center;
-    }
-
-protected:
-    friend StreamBase & operator<<( StreamBase &, const MapPosition & );
-    friend StreamBase & operator>>( StreamBase &, MapPosition & );
-
-    Point center;
-};
-
-StreamBase & operator<<( StreamBase &, const MapPosition & );
-StreamBase & operator>>( StreamBase &, MapPosition & );
-
-#endif
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+    };
+}

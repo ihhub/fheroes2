@@ -118,15 +118,15 @@ namespace AI
         // This should filter out all invalid units
         const Units friendly( friendlyForce, true );
         const Units enemies( enemyForce, true );
-        const size_t enemiesCount = enemies.size();
+        // const size_t enemiesCount = enemies.size();
 
         // Step 1. Friendly and enemy army analysis
         double myArmyStrength = 0;
         double enemyArmyStrength = 0;
         double myShooterStr = 0;
         double enemyShooterStr = 0;
-        double averageAllyDefense = 0;
-        double averageEnemyAttack = 0;
+        // double averageAllyDefense = 0;
+        // double averageEnemyAttack = 0;
         int highestDamageExpected = 0;
 
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
@@ -142,7 +142,7 @@ namespace AI
             if ( dmg > highestDamageExpected )
                 highestDamageExpected = dmg;
 
-            averageEnemyAttack += unit.GetAttack();
+            // averageEnemyAttack += unit.GetAttack();
         }
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
@@ -154,26 +154,26 @@ namespace AI
                 myShooterStr += unitStr;
             }
 
-            averageAllyDefense += unit.GetDefense();
+            // averageAllyDefense += unit.GetDefense();
         }
 
         const double enemyArcherRatio = enemyShooterStr / enemyArmyStrength;
         // Will be used for better unit strength heuristic
-        averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
-        averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
+        // averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
+        // averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
 
         // Step 2. Add castle siege (and battle arena) modifiers
         bool attackingCastle = false;
         bool defendingCastle = false;
-        const Castle * castle = arena.GetCastle();
+        const Castle * castle = Arena::GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
-            double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
+            double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
             DEBUG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
@@ -294,7 +294,7 @@ namespace AI
         }
         else {
             // Melee unit decision tree (both flyers and walkers)
-            Board & board = *arena.GetBoard();
+            Board & board = *Battle::Arena::GetBoard();
             board.SetPositionQuality( currentUnit );
 
             if ( defensiveTactics ) {
@@ -387,7 +387,7 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     const Indexes & around = Board::GetAroundIndexes( *enemy );
                     for ( const int cell : around ) {
-                        const int quality = board.GetCell( cell )->GetQuality();
+                        const int quality = Board::GetCell( cell )->GetQuality();
                         const uint32_t dist = arena.CalculateMoveDistance( cell );
                         if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
                             highestValue = quality;

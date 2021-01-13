@@ -99,6 +99,9 @@ namespace Interface
         void ActionListPressRight( HEROES & );
         void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current );
         void RedrawBackground( const Point & );
+
+    private:
+        Point _topLeftCorner;
     };
 
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
@@ -119,6 +122,9 @@ namespace Interface
         void ActionListPressRight( CASTLE & );
         void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current );
         void RedrawBackground( const Point & );
+
+    private:
+        Point _topLeftCorner;
     };
 
     class Basic;
@@ -138,8 +144,8 @@ namespace Interface
 
         u32 CountIcons( void ) const;
 
-        void Select( const Heroes & );
-        void Select( const Castle & );
+        void Select( Heroes * const );
+        void Select( Castle * const );
 
         bool IsSelected( icons_t ) const;
         void ResetIcons( icons_t = ICON_ANY );

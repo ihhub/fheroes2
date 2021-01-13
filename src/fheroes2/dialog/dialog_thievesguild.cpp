@@ -55,7 +55,7 @@ struct ValueColors : std::pair<int, int>
 
 void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
 {
-    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & v ) { return v.IsValue( value ); } );
+    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.IsValue( value ); } );
 
     if ( it == v.end() )
         v.push_back( ValueColors( value, color ) );
@@ -154,7 +154,7 @@ void GetArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        const int value = world.GetKingdom( *color ).GetArmiesStrength();
+        const int value = static_cast<int>( world.GetKingdom( *color ).GetArmiesStrength() );
         UpdateValuesColors( v, value, *color );
     }
 
@@ -215,7 +215,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
                 const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::LOCATORS, 22 );
                 fheroes2::Blit( window, display, px - window.width() / 2, pos.y - 4 );
 
-                fheroes2::Image icon = hero->GetPortrait( PORT_SMALL );
+                const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
                 if ( !icon.empty() )
                     fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
             }
@@ -287,7 +287,7 @@ void Dialog::ThievesGuild( bool oracle )
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, dst_pt.x, dst_pt.y );
 
     // text bar
-    text.Set( _( "Thieves' Guild: Player RanKings" ), Font::BIG );
+    text.Set( oracle ? _( "Oracle: Player Rankings" ) : _( "Thieves' Guild: Player Rankings" ), Font::BIG );
     dst_pt.x = cur_pt.x + 290 - text.w() / 2;
     dst_pt.y = cur_pt.y + 463;
     text.Blit( dst_pt.x, dst_pt.y );

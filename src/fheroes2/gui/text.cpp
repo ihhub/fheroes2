@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
 
 #include "agg.h"
@@ -377,9 +378,11 @@ Text::~Text()
 
 Text::Text( const Text & t )
 {
+    assert( t.message != nullptr );
 #ifdef WITH_TTF
-    if ( Settings::Get().Unicode() )
-        message = new TextUnicode( static_cast<TextUnicode &>( *t.message ) );
+    const TextUnicode * unicodeText = dynamic_cast<const TextUnicode *>( t.message );
+    if ( unicodeText )
+        message = new TextUnicode( *unicodeText );
     else
 #endif
         message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
@@ -390,10 +393,17 @@ Text::Text( const Text & t )
 
 Text & Text::operator=( const Text & t )
 {
+    if ( &t == this )
+        return *this;
+
+    assert( t.message != nullptr );
+
     delete message;
+
 #ifdef WITH_TTF
-    if ( Settings::Get().Unicode() )
-        message = new TextUnicode( static_cast<TextUnicode &>( *t.message ) );
+    const TextUnicode * unicodeText = dynamic_cast<const TextUnicode *>( t.message );
+    if ( unicodeText )
+        message = new TextUnicode( *unicodeText );
     else
 #endif
         message = new TextAscii( static_cast<TextAscii &>( *t.message ) );

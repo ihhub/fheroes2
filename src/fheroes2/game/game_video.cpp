@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "game_video.h"
+#include "audio_mixer.h"
 #include "cursor.h"
 #include "game.h"
 #include "screen.h"
@@ -26,12 +27,33 @@
 #include "smk_decoder.h"
 #include "ui_tool.h"
 
+namespace
+{
+    const std::vector<std::string> videoDir = {"anim", System::ConcatePath( "heroes2", "anim" )};
+
+    bool IsFile( const std::string & fileName, std::string & path )
+    {
+        std::string temp;
+
+        for ( size_t i = 0; i < videoDir.size(); ++i ) {
+            temp = Settings::GetLastFile( videoDir[i], fileName );
+            if ( System::IsFile( temp ) ) { // file doesn't exist, so no need to even try to load it
+                path.swap( temp );
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
 namespace Video
 {
-    size_t ShowVideo( const std::string & videoPath, bool isLooped, const std::vector<fheroes2::Rect> & roi )
+    size_t ShowVideo( const std::string & fileName, bool isLooped, const std::vector<fheroes2::Rect> & roi )
     {
-        if ( !System::IsFile( videoPath ) ) { // file doesn't exist, so no need to even try to load it
-            DEBUG( DBG_GAME, DBG_INFO, videoPath << " file does not exist" );
+        std::string videoPath;
+        if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
+            DEBUG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
             return 0;
         }
 

@@ -24,7 +24,6 @@
 #include <ctime>
 #include <sstream>
 
-#include "agg.h"
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
@@ -40,7 +39,6 @@ namespace Game
     void KeyboardGlobalFilter( int, int );
 
     KeySym key_events[EVENT_LAST];
-    int key_groups = 0;
 }
 
 const char * Game::EventsName( int evnt )
@@ -88,10 +86,6 @@ const char * Game::EventsName( int evnt )
         return "system fullscreen";
     case EVENT_SYSTEM_SCREENSHOT:
         return "system screenshot";
-    case EVENT_SYSTEM_DEBUG1:
-        return "system debug1";
-    case EVENT_SYSTEM_DEBUG2:
-        return "system debug2";
 
     case EVENT_SLEEPHERO:
         return "sleep hero";
@@ -173,10 +167,6 @@ const char * Game::EventsName( int evnt )
         return "show status";
     case EVENT_SHOWICONS:
         return "show icons";
-    case EVENT_EMULATETOGGLE:
-        return "emulate mouse toggle";
-    case EVENT_SWITCHGROUP:
-        return "switch group";
     default:
         break;
     }
@@ -212,8 +202,6 @@ void Game::HotKeysDefaults( void )
     // system
     key_events[EVENT_SYSTEM_FULLSCREEN] = KEY_F4;
     key_events[EVENT_SYSTEM_SCREENSHOT] = KEY_PRINT;
-    key_events[EVENT_SYSTEM_DEBUG1] = KEY_NONE;
-    key_events[EVENT_SYSTEM_DEBUG2] = KEY_NONE;
 
     // battle
     key_events[EVENT_BATTLE_CASTSPELL] = KEY_c;
@@ -263,11 +251,6 @@ void Game::HotKeysDefaults( void )
     // key_events[EVENT_MOVEBOTTOM] = KEVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
     // open focus
     // key_events[EVENT_OPENFOCUS] = KEY_NONE;
-    // scroll
-    // key_events[EVENT_SCROLLLEFT] = KEY_NONE;
-    // key_events[EVENT_SCROLLRIGHT] = KEY_NONE;
-    // key_events[EVENT_SCROLLUP] = KEY_NONE;
-    // key_events[EVENT_SCROLLDOWN] = KEY_NONE;
     // control panel
     key_events[EVENT_CTRLPANEL] = KEY_1;
     key_events[EVENT_SHOWRADAR] = KEY_2;
@@ -275,31 +258,32 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_SHOWSTATUS] = KEY_4;
     key_events[EVENT_SHOWICONS] = KEY_5;
     // system:
-    // emulate mouse
-    // key_events[EVENT_EMULATETOGGLE] = KEY_NONE;
-    // switch group
-    // key_events[EVENT_SWITCHGROUP] = KEY_NONE;
+    // gamepad scroll bindings
+    key_events[EVENT_SCROLLLEFT] = KEY_KP4;
+    key_events[EVENT_SCROLLRIGHT] = KEY_KP6;
+    key_events[EVENT_SCROLLUP] = KEY_KP8;
+    key_events[EVENT_SCROLLDOWN] = KEY_KP2;
     // split
     key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
     key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
+    key_events[EVENT_JOINSTACKS] = KEY_ALT;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyPress() && le.KeyValue() == key_events[evnt];
 }
 
 bool Game::HotKeyHoldEvent( const int eventID )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
     return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )
 {
     TinyConfig config( '=', '#' );
-    // const Tiny::Entry* entry = NULL;
 
     if ( config.Load( hotkeys.c_str() ) ) {
         int ival = 0;
@@ -315,34 +299,6 @@ void Game::HotKeysLoad( const std::string & hotkeys )
                 }
             }
         }
-
-#ifdef WITHOUT_MOUSE
-        LocalEvent & le = LocalEvent::Get();
-
-        ival = config.IntParams( "emulate mouse up" );
-        if ( ival )
-            le.SetEmulateMouseUpKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse down" );
-        if ( ival )
-            le.SetEmulateMouseDownKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse left" );
-        if ( ival )
-            le.SetEmulateMouseLeftKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate mouse right" );
-        if ( ival )
-            le.SetEmulateMouseRightKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate press left" );
-        if ( ival )
-            le.SetEmulatePressLeftKey( GetKeySym( ival ) );
-
-        ival = config.IntParams( "emulate press right" );
-        if ( ival )
-            le.SetEmulatePressRightKey( GetKeySym( ival ) );
-#endif
     }
 }
 
@@ -369,18 +325,4 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 //         if ( display.Save( stream.str().c_str() ) )
 //             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
 //     }
-#ifdef WITHOUT_MOUSE
-    else if ( sym == key_events[EVENT_EMULATETOGGLE] )
-        LocalEvent::Get().ToggleEmulateMouse();
-#endif
-    else
-        // reserved
-        if ( sym == key_events[EVENT_SWITCHGROUP] )
-        ++key_groups;
-    else if ( sym == key_events[EVENT_SYSTEM_DEBUG1] ) {
-        Interface::Basic::Get().EventDebug1();
-    }
-    else if ( sym == key_events[EVENT_SYSTEM_DEBUG2] ) {
-        Interface::Basic::Get().EventDebug2();
-    }
 }

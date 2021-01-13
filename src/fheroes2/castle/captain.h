@@ -32,36 +32,46 @@ class Captain : public HeroBase
 public:
     Captain( Castle & );
 
-    bool isValid( void ) const;
-    int GetAttack( void ) const;
-    int GetDefense( void ) const;
-    int GetPower( void ) const;
-    int GetKnowledge( void ) const;
-    int GetMorale( void ) const;
-    int GetLuck( void ) const;
-    int GetRace( void ) const;
-    int GetColor( void ) const;
-    int GetType( void ) const;
-    int GetControl( void ) const;
-    s32 GetIndex( void ) const;
+    virtual bool isValid() const override;
+    virtual int GetAttack() const override;
+    virtual int GetDefense() const override;
+    virtual int GetPower() const override;
+    virtual int GetKnowledge() const override;
+    virtual int GetMorale() const override;
+    virtual int GetLuck() const override;
+    virtual int GetRace() const override;
+    virtual int GetColor() const override;
+    virtual int GetType() const override;
+    virtual int GetControl() const override;
+    s32 GetIndex() const;
 
-    const std::string & GetName( void ) const;
+    virtual const std::string & GetName() const override;
 
-    const Castle * inCastle( void ) const;
+    virtual const Castle * inCastle() const override;
 
-    int GetLevelSkill( int ) const;
-    u32 GetSecondaryValues( int ) const;
+    virtual int GetLevelSkill( int ) const override
+    {
+        return 0;
+    }
 
-    const Army & GetArmy( void ) const;
-    Army & GetArmy( void );
+    virtual uint32_t GetSecondaryValues( int ) const override
+    {
+        return 0;
+    }
 
-    u32 GetMaxSpellPoints( void ) const;
+    virtual const Army & GetArmy() const override;
+    virtual Army & GetArmy() override;
 
-    void ActionPreBattle( void );
-    void ActionAfterBattle( void );
+    virtual uint32_t GetMaxSpellPoints() const override
+    {
+        return knowledge * 10;
+    }
 
-    void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const;
-    fheroes2::Image GetPortrait( int type ) const;
+    virtual void ActionPreBattle() override;
+    virtual void ActionAfterBattle() override;
+
+    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    fheroes2::Sprite GetPortrait( const PortraitType type ) const;
 
 private:
     Castle & home;

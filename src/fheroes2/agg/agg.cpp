@@ -28,6 +28,7 @@
 
 #include "agg.h"
 #include "artifact.h"
+#include "audio_cdrom.h"
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"
@@ -41,6 +42,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "til.h"
 #include "xmi.h"
 
 #ifdef WITH_ZLIB
@@ -90,10 +92,10 @@ namespace AGG
         std::vector<u8> body;
     };
 
-    struct fnt_cache_t
-    {
-        Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
-    };
+    // struct fnt_cache_t
+    // {
+    //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
+    // };
 
     struct loop_sound_t
     {
@@ -117,13 +119,12 @@ namespace AGG
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
-    std::map<u32, fnt_cache_t> fnt_cache;
+    // std::map<u32, fnt_cache_t> fnt_cache;
 
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
-    void LoadTTFChar( u32 );
-    Surface GetFNT( u32, u32 );
+    // void LoadTTFChar( u32 );
 #endif
 
     const std::vector<u8> & GetWAV( int m82 );
@@ -136,6 +137,31 @@ namespace AGG
 
     bool ReadDataDir( void );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
+
+    /* return letter sprite */
+    // Surface GetUnicodeLetter( u32 ch, u32 ft )
+    // {
+    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
+    //
+    //     if ( !ttf_valid )
+    //         return Surface();
+    //
+    //     if ( !fnt_cache[ch].sfs[0].isValid() )
+    //         LoadTTFChar( ch );
+    //
+    //     switch ( ft ) {
+    //     case Font::YELLOW_SMALL:
+    //         return fnt_cache[ch].sfs[1];
+    //     case Font::BIG:
+    //         return fnt_cache[ch].sfs[2];
+    //     case Font::YELLOW_BIG:
+    //         return fnt_cache[ch].sfs[3];
+    //     default:
+    //         break;
+    //     }
+    //
+    //     return fnt_cache[ch].sfs[0];
+    // }
 }
 
 /*AGG::File constructor */
@@ -230,14 +256,14 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = conf.GetListFiles( "data", ".agg" );
+    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
     const std::string & other_data = conf.GetDataParams();
 
     if ( other_data.size() && other_data != "data" )
-        aggs.Append( conf.GetListFiles( other_data, ".agg" ) );
+        aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
 
     // not found agg, exit
-    if ( 0 == aggs.size() )
+    if ( aggs.empty() )
         return false;
 
     // attach agg files
@@ -565,48 +591,46 @@ void AGG::PlayMusic( int mus, bool loop )
 }
 
 #ifdef WITH_TTF
-void AGG::LoadTTFChar( u32 ch )
-{
-    const Settings & conf = Settings::Get();
-    const RGBA white( 0xFF, 0xFF, 0xFF );
-    const RGBA yellow( 0xFF, 0xFF, 0x00 );
-
-    // small
-    fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-    fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-
-    // medium
-    if ( !( conf.QVGA() && !conf.Unicode() ) ) {
-        fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-        fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-    }
-
-    DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-}
+// void AGG::LoadTTFChar( u32 ch )
+// {
+//     const Settings & conf = Settings::Get();
+//      const RGBA white( 0xFF, 0xFF, 0xFF );
+//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
+//
+//      small
+//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
+//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
+//
+//      medium
+//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
+//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
+//
+//     DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
+// }
 
 void AGG::LoadFNT( void )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( !conf.Unicode() ) {
-        DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    }
-    else if ( fnt_cache.empty() ) {
-        const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-
-        for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-            LoadTTFChar( *it );
-
-        if ( fnt_cache.empty() ) {
-            DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-        }
-        else {
-            DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-        }
-    }
+    // const Settings & conf = Settings::Get();
+    //
+    // if ( !conf.Unicode() ) {
+    //     DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    // }
+    // else if ( fnt_cache.empty() ) {
+    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
+    //
+    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
+    //         LoadTTFChar( *it );
+    //
+    //     if ( fnt_cache.empty() ) {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    //     }
+    //     else {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
+    //     }
+    // }
 }
 
 u32 AGG::GetFontHeight( bool small )
@@ -614,30 +638,6 @@ u32 AGG::GetFontHeight( bool small )
     return small ? fonts[0].Height() : fonts[1].Height();
 }
 
-/* return letter sprite */
-Surface AGG::GetUnicodeLetter( u32 ch, u32 ft )
-{
-    bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-
-    if ( !ttf_valid )
-        return Surface();
-
-    if ( !fnt_cache[ch].sfs[0].isValid() )
-        LoadTTFChar( ch );
-
-    switch ( ft ) {
-    case Font::YELLOW_SMALL:
-        return fnt_cache[ch].sfs[1];
-    case Font::BIG:
-        return fnt_cache[ch].sfs[2];
-    case Font::YELLOW_BIG:
-        return fnt_cache[ch].sfs[3];
-    default:
-        break;
-    }
-
-    return fnt_cache[ch].sfs[0];
-}
 #else
 void AGG::LoadFNT( void )
 {
@@ -706,7 +706,7 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    fnt_cache.clear();
+    // fnt_cache.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;

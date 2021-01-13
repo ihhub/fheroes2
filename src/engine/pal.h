@@ -41,13 +41,6 @@ namespace PAL
         CUSTOM
     };
 
-    struct CyclingColorSet
-    {
-        uint8_t start;
-        uint8_t length;
-        bool forward;
-    };
-
     std::vector<uint8_t> GetCyclingPalette( int stepId );
     const std::vector<uint8_t> & GetPalette( int type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );

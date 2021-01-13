@@ -38,7 +38,6 @@
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
-#include "ground.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "m82.h"
@@ -74,7 +73,7 @@ int Game::StartGame( void )
 
     // cursor
     Cursor & cursor = Cursor::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
@@ -89,11 +88,11 @@ int Game::StartGame( void )
 
 void Game::DialogPlayers( int color, std::string str )
 {
-    const Player * player = Settings::Get().GetPlayers().Get( color );
+    const Player * player = Players::Get( color );
     StringReplace( str, "%{color}", ( player ? player->GetName() : Color::String( color ) ) );
 
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
-    fheroes2::Image sign = border;
+    fheroes2::Sprite sign = border;
 
     switch ( color ) {
     case Color::BLUE:
@@ -176,7 +175,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
     Interface::StatusWindow::ResetTimer();
     Interface::Basic & I = Interface::Basic::Get();
-    Interface::GameArea & gameArea = I.GetGameArea();
+    const Interface::GameArea & gameArea = I.GetGameArea();
     bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
     if ( it != myHeroes.end() ) {
@@ -268,7 +267,7 @@ void ShowNewWeekDialog( void )
 
 void ShowEventDayDialog( void )
 {
-    Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
 
     for ( EventsDate::const_iterator it = events.begin(); it != events.end(); ++it ) {
@@ -607,7 +606,7 @@ int Interface::Basic::HumanTurn( bool isload )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     int res = Game::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
@@ -663,11 +662,6 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
         myKingdom.HeroesActionNewPosition();
 
-    // auto hide status
-    bool autohide_status = conf.QVGA() && conf.ShowStatus();
-    if ( autohide_status )
-        Game::AnimateResetDelay( Game::AUTOHIDE_STATUS_DELAY );
-
     int fastScrollRepeatCount = 0;
     const int fastScrollThreshold = 2;
     bool isOngoingFastScrollEvent = false;
@@ -688,11 +682,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 res = Game::QUITGAME;
                 break;
             }
-        }
-        // for pocketpc: auto hide status if start turn
-        if ( autohide_status && Game::AnimateInfrequentDelay( Game::AUTOHIDE_STATUS_DELAY ) ) {
-            EventSwitchShowStatus();
-            autohide_status = false;
         }
 
         if ( !isOngoingFastScrollEvent )
@@ -1065,7 +1054,7 @@ int Interface::Basic::HumanTurn( bool isload )
     return res;
 }
 
-void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
+void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
 {
     Heroes * from_hero = GetFocusHeroes();
     const Maps::Tiles & tile = world.GetTiles( index_maps );
@@ -1094,9 +1083,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( s32 index_maps )
         if ( to_castle == NULL )
             break;
 
-        index_maps = to_castle->GetIndex();
-
-        Castle * from_castle = GetFocusCastle();
+        const Castle * from_castle = GetFocusCastle();
         if ( !from_castle || from_castle != to_castle ) {
             SetFocus( to_castle );
             RedrawFocus();
@@ -1138,8 +1125,8 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
         Cursor::Get().SetThemes( GetCursorTileIndex( index_maps ) );
     }
     else {
-        Settings & conf = Settings::Get();
-        Maps::Tiles & tile = world.GetTiles( index_maps );
+        const Settings & conf = Settings::Get();
+        const Maps::Tiles & tile = world.GetTiles( index_maps );
 
         DEBUG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
 

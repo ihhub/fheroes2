@@ -50,6 +50,7 @@
 #include "race.h"
 #include "settings.h"
 #include "spell.h"
+#include "til.h"
 #include "trees.h"
 #include "world.h"
 
@@ -57,7 +58,7 @@ namespace
 {
     const u8 monsterAnimationSequence[] = {0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0};
 
-    bool contains( int base, int value )
+    bool contains( const int base, const int value )
     {
         return ( base & value ) == value;
     }
@@ -158,11 +159,6 @@ Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
     tmp = ta.tmp;
 
     return *this;
-}
-
-bool Maps::TilesAddon::isUniq( u32 id ) const
-{
-    return uniq == id;
 }
 
 bool Maps::TilesAddon::isICN( int icn ) const
@@ -817,10 +813,7 @@ std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( uint32_t heroSpriteInd
 bool Maps::TilesAddon::ForceLevel1( const TilesAddon & ta )
 {
     // broken ship: left roc
-    if ( ICN::OBJNWAT2 == MP2::GetICNObject( ta.object ) && ta.index == 11 )
-        return true;
-
-    return false;
+    return ICN::OBJNWAT2 == MP2::GetICNObject( ta.object ) && ta.index == 11;
 }
 
 /* Maps::Addons */
@@ -881,23 +874,6 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     AddonsPushLevel2( mp2 );
 }
 
-void Maps::Tiles::SetIndex( int index )
-{
-    maps_index = index;
-}
-
-// Get third field containing Tile metadata (adventure spell ID)
-int Maps::Tiles::GetQuantity3( void ) const
-{
-    return quantity3;
-}
-
-// Set Tile metadata field (used for things like adventure spell ID)
-void Maps::Tiles::SetQuantity3( int value )
-{
-    quantity3 = value;
-}
-
 Heroes * Maps::Tiles::GetHeroes( void ) const
 {
     return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : NULL;
@@ -927,11 +903,6 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
 Point Maps::Tiles::GetCenter( void ) const
 {
     return Maps::GetPoint( GetIndex() );
-}
-
-s32 Maps::Tiles::GetIndex( void ) const
-{
-    return maps_index;
 }
 
 int Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
@@ -1155,7 +1126,7 @@ bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
 bool Maps::Tiles::isLongObject( int direction )
 {
     if ( Maps::isValidDirection( GetIndex(), direction ) ) {
-        Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), direction ) );
+        const Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), direction ) );
 
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it )
             if ( !Exclude4LongObject( *it )
@@ -1425,20 +1396,19 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::RedrawTile( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( area.GetVisibleTileROI() & mp )
-        area.DrawTile( dst, GetTileSurface(), mp );
+    if ( visibleTileROI & mp ) {
+        Interface::Basic::Get().GetGameArea().DrawTile( dst, GetTileSurface(), mp );
+    }
 }
 
-void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
+void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, const Rect & visibleTileROI )
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-
-    if ( area.GetVisibleTileROI() & mp ) {
+    if ( visibleTileROI & mp ) {
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
             area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
         }
@@ -1457,12 +1427,12 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp )
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw ) const
 {
-    Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetVisibleTileROI() & mp ) && !addon.empty() ) {
+    if ( ( visibleTileROI & mp ) && !addon.empty() ) {
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
@@ -1481,18 +1451,17 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, bool
     }
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, bool isPuzzleDraw ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw ) const
 {
-    RedrawAddon( dst, addons_level1, isPuzzleDraw );
+    RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw );
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Rect & visibleTileROI ) const
 {
 #ifdef WITH_DEBUG
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( area.GetVisibleTileROI() & mp ) {
+    if ( visibleTileROI & mp ) {
         if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
             fheroes2::Image sf = PassableViewSurface( tilePassable );
 
@@ -1501,11 +1470,13 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst ) const
                 text.Blit( 13, 13, sf );
             }
 
+            const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
             area.BlitOnTile( dst, sf, 0, 0, mp );
         }
     }
 #else
     (void)dst;
+    (void)visibleTileROI;
 #endif
 }
 
@@ -1536,27 +1507,28 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw ) cons
     }
 }
 
-void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, bool withShadow ) const
+void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow ) const
 {
     switch ( GetObject() ) {
     case MP2::OBJ_BOAT:
-        RedrawBoat( dst, withShadow );
+        RedrawBoat( dst, visibleTileROI, withShadow );
         break;
     case MP2::OBJ_MONSTER:
-        RedrawMonster( dst );
+        RedrawMonster( dst, visibleTileROI );
         break;
     default:
         break;
     }
 }
 
-void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( !( area.GetVisibleTileROI() & mp ) )
+    if ( !( visibleTileROI & mp ) )
         return;
+
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     const Monster & monster = QuantityMonster();
     const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
@@ -1570,12 +1542,12 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst ) const
     }
 }
 
-void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, bool withShadow ) const
+void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
-    if ( area.GetVisibleTileROI() & mp ) {
+    if ( visibleTileROI & mp ) {
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
         if ( withShadow ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
@@ -1627,16 +1599,16 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
     return false;
 }
 
-void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetVisibleTileROI() & mp ) ) {
+    if ( visibleTileROI & mp ) {
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-            if ( !SkipRedrawTileBottom4Hero( it->object, it->index, tilePassable ) ) {
-                const uint8_t object = ( *it ).object;
-                const uint8_t index = ( *it ).index;
+            const uint8_t object = it->object;
+            const uint8_t index = it->index;
+            if ( !SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
                 const int icn = MP2::GetICNObject( object );
 
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
@@ -1649,20 +1621,20 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst ) const
         }
 
         if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-            RedrawObjects( dst );
-            RedrawMonstersAndBoat( dst, false );
+            RedrawObjects( dst, false );
+            RedrawMonstersAndBoat( dst, visibleTileROI, false );
         }
     }
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst ) const
+void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( !( area.GetVisibleTileROI() & mp ) )
+    if ( !( visibleTileROI & mp ) )
         return;
 
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const int objectID = GetObject( false );
     // animate objects
     if ( objectID == MP2::OBJ_ABANDONEDMINE ) {
@@ -1678,15 +1650,15 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst ) const
         }
     }
 
-    RedrawAddon( dst, addons_level2 );
+    RedrawAddon( dst, addons_level2, visibleTileROI, false );
 }
 
-void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, bool skip_ground ) const
+void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground ) const
 {
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( area.GetVisibleTileROI() & mp ) && !addons_level2.empty() ) {
+    if ( ( visibleTileROI & mp ) && !addons_level2.empty() ) {
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
             if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
                 continue;
@@ -2051,10 +2023,10 @@ void Maps::Tiles::CorrectFlags32( u32 index, bool up )
         taddon->index = index;
     else if ( up )
         // or new flag
-        addons_level2.emplace_back( TilesAddon::UPPER, world.GetUniq(), 0x38, index );
+        addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
     else
         // or new flag
-        addons_level1.emplace_back( TilesAddon::UPPER, world.GetUniq(), 0x38, index );
+        addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), 0x38, index );
 }
 
 void Maps::Tiles::FixedPreload( Tiles & tile )
@@ -2341,7 +2313,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
     for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
         const Tiles & heroTile = world.GetTiles( *it );
         const Heroes * hero = heroTile.GetHeroes();
-        if ( hero == NULL ) { // no a hero? How can it be?!
+        if ( hero == NULL ) { // not a hero? How can it be?!
             continue;
         }
 

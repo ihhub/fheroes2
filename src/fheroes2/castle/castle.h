@@ -171,10 +171,10 @@ public:
 
     int OpenDialog( bool readonly = false );
 
-    int GetAttackModificator( std::string * ) const;
-    int GetDefenseModificator( std::string * ) const;
+    int GetAttackModificator( const std::string * ) const;
+    int GetDefenseModificator( const std::string * ) const;
     int GetPowerModificator( std::string * ) const;
-    int GetKnowledgeModificator( std::string * ) const;
+    int GetKnowledgeModificator( const std::string * ) const;
     int GetMoraleModificator( std::string * ) const;
     int GetLuckModificator( std::string * ) const;
 

@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ground.h"
 #include "world.h"
 
 namespace
@@ -114,7 +113,7 @@ namespace
         const uint32_t extendedWidth = mapSize.w + 2;
 
         MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
-        MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
+        const MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
         const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
 
         for ( ; currentTile != mapEnd; ++currentTile ) {
@@ -228,7 +227,7 @@ void World::ComputeStaticAnalysis()
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
-            Maps::Tiles & tile = vec_tiles[index];
+            const Maps::Tiles & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
                 ++obstacles[0][x].second;
@@ -266,7 +265,7 @@ void World::ComputeStaticAnalysis()
     // Step 3. Check all castles on the map and create region centres based on them
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
-    for ( Castle * castle : vec_castles ) {
+    for ( const Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
     std::sort( castleCenters.begin(), castleCenters.end(), []( const TileData & left, const TileData & right ) {

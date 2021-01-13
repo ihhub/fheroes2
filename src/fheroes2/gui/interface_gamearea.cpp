@@ -149,26 +149,26 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Point offset( 0, tileROI.y + y );
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
+            for ( int32_t x = 0; x < tileROI.w; ++x ) {
                 offset.x = tileROI.x + x;
-                Maps::Tiles::RedrawEmptyTile( dst, offset );
+                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
             }
         }
         else {
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
+            for ( int32_t x = 0; x < tileROI.w; ++x ) {
                 offset.x = tileROI.x + x;
 
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset );
+                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
                 }
                 else {
                     const Maps::Tiles & tile = world.GetTiles( offset.x, offset.y );
 
-                    tile.RedrawTile( dst );
+                    tile.RedrawTile( dst, tileROI );
 
                     // bottom and objects
                     if ( drawBottom ) {
-                        tile.RedrawBottom( dst, isPuzzleDraw );
+                        tile.RedrawBottom( dst, tileROI, isPuzzleDraw );
                         tile.RedrawObjects( dst, isPuzzleDraw );
                     }
                 }
@@ -183,13 +183,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const int32_t offsetY = tileROI.y + y;
             if ( offsetY < 0 || offsetY >= world.h() )
                 continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
+            for ( int32_t x = 0; x < tileROI.w; ++x ) {
                 const int32_t offsetX = tileROI.x + x;
                 if ( offsetX < 0 || offsetX >= world.w() )
                     continue;
 
                 const Maps::Tiles & tile = world.GetTiles( offsetX, offsetY );
-                tile.RedrawMonstersAndBoat( dst );
+                tile.RedrawMonstersAndBoat( dst, tileROI );
             }
         }
     }
@@ -203,7 +203,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const int32_t offsetY = tileROI.y + y;
         if ( offsetY < 0 || offsetY >= world.h() )
             continue;
-        for ( s32 x = 0; x < tileROI.w; ++x ) {
+        for ( int32_t x = 0; x < tileROI.w; ++x ) {
             const int32_t offsetX = tileROI.x + x;
             if ( offsetX < 0 || offsetX >= world.w() )
                 continue;
@@ -212,7 +212,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             // top
             if ( drawTop )
-                tile.RedrawTop( dst );
+                tile.RedrawTop( dst, tileROI );
 
             // heroes will be drawn later
             if ( tile.GetObject() == MP2::OBJ_HEROES && drawHeroes ) {
@@ -225,7 +225,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     // object fade in/fade out animation
-    Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
+    const Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
     if ( fadeInfo.object != MP2::OBJ_ZERO ) {
         const Point & mp = Maps::GetPoint( fadeInfo.tile );
         const int icn = MP2::GetICNObject( fadeInfo.object );
@@ -255,7 +255,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
-        hero.second->Redraw( dst, hero.first.x, hero.first.y - 1, true );
+        hero.second->Redraw( dst, hero.first.x, hero.first.y - 1, tileROI, true );
     }
 
     // route
@@ -304,15 +304,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         // redraw grid
         if ( flag & LEVEL_ALL ) {
             for ( int16_t y = 0; y < tileROI.h; ++y ) {
-                const s32 offsetY = tileROI.y + y;
+                const int32_t offsetY = tileROI.y + y;
                 if ( offsetY < 0 || offsetY >= world.h() )
                     continue;
-                for ( s32 x = 0; x < tileROI.w; ++x ) {
-                    const s32 offsetX = tileROI.x + x;
+                for ( int32_t x = 0; x < tileROI.w; ++x ) {
+                    const int32_t offsetX = tileROI.x + x;
                     if ( offsetX < 0 || offsetX >= world.w() )
                         continue;
 
-                    world.GetTiles( offsetX, offsetY ).RedrawPassable( dst );
+                    world.GetTiles( offsetX, offsetY ).RedrawPassable( dst, tileROI );
                 }
             }
         }
@@ -324,11 +324,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const int colors = Players::FriendColors();
 
         for ( int16_t y = 0; y < tileROI.h; ++y ) {
-            const s32 offsetY = tileROI.y + y;
+            const int32_t offsetY = tileROI.y + y;
             if ( offsetY < 0 || offsetY >= world.h() )
                 continue;
-            for ( s32 x = 0; x < tileROI.w; ++x ) {
-                const s32 offsetX = tileROI.x + x;
+            for ( int32_t x = 0; x < tileROI.w; ++x ) {
+                const int32_t offsetX = tileROI.x + x;
                 if ( offsetX < 0 || offsetX >= world.w() )
                     continue;
 
@@ -409,11 +409,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
     return result;
 }
 
-bool Interface::GameArea::NeedScroll( void ) const
-{
-    return scrollDirection != 0;
-}
-
 int Interface::GameArea::GetScrollCursor( void ) const
 {
     switch ( scrollDirection ) {
@@ -468,27 +463,20 @@ void Interface::GameArea::SetScroll( int direct )
         }
     }
 
-    scrollTime.Start();
-}
-
-void Interface::GameArea::SetUpdateCursor( void )
-{
-    updateCursor = true;
+    scrollTime.reset();
 }
 
 void Interface::GameArea::QueueEventProcessing( void )
 {
-    const Settings & conf = Settings::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Point & mp = le.GetMouseCursor();
 
-    s32 index = GetValidTileIdFromPoint( mp );
+    int32_t index = GetValidTileIdFromPoint( mp );
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( interface.GetCursorTileIndex( index ) );
+        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }
@@ -496,6 +484,8 @@ void Interface::GameArea::QueueEventProcessing( void )
     // out of range
     if ( index < 0 )
         return;
+
+    const Settings & conf = Settings::Get();
 
     // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
@@ -541,7 +531,7 @@ void Interface::GameArea::QueueEventProcessing( void )
                             interface.SetRedraw( REDRAW_GAMEAREA );
                             interface.Redraw();
                             cursor.Show();
-                            display.render();
+                            fheroes2::Display::instance().render();
                         }
                         else
                             break;
@@ -551,8 +541,7 @@ void Interface::GameArea::QueueEventProcessing( void )
         }
 
         // fixed pocket pc: click on maps after scroll (pause: ~800 ms)
-        scrollTime.Stop();
-        if ( 800 > scrollTime.Get() )
+        if ( 800 > scrollTime.getMs() )
             return;
     }
 
@@ -621,9 +610,4 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const Point & point ) cons
 Point Interface::GameArea::GetRelativeTilePosition( const Point & tileId ) const
 {
     return Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
-}
-
-void Interface::GameArea::ResetCursorPosition()
-{
-    _prevIndexPos = -1;
 }

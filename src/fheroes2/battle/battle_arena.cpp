@@ -21,8 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "agg.h"
+#include "ai.h"
 #include "army.h"
 #include "army_troop.h"
 #include "audio_music.h"
@@ -204,6 +206,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
+    assert( arena == nullptr );
     arena = this;
     army1 = new Force( a1, false );
     army2 = new Force( a2, true );
@@ -307,22 +310,16 @@ Battle::Arena::~Arena()
 {
     delete army1;
     delete army2;
+    delete towers[0];
+    delete towers[1];
+    delete towers[2];
+    delete catapult;
+    delete interface;
+    delete armies_order;
+    delete bridge;
 
-    if ( towers[0] )
-        delete towers[0];
-    if ( towers[1] )
-        delete towers[1];
-    if ( towers[2] )
-        delete towers[2];
-
-    if ( catapult )
-        delete catapult;
-    if ( interface )
-        delete interface;
-    if ( armies_order )
-        delete armies_order;
-    if ( bridge )
-        delete bridge;
+    assert( arena == this );
+    arena = nullptr;
 }
 
 void Battle::Arena::TurnTroop( Unit * current_troop )
@@ -496,7 +493,7 @@ void Battle::Arena::Turns( void )
         if ( army2->GetCommander() )
             result_game.exp1 += 500;
 
-        Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
+        const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
 }
@@ -558,13 +555,11 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
 {
     Indexes result = board.GetAStarPath( b, dst );
 
-    if ( result.size() ) {
-        if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
-            std::stringstream ss;
-            for ( u32 ii = 0; ii < result.size(); ++ii )
-                ss << result[ii] << ", ";
-            DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
-        }
+    if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
+        std::stringstream ss;
+        for ( u32 ii = 0; ii < result.size(); ++ii )
+            ss << result[ii] << ", ";
+        DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
     }
 
     return result;
@@ -715,10 +710,13 @@ s32 Battle::Arena::GetFreePositionNearHero( int color ) const
     else if ( army2->GetColor() == color )
         cells = cells2;
 
-    if ( cells )
-        for ( u32 ii = 0; ii < 3; ++ii )
-            if ( board[cells[ii]].isPassable1( true ) && NULL == board[cells[ii]].GetUnit() )
+    if ( cells ) {
+        for ( u32 ii = 0; ii < 3; ++ii ) {
+            if ( board[cells[ii]].isPassable1( true ) && NULL == board[cells[ii]].GetUnit() ) {
                 return cells[ii];
+            }
+        }
+    }
 
     return -1;
 }
