@@ -108,6 +108,7 @@ public:
     void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop &, u32 slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
+    void JoinAllTroopsOfType( const Troop & targetTroop );
 };
 
 enum

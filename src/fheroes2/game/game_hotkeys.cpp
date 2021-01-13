@@ -266,6 +266,7 @@ void Game::HotKeysDefaults( void )
     // split
     key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
     key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
+    key_events[EVENT_JOINSTACKS] = KEY_ALT;
 }
 
 bool Game::HotKeyPressEvent( int evnt )

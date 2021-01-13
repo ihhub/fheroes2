@@ -825,6 +825,25 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
+{
+    const int troopID = targetTroop.GetID();
+    const int totalMonsterCount = GetCountMonsters( troopID );
+
+    for ( iterator it = begin(); it != end(); ++it ) {
+        Troop * troop = *it;
+        if ( !troop->isValid() || troop->GetID() != troopID )
+            continue;
+
+        if ( troop == &targetTroop ) {
+            troop->SetCount( totalMonsterCount );
+        }
+        else {
+            troop->Reset();
+        }
+    }
+}
+
 Army::Army( HeroBase * s )
     : commander( s )
     , combat_format( true )

@@ -239,6 +239,11 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
+    if ( troop.isValid() && LocalEvent::Get().MouseClickMiddle() ) {
+        RedistributeArmyByOne( troop, army );
+        return true;
+    }
+
     if ( isSelected() ) {
         const ArmyTroop * troop2 = GetSelectedItem();
 
@@ -327,6 +332,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         {
             if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
                 RedistributeArmyByOne( troop, army );
+                return false;
+            }
+            else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+                army->JoinAllTroopsOfType( troop );
                 return false;
             }
 
@@ -422,6 +431,17 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
 bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
+    if ( troop.isValid() && !read_only ) {
+        if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
+            RedistributeArmyByOne( troop, army );
+            return false;
+        }
+        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+            army->JoinAllTroopsOfType( troop );
+            return false;
+        }
+    }
+
     const ArmyTroop * troop2 = GetSelectedItem();
 
     if ( &troop == troop2 ) {
