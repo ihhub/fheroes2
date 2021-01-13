@@ -20,37 +20,31 @@
 
 #include "agg.h"
 #include "assert.h"
-#include "audio_music.h"
 #include "campaign_data.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
-#include "game_video.h"
-#include "gamedefs.h"
-#include "mus.h"
 #include "settings.h"
 #include "text.h"
-#include "ui_button.h"
-#include "ui_tool.h"
 #include "world.h"
-
-std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
-{
-    assert( scenarioId >= 0 );
-    std::vector<Campaign::ScenarioBonusData> bonus;
-
-    // TODO: apply use of campaignID
-    if ( scenarioId == 0 ) {
-        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
-    }
-
-    return bonus;
-}
 
 namespace
 {
+    std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
+    {
+        assert( scenarioId >= 0 );
+        std::vector<Campaign::ScenarioBonusData> bonus;
+
+        // TODO: apply use of campaignID
+        if ( scenarioId == 0 ) {
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+        }
+
+        return bonus;
+    }
+
     const std::string rolandCampaignDescription[] = {_(
         "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
         " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." )};
@@ -108,33 +102,33 @@ namespace
 
         return GetCampaignMaps( maps, PRICE_OF_LOYALTY_CAMPAIGN_SCENARIO_FILE_EXTENSION );
     }
-}
 
-void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
-{
-    const Players & sortedPlayers = Settings::Get().GetPlayers();
-    for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-        if ( !*it )
-            continue;
+    void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
+    {
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+            if ( !*it )
+                continue;
 
-        const Player & player = ( **it );
-        if ( !player.isControlHuman() )
-            continue;
+            const Player & player = ( **it );
+            if ( !player.isControlHuman() )
+                continue;
 
-        Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+            Kingdom & kingdom = world.GetKingdom( player.GetColor() );
 
-        switch ( scenarioBonus._type ) {
-        case Campaign::ScenarioBonusData::RESOURCES:
-            kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
-            break;
-        case Campaign::ScenarioBonusData::ARTIFACT:
-            kingdom.GetBestHero()->PickupArtifact( Artifact( scenarioBonus._subType ) );
-            break;
-        case Campaign::ScenarioBonusData::TROOP:
-            kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
-            break;
-        default:
-            assert( 0 );
+            switch ( scenarioBonus._type ) {
+            case Campaign::ScenarioBonusData::RESOURCES:
+                kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
+                break;
+            case Campaign::ScenarioBonusData::ARTIFACT:
+                kingdom.GetBestHero()->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                break;
+            case Campaign::ScenarioBonusData::TROOP:
+                kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
+                break;
+            default:
+                assert( 0 );
+            }
         }
     }
 }
