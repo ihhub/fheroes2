@@ -189,7 +189,7 @@ namespace Battle
         void RedrawPartialStart();
         void RedrawPartialFinish();
         void HumanTurn( const Unit &, Actions & );
-        bool NetworkTurn( Result & );
+        bool NetworkTurn( const Result & );
 
         const Rect & GetArea( void ) const;
         Point GetMouseCursor() const;
@@ -207,9 +207,9 @@ namespace Battle
         void RedrawActionMove( Unit &, const Indexes & );
         void RedrawActionFly( Unit &, const Position & );
         void RedrawActionMorale( Unit &, bool );
-        void RedrawActionLuck( Unit & );
-        void RedrawActionTowerPart1( Tower &, Unit & );
-        void RedrawActionTowerPart2( TargetInfo & );
+        void RedrawActionLuck( const Unit & );
+        void RedrawActionTowerPart1( const Tower &, const Unit & );
+        void RedrawActionTowerPart2( const TargetInfo & );
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
@@ -251,16 +251,16 @@ namespace Battle
         void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = NULL );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
-        void RedrawActionDisruptingRaySpell( Unit & );
-        void RedrawActionBloodLustSpell( Unit & );
-        void RedrawActionStoneSpell( Unit & target );
+        void RedrawActionDisruptingRaySpell( const Unit & );
+        void RedrawActionBloodLustSpell( const Unit & );
+        void RedrawActionStoneSpell( const Unit & target );
         void RedrawActionColdRingSpell( s32, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
         void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
         void RedrawActionResurrectSpell( Unit &, const Spell & );
         void RedrawActionDeathWaveSpell( const TargetsInfo & targets, int strength );
-        void RedrawActionLightningBoltSpell( Unit & );
+        void RedrawActionLightningBoltSpell( const Unit & );
         void RedrawActionChainLightningSpell( const TargetsInfo & );
         void RedrawLightningOnTargets( const std::vector<Point> & points, const Rect & drawRoi ); // helper function
         void RedrawRaySpell( const Unit & target, int spellICN, int spellSound, uint32_t size );

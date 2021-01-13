@@ -180,7 +180,6 @@
     <ClCompile Include="src\engine\font.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
-    <ClCompile Include="src\engine\IMG_savepng.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
@@ -382,7 +381,6 @@
     <ClInclude Include="src\engine\font.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_tool.h" />
-    <ClInclude Include="src\engine\IMG_savepng.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />

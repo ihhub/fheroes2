@@ -36,7 +36,6 @@
 #include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "ground.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -179,7 +178,7 @@ void Game::DisableChangeMusic( bool /*f*/ )
 
 void Game::Init( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // update all global defines
@@ -187,7 +186,7 @@ void Game::Init( void )
         LoadExternalResource();
 
     // default events
-    le.SetStateDefaults();
+    LocalEvent::SetStateDefaults();
 
     // set global events
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
@@ -275,7 +274,7 @@ u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
 
 u32 Game::GetRating( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     u32 rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
@@ -315,7 +314,7 @@ u32 Game::GetRating( void )
 
 u32 Game::GetGameOverScores( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     u32 k_size = 0;
 

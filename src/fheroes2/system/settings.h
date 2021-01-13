@@ -391,7 +391,7 @@ public:
     {
         return data_params;
     }
-    const ListDirs GetMapsParams( void ) const
+    ListDirs GetMapsParams( void ) const
     {
         return maps_params;
     }

@@ -254,9 +254,11 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void OpenController();
     void CloseController();
     void OpenTouchpad();
+#endif
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
@@ -275,7 +277,7 @@ private:
 
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
-    void HandleKeyboardEvent( SDL_KeyboardEvent & );
+    void HandleKeyboardEvent( const SDL_KeyboardEvent & );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
@@ -346,18 +348,17 @@ private:
 
     // used to convert user-friendly pointer speed values into more useable ones
     const double CONTROLLER_SPEED_MOD = 2000000.0;
+    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
+    double _emulatedPointerPosX = 0;
+    double _emulatedPointerPosY = 0;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_GameController * _gameController = nullptr;
-    SDL_FingerID _firstFingerId;
-#endif
-
+    SDL_FingerID _firstFingerId = 0;
     fheroes2::Time _controllerTimer;
-    double _controllerPointerSpeed = 10.0 / CONTROLLER_SPEED_MOD;
-    double _controllerPointerPosX = 0;
-    double _controllerPointerPosY = 0;
     int16_t _controllerLeftXAxis = 0;
     int16_t _controllerLeftYAxis = 0;
     int16_t _controllerRightXAxis = 0;
@@ -366,6 +367,7 @@ private:
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
+#endif
 
 #ifdef VITA
     bool dpadInputActive = false;

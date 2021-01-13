@@ -121,7 +121,7 @@ bool AnimationSequence::isLastFrame() const
 
 bool AnimationSequence::isValid() const
 {
-    return _seq.size() > 0;
+    return !_seq.empty();
 }
 
 TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
@@ -184,7 +184,7 @@ double TimedSequence::movementProgress() const
 
 bool TimedSequence::isValid() const
 {
-    return _seq.size() > 0 && _currentTime <= _duration && _duration > 0;
+    return !_seq.empty() && _currentTime <= _duration && _duration > 0;
 }
 
 AnimationReference::AnimationReference()
@@ -301,7 +301,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
         return _static;
     case Monster_Info::IDLE:
         // Pick random animation
-        if ( _idle.size() > 0 && _idle.size() == _monsterInfo.idlePriority.size() ) {
+        if ( !_idle.empty() && _idle.size() == _monsterInfo.idlePriority.size() ) {
             Rand::Queue picker;
 
             for ( size_t i = 0; i < _idle.size(); ++i ) {
@@ -470,7 +470,7 @@ uint32_t AnimationReference::getShootingSpeed() const
     return _monsterInfo.shootSpeed;
 }
 
-size_t AnimationReference::getProjectileID( float angle ) const
+size_t AnimationReference::getProjectileID( const double angle ) const
 {
     return _monsterInfo.getProjectileID( angle );
 }
@@ -516,7 +516,7 @@ AnimationState::~AnimationState() {}
 bool AnimationState::switchAnimation( int animState, bool reverse )
 {
     std::vector<int> seq = getAnimationVector( animState );
-    if ( seq.size() > 0 ) {
+    if ( !seq.empty() ) {
         _animState = animState;
         if ( reverse )
             std::reverse( seq.begin(), seq.end() );
@@ -536,13 +536,13 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
 
     for ( std::vector<int>::const_iterator it = animationList.begin(); it != animationList.end(); ++it ) {
         const std::vector<int> & seq = getAnimationVector( *it );
-        if ( seq.size() > 0 ) {
+        if ( !seq.empty() ) {
             _animState = *it;
             combinedAnimation.insert( combinedAnimation.end(), seq.begin(), seq.end() );
         }
     }
 
-    if ( combinedAnimation.size() > 0 ) {
+    if ( !combinedAnimation.empty() ) {
         if ( reverse )
             std::reverse( combinedAnimation.begin(), combinedAnimation.end() );
 

@@ -225,7 +225,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     // object fade in/fade out animation
-    Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
+    const Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
     if ( fadeInfo.object != MP2::OBJ_ZERO ) {
         const Point & mp = Maps::GetPoint( fadeInfo.tile );
         const int icn = MP2::GetICNObject( fadeInfo.object );
@@ -476,7 +476,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     // change cusor if need
     if ( updateCursor || index != _prevIndexPos ) {
-        cursor.SetThemes( interface.GetCursorTileIndex( index ) );
+        cursor.SetThemes( Interface::Basic::GetCursorTileIndex( index ) );
         _prevIndexPos = index;
         updateCursor = false;
     }

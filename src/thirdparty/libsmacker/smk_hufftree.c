@@ -310,17 +310,18 @@ struct smk_huff16_t* _smk_huff16_build(struct smk_bit_t* bs)
 	/* Finally, call recursive function to retrieve the Bigtree. */
 	smk_huff16_build_rec(bs, big->cache, low8, hi8, big->t);
 
-	/* Done with 8-bit hufftrees, free them. */
-	smk_huff8_free(hi8);
-	smk_huff8_free(low8);
-
 	/* Check final end tag. */
 	smk_bs_read_1(bs, bit);
+
+    /* Done with 8-bit hufftrees, free them. */
+	smk_huff8_free(hi8);
+	smk_huff8_free(low8);
 
 	if (bit)
 	{
 		fputs("libsmacker::smk_huff16_build(bs) - ERROR: final get_bit returned 1\n", stderr);
-		goto error;
+        smk_huff16_free(big);
+		return NULL;
 	}
 
 	return big;

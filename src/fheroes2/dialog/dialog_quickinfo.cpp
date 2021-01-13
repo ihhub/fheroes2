@@ -309,6 +309,35 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
     return str;
 }
 
+fheroes2::Rect MakeRectQuickInfo( LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+{
+    if ( position.x > 0 && position.y > 0 ) {
+        return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
+    }
+
+    // place box next to mouse cursor
+    const Point & mp = le.GetMouseCursor();
+
+    const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+    const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+
+    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const Rect & ar = gamearea.GetROI();
+
+    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+        return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
+    }
+    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+        return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
+    }
+    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+        return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
+    }
+    else { // bottom right
+        return fheroes2::Rect( mx - imageBox.width(), my - imageBox.height(), imageBox.width(), imageBox.height() );
+    }
+}
+
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
     const int objectType = tile.GetObject( false );
@@ -348,28 +377,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( qwikinfo, 0 );
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
-    const Point & mp = le.GetMouseCursor();
-
-    fheroes2::Rect pos;
-    const s32 mx = mp.x;
-    const s32 my = mp.y;
-
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
-        pos = fheroes2::Rect( mx, my + TILEWIDTH / 2, box.width(), box.height() );
-    }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
-        pos = fheroes2::Rect( mx - box.width() - TILEWIDTH / 2, my + TILEWIDTH / 2, box.width(), box.height() );
-    }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
-        pos = fheroes2::Rect( mx, my - box.height(), box.width(), box.height() );
-    }
-    else { // bottom right
-        pos = fheroes2::Rect( mx - box.width() - TILEWIDTH / 2, my - box.height(), box.width(), box.height() );
-    }
+    fheroes2::Rect pos = MakeRectQuickInfo( le, box );
 
     fheroes2::ImageRestorer restorer( display, pos.x, pos.y, pos.width, pos.height );
     fheroes2::Blit( box, display, pos.x, pos.y );
@@ -532,7 +542,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     display.render();
 }
 
-void Dialog::QuickInfo( const Castle & castle )
+void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -540,28 +550,9 @@ void Dialog::QuickInfo( const Castle & castle )
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( qwiktown, 0 );
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
-    const Point & mp = le.GetMouseCursor();
-
-    fheroes2::Rect cur_rt;
-    const s32 mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-    const s32 my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
-        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
-    }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
-        cur_rt = fheroes2::Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
-    }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
-        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
-    }
-    else { // bottom right
-        cur_rt = fheroes2::Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
-    }
+    fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
     fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
@@ -673,7 +664,7 @@ void Dialog::QuickInfo( const Castle & castle )
         text.Blit( dst_pt.x, dst_pt.y );
 
         // mini port heroes
-        fheroes2::Image port = guardian->GetPortrait( PORT_SMALL );
+        const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
             dst_pt.y += 15;
@@ -715,7 +706,7 @@ void Dialog::QuickInfo( const Castle & castle )
     display.render();
 }
 
-void Dialog::QuickInfo( const Heroes & hero )
+void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
@@ -727,28 +718,9 @@ void Dialog::QuickInfo( const Heroes & hero )
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( qwikhero, 0 );
-    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect ar( gamearea.GetROI() );
 
     LocalEvent & le = LocalEvent::Get();
-    const Point & mp = le.GetMouseCursor();
-
-    fheroes2::Rect cur_rt;
-    const s32 mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-    const s32 my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
-        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, box.width(), box.height() );
-    }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
-        cur_rt = fheroes2::Rect( mx - box.width(), my + TILEWIDTH, box.width(), box.height() );
-    }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
-        cur_rt = fheroes2::Rect( mx + TILEWIDTH, my - box.height(), box.width(), box.height() );
-    }
-    else { // bottom right
-        cur_rt = fheroes2::Rect( mx - box.width(), my - box.height(), box.width(), box.height() );
-    }
+    fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
     fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
@@ -776,7 +748,7 @@ void Dialog::QuickInfo( const Heroes & hero )
     text.Blit( dst_pt.x, dst_pt.y );
 
     // mini port heroes
-    fheroes2::Image port = hero.GetPortrait( PORT_SMALL );
+    const fheroes2::Sprite & port = hero.GetPortrait( PORT_SMALL );
     if ( !port.empty() ) {
         dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
         dst_pt.y = cur_rt.y + 13;

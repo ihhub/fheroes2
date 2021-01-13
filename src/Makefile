@@ -18,44 +18,44 @@ CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
 # Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion
 
 ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
 endif
 
-ifdef WITH_SDL2
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-else
+ifdef FHEROES2_SDL1
 SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
+else
+SDL_LIBS := $(shell sdl2-config --libs)
+SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
 ifndef WITHOUT_MIXER
 CFLAGS := $(CFLAGS) -DWITH_MIXER
-ifdef WITH_SDL2
-SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
-else
+ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 endif
 
 ifndef WITHOUT_IMAGE
 CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
-ifdef WITH_SDL2
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
-else
+ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
 endif
 endif
 
 ifndef WITHOUT_UNICODE
 CFLAGS := $(CFLAGS) -DWITH_TTF
-ifdef WITH_SDL2
-SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
-else
+ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
 endif
 endif
 

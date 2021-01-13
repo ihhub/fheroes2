@@ -132,7 +132,7 @@ void Interface::ButtonsArea::ResetButtons( void )
 
 int Interface::ButtonsArea::QueueEventProcessing( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     int res = Game::CANCEL;
 

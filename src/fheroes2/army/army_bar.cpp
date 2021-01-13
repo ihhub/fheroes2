@@ -240,7 +240,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
     if ( isSelected() ) {
-        ArmyTroop * troop2 = GetSelectedItem();
+        const ArmyTroop * troop2 = GetSelectedItem();
 
         if ( &troop == troop2 ) {
             msg = _( "View %{name}" );
@@ -316,8 +316,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             selectedTroop->Reset();
         }
         // exchange
-        else
+        else if ( selectedTroop ) {
             Army::SwapTroops( troop, *selectedTroop );
+        }
 
         return false; // reset cursor
     }
@@ -421,7 +422,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
 bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
-    ArmyTroop * troop2 = GetSelectedItem();
+    const ArmyTroop * troop2 = GetSelectedItem();
 
     if ( &troop == troop2 ) {
         int flags = ( read_only || army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );

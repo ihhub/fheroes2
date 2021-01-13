@@ -517,7 +517,7 @@ void Castle::ActionNewWeek( void )
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth *= Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
@@ -1021,7 +1021,6 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         return false;
     }
 
-    Monster monster = troop;
     uint32_t count = troop.GetCount();
 
     // fix count
@@ -1029,17 +1028,17 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = monster.GetCost() * count;
+    const payment_t paymentCosts = troop.GetCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
         return false;
 
     // first: guard army join
-    if ( !GetArmy().JoinTroop( monster, count ) ) {
+    if ( !GetArmy().JoinTroop( troop ) ) {
         CastleHeroes heroes = world.GetHeroes( *this );
 
-        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( monster, count ) ) {
+        if ( !heroes.Guest() || !heroes.Guest()->GetArmy().JoinTroop( troop ) ) {
             if ( showDialog ) {
                 Dialog::Message( "", _( "There is no room in the garrison for this army." ), Font::BIG, Dialog::OK );
             }
@@ -1050,7 +1049,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     kingdom.OddFundsResource( paymentCosts );
     dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << monster.GetMultiName() << "(" << count << ")" );
+    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
@@ -2311,12 +2310,12 @@ std::string Castle::String( void ) const
     return os.str();
 }
 
-int Castle::GetAttackModificator( std::string * ) const
+int Castle::GetAttackModificator( const std::string * ) const
 {
     return 0;
 }
 
-int Castle::GetDefenseModificator( std::string * ) const
+int Castle::GetDefenseModificator( const std::string * ) const
 {
     return 0;
 }
@@ -2337,7 +2336,7 @@ int Castle::GetPowerModificator( std::string * strs ) const
     return result;
 }
 
-int Castle::GetKnowledgeModificator( std::string * ) const
+int Castle::GetKnowledgeModificator( const std::string * ) const
 {
     return 0;
 }

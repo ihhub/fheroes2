@@ -705,7 +705,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
         btnGroup.button( 0 ).disable();
 
-    TextSprite tsEnough;
+    TextSprite tsNotEnoughGold;
 
     if ( kingdom.GetCountMarketplace() ) {
         if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
@@ -713,20 +713,26 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsEnough.SetText( msg, Font::SMALL );
-            tsEnough.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-            tsEnough.Show();
+            tsNotEnoughGold.SetText( msg, Font::SMALL );
+            tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
+            tsNotEnoughGold.Show();
             btnMarket.draw();
         }
     }
 
+    TextSprite noRoom1;
+    noRoom1.SetText( _( "No room in" ), Font::SMALL );
+    noRoom1.SetPos( btnHeroesArea.x - 16, btnHeroesArea.y - 30 );
+    TextSprite noRoom2;
+    noRoom2.SetText( _( "the garrison" ), Font::SMALL );
+    noRoom2.SetPos( btnHeroesArea.x - 23, btnHeroesArea.y - 15 );
+
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
-        TextBox textbox2( _( "Not room in\nthe garrison" ), Font::SMALL, 100 );
-        textbox2.Blit( btnHeroesArea.x - 35, btnHeroesArea.y - 30 );
+        noRoom1.Show();
+        noRoom2.Show();
         btnHeroes.draw();
-
         btnGroup.button( 0 ).disable();
     }
 
@@ -750,39 +756,49 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
             Marketplace( false );
-
-            cursor.Hide();
-            tsTotal.Hide();
-            tsTotal.SetText( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
-            tsTotal.Show();
-
-            if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) ) {
-                tsEnough.Hide();
-                btnGroup.button( 0 ).enable();
-                btnGroup.draw();
-            }
-            else {
-                tsEnough.Hide();
-                std::string msg = _( "Not enough gold (%{gold})" );
-                StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-                tsEnough.SetText( msg, Font::SMALL );
-                tsEnough.Show();
-            }
-
-            cursor.Show();
-            display.render();
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );
-
-            if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
-                btnGroup.button( 0 ).enable();
-                btnGroup.draw();
-            }
-
-            cursor.Show();
-            display.render();
         }
+
+        cursor.Hide();
+        tsTotal.Hide();
+        tsTotal.SetText( GetString( gold ) + " (total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
+        tsTotal.Show();
+
+        const bool allowPayment = kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) );
+        const bool enoughRoom = hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop );
+
+        if ( allowPayment && enoughRoom ) {
+            btnGroup.button( 0 ).enable();
+        }
+        else {
+            btnGroup.button( 0 ).disable();
+        }
+
+        btnGroup.draw();
+
+        if ( allowPayment ) {
+            tsNotEnoughGold.Hide();
+        }
+        else {
+            std::string msg = _( "Not enough gold (%{gold})" );
+            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+            tsNotEnoughGold.SetText( msg, Font::SMALL );
+            tsNotEnoughGold.Show();
+        }
+
+        if ( enoughRoom ) {
+            noRoom1.Hide();
+            noRoom2.Hide();
+        }
+        else {
+            noRoom1.Show();
+            noRoom2.Show();
+        }
+
+        cursor.Show();
+        display.render();
     }
 
     cursor.Hide();

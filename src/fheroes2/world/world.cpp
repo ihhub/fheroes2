@@ -24,7 +24,6 @@
 #include <assert.h>
 #include <functional>
 
-#include "agg.h"
 #include "ai.h"
 #include "artifact.h"
 #include "castle.h"
@@ -665,7 +664,9 @@ s32 World::NextTeleport( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
     }
 
-    return teleports.size() ? *Rand::Get( teleports ) : index;
+    const int32_t * randValue = Rand::Get( teleports );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
@@ -709,7 +710,9 @@ s32 World::NextWhirlpool( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
     }
 
-    return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
+    const int32_t * randValue = Rand::Get( whilrpools );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 /* return message from sign */
@@ -938,7 +941,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 

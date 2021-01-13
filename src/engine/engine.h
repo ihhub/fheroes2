@@ -22,12 +22,6 @@
 #ifndef H2ENGINE_H
 #define H2ENGINE_H
 
-#include "audio.h"
-#include "audio_cdrom.h"
-#include "audio_mixer.h"
-#include "font.h"
-#include "rand.h"
-#include "serialize.h"
 #include "tools.h"
 #include "types.h"
 

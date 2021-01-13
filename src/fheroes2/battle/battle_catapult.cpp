@@ -143,9 +143,15 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
             targets.push_back( CAT_CENTRAL_TOWER );
     }
 
-    if ( targets.size() ) {
+    if ( !targets.empty() ) {
         // Miss chance is 25%
-        return canMiss && 6 > Rand::Get( 1, 20 ) ? static_cast<int>( CAT_MISS ) : ( 1 < targets.size() ? *Rand::Get( targets ) : targets.front() );
+        if ( canMiss && 6 > Rand::Get( 1, 20 ) ) {
+            return static_cast<int>( CAT_MISS );
+        }
+        else {
+            const uint32_t * targetId = Rand::Get( targets );
+            return targetId ? *targetId : targets.front();
+        }
     }
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "target not found.." );

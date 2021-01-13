@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "campaign_data.h"
+#include "artifact.h"
 #include "assert.h"
 #include "monster.h"
 #include "resource.h"
@@ -70,7 +71,7 @@ namespace Campaign
         , _currentScenarioBonus()
     {}
 
-    const std::string ScenarioBonusData::ToString() const
+    std::string ScenarioBonusData::ToString() const
     {
         std::string objectName;
 

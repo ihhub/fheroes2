@@ -73,7 +73,7 @@ void updatePlayers( Players & players, const int humanPlayerCount )
 
 size_t GetSelectedMapId( MapsFileInfoList & lists )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     const std::string & mapName = conf.CurrentFileInfo().name;
     const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
@@ -358,7 +358,7 @@ u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
 
 void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
     if ( firstDraw ) {

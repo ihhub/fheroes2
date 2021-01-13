@@ -22,7 +22,6 @@
 #define H2CAMPAIGN_DATA_H
 
 #include "gamedefs.h"
-#include "heroes_base.h"
 
 namespace Campaign
 {
@@ -46,7 +45,7 @@ namespace Campaign
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
-        const std::string ToString() const;
+        std::string ToString() const;
     };
 
     class CampaignData

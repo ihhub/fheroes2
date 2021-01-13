@@ -83,7 +83,7 @@ public:
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment, int level ) const;
 
-    void SetLastLostHero( Heroes & );
+    void SetLastLostHero( const Heroes & );
     void ResetLastLostHero( void );
     void AddHeroStartCondLoss( Heroes * );
     std::string GetNamesHeroStartCondLoss( void ) const;

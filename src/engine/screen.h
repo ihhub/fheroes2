@@ -52,19 +52,19 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
-#ifdef VITA
-        virtual void SetVitaKeepAspectRatio( bool ) {}
-#endif
-
-        virtual fheroes2::Rect GetWindowDestRect() const
+        virtual fheroes2::Rect getActiveWindowROI() const
         {
             return fheroes2::Rect();
         }
 
-        virtual std::pair<int, int> GetScreenResolution() const
+        virtual fheroes2::Size getCurrentScreenResolution() const
         {
-            return std::pair<int, int>();
+            return fheroes2::Size();
         }
+
+#ifdef VITA
+        virtual void SetVitaKeepAspectRatio( bool ) {}
+#endif
 
     protected:
         BaseRenderEngine()

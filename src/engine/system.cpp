@@ -60,7 +60,6 @@
 #include <dirent.h>
 #endif
 
-#include "serialize.h"
 #include "tools.h"
 
 int System::MakeDirectory( const std::string & path )

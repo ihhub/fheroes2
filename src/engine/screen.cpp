@@ -269,6 +269,7 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
+            _retrieveWindowInfo();
         }
 
         virtual bool isFullScreen() const override
@@ -352,23 +353,14 @@ namespace
             SDL_FreeSurface( surface );
         }
 
-        virtual fheroes2::Rect GetWindowDestRect() const override
+        virtual fheroes2::Rect getActiveWindowROI() const override
         {
-            fheroes2::Rect rect;
-            SDL_GetWindowPosition( _window, &rect.x, &rect.y );
-            SDL_GetWindowSize( _window, &rect.width, &rect.height );
-            return rect;
+            return _activeWindowROI;
         }
 
-        virtual std::pair<int, int> GetScreenResolution() const override
+        virtual fheroes2::Size getCurrentScreenResolution() const override
         {
-            std::pair<int, int> resolution;
-            int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
-            SDL_DisplayMode displayMode;
-            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
-            resolution.first = displayMode.w;
-            resolution.second = displayMode.h;
-            return resolution;
+            return _currentScreenResolution;
         }
 
         static RenderEngine * create()
@@ -493,7 +485,19 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
+            bool isPaletteModeSupported = false;
+
+            SDL_RendererInfo rendererInfo;
+            if ( SDL_GetRenderDriverInfo( 0, &rendererInfo ) == 0 ) {
+                for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
+                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        isPaletteModeSupported = true;
+                        break;
+                    }
+                }
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
                 return false;
@@ -516,6 +520,7 @@ namespace
                 return false;
             }
 
+            _retrieveWindowInfo();
             return true;
         }
 
@@ -571,6 +576,8 @@ namespace
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
 
         int renderFlags() const
         {
@@ -595,6 +602,18 @@ namespace
                     linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                 }
             }
+        }
+
+        void _retrieveWindowInfo()
+        {
+            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            SDL_DisplayMode displayMode;
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
+            _currentScreenResolution.width = displayMode.w;
+            _currentScreenResolution.height = displayMode.h;
+
+            SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
+            SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
         }
     };
 #else
@@ -881,7 +900,7 @@ namespace
             return new VitaRenderEngine;
         }
 
-        fheroes2::Rect GetWindowDestRect() const override
+        fheroes2::Rect getActiveWindowROI() const override
         {
             fheroes2::Rect rect;
             rect.x = destRect.x;
@@ -891,11 +910,11 @@ namespace
             return rect;
         }
 
-        virtual std::pair<int, int> GetScreenResolution() const override
+        virtual fheroes2::Size getCurrentScreenResolution() const override
         {
-            std::pair<int, int> resolution;
-            resolution.first = VITA_FULLSCREEN_WIDTH;
-            resolution.second = VITA_FULLSCREEN_HEIGHT;
+            fheroes2::Size resolution;
+            resolution.width = VITA_FULLSCREEN_WIDTH;
+            resolution.height = VITA_FULLSCREEN_HEIGHT;
             return resolution;
         }
 

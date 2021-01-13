@@ -132,6 +132,8 @@ namespace fheroes2
         ImageRestorer( Image & image, int32_t x_, int32_t y_, int32_t width, int32_t height );
         ~ImageRestorer(); // restore method will be call upon object's destruction
 
+        ImageRestorer( const ImageRestorer & ) = delete;
+
         void update( int32_t x_, int32_t y_, int32_t width, int32_t height );
 
         int32_t x() const

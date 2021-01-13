@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#include "castle.h"
 #include "heroes_base.h"
 #include "mageguild.h"
 #include "race.h"

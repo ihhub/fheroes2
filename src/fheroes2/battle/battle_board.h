@@ -92,6 +92,20 @@ namespace Battle
         static bool isValidMirrorImageIndex( s32, const Unit * );
 
         static Indexes GetAdjacentEnemies( const Unit & unit );
+
+        enum
+        {
+            CATAPULT_POS = 77,
+            CASTLE_GATE_POS = 50,
+            CASTLE_FIRST_TOP_WALL_POS = 8,
+            CASTLE_SECOND_TOP_WALL_POS = 29,
+            CASTLE_THIRD_TOP_WALL_POS = 73,
+            CASTLE_FORTH_TOP_WALL_POS = 96,
+            CASTLE_TOP_ARCHER_TOWER_POS = 19,
+            CASTLE_BOTTOM_ARCHER_TOWER_POS = 85,
+            CASTLE_TOP_GATE_TOWER_POS = 40,
+            CASTLE_BOTTOM_GATE_TOWER_POS = 62
+        };
     };
 }
 

@@ -31,6 +31,10 @@
 #include "skill.h"
 #include "spell_book.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Army;
 class Castle;
 
@@ -44,7 +48,8 @@ enum
     MDF_MORALE,
     MDF_LUCK
 };
-enum
+
+enum PortraitType
 {
     PORT_BIG = 1,
     PORT_MEDIUM = 2,
@@ -81,7 +86,7 @@ public:
     virtual void ActionPreBattle( void ) = 0;
 
     virtual const Castle * inCastle( void ) const = 0;
-    virtual void PortraitRedraw( s32, s32, int type, fheroes2::Image & ) const = 0;
+    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const = 0;
 
     virtual int GetType( void ) const = 0;
 

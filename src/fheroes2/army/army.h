@@ -31,6 +31,10 @@
 #include "bitmodes.h"
 #include "players.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Castle;
 class HeroBase;
 class Heroes;
@@ -135,7 +139,6 @@ public:
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
-    static bool ArchersFirst( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
@@ -173,7 +176,7 @@ public:
     int GetMorale( void ) const;
     int GetLuck( void ) const;
     int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( std::string * ) const;
+    int GetLuckModificator( const std::string * ) const;
     u32 ActionToSirens( void );
 
     const HeroBase * GetCommander( void ) const;

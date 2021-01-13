@@ -308,7 +308,7 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const Po
     if ( BUILD_SHIPYARD == build ) {
         // boat
         if ( castle.PresentBoat() ) {
-            const int icn2 = castle.GetICNBoat( castle.GetRace() );
+            const int icn2 = Castle::GetICNBoat( castle.GetRace() );
 
             const fheroes2::Sprite & sprite40 = fheroes2::AGG::GetICN( icn2, 0 );
             CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max, alpha );
