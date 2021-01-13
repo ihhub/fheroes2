@@ -89,7 +89,7 @@ namespace Campaign
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
         void addCampaignAward( const std::string & award );
-        void Reset();
+        void reset();
 
         static CampaignData & Get();
 

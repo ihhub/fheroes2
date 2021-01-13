@@ -103,7 +103,7 @@ int Game::NewCampaign()
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
 
     Campaign::CampaignData & campaignData = Campaign::CampaignData::Get();
-    campaignData.Reset();
+    campaignData.reset();
     campaignData.setCampaignID( chosenCampaign );
     campaignData.setCurrentScenarioID( 0 );
 
