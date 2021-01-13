@@ -74,7 +74,7 @@ namespace Battle
         return end != std::find( begin, end, tailIndex );
     }
 
-    Battle::Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances )
+    Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances )
     {
         if ( distances.size() > 1 ) {
             std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
