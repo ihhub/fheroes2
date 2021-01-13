@@ -54,12 +54,6 @@ namespace Campaign
     public:
         CampaignData();
 
-        static CampaignData & Get()
-        {
-            static CampaignData _campaignData;
-            return _campaignData;
-        }
-
         const ScenarioBonusData & getCurrentScenarioBonus() const
         {
             return _currentScenarioBonus;
@@ -95,6 +89,8 @@ namespace Campaign
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
         void addCampaignAward( const std::string & award );
+
+        static CampaignData & Get();
 
     private:
         friend StreamBase & operator<<( StreamBase & msg, const CampaignData & data );

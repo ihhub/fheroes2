@@ -25,6 +25,12 @@
 
 namespace Campaign
 {
+    static CampaignData & Get()
+    {
+        static CampaignData instance;
+        return instance;
+    }
+
     void CampaignData::addCampaignAward( const std::string & award )
     {
         _earnedCampaignAwards.emplace_back( award );
