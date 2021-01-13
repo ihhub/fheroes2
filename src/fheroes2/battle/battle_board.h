@@ -109,7 +109,7 @@ namespace Battle
         };
 
     private:
-        IndexDistance DistanceToUnit( const int32_t position, const Battle::Unit * unit ) const;
+        IndexDistance DistanceToUnit( const int32_t position, const Unit * unit ) const;
     };
 }
 
