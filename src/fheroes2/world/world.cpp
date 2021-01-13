@@ -24,7 +24,6 @@
 #include <assert.h>
 #include <functional>
 
-#include "agg.h"
 #include "ai.h"
 #include "artifact.h"
 #include "castle.h"
@@ -942,7 +941,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 

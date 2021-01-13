@@ -65,6 +65,18 @@ void LocalEvent::CloseController()
         _gameController = nullptr;
     }
 }
+
+void LocalEvent::OpenTouchpad()
+{
+    const int touchNumber = SDL_GetNumTouchDevices();
+    if ( touchNumber > 0 ) {
+        _touchpadAvailable = true;
+        fheroes2::cursor().enableSoftwareEmulation( true );
+#if SDL_VERSION_ATLEAST( 2, 0, 10 )
+        SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
+#endif
+    }
+}
 #endif
 
 const Point & LocalEvent::GetMousePressLeft( void ) const
@@ -425,7 +437,8 @@ namespace
 
             if ( _timer.getMs() >= 220 ) {
                 _timer.reset();
-                palette = PAL::GetCyclingPalette( _counter++ );
+                palette = PAL::GetCyclingPalette( _counter );
+                ++_counter;
                 return true;
             }
             return false;
@@ -618,7 +631,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
-                    fheroes2::cursor().enableSoftwareEmulation( false );
+                    if ( !_touchpadAvailable ) {
+                        fheroes2::cursor().enableSoftwareEmulation( false );
+                    }
                 }
             }
             break;
@@ -636,6 +651,11 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_CONTROLLERBUTTONDOWN:
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
+            break;
+        case SDL_FINGERDOWN:
+        case SDL_FINGERUP:
+        case SDL_FINGERMOTION:
+            HandleTouchEvent( event.tfinger );
             break;
 #endif
 
@@ -686,6 +706,58 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
+{
+    if ( event.touchId != 0 )
+        return;
+
+    if ( event.type == SDL_FINGERDOWN ) {
+        ++_numTouches;
+        if ( _numTouches == 1 ) {
+            _firstFingerId = event.fingerId;
+        }
+    }
+    else if ( event.type == SDL_FINGERUP ) {
+        --_numTouches;
+    }
+
+    if ( _firstFingerId == event.fingerId ) {
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
+        const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
+        const fheroes2::Rect windowRect = fheroes2::engine().getActiveWindowROI(); // scaled (logical) resolution
+
+        SetModes( MOUSE_MOTION );
+
+        _emulatedPointerPosX = ( ( screenResolution.width * event.x ) - ( screenResolution.width - windowRect.width - windowRect.x ) )
+                               * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
+        _emulatedPointerPosY = ( ( screenResolution.height * event.y ) - ( screenResolution.height - windowRect.height - windowRect.y ) )
+                               * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
+
+        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
+
+        if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
+            if ( modes & MOUSE_OFFSET )
+                ( *( redraw_cursor_func ) )( mouse_cu.x + mouse_st.x, mouse_cu.y + mouse_st.y );
+            else
+                ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+        }
+
+        if ( event.type == SDL_FINGERDOWN ) {
+            mouse_pl = mouse_cu;
+            SetModes( CLICK_LEFT );
+            SetModes( MOUSE_PRESSED );
+        }
+        else if ( event.type == SDL_FINGERUP ) {
+            mouse_rl = mouse_cu;
+            SetModes( CLICK_LEFT );
+            ResetModes( MOUSE_PRESSED );
+        }
+        mouse_button = SDL_BUTTON_LEFT;
+    }
+}
+
 void LocalEvent::HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion )
 {
     if ( motion.axis == SDL_CONTROLLER_AXIS_LEFTX ) {
@@ -789,23 +861,23 @@ void LocalEvent::ProcessControllerAxisMotion()
         const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
         const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
-        _controllerPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
-        _controllerPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
+        _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
 
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( _controllerPointerPosX < 0 )
-            _controllerPointerPosX = 0;
-        else if ( _controllerPointerPosX > display.width() )
-            _controllerPointerPosX = display.width();
+        if ( _emulatedPointerPosX < 0 )
+            _emulatedPointerPosX = 0;
+        else if ( _emulatedPointerPosX >= display.width() )
+            _emulatedPointerPosX = display.width() - 1;
 
-        if ( _controllerPointerPosY < 0 )
-            _controllerPointerPosY = 0;
-        else if ( _controllerPointerPosY > display.height() )
-            _controllerPointerPosY = display.height();
+        if ( _emulatedPointerPosY < 0 )
+            _emulatedPointerPosY = 0;
+        else if ( _emulatedPointerPosY >= display.height() )
+            _emulatedPointerPosY = display.height() - 1;
 
-        mouse_cu.x = static_cast<int16_t>( _controllerPointerPosX );
-        mouse_cu.y = static_cast<int16_t>( _controllerPointerPosY );
+        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -876,7 +948,7 @@ bool LocalEvent::MouseReleaseRight( void ) const
     return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-void LocalEvent::HandleKeyboardEvent( SDL_KeyboardEvent & event )
+void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
     if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
         if ( event.type == SDL_KEYDOWN ) {
@@ -898,8 +970,8 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
     SetModes( MOUSE_MOTION );
     mouse_cu.x = motion.x;
     mouse_cu.y = motion.y;
-    _controllerPointerPosX = mouse_cu.x;
-    _controllerPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = mouse_cu.x;
+    _emulatedPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 }
@@ -911,8 +983,8 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 
     mouse_cu.x = button.x;
     mouse_cu.y = button.y;
-    _controllerPointerPosX = mouse_cu.x;
-    _controllerPointerPosY = mouse_cu.y;
+    _emulatedPointerPosX = mouse_cu.x;
+    _emulatedPointerPosY = mouse_cu.y;
     if ( modes & MOUSE_OFFSET )
         mouse_cu += mouse_st;
 

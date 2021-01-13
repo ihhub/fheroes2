@@ -633,7 +633,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
-        Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
+        const Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
 
         if ( troop )
             switch ( troop->GetSpeed() ) {
@@ -1458,7 +1458,7 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
 
     secondary_skills.FindSkillsForLevelUp( race, sec1, sec2 );
     DEBUG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
-    Skill::Secondary * selected = NULL;
+    const Skill::Secondary * selected = NULL;
 
     if ( autoselect ) {
         if ( Skill::Secondary::UNKNOWN == sec1.Skill() || Skill::Secondary::UNKNOWN == sec2.Skill() ) {

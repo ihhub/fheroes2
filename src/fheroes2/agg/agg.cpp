@@ -28,6 +28,7 @@
 
 #include "agg.h"
 #include "artifact.h"
+#include "audio_cdrom.h"
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"
@@ -41,6 +42,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "til.h"
 #include "xmi.h"
 
 #ifdef WITH_ZLIB
@@ -261,7 +263,7 @@ bool AGG::ReadDataDir( void )
         aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
 
     // not found agg, exit
-    if ( 0 == aggs.size() )
+    if ( aggs.empty() )
         return false;
 
     // attach agg files

@@ -50,6 +50,7 @@
 #include "race.h"
 #include "settings.h"
 #include "spell.h"
+#include "til.h"
 #include "trees.h"
 #include "world.h"
 
@@ -1125,7 +1126,7 @@ bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
 bool Maps::Tiles::isLongObject( int direction )
 {
     if ( Maps::isValidDirection( GetIndex(), direction ) ) {
-        Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), direction ) );
+        const Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( GetIndex(), direction ) );
 
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it )
             if ( !Exclude4LongObject( *it )
@@ -1431,7 +1432,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
     const Point mp = Maps::GetPoint( GetIndex() );
 
     if ( ( visibleTileROI & mp ) && !addon.empty() ) {
-        Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );
@@ -1602,7 +1603,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( visibleTileROI & mp ) ) {
+    if ( visibleTileROI & mp ) {
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
             const uint8_t object = it->object;

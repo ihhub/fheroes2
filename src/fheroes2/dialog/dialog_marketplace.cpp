@@ -79,7 +79,7 @@ public:
         for ( Players::const_iterator it = players.begin(); it != players.end(); ++it ) {
             if ( *it ) {
                 const Player & player = ( **it );
-                Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+                const Kingdom & kingdom = world.GetKingdom( player.GetColor() );
                 if ( kingdom.isPlay() )
                     ++playerCount;
             }
@@ -299,8 +299,8 @@ void Dialog::Marketplace( bool fromTradingPost )
     u32 max_sell = 0;
     u32 max_buy = 0;
 
-    fheroes2::Rect & buttonMax = gui.buttonMax;
-    fheroes2::Rect & buttonMin = gui.buttonMin;
+    const fheroes2::Rect & buttonMax = gui.buttonMax;
+    const fheroes2::Rect & buttonMin = gui.buttonMin;
     fheroes2::Button & buttonGift = gui.buttonGift;
     fheroes2::Button & buttonTrade = gui.buttonTrade;
     fheroes2::Button & buttonLeft = gui.buttonLeft;

@@ -60,7 +60,7 @@ private:
 
 struct DwellingItem
 {
-    DwellingItem( Castle &, u32 dw );
+    DwellingItem( const Castle &, u32 dw );
 
     u32 type;
     Monster mons;

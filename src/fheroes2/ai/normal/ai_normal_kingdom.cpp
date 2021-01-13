@@ -185,7 +185,7 @@ namespace AI
             // search for best castle to recruit hero from
             for ( Castle * castle : sortedCastleList ) {
                 if ( castle && castle->isCastle() ) {
-                    Heroes * hero = castle->GetHeroes().Guest();
+                    const Heroes * hero = castle->GetHeroes().Guest();
                     const int mapIndex = castle->GetIndex();
 
                     // make sure there is no hero in castle already and we're not under threat

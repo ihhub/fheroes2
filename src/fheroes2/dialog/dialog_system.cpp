@@ -203,7 +203,7 @@ int Dialog::SystemOptions( void )
 void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     std::string str;
     Text text;

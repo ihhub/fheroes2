@@ -29,6 +29,7 @@
 
 #include "audio_music.h"
 #include "engine.h"
+#include "serialize.h"
 #include "system.h"
 
 #define TAG_FORM 0x464F524D
@@ -509,7 +510,7 @@ struct MidData
         , tracks( t )
     {
         // XMI files play MIDI at a fixed clock rate of 120 Hz
-        if ( tracks.size() > 0 && tracks.front().events.trackTempo > 0 ) {
+        if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
             ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
         }
     }

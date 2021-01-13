@@ -22,7 +22,6 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
-#include "pairs.h"
 #include "world_pathfinding.h"
 
 namespace AI

@@ -220,7 +220,7 @@ void Kingdom::AddHeroes( Heroes * hero )
         if ( heroes.end() == std::find( heroes.begin(), heroes.end(), hero ) )
             heroes.push_back( hero );
 
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
+        const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) && player->isControlHuman() )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_HEROES );
 
@@ -272,7 +272,7 @@ void Kingdom::AddCastle( const Castle * castle )
         if ( castles.end() == std::find( castles.begin(), castles.end(), castle ) )
             castles.push_back( const_cast<Castle *>( castle ) );
 
-        Player * player = Settings::Get().GetPlayers().GetCurrent();
+        const Player * player = Settings::Get().GetPlayers().GetCurrent();
         if ( player && player->isColor( GetColor() ) )
             Interface::Basic::Get().GetIconsPanel().ResetIcons( ICON_CASTLES );
 
@@ -485,7 +485,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     bool foundHeroes = false;
 
     for ( KingdomCastles::const_iterator it = castles.begin(); it != castles.end(); ++it ) {
-        Castle * castle = *it;
+        const Castle * castle = *it;
         if ( castle == nullptr )
             continue;
 
@@ -514,7 +514,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 
     if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
         // get first castle
-        Castle * first = castles.GetFirstCastle();
+        const Castle * first = castles.GetFirstCastle();
         if ( NULL == first )
             first = castles.front();
 
@@ -597,7 +597,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        totalIncome.gold *= Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() );
+        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() ) );
     }
 
     return totalIncome;
@@ -695,7 +695,7 @@ Kingdom & Kingdoms::GetKingdom( int color )
     return kingdoms[6];
 }
 
-void Kingdom::SetLastLostHero( Heroes & hero )
+void Kingdom::SetLastLostHero( const Heroes & hero )
 {
     lost_hero.id = hero.GetID();
     lost_hero.date = world.CountDay();

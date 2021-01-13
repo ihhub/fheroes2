@@ -48,14 +48,14 @@ namespace
 void DialogSpellFailed( const Spell & );
 void DialogNotAvailable( void );
 
-bool ActionSpellViewMines( Heroes & );
-bool ActionSpellViewResources( Heroes & );
+bool ActionSpellViewMines( const Heroes & );
+bool ActionSpellViewResources( const Heroes & );
 bool ActionSpellViewArtifacts( Heroes & );
-bool ActionSpellViewTowns( Heroes & );
-bool ActionSpellViewHeroes( Heroes & );
-bool ActionSpellViewAll( Heroes & );
-bool ActionSpellIdentifyHero( Heroes & );
-bool ActionSpellSummonBoat( Heroes & );
+bool ActionSpellViewTowns( const Heroes & );
+bool ActionSpellViewHeroes( const Heroes & );
+bool ActionSpellViewAll( const Heroes & );
+bool ActionSpellIdentifyHero( const Heroes & );
+bool ActionSpellSummonBoat( const Heroes & );
 bool ActionSpellDimensionDoor( Heroes & );
 bool ActionSpellTownGate( Heroes & );
 bool ActionSpellTownPortal( Heroes & );
@@ -306,13 +306,13 @@ void DialogNotAvailable( void )
     Dialog::Message( "", "Not available for current version", Font::BIG, Dialog::OK );
 }
 
-bool ActionSpellViewMines( Heroes & )
+bool ActionSpellViewMines( const Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewResources( Heroes & )
+bool ActionSpellViewResources( const Heroes & )
 {
     DialogNotAvailable();
     return false;
@@ -324,25 +324,25 @@ bool ActionSpellViewArtifacts( Heroes & )
     return false;
 }
 
-bool ActionSpellViewTowns( Heroes & )
+bool ActionSpellViewTowns( const Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewHeroes( Heroes & )
+bool ActionSpellViewHeroes( const Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellViewAll( Heroes & )
+bool ActionSpellViewAll( const Heroes & )
 {
     DialogNotAvailable();
     return false;
 }
 
-bool ActionSpellIdentifyHero( Heroes & hero )
+bool ActionSpellIdentifyHero( const Heroes & hero )
 {
     if ( hero.GetKingdom().Modes( Kingdom::IDENTIFYHERO ) ) {
         Message( "", _( "This spell is already in use." ), Font::BIG, Dialog::OK );
@@ -355,7 +355,7 @@ bool ActionSpellIdentifyHero( Heroes & hero )
     return true;
 }
 
-bool ActionSpellSummonBoat( Heroes & hero )
+bool ActionSpellSummonBoat( const Heroes & hero )
 {
     if ( hero.isShipMaster() ) {
         Dialog::Message( "", _( "This spell cannot be used on a boat." ), Font::BIG, Dialog::OK );
@@ -589,7 +589,7 @@ bool ActionSpellVisions( Heroes & hero )
     if ( monsters.size() ) {
         for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
             const Maps::Tiles & tile = world.GetTiles( *it );
-            MapMonster * map_troop = NULL;
+            const MapMonster * map_troop = NULL;
             if ( tile.GetObject() == MP2::OBJ_MONSTER )
                 map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 

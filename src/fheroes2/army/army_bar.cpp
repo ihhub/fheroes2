@@ -245,7 +245,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
     }
 
     if ( isSelected() ) {
-        ArmyTroop * troop2 = GetSelectedItem();
+        const ArmyTroop * troop2 = GetSelectedItem();
 
         if ( &troop == troop2 ) {
             msg = _( "View %{name}" );
@@ -442,7 +442,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
         }
     }
 
-    ArmyTroop * troop2 = GetSelectedItem();
+    const ArmyTroop * troop2 = GetSelectedItem();
 
     if ( &troop == troop2 ) {
         int flags = ( read_only || army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );

@@ -55,7 +55,7 @@ struct ValueColors : std::pair<int, int>
 
 void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )
 {
-    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & v ) { return v.IsValue( value ); } );
+    std::vector<ValueColors>::iterator it = std::find_if( v.begin(), v.end(), [value]( const ValueColors & vc ) { return vc.IsValue( value ); } );
 
     if ( it == v.end() )
         v.push_back( ValueColors( value, color ) );
@@ -154,7 +154,7 @@ void GetArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        const int value = world.GetKingdom( *color ).GetArmiesStrength();
+        const int value = static_cast<int>( world.GetKingdom( *color ).GetArmiesStrength() );
         UpdateValuesColors( v, value, *color );
     }
 
