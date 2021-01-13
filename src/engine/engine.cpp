@@ -49,8 +49,10 @@ bool SDL::Init( const u32 system )
     if ( SDL_INIT_AUDIO & system )
         Mixer::Init();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    if ( SDL_INIT_GAMECONTROLLER & system )
+    if ( SDL_INIT_GAMECONTROLLER & system ) {
         LocalEvent::Get().OpenController();
+    }
+    LocalEvent::Get().OpenTouchpad();
 #endif
 #ifdef WITH_AUDIOCD
     if ( SDL_INIT_CDROM & system )
@@ -87,7 +89,6 @@ void SDL::Quit( void )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {
         LocalEvent::Get().CloseController();
     }
-    LocalEvent::Get().OpenTouchpad();
 #endif
     if ( SubSystem( SDL_INIT_AUDIO ) )
         Mixer::Quit();
