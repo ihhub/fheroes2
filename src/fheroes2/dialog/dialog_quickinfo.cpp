@@ -311,35 +311,31 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
 
 fheroes2::Rect MakeRectQuickInfo( LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
 {
-    fheroes2::Rect rect;
     if ( position.x > 0 && position.y > 0 ) {
-        rect = fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
-    }
-    else { // place box next to mouse cursor
-
-        const Point & mp = le.GetMouseCursor();
-
-        const s32 mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-        const s32 my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
-
-        const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-        const Rect & ar = gamearea.GetROI();
-
-        if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
-            rect = fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
-        }
-        else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
-            rect = fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
-        }
-        else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
-            rect = fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
-        }
-        else { // bottom right
-            rect = fheroes2::Rect( mx - imageBox.width(), my - imageBox.height(), imageBox.width(), imageBox.height() );
-        }
+        return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
     }
 
-    return rect;
+    // place box next to mouse cursor
+    const Point & mp = le.GetMouseCursor();
+
+    const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+    const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
+
+    const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    const Rect & ar = gamearea.GetROI();
+
+    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+        return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
+    }
+    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+        return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
+    }
+    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+        return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
+    }
+    else { // bottom right
+        return fheroes2::Rect( mx - imageBox.width(), my - imageBox.height(), imageBox.width(), imageBox.height() );
+    }
 }
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
