@@ -54,6 +54,26 @@ namespace Battle
         else
             return endX < startX;
     }
+    
+    bool contains( const Indexes & indexes, const Unit * unit )
+    {
+        assert( unit );
+
+        const auto begin = indexes.begin();
+        const auto end = indexes.end();
+
+        const bool result = end != std::find( begin, end, unit->GetHeadIndex() );
+        if ( !result ) {
+            return false;
+        }
+
+        const int32_t tailIndex = unit->GetTailIndex();
+        if ( tailIndex == -1 ) {
+            return true;
+        }
+
+        return end != std::find( begin, end, tailIndex );
+    }
 }
 
 Battle::Board::Board()
@@ -473,26 +493,6 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     }
 
     return result;
-}
-
-bool contains( const Battle::Indexes & indexes, const Battle::Unit * unit )
-{
-    assert( unit );
-
-    const auto begin = indexes.begin();
-    const auto end = indexes.end();
-
-    const bool result = end != std::find( begin, end, unit->GetHeadIndex() );
-    if ( !result ) {
-        return false;
-    }
-
-    const int32_t tailIndex = unit->GetTailIndex();
-    if ( tailIndex == -1 ) {
-        return true;
-    }
-
-    return end != std::find( begin, end, tailIndex );
 }
 
 IndexDistance Battle::Board::DistanceToUnit( int32_t position, const Battle::Unit * unit ) const
