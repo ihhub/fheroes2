@@ -101,8 +101,7 @@ endif
 endif
 
 ifdef VITA
-#PLATFORM := vita
-PLATFORM := dolce
+PLATFORM := vita
 endif
 
 include Makefile.$(PLATFORM)

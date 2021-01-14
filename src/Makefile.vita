@@ -1,21 +1,25 @@
-AR := $(VITASDK)/arm-vita-eabi/bin/ar
-CC := arm-vita-eabi-gcc
-CXX := arm-vita-eabi-g++
+AR := arm-dolce-eabi-gcc-ar
+CC := arm-dolce-eabi-gcc
+CXX := arm-dolce-eabi-g++
 
-CFLAGS := $(CFLAGS) -DVITA -I$(VITASDK)/arm-vita-eabi/include -O1 -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard -ftree-vectorize
-LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib -Wl,-q
+CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize \
+          -flto=jobserver \
+          -fgraphite-identity -floop-nest-optimize -floop-interchange -ftree-loop-distribution
+LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib -Wl,-q -Wl,-flto -Wl,-O1 -Wl,--as-needed -Wl,--hash-style=gnu -Wl,--sort-common
 
 ifdef WITH_SDL2
-SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2 -lSceAudio_stub -lSceCtrl_stub -lvita2d -lSceGxm_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lScePower_stub -lFLAC -lmikmod -lmpg123
-SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2 -D_REENTRANT
+SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lvita2d -lpib -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
+                                             -lSceGxm_stub -lSceDisplayUser_stub -lSceAppMgr_stub -lSceAppMgrUser_stub -lSceGxmInternalForVsh_stub \
+                                             -lSceSysmodule_stub -lSceSharedFb_stub -lSceCommonDialog_stub -lSceMotion_stub
+SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL2 -D_REENTRANT
 else
-SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL -lvita2d -lSceDisplay_stub -lSceCtrl_stub -lSceAudio_stub -lSceSysmodule_stub -lSceGxm_stub -lSceHid_stub -lSceAppMgr_stub -lSceCommonDialog_stub -lScePower_stub -lmikmod
-SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL -D_REENTRANT
+SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL -lvita2d -lSceDisplay_stub -lSceCtrl_stub -lSceAudio_stub -lSceSysmodule_stub -lSceGxm_stub -lSceHid_stub -lSceAppMgr_stub -lSceCommonDialog_stub -lScePower_stub -lmikmod
+SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL -D_REENTRANT
 endif
 
 ifndef WITHOUT_MIXER
 ifdef WITH_SDL2
-SDL_LIBS := -lSDL2_mixer -lvorbisfile -lvorbis -logg $(SDL_LIBS)
+SDL_LIBS := -lSDL2_mixer $(SDL_LIBS) -lFLAC -lmikmod -lmpg123 -lvorbisfile -lvorbis -logg
 else
 SDL_LIBS := -lSDL_mixer -lvorbisfile -lvorbis -logg $(SDL_LIBS)
 endif
@@ -25,7 +29,7 @@ ifndef WITHOUT_IMAGE
 ifdef WITH_SDL2
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL_image -ljpeg -lpng
+SDL_LIBS := $(SDL_LIBS) -lSDL_image
 endif
 endif
 
