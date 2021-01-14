@@ -1018,8 +1018,7 @@ namespace
                     vita2d_texture_set_filters( texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
 
                     if ( keepAspectRatio ) {
-                        if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT )
-                             >= ( static_cast<float>( width_ ) / height_ ) ) {
+                        if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
                             float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
                             destRect.w = width_ * scale;
                             destRect.h = VITA_FULLSCREEN_HEIGHT;
