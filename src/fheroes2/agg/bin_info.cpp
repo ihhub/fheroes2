@@ -345,9 +345,9 @@ namespace Bin_Info
         return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
     }
 
-    size_t MonsterAnimInfo::getProjectileID( const double angle ) const
+    size_t MonsterAnimInfo::getProjectileID( float angle ) const
     {
-        const std::vector<double> & angles = projectileAngles;
+        const std::vector<float> & angles = projectileAngles;
         if ( angles.empty() )
             return 0;
 
