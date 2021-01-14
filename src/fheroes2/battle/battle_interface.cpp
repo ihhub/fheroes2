@@ -44,6 +44,8 @@
 #include "settings.h"
 #include "world.h"
 
+#include <cassert>
+
 #define ARMYORDERW 40
 
 namespace
@@ -1512,8 +1514,69 @@ void Battle::Interface::RedrawCover()
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit && conf.BattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE ) {
-        Point cursorPt = cell->GetPos();
-        fheroes2::Blit( sf_cursor, _mainSurface, cursorPt.x, cursorPt.y );
+        std::set<const Cell *> highlightCells;
+
+        if ( humanturn_spell.isValid() ) {
+            switch ( humanturn_spell.GetID() ) {
+            case Spell::COLDRING: {
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+                }
+                break;
+            }
+            case Spell::FIREBALL:
+            case Spell::METEORSHOWER: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+                }
+                break;
+            }
+            case Spell::FIREBLAST: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+
+                    const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
+                    for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
+                        const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
+                        if ( aroundCellTwice != nullptr ) {
+                            highlightCells.emplace( aroundCellTwice );
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+                highlightCells.emplace( cell );
+            }
+        }
+        else {
+            highlightCells.emplace( cell );
+        }
+
+        assert( !highlightCells.empty() );
+
+        for ( const Cell * highlightCell : highlightCells ) {
+            if ( highlightCell->isPassable1( false ) ) {
+                fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+            }
+            else {
+                fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+            }
+        }
     }
 }
 
