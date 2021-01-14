@@ -259,7 +259,7 @@ bool Game::Load( const std::string & fn )
 
     fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
 
-    if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
+    if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE_2 )
         fz >> Campaign::CampaignData::Get();
 
     fz >> end_check;
