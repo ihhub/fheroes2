@@ -526,10 +526,11 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 
     ArmyTroop & selectedTroop = *GetSelectedItem();
 
-    if ( troop.GetID() == selectedTroop.GetID() )
+    // prevent troop from splitting into its own stack by checking against their pointers
+    if ( &troop == &selectedTroop )
         return false;
 
-    if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
+    if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
         ResetSelected();
         RedistributeArmy( selectedTroop, troop, _isTroopInfoVisible );
     }
@@ -539,7 +540,7 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    if ( !destTroop.isValid() || destTroop.GetMonster() == selectedTroop.GetMonster() ) {
+    if ( !destTroop.isValid() || destTroop.GetID() == selectedTroop.GetID() ) {
         ResetSelected();
         RedistributeArmy( selectedTroop, destTroop, _isTroopInfoVisible );
     }
