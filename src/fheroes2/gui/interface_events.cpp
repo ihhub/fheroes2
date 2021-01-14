@@ -424,7 +424,7 @@ void Interface::Basic::EventDefaultAction( void )
             hero->SetMove( true );
         else
             // 3. hero dialog
-            Game::OpenHeroesDialog( *hero );
+            Game::OpenHeroesDialog( *hero, true, true );
     }
     else
         // 4. town dialog
@@ -436,7 +436,7 @@ void Interface::Basic::EventDefaultAction( void )
 void Interface::Basic::EventOpenFocus( void )
 {
     if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes() );
+        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
     else if ( GetFocusCastle() )
         Game::OpenCastleDialog( *GetFocusCastle() );
 }

@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_interface.h"
 #include "heroes.h"
 #include "interface_icons.h"
 #include "interface_list.h"
@@ -62,14 +63,10 @@ struct HeroRow
 
     void Clear( void )
     {
-        if ( armyBar )
-            delete armyBar;
-        if ( artifactsBar )
-            delete artifactsBar;
-        if ( secskillsBar )
-            delete secskillsBar;
-        if ( primskillsBar )
-            delete primskillsBar;
+        delete armyBar;
+        delete artifactsBar;
+        delete secskillsBar;
+        delete primskillsBar;
     }
 
     void Init( Heroes * ptr )
@@ -104,10 +101,10 @@ struct HeroRow
 
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
-    std::vector<HeroRow> content;
-
 public:
     StatsHeroesList( const Point & pt, KingdomHeroes & );
+
+    bool Refresh( KingdomHeroes & heroes );
 
     virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
     virtual void RedrawBackground( const Point & ) override;
@@ -122,6 +119,10 @@ public:
     virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
     virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
     virtual bool ActionListCursor( HeroRow &, const Point & ) override;
+
+private:
+    std::vector<HeroRow> content;
+    void SetContent( KingdomHeroes & heroes );
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -135,13 +136,32 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( pt.x + 626, pt.y + 20 + back.height() ) );
     SetAreaMaxItems( 4 );
     SetAreaItems( fheroes2::Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
+    SetContent( heroes );
+}
 
+void StatsHeroesList::SetContent( KingdomHeroes & heroes )
+{
     content.resize( heroes.size() );
-
     for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
         content[std::distance( heroes.begin(), it )].Init( *it );
-
     SetListContent( content );
+}
+
+// Updates the UI list according to current list of kingdom heroes.
+// Returns true if we updated something
+bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
+{
+    if ( heroes.size() != content.size() ) {
+        SetContent( heroes );
+        return true;
+    }
+    for ( size_t i = 0; i < content.size(); ++i ) {
+        if ( heroes[i] != content[i].hero ) {
+            SetContent( heroes );
+            return true;
+        }
+    }
+    return false;
 }
 
 void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
@@ -153,7 +173,7 @@ void StatsHeroesList::ActionListSingleClick( HeroRow & row, const Point & cursor
 {
     if ( row.hero
          && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
-        Game::OpenHeroesDialog( *row.hero, false );
+        Game::OpenHeroesDialog( *row.hero, false, false );
 }
 
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
@@ -369,7 +389,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & curso
     if ( row.castle ) {
         // click castle icon
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
-            Game::OpenCastleDialog( *row.castle );
+            Game::OpenCastleDialog( *row.castle, false );
             row.Init( row.castle );
         }
         else
@@ -377,7 +397,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & curso
             if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero ) {
-                Game::OpenHeroesDialog( *hero, false );
+                Game::OpenHeroesDialog( *hero, false, false );
                 row.Init( row.castle );
             }
         }
@@ -643,6 +663,7 @@ void Kingdom::OverviewDialog( void )
 
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
+    int worldMapRedrawMask = 0;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
@@ -670,20 +691,49 @@ void Kingdom::OverviewDialog( void )
         if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
             break;
 
-        listStats->QueueEventProcessing();
+        redraw |= listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) )
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
         else if ( le.MousePressRight( rectIncome ) )
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
-        // redraw
         if ( !cursor.isVisible() || redraw ) {
+            // check if the heroes list has changed, which requires update of UI size
+            const bool refreshHeroList = listHeroes.Refresh( heroes );
+
+            // check if graphics in main world map window changed, this can happen in several situations:
+            // - hero dismissed -> hero icon list is updated and world map focus changed
+            // - hero hired -> hero icon list is updated
+            // So, it's equivalent to check if hero list changed
+            const bool mainWindowChanged = refreshHeroList;
+
+            if ( mainWindowChanged ) {
+                worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
+                // redraw of the main game window on screen, which will also erase current kingdom window
+                Interface::Basic::Get().Redraw();
+            }
+
+            if ( refreshHeroList || mainWindowChanged ) {
+                // redraw Kingdom window from scratch, because it's now invalid
+                Dialog::FrameBorder::RenderRegular( background.GetRect() );
+                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
+                buttonHeroes.draw();
+                buttonCastle.draw();
+                buttonExit.draw();
+            }
+
             listStats->Redraw();
+            RedrawIncomeInfo( cur_pt, *this );
             RedrawFundsInfo( cur_pt, *this );
             cursor.Show();
             display.render();
             redraw = false;
         }
+    }
+
+    if ( worldMapRedrawMask != 0 ) {
+        // Force redraw of all UI elements that changed, that were masked by Kingdom window
+        Interface::Basic::Get().SetRedraw( worldMapRedrawMask );
     }
 }
