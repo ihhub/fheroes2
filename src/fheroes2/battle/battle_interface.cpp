@@ -1573,6 +1573,9 @@ void Battle::Interface::RedrawCover()
             if ( highlightCell->isPassable1( false ) ) {
                 fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
+            else {
+                fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+            }
         }
     }
 }
