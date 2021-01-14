@@ -1518,49 +1518,49 @@ void Battle::Interface::RedrawCover()
 
         if ( humanturn_spell.isValid() ) {
             switch ( humanturn_spell.GetID() ) {
-                case Spell::COLDRING: {
-                    const Indexes around = Board::GetAroundIndexes( index_pos );
-                    for ( size_t i = 0; i < around.size(); ++i ) {
-                        const Cell * aroundCell = Board::GetCell( around[i] );
-                        if ( aroundCell != nullptr ) {
-                            highlightCells.emplace( aroundCell );
-                        }
+            case Spell::COLDRING: {
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
                     }
-                    break;
                 }
-                case Spell::FIREBALL:
-                case Spell::METEORSHOWER: {
-                    highlightCells.emplace( cell );
-                    const Indexes around = Board::GetAroundIndexes( index_pos );
-                    for ( size_t i = 0; i < around.size(); ++i ) {
-                        const Cell * aroundCell = Board::GetCell( around[i] );
-                        if ( aroundCell != nullptr ) {
-                            highlightCells.emplace( aroundCell );
-                        }
+                break;
+            }
+            case Spell::FIREBALL:
+            case Spell::METEORSHOWER: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
                     }
-                    break;
                 }
-                case Spell::FIREBLAST: {
-                    highlightCells.emplace( cell );
-                    const Indexes around = Board::GetAroundIndexes( index_pos );
-                    for ( size_t i = 0; i < around.size(); ++i ) {
-                        const Cell * aroundCell = Board::GetCell( around[i] );
-                        if ( aroundCell != nullptr ) {
-                            highlightCells.emplace( aroundCell );
-                        }
+                break;
+            }
+            case Spell::FIREBLAST: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
 
-                        const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
-                        for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
-                            const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
-                            if ( aroundCellTwice != nullptr ) {
-                                highlightCells.emplace( aroundCellTwice );
-                            }
+                    const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
+                    for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
+                        const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
+                        if ( aroundCellTwice != nullptr ) {
+                            highlightCells.emplace( aroundCellTwice );
                         }
                     }
-                    break;
                 }
-                default:
-                    highlightCells.emplace( cell );
+                break;
+            }
+            default:
+                highlightCells.emplace( cell );
             }
         }
         else {
