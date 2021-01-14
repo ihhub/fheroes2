@@ -647,7 +647,7 @@ int Castle::OpenDialog( bool readonly )
             }
         }
 
-        if ( alphaHero >= 255 ) {
+        if ( alphaHero != 255 ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                 if ( alphaHero > 255 ) {
                     alphaHero = 255;
