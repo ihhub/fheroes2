@@ -33,6 +33,7 @@
 #include "players.h"
 #include "system.h"
 
+#define FORMAT_VERSION_090_RELEASE_2 9001
 #define FORMAT_VERSION_090_RELEASE 9000
 #define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
@@ -40,7 +41,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE_2 // TODO: update this value for a new release
 
 enum
 {

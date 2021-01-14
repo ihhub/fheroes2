@@ -24,6 +24,7 @@
 #include <fstream>
 
 #include "audio_music.h"
+#include "campaign_data.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
@@ -1895,10 +1896,13 @@ bool Settings::ChangeFullscreenResolution( void ) const
     return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
 }
 
-StreamBase & operator<<( StreamBase & msg, const Settings & conf )
+StreamBase & operator<<( StreamBase & msg, const Settings & conf)
 {
     msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
+
+    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_090_RELEASE )
+        msg << Campaign::CampaignData::Get();
 
     return msg;
 }
