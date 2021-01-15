@@ -22,6 +22,7 @@
 #ifndef H2RAND_H
 #define H2RAND_H
 
+#include <cstdlib>
 #include <list>
 #include <utility>
 #include <vector>

@@ -23,7 +23,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
-#include "types.h"
 
 #include <chrono>
 #include <cstring>
@@ -269,7 +268,7 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay )
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs )
     {
         Display & display = Display::instance();
 
@@ -277,7 +276,7 @@ namespace fheroes2
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int stepDelay = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -286,14 +285,14 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount )
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount )
     {
         Display & display = Display::instance();
-        const int stepDelay = delay / frameCount;
+        const int stepDelay = delayMs / frameCount;
 
         Image shadow = top;
 
@@ -303,28 +302,28 @@ namespace fheroes2
 
             display.render();
 
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void FadeDisplay( int delay )
+    void FadeDisplay( int delayMs )
     {
         Display & display = Display::instance();
         const Image temp = display;
 
-        FadeDisplay( temp, Point( 0, 0 ), 5, delay );
+        FadeDisplay( temp, Point( 0, 0 ), 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay )
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delayMs )
     {
         Display & display = Display::instance();
         Image shadow = top;
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int stepDelay = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -334,16 +333,16 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delayMs,
                                   int frameCount )
     {
         Display & display = Display::instance();
         Image shadow = top;
-        const int stepDelay = delay / frameCount;
+        const int stepDelay = delayMs / frameCount;
 
         for ( int i = 0; i < frameCount; ++i ) {
             ApplyPalette( shadow, paletteId );
@@ -352,7 +351,7 @@ namespace fheroes2
 
             display.render();
 
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 

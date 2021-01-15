@@ -104,7 +104,7 @@ int main( int argc, char ** argv )
     if ( conf.Music() )
         SetTimidityEnvPath();
 
-    u32 subsystem = INIT_VIDEO | INIT_TIMER;
+    u32 subsystem = INIT_VIDEO;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     subsystem |= INIT_GAMECONTROLLER;

@@ -2713,7 +2713,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
     // Mage is channeling the bolt; doesn't have missile sprite
     if ( isMage )
-        DELAY( Game::ApplyBattleSpeed( 115 ) );
+        fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
     else
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) );
 
@@ -3842,7 +3842,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
     }
 
     // small delay to display fully drawn lightning
-    DELAY( 100 );
+    fheroes2::delayforMs( 100 );
 
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {

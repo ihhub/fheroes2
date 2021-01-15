@@ -173,7 +173,7 @@ int callbackPlayMusic( void * ptr )
 
         do {
             std::system( os.str().c_str() );
-            DELAY( 100 );
+            fheroes2::delayforMs( 100 );
         } while ( info->status & Music::LOOP );
 
         info->status &= ~Music::PLAY;
@@ -274,7 +274,7 @@ void Music::Play( const std::string & f, bool loop )
             Pause();
             current = it;
             Resume();
-            DELAY( 100 );
+            fheroes2::delayforMs( 100 );
         }
 
         if ( ( *it ).isPlay() )

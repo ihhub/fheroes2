@@ -390,7 +390,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        DELAY( 10 );
+        fheroes2::delayforMs( 10 );
     }
 }
 

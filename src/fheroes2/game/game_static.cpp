@@ -268,7 +268,7 @@ namespace GameStatic
 
     // visit objects mod:	OBJ_BUOY, OBJ_OASIS, OBJ_WATERINGHOLE, OBJ_TEMPLE, OBJ_GRAVEYARD, OBJ_DERELICTSHIP,
     //			        OBJ_SHIPWRECK, OBJ_MERMAID, OBJ_FAERIERING, OBJ_FOUNTAIN, OBJ_IDOL, OBJ_PYRAMID
-    s8 objects_mod[] = {1, 1, 1, 2, -1, -1, -1, 1, 1, 1, 1, -2};
+    int8_t objects_mod[] = {1, 1, 1, 2, -1, -1, -1, 1, 1, 1, 1, -2};
 
     // world
     u32 uniq = 0;
