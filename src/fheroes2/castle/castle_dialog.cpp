@@ -314,7 +314,7 @@ int Castle::OpenDialog( bool readonly )
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
-    int alphaHero = 255;
+    int alphaHero = SDL_ALPHA_OPAQUE;
     fheroes2::Image surfaceHero( 552, 107 );
 
     // dialog menu loop
@@ -631,7 +631,7 @@ int Castle::OpenDialog( bool readonly )
                                 selectArmy2.SetPos( savept.x, savept.y );
 
                                 RedrawResourcePanel( cur_pt );
-                                alphaHero = 0;
+                                alphaHero = SDL_ALPHA_TRANSPARENT;
                             }
                         } break;
 
@@ -646,22 +646,17 @@ int Castle::OpenDialog( bool readonly )
                     msg_status = GetStringBuilding( ( *it ).id );
             }
         }
-
-        if ( alphaHero != 255 ) {
+        if ( alphaHero < SDL_ALPHA_OPAQUE ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
-                if ( alphaHero > 255 ) {
-                    alphaHero = 255;
-                }
-                else {
-                    alphaHero += 10;
-                }
-                fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, alphaHero );
-                if ( !need_redraw ) {
+                alphaHero += 10;
+                if ( alphaHero >= SDL_ALPHA_OPAQUE )
+                    fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
+                else
+                    fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, alphaHero );
+                if ( !need_redraw )
                     display.render();
-                }
             }
         }
-
         if ( need_redraw ) {
             cursor.Hide();
             selectArmy1.Redraw();

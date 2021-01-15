@@ -254,7 +254,7 @@ namespace CastleDialog
     {
     public:
         FadeBuilding()
-            : _alpha( 0 )
+            : _alpha( SDL_ALPHA_TRANSPARENT )
             , _build( BUILD_NOTHING )
         {}
 
@@ -264,7 +264,7 @@ namespace CastleDialog
 
         bool IsFadeDone() const
         {
-            return _alpha >= 255;
+            return _alpha >= SDL_ALPHA_OPAQUE;
         }
 
         void StopFadeBuilding();

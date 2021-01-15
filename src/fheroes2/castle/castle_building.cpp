@@ -64,13 +64,13 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
 
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
-    _alpha = 0;
+    _alpha = SDL_ALPHA_TRANSPARENT;
     _build = build;
 }
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < 255 ) {
+    if ( _alpha < SDL_ALPHA_OPAQUE ) {
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
             _alpha += 15;
             return true;
@@ -83,7 +83,7 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
 {
     if ( _build != BUILD_NOTHING ) {
         _build = BUILD_NOTHING;
-        _alpha = 256;
+        _alpha = SDL_ALPHA_OPAQUE;
     }
 }
 
