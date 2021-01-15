@@ -506,6 +506,10 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & 
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
+    // for this one, prioritize the click before press - aka prioritize split before showing troop info
+    if ( ActionBarRightMouseSingleClick( troop ) )
+        return true;
+
     if ( troop.isValid() && _isTroopInfoVisible ) {
         ResetSelected();
 
@@ -533,9 +537,10 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
     if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
         ResetSelected();
         RedistributeArmy( selectedTroop, troop, _isTroopInfoVisible );
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
