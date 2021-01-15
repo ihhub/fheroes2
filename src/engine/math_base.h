@@ -23,6 +23,10 @@
 #include <cmath>
 #include <stdint.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 // Below source code was partially taken from https://github.com/ihhub/penguinv open source project
 namespace fheroes2
 {

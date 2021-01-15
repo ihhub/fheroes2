@@ -79,7 +79,6 @@ namespace Interface
         uint32_t turn_progress;
 
         SDL::Timer timerShowLastResource;
-        SDL::Timer timerRedrawAIStatus;
     };
 }
 

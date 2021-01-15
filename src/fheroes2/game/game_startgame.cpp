@@ -591,7 +591,7 @@ int Interface::Basic::StartGame( void )
                     res = Game::ENDTURN;
             }
 
-        DELAY( 10 );
+        fheroes2::delayforMs( 10 );
     }
 
     if ( res == Game::ENDTURN )

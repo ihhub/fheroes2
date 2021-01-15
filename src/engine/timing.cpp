@@ -20,6 +20,8 @@
 
 #include "timing.h"
 
+#include <thread>
+
 namespace fheroes2
 {
     Time::Time()
@@ -41,5 +43,10 @@ namespace fheroes2
     uint64_t Time::getMs() const
     {
         return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
+
+    void delayforMs( const uint32_t delayMs )
+    {
+        std::this_thread::sleep_for( std::chrono::milliseconds( delayMs ) );
     }
 }
