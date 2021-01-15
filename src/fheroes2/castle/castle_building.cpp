@@ -51,7 +51,7 @@ CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point
 
     CastlePackOrdersBuildings( castle, ordersBuildings );
 
-    for ( std::vector<building_t>::const_iterator it = ordersBuildings.begin(); it != ordersBuildings.end(); ++it ) {
+    for ( auto it = ordersBuildings.cbegin(); it != ordersBuildings.cend(); ++it ) {
         push_back( builds_t( *it, CastleGetCoordBuilding( castle.GetRace(), *it, top ) ) );
     }
 }
@@ -64,13 +64,13 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
 
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
-    _alpha = SDL_ALPHA_TRANSPARENT;
+    _alpha = fheroes2::alpha::transaprent;
     _build = build;
 }
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < SDL_ALPHA_OPAQUE ) {
+    if ( _alpha < fheroes2::alpha::opaque ) {
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
             _alpha += 15;
             return true;
@@ -83,7 +83,7 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
 {
     if ( _build != BUILD_NOTHING ) {
         _build = BUILD_NOTHING;
-        _alpha = SDL_ALPHA_OPAQUE;
+        _alpha = fheroes2::alpha::opaque;
     }
 }
 
@@ -192,7 +192,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
     // redraw all builds
     if ( BUILD_NOTHING == fadeBuilding.GetBuild() ) {
-        for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
+        for ( auto it = orders.cbegin(); it != orders.cend(); ++it ) {
             const uint32_t currentBuildId = it->id;
             if ( castle.isBuild( currentBuildId ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
@@ -204,8 +204,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         }
     }
     // redraw build with alpha
-    else if ( orders.end() != std::find( orders.begin(), orders.end(), fadeBuilding.GetBuild() ) ) {
-        for ( CastleDialog::CacheBuildings::const_iterator it = orders.begin(); it != orders.end(); ++it ) {
+    else if ( orders.cend() != std::find( orders.cbegin(), orders.cend(), fadeBuilding.GetBuild() ) ) {
+        for ( auto it = orders.cbegin(); it != orders.cend(); ++it ) {
             const uint32_t currentBuildId = it->id;
 
             if ( castle.isBuild( currentBuildId ) ) {
@@ -366,7 +366,7 @@ bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t b
 void CastleDialog::RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha )
 {
     const Rect & roi = CastleGetMaxArea( castle, position );
-    const bool constructionInProgress = alpha < 255;
+    const bool constructionInProgress = alpha < fheroes2::alpha::opaque;
 
     if ( Race::BARB == castle.GetRace() ) {
         if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {

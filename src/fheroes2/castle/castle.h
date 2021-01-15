@@ -254,7 +254,7 @@ namespace CastleDialog
     {
     public:
         FadeBuilding()
-            : _alpha( SDL_ALPHA_TRANSPARENT )
+            : _alpha( fheroes2::alpha::transaprent )
             , _build( BUILD_NOTHING )
         {}
 
@@ -264,7 +264,7 @@ namespace CastleDialog
 
         bool IsFadeDone() const
         {
-            return _alpha >= SDL_ALPHA_OPAQUE;
+            return _alpha >= fheroes2::alpha::opaque;
         }
 
         void StopFadeBuilding();
@@ -306,13 +306,13 @@ namespace CastleDialog
     };
 
     void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
-    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
+    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = fheroes2::alpha::opaque );
 
-    void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
-    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+    void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = fheroes2::alpha::opaque );
+    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = fheroes2::alpha::opaque );
 
     bool RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress );
-    void RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha = 255 );
+    void RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha = fheroes2::alpha::opaque );
 }
 
 struct VecCastles : public std::vector<Castle *>

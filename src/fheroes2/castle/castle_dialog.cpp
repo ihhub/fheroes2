@@ -314,7 +314,7 @@ int Castle::OpenDialog( bool readonly )
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
-    int alphaHero = SDL_ALPHA_OPAQUE;
+    int alphaHero = fheroes2::alpha::opaque;
     fheroes2::Image surfaceHero( 552, 107 );
 
     // dialog menu loop
@@ -452,7 +452,7 @@ int Castle::OpenDialog( bool readonly )
         CastleDialog::CacheBuildings::const_reverse_iterator crend = cacheBuildings.rend();
         for ( CastleDialog::CacheBuildings::const_reverse_iterator it = cacheBuildings.rbegin(); it != crend; ++it )
 #else
-        for ( CastleDialog::CacheBuildings::const_reverse_iterator it = cacheBuildings.rbegin(); it != cacheBuildings.rend(); ++it )
+        for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it )
 #endif
         {
             if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
@@ -472,7 +472,7 @@ int Castle::OpenDialog( bool readonly )
             }
         }
 
-        for ( CastleDialog::CacheBuildings::const_iterator it = cacheBuildings.begin(); it != cacheBuildings.end(); ++it ) {
+        for ( auto it = cacheBuildings.cbegin(); it != cacheBuildings.cend(); ++it ) {
             if ( BUILD_MAGEGUILD & ( *it ).id ) {
                 const int mageGuildLevel = GetLevelMageGuild();
                 if ( ( *it ).id == ( BUILD_MAGEGUILD1 << ( mageGuildLevel - 1 ) ) ) {
@@ -631,7 +631,7 @@ int Castle::OpenDialog( bool readonly )
                                 selectArmy2.SetPos( savept.x, savept.y );
 
                                 RedrawResourcePanel( cur_pt );
-                                alphaHero = SDL_ALPHA_TRANSPARENT;
+                                alphaHero = fheroes2::alpha::transaprent;
                             }
                         } break;
 
@@ -646,10 +646,10 @@ int Castle::OpenDialog( bool readonly )
                     msg_status = GetStringBuilding( ( *it ).id );
             }
         }
-        if ( alphaHero < SDL_ALPHA_OPAQUE ) {
+        if ( alphaHero < fheroes2::alpha::opaque ) {
             if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                 alphaHero += 10;
-                if ( alphaHero >= SDL_ALPHA_OPAQUE )
+                if ( alphaHero >= fheroes2::alpha::opaque )
                     fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
                 else
                     fheroes2::AlphaBlit( surfaceHero, display, cur_pt.x, cur_pt.y + 356, alphaHero );
