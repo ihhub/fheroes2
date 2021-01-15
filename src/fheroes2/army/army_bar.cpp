@@ -31,10 +31,9 @@
 #include "text.h"
 #include "world.h"
 
-void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army* armyTarget, bool & isTroopInfoVisible )
+void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget, bool & isTroopInfoVisible )
 {
     const Army * armyFrom = troopFrom.GetArmy();
-    
     bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
 
     if ( troopFrom.GetCount() <= 1 ) {
