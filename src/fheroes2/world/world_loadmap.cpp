@@ -24,7 +24,6 @@
 #include <functional>
 
 #include "agg.h"
-#include "ai.h"
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -39,6 +38,7 @@
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
 #include "settings.h"
 #include "text.h"

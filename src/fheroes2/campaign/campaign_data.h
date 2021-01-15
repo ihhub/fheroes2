@@ -22,6 +22,7 @@
 #define H2CAMPAIGN_DATA_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 namespace Campaign
 {

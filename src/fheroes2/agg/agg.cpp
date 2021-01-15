@@ -28,7 +28,9 @@
 
 #include "agg.h"
 #include "artifact.h"
+#include "audio.h"
 #include "audio_cdrom.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"

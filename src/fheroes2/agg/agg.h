@@ -26,8 +26,6 @@
 #include <utility>
 #include <vector>
 
-#include "audio.h"
-#include "audio_mixer.h"
 #include "gamedefs.h"
 #include "icn.h"
 

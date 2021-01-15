@@ -31,6 +31,7 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
 #include "text.h"

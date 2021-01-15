@@ -23,6 +23,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "assert.h"
+#include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"

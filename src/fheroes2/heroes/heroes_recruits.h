@@ -26,6 +26,7 @@
 #include <utility>
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 class Heroes;
 

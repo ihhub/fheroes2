@@ -24,6 +24,7 @@
 
 #include "agg.h"
 #include "assert.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "campaign_data.h"
 #include "cursor.h"

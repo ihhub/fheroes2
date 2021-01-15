@@ -33,6 +33,7 @@
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
+#include "rand.h"
 #include "settings.h"
 #include "world.h"
 

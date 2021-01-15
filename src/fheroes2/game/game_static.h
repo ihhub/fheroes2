@@ -24,6 +24,7 @@
 #define H2GAMESTATIC_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 namespace Skill
 {

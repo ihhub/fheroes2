@@ -22,8 +22,6 @@
 #ifndef H2GAMEDEFS_H
 #define H2GAMEDEFS_H
 
-#include "rand.h"
-#include "serialize.h"
 #include "tools.h"
 #include "types.h"
 
