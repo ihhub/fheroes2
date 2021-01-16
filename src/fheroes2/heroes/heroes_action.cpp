@@ -372,13 +372,13 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
 }
 
 // action to next cell
-void Heroes::Action( s32 dst_index )
+void Heroes::Action( int tileIndex, bool isDestination )
 {
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, dst_index );
+        return AI::HeroesAction( *this, tileIndex, isDestination );
 
-    Maps::Tiles & tile = world.GetTiles( dst_index );
-    const int object = ( dst_index == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+    Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
 
     if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
         AGG::PlayMusic( MUS::FromMapObject( object ), false );
@@ -389,14 +389,14 @@ void Heroes::Action( s32 dst_index )
     }
 
     /* new format map only */
-    ListActions * list = world.GetListActions( dst_index );
+    ListActions * list = world.GetListActions( tileIndex );
     bool cancel_default = false;
 
     if ( list ) {
         for ( ListActions::const_iterator it = list->begin(); it != list->end(); ++it ) {
             switch ( ( *it )->GetType() ) {
             case ACTION_ACCESS:
-                if ( !ActionAccess::Action( static_cast<ActionAccess *>( *it ), dst_index, *this ) )
+                if ( !ActionAccess::Action( static_cast<ActionAccess *>( *it ), tileIndex, *this ) )
                     cancel_default = true;
                 break;
 
@@ -435,21 +435,21 @@ void Heroes::Action( s32 dst_index )
     else
         switch ( object ) {
         case MP2::OBJ_MONSTER:
-            ActionToMonster( *this, object, dst_index );
+            ActionToMonster( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_CASTLE:
-            ActionToCastle( *this, dst_index );
+            ActionToCastle( *this, tileIndex );
             break;
         case MP2::OBJ_HEROES:
-            ActionToHeroes( *this, dst_index );
+            ActionToHeroes( *this, tileIndex );
             break;
 
         case MP2::OBJ_BOAT:
-            ActionToBoat( *this, dst_index );
+            ActionToBoat( *this, tileIndex );
             break;
         case MP2::OBJ_COAST:
-            ActionToCoast( *this, dst_index );
+            ActionToCoast( *this, tileIndex );
             break;
 
             // resource object
@@ -457,70 +457,70 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_LEANTO:
-            ActionToObjectResource( *this, object, dst_index );
+            ActionToObjectResource( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_WAGON:
-            ActionToWagon( *this, dst_index );
+            ActionToWagon( *this, tileIndex );
             break;
         case MP2::OBJ_SKELETON:
-            ActionToSkeleton( *this, object, dst_index );
+            ActionToSkeleton( *this, object, tileIndex );
             break;
 
         // pickup object
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_CAMPFIRE:
-            ActionToPickupResource( *this, object, dst_index );
+            ActionToPickupResource( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_TREASURECHEST:
-            ActionToTreasureChest( *this, object, dst_index );
+            ActionToTreasureChest( *this, object, tileIndex );
             break;
         case MP2::OBJ_ANCIENTLAMP:
-            ActionToAncientLamp( *this, object, dst_index );
+            ActionToAncientLamp( *this, object, tileIndex );
             break;
         case MP2::OBJ_FLOTSAM:
-            ActionToFlotSam( *this, object, dst_index );
+            ActionToFlotSam( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_SHIPWRECKSURVIROR:
-            ActionToShipwreckSurvivor( *this, object, dst_index );
+            ActionToShipwreckSurvivor( *this, object, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
-            ActionToArtifact( *this, object, dst_index );
+            ActionToArtifact( *this, object, tileIndex );
             break;
 
             // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
-            ActionToShrine( *this, dst_index );
+            ActionToShrine( *this, tileIndex );
             break;
 
         // witchs hut
         case MP2::OBJ_WITCHSHUT:
-            ActionToWitchsHut( *this, object, dst_index );
+            ActionToWitchsHut( *this, object, tileIndex );
             break;
 
         // info message
         case MP2::OBJ_SIGN:
-            ActionToSign( *this, dst_index );
+            ActionToSign( *this, tileIndex );
             break;
 
         // luck modification
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
-            ActionToGoodLuckObject( *this, object, dst_index );
+            ActionToGoodLuckObject( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_PYRAMID:
-            ActionToPyramid( *this, object, dst_index );
+            ActionToPyramid( *this, object, tileIndex );
             break;
         case MP2::OBJ_MAGICWELL:
-            ActionToMagicWell( *this, dst_index );
+            ActionToMagicWell( *this, tileIndex );
             break;
         case MP2::OBJ_TRADINGPOST:
             ActionToTradingPost( *this );
@@ -531,7 +531,7 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-            ActionToPrimarySkillObject( *this, object, dst_index );
+            ActionToPrimarySkillObject( *this, object, tileIndex );
             break;
 
         // morale modification
@@ -539,37 +539,38 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_TEMPLE:
         case MP2::OBJ_WATERINGHOLE:
         case MP2::OBJ_BUOY:
-            ActionToGoodMoraleObject( *this, object, dst_index );
+            ActionToGoodMoraleObject( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DERELICTSHIP:
-            ActionToPoorMoraleObject( *this, object, dst_index );
+            ActionToPoorMoraleObject( *this, object, tileIndex );
             break;
 
         // experience modification
         case MP2::OBJ_GAZEBO:
-            ActionToExperienceObject( *this, object, dst_index );
+            ActionToExperienceObject( *this, object, tileIndex );
             break;
         case MP2::OBJ_DAEMONCAVE:
-            ActionToDaemonCave( *this, object, dst_index );
+            ActionToDaemonCave( *this, object, tileIndex );
             break;
 
             // teleports
         case MP2::OBJ_STONELITHS:
-            ActionToTeleports( *this, dst_index );
+            ActionToTeleports( *this, tileIndex );
             break;
         case MP2::OBJ_WHIRLPOOL:
-            ActionToWhirlpools( *this, dst_index );
+            if ( isDestination )
+                ActionToWhirlpools( *this, tileIndex );
             break;
 
         // obsv tower
         case MP2::OBJ_OBSERVATIONTOWER:
-            ActionToObservationTower( *this, object, dst_index );
+            ActionToObservationTower( *this, object, tileIndex );
             break;
         case MP2::OBJ_MAGELLANMAPS:
-            ActionToMagellanMaps( *this, object, dst_index );
+            ActionToMagellanMaps( *this, object, tileIndex );
             break;
 
         // capture color object
@@ -577,11 +578,11 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_LIGHTHOUSE:
-            ActionToCaptureObject( *this, object, dst_index );
+            ActionToCaptureObject( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_ABANDONEDMINE:
-            ActionToAbandoneMine( *this, object, dst_index );
+            ActionToAbandoneMine( *this, object, tileIndex );
             break;
 
             // accept army
@@ -595,7 +596,7 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT:
-            ActionToDwellingJoinMonster( *this, object, dst_index );
+            ActionToDwellingJoinMonster( *this, object, tileIndex );
             break;
 
             // recruit army
@@ -603,22 +604,22 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
         case MP2::OBJ_DESERTTENT:
-            ActionToDwellingRecruitMonster( *this, object, dst_index );
+            ActionToDwellingRecruitMonster( *this, object, tileIndex );
             break;
 
         // battle and recruit army
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
-            ActionToDwellingBattleMonster( *this, object, dst_index );
+            ActionToDwellingBattleMonster( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_ARTESIANSPRING:
-            ActionToArtesianSpring( *this, object, dst_index );
+            ActionToArtesianSpring( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_XANADU:
-            ActionToXanadu( *this, object, dst_index );
+            ActionToXanadu( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_HILLFORT:
@@ -627,22 +628,22 @@ void Heroes::Action( s32 dst_index )
             break;
 
         case MP2::OBJ_EVENT:
-            ActionToEvent( *this, dst_index );
+            ActionToEvent( *this, tileIndex );
             break;
 
         case MP2::OBJ_OBELISK:
-            ActionToObelisk( *this, object, dst_index );
+            ActionToObelisk( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_TREEKNOWLEDGE:
-            ActionToTreeKnowledge( *this, object, dst_index );
+            ActionToTreeKnowledge( *this, object, tileIndex );
             break;
 
         case MP2::OBJ_ORACLE:
             ActionToOracle( *this );
             break;
         case MP2::OBJ_SPHINX:
-            ActionToSphinx( *this, object, dst_index );
+            ActionToSphinx( *this, object, tileIndex );
             break;
 
             // loyalty version
@@ -651,38 +652,38 @@ void Heroes::Action( s32 dst_index )
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
         case MP2::OBJ_BARROWMOUNDS:
-            ActionToDwellingRecruitMonster( *this, object, dst_index );
+            ActionToDwellingRecruitMonster( *this, object, tileIndex );
             break;
         case MP2::OBJ_ALCHEMYTOWER:
             ActionToAlchemistsTower( *this );
             break;
         case MP2::OBJ_STABLES:
-            ActionToStables( *this, object, dst_index );
+            ActionToStables( *this, object, tileIndex );
             break;
         case MP2::OBJ_ARENA:
-            ActionToArena( *this, object, dst_index );
+            ActionToArena( *this, object, tileIndex );
             break;
         case MP2::OBJ_MERMAID:
-            ActionToGoodLuckObject( *this, object, dst_index );
+            ActionToGoodLuckObject( *this, object, tileIndex );
             break;
         case MP2::OBJ_SIRENS:
-            ActionToSirens( *this, object, dst_index );
+            ActionToSirens( *this, object, tileIndex );
             break;
         case MP2::OBJ_JAIL:
-            ActionToJail( *this, object, dst_index );
+            ActionToJail( *this, object, tileIndex );
             break;
         case MP2::OBJ_HUTMAGI:
-            ActionToHutMagi( *this, object, dst_index );
+            ActionToHutMagi( *this, object, tileIndex );
             break;
         case MP2::OBJ_EYEMAGI:
             ActionToEyeMagi( *this, object );
             break;
 
         case MP2::OBJ_BARRIER:
-            ActionToBarrier( *this, object, dst_index );
+            ActionToBarrier( *this, object, tileIndex );
             break;
         case MP2::OBJ_TRAVELLERTENT:
-            ActionToTravellersTent( *this, object, dst_index );
+            ActionToTravellersTent( *this, object, tileIndex );
             break;
 
             // object

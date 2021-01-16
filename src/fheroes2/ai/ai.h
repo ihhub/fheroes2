@@ -118,7 +118,7 @@ namespace AI
     Base & Get( AI_TYPE type = NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index );
+    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
     bool HeroesValidObject( const Heroes & hero, s32 index );
     void HeroesMove( Heroes & hero );
 

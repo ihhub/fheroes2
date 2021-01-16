@@ -1623,7 +1623,7 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
         // force flip, for monster attack show sprite
         fheroes2::Display::instance().render();
     }
-    hero.Action( dst );
+    hero.Action( dst, true );
 }
 
 void Heroes::ActionNewPosition( void )
@@ -1658,7 +1658,7 @@ void Heroes::ActionNewPosition( void )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex() );
+            Action( GetIndex(), false );
             SetMove( false );
         }
     }

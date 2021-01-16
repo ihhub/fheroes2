@@ -274,7 +274,7 @@ public:
     void SetMove( bool );
     bool isAction( void ) const;
     void ResetAction( void );
-    void Action( s32 );
+    void Action( int tileIndex, bool isDestination );
     void ActionNewPosition( void );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
