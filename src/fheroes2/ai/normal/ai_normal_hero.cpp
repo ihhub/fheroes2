@@ -143,7 +143,12 @@ namespace AI
 #endif
 
         // pre-cache the pathfinder
-        _pathfinder.reEvaluateIfNeeded( hero );
+        if ( heroInPatrolMode ) {
+            _pathfinder.reEvaluateIfNeeded( patrolIndex, hero.GetColor(), heroStrength, hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+        }
+        else {
+            _pathfinder.reEvaluateIfNeeded( hero );
+        }
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
