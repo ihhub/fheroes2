@@ -33,6 +33,7 @@
 #include "puzzle.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_window.h"
 #include "world.h"
 
 const u8 zone1_index[] = {0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47};
@@ -181,10 +182,10 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     const Settings & conf = Settings::Get();
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
-    Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2,
-                                     sf.width(), sf.height() );
+    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2,
+                                           gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
 
-    Rect blitArea = frameborder.GetArea();
+    Rect blitArea = border.activeArea();
 
     fheroes2::Image background( blitArea.w, blitArea.h );
     if ( conf.ExtGameEvilInterface() )

@@ -194,6 +194,8 @@ namespace fheroes2
     void ApplyAlpha( Image & image, uint8_t alpha );
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
 
+    void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId );
+
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );

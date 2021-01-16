@@ -231,7 +231,6 @@ namespace Battle
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
-        void RedrawBorder( void );
         void RedrawCover( void );
         void RedrawCoverStatic();
         void RedrawCoverBoard( const Settings &, const Board & );

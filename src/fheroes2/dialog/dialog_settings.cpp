@@ -29,6 +29,7 @@
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_window.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {
@@ -145,8 +146,8 @@ void Dialog::ExtSettings( bool readonly )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 320, 400 ) );
-    const Rect & area = frameborder.GetArea();
+    const fheroes2::StandardWindow frameborder( 320, 400 );
+    const Rect area( frameborder.activeArea() );
 
     Text text( "Experimental Game Settings", Font::YELLOW_BIG );
     text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
