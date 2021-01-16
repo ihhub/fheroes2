@@ -43,6 +43,7 @@
 #include "text.h"
 #include "tools.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 void CastleRedrawTownName( const Castle & castle, const Point & dst );
@@ -200,9 +201,9 @@ int Castle::OpenDialog( bool readonly )
     if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    const Point & cur_pt = background.GetArea();
+    const Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
     std::string msg_date, msg_status;
 

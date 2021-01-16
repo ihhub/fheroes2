@@ -20,16 +20,16 @@
 
 #include "game_credits.h"
 #include "agg.h"
-#include "dialog.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_window.h"
 
 void Game::ShowCredits()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Dialog::FrameBorder border( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     const fheroes2::Point screenOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 

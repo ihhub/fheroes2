@@ -803,6 +803,43 @@ namespace fheroes2
         ApplyPalette( in, out, palette );
     }
 
+    void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId )
+    {
+        if ( !Validate( image, x, y, width, height ) )
+            return;
+
+        const int32_t imageWidth = image.width();
+
+        uint8_t * imageY = image.image() + y * imageWidth + x;
+        const uint8_t * imageYEnd = imageY + height * imageWidth;
+
+        if ( image.singleLayer() ) {
+            for ( ; imageY != imageYEnd; imageY += imageWidth ) {
+                uint8_t * imageX = imageY;
+                const uint8_t * imageXEnd = imageX + width;
+
+                for ( ; imageX != imageXEnd; ++imageX ) {
+                    *imageX = *( transformTable + transformId * 256 + *imageX );
+                }
+            }
+        }
+        else {
+            uint8_t * transformY = image.transform() + y * imageWidth + x;
+
+            for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
+                uint8_t * imageX = imageY;
+                uint8_t * transformX = transformY;
+                const uint8_t * imageXEnd = imageX + width;
+
+                for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
+                    if ( *transformX == 0 ) {
+                        *imageX = *( transformTable + transformId * 256 + *imageX );
+                    }
+                }
+            }
+        }
+    }
+
     void Blit( const Image & in, Image & out, bool flip )
     {
         Blit( in, 0, 0, out, 0, 0, in.width(), in.height(), flip );

@@ -37,6 +37,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace Battle
@@ -93,13 +94,16 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( local )
         AGG::ResetMixer();
 
+    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
     Arena arena( army1, army2, mapsindex, local );
 
     DEBUG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    while ( arena.BattleValid() )
+    while ( arena.BattleValid() ) {
         arena.Turns();
+    }
 
     const Result & result = arena.GetResult();
 

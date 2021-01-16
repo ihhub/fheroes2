@@ -1056,7 +1056,6 @@ void Battle::Interface::Redraw( void )
 void Battle::Interface::RedrawPartialStart()
 {
     Cursor::Get().Hide();
-    RedrawBorder();
     RedrawCover();
     RedrawArmies();
 }
@@ -1923,12 +1922,6 @@ void Battle::Interface::RedrawKilled()
             }
         }
     }
-}
-
-void Battle::Interface::RedrawBorder( void )
-{
-    if ( !fheroes2::Display::instance().isDefaultSize() )
-        Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 
 int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const

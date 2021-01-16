@@ -148,21 +148,22 @@ namespace Dialog
         FrameBorder( s32, s32, u32, u32 );
         ~FrameBorder();
 
-        void SetBorder( int );
-        int BorderWidth( void ) const;
-        int BorderHeight( void ) const;
-        void SetPosition( s32, s32, u32 = 0, u32 = 0 );
+        int BorderWidth() const;
+        int BorderHeight() const;
+        void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
 
         bool isValid() const;
-        const Rect & GetRect( void ) const;
-        const Rect & GetArea( void ) const;
-        const Rect & GetTop( void ) const;
+        const Rect & GetRect() const;
+        const Rect & GetArea() const;
+        const Rect & GetTop() const;
 
-        static void RenderRegular( const Rect & );
+        static void RenderRegular( const Rect & dstrt );
         static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
 
     protected:
         fheroes2::ImageRestorer restorer;
+
+    private:
         Rect rect;
         Rect area;
         Rect top;

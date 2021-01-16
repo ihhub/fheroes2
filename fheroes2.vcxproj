@@ -304,6 +304,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes.cpp" />
     <ClCompile Include="src\fheroes2\heroes\heroes_action.cpp" />
@@ -464,6 +465,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_window.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes.h" />
     <ClInclude Include="src\fheroes2\heroes\heroes_base.h" />
