@@ -27,12 +27,6 @@
 
 namespace fheroes2
 {
-    enum alpha : uint8_t
-    {
-        opaque = 255,
-        transaprent = 0
-    };
-
     // Image contains image layer and transform layer.
     // - image layer contains visible pixels which are copy to a destination image
     // - transform layer is used to apply some transformation to an image on which we draw the current one. For example, shadowing

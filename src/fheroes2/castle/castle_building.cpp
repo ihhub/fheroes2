@@ -64,13 +64,13 @@ const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
 
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
-    _alpha = fheroes2::alpha::transaprent;
+    _alpha = 0;
     _build = build;
 }
 
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
-    if ( _alpha < fheroes2::alpha::opaque ) {
+    if ( _alpha < 255 ) {
         if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
             _alpha += 15;
             return true;
@@ -83,7 +83,7 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
 {
     if ( _build != BUILD_NOTHING ) {
         _build = BUILD_NOTHING;
-        _alpha = fheroes2::alpha::opaque;
+        _alpha = 255;
     }
 }
 
@@ -366,7 +366,7 @@ bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t b
 void CastleDialog::RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha )
 {
     const Rect & roi = CastleGetMaxArea( castle, position );
-    const bool constructionInProgress = alpha < fheroes2::alpha::opaque;
+    const bool constructionInProgress = alpha < 255;
 
     if ( Race::BARB == castle.GetRace() ) {
         if ( buildId & BUILD_MAGEGUILD || buildId == BUILD_SPEC ) {

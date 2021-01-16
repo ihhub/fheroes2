@@ -656,11 +656,11 @@ namespace fheroes2
 
     void AlphaBlit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alphaValue, bool flip )
     {
-        if ( alphaValue == alpha::transaprent ) { // there is nothing we need to do
+        if ( alphaValue == 0 ) { // there is nothing we need to do
             return;
         }
 
-        if ( alphaValue == alpha::opaque ) {
+        if ( alphaValue == 255 ) {
             Blit( in, inX, inY, out, outX, outY, width, height, flip );
             return;
         }
@@ -673,7 +673,7 @@ namespace fheroes2
         const int32_t widthIn = in.width();
         const int32_t widthOut = out.width();
 
-        const uint8_t behindValue = alpha::opaque - alphaValue;
+        const uint8_t behindValue = 255 - alphaValue;
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -794,9 +794,9 @@ namespace fheroes2
         const uint8_t * value = kb_pal;
 
         for ( uint32_t i = 0; i < 256; ++i ) {
-            const uint32_t red = static_cast<uint32_t>( *value++ ) * alpha / alpha::opaque;
-            const uint32_t green = static_cast<uint32_t>( *value++ ) * alpha / alpha::opaque;
-            const uint32_t blue = static_cast<uint32_t>( *value++ ) * alpha / alpha::opaque;
+            const uint32_t red = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t green = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t blue = static_cast<uint32_t>( *value++ ) * alpha / 255;
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
