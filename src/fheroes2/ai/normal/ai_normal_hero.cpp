@@ -149,7 +149,7 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && _pathfinder.buildPath( node.first ).size() > distanceLimit )
+            if ( heroInPatrolMode && _pathfinder.buildPath( node.first, true ).size() > distanceLimit )
                 continue;
 
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -226,7 +226,7 @@ namespace AI
 
             if ( targetIndex != -1 ) {
                 _pathfinder.reEvaluateIfNeeded( hero );
-                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
+                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex, false ), targetIndex );
                 objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
 
                 HeroesMove( hero );

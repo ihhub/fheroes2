@@ -454,7 +454,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     return result;
 }
 
-std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex ) const
+std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPlanningMode ) const
 {
     std::list<Route::Step> path;
     if ( _pathStart == -1 )
@@ -485,8 +485,8 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex ) const
         }
     }
 
-    // Cut the path to the last valid tile
-    if ( lastValidNode != targetIndex ) {
+    // Cut the path to the last valid tile/obstacle if not in planning mode
+    if ( !isPlanningMode && lastValidNode != targetIndex ) {
         path.erase( std::find_if( path.begin(), path.end(), [&lastValidNode]( const Route::Step & step ) { return step.GetFrom() == lastValidNode; } ), path.end() );
     }
 
