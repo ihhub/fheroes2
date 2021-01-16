@@ -122,9 +122,11 @@ namespace AI
                 value -= suboptimalTaskPenalty;
             return value;
         }
-        else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
-            // de-prioritize the water movement even harder
-            return -3000.0;
+        else if ( objectID == MP2::OBJ_BOAT ) {
+            return -5000.0;
+        }
+        else if ( objectID == MP2::OBJ_WHIRLPOOL ) {
+            return -suboptimalTaskPenalty;
         }
 
         return 0;
