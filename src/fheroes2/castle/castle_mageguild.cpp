@@ -130,8 +130,9 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
-                                            fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
+                                            ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
+                                            fheroes2::Display::DEFAULT_HEIGHT );
 
     const Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );

@@ -182,8 +182,8 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     const Settings & conf = Settings::Get();
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
-    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2,
-                                           sf.width(), sf.height() );
+    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2,
+                                           gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
 
     Rect blitArea = border.activeArea();
 
