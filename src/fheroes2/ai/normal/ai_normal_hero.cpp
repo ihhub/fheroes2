@@ -143,18 +143,13 @@ namespace AI
 #endif
 
         // pre-cache the pathfinder
-        if ( heroInPatrolMode ) {
-            _pathfinder.reEvaluateIfNeeded( patrolIndex, hero.GetColor(), heroStrength, hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-        }
-        else {
-            _pathfinder.reEvaluateIfNeeded( hero );
-        }
+        _pathfinder.reEvaluateIfNeeded( hero );
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && _pathfinder.buildPath( node.first, true ).size() > distanceLimit )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
                 continue;
 
             if ( HeroesValidObject( hero, node.first ) ) {
@@ -231,7 +226,7 @@ namespace AI
 
             if ( targetIndex != -1 ) {
                 _pathfinder.reEvaluateIfNeeded( hero );
-                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex, false ), targetIndex );
+                hero.GetPath().setPath( _pathfinder.buildPath( targetIndex ), targetIndex );
                 objectsToErase.push_back( hero.GetPath().GetDestinationIndex() );
 
                 HeroesMove( hero );
