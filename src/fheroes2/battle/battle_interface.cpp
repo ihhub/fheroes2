@@ -1671,8 +1671,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
 
     if ( Board::CATAPULT_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
-        const Rect & pos = Board::GetCell( cellId )->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h + cellYOffset );
+        fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Board::CASTLE_GATE_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
@@ -1745,7 +1744,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             index = ltower->isValid() ? 18 : 19;
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
-        fheroes2::Blit( towerSprite, _mainSurface, 415, 40 );
+        fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
     else if ( Board::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
         const Tower * rtower = Arena::GetTower( TWR_RIGHT );
@@ -1755,15 +1754,15 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             index = rtower->isValid() ? 18 : 19;
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
-        fheroes2::Blit( towerSprite, _mainSurface, 415, 290 );
+        fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
     else if ( Board::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
-        fheroes2::Blit( towerSprite, _mainSurface, 375, 120 );
+        fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
     else if ( Board::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
-        fheroes2::Blit( towerSprite, _mainSurface, 375, 205 );
+        fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
 }
 
