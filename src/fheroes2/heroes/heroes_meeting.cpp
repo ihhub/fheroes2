@@ -145,7 +145,9 @@ public:
 class MeetingSecondarySkillsBar : public SecondarySkillsBar
 {
 public:
-    explicit MeetingSecondarySkillsBar() {}
+    explicit MeetingSecondarySkillsBar( const Heroes & hero )
+        : SecondarySkillsBar( hero )
+    {}
 
     virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
@@ -263,14 +265,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
-    MeetingSecondarySkillsBar secskill_bar1;
+    MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.SetColRows( 8, 1 );
     secskill_bar1.SetHSpace( -1 );
     secskill_bar1.SetContent( secondary_skills.ToVector() );
     secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
     secskill_bar1.Redraw();
 
-    MeetingSecondarySkillsBar secskill_bar2;
+    MeetingSecondarySkillsBar secskill_bar2( heroes2 );
     secskill_bar2.SetColRows( 8, 1 );
     secskill_bar2.SetHSpace( -1 );
     secskill_bar2.SetContent( heroes2.GetSecondarySkills().ToVector() );

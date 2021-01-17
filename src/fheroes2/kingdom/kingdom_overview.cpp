@@ -87,7 +87,7 @@ struct HeroRow
         artifactsBar->SetVSpace( 8 );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secskillsBar = new SecondarySkillsBar();
+        secskillsBar = new SecondarySkillsBar( *hero );
         secskillsBar->SetColRows( 4, 2 );
         secskillsBar->SetHSpace( -1 );
         secskillsBar->SetVSpace( 8 );

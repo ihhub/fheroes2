@@ -181,9 +181,10 @@ bool PrimarySkillsBar::QueueEventProcessing( std::string * str )
     return res;
 }
 
-SecondarySkillsBar::SecondarySkillsBar( bool mini /* true */, bool change /* false */ )
+SecondarySkillsBar::SecondarySkillsBar( const Heroes & hero, bool mini /* true */, bool change /* false */ )
     : use_mini_sprite( mini )
     , can_change( change )
+    , hero( hero )
 {
     if ( use_mini_sprite ) {
         backsf = GetBarBackgroundSprite();
@@ -218,7 +219,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
 
-            text.Set( Skill::Level::String( skill.Level() ) );
+            text.Set( Skill::Level::StringWithBonus( hero, skill.Skill(), skill.Level() ) );
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
@@ -227,7 +228,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
 bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        Dialog::SecondarySkillInfo( skill, true );
+        Dialog::SecondarySkillInfo( skill, hero, true );
         return true;
     }
     else if ( can_change ) {
@@ -248,7 +249,7 @@ bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
         if ( can_change )
             skill.Reset();
         else
-            Dialog::SecondarySkillInfo( skill, false );
+            Dialog::SecondarySkillInfo( skill, hero, false );
         return true;
     }
 
