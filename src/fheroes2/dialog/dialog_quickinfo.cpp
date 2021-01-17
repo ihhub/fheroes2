@@ -298,7 +298,12 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool show, const Heroes * 
         if ( dir != Direction::UNKNOWN ) {
             uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 
-            if ( cost ) {
+            if ( tile.GoodForUltimateArtifact() ) {
+                str.append( "\n" );
+                str.append( _( "(digging ok)" ) );
+            }
+
+            if ( cost > 0 ) {
                 str.append( "\n" );
                 str.append( _( "penalty: %{cost}" ) );
                 StringReplace( str, "%{cost}", cost );
