@@ -315,7 +315,7 @@ int Castle::OpenDialog( bool readonly )
     bool need_redraw = false;
 
     int alphaHero = 255;
-    fheroes2::Image surfaceHero( 552, 107 );
+    fheroes2::Image surfaceHero( 552, 105 );
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
@@ -660,7 +660,7 @@ int Castle::OpenDialog( bool readonly )
         if ( need_redraw ) {
             cursor.Hide();
             selectArmy1.Redraw();
-            if ( selectArmy2.isValid() )
+            if ( selectArmy2.isValid() && alphaHero >= 255 )
                 selectArmy2.Redraw();
             CastleRedrawTownName( *this, cur_pt );
             RedrawResourcePanel( cur_pt );
