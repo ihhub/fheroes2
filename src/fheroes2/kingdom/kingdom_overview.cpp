@@ -44,18 +44,22 @@
 struct HeroRow
 {
     Heroes * hero;
-    ArmyBar * armyBar;
-    ArtifactsBar * artifactsBar;
-    SecondarySkillsBar * secskillsBar;
-    PrimarySkillsBar * primskillsBar;
+    std::unique_ptr<ArmyBar> armyBar;
+    std::unique_ptr<ArtifactsBar> artifactsBar;
+    std::unique_ptr<SecondarySkillsBar> secskillsBar;
+    std::unique_ptr<PrimarySkillsBar> primskillsBar;
 
     HeroRow()
-        : hero( NULL )
-        , armyBar( NULL )
-        , artifactsBar( NULL )
-        , secskillsBar( NULL )
-        , primskillsBar( NULL )
+        : hero( nullptr )
     {}
+
+    HeroRow( const HeroRow & )
+        : hero( nullptr )
+    {
+        // If this assertion blows up then something is not right. We should not make a copy of this structure.
+        assert( 0 );
+    }
+
     ~HeroRow()
     {
         Clear();
@@ -63,10 +67,10 @@ struct HeroRow
 
     void Clear( void )
     {
-        delete armyBar;
-        delete artifactsBar;
-        delete secskillsBar;
-        delete primskillsBar;
+        armyBar.reset();
+        artifactsBar.reset();
+        secskillsBar.reset();
+        primskillsBar.reset();
     }
 
     void Init( Heroes * ptr )
@@ -75,24 +79,24 @@ struct HeroRow
 
         Clear();
 
-        armyBar = new ArmyBar( &hero->GetArmy(), true, false );
+        armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
         armyBar->SetBackground( Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
-        artifactsBar = new ArtifactsBar( hero, true, false );
+        artifactsBar.reset( new ArtifactsBar( hero, true, false ) );
         artifactsBar->SetColRows( 7, 2 );
         artifactsBar->SetHSpace( 1 );
         artifactsBar->SetVSpace( 8 );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secskillsBar = new SecondarySkillsBar( *hero );
+        secskillsBar.reset( new SecondarySkillsBar( *hero ) );
         secskillsBar->SetColRows( 4, 2 );
         secskillsBar->SetHSpace( -1 );
         secskillsBar->SetVSpace( 8 );
         secskillsBar->SetContent( hero->GetSecondarySkills().ToVector() );
 
-        primskillsBar = new PrimarySkillsBar( ptr, true );
+        primskillsBar.reset( new PrimarySkillsBar( ptr, true ) );
         primskillsBar->SetColRows( 4, 1 );
         primskillsBar->SetHSpace( 2 );
         primskillsBar->SetTextOff( 20, -13 );
@@ -235,20 +239,20 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
         text.Blit( dstx + 195 - text.w(), dsty + 20 );
 
         // primary skills info
-        const_cast<PrimarySkillsBar *>( row.primskillsBar )->SetPos( dstx + 56, dsty - 3 );
-        const_cast<PrimarySkillsBar *>( row.primskillsBar )->Redraw();
+        row.primskillsBar.get()->SetPos( dstx + 56, dsty - 3 );
+        row.primskillsBar.get()->Redraw();
 
         // secondary skills info
-        const_cast<SecondarySkillsBar *>( row.secskillsBar )->SetPos( dstx + 206, dsty + 3 );
-        const_cast<SecondarySkillsBar *>( row.secskillsBar )->Redraw();
+        row.secskillsBar.get()->SetPos( dstx + 206, dsty + 3 );
+        row.secskillsBar.get()->Redraw();
 
         // artifacts info
-        const_cast<ArtifactsBar *>( row.artifactsBar )->SetPos( dstx + 348, dsty + 3 );
-        const_cast<ArtifactsBar *>( row.artifactsBar )->Redraw();
+        row.artifactsBar.get()->SetPos( dstx + 348, dsty + 3 );
+        row.artifactsBar.get()->Redraw();
 
         // army info
-        const_cast<ArmyBar *>( row.armyBar )->SetPos( dstx - 1, dsty + 30 );
-        const_cast<ArmyBar *>( row.armyBar )->Redraw();
+        row.armyBar.get()->SetPos( dstx - 1, dsty + 30 );
+        row.armyBar.get()->Redraw();
     }
 }
 
@@ -621,7 +625,7 @@ void Kingdom::OverviewDialog( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    const fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+    fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     const Point cur_pt( background.activeArea().x, background.activeArea().y );
     Point dst_pt( cur_pt );
@@ -731,7 +735,7 @@ void Kingdom::OverviewDialog( void )
 
             if ( refreshHeroList || mainWindowChanged ) {
                 // redraw Kingdom window from scratch, because it's now invalid
-                Dialog::FrameBorder::RenderRegular( background.GetRect() );
+                background.render();
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
                 buttonHeroes.draw();
                 buttonCastle.draw();
