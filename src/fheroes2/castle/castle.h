@@ -250,6 +250,7 @@ private:
 
 namespace CastleDialog
 {
+    // Class used for fading animation
     class FadeBuilding
     {
     public:
