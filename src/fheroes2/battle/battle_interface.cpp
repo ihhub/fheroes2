@@ -1182,12 +1182,19 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
+                    const int unitAnimState = unitOnCell->GetAnimationState();
+                    const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
+
                     if ( isCellBefore ) {
-                        troopCounterBeforeWall.emplace_back( unitOnCell );
+                        if ( isStaticUnit ) {
+                            troopCounterBeforeWall.emplace_back( unitOnCell );
+                        }
                         troopBeforeWall.emplace_back( unitOnCell );
                     }
                     else {
-                        troopCounterAfterWall.emplace_back( unitOnCell );
+                        if ( isStaticUnit ) {
+                            troopCounterAfterWall.emplace_back( unitOnCell );
+                        }
                         troopAfterWall.emplace_back( unitOnCell );
                     }
                 }
@@ -1250,7 +1257,12 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                    troopCounter.emplace_back( unitOnCell );
+                    const int unitAnimState = unitOnCell->GetAnimationState();
+                    const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
+                    if ( isStaticUnit ) {
+                        troopCounter.emplace_back( unitOnCell );
+                    }
+
                     troop.emplace_back( unitOnCell );
                 }
                 else {
