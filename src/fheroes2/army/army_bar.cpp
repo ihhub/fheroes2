@@ -34,16 +34,15 @@
 void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget, bool & isTroopInfoVisible )
 {
     const Army * armyFrom = troopFrom.GetArmy();
-    bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
+    const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
 
     if ( troopFrom.GetCount() <= 1 ) {
-        if ( !saveLastTroop && !troopTarget.isValid() ) {
-            Army::SwapTroops( troopFrom, troopTarget );
-            isTroopInfoVisible = false;
-        }
-        else {
+        if ( saveLastTroop || troopTarget.isValid() ) {
             return;
         }
+
+        Army::SwapTroops( troopFrom, troopTarget );
+        isTroopInfoVisible = false;
     }
     else {
         const uint32_t freeSlots = ( armyFrom == armyTarget ? 1 : 0 ) + armyTarget->Size() - armyTarget->GetCount();
@@ -507,7 +506,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & 
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
-    // for this one, prioritize the click before press - aka prioritize split before showing troop info
+    // Prioritize the click before press - aka prioritize split before showing troop info
     if ( ActionBarRightMouseSingleClick( troop ) )
         return true;
 
