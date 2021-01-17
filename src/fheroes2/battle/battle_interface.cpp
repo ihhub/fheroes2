@@ -2034,7 +2034,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
     _currentUnit = &b;
     humanturn_redraw = false;
     humanturn_exit = false;
@@ -2737,7 +2737,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
@@ -3014,7 +3014,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         frameDelay = frameDelay * 12 / 10; // 20% slower
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
 #ifdef DEBUG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
@@ -3102,7 +3102,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3440,7 +3440,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
         const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame() );
@@ -3519,7 +3519,7 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
 void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit & defender )
 {
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     _currentUnit = NULL;
 
     const Point missileStart = tower.GetPortPosition();
@@ -3641,7 +3641,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
         const Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
 
-        Cursor::Get().SetThemes( Cursor::WAR_NONE );
+        Cursor::Get().SetThemes( Cursor::WAR_POINTER );
         AGG::PlaySound( M82::MAGCAROW );
 
         // Magic arrow == Archer missile
@@ -3653,7 +3653,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     uint32_t currentAlpha = target.GetCustomAlpha();
 
@@ -3692,7 +3692,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     uint32_t currentAlpha = 0;
 
@@ -3725,7 +3725,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     const Points points = GetLinePoints( rt1, rt2, 5 );
     Points::const_iterator pnt = points.begin();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     AGG::PlaySound( M82::MIRRORIM );
 
     while ( le.HandleEvents() && pnt != points.end() ) {
@@ -3754,7 +3754,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
@@ -3917,7 +3917,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     fheroes2::Sprite mixSprite( unitSprite );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -3957,7 +3957,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 
     fheroes2::Sprite mixSprite( unitSprite );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -4021,7 +4021,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
     const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
     AGG::PlaySound( spellSound );
 
     size_t i = 0;
@@ -4077,7 +4077,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     _currentUnit = NULL;
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     Rect area = GetArea();
     area.h -= 36;
@@ -4113,7 +4113,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     // set WNCE
     _currentUnit = NULL;
@@ -4155,7 +4155,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     const fheroes2::Image original( _mainSurface );
     const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
@@ -4203,7 +4203,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         spriteCache.push_back( fheroes2::AGG::GetICN( icn, i ) );
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4260,7 +4260,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.w, area.h );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.w, area.h );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::ARMGEDN );
@@ -4325,7 +4325,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     uint32_t frame = 0;
     area.h -= 38;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     fheroes2::Image sprite( area.w, area.h );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.w, area.h );
@@ -4429,7 +4429,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
     uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4521,7 +4521,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     uint32_t frame = 0;
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
 
@@ -4571,7 +4571,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     uint32_t frame = 0;
     const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     if ( animation == WINCE ) {
         _currentUnit = NULL;
