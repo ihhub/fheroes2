@@ -84,12 +84,12 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button * button = NULL;
+    std::unique_ptr<fheroes2::Button> button;
 
     if ( ok_button ) {
         const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
                                   box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
-        button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
+        button.reset( new fheroes2::Button( pt.x, pt.y, system, 1, 2 ) );
     }
 
     if ( button )
@@ -117,8 +117,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
             break;
         }
     }
-
-    delete button;
 }
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )
