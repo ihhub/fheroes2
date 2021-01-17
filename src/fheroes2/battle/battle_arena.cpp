@@ -290,7 +290,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         fheroes2::Display & display = fheroes2::Display::instance();
 
         cursor.Hide();
-        cursor.SetThemes( Cursor::WAR_NONE );
+        cursor.SetThemes( Cursor::WAR_POINTER );
 
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
