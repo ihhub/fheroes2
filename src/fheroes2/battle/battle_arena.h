@@ -29,6 +29,7 @@
 #include "battle_grave.h"
 #include "battle_pathfinding.h"
 #include "gamedefs.h"
+#include "serialize.h"
 #include "spell_storage.h"
 
 #define ARENAW 11

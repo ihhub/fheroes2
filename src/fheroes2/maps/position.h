@@ -24,6 +24,7 @@
 #define H2POSITION_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 class MapPosition
 {

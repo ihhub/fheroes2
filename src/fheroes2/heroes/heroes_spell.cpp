@@ -30,6 +30,7 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "monster.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
 #include "ui_window.h"

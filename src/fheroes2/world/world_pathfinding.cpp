@@ -21,7 +21,6 @@
 #include <set>
 
 #include "world_pathfinding.h"
-#include "ai.h"
 #include "ground.h"
 #include "world.h"
 

@@ -36,6 +36,7 @@
 #include "heroes.h"
 #include "luck.h"
 #include "morale.h"
+#include "rand.h"
 #include "settings.h"
 #include "speed.h"
 #include "world.h"

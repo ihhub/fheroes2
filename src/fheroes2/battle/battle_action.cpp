@@ -31,6 +31,7 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "kingdom.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
 #include "world.h"

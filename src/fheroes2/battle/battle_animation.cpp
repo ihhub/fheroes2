@@ -20,6 +20,7 @@
 
 #include "battle_animation.h"
 #include "monster.h"
+#include "rand.h"
 #include "settings.h"
 #include <algorithm>
 

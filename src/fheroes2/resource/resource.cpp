@@ -25,6 +25,7 @@
 #include "image.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "rand.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"

@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -41,6 +42,7 @@
 #include "pal.h"
 #include "pocketpc.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
 #include "world.h"
 

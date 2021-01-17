@@ -27,6 +27,7 @@
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "battle_arena.h"
 #include "battle_army.h"

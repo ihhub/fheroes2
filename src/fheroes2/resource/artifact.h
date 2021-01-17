@@ -26,11 +26,11 @@
 
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "serialize.h"
 #include "ui_tool.h"
 
 class Spell;
 class Heroes;
-class StreamBase;
 
 class Artifact
 {

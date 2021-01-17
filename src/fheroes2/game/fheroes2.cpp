@@ -25,6 +25,7 @@
 #include <string>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "bin_info.h"
 #include "cursor.h"

@@ -29,6 +29,7 @@
 #include "game_static.h"
 #include "heroes.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
