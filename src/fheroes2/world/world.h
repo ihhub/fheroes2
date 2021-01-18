@@ -180,8 +180,8 @@ public:
 
     const Maps::Tiles & GetTiles( u32, u32 ) const;
     Maps::Tiles & GetTiles( u32, u32 );
-    const Maps::Tiles & GetTiles( s32 ) const;
-    Maps::Tiles & GetTiles( s32 );
+    const Maps::Tiles & GetTiles( const int32_t tileId ) const;
+    Maps::Tiles & GetTiles( const int32_t tileId );
 
     void InitKingdoms( void );
 
@@ -262,7 +262,7 @@ public:
     size_t getRegionCount() const;
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( int index, int direction ) const;
+    bool isValidPath( int index, int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();

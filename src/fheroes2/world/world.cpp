@@ -355,21 +355,21 @@ Maps::Tiles & World::GetTiles( u32 ax, u32 ay )
     return GetTiles( ay * w() + ax );
 }
 
-const Maps::Tiles & World::GetTiles( s32 index ) const
+const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
 {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( index );
+    return vec_tiles.at( tileId );
 #else
-    return vec_tiles[index];
+    return vec_tiles[tileId];
 #endif
 }
 
-Maps::Tiles & World::GetTiles( s32 index )
+Maps::Tiles & World::GetTiles( const int32_t tileId )
 {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( index );
+    return vec_tiles.at( tileId );
 #else
-    return vec_tiles[index];
+    return vec_tiles[tileId];
 #endif
 }
 
@@ -611,7 +611,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         for ( MapsTiles::const_iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
             const Maps::Tiles & tile = *it;
 
-            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true )
+            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true, 0 )
                  && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
                 tiles.push_back( tile.GetIndex() );
                 const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );

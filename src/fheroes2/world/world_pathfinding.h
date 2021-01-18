@@ -47,6 +47,7 @@ protected:
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
+    int _currentColor = Color::NONE;
     std::vector<int> _mapOffset;
 };
 
@@ -89,7 +90,6 @@ public:
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 
-    int _currentColor = Color::NONE;
     double _armyStrength = -1;
     double _advantage = 1.0;
     Army _temporaryArmy; // for internal calculations
