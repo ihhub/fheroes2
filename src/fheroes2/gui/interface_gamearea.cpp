@@ -179,7 +179,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     if ( maxY > world.h() )
         maxY = world.h();
 
-    if ( minX >= maxX  || minY >= maxY ) {
+    if ( minX >= maxX || minY >= maxY ) {
         // This can't be true! Please check your code changes as we shouldn't have an empty area.
         assert( 0 );
         return;
