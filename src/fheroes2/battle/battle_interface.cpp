@@ -1582,8 +1582,17 @@ void Battle::Interface::RedrawCover()
 
         assert( !highlightCells.empty() );
 
+        const HeroBase * currentCommander = arena.GetCurrentCommander();
+        const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
+
         for ( const Cell * highlightCell : highlightCells ) {
-            if ( highlightCell->isPassable1( false ) ) {
+            bool isApplicable = highlightCell->isPassable1( false );
+            if ( isApplicable ) {
+                const Unit * highlightedUnit = highlightCell->GetUnit();
+                isApplicable = highlightedUnit == nullptr || highlightedUnit->GetMagicResist( humanturn_spell, spellPower ) < 100;
+            }
+
+            if ( isApplicable ) {
                 fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
             else {
