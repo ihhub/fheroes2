@@ -149,11 +149,11 @@ namespace Maps
         bool isObject( int obj ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
-        bool isPassable( int direct, bool fromWater, bool skipfog ) const;
+        bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
         bool isRoad() const;
         bool isStream( void ) const;
         bool isShadow( void ) const;
-        bool GoodForUltimateArtifact( void ) const;
+        bool GoodForUltimateArtifact( const int heroColor ) const;
 
         TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
 

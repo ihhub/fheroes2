@@ -73,7 +73,7 @@ bool World::isTileBlocked( int tileIndex, bool fromWater ) const
     return false;
 }
 
-bool World::isValidPath( int index, int direction ) const
+bool World::isValidPath( int index, int direction, const int heroColor ) const
 {
     const Maps::Tiles & fromTile = GetTiles( index );
     const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
@@ -108,10 +108,10 @@ bool World::isValidPath( int index, int direction ) const
         }
     }
 
-    if ( !fromTile.isPassable( direction, fromWater, false ) )
+    if ( !fromTile.isPassable( direction, fromWater, false, heroColor ) )
         return false;
 
-    return toTile.isPassable( Direction::Reflect( direction ), fromWater, false );
+    return toTile.isPassable( Direction::Reflect( direction ), fromWater, false, heroColor );
 }
 
 void WorldPathfinder::checkWorldSize()
@@ -185,7 +185,7 @@ void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int
 
             const uint32_t moveCost = currentNode._cost + getMovementPenalty( currentNodeIdx, newIndex, directions[i], _pathfindingSkill );
             PathfindingNode & newNode = _cache[newIndex];
-            if ( world.isValidPath( currentNodeIdx, directions[i] ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
+            if ( world.isValidPath( currentNodeIdx, directions[i], _currentColor ) && ( newNode._from == -1 || newNode._cost > moveCost ) ) {
                 const Maps::Tiles & tile = world.GetTiles( newIndex );
 
                 newNode._from = currentNodeIdx;
@@ -206,6 +206,7 @@ void PlayerWorldPathfinder::reset()
 
     if ( _pathStart != -1 ) {
         _pathStart = -1;
+        _currentColor = Color::NONE;
         _pathfindingSkill = Skill::Level::EXPERT;
     }
 }
@@ -217,6 +218,7 @@ void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
     if ( _pathStart != startIndex || _pathfindingSkill != skill ) {
         _pathStart = startIndex;
+        _currentColor = hero.GetColor();
         _pathfindingSkill = skill;
 
         processWorldMap( startIndex );
@@ -245,6 +247,11 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
         }
     }
 
+    // Check a corner case when a path is blocked by something else and the destination is not reachable anymore.
+    if ( currentNode == -1 && path.size() == 1 ) {
+        path.clear();
+    }
+
     return path;
 }
 
@@ -258,7 +265,7 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
-            if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction ) ) {
+            if ( direction != Direction::UNKNOWN && direction != Direction::CENTER && world.isValidPath( currentNodeIdx, direction, _currentColor ) ) {
                 // add straight to cache, can't move further from the monster
                 const uint32_t moveCost = _cache[currentNodeIdx]._cost + getMovementPenalty( currentNodeIdx, monsterIndex, direction, _pathfindingSkill );
                 PathfindingNode & monsterNode = _cache[monsterIndex];
