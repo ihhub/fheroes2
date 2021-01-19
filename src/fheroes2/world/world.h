@@ -270,6 +270,8 @@ public:
     void ComputeStaticAnalysis();
     static u32 GetUniq( void );
 
+    uint32_t GetMapSeed() const;
+
 private:
     World()
         : Size( 0, 0 )
@@ -321,6 +323,8 @@ private:
     Maps::Indexes _allTeleporters;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
+
+    uint32_t _seed;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

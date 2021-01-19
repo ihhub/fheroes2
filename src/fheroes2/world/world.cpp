@@ -261,6 +261,9 @@ void World::Defaults( void )
     vec_heroes.Init();
 
     vec_castles.Init();
+
+    // map seed is random and persisted on saves
+    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 }
 
 void World::Reset( void )
@@ -299,6 +302,8 @@ void World::Reset( void )
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
+
+    _seed = 0;
 }
 
 /* new maps */
@@ -1066,6 +1071,11 @@ void World::PostLoad()
     ComputeStaticAnalysis();
 }
 
+uint32_t World::GetMapSeed() const
+{
+    return _seed;
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
@@ -1187,12 +1197,21 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
     return msg;
 }
 
+const int SEED_VERSION = 9001;
+
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
     const Size & sz = w;
 
-    return msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj << w.ultimate_artifact
-               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects;
+    StreamBase & stream = msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
+                              << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss
+                              << w.map_actions << w.map_objects;
+
+    if ( Game::GetLoadVersion() >= SEED_VERSION ) {
+        stream << w._seed;
+    }
+
+    return stream;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1201,6 +1220,14 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+
+    if ( Game::GetLoadVersion() >= SEED_VERSION ) {
+        msg >> w._seed;
+    }
+    else {
+        // For old versions, generate a random seed
+        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
+    }
 
     w.PostLoad();
 
