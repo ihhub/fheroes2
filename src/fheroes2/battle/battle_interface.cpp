@@ -1585,6 +1585,8 @@ void Battle::Interface::RedrawCover()
         const HeroBase * currentCommander = arena.GetCurrentCommander();
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
+        const bool displayMoveShadow = conf.BattleShowMoveShadow();
+
         for ( const Cell * highlightCell : highlightCells ) {
             bool isApplicable = highlightCell->isPassable1( false );
             if ( isApplicable ) {
@@ -1593,6 +1595,10 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( isApplicable ) {
+                if ( displayMoveShadow && highlightCell->GetDirection() == UNKNOWN ) {
+                    fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                }
+
                 fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
             else {
@@ -1639,8 +1645,9 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
+            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() ) {
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+            }
         }
     }
 }
