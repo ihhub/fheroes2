@@ -49,35 +49,19 @@ struct HeroRow
     std::unique_ptr<SecondarySkillsBar> secskillsBar;
     std::unique_ptr<PrimarySkillsBar> primskillsBar;
 
-    HeroRow()
-        : hero( nullptr )
-    {}
-
-    HeroRow( const HeroRow & )
-        : hero( nullptr )
+    HeroRow( Heroes * ptr )
     {
-        // If this assertion blows up then something is not right. We should not make a copy of this structure.
-        assert( 0 );
+        Init( ptr );
     }
 
-    ~HeroRow()
-    {
-        Clear();
-    }
-
-    void Clear( void )
-    {
-        armyBar.reset();
-        artifactsBar.reset();
-        secskillsBar.reset();
-        primskillsBar.reset();
-    }
+    HeroRow( const HeroRow & ) = delete;
+    HeroRow & operator=( const HeroRow & ) = delete;
+    HeroRow( HeroRow && ) = default;
+    HeroRow & operator=( HeroRow && ) = default;
 
     void Init( Heroes * ptr )
     {
         hero = ptr;
-
-        Clear();
 
         armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
         armyBar->SetBackground( Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
@@ -126,6 +110,7 @@ public:
 
 private:
     std::vector<HeroRow> content;
+
     void SetContent( KingdomHeroes & heroes );
 };
 
@@ -145,9 +130,10 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
 
 void StatsHeroesList::SetContent( KingdomHeroes & heroes )
 {
-    content.resize( heroes.size() );
-    for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
-        content[std::distance( heroes.begin(), it )].Init( *it );
+    content.clear();
+    content.reserve( heroes.size() );
+    for ( auto & hero : heroes )
+        content.emplace_back( hero );
     SetListContent( content );
 }
 
@@ -239,20 +225,20 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
         text.Blit( dstx + 195 - text.w(), dsty + 20 );
 
         // primary skills info
-        row.primskillsBar.get()->SetPos( dstx + 56, dsty - 3 );
-        row.primskillsBar.get()->Redraw();
+        row.primskillsBar->SetPos( dstx + 56, dsty - 3 );
+        row.primskillsBar->Redraw();
 
         // secondary skills info
-        row.secskillsBar.get()->SetPos( dstx + 206, dsty + 3 );
-        row.secskillsBar.get()->Redraw();
+        row.secskillsBar->SetPos( dstx + 206, dsty + 3 );
+        row.secskillsBar->Redraw();
 
         // artifacts info
-        row.artifactsBar.get()->SetPos( dstx + 348, dsty + 3 );
-        row.artifactsBar.get()->Redraw();
+        row.artifactsBar->SetPos( dstx + 348, dsty + 3 );
+        row.artifactsBar->Redraw();
 
         // army info
-        row.armyBar.get()->SetPos( dstx - 1, dsty + 30 );
-        row.armyBar.get()->Redraw();
+        row.armyBar->SetPos( dstx - 1, dsty + 30 );
+        row.armyBar->Redraw();
     }
 }
 
@@ -290,34 +276,20 @@ struct CstlRow
     std::unique_ptr<ArmyBar> armyBarGuest;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
-    CstlRow()
-        : castle( NULL )
-    {}
-
-    CstlRow( const CstlRow & )
-        : castle( NULL )
+    CstlRow( Castle * ptr )
     {
-        // If this assertion blows up then something is not right. We should not make a copy of this structure.
-        assert( 0 );
+        Init( ptr );
     }
 
-    ~CstlRow()
-    {
-        Clear();
-    }
-
-    void Clear()
-    {
-        armyBarGuard.reset();
-        armyBarGuest.reset();
-        dwellingsBar.reset();
-    }
+    CstlRow( const CstlRow & ) = delete;
+    CstlRow & operator=( const CstlRow & ) = delete;
+    CstlRow( CstlRow && ) = default;
+    CstlRow & operator=( CstlRow && ) = default;
 
     void Init( Castle * ptr )
     {
         castle = ptr;
 
-        Clear();
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
         armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
@@ -334,7 +306,7 @@ struct CstlRow
             armyBarGuest->SetHSpace( -1 );
         }
         else {
-            armyBarGuest = nullptr;
+            armyBarGuest.reset();
         }
 
         dwellingsBar.reset( new DwellingsBar( *castle, Size( 39, 52 ) ) );
@@ -379,10 +351,10 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     SetAreaMaxItems( 4 );
     SetAreaItems( fheroes2::Rect( pt.x + 30, pt.y + 17, 594, 344 ) );
 
-    content.resize( castles.size() );
+    content.reserve( castles.size() );
 
-    for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
-        content[std::distance( castles.begin(), it )].Init( *it );
+    for ( auto & castle : castles )
+        content.emplace_back( castle );
 
     SetListContent( content );
 }
