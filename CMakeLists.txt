@@ -5,6 +5,7 @@ project(fheroes2 VERSION 0.8.4 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Compile-time options
 set(SDL_VERSIONS SDL SDL2)
