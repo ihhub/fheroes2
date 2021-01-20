@@ -611,7 +611,7 @@ namespace
 
                     // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
                     if ( _surface->w % 4 == 0 ) {
-                         linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                     }
                 }
             }
