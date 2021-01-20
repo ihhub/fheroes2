@@ -428,7 +428,8 @@ namespace
                     if ( display.width() % 4 != 0 ) {
                         const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
                         for ( int32_t i = 0; i < display.height(); ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i, static_cast<size_t>( width ) );
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
                         }
                     }
                     else {
@@ -770,7 +771,8 @@ namespace
                     if ( display.width() % 4 != 0 ) {
                         const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
                         for ( int32_t i = 0; i < display.height(); ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i, static_cast<size_t>( width ) );
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
                         }
                     }
                     else {
@@ -905,7 +907,7 @@ namespace
 
                     // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
                     if ( _surface->w % 4 == 0 ) {
-                         linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
                     }
                 }
             }
