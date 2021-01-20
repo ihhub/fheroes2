@@ -57,8 +57,8 @@ namespace fheroes2
             _files[name] = std::make_pair( fileSize, fileOffset );
         }
         if ( _files.size() != count ) {
-                _files.clear();
-                return false;
+            _files.clear();
+            return false;
         }
         return !_stream.fail();
     }
