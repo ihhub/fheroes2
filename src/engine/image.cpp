@@ -209,20 +209,6 @@ namespace
         return true;
     }
 
-    bool Validate( const fheroes2::Image & in, int32_t inX, int32_t inY, const fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
-    {
-        if ( in.empty() || out.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
-            return false;
-
-        if ( inX < 0 || inY < 0 || outX < 0 || outY < 0 || inX > in.width() || inY > in.height() || outX > out.width() || outY > out.height() )
-            return false;
-
-        if ( ( inX + width > in.width() ) || ( inY + height > in.height() ) || ( outX + width > out.width() ) || ( outY + height > out.height() ) )
-            return false;
-
-        return true;
-    }
-
     bool Verify( int32_t & inX, int32_t & inY, int32_t & outX, int32_t & outY, int32_t & width, int32_t & height, int32_t widthIn, int32_t heightIn, int32_t widthOut,
                  int32_t heightOut )
     {
