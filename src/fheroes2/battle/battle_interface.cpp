@@ -1704,8 +1704,12 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Board::CASTLE_GATE_POS == cellId ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
-        fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        Bridge * bridge = Arena::GetBridge();
+        assert( bridge != nullptr );
+        if ( bridge != nullptr && !bridge->isDestroy() ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        }
     }
     else if ( Board::CASTLE_FIRST_TOP_WALL_POS == cellId || Board::CASTLE_SECOND_TOP_WALL_POS == cellId || Board::CASTLE_THIRD_TOP_WALL_POS == cellId
               || Board::CASTLE_FORTH_TOP_WALL_POS == cellId ) {
