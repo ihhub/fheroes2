@@ -273,6 +273,7 @@
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_campaign.cpp" />
     <ClCompile Include="src\fheroes2\game\game_credits.cpp" />
     <ClCompile Include="src\fheroes2\game\game_delays.cpp" />
     <ClCompile Include="src\fheroes2\game\game_highscores.cpp" />

@@ -27,14 +27,14 @@
 #include <list>
 
 #include "bitmodes.h"
-#include "campaign_data.h"
 #include "dir.h"
 #include "gamedefs.h"
 #include "maps_fileinfo.h"
 #include "players.h"
 #include "system.h"
 
-#define FORMAT_VERSION_090_RELEASE 9000
+#define FORMAT_VERSION_090_RELEASE 9001
+#define FORMAT_VERSION_084_RELEASE 9000
 #define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
 #define FORMAT_VERSION_070_RELEASE 3269
@@ -338,11 +338,6 @@ public:
     int GameType( void ) const;
     void SetGameType( int );
 
-    void SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus );
-    void SetCurrentCampaignScenarioID( const int scenarioID );
-    void SetCurrentCampaignID( const int campaignID );
-    void AddCurrentCampaignMapToFinished();
-
     Players & GetPlayers( void );
     const Players & GetPlayers( void ) const;
 
@@ -452,8 +447,6 @@ private:
     Point pos_stat;
 
     Players players;
-
-    Campaign::CampaignData campaignData;
 };
 
 StreamBase & operator<<( StreamBase &, const Settings & );
