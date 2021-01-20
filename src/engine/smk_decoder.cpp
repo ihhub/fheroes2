@@ -174,7 +174,7 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_
     if ( _videoFile == NULL )
         return;
 
-    const bool resizedImage = ( image.width() != _width ) || ( image.height() != _height );
+    const bool resizedImage = ( image.width() != static_cast<int32_t>( _width ) ) || ( image.height() != static_cast<int32_t>( _height ) );
 
     image.resize( _width, _height );
     image._disableTransformLayer();
