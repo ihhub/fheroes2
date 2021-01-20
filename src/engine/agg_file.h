@@ -35,7 +35,7 @@ namespace fheroes2
         AGGFile();
 
         bool isGood() const;
-        bool open( const std::string & );
+        bool open( const std::string & fileName );
         const std::vector<uint8_t> & read( const std::string & key );
 
     private:

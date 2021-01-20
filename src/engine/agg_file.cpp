@@ -32,9 +32,9 @@ namespace fheroes2
         return !_stream.fail() && _files.size();
     }
 
-    bool AGGFile::open( const std::string & filename )
+    bool AGGFile::open( const std::string & fileName )
     {
-        if ( !_stream.open( filename, "rb" ) )
+        if ( !_stream.open( fileName, "rb" ) )
             return false;
 
         const size_t size = _stream.size();
