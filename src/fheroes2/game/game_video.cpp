@@ -130,7 +130,7 @@ namespace Video
 
                     video.getNextFrame( frame, palette );
 
-                    fheroes2::Blit( frame, display, offset.x, offset.y );
+                    fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {
@@ -168,7 +168,7 @@ namespace Video
                         video.resetFrame();
 
                     video.getNextFrame( frame, palette );
-                    fheroes2::Blit( frame, display, offset.x, offset.y );
+                    fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {

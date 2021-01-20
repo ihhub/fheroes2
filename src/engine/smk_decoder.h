@@ -39,7 +39,10 @@ public:
     SMKVideoSequence( const SMKVideoSequence & ) = delete;
 
     void resetFrame();
+
+    // This method sets image into a single layer image type as video frames shouldn't have any transform-related information.
     void getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette );
+
     const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     unsigned long width() const;
