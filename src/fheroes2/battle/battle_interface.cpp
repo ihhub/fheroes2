@@ -1595,7 +1595,7 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( isApplicable ) {
-                if ( displayMoveShadow && highlightCell->GetDirection() == UNKNOWN ) {
+                if ( displayMoveShadow && ( highlightCell->GetDirection() == UNKNOWN || highlightCell->GetUnit() != nullptr ) ) {
                     fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
                 }
 
