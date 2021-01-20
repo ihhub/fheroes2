@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cctype>
 #include <iterator>
 #include <string>
 
@@ -27,18 +26,6 @@
 namespace fheroes2
 {
     AGGFile::AGGFile() {}
-
-    uint32_t AGGFile::aggFilenameHash( const std::string & s )
-    {
-        uint32_t a = 0, b = 0;
-        for ( auto cri = s.crbegin(); cri != s.crend(); cri++ ) {
-            a = ( a << 5 ) + ( a >> 25 );
-            uint8_t c = static_cast<uint8_t>( std::toupper( *cri ) );
-            b += c;
-            a += b + c;
-        }
-        return a;
-    }
 
     bool AGGFile::isGood() const
     {
@@ -62,51 +49,37 @@ namespace fheroes2
         _stream.seek( size - nameEntriesSize );
         StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
-        for ( uint16_t i = 0; i < count; ++i ) {
-            const uint32_t hash = fileEntries.getLE32();
+        for ( size_t i = 0; i < count; ++i ) {
             const std::string & name = nameEntries.toString( _maxFilenameSize );
-            if ( hash == aggFilenameHash( name ) && !_files.count( hash ) ) {
-                const uint32_t fileOffset = fileEntries.getLE32();
-                const uint32_t fileSize = fileEntries.getLE32();
-                _files[hash] = std::make_pair( fileSize, fileOffset );
-                _names[name] = hash;
-            }
-            else {
+            fileEntries.getLE32();
+            const uint32_t fileOffset = fileEntries.getLE32();
+            const uint32_t fileSize = fileEntries.getLE32();
+            _files[name] = std::make_pair( fileSize, fileOffset );
+        }
+        if ( _files.size() != count ) {
                 _files.clear();
-                _names.clear();
                 return false;
-            }
         }
         return !_stream.fail();
     }
 
-    const std::vector<uint8_t> & AGGFile::read( uint32_t hash )
+    const std::vector<uint8_t> & AGGFile::read( const std::string & fileName )
     {
-        auto it = _files.find( hash );
-        if ( it != _files.end() ) {
-            auto f = it->second;
-            if ( f.first ) {
-                _stream.seek( f.second );
-                _body = _stream.getRaw( f.first );
-                return _body;
+        if ( _key != fileName ) {
+            auto it = _files.find( fileName );
+            if ( it != _files.end() ) {
+                _key = fileName;
+                auto fileParams = it->second;
+                if ( fileParams.first ) {
+                    _stream.seek( fileParams.second );
+                    _body = _stream.getRaw( fileParams.first );
+                }
+            }
+            else {
+                _key.clear();
+                _body.clear();
             }
         }
-        _body.clear();
-        _key.clear();
-        return _body;
-    }
-
-    const std::vector<uint8_t> & AGGFile::read( const std::string & str )
-    {
-        if ( _key != str ) {
-            auto it = _names.find( str );
-            if ( it != _names.end() ) {
-                _key = str;
-                return read( it->second );
-            }
-        }
-        _body.clear();
-        _key.clear();
         return _body;
     }
 }

@@ -18,6 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef AGG_FILE_H
+#define AGG_FILE_H
+
 #include <map>
 #include <string>
 #include <vector>
@@ -33,19 +36,16 @@ namespace fheroes2
 
         bool isGood() const;
         bool open( const std::string & );
-        const std::vector<uint8_t> & read( uint32_t key );
         const std::vector<uint8_t> & read( const std::string & key );
 
     private:
-        static uint32_t aggFilenameHash( const std::string & s );
-
         static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
 
         StreamFile _stream;
-        std::map<uint32_t, std::pair<uint32_t, uint32_t> > _files;
-        std::map<std::string, uint32_t> _names;
+        std::map<std::string, std::pair<uint32_t, uint32_t> > _files;
 
         std::string _key;
         std::vector<uint8_t> _body;
     };
 }
+#endif
