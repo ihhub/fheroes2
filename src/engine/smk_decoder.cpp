@@ -174,14 +174,19 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_
     if ( _videoFile == NULL )
         return;
 
+    const bool resizedImage = ( image.width() != _width ) || ( image.height() != _height );
+
     image.resize( _width, _height );
+    image._disableTransformLayer();
 
     const uint8_t * data = smk_get_video( _videoFile );
     const uint8_t * paletteData = smk_get_palette( _videoFile );
 
     const size_t size = static_cast<size_t>( _width ) * _height;
     std::copy( data, data + size, image.image() );
-    std::fill( image.transform(), image.transform() + size, 0 );
+    if ( resizedImage ) {
+        std::fill( image.transform(), image.transform() + size, 0 );
+    }
 
     palette.resize( 256 * 3 );
     memcpy( palette.data(), paletteData, 256 * 3 );
