@@ -20,6 +20,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -32,9 +35,6 @@
 #include "settings.h"
 #include "spell.h"
 #include "world.h"
-
-#include <algorithm>
-#include <cassert>
 
 namespace
 {
@@ -648,7 +648,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
             foundTroops.erase( foundTroops.begin() );
         }
 
-        if ( result.size() != 4 ) {
+        if ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT ) {
             foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
         }
     }
