@@ -30,6 +30,9 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "heroes.h"
+
+#include <cassert>
+
 using namespace Battle;
 
 namespace AI
@@ -105,6 +108,11 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        if ( currentUnit.Modes( SP_BERSERKER ) != 0 ) {
+            berserkTurn( arena, currentUnit, actions );
+            return;
+        }
+
         const int myColor = currentUnit.GetColor();
         const int myHeadIndex = currentUnit.GetHeadIndex();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
@@ -447,5 +455,45 @@ namespace AI
         }
 
         actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+    }
+
+    void Normal::berserkTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
+    {
+        assert( currentUnit.Modes( SP_BERSERKER ) );
+
+        Board & board = *Battle::Arena::GetBoard();
+        const uint32_t currentUnitUID = currentUnit.GetUID();
+
+        std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
+        if ( !nearestUnits.empty() ) {
+            for ( size_t i = 0; i < nearestUnits.size(); ++i ) {
+                const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
+                const int32_t targetUnitHead = nearestUnits[i]->GetHeadIndex();
+                if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                    break;
+                }
+                else {
+                    int targetCell = -1;
+                    const Indexes & around = Board::GetAroundIndexes( *nearestUnits[i] );
+                    for ( const int cell : around ) {
+                        if ( arena.hexIsPassable( cell ) ) {
+                            targetCell = cell;
+                            break;
+                        }
+                    }
+
+                    if ( targetCell != -1 ) {
+                        if ( currentUnit.GetHeadIndex() != targetCell )
+                            actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnitUID, targetCell ) );
+
+                        actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                        break;
+                    }
+                }
+            }
+        }
+
+        actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnitUID ) );
     }
 }
