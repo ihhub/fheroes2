@@ -53,46 +53,6 @@ namespace Battle
         else
             return endX < startX;
     }
-
-    bool contains( const Indexes & indexes, const Unit * unit )
-    {
-        assert( unit );
-
-        const auto begin = indexes.begin();
-        const auto end = indexes.end();
-
-        const bool result = end != std::find( begin, end, unit->GetHeadIndex() );
-        if ( !result ) {
-            return false;
-        }
-
-        const int32_t tailIndex = unit->GetTailIndex();
-        if ( tailIndex == -1 ) {
-            return true;
-        }
-
-        return end != std::find( begin, end, tailIndex );
-    }
-
-    Indexes SortIndexesByDistanceAsc( std::vector<IndexDistance> & distances )
-    {
-        if ( distances.size() > 1 ) {
-            std::sort( distances.begin(), distances.end(), IndexDistance::Shortest );
-            const uint32_t smallestDistance = distances.front().second;
-            for ( size_t i = 1; i < distances.size(); ++i ) {
-                if ( distances[i].second != smallestDistance ) {
-                    distances.resize( i );
-                    break;
-                }
-            }
-        }
-
-        Indexes result;
-        for ( const IndexDistance & distance : distances ) {
-            result.emplace_back( distance.first );
-        }
-        return result;
-    }
 }
 
 Battle::Board::Board()
@@ -514,43 +474,34 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-IndexDistance Battle::Board::DistanceToUnit( int32_t position, const Battle::Unit * unit ) const
+std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    assert( unit );
+    std::vector<std::pair<Battle::Unit *, int32_t> > foundUnits;
 
-    const int32_t headIndex = unit->GetHeadIndex();
-    const int32_t tailIndex = unit->GetTailIndex();
-    IndexDistance distance = IndexDistance( headIndex, GetDistance( position, headIndex ) );
-    if ( tailIndex == -1 ) {
-        return distance;
-    }
-
-    const IndexDistance distanceToTail = IndexDistance( tailIndex, GetDistance( position, tailIndex ) );
-    if ( distanceToTail.second < distance.second ) {
-        return distanceToTail;
-    }
-    return distance;
-}
-
-Battle::Indexes Battle::Board::GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const
-{
-    std::vector<IndexDistance> distances;
-    distances.reserve( 15 ); // TODO: replace this magic number or explain it
-
-    for ( const Cell & cell : *this ) {
-        const Unit * unit = cell.GetUnit();
-        if ( unit == nullptr ) {
+    for ( Cell & cell : *this ) {
+        Unit * cellUnit = cell.GetUnit();
+        if ( cellUnit == nullptr || startUnit == cellUnit || cell.GetIndex() != cellUnit->GetHeadIndex() ) {
             continue;
         }
 
-        const bool isBlackListed = contains( blackList, unit );
-        const Position & currentPosition = unit->GetPosition();
-        if ( !isBlackListed && !currentPosition.contains( position ) ) {
-            distances.emplace_back( DistanceToUnit( position, unit ) );
+        const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
+        if ( !isBlackListed ) {
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
         }
     }
 
-    return SortIndexesByDistanceAsc( distances );
+    std::sort( foundUnits.begin(), foundUnits.end(), []( const std::pair<Battle::Unit *, int32_t> & first, const std::pair<Battle::Unit *, int32_t> & second ) {
+        return first.second < second.second;
+    } );
+
+    std::vector<Battle::Unit * > units;
+    units.reserve( foundUnits.size() );
+
+    for ( const auto & foundUnit : foundUnits ) {
+        units.push_back( foundUnit.first );
+    }
+
+    return units;
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )
