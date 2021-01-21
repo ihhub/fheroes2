@@ -632,7 +632,8 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
             const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower );
-            if ( resist < Rand::Get( 1, 100 ) ) {
+            assert( resist >= 0 );
+            if ( resist < static_cast<int32_t>( Rand::Get( 1, 100 ) ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
