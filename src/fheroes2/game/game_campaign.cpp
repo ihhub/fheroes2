@@ -20,7 +20,7 @@
 
 #include "agg.h"
 #include "assert.h"
-#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -150,8 +150,8 @@ int Game::SelectCampaignScenario()
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Campaign::CampaignData & campaignData = Campaign::CampaignData::Get();
-    const size_t chosenCampaign = campaignData.getCampaignID();
+    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+    const size_t chosenCampaign = campaignSaveData.getCampaignID();
     const bool goodCampaign = chosenCampaign == 0;
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
@@ -171,7 +171,7 @@ int Game::SelectCampaignScenario()
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    const int chosenScenarioID = campaignData.getCurrentScenarioID();
+    const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
     const std::vector<Campaign::ScenarioBonusData> bonusChoices = getCampaignBonusData( chosenCampaign, chosenScenarioID );
     const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
 
@@ -299,8 +299,8 @@ int Game::SelectCampaignScenario()
                 continue;
             }
 
-            campaignData.setCurrentScenarioBonus( scenarioBonus );
-            campaignData.setCurrentScenarioID( chosenScenarioID );
+            campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
+            campaignSaveData.setCurrentScenarioID( chosenScenarioID );
 
             SetScenarioBonus( scenarioBonus );
 

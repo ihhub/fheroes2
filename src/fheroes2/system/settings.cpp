@@ -24,7 +24,7 @@
 #include <fstream>
 
 #include "audio_music.h"
-#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
@@ -1925,7 +1925,7 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
         >> conf.opt_addons >> conf.players;
 
     if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
-        msg >> Campaign::CampaignData::Get();
+        msg >> Campaign::CampaignSaveData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

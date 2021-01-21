@@ -26,7 +26,7 @@
 #include "assert.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
-#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -103,10 +103,10 @@ int Game::NewCampaign()
     Video::ShowVideo( "CHOOSEW.SMK", false );
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
 
-    Campaign::CampaignData & campaignData = Campaign::CampaignData::Get();
-    campaignData.reset();
-    campaignData.setCampaignID( chosenCampaign );
-    campaignData.setCurrentScenarioID( 0 );
+    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+    campaignSaveData.reset();
+    campaignSaveData.setCampaignID( chosenCampaign );
+    campaignSaveData.setCurrentScenarioID( 0 );
 
     AGG::PlayMusic( MUS::VICTORY );
 
