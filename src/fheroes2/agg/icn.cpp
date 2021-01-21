@@ -1740,9 +1740,6 @@ bool ICN::HighlyObjectSprite( int icn, u32 index )
             return true;
         break;
 
-    case FLAG32:
-        return true;
-
     default:
         break;
     }
