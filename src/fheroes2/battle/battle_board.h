@@ -27,7 +27,6 @@
 
 #include "battle.h"
 #include "battle_cell.h"
-#include "pairs.h"
 
 #define ARENAW 11
 #define ARENAH 9
@@ -58,7 +57,7 @@ namespace Battle
 
         s32 GetIndexAbsPosition( const Point & ) const;
         Indexes GetPassableQualityPositions( const Unit & b );
-        Indexes GetNearestTroopIndexes( int32_t position, const Indexes & blackList ) const;
+        std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
         void SetEnemyQuality( const Unit & );
@@ -107,9 +106,6 @@ namespace Battle
             CASTLE_TOP_GATE_TOWER_POS = 40,
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
-
-    private:
-        IndexDistance DistanceToUnit( const int32_t position, const Unit * unit ) const;
     };
 }
 
