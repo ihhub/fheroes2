@@ -464,7 +464,7 @@ namespace AI
         Board & board = *Battle::Arena::GetBoard();
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
-        std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
+        const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
         if ( !nearestUnits.empty() ) {
             for ( size_t i = 0; i < nearestUnits.size(); ++i ) {
                 const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
