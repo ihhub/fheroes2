@@ -69,9 +69,12 @@ namespace fheroes2
             if ( it != _files.end() ) {
                 _key = fileName;
                 const auto & fileParams = it->second;
-                if ( fileParams.first ) {
+                if ( fileParams.first > 0 ) {
                     _stream.seek( fileParams.second );
                     _body = _stream.getRaw( fileParams.first );
+                }
+                else {
+                    _body.clear();
                 }
             }
             else {
