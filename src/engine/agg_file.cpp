@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iterator>
 #include <string>
 
 #include "agg_file.h"
@@ -51,7 +50,7 @@ namespace fheroes2
 
         for ( size_t i = 0; i < count; ++i ) {
             const std::string & name = nameEntries.toString( _maxFilenameSize );
-            fileEntries.getLE32();
+            fileEntries.getLE32(); // skip CRC (?) part
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
             _files[name] = std::make_pair( fileSize, fileOffset );
@@ -69,7 +68,7 @@ namespace fheroes2
             auto it = _files.find( fileName );
             if ( it != _files.end() ) {
                 _key = fileName;
-                auto fileParams = it->second;
+                const auto & fileParams = it->second;
                 if ( fileParams.first ) {
                     _stream.seek( fileParams.second );
                     _body = _stream.getRaw( fileParams.first );
