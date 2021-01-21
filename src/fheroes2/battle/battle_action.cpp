@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
-
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -34,6 +32,9 @@
 #include "settings.h"
 #include "spell.h"
 #include "world.h"
+
+#include <algorithm>
+#include <cassert>
 
 namespace
 {
@@ -607,40 +608,49 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
-bool Battle::Arena::IsImmuneToChainLightning( int32_t troopIndex, const HeroBase * hero ) const
+std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
 {
-    const Unit * target = GetTroopBoard( troopIndex );
-    if ( !target ) {
-        return true;
-    }
-    const int power = hero ? hero->GetPower() : 0;
-    const uint32_t resist = target->GetMagicResist( Spell::CHAINLIGHTNING, power );
-    return ( resist >= 100 ) ? true : Rand::Get( 1, 100 ) <= resist;
-}
+    std::vector<Battle::Unit *> result = {firstUnit};
+    std::vector<Battle::Unit *> ignoredTroops = {firstUnit};
 
-Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, int32_t attackedTroopIndex ) const
-{
-    int32_t currentTargetIndex = attackedTroopIndex;
-    Indexes result = {currentTargetIndex};
+    std::vector<Battle::Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
-    Indexes ignoredTroops = {currentTargetIndex};
-    const Indexes allTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
-    for ( const int32_t troopIndex : allTroops ) {
-        if ( IsImmuneToChainLightning( troopIndex, hero ) ) {
-            ignoredTroops.push_back( troopIndex );
+    const int heroSpellPower = hero ? hero->GetPower() : 0;
+
+    // Filter those which are fully immuned
+    for ( size_t i = 0; i < foundTroops.size(); ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower ) >= 100 ) {
+            ignoredTroops.push_back( foundTroops[i] );
+            foundTroops.erase( foundTroops.begin() + i );
+        }
+        else {
+            ++i;
         }
     }
 
-    while ( result.size() < CHAIN_LIGHTNING_CREATURE_COUNT ) {
-        const Indexes nearestTroops = board.GetNearestTroopIndexes( currentTargetIndex, ignoredTroops );
-        if ( nearestTroops.empty() ) {
-            break;
+    while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
+        bool targetFound = false;
+        for ( size_t i = 0; i < foundTroops.size(); ++i ) {
+            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower );
+            if ( resist < Rand::Get( 1, 100 ) ) {
+                ignoredTroops.push_back( foundTroops[i] );
+                result.push_back( foundTroops[i] );
+                foundTroops.erase( foundTroops.begin() + i );
+                targetFound = true;
+                break;
+            }
         }
 
-        const int32_t chosenTroopIndex = *Rand::Get( nearestTroops );
-        result.push_back( chosenTroopIndex );
-        ignoredTroops.push_back( chosenTroopIndex );
-        currentTargetIndex = chosenTroopIndex;
+        // All targets are resisted. Choosing the nearest one.
+        if ( !targetFound ) {
+            ignoredTroops.push_back( foundTroops.front() );
+            result.push_back( foundTroops.front() );
+            foundTroops.erase( foundTroops.begin() );
+        }
+
+        if ( result.size() != 4 ) {
+            foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
+        }
     }
 
     return result;
@@ -648,18 +658,19 @@ Battle::Indexes Battle::Arena::FindChainLightningTargetIndexes( const HeroBase *
 
 Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
 {
-    TargetsInfo targets;
-    const Indexes targetIndexes = FindChainLightningTargetIndexes( hero, attackedTroopIndex );
-    for ( size_t i = 0; i < targetIndexes.size(); ++i ) {
-        Unit * target = GetTroopBoard( targetIndexes[i] );
-        if ( target == nullptr ) {
-            continue;
-        }
+    Unit * unit = GetTroopBoard( attackedTroopIndex );
+    if ( unit == nullptr ) {
+        assert( 0 );
+        return TargetsInfo();
+    }
 
+    TargetsInfo targets;
+    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
+    for ( size_t i = 0; i < targetUnits.size(); ++i ) {
         targets.emplace_back();
         TargetInfo & res = targets.back();
 
-        res.defender = target;
+        res.defender = targetUnits[i];
         // store temp priority for calculate damage
         res.damage = i;
     }
@@ -670,6 +681,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 {
     TargetsInfo targets;
     targets.reserve( 8 );
+
+    bool ignoreMagicResistance = false;
 
     TargetInfo res;
     Unit * target = GetTroopBoard( dst );
@@ -707,6 +720,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::CHAINLIGHTNING: {
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
+            ignoreMagicResistance = true;
         } break;
 
         // check abroads
@@ -758,19 +772,21 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             break;
         }
 
-    // remove resistent magic troop
-    TargetsInfo::iterator it = targets.begin();
-    while ( it != targets.end() ) {
-        const u32 resist = ( *it ).defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
+    // Remove resistent magic troop
+    if ( !ignoreMagicResistance ) {
+        TargetsInfo::iterator it = targets.begin();
+        while ( it != targets.end() ) {
+            const u32 resist = ( *it ).defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-        if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
-            if ( interface )
-                interface->RedrawActionResistSpell( *( *it ).defender );
+            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+                if ( interface )
+                    interface->RedrawActionResistSpell( *( *it ).defender );
 
-            it = targets.erase( it );
+                it = targets.erase( it );
+            }
+            else
+                ++it;
         }
-        else
-            ++it;
     }
 
     return targets;
