@@ -356,8 +356,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                              Font::BIG );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
             Dialog::Message( _( "Size Icon" ),
-                             _( "Indicates whether the map\r\nis small (36 x 36), medium\r\n(72 x 72), large (108 x 108),\r\nor extra large (144 x 144)." ),
-                             Font::BIG );
+                             _( "Indicates whether the map\r\nis small (36 x 36), medium\r\n(72 x 72), large (108 x 108),\r\nor extra large (144 x 144)." ), Font::BIG );
         else if ( le.MousePressRight( curMapName ) )
             Dialog::Message( _( "Selected Name" ), _( "The name of the currently selected map." ), Font::BIG );
         else if ( le.MousePressRight( victoryConds ) ) {
