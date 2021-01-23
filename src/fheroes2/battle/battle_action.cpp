@@ -685,6 +685,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     targets.reserve( 8 );
 
     bool ignoreMagicResistance = false;
+    bool playResistSound = true;
 
     TargetInfo res;
     Unit * target = GetTroopBoard( dst );
@@ -723,6 +724,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
             ignoreMagicResistance = true;
+            playResistSound = false;
         } break;
 
         // check abroads
@@ -742,6 +744,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             // unique
             targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            playResistSound = false;
         } break;
 
         // check all troops
@@ -768,6 +771,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             // unique
             targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            playResistSound = false;
         } break;
 
         default:
@@ -782,7 +786,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
                 if ( interface )
-                    interface->RedrawActionResistSpell( *( *it ).defender );
+                    interface->RedrawActionResistSpell( *( *it ).defender, playResistSound );
 
                 it = targets.erase( it );
             }

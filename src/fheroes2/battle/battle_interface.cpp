@@ -3200,9 +3200,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionResistSpell( const Unit & target )
+void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound  )
 {
-    AGG::PlaySound( M82::RSBRYFZL );
+    if ( playSound ) {
+        AGG::PlaySound( M82::RSBRYFZL );
+    }
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
