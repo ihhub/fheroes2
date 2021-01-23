@@ -3200,7 +3200,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound  )
+void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
 {
     if ( playSound ) {
         AGG::PlaySound( M82::RSBRYFZL );
