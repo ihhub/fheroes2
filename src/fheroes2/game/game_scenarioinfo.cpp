@@ -120,7 +120,7 @@ int Game::ScenarioInfo( void )
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
 
-    rectPanel = Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    rectPanel = Rect( ( display.width() - panel.width() ) - 15, 5, panel.width(), panel.height() );
     pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
     pointOpponentInfo = Point( rectPanel.x + 24, rectPanel.y + 202 );
     pointClassInfo = Point( rectPanel.x + 24, rectPanel.y + 282 );
