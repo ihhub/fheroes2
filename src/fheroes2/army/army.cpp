@@ -1429,11 +1429,6 @@ bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
     return army1.isStrongerThan( army2 );
 }
 
-void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
-{
-    troops.DrawMons32Line( cx, cy, width, first, count, scoute, false, true );
-}
-
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {

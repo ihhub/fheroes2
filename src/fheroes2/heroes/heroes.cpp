@@ -1378,13 +1378,10 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    int dist = Spell( Spell::VISIONS ).ExtraValue();
-    int acount = HasArtifact( Artifact::CRYSTAL_BALL );
-
-    if ( acount )
-        dist = acount * ( Settings::Get().UseAltResource() ? dist * 2 + 2 : 8 );
-
-    return dist;
+    uint32_t crystalBallCount = HasArtifact( Artifact::CRYSTAL_BALL );
+    if ( crystalBallCount < 1 )
+        crystalBallCount = 1;
+    return 8 * crystalBallCount;
 }
 
 int Heroes::GetDirection( void ) const
@@ -1682,50 +1679,6 @@ const Point & Heroes::GetCenterPatrol( void ) const
 int Heroes::GetSquarePatrol( void ) const
 {
     return patrol_square;
-}
-
-int Heroes::CanScouteTile( s32 dst ) const
-{
-    int scouting = GetSecondaryValues( Skill::Secondary::SCOUTING );
-    bool army_info = false;
-
-    switch ( world.GetTiles( dst ).GetObject() ) {
-    case MP2::OBJ_MONSTER:
-    case MP2::OBJ_CASTLE:
-    case MP2::OBJ_HEROES:
-        army_info = true;
-        break;
-
-    default:
-        break;
-    }
-
-    if ( army_info ) {
-        // depends from distance
-        if ( Maps::GetApproximateDistance( GetIndex(), dst ) <= GetVisionsDistance() ) {
-            // check crystal ball
-            return HasArtifact( Artifact::CRYSTAL_BALL ) ? Skill::Level::EXPERT : scouting;
-        }
-        else {
-            // check spell identify hero
-            if ( GetKingdom().Modes( Kingdom::IDENTIFYHERO ) && MP2::OBJ_HEROES == world.GetTiles( dst ).GetObject() )
-                return Skill::Level::EXPERT;
-        }
-    }
-    else {
-        if ( Settings::Get().ExtWorldScouteExtended() ) {
-            // const Maps::Tiles & tile = world.GetTiles(dst);
-
-            u32 dist = GetSecondaryValues( Skill::Secondary::SCOUTING ) ? GetScoute() : 0;
-            if ( Modes( VISIONS ) && dist < GetVisionsDistance() )
-                dist = GetVisionsDistance();
-
-            if ( dist > Maps::GetApproximateDistance( GetIndex(), dst ) )
-                return scouting;
-        }
-    }
-
-    return 0;
 }
 
 void Heroes::MovePointsScaleFixed( void )
