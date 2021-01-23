@@ -1130,49 +1130,46 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
     return image;
 }
 
-u32 Battle::Arena::GetObstaclesPenalty( const Unit & attacker, const Unit & defender ) const
+bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
 {
     if ( defender.Modes( CAP_TOWER ) || attacker.Modes( CAP_TOWER ) )
-        return 0;
+        return false;
 
     // check golden bow artifact
-    const HeroBase * enemy = attacker.GetCommander();
-    if ( enemy && enemy->HasArtifact( Artifact::GOLDEN_BOW ) )
-        return 0;
+    const HeroBase * hero = attacker.GetCommander();
+    if ( hero && hero->HasArtifact( Artifact::GOLDEN_BOW ) )
+        return false;
 
-    u32 result = 0;
-    const u32 step = CELLW / 3;
-
-    if ( castle ) {
-        // archery skill
-        if ( enemy && Skill::Level::NONE != enemy->GetLevelSkill( Skill::Secondary::ARCHERY ) )
-            return 0;
-
-        // attacker is castle owner
-        if ( attacker.GetColor() == castle->GetColor() && !attacker.OutOfWalls() )
-            return 0;
-
-        if ( defender.GetColor() == castle->GetColor() && defender.OutOfWalls() )
-            return 0;
-
-        // check castle walls defensed
-        const Points points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), step );
-
-        for ( Points::const_iterator it = points.begin(); it != points.end(); ++it ) {
-            if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
-                return 0;
-            else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )
-                return 0;
-            else if ( 0 == board[73].GetObject() && ( board[73].GetPos() & *it ) )
-                return 0;
-            else if ( 0 == board[96].GetObject() && ( board[96].GetPos() & *it ) )
-                return 0;
-        }
-
-        result = 1;
+    if ( castle == nullptr ) {
+        return false;
     }
 
-    return result;
+    // archery skill
+    if ( hero && hero->GetLevelSkill( Skill::Secondary::ARCHERY ) != Skill::Level::NONE )
+        return false;
+
+    // attacker is castle owner
+    if ( attacker.GetColor() == castle->GetColor() && !attacker.OutOfWalls() )
+        return false;
+
+    if ( defender.GetColor() == castle->GetColor() && defender.OutOfWalls() )
+        return false;
+
+    // check castle walls defensed
+    const Points points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+
+    for ( Points::const_iterator it = points.begin(); it != points.end(); ++it ) {
+        if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
+            return false;
+        else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )
+            return false;
+        else if ( 0 == board[73].GetObject() && ( board[73].GetPos() & *it ) )
+            return false;
+        else if ( 0 == board[96].GetObject() && ( board[96].GetPos() & *it ) )
+            return false;
+    }
+
+    return true;
 }
 
 Battle::Force & Battle::Arena::GetForce1( void )
