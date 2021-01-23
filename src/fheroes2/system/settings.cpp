@@ -330,10 +330,6 @@ const settings_t settingsFHeroes2[] = {
         _( "battle: soft wait troop" ),
     },
     {
-        Settings::BATTLE_OBJECTS_ARCHERS_PENALTY,
-        _( "battle: high objects are an obstacle for archers" ),
-    },
-    {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
         _( "battle: skip increase +2 defense" ),
     },
@@ -1666,11 +1662,6 @@ bool Settings::ExtBattleShowBattleOrder( void ) const
 bool Settings::ExtBattleSoftWait( void ) const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
-}
-
-bool Settings::ExtBattleObjectsArchersPenalty( void ) const
-{
-    return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
 }
 
 bool Settings::ExtGameRewriteConfirm( void ) const

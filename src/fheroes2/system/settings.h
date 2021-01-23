@@ -177,7 +177,6 @@ public:
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
-        BATTLE_OBJECTS_ARCHERS_PENALTY = 0x42000000,
 
         SETTINGS_LAST
     };
@@ -285,7 +284,6 @@ public:
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
-    bool ExtBattleObjectsArchersPenalty( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
     bool ExtGameRememberLastFocus( void ) const;

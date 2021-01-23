@@ -1171,67 +1171,6 @@ u32 Battle::Arena::GetObstaclesPenalty( const Unit & attacker, const Unit & defe
 
         result = 1;
     }
-    else if ( Settings::Get().ExtBattleObjectsArchersPenalty() ) {
-        const Points points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), step );
-        Indexes indexes;
-        indexes.reserve( points.size() );
-
-        for ( Points::const_iterator it = points.begin(); it != points.end(); ++it ) {
-            const s32 index = board.GetIndexAbsPosition( *it );
-            if ( Board::isValidIndex( index ) )
-                indexes.push_back( index );
-        }
-
-        if ( indexes.size() ) {
-            std::sort( indexes.begin(), indexes.end() );
-            indexes.resize( std::distance( indexes.begin(), std::unique( indexes.begin(), indexes.end() ) ) );
-        }
-
-        for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it ) {
-            // obstacles
-            switch ( board[*it].GetObject() ) {
-            // tree
-            case 0x82:
-            // trock
-            case 0x85:
-            // tree
-            case 0x89:
-            // tree
-            case 0x8D:
-            // rock
-            case 0x95:
-            case 0x96:
-            // stub
-            case 0x9A:
-            // dead tree
-            case 0x9B:
-            // tree
-            case 0x9C:
-                ++result;
-                break;
-
-            default:
-                break;
-            }
-        }
-
-        if ( enemy ) {
-            switch ( enemy->GetLevelSkill( Skill::Secondary::ARCHERY ) ) {
-            case Skill::Level::BASIC:
-                if ( result < 2 )
-                    return 0;
-                break;
-            case Skill::Level::ADVANCED:
-                if ( result < 3 )
-                    return 0;
-                break;
-            case Skill::Level::EXPERT:
-                return 0;
-            default:
-                break;
-            }
-        }
-    }
 
     return result;
 }
