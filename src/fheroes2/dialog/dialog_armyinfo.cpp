@@ -706,18 +706,19 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         btnGroup.button( 0 ).disable();
 
     TextSprite tsNotEnoughGold;
+    tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
 
-    if ( kingdom.GetCountMarketplace() ) {
-        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-            btnMarket.disable();
-        else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsNotEnoughGold.SetText( msg, Font::SMALL );
-            tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-            tsNotEnoughGold.Show();
-            btnMarket.draw();
-        }
+    if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
+        tsNotEnoughGold.Hide();
+        btnMarket.disable();
+        btnMarket.hide();
+    }
+    else {
+        std::string msg = _( "Not enough gold (%{gold})" );
+        StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.Show();
+        btnMarket.enable();
+        btnMarket.draw();
     }
 
     TextSprite noRoom1;
@@ -780,13 +781,19 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         if ( allowPayment ) {
             tsNotEnoughGold.Hide();
+            btnMarket.disable();
+            btnMarket.hide();
         }
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
             tsNotEnoughGold.SetText( msg, Font::SMALL );
             tsNotEnoughGold.Show();
+            btnMarket.enable();
+            btnMarket.show();
         }
+
+        btnMarket.draw();
 
         if ( enoughRoom ) {
             noRoom1.Hide();
