@@ -300,25 +300,27 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
     return str;
 }
 
-std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, const Heroes * hero )
+std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, bool showTerrainPenaltyOption, const Heroes * hero )
 {
     std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
 
     if ( showVisitedOption && hero ) {
         int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
         if ( dir != Direction::UNKNOWN ) {
-            uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-
             if ( tile.GoodForUltimateArtifact( hero->GetColor() ) ) {
                 str.append( "\n" );
                 str.append( _( "(digging ok)" ) );
             }
+        }
+    }
 
-            if ( cost > 0 ) {
-                str.append( "\n" );
-                str.append( _( "penalty: %{cost}" ) );
-                StringReplace( str, "%{cost}", cost );
-            }
+    if ( showTerrainPenaltyOption && hero ) {
+        uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+
+        if ( cost > 0 ) {
+            str.append( "\n" );
+            str.append( _( "penalty: %{cost}" ) );
+            StringReplace( str, "%{cost}", cost );
         }
     }
 
@@ -448,6 +450,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const uint32_t scoutingLevelForTile = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : GetHeroScoutingLevelForTile( from_hero, tile.GetIndex() );
 
     const bool showVisitedOption = settings.ExtWorldShowVisitedContent();
+    const bool showTerrainPenaltyOption = settings.ExtWorldShowTerrainPenalty();
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
 
     if ( tile.isFog( settings.CurrentColor() ) )
@@ -465,7 +468,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
         case MP2::OBJ_EVENT:
         case MP2::OBJ_ZERO:
-            name_object = ShowGroundInfo( tile, showVisitedOption, from_hero );
+            name_object = ShowGroundInfo( tile, showVisitedOption, showTerrainPenaltyOption, from_hero );
             break;
 
         case MP2::OBJ_DERELICTSHIP:
