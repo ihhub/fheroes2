@@ -154,7 +154,6 @@ public:
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
         HEROES_SURRENDERING_GIVE_EXP = 0x22000000,
@@ -257,7 +256,6 @@ public:
     bool ExtHeroSurrenderingGiveExp( void ) const;
     bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
-    bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;

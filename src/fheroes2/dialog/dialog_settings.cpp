@@ -200,7 +200,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
     states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
-    states.push_back( Settings::HEROES_ALLOW_BANNED_SECSKILLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );

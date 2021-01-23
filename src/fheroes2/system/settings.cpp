@@ -310,10 +310,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
     {
-        Settings::HEROES_ALLOW_BANNED_SECSKILLS,
-        _( "heroes: allow banned sec. skills upgrade" ),
-    },
-    {
         Settings::HEROES_ARENA_ANY_SKILLS,
         _( "heroes: in Arena can choose any of primary skills" ),
     },
@@ -1755,11 +1751,6 @@ bool Settings::ExtBattleReverseWaitOrder( void ) const
 bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtHeroAllowBannedSecSkillsUpgrade( void ) const
-{
-    return ExtModes( HEROES_ALLOW_BANNED_SECSKILLS );
 }
 
 bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const

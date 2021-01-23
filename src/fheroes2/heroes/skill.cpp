@@ -785,14 +785,6 @@ void Skill::SecSkills::FindSkillsForLevelUp( int race, Secondary & sec1, Seconda
         sec1.NextLevel();
         sec2.NextLevel();
     }
-    else if ( Settings::Get().ExtHeroAllowBannedSecSkillsUpgrade() ) {
-        const_iterator it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isLevel( static_cast<int>( Level::EXPERT ) ); } );
-        if ( it != end() ) {
-            sec1.SetSkill( ( *it ).Skill() );
-            sec1.SetLevel( GetLevel( sec1.Skill() ) );
-            sec1.NextLevel();
-        }
-    }
 }
 
 void StringAppendModifiers( std::string & str, int value )
