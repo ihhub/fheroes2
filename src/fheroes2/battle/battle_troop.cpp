@@ -507,7 +507,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
             }
 
             // check castle defense
-            if ( GetArena()->GetObstaclesPenalty( *this, enemy ) )
+            if ( GetArena()->IsShootingPenalty( *this, enemy ) )
                 dmg /= 2;
 
             // check spell shield

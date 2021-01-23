@@ -310,10 +310,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
     {
-        Settings::HEROES_ALLOW_BANNED_SECSKILLS,
-        _( "heroes: allow banned sec. skills upgrade" ),
-    },
-    {
         Settings::HEROES_ARENA_ANY_SKILLS,
         _( "heroes: in Arena can choose any of primary skills" ),
     },
@@ -332,10 +328,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::BATTLE_SOFT_WAITING,
         _( "battle: soft wait troop" ),
-    },
-    {
-        Settings::BATTLE_OBJECTS_ARCHERS_PENALTY,
-        _( "battle: high objects are an obstacle for archers" ),
     },
     {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
@@ -1672,11 +1664,6 @@ bool Settings::ExtBattleSoftWait( void ) const
     return ExtModes( BATTLE_SOFT_WAITING );
 }
 
-bool Settings::ExtBattleObjectsArchersPenalty( void ) const
-{
-    return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
@@ -1755,11 +1742,6 @@ bool Settings::ExtBattleReverseWaitOrder( void ) const
 bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtHeroAllowBannedSecSkillsUpgrade( void ) const
-{
-    return ExtModes( HEROES_ALLOW_BANNED_SECSKILLS );
 }
 
 bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const

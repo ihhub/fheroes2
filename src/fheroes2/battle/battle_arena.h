@@ -134,7 +134,7 @@ namespace Battle
         void ApplyActionSpellEarthQuake( const Command & );
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
-        u32 GetObstaclesPenalty( const Unit &, const Unit & ) const;
+        bool IsShootingPenalty( const Unit &, const Unit & ) const;
         int GetICNCovr( void ) const;
 
         u32 GetCastleTargetValue( int ) const;
