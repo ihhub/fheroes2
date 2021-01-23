@@ -73,7 +73,8 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            stats.validObjects.emplace_back( idx, objectID );
+            if ( objectID != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, objectID );
 
             if ( !tile.isFog( color ) ) {
                 _mapObjects.emplace_back( idx, objectID );

@@ -24,6 +24,7 @@
 #include "engine.h"
 #include "game.h"
 #include "gamedefs.h"
+#include "rand.h"
 #include "settings.h"
 #include "world.h"
 

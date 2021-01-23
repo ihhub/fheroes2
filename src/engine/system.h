@@ -23,10 +23,10 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
+#include "dir.h"
+
 #include <iostream>
-#include <list>
 #include <sstream>
-#include <string>
 
 #if defined( ANDROID )
 #include <android/log.h>
@@ -56,8 +56,6 @@ namespace std
     {                                                                                                                                                                    \
         COUT( System::GetTime() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                        \
     }
-
-#include "dir.h"
 
 namespace System
 {

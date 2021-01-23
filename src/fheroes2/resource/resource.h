@@ -23,6 +23,7 @@
 #define H2RESOURCE_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 struct cost_t
 {

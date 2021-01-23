@@ -23,9 +23,8 @@
 #ifndef H2TYPES_H
 #define H2TYPES_H
 
-#include <SDL.h>
+#include <cstdint>
 
-typedef int8_t s8;
 typedef uint8_t u8;
 typedef uint16_t u16;
 typedef int32_t s32;
@@ -35,11 +34,5 @@ typedef uint32_t u32;
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
 #define ARRAY_COUNT_END( A ) A + ARRAY_COUNT( A )
-
-#define DELAY( X ) SDL_Delay( X )
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 #endif

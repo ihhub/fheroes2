@@ -37,6 +37,7 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "ui_window.h"
 #include "world.h"
 
 namespace Battle
@@ -93,13 +94,16 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( local )
         AGG::ResetMixer();
 
+    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
     Arena arena( army1, army2, mapsindex, local );
 
     DEBUG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    while ( arena.BattleValid() )
+    while ( arena.BattleValid() ) {
         arena.Turns();
+    }
 
     const Result & result = arena.GetResult();
 
@@ -260,26 +264,10 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
     if ( 0 == killed || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
         return;
 
-    // check necromancy shrine build
-    u32 percent = 10 * world.GetKingdom( army.GetColor() ).GetCountNecromancyShrineBuild();
-
-    // check artifact
-    u32 acount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
-    if ( acount )
-        percent += acount * 10;
-
-    // fix over 60%
-    if ( percent > 60 )
-        percent = 60;
-
-    percent += hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
-
-    // hard fix overflow
-    if ( percent > 90 )
-        percent = 90;
+    const uint32_t necromancyPercent = GetNecromancyPercent( hero );
 
     const Monster mons( Monster::SKELETON );
-    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * percent / 100 );
+    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * necromancyPercent / 100 );
     if ( count == 0u )
         count = 1;
     army.JoinTroop( mons, count );

@@ -38,6 +38,7 @@
 #include "morale.h"
 #include "payment.h"
 #include "race.h"
+#include "rand.h"
 #include "screen.h"
 #include "settings.h"
 #include "speed.h"

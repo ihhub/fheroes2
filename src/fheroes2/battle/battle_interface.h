@@ -202,7 +202,7 @@ namespace Battle
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
         void RedrawActionSpellCastPart1( const Spell &, s32, const HeroBase *, const std::string &, const TargetsInfo & );
         void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
-        void RedrawActionResistSpell( const Unit & );
+        void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
         void RedrawActionMove( Unit &, const Indexes & );
         void RedrawActionFly( Unit &, const Position & );
@@ -231,7 +231,6 @@ namespace Battle
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
-        void RedrawBorder( void );
         void RedrawCover( void );
         void RedrawCoverStatic();
         void RedrawCoverBoard( const Settings &, const Board & );

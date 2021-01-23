@@ -27,6 +27,7 @@
 #include "ai.h"
 #include "army.h"
 #include "army_troop.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "battle_arena.h"
 #include "battle_army.h"
@@ -290,7 +291,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         fheroes2::Display & display = fheroes2::Display::instance();
 
         cursor.Hide();
-        cursor.SetThemes( Cursor::WAR_NONE );
+        cursor.SetThemes( Cursor::WAR_POINTER );
 
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
@@ -390,7 +391,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        DELAY( 10 );
+        fheroes2::delayforMs( 10 );
     }
 }
 

@@ -37,4 +37,6 @@ namespace fheroes2
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
     };
+
+    void delayforMs( const uint32_t delayMs );
 }

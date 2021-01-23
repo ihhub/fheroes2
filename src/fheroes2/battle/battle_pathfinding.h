@@ -57,7 +57,7 @@ namespace Battle
         ArenaPathfinder();
         virtual void reset() override;
         void calculate( const Unit & unit );
-        virtual std::list<Route::Step> buildPath( int targetCell ) const override;
+        std::list<Route::Step> buildPath( int targetCell ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
     };

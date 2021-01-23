@@ -37,6 +37,7 @@
 #include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "ui_window.h"
 #include "world.h"
 
 #define PRIMARY_MAX_VALUE 20
@@ -157,9 +158,9 @@ bool Battle::Only::ChangeSettings( void )
     cursor.Hide();
     cursor.SetThemes( Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    const Point & cur_pt = frameborder.GetArea();
+    const Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
 
     rtPortrait1 = Rect( cur_pt.x + 93, cur_pt.y + 72, 101, 93 );
     rtPortrait2 = Rect( cur_pt.x + 445, cur_pt.y + 72, 101, 93 );
@@ -516,7 +517,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         primskill_bar1->SetTextOff( 70, -25 );
         primskill_bar1->SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-        secskill_bar1 = new SecondarySkillsBar( true, true );
+        secskill_bar1 = new SecondarySkillsBar( *hero1, true, true );
         secskill_bar1->SetColRows( 8, 1 );
         secskill_bar1->SetHSpace( -1 );
         secskill_bar1->SetContent( hero1->GetSecondarySkills().ToVector() );
@@ -586,7 +587,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         primskill_bar2->SetTextOff( -70, -25 );
         primskill_bar2->SetPos( cur_pt.x + 389, cur_pt.y + 51 );
 
-        secskill_bar2 = new SecondarySkillsBar( true, true );
+        secskill_bar2 = new SecondarySkillsBar( *hero2, true, true );
         secskill_bar2->SetColRows( 8, 1 );
         secskill_bar2->SetHSpace( -1 );
         secskill_bar2->SetContent( hero2->GetSecondarySkills().ToVector() );

@@ -39,6 +39,7 @@
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 /* readonly: false, fade: false */
@@ -53,8 +54,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( fade && Settings::Get().ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-    const Point & cur_pt = background.GetArea();
+    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const Point cur_pt( background.activeArea().x, background.activeArea().y );
     Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -152,7 +153,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     selectArmy.Redraw();
 
     // secskill
-    SecondarySkillsBar secskill_bar( false );
+    SecondarySkillsBar secskill_bar( *this, false );
     secskill_bar.SetColRows( 8, 1 );
     secskill_bar.SetHSpace( 5 );
     secskill_bar.SetContent( secondary_skills.ToVector() );

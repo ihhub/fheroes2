@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,49 +20,28 @@
 
 #pragma once
 
-#include "route.h"
+#include "screen.h"
 
-// Base representation of the dataset that mirrors the 2D map being traversed
-struct PathfindingNode
+namespace fheroes2
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    uint16_t _objectID = 0;
-
-    PathfindingNode() {}
-    PathfindingNode( int node, uint32_t cost, uint16_t object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
+    // Standard window with shadow
+    class StandardWindow
     {
-        _from = -1;
-        _cost = 0;
-        _objectID = 0;
-    }
-};
+    public:
+        StandardWindow( const int32_t width, const int32_t height, Image & output = Display::instance() );
+        StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, Image & output = Display::instance() );
 
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
-{
-public:
-    virtual void reset() = 0;
+        const Rect & activeArea() const
+        {
+            return _activeArea;
+        }
 
-    virtual uint32_t getDistance( int targetIndex ) const
-    {
-        return _cache[targetIndex]._cost;
-    }
+    private:
+        Image & _output;
+        Rect _activeArea;
+        Rect _windowArea;
+        ImageRestorer _restorer;
 
-    virtual const T & getNode( int targetIndex ) const
-    {
-        return _cache[targetIndex];
-    }
-
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+        void _render();
+    };
+}

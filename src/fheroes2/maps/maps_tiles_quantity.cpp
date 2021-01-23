@@ -24,6 +24,7 @@
 #include "difficulty.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"

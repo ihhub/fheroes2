@@ -18,51 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#ifndef AGG_FILE_H
+#define AGG_FILE_H
 
-#include "route.h"
+#include <map>
+#include <string>
+#include <vector>
 
-// Base representation of the dataset that mirrors the 2D map being traversed
-struct PathfindingNode
+#include "serialize.h"
+
+namespace fheroes2
 {
-    int _from = -1;
-    uint32_t _cost = 0;
-    uint16_t _objectID = 0;
-
-    PathfindingNode() {}
-    PathfindingNode( int node, uint32_t cost, uint16_t object )
-        : _from( node )
-        , _cost( cost )
-        , _objectID( object )
-    {}
-    virtual ~PathfindingNode() = default;
-    // Sets node values back to the defaults; used before processing new path
-    virtual void resetNode()
+    class AGGFile
     {
-        _from = -1;
-        _cost = 0;
-        _objectID = 0;
-    }
-};
+    public:
+        AGGFile();
 
-// Template class has to be either PathfindingNode or its derivative
-template <class T>
-class Pathfinder
-{
-public:
-    virtual void reset() = 0;
+        bool isGood() const;
+        bool open( const std::string & fileName );
+        const std::vector<uint8_t> & read( const std::string & fileName );
 
-    virtual uint32_t getDistance( int targetIndex ) const
-    {
-        return _cache[targetIndex]._cost;
-    }
+    private:
+        static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
 
-    virtual const T & getNode( int targetIndex ) const
-    {
-        return _cache[targetIndex];
-    }
+        StreamFile _stream;
+        std::map<std::string, std::pair<uint32_t, uint32_t> > _files;
 
-protected:
-    std::vector<T> _cache;
-    int _pathStart = -1;
-};
+        std::string _key;
+        std::vector<uint8_t> _body;
+    };
+}
+#endif

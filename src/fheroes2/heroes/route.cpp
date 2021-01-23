@@ -516,9 +516,11 @@ void Route::Path::RescanPassable( void )
     // scan passable
     iterator it = begin();
 
-    for ( ; it != end(); ++it )
-        if ( !world.GetTiles( ( *it ).GetFrom() ).isPassable( ( *it ).GetDirection(), hero->isShipMaster(), false ) )
+    for ( ; it != end(); ++it ) {
+        if ( !world.GetTiles( it->GetFrom() ).isPassable( it->GetDirection(), hero->isShipMaster(), false, hero->GetColor() ) ) {
             break;
+        }
+    }
 
     if ( hero->isControlAI() ) {
         Reset();
@@ -527,7 +529,7 @@ void Route::Path::RescanPassable( void )
         if ( it == begin() )
             Reset();
         else {
-            dst = ( *it ).GetFrom();
+            dst = it->GetFrom();
             erase( it, end() );
         }
     }

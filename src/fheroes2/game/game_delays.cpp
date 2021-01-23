@@ -25,6 +25,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "gamedefs.h"
+#include "rand.h"
 #include "settings.h"
 
 TimeDelay::TimeDelay( uint32_t dl )

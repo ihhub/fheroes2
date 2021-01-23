@@ -100,7 +100,7 @@ StreamBase & StreamBase::operator>>( u8 & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( s8 & v )
+StreamBase & StreamBase::operator>>( int8_t & v )
 {
     v = get8();
     return *this;
@@ -196,7 +196,7 @@ StreamBase & StreamBase::operator<<( const u8 v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s8 v )
+StreamBase & StreamBase::operator<<( const int8_t v )
 {
     put8( v );
     return *this;

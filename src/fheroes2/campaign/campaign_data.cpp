@@ -26,6 +26,12 @@
 
 namespace Campaign
 {
+    CampaignData & Campaign::CampaignData::Get()
+    {
+        static CampaignData instance;
+        return instance;
+    }
+
     void CampaignData::addCampaignAward( const std::string & award )
     {
         _earnedCampaignAwards.emplace_back( award );
@@ -49,6 +55,14 @@ namespace Campaign
     void CampaignData::addCurrentMapToFinished()
     {
         _finishedMaps.emplace_back( _currentScenarioID );
+    }
+
+    void CampaignData::reset()
+    {
+        _finishedMaps.clear();
+        _earnedCampaignAwards.clear();
+        _currentScenarioID = 0;
+        _campaignID = 0;
     }
 
     ScenarioBonusData::ScenarioBonusData()

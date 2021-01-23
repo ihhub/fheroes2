@@ -22,6 +22,7 @@
 
 #include "game.h"
 #include "agg.h"
+#include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
@@ -188,7 +189,7 @@ int Game::LoadGame( void )
                 return LOADSTANDARD;
             }
         }
-        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( EVENT_BUTTON_CAMPAIN ) ) {
+        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }

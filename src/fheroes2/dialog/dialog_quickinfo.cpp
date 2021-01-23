@@ -247,7 +247,7 @@ std::string ShowLocalVisitTileInfo( const Maps::Tiles & tile, const Heroes * her
 {
     std::string str = MP2::StringObject( tile.GetObject() );
     if ( hero ) {
-        str.append( "\n" );
+        str.append( "\n \n" );
         str.append( hero->isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
@@ -258,7 +258,7 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
 {
     std::string str = MP2::StringObject( tile.GetObject() );
     if ( hero ) {
-        str.append( "\n" );
+        str.append( "\n \n" );
         str.append( hero->isObjectTypeVisited( tile.GetObject() ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
@@ -268,7 +268,7 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
 std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
-    str.append( "\n" );
+    str.append( "\n \n" );
     str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
 
     return str;
@@ -277,8 +277,9 @@ std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingd
 std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom, bool showVisitedOption )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
+
     if ( showVisitedOption && kingdom.isVisited( tile ) ) {
-        str.append( "\n" );
+        str.append( "\n \n" );
         str.append( _( "(already visited)" ) );
     }
 
@@ -292,7 +293,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
     str.append( MP2::StringObject( tile.GetObject() ) );
 
     if ( MP2::OBJ_TRAVELLERTENT == tile.GetObject() && kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
-        str.append( "\n" );
+        str.append( "\n \n" );
         str.append( _( "(already visited)" ) );
     }
 
@@ -308,7 +309,12 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, co
         if ( dir != Direction::UNKNOWN ) {
             uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 
-            if ( cost ) {
+            if ( tile.GoodForUltimateArtifact( hero->GetColor() ) ) {
+                str.append( "\n" );
+                str.append( _( "(digging ok)" ) );
+            }
+
+            if ( cost > 0 ) {
                 str.append( "\n" );
                 str.append( _( "penalty: %{cost}" ) );
                 StringReplace( str, "%{cost}", cost );

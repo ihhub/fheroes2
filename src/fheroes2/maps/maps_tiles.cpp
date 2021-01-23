@@ -1407,23 +1407,25 @@ void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI
 
 void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, const Rect & visibleTileROI )
 {
-    if ( visibleTileROI & mp ) {
-        const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-        if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
-        }
-        else if ( mp.x == world.w() && mp.y >= 0 && mp.y < world.h() ) { // right first row
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), mp );
-        }
-        else if ( mp.y == world.h() && mp.x >= 0 && mp.x < world.w() ) { // bottom first row
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), mp );
-        }
-        else if ( mp.x == -1 && mp.y >= 0 && mp.y < world.h() ) { // left first row
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), mp );
-        }
-        else {
-            area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( static_cast<int>( mp.y ) ) % 4 ) * 4 + std::abs( static_cast<int>( mp.x ) ) % 4, 0 ), mp );
-        }
+    if ( !( visibleTileROI & mp ) ) {
+        return;
+    }
+
+    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
+    if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
+        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
+    }
+    else if ( mp.x == world.w() && mp.y >= 0 && mp.y < world.h() ) { // right first row
+        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 24 + ( mp.y % 4 ), 0 ), mp );
+    }
+    else if ( mp.y == world.h() && mp.x >= 0 && mp.x < world.w() ) { // bottom first row
+        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 28 + ( mp.x % 4 ), 0 ), mp );
+    }
+    else if ( mp.x == -1 && mp.y >= 0 && mp.y < world.h() ) { // left first row
+        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 32 + ( mp.y % 4 ), 0 ), mp );
+    }
+    else {
+        area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, ( std::abs( static_cast<int>( mp.y ) ) % 4 ) * 4 + std::abs( static_cast<int>( mp.x ) ) % 4, 0 ), mp );
     }
 }
 
@@ -1816,9 +1818,9 @@ void Maps::Tiles::FixObject( void )
     }
 }
 
-bool Maps::Tiles::GoodForUltimateArtifact( void ) const
+bool Maps::Tiles::GoodForUltimateArtifact( const int heroColor ) const
 {
-    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true );
+    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true, heroColor );
 }
 
 bool TileIsGround( s32 index, int ground )
@@ -1839,9 +1841,9 @@ bool Maps::Tiles::validateWaterRules( bool fromWater ) const
     return true;
 }
 
-bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog ) const
+bool Maps::Tiles::isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const
 {
-    if ( !skipfog && isFog( Settings::Get().CurrentColor() ) )
+    if ( !skipfog && isFog( heroColor ) )
         return false;
 
     if ( !validateWaterRules( fromWater ) )

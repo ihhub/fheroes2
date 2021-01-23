@@ -96,7 +96,7 @@ public:
     StreamBase & operator>>( bool & );
     StreamBase & operator>>( char & );
     StreamBase & operator>>( u8 & );
-    StreamBase & operator>>( s8 & );
+    StreamBase & operator>>( int8_t & );
     StreamBase & operator>>( u16 & );
     StreamBase & operator>>( int16_t & );
     StreamBase & operator>>( u32 & );
@@ -111,7 +111,7 @@ public:
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
     StreamBase & operator<<( const u8 );
-    StreamBase & operator<<( const s8 );
+    StreamBase & operator<<( const int8_t );
     StreamBase & operator<<( const u16 );
     StreamBase & operator<<( const int16_t );
     StreamBase & operator<<( const u32 );

@@ -30,6 +30,7 @@
 #include "heroes_indicator.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_window.h"
 #include "world.h"
 
 class ArmyCell : public Rect
@@ -156,14 +157,13 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 230, 160 ) );
-    const Rect & area = frameborder.GetArea();
-    Point dst_pt;
+    const fheroes2::StandardWindow frameborder( 230, 160 );
+    const Rect area( frameborder.activeArea() );
 
     // portrait
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
-    dst_pt.x = area.x + 3;
-    dst_pt.y = area.y + 5;
+
+    Point dst_pt( area.x + 3, area.y + 5 );
     fheroes2::Blit( window, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Sprite & port = hero.GetPortrait( PORT_MEDIUM );

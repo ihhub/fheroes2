@@ -24,6 +24,7 @@
 #include "artifact.h"
 #include "battle_command.h"
 #include "heroes_base.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 

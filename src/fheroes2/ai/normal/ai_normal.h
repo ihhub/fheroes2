@@ -59,6 +59,8 @@ namespace AI
         std::vector<IndexObject> _mapObjects;
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
+
+        void berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
     };
 }
 

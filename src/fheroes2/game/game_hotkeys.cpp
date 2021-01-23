@@ -54,7 +54,7 @@ const char * Game::EventsName( int evnt )
         return "button credits";
     case EVENT_BUTTON_STANDARD:
         return "button standard";
-    case EVENT_BUTTON_CAMPAIN:
+    case EVENT_BUTTON_CAMPAIGN:
         return "button campain";
     case EVENT_BUTTON_MULTI:
         return "button multigame";
@@ -183,7 +183,7 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_BUTTON_HIGHSCORES] = KEY_h;
     key_events[EVENT_BUTTON_CREDITS] = KEY_c;
     key_events[EVENT_BUTTON_STANDARD] = KEY_s;
-    key_events[EVENT_BUTTON_CAMPAIN] = KEY_c;
+    key_events[EVENT_BUTTON_CAMPAIGN] = KEY_c;
     key_events[EVENT_BUTTON_MULTI] = KEY_m;
     key_events[EVENT_BUTTON_SETTINGS] = KEY_t;
     key_events[EVENT_BUTTON_SELECT] = KEY_s;

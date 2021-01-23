@@ -35,7 +35,10 @@
 #include "skill_bar.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_window.h"
 #include "world.h"
+
+#include <cassert>
 
 struct HeroRow
 {
@@ -86,7 +89,7 @@ struct HeroRow
         artifactsBar->SetVSpace( 8 );
         artifactsBar->SetContent( hero->GetBagArtifacts() );
 
-        secskillsBar = new SecondarySkillsBar();
+        secskillsBar = new SecondarySkillsBar( *hero );
         secskillsBar->SetColRows( 4, 2 );
         secskillsBar->SetHSpace( -1 );
         secskillsBar->SetVSpace( 8 );
@@ -259,29 +262,31 @@ void StatsHeroesList::RedrawBackground( const Point & dst )
 struct CstlRow
 {
     Castle * castle;
-    ArmyBar * armyBarGuard;
-    ArmyBar * armyBarGuest;
-    DwellingsBar * dwellingsBar;
+    std::unique_ptr<ArmyBar> armyBarGuard;
+    std::unique_ptr<ArmyBar> armyBarGuest;
+    std::unique_ptr<DwellingsBar> dwellingsBar;
 
     CstlRow()
         : castle( NULL )
-        , armyBarGuard( NULL )
-        , armyBarGuest( NULL )
-        , dwellingsBar( NULL )
     {}
+
+    CstlRow( const CstlRow & )
+        : castle( NULL )
+    {
+        // If this assertion blows up then something is not right. We should not make a copy of this structure.
+        assert( 0 );
+    }
+
     ~CstlRow()
     {
         Clear();
     }
 
-    void Clear( void )
+    void Clear()
     {
-        if ( armyBarGuard )
-            delete armyBarGuard;
-        if ( armyBarGuest )
-            delete armyBarGuest;
-        if ( dwellingsBar )
-            delete dwellingsBar;
+        armyBarGuard.reset();
+        armyBarGuest.reset();
+        dwellingsBar.reset();
     }
 
     void Init( Castle * ptr )
@@ -291,7 +296,7 @@ struct CstlRow
         Clear();
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
-        armyBarGuard = new ArmyBar( &castle->GetArmy(), true, false );
+        armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
         armyBarGuard->SetBackground( Size( 41, 41 ), fill );
         armyBarGuard->SetColRows( 5, 1 );
         armyBarGuard->SetHSpace( -1 );
@@ -299,13 +304,13 @@ struct CstlRow
         CastleHeroes heroes = world.GetHeroes( *castle );
 
         if ( heroes.Guest() ) {
-            armyBarGuest = new ArmyBar( &heroes.Guest()->GetArmy(), true, false );
+            armyBarGuest.reset( new ArmyBar( &heroes.Guest()->GetArmy(), true, false ) );
             armyBarGuest->SetBackground( Size( 41, 41 ), fill );
             armyBarGuest->SetColRows( 5, 1 );
             armyBarGuest->SetHSpace( -1 );
         }
 
-        dwellingsBar = new DwellingsBar( *castle, Size( 39, 52 ) );
+        dwellingsBar.reset( new DwellingsBar( *castle, Size( 39, 52 ) ) );
         dwellingsBar->SetColRows( 6, 1 );
         dwellingsBar->SetHSpace( 2 );
     }
@@ -313,8 +318,6 @@ struct CstlRow
 
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
-    std::vector<CstlRow> content;
-
 public:
     StatsCastlesList( const Point & pt, KingdomCastles & );
 
@@ -331,6 +334,9 @@ public:
     virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
     virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
     virtual bool ActionListCursor( CstlRow &, const Point & ) override;
+
+private:
+    std::vector<CstlRow> content;
 };
 
 StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
@@ -451,17 +457,17 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
 
         // army info
         if ( row.armyBarGuard ) {
-            const_cast<ArmyBar *>( row.armyBarGuard )->SetPos( dstx + 146, row.armyBarGuest ? dsty : dsty + 20 );
-            const_cast<ArmyBar *>( row.armyBarGuard )->Redraw();
+            row.armyBarGuard->SetPos( dstx + 146, row.armyBarGuest ? dsty : dsty + 20 );
+            row.armyBarGuard->Redraw();
         }
 
         if ( row.armyBarGuest ) {
-            const_cast<ArmyBar *>( row.armyBarGuest )->SetPos( dstx + 146, row.armyBarGuard ? dsty + 41 : dsty + 20 );
-            const_cast<ArmyBar *>( row.armyBarGuest )->Redraw();
+            row.armyBarGuest->SetPos( dstx + 146, row.armyBarGuard ? dsty + 41 : dsty + 20 );
+            row.armyBarGuest->Redraw();
         }
 
-        const_cast<DwellingsBar *>( row.dwellingsBar )->SetPos( dstx + 349, dsty + 15 );
-        const_cast<DwellingsBar *>( row.dwellingsBar )->Redraw();
+        row.dwellingsBar->SetPos( dstx + 349, dsty + 15 );
+        row.dwellingsBar->Redraw();
     }
 }
 
@@ -582,9 +588,9 @@ void Kingdom::OverviewDialog( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder background( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    const Point & cur_pt = background.GetArea();
+    const Point cur_pt( background.activeArea().x, background.activeArea().y );
     Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, dst_pt.x, dst_pt.y );

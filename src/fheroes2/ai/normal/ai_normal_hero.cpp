@@ -149,7 +149,7 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && _pathfinder.buildPath( node.first ).size() > distanceLimit )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
                 continue;
 
             if ( HeroesValidObject( hero, node.first ) ) {
