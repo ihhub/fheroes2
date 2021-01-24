@@ -91,10 +91,10 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
             savname.erase( dotPos );
 
         text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 5, dsty, 155 );
+        text.Blit( dstx + 5, dsty, 150 );
 
         text.Set( short_date, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 265 - text.w(), dsty );
+        text.Blit( dstx + 160, dsty );
     }
 }
 
