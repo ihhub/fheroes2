@@ -198,6 +198,10 @@ const settings_t settingsFHeroes2[] = {
         _( "world: show visited content from objects" ),
     },
     {
+        Settings::WORLD_SHOW_TERRAIN_PENALTY,
+        _( "world: show terrain penalty" ),
+    },
+    {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
     },
@@ -1567,6 +1571,11 @@ bool Settings::ExtCastleAllowGuardians( void ) const
 bool Settings::ExtWorldShowVisitedContent( void ) const
 {
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
+}
+
+bool Settings::ExtWorldShowTerrainPenalty() const
+{
+    return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
 }
 
 bool Settings::ExtWorldScouteExtended( void ) const

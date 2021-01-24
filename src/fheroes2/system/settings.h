@@ -149,7 +149,8 @@ public:
         WORLD_BAN_PLAGUES = 0x20000800,
         UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
         UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
-        // UNUSED = 0x20004000,
+        WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
+        // UNUSED = 0x20008000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
@@ -259,6 +260,7 @@ public:
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
+    bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
