@@ -1573,7 +1573,7 @@ bool Settings::ExtWorldShowVisitedContent( void ) const
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
 
-bool Settings::ExtWorldShowTerrainPenalty( void ) const
+bool Settings::ExtWorldShowTerrainPenalty() const
 {
     return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
 }
