@@ -2364,7 +2364,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
