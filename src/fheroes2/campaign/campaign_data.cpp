@@ -21,5 +21,69 @@
 #include "campaign_data.h"
 #include "artifact.h"
 #include "assert.h"
+#include "maps_fileinfo.h"
 #include "monster.h"
 #include "resource.h"
+
+namespace Campaign
+{
+    CampaignData::CampaignData()
+        : _campaignID( 0 )
+        , _isGoodCampaign( false )
+        , _campaignDescription()
+        , _scenarios()
+    {}
+
+    const std::vector<int> & CampaignData::getScenariosBefore( const int scenarioID ) const
+    {
+        std::vector<int> scenarioIDs;
+
+        for ( size_t i = 0, count = _scenarios.size(); i < count; ++i ) {
+            if ( _scenarios[i].getScenarioID() >= scenarioID )
+                break;
+
+            const std::vector<int> nextMaps = _scenarios[i].getNextMaps();
+            for ( size_t j = 0, nextMapCount = nextMaps.size(); j < nextMapCount; ++j ) {
+                if ( nextMaps[i] == scenarioID )
+                    scenarioIDs.emplace_back( nextMaps[i] );
+            }
+        }
+
+        return scenarioIDs;
+    }
+
+    const bool CampaignData::isAllCampaignMapsPresent() const
+    {
+        for ( int i = 0, count = _scenarios.size(); i < count; ++i ) {
+            if ( !_scenarios[i].isMapFilePresent() )
+                return false;
+        }
+
+        return true;
+    }
+
+    const bool CampaignData::isLastScenario( const int scenarioID ) const
+    {
+        return scenarioID == _scenarios.back().getScenarioID();
+    }
+
+    void CampaignData::setCampaignID( const int campaignID )
+    {
+        _campaignID = campaignID;
+    }
+
+    void CampaignData::setCampaignAlignment( const bool isGoodCampaign )
+    {
+        _isGoodCampaign = isGoodCampaign;
+    }
+
+    void CampaignData::setCampaignScenarios( const std::vector<ScenarioData> & scenarios )
+    {
+        _scenarios = scenarios;
+    }
+
+    void CampaignData::setCampaignDescription( const std::string & campaignDescription )
+    {
+        _campaignDescription = campaignDescription;
+    }
+}

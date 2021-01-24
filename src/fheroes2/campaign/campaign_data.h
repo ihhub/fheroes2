@@ -17,3 +17,58 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#ifndef H2CAMPAIGN_DATA_H
+#define H2CAMPAIGN_DATA_H
+
+#include "campaign_scenariodata.h"
+#include "gamedefs.h"
+#include "maps_fileinfo.h"
+#include "serialize.h"
+
+namespace Campaign
+{
+    class CampaignData
+    {
+    public:
+        const std::string & getCampaignDescription() const
+        {
+            return _campaignDescription;
+        }
+
+        const int getCampaignID() const
+        {
+            return _campaignID;
+        }
+
+        const bool isGoodCampaign() const
+        {
+            return _isGoodCampaign;
+        }
+
+        const std::vector<ScenarioData> & getAllScenarios() const
+        {
+            return _scenarios;
+        }
+
+        const std::vector<int> & getScenariosBefore( const int scenarioID ) const;
+
+        const bool isAllCampaignMapsPresent() const;
+        const bool isLastScenario( const int scenarioID ) const;
+
+        void setCampaignID( const int campaignID );
+        void setCampaignAlignment( const bool isGoodCampaign );
+        void setCampaignDescription( const std::string & campaignDescription );
+        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
+
+        CampaignData();
+
+    private:
+        int _campaignID;
+        bool _isGoodCampaign;
+        std::string _campaignDescription;
+        std::vector<ScenarioData> _scenarios;
+    };
+}
+
+#endif
