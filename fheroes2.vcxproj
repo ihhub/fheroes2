@@ -170,6 +170,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
     <ClCompile Include="src\engine\audio_cdrom.cpp" />
     <ClCompile Include="src\engine\audio_mixer.cpp" />
@@ -273,6 +274,7 @@
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
     <ClCompile Include="src\fheroes2\game\fheroes2.cpp" />
     <ClCompile Include="src\fheroes2\game\game.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_campaign.cpp" />
     <ClCompile Include="src\fheroes2\game\game_credits.cpp" />
     <ClCompile Include="src\fheroes2\game\game_delays.cpp" />
     <ClCompile Include="src\fheroes2\game\game_highscores.cpp" />
@@ -372,6 +374,7 @@
     <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
     <ClInclude Include="src\engine\audio_cdrom.h" />
     <ClInclude Include="src\engine\audio_mixer.h" />

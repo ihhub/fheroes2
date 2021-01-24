@@ -18,45 +18,34 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#ifndef AGG_FILE_H
+#define AGG_FILE_H
 
+#include <map>
 #include <string>
 #include <vector>
 
-struct smk_t;
+#include "serialize.h"
 
 namespace fheroes2
 {
-    class Image;
+    class AGGFile
+    {
+    public:
+        AGGFile();
+
+        bool isGood() const;
+        bool open( const std::string & fileName );
+        const std::vector<uint8_t> & read( const std::string & fileName );
+
+    private:
+        static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
+
+        StreamFile _stream;
+        std::map<std::string, std::pair<uint32_t, uint32_t> > _files;
+
+        std::string _key;
+        std::vector<uint8_t> _body;
+    };
 }
-
-class SMKVideoSequence
-{
-public:
-    explicit SMKVideoSequence( const std::string & filePath );
-    ~SMKVideoSequence();
-
-    SMKVideoSequence( const SMKVideoSequence & ) = delete;
-
-    void resetFrame();
-
-    // This method sets image into a single layer image type as video frames shouldn't have any transform-related information.
-    void getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette );
-
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
-
-    unsigned long width() const;
-    unsigned long height() const;
-    double fps() const;
-    unsigned long frameCount() const;
-
-private:
-    std::vector<std::vector<uint8_t> > _audioChannel;
-    unsigned long _width;
-    unsigned long _height;
-    double _fps;
-    unsigned long _frameCount;
-    unsigned long _currentFrameId;
-
-    struct smk_t * _videoFile;
-};
+#endif

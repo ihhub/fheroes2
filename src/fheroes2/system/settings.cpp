@@ -24,6 +24,7 @@
 #include <fstream>
 
 #include "audio_music.h"
+#include "campaign_data.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
@@ -197,6 +198,10 @@ const settings_t settingsFHeroes2[] = {
         _( "world: show visited content from objects" ),
     },
     {
+        Settings::WORLD_SHOW_TERRAIN_PENALTY,
+        _( "world: show terrain penalty" ),
+    },
+    {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
     },
@@ -309,10 +314,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
     {
-        Settings::HEROES_ALLOW_BANNED_SECSKILLS,
-        _( "heroes: allow banned sec. skills upgrade" ),
-    },
-    {
         Settings::HEROES_ARENA_ANY_SKILLS,
         _( "heroes: in Arena can choose any of primary skills" ),
     },
@@ -331,10 +332,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::BATTLE_SOFT_WAITING,
         _( "battle: soft wait troop" ),
-    },
-    {
-        Settings::BATTLE_OBJECTS_ARCHERS_PENALTY,
-        _( "battle: high objects are an obstacle for archers" ),
     },
     {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
@@ -1302,26 +1299,6 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
-void Settings::SetCurrentCampaignScenarioBonus( const Campaign::ScenarioBonusData & bonus )
-{
-    campaignData.setCurrentScenarioBonus( bonus );
-}
-
-void Settings::SetCurrentCampaignScenarioID( const int scenarioID )
-{
-    campaignData.setCurrentScenarioID( scenarioID );
-}
-
-void Settings::SetCurrentCampaignID( const int campaignID )
-{
-    campaignData.setCampaignID( campaignID );
-}
-
-void Settings::AddCurrentCampaignMapToFinished()
-{
-    campaignData.addCurrentMapToFinished();
-}
-
 const Players & Settings::GetPlayers( void ) const
 {
     return players;
@@ -1596,6 +1573,11 @@ bool Settings::ExtWorldShowVisitedContent( void ) const
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
 
+bool Settings::ExtWorldShowTerrainPenalty() const
+{
+    return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
+}
+
 bool Settings::ExtWorldScouteExtended( void ) const
 {
     return ExtModes( WORLD_SCOUTING_EXTENDED );
@@ -1691,11 +1673,6 @@ bool Settings::ExtBattleSoftWait( void ) const
     return ExtModes( BATTLE_SOFT_WAITING );
 }
 
-bool Settings::ExtBattleObjectsArchersPenalty( void ) const
-{
-    return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
@@ -1774,11 +1751,6 @@ bool Settings::ExtBattleReverseWaitOrder( void ) const
 bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtHeroAllowBannedSecSkillsUpgrade( void ) const
-{
-    return ExtModes( HEROES_ALLOW_BANNED_SECSKILLS );
 }
 
 bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const
@@ -1919,10 +1891,6 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
     msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
         << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
 
-    // TODO: add verification logic
-    if ( conf.game_type & Game::TYPE_CAMPAIGN )
-        msg << conf.campaignData;
-
     return msg;
 }
 
@@ -1947,8 +1915,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
 
-    if ( conf.game_type & Game::TYPE_CAMPAIGN )
-        msg >> conf.campaignData;
+    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
+        msg >> Campaign::CampaignData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

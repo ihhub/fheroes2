@@ -134,7 +134,7 @@ namespace Battle
         void ApplyActionSpellEarthQuake( const Command & );
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
-        u32 GetObstaclesPenalty( const Unit &, const Unit & ) const;
+        bool IsShootingPenalty( const Unit &, const Unit & ) const;
         int GetICNCovr( void ) const;
 
         u32 GetCastleTargetValue( int ) const;
@@ -167,6 +167,8 @@ namespace Battle
 
         s32 GetFreePositionNearHero( int ) const;
         std::vector<int> GetCastleTargets( void ) const;
+        TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
+        std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 
         void ApplyActionRetreat( const Command & );
         void ApplyActionSurrender( const Command & );
@@ -217,6 +219,11 @@ namespace Battle
             SECOND_WALL_HEX_POSITION = 29,
             THIRD_WALL_HEX_POSITION = 73,
             FORTH_WALL_HEX_POSITION = 96
+        };
+
+        enum
+        {
+            CHAIN_LIGHTNING_CREATURE_COUNT = 4
         };
     };
 

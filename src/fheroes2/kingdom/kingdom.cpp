@@ -813,6 +813,20 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj 
         }
 }
 
+// Check if tile is visible from any crystal ball of any hero
+bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
+{
+    for ( const Heroes * hero : heroes ) {
+        if ( hero->HasArtifact( Artifact::CRYSTAL_BALL ) ) {
+            const uint32_t crystalBallDistance = hero->GetVisionsDistance();
+            if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits

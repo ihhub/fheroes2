@@ -507,7 +507,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
             }
 
             // check castle defense
-            if ( GetArena()->GetObstaclesPenalty( *this, enemy ) )
+            if ( GetArena()->IsShootingPenalty( *this, enemy ) )
                 dmg /= 2;
 
             // check spell shield
@@ -737,8 +737,13 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     if ( Modes( SP_ANTIMAGIC ) )
         return false;
 
-    if ( ( Modes( CAP_MIRRORIMAGE ) || Modes( CAP_MIRROROWNER ) ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) )
+    if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
+    }
+
+    if ( Modes( CAP_MIRROROWNER ) && spell == Spell::MIRRORIMAGE ) {
+        return false;
+    }
 
     // check global
     // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!

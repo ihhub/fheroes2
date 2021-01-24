@@ -1582,8 +1582,23 @@ void Battle::Interface::RedrawCover()
 
         assert( !highlightCells.empty() );
 
+        const HeroBase * currentCommander = arena.GetCurrentCommander();
+        const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
+
+        const bool displayMoveShadow = conf.BattleShowMoveShadow();
+
         for ( const Cell * highlightCell : highlightCells ) {
-            if ( highlightCell->isPassable1( false ) ) {
+            bool isApplicable = highlightCell->isPassable1( false );
+            if ( isApplicable ) {
+                const Unit * highlightedUnit = highlightCell->GetUnit();
+                isApplicable = highlightedUnit == nullptr || highlightedUnit->GetMagicResist( humanturn_spell, spellPower ) < 100;
+            }
+
+            if ( isApplicable ) {
+                if ( displayMoveShadow && ( highlightCell->GetDirection() == UNKNOWN || highlightCell->GetUnit() != nullptr ) ) {
+                    fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                }
+
                 fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
             }
             else {
@@ -1630,8 +1645,9 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
+            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() ) {
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+            }
         }
     }
 }
@@ -1688,8 +1704,12 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Board::CASTLE_GATE_POS == cellId ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
-        fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        Bridge * bridge = Arena::GetBridge();
+        assert( bridge != nullptr );
+        if ( bridge != nullptr && !bridge->isDestroy() ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        }
     }
     else if ( Board::CASTLE_FIRST_TOP_WALL_POS == cellId || Board::CASTLE_SECOND_TOP_WALL_POS == cellId || Board::CASTLE_THIRD_TOP_WALL_POS == cellId
               || Board::CASTLE_FORTH_TOP_WALL_POS == cellId ) {
@@ -1960,7 +1980,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
-                    return arena.GetObstaclesPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
                     const int dir = cell->GetTriangleDirection( GetMouseCursor() );
@@ -2344,7 +2364,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -3180,9 +3200,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionResistSpell( const Unit & target )
+void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
 {
-    AGG::PlaySound( M82::RSBRYFZL );
+    if ( playSound ) {
+        AGG::PlaySound( M82::RSBRYFZL );
+    }
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );

@@ -112,7 +112,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
             break;
 
         default:
-            allow = ( tile.isPassable( Direction::CENTER, fromWater, false ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
+            allow = ( tile.isPassable( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
             break;
         }
 
@@ -359,7 +359,7 @@ int Interface::Basic::EventDigArtifact( void )
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact( hero->GetColor() ) ) {
                 AGG::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
