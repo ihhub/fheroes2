@@ -315,7 +315,7 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, bo
     }
 
     if ( showTerrainPenaltyOption && hero ) {
-        uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
+        const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
 
         if ( cost > 0 ) {
             str.append( "\n" );
