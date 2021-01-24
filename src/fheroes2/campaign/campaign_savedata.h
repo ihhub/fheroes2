@@ -18,37 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CAMPAIGN_DATA_H
-#define H2CAMPAIGN_DATA_H
+#ifndef H2CAMPAIGN_SAVEDATA_H
+#define H2CAMPAIGN_SAVEDATA_H
 
+#include "campaign_scenariodata.h"
 #include "gamedefs.h"
 #include "serialize.h"
 
 namespace Campaign
 {
-    struct ScenarioBonusData
-    {
-    public:
-        enum
-        {
-            RESOURCES,
-            ARTIFACT,
-            TROOP
-        };
-
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
-
-        ScenarioBonusData();
-        ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount );
-
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
-        friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
-
-        std::string ToString() const;
-    };
-
     class CampaignSaveData
     {
     public:
