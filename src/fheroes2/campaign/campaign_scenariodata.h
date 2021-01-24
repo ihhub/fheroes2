@@ -17,3 +17,81 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#ifndef H2CAMPAIGN_SCENARIODATA_H
+#define H2CAMPAIGN_SCENARIODATA_H
+
+#include "gamedefs.h"
+#include "maps_fileinfo.h"
+#include "serialize.h"
+
+namespace Campaign
+{
+    struct ScenarioBonusData
+    {
+    public:
+        enum
+        {
+            RESOURCES,
+            ARTIFACT,
+            TROOP
+        };
+
+        uint32_t _type;
+        uint32_t _subType;
+        uint32_t _amount;
+
+        ScenarioBonusData();
+        ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount );
+
+        friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
+        friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
+
+        std::string ToString() const;
+    };
+
+    class ScenarioData
+    {
+    public:
+        const std::vector<int> & getNextMaps() const
+        {
+            return _nextMaps;
+        }
+
+        const std::vector<ScenarioBonusData> & getBonuses() const
+        {
+            return _bonuses;
+        }
+
+        const std::string & getFileName() const
+        {
+            return _fileName;
+        }
+
+        const int getScenarioID() const
+        {
+            return _scenarioID;
+        }
+
+        const std::string & getDescription() const
+        {
+            return _description;
+        }
+
+        const bool isMapFilePresent() const;
+        const Maps::FileInfo loadMap() const;
+
+        ScenarioData();
+        ScenarioData( int scenarioID, std::vector<int> & nextMaps, std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
+                      const std::string & description );
+
+    private:
+        int _scenarioID;
+        std::vector<int> _nextMaps;
+        std::vector<ScenarioBonusData> _bonuses;
+        std::string _fileName;
+        std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
+    };
+}
+
+#endif
