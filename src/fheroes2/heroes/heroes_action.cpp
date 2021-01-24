@@ -309,10 +309,8 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int c
 
 void AnimationRemoveObject( const Maps::Tiles & tile )
 {
-    if ( tile.GetObject() == MP2::OBJ_ZERO )
-        return;
-
-    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
+    if ( tile.GetObject() != MP2::OBJ_ZERO )
+        Game::ObjectFadeAnimation::StartFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )

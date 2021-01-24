@@ -56,7 +56,7 @@ bool ActionSpellViewTowns( const Heroes & );
 bool ActionSpellViewHeroes( const Heroes & );
 bool ActionSpellViewAll( const Heroes & );
 bool ActionSpellIdentifyHero( const Heroes & );
-bool ActionSpellSummonBoat( const Heroes & );
+bool ActionSpellSummonBoat( const Heroes & hero );
 bool ActionSpellDimensionDoor( Heroes & );
 bool ActionSpellTownGate( Heroes & );
 bool ActionSpellTownPortal( Heroes & );
@@ -363,11 +363,11 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    const s32 center = hero.GetIndex();
+    const int32_t center = hero.GetIndex();
     const Point & centerPoint = Maps::GetPoint( center );
 
     // find water
-    s32 dst_water = -1;
+    int32_t dst_water = -1;
     MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const Point & leftPoint = Maps::GetPoint( left );
@@ -379,7 +379,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
-    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
+    for ( auto it = freeTiles.cbegin(); it != freeTiles.cend(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
             break;
@@ -391,7 +391,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    u32 chance = 0;
+    uint32_t chance = 0;
 
     switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
     case Skill::Level::BASIC:
@@ -408,18 +408,16 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         break;
     }
 
-    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( size_t i = 0; i < boats.size(); ++i ) {
-        const s32 boat = boats[i];
-        if ( Maps::isValidAbsIndex( boat ) ) {
-            if ( Rand::Get( 1, 100 ) <= chance ) {
-                Maps::Tiles & boatFile = world.GetTiles( boat );
-                boatFile.RemoveObjectSprite();
-                boatFile.SetObject( MP2::OBJ_ZERO );
-                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
-                return true;
+    if ( Rand::Get( 1, 100 ) <= chance ) {
+        const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
+        for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
+            if ( Maps::isValidAbsIndex( *it ) ) {
+                const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
+                if ( distance > 3 ) {
+                    Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                    return true;
+                }
             }
-            break;
         }
     }
 

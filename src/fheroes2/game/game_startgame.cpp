@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <tuple>
 
 #ifdef AI
 #undef AI
@@ -1003,24 +1004,53 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
-            if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-                if ( fadeInfo.isFadeOut && fadeInfo.alpha < 20 ) {
-                    fadeInfo.object = MP2::OBJ_ZERO;
-                }
-                else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
-                    Maps::Tiles & objectTile = world.GetTiles( fadeInfo.tile );
-                    objectTile.SetObject( fadeInfo.object );
-                    // TODO: we need to expand the logic to all objects.
-                    if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-                        objectTile.SetObjectSpriteIndex( fadeInfo.index );
+            auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+            auto & object = std::get<0>( fadeTask );
+            if ( MP2::OBJ_ZERO != object ) {
+                auto & fadeOut = std::get<6>( fadeTask );
+                if ( fadeOut ) {
+                    auto & alpha = std::get<5>( fadeTask );
+                    if ( alpha > 20 ) {
+                        alpha -= 20;
                     }
-                    fadeInfo.object = MP2::OBJ_ZERO;
+                    else {
+                        fadeOut = false;
+                        alpha = 0;
+                        const auto fromIndex = std::get<3>( fadeTask );
+                        Maps::Tiles & tile = world.GetTiles( fromIndex );
+                        if ( tile.GetObject() == object ) {
+                            tile.RemoveObjectSprite();
+                            tile.SetObject( MP2::OBJ_ZERO );
+                        }
+                        const auto fadeIn = std::get<7>( fadeTask );
+                        if ( !fadeIn ) {
+                            object = MP2::OBJ_ZERO;
+                        }
+                    }
+                    gameArea.SetRedraw();
                 }
                 else {
-                    fadeInfo.alpha += ( fadeInfo.isFadeOut ) ? -20 : 20;
+                    auto & fadeIn = std::get<7>( fadeTask );
+                    if ( fadeIn ) {
+                        auto & alpha = std::get<5>( fadeTask );
+                        if ( alpha == 0 ) {
+                            const auto toIndex = std::get<4>( fadeTask );
+                            Maps::Tiles & tile = world.GetTiles( toIndex );
+                            if ( MP2::OBJ_BOAT == object ) {
+                                tile.setBoat( Direction::RIGHT );
+                            }
+                        }
+                        if ( alpha < ( 255 - 20 ) ) {
+                            alpha += 20;
+                        }
+                        else {
+                            fadeIn = false;
+                            alpha = 255;
+                            object = MP2::OBJ_ZERO;
+                        }
+                        gameArea.SetRedraw();
+                    }
                 }
-                gameArea.SetRedraw();
             }
         }
 
@@ -1042,6 +1072,8 @@ int Interface::Basic::HumanTurn( bool isload )
             Game::DialogPlayers( conf.CurrentColor(),
                                  _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
         }
+
+        Game::ObjectFadeAnimation::FinishFadeTask();
 
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );

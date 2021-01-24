@@ -267,21 +267,10 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        struct Info
-        {
-            Info();
-            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
-
-            uint8_t object;
-            uint8_t index;
-            int32_t tile;
-            uint32_t alpha;
-            fheroes2::Size surfaceSize;
-            bool isFadeOut;
-        };
-
-        void Set( const Info & info );
-        Info & Get();
+        using FadeTask = std::tuple<uint8_t, uint32_t, uint32_t, int32_t, int32_t, uint32_t, bool, bool, uint8_t>;
+        FadeTask & GetFadeTask();
+        void StartFadeTask( uint8_t object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void FinishFadeTask();
     }
 
     namespace Editor
