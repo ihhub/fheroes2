@@ -215,7 +215,7 @@ void Game::ObjectFadeAnimation::FinishFadeTask()
     }
 }
 
-void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromIndex, uint32_t toIndex, bool fadeOut, bool fadeIn )
 {
     FinishFadeTask();
 
