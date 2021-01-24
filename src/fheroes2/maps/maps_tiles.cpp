@@ -1538,7 +1538,7 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTile
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
     area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
 
-    if ( spriteIndicies.second != -1 ) {
+    if ( spriteIndicies.second ) {
         const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
         area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp );
     }
@@ -2314,7 +2314,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
     }
 }
 
-std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
+std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
     const int tileIndex = tile.GetIndex();
     int attackerIndex = -1;
@@ -2334,7 +2334,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
         }
     }
 
-    std::pair<int, int> spriteIndices( monsterIndex * 9, -1 );
+    std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
 
     // draw attack sprite
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {

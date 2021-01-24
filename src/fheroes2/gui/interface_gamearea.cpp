@@ -237,14 +237,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const auto fromIndex = std::get<3>( fadeTask );
             const Point & mp = Maps::GetPoint( fromIndex );
             const auto objectIndex = std::get<1>( fadeTask );
-            const auto animatedIndex = std::get<2>( fadeTask );
+            const auto animationIndex = std::get<2>( fadeTask );
             const auto alpha = std::get<5>( fadeTask );
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, objectIndex );
             BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, alpha );
 
-            if ( animatedIndex != -1 ) {
-                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animatedIndex );
+            if ( animationIndex ) {
+                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex );
                 BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, alpha );
             }
         }

@@ -270,7 +270,7 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        using FadeTask = std::tuple<uint8_t, uint32_t, uint32_t, int32_t, int32_t, uint32_t, bool, bool, uint8_t>;
+        using FadeTask = std::tuple<uint8_t, uint32_t, int32_t, int32_t, int32_t, uint32_t, bool, bool, uint8_t>;
         FadeTask & GetFadeTask();
         void StartFadeTask( uint8_t object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
         void FinishFadeTask();

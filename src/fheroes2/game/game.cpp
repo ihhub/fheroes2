@@ -226,7 +226,7 @@ void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, int32_t fromIndex
         fadeTask = std::make_tuple( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else if ( MP2::OBJ_BOAT == object ) {
-        fadeTask = std::make_tuple( object, fromTile.GetObjectSpriteIndex(), -1, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = std::make_tuple( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
         const int icn = MP2::GetICNObject( object );
