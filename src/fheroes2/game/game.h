@@ -237,6 +237,7 @@ namespace Game
     int NetworkHost( void );
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
+    void CompleteCampaignScenario();
 
     bool IsOriginalCampaignPresent();
 

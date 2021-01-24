@@ -20,7 +20,9 @@
 
 #include "agg.h"
 #include "assert.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
+#include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -30,19 +32,75 @@
 
 namespace
 {
-    std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int /*campaignID*/, const int scenarioId )
+    std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioId >= 0 );
+        assert( scenarioID >= 0 && scenarioID <= 10 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
-        // TODO: apply use of campaignID
-        if ( scenarioId == 0 ) {
+        switch ( scenarioID ) {
+        case 0:
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 1:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 2:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 3:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
         }
 
         return bonus;
+    }
+
+    std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
+    {
+        assert( scenarioID >= 0 && scenarioID <= 10 );
+        std::vector<Campaign::ScenarioBonusData> bonus;
+
+        switch ( scenarioID ) {
+        case 0:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 1:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 2:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        }
+
+        return bonus;
+    }
+
+    std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID )
+    {
+        assert( scenarioID >= 0 );
+        switch ( campaignID ) {
+        case 0:
+            return getRolandCampaignBonusData( scenarioID );
+        case 1:
+            return getArchibaldCampaignBonusData( scenarioID );
+        }
+
+        // shouldn't be here unless we get an unsupported campaign
+        return std::vector<Campaign::ScenarioBonusData>();
     }
 
     const std::string rolandCampaignDescription[] = {_(
@@ -58,51 +116,135 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconIdx ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
-    bool hasEnding( const std::string & fullString, const std::string & ending )
+    // TODO: return buttonGroup?
+    void DrawCampaignScenarioIcons( const Campaign::CampaignData campaignData, const fheroes2::Point & top )
     {
-        if ( fullString.length() >= ending.length() )
-            return ( 0 == fullString.compare( fullString.length() - ending.length(), ending.length(), ending ) );
-        else
-            return false;
-    }
+        fheroes2::Display & display = fheroes2::Display::instance();
 
-    std::vector<Maps::FileInfo> GetCampaignMaps( const std::vector<std::string> & fileNames, const std::string & fileExtension )
-    {
-        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
-        std::vector<Maps::FileInfo> maps;
+        const bool isGoodCampaign = campaignData.isGoodCampaign();
+        const fheroes2::Point trackOffset = fheroes2::Point( top.x + 39, top.y + 294 );
 
-        for ( size_t i = 0; i < fileNames.size(); ++i ) {
-            for ( ListFiles::const_iterator file = files.begin(); file != files.end(); ++file ) {
-                // check if the obtained file's name matches the one we want
-                if ( !hasEnding( *file, fileNames[i] ) )
-                    continue;
-
-                Maps::FileInfo fi;
-                if ( fi.ReadMP2( *file ) ) {
-                    maps.push_back( fi );
-                }
-            }
+        int campaignTrack = ICN::CTRACK00;
+        switch ( campaignData.getCampaignID() ) {
+        case 0:
+            campaignTrack = ICN::CTRACK00;
+            break; // roland
+        case 1:
+            campaignTrack = ICN::CTRACK03;
+            break; // archibald
         }
 
-        return maps;
+        fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
+
+        const int iconsId = isGoodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+        const int selectedIconIdx = isGoodCampaign ? 14 : 17;
+        const int unselectedIdx = 12;
+        // TODO: find icon Idx for done (yellow ring border)
+
+        const int middleY = 40, deltaY = 42;
+        const int startX = -2, deltaX = 74;
+
+        const std::vector<Campaign::ScenarioData> scenarios = campaignData.getAllScenarios();
+        Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+
+        std::vector<int> prevScenarioNextMaps;
+
+        int currentX = startX;
+        for ( size_t i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
+            const std::vector<int> nextMaps = scenarios[i].getNextMaps();
+
+            // sub scenario -> this scenario's next map is one of the prev scenario's next map
+            bool isSubScenario = false;
+            int x = currentX, y = middleY;
+
+            for ( int j = 0, prevScenarioNextMapsCount = prevScenarioNextMaps.size(); j < prevScenarioNextMapsCount; ++j ) {
+                if ( std::none_of( nextMaps.begin(), nextMaps.end(), [&]( int scenarioID ) { return scenarioID == prevScenarioNextMaps[j]; } ) )
+                    continue;
+
+                isSubScenario = true;
+                x -= deltaX / 2;
+                y -= deltaY;
+                break;
+            }
+
+            // if it's not a sub-scenario, try to check whether it's a branching scenario
+            bool isBranching = !isSubScenario && prevScenarioNextMaps.size() > 1;
+            bool isFinalBranch = false;
+
+            if ( !isSubScenario && prevScenarioNextMaps.size() > 1 ) {
+                isBranching = true;
+                isFinalBranch = prevScenarioNextMaps.back() == i;
+
+                y += isFinalBranch ? deltaY : -deltaY;
+            }
+
+            DrawCampaignScenarioIcon( iconsId, saveData.getCurrentScenarioID() == i ? selectedIconIdx : unselectedIdx, trackOffset, x, y );
+
+            if ( !isBranching || isFinalBranch )
+                prevScenarioNextMaps = nextMaps;
+
+            if ( !isSubScenario && ( !isBranching || isFinalBranch ) )
+                currentX += deltaX;
+        }
     }
 
-    const std::vector<Maps::FileInfo> GetRolandCampaign()
+    const Campaign::CampaignData GetRolandCampaignData()
     {
-        const std::vector<std::string> maps = {"CAMPG01.H2C", "CAMPG02.H2C", "CAMPG03.H2C", "CAMPG04.H2C", "CAMPG05.H2C", "CAMPG05B.H2C",
-                                               "CAMPG06.H2C", "CAMPG07.H2C", "CAMPG08.H2C", "CAMPG09.H2C", "CAMPG10.H2C"};
+        // TODO: Do all campaign data until CAMPG10.H2C, for now we'll test until mission 4 (in which mission 3 Save The Dwarves is optional)
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 0, std::vector<int>{ 1 }, getCampaignBonusData( 0, 0 ), std::string( "CAMPG01.H2C" ), rolandCampaignDescription[0] ) );
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 1, std::vector<int>{ 2, 3 }, getCampaignBonusData( 0, 1 ), std::string( "CAMPG02.H2C" ), rolandCampaignDescription[0] ) );
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 2, std::vector<int>{ 3 }, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[0] ) );
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 3, std::vector<int>{ 4 }, getCampaignBonusData( 0, 3 ), std::string( "CAMPG04.H2C" ), rolandCampaignDescription[0] ) );
 
-        const std::string fileExtension = maps.front().substr( maps.front().rfind( '.' ) + 1 );
-        return GetCampaignMaps( maps, fileExtension );
+        Campaign::CampaignData campaignData = Campaign::CampaignData();
+        campaignData.setCampaignID( 0 );
+        campaignData.setCampaignDescription( "Roland Campaign" );
+        campaignData.setCampaignAlignment( true );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
     }
 
-    const std::vector<Maps::FileInfo> GetArchibaldCampaign()
+    const Campaign::CampaignData GetArchibaldCampaignData()
     {
-        const std::vector<std::string> maps = {"CAMPE01.H2C", "CAMPE02.H2C", "CAMPE03.H2C", "CAMPE04.H2C", "CAMPE05.H2C", "CAMPE05B.H2C",
-                                               "CAMPE06.H2C", "CAMPE07.H2C", "CAMPE08.H2C", "CAMPE09.H2C", "CAMPE10.H2C", "CAMPE11.H2C"};
+        // TODO: Do all campaign data until CAMPE10.H2C
+        std::vector<Campaign::ScenarioBonusData> bonus;
+        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
 
-        const std::string fileExtension = maps.front().substr( maps.front().rfind( '.' ) + 1 );
-        return GetCampaignMaps( maps, fileExtension );
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 0, std::vector<int>{ 1 }, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] ) );
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 1, std::vector<int>{ 2 }, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] ) );
+        scenarioDatas.emplace_back(
+            Campaign::ScenarioData( 2, std::vector<int>{}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[0] ) );
+
+        Campaign::CampaignData campaignData = Campaign::CampaignData();
+        campaignData.setCampaignID( 1 );
+        campaignData.setCampaignDescription( "Archibald Campaign" );
+        campaignData.setCampaignAlignment( false );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    const Campaign::CampaignData GetCampaignData( int campaignID )
+    {
+        switch ( campaignID ) {
+        case 0:
+            return GetRolandCampaignData();
+        case 1:
+            return GetArchibaldCampaignData();
+        default:
+            return Campaign::CampaignData();
+        }
     }
 
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
@@ -137,7 +279,24 @@ namespace
 
 bool Game::IsOriginalCampaignPresent()
 {
-    return !GetRolandCampaign().empty() && !GetArchibaldCampaign().empty();
+    return GetRolandCampaignData().isAllCampaignMapsPresent() && GetArchibaldCampaignData().isAllCampaignMapsPresent();
+}
+
+void Game::CompleteCampaignScenario()
+{
+    Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+
+    saveData.addCurrentMapToFinished();
+    const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
+
+    const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
+
+    // TODO: show credit if cleared last scenario
+    if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+    }
+    // if not, eventually call SelectCampaignScenario() again
+    else {
+    }
 }
 
 int Game::SelectCampaignScenario()
@@ -151,8 +310,10 @@ int Game::SelectCampaignScenario()
     cursor.SetThemes( cursor.POINTER );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-    const size_t chosenCampaign = campaignSaveData.getCampaignID();
-    const bool goodCampaign = chosenCampaign == 0;
+    const size_t chosenCampaignID = campaignSaveData.getCampaignID();
+
+    const Campaign::CampaignData & campaignData = GetCampaignData( chosenCampaignID );
+    const bool goodCampaign = campaignData.isGoodCampaign();
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
@@ -172,7 +333,10 @@ int Game::SelectCampaignScenario()
                     releaseButton.height() );
 
     const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
-    const std::vector<Campaign::ScenarioBonusData> bonusChoices = getCampaignBonusData( chosenCampaign, chosenScenarioID );
+    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+    const Campaign::ScenarioData scenario = scenarios[chosenScenarioID];
+
+    const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
     const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
 
     fheroes2::ButtonGroup buttonChoices;
@@ -191,11 +355,10 @@ int Game::SelectCampaignScenario()
         buttonChoices.button( 0 ).press();
     }
 
-    const std::vector<Maps::FileInfo> & campaignMaps = goodCampaign ? GetRolandCampaign() : GetArchibaldCampaign();
-
     buttonViewIntro.disable();
     buttonViewIntro.draw();
-    if ( campaignMaps.empty() )
+
+    if ( scenarios.empty() )
         buttonOk.disable();
     buttonOk.draw();
     buttonCancel.draw();
@@ -206,15 +369,16 @@ int Game::SelectCampaignScenario()
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
-    if ( !campaignMaps.empty() ) {
-        const std::string & desc = campaignMaps[chosenScenarioID].description;
-        TextBox mapName( desc.substr( 1, desc.length() - 2 ), Font::BIG, 200 );
+    const auto mapInfo = scenario.loadMap();
+    if ( !scenarios.empty() ) {
+        const std::string & mapNameStr = mapInfo.description;
+        TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
         mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( "1", Font::BIG );
         campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
-        TextBox mapDescription( goodCampaign ? rolandCampaignDescription[chosenScenarioID] : archibaldCampaignDescription[chosenScenarioID], Font::BIG, 356 );
+        TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
         const int textChoiceWidth = 150;
@@ -231,36 +395,7 @@ int Game::SelectCampaignScenario()
         textDescription.Blit( top.x + 40, top.y + 200 );
     }
 
-    const int iconsId = goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
-    const fheroes2::Point trackOffset = fheroes2::Point( top.x + 39, top.y + 294 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( goodCampaign ? ICN::CTRACK00 : ICN::CTRACK03, 0 ), display, top.x + 39, top.y + 294 );
-
-    if ( goodCampaign ) {
-        DrawCampaignScenarioIcon( iconsId, 14, trackOffset, -2, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 72, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 109, -2 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 220, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 294, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, 82 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, -2 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 516, 40 );
-    }
-    else {
-        DrawCampaignScenarioIcon( iconsId, 17, trackOffset, -2, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 72, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, -2 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 146, 82 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 220, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 294, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 331, -2 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 368, 40 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, -2 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 442, 82 );
-        DrawCampaignScenarioIcon( iconsId, 12, trackOffset, 516, 40 );
-    }
-
+    DrawCampaignScenarioIcons( campaignData, top );
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Show();
@@ -285,7 +420,7 @@ int Game::SelectCampaignScenario()
         if ( le.MouseClickLeft( buttonCancel.area() ) )
             return Game::NEWGAME;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
-            conf.SetCurrentFileInfo( campaignMaps[chosenScenarioID] );
+            conf.SetCurrentFileInfo( mapInfo );
             Players & players = conf.GetPlayers();
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
@@ -293,7 +428,7 @@ int Game::SelectCampaignScenario()
             Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
-            if ( !world.LoadMapMP2( campaignMaps[chosenScenarioID].file ) ) {
+            if ( !world.LoadMapMP2( mapInfo.file ) ) {
                 Dialog::Message( "Campaign Game loading failure", "Please make sure that campaign files are correct and present", Font::SMALL, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
