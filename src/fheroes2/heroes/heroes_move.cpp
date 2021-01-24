@@ -475,10 +475,10 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
         }
     }
 
-    const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
+    const Maps::Tiles & heroTile = world.GetTiles( center.x, center.y );
 
     if ( withShadow ) {
-        if ( tile.GetObject( false ) == MP2::OBJ_CASTLE && ( sprite_index > 44 || ( sprite_index % 9 ) < 5 ) ) {
+        if ( heroTile.GetObject( false ) == MP2::OBJ_CASTLE && ( sprite_index > 44 || ( sprite_index % 9 ) < 5 ) ) {
             withShadow = false;
         }
         else if ( center.y > 0 ) {
@@ -504,9 +504,9 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
     fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
 
     // redraw dependences tiles
-    const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
+    const bool skipGround = MP2::isActionObject( heroTile.GetObject( false ), isShipMaster() );
 
-    tile.RedrawTop( dst, visibleTileROI );
+    heroTile.RedrawTop( dst, visibleTileROI );
 
     if ( Maps::isValidDirection( centerIndex, Direction::TOP ) )
         world.GetTiles( Maps::GetDirectionIndex( centerIndex, Direction::TOP ) ).RedrawTop4Hero( dst, visibleTileROI, skipGround );
