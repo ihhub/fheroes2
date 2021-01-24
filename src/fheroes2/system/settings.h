@@ -260,7 +260,7 @@ public:
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
-    bool ExtWorldShowTerrainPenalty( void ) const;
+    bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
