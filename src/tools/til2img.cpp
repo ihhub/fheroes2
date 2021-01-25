@@ -28,11 +28,11 @@
 #include <SDL.h>
 
 #include "engine.h"
-#include "serialize.h"
-#include "palette_h2.h"
-#include "system.h"
 #include "image.h"
 #include "image_tool.h"
+#include "palette_h2.h"
+#include "serialize.h"
+#include "system.h"
 
 #if defined( _MSC_VER )
 #undef main
@@ -75,9 +75,9 @@ int main( int argc, char ** argv )
     std::vector<u8> buf = sf.getRaw( width * height * count );
     if ( debugMode ) {
         std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
-        std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl; 
+        std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl;
     }
-    
+
     SDL::Init();
 
     for ( int cur = 0; cur < count; ++cur ) {
@@ -98,7 +98,7 @@ int main( int argc, char ** argv )
             if ( debugMode ) {
                 std::cout << "Saving " << dstfile << std::endl;
             }
-            
+
             if ( !fheroes2::Save( image, dstfile, 0 ) )
                 std::cout << "error" << std::endl;
         }

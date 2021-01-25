@@ -668,7 +668,7 @@ namespace fheroes2
 
                 Sprite & sprite = _icnVsSprite[id][i];
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                
+
                 fheroes2::AGG::DecodeICNSprite( sprite, header1, data, sizeData );
             }
         }

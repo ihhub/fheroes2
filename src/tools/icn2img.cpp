@@ -26,14 +26,14 @@
 #include <iostream>
 #include <sstream>
 
-#include "serialize.h"
-#include "palette_h2.h"
-#include "system.h"
-#include "image.h"
-#include "image_tool.h"
-#include <SDL.h>
 #include "decode.h"
 #include "engine.h"
+#include "image.h"
+#include "image_tool.h"
+#include "palette_h2.h"
+#include "serialize.h"
+#include "system.h"
+#include <SDL.h>
 
 #if defined( _MSC_VER )
 #undef main
