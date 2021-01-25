@@ -68,7 +68,7 @@ namespace Campaign
             return _fileName;
         }
 
-        const int getScenarioID() const
+        int getScenarioID() const
         {
             return _scenarioID;
         }
@@ -78,7 +78,7 @@ namespace Campaign
             return _description;
         }
 
-        const bool isMapFilePresent() const;
+        bool isMapFilePresent() const;
         const Maps::FileInfo loadMap() const;
 
         ScenarioData();

@@ -109,7 +109,7 @@ namespace Campaign
         , _description( description )
     {}
 
-    const bool Campaign::ScenarioData::isMapFilePresent() const
+    bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;
         return TryGetMatchingFile( _fileName, matchingFilePath );

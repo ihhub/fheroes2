@@ -58,7 +58,7 @@ namespace Campaign
         return _scenarios[scenarioID].getNextMaps();
     }
 
-    const bool CampaignData::isAllCampaignMapsPresent() const
+    bool CampaignData::isAllCampaignMapsPresent() const
     {
         for ( int i = 0, count = _scenarios.size(); i < count; ++i ) {
             if ( !_scenarios[i].isMapFilePresent() )
@@ -68,7 +68,7 @@ namespace Campaign
         return true;
     }
 
-    const bool CampaignData::isLastScenario( const int scenarioID ) const
+    bool CampaignData::isLastScenario( const int scenarioID ) const
     {
         return scenarioID == _scenarios.back().getScenarioID();
     }

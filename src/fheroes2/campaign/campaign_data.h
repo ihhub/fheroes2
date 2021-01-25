@@ -36,12 +36,12 @@ namespace Campaign
             return _campaignDescription;
         }
 
-        const int getCampaignID() const
+        int getCampaignID() const
         {
             return _campaignID;
         }
 
-        const bool isGoodCampaign() const
+        bool isGoodCampaign() const
         {
             return _isGoodCampaign;
         }
@@ -54,8 +54,8 @@ namespace Campaign
         const std::vector<int> & getScenariosBefore( const int scenarioID ) const;
         const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
 
-        const bool isAllCampaignMapsPresent() const;
-        const bool isLastScenario( const int scenarioID ) const;
+        bool isAllCampaignMapsPresent() const;
+        bool isLastScenario( const int scenarioID ) const;
 
         void setCampaignID( const int campaignID );
         void setCampaignAlignment( const bool isGoodCampaign );
