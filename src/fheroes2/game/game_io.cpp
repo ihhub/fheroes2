@@ -259,7 +259,7 @@ bool Game::Load( const std::string & fn )
         warningMessage.append( "(tip: set unicode = on)" );
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
- 
+
     if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
         fz >> Campaign::CampaignData::Get();
 
