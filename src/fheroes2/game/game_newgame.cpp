@@ -110,7 +110,7 @@ int Game::NewCampaign()
 
     AGG::PlayMusic( MUS::VICTORY );
 
-    return SelectCampaignScenario();
+    return Game::SELECTCAMPAIGNSCENARIO;
 }
 
 #ifdef NETWORK_ENABLE
