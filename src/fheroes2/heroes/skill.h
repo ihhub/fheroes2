@@ -176,7 +176,6 @@ namespace Skill
         friend StreamBase & operator<<( StreamBase &, const Primary & );
         friend StreamBase & operator>>( StreamBase &, Primary & );
 
-    public:
         int attack;
         int defense;
         int power;

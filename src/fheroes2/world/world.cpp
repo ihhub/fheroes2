@@ -1197,20 +1197,13 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
     return msg;
 }
 
-const int SEED_VERSION = 9001;
-
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
     const Size & sz = w;
 
     StreamBase & stream = msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
                               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss
-                              << w.map_actions << w.map_objects;
-
-    if ( Game::GetLoadVersion() >= SEED_VERSION ) {
-        stream << w._seed;
-    }
-
+                              << w.map_actions << w.map_objects << w._seed;
     return stream;
 }
 
@@ -1221,11 +1214,11 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
-    if ( Game::GetLoadVersion() >= SEED_VERSION ) {
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_090_PRE_RELEASE ) {
         msg >> w._seed;
     }
     else {
-        // For old versions, generate a random seed
+        // For old versions, generate a different seed at each map loading
         w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
     }
 

@@ -43,10 +43,10 @@ namespace Battle
 
 struct HeroSeedsForLevelUp
 {
-    uint32_t seedPrimarySkill;
-    uint32_t seedSecondaySkill1;
-    uint32_t seedSecondaySkill2;
-    uint32_t seedSecondaySkillRandomChoose;
+    uint32_t seedPrimarySkill = 0;
+    uint32_t seedSecondaySkill1 = 0;
+    uint32_t seedSecondaySkill2 = 0;
+    uint32_t seedSecondaySkillRandomChoose = 0;
 };
 
 class Heroes : public HeroBase, public ColorBase

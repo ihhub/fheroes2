@@ -49,6 +49,16 @@
 #include "speed.h"
 #include "world.h"
 
+namespace
+{
+    template <class T>
+    void hash_combine( std::size_t & seed, const T & v )
+    {
+        std::hash<T> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
+}
+
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -1435,7 +1445,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     const HeroSeedsForLevelUp seeds = GetSeedsForLevelUp();
 
     // level up primary skill
-    int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
+    const int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
 
     DEBUG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
 
@@ -2017,26 +2027,20 @@ bool AllHeroes::HaveTwoFreemans( void ) const
     return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
 }
 
-template <class T>
-void hash_combine( std::size_t & seed, const T & v )
-{
-    std::hash<T> hasher;
-    seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
-}
-
-/* We generate seeds based on the hero and global world map seed
- * The idea is that, we want the skill selection to be randomized at each map restart,
- * but deterministic for a given hero.
- * We also want the available skills to change depending on current skills/stats of the hero,
- * to avoid giving out the same skills/stats at each level up. We can't use the level field for this, as it
- * doesn't change when we level up several levels at once.
- * We also need to generate different seeds for each possible call to the random number generator,
- * in order to avoid always drawing the same random number at level-up: otherwise this
- * would mean that for all possible games, the 2nd secondary
- * skill would always be the same  once the 1st one is selected.
- * */
 HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 {
+    /* We generate seeds based on the hero and global world map seed
+     * The idea is that, we want the skill selection to be randomized at each map restart,
+     * but deterministic for a given hero.
+     * We also want the available skills to change depending on current skills/stats of the hero,
+     * to avoid giving out the same skills/stats at each level up. We can't use the level field for this, as it
+     * doesn't change when we level up several levels at once.
+     * We also need to generate different seeds for each possible call to the random number generator,
+     * in order to avoid always drawing the same random number at level-up: otherwise this
+     * would mean that for all possible games, the 2nd secondary
+     * skill would always be the same once the 1st one is selected.
+     * */
+
     size_t hash = static_cast<size_t>( world.GetMapSeed() );
     hash_combine( hash, name );
     hash_combine( hash, attack );
