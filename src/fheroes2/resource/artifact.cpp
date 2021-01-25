@@ -34,6 +34,7 @@
 #include "rand.h"
 #include "settings.h"
 #include "spell.h"
+#include "statusbar.h"
 #include "text.h"
 #include "world.h"
 
@@ -906,11 +907,17 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
+<<<<<<< HEAD
 ArtifactsBar::ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change /* false */ )
     : _hero( hero )
+=======
+ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar )
+    : hero( ptr )
+>>>>>>> Add status callback to spell book
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , bar( bar )
 {
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
@@ -1006,8 +1013,15 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
             const_cast<Heroes *>( _hero )->EditSpellBook();
-        else
-            _hero->OpenSpellBook( SpellBook::Filter::ALL, false );
+        else {
+            std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) {
+                if ( bar != nullptr ) {
+                    bar->ShowMessage( status );
+                }
+            };
+
+            _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+        }
     }
     else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();

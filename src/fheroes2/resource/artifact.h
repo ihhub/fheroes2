@@ -232,10 +232,11 @@ public:
     std::string String( void ) const;
 };
 
+class StatusBar;
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false );
+    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
@@ -263,6 +264,7 @@ private:
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
+    StatusBar * bar;
     std::string msg;
 };
 

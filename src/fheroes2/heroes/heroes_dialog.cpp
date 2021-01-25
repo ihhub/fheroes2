@@ -160,18 +160,6 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     secskill_bar.SetPos( cur_pt.x + 3, cur_pt.y + 233 );
     secskill_bar.Redraw();
 
-    dst_pt.x = cur_pt.x + 51;
-    dst_pt.y = cur_pt.y + 308;
-
-    ArtifactsBar selectArtifacts( this, false, readonly );
-
-    selectArtifacts.SetColRows( 7, 2 );
-    selectArtifacts.SetHSpace( 15 );
-    selectArtifacts.SetVSpace( 15 );
-    selectArtifacts.SetContent( GetBagArtifacts() );
-    selectArtifacts.SetPos( dst_pt.x, dst_pt.y );
-    selectArtifacts.Redraw();
-
     // bottom small bar
     dst_pt.x = cur_pt.x + 22;
     dst_pt.y = cur_pt.y + 460;
@@ -180,6 +168,19 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     StatusBar statusBar;
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+
+    // artifact bar
+    dst_pt.x = cur_pt.x + 51;
+    dst_pt.y = cur_pt.y + 308;
+
+    ArtifactsBar selectArtifacts( this, false, readonly, false, &statusBar );
+
+    selectArtifacts.SetColRows( 7, 2 );
+    selectArtifacts.SetHSpace( 15 );
+    selectArtifacts.SetVSpace( 15 );
+    selectArtifacts.SetContent( GetBagArtifacts() );
+    selectArtifacts.SetPos( dst_pt.x, dst_pt.y );
+    selectArtifacts.Redraw();
 
     // button prev
     dst_pt.x = cur_pt.x;

@@ -47,14 +47,14 @@ namespace
     {
         return std::string( spell1.GetName() ) < std::string( spell2.GetName() );
     }
-
 }
 
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, SpellBook::Filter only, const HeroBase & hero );
 void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
 
-Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bool canCastSpell ) const
+Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bool canCastSpell,
+                       std::function<void( const std::string & )> * statusCallback /*= nullptr*/ ) const
 {
     if ( !hero.HaveSpellBook() ) {
         Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
@@ -144,11 +144,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
             StringReplace( str, "%{point}", hero.GetSpellPoints() );
             Dialog::Message( "", str, Font::BIG );
         }
-        else if ( le.MousePressRight( advn_rt ) ) {
+        else if ( le.MousePressRight( advn_rt ) && displayableSpells != Filter::CMBT ) {
             const std::string str = _( "View Adventure Spells" );
             Dialog::Message( "", str, Font::BIG );
         }
-        else if ( le.MousePressRight( cmbt_rt ) ) {
+        else if ( le.MousePressRight( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
             const std::string str = _( "View Combat Spells" );
             Dialog::Message( "", str, Font::BIG );
         }
@@ -187,6 +187,41 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
                         Dialog::SpellInfo( *spell, true );
                         cursor.Show();
                         display.render();
+                    }
+                }
+            }
+        }
+
+        if ( statusCallback != nullptr ) {
+            if ( le.MouseCursor( info_rt ) ) {
+                std::string str = _( "Your hero has %{point} spell points remaining." );
+                StringReplace( str, "%{point}", hero.GetSpellPoints() );
+                ( *statusCallback )( str );
+            }
+            else if ( le.MouseCursor( advn_rt ) && displayableSpells != Filter::CMBT ) {
+                ( *statusCallback )( _( "View Adventure Spells" ) );
+            }
+            else if ( le.MouseCursor( cmbt_rt ) && displayableSpells != Filter::ADVN ) {
+                ( *statusCallback )( _( "View Combat Spells" ) );
+            }
+            else if ( le.MouseCursor( prev_list ) ) {
+                ( *statusCallback )( _( "View previous page" ) );
+            }
+            else if ( le.MouseCursor( next_list ) ) {
+                ( *statusCallback )( _( "View next page" ) );
+            }
+            else if ( le.MouseCursor( clos_rt ) ) {
+                ( *statusCallback )( _( "Close Spellbook" ) );
+            }
+            else if ( le.MouseCursor( pos ) ) {
+                const s32 index = coords.GetIndex( le.GetMouseCursor() );
+
+                if ( 0 <= index ) {
+                    SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
+                    if ( spell < displayedSpells.end() ) {
+                        std::string str = _( "View %{spell}" );
+                        StringReplace( str, "%{spell}", spell->GetName() );
+                        ( *statusCallback )( str );
                     }
                 }
             }
@@ -327,9 +362,9 @@ SpellStorage SpellBook::SetFilter( Filter filter, const HeroBase * hero ) const
     if ( hero != nullptr )
         res.Append( hero->GetBagArtifacts() );
 
-    if ( filter != SpellBook::ALL ) {
+    if ( filter != SpellBook::Filter::ALL ) {
         res.resize( std::distance( res.begin(), std::remove_if( res.begin(), res.end(), [filter]( const Spell & s ) {
-                                       return ( ( SpellBook::ADVN & filter ) && s.isCombat() ) || ( ( SpellBook::CMBT & filter ) && !s.isCombat() );
+                                       return ( ( SpellBook::Filter::ADVN == filter ) && s.isCombat() ) || ( ( SpellBook::Filter::CMBT == filter ) && !s.isCombat() );
                                    } ) ) );
     }
 
