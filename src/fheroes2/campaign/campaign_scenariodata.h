@@ -81,7 +81,7 @@ namespace Campaign
         bool isMapFilePresent() const;
         const Maps::FileInfo loadMap() const;
 
-        ScenarioData( int scenarioID, std::vector<int> & nextMaps, std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
+        ScenarioData( int scenarioID, std::vector<int> nextMaps, std::vector<Campaign::ScenarioBonusData> bonuses, const std::string & fileName,
                       const std::string & description );
 
     private:
