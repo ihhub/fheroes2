@@ -64,7 +64,9 @@ namespace Game
         EDITLOADMAP,
         EDITSAVEMAP,
         EDITSTART,
-        ENDTURN
+        ENDTURN,
+        SELECTCAMPAIGNSCENARIO,
+        COMPLETECAMPAIGNSCENARIO
     };
 
     void Init( void );
@@ -237,7 +239,7 @@ namespace Game
     int NetworkHost( void );
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
-    void CompleteCampaignScenario();
+    int CompleteCampaignScenario();
 
     bool IsOriginalCampaignPresent();
 

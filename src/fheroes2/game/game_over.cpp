@@ -344,7 +344,7 @@ int GameOver::Result::LocalCheckGameOver( void )
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
                 Video::ShowVideo( "WIN.SMK", false );
-                res = Game::HIGHSCORES;
+                res = conf.GameType() & Game::TYPE_CAMPAIGN ? Game::COMPLETECAMPAIGNSCENARIO : Game::HIGHSCORES;
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );

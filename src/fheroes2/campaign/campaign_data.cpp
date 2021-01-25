@@ -52,6 +52,12 @@ namespace Campaign
         return scenarioIDs;
     }
 
+    const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
+    {
+        assert( scenarioID >= 0 && scenarioID < _scenarios.size() );
+        return _scenarios[scenarioID].getNextMaps();
+    }
+
     const bool CampaignData::isAllCampaignMapsPresent() const
     {
         for ( int i = 0, count = _scenarios.size(); i < count; ++i ) {

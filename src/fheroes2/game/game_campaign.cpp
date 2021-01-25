@@ -282,20 +282,23 @@ bool Game::IsOriginalCampaignPresent()
     return GetRolandCampaignData().isAllCampaignMapsPresent() && GetArchibaldCampaignData().isAllCampaignMapsPresent();
 }
 
-void Game::CompleteCampaignScenario()
+int Game::CompleteCampaignScenario()
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
     saveData.addCurrentMapToFinished();
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
-
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
-    // TODO: show credit if cleared last scenario
+    // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+        return Game::HIGHSCORES;
     }
     // if not, eventually call SelectCampaignScenario() again
     else {
+        const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
+        saveData.setCurrentScenarioID( firstNextMap );
+        return Game::SELECTCAMPAIGNSCENARIO;
     }
 }
 
