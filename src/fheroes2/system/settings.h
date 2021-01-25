@@ -203,6 +203,7 @@ public:
 
     const std::string & MapsCharset( void ) const;
     const std::string & ForceLang( void ) const;
+    const std::string & Lang( void ) const;
     const std::string & FontsNormal( void ) const;
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
@@ -417,6 +418,7 @@ private:
     std::string font_normal;
     std::string font_small;
     std::string force_lang;
+    std::string lang;
     std::string maps_charset;
     int size_normal;
     int size_small;
