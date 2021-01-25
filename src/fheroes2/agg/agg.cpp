@@ -39,6 +39,7 @@
 #include "error.h"
 #include "font.h"
 #include "game.h"
+#include "image_tool.h"
 #include "m82.h"
 #include "mus.h"
 #include "pal.h"
@@ -54,7 +55,7 @@
 #include "zzlib.h"
 #endif
 
-StreamBase & operator>>( StreamBase & st, fheroes2::AGG::ICNHeader & icn );
+StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
 
 namespace AGG
 {
@@ -666,10 +667,10 @@ namespace fheroes2
                     sizeData = blockSize - header1.offsetData;
                 }
 
-                Sprite & sprite = _icnVsSprite[id][i];
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
 
-                fheroes2::AGG::DecodeICNSprite( sprite, header1, data, sizeData );
+                _icnVsSprite[id][i]
+                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
             }
         }
 

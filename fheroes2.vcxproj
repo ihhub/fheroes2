@@ -198,7 +198,6 @@
     <ClCompile Include="src\engine\xmi2mid.cpp" />
     <ClCompile Include="src\engine\zzlib.cpp" />
     <ClCompile Include="src\fheroes2\agg\agg.cpp" />
-    <ClCompile Include="src\fheroes2\agg\decode.cpp" />
     <ClCompile Include="src\fheroes2\agg\bin_info.cpp" />
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />

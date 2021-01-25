@@ -19,7 +19,9 @@
  ***************************************************************************/
 
 #include "image_tool.h"
+#include "agg_file.h"
 #include "palette_h2.h"
+#include "serialize.h"
 
 #include <SDL_version.h>
 #include <SDL_video.h>
@@ -78,7 +80,7 @@ namespace
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         int res = 0;
-        const std::string pngExtension(".png");
+        const std::string pngExtension( ".png" );
         if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) ) {
             res = IMG_SavePNG( surface, path.c_str() );
         }
@@ -109,4 +111,101 @@ namespace fheroes2
 
         return SaveImage( temp, path );
     }
+
+    Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )
+    {
+        Sprite sprite( width, height, offsetX, offsetY );
+
+        uint8_t * imageData = sprite.image();
+        uint8_t * imageTransform = sprite.transform();
+
+        uint32_t posX = 0;
+
+        const uint8_t * dataEnd = data + sizeData;
+
+        while ( 1 ) {
+            if ( 0 == *data ) { // 0x00 - end line
+                imageData += width;
+                imageTransform += width;
+                posX = 0;
+                ++data;
+            }
+            else if ( 0x80 > *data ) { // 0x7F - count data
+                uint32_t c = *data;
+                ++data;
+                while ( c-- && data != dataEnd ) {
+                    imageData[posX] = *data;
+                    imageTransform[posX] = 0;
+                    ++posX;
+                    ++data;
+                }
+            }
+            else if ( 0x80 == *data ) { // 0x80 - end data
+                break;
+            }
+            else if ( 0xC0 > *data ) { // 0xBF - skip data
+                posX += *data - 0x80;
+                ++data;
+            }
+            else if ( 0xC0 == *data ) { // 0xC0 - transform layer
+                ++data;
+
+                const uint8_t transformValue = *data;
+                const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
+
+                uint32_t c = *data % 4 ? *data % 4 : *( ++data );
+
+                if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
+                    while ( c-- ) {
+                        imageTransform[posX] = transformType;
+                        ++posX;
+                    }
+                }
+                else {
+                    posX += c;
+                }
+
+                ++data;
+            }
+            else if ( 0xC1 == *data ) { // 0xC1
+                ++data;
+                uint32_t c = *data;
+                ++data;
+                while ( c-- ) {
+                    imageData[posX] = *data;
+                    imageTransform[posX] = 0;
+                    ++posX;
+                }
+                ++data;
+            }
+            else {
+                uint32_t c = *data - 0xC0;
+                ++data;
+                while ( c-- ) {
+                    imageData[posX] = *data;
+                    imageTransform[posX] = 0;
+                    ++posX;
+                }
+                ++data;
+            }
+
+            if ( data >= dataEnd ) {
+                break;
+            }
+        }
+
+        return sprite;
+    }
+}
+
+StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )
+{
+    icn.offsetX = st.getLE16();
+    icn.offsetY = st.getLE16();
+    icn.width = st.getLE16();
+    icn.height = st.getLE16();
+    icn.animationFrames = st.get();
+    icn.offsetData = st.getLE32();
+
+    return st;
 }

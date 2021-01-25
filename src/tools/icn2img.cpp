@@ -26,7 +26,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "decode.h"
+#include "agg_file.h"
 #include "engine.h"
 #include "image.h"
 #include "image_tool.h"
@@ -39,7 +39,7 @@
 #undef main
 #endif
 
-StreamBase & operator>>( StreamBase & st, fheroes2::AGG::ICNHeader & icn );
+StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
 
 int main( int argc, char ** argv )
 {
@@ -102,12 +102,12 @@ int main( int argc, char ** argv )
 
     u32 save_pos = sf.tell();
 
-    std::vector<fheroes2::AGG::ICNHeader> headers( count_sprite );
+    std::vector<fheroes2::ICNHeader> headers( count_sprite );
     for ( int ii = 0; ii < count_sprite; ++ii )
         sf >> headers[ii];
 
     for ( int ii = 0; ii < count_sprite; ++ii ) {
-        const fheroes2::AGG::ICNHeader & head = headers[ii];
+        const fheroes2::ICNHeader & head = headers[ii];
 
         u32 data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
         sf.seek( save_pos + head.offsetData );
@@ -115,8 +115,7 @@ int main( int argc, char ** argv )
         std::vector<u8> buf = sf.getRaw( data_size );
 
         if ( buf.size() ) {
-            fheroes2::Sprite image; // accepting transparency
-            fheroes2::AGG::DecodeICNSprite( image, head, &buf[0], data_size );
+            fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
 
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
