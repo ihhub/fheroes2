@@ -49,8 +49,9 @@ struct HeroRow
     std::unique_ptr<SecondarySkillsBar> secskillsBar;
     std::unique_ptr<PrimarySkillsBar> primskillsBar;
 
-    HeroRow( Heroes * ptr )
+    HeroRow( Heroes * ptr = nullptr )
     {
+        assert( ptr != nullptr );
         Init( ptr );
     }
 
@@ -276,8 +277,9 @@ struct CstlRow
     std::unique_ptr<ArmyBar> armyBarGuest;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
-    CstlRow( Castle * ptr )
+    CstlRow( Castle * ptr = nullptr )
     {
+        assert( ptr != nullptr );
         Init( ptr );
     }
 
