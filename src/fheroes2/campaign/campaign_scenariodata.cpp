@@ -92,14 +92,6 @@ namespace Campaign
         return msg >> data._type >> data._subType >> data._amount;
     }
 
-    ScenarioData::ScenarioData()
-        : _scenarioID( 0 )
-        , _nextMaps()
-        , _bonuses()
-        , _fileName()
-        , _description()
-    {}
-
     ScenarioData::ScenarioData( int scenarioID, std::vector<int> & nextMaps, std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
                                 const std::string & description )
         : _scenarioID( scenarioID )

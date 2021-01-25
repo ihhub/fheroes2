@@ -150,7 +150,7 @@ namespace
         std::vector<int> prevScenarioNextMaps;
 
         int currentX = startX;
-        for ( size_t i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
+        for ( int i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
 
             // sub scenario -> this scenario's next map is one of the prev scenario's next map
