@@ -692,22 +692,14 @@ void Kingdom::OverviewDialog( void )
         if ( !cursor.isVisible() || redraw ) {
             listCastles.Refresh();
 
-            // check if the heroes list has changed, which requires update of UI size
-            const bool refreshHeroList = listHeroes.Refresh( heroes );
-
-            // check if graphics in main world map window changed, this can happen in several situations:
+            // check if graphics in main world map window should change, this can happen in several situations:
             // - hero dismissed -> hero icon list is updated and world map focus changed
             // - hero hired -> hero icon list is updated
             // So, it's equivalent to check if hero list changed
-            const bool mainWindowChanged = refreshHeroList;
-
-            if ( mainWindowChanged ) {
+            if ( listHeroes.Refresh( heroes ) ) {
                 worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
-                // redraw of the main game window on screen, which will also erase current kingdom window
+                // redraw the main game window on screen, which will also erase current kingdom window
                 Interface::Basic::Get().Redraw();
-            }
-
-            if ( refreshHeroList || mainWindowChanged ) {
                 // redraw Kingdom window from scratch, because it's now invalid
                 background.render();
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
