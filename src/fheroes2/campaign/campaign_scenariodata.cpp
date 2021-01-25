@@ -32,7 +32,7 @@ namespace Campaign
         return fullMapPath.find( scenarioMapName ) != std::string::npos;
     }
 
-    const bool & TryGetMatchingFile( const std::string fileName, std::string & matchingFilePath )
+    bool TryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
         const std::string mapFolder = "maps";
