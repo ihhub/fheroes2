@@ -112,7 +112,7 @@ public:
 
     std::vector<Spell> GetSpells( int lvl = -1 ) const;
     void EditSpellBook( void );
-    Spell OpenSpellBook( int filter, bool ) const;
+    Spell OpenSpellBook( SpellBook::Filter filter, bool canCastSpells ) const;
     bool HaveSpellBook( void ) const;
     bool HaveSpell( const Spell &, bool skip_bag = false ) const;
     void AppendSpellToBook( const Spell &, bool without_wisdom = false );

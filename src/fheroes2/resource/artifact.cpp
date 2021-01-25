@@ -1007,7 +1007,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
         if ( can_change )
             const_cast<Heroes *>( _hero )->EditSpellBook();
         else
-            _hero->OpenSpellBook( SpellBook::ALL, false );
+            _hero->OpenSpellBook( SpellBook::Filter::ALL, false );
     }
     else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();

@@ -4761,7 +4761,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 if ( arena.isDisableCastSpell( Spell::NONE, &msg ) )
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                 else {
-                    const Spell spell = hero->OpenSpellBook( SpellBook::CMBT, true );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true );
                     if ( spell.isValid() ) {
                         std::string error;
 

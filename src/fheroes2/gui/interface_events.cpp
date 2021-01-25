@@ -180,7 +180,7 @@ void Interface::Basic::EventCastSpell( void )
         ResetFocus( GameFocus::HEROES );
         Redraw();
 
-        const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
+        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true );
         // apply cast spell
         if ( spell.isValid() ) {
             hero->ActionSpellCast( spell );
