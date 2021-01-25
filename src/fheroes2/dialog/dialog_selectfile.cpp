@@ -75,10 +75,16 @@ private:
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
     char short_date[20];
+    char short_hours[20];
+    char short_time[20];
     time_t timeval = info.localtime;
 
     std::fill( short_date, ARRAY_COUNT_END( short_date ), 0 );
-    std::strftime( short_date, ARRAY_COUNT( short_date ) - 1, "%b %d, %H:%M", std::localtime( &timeval ) );
+    std::fill( short_hours, ARRAY_COUNT_END( short_hours ), 0 );
+    std::fill( short_time, ARRAY_COUNT_END( short_time ), 0 );
+    std::strftime( short_date, ARRAY_COUNT( short_date ) - 1, "%b %d,", std::localtime( &timeval ) );
+    std::strftime( short_hours, ARRAY_COUNT( short_hours ) - 1, "%H", std::localtime( &timeval ) );
+    std::strftime( short_time, ARRAY_COUNT( short_time ) - 1, ":%M", std::localtime( &timeval ) );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( savname.size() ) {
@@ -94,7 +100,13 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
         text.Blit( dstx + 5, dsty, 150 );
 
         text.Set( short_date, ( current ? Font::YELLOW_BIG : Font::BIG ) );
-        text.Blit( dstx + 160, dsty );
+        text.Blit( dstx + 225 - text.w(), dsty );
+
+        text.Set( short_hours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Blit( dstx + 245 - text.w(), dsty );
+
+        text.Set( short_time, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Blit( dstx + 245, dsty );
     }
 }
 
