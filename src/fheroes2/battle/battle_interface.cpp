@@ -44,6 +44,7 @@
 #include "race.h"
 #include "rand.h"
 #include "settings.h"
+#include "ui_window.h"
 #include "world.h"
 
 #include <cassert>
@@ -1047,6 +1048,15 @@ void Battle::Interface::UpdateContourColor()
         static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
+}
+
+void Battle::Interface::fullRedraw()
+{
+    if ( !_background ) {
+        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    }
+
+    Redraw();
 }
 
 void Battle::Interface::Redraw( void )

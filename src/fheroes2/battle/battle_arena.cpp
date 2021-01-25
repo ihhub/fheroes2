@@ -296,7 +296,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
-        interface->Redraw();
+        interface->fullRedraw();
         cursor.Show();
         display.render();
 
