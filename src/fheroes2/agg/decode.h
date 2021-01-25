@@ -20,28 +20,42 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iostream>
+#ifndef H2DECODE_H
+#define H2DECODE_H
 
-#include "audio_music.h"
-#include "engine.h"
+#include <utility>
+#include <vector>
 
-int main( int argc, char ** argv )
+#include "types.h"
+
+namespace fheroes2
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
-        return EXIT_SUCCESS;
+    class Image;
+    class Sprite;
+
+    namespace AGG
+    {
+        struct ICNHeader
+        {
+            ICNHeader()
+                : offsetX( 0 )
+                , offsetY( 0 )
+                , width( 0 )
+                , height( 0 )
+                , animationFrames( 0 )
+                , offsetData( 0 )
+            {}
+
+            u16 offsetX;
+            u16 offsetY;
+            u16 width;
+            u16 height;
+            u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
+            u32 offsetData;
+        };
+
+        void DecodeICNSprite( Sprite & sprite, const ICNHeader & header1, const uint8_t * data, uint32_t sizeData );
     }
-
-    std::vector<u8> buf = LoadFileToMem( argv[1] );
-
-    if ( buf.size() ) {
-        buf = Music::Xmi2Mid( buf );
-
-        if ( buf.empty() )
-            std::cerr << ", file: " << argv[1] << std::endl;
-        else
-            SaveMemToFile( buf, std::string( argv[2] ) );
-    }
-
-    return 0;
 }
+
+#endif

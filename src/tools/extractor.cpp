@@ -25,11 +25,16 @@
 #include <iostream>
 #include <vector>
 
-#include "engine.h"
+#include "tools.h"
 #include "system.h"
-#include <SDL.h>
+#include "serialize.h"
 
 #define FATSIZENAME 15
+
+#if defined( _MSC_VER )
+#undef main
+#endif
+
 
 struct aggfat_t
 {

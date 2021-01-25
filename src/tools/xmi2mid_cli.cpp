@@ -20,56 +20,32 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
 #include <iostream>
 
-#include "serialize.h"
+#include "audio_music.h"
+#include "engine.h"
+
+#if defined( _MSC_VER )
+#undef main
+#endif
 
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.82m outfile.wav" << std::endl;
-
+        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
         return EXIT_SUCCESS;
     }
 
-    std::fstream fd_data( argv[1], std::ios::in | std::ios::binary );
+    std::vector<u8> buf = LoadFileToMem( argv[1] );
 
-    if ( fd_data.fail() ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
+    if ( buf.size() ) {
+        buf = Music::Xmi2Mid( buf );
 
-        return EXIT_SUCCESS;
+        if ( buf.empty() )
+            std::cerr << ", file: " << argv[1] << std::endl;
+        else
+            SaveMemToFile( buf, std::string( argv[2] ) );
     }
 
-    fd_data.seekg( 0, std::ios_base::end );
-    u32 size = fd_data.tellg();
-    fd_data.seekg( 0, std::ios_base::beg );
-    char * body = new char[size];
-    fd_data.read( body, size );
-    fd_data.close();
-
-    std::fstream fd_body( argv[2], std::ios::out | std::ios::binary );
-    if ( !fd_body.fail() ) {
-        StreamBuf wavHeader( 44 );
-        wavHeader.putLE32( 0x46464952 ); // RIFF
-        wavHeader.putLE32( size + 0x24 ); // size
-        wavHeader.putLE32( 0x45564157 ); // WAVE
-        wavHeader.putLE32( 0x20746D66 ); // FMT
-        wavHeader.putLE32( 0x10 ); // size_t
-        wavHeader.putLE16( 0x01 ); // format
-        wavHeader.putLE16( 0x01 ); // channels
-        wavHeader.putLE32( 22050 ); // samples
-        wavHeader.putLE32( 22050 ); // byteper
-        wavHeader.putLE16( 0x01 ); // align
-        wavHeader.putLE16( 0x08 ); // bitsper
-        wavHeader.putLE32( 0x61746164 ); // DATA
-        wavHeader.putLE32( size ); // size
-
-        fd_body.write( (const char *)wavHeader.data(), wavHeader.size() );
-        fd_body.close();
-    }
-
-    delete[] body;
-
-    return EXIT_SUCCESS;
+    return 0;
 }

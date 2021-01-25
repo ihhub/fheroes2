@@ -33,6 +33,7 @@
 #include "audio_cdrom.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
+#include "decode.h"
 #include "dir.h"
 #include "engine.h"
 #include "error.h"
@@ -52,6 +53,8 @@
 #include "embedded_image.h"
 #include "zzlib.h"
 #endif
+
+StreamBase & operator>>( StreamBase & st, fheroes2::AGG::ICNHeader & icn );
 
 namespace AGG
 {
@@ -664,90 +667,9 @@ namespace fheroes2
                 }
 
                 Sprite & sprite = _icnVsSprite[id][i];
-
-                sprite.resize( header1.width, header1.height );
-                sprite.reset();
-                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
-
-                uint8_t * imageData = sprite.image();
-                uint8_t * imageTransform = sprite.transform();
-
-                uint32_t posX = 0;
-                const uint32_t width = sprite.width();
-
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                const uint8_t * dataEnd = data + sizeData;
-
-                while ( 1 ) {
-                    if ( 0 == *data ) { // 0x00 - end line
-                        imageData += width;
-                        imageTransform += width;
-                        posX = 0;
-                        ++data;
-                    }
-                    else if ( 0x80 > *data ) { // 0x7F - count data
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- && data != dataEnd ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                            ++data;
-                        }
-                    }
-                    else if ( 0x80 == *data ) { // 0x80 - end data
-                        break;
-                    }
-                    else if ( 0xC0 > *data ) { // 0xBF - skip data
-                        posX += *data - 0x80;
-                        ++data;
-                    }
-                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                        ++data;
-
-                        const uint8_t transformValue = *data;
-                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
-
-                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-
-                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                            while ( c-- ) {
-                                imageTransform[posX] = transformType;
-                                ++posX;
-                            }
-                        }
-                        else {
-                            posX += c;
-                        }
-
-                        ++data;
-                    }
-                    else if ( 0xC1 == *data ) { // 0xC1
-                        ++data;
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-                    else {
-                        uint32_t c = *data - 0xC0;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-
-                    if ( data >= dataEnd ) {
-                        break;
-                    }
-                }
+                
+                fheroes2::AGG::DecodeICNSprite( sprite, header1, data, sizeData );
             }
         }
 
