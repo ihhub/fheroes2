@@ -34,7 +34,7 @@ namespace Campaign
         , _scenarios()
     {}
 
-    const std::vector<int> & CampaignData::getScenariosBefore( const int scenarioID ) const
+    const std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
         std::vector<int> scenarioIDs;
 
@@ -54,7 +54,6 @@ namespace Campaign
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {
-        assert( scenarioID >= 0 && scenarioID < _scenarios.size() );
         return _scenarios[scenarioID].getNextMaps();
     }
 

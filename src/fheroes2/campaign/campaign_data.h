@@ -51,7 +51,7 @@ namespace Campaign
             return _scenarios;
         }
 
-        const std::vector<int> & getScenariosBefore( const int scenarioID ) const;
+        const std::vector<int> getScenariosBefore( const int scenarioID ) const;
         const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
 
         bool isAllCampaignMapsPresent() const;
