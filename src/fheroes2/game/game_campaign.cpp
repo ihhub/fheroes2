@@ -179,8 +179,6 @@ namespace
                 y += isFinalBranch ? deltaY : -deltaY;
             }
 
-            int iconIdx = 0;
-
             // currently selected scenario
             if ( saveData.getCurrentScenarioID() == i
                  || std::any_of( completedScenarioNextMaps.begin(), completedScenarioNextMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
