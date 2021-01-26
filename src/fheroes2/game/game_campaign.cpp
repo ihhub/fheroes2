@@ -137,19 +137,19 @@ namespace
         fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
 
         const int iconsId = isGoodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
-        const int selectedIconIdx = isGoodCampaign ? 14 : 17;
-        const int unselectedIdx = 12;
+        const int selectedIconIdx = isGoodCampaign ? Campaign::SCENARIOICON_GOOD_SELECTED : Campaign::SCENARIOICON_EVIL_SELECTED;
         // TODO: find icon Idx for done (yellow ring border)
 
         const int middleY = 40, deltaY = 42;
         const int startX = -2, deltaX = 74;
 
         const std::vector<Campaign::ScenarioData> scenarios = campaignData.getAllScenarios();
-        Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-
-        std::vector<int> prevScenarioNextMaps;
+        const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
         int currentX = startX;
+        std::vector<int> prevScenarioNextMaps;
+        const std::vector<int> & completedScenarioNextMaps = campaignData.getScenariosAfter( saveData.getCurrentScenarioID() );
+        const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
         for ( int i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
 
@@ -178,7 +178,21 @@ namespace
                 y += isFinalBranch ? deltaY : -deltaY;
             }
 
-            DrawCampaignScenarioIcon( iconsId, saveData.getCurrentScenarioID() == i ? selectedIconIdx : unselectedIdx, trackOffset, x, y );
+            int iconIdx = 0;
+
+            // currently selected scenario
+            if ( saveData.getCurrentScenarioID() == i )
+                iconIdx = selectedIconIdx;
+            // another scenario you can select
+            else if ( std::any_of( completedScenarioNextMaps.begin(), completedScenarioNextMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
+                iconIdx = Campaign::SCENARIOICON_AVAILABLE;
+            // cleared scenario
+            else if ( std::any_of( clearedMaps.begin(), clearedMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
+                iconIdx = Campaign::SCENARIOICON_CLEARED;
+            else
+                iconIdx = Campaign::SCENARIOICON_UNAVAILABLE;
+
+            DrawCampaignScenarioIcon( iconsId, iconIdx, trackOffset, x, y );
 
             if ( !isBranching || isFinalBranch )
                 prevScenarioNextMaps = nextMaps;

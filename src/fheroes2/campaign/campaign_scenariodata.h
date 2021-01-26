@@ -27,6 +27,15 @@
 
 namespace Campaign
 {
+    enum
+    {
+        SCENARIOICON_CLEARED = 10,
+        SCENARIOICON_AVAILABLE = 11,
+        SCENARIOICON_UNAVAILABLE = 12,
+        SCENARIOICON_GOOD_SELECTED = 14,
+        SCENARIOICON_EVIL_SELECTED = 17,
+    };
+
     struct ScenarioBonusData
     {
     public:
