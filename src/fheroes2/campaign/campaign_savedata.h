@@ -62,7 +62,7 @@ namespace Campaign
             return _finishedMaps.back();
         }
 
-        bool isStarting() const 
+        bool isStarting() const
         {
             return _finishedMaps.empty();
         }

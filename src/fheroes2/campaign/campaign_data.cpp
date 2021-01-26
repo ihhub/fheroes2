@@ -34,7 +34,6 @@ namespace Campaign
         , _scenarios()
     {}
 
-
     const std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
         std::vector<int> scenarioIDs;
@@ -58,7 +57,7 @@ namespace Campaign
         return _scenarios[scenarioID].getNextMaps();
     }
 
-    const std::vector<int> CampaignData::getStartingScenarios() const 
+    const std::vector<int> CampaignData::getStartingScenarios() const
     {
         std::vector<int> startingScenarios;
 
@@ -70,14 +69,13 @@ namespace Campaign
         return startingScenarios;
     }
 
-    bool CampaignData::isStartingScenario( const int scenarioID ) const 
+    bool CampaignData::isStartingScenario( const int scenarioID ) const
     {
         // starting scenario = a scenario that is never included as a nextMap
         for ( size_t i = 0, count = _scenarios.size(); i < count; ++i ) {
             const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
 
-            if ( std::any_of( nextMaps.begin(), nextMaps.end(), [&](const int nextMap){
-                return nextMap == scenarioID;} ))
+            if ( std::any_of( nextMaps.begin(), nextMaps.end(), [&]( const int nextMap ) { return nextMap == scenarioID; } ) )
                 return false;
         }
 

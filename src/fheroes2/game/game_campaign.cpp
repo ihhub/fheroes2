@@ -200,7 +200,7 @@ namespace
         }
     }
 
-    void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top ) 
+    void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
     {
         const auto mapInfo = scenario.loadMap();
         const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
@@ -209,7 +209,7 @@ namespace
         TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
         mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
-        Text campaignMapId( std::to_string(scenario.getScenarioID() + 1), Font::BIG );
+        Text campaignMapId( std::to_string( scenario.getScenarioID() + 1 ), Font::BIG );
         campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
 
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
