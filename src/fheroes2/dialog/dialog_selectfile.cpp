@@ -74,17 +74,17 @@ private:
 
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
-    char short_date[20];
-    char short_hours[20];
-    char short_time[20];
+    char shortDate[20];
+    char shortHours[20];
+    char shortTime[20];
     time_t timeval = info.localtime;
 
-    std::fill( short_date, ARRAY_COUNT_END( short_date ), 0 );
-    std::fill( short_hours, ARRAY_COUNT_END( short_hours ), 0 );
-    std::fill( short_time, ARRAY_COUNT_END( short_time ), 0 );
-    std::strftime( short_date, ARRAY_COUNT( short_date ) - 1, "%b %d,", std::localtime( &timeval ) );
-    std::strftime( short_hours, ARRAY_COUNT( short_hours ) - 1, "%H", std::localtime( &timeval ) );
-    std::strftime( short_time, ARRAY_COUNT( short_time ) - 1, ":%M", std::localtime( &timeval ) );
+    std::fill( shortDate, ARRAY_COUNT_END( shortDate ), 0 );
+    std::fill( shortHours, ARRAY_COUNT_END( shortHours ), 0 );
+    std::fill( shortTime, ARRAY_COUNT_END( shortTime ), 0 );
+    std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
+    std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
+    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( savname.size() ) {
@@ -99,13 +99,13 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
         text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 5, dsty, 150 );
 
-        text.Set( short_date, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortDate, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 225 - text.w(), dsty );
 
-        text.Set( short_hours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortHours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 245 - text.w(), dsty );
 
-        text.Set( short_time, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortTime, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 245, dsty );
     }
 }
