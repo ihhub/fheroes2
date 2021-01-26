@@ -62,6 +62,11 @@ namespace Campaign
             return _finishedMaps.back();
         }
 
+        bool isStarting() const 
+        {
+            return _finishedMaps.empty();
+        }
+
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
