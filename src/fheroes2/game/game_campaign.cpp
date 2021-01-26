@@ -111,13 +111,12 @@ namespace
         "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
         " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." )};
 
-    void DrawCampaignScenarioIcon( const int icnId, int const iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
+    void DrawCampaignScenarioIcon( const int icnId, const int iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
         fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconIdx ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
-    // TODO: return buttonGroup?
-    void DrawCampaignScenarioIcons( const Campaign::CampaignData campaignData, const fheroes2::Point & top )
+    void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData campaignData, const fheroes2::Point & top )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -148,8 +147,10 @@ namespace
 
         int currentX = startX;
         std::vector<int> prevScenarioNextMaps;
-        const std::vector<int> & completedScenarioNextMaps = campaignData.getScenariosAfter( saveData.getCurrentScenarioID() );
         const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
+        const std::vector<int> & completedScenarioNextMaps
+            = saveData.isStarting() ? std::vector<int>() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+
         for ( int i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
 
@@ -181,24 +182,43 @@ namespace
             int iconIdx = 0;
 
             // currently selected scenario
-            if ( saveData.getCurrentScenarioID() == i )
-                iconIdx = selectedIconIdx;
-            // another scenario you can select
-            else if ( std::any_of( completedScenarioNextMaps.begin(), completedScenarioNextMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
-                iconIdx = Campaign::SCENARIOICON_AVAILABLE;
+            if ( saveData.getCurrentScenarioID() == i
+                 || std::any_of( completedScenarioNextMaps.begin(), completedScenarioNextMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
+                buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
+                                          fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
             // cleared scenario
             else if ( std::any_of( clearedMaps.begin(), clearedMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
-                iconIdx = Campaign::SCENARIOICON_CLEARED;
+                DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_CLEARED, trackOffset, x, y );
             else
-                iconIdx = Campaign::SCENARIOICON_UNAVAILABLE;
-
-            DrawCampaignScenarioIcon( iconsId, iconIdx, trackOffset, x, y );
+                DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_UNAVAILABLE, trackOffset, x, y );
 
             if ( !isBranching || isFinalBranch )
                 prevScenarioNextMaps = nextMaps;
 
             if ( !isSubScenario && ( !isBranching || isFinalBranch ) )
                 currentX += deltaX;
+        }
+    }
+
+    void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top ) 
+    {
+        const auto mapInfo = scenario.loadMap();
+        const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
+
+        const std::string & mapNameStr = mapInfo.description;
+        TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
+        mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
+
+        Text campaignMapId( std::to_string(scenario.getScenarioID() + 1), Font::BIG );
+        campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+
+        TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
+        mapDescription.Blit( top.x + 34, top.y + 132 );
+
+        const int textChoiceWidth = 150;
+        for ( uint32_t i = 0, count = bonuses.size(); i < count; ++i ) {
+            Text choice( bonuses[i].ToString(), Font::BIG );
+            choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
         }
     }
 
@@ -337,9 +357,21 @@ int Game::SelectCampaignScenario()
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
 
-    fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 0, 1 );
-    fheroes2::Button buttonOk( top.x + 367, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 4, 5 );
-    fheroes2::Button buttonCancel( top.x + 511, top.y + 431, goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE, 6, 7 );
+    const int buttonIconID = goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+    fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
+    fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
+    fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
+
+    const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
+    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+    const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
+
+    // create scenario bonus choice buttons
+    fheroes2::ButtonGroup buttonChoices;
+    fheroes2::OptionButtonGroup optionButtonGroup;
+
+    Campaign::ScenarioBonusData scenarioBonus;
+    const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
 
     const fheroes2::Point optionButtonOffset( 590, 199 );
     const int32_t optionButtonStep = 22;
@@ -349,22 +381,11 @@ int Game::SelectCampaignScenario()
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
 
-    const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
-    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-    const Campaign::ScenarioData scenario = scenarios[chosenScenarioID];
-
-    const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
-    const uint32_t bonusChoiceCount = static_cast<uint32_t>( bonusChoices.size() );
-
-    fheroes2::ButtonGroup buttonChoices;
-    fheroes2::OptionButtonGroup optionButtonGroup;
-
+    const uint32_t bonusChoiceCount = static_cast<uint32_t>( scenario.getBonuses().size() );
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
         buttonChoices.createButton( optionButtonOffset.x + top.x, optionButtonOffset.y + optionButtonStep * i + top.y, releaseButton, pressedButton, i );
         optionButtonGroup.addButton( &buttonChoices.button( i ) );
     }
-
-    Campaign::ScenarioBonusData scenarioBonus;
 
     // in case there's no bonus for the map
     if ( bonusChoiceCount > 0 ) {
@@ -375,8 +396,6 @@ int Game::SelectCampaignScenario()
     buttonViewIntro.disable();
     buttonViewIntro.draw();
 
-    if ( scenarios.empty() )
-        buttonOk.disable();
     buttonOk.draw();
     buttonCancel.draw();
 
@@ -386,33 +405,22 @@ int Game::SelectCampaignScenario()
     Text textDaysSpent( "0", Font::BIG );
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
-    const auto mapInfo = scenario.loadMap();
-    if ( !scenarios.empty() ) {
-        const std::string & mapNameStr = mapInfo.description;
-        TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
-        mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
+    DrawCampaignScenarioDescription( scenario, top );
 
-        Text campaignMapId( "1", Font::BIG );
-        campaignMapId.Blit( top.x + 172 - campaignMapId.w() / 2, top.y + 97 - campaignMapId.h() / 2 );
+    const std::vector<int> selectableScenarios
+        = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
+    const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
 
-        TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
-        mapDescription.Blit( top.x + 34, top.y + 132 );
+    fheroes2::ButtonGroup selectableScenarioButtons;
+    DrawCampaignScenarioIcons( selectableScenarioButtons, campaignData, top );
 
-        const int textChoiceWidth = 150;
-        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-            Text choice( bonusChoices[i].ToString(), Font::BIG );
-            choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
-        }
-    }
-    else {
-        TextBox textCaption( "We are working hard to ensure that the support of Campaign would arrive as soon as possible", Font::YELLOW_BIG, 350 );
-        textCaption.Blit( top.x + 40, top.y + 140 );
+    for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
+        if ( chosenScenarioID == selectableScenarios[i] )
+            selectableScenarioButtons.button( i ).press();
 
-        TextBox textDescription( "Campaign Game mode is under construction", Font::BIG, 350 );
-        textDescription.Blit( top.x + 40, top.y + 200 );
+        selectableScenarioButtons.button( i ).draw();
     }
 
-    DrawCampaignScenarioIcons( campaignData, top );
     LocalEvent & le = LocalEvent::Get();
 
     cursor.Show();
@@ -434,9 +442,17 @@ int Game::SelectCampaignScenario()
             }
         }
 
+        for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
+            if ( le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+                campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
+                return Game::SELECTCAMPAIGNSCENARIO;
+            }
+        }
+
         if ( le.MouseClickLeft( buttonCancel.area() ) )
             return Game::NEWGAME;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
+            const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
             Players & players = conf.GetPlayers();
             players.SetStartGame();
