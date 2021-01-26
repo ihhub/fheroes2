@@ -84,6 +84,7 @@ namespace Interface
 
         bool NeedRedraw( void ) const;
         void SetRedraw( int );
+        int GetRedrawMask() const;
         void Redraw( int f = 0 );
 
         const fheroes2::Rect & GetScrollLeft( void ) const;
