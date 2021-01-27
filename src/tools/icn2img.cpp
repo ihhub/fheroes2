@@ -113,7 +113,7 @@ int main( int argc, char ** argv )
         std::vector<u8> buf = sf.getRaw( data_size );
 
         if ( buf.size() ) {
-            fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
+            const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
 
             std::ostringstream os;
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
