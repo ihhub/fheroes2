@@ -22,6 +22,7 @@
 #define H2CAMPAIGN_DATA_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 namespace Campaign
 {
@@ -73,11 +74,24 @@ namespace Campaign
             return _campaignID;
         }
 
+        int getCurrentScenarioID() const
+        {
+            return _currentScenarioID;
+        }
+
+        int getLastCompletedScenarioID() const
+        {
+            return _finishedMaps.back();
+        }
+
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
         void addCampaignAward( const std::string & award );
+        void reset();
+
+        static CampaignData & Get();
 
     private:
         friend StreamBase & operator<<( StreamBase & msg, const CampaignData & data );

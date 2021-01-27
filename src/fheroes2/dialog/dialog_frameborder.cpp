@@ -23,22 +23,13 @@
 #include "agg.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "screen.h"
 #include "settings.h"
-#include "text.h"
-
-#define ANGLEWIDTH 44
 
 Dialog::FrameBorder::FrameBorder( int v )
     : restorer( fheroes2::Display::instance() )
     , border( v )
 {}
-
-Dialog::FrameBorder::~FrameBorder()
-{
-    if ( Cursor::Get().isVisible() ) {
-        Cursor::Get().Hide();
-    };
-}
 
 Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
     : restorer( fheroes2::Display::instance() )
@@ -67,29 +58,36 @@ Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
     RenderRegular( GetRect() );
 }
 
+Dialog::FrameBorder::~FrameBorder()
+{
+    if ( Cursor::Get().isVisible() ) {
+        Cursor::Get().Hide();
+    }
+}
+
 bool Dialog::FrameBorder::isValid() const
 {
     return rect.w != 0 && rect.h != 0;
 }
 
-int Dialog::FrameBorder::BorderWidth( void ) const
+int Dialog::FrameBorder::BorderWidth() const
 {
     return border;
 }
 
-int Dialog::FrameBorder::BorderHeight( void ) const
+int Dialog::FrameBorder::BorderHeight() const
 {
     return border;
 }
 
-void Dialog::FrameBorder::SetPosition( s32 posx, s32 posy, u32 encw, u32 ench )
+void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench )
 {
     restorer.restore();
 
     rect.x = posx;
     rect.y = posy;
 
-    if ( encw && ench ) {
+    if ( encw > 0 && ench > 0 ) {
         rect.w = encw + 2 * border;
         rect.h = ench + 2 * border;
 
@@ -98,8 +96,9 @@ void Dialog::FrameBorder::SetPosition( s32 posx, s32 posy, u32 encw, u32 ench )
         area.w = encw;
         area.h = ench;
     }
-    else
+    else {
         restorer.update( posx, posy, restorer.width(), restorer.height() );
+    }
 
     area.x = posx + border;
     area.y = posy + border;
@@ -107,22 +106,17 @@ void Dialog::FrameBorder::SetPosition( s32 posx, s32 posy, u32 encw, u32 ench )
     top = Rect( posx, posy, area.w, border );
 }
 
-void Dialog::FrameBorder::SetBorder( int v )
-{
-    border = v;
-}
-
-const Rect & Dialog::FrameBorder::GetTop( void ) const
+const Rect & Dialog::FrameBorder::GetTop() const
 {
     return top;
 }
 
-const Rect & Dialog::FrameBorder::GetRect( void ) const
+const Rect & Dialog::FrameBorder::GetRect() const
 {
     return rect;
 }
 
-const Rect & Dialog::FrameBorder::GetArea( void ) const
+const Rect & Dialog::FrameBorder::GetArea() const
 {
     return area;
 }

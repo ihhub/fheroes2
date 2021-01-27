@@ -27,8 +27,8 @@
 
 namespace Mixer
 {
-    void Init( void );
-    void Quit( void );
+    void Init();
+    void Quit();
 }
 
 #ifdef WITH_AUDIOCD
@@ -73,7 +73,7 @@ bool SDL::Init( const u32 system )
     return true;
 }
 
-void SDL::Quit( void )
+void SDL::Quit()
 {
 #ifdef WITH_NET
     Network::Quit();

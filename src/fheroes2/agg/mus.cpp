@@ -28,6 +28,7 @@
 #include "mp2.h"
 #include "mus.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
 
 namespace MUS

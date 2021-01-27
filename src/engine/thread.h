@@ -24,6 +24,7 @@
 #define SDLTHREAD_H
 
 #include "types.h"
+#include <SDL.h>
 #include <SDL_thread.h>
 
 namespace SDL

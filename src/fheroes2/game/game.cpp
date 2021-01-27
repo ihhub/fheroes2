@@ -26,7 +26,7 @@
 #include <map>
 
 #include "agg.h"
-#include "ai.h"
+#include "audio_mixer.h"
 #include "battle.h"
 #include "buildinginfo.h"
 #include "castle.h"
@@ -43,6 +43,7 @@
 #include "mus.h"
 #include "payment.h"
 #include "profit.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"

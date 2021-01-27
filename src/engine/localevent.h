@@ -27,6 +27,8 @@
 #include "timing.h"
 #include "types.h"
 
+#include <SDL.h>
+
 enum KeySym
 {
     KEY_NONE = -1,

@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "castle.h"
 #include "cursor.h"
-#include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
@@ -31,8 +30,10 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "monster.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
+#include "ui_window.h"
 #include "world.h"
 
 #include <assert.h>
@@ -536,9 +537,9 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<Dialog::FrameBorder> frameborder( new Dialog::FrameBorder( Size( 280, 250 ) ) );
+    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 280, 250 ) );
 
-    const Rect & area = frameborder->GetArea();
+    const Rect area( frameborder->activeArea() );
     int result = Dialog::ZERO;
 
     CastleIndexListBox listbox( area, result, isEvilInterface );
@@ -554,7 +555,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::REQUESTS;
 
     btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
     btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );

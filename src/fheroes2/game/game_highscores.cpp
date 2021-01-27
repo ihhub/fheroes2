@@ -28,6 +28,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -38,6 +39,7 @@
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_window.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -206,7 +208,7 @@ int Game::HighScores()
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
-    Dialog::FrameBorder border( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     hgs.RedrawList( top.x, top.y );
 

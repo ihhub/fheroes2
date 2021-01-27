@@ -73,14 +73,15 @@ namespace fheroes2
         void swap( Image & image );
 
         // This is an optional indicator for image processing functions.
-        // The whole image still consists of 2 layers but transform layer could be ignored in computations.
+        // The whole image still consists of 2 layers but transform layer might be ignored in computations.
         bool singleLayer() const
         {
             return _singleLayer;
         }
 
-    protected:
-        void disableTransformLayer() // disable transform layer usage. Be careful! Use only for display related images!
+        // BE CAREFUL! This method disables transform layer usage. Use only for display / video related images which are for end rendering purposes!
+        // The name of this method starts from _ on purpose to do not mix with other public methods.
+        void _disableTransformLayer()
         {
             _singleLayer = true;
         }
@@ -194,6 +195,8 @@ namespace fheroes2
     void ApplyAlpha( Image & image, uint8_t alpha );
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
 
+    void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId );
+
     // draw one image onto another
     void Blit( const Image & in, Image & out, bool flip = false );
     void Blit( const Image & in, Image & out, int32_t outX, int32_t outY, bool flip = false );
@@ -236,7 +239,10 @@ namespace fheroes2
     void ReplaceColorIdByTransformId( Image & image, uint8_t colorId, uint8_t transformId );
 
     // Please remember that subpixel accuracy resizing is extremely slow!
-    void Resize( const Image & in, Image & out, bool isSubpixelAccuracy = false );
+    void Resize( const Image & in, Image & out, const bool isSubpixelAccuracy = false );
+
+    void Resize( const Image & in, const int32_t inX, const int32_t inY, const int32_t widthRoiIn, const int32_t heightRoiIn, Image & out, const int32_t outX,
+                 const int32_t outY, const int32_t widthRoiOut, const int32_t heightRoiOut, const bool isSubpixelAccuracy = false );
 
     // Please use value from the main palette only
     void SetPixel( Image & image, int32_t x, int32_t y, uint8_t value );

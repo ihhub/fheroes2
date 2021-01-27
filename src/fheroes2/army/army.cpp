@@ -38,6 +38,7 @@
 #include "morale.h"
 #include "payment.h"
 #include "race.h"
+#include "rand.h"
 #include "screen.h"
 #include "settings.h"
 #include "speed.h"
@@ -825,6 +826,25 @@ void Troops::AssignToFirstFreeSlot( const Troop & troop, const uint32_t splitCou
     }
 }
 
+void Troops::JoinAllTroopsOfType( const Troop & targetTroop )
+{
+    const int troopID = targetTroop.GetID();
+    const int totalMonsterCount = GetCountMonsters( troopID );
+
+    for ( iterator it = begin(); it != end(); ++it ) {
+        Troop * troop = *it;
+        if ( !troop->isValid() || troop->GetID() != troopID )
+            continue;
+
+        if ( troop == &targetTroop ) {
+            troop->SetCount( totalMonsterCount );
+        }
+        else {
+            troop->Reset();
+        }
+    }
+}
+
 Army::Army( HeroBase * s )
     : commander( s )
     , combat_format( true )
@@ -1407,11 +1427,6 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
 bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
 {
     return army1.isStrongerThan( army2 );
-}
-
-void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
-{
-    troops.DrawMons32Line( cx, cy, width, first, count, scoute, false, true );
 }
 
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */

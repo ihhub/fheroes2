@@ -24,7 +24,6 @@
 #include <functional>
 
 #include "agg.h"
-#include "ai.h"
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -39,6 +38,7 @@
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
@@ -1557,7 +1557,7 @@ void World::ProcessNewMap()
             const Maps::Tiles & tile = vec_tiles[ii];
             const s32 x = tile.GetIndex() % w();
             const s32 y = tile.GetIndex() / w();
-            if ( tile.GoodForUltimateArtifact() && x > 5 && x < w() - 5 && y > 5 && y < h() - 5 )
+            if ( tile.GoodForUltimateArtifact( 0 ) && x > 5 && x < w() - 5 && y > 5 && y < h() - 5 )
                 pools.push_back( tile.GetIndex() );
         }
 

@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
 #include "battle_catapult.h"
@@ -41,8 +42,12 @@
 #include "pal.h"
 #include "pocketpc.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
+#include "ui_window.h"
 #include "world.h"
+
+#include <cassert>
 
 #define ARMYORDERW 40
 
@@ -1045,6 +1050,15 @@ void Battle::Interface::UpdateContourColor()
     }
 }
 
+void Battle::Interface::fullRedraw()
+{
+    if ( !_background ) {
+        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    }
+
+    Redraw();
+}
+
 void Battle::Interface::Redraw( void )
 {
     RedrawPartialStart();
@@ -1054,7 +1068,6 @@ void Battle::Interface::Redraw( void )
 void Battle::Interface::RedrawPartialStart()
 {
     Cursor::Get().Hide();
-    RedrawBorder();
     RedrawCover();
     RedrawArmies();
 }
@@ -1181,12 +1194,19 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
+                    const int unitAnimState = unitOnCell->GetAnimationState();
+                    const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
+
                     if ( isCellBefore ) {
-                        troopCounterBeforeWall.emplace_back( unitOnCell );
+                        if ( isStaticUnit ) {
+                            troopCounterBeforeWall.emplace_back( unitOnCell );
+                        }
                         troopBeforeWall.emplace_back( unitOnCell );
                     }
                     else {
-                        troopCounterAfterWall.emplace_back( unitOnCell );
+                        if ( isStaticUnit ) {
+                            troopCounterAfterWall.emplace_back( unitOnCell );
+                        }
                         troopAfterWall.emplace_back( unitOnCell );
                     }
                 }
@@ -1249,7 +1269,12 @@ void Battle::Interface::RedrawArmies()
                 }
 
                 if ( _movingUnit != unitOnCell && unitOnCell->isValid() ) {
-                    troopCounter.emplace_back( unitOnCell );
+                    const int unitAnimState = unitOnCell->GetAnimationState();
+                    const bool isStaticUnit = unitAnimState == Monster_Info::STATIC || unitAnimState == Monster_Info::IDLE;
+                    if ( isStaticUnit ) {
+                        troopCounter.emplace_back( unitOnCell );
+                    }
+
                     troop.emplace_back( unitOnCell );
                 }
                 else {
@@ -1512,8 +1537,84 @@ void Battle::Interface::RedrawCover()
     const Cell * cell = Board::GetCell( index_pos );
 
     if ( cell && _currentUnit && conf.BattleShowMouseShadow() && Cursor::Get().Themes() != Cursor::WAR_NONE ) {
-        Point cursorPt = cell->GetPos();
-        fheroes2::Blit( sf_cursor, _mainSurface, cursorPt.x, cursorPt.y );
+        std::set<const Cell *> highlightCells;
+
+        if ( humanturn_spell.isValid() ) {
+            switch ( humanturn_spell.GetID() ) {
+            case Spell::COLDRING: {
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+                }
+                break;
+            }
+            case Spell::FIREBALL:
+            case Spell::METEORSHOWER: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+                }
+                break;
+            }
+            case Spell::FIREBLAST: {
+                highlightCells.emplace( cell );
+                const Indexes around = Board::GetAroundIndexes( index_pos );
+                for ( size_t i = 0; i < around.size(); ++i ) {
+                    const Cell * aroundCell = Board::GetCell( around[i] );
+                    if ( aroundCell != nullptr ) {
+                        highlightCells.emplace( aroundCell );
+                    }
+
+                    const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
+                    for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
+                        const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
+                        if ( aroundCellTwice != nullptr ) {
+                            highlightCells.emplace( aroundCellTwice );
+                        }
+                    }
+                }
+                break;
+            }
+            default:
+                highlightCells.emplace( cell );
+            }
+        }
+        else {
+            highlightCells.emplace( cell );
+        }
+
+        assert( !highlightCells.empty() );
+
+        const HeroBase * currentCommander = arena.GetCurrentCommander();
+        const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
+
+        const bool displayMoveShadow = conf.BattleShowMoveShadow();
+
+        for ( const Cell * highlightCell : highlightCells ) {
+            bool isApplicable = highlightCell->isPassable1( false );
+            if ( isApplicable ) {
+                const Unit * highlightedUnit = highlightCell->GetUnit();
+                isApplicable = highlightedUnit == nullptr || highlightedUnit->GetMagicResist( humanturn_spell, spellPower ) < 100;
+            }
+
+            if ( isApplicable ) {
+                if ( displayMoveShadow && ( highlightCell->GetDirection() == UNKNOWN || highlightCell->GetUnit() != nullptr ) ) {
+                    fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+                }
+
+                fheroes2::Blit( sf_cursor, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+            }
+            else {
+                fheroes2::Blit( sf_shadow, _mainSurface, highlightCell->GetPos().x, highlightCell->GetPos().y );
+            }
+        }
     }
 }
 
@@ -1554,8 +1655,9 @@ void Battle::Interface::RedrawCoverBoard( const Settings & conf, const Board & b
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() )
+            if ( ( *it ).isPassable1( true ) && UNKNOWN != ( *it ).GetDirection() ) {
                 fheroes2::Blit( sf_shadow, _mainSurface, ( *it ).GetPos().x, ( *it ).GetPos().y );
+            }
         }
     }
 }
@@ -1609,12 +1711,15 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
 
     if ( Board::CATAPULT_POS == cellId ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CATAPULT, catapult_frame );
-        const Rect & pos = Board::GetCell( cellId )->GetPos();
-        fheroes2::Blit( sprite, _mainSurface, sprite.x() + pos.x - pos.w, sprite.y() + pos.y + pos.h + cellYOffset );
+        fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Board::CASTLE_GATE_POS == cellId ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
-        fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        Bridge * bridge = Arena::GetBridge();
+        assert( bridge != nullptr );
+        if ( bridge != nullptr && !bridge->isDestroy() ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        }
     }
     else if ( Board::CASTLE_FIRST_TOP_WALL_POS == cellId || Board::CASTLE_SECOND_TOP_WALL_POS == cellId || Board::CASTLE_THIRD_TOP_WALL_POS == cellId
               || Board::CASTLE_FORTH_TOP_WALL_POS == cellId ) {
@@ -1683,7 +1788,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             index = ltower->isValid() ? 18 : 19;
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
-        fheroes2::Blit( towerSprite, _mainSurface, 415, 40 );
+        fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 153 + towerSprite.y() );
     }
     else if ( Board::CASTLE_BOTTOM_ARCHER_TOWER_POS == cellId ) {
         const Tower * rtower = Arena::GetTower( TWR_RIGHT );
@@ -1693,15 +1798,15 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
             index = rtower->isValid() ? 18 : 19;
 
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, index );
-        fheroes2::Blit( towerSprite, _mainSurface, 415, 290 );
+        fheroes2::Blit( towerSprite, _mainSurface, 443 + towerSprite.x(), 405 + towerSprite.y() );
     }
     else if ( Board::CASTLE_TOP_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
-        fheroes2::Blit( towerSprite, _mainSurface, 375, 120 );
+        fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 237 + towerSprite.y() );
     }
     else if ( Board::CASTLE_BOTTOM_GATE_TOWER_POS == cellId ) {
         const fheroes2::Sprite & towerSprite = fheroes2::AGG::GetICN( castleIcnId, 17 );
-        fheroes2::Blit( towerSprite, _mainSurface, 375, 205 );
+        fheroes2::Blit( towerSprite, _mainSurface, 399 + towerSprite.x(), 321 + towerSprite.y() );
     }
 }
 
@@ -1862,12 +1967,6 @@ void Battle::Interface::RedrawKilled()
     }
 }
 
-void Battle::Interface::RedrawBorder( void )
-{
-    if ( !fheroes2::Display::instance().isDefaultSize() )
-        Dialog::FrameBorder::RenderRegular( border.GetRect() );
-}
-
 int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 {
     statusMsg.clear();
@@ -1891,7 +1990,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
-                    return arena.GetObstaclesPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
                     const int dir = cell->GetTriangleDirection( GetMouseCursor() );
@@ -1979,7 +2078,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
     _currentUnit = &b;
     humanturn_redraw = false;
     humanturn_exit = false;
@@ -2275,7 +2374,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -2650,7 +2749,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
     // Mage is channeling the bolt; doesn't have missile sprite
     if ( isMage )
-        DELAY( Game::ApplyBattleSpeed( 115 ) );
+        fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
     else
         missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) );
 
@@ -2682,7 +2781,7 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
@@ -2959,7 +3058,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         frameDelay = frameDelay * 12 / 10; // 20% slower
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
 #ifdef DEBUG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
@@ -3047,7 +3146,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3111,9 +3210,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionResistSpell( const Unit & target )
+void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
 {
-    AGG::PlaySound( M82::RSBRYFZL );
+    if ( playSound ) {
+        AGG::PlaySound( M82::RSBRYFZL );
+    }
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );
@@ -3385,7 +3486,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     StringReplace( msg, "%{attacker}", unit.GetName() );
     status.SetMessage( msg, true );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
         const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame() );
@@ -3464,7 +3565,7 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
 void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit & defender )
 {
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     _currentUnit = NULL;
 
     const Point missileStart = tower.GetPortPosition();
@@ -3586,7 +3687,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
         const Point targetPos = target.GetCenterPoint();
         const double angle = GetAngle( missileStart, targetPos );
 
-        Cursor::Get().SetThemes( Cursor::WAR_NONE );
+        Cursor::Get().SetThemes( Cursor::WAR_POINTER );
         AGG::PlaySound( M82::MAGCAROW );
 
         // Magic arrow == Archer missile
@@ -3598,7 +3699,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     uint32_t currentAlpha = target.GetCustomAlpha();
 
@@ -3637,7 +3738,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     uint32_t currentAlpha = 0;
 
@@ -3670,7 +3771,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     const Points points = GetLinePoints( rt1, rt2, 5 );
     Points::const_iterator pnt = points.begin();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     AGG::PlaySound( M82::MIRRORIM );
 
     while ( le.HandleEvents() && pnt != points.end() ) {
@@ -3699,7 +3800,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
 
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
@@ -3779,7 +3880,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<Point> & poi
     }
 
     // small delay to display fully drawn lightning
-    DELAY( 100 );
+    fheroes2::delayforMs( 100 );
 
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
@@ -3862,7 +3963,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     fheroes2::Sprite mixSprite( unitSprite );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -3902,7 +4003,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 
     fheroes2::Sprite mixSprite( unitSprite );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
@@ -3966,7 +4067,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     const Points path = GetEuclideanLine( startingPos, targetPos, size );
     const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
     AGG::PlaySound( spellSound );
 
     size_t i = 0;
@@ -4022,7 +4123,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     _currentUnit = NULL;
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     Rect area = GetArea();
     area.h -= 36;
@@ -4058,7 +4159,7 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     // set WNCE
     _currentUnit = NULL;
@@ -4100,7 +4201,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     const fheroes2::Image original( _mainSurface );
     const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
@@ -4148,7 +4249,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         spriteCache.push_back( fheroes2::AGG::GetICN( icn, i ) );
     }
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4205,7 +4306,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteWhitening, 0, 0, area.w, area.h );
     fheroes2::Copy( _mainSurface, area.x, area.y, spriteReddish, 0, 0, area.w, area.h );
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     AGG::PlaySound( M82::ARMGEDN );
@@ -4270,7 +4371,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     uint32_t frame = 0;
     area.h -= 38;
 
-    cursor.SetThemes( Cursor::WAR_NONE );
+    cursor.SetThemes( Cursor::WAR_POINTER );
 
     fheroes2::Image sprite( area.w, area.h );
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.w, area.h );
@@ -4374,7 +4475,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
     uint32_t frame = 0;
     const Rect & center = Board::GetCell( dst )->GetPos();
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4466,7 +4567,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
 
     uint32_t frame = 0;
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = NULL;
 
@@ -4516,7 +4617,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     uint32_t frame = 0;
     const bool reflect = ( icn == ICN::SHIELD && b.isReflect() );
 
-    Cursor::Get().SetThemes( Cursor::WAR_NONE );
+    Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
     if ( animation == WINCE ) {
         _currentUnit = NULL;

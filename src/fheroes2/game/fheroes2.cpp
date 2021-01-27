@@ -25,6 +25,7 @@
 #include <string>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "bin_info.h"
 #include "cursor.h"
@@ -119,7 +120,7 @@ int main( int argc, char ** argv )
     if ( conf.Music() )
         SetTimidityEnvPath();
 
-    u32 subsystem = INIT_VIDEO | INIT_TIMER;
+    u32 subsystem = INIT_VIDEO;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     subsystem |= INIT_GAMECONTROLLER;
@@ -217,8 +218,8 @@ int main( int argc, char ** argv )
                 case Game::NEWSTANDARD:
                     rs = Game::NewStandard();
                     break;
-                case Game::NEWCAMPAIN:
-                    rs = Game::NewCampain();
+                case Game::NEWCAMPAIGN:
+                    rs = Game::NewCampaign();
                     break;
                 case Game::NEWMULTI:
                     rs = Game::NewMulti();

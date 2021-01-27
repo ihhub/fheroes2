@@ -33,6 +33,7 @@
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
+#include "rand.h"
 #include "settings.h"
 #include "world.h"
 
@@ -474,38 +475,33 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * black ) const
+std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    Indexes result;
-    std::vector<IndexDistance> dists;
-    dists.reserve( 15 );
+    std::vector<std::pair<Battle::Unit *, int32_t> > foundUnits;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Battle::Unit * b = ( *it ).GetUnit();
+    for ( Cell & cell : *this ) {
+        Unit * cellUnit = cell.GetUnit();
+        if ( cellUnit == nullptr || startUnit == cellUnit || cell.GetIndex() != cellUnit->GetHeadIndex() ) {
+            continue;
+        }
 
-        if ( b ) {
-            // check black list
-            if ( black && black->end() != std::find( black->begin(), black->end(), b->GetHeadIndex() ) )
-                continue;
-            // added
-            if ( pos != b->GetHeadIndex() )
-                dists.push_back( IndexDistance( b->GetHeadIndex(), GetDistance( pos, b->GetHeadIndex() ) ) );
+        const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
+        if ( !isBlackListed ) {
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
         }
     }
 
-    if ( 1 < dists.size() ) {
-        std::sort( dists.begin(), dists.end(), IndexDistance::Shortest );
-        const uint32_t distFront = dists.front().second;
-        dists.resize( std::count_if( dists.begin(), dists.end(), [distFront]( const IndexDistance & v ) { return v.second == distFront; } ) );
+    std::sort( foundUnits.begin(), foundUnits.end(),
+               []( const std::pair<Battle::Unit *, int32_t> & first, const std::pair<Battle::Unit *, int32_t> & second ) { return first.second < second.second; } );
+
+    std::vector<Battle::Unit *> units;
+    units.reserve( foundUnits.size() );
+
+    for ( const auto & foundUnit : foundUnits ) {
+        units.push_back( foundUnit.first );
     }
 
-    if ( dists.size() ) {
-        result.reserve( dists.size() );
-        for ( std::vector<IndexDistance>::const_iterator it = dists.begin(); it != dists.end(); ++it )
-            result.push_back( ( *it ).first );
-    }
-
-    return result;
+    return units;
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )

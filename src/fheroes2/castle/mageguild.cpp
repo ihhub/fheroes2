@@ -25,6 +25,7 @@
 #include "heroes_base.h"
 #include "mageguild.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
 
 Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );

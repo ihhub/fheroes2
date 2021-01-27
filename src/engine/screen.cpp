@@ -33,6 +33,7 @@
 #endif
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <set>
 
@@ -428,7 +429,16 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    if ( display.width() % 4 != 0 ) {
+                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < display.height(); ++i ) {
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
+                        }
+                    }
+                    else {
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    }
                 }
             }
 
@@ -558,6 +568,10 @@ namespace
 
                 SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
             }
+            else {
+                // This is unsupported format. Please implement it.
+                assert( 0 );
+            }
         }
 
         virtual bool isMouseCursorActive() const override
@@ -599,7 +613,10 @@ namespace
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
-                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
+                    if ( _surface->w % 4 == 0 ) {
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    }
                 }
             }
         }
@@ -755,7 +772,16 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    if ( display.width() % 4 != 0 ) {
+                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < display.height(); ++i ) {
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
+                        }
+                    }
+                    else {
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    }
                 }
             }
 
@@ -842,6 +868,10 @@ namespace
 
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
             }
+            else {
+                // This is unsupported format. Please implement it.
+                assert( 0 );
+            }
         }
 
         virtual bool isMouseCursorActive() const override
@@ -873,13 +903,16 @@ namespace
 
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
-                    // copy the image from display buffer to SDL surface
+                    // Copy the image from display buffer to SDL surface in case of fullscreen toggling
                     fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
-                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
+                    if ( _surface->w % 4 == 0 ) {
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    }
                 }
             }
         }
@@ -1126,7 +1159,7 @@ namespace fheroes2
         , _postprocessing( NULL )
         , _renderSurface( NULL )
     {
-        disableTransformLayer();
+        _disableTransformLayer();
     }
 
     Display::~Display()

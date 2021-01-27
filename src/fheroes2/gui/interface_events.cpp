@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -111,7 +112,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
             break;
 
         default:
-            allow = ( tile.isPassable( Direction::CENTER, fromWater, false ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
+            allow = ( tile.isPassable( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
             break;
         }
 
@@ -358,7 +359,7 @@ int Interface::Basic::EventDigArtifact( void )
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact( hero->GetColor() ) ) {
                 AGG::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
@@ -423,7 +424,7 @@ void Interface::Basic::EventDefaultAction( void )
             hero->SetMove( true );
         else
             // 3. hero dialog
-            Game::OpenHeroesDialog( *hero );
+            Game::OpenHeroesDialog( *hero, true, true );
     }
     else
         // 4. town dialog
@@ -435,7 +436,7 @@ void Interface::Basic::EventDefaultAction( void )
 void Interface::Basic::EventOpenFocus( void )
 {
     if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes() );
+        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
     else if ( GetFocusCastle() )
         Game::OpenCastleDialog( *GetFocusCastle() );
 }

@@ -26,6 +26,7 @@
 #include "game.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_window.h"
 #include "world.h"
 
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
@@ -205,8 +206,8 @@ void Dialog::MakeGiftResource( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 320, 224 ) );
-    const Rect & box = frameborder.GetArea();
+    const fheroes2::StandardWindow frameborder( 320, 224 );
+    const Rect box( frameborder.activeArea() );
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 
