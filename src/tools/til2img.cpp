@@ -28,7 +28,6 @@
 #include <SDL.h>
 
 #include "engine.h"
-#include "image.h"
 #include "image_tool.h"
 #include "palette_h2.h"
 #include "serialize.h"
