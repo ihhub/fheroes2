@@ -268,7 +268,7 @@ public:
 #ifdef VITA
     void DPadTextInputActive( bool active )
     {
-        dpadInputActive = active;
+        _dpadInputActive = active;
     }
 #endif
 
@@ -370,7 +370,7 @@ private:
 #endif
 
 #ifdef VITA
-    bool dpadInputActive = false;
+    bool _dpadInputActive = false;
 #endif
 };
 

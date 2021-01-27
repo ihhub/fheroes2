@@ -537,7 +537,11 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( _gameController != nullptr ) {
         // fast map scroll with dpad
+#ifdef VITA
+        if ( !_dpadScrollActive || _dpadInputActive )
+#else
         if ( !_dpadScrollActive )
+#endif
             ResetModes( KEY_PRESSED );
     }
     else {
