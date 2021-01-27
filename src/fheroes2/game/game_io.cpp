@@ -252,9 +252,9 @@ bool Game::Load( const std::string & fn )
     u16 end_check = 0;
 
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
-    if ( conf.Lang() != "en" && conf.Lang() != conf.ForceLang() && !conf.Unicode() ) {
+    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
         std::string warningMessage( "This is an saved game is localized for lang = " );
-        warningMessage.append( conf.Lang() );
+        warningMessage.append( conf.loadedFileLanguage() );
         warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
         warningMessage.append( "(tip: set unicode = on)" );
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );

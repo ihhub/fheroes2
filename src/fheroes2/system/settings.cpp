@@ -932,9 +932,9 @@ const std::string & Settings::ForceLang( void ) const
 {
     return force_lang;
 }
-const std::string & Settings::Lang( void ) const
+const std::string & Settings::loadedFileLanguage( void ) const
 {
-    return lang;
+    return _loadedFileLanguage;
 }
 const std::string & Settings::MapsCharset( void ) const
 {
@@ -1899,7 +1899,7 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    msg >> conf.lang;
+    msg >> conf._loadedFileLanguage;
 
     int debug;
     u32 opt_game = 0; // skip: settings
