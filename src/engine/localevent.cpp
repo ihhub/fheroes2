@@ -733,9 +733,9 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         SetModes( MOUSE_MOTION );
 
-        _emulatedPointerPosX = ( ( screenResolution.width * event.x ) - ( screenResolution.width - windowRect.width - windowRect.x ) )
+        _emulatedPointerPosX = ( screenResolution.width * event.x - windowRect.x )
                                * ( static_cast<double>( gameSurfaceRes.width ) / windowRect.width );
-        _emulatedPointerPosY = ( ( screenResolution.height * event.y ) - ( screenResolution.height - windowRect.height - windowRect.y ) )
+        _emulatedPointerPosY = ( screenResolution.height * event.y - windowRect.y )
                                * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
 
         mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
