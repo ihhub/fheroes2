@@ -168,37 +168,6 @@ const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpa
     return heroes2_agg.read( key );
 }
 
-struct ICNHeader
-{
-    ICNHeader()
-        : offsetX( 0 )
-        , offsetY( 0 )
-        , width( 0 )
-        , height( 0 )
-        , animationFrames( 0 )
-        , offsetData( 0 )
-    {}
-
-    u16 offsetX;
-    u16 offsetY;
-    u16 width;
-    u16 height;
-    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-    u32 offsetData;
-};
-
-StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
-{
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
-
-    return st;
-}
-
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
