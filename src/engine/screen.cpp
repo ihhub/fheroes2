@@ -1036,8 +1036,8 @@ namespace
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
             texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
             memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
-            palettedTexturePointer = (uint8_t *)vita2d_texture_get_datap( texBuffer );
-            SDL_memset( palettedTexturePointer, '\0', width_ * height_ * sizeof( uint8_t ) );
+            palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( texBuffer ) );
+            memset( palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
             // linkRenderSurface( palettedTexturePointer );
 
             // screen scaling calculation

@@ -71,7 +71,7 @@ void SetCurrentVitaCharIndex( char current_char )
         current_char += 32;
     }
 
-    KeySym keySym = KeySymFromChar( current_char );
+    const KeySym keySym = KeySymFromChar( current_char );
     for ( int i = 0; i < TOTAL_CHARACTERS_VITA; ++i ) {
         if ( vitaKeys[i] == keySym ) {
             currentCharIndex = i;

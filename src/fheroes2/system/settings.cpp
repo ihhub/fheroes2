@@ -404,6 +404,9 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+#ifdef VITA
+    , _vitaKeepAspectRatio( 1 )
+#endif
     , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
@@ -728,8 +731,8 @@ bool Settings::Read( const std::string & filename )
 
 #ifdef VITA
     if ( config.Exists( "vita_keep_aspect_ratio" ) ) {
-        vita_keep_aspect_ratio = config.IntParams( "vita_keep_aspect_ratio" );
-        fheroes2::engine().SetVitaKeepAspectRatio( vita_keep_aspect_ratio );
+        _vitaKeepAspectRatio = config.IntParams( "vita_keep_aspect_ratio" );
+        fheroes2::engine().SetVitaKeepAspectRatio( _vitaKeepAspectRatio );
     }
 #endif
 
@@ -779,8 +782,8 @@ bool Settings::Save( const std::string & filename ) const
 
     std::fstream file;
 #ifdef VITA
-    const std::string vita_filename = "ux0:data/fheroes2/" + filename;
-    file.open( vita_filename.data(), std::fstream::out | std::fstream::trunc );
+    const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
+    file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
 #else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
 #endif
@@ -892,7 +895,7 @@ std::string Settings::String( void ) const
 
 #ifdef VITA
     os << std::endl << "# vita keep aspect ratio" << std::endl;
-    os << "vita_keep_aspect_ratio = " << vita_keep_aspect_ratio << std::endl;
+    os << "vita_keep_aspect_ratio = " << _vitaKeepAspectRatio << std::endl;
 #endif
 
     return os.str();

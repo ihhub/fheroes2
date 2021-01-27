@@ -427,7 +427,7 @@ private:
     int music_volume;
     MusicSource _musicType;
 #ifdef VITA
-    int vita_keep_aspect_ratio;
+    int _vitaKeepAspectRatio;
 #endif
     int _controllerPointerSpeed;
     int heroes_speed;
