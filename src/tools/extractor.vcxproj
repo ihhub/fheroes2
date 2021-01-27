@@ -37,11 +37,6 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A5447356-473D-44F0-B269-01CEF05E0ACF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-    <Disable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn>true</Disable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" Label="Configuration">
@@ -100,51 +95,51 @@
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Debug.props" />
-    <Import Project="VisualStudio\SDL1.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Debug.props" />
+    <Import Project="..\..\VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Debug.props" />
-    <Import Project="VisualStudio\SDL2.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Debug.props" />
+    <Import Project="..\..\VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Release.props" />
-    <Import Project="VisualStudio\SDL1.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Release.props" />
+    <Import Project="..\..\VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Release.props" />
-    <Import Project="VisualStudio\SDL2.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Release.props" />
+    <Import Project="..\..\VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Debug.props" />
-    <Import Project="VisualStudio\SDL1.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Debug.props" />
+    <Import Project="..\..\VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL2|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Debug.props" />
-    <Import Project="VisualStudio\SDL2.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Debug.props" />
+    <Import Project="..\..\VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL1|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Release.props" />
-    <Import Project="VisualStudio\SDL1.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Release.props" />
+    <Import Project="..\..\VisualStudio\SDL1.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release-SDL2|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VisualStudio\common.props" />
-    <Import Project="VisualStudio\Release.props" />
-    <Import Project="VisualStudio\SDL2.props" />
+    <Import Project="..\..\VisualStudio\common.props" />
+    <Import Project="..\..\VisualStudio\Release.props" />
+    <Import Project="..\..\VisualStudio\SDL2.props" />
   </ImportGroup>
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
@@ -174,37 +169,37 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\engine\agg_file.cpp" />
-    <ClCompile Include="src\engine\audio.cpp" />
-    <ClCompile Include="src\engine\audio_cdrom.cpp" />
-    <ClCompile Include="src\engine\audio_mixer.cpp" />
-    <ClCompile Include="src\engine\audio_music.cpp" />
-    <ClCompile Include="src\engine\dir.cpp" />
-    <ClCompile Include="src\engine\engine.cpp" />
-    <ClCompile Include="src\engine\error.cpp" />
-    <ClCompile Include="src\engine\font.cpp" />
-    <ClCompile Include="src\engine\image.cpp" />
-    <ClCompile Include="src\engine\image_tool.cpp" />
-    <ClCompile Include="src\engine\localevent.cpp" />
-    <ClCompile Include="src\engine\pal.cpp" />
-    <ClCompile Include="src\engine\rand.cpp" />
-    <ClCompile Include="src\engine\rect.cpp" />
-    <ClCompile Include="src\engine\screen.cpp" />
-    <ClCompile Include="src\engine\sdlnet.cpp" />
-    <ClCompile Include="src\engine\serialize.cpp" />
-    <ClCompile Include="src\engine\smk_decoder.cpp" />
-    <ClCompile Include="src\engine\system.cpp" />
-    <ClCompile Include="src\engine\thread.cpp" />
-    <ClCompile Include="src\engine\timing.cpp" />
-    <ClCompile Include="src\engine\tinyconfig.cpp" />
-    <ClCompile Include="src\engine\tools.cpp" />
-    <ClCompile Include="src\engine\translations.cpp" />
-    <ClCompile Include="src\engine\xmi2mid.cpp" />
-    <ClCompile Include="src\engine\zzlib.cpp" />
-    <ClCompile Include="src\tools\extractor.cpp" />
-    <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
+    <ClCompile Include="..\engine\agg_file.cpp" />
+    <ClCompile Include="..\engine\audio.cpp" />
+    <ClCompile Include="..\engine\audio_cdrom.cpp" />
+    <ClCompile Include="..\engine\audio_mixer.cpp" />
+    <ClCompile Include="..\engine\audio_music.cpp" />
+    <ClCompile Include="..\engine\dir.cpp" />
+    <ClCompile Include="..\engine\engine.cpp" />
+    <ClCompile Include="..\engine\error.cpp" />
+    <ClCompile Include="..\engine\font.cpp" />
+    <ClCompile Include="..\engine\image.cpp" />
+    <ClCompile Include="..\engine\image_tool.cpp" />
+    <ClCompile Include="..\engine\localevent.cpp" />
+    <ClCompile Include="..\engine\pal.cpp" />
+    <ClCompile Include="..\engine\rand.cpp" />
+    <ClCompile Include="..\engine\rect.cpp" />
+    <ClCompile Include="..\engine\screen.cpp" />
+    <ClCompile Include="..\engine\sdlnet.cpp" />
+    <ClCompile Include="..\engine\serialize.cpp" />
+    <ClCompile Include="..\engine\smk_decoder.cpp" />
+    <ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\thread.cpp" />
+    <ClCompile Include="..\engine\timing.cpp" />
+    <ClCompile Include="..\engine\tinyconfig.cpp" />
+    <ClCompile Include="..\engine\tools.cpp" />
+    <ClCompile Include="..\engine\translations.cpp" />
+    <ClCompile Include="..\engine\xmi2mid.cpp" />
+    <ClCompile Include="..\engine\zzlib.cpp" />
+    <ClCompile Include="extractor.cpp" />
+    <ClCompile Include="..\thirdparty\libsmacker\smacker.c" />
+    <ClCompile Include="..\thirdparty\libsmacker\smk_bitstream.c" />
+    <ClCompile Include="..\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

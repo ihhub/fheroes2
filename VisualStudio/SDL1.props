@@ -12,7 +12,7 @@
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(ProjectDir)..\sdl\lib\$(PlatformTarget)\*" "$(OutDir)"
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)..\..\sdl\lib\$(PlatformTarget)\*" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
