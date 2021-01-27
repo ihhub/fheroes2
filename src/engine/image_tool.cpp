@@ -19,9 +19,7 @@
  ***************************************************************************/
 
 #include "image_tool.h"
-#include "agg_file.h"
 #include "palette_h2.h"
-#include "serialize.h"
 
 #include <SDL_version.h>
 #include <SDL_video.h>
