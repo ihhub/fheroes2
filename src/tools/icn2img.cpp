@@ -39,8 +39,6 @@
 #undef main
 #endif
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
-
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {

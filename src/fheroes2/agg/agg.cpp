@@ -54,8 +54,6 @@
 #include "zzlib.h"
 #endif
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
-
 namespace AGG
 {
     // struct fnt_cache_t

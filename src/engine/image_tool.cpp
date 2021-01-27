@@ -198,14 +198,3 @@ namespace fheroes2
     }
 }
 
-StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )
-{
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
-
-    return st;
-}
