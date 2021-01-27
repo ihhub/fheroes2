@@ -932,7 +932,7 @@ const std::string & Settings::ForceLang( void ) const
 {
     return force_lang;
 }
-const std::string & Settings::loadedFileLanguage( void ) const
+const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;
 }

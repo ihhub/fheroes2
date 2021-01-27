@@ -203,7 +203,7 @@ public:
 
     const std::string & MapsCharset( void ) const;
     const std::string & ForceLang( void ) const;
-    const std::string & loadedFileLanguage( void ) const;
+    const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal( void ) const;
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
