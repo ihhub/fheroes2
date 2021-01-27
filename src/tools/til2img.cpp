@@ -84,7 +84,8 @@ int main( int argc, char ** argv )
         u32 offset = width * height * cur;
         if ( offset < buf.size() ) {
             fheroes2::Image image( width, height );
-            memcpy( image.image(), &buf[offset], (size_t)width * height );
+            memcpy( image.image(), &buf[offset], static_cast<size_t>( width * height ) );
+            std::fill( image.transform(), image.transform() + width * height, 0 );
 
             std::ostringstream stream;
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
