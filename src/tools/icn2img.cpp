@@ -28,12 +28,9 @@
 
 #include "agg_file.h"
 #include "engine.h"
-#include "image.h"
 #include "image_tool.h"
 #include "palette_h2.h"
-#include "serialize.h"
 #include "system.h"
-#include <SDL.h>
 
 #if defined( _MSC_VER )
 #undef main
