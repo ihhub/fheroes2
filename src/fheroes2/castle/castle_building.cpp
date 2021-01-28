@@ -292,11 +292,29 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const Point & ds
 
         CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );
 
+        // Special case: Knight castle's flags are overlapped by Right Turret so we need to draw flags after drawing the Turret.
+        const bool knightCastleCase = ( race == Race::KNGT && castle.isBuild( BUILD_RIGHTTURRET ) && castle.isBuild( BUILD_CASTLE ) );
+        if ( knightCastleCase && build == BUILD_CASTLE ) {
+            // Do not draw flags.
+            return;
+        }
+
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
             const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, index2 );
 
             CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max, alpha );
+        }
+
+        if ( knightCastleCase && build == BUILD_RIGHTTURRET ) {
+            // Draw Castle's flags after the Turret.
+            const int castleIcn = Castle::GetICNBuilding( BUILD_CASTLE, race );
+            const uint32_t flagAnimFrame = ICN::AnimationFrame( castleIcn, index, frame );
+            if ( flagAnimFrame > 0 ) {
+                const fheroes2::Sprite & castleFlagSprite = fheroes2::AGG::GetICN( castleIcn, flagAnimFrame );
+
+                CastleDialog::RedrawBuildingSpriteToArea( castleFlagSprite, dst_pt.x + castleFlagSprite.x(), dst_pt.y + castleFlagSprite.y(), max, alpha );
+            }
         }
     }
 }
