@@ -93,8 +93,8 @@ namespace Dialog
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
     void SpellInfo( const Spell &, bool ok_button = true );
     void SpellInfo( const std::string &, const std::string &, const Spell &, bool ok_button = true );
-    void SecondarySkillInfo( const Skill::Secondary &, const bool ok_button = true );
-    void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const bool ok_button = true );
+    void SecondarySkillInfo( const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
+    void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
     void PrimarySkillInfo( const std::string &, const std::string &, int );
     int SpriteInfo( const std::string &, const std::string &, const fheroes2::Image &, int buttons = Dialog::OK );
     int ArtifactInfo( const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK );

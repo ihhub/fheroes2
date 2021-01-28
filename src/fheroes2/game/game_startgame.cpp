@@ -29,6 +29,7 @@
 
 #include "agg.h"
 #include "ai.h"
+#include "audio_mixer.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
@@ -121,7 +122,7 @@ void Game::DialogPlayers( int color, std::string str )
 }
 
 /* open castle wrapper */
-void Game::OpenCastleDialog( Castle & castle )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
@@ -157,17 +158,19 @@ void Game::OpenCastleDialog( Castle & castle )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
-    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
-    }
-    else {
-        basicInterface.SetFocus( *it );
+    if ( updateFocus ) {
+        if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+        }
+        else {
+            basicInterface.SetFocus( *it );
+        }
     }
     basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld )
 {
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
@@ -205,7 +208,10 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
                 ( *it )->GetPath().Hide();
                 gameArea.SetRedraw();
 
-                ( *it )->FadeOut();
+                if ( windowIsGameWorld ) {
+                    ( *it )->FadeOut();
+                }
+
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
                 updateFocus = true;
@@ -369,7 +375,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
         if ( water ) {
             if ( MP2::isWaterObject( tile.GetObject() ) )
                 return Cursor::DistanceThemes( Cursor::REDBOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
-            else if ( tile.isPassable( Direction::CENTER, true, false ) )
+            else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
                 return Cursor::DistanceThemes( Cursor::BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         break;
@@ -456,7 +462,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
-        else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false ) ) {
+        else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
             bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -640,8 +646,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     if ( !isload ) {
         // new week dialog
-        if ( 1 < world.CountWeek() && world.BeginWeek() )
+        if ( 1 < world.CountWeek() && world.BeginWeek() ) {
+            const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
+            AGG::PlayMusic( currentMusic, true );
+        }
 
         // show event day
         ShowEventDayDialog();
@@ -1069,7 +1078,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
                 RedrawFocus();
             }
             else
-                Game::OpenHeroesDialog( *to_hero );
+                Game::OpenHeroesDialog( *to_hero, true, true );
         }
     } break;
 

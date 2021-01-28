@@ -122,11 +122,17 @@ namespace AI
                 value -= suboptimalTaskPenalty;
             return value;
         }
-        else if ( objectID == MP2::OBJ_BOAT ) {
-            return -5000.0;
-        }
         else if ( objectID == MP2::OBJ_WHIRLPOOL ) {
-            return -suboptimalTaskPenalty;
+            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
+            for ( const int whirlpoolIndex : list ) {
+                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
+                    return -3000.0;
+            }
+            return -dangerousTaskPenalty; // no point to even loose the army for this
+        }
+        else if ( objectID == MP2::OBJ_BOAT ) {
+            // de-prioritize the water movement even harder
+            return -5000.0;
         }
 
         return 0;
@@ -151,7 +157,7 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && _pathfinder.buildPath( node.first ).size() > distanceLimit )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
                 continue;
 
             if ( HeroesValidObject( hero, node.first ) ) {

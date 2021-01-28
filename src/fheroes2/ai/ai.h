@@ -24,6 +24,7 @@
 #define H2AI_H
 
 #include "gamedefs.h"
+#include "rand.h"
 
 class Funds;
 class Castle;

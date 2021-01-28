@@ -30,6 +30,7 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "monster.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
 #include "ui_window.h"
@@ -554,7 +555,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::SYSTEM;
+    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::REQUESTS;
 
     btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
     btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );

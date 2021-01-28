@@ -261,7 +261,7 @@ void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
                 Game::OpenCastleDialog( *castle );
         }
         else
-            Game::OpenHeroesDialog( *item, false );
+            Game::OpenHeroesDialog( *item, false, true );
     }
 }
 

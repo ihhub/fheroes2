@@ -38,45 +38,52 @@ public:
     Heroes * Guest( void )
     {
         return first;
-    };
+    }
+
     Heroes * Guard( void )
     {
         return second;
-    };
+    }
+
     const Heroes * Guest( void ) const
     {
         return first;
-    };
+    }
+
     const Heroes * Guard( void ) const
     {
         return second;
-    };
+    }
+
     Heroes * GuestFirst( void )
     {
         return first ? first : second;
-    };
+    }
+
     Heroes * GuardFirst( void )
     {
         return second ? second : first;
-    };
+    }
 
     bool operator==( const Heroes * hero ) const
     {
         return first == hero || second == hero;
-    };
+    }
 
     void Swap( void )
     {
         std::swap( first, second );
-    };
+    }
+
     bool FullHouse( void ) const
     {
         return first && second;
-    };
+    }
+
     bool IsValid( void ) const
     {
         return first || second;
-    };
+    }
 };
 
 #endif

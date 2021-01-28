@@ -23,6 +23,7 @@
 #include "agg.h"
 #include "ai.h"
 #include "assert.h"
+#include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -1282,7 +1283,7 @@ void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
 
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
-            Dialog::SecondarySkillInfo( MP2::StringObject( obj ), msg, skill );
+            Dialog::SecondarySkillInfo( MP2::StringObject( obj ), msg, skill, hero );
         }
     }
 

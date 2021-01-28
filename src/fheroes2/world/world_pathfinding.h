@@ -47,6 +47,7 @@ protected:
     virtual void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) = 0;
 
     uint8_t _pathfindingSkill = Skill::Level::EXPERT;
+    int _currentColor = Color::NONE;
     std::vector<int> _mapOffset;
 };
 
@@ -57,7 +58,7 @@ public:
     virtual void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
+    std::list<Route::Step> buildPath( int targetIndex ) const;
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
@@ -81,7 +82,7 @@ public:
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
-    virtual std::list<Route::Step> buildPath( int targetIndex ) const override;
+    std::list<Route::Step> buildPath( int targetIndex, bool isPlanningMode = false ) const;
 
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
@@ -89,7 +90,6 @@ public:
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater ) override;
 
-    int _currentColor = Color::NONE;
     double _armyStrength = -1;
     double _advantage = 1.0;
     Army _temporaryArmy; // for internal calculations

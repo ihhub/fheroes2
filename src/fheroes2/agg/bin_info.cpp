@@ -347,7 +347,7 @@ namespace Bin_Info
 
     size_t MonsterAnimInfo::getProjectileID( const double angle ) const
     {
-        const std::vector<double> & angles = projectileAngles;
+        const std::vector<float> & angles = projectileAngles;
         if ( angles.empty() )
             return 0;
 

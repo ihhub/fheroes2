@@ -45,7 +45,7 @@ namespace Game
         HIGHSCORES,
         CREDITS,
         NEWSTANDARD,
-        NEWCAMPAIN,
+        NEWCAMPAIGN,
         NEWMULTI,
         NEWHOTSEAT,
         NEWNETWORK,
@@ -105,7 +105,7 @@ namespace Game
         EVENT_BUTTON_HIGHSCORES,
         EVENT_BUTTON_CREDITS,
         EVENT_BUTTON_STANDARD,
-        EVENT_BUTTON_CAMPAIN,
+        EVENT_BUTTON_CAMPAIGN,
         EVENT_BUTTON_MULTI,
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
@@ -219,7 +219,7 @@ namespace Game
     int HighScores();
     int Credits( void );
     int NewStandard( void );
-    int NewCampain( void );
+    int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
     int NewNetwork( void );
@@ -230,12 +230,15 @@ namespace Game
     int LoadHotseat();
     int LoadNetwork();
     int ScenarioInfo( void );
+    int SelectCampaignScenario();
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
+
+    bool IsOriginalCampaignPresent();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
@@ -255,8 +258,8 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
-    void OpenCastleDialog( Castle & );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     void LoadPlayers( const std::string & mapFileName, Players & players );
     void SavePlayers( const std::string & mapFileName, const Players & players );

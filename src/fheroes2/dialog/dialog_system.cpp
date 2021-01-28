@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "cursor.h"
 #include "dialog.h"

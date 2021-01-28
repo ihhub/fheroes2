@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "battle_arena.h"
 #include "battle_bridge.h"
@@ -31,6 +32,7 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "kingdom.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
 #include "world.h"
@@ -607,10 +609,83 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
     }
 }
 
+std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
+{
+    std::vector<Battle::Unit *> result = {firstUnit};
+    std::vector<Battle::Unit *> ignoredTroops = {firstUnit};
+
+    std::vector<Battle::Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
+
+    const int heroSpellPower = hero ? hero->GetPower() : 0;
+
+    // Filter those which are fully immuned
+    for ( size_t i = 0; i < foundTroops.size(); ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower ) >= 100 ) {
+            ignoredTroops.push_back( foundTroops[i] );
+            foundTroops.erase( foundTroops.begin() + i );
+        }
+        else {
+            ++i;
+        }
+    }
+
+    while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
+        bool targetFound = false;
+        for ( size_t i = 0; i < foundTroops.size(); ++i ) {
+            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower );
+            assert( resist >= 0 );
+            if ( resist < static_cast<int32_t>( Rand::Get( 1, 100 ) ) ) {
+                ignoredTroops.push_back( foundTroops[i] );
+                result.push_back( foundTroops[i] );
+                foundTroops.erase( foundTroops.begin() + i );
+                targetFound = true;
+                break;
+            }
+        }
+
+        // All targets are resisted. Choosing the nearest one.
+        if ( !targetFound ) {
+            ignoredTroops.push_back( foundTroops.front() );
+            result.push_back( foundTroops.front() );
+            foundTroops.erase( foundTroops.begin() );
+        }
+
+        if ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT ) {
+            foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
+        }
+    }
+
+    return result;
+}
+
+Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex )
+{
+    Unit * unit = GetTroopBoard( attackedTroopIndex );
+    if ( unit == nullptr ) {
+        assert( 0 );
+        return TargetsInfo();
+    }
+
+    TargetsInfo targets;
+    const std::vector<Unit *> targetUnits = FindChainLightningTargetIndexes( hero, unit );
+    for ( size_t i = 0; i < targetUnits.size(); ++i ) {
+        targets.emplace_back();
+        TargetInfo & res = targets.back();
+
+        res.defender = targetUnits[i];
+        // store temp priority for calculate damage
+        res.damage = i;
+    }
+    return targets;
+}
+
 Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, s32 dst )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
+
+    bool ignoreMagicResistance = false;
+    bool playResistSound = true;
 
     TargetInfo res;
     Unit * target = GetTroopBoard( dst );
@@ -646,52 +721,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
-            uint32_t currentMonsterPos = dst;
-
-            Indexes trgts;
-            trgts.reserve( 12 );
-            trgts.push_back( currentMonsterPos );
-
-            Indexes ignoredMonster;
-            ignoredMonster.push_back( currentMonsterPos );
-
-            // find targets
-            while ( trgts.size() < 4 ) {
-                const Indexes nearestPosIds = board.GetNearestTroopIndexes( currentMonsterPos, &ignoredMonster );
-                if ( nearestPosIds.empty() )
-                    break;
-
-                Indexes sortedIds;
-
-                for ( size_t monsterId = 0; monsterId < nearestPosIds.size(); ++monsterId ) {
-                    const Unit * targetUnit = GetTroopBoard( nearestPosIds[monsterId] );
-                    if ( targetUnit != NULL && ( targetUnit->GetMagicResist( spell, hero ? hero->GetPower() : 0 ) < 100 ) ) {
-                        sortedIds.push_back( nearestPosIds[monsterId] );
-                    }
-                    ignoredMonster.push_back( nearestPosIds[monsterId] );
-                }
-
-                if ( sortedIds.empty() ) {
-                    continue;
-                }
-
-                const int32_t * monsterPos = Rand::Get( sortedIds );
-                const uint32_t chosenMonsterPos = monsterPos ? *monsterPos : sortedIds.front();
-                trgts.push_back( chosenMonsterPos );
-                currentMonsterPos = chosenMonsterPos;
-            }
-
-            // save targets
-            for ( Indexes::iterator it = trgts.begin(); it != trgts.end(); ++it ) {
-                Unit * targetDefender = GetTroopBoard( *it );
-
-                if ( targetDefender ) {
-                    res.defender = targetDefender;
-                    // store temp priority for calculate damage
-                    res.damage = std::distance( trgts.begin(), it );
-                    targets.push_back( res );
-                }
-            }
+            TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
+            targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
+            ignoreMagicResistance = true;
+            playResistSound = false;
         } break;
 
         // check abroads
@@ -711,6 +744,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             // unique
             targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            playResistSound = false;
         } break;
 
         // check all troops
@@ -737,25 +771,28 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
 
             // unique
             targets.resize( std::distance( targets.begin(), std::unique( targets.begin(), targets.end() ) ) );
+            playResistSound = false;
         } break;
 
         default:
             break;
         }
 
-    // remove resistent magic troop
-    TargetsInfo::iterator it = targets.begin();
-    while ( it != targets.end() ) {
-        const u32 resist = ( *it ).defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
+    // Remove resistent magic troop
+    if ( !ignoreMagicResistance ) {
+        TargetsInfo::iterator it = targets.begin();
+        while ( it != targets.end() ) {
+            const u32 resist = ( *it ).defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
-        if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
-            if ( interface )
-                interface->RedrawActionResistSpell( *( *it ).defender );
+            if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
+                if ( interface )
+                    interface->RedrawActionResistSpell( *( *it ).defender, playResistSound );
 
-            it = targets.erase( it );
+                it = targets.erase( it );
+            }
+            else
+                ++it;
         }
-        else
-            ++it;
     }
 
     return targets;
@@ -894,7 +931,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
     }
 
     const HeroBase * commander = GetCurrentCommander();
-    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0 , 0 );
+    const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
     const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
@@ -909,8 +946,6 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
     DEBUG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() );
 }
-
-
 
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {

@@ -35,7 +35,7 @@ namespace fheroes2
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
     {
-        _render();
+        render();
     }
 
     StandardWindow::StandardWindow( const int32_t x, const int32_t y, const int32_t width, const int32_t height, Image & output )
@@ -44,10 +44,10 @@ namespace fheroes2
         , _windowArea( _activeArea.x - borderSize, _activeArea.y - borderSize, _activeArea.width + 2 * borderSize, _activeArea.height + 2 * borderSize )
         , _restorer( output, _windowArea.x - borderSize, _windowArea.y, _windowArea.width + borderSize, _windowArea.height + borderSize )
     {
-        _render();
+        render();
     }
 
-    void StandardWindow::_render()
+    void StandardWindow::render()
     {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
         const fheroes2::Image renderedImage

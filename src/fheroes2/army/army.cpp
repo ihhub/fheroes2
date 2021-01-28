@@ -38,6 +38,7 @@
 #include "morale.h"
 #include "payment.h"
 #include "race.h"
+#include "rand.h"
 #include "screen.h"
 #include "settings.h"
 #include "speed.h"
@@ -1426,11 +1427,6 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
 bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
 {
     return army1.isStrongerThan( army2 );
-}
-
-void Army::DrawMons32LineWithScoute( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count, u32 scoute )
-{
-    troops.DrawMons32Line( cx, cy, width, first, count, scoute, false, true );
 }
 
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */

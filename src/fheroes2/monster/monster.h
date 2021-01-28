@@ -29,6 +29,7 @@
 #include "gamedefs.h"
 #include "monster_info.h"
 #include "payment.h"
+#include "serialize.h"
 
 class Spell;
 

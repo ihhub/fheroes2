@@ -517,7 +517,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         primskill_bar1->SetTextOff( 70, -25 );
         primskill_bar1->SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-        secskill_bar1 = new SecondarySkillsBar( true, true );
+        secskill_bar1 = new SecondarySkillsBar( *hero1, true, true );
         secskill_bar1->SetColRows( 8, 1 );
         secskill_bar1->SetHSpace( -1 );
         secskill_bar1->SetContent( hero1->GetSecondarySkills().ToVector() );
@@ -587,7 +587,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         primskill_bar2->SetTextOff( -70, -25 );
         primskill_bar2->SetPos( cur_pt.x + 389, cur_pt.y + 51 );
 
-        secskill_bar2 = new SecondarySkillsBar( true, true );
+        secskill_bar2 = new SecondarySkillsBar( *hero2, true, true );
         secskill_bar2->SetColRows( 8, 1 );
         secskill_bar2->SetHSpace( -1 );
         secskill_bar2->SetContent( hero2->GetSecondarySkills().ToVector() );

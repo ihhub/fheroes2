@@ -174,7 +174,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
     fheroes2::ButtonSprite button_hero( pt.x, pt.y, armyButtonReleasedBack, armyButtonPressedBack );
 
-    text.Set( GetString( HEROESMAXSKILL ) + "/" + GetString( hero.GetSecondarySkills().Count() ), Font::BIG );
+    text.Set( GetString( hero.GetSecondarySkills().Count() ) + "/" + GetString( HEROESMAXSKILL ), Font::BIG );
     text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );
 
     button_learn1.draw();
@@ -203,26 +203,26 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
             cursor.Hide();
-            Dialog::SecondarySkillInfo( sec1 );
+            Dialog::SecondarySkillInfo( sec1, hero );
             cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
             cursor.Hide();
-            Dialog::SecondarySkillInfo( sec2 );
+            Dialog::SecondarySkillInfo( sec2, hero );
             cursor.Show();
             display.render();
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
             cursor.Hide();
-            Dialog::SecondarySkillInfo( sec1, false );
+            Dialog::SecondarySkillInfo( sec1, hero, false );
             cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
             cursor.Hide();
-            Dialog::SecondarySkillInfo( sec2, false );
+            Dialog::SecondarySkillInfo( sec2, hero, false );
             cursor.Show();
             display.render();
         }

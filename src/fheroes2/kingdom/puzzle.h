@@ -26,6 +26,7 @@
 #include <bitset>
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 #define PUZZLETILES 48
 

@@ -24,7 +24,6 @@
 #define H2ARTIFACT_ULTIMATE_H
 
 #include "artifact.h"
-#include "gamedefs.h"
 
 class UltimateArtifact : public Artifact
 {

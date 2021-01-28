@@ -169,6 +169,8 @@ public:
     void UpdateRecruits( void );
     void LossPostActions( void );
 
+    bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
+
     static u32 GetMaxHeroes( void );
 
 private:
