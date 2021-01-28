@@ -451,8 +451,7 @@ int Castle::OpenDialog( bool readonly )
             }
 
             // buildings event
-            for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it )
-            {
+            for ( auto it = cacheBuildings.crbegin(); it != cacheBuildings.crend(); ++it ) {
                 if ( ( *it ).id == GetActualDwelling( ( *it ).id ) && isBuild( ( *it ).id ) ) {
                     if ( !readonly && le.MouseClickLeft( ( *it ).coord ) ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
