@@ -255,7 +255,7 @@ namespace CastleDialog
     {
     public:
         FadeBuilding()
-            : _alpha( 0 )
+            : _alpha( 255 )
             , _build( BUILD_NOTHING )
         {}
 
