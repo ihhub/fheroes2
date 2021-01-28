@@ -122,7 +122,15 @@ namespace AI
                 value -= suboptimalTaskPenalty;
             return value;
         }
-        else if ( objectID == MP2::OBJ_BOAT || objectID == MP2::OBJ_WHIRLPOOL ) {
+        else if ( objectID == MP2::OBJ_WHIRLPOOL ) {
+            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
+            for ( const int whirlpoolIndex : list ) {
+                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
+                    return -3000.0;
+            }
+            return -dangerousTaskPenalty; // no point to even loose the army for this
+        }
+        else if ( objectID == MP2::OBJ_BOAT ) {
             // de-prioritize the water movement even harder
             return -3000.0;
         }
