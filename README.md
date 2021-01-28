@@ -18,7 +18,7 @@ All rights for the original game and its resources belong to former The 3DO Comp
 
 Requirements
 ---------------------------
-You are required to have at least a demo version of Heroes of Might and Magic II game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
+You are required to have at least a demo version of Heroes of Might and Magic 2 game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
 
 MacOS and Linux
 --------------------------

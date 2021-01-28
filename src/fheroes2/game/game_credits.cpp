@@ -95,7 +95,7 @@ void Game::ShowCredits()
     title.Blit( screenOffset.x + 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY );
     offsetY += title.h();
 
-    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nAndrey Starodubtsev\neos428\nVasilenko Alexey\nvincent-grosbois\nemotionalamoeba\nOroty\n"
+    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nvincent-grosbois\neos428\nAndrey Starodubtsev\nVasilenko Alexey\nemotionalamoeba\ntau3\n"
                                     "and many other contributors!" );
 
     name.Set( contributors, Font::BIG, textWidth );
