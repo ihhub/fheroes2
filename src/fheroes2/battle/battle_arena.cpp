@@ -731,13 +731,8 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
-    const Force * const force = ( army1->GetColor() == color ) ? army1 : army2;
-    const HeroBase * const commander = force->GetCommander();
-    if ( !commander ) {
-        return false;
-    }
-    const Castle * const castle = commander->inCastle();
-    return commander->isHeroes() && !castle;
+    const HeroBase * hero = army1->GetColor() == color ? army1->GetCommander() : army2->GetCommander();
+    return hero && hero->isHeroes() && NULL == hero->inCastle();
 }
 
 bool Battle::Arena::isSpellcastDisabled() const
