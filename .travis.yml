@@ -27,13 +27,14 @@ jobs:
         - sudo apt-get install -y libsdl2-image-dev
         - export FHEROES2_STRICT_COMPILATION="ON"
       script:
+        - |
         if [[ "$SONARQUBE_SKIPPED" != "true" ]]; then
           # Wraps the compilation with the Build Wrapper to generate configuration (used
           # later by the SonarScanner) into the "bw-output" folder
-          - build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
+          build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
           # And finally run the SonarCloud analysis - read the "sonar-project.properties"
           # file to see the specific configuration
-          - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+          sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
         else
           echo "Skipping compilation as SonarQube will not analyze this commit."
         fi
