@@ -1,4 +1,10 @@
 version 0.9.0 (04 February 2021)
+- add more logic for AI jumping into whirlpools
+- do not block shooters with overpowered AI army
+- fix overlapped flag in Knight's castle
+- disable actions while buying a hero or during construction
+- change the text for the number of secondary skills in level up window
+- play music after showing New Week/Month dialog
 - reset hero direction when recruiting
 - align dates by left in the load file dialog
 - cap Necromancy bonus to 100% instead of 90%
