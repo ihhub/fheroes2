@@ -418,7 +418,7 @@ private:
     std::string font_normal;
     std::string font_small;
     std::string force_lang;
-    std::string _loadedFileLanguage;
+    std::string _loadedFileLanguage; // not a part of save or configuration file
     std::string maps_charset;
     int size_normal;
     int size_small;
