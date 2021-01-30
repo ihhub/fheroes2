@@ -1457,6 +1457,9 @@ bool Battle::Unit::isMagicResist( const Spell & spell, u32 spower ) const
 
 u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
 {
+    if ( Modes( SP_ANTIMAGIC ) )
+        return 100;
+
     if ( spell.isMindInfluence() && ( isUndead() || isElemental() || GetID() == Monster::GIANT || GetID() == Monster::TITAN ) )
         return 100;
 
