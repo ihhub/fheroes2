@@ -270,6 +270,11 @@ bool ReadConfigs( void )
         if ( System::IsFile( *it ) ) {
             if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
+                std::string sval;
+                sval = conf.externalMusicCommand();
+                if ( !sval.empty() )
+                    Music::SetExtCommand( sval );
+
                 break;
             }
         }

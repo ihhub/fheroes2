@@ -352,6 +352,7 @@ public:
     const std::string & MapsFile( void ) const;
     const std::string & MapsName( void ) const;
     const std::string & MapsDescription( void ) const;
+    const std::string & externalMusicCommand() const;
     int MapsDifficulty( void ) const;
     Size MapsSize( void ) const;
     bool GameStartWithHeroes( void ) const;
@@ -419,6 +420,7 @@ private:
     std::string font_small;
     std::string force_lang;
     std::string _loadedFileLanguage; // not a part of save or configuration file
+    std::string _externalMusicCommand;
     std::string maps_charset;
     int size_normal;
     int size_small;

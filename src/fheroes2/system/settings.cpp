@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <fstream>
 
-#include "audio_music.h"
 #include "campaign_data.h"
 #include "difficulty.h"
 #include "game.h"
@@ -668,7 +667,7 @@ bool Settings::Read( const std::string & filename )
     // playmus command
     sval = config.StrParams( "playmus command" );
     if ( !sval.empty() )
-        Music::SetExtCommand( sval );
+        _externalMusicCommand = sval;
 
     // videodriver
     sval = config.StrParams( "videodriver" );
@@ -1340,6 +1339,11 @@ const std::string & Settings::MapsName( void ) const
 const std::string & Settings::MapsDescription( void ) const
 {
     return current_maps_file.description;
+}
+
+const std::string & Settings::externalMusicCommand() const
+{
+    return _externalMusicCommand;
 }
 
 int Settings::MapsDifficulty( void ) const
