@@ -23,6 +23,8 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
+#include <string>
+
 #include "rect.h"
 #include "timing.h"
 #include "types.h"
@@ -164,6 +166,10 @@ enum KeySym
 
 const char * KeySymGetName( KeySym );
 KeySym GetKeySym( int );
+bool PressIntKey( u32 max, u32 & result );
+size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
+KeySym KeySymFromChar( char );
+char CharFromKeySym( KeySym, u16 mod = 0 );
 
 class LocalEvent
 {
