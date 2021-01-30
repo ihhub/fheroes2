@@ -202,7 +202,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     }
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
-    Rect rt( ( display.width() - panel.width() ) - 35, 10, panel.width(), panel.height() );
+    Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
     fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.w + SHADOWWIDTH, rt.h + SHADOWWIDTH );
 
