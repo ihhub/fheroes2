@@ -1553,13 +1553,8 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
         const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-        //const auto object = std::get<0>( fadeTask );
-        //const auto fadeOut = std::get<6>( fadeTask );
-        //const auto from = std::get<3>( fadeTask );
-        //const auto fadeIn = std::get<7>( fadeTask );
-        //const auto to = std::get<4>( fadeTask );
-        const auto alpha
-            = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
+        const auto alpha = ( MP2::OBJ_BOAT == fadeTask.object
+                             && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
                                ? fadeTask.alpha
                                : 255;
 
