@@ -25,6 +25,8 @@
 #include "tools.h"
 #include "types.h"
 
+#include <SDL.h>
+
 #define INIT_VIDEO SDL_INIT_VIDEO
 #define INIT_AUDIO SDL_INIT_AUDIO
 #define INIT_CDROM SDL_INIT_CDROM

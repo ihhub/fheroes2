@@ -27,6 +27,7 @@
 
 #include "gamedefs.h"
 #include "image.h"
+#include "timing.h"
 
 class Sprite;
 

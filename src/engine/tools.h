@@ -25,7 +25,6 @@
 #include <list>
 #include <string>
 
-#include "localevent.h"
 #include "rect.h"
 #include "types.h"
 

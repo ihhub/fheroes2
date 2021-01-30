@@ -35,6 +35,8 @@
 #include "system.h"
 #include "tools.h"
 
+#include <SDL.h>
+
 /* trim left right space */
 std::string StringTrim( std::string str )
 {

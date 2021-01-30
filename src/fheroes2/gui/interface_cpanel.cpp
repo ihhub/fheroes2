@@ -24,6 +24,7 @@
 #include "agg.h"
 #include "game.h"
 #include "game_interface.h"
+#include "localevent.h"
 #include "settings.h"
 
 Interface::ControlPanel::ControlPanel( Basic & basic )
