@@ -38,6 +38,7 @@
 #include "error.h"
 #include "font.h"
 #include "game.h"
+#include "image_tool.h"
 #include "m82.h"
 #include "mus.h"
 #include "pal.h"
@@ -165,37 +166,6 @@ const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpa
     }
 
     return heroes2_agg.read( key );
-}
-
-struct ICNHeader
-{
-    ICNHeader()
-        : offsetX( 0 )
-        , offsetY( 0 )
-        , width( 0 )
-        , height( 0 )
-        , animationFrames( 0 )
-        , offsetData( 0 )
-    {}
-
-    u16 offsetX;
-    u16 offsetY;
-    u16 width;
-    u16 height;
-    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-    u32 offsetData;
-};
-
-StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
-{
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
-
-    return st;
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
@@ -663,91 +633,10 @@ namespace fheroes2
                     sizeData = blockSize - header1.offsetData;
                 }
 
-                Sprite & sprite = _icnVsSprite[id][i];
-
-                sprite.resize( header1.width, header1.height );
-                sprite.reset();
-                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
-
-                uint8_t * imageData = sprite.image();
-                uint8_t * imageTransform = sprite.transform();
-
-                uint32_t posX = 0;
-                const uint32_t width = sprite.width();
-
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                const uint8_t * dataEnd = data + sizeData;
 
-                while ( 1 ) {
-                    if ( 0 == *data ) { // 0x00 - end line
-                        imageData += width;
-                        imageTransform += width;
-                        posX = 0;
-                        ++data;
-                    }
-                    else if ( 0x80 > *data ) { // 0x7F - count data
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- && data != dataEnd ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                            ++data;
-                        }
-                    }
-                    else if ( 0x80 == *data ) { // 0x80 - end data
-                        break;
-                    }
-                    else if ( 0xC0 > *data ) { // 0xBF - skip data
-                        posX += *data - 0x80;
-                        ++data;
-                    }
-                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                        ++data;
-
-                        const uint8_t transformValue = *data;
-                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
-
-                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-
-                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                            while ( c-- ) {
-                                imageTransform[posX] = transformType;
-                                ++posX;
-                            }
-                        }
-                        else {
-                            posX += c;
-                        }
-
-                        ++data;
-                    }
-                    else if ( 0xC1 == *data ) { // 0xC1
-                        ++data;
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-                    else {
-                        uint32_t c = *data - 0xC0;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-
-                    if ( data >= dataEnd ) {
-                        break;
-                    }
-                }
+                _icnVsSprite[id][i]
+                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
             }
         }
 
