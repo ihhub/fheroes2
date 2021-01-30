@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <tuple>
 #include <vector>
 
 #ifdef AI
