@@ -734,9 +734,6 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
 {
-    if ( Modes( SP_ANTIMAGIC ) )
-        return false;
-
     if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
     }
