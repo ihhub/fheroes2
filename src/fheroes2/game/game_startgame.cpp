@@ -1005,48 +1005,40 @@ int Interface::Basic::HumanTurn( bool isload )
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
             auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-            auto & object = std::get<0>( fadeTask );
-            if ( MP2::OBJ_ZERO != object ) {
-                auto & fadeOut = std::get<6>( fadeTask );
-                if ( fadeOut ) {
-                    auto & alpha = std::get<5>( fadeTask );
-                    if ( alpha > 20 ) {
-                        alpha -= 20;
+            if ( MP2::OBJ_ZERO != fadeTask.object ) {
+                if ( fadeTask.fadeOut ) {
+                    if ( fadeTask.alpha > 20 ) {
+                        fadeTask.alpha -= 20;
                     }
                     else {
-                        fadeOut = false;
-                        alpha = 0;
-                        const auto fromIndex = std::get<3>( fadeTask );
-                        Maps::Tiles & tile = world.GetTiles( fromIndex );
-                        if ( tile.GetObject() == object ) {
+                        fadeTask.fadeOut = false;
+                        fadeTask.alpha = 0;
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+                        if ( tile.GetObject() == fadeTask.object ) {
                             tile.RemoveObjectSprite();
                             tile.SetObject( MP2::OBJ_ZERO );
                         }
-                        const auto fadeIn = std::get<7>( fadeTask );
-                        if ( !fadeIn ) {
-                            object = MP2::OBJ_ZERO;
+                        if ( !fadeTask.fadeIn ) {
+                            fadeTask.object = MP2::OBJ_ZERO;
                         }
                     }
                     gameArea.SetRedraw();
                 }
                 else {
-                    auto & fadeIn = std::get<7>( fadeTask );
-                    if ( fadeIn ) {
-                        auto & alpha = std::get<5>( fadeTask );
-                        if ( alpha == 0 ) {
-                            const auto toIndex = std::get<4>( fadeTask );
-                            Maps::Tiles & tile = world.GetTiles( toIndex );
-                            if ( MP2::OBJ_BOAT == object ) {
+                    if ( fadeTask.fadeIn ) {
+                        if ( fadeTask.alpha == 0 ) {
+                            Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+                            if ( MP2::OBJ_BOAT == fadeTask.object ) {
                                 tile.setBoat( Direction::RIGHT );
                             }
                         }
-                        if ( alpha < ( 255 - 20 ) ) {
-                            alpha += 20;
+                        if ( fadeTask.alpha < ( 235 ) ) {
+                            fadeTask.alpha += 20;
                         }
                         else {
-                            fadeIn = false;
-                            alpha = 255;
-                            object = MP2::OBJ_ZERO;
+                            fadeTask.fadeIn = false;
+                            fadeTask.alpha = 255;
+                            fadeTask.object = MP2::OBJ_ZERO;
                         }
                         gameArea.SetRedraw();
                     }

@@ -75,7 +75,7 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask fadeTask;
+        FadeTask fadeTask = { MP2::OBJ_ZERO, 0, 0, 0, 0, 0, false, false, 0 };
     }
 }
 
@@ -192,26 +192,21 @@ void Game::SetCurrentMusic( int mus )
 
 void Game::ObjectFadeAnimation::FinishFadeTask()
 {
-    auto & object = std::get<0>( fadeTask );
-    if ( object != MP2::OBJ_ZERO ) {
-        const auto fadeOut = std::get<6>( fadeTask );
-        if ( fadeOut ) {
-            const auto fromIndex = std::get<3>( fadeTask );
-            Maps::Tiles & tile = world.GetTiles( fromIndex );
-            if ( tile.GetObject() == object ) {
+    if ( fadeTask.object != MP2::OBJ_ZERO ) {
+        if ( fadeTask.fadeOut ) {
+            Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+            if ( tile.GetObject() == fadeTask.object ) {
                 tile.RemoveObjectSprite();
                 tile.SetObject( MP2::OBJ_ZERO );
             }
         }
-        const auto fadeIn = std::get<6>( fadeTask );
-        if ( fadeIn ) {
-            const auto toIndex = std::get<4>( fadeTask );
-            Maps::Tiles & tile = world.GetTiles( toIndex );
-            if ( MP2::OBJ_BOAT == object ) {
+        if ( fadeTask.fadeIn ) {
+            Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+            if ( MP2::OBJ_BOAT == fadeTask.object ) {
                 tile.setBoat( Direction::RIGHT );
             }
         }
-        object = MP2::OBJ_ZERO;
+        fadeTask.object = MP2::OBJ_ZERO;
     }
 }
 
@@ -219,19 +214,19 @@ void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromInde
 {
     FinishFadeTask();
 
-    const auto & fromTile = world.GetTiles( fromIndex );
+    const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
     const uint32_t alpha = fadeOut ? 255u : 0;
     if ( MP2::OBJ_MONSTER == object ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
-        fadeTask = std::make_tuple( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = { object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 };
     }
     else if ( MP2::OBJ_BOAT == object ) {
-        fadeTask = std::make_tuple( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = { object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 };
     }
     else {
         const int icn = MP2::GetICNObject( object );
         const auto animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() );
-        fadeTask = std::make_tuple( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
+        fadeTask = { object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() }; 
     }
 }
 

@@ -199,27 +199,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const auto object = std::get<0>( fadeTask );
-    const auto fadeOut = std::get<6>( fadeTask );
 
     // fade out animation for objects only
-    if ( drawBottom && fadeOut && MP2::OBJ_ZERO != object && MP2::OBJ_BOAT != object && MP2::OBJ_MONSTER != object ) {
-        const auto objectIndex = std::get<1>( fadeTask );
-        const auto animationIndex = std::get<2>( fadeTask );
-        const auto alpha = std::get<5>( fadeTask );
+    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
+        const int icn = MP2::GetICNObject( fadeTask.objectTileset );
+        const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
 
-        const auto objectTileset = std::get<8>( fadeTask );
-        const int icn = MP2::GetICNObject( objectTileset );
-        const auto fromIndex = std::get<3>( fadeTask );
-        const Point & mp = Maps::GetPoint( fromIndex );
-
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-        BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alpha );
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeTask.objectIndex );
+        BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeTask.alpha );
 
         // possible animation
-        if ( animationIndex ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
-            BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alpha );
+        if ( fadeTask.animationIndex ) {
+            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, fadeTask.animationIndex );
+            BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, fadeTask.alpha );
         }
     }
 
@@ -233,19 +225,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
 
         // fade out animation for monsters only
-        if ( MP2::OBJ_MONSTER == object && fadeOut ) {
-            const auto fromIndex = std::get<3>( fadeTask );
-            const Point & mp = Maps::GetPoint( fromIndex );
-            const auto objectIndex = std::get<1>( fadeTask );
-            const auto animationIndex = std::get<2>( fadeTask );
-            const auto alpha = std::get<5>( fadeTask );
+        if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
+            const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
+            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
 
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, objectIndex );
-            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, alpha );
-
-            if ( animationIndex ) {
-                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, animationIndex );
-                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, alpha );
+            if ( fadeTask.animationIndex ) {
+                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
+                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
             }
         }
     }
