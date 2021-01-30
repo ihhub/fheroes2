@@ -708,6 +708,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     TextSprite tsNotEnoughGold;
     tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
 
+    fheroes2::ImageRestorer marketButtonRestorer( display, btnMarket.area().x, btnMarket.area().y, btnMarket.area().width, btnMarket.area().height );
+
     if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
         tsNotEnoughGold.Hide();
         btnMarket.disable();
@@ -779,10 +781,11 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         btnGroup.draw();
 
-        if ( allowPayment ) {
+        if ( allowPayment || kingdom.GetCountMarketplace() == 0 ) {
             tsNotEnoughGold.Hide();
             btnMarket.disable();
             btnMarket.hide();
+            marketButtonRestorer.restore();
         }
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
