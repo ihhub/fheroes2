@@ -226,10 +226,10 @@ namespace
     {
         // TODO: Do all campaign data until CAMPG10.H2C, for now we'll test until mission 4 (in which mission 3 Save The Dwarves is optional)
         std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, getCampaignBonusData( 0, 0 ), std::string( "CAMPG01.H2C" ), rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, getCampaignBonusData( 0, 1 ), std::string( "CAMPG02.H2C" ), rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, getCampaignBonusData( 0, 3 ), std::string( "CAMPG04.H2C" ), rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 0, 0 ), std::string( "CAMPG01.H2C" ), rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 0, 1 ), std::string( "CAMPG02.H2C" ), rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{3}, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{4}, getCampaignBonusData( 0, 3 ), std::string( "CAMPG04.H2C" ), rolandCampaignDescription[0] );
 
         Campaign::CampaignData campaignData = Campaign::CampaignData();
         campaignData.setCampaignID( 0 );
@@ -249,8 +249,8 @@ namespace
         bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
 
         std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2 }, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{2}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 2, std::vector<int>{}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[0] );
 
         Campaign::CampaignData campaignData = Campaign::CampaignData();

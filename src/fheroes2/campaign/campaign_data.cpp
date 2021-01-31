@@ -86,7 +86,7 @@ namespace Campaign
 
     bool CampaignData::isAllCampaignMapsPresent() const
     {
-        for ( int i = 0; i < _scenarios.size(); ++i ) {
+        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             if ( !_scenarios[i].isMapFilePresent() )
                 return false;
         }
