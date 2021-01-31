@@ -45,7 +45,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom );
         void CastleTurn( Castle & castle, bool defensive = false );
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroesTurn( VecHeroes & heroes ) override;
+        virtual void HeroesTurn( VecHeroes & heroes ) override;
 
         void revealFog( const Maps::Tiles & tile );
 
