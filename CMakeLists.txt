@@ -31,7 +31,6 @@ set(CONFIGURE_FHEROES2_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}/${PROJECT_NAME}" CA
 set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "System fheroes2 game directory")
 
 # Find libraries and enable/disable features
-
 find_package(${USE_SDL_VERSION} REQUIRED)
 
 if(ENABLE_IMAGE)
