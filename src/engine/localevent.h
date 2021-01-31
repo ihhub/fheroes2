@@ -165,10 +165,15 @@ enum KeySym
 };
 
 const char * KeySymGetName( KeySym );
+
 KeySym GetKeySym( int );
+
 bool PressIntKey( u32 max, u32 & result );
+
 size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
+
 KeySym KeySymFromChar( char );
+
 char CharFromKeySym( KeySym, u16 mod = 0 );
 
 class LocalEvent
