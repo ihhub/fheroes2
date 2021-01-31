@@ -152,7 +152,7 @@ namespace
         const std::vector<int> & availableMaps
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
-        for ( int i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
+        for ( int i = 0; i < scenarios.size(); ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
 
             // sub scenario -> this scenario's next map is one of the prev scenario's next map
