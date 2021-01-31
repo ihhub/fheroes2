@@ -36,12 +36,12 @@ namespace fheroes2
             return _activeArea;
         }
 
+        void render();
+
     private:
         Image & _output;
         Rect _activeArea;
         Rect _windowArea;
         ImageRestorer _restorer;
-
-        void _render();
     };
 }

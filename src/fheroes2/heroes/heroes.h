@@ -291,7 +291,6 @@ public:
     void FadeIn( const Point & offset = Point() ) const;
     void Scoute( void ) const;
     int GetScoute( void ) const;
-    int CanScouteTile( s32 ) const;
     u32 GetVisionsDistance( void ) const;
 
     bool isShipMaster( void ) const;

@@ -132,6 +132,8 @@ int Game::LoadMulti( void )
 
 int Game::LoadGame( void )
 {
+    Mixer::Pause();
+    AGG::PlayMusic( MUS::MAINMENU );
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Cursor & cursor = Cursor::Get();

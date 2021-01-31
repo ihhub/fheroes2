@@ -122,7 +122,7 @@ void Game::DialogPlayers( int color, std::string str )
 }
 
 /* open castle wrapper */
-void Game::OpenCastleDialog( Castle & castle )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
@@ -158,17 +158,19 @@ void Game::OpenCastleDialog( Castle & castle )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
-    if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
-        basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
-    }
-    else {
-        basicInterface.SetFocus( *it );
+    if ( updateFocus ) {
+        if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
+            basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
+        }
+        else {
+            basicInterface.SetFocus( *it );
+        }
     }
     basicInterface.RedrawFocus();
 }
 
 /* open heroes wrapper */
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld )
 {
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
@@ -206,7 +208,10 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus )
                 ( *it )->GetPath().Hide();
                 gameArea.SetRedraw();
 
-                ( *it )->FadeOut();
+                if ( windowIsGameWorld ) {
+                    ( *it )->FadeOut();
+                }
+
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
                 updateFocus = true;
@@ -641,8 +646,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     if ( !isload ) {
         // new week dialog
-        if ( 1 < world.CountWeek() && world.BeginWeek() )
+        if ( 1 < world.CountWeek() && world.BeginWeek() ) {
+            const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
+            AGG::PlayMusic( currentMusic, true );
+        }
 
         // show event day
         ShowEventDayDialog();
@@ -1069,8 +1077,10 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
                 SetFocus( to_hero );
                 RedrawFocus();
             }
-            else
-                Game::OpenHeroesDialog( *to_hero );
+            else {
+                Game::OpenHeroesDialog( *to_hero, true, true );
+                Cursor::Get().SetThemes( Cursor::HEROES );
+            }
         }
     } break;
 
@@ -1091,6 +1101,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         }
         else {
             Game::OpenCastleDialog( *to_castle );
+            Cursor::Get().SetThemes( Cursor::CASTLE );
         }
     } break;
     case Cursor::FIGHT:

@@ -37,6 +37,11 @@
 
 class Settings;
 
+namespace fheroes2
+{
+    class StandardWindow;
+}
+
 namespace Battle
 {
     class Arena;
@@ -185,6 +190,7 @@ namespace Battle
         Interface( Arena &, s32 );
         ~Interface();
 
+        void fullRedraw(); // only at the start of the battle
         void Redraw();
         void RedrawPartialStart();
         void RedrawPartialFinish();
@@ -202,7 +208,7 @@ namespace Battle
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
         void RedrawActionSpellCastPart1( const Spell &, s32, const HeroBase *, const std::string &, const TargetsInfo & );
         void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
-        void RedrawActionResistSpell( const Unit & );
+        void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
         void RedrawActionMove( Unit &, const Indexes & );
         void RedrawActionFly( Unit &, const Position & );
@@ -340,6 +346,8 @@ namespace Battle
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
+
+        std::unique_ptr<fheroes2::StandardWindow> _background;
     };
 }
 

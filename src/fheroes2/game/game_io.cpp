@@ -251,7 +251,14 @@ bool Game::Load( const std::string & fn )
     SetLoadVersion( binver );
     u16 end_check = 0;
 
-    fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
+        std::string warningMessage( "This is an saved game is localized for lang = " );
+        warningMessage.append( conf.loadedFileLanguage() );
+        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
+        warningMessage.append( "(tip: set unicode = on)" );
+        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
+    }
 
     if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
         fz >> Campaign::CampaignSaveData::Get();

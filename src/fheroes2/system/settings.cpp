@@ -198,6 +198,10 @@ const settings_t settingsFHeroes2[] = {
         _( "world: show visited content from objects" ),
     },
     {
+        Settings::WORLD_SHOW_TERRAIN_PENALTY,
+        _( "world: show terrain penalty" ),
+    },
+    {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
     },
@@ -310,10 +314,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
     {
-        Settings::HEROES_ALLOW_BANNED_SECSKILLS,
-        _( "heroes: allow banned sec. skills upgrade" ),
-    },
-    {
         Settings::HEROES_ARENA_ANY_SKILLS,
         _( "heroes: in Arena can choose any of primary skills" ),
     },
@@ -332,10 +332,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::BATTLE_SOFT_WAITING,
         _( "battle: soft wait troop" ),
-    },
-    {
-        Settings::BATTLE_OBJECTS_ARCHERS_PENALTY,
-        _( "battle: high objects are an obstacle for archers" ),
     },
     {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
@@ -936,6 +932,10 @@ const std::string & Settings::FontsSmall( void ) const
 const std::string & Settings::ForceLang( void ) const
 {
     return force_lang;
+}
+const std::string & Settings::loadedFileLanguage() const
+{
+    return _loadedFileLanguage;
 }
 const std::string & Settings::MapsCharset( void ) const
 {
@@ -1577,6 +1577,11 @@ bool Settings::ExtWorldShowVisitedContent( void ) const
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
 
+bool Settings::ExtWorldShowTerrainPenalty() const
+{
+    return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
+}
+
 bool Settings::ExtWorldScouteExtended( void ) const
 {
     return ExtModes( WORLD_SCOUTING_EXTENDED );
@@ -1672,11 +1677,6 @@ bool Settings::ExtBattleSoftWait( void ) const
     return ExtModes( BATTLE_SOFT_WAITING );
 }
 
-bool Settings::ExtBattleObjectsArchersPenalty( void ) const
-{
-    return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
@@ -1755,11 +1755,6 @@ bool Settings::ExtBattleReverseWaitOrder( void ) const
 bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtHeroAllowBannedSecSkillsUpgrade( void ) const
-{
-    return ExtModes( HEROES_ALLOW_BANNED_SECSKILLS );
 }
 
 bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const
@@ -1905,17 +1900,7 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    std::string lang;
-
-    msg >> lang;
-
-    if ( lang != "en" && lang != conf.force_lang && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
-        warningMessage.append( lang );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
-        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
-    }
+    msg >> conf._loadedFileLanguage;
 
     int debug;
     u32 opt_game = 0; // skip: settings

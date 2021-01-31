@@ -261,8 +261,8 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
-    void OpenCastleDialog( Castle & );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     void LoadPlayers( const std::string & mapFileName, Players & players );
     void SavePlayers( const std::string & mapFileName, const Players & players );

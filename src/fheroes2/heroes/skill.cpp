@@ -785,14 +785,6 @@ void Skill::SecSkills::FindSkillsForLevelUp( int race, Secondary & sec1, Seconda
         sec1.NextLevel();
         sec2.NextLevel();
     }
-    else if ( Settings::Get().ExtHeroAllowBannedSecSkillsUpgrade() ) {
-        const_iterator it = std::find_if( begin(), end(), []( const Secondary & v ) { return !v.isLevel( static_cast<int>( Level::EXPERT ) ); } );
-        if ( it != end() ) {
-            sec1.SetSkill( ( *it ).Skill() );
-            sec1.SetLevel( GetLevel( sec1.Skill() ) );
-            sec1.NextLevel();
-        }
-    }
 }
 
 void StringAppendModifiers( std::string & str, int value )
@@ -835,20 +827,16 @@ uint32_t Skill::GetNecromancyBonus( const HeroBase & hero )
 {
     const uint32_t shrineCount = world.GetKingdom( hero.GetColor() ).GetCountNecromancyShrineBuild();
     const uint32_t artifactCount = hero.HasArtifact( Artifact::SPADE_NECROMANCY );
-    // cap bonus at 6
-    return std::min( 6u, shrineCount + artifactCount );
+    // cap bonus at 7
+    return std::min( 7u, shrineCount + artifactCount );
 }
 
 uint32_t Skill::GetNecromancyPercent( const HeroBase & hero )
 {
     uint32_t percent = hero.GetSecondaryValues( Skill::Secondary::NECROMANCY );
     percent += 10 * GetNecromancyBonus( hero );
-
-    // hard fix overflow
-    if ( percent > 90 )
-        percent = 90;
-
-    return percent;
+    // cap at 100% bonus
+    return std::min( percent, 100u );
 }
 
 StreamBase & Skill::operator<<( StreamBase & msg, const Primary & skill )

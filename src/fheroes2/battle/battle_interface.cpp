@@ -44,6 +44,7 @@
 #include "race.h"
 #include "rand.h"
 #include "settings.h"
+#include "ui_window.h"
 #include "world.h"
 
 #include <cassert>
@@ -1049,6 +1050,15 @@ void Battle::Interface::UpdateContourColor()
     }
 }
 
+void Battle::Interface::fullRedraw()
+{
+    if ( !_background ) {
+        _background.reset( new fheroes2::StandardWindow( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    }
+
+    Redraw();
+}
+
 void Battle::Interface::Redraw( void )
 {
     RedrawPartialStart();
@@ -1980,7 +1990,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
-                    return arena.GetObstaclesPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
+                    return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
                     const int dir = cell->GetTriangleDirection( GetMouseCursor() );
@@ -2364,7 +2374,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -3200,9 +3210,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     status.SetMessage( msg, true );
 }
 
-void Battle::Interface::RedrawActionResistSpell( const Unit & target )
+void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
 {
-    AGG::PlaySound( M82::RSBRYFZL );
+    if ( playSound ) {
+        AGG::PlaySound( M82::RSBRYFZL );
+    }
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
     status.SetMessage( str, true );

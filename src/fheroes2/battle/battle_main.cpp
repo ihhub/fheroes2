@@ -37,7 +37,6 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
-#include "ui_window.h"
 #include "world.h"
 
 namespace Battle
@@ -93,8 +92,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     if ( local )
         AGG::ResetMixer();
-
-    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     Arena arena( army1, army2, mapsindex, local );
 

@@ -18,50 +18,56 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AI_NORMAL_H
-#define H2AI_NORMAL_H
+#ifndef AGG_FILE_H
+#define AGG_FILE_H
 
-#include "ai.h"
-#include "world_pathfinding.h"
+#include <map>
+#include <string>
+#include <vector>
 
-namespace AI
+#include "serialize.h"
+
+namespace fheroes2
 {
-    struct RegionStats
-    {
-        double highestThreat = -1;
-        double averageMonster = -1;
-        int friendlyHeroCount = 0;
-        int monsterCount = 0;
-        int fogCount = 0;
-        std::vector<IndexObject> validObjects;
-    };
-
-    class Normal : public Base
+    class AGGFile
     {
     public:
-        Normal();
-        void KingdomTurn( Kingdom & kingdom );
-        void CastleTurn( Castle & castle, bool defensive = false );
-        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroTurn( Heroes & hero );
+        AGGFile();
 
-        void revealFog( const Maps::Tiles & tile );
-
-        void HeroesActionComplete( Heroes & hero );
-
-        double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
-        int getPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
-        void resetPathfinder();
+        bool isGood() const;
+        bool open( const std::string & fileName );
+        const std::vector<uint8_t> & read( const std::string & fileName );
 
     private:
-        // following data won't be saved/serialized
-        double _combinedHeroStrength = 0;
-        std::vector<IndexObject> _mapObjects;
-        std::vector<RegionStats> _regions;
-        AIWorldPathfinder _pathfinder;
+        static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
 
-        void berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
+        StreamFile _stream;
+        std::map<std::string, std::pair<uint32_t, uint32_t> > _files;
+
+        std::string _key;
+        std::vector<uint8_t> _body;
+    };
+
+    struct ICNHeader
+    {
+        ICNHeader()
+            : offsetX( 0 )
+            , offsetY( 0 )
+            , width( 0 )
+            , height( 0 )
+            , animationFrames( 0 )
+            , offsetData( 0 )
+        {}
+
+        uint16_t offsetX;
+        uint16_t offsetY;
+        uint16_t width;
+        uint16_t height;
+        uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
+        uint32_t offsetData;
     };
 }
+
+StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
 
 #endif

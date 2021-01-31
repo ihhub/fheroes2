@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_file.h"
 #include "artifact.h"
 #include "audio.h"
 #include "audio_cdrom.h"
@@ -37,6 +38,7 @@
 #include "error.h"
 #include "font.h"
 #include "game.h"
+#include "image_tool.h"
 #include "m82.h"
 #include "mus.h"
 #include "pal.h"
@@ -52,48 +54,8 @@
 #include "zzlib.h"
 #endif
 
-#define FATSIZENAME 15
-
 namespace AGG
 {
-    class FAT
-    {
-    public:
-        FAT()
-            : crc( 0 )
-            , offset( 0 )
-            , size( 0 )
-        {}
-
-        u32 crc;
-        u32 offset;
-        u32 size;
-
-        std::string Info( void ) const;
-    };
-
-    class File
-    {
-    public:
-        File();
-        ~File();
-
-        bool Open( const std::string & );
-        bool isGood( void ) const;
-        const std::string & Name( void ) const;
-        const FAT & Fat( const std::string & key );
-
-        const std::vector<u8> & Read( const std::string & key );
-
-    private:
-        std::string filename;
-        std::map<std::string, FAT> fat;
-        u32 count_items;
-        StreamFile stream;
-        std::string key;
-        std::vector<u8> body;
-    };
-
     // struct fnt_cache_t
     // {
     //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
@@ -115,8 +77,8 @@ namespace AGG
         int channel;
     };
 
-    File heroes2_agg;
-    File heroes2x_agg;
+    fheroes2::AGGFile heroes2_agg;
+    fheroes2::AGGFile heroes2x_agg;
 
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
@@ -166,93 +128,6 @@ namespace AGG
     // }
 }
 
-/*AGG::File constructor */
-AGG::File::File( void )
-    : count_items( 0 )
-{}
-
-bool AGG::File::Open( const std::string & fname )
-{
-    filename = fname;
-
-    if ( !stream.open( filename, "rb" ) ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << filename << ", skipping..." );
-        return false;
-    }
-
-    const size_t size = stream.size();
-    count_items = stream.getLE16();
-    DEBUG( DBG_ENGINE, DBG_INFO, "load: " << filename << ", count items: " << count_items );
-
-    StreamBuf fats = stream.toStreamBuf( count_items * 4 * 3 /* crc, offset, size */ );
-    stream.seek( size - FATSIZENAME * count_items );
-    StreamBuf names = stream.toStreamBuf( FATSIZENAME * count_items );
-
-    for ( u32 ii = 0; ii < count_items; ++ii ) {
-        FAT & f = fat[names.toString( FATSIZENAME )];
-
-        f.crc = fats.getLE32();
-        f.offset = fats.getLE32();
-        f.size = fats.getLE32();
-    }
-
-    return !stream.fail();
-}
-
-AGG::File::~File() {}
-
-bool AGG::File::isGood( void ) const
-{
-    return !stream.fail() && count_items;
-}
-
-/* get AGG file name */
-const std::string & AGG::File::Name( void ) const
-{
-    return filename;
-}
-
-/* get FAT element */
-const AGG::FAT & AGG::File::Fat( const std::string & key_ )
-{
-    return fat[key_];
-}
-
-/* dump FAT */
-std::string AGG::FAT::Info( void ) const
-{
-    std::ostringstream os;
-
-    os << "crc: " << crc << ", offset: " << offset << ", size: " << size;
-    return os.str();
-}
-
-/* read element to body */
-const std::vector<u8> & AGG::File::Read( const std::string & str )
-{
-    if ( key != str ) {
-        std::map<std::string, FAT>::const_iterator it = fat.find( str );
-
-        if ( it != fat.end() ) {
-            const FAT & f = ( *it ).second;
-            key = str;
-
-            if ( f.size ) {
-                DEBUG( DBG_ENGINE, DBG_TRACE, key << ":\t" << f.Info() );
-
-                stream.seek( f.offset );
-                body = stream.getRaw( f.size );
-            }
-        }
-        else if ( body.size() ) {
-            body.clear();
-            key.clear();
-        }
-    }
-
-    return body;
-}
-
 /* read data directory */
 bool AGG::ReadDataDir( void )
 {
@@ -272,9 +147,9 @@ bool AGG::ReadDataDir( void )
     for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
         std::string lower = StringLower( *it );
         if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() )
-            heroes2_agg.Open( *it );
+            heroes2_agg.open( *it );
         if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() )
-            heroes2x_agg.Open( *it );
+            heroes2x_agg.open( *it );
     }
 
     conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
@@ -285,43 +160,12 @@ bool AGG::ReadDataDir( void )
 const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.Read( key );
+        const std::vector<u8> & buf = heroes2x_agg.read( key );
         if ( buf.size() )
             return buf;
     }
 
-    return heroes2_agg.Read( key );
-}
-
-struct ICNHeader
-{
-    ICNHeader()
-        : offsetX( 0 )
-        , offsetY( 0 )
-        , width( 0 )
-        , height( 0 )
-        , animationFrames( 0 )
-        , offsetData( 0 )
-    {}
-
-    u16 offsetX;
-    u16 offsetY;
-    u16 width;
-    u16 height;
-    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-    u32 offsetData;
-};
-
-StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
-{
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
-
-    return st;
+    return heroes2_agg.read( key );
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
@@ -789,91 +633,10 @@ namespace fheroes2
                     sizeData = blockSize - header1.offsetData;
                 }
 
-                Sprite & sprite = _icnVsSprite[id][i];
-
-                sprite.resize( header1.width, header1.height );
-                sprite.reset();
-                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
-
-                uint8_t * imageData = sprite.image();
-                uint8_t * imageTransform = sprite.transform();
-
-                uint32_t posX = 0;
-                const uint32_t width = sprite.width();
-
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                const uint8_t * dataEnd = data + sizeData;
 
-                while ( 1 ) {
-                    if ( 0 == *data ) { // 0x00 - end line
-                        imageData += width;
-                        imageTransform += width;
-                        posX = 0;
-                        ++data;
-                    }
-                    else if ( 0x80 > *data ) { // 0x7F - count data
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- && data != dataEnd ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                            ++data;
-                        }
-                    }
-                    else if ( 0x80 == *data ) { // 0x80 - end data
-                        break;
-                    }
-                    else if ( 0xC0 > *data ) { // 0xBF - skip data
-                        posX += *data - 0x80;
-                        ++data;
-                    }
-                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                        ++data;
-
-                        const uint8_t transformValue = *data;
-                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
-
-                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-
-                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                            while ( c-- ) {
-                                imageTransform[posX] = transformType;
-                                ++posX;
-                            }
-                        }
-                        else {
-                            posX += c;
-                        }
-
-                        ++data;
-                    }
-                    else if ( 0xC1 == *data ) { // 0xC1
-                        ++data;
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-                    else {
-                        uint32_t c = *data - 0xC0;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-
-                    if ( data >= dataEnd ) {
-                        break;
-                    }
-                }
+                _icnVsSprite[id][i]
+                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
             }
         }
 

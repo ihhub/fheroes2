@@ -149,12 +149,12 @@ public:
         WORLD_BAN_PLAGUES = 0x20000800,
         UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
         UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
-        // UNUSED = 0x20004000,
+        WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
+        // UNUSED = 0x20008000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
         HEROES_SURRENDERING_GIVE_EXP = 0x22000000,
@@ -178,7 +178,6 @@ public:
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
-        BATTLE_OBJECTS_ARCHERS_PENALTY = 0x42000000,
 
         SETTINGS_LAST
     };
@@ -204,6 +203,7 @@ public:
 
     const std::string & MapsCharset( void ) const;
     const std::string & ForceLang( void ) const;
+    const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal( void ) const;
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
@@ -257,11 +257,11 @@ public:
     bool ExtHeroSurrenderingGiveExp( void ) const;
     bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
-    bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
+    bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
@@ -287,7 +287,6 @@ public:
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
-    bool ExtBattleObjectsArchersPenalty( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
@@ -419,6 +418,7 @@ private:
     std::string font_normal;
     std::string font_small;
     std::string force_lang;
+    std::string _loadedFileLanguage; // not a part of save or configuration file
     std::string maps_charset;
     int size_normal;
     int size_small;
