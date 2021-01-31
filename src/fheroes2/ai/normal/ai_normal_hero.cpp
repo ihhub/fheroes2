@@ -132,7 +132,7 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_BOAT ) {
             // de-prioritize the water movement even harder
-            return -3000.0;
+            return -5000.0;
         }
 
         return 0;
