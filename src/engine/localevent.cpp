@@ -29,15 +29,18 @@
 
 #define TAP_DELAY_EMULATE 1050
 
-enum KeyMod
+namespace
 {
-    MOD_NONE = KMOD_NONE,
-    MOD_CTRL = KMOD_CTRL,
-    MOD_SHIFT = KMOD_SHIFT,
-    MOD_ALT = KMOD_ALT,
-    MOD_CAPS = KMOD_CAPS,
-    MOD_NUM = KMOD_NUM
-};
+    enum KeyMod
+    {
+        MOD_NONE = KMOD_NONE,
+        MOD_CTRL = KMOD_CTRL,
+        MOD_SHIFT = KMOD_SHIFT,
+        MOD_ALT = KMOD_ALT,
+        MOD_CAPS = KMOD_CAPS,
+        MOD_NUM = KMOD_NUM
+    };
+}
 
 LocalEvent::LocalEvent()
     : modes( 0 )
