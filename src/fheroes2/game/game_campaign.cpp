@@ -152,8 +152,9 @@ namespace
         const std::vector<int> & availableMaps
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
-        for ( int i = 0; i < scenarios.size(); ++i ) {
+        for ( size_t i = 0; i < scenarios.size(); ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
+            const int scenarioID = scenarios[i].getScenarioID();
 
             // sub scenario -> this scenario's next map is one of the prev scenario's next map
             // an example in original campaign would be Save/Slay the Dwarves
@@ -161,7 +162,7 @@ namespace
             int x = currentX;
             int y = middleY;
 
-            for ( int j = 0; j < prevScenarioNextMaps.size(); ++j ) {
+            for ( size_t j = 0; j < prevScenarioNextMaps.size(); ++j ) {
                 if ( std::find( nextMaps.begin(), nextMaps.end(), prevScenarioNextMaps[j] ) == nextMaps.end() )
                     continue;
 
@@ -172,18 +173,18 @@ namespace
             }
 
             // if it's not a sub-scenario, try to check whether it's a branching scenario
-            bool isBranching = !isSubScenario && prevScenarioNextMaps.size() > 1;
+            bool isBranching = false;
             bool isFinalBranch = false;
 
             if ( !isSubScenario && prevScenarioNextMaps.size() > 1 ) {
                 isBranching = true;
-                isFinalBranch = prevScenarioNextMaps.back() == i;
+                isFinalBranch = prevScenarioNextMaps.back() == scenarioID;
 
                 y += isFinalBranch ? deltaY : -deltaY;
             }
 
             // available scenario (one of which should be selected)
-            if ( std::find( availableMaps.begin(), availableMaps.end(), i ) != availableMaps.end() )
+            if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() )
                 buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
                                           fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
             // cleared scenario
@@ -216,7 +217,7 @@ namespace
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
         const int textChoiceWidth = 150;
-        for ( uint32_t i = 0, count = bonuses.size(); i < count; ++i ) {
+        for ( uint32_t i = 0; i < bonuses.size(); ++i ) {
             Text choice( bonuses[i].ToString(), Font::BIG );
             choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
         }

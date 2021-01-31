@@ -38,7 +38,7 @@ namespace Campaign
     {
         std::vector<int> scenarioIDs;
 
-        for ( size_t i = 0, count = _scenarios.size(); i < count; ++i ) {
+        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             if ( _scenarios[i].getScenarioID() >= scenarioID )
                 break;
 
@@ -63,7 +63,7 @@ namespace Campaign
     {
         std::vector<int> startingScenarios;
 
-        for ( size_t i = 0, count = _scenarios.size(); i < count; ++i ) {
+        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             if ( isStartingScenario( _scenarios[i].getScenarioID() ) )
                 startingScenarios.emplace_back( _scenarios[i].getScenarioID() );
         }
