@@ -24,8 +24,6 @@
 #include "ai.h"
 #include "world_pathfinding.h"
 
-struct VecHeroes;
-
 namespace AI
 {
     struct RegionStats

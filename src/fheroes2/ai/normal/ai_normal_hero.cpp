@@ -108,21 +108,12 @@ namespace AI
             return 3000.0;
         }
         else if ( objectID == MP2::OBJ_SHRINE1 ) {
-            if ( !hero.HaveSpellBook() ) {
-                return -dangerousTaskPenalty;
-            }
             return 100;
         }
         else if ( objectID == MP2::OBJ_SHRINE2 ) {
-            if ( !hero.HaveSpellBook() ) {
-                return -dangerousTaskPenalty;
-            }
             return 250;
         }
         else if ( objectID == MP2::OBJ_SHRINE3 ) {
-            if ( !hero.HaveSpellBook() ) {
-                return -dangerousTaskPenalty;
-            }
             return 500;
         }
         else if ( MP2::isHeroUpgradeObject( objectID ) ) {
