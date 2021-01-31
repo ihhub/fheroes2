@@ -57,7 +57,7 @@ VPATH := $(SOURCEDIR)
 
 %.o: %.cpp
 	@echo "$(CXX): $@"
-	@$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
 
 include $(wildcard *.d)
 
