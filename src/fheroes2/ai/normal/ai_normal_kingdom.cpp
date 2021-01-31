@@ -135,7 +135,7 @@ namespace AI
         }
 
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
-        std::vector<int> castlesInDanger;
+        std::set<int> castlesInDanger;
 
         for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
             if ( enemy->second == nullptr )
@@ -158,8 +158,7 @@ namespace AI
                         const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
                         if ( dist && dist < threatDistanceLimit ) {
                             // castle is under threat
-                            castlesInDanger.push_back( castleIndex );
-                            break;
+                            castlesInDanger.insert( castleIndex );
                         }
                     }
                 }
