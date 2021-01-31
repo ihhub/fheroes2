@@ -215,7 +215,7 @@ void HeroBase::EditSpellBook( void )
     spell_book.Edit( *this );
 }
 
-Spell HeroBase::OpenSpellBook( SpellBook::Filter filter, bool canCastSpell, std::function<void( const std::string & )> * statusCallback /*= nullptr */ ) const
+Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, bool canCastSpell, std::function<void( const std::string & )> * statusCallback ) const
 {
     return spell_book.Open( *this, filter, canCastSpell, statusCallback );
 }

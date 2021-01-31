@@ -907,17 +907,12 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-<<<<<<< HEAD
-ArtifactsBar::ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change /* false */ )
-    : _hero( hero )
-=======
-ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar )
-    : hero( ptr )
->>>>>>> Add status callback to spell book
+ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar /* = nullptr */ )
+    : _hero( ptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
-    , bar( bar )
+    , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
@@ -1014,13 +1009,14 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
         if ( can_change )
             const_cast<Heroes *>( _hero )->EditSpellBook();
         else {
-            std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) {
-                if ( bar != nullptr ) {
-                    bar->ShowMessage( status );
-                }
-            };
-
-            _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+            if ( this->_statusBar != nullptr ) {
+                StatusBar * const statusBar = this->_statusBar;
+                std::function<void( const std::string & )> statusCallback = [statusBar]( const std::string & status ) { statusBar->ShowMessage( status ); };
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+            }
+            else {
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+            }
         }
     }
     else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {

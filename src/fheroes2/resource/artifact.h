@@ -31,6 +31,7 @@
 
 class Spell;
 class Heroes;
+class StatusBar;
 
 class Artifact
 {
@@ -232,7 +233,6 @@ public:
     std::string String( void ) const;
 };
 
-class StatusBar;
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
@@ -264,7 +264,7 @@ private:
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
-    StatusBar * bar;
+    StatusBar * _statusBar;
     std::string msg;
 };
 
