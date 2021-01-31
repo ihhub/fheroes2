@@ -428,9 +428,6 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
-#ifdef VITA
-    int _vitaKeepAspectRatio;
-#endif
     int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;

@@ -951,17 +951,13 @@ namespace
             return resolution;
         }
 
-        void SetVitaKeepAspectRatio( bool keepAspect ) override
-        {
-            keepAspectRatio = keepAspect;
-        }
-
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
         {
             static std::vector<std::pair<int, int> > filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
                 filteredResolutions.push_back( std::make_pair( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+                filteredResolutions.push_back( std::make_pair( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
                 filteredResolutions.push_back( std::make_pair( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT ) );
             }
 
@@ -972,7 +968,8 @@ namespace
         enum
         {
             VITA_FULLSCREEN_WIDTH = 960,
-            VITA_FULLSCREEN_HEIGHT = 544
+            VITA_FULLSCREEN_HEIGHT = 544,
+            VITA_ASPECT_CORRECTED_WIDTH = 848
         };
 
         std::vector<uint32_t> _palette32Bit;
@@ -1049,24 +1046,17 @@ namespace
             if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
                     vita2d_texture_set_filters( texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
-
-                    if ( keepAspectRatio ) {
-                        if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
-                            float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
-                            destRect.w = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
-                            destRect.h = VITA_FULLSCREEN_HEIGHT;
-                            destRect.x = ( VITA_FULLSCREEN_WIDTH - destRect.w ) / 2;
-                        }
-                        else {
-                            float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
-                            destRect.w = VITA_FULLSCREEN_WIDTH;
-                            destRect.h = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
-                            destRect.y = ( VITA_FULLSCREEN_HEIGHT - destRect.h ) / 2;
-                        }
+                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
+                        float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
+                        destRect.w = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                        destRect.h = VITA_FULLSCREEN_HEIGHT;
+                        destRect.x = ( VITA_FULLSCREEN_WIDTH - destRect.w ) / 2;
                     }
                     else {
+                        float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
                         destRect.w = VITA_FULLSCREEN_WIDTH;
-                        destRect.h = VITA_FULLSCREEN_HEIGHT;
+                        destRect.h = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                        destRect.y = ( VITA_FULLSCREEN_HEIGHT - destRect.h ) / 2;
                     }
                 }
                 else {
@@ -1092,7 +1082,7 @@ namespace
             vita2d_start_drawing();
             vita2d_draw_texture_scale( texBuffer, destRect.x, destRect.y, static_cast<float>( destRect.w ) / width, static_cast<float>( destRect.h ) / height );
             vita2d_end_drawing();
-            vita2d_wait_rendering_done();
+            // vita2d_wait_rendering_done();
             vita2d_swap_buffers();
         }
 
@@ -1128,7 +1118,6 @@ namespace
     private:
         SDL_Window * _window = nullptr;
         SDL_Surface * _surface = nullptr;
-        bool keepAspectRatio;
 
         void _createPalette()
         {

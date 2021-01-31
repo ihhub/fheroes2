@@ -62,10 +62,6 @@ namespace fheroes2
             return fheroes2::Size();
         }
 
-#ifdef VITA
-        virtual void SetVitaKeepAspectRatio( bool ) {}
-#endif
-
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )

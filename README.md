@@ -49,9 +49,7 @@ Text input is done with D-Pad.
 
 Pointer movement speed can be changed with 'gamepad_pointer_speed' parameter in "ux0:data/fheroes2/fheroes2.cfg".
 
-Use "fullscreen = on" option to scale game area to native Vita resolution or "fullscreen = off" to keep game area at the center of the screen.
-
-"vita_keep_aspect_ratio = 1" keeps aspect ratio of original image when scaling. "vita_keep_aspect_ratio = 0" just scales it to 960x544.
+Use "fullscreen = on" option to scale game area to native Vita resolution or "fullscreen = off" to keep the game area at the center of the screen.
 
 Native resolution is supported (set "videomode = 960x544" option in config file or just click on the left door in main menu and select resolution manually. Game restart is required after resolution change).
 
