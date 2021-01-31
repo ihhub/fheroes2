@@ -233,8 +233,6 @@ namespace AI
         status.RedrawTurnProgress( 7 );
 
         // Step 5. Move newly hired heroes if any.
-        size_t heroesMovedCount = 0;
-
         HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 9 );
