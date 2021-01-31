@@ -134,6 +134,33 @@ namespace AI
             // de-prioritize the water movement even harder
             return -5000.0;
         }
+        else if ( objectID == MP2::OBJ_MAGICWELL ) {
+            if ( !hero.HaveSpellBook() ) {
+                return -3000;
+            }
+            if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
+                return -2000; // no reason to visit the well with no magic book or with half of points
+            }
+            return 0;
+        }
+        else if ( objectID == MP2::OBJ_TEMPLE ) {
+            const int moral = hero.GetMorale();
+            if ( moral >= 3 ) {
+                return -3000; // no reason to visit with a maximum moral
+            }
+            else if ( moral == 2 ) {
+                return -2000; // moral is good enough to avoid visting this object
+            }
+            else if ( moral == 1 ) {
+                return -1000; // is it worth to visit this object with better than neutral moral?
+            }
+            else if ( moral == 0 ) {
+                return 0;
+            }
+            else {
+                return 500;
+            }
+        }
 
         return 0;
     }
