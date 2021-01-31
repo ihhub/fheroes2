@@ -47,5 +47,27 @@ namespace fheroes2
         std::string _key;
         std::vector<uint8_t> _body;
     };
+
+    struct ICNHeader
+    {
+        ICNHeader()
+            : offsetX( 0 )
+            , offsetY( 0 )
+            , width( 0 )
+            , height( 0 )
+            , animationFrames( 0 )
+            , offsetData( 0 )
+        {}
+
+        uint16_t offsetX;
+        uint16_t offsetY;
+        uint16_t width;
+        uint16_t height;
+        uint8_t animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
+        uint32_t offsetData;
+    };
 }
+
+StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn );
+
 #endif

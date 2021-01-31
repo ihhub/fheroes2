@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
 #include "agg.h"
 #include "army.h"
 #include "castle.h"
@@ -364,10 +362,6 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
     const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
     const int tileObject = world.GetTiles( dst ).GetObject();
-
-    // logic for these is handled in other QuickInfo dialogs
-    assert( tileObject != MP2::OBJ_CASTLE );
-    assert( tileObject != MP2::OBJ_HEROES );
 
     const bool monsterInfo = tileObject == MP2::OBJ_MONSTER;
 
