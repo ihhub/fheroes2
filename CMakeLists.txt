@@ -25,6 +25,8 @@ option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
 option(USE_SYSTEM_TINYXML        "Use system libtinyxml instead bundled version" OFF)
 option(USE_SYSTEM_LIBSMACKER     "Use system libsmacker instead bundled version" OFF)
 
+option(FHEROES2_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
+
 set(CONFIGURE_FHEROES2_LOCALEDIR "${CMAKE_INSTALL_LOCALEDIR}/${PROJECT_NAME}" CACHE STRING "System Locale directory")
 set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "System fheroes2 game directory")
 

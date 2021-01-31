@@ -26,5 +26,6 @@ jobs:
           brew install ${{ matrix.config.sdl_packages }}
       - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
         run: |
-          cmake -B build -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON
+          cmake -B build -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON
           cmake --build build -j2
+

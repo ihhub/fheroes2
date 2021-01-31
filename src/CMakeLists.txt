@@ -1,3 +1,8 @@
+if(FHEROES2_STRICT_COMPILATION)
+	set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-Werror")
+	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Werror")
+endif()
+
 add_subdirectory(thirdparty)
 add_subdirectory(engine)
 add_subdirectory(fheroes2)
