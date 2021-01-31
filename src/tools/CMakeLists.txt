@@ -20,7 +20,7 @@ target_link_libraries(til2img
 	engine
 	)
 
-add_executable(xmi2mid xmi2mid.cpp)
+add_executable(xmi2mid xmi2mid_cli.cpp)
 target_link_libraries(xmi2mid
 	engine
 	)
