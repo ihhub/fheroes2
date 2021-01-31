@@ -149,20 +149,20 @@ namespace
         int currentX = startX;
         std::vector<int> prevScenarioNextMaps;
         const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
-        const std::vector<int> & completedScenarioNextMaps
-            = saveData.isStarting() ? std::vector<int>() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+        const std::vector<int> & availableMaps
+            = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
         for ( int i = 0, scenarioCount = scenarios.size(); i < scenarioCount; ++i ) {
             const std::vector<int> nextMaps = scenarios[i].getNextMaps();
 
             // sub scenario -> this scenario's next map is one of the prev scenario's next map
+            // an example in original campaign would be Save/Slay the Dwarves
             bool isSubScenario = false;
             int x = currentX;
             int y = middleY;
 
             for ( int j = 0; j < prevScenarioNextMaps.size(); ++j ) {
-                const int mapID = prevScenarioNextMaps[j];
-                if ( std::none_of( nextMaps.begin(), nextMaps.end(), [&mapID]( int scenarioID ) { return scenarioID == mapID; } ) )
+                if ( std::find( nextMaps.begin(), nextMaps.end(), prevScenarioNextMaps[j] ) == nextMaps.end() )
                     continue;
 
                 isSubScenario = true;
@@ -182,13 +182,12 @@ namespace
                 y += isFinalBranch ? deltaY : -deltaY;
             }
 
-            // currently selected scenario
-            if ( saveData.getCurrentScenarioID() == i
-                 || std::any_of( completedScenarioNextMaps.begin(), completedScenarioNextMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
+            // available scenario (one of which should be selected)
+            if ( std::find( availableMaps.begin(), availableMaps.end(), i ) != availableMaps.end() )
                 buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
                                           fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
             // cleared scenario
-            else if ( std::any_of( clearedMaps.begin(), clearedMaps.end(), [&]( const int scenarioID ) { return scenarioID == i; } ) )
+            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), i ) != clearedMaps.end() )
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_CLEARED, trackOffset, x, y );
             else
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_UNAVAILABLE, trackOffset, x, y );

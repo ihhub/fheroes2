@@ -77,7 +77,7 @@ namespace Campaign
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
 
-            if ( std::any_of( nextMaps.begin(), nextMaps.end(), [&scenarioID]( const int nextMap ) { return nextMap == scenarioID; } ) )
+            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioID ) != nextMaps.end() )
                 return false;
         }
 
