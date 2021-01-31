@@ -32,7 +32,7 @@ namespace Campaign
         return fullMapPath.find( scenarioMapName ) != std::string::npos;
     }
 
-    bool TryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
+    bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
         const std::string mapFolder = "maps";
@@ -104,7 +104,7 @@ namespace Campaign
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;
-        return TryGetMatchingFile( _fileName, matchingFilePath );
+        return tryGetMatchingFile( _fileName, matchingFilePath );
     }
 
     const Maps::FileInfo Campaign::ScenarioData::loadMap() const
@@ -112,7 +112,7 @@ namespace Campaign
         std::string matchingFilePath;
 
         Maps::FileInfo fi;
-        if ( TryGetMatchingFile( _fileName, matchingFilePath ) )
+        if ( tryGetMatchingFile( _fileName, matchingFilePath ) )
             fi.ReadMP2( matchingFilePath );
 
         return fi;

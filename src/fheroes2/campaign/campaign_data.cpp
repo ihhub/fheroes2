@@ -42,10 +42,12 @@ namespace Campaign
             if ( _scenarios[i].getScenarioID() >= scenarioID )
                 break;
 
-            const std::vector<int> nextMaps = _scenarios[i].getNextMaps();
-            for ( size_t j = 0, nextMapCount = nextMaps.size(); j < nextMapCount; ++j ) {
-                if ( nextMaps[i] == scenarioID )
+            const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
+            for ( size_t mapID = 0; mapID < nextMaps.size(); ++mapID ) {
+                if ( nextMaps[i] == scenarioID ) {
                     scenarioIDs.emplace_back( nextMaps[i] );
+                    break;
+                }
             }
         }
 
@@ -72,10 +74,10 @@ namespace Campaign
     bool CampaignData::isStartingScenario( const int scenarioID ) const
     {
         // starting scenario = a scenario that is never included as a nextMap
-        for ( size_t i = 0, count = _scenarios.size(); i < count; ++i ) {
+        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
 
-            if ( std::any_of( nextMaps.begin(), nextMaps.end(), [&]( const int nextMap ) { return nextMap == scenarioID; } ) )
+            if ( std::any_of( nextMaps.begin(), nextMaps.end(), [&scenarioID]( const int nextMap ) { return nextMap == scenarioID; } ) )
                 return false;
         }
 
@@ -84,7 +86,7 @@ namespace Campaign
 
     bool CampaignData::isAllCampaignMapsPresent() const
     {
-        for ( int i = 0, count = _scenarios.size(); i < count; ++i ) {
+        for ( int i = 0; i < _scenarios.size(); ++i ) {
             if ( !_scenarios[i].isMapFilePresent() )
                 return false;
         }

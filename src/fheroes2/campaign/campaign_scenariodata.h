@@ -62,6 +62,9 @@ namespace Campaign
     class ScenarioData
     {
     public:
+        ScenarioData( int scenarioID, std::vector<int> nextMaps, std::vector<Campaign::ScenarioBonusData> bonuses, const std::string & fileName,
+                      const std::string & description );
+
         const std::vector<int> & getNextMaps() const
         {
             return _nextMaps;
@@ -89,9 +92,6 @@ namespace Campaign
 
         bool isMapFilePresent() const;
         const Maps::FileInfo loadMap() const;
-
-        ScenarioData( int scenarioID, std::vector<int> nextMaps, std::vector<Campaign::ScenarioBonusData> bonuses, const std::string & fileName,
-                      const std::string & description );
 
     private:
         int _scenarioID;
