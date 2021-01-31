@@ -159,7 +159,6 @@ namespace AI
                         if ( dist && dist < threatDistanceLimit ) {
                             // castle is under threat
                             castlesInDanger.push_back( castleIndex );
-                            break;
                         }
                     }
                 }
