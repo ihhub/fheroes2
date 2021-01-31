@@ -135,8 +135,7 @@ namespace AI
             return -5000.0;
         }
         else if ( objectID == MP2::OBJ_MAGICWELL ) {
-            if ( !hero.HaveSpellBook() )
-            {
+            if ( !hero.HaveSpellBook() ) {
                 return -3000;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
