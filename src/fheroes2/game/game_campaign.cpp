@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
  *   Copyright (C) 2020                                                    *
@@ -138,10 +137,11 @@ namespace
 
         const int iconsId = isGoodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
         const int selectedIconIdx = isGoodCampaign ? Campaign::SCENARIOICON_GOOD_SELECTED : Campaign::SCENARIOICON_EVIL_SELECTED;
-        // TODO: find icon Idx for done (yellow ring border)
 
-        const int middleY = 40, deltaY = 42;
-        const int startX = -2, deltaX = 74;
+        const int middleY = 40;
+        const int deltaY = 42;
+        const int startX = -2;
+        const int deltaX = 74;
 
         const std::vector<Campaign::ScenarioData> scenarios = campaignData.getAllScenarios();
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
@@ -153,7 +153,7 @@ namespace
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
         for ( size_t i = 0; i < scenarios.size(); ++i ) {
-            const std::vector<int> nextMaps = scenarios[i].getNextMaps();
+            const std::vector<int> & nextMaps = scenarios[i].getNextMaps();
             const int scenarioID = scenarios[i].getScenarioID();
 
             // sub scenario -> this scenario's next map is one of the prev scenario's next map
@@ -217,7 +217,7 @@ namespace
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
         const int textChoiceWidth = 150;
-        for ( uint32_t i = 0; i < bonuses.size(); ++i ) {
+        for ( size_t i = 0; i < bonuses.size(); ++i ) {
             Text choice( bonuses[i].ToString(), Font::BIG );
             choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
         }
@@ -319,15 +319,12 @@ int Game::CompleteCampaignScenario()
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
     // TODO: do proper calc based on all scenarios cleared?
-    if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+    if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
         return Game::HIGHSCORES;
-    }
-    // if not, eventually call SelectCampaignScenario() again
-    else {
-        const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
-        saveData.setCurrentScenarioID( firstNextMap );
-        return Game::SELECTCAMPAIGNSCENARIO;
-    }
+
+    const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
+    saveData.setCurrentScenarioID( firstNextMap );
+    return Game::SELECTCAMPAIGNSCENARIO;
 }
 
 int Game::SelectCampaignScenario()

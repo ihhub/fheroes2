@@ -38,7 +38,7 @@ namespace Campaign
         const std::string mapFolder = "maps";
         const ListFiles files = Settings::GetListFiles( mapFolder, fileExtension );
 
-        const auto iterator = std::find_if( files.begin(), files.end(), [&]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
+        const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
 
         if ( iterator != files.end() ) {
             matchingFilePath = *iterator;

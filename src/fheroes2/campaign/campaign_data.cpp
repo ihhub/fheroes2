@@ -44,8 +44,8 @@ namespace Campaign
 
             const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
             for ( size_t mapID = 0; mapID < nextMaps.size(); ++mapID ) {
-                if ( nextMaps[i] == scenarioID ) {
-                    scenarioIDs.emplace_back( nextMaps[i] );
+                if ( nextMaps[mapID] == scenarioID ) {
+                    scenarioIDs.emplace_back( nextMaps[mapID] );
                     break;
                 }
             }
