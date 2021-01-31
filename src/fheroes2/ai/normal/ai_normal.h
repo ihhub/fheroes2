@@ -24,6 +24,8 @@
 #include "ai.h"
 #include "world_pathfinding.h"
 
+struct VecHeroes;
+
 namespace AI
 {
     struct RegionStats
@@ -43,14 +45,15 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom );
         void CastleTurn( Castle & castle, bool defensive = false );
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-        void HeroTurn( Heroes & hero );
+        // void HeroTurn( Heroes & heroes );
+        void HeroesTurn( VecHeroes & heroes ) override;
 
         void revealFog( const Maps::Tiles & tile );
 
         void HeroesActionComplete( Heroes & hero );
 
         double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
-        int getPriorityTarget( const Heroes & hero, int patrolIndex = -1, uint32_t distanceLimit = 0 );
+        int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder();
 
     private:

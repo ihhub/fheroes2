@@ -237,6 +237,9 @@ namespace AI
 
         // Step 4. Move heroes until they have nothing to do (HERO_WAITING or HERO_MOVED state)
         size_t heroesMovedCount = 0;
+
+        HeroesTurn( sortedHeroList );
+        /*
         for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
             if ( *it ) {
                 HeroTurn( **it );
@@ -256,6 +259,7 @@ namespace AI
                 status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
             }
         }
+        */
 
         status.RedrawTurnProgress( 9 );
 

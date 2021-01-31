@@ -31,6 +31,7 @@ class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
+struct VecHeroes;
 namespace Maps
 {
     class Tiles;
@@ -78,6 +79,7 @@ namespace AI
         virtual void CastleTurn( Castle & castle, bool defensive = false );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
+        virtual void HeroesTurn( VecHeroes & ) {}
 
         virtual void revealFog( const Maps::Tiles & tile );
 
