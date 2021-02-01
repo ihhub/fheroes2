@@ -342,6 +342,8 @@ int GameOver::Result::LocalCheckGameOver( void )
         assert( activeHumanColors <= 1 );
 
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
+        const Settings & conf = Settings::Get();
+
         if ( myKingdom.isControlHuman() ) {
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
@@ -356,7 +358,6 @@ int GameOver::Result::LocalCheckGameOver( void )
         }
 
         // set: continue after victory
-        const Settings & conf = Settings::Get();
         if ( Game::CANCEL != res && conf.ExtGameContinueAfterVictory() && ( !myKingdom.GetCastles().empty() || !myKingdom.GetHeroes().empty() ) ) {
             if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 continue_game = true;
