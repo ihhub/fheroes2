@@ -171,7 +171,12 @@ namespace AI
         if ( slowEarlyGame )
             heroLimit = 2;
 
-        // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
+        // Step 3. Do some hero stuff.
+        HeroesTurn( heroes );
+
+        status.RedrawTurnProgress( 6 );
+
+        // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
 
         // sort castles by value: best first
         VecCastles sortedCastleList( castles );
@@ -225,37 +230,10 @@ namespace AI
             }
         }
 
-        // Copy hero list and sort (original list may be altered during the turn)
-        VecHeroes sortedHeroList = heroes;
-        std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
-            if ( left && right )
-                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
-            return right == NULL;
-        } );
+        status.RedrawTurnProgress( 7 );
 
-        status.RedrawTurnProgress( 2 );
-
-        // Step 4. Move heroes until they have nothing to do (HERO_WAITING or HERO_MOVED state)
-        size_t heroesMovedCount = 0;
-        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
-            if ( *it ) {
-                HeroTurn( **it );
-
-                if ( ( *it )->Modes( HERO_MOVED ) ) {
-                    ++heroesMovedCount;
-                    status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
-                }
-            }
-        }
-
-        // Step 5. Repeat process (maybe there was a path unlocked by a stronger hero)
-        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
-            if ( *it && !( *it )->Modes( HERO_MOVED ) ) {
-                HeroTurn( **it );
-                ++heroesMovedCount;
-                status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
-            }
-        }
+        // Step 5. Move newly hired heroes if any.
+        HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 9 );
 
