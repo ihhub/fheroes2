@@ -203,7 +203,7 @@ namespace
 
     void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
     {
-        const auto mapInfo = scenario.loadMap();
+        const Maps::FileInfo & mapInfo = scenario.loadMap();
         const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
 
         const std::string & mapNameStr = mapInfo.description;
@@ -232,7 +232,7 @@ namespace
         scenarioDatas.emplace_back( 2, std::vector<int>{3}, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[0] );
         scenarioDatas.emplace_back( 3, std::vector<int>{4}, getCampaignBonusData( 0, 3 ), std::string( "CAMPG04.H2C" ), rolandCampaignDescription[0] );
 
-        Campaign::CampaignData campaignData = Campaign::CampaignData();
+        Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 0 );
         campaignData.setCampaignDescription( "Roland Campaign" );
         campaignData.setCampaignAlignment( true );
@@ -254,7 +254,7 @@ namespace
         scenarioDatas.emplace_back( 1, std::vector<int>{2}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 2, std::vector<int>{}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[0] );
 
-        Campaign::CampaignData campaignData = Campaign::CampaignData();
+        Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 1 );
         campaignData.setCampaignDescription( "Archibald Campaign" );
         campaignData.setCampaignAlignment( false );
@@ -398,7 +398,7 @@ int Game::SelectCampaignScenario()
 
     DrawCampaignScenarioDescription( scenario, top );
 
-    const std::vector<int> selectableScenarios
+    const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
     const uint32_t selectableScenariosCount = static_cast<uint32_t>( selectableScenarios.size() );
 

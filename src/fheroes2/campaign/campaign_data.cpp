@@ -20,10 +20,10 @@
 
 #include "campaign_data.h"
 #include "artifact.h"
-#include "assert.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "resource.h"
+#include <cassert>
 
 namespace Campaign
 {
@@ -64,8 +64,9 @@ namespace Campaign
         std::vector<int> startingScenarios;
 
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( isStartingScenario( _scenarios[i].getScenarioID() ) )
-                startingScenarios.emplace_back( _scenarios[i].getScenarioID() );
+            const int scenarioID = _scenarios[i].getScenarioID();
+            if ( isStartingScenario( scenarioID ) )
+                startingScenarios.emplace_back( scenarioID );
         }
 
         return startingScenarios;
@@ -96,6 +97,7 @@ namespace Campaign
 
     bool CampaignData::isLastScenario( const int scenarioID ) const
     {
+        assert( !_scenarios.empty() );
         return scenarioID == _scenarios.back().getScenarioID();
     }
 

@@ -62,7 +62,7 @@ namespace Campaign
     class ScenarioData
     {
     public:
-        ScenarioData( int scenarioID, std::vector<int> nextMaps, std::vector<Campaign::ScenarioBonusData> bonuses, const std::string & fileName,
+        ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
                       const std::string & description );
 
         const std::vector<int> & getNextMaps() const

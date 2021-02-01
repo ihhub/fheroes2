@@ -31,6 +31,8 @@ namespace Campaign
     class CampaignData
     {
     public:
+        CampaignData();
+
         const std::string & getCampaignDescription() const
         {
             return _campaignDescription;
@@ -63,8 +65,6 @@ namespace Campaign
         void setCampaignAlignment( const bool isGoodCampaign );
         void setCampaignDescription( const std::string & campaignDescription );
         void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
-
-        CampaignData();
 
     private:
         int _campaignID;

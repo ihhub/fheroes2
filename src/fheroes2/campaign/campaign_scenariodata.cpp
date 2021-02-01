@@ -20,10 +20,10 @@
 
 #include "campaign_scenariodata.h"
 #include "artifact.h"
-#include "assert.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "resource.h"
+#include <cassert>
 
 namespace Campaign
 {
@@ -35,8 +35,7 @@ namespace Campaign
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
-        const std::string mapFolder = "maps";
-        const ListFiles files = Settings::GetListFiles( mapFolder, fileExtension );
+        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
 
         const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
 
@@ -92,7 +91,7 @@ namespace Campaign
         return msg >> data._type >> data._subType >> data._amount;
     }
 
-    ScenarioData::ScenarioData( int scenarioID, std::vector<int> nextMaps, std::vector<ScenarioBonusData> bonuses, const std::string & fileName,
+    ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
                                 const std::string & description )
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
