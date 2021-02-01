@@ -35,6 +35,61 @@ namespace
         int patrolCenter = -1;
         uint32_t patrolDistance = 0;
     };
+
+    // Used for caching object validations per hero.
+    class ObjectValidator
+    {
+    public:
+        ObjectValidator( const Heroes & hero )
+            : _hero( hero )
+        {}
+
+        bool isValid( const int index )
+        {
+            auto iter = _validObjects.find( index );
+            if ( iter != _validObjects.end() ) {
+                return iter->second;
+            }
+
+            const bool valid = AI::HeroesValidObject( _hero, index );
+            _validObjects[index] = valid;
+            return valid;
+        }
+
+    private:
+        const Heroes & _hero;
+        std::map<int, bool> _validObjects;
+    };
+
+    // Used for caching of object value estimation per hero.
+    class ObjectValueStorage
+    {
+    public:
+        ObjectValueStorage( const Heroes & hero, const AI::Normal & ai, const double ignoreValue )
+            : _hero( hero )
+            , _ai( ai )
+            , _ignoreValue( ignoreValue )
+        {}
+
+        double value( const std::pair<int, int> & objectInfo )
+        {
+            auto iter = _objectValue.find( objectInfo );
+            if ( iter != _objectValue.end() ) {
+                return iter->second;
+            }
+
+            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue );
+
+            _objectValue[objectInfo] = value;
+            return value;
+        }
+
+    private:
+        const Heroes & _hero;
+        const AI::Normal & _ai;
+        const double _ignoreValue;
+        std::map<std::pair<int, int>, double> _objectValue;
+    };
 }
 
 namespace AI
@@ -131,11 +186,11 @@ namespace AI
             return valueToIgnore;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return _regions[tile.GetRegion()].fogCount * 150.0;
+            return _regions[tile.GetRegion()].fogCount * 100.0;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const RegionStats & regionStats = _regions[tile.GetRegion()];
-            const int objectCount = regionStats.validObjects.size();
+            const size_t objectCount = regionStats.validObjects.size();
             if ( objectCount < 1 )
                 return valueToIgnore;
 
@@ -204,6 +259,9 @@ namespace AI
 
         const uint32_t leftMovePoints = hero.GetMovePoints();
 
+        ObjectValidator objectValidator( hero );
+        ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
+
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
 
@@ -211,24 +269,24 @@ namespace AI
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
                 continue;
 
-            if ( HeroesValidObject( hero, node.first ) ) {
+            if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
                 if ( dist == 0 )
                     continue;
 
-                double value = getObjectValue( hero, node.first, node.second, lowestPossibleValue );
+                double value = valueStorage.value( node );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
-                    if ( HeroesValidObject( hero, pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += getObjectValue( hero, pair.first, pair.second, lowestPossibleValue );
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
+                        value += valueStorage.value( pair );
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
                 if ( heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
 
                 if ( dist > leftMovePoints ) {
-                    // Distant object out of reach for current turn must have lower priority
+                    // Distant object which is out of reach for the current turn must have lower priority.
                     dist = leftMovePoints + ( dist - leftMovePoints ) * 2;
                 }
 
@@ -295,17 +353,15 @@ namespace AI
             }
         }
 
-        const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
-            double maxPriority = lowestPossibleValue - 1;
+            double maxPriority = 0;
             int bestTargetIndex = -1;
 
             for ( HeroToMove & heroInfo : availableHeroes ) {
                 double priority = -1;
                 const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
-                if ( targetIndex != -1 && priority > maxPriority ) {
+                if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                     maxPriority = priority;
                     bestTargetIndex = targetIndex;
                     bestHero = heroInfo.hero;
