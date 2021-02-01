@@ -1601,7 +1601,7 @@ void Battle::Interface::RedrawCover()
             bool isApplicable = highlightCell->isPassable1( false );
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
-                isApplicable = highlightedUnit == nullptr || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
+                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
             }
 
             if ( isApplicable ) {
