@@ -25,7 +25,6 @@
 
 #include "audio_music.h"
 #include "campaign_savedata.h"
-#include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
 #include "race.h"

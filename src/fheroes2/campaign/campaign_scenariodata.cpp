@@ -106,7 +106,7 @@ namespace Campaign
         return tryGetMatchingFile( _fileName, matchingFilePath );
     }
 
-    const Maps::FileInfo Campaign::ScenarioData::loadMap() const
+    Maps::FileInfo Campaign::ScenarioData::loadMap() const
     {
         std::string matchingFilePath;
 

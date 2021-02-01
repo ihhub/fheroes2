@@ -49,7 +49,7 @@ namespace
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
         bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
 
         return bonus;
@@ -109,7 +109,7 @@ namespace
         const int startX = -2;
         const int deltaX = 74;
 
-        const std::vector<Campaign::ScenarioData> scenarios = campaignData.getAllScenarios();
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
         int currentX = startX;
@@ -150,14 +150,17 @@ namespace
             }
 
             // available scenario (one of which should be selected)
-            if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() )
+            if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() ) {
                 buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
                                           fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
+            }
             // cleared scenario
-            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), i ) != clearedMaps.end() )
+            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), i ) != clearedMaps.end() ) {
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_CLEARED, trackOffset, x, y );
-            else
+            }
+            else {
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_UNAVAILABLE, trackOffset, x, y );
+            }
 
             if ( !isBranching || isFinalBranch )
                 prevScenarioNextMaps = nextMaps;
@@ -189,10 +192,11 @@ namespace
         }
     }
 
-    const Campaign::CampaignData GetRolandCampaignData()
+    Campaign::CampaignData GetRolandCampaignData()
     {
         // TODO: Do all campaign data until CAMPG10.H2C, for now we'll test until mission 4 (in which mission 3 Save The Dwarves is optional)
         std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 4 );
         scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 0, 0 ), std::string( "CAMPG01.H2C" ), rolandCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 0, 1 ), std::string( "CAMPG02.H2C" ), rolandCampaignDescription[0] );
         scenarioDatas.emplace_back( 2, std::vector<int>{3}, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[0] );
@@ -207,15 +211,11 @@ namespace
         return campaignData;
     }
 
-    const Campaign::CampaignData GetArchibaldCampaignData()
+    Campaign::CampaignData GetArchibaldCampaignData()
     {
         // TODO: Do all campaign data until CAMPE10.H2C
-        std::vector<Campaign::ScenarioBonusData> bonus;
-        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
-
         std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 4 );
         scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 2, std::vector<int>{}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[0] );
@@ -230,7 +230,7 @@ namespace
         return campaignData;
     }
 
-    const Campaign::CampaignData GetCampaignData( int campaignID )
+    Campaign::CampaignData GetCampaignData( int campaignID )
     {
         switch ( campaignID ) {
         case 0:
@@ -291,7 +291,7 @@ int Game::CompleteCampaignScenario()
 
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
     saveData.setCurrentScenarioID( firstNextMap );
-    return Game::SELECTCAMPAIGNSCENARIO;
+    return Game::SELECT_CAMPAIGN_SCENARIO;
 }
 
 int Game::SelectCampaignScenario()
@@ -403,7 +403,7 @@ int Game::SelectCampaignScenario()
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
             if ( le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
-                return Game::SELECTCAMPAIGNSCENARIO;
+                return Game::SELECT_CAMPAIGN_SCENARIO;
             }
         }
 

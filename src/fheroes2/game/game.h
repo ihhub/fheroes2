@@ -65,8 +65,8 @@ namespace Game
         EDITSAVEMAP,
         EDITSTART,
         ENDTURN,
-        SELECTCAMPAIGNSCENARIO,
-        COMPLETECAMPAIGNSCENARIO
+        SELECT_CAMPAIGN_SCENARIO,
+        COMPLETE_CAMPAIGN_SCENARIO
     };
 
     void Init( void );

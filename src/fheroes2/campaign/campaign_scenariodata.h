@@ -21,9 +21,7 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
-#include "gamedefs.h"
 #include "maps_fileinfo.h"
-#include "serialize.h"
 
 namespace Campaign
 {
@@ -62,6 +60,7 @@ namespace Campaign
     class ScenarioData
     {
     public:
+        ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
                       const std::string & description );
 
@@ -91,7 +90,7 @@ namespace Campaign
         }
 
         bool isMapFilePresent() const;
-        const Maps::FileInfo loadMap() const;
+        Maps::FileInfo loadMap() const;
 
     private:
         int _scenarioID;
