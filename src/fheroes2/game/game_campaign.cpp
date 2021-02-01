@@ -217,8 +217,9 @@ namespace
 
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{2}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 2, std::vector<int>{}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{}, getCampaignBonusData( 1, 3 ), std::string( "CAMPE04.H2C" ), archibaldCampaignDescription[0] );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 1 );
