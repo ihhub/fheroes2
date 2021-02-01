@@ -319,6 +319,7 @@ private:
 
     // This data isn't serialized
     Maps::Indexes _allTeleporters;
+    Maps::Indexes _whirlpoolTiles;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

@@ -542,9 +542,10 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
 
         // possible that hero loses the battle
         if ( !hero.isFreeman() ) {
-            hero.Action( indexTo );
+            const bool isDestination = indexTo == hero.GetPath().GetDestinationIndex();
+            hero.Action( indexTo, isDestination );
 
-            if ( indexTo == hero.GetPath().GetDestinationIndex() ) {
+            if ( isDestination ) {
                 hero.GetPath().Reset();
                 hero.SetMove( false );
             }
@@ -552,7 +553,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
     }
     else {
         hero.GetPath().Reset();
-        hero.Action( indexTo );
+        hero.Action( indexTo, true );
         hero.SetMove( false );
     }
 }
