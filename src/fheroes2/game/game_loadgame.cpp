@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game_io.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"

@@ -22,6 +22,7 @@
 #include "agg.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "pal.h"
 #include "settings.h"
 

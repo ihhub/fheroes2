@@ -30,6 +30,7 @@
 #include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "localevent.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
