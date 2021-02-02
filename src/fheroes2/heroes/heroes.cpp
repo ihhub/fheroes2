@@ -2042,12 +2042,12 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = static_cast<size_t>( world.GetMapSeed() );
-    hash_combine( hash, name );
+    hash_combine( hash, hid );
+    hash_combine( hash, race );
     hash_combine( hash, attack );
     hash_combine( hash, defense );
     hash_combine( hash, power );
     hash_combine( hash, knowledge );
-
     for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
         hash_combine( hash, GetLevelSkill( skillId ) );
     }
