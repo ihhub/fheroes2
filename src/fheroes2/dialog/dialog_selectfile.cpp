@@ -283,7 +283,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     std::string result;
     bool is_limit = false;
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     le.DPadTextInputActive( true );
 #endif
 
@@ -355,7 +355,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     cursor.Hide();
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     le.DPadTextInputActive( false );
 #endif
 

@@ -100,7 +100,7 @@ LIBS := -liconv
 endif
 endif
 
-ifdef VITA
+ifdef FHEROES2_VITA
 PLATFORM := vita
 endif
 

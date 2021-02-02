@@ -267,7 +267,7 @@ public:
         _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
     }
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     void DPadTextInputActive( bool active )
     {
         _dpadInputActive = active;
@@ -335,7 +335,7 @@ private:
 
     fheroes2::Time clock;
     u32 clock_delay;
-    uint32_t loop_delay;
+    int loop_delay;
 
     // These members are used for restoring music and sounds when an user reopens the window
     bool _isHiddenWindow;
@@ -371,7 +371,7 @@ private:
     int16_t _numTouches = 0;
 #endif
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     bool _dpadInputActive = false;
 #endif
 };

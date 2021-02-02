@@ -80,7 +80,7 @@ T clamp( const T & value, const T & min, const T & max )
     return ( value < min ) ? min : ( max < value ) ? max : value;
 }
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
 char GetCurrentVitaChar();
 void SetCurrentVitaCharIndex( char current_char );
 #endif

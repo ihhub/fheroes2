@@ -37,7 +37,7 @@
 #include <cmath>
 #include <set>
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
 #include <vita2d.h>
 #endif
 
@@ -919,7 +919,7 @@ namespace
     };
 #endif
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     class VitaRenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
@@ -1138,7 +1138,7 @@ namespace fheroes2
     }
 
     Display::Display()
-#ifdef VITA
+#if defined( FHEROES2_VITA )
         : _engine( VitaRenderEngine::create() )
 #else
         : _engine( RenderEngine::create() )

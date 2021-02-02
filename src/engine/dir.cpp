@@ -21,7 +21,7 @@
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
 #include <windows.h>
-#elif defined( VITA )
+#elif defined( FHEROES2_VITA )
 #include <psp2/kernel/iofilemgr.h>
 #else
 #include <dirent.h>
@@ -50,7 +50,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         } while ( FindNextFile( hFind, &data ) != 0 );
         FindClose( hFind );
     }
-#elif defined( VITA )
+#elif defined( FHEROES2_VITA )
     // open the directory
     int uid = sceIoDopen( path.c_str() );
     if ( uid <= 0 )

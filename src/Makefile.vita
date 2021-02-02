@@ -2,7 +2,7 @@ AR := arm-dolce-eabi-gcc-ar
 CC := arm-dolce-eabi-gcc
 CXX := arm-dolce-eabi-g++
 
-CFLAGS := $(CFLAGS) -DVITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -flto=jobserver -fgraphite-identity -floop-nest-optimize
+CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -flto=jobserver -fgraphite-identity -floop-nest-optimize
 LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib $(CFLAGS) -Wl,-O1 -Wl,--sort-common -Wl,-flto
 
 SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lvita2d -lpib -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \

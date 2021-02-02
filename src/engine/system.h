@@ -41,7 +41,7 @@ namespace std
         osss << x;                                                                                                                                                       \
         __android_log_print( ANDROID_LOG_INFO, "SDLHeroes2", "%s", osss.str().c_str() );                                                                                 \
     }
-#elif defined( VITA )
+#elif defined( FHEROES2_VITA )
 #include <psp2/kernel/clib.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \

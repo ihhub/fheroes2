@@ -54,7 +54,7 @@
 #define be32toh( x ) OSSwapBigToHostInt32( x )
 #define le32toh( x ) OSSwapLittleToHostInt32( x )
 
-#elif defined( VITA )
+#elif defined( FHEROES2_VITA )
 #include "SDL_endian.h"
 
 #define BIG_ENDIAN 4321

@@ -42,7 +42,7 @@
 #include "system.h"
 #include "zzlib.h"
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
 #include <psp2/kernel/processmgr.h>
 #include <psp2/power.h>
 
@@ -78,7 +78,7 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     scePowerSetArmClockFrequency( 444 );
     scePowerSetBusClockFrequency( 222 );
     scePowerSetGpuClockFrequency( 222 );
@@ -272,7 +272,7 @@ int main( int argc, char ** argv )
 #endif
     fheroes2::Display::instance().release();
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     sceKernelExitProcess( 0 );
 #endif
 

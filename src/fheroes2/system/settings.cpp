@@ -770,7 +770,7 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
     file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
 #else
@@ -990,7 +990,7 @@ ListDirs Settings::GetRootDirs( void )
     if ( !home.empty() )
         dirs.push_back( home );
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     dirs.push_back( "ux0:app/FHOMM0002" );
     dirs.push_back( "ux0:data/fheroes2" );
 #endif

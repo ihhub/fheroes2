@@ -270,7 +270,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     LocalEvent & le = LocalEvent::Get();
     bool redraw = true;
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     le.DPadTextInputActive( true );
 #endif
 
@@ -318,7 +318,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     cursor.SetThemes( oldcursor );
     cursor.Hide();
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     le.DPadTextInputActive( false );
 #endif
 

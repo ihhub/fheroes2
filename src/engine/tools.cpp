@@ -45,7 +45,7 @@ enum KeyMod
     MOD_NUM = KMOD_NUM
 };
 
-#ifdef VITA
+#if defined( FHEROES2_VITA )
 static const int TOTAL_CHARACTERS_VITA = 38;
 bool currentUpper;
 int currentCharIndex;
@@ -539,7 +539,7 @@ char CharFromKeySym( KeySym sym, u16 mod )
 
 size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 {
-#ifdef VITA
+#if defined( FHEROES2_VITA )
     // input with D-Pad
     if ( res.size() ) {
         SetCurrentVitaCharIndex( res.back() );
