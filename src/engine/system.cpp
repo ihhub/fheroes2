@@ -320,6 +320,7 @@ bool System::IsFile( const std::string & name, bool writable )
 #if defined( _MSC_VER )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
 #elif defined( ANDROID ) || defined( FHEROES2_VITA )
+    // access is UNBELIEVABLY slow on Vita, so just return true and hack your way around..
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #else
     std::string correctedPath;

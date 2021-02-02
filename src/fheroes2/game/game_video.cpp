@@ -30,7 +30,7 @@
 
 namespace
 {
-    const std::vector<std::string> videoDir = {"anim", System::ConcatePath( "heroes2", "anim" )};
+    const std::vector<std::string> videoDir = {System::ConcatePath( "heroes2", "anim" ), "anim"};
 
     bool IsFile( const std::string & fileName, std::string & path )
     {
