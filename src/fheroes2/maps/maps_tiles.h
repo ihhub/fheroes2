@@ -153,7 +153,7 @@ namespace Maps
         bool isRoad() const;
         bool isStream( void ) const;
         bool isShadow( void ) const;
-        bool GoodForUltimateArtifact( const int heroColor ) const;
+        bool GoodForUltimateArtifact() const;
 
         TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
 
