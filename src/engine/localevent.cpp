@@ -42,6 +42,44 @@ namespace
     };
 }
 
+#if defined( FHEROES2_VITA )
+static const int TOTAL_CHARACTERS_DPAD = 38;
+bool currentUpper = false;
+int currentCharIndex = 0;
+
+const KeySym dPadKeys[TOTAL_CHARACTERS_DPAD] = {
+    // lowercase letters
+    KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
+    KEY_x, KEY_y, KEY_z,
+    // space, underscore
+    KEY_SPACE, KEY_UNDERSCORE,
+    // nums
+    KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
+
+char GetCurrentDPadChar()
+{
+    return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
+}
+
+void SetCurrentDPadCharIndex( char currentChar )
+{
+    if ( currentChar >= 'A' && currentChar <= 'Z' ) {
+        currentUpper = true;
+        currentChar += 32;
+    }
+
+    const KeySym keySym = KeySymFromChar( currentChar );
+    for ( int i = 0; i < TOTAL_CHARACTERS_DPAD; ++i ) {
+        if ( dPadKeys[i] == keySym ) {
+            currentCharIndex = i;
+            return;
+        }
+    }
+
+    currentCharIndex = 0;
+}
+#endif
+
 LocalEvent::LocalEvent()
     : modes( 0 )
     , key_value( KEY_NONE )
@@ -692,44 +730,6 @@ char CharFromKeySym( KeySym sym, u16 mod )
 
     return 0;
 }
-
-#if defined( FHEROES2_VITA )
-static const int TOTAL_CHARACTERS_DPAD = 38;
-bool currentUpper = false;
-int currentCharIndex = 0;
-
-const KeySym dPadKeys[TOTAL_CHARACTERS_DPAD] = {
-    // lowercase letters
-    KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
-    KEY_x, KEY_y, KEY_z,
-    // space, underscore
-    KEY_SPACE, KEY_UNDERSCORE,
-    // nums
-    KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
-    
-char GetCurrentDPadChar()
-{
-    return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
-}
-
-void SetCurrentDPadCharIndex( char currentChar )
-{
-    if ( currentChar >= 'A' && currentChar <= 'Z' ) {
-        currentUpper = true;
-        currentChar += 32;
-    }
-
-    const KeySym keySym = KeySymFromChar( currentChar );
-    for ( int i = 0; i < TOTAL_CHARACTERS_DPAD; ++i ) {
-        if ( dPadKeys[i] == keySym ) {
-            currentCharIndex = i;
-            return;
-        }
-    }
-
-    currentCharIndex = 0;
-}
-#endif
 
 size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 {

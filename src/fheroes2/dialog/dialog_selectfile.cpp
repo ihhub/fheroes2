@@ -284,7 +284,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     bool is_limit = false;
 
 #if defined( FHEROES2_VITA )
-    le.DPadTextInputActive( true );
+    le.SetDPadTextInputStatus( true );
 #endif
 
     while ( le.HandleEvents() && result.empty() ) {
@@ -356,7 +356,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     cursor.Hide();
 
 #if defined( FHEROES2_VITA )
-    le.DPadTextInputActive( false );
+    le.SetDPadTextInputStatus( false );
 #endif
 
     return result;

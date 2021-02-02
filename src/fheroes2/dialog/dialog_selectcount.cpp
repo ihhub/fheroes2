@@ -272,7 +272,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     bool redraw = true;
 
 #if defined( FHEROES2_VITA )
-    le.DPadTextInputActive( true );
+    le.SetDPadTextInputStatus( true );
 #endif
 
     // message loop
@@ -320,7 +320,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     cursor.Hide();
 
 #if defined( FHEROES2_VITA )
-    le.DPadTextInputActive( false );
+    le.SetDPadTextInputStatus( false );
 #endif
 
     return !res.empty();

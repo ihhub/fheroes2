@@ -585,7 +585,6 @@ namespace
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
 
-        std::vector<uint32_t> _palette32Bit;
         std::vector<SDL_Color> _palette8Bit;
 
         std::string _previousWindowTitle;
@@ -935,20 +934,12 @@ namespace
 
         fheroes2::Rect getActiveWindowROI() const override
         {
-            fheroes2::Rect rect;
-            rect.x = destRect.x;
-            rect.y = destRect.y;
-            rect.width = destRect.w;
-            rect.height = destRect.h;
-            return rect;
+            return _destRect;
         }
 
         virtual fheroes2::Size getCurrentScreenResolution() const override
         {
-            fheroes2::Size resolution;
-            resolution.width = VITA_FULLSCREEN_WIDTH;
-            resolution.height = VITA_FULLSCREEN_HEIGHT;
-            return resolution;
+            return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
         }
 
         virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
@@ -956,26 +947,28 @@ namespace
             static std::vector<std::pair<int, int> > filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
-                filteredResolutions.push_back( std::make_pair( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-                filteredResolutions.push_back( std::make_pair( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-                filteredResolutions.push_back( std::make_pair( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT ) );
+                filteredResolutions.emplace_back( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                filteredResolutions.emplace_back( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                filteredResolutions.emplace_back( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
             }
 
             return filteredResolutions;
         }
 
     protected:
+        VitaRenderEngine()
+            : _window( nullptr )
+            , _surface( nullptr )
+            , _texBuffer( nullptr )
+            , _palettedTexturePointer( nullptr )
+        {}
+
         enum
         {
             VITA_FULLSCREEN_WIDTH = 960,
             VITA_FULLSCREEN_HEIGHT = 544,
             VITA_ASPECT_CORRECTED_WIDTH = 848
         };
-
-        std::vector<uint32_t> _palette32Bit;
-        SDL_Rect destRect;
-        vita2d_texture * texBuffer = nullptr;
-        uint8_t * palettedTexturePointer = nullptr;
 
         virtual void clear() override
         {
@@ -991,9 +984,9 @@ namespace
 
             vita2d_fini();
 
-            if ( texBuffer != nullptr ) {
-                vita2d_free_texture( texBuffer );
-                texBuffer = nullptr;
+            if ( _texBuffer != nullptr ) {
+                vita2d_free_texture( _texBuffer );
+                _texBuffer = nullptr;
             }
         }
 
@@ -1028,41 +1021,39 @@ namespace
                 return false;
             }
 
-            _createPalette();
-
             vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
-            texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
-            memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
-            palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( texBuffer ) );
-            memset( palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
-            // linkRenderSurface( palettedTexturePointer );
+            _texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
+            _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
+            memset( _palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
+            _createPalette();
+            // linkRenderSurface( _palettedTexturePointer );
 
             // screen scaling calculation
-            destRect.x = 0;
-            destRect.y = 0;
-            destRect.w = width_;
-            destRect.h = height_;
+            _destRect.x = 0;
+            _destRect.y = 0;
+            _destRect.width = width_;
+            _destRect.height = height_;
 
             if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
                 if ( isFullScreen ) {
-                    vita2d_texture_set_filters( texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
+                    vita2d_texture_set_filters( _texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
                     if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
                         float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
-                        destRect.w = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
-                        destRect.h = VITA_FULLSCREEN_HEIGHT;
-                        destRect.x = ( VITA_FULLSCREEN_WIDTH - destRect.w ) / 2;
+                        _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                        _destRect.height = VITA_FULLSCREEN_HEIGHT;
+                        _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
                     }
                     else {
                         float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
-                        destRect.w = VITA_FULLSCREEN_WIDTH;
-                        destRect.h = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
-                        destRect.y = ( VITA_FULLSCREEN_HEIGHT - destRect.h ) / 2;
+                        _destRect.width = VITA_FULLSCREEN_WIDTH;
+                        _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                        _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
                     }
                 }
                 else {
                     // center game area
-                    destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
-                    destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                    _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                    _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
                 }
             }
 
@@ -1071,18 +1062,17 @@ namespace
 
         virtual void render( const fheroes2::Display & display ) override
         {
-            if ( texBuffer == nullptr )
+            if ( _texBuffer == nullptr )
                 return;
 
             const int32_t width = display.width();
             const int32_t height = display.height();
 
-            SDL_memcpy( palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
-            vita2d_draw_texture_scale( texBuffer, destRect.x, destRect.y, static_cast<float>( destRect.w ) / width, static_cast<float>( destRect.h ) / height );
+            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width, static_cast<float>( _destRect.height ) / height );
             vita2d_end_drawing();
-            // vita2d_wait_rendering_done();
             vita2d_swap_buffers();
         }
 
@@ -1106,8 +1096,8 @@ namespace
                 }
             }
 
-            if ( texBuffer != nullptr )
-                memcpy( vita2d_texture_get_palette( texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
+            if ( _texBuffer != nullptr )
+                memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
         }
 
         virtual bool isMouseCursorActive() const override
@@ -1116,8 +1106,11 @@ namespace
         }
 
     private:
-        SDL_Window * _window = nullptr;
-        SDL_Surface * _surface = nullptr;
+        SDL_Window * _window;
+        SDL_Surface * _surface;
+        vita2d_texture * _texBuffer;
+        uint8_t * _palettedTexturePointer;
+        fheroes2::Rect _destRect;
 
         void _createPalette()
         {

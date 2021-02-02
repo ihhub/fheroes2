@@ -279,7 +279,7 @@ public:
     }
 
 #if defined( FHEROES2_VITA )
-    void DPadTextInputActive( bool active )
+    void SetDPadTextInputStatus( const bool active )
     {
         _dpadInputActive = active;
     }

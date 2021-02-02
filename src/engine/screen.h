@@ -67,6 +67,8 @@ namespace fheroes2
             : _isFullScreen( false )
         {}
 
+        std::vector<uint32_t> _palette32Bit;
+
         virtual void clear() {}
         virtual void render( const Display & ) {}
         virtual bool allocate( int32_t &, int32_t &, bool )
