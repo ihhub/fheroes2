@@ -37,6 +37,7 @@
 #include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"

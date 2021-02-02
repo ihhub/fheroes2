@@ -26,6 +26,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"

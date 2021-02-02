@@ -22,6 +22,7 @@
 
 #include "engine.h"
 #include "font.h"
+#include "localevent.h"
 #include "sdlnet.h"
 #include "system.h"
 

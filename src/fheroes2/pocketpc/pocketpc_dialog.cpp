@@ -22,6 +22,7 @@
 #include "battle_board.h"
 #include "cursor.h"
 #include "game.h"
+#include "localevent.h"
 #include "pocketpc.h"
 #include "text.h"
 

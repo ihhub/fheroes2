@@ -29,6 +29,7 @@
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "image.h"
+#include "localevent.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"

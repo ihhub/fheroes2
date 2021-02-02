@@ -30,6 +30,7 @@
 #include "dir.h"
 #include "system.h"
 #include "tools.h"
+#include <cstring>
 
 void ListFiles::Append( const ListFiles & list )
 {

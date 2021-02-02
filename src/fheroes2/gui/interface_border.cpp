@@ -23,6 +23,7 @@
 #include "interface_border.h"
 #include "agg.h"
 #include "game_interface.h"
+#include "localevent.h"
 #include "maps.h"
 #include "settings.h"
 #include "ui_tool.h"
