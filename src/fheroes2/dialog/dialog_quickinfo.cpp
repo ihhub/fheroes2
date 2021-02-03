@@ -301,10 +301,20 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
     const int objectType = tile.GetObject( false );
-    std::string str = objectType == MP2::OBJ_COAST ? MP2::StringObject( objectType ) : ( tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() ) );
+
+    std::string str;
+    if ( objectType == MP2::OBJ_COAST ) {
+        str = MP2::StringObject( objectType );
+    }
+    else if ( tile.isRoad() ) {
+        str = _( "Road" );
+    }
+    else {
+        str = Maps::Ground::String( tile.GetGround() );
+    }
 
     if ( tile.GoodForUltimateArtifact() ) {
-        str.append( "\n" );
+        str.append( "\n \n" );
         str.append( _( "(digging ok)" ) );
     }
 
