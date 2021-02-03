@@ -15,8 +15,6 @@ Download
 ---------------------------
 You can download a compiled version of the game for your operating system via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
 
-Please note that for **32-bit** version of the game on **Windows OS** you have to install [**Visual Studio 2015 Redistributable (vc_redist.x86.exe)**](https://www.microsoft.com/en-sg/download/details.aspx?id=48145) if you face an error during application startup.
-
 Copyright
 ---------------------------
 All rights for the original game and its resources belong to former The 3DO Company. These rights were transferred to Ubisoft. We do not encourage and do not support any form of illegal usage of the original game. We strongly advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms. Alternatively, you can download a free demo version of the game.
