@@ -359,7 +359,7 @@ int Interface::Basic::EventDigArtifact( void )
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact( hero->GetColor() ) ) {
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
                 AGG::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
