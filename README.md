@@ -4,9 +4,13 @@ fheroes2
 
 Free implementation of Heroes of Might and Magic II engine.
 
-<img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="410">
+<p align="center">
+    <img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="410">
+</p>
 
-<img src="files/images/screenshots/screenshot_battle.png?raw=true" width="512">
+<p align="center">
+    <img src="files/images/screenshots/screenshot_battle.png?raw=true" width="512">
+</p>
 
 Download
 ---------------------------
