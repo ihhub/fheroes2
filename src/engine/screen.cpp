@@ -1071,7 +1071,8 @@ namespace
             SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
 
             vita2d_start_drawing();
-            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width, static_cast<float>( _destRect.height ) / height );
+            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width,
+                                       static_cast<float>( _destRect.height ) / height );
             vita2d_end_drawing();
             vita2d_swap_buffers();
         }

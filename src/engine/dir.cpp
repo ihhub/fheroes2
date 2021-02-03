@@ -65,7 +65,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         const std::string fullname = System::ConcatePath( path, dir.d_name );
 
         // if not regular file
-        if ( !SCE_STM_ISREG ( dir.d_stat.st_mode ) )
+        if ( !SCE_STM_ISREG( dir.d_stat.st_mode ) )
             continue;
 
         if ( filter.size() ) {
