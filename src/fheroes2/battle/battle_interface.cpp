@@ -3407,12 +3407,12 @@ std::string Join( const std::set<uint32_t> & values )
     assert( !values.empty() );
     const std::string separator = ", ";
     std::stringstream builder;
-    for ( uint32_t value : values ) {
+    for ( const uint32_t value : values ) {
         builder << value;
         builder << separator;
     }
     const std::string result = builder.str();
-    return result.substr( 0, separator.length() );
+    return result.substr( 0, result.length() - separator.length() );
 }
 
 std::string MakeDamageMessage( const Spell & spell, const std::set<uint32_t> & damages )
@@ -3424,12 +3424,11 @@ std::string MakeDamageMessage( const Spell & spell, const std::set<uint32_t> & d
     msg << Join( damages );
     msg << " damage to ";
     msg << damages.size();
-    msg << " ";
     if ( spell.isUndeadOnly() ) {
-        msg << "undead";
+        msg << " undead";
     }
     else if ( spell.isALiveOnly() ) {
-        msg << "alive";
+        msg << " alive";
     }
     msg << " creature";
     if ( damages.size() != 1 ) {
