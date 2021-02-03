@@ -46,6 +46,8 @@
 #include "settings.h"
 #include "ui_window.h"
 #include "world.h"
+#include <set>
+#include <sstream>
 
 #include <cassert>
 
@@ -3400,32 +3402,61 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     }
 }
 
+std::string Join( const std::set<uint32_t> & values )
+{
+    assert( !values.empty() );
+    const std::string separator = ", ";
+    std::stringstream builder;
+    for ( uint32_t value : values ) {
+        builder << value;
+        builder << separator;
+    }
+    const std::string result = builder.str();
+    return result.substr( 0, separator.length() );
+}
+
+std::string MakeDamageMessage( const Spell & spell, const std::set<uint32_t> & damages )
+{
+    std::stringstream msg;
+    msg << "The ";
+    msg << spell.GetName();
+    msg << " does ";
+    msg << Join( damages );
+    msg << " damage to ";
+    msg << damages.size();
+    msg << " ";
+    if ( spell.isUndeadOnly() ) {
+        msg << "undead";
+    }
+    else if ( spell.isALiveOnly() ) {
+        msg << "alive";
+    }
+    msg << " creature";
+    if ( damages.size() != 1 ) {
+        msg << 's';
+    }
+    msg << '.';
+    return Translation::gettext( msg.str() );
+}
+
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;
-        uint32_t damage = 0;
+        std::set<uint32_t> damages;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
             if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
                 killed += ( *it ).killed;
-                damage += ( *it ).damage;
+                damages.insert( ( *it ).damage );
             }
         }
 
         // targets damage animation
         RedrawActionWincesKills( targets );
 
-        if ( damage ) {
-            std::string msg;
-            if ( spell.isUndeadOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all undead creatures." );
-            else if ( spell.isALiveOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all living creatures." );
-            else
-                msg = _( "The %{spell} does %{damage} damage." );
-            StringReplace( msg, "%{spell}", spell.GetName() );
-            StringReplace( msg, "%{damage}", damage );
+        if ( !damages.empty() ) {
+            std::string msg = MakeDamageMessage( spell, damages );
 
             if ( killed ) {
                 status.SetMessage( msg, true );
