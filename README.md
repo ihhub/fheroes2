@@ -6,6 +6,8 @@ Free implementation of Heroes of Might and Magic II engine.
 
 <img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="410">
 
+<img src="files/images/screenshots/screenshot_battle.png?raw=true" width="512">
+
 Download
 ---------------------------
 You can download a compiled version of the game for your operating system via [**Github releases**](https://github.com/ihhub/fheroes2/releases) of this project.
