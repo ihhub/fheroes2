@@ -319,9 +319,10 @@ bool System::IsFile( const std::string & name, bool writable )
 {
 #if defined( _MSC_VER )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( ANDROID ) || defined( FHEROES2_VITA )
-    // access is UNBELIEVABLY slow on Vita, so just return true and hack your way around..
+#elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
+#elif defined( FHEROES2_VITA )
+    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
     if ( !GetCaseInsensitivePath( name, correctedPath ) )
@@ -340,8 +341,10 @@ bool System::IsDirectory( const std::string & name, bool writable )
 {
 #if defined( _MSC_VER )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( ANDROID ) || defined( FHEROES2_VITA )
+#elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
+#elif defined( FHEROES2_VITA )
+    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
     if ( !GetCaseInsensitivePath( name, correctedPath ) )
