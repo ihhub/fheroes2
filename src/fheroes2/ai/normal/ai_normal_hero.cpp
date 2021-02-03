@@ -322,6 +322,11 @@ namespace AI
         Castle * castle = hero.inCastle();
         if ( castle ) {
             ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+
+            if ( !hero.HaveSpellBook() && castle->GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
+                // this call will check if AI kingdom have enough resources to buy book
+                hero.BuySpellBook( castle );
+            }
         }
     }
 
