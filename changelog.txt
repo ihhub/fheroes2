@@ -1,4 +1,11 @@
 version 0.9.0 (04 February 2021)
+- fix infinite AI turns
+- optimize AI hero movements
+- do not visit useless objects by AI heroes
+- fix AI castle defence mechanics
+- restore cursor theme after HeroDialog or CastleDialog
+- do not show marketplace icon for joining creature dialog is no markets exist
+- allow to retreat for a hero with no castles
 - add more logic for AI jumping into whirlpools
 - do not block shooters with overpowered AI army
 - fix overlapped flag in Knight's castle
