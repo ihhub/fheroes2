@@ -18,22 +18,22 @@
       <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if exist "$(ProjectDir)data" (
+      <Command>if exist "$(MSBuildThisFileDirectory)..\data" (
     if not exist "$(OutDir)data" (
         mkdir "$(OutDir)data"
-        xcopy /Y /s /Q "$(ProjectDir)data" "$(OutDir)data"
+        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\data" "$(OutDir)data"
     )
 )
 
-if exist "$(ProjectDir)maps" (
+if exist "$(MSBuildThisFileDirectory)..\maps" (
     if not exist "$(OutDir)maps" (
         mkdir "$(OutDir)maps"
-        xcopy /Y /s /Q "$(ProjectDir)maps" "$(OutDir)maps"
+        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\maps" "$(OutDir)maps"
     )
 )
 
-xcopy /Y "$(ProjectDir)fheroes2.cfg" "$(OutDir)"
-xcopy /Y "$(ProjectDir)fheroes2.key" "$(OutDir)"
+xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.cfg" "$(OutDir)"
+xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.key" "$(OutDir)"
 
 %(Command)</Command>
     </PostBuildEvent>

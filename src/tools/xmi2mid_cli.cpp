@@ -25,6 +25,10 @@
 #include "audio_music.h"
 #include "engine.h"
 
+#if defined( _MSC_VER )
+#undef main
+#endif
+
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {

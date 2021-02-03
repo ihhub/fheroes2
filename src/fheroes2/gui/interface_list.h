@@ -26,6 +26,7 @@
 #include <algorithm>
 
 #include "cursor.h"
+#include "localevent.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 

@@ -646,8 +646,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     if ( !isload ) {
         // new week dialog
-        if ( 1 < world.CountWeek() && world.BeginWeek() )
+        if ( 1 < world.CountWeek() && world.BeginWeek() ) {
+            const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
+            AGG::PlayMusic( currentMusic, true );
+        }
 
         // show event day
         ShowEventDayDialog();
@@ -1074,8 +1077,10 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
                 SetFocus( to_hero );
                 RedrawFocus();
             }
-            else
+            else {
                 Game::OpenHeroesDialog( *to_hero, true, true );
+                Cursor::Get().SetThemes( Cursor::HEROES );
+            }
         }
     } break;
 
@@ -1096,6 +1101,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         }
         else {
             Game::OpenCastleDialog( *to_castle );
+            Cursor::Get().SetThemes( Cursor::CASTLE );
         }
     } break;
     case Cursor::FIGHT:

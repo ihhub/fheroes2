@@ -198,7 +198,10 @@ namespace AI
             }
         }
 
-        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
+        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = myArmyStrength > enemyArmyStrength * 10;
+
+        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG( DBG_BATTLE, DBG_TRACE,
                "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
 

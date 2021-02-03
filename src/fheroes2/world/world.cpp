@@ -672,13 +672,11 @@ s32 World::NextTeleport( s32 index ) const
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 {
     if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        MapsIndexes whilrpools = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
-        for ( MapsIndexes::const_iterator it = whilrpools.begin(); it != whilrpools.end(); ++it ) {
+        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
             uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
         }
-        whilrpools.clear();
 
         if ( 2 > uniq_whirlpools.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
@@ -1061,6 +1059,7 @@ void World::PostLoad()
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
 
     resetPathfinder();
     ComputeStaticAnalysis();

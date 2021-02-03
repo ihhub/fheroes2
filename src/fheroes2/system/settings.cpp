@@ -25,9 +25,9 @@
 
 #include "audio_music.h"
 #include "campaign_data.h"
-#include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
+#include "localevent.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -932,6 +932,10 @@ const std::string & Settings::FontsSmall( void ) const
 const std::string & Settings::ForceLang( void ) const
 {
     return force_lang;
+}
+const std::string & Settings::loadedFileLanguage() const
+{
+    return _loadedFileLanguage;
 }
 const std::string & Settings::MapsCharset( void ) const
 {
@@ -1896,17 +1900,7 @@ StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    std::string lang;
-
-    msg >> lang;
-
-    if ( lang != "en" && lang != conf.force_lang && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
-        warningMessage.append( lang );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
-        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
-    }
+    msg >> conf._loadedFileLanguage;
 
     int debug;
     u32 opt_game = 0; // skip: settings

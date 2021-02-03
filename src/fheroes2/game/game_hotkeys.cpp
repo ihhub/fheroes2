@@ -27,6 +27,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "settings.h"
 #include "system.h"
 #include "tinyconfig.h"

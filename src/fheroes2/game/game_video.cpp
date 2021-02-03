@@ -22,6 +22,7 @@
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "game.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
