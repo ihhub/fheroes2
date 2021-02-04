@@ -1,3 +1,90 @@
+version 0.9.0 (04 February 2021)
+- make AI to buy magic books in castles
+- fix infinite AI turns
+- optimize AI hero movements
+- do not visit useless objects by AI heroes
+- fix AI castle defence mechanics
+- restore cursor theme after HeroDialog or CastleDialog
+- do not show marketplace icon for joining creature dialog is no markets exist
+- allow to retreat for a hero with no castles
+- add more logic for AI jumping into whirlpools
+- do not block shooters with overpowered AI army
+- fix overlapped flag in Knight's castle
+- disable actions while buying a hero or during construction
+- change the text for the number of secondary skills in level up window
+- play music after showing New Week/Month dialog
+- reset hero direction when recruiting
+- align dates by left in the load file dialog
+- cap Necromancy bonus to 100% instead of 90%
+- fix multiple bugs in Kingdom View
+- fix Transcribe Spell Description Text
+- cancel spell selection with ESC button in combat
+- add a separate option for displaying terrain penalty
+- fix missing music for Load Game option
+- fix Scouting skill bugs and make crystal ball work
+- do not play dwarves' resist sound during mass spells
+- fix Berserk spell logic
+- fix Chain lightning spell logic
+- fix castle flag drawing for nearby hero
+- add empty line for visited info
+- allow Anti-magic spell on mirror-master creature
+- do not draw wall for destroyed bridge
+- fix pathfinding issues and missing path display
+- fix Kingdom overview crash
+- do no freeze building animation during construction or hero's hiring
+- show Spade of Necromancy artifact bonus in Necromancy Skill window
+- display troop counter only for static animations
+- show pointer cursor most of the time during combat
+- fix castle's object positions
+- display correct text when righ-clicking on map tile
+- fix path selection for AI hero in patrol
+- fix town portal buttons in Good interface
+- add new standard window with shadow
+- fix events when AI was choosing to disembark on empty tiles
+- change highlighted cursor area for spells during battle
+- implement Alt hotkey to unite stacks of same type
+- implement CTRL split even with selected troop
+- add touchpad support
+- fix joining creature logic with the lack of gold
+- quick Info dialogs have fixed position when clicked from right bar
+- add a check for special objects that you can't move through
+- after AI loses to either castle or other player, center the view on them
+- fix animation order of creatures during combat
+- do not close File Save window while cancelling file overriding
+- fix marketplace button drawings in Surrender window
+- fix castle's battlefield drawings
+- hide Marketplace button for Surrender window
+- always draw troop counter at the top of monster sprites
+- fix a log message when a tower kills one creature
+- display battle grid for whole battlefield
+- fix object drawings on battlefield
+- Bone Dragon morale malus shows in battle and in dialog window
+- add PNG image saving support for SDL2
+- add palette support for SDL2
+- fix morale and luck sprites positioning in meeting screen
+- fix mouse cursor switching while navigating on hero or castle panel
+- always display the correct monster combat speed
+- fix Player Rankings message bar
+- add game controller support
+- add Gold version support for video playback
+- fix Earthquake spell animation
+- fix enemy castle capture action
+- speed up interface drawings for World map
+- fix Hydra's movement during battle
+- set correct size for spell point and experience point zone in hero window
+- fix income info clickable area at castle options window
+- add spells into Hero's book at the start of a map
+- add initial Nintendo Switch support
+- fix Battle Only mode UI
+- fix logic in mouse button press
+- make interface itemsbar adjustment while fixing some split logics
+- add FPS display support
+- fix clickable area for Heroes and Castles in their lists
+- differentiate save files based on game type
+- fix a crash while trying to get settings path on SDL 2
+- fix path calculation for 2-hex creatures in battle
+- add software emulation support for cursor
+
 version 0.8.4 (23 December 2020)
 - speed up sprites allocation and deallocation (noticeable for low-profile devices)
 - add extra info in first game message about F4 key
