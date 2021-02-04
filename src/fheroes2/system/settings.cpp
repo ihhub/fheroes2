@@ -717,8 +717,8 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-    if ( config.Exists( "controller_pointer_speed" ) ) {
-        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+    if ( config.Exists( "controller pointer speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
         if ( _controllerPointerSpeed > 100 )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
