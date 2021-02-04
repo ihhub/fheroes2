@@ -57,6 +57,11 @@ namespace AI
 
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
     {
+        if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
+            // this call will check if AI kingdom have enough resources to buy book
+            hero.BuySpellBook( &castle );
+        }
+
         hero.GetArmy().UpgradeTroops( castle );
         castle.recruitBestAvailable( budget );
         hero.GetArmy().JoinStrongestFromArmy( castle.GetArmy() );
