@@ -1,4 +1,5 @@
 version 0.9.0 (04 February 2021)
+- make AI to buy magic books in castles
 - fix infinite AI turns
 - optimize AI hero movements
 - do not visit useless objects by AI heroes
