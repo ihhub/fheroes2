@@ -55,6 +55,7 @@ matrix:
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
+        skip_cleanup: true
         on:
           branch: master
     - os: linux
@@ -79,6 +80,7 @@ matrix:
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
+        skip_cleanup: true
         on:
           branch: master
     - os: linux
@@ -106,6 +108,7 @@ matrix:
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
+        skip_cleanup: true
         on:
           branch: master
     - os: linux
@@ -133,6 +136,7 @@ matrix:
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
+        skip_cleanup: true
         on:
           branch: master
 
