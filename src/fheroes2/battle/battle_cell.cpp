@@ -24,7 +24,7 @@
 #include "army_troop.h"
 #include "battle_board.h"
 #include "battle_troop.h"
-#include "settings.h"
+#include "logging.h"
 
 #define INFL 12
 
@@ -89,7 +89,7 @@ Battle::Position Battle::Position::GetCorrect( const Unit & b, s32 head )
                 std::swap( result.first, result.second );
             }
             else {
-                DEBUG( DBG_BATTLE, DBG_WARN, "NULL pointer, " << b.String() << ", dst: " << head );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN, "NULL pointer, " << b.String() << ", dst: " << head );
             }
         }
     }

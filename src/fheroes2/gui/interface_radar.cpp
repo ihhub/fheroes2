@@ -29,7 +29,7 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "interface_radar.h"
-#include "settings.h"
+#include "logging.h"
 #include "text.h"
 #include "world.h"
 

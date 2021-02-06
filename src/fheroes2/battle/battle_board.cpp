@@ -33,8 +33,9 @@
 #include "game_static.h"
 #include "ground.h"
 #include "icn.h"
+#include "logging.h"
 #include "rand.h"
-#include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Battle
@@ -143,7 +144,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
             if ( enemy->isWide() )
                 GetCell( enemy->GetTailIndex() )->SetQuality( score );
 
-            DEBUG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
         }
     }
 }
@@ -211,7 +212,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
     // check if target position is valid
     if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR( "Board::GetAStarPath invalid destination for unit " + unit.String() );
+        ERROR_LOG( "Board::GetAStarPath invalid destination for unit " + unit.String() );
         return result;
     }
 
@@ -439,9 +440,9 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     }
 
     if ( debug && result.empty() ) {
-        DEBUG( DBG_BATTLE, DBG_WARN,
-               "Path is not found for " << unit.String() << ", destination: "
-                                        << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                   "Path is not found for " << unit.String() << ", destination: "
+                                            << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
     }
 
     return result;
@@ -469,7 +470,7 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
         else
             for ( Indexes::const_iterator it = result.begin(); it != result.end(); ++it )
                 ss << *it << ", ";
-        DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
     }
 
     return result;

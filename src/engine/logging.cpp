@@ -20,54 +20,59 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "luck.h"
-#include "translations.h"
+#include "logging.h"
+#include <ctime>
 
-const std::string & Luck::String( int luck )
+static int debug = DEFAULT_DEBUG;
+
+#if defined( __SWITCH__ ) // Platforms which log to file
+std::ofstream log_file;
+#endif
+
+void InitLog( int debug_setting )
 {
-    static const std::string str_luck[]
-        = {"Unknown", _( "luck|Cursed" ), _( "luck|Awful" ), _( "luck|Bad" ), _( "luck|Normal" ), _( "luck|Good" ), _( "luck|Great" ), _( "luck|Irish" )};
-
-    switch ( luck ) {
-    case Luck::CURSED:
-        return str_luck[1];
-    case Luck::AWFUL:
-        return str_luck[2];
-    case Luck::BAD:
-        return str_luck[3];
-    case Luck::NORMAL:
-        return str_luck[4];
-    case Luck::GOOD:
-        return str_luck[5];
-    case Luck::GREAT:
-        return str_luck[6];
-    case Luck::IRISH:
-        return str_luck[7];
-    default:
-        break;
-    }
-
-    return str_luck[0];
+    debug = debug_setting;
+#if defined( __SWITCH__ ) // Platforms which log to file
+    log_file.open( "fheroes2.log", std::ofstream::out );
+#endif
 }
 
-const std::string & Luck::Description( int luck )
+std::string GetLogTime( void )
 {
-    static const std::string str_desc_luck[] = {"Unknown", _( "Bad luck sometimes falls on your armies in combat, causing their attacks to only do half damage." ),
-                                                _( "Neutral luck means your armies will never get lucky or unlucky attacks on the enemy." ),
-                                                _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." )};
+    time_t raw;
+    struct tm * tmi;
+    char buf[13] = {0};
 
-    switch ( luck ) {
-    case Luck::CURSED:
-    case Luck::AWFUL:
-    case Luck::BAD:
-        return str_desc_luck[1];
-    case Luck::NORMAL:
-        return str_desc_luck[2];
-    case Luck::GOOD:
-    case Luck::GREAT:
-    case Luck::IRISH:
-        return str_desc_luck[3];
-    }
+    std::time( &raw );
+    tmi = std::localtime( &raw );
 
-    return str_desc_luck[0];
+    std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );
+
+    return std::string( buf );
+}
+
+bool IS_DEBUG( int name, int level )
+{
+    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
+           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
+           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
+}
+
+const char * StringDebug( int name )
+{
+    if ( name & DBG_ENGINE )
+        return "DBG_ENGINE";
+    else if ( name & DBG_GAME )
+        return "DBG_GAME";
+    else if ( name & DBG_BATTLE )
+        return "DBG_BATTLE";
+    else if ( name & DBG_AI )
+        return "DBG_AI";
+    else if ( name & DBG_NETWORK )
+        return "DBG_NETWORK";
+    else if ( name & DBG_OTHER )
+        return "DBG_OTHER";
+    else if ( name & DBG_DEVEL )
+        return "DBG_DEVEL";
+    return "";
 }

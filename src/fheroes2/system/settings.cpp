@@ -22,45 +22,20 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
 #include "campaign_data.h"
 #include "difficulty.h"
 #include "game.h"
 #include "localevent.h"
+#include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
 
 #define DEFAULT_PORT 5154
-#define DEFAULT_DEBUG DBG_ALL_WARN
-
-bool IS_DEBUG( int name, int level )
-{
-    const int debug = Settings::Get().Debug();
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
-}
-
-const char * StringDebug( int name )
-{
-    if ( name & DBG_ENGINE )
-        return "DBG_ENGINE";
-    else if ( name & DBG_GAME )
-        return "DBG_GAME";
-    else if ( name & DBG_BATTLE )
-        return "DBG_BATTLE";
-    else if ( name & DBG_AI )
-        return "DBG_AI";
-    else if ( name & DBG_NETWORK )
-        return "DBG_NETWORK";
-    else if ( name & DBG_OTHER )
-        return "DBG_OTHER";
-    else if ( name & DBG_DEVEL )
-        return "DBG_DEVEL";
-    return "";
-}
 
 enum
 {
@@ -699,7 +674,7 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
         }
     }
 
@@ -1040,7 +1015,7 @@ std::string Settings::GetWriteableDir( const char * subdir )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "writable directory not found" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }

@@ -26,10 +26,10 @@
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "logging.h"
 #include "maps.h"
 #include "pal.h"
 #include "route.h"
-#include "settings.h"
 #include "world.h"
 
 #include <cassert>
@@ -374,7 +374,7 @@ void Interface::GameArea::SetCenter( const Point & pt )
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" );
         return fheroes2::Image();
     }
 

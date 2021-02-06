@@ -34,7 +34,7 @@
 #include "game.h"
 #include "heroes_base.h"
 #include "kingdom.h"
-#include "settings.h"
+#include "logging.h"
 #include "skill.h"
 #include "text.h"
 #include "world.h"
@@ -54,11 +54,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
             result.army1 = RESULT_WINS;
-            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
         }
         else {
             result.army2 = RESULT_WINS;
-            DEBUG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
         }
         return result;
     }
@@ -95,8 +95,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     Arena arena( army1, army2, mapsindex, local );
 
-    DEBUG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
     while ( arena.BattleValid() ) {
         arena.Turns();
@@ -160,8 +160,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
         NecromancySkillAction( *hero_wins, result.killed, hero_wins->isControlHuman() );
 
-    DEBUG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
 
     // update army
     if ( army1.GetCommander() && army1.GetCommander()->isHeroes() ) {
@@ -177,7 +177,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             army2.Reset( false );
     }
 
-    DEBUG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
 
     return result;
 }
@@ -285,7 +285,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
         Dialog::SpriteInfo( "", msg, sf1 );
     }
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, "raise: " << count << mons.GetMultiName() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << count << mons.GetMultiName() );
 }
 
 u32 Battle::Result::AttackerResult( void ) const

@@ -23,6 +23,7 @@
 #include "battle_tower.h"
 #include "battle_cell.h"
 #include "castle.h"
+#include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, int twr )
     : Unit( Troop( Monster::ARCHER, 0 ), -1, false )

@@ -29,10 +29,10 @@
 #include "ground.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "maps_tiles.h"
 #include "race.h"
-#include "settings.h"
 #include "world.h"
 
 namespace
@@ -123,7 +123,7 @@ fheroes2::Sprite SpriteHero( const Heroes & hero, int index, bool rotate )
             break;
 
         default:
-            DEBUG( DBG_GAME, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
             break;
         }
 
@@ -157,7 +157,7 @@ fheroes2::Sprite SpriteHero( const Heroes & hero, int index, bool rotate )
             break;
 
         default:
-            DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
             break;
         }
 
@@ -190,7 +190,7 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
         break;
 
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown color" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" );
         break;
     }
 
@@ -224,7 +224,7 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
             break;
 
         default:
-            DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
             break;
         }
 
@@ -310,7 +310,7 @@ fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
         break;
 
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
         break;
     }
 
@@ -348,7 +348,7 @@ fheroes2::Sprite SpriteFroth( const Heroes & hero, int index )
         break;
 
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown direction" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
         break;
     }
 

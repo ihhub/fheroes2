@@ -31,6 +31,7 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
+#include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -48,7 +49,6 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
-#include "settings.h"
 #include "spell.h"
 #include "text.h"
 #include "til.h"
@@ -2064,7 +2064,7 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
             if ( MP2::OBJ_ZERO != newObjectID )
                 tile.SetObject( newObjectID );
             else {
-                DEBUG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile.GetIndex() );
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile.GetIndex() );
             }
         } break;
 
@@ -2277,7 +2277,7 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     if ( !art.isValid() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "unknown artifact" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" );
         return;
     }
 
@@ -2628,7 +2628,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color ) const
         }
         // unknown
         else {
-            DEBUG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
             area.DrawTile( dst, sf, mp );
             return;
