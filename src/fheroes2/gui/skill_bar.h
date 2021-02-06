@@ -66,5 +66,5 @@ protected:
     const bool use_mini_sprite;
     const bool can_change;
     std::string msg;
-    const Heroes & hero;
+    const Heroes & _hero;
 };
