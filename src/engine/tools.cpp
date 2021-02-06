@@ -449,7 +449,7 @@ Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
     line.reserve( length );
 
     for ( uint32_t i = 0; i <= length; ++i ) {
-        line.push_back( Point( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) ) );
+        line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
     }
 
     return line;
