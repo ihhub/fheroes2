@@ -30,9 +30,9 @@
 #include "tools.h"
 #include <cstring>
 
-void ListFiles::Append( const ListFiles & list )
+void ListFiles::Append( const ListFiles & files )
 {
-    insert( end(), list.begin(), list.end() );
+    insert( end(), files.begin(), files.end() );
 }
 
 void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )

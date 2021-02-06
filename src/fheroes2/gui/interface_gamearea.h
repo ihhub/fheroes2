@@ -23,39 +23,33 @@
 #ifndef H2INTERFACE_GAMEAREA_H
 #define H2INTERFACE_GAMEAREA_H
 
-#include <map>
-
 #include "gamedefs.h"
 #include "image.h"
 #include "timing.h"
 
-class Sprite;
-
-enum scroll_t
-{
-    SCROLL_NONE = 0x00,
-    SCROLL_LEFT = 0x01,
-    SCROLL_RIGHT = 0x02,
-    SCROLL_TOP = 0x04,
-    SCROLL_BOTTOM = 0x08
-};
-
-enum level_t
-{
-    LEVEL_BOTTOM = 0x01,
-    LEVEL_TOP = 0x02,
-    LEVEL_HEROES = 0x04,
-    LEVEL_OBJECTS = 0x08,
-    LEVEL_FOG = 0x20,
-
-    LEVEL_ALL = 0xFF
-};
-
-typedef std::map<std::pair<int, uint32_t>, Sprite> MapObjectSprite;
-
 namespace Interface
 {
     class Basic;
+
+    enum ScollingType
+    {
+        SCROLL_NONE = 0x00,
+        SCROLL_LEFT = 0x01,
+        SCROLL_RIGHT = 0x02,
+        SCROLL_TOP = 0x04,
+        SCROLL_BOTTOM = 0x08
+    };
+
+    enum RedrawLevelType
+    {
+        LEVEL_BOTTOM = 0x01,
+        LEVEL_TOP = 0x02,
+        LEVEL_HEROES = 0x04,
+        LEVEL_OBJECTS = 0x08,
+        LEVEL_FOG = 0x20,
+
+        LEVEL_ALL = 0xFF
+    };
 
     class GameArea
     {

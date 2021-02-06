@@ -73,10 +73,10 @@ void MapObjects::clear( void )
 void MapObjects::add( MapObjectSimple * obj )
 {
     if ( obj ) {
-        std::map<u32, MapObjectSimple *> & map = *this;
-        if ( map[obj->GetUID()] )
-            delete map[obj->GetUID()];
-        map[obj->GetUID()] = obj;
+        std::map<u32, MapObjectSimple *> & currentMap = *this;
+        if ( currentMap[obj->GetUID()] )
+            delete currentMap[obj->GetUID()];
+        currentMap[obj->GetUID()] = obj;
     }
 }
 

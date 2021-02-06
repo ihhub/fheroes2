@@ -39,25 +39,25 @@ Battle::Indexes Battle::Graveyard::GetClosedCells( void ) const
 
 void Battle::Graveyard::AddTroop( const Unit & b )
 {
-    Graveyard & map = *this;
+    Graveyard & graveyard = *this;
 
-    map[b.GetHeadIndex()].push_back( b.GetUID() );
+    graveyard[b.GetHeadIndex()].push_back( b.GetUID() );
 
     if ( b.isWide() )
-        map[b.GetTailIndex()].push_back( b.GetUID() );
+        graveyard[b.GetTailIndex()].push_back( b.GetUID() );
 }
 
 void Battle::Graveyard::RemoveTroop( const Unit & b )
 {
-    Graveyard & map = *this;
-    TroopUIDs & ids = map[b.GetHeadIndex()];
+    Graveyard & graveyard = *this;
+    TroopUIDs & ids = graveyard[b.GetHeadIndex()];
 
     TroopUIDs::iterator it = std::find( ids.begin(), ids.end(), b.GetUID() );
     if ( it != ids.end() )
         ids.erase( it );
 
     if ( b.isWide() ) {
-        TroopUIDs & ids2 = map[b.GetTailIndex()];
+        TroopUIDs & ids2 = graveyard[b.GetTailIndex()];
 
         it = std::find( ids2.begin(), ids2.end(), b.GetUID() );
         if ( it != ids2.end() )
