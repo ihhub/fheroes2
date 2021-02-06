@@ -237,7 +237,6 @@ public:
     static u32 GetCountFromHitPoints( const Monster &, u32 );
 
     static void UpdateStats( const std::string & );
-    static float GetUpgradeRatio( void );
 
     static uint32_t GetICNByMonsterID( uint32_t monsterID );
     static uint32_t GetMissileICN( uint32_t monsterID );

@@ -300,7 +300,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
 {
-    if ( _pathStart != start || _currentColor != color || _armyStrength != armyStrength || _pathfindingSkill != skill ) {
+    if ( _pathStart != start || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill ) {
         _pathStart = start;
         _currentColor = color;
         _armyStrength = armyStrength;
