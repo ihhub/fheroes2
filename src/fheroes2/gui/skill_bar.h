@@ -38,7 +38,7 @@ public:
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
+private:
     const Heroes * _hero;
     fheroes2::Image backsf;
     bool use_mini_sprite;
@@ -61,7 +61,7 @@ public:
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
+private:
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool can_change;

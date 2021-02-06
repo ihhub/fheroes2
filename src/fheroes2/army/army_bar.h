@@ -64,9 +64,11 @@ public:
     bool QueueEventProcessing( ArmyBar &, std::string * = NULL );
 
 protected:
+    fheroes2::MovableSprite spcursor;
+
+private:
     Army * _army;
     fheroes2::Image backsf;
-    fheroes2::MovableSprite spcursor;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;

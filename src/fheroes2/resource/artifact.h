@@ -255,9 +255,11 @@ public:
     virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
+    fheroes2::MovableSprite spcursor;
+
+private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    fheroes2::MovableSprite spcursor;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;

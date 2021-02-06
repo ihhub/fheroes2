@@ -97,8 +97,8 @@ void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
-    : _army( NULL )
-    , spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
+    : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
+    , _army( nullptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
