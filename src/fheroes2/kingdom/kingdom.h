@@ -50,8 +50,6 @@ struct LastLoseHero
     u32 date;
 };
 
-StreamBase & operator>>( StreamBase &, LastLoseHero & );
-
 struct KingdomCastles : public VecCastles
 {};
 
