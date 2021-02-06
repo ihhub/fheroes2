@@ -235,7 +235,7 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
+    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
@@ -255,7 +255,7 @@ public:
     virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
-    const Heroes * hero;
+    const Heroes * _hero;
     fheroes2::Image backsf;
     fheroes2::MovableSprite spcursor;
     bool use_mini_sprite;
