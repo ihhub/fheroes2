@@ -362,7 +362,7 @@ namespace AI
                                 if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
                                           && ( maxArcherValue < archerValue
-                                              || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
+                                               || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
                                     targetCell = moveToEnemy.first;
                                     target = enemy;
                                     maxArcherValue = archerValue;
