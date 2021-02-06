@@ -785,7 +785,7 @@ void Heroes::FadeOut( const Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, LEVEL_ALL );
+            gamearea.Redraw( display, Interface::LEVEL_ALL );
 
             Cursor::Get().Show();
             display.render();
@@ -821,7 +821,7 @@ void Heroes::FadeIn( const Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, LEVEL_ALL );
+            gamearea.Redraw( display, Interface::LEVEL_ALL );
 
             Cursor::Get().Show();
             display.render();
