@@ -977,14 +977,19 @@ namespace fheroes2
 
             _renderFrame();
 
-            Blit( backup, *this, backup.x(), backup.y() );
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+
+            Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
             _renderFrame();
-        }
 
-        if ( _postprocessing != NULL )
-            _postprocessing();
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+        }
     }
 
     void Display::_renderFrame()
