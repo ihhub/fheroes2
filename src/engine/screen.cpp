@@ -295,7 +295,7 @@ namespace
                     for ( int i = 0; i < displayModeCount; ++i ) {
                         SDL_DisplayMode videoMode;
                         if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
-                            resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+                            resolutionSet.emplace( videoMode.w, videoMode.h );
                         }
                     }
                 }
@@ -684,7 +684,7 @@ namespace
                 SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
                 if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
                     for ( int i = 0; modes[i]; ++i ) {
-                        resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+                        resolutionSet.emplace( modes[i]->w, modes[i]->h );
                     }
                 }
 
@@ -1189,14 +1189,19 @@ namespace fheroes2
 
             _renderFrame();
 
-            Blit( backup, *this, backup.x(), backup.y() );
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+
+            Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
             _renderFrame();
-        }
 
-        if ( _postprocessing != NULL )
-            _postprocessing();
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+        }
     }
 
     void Display::_renderFrame()

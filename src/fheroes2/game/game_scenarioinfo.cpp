@@ -127,11 +127,11 @@ int Game::ScenarioInfo( void )
 
     const uint32_t ngextraWidth = ngextra.width();
     const uint32_t ngextraHeight = ngextra.height();
-    coordDifficulty.push_back( Rect( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
-    coordDifficulty.push_back( Rect( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
-    coordDifficulty.push_back( Rect( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
-    coordDifficulty.push_back( Rect( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
-    coordDifficulty.push_back( Rect( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight ) );
+    coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+    coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+    coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+    coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+    coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
     fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
     fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );

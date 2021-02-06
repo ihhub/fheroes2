@@ -68,15 +68,15 @@ int Dialog::SystemOptions( void )
     const fheroes2::Point optionStep( 92, 110 );
 
     std::vector<fheroes2::Rect> rects;
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) ); // not in use
+    rects.emplace_back( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ); // not in use
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
