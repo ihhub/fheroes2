@@ -64,7 +64,7 @@ struct SelectRecipientsColors
             const u32 current = std::distance( colors.begin(), it );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.emplace_back(  pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() );
+            positions.emplace_back( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() );
         }
     }
 
