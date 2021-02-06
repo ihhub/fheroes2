@@ -78,7 +78,7 @@ namespace
             iterationCount = 5;
 
         std::vector<std::pair<LightningPoint, LightningPoint> > lines;
-        lines.push_back( std::make_pair( LightningPoint( Point( 0, 0 ), 5 ), LightningPoint( Point( distance, 0 ), 3 ) ) );
+        lines.emplace_back( LightningPoint( Point( 0, 0 ), 5 ), LightningPoint( Point( distance, 0 ), 3 ) );
 
         int maxOffset = distance;
 
@@ -102,14 +102,14 @@ namespace
 
                 const LightningPoint middlePoint( middle, middleThickness );
 
-                lines.push_back( std::make_pair( oldLines[i].first, middlePoint ) );
-                lines.push_back( std::make_pair( middlePoint, oldLines[i].second ) );
+                lines.emplace_back( oldLines[i].first, middlePoint );
+                lines.emplace_back( middlePoint, oldLines[i].second );
 
                 if ( Rand::Get( 1, 4 ) == 1 ) { // 25%
                     offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
                     const int16_t x = static_cast<int16_t>( ( middle.x - oldLines[i].first.point.x ) * 0.7 ) + middle.x;
                     const int16_t y = int16_t( ( middle.y - oldLines[i].first.point.y ) * 0.7 ) + middle.y + ( isPositive ? offsetY : -offsetY );
-                    lines.push_back( std::make_pair( middlePoint, LightningPoint( Point( x, y ), 1 ) ) );
+                    lines.emplace_back( middlePoint, LightningPoint( Point( x, y ), 1 ) );
                 }
             }
 
@@ -1601,7 +1601,7 @@ void Battle::Interface::RedrawCover()
             bool isApplicable = highlightCell->isPassable1( false );
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
-                isApplicable = highlightedUnit == nullptr || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
+                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
             }
 
             if ( isApplicable ) {

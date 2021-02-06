@@ -24,6 +24,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"

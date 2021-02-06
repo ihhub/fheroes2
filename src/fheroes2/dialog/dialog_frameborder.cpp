@@ -27,12 +27,12 @@
 #include "settings.h"
 
 Dialog::FrameBorder::FrameBorder( int v )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( v )
 {}
 
 Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
@@ -42,7 +42,7 @@ Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
 }
 
 Dialog::FrameBorder::FrameBorder( const Size & sz )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
@@ -51,7 +51,7 @@ Dialog::FrameBorder::FrameBorder( const Size & sz )
 }
 
 Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     SetPosition( posx, posy, encw, ench );

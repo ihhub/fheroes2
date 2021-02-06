@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_static.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
@@ -182,11 +183,16 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
                 else {
-                    std::string msg
-                        = 1.0f != Monster::GetUpgradeRatio() ? _(
-                              "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest number. Do you wish to upgrade them?" )
-                                                             : _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                    StringReplace( msg, "%{ratio}", GetString( Monster::GetUpgradeRatio(), 2 ) );
+                    std::string msg;
+                    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
+                        msg = _( "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest "
+                                 "number. Do you wish to upgrade them?" );
+                        StringReplace( msg, "%{ratio}", GetString( GameStatic::GetMonsterUpgradeRatio(), 2 ) );
+                    }
+                    else {
+                        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    }
+
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
                         result = Dialog::UPGRADE;
                         break;

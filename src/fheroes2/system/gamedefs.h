@@ -26,8 +26,8 @@
 #include "types.h"
 
 #define MAJOR_VERSION 0
-#define MINOR_VERSION 8
-#define INTERMEDIATE_VERSION 4
+#define MINOR_VERSION 9
+#define INTERMEDIATE_VERSION 0
 
 #include "translations.h"
 #define _( s ) Translation::gettext( s )

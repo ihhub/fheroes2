@@ -1818,9 +1818,9 @@ void Maps::Tiles::FixObject( void )
     }
 }
 
-bool Maps::Tiles::GoodForUltimateArtifact( const int heroColor ) const
+bool Maps::Tiles::GoodForUltimateArtifact() const
 {
-    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true, heroColor );
+    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true, 0 );
 }
 
 bool TileIsGround( s32 index, int ground )

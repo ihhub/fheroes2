@@ -98,9 +98,9 @@ namespace Game
             , gameType( 0 )
         {}
 
-        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType )
+        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType_ )
             : HeaderSAVBase( fi, loyalty )
-            , gameType( gameType )
+            , gameType( gameType_ )
         {}
 
         int gameType;

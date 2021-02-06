@@ -298,23 +298,28 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
     return str;
 }
 
-std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, bool showTerrainPenaltyOption, const Heroes * hero )
+std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
+    const int objectType = tile.GetObject( false );
 
-    if ( showVisitedOption && hero ) {
-        int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
-        if ( dir != Direction::UNKNOWN ) {
-            if ( tile.GoodForUltimateArtifact( hero->GetColor() ) ) {
-                str.append( "\n" );
-                str.append( _( "(digging ok)" ) );
-            }
-        }
+    std::string str;
+    if ( objectType == MP2::OBJ_COAST ) {
+        str = MP2::StringObject( objectType );
+    }
+    else if ( tile.isRoad() ) {
+        str = _( "Road" );
+    }
+    else {
+        str = Maps::Ground::String( tile.GetGround() );
+    }
+
+    if ( tile.GoodForUltimateArtifact() ) {
+        str.append( "\n \n" );
+        str.append( _( "(digging ok)" ) );
     }
 
     if ( showTerrainPenaltyOption && hero ) {
         const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-
         if ( cost > 0 ) {
             str.append( "\n" );
             str.append( _( "penalty: %{cost}" ) );
@@ -462,7 +467,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
         case MP2::OBJ_EVENT:
         case MP2::OBJ_ZERO:
-            name_object = ShowGroundInfo( tile, showVisitedOption, showTerrainPenaltyOption, from_hero );
+        case MP2::OBJ_COAST:
+            name_object = ShowGroundInfo( tile, showTerrainPenaltyOption, from_hero );
             break;
 
         case MP2::OBJ_DERELICTSHIP:

@@ -27,6 +27,7 @@
 #include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
+#include "localevent.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"

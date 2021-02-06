@@ -27,6 +27,7 @@
 #include <utility>
 
 #include "gamedefs.h"
+#include "localevent.h"
 #include "screen.h"
 
 namespace Interface

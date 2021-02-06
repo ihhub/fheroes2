@@ -671,7 +671,6 @@ int Castle::OpenDialog( bool readonly )
                 buttonExit.draw();
             cursor.Show();
             display.render();
-            need_redraw = false;
         }
 
         // status message exit

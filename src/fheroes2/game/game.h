@@ -290,15 +290,6 @@ namespace Game
         Info & Get();
     }
 
-    namespace Editor
-    {
-        int MainMenu( void );
-        int NewMaps( void );
-        int LoadMaps( void );
-        int StartGame( void );
-        int StartGame( void );
-    }
-
     u32 GetStep4Player( u32, u32, u32 );
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );

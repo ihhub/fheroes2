@@ -205,10 +205,10 @@ class TextBox : protected fheroes2::Rect
 {
 public:
     TextBox();
-    TextBox( const std::string &, int, u32 width );
+    TextBox( const std::string &, int, uint32_t width_ );
     TextBox( const std::string &, int, const fheroes2::Rect & );
 
-    void Set( const std::string &, int, u32 width );
+    void Set( const std::string &, int, uint32_t width_ );
     void SetAlign( int type );
 
     int32_t x() const

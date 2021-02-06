@@ -361,7 +361,8 @@ namespace AI
                                 // Tertiary - Enemy unit threat
                                 if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
-                                          && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
+                                          && ( maxArcherValue < archerValue
+                                               || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
                                     targetCell = moveToEnemy.first;
                                     target = enemy;
                                     maxArcherValue = archerValue;
