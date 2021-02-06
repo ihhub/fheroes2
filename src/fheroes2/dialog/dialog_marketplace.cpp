@@ -256,13 +256,13 @@ void Dialog::Marketplace( bool fromTradingPost )
     const fheroes2::Point pt1( pos_rt.x, pos_rt.y + 190 );
     std::vector<fheroes2::Rect> rectsFrom;
     rectsFrom.reserve( 7 );
-    rectsFrom.push_back( fheroes2::Rect( pt1.x, pt1.y, 34, 34 ) ); // wood
-    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y, 34, 34 ) ); // mercury
-    rectsFrom.push_back( fheroes2::Rect( pt1.x + 74, pt1.y, 34, 34 ) ); // ore
-    rectsFrom.push_back( fheroes2::Rect( pt1.x, pt1.y + 37, 34, 34 ) ); // sulfur
-    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y + 37, 34, 34 ) ); // crystal
-    rectsFrom.push_back( fheroes2::Rect( pt1.x + 74, pt1.y + 37, 34, 34 ) ); // gems
-    rectsFrom.push_back( fheroes2::Rect( pt1.x + 37, pt1.y + 74, 34, 34 ) ); // gold
+    rectsFrom.emplace_back( pt1.x, pt1.y, 34, 34 ); // wood
+    rectsFrom.emplace_back( pt1.x + 37, pt1.y, 34, 34 ); // mercury
+    rectsFrom.emplace_back( pt1.x + 74, pt1.y, 34, 34 ); // ore
+    rectsFrom.emplace_back( pt1.x, pt1.y + 37, 34, 34 ); // sulfur
+    rectsFrom.emplace_back( pt1.x + 37, pt1.y + 37, 34, 34 ); // crystal
+    rectsFrom.emplace_back( pt1.x + 74, pt1.y + 37, 34, 34 ); // gems
+    rectsFrom.emplace_back( pt1.x + 37, pt1.y + 74, 34, 34 ); // gold
 
     fheroes2::MovableSprite cursorFrom( fheroes2::AGG::GetICN( tradpost, 14 ) );
     text.Set( header_from, Font::SMALL );
@@ -278,13 +278,13 @@ void Dialog::Marketplace( bool fromTradingPost )
     const fheroes2::Point pt2( 138 + pos_rt.x, pos_rt.y + 190 );
     std::vector<fheroes2::Rect> rectsTo;
     rectsTo.reserve( 7 );
-    rectsTo.push_back( fheroes2::Rect( pt2.x, pt2.y, 34, 34 ) ); // wood
-    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y, 34, 34 ) ); // mercury
-    rectsTo.push_back( fheroes2::Rect( pt2.x + 74, pt2.y, 34, 34 ) ); // ore
-    rectsTo.push_back( fheroes2::Rect( pt2.x, pt2.y + 37, 34, 34 ) ); // sulfur
-    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y + 37, 34, 34 ) ); // crystal
-    rectsTo.push_back( fheroes2::Rect( pt2.x + 74, pt2.y + 37, 34, 34 ) ); // gems
-    rectsTo.push_back( fheroes2::Rect( pt2.x + 37, pt2.y + 74, 34, 34 ) ); // gold
+    rectsTo.emplace_back( pt2.x, pt2.y, 34, 34 ); // wood
+    rectsTo.emplace_back( pt2.x + 37, pt2.y, 34, 34 ); // mercury
+    rectsTo.emplace_back( pt2.x + 74, pt2.y, 34, 34 ); // ore
+    rectsTo.emplace_back( pt2.x, pt2.y + 37, 34, 34 ); // sulfur
+    rectsTo.emplace_back( pt2.x + 37, pt2.y + 37, 34, 34 ); // crystal
+    rectsTo.emplace_back( pt2.x + 74, pt2.y + 37, 34, 34 ); // gems
+    rectsTo.emplace_back( pt2.x + 37, pt2.y + 74, 34, 34 ); // gold
 
     fheroes2::MovableSprite cursorTo( fheroes2::AGG::GetICN( tradpost, 14 ) );
     text.Set( header_to, Font::SMALL );
