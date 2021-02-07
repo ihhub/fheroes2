@@ -201,6 +201,8 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
     case PaletteType::CUSTOM:
         assert( 0 );
         break;
+    case PaletteType::STANDARD:
+        break;
     }
 
     static std::vector<uint8_t> standard;
