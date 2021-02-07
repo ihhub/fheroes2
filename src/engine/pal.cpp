@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "pal.h"
 
+#include <cassert>
 #include <cstring>
 
 #define PALETTE_SIZE 256
@@ -197,6 +198,9 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
         static std::vector<uint8_t> palette( darkeningTable, darkeningTable + PALETTE_SIZE );
         return palette;
     }
+    case PaletteType::CUSTOM:
+        assert(0);
+        break;
     }
 
     static std::vector<uint8_t> standard;
