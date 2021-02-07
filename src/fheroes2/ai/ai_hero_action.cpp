@@ -44,6 +44,7 @@
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 namespace AI
@@ -2012,7 +2013,7 @@ namespace AI
                         }
                     }
 
-                    I.Redraw( REDRAW_GAMEAREA );
+                    I.Redraw( Interface::REDRAW_GAMEAREA );
                     cursor.Show();
                     fheroes2::Display::instance().render();
                 }

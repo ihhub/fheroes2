@@ -33,6 +33,7 @@
 #include "rand.h"
 #include "settings.h"
 #include "spell.h"
+#include "text.h"
 #include "ui_window.h"
 #include "world.h"
 

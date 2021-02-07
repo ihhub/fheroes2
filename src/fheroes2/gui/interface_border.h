@@ -34,7 +34,7 @@ namespace Interface
     {
     public:
         BorderWindow( const Rect & );
-        virtual ~BorderWindow() {}
+        virtual ~BorderWindow() = default;
 
         virtual void SetPos( s32, s32 ) = 0;
         virtual void SavePosition( void ) = 0;

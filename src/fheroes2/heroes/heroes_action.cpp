@@ -41,6 +41,7 @@
 #include "race.h"
 #include "settings.h"
 #include "skill.h"
+#include "text.h"
 #include "world.h"
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
@@ -898,7 +899,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
                 castle->Scoute();
-                Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
 
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
             }
@@ -915,7 +916,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             hero.GetKingdom().AddCastle( castle );
             world.CaptureObject( dst_index, hero.GetColor() );
             castle->Scoute();
-            Interface::Basic::Get().SetRedraw( REDRAW_CASTLES );
+            Interface::Basic::Get().SetRedraw( Interface::REDRAW_CASTLES );
 
             Mixer::Reduce();
             castle->MageGuildEducateHero( hero );
@@ -1004,7 +1005,7 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
 
             Interface::Basic & I = Interface::Basic::Get();
             I.GetStatusWindow().SetResource( rc.first, rc.second );
-            I.SetRedraw( REDRAW_STATUS );
+            I.SetRedraw( Interface::REDRAW_STATUS );
         }
 
         hero.GetKingdom().AddFundsResource( funds );
