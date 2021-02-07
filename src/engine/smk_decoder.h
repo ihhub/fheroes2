@@ -37,6 +37,7 @@ public:
     ~SMKVideoSequence();
 
     SMKVideoSequence( const SMKVideoSequence & ) = delete;
+    SMKVideoSequence & operator=( const SMKVideoSequence & ) = delete;
 
     void resetFrame();
 

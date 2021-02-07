@@ -169,9 +169,9 @@ u32 DialogGoldWithExp( const std::string & hdr, const std::string & msg, u32 cou
     fheroes2::Blit( gold, image, 0, image.height() - gold.height() - 12 );
     fheroes2::Blit( sprite, image, gold.width() + 50, 0 );
 
-    Text text( GetString( count ), Font::SMALL );
+    Text text( std::to_string( count ), Font::SMALL );
     text.Blit( ( gold.width() - text.w() ) / 2, image.height() - 12, image );
-    text.Set( GetString( exp ) );
+    text.Set( std::to_string( exp ) );
     text.Blit( gold.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
@@ -190,7 +190,7 @@ u32 DialogArtifactWithExp( const std::string & hdr, const std::string & msg, con
     fheroes2::Blit( artifact, image, 5, 5 );
     fheroes2::Blit( sprite, image, border.width() + 50, ( border.height() - sprite.height() ) / 2 );
 
-    Text text( GetString( exp ), Font::SMALL );
+    Text text( std::to_string( exp ), Font::SMALL );
     text.Blit( border.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
@@ -204,7 +204,7 @@ u32 DialogWithExp( const std::string & hdr, const std::string & msg, u32 exp, u3
     image.reset();
 
     fheroes2::Blit( sprite, image );
-    Text text( GetString( exp ), Font::SMALL );
+    Text text( std::to_string( exp ), Font::SMALL );
     text.Blit( ( sprite.width() - text.w() ) / 2, sprite.height(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
@@ -223,7 +223,7 @@ u32 DialogWithArtifactAndGold( const std::string & hdr, const std::string & msg,
     fheroes2::Blit( artifact, image, 5, 5 );
     fheroes2::Blit( gold, image, border.width() + 50, ( border.height() - gold.height() ) / 2 );
 
-    Text text( GetString( count ), Font::SMALL );
+    Text text( std::to_string( count ), Font::SMALL );
     text.Blit( border.width() + 50 + ( gold.width() - text.w() ) / 2, border.height() - 25, image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );
@@ -238,7 +238,7 @@ u32 DialogWithGold( const std::string & hdr, const std::string & msg, u32 count,
 
     fheroes2::Blit( gold, image );
 
-    Text text( GetString( count ), Font::SMALL );
+    Text text( std::to_string( count ), Font::SMALL );
     text.Blit( ( gold.width() - text.w() ) / 2, gold.height(), image );
 
     return Dialog::SpriteInfo( hdr, msg, image, buttons );

@@ -1080,7 +1080,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
-                SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
+                const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
@@ -1531,7 +1531,6 @@ bool LocalEvent::MouseClickLeft( void )
 
 bool LocalEvent::MouseClickLeft( const Rect & rt )
 {
-    // if(MouseReleaseLeft() && (rt & mouse_rl) && (CLICK_LEFT & modes) && ((modes & TAP_MODE) || (rt & mouse_pl)))
     if ( MouseReleaseLeft() && ( rt & mouse_pl ) && ( rt & mouse_rl ) && ( CLICK_LEFT & modes ) ) {
         ResetModes( CLICK_LEFT );
         return true;
@@ -1720,7 +1719,7 @@ int LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
 int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 #endif
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
 
     // motion
     if ( ( le.modes & GLOBAL_FILTER ) && SDL_MOUSEMOTION == event->type ) {

@@ -731,9 +731,9 @@ DwellingItem::DwellingItem( const Castle & castle, u32 dw )
     mons = Monster( castle.GetRace(), type );
 }
 
-DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
+DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     : castle( cstl )
-    , backsf( sz.w, sz.h )
+    , backsf( sz.width, sz.height )
 {
     for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
         content.emplace_back( castle, dw );
@@ -741,7 +741,7 @@ DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
     SetContent( content );
 
     fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-    SetItemSize( sz.w, sz.h );
+    SetItemSize( sz.width, sz.height );
 }
 
 void DwellingsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
@@ -756,7 +756,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
-        Text text( GetString( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
+        Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
@@ -766,7 +766,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
             grown += Castle::GetGrownWel2();
 
         // grown
-        text.Set( "+" + GetString( grown ), Font::YELLOW_SMALL );
+        text.Set( "+" + std::to_string( grown ), Font::YELLOW_SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + 2 );
     }
     else

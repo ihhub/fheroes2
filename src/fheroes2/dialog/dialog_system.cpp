@@ -221,7 +221,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
     if ( conf.Music() && conf.MusicVolume() )
-        str = GetString( conf.MusicVolume() );
+        str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
     text.Set( str );
@@ -236,7 +236,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
     if ( conf.Sound() && conf.SoundVolume() )
-        str = GetString( conf.SoundVolume() );
+        str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );
     text.Set( str, Font::SMALL );
@@ -277,7 +277,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
     if ( heroSpeed )
-        str = GetString( heroSpeed );
+        str = std::to_string( heroSpeed );
     else
         str = _( "off" );
     text.Set( str );
@@ -294,7 +294,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     if ( aiSpeed )
-        str = GetString( aiSpeed );
+        str = std::to_string( aiSpeed );
     else
         str = _( "off" );
     text.Set( str );
@@ -309,7 +309,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
-    str = GetString( conf.ScrollSpeed() );
+    str = std::to_string( conf.ScrollSpeed() );
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 

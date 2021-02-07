@@ -28,11 +28,7 @@
 #include "rect.h"
 #include "types.h"
 
-std::string GetString( int );
 std::string GetStringShort( int );
-std::string GetString( const Point & );
-std::string GetString( const Size & );
-std::string GetString( const Rect & );
 std::string GetString( double, u8 );
 std::string GetHexString( int value, int width = 8 );
 

@@ -186,13 +186,13 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RESSMALL, 0 ), fheroes2::Display::instance(), pos.x + 6, pos.y + 3 + oh );
 
     // count castle
-    Text text( GetString( myKingdom.GetCountCastle() ), Font::SMALL );
+    Text text( std::to_string( myKingdom.GetCountCastle() ), Font::SMALL );
     text.Blit( pos.x + 26 - text.w() / 2, pos.y + 28 + oh );
     // count town
-    text.Set( GetString( myKingdom.GetCountTown() ) );
+    text.Set( std::to_string( myKingdom.GetCountTown() ) );
     text.Blit( pos.x + 78 - text.w() / 2, pos.y + 28 + oh );
     // count gold
-    text.Set( GetString( myKingdom.GetFunds().Get( Resource::GOLD ) ) );
+    text.Set( std::to_string( myKingdom.GetFunds().Get( Resource::GOLD ) ) );
     text.Blit( pos.x + 122 - text.w() / 2, pos.y + 28 + oh );
     // count wood
     text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
@@ -277,7 +277,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
     fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.w - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
-    text.Set( GetString( countLastResource ), Font::SMALL, pos.w );
+    text.Set( std::to_string( countLastResource ), Font::SMALL, pos.w );
     text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
 }
 

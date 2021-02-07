@@ -105,7 +105,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , _isTroopInfoVisible( true )
 {
     if ( use_mini_sprite )
-        SetBackground( Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
+        SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );
@@ -134,17 +134,17 @@ bool ArmyBar::isValid() const
     return _army != nullptr;
 }
 
-void ArmyBar::SetBackground( const Size & sz, const uint8_t fillColor )
+void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
 {
     if ( use_mini_sprite ) {
-        SetItemSize( sz.w, sz.h );
+        SetItemSize( sz.width, sz.height );
 
-        backsf.resize( sz.w, sz.h );
+        backsf.resize( sz.width, sz.height );
         backsf.fill( fillColor );
 
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
 
-        spcursor.resize( sz.w, sz.h );
+        spcursor.resize( sz.width, sz.height );
         spcursor.reset();
         fheroes2::DrawBorder( spcursor, 214 );
     }
@@ -161,7 +161,7 @@ void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( troop.isValid() ) {
-        Text text( GetString( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
+        Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
         if ( use_mini_sprite ) {
             const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );

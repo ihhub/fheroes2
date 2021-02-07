@@ -560,7 +560,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const Point & pos, u32 co
     const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
 
-    const Text text( GetString( value ), Font::SMALL );
+    const Text text( std::to_string( value ), Font::SMALL );
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
 }
 

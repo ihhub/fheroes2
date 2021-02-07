@@ -62,7 +62,7 @@ public:
             if ( readonly )
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LOCATORS, 24 ), display, x + 33, y + 5 );
 
-            Text text( GetString( troop.GetCount() ), Font::SMALL );
+            Text text( std::to_string( troop.GetCount() ), Font::SMALL );
             text.Blit( x + ( back.width() - text.w() ) / 2, y + back.height() - 11 );
         }
 

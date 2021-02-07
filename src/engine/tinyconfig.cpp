@@ -113,9 +113,9 @@ void TinyConfig::AddEntry( const std::string & key, int val, bool uniq )
     iterator it = end();
 
     if ( uniq && ( end() != ( it = find( ModifyKey( key ) ) ) ) )
-        it->second = GetString( val );
+        it->second = std::to_string( val );
     else
-        insert( std::pair<std::string, std::string>( ModifyKey( key ), GetString( val ) ) );
+        emplace( ModifyKey( key ), std::to_string( val ) );
 }
 
 int TinyConfig::IntParams( const std::string & key ) const
