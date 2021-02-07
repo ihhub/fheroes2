@@ -220,7 +220,9 @@ namespace AI
         }
 
         // Step 4. Calculate spell heuristics
-        if ( CheckCommanderCanSpellcast( arena, commander ) ) {
+
+        // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
+        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && CheckCommanderCanSpellcast( arena, commander ) ) {
             // 1. For damage spells - maximum amount of enemy threat lost
             // 2. For buffs - friendly unit strength gained
             // 3. For debuffs - enemy unit threat lost
