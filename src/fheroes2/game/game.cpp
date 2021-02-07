@@ -48,6 +48,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "system.h"
+#include "text.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "world.h"

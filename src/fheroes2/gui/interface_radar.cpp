@@ -30,6 +30,7 @@
 #include "ground.h"
 #include "interface_radar.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 #define RADARCOLOR 0xB5 // index palette

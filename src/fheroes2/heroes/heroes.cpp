@@ -47,6 +47,7 @@
 #include "race.h"
 #include "settings.h"
 #include "speed.h"
+#include "text.h"
 #include "world.h"
 
 const char * Heroes::GetName( int id )

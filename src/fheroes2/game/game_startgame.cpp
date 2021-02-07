@@ -47,6 +47,7 @@
 #include "route.h"
 #include "settings.h"
 #include "system.h"
+#include "text.h"
 #include "world.h"
 
 namespace
@@ -573,7 +574,7 @@ int Interface::Basic::StartGame( void )
                 default:
                     if ( res == Game::ENDTURN ) {
                         statusWindow.Reset();
-                        statusWindow.SetState( STATUS_AITURN );
+                        statusWindow.SetState( StatusType::STATUS_AITURN );
 
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );

@@ -36,6 +36,7 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
