@@ -1431,9 +1431,13 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, cons
 
 void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw ) const
 {
+    if ( addon.empty() ) {
+        return;
+    }
+
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( visibleTileROI & mp ) && !addon.empty() ) {
+    if ( ( visibleTileROI & mp ) ) {
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;

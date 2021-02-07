@@ -305,25 +305,11 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 
 void Game::KeyboardGlobalFilter( int sym, int mod )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // system hotkeys
     if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         Cursor::Get().Hide();
         fheroes2::engine().toggleFullScreen();
         Cursor::Get().Show();
-        display.render();
+        fheroes2::Display::instance().render();
     }
-//     else if ( sym == key_events[EVENT_SYSTEM_SCREENSHOT] ) {
-//         std::ostringstream stream;
-//         stream << System::ConcatePath( Settings::GetSaveDir(), "screenshot_" ) << std::time( 0 );
-//
-// #ifndef WITH_IMAGE
-//         stream << ".bmp";
-// #else
-//         stream << ".png";
-// #endif
-//         if ( display.Save( stream.str().c_str() ) )
-//             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
-//     }
 }

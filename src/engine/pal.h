@@ -25,7 +25,7 @@
 
 namespace PAL
 {
-    enum
+    enum class PaletteType : int
     {
         STANDARD, // default
         YELLOW_TEXT,
@@ -42,7 +42,7 @@ namespace PAL
     };
 
     std::vector<uint8_t> GetCyclingPalette( int stepId );
-    const std::vector<uint8_t> & GetPalette( int type );
+    const std::vector<uint8_t> & GetPalette( const PaletteType type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }
 
