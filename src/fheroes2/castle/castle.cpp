@@ -2799,7 +2799,8 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
     return res;
 }
 
-std::string Castle::buildingStatusMessage( uint32_t buildingId ) const {
+std::string Castle::buildingStatusMessage( uint32_t buildingId ) const
+{
     Monster building( race, buildingId );
     if ( building.GetDwelling() ) {
         Monster dwelling( race, building.GetDwelling() );
