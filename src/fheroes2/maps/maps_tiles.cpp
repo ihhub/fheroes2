@@ -1719,7 +1719,8 @@ std::string Maps::Tiles::String( void ) const
     std::ostringstream os;
 
     os << "----------------:--------" << std::endl
-       << "maps index      : " << GetIndex() << ", " << "point: x(" << GetCenter().x << "), y(" << GetCenter().y << ")" << std::endl
+       << "maps index      : " << GetIndex() << ", "
+       << "point: x(" << GetCenter().x << "), y(" << GetCenter().y << ")" << std::endl
        << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl

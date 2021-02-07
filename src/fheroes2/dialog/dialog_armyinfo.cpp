@@ -665,8 +665,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
-    TextSprite tsTotal( std::to_string( gold ) + " " + "(" + "total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL,
-                        pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
+    TextSprite tsTotal( std::to_string( gold ) + " " + "(" + "total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+                        Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
