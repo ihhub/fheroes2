@@ -440,8 +440,8 @@ void BuildingInfo::Redraw( void )
 
             const fheroes2::Point offset( 6, 59 );
             fheroes2::Sprite grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
-            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
-            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             fheroes2::Blit( grayedOut, display, area.x + offset.x, area.y + offset.y );
         }
         else {
@@ -468,8 +468,8 @@ void BuildingInfo::Redraw( void )
             fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
         else if ( bcond == BUILD_DISABLE ) {
             fheroes2::Sprite disabledSprite( sprite_deny );
-            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
-            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
         }
         else if ( bcond != ALLOW_BUILD ) {

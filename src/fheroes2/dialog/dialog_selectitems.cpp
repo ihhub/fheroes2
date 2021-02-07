@@ -283,7 +283,7 @@ Spell Dialog::SelectSpell( int cur )
 
     listbox.SetListContent( spells );
     if ( cur != Spell::NONE )
-        listbox.SetCurrent( static_cast<int>( cur ) );
+        listbox.SetCurrent( cur );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
@@ -328,7 +328,7 @@ Artifact Dialog::SelectArtifact( int cur )
 
     listbox.SetListContent( artifacts );
     if ( cur != Artifact::UNKNOWN )
-        listbox.SetCurrent( static_cast<int>( cur ) );
+        listbox.SetCurrent( cur );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );

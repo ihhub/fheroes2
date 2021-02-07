@@ -1418,14 +1418,14 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
     fheroes2::Sprite spmon1;
     fheroes2::Sprite spmon2;
 
-    uint8_t applyPalette = PAL::STANDARD;
+    PAL::PaletteType applyPalette = PAL::PaletteType::STANDARD;
 
     if ( b_current_sprite && _currentUnit == &b ) {
         spmon1 = *b_current_sprite;
     }
     else if ( b.Modes( SP_STONE ) ) { // under medusa's stunning effect
         spmon1 = fheroes2::AGG::GetICN( msi.icn_file, b.GetFrame() );
-        applyPalette = PAL::GRAY;
+        applyPalette = PAL::PaletteType::GRAY;
     }
     else {
         // regular
@@ -1442,7 +1442,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         }
 
         if ( b.Modes( CAP_MIRRORIMAGE ) ) {
-            applyPalette = PAL::MIRROR_IMAGE;
+            applyPalette = PAL::PaletteType::MIRROR_IMAGE;
         }
     }
 
@@ -1479,7 +1479,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
             sp.y += cy + static_cast<int32_t>( ( _movingPos.y - _flyingPos.y ) * movementProgress );
         }
 
-        if ( applyPalette != PAL::STANDARD ) {
+        if ( applyPalette != PAL::PaletteType::STANDARD ) {
             fheroes2::ApplyPalette( spmon1, PAL::GetPalette( applyPalette ) );
         }
 
@@ -3763,7 +3763,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 
     const Monster::monstersprite_t & msi = target.GetMonsterSprite();
     fheroes2::Sprite sprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
-    fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+    fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
 
     const Rect & rt1 = target.GetRectPosition();
     const Rect & rt2 = pos.GetRect();
@@ -3940,10 +3940,10 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     std::vector<std::vector<uint8_t> > originalPalette;
     if ( target.Modes( SP_STONE ) ) {
-        originalPalette.push_back( PAL::GetPalette( PAL::GRAY ) );
+        originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::GRAY ) );
     }
     else if ( target.Modes( CAP_MIRRORIMAGE ) ) {
-        originalPalette.push_back( PAL::GetPalette( PAL::MIRROR_IMAGE ) );
+        originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
     }
 
     if ( !originalPalette.empty() ) {
@@ -3953,9 +3953,9 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
         fheroes2::ApplyPalette( unitSprite, originalPalette[0] );
     }
 
-    std::vector<uint8_t> convert = PAL::GetPalette( PAL::RED );
+    std::vector<uint8_t> convert = PAL::GetPalette( PAL::PaletteType::RED );
     if ( !originalPalette.empty() ) {
-        convert = PAL::CombinePalettes( PAL::GetPalette( PAL::GRAY ), convert );
+        convert = PAL::CombinePalettes( PAL::GetPalette( PAL::PaletteType::GRAY ), convert );
     }
 
     fheroes2::Sprite bloodlustEffect( unitSprite );
@@ -3999,7 +3999,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
-    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::GRAY ) );
+    fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
 
     fheroes2::Sprite mixSprite( unitSprite );
 
@@ -4324,7 +4324,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
         }
     }
 
-    fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::RED ) );
+    fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::PaletteType::RED ) );
     fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.w, area.h );
 
     cursor.Hide();

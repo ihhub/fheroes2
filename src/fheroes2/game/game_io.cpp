@@ -42,8 +42,11 @@
 #include "world.h"
 #include "zzlib.h"
 
-static u16 SAV2ID2 = 0xFF02;
-static u16 SAV2ID3 = 0xFF03;
+namespace
+{
+    const uint16_t SAV2ID2 = 0xFF02;
+    const uint16_t SAV2ID3 = 0xFF03;
+}
 
 namespace Game
 {
