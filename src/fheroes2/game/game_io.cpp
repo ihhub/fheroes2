@@ -141,7 +141,7 @@ bool Game::Save( const std::string & fn )
         Game::SetLastSavename( fn );
 
     // raw info content
-    fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << GetString( loadver ) << loadver
+    fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << std::to_string( loadver ) << loadver
        << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion(), conf.GameType() );
     fs.close();
 

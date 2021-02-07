@@ -79,28 +79,17 @@ std::string StringUpper( std::string str )
     return str;
 }
 
-/* int to string */
-std::string GetString( int value )
-{
-    std::ostringstream stream;
-    stream << value;
-    return stream.str();
-}
-
 std::string GetStringShort( int value )
 {
     if ( std::abs( value ) > 1000 ) {
-        std::ostringstream stream;
+        if ( std::abs( value ) > 1000000 ) {
+            return std::to_string( value / 1000000 ) + 'M';
+        }
 
-        if ( std::abs( value ) > 1000000 )
-            stream << value / 1000000 << "M";
-        else
-            stream << value / 1000 << "K";
-
-        return stream.str();
+        return std::to_string( value / 1000 ) + 'K';
     }
 
-    return GetString( value );
+    return std::to_string( value );
 }
 
 std::string GetString( double value, u8 prec )
@@ -108,27 +97,6 @@ std::string GetString( double value, u8 prec )
     std::ostringstream stream;
     stream << std::setprecision( prec ) << value;
     return stream.str();
-}
-
-std::string GetString( const Point & pt )
-{
-    std::ostringstream os;
-    os << "point: x(" << pt.x << "), y(" << pt.y << ")";
-    return os.str();
-}
-
-std::string GetString( const Size & sz )
-{
-    std::ostringstream os;
-    os << "size: w(" << sz.w << "), h(" << sz.h << ")";
-    return os.str();
-}
-
-std::string GetString( const Rect & rt )
-{
-    std::ostringstream os;
-    os << "rect: x(" << rt.x << "), y(" << rt.y << "), w(" << rt.w << "), h(" << rt.h << ")";
-    return os.str();
 }
 
 std::string GetHexString( int value, int width )
@@ -210,7 +178,7 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 
 void StringReplace( std::string & dst, const char * pred, int value )
 {
-    StringReplace( dst, pred, GetString( value ) );
+    StringReplace( dst, pred, std::to_string( value ) );
 }
 
 std::list<std::string> StringSplit( const std::string & str, const std::string & sep )

@@ -302,7 +302,7 @@ public:
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
-    const Size & VideoMode( void ) const;
+    const fheroes2::Size & VideoMode() const;
 
     void SetDebug( int );
     void SetUnicode( bool );
@@ -408,7 +408,7 @@ private:
     BitModes opt_addons;
 
     int debug;
-    Size video_mode;
+    fheroes2::Size video_mode;
     int game_difficulty;
 
     std::string path_program;

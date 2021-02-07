@@ -794,7 +794,7 @@ void StringAppendModifiers( std::string & str, int value )
     else if ( value > 0 )
         str.append( " +" );
 
-    str.append( GetString( value ) );
+    str.append( std::to_string( value ) );
 }
 
 int Skill::GetLeadershipModifiers( int level, std::string * strs = NULL )

@@ -829,7 +829,7 @@ void Battle::ArmiesOrder::RedrawUnit( const Rect & pos, const Battle::Unit & uni
         fheroes2::Blit( sf_color[2], output, pos.x + 1, pos.y + 1 );
 
     // number
-    Text number( GetString( unit.GetCount() ), Font::SMALL );
+    Text number( std::to_string( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
 }
 
@@ -1085,7 +1085,7 @@ void Battle::Interface::RedrawPartialFinish()
         for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
             uint32_t distance = arena.CalculateMoveDistance( it->GetIndex() );
             if ( distance != MAX_MOVE_COST ) {
-                Text text( GetString( distance ), Font::SMALL );
+                Text text( std::to_string( distance ), Font::SMALL );
                 text.Blit( ( *it ).GetPos().x + 20, ( *it ).GetPos().y + 22, _mainSurface );
             }
         }
@@ -1714,7 +1714,7 @@ void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
         fheroes2::Blit( sprite, _mainSurface, 22 + sprite.x(), 390 + sprite.y() );
     }
     else if ( Board::CASTLE_GATE_POS == cellId ) {
-        Bridge * bridge = Arena::GetBridge();
+        const Bridge * bridge = Arena::GetBridge();
         assert( bridge != nullptr );
         if ( bridge != nullptr && !bridge->isDestroy() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( castleIcnId, 4 );
@@ -2785,7 +2785,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
-    _movingPos = attacker.GetRectPosition();
+    _movingPos = Point( attacker.GetRectPosition().x, attacker.GetRectPosition().y );
 
     // Unit 'Position' is position of the tile he's standing at
     const Rect & pos1 = attacker.GetRectPosition();

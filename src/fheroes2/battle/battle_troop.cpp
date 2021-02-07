@@ -209,7 +209,7 @@ bool Battle::Unit::isModes( u32 v ) const
 std::string Battle::Unit::GetShotString( void ) const
 {
     if ( Troop::GetShots() == GetShots() )
-        return GetString( Troop::GetShots() );
+        return std::to_string( Troop::GetShots() );
 
     std::ostringstream os;
     os << Troop::GetShots() << " (" << GetShots() << ")";

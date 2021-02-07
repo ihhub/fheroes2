@@ -207,14 +207,14 @@ void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_s
     _scrollbar.hide();
 
     textSell.Hide();
-    textSell.SetText( std::string( "-" ) + GetString( count_sell ) + " " + "(" + GetString( max_sell - count_sell ) + ")" );
+    textSell.SetText( std::string( "-" ) + std::to_string( count_sell ) + " " + "(" + std::to_string( max_sell - count_sell ) + ")" );
     dst_pt.x = pos_rt.x + pos_rt.width / 2 - 70 - textSell.w() / 2;
     dst_pt.y = pos_rt.y + 116;
     textSell.SetPos( dst_pt.x, dst_pt.y );
     textSell.Show();
 
     textBuy.Hide();
-    textBuy.SetText( std::string( "+" ) + GetString( count_buy ) + " " + "(" + GetString( orig_buy + count_buy ) + ")" );
+    textBuy.SetText( std::string( "+" ) + std::to_string( count_buy ) + " " + "(" + std::to_string( orig_buy + count_buy ) + ")" );
     dst_pt.x = pos_rt.x + pos_rt.width / 2 + 70 - textBuy.w() / 2;
     dst_pt.y = pos_rt.y + 116;
     textBuy.SetPos( dst_pt.x, dst_pt.y );
@@ -500,7 +500,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, s32 px, s32 py, s32 value
     fheroes2::Point dst_pt( px, py );
 
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
-    text.Set( GetString( value ), Font::SMALL );
+    text.Set( std::to_string( value ), Font::SMALL );
     dst_pt.x += ( 34 - text.w() ) / 2;
     dst_pt.y += 21;
     text.Blit( dst_pt.x, dst_pt.y );
@@ -569,7 +569,7 @@ std::string GetStringTradeCosts( int rs_from, int rs_to, bool tradingPost )
     }
     else {
         res = "1/";
-        res.append( GetString( GetTradeCosts( rs_from, rs_to, tradingPost ) ) );
+        res.append( std::to_string( GetTradeCosts( rs_from, rs_to, tradingPost ) ) );
     }
 
     return res;

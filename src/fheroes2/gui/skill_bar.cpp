@@ -79,25 +79,25 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             case Skill::Primary::ATTACK:
                 fheroes2::Blit( backSprite, 217, 52, dstsf, dstpt.x, dstpt.y, ww, ww );
                 if ( _hero )
-                    text.Set( GetString( _hero->GetAttack() ) );
+                    text.Set( std::to_string( _hero->GetAttack() ) );
                 break;
 
             case Skill::Primary::DEFENSE:
                 fheroes2::Blit( backSprite, 217, 85, dstsf, dstpt.x, dstpt.y, ww, ww );
                 if ( _hero )
-                    text.Set( GetString( _hero->GetDefense() ) );
+                    text.Set( std::to_string( _hero->GetDefense() ) );
                 break;
 
             case Skill::Primary::POWER:
                 fheroes2::Blit( backSprite, 217, 118, dstsf, dstpt.x, dstpt.y, ww, ww );
                 if ( _hero )
-                    text.Set( GetString( _hero->GetPower() ) );
+                    text.Set( std::to_string( _hero->GetPower() ) );
                 break;
 
             case Skill::Primary::KNOWLEDGE:
                 fheroes2::Blit( backSprite, 217, 151, dstsf, dstpt.x, dstpt.y, ww, ww );
                 if ( _hero )
-                    text.Set( GetString( _hero->GetKnowledge() ) );
+                    text.Set( std::to_string( _hero->GetKnowledge() ) );
                 break;
 
             default:
@@ -117,19 +117,19 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             if ( _hero ) {
                 switch ( skill ) {
                 case Skill::Primary::ATTACK:
-                    text.Set( GetString( _hero->GetAttack() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetAttack() ), Font::BIG );
                     break;
 
                 case Skill::Primary::DEFENSE:
-                    text.Set( GetString( _hero->GetDefense() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetDefense() ), Font::BIG );
                     break;
 
                 case Skill::Primary::POWER:
-                    text.Set( GetString( _hero->GetPower() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetPower() ), Font::BIG );
                     break;
 
                 case Skill::Primary::KNOWLEDGE:
-                    text.Set( GetString( _hero->GetKnowledge() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetKnowledge() ), Font::BIG );
                     break;
 
                 default:
@@ -212,7 +212,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
         fheroes2::Blit( sprite, dstsf, pos.x + ( pos.w - sprite.width() ) / 2, pos.y + ( pos.h - sprite.height() ) / 2 );
 
         if ( use_mini_sprite ) {
-            Text text( GetString( skill.Level() ), Font::SMALL );
+            Text text( std::to_string( skill.Level() ), Font::SMALL );
             text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
         }
         else {

@@ -108,12 +108,12 @@ namespace
         }
     }
 
-    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
+    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const fheroes2::Size & mapSize, std::vector<MapRegion> & regions )
     {
-        const uint32_t extendedWidth = mapSize.w + 2;
+        const uint32_t extendedWidth = mapSize.width + 2;
 
         MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
-        const MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
+        const MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.height + 1 );
         const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
 
         for ( ; currentTile != mapEnd; ++currentTile ) {
@@ -366,7 +366,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
-    FindMissingRegions( data, Size( width, height ), _regions );
+    FindMissingRegions( data, fheroes2::Size( width, height ), _regions );
 
     // Step 9. Assign regions to the map tiles and finalize the data
     for ( MapRegion & reg : _regions ) {

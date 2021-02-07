@@ -395,7 +395,7 @@ std::string Settings::GetVersion( void )
 /* constructor */
 Settings::Settings()
     : debug( 0 )
-    , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -699,8 +699,8 @@ bool Settings::Read( const std::string & filename )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.h = fheroes2::Display::DEFAULT_HEIGHT;
+        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
+        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -709,8 +709,8 @@ bool Settings::Read( const std::string & filename )
             std::string width( value.substr( 0, pos ) );
             std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
 
-            video_mode.w = GetInt( width );
-            video_mode.h = GetInt( height );
+            video_mode.width = GetInt( width );
+            video_mode.height = GetInt( height );
         }
         else {
             DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
@@ -742,7 +742,7 @@ bool Settings::Read( const std::string & filename )
     if ( video_driver.size() )
         video_driver = StringLower( video_driver );
 
-    if ( video_mode.w && video_mode.h )
+    if ( video_mode.width > 0 && video_mode.height > 0 )
         PostLoad();
 
     return true;
@@ -1233,8 +1233,7 @@ bool Settings::BattleShowMoveShadow( void ) const
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
-/* get video mode */
-const Size & Settings::VideoMode( void ) const
+const fheroes2::Size & Settings::VideoMode() const
 {
     return video_mode;
 }
@@ -1699,7 +1698,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
+    return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const
