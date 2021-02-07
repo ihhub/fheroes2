@@ -665,9 +665,7 @@ bool Settings::Read( const std::string & filename )
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
     // playmus command
-    sval = config.StrParams( "playmus command" );
-    if ( !sval.empty() )
-        _externalMusicCommand = sval;
+    _externalMusicCommand = config.StrParams( "playmus command" );
 
     // videodriver
     sval = config.StrParams( "videodriver" );
