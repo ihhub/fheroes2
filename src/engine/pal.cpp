@@ -199,7 +199,7 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
         return palette;
     }
     case PaletteType::CUSTOM:
-        assert(0);
+        assert( 0 );
         break;
     }
 
