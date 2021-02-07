@@ -46,7 +46,7 @@ namespace Interface
     private:
         void SavePosition( void );
         void Generate( void );
-        void RedrawObjects( int color = 0xFF );
+        void RedrawObjects( int color = 0xFF ) const;
         void RedrawCursor( void );
         void ChangeAreaSize( const Size & );
 

@@ -133,7 +133,7 @@ void StatsHeroesList::SetContent( KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
-    for ( auto & hero : heroes )
+    for ( Heroes * hero : heroes )
         content.emplace_back( hero );
     SetListContent( content );
 }
@@ -355,7 +355,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
 
     content.reserve( castles.size() );
 
-    for ( auto & castle : castles )
+    for ( Castle * castle : castles )
         content.emplace_back( castle );
 
     SetListContent( content );

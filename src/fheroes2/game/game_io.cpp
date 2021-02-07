@@ -196,7 +196,7 @@ bool Game::Load( const std::string & fn )
 
     int fileGameType = Game::TYPE_STANDARD;
     HeaderSAVBase header;
-    // starting from 0.9.0, headers also include gameType
+    // starting from 0.8.4, headers also include gameType
     if ( binver >= FORMAT_VERSION_084_RELEASE ) {
         HeaderSAV currentFormatHeader;
         fs >> currentFormatHeader;

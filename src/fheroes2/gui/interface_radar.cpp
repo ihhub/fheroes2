@@ -227,8 +227,7 @@ int GetChunkSize( int size1, int size2 )
     return res;
 }
 
-/* redraw radar area for color */
-void Interface::Radar::RedrawObjects( int color )
+void Interface::Radar::RedrawObjects( int color ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Rect & rect = GetArea();

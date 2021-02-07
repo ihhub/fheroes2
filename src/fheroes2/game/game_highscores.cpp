@@ -87,7 +87,7 @@ public:
     HGSData() {}
 
     bool Load( const std::string & );
-    bool Save( const std::string & );
+    bool Save( const std::string & ) const;
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
 
@@ -114,7 +114,7 @@ bool HGSData::Load( const std::string & fn )
     return false;
 }
 
-bool HGSData::Save( const std::string & fn )
+bool HGSData::Save( const std::string & fn ) const
 {
     ZStreamFile hdata;
     hdata.setbigendian( true );

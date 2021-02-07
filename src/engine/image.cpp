@@ -810,11 +810,11 @@ namespace fheroes2
             }
         }
         else {
-            uint8_t * transformY = image.transform() + y * imageWidth + x;
+            const uint8_t * transformY = image.transform() + y * imageWidth + x;
 
             for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
                 uint8_t * imageX = imageY;
-                uint8_t * transformX = transformY;
+                const uint8_t * transformX = transformY;
                 const uint8_t * imageXEnd = imageX + width;
 
                 for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {

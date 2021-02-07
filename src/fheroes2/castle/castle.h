@@ -226,7 +226,7 @@ private:
     void OpenTavern( void );
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes );
-    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo );
+    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
