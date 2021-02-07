@@ -1579,7 +1579,7 @@ void World::ProcessNewMap()
     vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );
     StringReplace( vec_rumors.back(), "%{name}", ultimate_artifact.GetName() );
 
-    vec_rumors.emplace_back(  _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
+    vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
     if ( world.h() / 3 > ultimate_pos.y ) {
         if ( world.w() / 3 > ultimate_pos.x )

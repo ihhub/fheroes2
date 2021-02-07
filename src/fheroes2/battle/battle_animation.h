@@ -34,6 +34,7 @@ public:
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();
+
 private:
     uint32_t halfDelay;
     bool timerIsSet;
