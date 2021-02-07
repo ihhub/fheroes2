@@ -193,6 +193,7 @@ public:
 
     std::string GetStringBuilding( u32 ) const;
     std::string GetDescriptionBuilding( u32 ) const;
+    std::string buildingStatusMessage( uint32_t ) const;
 
     static const char * GetStringBuilding( u32, int race );
     static const char * GetDescriptionBuilding( u32, int race );

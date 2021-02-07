@@ -639,8 +639,9 @@ int Castle::OpenDialog( bool readonly )
                     else if ( le.MousePressRight( ( *it ).coord ) )
                         Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
 
-                    if ( le.MouseCursor( ( *it ).coord ) )
-                        msg_status = GetStringBuilding( ( *it ).id );
+                    if ( le.MouseCursor( ( *it ).coord ) ) {
+                        msg_status = buildingStatusMessage( ( *it ).id );
+                    }
                 }
             }
         }
