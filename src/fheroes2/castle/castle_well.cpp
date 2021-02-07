@@ -205,7 +205,7 @@ void Castle::OpenWell( void )
     }
 }
 
-void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo )
+void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );

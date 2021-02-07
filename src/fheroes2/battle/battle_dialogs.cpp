@@ -496,7 +496,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
 
-                fheroes2::Image image = border;
+                fheroes2::Sprite image = border;
                 fheroes2::Blit( artifact, image, 5, 5 );
 
                 fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );

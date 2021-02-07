@@ -39,7 +39,7 @@ namespace Interface
         virtual void SetPos( s32, s32 ) = 0;
         virtual void SavePosition( void ) = 0;
 
-        void Redraw( void );
+        void Redraw() const;
         bool QueueEventProcessing( void );
 
         const Rect & GetArea( void ) const;

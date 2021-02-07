@@ -4828,46 +4828,51 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
 Battle::PopupDamageInfo::PopupDamageInfo()
     : Dialog::FrameBorder( 5 )
-    , cell( NULL )
-    , attacker( NULL )
-    , defender( NULL )
-    , redraw( false )
+    , _cell( nullptr )
+    , _attacker( nullptr )
+    , _defender( nullptr )
+    , _redraw( false )
 {}
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * c, const Unit * a, const Unit * b, const Point & offset )
+void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Point & offset )
 {
-    if ( Settings::Get().ExtBattleShowDamage() && Battle::AnimateInfrequentDelay( Game::BATTLE_POPUP_DELAY )
-         && ( !cell || ( c && cell != c ) || !attacker || ( a && attacker != a ) || !defender || ( b && defender != b ) ) ) {
-        redraw = true;
-        cell = c;
-        attacker = a;
-        defender = b;
-
-        const Rect & rt = cell->GetPos();
-        SetPosition( rt.x + rt.w + offset.x, rt.y + offset.y, 20, 20 );
+    if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
+        return;
     }
+
+    if ( !Settings::Get().ExtBattleShowDamage() || !Battle::AnimateInfrequentDelay( Game::BATTLE_POPUP_DELAY ) ) {
+        return;
+    }
+
+    _redraw = true;
+    _cell = cell;
+    _attacker = attacker;
+    _defender = defender;
+
+    const Rect & rt = cell->GetPos();
+    SetPosition( rt.x + rt.w + offset.x, rt.y + offset.y, 20, 20 );
 }
 
 void Battle::PopupDamageInfo::Reset( void )
 {
-    if ( redraw ) {
+    if ( _redraw ) {
         Cursor::Get().Hide();
         restorer.restore();
-        redraw = false;
-        cell = NULL;
-        attacker = NULL;
-        defender = NULL;
+        _redraw = false;
+        _cell = nullptr;
+        _attacker = nullptr;
+        _defender = nullptr;
     }
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
 void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 {
-    if ( redraw ) {
+    if ( _redraw ) {
         Cursor::Get().Hide();
 
-        uint32_t tmp1 = attacker->CalculateMinDamage( *defender );
-        uint32_t tmp2 = attacker->CalculateMaxDamage( *defender );
+        uint32_t tmp1 = _attacker->CalculateMinDamage( *_defender );
+        uint32_t tmp2 = _attacker->CalculateMaxDamage( *_defender );
 
         std::string str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
 
@@ -4876,13 +4881,13 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 
         Text text1( str, Font::SMALL );
 
-        tmp1 = defender->HowManyWillKilled( tmp1 );
-        tmp2 = defender->HowManyWillKilled( tmp2 );
+        tmp1 = _defender->HowManyWillKilled( tmp1 );
+        tmp2 = _defender->HowManyWillKilled( tmp2 );
 
-        if ( tmp1 > defender->GetCount() )
-            tmp1 = defender->GetCount();
-        if ( tmp2 > defender->GetCount() )
-            tmp2 = defender->GetCount();
+        if ( tmp1 > _defender->GetCount() )
+            tmp1 = _defender->GetCount();
+        if ( tmp2 > _defender->GetCount() )
+            tmp2 = _defender->GetCount();
 
         str = tmp1 == tmp2 ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
 
@@ -4896,7 +4901,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 
         const Rect & borderArea = GetArea();
         const Rect & borderRect = GetRect();
-        const Rect & pos = cell->GetPos();
+        const Rect & pos = _cell->GetPos();
 
         int tx = borderRect.x;
         int ty = borderRect.y;
@@ -4906,8 +4911,9 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
             ty = pos.y - pos.h;
         }
 
-        if ( borderRect.x != tx || borderRect.y != ty || borderArea.w != tw || borderArea.h != th )
+        if ( borderRect.x != tx || borderRect.y != ty || borderArea.w != tw || borderArea.h != th ) {
             SetPosition( tx, ty, tw, th );
+        }
 
         const Rect & currectArea = GetRect();
         Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( currectArea.x, currectArea.y, currectArea.w, currectArea.h ) );

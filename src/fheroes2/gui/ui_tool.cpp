@@ -172,7 +172,7 @@ namespace fheroes2
         LocalEvent::Get().ResumeCycling();
     }
 
-    void ScreenPaletteRestorer::changePalette( const uint8_t * palette )
+    void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const
     {
         Display::instance().changePalette( palette );
     }

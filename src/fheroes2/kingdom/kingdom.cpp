@@ -529,7 +529,7 @@ u32 Kingdom::GetMaxHeroes( void )
     return GameStatic::GetKingdomMaxHeroes();
 }
 
-void Kingdom::HeroesActionNewPosition( void )
+void Kingdom::HeroesActionNewPosition() const
 {
     // Heroes::ActionNewPosition: can remove elements from heroes vector.
     KingdomHeroes heroes2( heroes );

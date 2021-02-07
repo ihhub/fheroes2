@@ -179,7 +179,7 @@ const Rect & Interface::BorderWindow::GetArea( void ) const
     return area;
 }
 
-void Interface::BorderWindow::Redraw( void )
+void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }

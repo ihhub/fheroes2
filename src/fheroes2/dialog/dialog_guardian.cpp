@@ -51,7 +51,7 @@ public:
         fheroes2::DrawBorder( curs, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
 
-    void Redraw( void )
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Blit( back, display, x, y );
@@ -68,7 +68,7 @@ public:
 
         if ( select )
             fheroes2::Blit( curs, display, x, y );
-    };
+    }
 
     const Troop & troop;
     bool select;

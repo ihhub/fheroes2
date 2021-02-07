@@ -467,7 +467,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
         TiXmlElement * xml_answer = doc.FirstChildElement( "answer" );
         for ( ; xml_answer; xml_answer = xml_answer->NextSiblingElement( "answer" ) )
             if ( xml_answer->GetText() )
-                riddle.answers.push_back( xml_answer->GetText() );
+                riddle.answers.emplace_back( xml_answer->GetText() );
     }
 
     TiXmlElement * xml_resources = doc.FirstChildElement( "resources" );
@@ -552,7 +552,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Rumors & rumors )
     TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     for ( ; xml_msg; xml_msg = xml_msg->NextSiblingElement( "msg" ) )
         if ( xml_msg->GetText() )
-            rumors.push_back( xml_msg->GetText() );
+            rumors.emplace_back( xml_msg->GetText() );
 
     return doc;
 }
@@ -1576,44 +1576,42 @@ void World::ProcessNewMap()
         ultimate_pos = ( *it ).GetCenter();
     }
 
-    std::string rumor = _( "The ultimate artifact is really the %{name}." );
-    StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
-    vec_rumors.push_back( rumor );
+    vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );
+    StringReplace( vec_rumors.back(), "%{name}", ultimate_artifact.GetName() );
 
-    rumor = _( "The ultimate artifact may be found in the %{name} regions of the world." );
+    vec_rumors.emplace_back(  _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
     if ( world.h() / 3 > ultimate_pos.y ) {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "north-west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "north" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
         else
-            StringReplace( rumor, "%{name}", _( "north-east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
     }
     else if ( 2 * world.h() / 3 > ultimate_pos.y ) {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "center" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
         else
-            StringReplace( rumor, "%{name}", _( "east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
     }
     else {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "south-west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "south" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
         else
-            StringReplace( rumor, "%{name}", _( "south-east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );
     }
-    vec_rumors.push_back( rumor );
 
-    vec_rumors.push_back( _( "The truth is out there." ) );
-    vec_rumors.push_back( _( "The dark side is stronger." ) );
-    vec_rumors.push_back( _( "The end of the world is near." ) );
-    vec_rumors.push_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
-    vec_rumors.push_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
-    vec_rumors.push_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
+    vec_rumors.emplace_back( _( "The truth is out there." ) );
+    vec_rumors.emplace_back( _( "The dark side is stronger." ) );
+    vec_rumors.emplace_back( _( "The end of the world is near." ) );
+    vec_rumors.emplace_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
+    vec_rumors.emplace_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
+    vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
 
-    vec_rumors.push_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
+    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

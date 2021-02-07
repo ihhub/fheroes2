@@ -501,12 +501,10 @@ Troop * Troops::GetWeakestTroop( void )
     return *lowest;
 }
 
-Troop * Troops::GetSlowestTroop( void )
+const Troop * Troops::GetSlowestTroop() const
 {
-    iterator first, last, lowest;
-
-    first = begin();
-    last = end();
+    const_iterator first = begin();
+    const_iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -515,8 +513,8 @@ Troop * Troops::GetSlowestTroop( void )
             ++first;
 
     if ( first == end() )
-        return NULL;
-    lowest = first;
+        return nullptr;
+    const_iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
