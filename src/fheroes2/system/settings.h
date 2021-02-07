@@ -223,7 +223,6 @@ public:
 
     bool FullScreen( void ) const;
     bool KeepAspectRatio( void ) const;
-    bool ChangeFullscreenResolution( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -322,6 +321,7 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

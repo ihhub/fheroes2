@@ -79,7 +79,6 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000200,
     GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00000800,
     GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
     GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
     GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
@@ -131,10 +130,6 @@ const settings_t settingsGeneral[] = {
         "fullscreen",
     },
     {
-        GLOBAL_FULLSCREEN,
-        "full screen",
-    },
-    {
         GLOBAL_USEUNICODE,
         "unicode",
     },
@@ -157,10 +152,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_KEEP_ASPECT_RATIO,
         "keep aspect ratio",
-    },
-    {
-        GLOBAL_CHANGE_FULLSCREEN_RESOLUTION,
-        "change fullscreen resolution",
     },
     {
         0,
@@ -823,10 +814,6 @@ std::string Settings::String( void ) const
     os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-       << std::endl;
-
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
@@ -1140,6 +1127,16 @@ void Settings::SetBattleSpeed( int speed )
         speed = 10;
     }
     battle_speed = speed;
+}
+
+void Settings::setFullScreen( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_FULLSCREEN );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_FULLSCREEN );
+    }
 }
 
 /* set scroll speed: 1 - 4 */
@@ -1880,11 +1877,6 @@ bool Settings::FullScreen( void ) const
 bool Settings::KeepAspectRatio( void ) const
 {
     return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
-}
-
-bool Settings::ChangeFullscreenResolution( void ) const
-{
-    return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
