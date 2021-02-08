@@ -28,7 +28,7 @@
 
 namespace Interface
 {
-    void GameBorderRedraw( const bool viewWorld );
+    void GameBorderRedraw( const bool viewWorldMode );
 
     class BorderWindow
     {

@@ -1438,7 +1438,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
 
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( visibleTileROI & mp ) ) {
+    if ( visibleTileROI & mp ) {
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;
             const int icn = MP2::GetICNObject( ( *it ).object );

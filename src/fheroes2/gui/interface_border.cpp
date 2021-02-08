@@ -28,10 +28,10 @@
 #include "settings.h"
 #include "ui_tool.h"
 
-void Interface::GameBorderRedraw( const bool viewWorld )
+void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() && !viewWorld )
+    if ( conf.ExtGameHideInterface() && !viewWorldMode )
         return;
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -105,7 +105,7 @@ void Interface::GameBorderRedraw( const bool viewWorld )
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
 
-    const int32_t countHMiddleBorder = viewWorld ? 0 : count_h;
+    const int32_t countHMiddleBorder = viewWorldMode ? 0 : count_h;
 
     for ( int32_t i = 0; i < countHMiddleBorder + 1; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -166,7 +166,7 @@ void Interface::GameBorderRedraw( const bool viewWorld )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-    if ( viewWorld ) {
+    if ( viewWorldMode ) {
         dstpt.y = 464;
     }
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );

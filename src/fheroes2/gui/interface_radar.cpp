@@ -360,8 +360,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
     else
         sw = GetChunkSize( areah, world_h );
 
-    fheroes2::Image sf( sw, sw );
-
     for ( uint32_t yy = 0; yy < world_h; yy += stepy ) {
         const int dsty = rect.y + offset.y + ( yy * areah ) / world_h; // calculate once per row
 
@@ -423,8 +421,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             const int dstx = rect.x + offset.x + ( xx * areaw ) / world_w;
 
             if ( sw > 1 ) {
-                sf.fill( fillColor );
-                fheroes2::Blit( sf, display, dstx, dsty );
+                fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
             }
             else {
                 if ( dstx < display.width() && dsty < display.height() )

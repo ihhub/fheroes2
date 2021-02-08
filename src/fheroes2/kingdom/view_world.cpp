@@ -32,7 +32,7 @@
 
 #include <cassert>
 
-#define VIEWWORLD_DEBUG_ZOOM_LEVEL  // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
+//#define VIEWWORLD_DEBUG_ZOOM_LEVEL  // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
 namespace
 {
@@ -126,15 +126,14 @@ namespace
         explicit CacheForMapWithResources( const bool revealAll )
         {
 #ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
-            const int cachedLevels = 4;
+            cachedImages.resize( 4 );
 #else
-            const int cachedLevels = 3;
+            cachedImages.resize( 3 );
 #endif
             LocalEvent::Get().PauseCycling();
 
-            cachedImages.resize( cachedLevels );
-            for ( int i = 0; i < cachedLevels; ++i ) {
-                cachedImages[i] = fheroes2::Image( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
+            for ( size_t i = 0; i < cachedImages.size(); ++i ) {
+                cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
                 cachedImages[i]._disableTransformLayer();
             }
 
@@ -166,7 +165,7 @@ namespace
                     gamearea.SetCenterInPixels( Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
-                    for ( int i = 0; i < cachedLevels; ++i ) {
+                    for ( size_t i = 0; i < cachedImages.size(); ++i ) {
                         const int blockSizeResizedX = blockSizeX * tileSizePerZoomLevel[i] / TILEWIDTH;
                         const int blockSizeResizedY = blockSizeY * tileSizePerZoomLevel[i] / TILEWIDTH;
                         fheroes2::Resize( temporaryImg, 0, 0, temporaryImg.width(), temporaryImg.height(), cachedImages[i], x * tileSizePerZoomLevel[i] / TILEWIDTH,
@@ -196,23 +195,19 @@ namespace
         fheroes2::Blit( image, inPos, display, outPos, outSize );
 
         // now, blit black pixels outside of the main view
-        fheroes2::Sprite leftBar( outPos.x - BORDERWIDTH, outSize.height, BORDERWIDTH, BORDERWIDTH );
-        leftBar.fill( 0 );
-        fheroes2::Blit( leftBar, display, leftBar.x(), leftBar.y() );
+        // left bar
+        fheroes2::Fill( display, BORDERWIDTH, BORDERWIDTH, outPos.x - BORDERWIDTH, outSize.height, 0 );
 
-        fheroes2::Sprite rightBar( display.width() - BORDERWIDTH + offsetPixelsX - image.width(), outSize.height, BORDERWIDTH - offsetPixelsX + image.width(),
-                                   BORDERWIDTH );
-        rightBar.fill( 0 );
-        fheroes2::Blit( rightBar, display, rightBar.x(), rightBar.y() );
+        // right bar
+        fheroes2::Fill( display, BORDERWIDTH - offsetPixelsX + image.width(), BORDERWIDTH, display.width() - BORDERWIDTH + offsetPixelsX - image.width(), outSize.height,
+                        0 );
 
-        fheroes2::Sprite topBar( display.width(), outPos.y - BORDERWIDTH, BORDERWIDTH, BORDERWIDTH );
-        topBar.fill( 0 );
-        fheroes2::Blit( topBar, display, topBar.x(), topBar.y() );
+        // top bar
+        fheroes2::Fill( display, BORDERWIDTH, BORDERWIDTH, display.width(), outPos.y - BORDERWIDTH, 0 );
 
-        fheroes2::Sprite bottomBar( outSize.width, display.height() - BORDERWIDTH + offsetPixelsY - image.height(), BORDERWIDTH,
-                                    BORDERWIDTH - offsetPixelsY + image.height() );
-        bottomBar.fill( 0 );
-        fheroes2::Blit( bottomBar, display, bottomBar.x(), bottomBar.y() );
+        // bottom bar
+        fheroes2::Fill( display, BORDERWIDTH, BORDERWIDTH - offsetPixelsY + image.height(), outSize.width,
+                        display.height() - BORDERWIDTH + offsetPixelsY - image.height(), 0 );
     }
 
     void DrawObjectsIcons( const int color, const ViewWorldMode mode, const ViewWorld::ZoomROIs & ROI )
