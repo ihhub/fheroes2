@@ -496,7 +496,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
 
-                fheroes2::Image image = border;
+                fheroes2::Sprite image = border;
                 fheroes2::Blit( artifact, image, 5, 5 );
 
                 fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );
@@ -568,22 +568,22 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     tp.x = pos_rt.x + ( pos_rt.width - text.w() ) / 2;
     tp.y = pos_rt.y + 11;
     text.Blit( tp.x, tp.y );
-    str = _( "Attack" ) + std::string( ": " ) + GetString( hero.GetAttack() );
+    str = _( "Attack" ) + std::string( ": " ) + std::to_string( hero.GetAttack() );
     text.Set( str );
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 40;
     text.Blit( tp.x, tp.y );
-    str = _( "Defense" ) + std::string( ": " ) + GetString( hero.GetDefense() );
+    str = _( "Defense" ) + std::string( ": " ) + std::to_string( hero.GetDefense() );
     text.Set( str );
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 51;
     text.Blit( tp.x, tp.y );
-    str = _( "Spell Power" ) + std::string( ": " ) + GetString( hero.GetPower() );
+    str = _( "Spell Power" ) + std::string( ": " ) + std::to_string( hero.GetPower() );
     text.Set( str );
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 62;
     text.Blit( tp.x, tp.y );
-    str = _( "Knowledge" ) + std::string( ": " ) + GetString( hero.GetKnowledge() );
+    str = _( "Knowledge" ) + std::string( ": " ) + std::to_string( hero.GetKnowledge() );
     text.Set( str );
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 73;
@@ -598,7 +598,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 95;
     text.Blit( tp.x, tp.y );
-    str = _( "Spell Points" ) + std::string( ": " ) + GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() );
+    str = _( "Spell Points" ) + std::string( ": " ) + std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() );
     text.Set( str );
     tp.x = pos_rt.x + 190 - text.w() / 2;
     tp.y = pos_rt.y + 117;

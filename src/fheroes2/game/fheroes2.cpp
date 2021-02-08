@@ -144,7 +144,7 @@ int main( int argc, char ** argv )
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();
 
-            display.resize( conf.VideoMode().w, conf.VideoMode().h );
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
@@ -277,6 +277,10 @@ bool ReadConfigs( void )
         if ( System::IsFile( *it ) ) {
             if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
+                const std::string & externalCommand = conf.externalMusicCommand();
+                if ( !externalCommand.empty() )
+                    Music::SetExtCommand( externalCommand );
+
                 break;
             }
         }

@@ -223,7 +223,6 @@ public:
 
     bool FullScreen( void ) const;
     bool KeepAspectRatio( void ) const;
-    bool ChangeFullscreenResolution( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -302,7 +301,7 @@ public:
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
-    const Size & VideoMode( void ) const;
+    const fheroes2::Size & VideoMode() const;
 
     void SetDebug( int );
     void SetUnicode( bool );
@@ -322,6 +321,7 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -352,6 +352,7 @@ public:
     const std::string & MapsFile( void ) const;
     const std::string & MapsName( void ) const;
     const std::string & MapsDescription( void ) const;
+    const std::string & externalMusicCommand() const;
     int MapsDifficulty( void ) const;
     Size MapsSize( void ) const;
     bool GameStartWithHeroes( void ) const;
@@ -408,7 +409,7 @@ private:
     BitModes opt_addons;
 
     int debug;
-    Size video_mode;
+    fheroes2::Size video_mode;
     int game_difficulty;
 
     std::string path_program;
@@ -419,6 +420,7 @@ private:
     std::string font_small;
     std::string force_lang;
     std::string _loadedFileLanguage; // not a part of save or configuration file
+    std::string _externalMusicCommand;
     std::string maps_charset;
     int size_normal;
     int size_small;

@@ -65,7 +65,7 @@ struct HeroRow
         hero = ptr;
 
         armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
-        armyBar->SetBackground( Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
+        armyBar->SetBackground( fheroes2::Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
@@ -133,7 +133,7 @@ void StatsHeroesList::SetContent( KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
-    for ( auto & hero : heroes )
+    for ( Heroes * hero : heroes )
         content.emplace_back( hero );
     SetListContent( content );
 }
@@ -213,16 +213,16 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
         // base info
         Interface::RedrawHeroesIcon( *row.hero, dstx + 5, dsty + 4 );
 
-        text.Set( GetString( row.hero->GetAttack() ) );
+        text.Set( std::to_string( row.hero->GetAttack() ) );
         text.Blit( dstx + 90 - text.w(), dsty + 20 );
 
-        text.Set( GetString( row.hero->GetDefense() ) );
+        text.Set( std::to_string( row.hero->GetDefense() ) );
         text.Blit( dstx + 125 - text.w(), dsty + 20 );
 
-        text.Set( GetString( row.hero->GetPower() ) );
+        text.Set( std::to_string( row.hero->GetPower() ) );
         text.Blit( dstx + 160 - text.w(), dsty + 20 );
 
-        text.Set( GetString( row.hero->GetKnowledge() ) );
+        text.Set( std::to_string( row.hero->GetKnowledge() ) );
         text.Blit( dstx + 195 - text.w(), dsty + 20 );
 
         // primary skills info
@@ -295,7 +295,7 @@ struct CstlRow
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
         armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
-        armyBarGuard->SetBackground( Size( 41, 41 ), fill );
+        armyBarGuard->SetBackground( fheroes2::Size( 41, 41 ), fill );
         armyBarGuard->SetColRows( 5, 1 );
         armyBarGuard->SetHSpace( -1 );
 
@@ -303,7 +303,7 @@ struct CstlRow
 
         if ( heroes.Guest() ) {
             armyBarGuest.reset( new ArmyBar( &heroes.Guest()->GetArmy(), true, false ) );
-            armyBarGuest->SetBackground( Size( 41, 41 ), fill );
+            armyBarGuest->SetBackground( fheroes2::Size( 41, 41 ), fill );
             armyBarGuest->SetColRows( 5, 1 );
             armyBarGuest->SetHSpace( -1 );
         }
@@ -311,7 +311,7 @@ struct CstlRow
             armyBarGuest.reset();
         }
 
-        dwellingsBar.reset( new DwellingsBar( *castle, Size( 39, 52 ) ) );
+        dwellingsBar.reset( new DwellingsBar( *castle, fheroes2::Size( 39, 52 ) ) );
         dwellingsBar->SetColRows( 6, 1 );
         dwellingsBar->SetHSpace( 2 );
     }
@@ -355,7 +355,7 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
 
     content.reserve( castles.size() );
 
-    for ( auto & castle : castles )
+    for ( Castle * castle : castles )
         content.emplace_back( castle );
 
     SetListContent( content );
@@ -446,8 +446,8 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
         if ( hero ) {
             Interface::RedrawHeroesIcon( *hero, dstx + 82, dsty + 19 );
             const std::string sep = "-";
-            text.Set( GetString( hero->GetAttack() ) + sep + GetString( hero->GetDefense() ) + sep + GetString( hero->GetPower() ) + sep
-                      + GetString( hero->GetKnowledge() ) );
+            text.Set( std::to_string( hero->GetAttack() ) + sep + std::to_string( hero->GetDefense() ) + sep + std::to_string( hero->GetPower() ) + sep
+                      + std::to_string( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
         else {
@@ -562,28 +562,28 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 4, 422, fheroes2::Display::instance(), pt.x + 4, pt.y + 422, 530, 56 );
 
-    text.Set( GetString( funds.wood ) );
+    text.Set( std::to_string( funds.wood ) );
     text.Blit( pt.x + 56 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.mercury ) );
+    text.Set( std::to_string( funds.mercury ) );
     text.Blit( pt.x + 146 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.ore ) );
+    text.Set( std::to_string( funds.ore ) );
     text.Blit( pt.x + 226 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.sulfur ) );
+    text.Set( std::to_string( funds.sulfur ) );
     text.Blit( pt.x + 294 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.crystal ) );
+    text.Set( std::to_string( funds.crystal ) );
     text.Blit( pt.x + 362 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.gems ) );
+    text.Set( std::to_string( funds.gems ) );
     text.Blit( pt.x + 428 - text.w() / 2, pt.y + 448 );
 
-    text.Set( GetString( funds.gold ) );
+    text.Set( std::to_string( funds.gold ) );
     text.Blit( pt.x + 496 - text.w() / 2, pt.y + 448 );
 
-    text.Set( _( "Gold Per Day:" ) + std::string( " " ) + GetString( myKingdom.GetIncome().Get( Resource::GOLD ) ) );
+    text.Set( _( "Gold Per Day:" ) + std::string( " " ) + std::to_string( myKingdom.GetIncome().Get( Resource::GOLD ) ) );
     text.Blit( pt.x + 180, pt.y + 462 );
 
     std::string msg = _( "Day: %{day}" );

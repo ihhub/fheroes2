@@ -235,7 +235,7 @@ void ExperienceIndicator::Redraw( void )
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
-    Text text( GetString( hero->GetExperience() ), Font::SMALL );
+    Text text( std::to_string( hero->GetExperience() ), Font::SMALL );
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
@@ -273,7 +273,7 @@ void SpellPointsIndicator::Redraw( void )
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
-    Text text( GetString( hero->GetSpellPoints() ) + "/" + GetString( hero->GetMaxSpellPoints() ), Font::SMALL );
+    Text text( std::to_string( hero->GetSpellPoints() ) + "/" + std::to_string( hero->GetMaxSpellPoints() ), Font::SMALL );
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 

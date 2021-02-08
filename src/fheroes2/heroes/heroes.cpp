@@ -47,6 +47,7 @@
 #include "race.h"
 #include "settings.h"
 #include "speed.h"
+#include "text.h"
 #include "world.h"
 
 const char * Heroes::GetName( int id )
@@ -633,7 +634,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
-        const Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
+        const Troop * troop = army.GetSlowestTroop();
 
         if ( troop )
             switch ( troop->GetSpeed() ) {

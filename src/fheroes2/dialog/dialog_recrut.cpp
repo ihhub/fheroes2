@@ -36,16 +36,16 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
 {
     Text text;
 
-    text.Set( GetString( result ), Font::BIG );
+    text.Set( std::to_string( result ), Font::BIG );
     text.Blit( pos.x + 167 - text.w() / 2, pos.y + 160 );
-    const std::string sgold = GetString( paymentCosts.gold ) + " " + "(" + GetString( funds.gold - paymentCosts.gold ) + ")";
+    const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
     if ( rsext ) {
         text.Set( sgold, Font::SMALL );
         text.Blit( pos.x + 133 - text.w() / 2, pos.y + 228 );
 
-        text.Set( GetString( paymentCosts.Get( rsext ) ) + " " + "(" + GetString( funds.Get( rsext ) - paymentCosts.Get( rsext ) ) + ")", Font::SMALL );
+        text.Set( std::to_string( paymentCosts.Get( rsext ) ) + " " + "(" + std::to_string( funds.Get( rsext ) - paymentCosts.Get( rsext ) ) + ")", Font::SMALL );
         text.Blit( pos.x + 195 - text.w() / 2, pos.y + 228 );
     }
     else {
@@ -62,7 +62,7 @@ void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & p
     fheroes2::Point dst_pt( pos.x + px1, pos.y + py1 );
     fheroes2::Blit( sres, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
-    const Text text( GetString( value ), Font::SMALL );
+    const Text text( std::to_string( value ), Font::SMALL );
     dst_pt.x = pos.x + px2 - text.w() / 2;
     dst_pt.y = pos.y + py2;
     text.Blit( dst_pt.x, dst_pt.y );

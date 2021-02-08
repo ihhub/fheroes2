@@ -641,7 +641,7 @@ namespace fheroes2
         }
 
         // Helper function for LoadModifiedICN
-        void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
+        void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
         {
             GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
 
@@ -656,7 +656,7 @@ namespace fheroes2
         {
             switch ( id ) {
             case ICN::ROUTERED:
-                CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
+                CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
                 LoadOriginalICN( id );
@@ -666,16 +666,16 @@ namespace fheroes2
                 }
                 return true;
             case ICN::YELLOW_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::YELLOW_SMALFONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::GRAY_SMALL_FONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
@@ -1001,7 +1001,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::LISTBOX_EVIL:
-                CopyICNWithPalette( id, ICN::LISTBOX, PAL::GRAY );
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     ApplyPalette( _icnVsSprite[id][i], 2 );
                 }

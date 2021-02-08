@@ -23,13 +23,13 @@
 #define H2GAMEDEFS_H
 
 #include "tools.h"
+#include "translations.h"
 #include "types.h"
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 9
 #define INTERMEDIATE_VERSION 0
 
-#include "translations.h"
 #define _( s ) Translation::gettext( s )
 #define _n( a, b, c ) Translation::ngettext( a, b, c )
 

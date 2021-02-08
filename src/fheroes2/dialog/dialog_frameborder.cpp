@@ -31,22 +31,22 @@ Dialog::FrameBorder::FrameBorder( int v )
     , border( v )
 {}
 
-Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
+Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz, const fheroes2::Image & sf )
     : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
     const Rect & currentArea = GetRect();
     RenderOther( sf, fheroes2::Rect( currentArea.x, currentArea.y, currentArea.w, currentArea.h ) );
 }
 
-Dialog::FrameBorder::FrameBorder( const Size & sz )
+Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
     : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
     RenderRegular( GetRect() );
 }
 

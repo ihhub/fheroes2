@@ -106,7 +106,7 @@ public:
         const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
         fheroes2::Blit( sprite_edit, display, pos.x, pos.y + 4 );
 
-        Text text( GetString( vcur ), Font::BIG );
+        Text text( std::to_string( vcur ), Font::BIG );
         text.Blit( pos.x + ( sprite_edit.width() - text.w() ) / 2, pos.y + 5 );
 
         btnUp.draw();

@@ -31,6 +31,7 @@
 #include "kingdom.h"
 #include "mus.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 #include <cassert>
@@ -364,7 +365,7 @@ int GameOver::Result::LocalCheckGameOver( void )
                 if ( res == Game::HIGHSCORES )
                     Game::HighScores();
                 res = Game::CANCEL;
-                Interface::Basic::Get().SetRedraw( REDRAW_ALL );
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
             }
         }
     }

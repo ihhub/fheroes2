@@ -54,7 +54,7 @@ namespace fheroes2
         ScreenPaletteRestorer();
         ~ScreenPaletteRestorer();
 
-        void changePalette( const uint8_t * palette );
+        void changePalette( const uint8_t * palette ) const;
     };
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );

@@ -354,15 +354,15 @@ void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
         mp = 999; // just in case of broken code
     }
 
-    Text text( mp >= 100 ? GetString( mp / 100 ) : " ", Font::SMALL );
+    Text text( mp >= 100 ? std::to_string( mp / 100 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
-    text.Set( mp >= 10 ? GetString( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
+    text.Set( mp >= 10 ? std::to_string( ( mp % 100 ) / 10 ) : " ", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
     tp.y += text.h();
 
-    text.Set( mp > 0 ? GetString( mp % 10 ) : "0", Font::SMALL );
+    text.Set( mp > 0 ? std::to_string( mp % 10 ) : "0", Font::SMALL );
     text.Blit( tp.x - text.w() / 2, tp.y );
 }
 
@@ -417,7 +417,7 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
         const uint32_t spellCost = spell.SpellPoint( &hero );
         const bool isAvailable = heroSpellPoints >= spellCost;
 
-        TextBox box( std::string( spell.GetName() ) + " [" + GetString( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
+        TextBox box( std::string( spell.GetName() ) + " [" + std::to_string( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
         box.Blit( px + ox - 40, py + oy + 25 );
 
         coords.push_back( rect );

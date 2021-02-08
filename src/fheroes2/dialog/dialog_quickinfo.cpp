@@ -50,7 +50,7 @@ std::string GetMinesIncomeString( int type )
         res.append( " " );
         res.append( "(" );
         res.append( value > 0 ? "+" : "-" );
-        res.append( GetString( value ) );
+        res.append( std::to_string( value ) );
         res.append( ")" );
     }
 
@@ -895,7 +895,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += port.height();
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetAttack() ) );
+        text.Set( std::to_string( hero.GetAttack() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -905,7 +905,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetDefense() ) );
+        text.Set( std::to_string( hero.GetDefense() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -915,7 +915,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetPower() ) );
+        text.Set( std::to_string( hero.GetPower() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -925,7 +925,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetKnowledge() ) );
+        text.Set( std::to_string( hero.GetKnowledge() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -935,7 +935,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ) );
+        text.Set( std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -945,7 +945,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetMobilityIndexSprite() ) + "/" + GetString( hero.GetMovePoints() ) + "/" + GetString( hero.GetMaxMovePoints() ) );
+        text.Set( std::to_string( hero.GetMobilityIndexSprite() ) + "/" + std::to_string( hero.GetMovePoints() ) + "/" + std::to_string( hero.GetMaxMovePoints() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 

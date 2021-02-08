@@ -79,7 +79,6 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000200,
     GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00000800,
     GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
     GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
     GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
@@ -131,10 +130,6 @@ const settings_t settingsGeneral[] = {
         "fullscreen",
     },
     {
-        GLOBAL_FULLSCREEN,
-        "full screen",
-    },
-    {
         GLOBAL_USEUNICODE,
         "unicode",
     },
@@ -157,10 +152,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_KEEP_ASPECT_RATIO,
         "keep aspect ratio",
-    },
-    {
-        GLOBAL_CHANGE_FULLSCREEN_RESOLUTION,
-        "change fullscreen resolution",
     },
     {
         0,
@@ -387,15 +378,13 @@ const settings_t settingsFHeroes2[] = {
 
 std::string Settings::GetVersion( void )
 {
-    std::ostringstream os;
-    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION ) << "." << static_cast<int>( INTERMEDIATE_VERSION );
-    return os.str();
+    return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
 }
 
 /* constructor */
 Settings::Settings()
     : debug( 0 )
-    , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -667,9 +656,7 @@ bool Settings::Read( const std::string & filename )
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
     // playmus command
-    sval = config.StrParams( "playmus command" );
-    if ( !sval.empty() )
-        Music::SetExtCommand( sval );
+    _externalMusicCommand = config.StrParams( "playmus command" );
 
     // videodriver
     sval = config.StrParams( "videodriver" );
@@ -699,8 +686,8 @@ bool Settings::Read( const std::string & filename )
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.h = fheroes2::Display::DEFAULT_HEIGHT;
+        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
+        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -709,8 +696,8 @@ bool Settings::Read( const std::string & filename )
             std::string width( value.substr( 0, pos ) );
             std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
 
-            video_mode.w = GetInt( width );
-            video_mode.h = GetInt( height );
+            video_mode.width = GetInt( width );
+            video_mode.height = GetInt( height );
         }
         else {
             DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
@@ -742,7 +729,7 @@ bool Settings::Read( const std::string & filename )
     if ( video_driver.size() )
         video_driver = StringLower( video_driver );
 
-    if ( video_mode.w && video_mode.h )
+    if ( video_mode.width > 0 && video_mode.height > 0 )
         PostLoad();
 
     return true;
@@ -824,10 +811,6 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
-
-    os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-       << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
@@ -1144,6 +1127,16 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
+void Settings::setFullScreen( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_FULLSCREEN );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_FULLSCREEN );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -1233,8 +1226,7 @@ bool Settings::BattleShowMoveShadow( void ) const
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
-/* get video mode */
-const Size & Settings::VideoMode( void ) const
+const fheroes2::Size & Settings::VideoMode() const
 {
     return video_mode;
 }
@@ -1341,6 +1333,11 @@ const std::string & Settings::MapsName( void ) const
 const std::string & Settings::MapsDescription( void ) const
 {
     return current_maps_file.description;
+}
+
+const std::string & Settings::externalMusicCommand() const
+{
+    return _externalMusicCommand;
 }
 
 int Settings::MapsDifficulty( void ) const
@@ -1699,7 +1696,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
+    return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const
@@ -1883,11 +1880,6 @@ bool Settings::FullScreen( void ) const
 bool Settings::KeepAspectRatio( void ) const
 {
     return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
-}
-
-bool Settings::ChangeFullscreenResolution( void ) const
-{
-    return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

@@ -96,7 +96,7 @@ void RowSpells::Redraw( void )
 
             fheroes2::Blit( icon, display, dst.x + 3 + ( dst.w - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            TextBox text( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
+            TextBox text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
         }
     }

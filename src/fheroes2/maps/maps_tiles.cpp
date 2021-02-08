@@ -50,6 +50,7 @@
 #include "race.h"
 #include "settings.h"
 #include "spell.h"
+#include "text.h"
 #include "til.h"
 #include "trees.h"
 #include "world.h"
@@ -1431,9 +1432,13 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, cons
 
 void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw ) const
 {
+    if ( addon.empty() ) {
+        return;
+    }
+
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( ( visibleTileROI & mp ) && !addon.empty() ) {
+    if ( ( visibleTileROI & mp ) ) {
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
             const u8 index = ( *it ).index;
@@ -1468,7 +1473,7 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Rect & visibleTil
             fheroes2::Image sf = PassableViewSurface( tilePassable );
 
             if ( impassableTileRule ) {
-                const Text text( GetString( impassableTileRule ), Font::SMALL );
+                const Text text( std::to_string( impassableTileRule ), Font::SMALL );
                 text.Blit( 13, 13, sf );
             }
 
@@ -1719,7 +1724,8 @@ std::string Maps::Tiles::String( void ) const
     std::ostringstream os;
 
     os << "----------------:--------" << std::endl
-       << "maps index      : " << GetIndex() << ", " << GetString( GetCenter() ) << std::endl
+       << "maps index      : " << GetIndex() << ", "
+       << "point: x(" << GetCenter().x << "), y(" << GetCenter().y << ")" << std::endl
        << "id              : " << uniq << std::endl
        << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
