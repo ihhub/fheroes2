@@ -133,7 +133,7 @@ namespace Battle
         {
             listlog = logs;
         };
-        void SetMessage( const std::string &, bool = false );
+        void SetMessage( const std::string & message, bool top = false );
         void Redraw( void );
         const std::string & GetMessage( void ) const;
 

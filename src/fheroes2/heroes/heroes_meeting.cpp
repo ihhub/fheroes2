@@ -516,8 +516,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     // skip bag artifacts
-    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::ALL );
-    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::ALL );
+    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
+    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
 
     // remove_if for learn spells
     if ( learn.size() ) {
