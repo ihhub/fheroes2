@@ -22,8 +22,6 @@
 #define H2CAMPAIGN_SAVEDATA_H
 
 #include "campaign_scenariodata.h"
-#include "gamedefs.h"
-#include "serialize.h"
 
 namespace Campaign
 {

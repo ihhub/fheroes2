@@ -19,6 +19,9 @@
  ***************************************************************************/
 
 #include "campaign_savedata.h"
+#include "serialize.h"
+#include <algorithm>
+#include <cassert>
 
 namespace Campaign
 {
@@ -50,7 +53,9 @@ namespace Campaign
 
     void CampaignSaveData::addCurrentMapToFinished()
     {
-        _finishedMaps.emplace_back( _currentScenarioID );
+        bool isNotDuplicate = std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioID ) == _finishedMaps.end();
+        if ( isNotDuplicate )
+            _finishedMaps.emplace_back( _currentScenarioID );
     }
 
     void CampaignSaveData::reset()

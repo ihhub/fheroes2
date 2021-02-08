@@ -43,12 +43,10 @@ namespace Campaign
                 break;
 
             const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
-            for ( size_t mapID = 0; mapID < nextMaps.size(); ++mapID ) {
-                if ( nextMaps[mapID] == scenarioID ) {
-                    scenarioIDs.emplace_back( nextMaps[mapID] );
-                    break;
-                }
-            }
+
+            // if any of this scenario's next maps is the one passed as param, then this scenario is a previous scenario
+            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioID ) != nextMaps.end() )
+                scenarioIDs.emplace_back( _scenarios[i].getScenarioID() );
         }
 
         return scenarioIDs;
@@ -56,7 +54,12 @@ namespace Campaign
 
     const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
     {
-        return _scenarios[scenarioID].getNextMaps();
+        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
+            if ( _scenarios[i].getScenarioID() == scenarioID )
+                return _scenarios[i].getNextMaps();
+        }
+
+        return std::vector<int>();
     }
 
     const std::vector<int> CampaignData::getStartingScenarios() const
