@@ -222,6 +222,15 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
                     StringReplace( str, "%{spell}", spell.GetName() );
                     ( *statusCallback )( str );
                 }
+                else if ( displayableSpells == Filter::CMBT ) {
+                    ( *statusCallback )( _( "View Combat Spells" ) );
+                }
+                else if ( displayableSpells == Filter::ADVN ) {
+                    ( *statusCallback )( _( "View Adventure Spells" ) );
+                }
+                else {
+                    ( *statusCallback )( _( "View Spells" ) );
+                }
             }
         }
 
