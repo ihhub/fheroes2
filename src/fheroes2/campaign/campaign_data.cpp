@@ -59,7 +59,7 @@ namespace Campaign
                 return _scenarios[i].getNextMaps();
         }
 
-        return std::vector<int>();
+        return _scenarios[scenarioID].getNextMaps();
     }
 
     const std::vector<int> CampaignData::getStartingScenarios() const
