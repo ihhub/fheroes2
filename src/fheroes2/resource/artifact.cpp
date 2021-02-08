@@ -1010,8 +1010,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             const_cast<Heroes *>( _hero )->EditSpellBook();
         else {
             if ( this->_statusBar != nullptr ) {
-                StatusBar * const statusBar = this->_statusBar;
-                std::function<void( const std::string & )> statusCallback = [statusBar]( const std::string & status ) { statusBar->ShowMessage( status ); };
+                std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
                 _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
             }
             else {
