@@ -1531,12 +1531,12 @@ void World::ProcessNewMap()
         // get first castle position
         Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
 
-        if ( kingdom.GetCastles().size() ) {
+        if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
+            const Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::SANDYSANDY );
 
-            if ( hero ) {
-                const Point & cp = castle->GetCenter();
+            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
                 hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
             }
         }
