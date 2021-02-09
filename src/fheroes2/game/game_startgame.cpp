@@ -155,7 +155,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        ( *it )->OpenDialog( true );
+        castle.OpenDialog( true );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -163,7 +163,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else {
+        else if ( it != myCastles.end() ) {
             basicInterface.SetFocus( *it );
         }
     }
