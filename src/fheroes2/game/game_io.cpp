@@ -255,7 +255,7 @@ bool Game::Load( const std::string & fn )
     u16 end_check = 0;
 
     fz >> World::Get() >> conf;
-    if ( conf.GameType() & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE ) {
+    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE ) {
         fz >> Campaign::CampaignData::Get();
     }
 

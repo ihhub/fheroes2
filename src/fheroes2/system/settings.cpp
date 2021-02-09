@@ -1827,7 +1827,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( Settings::GetWriteableDir( "save" ), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1839,7 +1839,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( Settings::GetWriteableDir( "save" ), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
