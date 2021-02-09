@@ -25,6 +25,14 @@
 
 namespace Campaign
 {
+    CampaignSaveData::CampaignSaveData()
+        : _finishedMaps()
+        , _earnedCampaignAwards()
+        , _currentScenarioID( 0 )
+        , _campaignID( 0 )
+        , _currentScenarioBonus()
+    {}
+
     CampaignSaveData & Campaign::CampaignSaveData::Get()
     {
         static CampaignSaveData instance;
@@ -65,14 +73,6 @@ namespace Campaign
         _currentScenarioID = 0;
         _campaignID = 0;
     }
-
-    CampaignSaveData::CampaignSaveData()
-        : _finishedMaps()
-        , _earnedCampaignAwards()
-        , _currentScenarioID( 0 )
-        , _campaignID( 0 )
-        , _currentScenarioBonus()
-    {}
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
     {
