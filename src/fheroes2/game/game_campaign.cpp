@@ -87,7 +87,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const bool isGoodCampaign = campaignData.isGoodCampaign();
-        const fheroes2::Point trackOffset = fheroes2::Point( top.x + 39, top.y + 294 );
+        const fheroes2::Point trackOffset( top.x + 39, top.y + 294 );
 
         int campaignTrack = ICN::CTRACK00;
         switch ( campaignData.getCampaignID() ) {
