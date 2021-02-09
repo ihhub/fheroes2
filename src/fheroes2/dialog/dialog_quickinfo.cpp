@@ -80,7 +80,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
     }
 
     if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
-        str.append( "\n\n" );
+        str.append( "\n \n" );
         str.append( _( "guarded by %{count} %{monster}" ) );
 
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
