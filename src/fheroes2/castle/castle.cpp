@@ -2799,16 +2799,16 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
     return res;
 }
 
-std::string Castle::buildingStatusMessage( uint32_t buildingId ) const
+std::string Castle::buildingStatusMessage( const uint32_t buildingId ) const
 {
-    Monster buildingInfo( race, buildingId );
-    if ( buildingInfo.GetDwelling() ) {
-        Monster dwellingInfo( race, buildingInfo.GetDwelling() );
-        std::string msg_status = _( "Recruit %{name}" );
-        StringReplace( msg_status, "%{name}", dwellingInfo.GetName() );
-        return msg_status;
-    }
-    else {
+    const Monster buildingInfo( race, buildingId );
+    const uint32_t dwellingId = buildingInfo.GetDwelling();
+    if ( dwellingId != 0 ) {
         return GetStringBuilding( buildingId );
     }
+
+    const Monster monster( race, dwellingId );
+    std::string msgStatus = _( "Recruit %{name}" );
+    StringReplace( msgStatus, "%{name}", monster.GetName() );
+    return msgStatus;
 }

@@ -193,7 +193,10 @@ public:
 
     std::string GetStringBuilding( u32 ) const;
     std::string GetDescriptionBuilding( u32 ) const;
-    std::string buildingStatusMessage( uint32_t ) const;
+
+    // Returns message displayed in the status bar on the castle view
+    // when hover over the building
+    std::string buildingStatusMessage( const uint32_t buildingId ) const;
 
     static const char * GetStringBuilding( u32, int race );
     static const char * GetDescriptionBuilding( u32, int race );
