@@ -275,6 +275,8 @@ bool ReadConfigs( void )
                 if ( !externalCommand.empty() )
                     Music::SetExtCommand( externalCommand );
 
+                LocalEvent & le = LocalEvent::Get();
+                le.SetControllerPointerSpeed( conf.controllerPointerSpeed() );
                 break;
             }
         }

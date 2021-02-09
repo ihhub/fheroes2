@@ -366,6 +366,7 @@ public:
     Point WinsMapsPositionObject( void ) const;
     Point LossMapsPositionObject( void ) const;
     u32 LossCountDays( void ) const;
+    uint32_t controllerPointerSpeed() const;
 
     std::string GetProgramPath( void ) const
     {
