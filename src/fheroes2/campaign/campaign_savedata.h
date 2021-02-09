@@ -18,24 +18,31 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CAMPAIGN_DATA_H
-#define H2CAMPAIGN_DATA_H
+#ifndef H2CAMPAIGN_SAVEDATA_H
+#define H2CAMPAIGN_SAVEDATA_H
 
 #include "campaign_scenariodata.h"
-#include "gamedefs.h"
-#include "maps_fileinfo.h"
-#include "serialize.h"
 
 namespace Campaign
 {
-    class CampaignData
+    class CampaignSaveData
     {
     public:
-        CampaignData();
+        CampaignSaveData();
 
-        const std::string & getCampaignDescription() const
+        const ScenarioBonusData & getCurrentScenarioBonus() const
         {
-            return _campaignDescription;
+            return _currentScenarioBonus;
+        }
+
+        const std::vector<int> & getFinishedMaps() const
+        {
+            return _finishedMaps;
+        }
+
+        const std::vector<std::string> & getEarnedCampaignAwards() const
+        {
+            return _earnedCampaignAwards;
         }
 
         int getCampaignID() const
@@ -43,34 +50,39 @@ namespace Campaign
             return _campaignID;
         }
 
-        bool isGoodCampaign() const
+        int getCurrentScenarioID() const
         {
-            return _isGoodCampaign;
+            return _currentScenarioID;
         }
 
-        const std::vector<ScenarioData> & getAllScenarios() const
+        int getLastCompletedScenarioID() const
         {
-            return _scenarios;
+            return _finishedMaps.back();
         }
 
-        const std::vector<int> getScenariosBefore( const int scenarioID ) const;
-        const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
-        const std::vector<int> getStartingScenarios() const;
+        bool isStarting() const
+        {
+            return _finishedMaps.empty();
+        }
 
-        bool isAllCampaignMapsPresent() const;
-        bool isLastScenario( const int scenarioID ) const;
-        bool isStartingScenario( const int scenarioID ) const;
-
+        void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
+        void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
-        void setCampaignAlignment( const bool isGoodCampaign );
-        void setCampaignDescription( const std::string & campaignDescription );
-        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
+        void addCurrentMapToFinished();
+        void addCampaignAward( const std::string & award );
+        void reset();
+
+        static CampaignSaveData & Get();
 
     private:
+        friend StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data );
+        friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
+
+        std::vector<int> _finishedMaps;
+        std::vector<std::string> _earnedCampaignAwards; // should have its own data format
+        int _currentScenarioID;
         int _campaignID;
-        bool _isGoodCampaign;
-        std::string _campaignDescription;
-        std::vector<ScenarioData> _scenarios;
+        ScenarioBonusData _currentScenarioBonus;
     };
 }
 
