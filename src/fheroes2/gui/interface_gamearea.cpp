@@ -136,7 +136,7 @@ void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image
     }
     else if ( _windowROI & Rect( dstpt, width, height ) ) {
         const Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::Blit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h );
+        fheroes2::Copy( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h );
     }
 }
 
