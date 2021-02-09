@@ -348,8 +348,14 @@ int GameOver::Result::LocalCheckGameOver( void )
         if ( myKingdom.isControlHuman() ) {
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
-                Video::ShowVideo( "WIN.SMK", false );
-                res = conf.GameType() & Game::TYPE_CAMPAIGN ? Game::COMPLETE_CAMPAIGN_SCENARIO : Game::HIGHSCORES;
+
+                if ( conf.GameType() & Game::TYPE_CAMPAIGN ) {
+                    res = Game::COMPLETE_CAMPAIGN_SCENARIO;
+                }
+                else {
+                    Video::ShowVideo( "WIN.SMK", false );
+                    res = Game::HIGHSCORES;
+                }
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );

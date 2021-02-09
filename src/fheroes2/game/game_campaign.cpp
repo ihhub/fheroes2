@@ -297,6 +297,7 @@ int Game::CompleteCampaignScenario()
 int Game::SelectCampaignScenario()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+    display.fill( 0 );
     Settings & conf = Settings::Get();
 
     // cursor
