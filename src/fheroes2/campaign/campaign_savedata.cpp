@@ -53,7 +53,7 @@ namespace Campaign
 
     void CampaignSaveData::addCurrentMapToFinished()
     {
-        bool isNotDuplicate = std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioID ) == _finishedMaps.end();
+        const bool isNotDuplicate = std::find( _finishedMaps.begin(), _finishedMaps.end(), _currentScenarioID ) == _finishedMaps.end();
         if ( isNotDuplicate )
             _finishedMaps.emplace_back( _currentScenarioID );
     }
