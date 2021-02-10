@@ -310,6 +310,9 @@ namespace
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player.GetColor(), scenarioBonus._subType );
                 break;
+            case Campaign::ScenarioBonusData::SKILL:
+                kingdom.GetBestHero()->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                break;
             default:
                 assert( 0 );
             }

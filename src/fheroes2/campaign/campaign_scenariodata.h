@@ -43,7 +43,8 @@ namespace Campaign
             ARTIFACT,
             TROOP,
             SPELL,
-            STARTING_RACE
+            STARTING_RACE,
+            SKILL
         };
 
         uint32_t _type;
