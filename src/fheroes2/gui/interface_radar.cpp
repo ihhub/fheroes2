@@ -233,7 +233,7 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     cursorArea.hide();
     fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
     RedrawObjects( Players::FriendColors(), mode );
-    Rect roiInTiles = roi.GetROIinTiles();
+    const Rect roiInTiles = roi.GetROIinTiles();
     RedrawCursor( &roiInTiles );
 }
 
@@ -366,15 +366,15 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
         for ( uint32_t xx = 0; xx < world_w; xx += stepx ) {
             const Maps::Tiles & tile = world.GetTiles( xx, yy );
 #ifdef WITH_DEBUG
-            const bool visible_tile = IS_DEVEL() || !tile.isFog( color ) || revealAll;
+            const bool visibleTile = IS_DEVEL() || !tile.isFog( color ) || revealAll;
 #else
-            const bool visible_tile = !tile.isFog( color ) || revealAll;
+            const bool visibleTile = !tile.isFog( color ) || revealAll;
 #endif
             uint8_t fillColor = 0;
 
             switch ( tile.GetObject( revealHeroes ) ) {
             case MP2::OBJ_HEROES: {
-                if ( visible_tile || revealHeroes ) {
+                if ( visibleTile || revealHeroes ) {
                     const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                     if ( hero )
                         fillColor = GetPaletteIndexFromColor( hero->GetColor() );
@@ -383,7 +383,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
-                if ( visible_tile || revealTowns ) {
+                if ( visibleTile || revealTowns ) {
                     const Castle * castle = world.GetCastle( tile.GetCenter() );
                     if ( castle )
                         fillColor = GetPaletteIndexFromColor( castle->GetColor() );
@@ -395,25 +395,25 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJ_ALCHEMYLAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
-                if ( visible_tile || revealMines ) {
+                if ( visibleTile || revealMines ) {
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
 
             case MP2::OBJ_ARTIFACT:
-                if ( visible_tile || revealArtifacts ) {
+                if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
 
             case MP2::OBJ_RESOURCE:
-                if ( visible_tile || revealResources ) {
+                if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
 
             default:
-                if ( visible_tile ) {
+                if ( visibleTile ) {
                     continue;
                 }
             }
@@ -532,7 +532,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     // move cursor
     if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
-            const fheroes2::Point prevCoordsTopLeft = fheroes2::Point( initROI.x, initROI.y );
+            const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
             const Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
@@ -545,8 +545,9 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 }
             }
         }
-        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) )
+        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
+        }
         else if ( le.MouseWheelUp() ) {
             return roi.ChangeZoom( true );
         }

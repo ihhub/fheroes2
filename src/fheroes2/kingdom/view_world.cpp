@@ -183,14 +183,14 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<int>( ROI._zoomLevel )];
 
-        const Rect & ROIScreen = Interface::Basic::Get().GetGameArea().GetROI();
+        const Rect & roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
 
         const int offsetPixelsX = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int offsetPixelsY = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
 
         const fheroes2::Point inPos( offsetPixelsX < 0 ? 0 : offsetPixelsX, offsetPixelsY < 0 ? 0 : offsetPixelsY );
         const fheroes2::Point outPos( BORDERWIDTH + ( offsetPixelsX < 0 ? -offsetPixelsX : 0 ), BORDERWIDTH + ( offsetPixelsY < 0 ? -offsetPixelsY : 0 ) );
-        const fheroes2::Size outSize( ROIScreen.w + 2 * BORDERWIDTH + RADARWIDTH, ROIScreen.h );
+        const fheroes2::Size outSize( roiScreen.w + 2 * BORDERWIDTH + RADARWIDTH, roiScreen.h );
 
         fheroes2::Blit( image, inPos, display, outPos, outSize );
 
@@ -370,9 +370,7 @@ ViewWorld::ZoomROIs::ZoomROIs( const ViewWorld::ZoomLevel zoomLevel, const fhero
 
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
-    fheroes2::Point newCenter = centerInPixels;
-    newCenter.x = clamp( newCenter.x, 0, world.w() * TILEWIDTH );
-    newCenter.y = clamp( newCenter.y, 0, world.h() * TILEWIDTH );
+    const fheroes2::Point newCenter( clamp( centerInPixels.x, 0, world.w() * TILEWIDTH ), clamp( centerInPixels.y, 0, world.h() * TILEWIDTH ) );
 
     if ( newCenter == _center ) {
         return false;
@@ -390,10 +388,8 @@ bool ViewWorld::ZoomROIs::ChangeZoom( const bool zoomIn, const bool cycle )
     if ( newLevel == _zoomLevel ) {
         return false;
     }
-    else {
-        _zoomLevel = newLevel;
-        return true;
-    }
+    _zoomLevel = newLevel;
+    return true;
 }
 
 const fheroes2::Rect & ViewWorld::ZoomROIs::GetROIinPixels() const
@@ -421,7 +417,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
 
     const Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const Rect visibleScreenInPixels = interface.GetGameArea().GetROI();
+    const Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
 
     // Initial view is centered on where the player is centered
     fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.w / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.h / 2 );
@@ -439,7 +435,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     const int oldcursor = cursor.Themes();
     cursor.SetThemes( Cursor::POINTER );
 
-    CacheForMapWithResources cache = CacheForMapWithResources( mode == ViewWorldMode::ViewAll );
+    CacheForMapWithResources cache( mode == ViewWorldMode::ViewAll );
 
     DrawWorld( currentROI, cache );
     DrawObjectsIcons( color, mode, currentROI );
