@@ -22,7 +22,9 @@
 #include "artifact.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
+#include "race.h"
 #include "resource.h"
+#include "spell.h"
 #include <cassert>
 
 namespace Campaign
@@ -72,6 +74,12 @@ namespace Campaign
             break;
         case ScenarioBonusData::TROOP:
             objectName = Monster( _subType ).GetPluralName( _amount );
+            break;
+        case ScenarioBonusData::SPELL:
+            objectName = Spell( _subType ).GetName();
+            break;
+        case ScenarioBonusData::STARTING_RACE:
+            objectName = Race::String( _subType );
             break;
         default:
             assert( 0 ); // some new bonus?

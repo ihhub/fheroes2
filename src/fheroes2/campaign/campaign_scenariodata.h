@@ -41,7 +41,9 @@ namespace Campaign
         {
             RESOURCES,
             ARTIFACT,
-            TROOP
+            TROOP,
+            SPELL,
+            STARTING_RACE
         };
 
         uint32_t _type;
