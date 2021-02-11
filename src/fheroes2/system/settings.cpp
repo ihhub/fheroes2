@@ -1387,7 +1387,7 @@ u32 Settings::LossCountDays( void ) const
     return current_maps_file.LossCountDays();
 }
 
-uint32_t Settings::controllerPointerSpeed() const
+int Settings::controllerPointerSpeed() const
 {
     return _controllerPointerSpeed;
 }
