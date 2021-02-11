@@ -31,7 +31,6 @@
 #include "interface_radar.h"
 #include "settings.h"
 #include "text.h"
-#include "view_world.h"
 #include "world.h"
 
 namespace
