@@ -59,7 +59,6 @@ namespace Interface
 
         void SavePosition( void );
         void Generate( void );
-        void RedrawObjects( int color = 0xFF ) const;
         void RedrawObjects( int color, ViewWorldMode flags ) const;
 
         void ChangeAreaSize( const Size & );
