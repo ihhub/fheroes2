@@ -457,10 +457,10 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
     LocalEvent & le = LocalEvent::Get();
     const Rect & rect = GetArea();
 
-    const fheroes2::Rect initROI = roi.GetROIinPixels();
     // move cursor
     if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+            const fheroes2::Rect initROI = roi.GetROIinPixels();
             const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
             const Point & pt = le.GetMouseCursor();
 
