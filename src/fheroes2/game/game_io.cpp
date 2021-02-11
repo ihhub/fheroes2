@@ -256,7 +256,7 @@ bool Game::Load( const std::string & fn )
 
     fz >> World::Get() >> conf;
     if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE ) {
-        fz >> Campaign::CampaignData::Get();
+        fz >> Campaign::CampaignSaveData::Get();
     }
 
     fz >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
