@@ -225,8 +225,8 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const int32_t world_w = world.w();
-        const int32_t world_h = world.h();
+        const int32_t worldWidth = world.w();
+        const int32_t worldHeight = world.h();
 
         const Rect roiPixels = ROI.GetROIinPixels();
 
@@ -239,10 +239,10 @@ namespace
         const int32_t marginForRightSide = ( 2 * BORDERWIDTH + RADARWIDTH ) / tileSize + 1;
 
         // add a margin of 2 tiles because icons outside of view can still show on the view
-        const int32_t minTileX = clamp( roiTiles.x - 2, 0, world_w );
-        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.w + marginForRightSide + 2, 0, world_w );
-        const int32_t minTileY = clamp( roiTiles.y - 2, 0, world_h );
-        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.h + 2, 0, world_h );
+        const int32_t minTileX = clamp( roiTiles.x - 2, 0, worldWidth );
+        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.w + marginForRightSide + 2, 0, worldWidth );
+        const int32_t minTileY = clamp( roiTiles.y - 2, 0, worldHeight );
+        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.h + 2, 0, worldHeight );
 
         for ( int32_t posY = minTileY; posY < maxTileY; ++posY ) {
             const int dsty = posY * tileSize - offsetY + BORDERWIDTH;
@@ -262,7 +262,7 @@ namespace
                     if ( revealHeroes || !tile.isFog( color ) ) {
                         const Heroes * hero = world.GetHeroes( tile.GetCenter() );
                         if ( hero ) {
-                            int colorOffset = colorToOffsetICN( hero->GetColor() );
+                            const int colorOffset = colorToOffsetICN( hero->GetColor() );
                             index = colorOffset >= 0 ? 7 + colorOffset : -1;
 
                             // handle case of hero above town/mine :
@@ -271,7 +271,7 @@ namespace
                             case MP2::OBJ_MINES:
                             case MP2::OBJ_SAWMILL:
                                 if ( revealMines || !tile.isFog( color ) ) { // draw mine now, hero on top after the switch
-                                    int colorOffsetForMine = colorToOffsetICN( tile.QuantityColor() );
+                                    const int colorOffsetForMine = colorToOffsetICN( tile.QuantityColor() );
                                     const fheroes2::Sprite & mineSprite = fheroes2::AGG::GetICN( icnBase, colorOffsetForMine );
                                     fheroes2::Blit( mineSprite, display, dstx, dsty );
                                 }
