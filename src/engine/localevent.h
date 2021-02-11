@@ -275,7 +275,9 @@ public:
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
-        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+        if ( newSpeed > 0 ) {
+            _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+        }
     }
 
 private:
