@@ -208,6 +208,7 @@ int Interface::Basic::EventAdventureDialog( void )
     Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
         break;
 
     case Dialog::PUZZLE:
