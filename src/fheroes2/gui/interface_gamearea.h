@@ -79,6 +79,8 @@ namespace Interface
         void SetScroll( int );
 
         void SetCenter( const Point & point );
+
+        // Do not call this method unless it's needed for manual setup of the position
         void SetCenterInPixels( const Point & point );
 
         void SetRedraw( void ) const;
