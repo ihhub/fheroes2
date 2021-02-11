@@ -27,7 +27,6 @@
 #include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "localevent.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -444,7 +443,6 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
     std::string sval;
     int ival;
-    LocalEvent & le = LocalEvent::Get();
 
     if ( !config.Load( filename ) )
         return false;
@@ -663,25 +661,6 @@ bool Settings::Read( const std::string & filename )
     if ( !sval.empty() )
         video_driver = sval;
 
-    // pocketpc
-    if ( PocketPC() ) {
-        ival = config.IntParams( "pointer offset x" );
-        if ( ival )
-            le.SetMouseOffsetX( ival );
-
-        ival = config.IntParams( "pointer offset y" );
-        if ( ival )
-            le.SetMouseOffsetY( ival );
-
-        ival = config.IntParams( "tap delay" );
-        if ( ival )
-            le.SetTapDelayForRightClickEmulation( ival );
-
-        sval = config.StrParams( "pointer rotate fix" );
-        if ( !sval.empty() )
-            System::SetEnvironment( "GAPI_POINTER_FIX", sval.c_str() );
-    }
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -710,7 +689,6 @@ bool Settings::Read( const std::string & filename )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
             _controllerPointerSpeed = 0;
-        le.SetControllerPointerSpeed( _controllerPointerSpeed );
     }
 
 #ifndef WITH_TTF
@@ -1408,6 +1386,11 @@ Point Settings::LossMapsPositionObject( void ) const
 u32 Settings::LossCountDays( void ) const
 {
     return current_maps_file.LossCountDays();
+}
+
+int Settings::controllerPointerSpeed() const
+{
+    return _controllerPointerSpeed;
 }
 
 void Settings::SetUnicode( bool f )
