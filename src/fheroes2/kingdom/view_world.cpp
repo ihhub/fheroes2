@@ -159,6 +159,8 @@ namespace
                 drawingFlags &= ~Interface::RedrawLevelType::LEVEL_FOG;
             }
 
+            drawingFlags ^= Interface::RedrawLevelType::LEVEL_HEROES;
+
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
                 for ( int y = 0; y < worldHeightPixels; y += blockSizeY ) {
@@ -429,7 +431,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
 
-    ZoomROIs currentROI = ZoomROIs( ZoomLevel::ZoomLevel2, viewCenterInPixels );
+    ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
 
     Cursor & cursor = Cursor::Get();
     const int oldcursor = cursor.Themes();
