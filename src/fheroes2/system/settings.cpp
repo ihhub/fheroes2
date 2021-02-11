@@ -1883,12 +1883,6 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
 
-<<<<<<< HEAD
-    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
-        msg >> Campaign::CampaignSaveData::Get();
-
-=======
->>>>>>> Remove depedency on game.h and campaign_data.h
 #ifndef WITH_DEBUG
     conf.debug = debug;
 #endif
