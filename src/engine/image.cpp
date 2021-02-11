@@ -238,7 +238,6 @@ namespace
         if ( x > widthOut || y > heightOut )
             return false;
 
-
         if ( x + width > widthOut ) {
             const int32_t offsetX = x + width - widthOut;
             if ( offsetX >= width )
