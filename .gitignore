@@ -65,3 +65,6 @@ fheroes2.cfg
 
 # demo directory
 script/demo/demo
+
+# Mac magic folders
+.DS_Store
