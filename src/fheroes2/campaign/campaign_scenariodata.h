@@ -39,7 +39,7 @@ namespace Campaign
     public:
         enum
         {
-            RESOURCES,
+            RESOURCES = 0,
             ARTIFACT,
             TROOP,
             SPELL,
