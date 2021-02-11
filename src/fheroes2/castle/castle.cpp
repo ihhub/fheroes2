@@ -2798,3 +2798,16 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
 
     return res;
 }
+
+std::string Castle::buildingStatusMessage( const uint32_t buildingId ) const
+{
+    // Check if building is a monster dwelling or its upgraded version
+    if ( ( buildingId & DWELLING_MONSTERS ) == 0 && ( buildingId & DWELLING_UPGRADES ) == 0 ) {
+        return GetStringBuilding( buildingId );
+    }
+
+    const Monster monster( race, buildingId );
+    std::string msgStatus = _( "Recruit %{name}" );
+    StringReplace( msgStatus, "%{name}", monster.GetMultiName() );
+    return msgStatus;
+}
