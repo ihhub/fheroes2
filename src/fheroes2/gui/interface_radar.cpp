@@ -34,6 +34,22 @@
 #include "view_world.h"
 #include "world.h"
 
+namespace
+{
+    int GetChunkSize( int size1, int size2 )
+    {
+        if ( size1 > size2 ) {
+            const int res = size1 / size2;
+            if ( ( size1 % size2 ) * 10 > size2 ) {
+                return res + 1;
+            }
+            return res;
+        }
+
+        return 1;
+    }
+}
+
 #define RADARCOLOR 0xB5 // index palette
 #define COLOR_DESERT 0x76
 #define COLOR_SNOW 0x0D
@@ -220,7 +236,7 @@ void Interface::Radar::Redraw()
         else {
             cursorArea.hide();
             fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
-            RedrawObjects( Players::FriendColors() );
+            RedrawObjects( Players::FriendColors(), ViewWorldMode::OnlyVisible );
             RedrawCursor();
         }
     }
@@ -237,96 +253,6 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     RedrawCursor( &roiInTiles );
 }
 
-int GetChunkSize( int size1, int size2 )
-{
-    int res = 1;
-    if ( size1 > size2 ) {
-        res = size1 / size2;
-        if ( ( size1 % size2 ) * 10 > size2 )
-            res += 1;
-    }
-
-    return res;
-}
-
-void Interface::Radar::RedrawObjects( int color ) const
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Rect & rect = GetArea();
-    const s32 world_w = world.w();
-    const s32 world_h = world.h();
-    const int areaw = ( offset.x ? rect.w - 2 * offset.x : rect.w );
-    const int areah = ( offset.y ? rect.h - 2 * offset.y : rect.h );
-
-    int stepx = world_w / rect.w;
-    int stepy = world_h / rect.h;
-
-    if ( 0 == stepx )
-        stepx = 1;
-    if ( 0 == stepy )
-        stepy = 1;
-
-    int sw = 0;
-
-    if ( world_w >= world_h )
-        sw = GetChunkSize( areaw, world_w );
-    else
-        sw = GetChunkSize( areah, world_h );
-
-    for ( s32 yy = 0; yy < world_h; yy += stepy ) {
-        const int dsty = rect.y + offset.y + ( yy * areah ) / world_h; // calculate once per row
-
-        for ( s32 xx = 0; xx < world_w; xx += stepx ) {
-            const Maps::Tiles & tile = world.GetTiles( xx, yy );
-#ifdef WITH_DEBUG
-            bool show_tile = IS_DEVEL() || !tile.isFog( color );
-#else
-            const bool show_tile = !tile.isFog( color );
-#endif
-            uint8_t fillColor = 0;
-
-            if ( show_tile ) {
-                switch ( tile.GetObject() ) {
-                case MP2::OBJ_HEROES: {
-                    const Heroes * hero = world.GetHeroes( tile.GetCenter() );
-                    if ( hero )
-                        fillColor = GetPaletteIndexFromColor( hero->GetColor() );
-                } break;
-
-                case MP2::OBJ_CASTLE:
-                case MP2::OBJN_CASTLE: {
-                    const Castle * castle = world.GetCastle( tile.GetCenter() );
-                    if ( castle )
-                        fillColor = GetPaletteIndexFromColor( castle->GetColor() );
-                } break;
-
-                case MP2::OBJ_DRAGONCITY:
-                case MP2::OBJ_LIGHTHOUSE:
-                case MP2::OBJ_ALCHEMYLAB:
-                case MP2::OBJ_MINES:
-                case MP2::OBJ_SAWMILL:
-                    fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
-                    break;
-
-                default:
-                    continue;
-                }
-            }
-
-            const int dstx = rect.x + offset.x + ( xx * areaw ) / world_w;
-
-            if ( sw > 1 ) {
-                fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
-            }
-            else {
-                if ( dstx < display.width() && dsty < display.height() )
-                    fheroes2::SetPixel( display, dstx, dsty, fillColor );
-            }
-        }
-    }
-}
-
-// Redrawing method for "View World".
 void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 {
     const bool revealAll = flags == ViewWorldMode::ViewAll;
@@ -340,13 +266,13 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const uint32_t world_w = world.w();
-    const uint32_t world_h = world.h();
+    const int32_t worldWidth = world.w();
+    const int32_t worldHeight = world.h();
     const int areaw = ( offset.x ? rect.w - 2 * offset.x : rect.w );
     const int areah = ( offset.y ? rect.h - 2 * offset.y : rect.h );
 
-    int stepx = world_w / rect.w;
-    int stepy = world_h / rect.h;
+    int stepx = worldWidth / rect.w;
+    int stepy = worldHeight / rect.h;
 
     if ( 0 == stepx )
         stepx = 1;
@@ -355,20 +281,24 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 
     int sw = 0;
 
-    if ( world_w >= world_h )
-        sw = GetChunkSize( areaw, world_w );
+    if ( worldWidth >= worldHeight )
+        sw = GetChunkSize( areaw, worldWidth );
     else
-        sw = GetChunkSize( areah, world_h );
+        sw = GetChunkSize( areah, worldHeight );
 
-    for ( uint32_t yy = 0; yy < world_h; yy += stepy ) {
-        const int dsty = rect.y + offset.y + ( yy * areah ) / world_h; // calculate once per row
+    const int32_t offsetX = rect.x + offset.x;
+    const int32_t offsetY = rect.y + offset.y;
 
-        for ( uint32_t xx = 0; xx < world_w; xx += stepx ) {
-            const Maps::Tiles & tile = world.GetTiles( xx, yy );
+    for ( int32_t y = 0; y < worldHeight; y += stepy ) {
+        const int dsty = offsetY + ( y * areah ) / worldHeight; // calculate once per row
+
+        int tileIndex = y * worldWidth;
+        for ( int32_t x = 0; x < worldWidth; x += stepx, tileIndex += stepx ) {
+            const Maps::Tiles & tile = world.GetTiles( tileIndex );
 #ifdef WITH_DEBUG
-            const bool visibleTile = IS_DEVEL() || !tile.isFog( color ) || revealAll;
+            const bool visibleTile = revealAll || IS_DEVEL() || !tile.isFog( color );
 #else
-            const bool visibleTile = !tile.isFog( color ) || revealAll;
+            const bool visibleTile = revealAll || !tile.isFog( color );
 #endif
             uint8_t fillColor = 0;
 
@@ -418,7 +348,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
             }
 
-            const int dstx = rect.x + offset.x + ( xx * areaw ) / world_w;
+            const int dstx = offsetX + ( x * areaw ) / worldWidth;
 
             if ( sw > 1 ) {
                 fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
