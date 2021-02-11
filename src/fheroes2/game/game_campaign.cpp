@@ -26,6 +26,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -33,24 +34,62 @@
 namespace
 {
     // TODO: Implement bonus data for each scenario
-    std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int /*scenarioID*/ )
+    std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int scenarioID )
     {
         std::vector<Campaign::ScenarioBonusData> bonus;
 
-        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+        switch ( scenarioID ) {
+        case 0:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 1:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
+            break;
+        case 2:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
+            break;
+        case 3:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
+            break;
+        }
 
         return bonus;
     }
 
-    std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int /*scenarioID*/ )
+    std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
     {
         std::vector<Campaign::ScenarioBonusData> bonus;
 
-        bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
-        bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+        switch ( scenarioID ) {
+        case 0:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
+            break;
+        case 1:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
+            break;
+        case 2:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::MASSCURSE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DEFENDER_HELM, 1 );
+            break;
+        case 3:
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
+            break;
+        }
 
         return bonus;
     }
@@ -265,6 +304,15 @@ namespace
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 break;
+            case Campaign::ScenarioBonusData::SPELL:
+                kingdom.GetBestHero()->AppendSpellToBook( scenarioBonus._subType, true );
+                break;
+            case Campaign::ScenarioBonusData::STARTING_RACE:
+                Players::SetPlayerRace( player.GetColor(), scenarioBonus._subType );
+                break;
+            case Campaign::ScenarioBonusData::SKILL:
+                kingdom.GetBestHero()->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                break;
             default:
                 assert( 0 );
             }
@@ -413,6 +461,11 @@ int Game::SelectCampaignScenario()
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
+
+            // starting faction scenario bonus has to be called before players.SetStartGame()
+            if ( scenarioBonus._type == Campaign::ScenarioBonusData::STARTING_RACE )
+                SetScenarioBonus( scenarioBonus );
+
             Players & players = conf.GetPlayers();
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
@@ -426,10 +479,12 @@ int Game::SelectCampaignScenario()
                 continue;
             }
 
+            // meanwhile, the others should be called after players.SetStartGame()
+            if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
+                SetScenarioBonus( scenarioBonus );
+
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
-
-            SetScenarioBonus( scenarioBonus );
 
             return Game::STARTGAME;
         }

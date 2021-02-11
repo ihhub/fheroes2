@@ -22,7 +22,10 @@
 #include "artifact.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
+#include "race.h"
 #include "resource.h"
+#include "skill.h"
+#include "spell.h"
 #include <cassert>
 
 namespace Campaign
@@ -61,6 +64,8 @@ namespace Campaign
 
     std::string ScenarioBonusData::ToString() const
     {
+        const std::vector<int> useAmountTypes = {ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP};
+
         std::string objectName;
 
         switch ( _type ) {
@@ -73,11 +78,20 @@ namespace Campaign
         case ScenarioBonusData::TROOP:
             objectName = Monster( _subType ).GetPluralName( _amount );
             break;
+        case ScenarioBonusData::SPELL:
+            objectName = Spell( _subType ).GetName();
+            break;
+        case ScenarioBonusData::STARTING_RACE:
+            objectName = Race::String( _subType );
+            break;
+        case ScenarioBonusData::SKILL:
+            objectName = Skill::Secondary( _subType, _amount ).GetName();
+            break;
         default:
             assert( 0 ); // some new bonus?
         }
 
-        const bool useAmount = _amount > 1;
+        const bool useAmount = std::find( useAmountTypes.begin(), useAmountTypes.end(), _type ) != useAmountTypes.end() && _amount > 1;
         return useAmount ? std::to_string( _amount ) + " " + objectName : objectName;
     }
 
