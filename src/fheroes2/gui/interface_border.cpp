@@ -166,7 +166,7 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
-    if ( viewWorldMode ) {
+    if ( viewWorldMode && displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
         dstpt.y = 464;
     }
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
