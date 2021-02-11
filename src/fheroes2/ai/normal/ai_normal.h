@@ -62,6 +62,18 @@ namespace AI
 
         void berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
     };
+
+    class BattlePlanner
+    {
+    public:
+        BattlePlanner();
+
+        Battle::Actions planUnitTurn(); 
+        int getColor() const;
+
+    private:
+
+    };
 }
 
 #endif

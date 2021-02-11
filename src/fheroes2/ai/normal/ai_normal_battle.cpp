@@ -37,6 +37,34 @@ using namespace Battle;
 
 namespace AI
 {
+    class BattlePlanner
+    {
+        int _color;
+
+        void startNewBattle( Arena & arena, int color )
+        {
+            _color = color;
+
+            const Force & friendlyForce = arena.GetForce( _color );
+            const Force & enemyForce = arena.GetForce( _color, true );
+
+            const HeroBase * commander = friendlyForce.GetCommander();
+        }
+
+        Actions PlanUnitTurn( Arena & arena, const Unit & currentUnit )
+        {
+            Actions result;
+
+            const int myHeadIndex = currentUnit.GetHeadIndex();
+            const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
+
+            DEBUG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _color );
+
+
+            return result;
+        }
+    };
+
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
