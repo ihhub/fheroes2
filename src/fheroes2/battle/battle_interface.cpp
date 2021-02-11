@@ -156,6 +156,44 @@ namespace
             }
         }
     }
+
+    std::string Join( const std::set<uint32_t> & values )
+    {
+        assert( !values.empty() );
+
+        const std::string separator = ", ";
+        std::stringstream builder;
+        for ( const uint32_t value : values ) {
+            builder << value;
+            builder << separator;
+        }
+        const std::string result = builder.str();
+        return result.substr( 0, result.length() - separator.length() );
+    }
+
+    std::string MakeDamageMessage( const Spell & spell, const std::set<uint32_t> & damages )
+    {
+        assert( !damages.empty() );
+
+        std::string msg = "The ";
+        msg += spell.GetName();
+        msg += " does ";
+        msg += Join( damages );
+        msg += " damage to ";
+        msg += damages.size();
+        if ( spell.isUndeadOnly() ) {
+            msg += " undead";
+        }
+        else if ( spell.isALiveOnly() ) {
+            msg += " alive";
+        }
+        msg += " creature";
+        if ( damages.size() > 1 ) {
+            msg += 's';
+        }
+        msg += '.';
+        return Translation::gettext( msg );
+    }
 }
 
 namespace Battle
@@ -3400,42 +3438,6 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
             AnimateOpponents( opponent );
         }
     }
-}
-
-std::string Join( const std::set<uint32_t> & values )
-{
-    assert( !values.empty() );
-    const std::string separator = ", ";
-    std::stringstream builder;
-    for ( const uint32_t value : values ) {
-        builder << value;
-        builder << separator;
-    }
-    const std::string result = builder.str();
-    return result.substr( 0, result.length() - separator.length() );
-}
-
-std::string MakeDamageMessage( const Spell & spell, const std::set<uint32_t> & damages )
-{
-    std::stringstream msg;
-    msg << "The ";
-    msg << spell.GetName();
-    msg << " does ";
-    msg << Join( damages );
-    msg << " damage to ";
-    msg << damages.size();
-    if ( spell.isUndeadOnly() ) {
-        msg << " undead";
-    }
-    else if ( spell.isALiveOnly() ) {
-        msg << " alive";
-    }
-    msg << " creature";
-    if ( damages.size() != 1 ) {
-        msg << 's';
-    }
-    msg << '.';
-    return Translation::gettext( msg.str() );
 }
 
 void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
