@@ -25,7 +25,7 @@
 
 namespace Campaign
 {
-    enum
+    enum ScenarioIcon
     {
         SCENARIOICON_CLEARED = 10,
         SCENARIOICON_AVAILABLE = 11,
@@ -37,7 +37,7 @@ namespace Campaign
     struct ScenarioBonusData
     {
     public:
-        enum
+        enum BonusType
         {
             RESOURCES = 0,
             ARTIFACT,
