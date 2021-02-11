@@ -2801,15 +2801,13 @@ std::string Castle::GetDescriptionBuilding( u32 build ) const
 
 std::string Castle::buildingStatusMessage( const uint32_t buildingId ) const
 {
-    const Monster buildingInfo( race, buildingId );
-    const uint32_t dwellingMonsterId = buildingInfo.GetDwelling();
-    const bool isDwelling = dwellingMonsterId != 0;
-    if ( !isDwelling ) {
+    // Check if building is a monster dwelling or its upgraded version
+    if ( ( buildingId & DWELLING_MONSTERS ) == 0 && ( buildingId & DWELLING_UPGRADES ) == 0 ) {
         return GetStringBuilding( buildingId );
     }
 
-    const Monster monster( race, dwellingMonsterId );
+    const Monster monster( race, buildingId );
     std::string msgStatus = _( "Recruit %{name}" );
-    StringReplace( msgStatus, "%{name}", monster.GetName() );
+    StringReplace( msgStatus, "%{name}", monster.GetMultiName() );
     return msgStatus;
 }
