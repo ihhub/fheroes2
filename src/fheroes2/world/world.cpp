@@ -1213,7 +1213,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_090_PRE_RELEASE ) {
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_090_RELEASE ) {
         msg >> w._seed;
     }
     else {
