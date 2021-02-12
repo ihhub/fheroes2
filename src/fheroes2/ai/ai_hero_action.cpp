@@ -196,6 +196,24 @@ namespace AI
         hero.SetFreeman( reason );
     }
 
+    bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
+    {
+        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
+        if ( castle ) {
+            if ( hero.GetColor() == castle->GetColor() ) {
+                return castle->GetHeroes().Guest() == NULL;
+            }
+            else {
+                if ( hero.isFriends( castle->GetColor() ) )
+                    return false;
+                else {
+                    const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+                    return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
+                }
+            }
+        }
+    }
+
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -1846,36 +1864,25 @@ namespace AI
                 return true;
             break;
 
-        case MP2::OBJ_CASTLE: {
-            const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
-            if ( castle ) {
-                if ( hero.GetColor() == castle->GetColor() ) {
-                    return castle->GetHeroes().Guest() == NULL;
-                }
-                else {
-                    if ( hero.isFriends( castle->GetColor() ) )
-                        return false;
-                    else {
-                        const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;
-                        return army.GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
-                    }
-                }
-            }
-            break;
-        }
-
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
+                const bool otherHeroInCastle = hero2->inCastle();
+
                 if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
-                    return !hero2->inCastle();
+                    return !otherHeroInCastle;
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
+                else if ( otherHeroInCastle )
+                    return AIShouldVisitCastle( hero, index );
                 else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
         }
+
+        case MP2::OBJ_CASTLE:
+            return AIShouldVisitCastle( hero, index );
 
         case MP2::OBJ_BOAT:
         case MP2::OBJ_STONELITHS:
