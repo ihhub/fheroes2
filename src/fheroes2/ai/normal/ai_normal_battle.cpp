@@ -168,12 +168,12 @@ namespace AI
 
         // Re-arrange troops in army
         army.Clean();
-        for ( size_t slot : slotOrder ) {
-            if ( archers.size() ) {
+        for ( const size_t slot : slotOrder ) {
+            if ( !archers.empty() ) {
                 army.GetTroop( slot )->Set( archers.back() );
                 archers.pop_back();
             }
-            else if ( others.size() ) {
+            else if ( !others.empty() ) {
                 army.GetTroop( slot )->Set( others.back() );
                 others.pop_back();
             }
