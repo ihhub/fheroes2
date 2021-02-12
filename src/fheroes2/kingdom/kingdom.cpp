@@ -829,13 +829,13 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
 {
-    static cost_t startingResourcesSet[] = { { 10000, 30, 10, 30, 10, 10, 10 },
-                                             { 7500, 20, 5, 20, 5, 5, 5 },
-                                             { 5000, 10, 2, 10, 2, 2, 2 },
-                                             { 2500, 5, 0, 5, 0, 0, 0 },
-                                             { 0, 0, 0, 0, 0, 0, 0 },
-                                             // ai resource
-                                             { 10000, 30, 10, 30, 10, 10, 10 } };
+    static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
+                                            {7500, 20, 5, 20, 5, 5, 5},
+                                            {5000, 10, 2, 10, 2, 2, 2},
+                                            {2500, 5, 0, 5, 0, 0, 0},
+                                            {0, 0, 0, 0, 0, 0, 0},
+                                            // ai resource
+                                            {10000, 30, 10, 30, 10, 10, 10}};
 
     if ( isAIKingdom )
         return startingResourcesSet[5];
