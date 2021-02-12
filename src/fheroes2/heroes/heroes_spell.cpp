@@ -391,32 +391,13 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    uint32_t chance = 0;
-
-    switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
-    case Skill::Level::BASIC:
-        chance = 50;
-        break;
-    case Skill::Level::ADVANCED:
-        chance = 75;
-        break;
-    case Skill::Level::EXPERT:
-        chance = 100;
-        break;
-    default:
-        chance = 30;
-        break;
-    }
-
-    if ( Rand::Get( 1, 100 ) <= chance ) {
-        const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-        for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
-            if ( Maps::isValidAbsIndex( *it ) ) {
-                const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
-                if ( distance > 3 ) {
-                    Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
-                    return true;
-                }
+    const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
+    for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
+        if ( Maps::isValidAbsIndex( *it ) ) {
+            const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
+            if ( distance > 1 ) {
+                Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                return true;
             }
         }
     }
