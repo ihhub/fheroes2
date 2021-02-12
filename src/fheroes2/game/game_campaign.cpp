@@ -173,7 +173,7 @@ namespace
         return std::vector<Campaign::ScenarioBonusData>();
     }
 
-    const std::string rolandCampaignDescription[] = {
+    const std::string rolandCampaignDescription[10] = {
         _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
            " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
         "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win.",
@@ -186,7 +186,7 @@ namespace
         "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario.",
         "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!"};
 
-    const std::string archibaldCampaignDescription[] = {
+    const std::string archibaldCampaignDescription[11] = {
         _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
            " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
         "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight.",
