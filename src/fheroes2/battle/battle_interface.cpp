@@ -2547,7 +2547,6 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
 
 void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
 {
-    const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
     if ( b ) {
