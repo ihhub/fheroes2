@@ -124,6 +124,14 @@ public:
 
     static Settings & Get( void );
 
+    /*
+    Pseudo Constructor to minimize
+    dependencies on other parts of
+    the game code. Should be called
+    from the main method.
+    */
+    static Settings & Get( const int difficulty );
+
     bool Read( const std::string & );
     bool Save( const std::string & ) const;
 

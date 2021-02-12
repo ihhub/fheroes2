@@ -24,7 +24,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "difficulty.h"
 #include "game.h"
 #include "logging.h"
 #include "settings.h"
@@ -340,7 +339,6 @@ std::string Settings::GetVersion( void )
 Settings::Settings()
     : debug( 0 )
     , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
-    , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
     , size_normal( 15 )
@@ -386,6 +384,19 @@ Settings & Settings::Get( void )
     static Settings conf;
 
     return conf;
+}
+
+/*
+Pseudo Constructor to minimize
+dependencies on other parts of
+the game code. Should be called
+from the main method.
+*/
+Settings & Settings::Get( const int difficulty )
+{
+    Settings::Get().SetGameDifficulty( difficulty );
+
+    return Settings::Get();
 }
 
 bool Settings::Read( const std::string & filename )
@@ -795,8 +806,6 @@ void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 
     players.Init( current_maps_file );
 
-    // game difficulty
-    game_difficulty = Difficulty::NORMAL;
     preferably_count_players = 0;
 }
 
@@ -1163,6 +1172,7 @@ void Settings::SetGameDifficulty( int d )
 {
     game_difficulty = d;
 }
+
 void Settings::SetCurrentColor( int color )
 {
     players.current_color = color;

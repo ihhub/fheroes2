@@ -184,7 +184,7 @@ int Game::ScenarioInfo( void )
 
     fheroes2::MovableSprite levelCursor( ngextra );
 
-    switch ( conf.GameDifficulty() ) {
+    switch ( Game::GetDifficulty() ) {
     case Difficulty::EASY:
         levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
         break;
@@ -242,7 +242,7 @@ int Game::ScenarioInfo( void )
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
                 levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
-                conf.SetGameDifficulty( Difficulty::NORMAL );
+                Game::SaveDifficulty( Difficulty::NORMAL );
                 buttonOk.draw();
                 buttonCancel.draw();
             }
@@ -258,7 +258,7 @@ int Game::ScenarioInfo( void )
         else
             // click ok
             if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( conf.GameDifficulty() ) );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::GetDifficulty() ) );
             result = STARTGAME;
             break;
         }
@@ -270,7 +270,7 @@ int Game::ScenarioInfo( void )
                 cursor.Hide();
                 levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                 levelCursor.redraw();
-                conf.SetGameDifficulty( index );
+                Game::SaveDifficulty( index );
                 RedrawRatingInfo( rating );
                 cursor.Show();
                 display.render();
