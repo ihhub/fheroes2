@@ -23,10 +23,7 @@
 #include <cstring>
 
 #include "buildinginfo.h"
-#include "castle.h"
 #include "payment.h"
-#include "race.h"
-#include "settings.h"
 
 struct paymentstats_t
 {

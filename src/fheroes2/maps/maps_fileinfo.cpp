@@ -36,7 +36,6 @@
 #include "maps_fileinfo.h"
 #include "race.h"
 #include "settings.h"
-#include "world.h"
 
 #define LENGTHNAME 16
 #define LENGTHDESCRIPTION 143
