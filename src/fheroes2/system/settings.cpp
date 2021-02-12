@@ -24,7 +24,6 @@
 #include <fstream>
 
 #include "difficulty.h"
-#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "tinyconfig.h"
