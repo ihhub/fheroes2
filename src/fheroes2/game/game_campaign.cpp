@@ -351,8 +351,8 @@ namespace
         scenarioDatas.emplace_back( 5, std::vector<int>{6, 7}, getCampaignBonusData( 1, 5 ), std::string( "CAMPE06.H2C" ), archibaldCampaignDescription[5] );
         scenarioDatas.emplace_back( 6, std::vector<int>{7}, getCampaignBonusData( 1, 6 ), std::string( "CAMPE07.H2C" ), archibaldCampaignDescription[6] );
         scenarioDatas.emplace_back( 7, std::vector<int>{8, 9}, getCampaignBonusData( 1, 7 ), std::string( "CAMPE08.H2C" ), archibaldCampaignDescription[7] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, getCampaignBonusData( 1, 8 ), std::string( "CAMPE09.H2C" ), archibaldCampaignDescription[8] );
-        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, getCampaignBonusData( 1, 9 ), std::string( "CAMPE10.H2C" ), archibaldCampaignDescription[9] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{10}, getCampaignBonusData( 1, 8 ), std::string( "CAMPE09.H2C" ), archibaldCampaignDescription[8] );
+        scenarioDatas.emplace_back( 9, std::vector<int>{10}, getCampaignBonusData( 1, 9 ), std::string( "CAMPE10.H2C" ), archibaldCampaignDescription[9] );
         scenarioDatas.emplace_back( 10, std::vector<int>{}, getCampaignBonusData( 1, 10 ), std::string( "CAMPE11.H2C" ), archibaldCampaignDescription[10] );
 
         Campaign::CampaignData campaignData;
