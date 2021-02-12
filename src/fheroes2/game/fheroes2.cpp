@@ -248,6 +248,12 @@ int main( int argc, char ** argv )
                 case Game::STARTGAME:
                     rs = Game::StartGame();
                     break;
+                case Game::SELECT_CAMPAIGN_SCENARIO:
+                    rs = Game::SelectCampaignScenario();
+                    break;
+                case Game::COMPLETE_CAMPAIGN_SCENARIO:
+                    rs = Game::CompleteCampaignScenario();
+                    break;
 
                 default:
                     break;
@@ -278,6 +284,7 @@ bool ReadConfigs( void )
                 if ( !externalCommand.empty() )
                     Music::SetExtCommand( externalCommand );
 
+                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
                 break;
             }
         }

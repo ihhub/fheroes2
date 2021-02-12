@@ -18,60 +18,58 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2CAMPAIGN_DATA_H
-#define H2CAMPAIGN_DATA_H
+#ifndef H2VIEWWORLD_H
+#define H2VIEWWORLD_H
 
-#include "campaign_scenariodata.h"
 #include "gamedefs.h"
-#include "maps_fileinfo.h"
-#include "serialize.h"
+#include "image.h"
+#include "math_base.h"
 
-namespace Campaign
+namespace Interface
 {
-    class CampaignData
-    {
-    public:
-        CampaignData();
-
-        const std::string & getCampaignDescription() const
-        {
-            return _campaignDescription;
-        }
-
-        int getCampaignID() const
-        {
-            return _campaignID;
-        }
-
-        bool isGoodCampaign() const
-        {
-            return _isGoodCampaign;
-        }
-
-        const std::vector<ScenarioData> & getAllScenarios() const
-        {
-            return _scenarios;
-        }
-
-        const std::vector<int> getScenariosBefore( const int scenarioID ) const;
-        const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
-        const std::vector<int> getStartingScenarios() const;
-
-        bool isAllCampaignMapsPresent() const;
-        bool isLastScenario( const int scenarioID ) const;
-        bool isStartingScenario( const int scenarioID ) const;
-
-        void setCampaignID( const int campaignID );
-        void setCampaignAlignment( const bool isGoodCampaign );
-        void setCampaignDescription( const std::string & campaignDescription );
-        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
-
-    private:
-        int _campaignID;
-        bool _isGoodCampaign;
-        std::string _campaignDescription;
-        std::vector<ScenarioData> _scenarios;
-    };
+    class Basic;
 }
+
+enum class ViewWorldMode : int
+{
+    OnlyVisible = 0, // Only show what is currently not under fog of war
+
+    ViewArtifacts = 1,
+    ViewMines = 2,
+    ViewResources = 3,
+    ViewHeroes = 4,
+    ViewTowns = 5,
+
+    ViewAll = 6,
+};
+
+class ViewWorld
+{
+public:
+    enum ZoomLevel : int
+    {
+        ZoomLevel0 = 0,
+        ZoomLevel1 = 1,
+        ZoomLevel2 = 2,
+        ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+    };
+
+    static void ViewWorldWindow( const int color, const ViewWorldMode type, Interface::Basic & interface );
+
+    struct ZoomROIs
+    {
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
+
+        bool ChangeZoom( const bool zoomIn, const bool cycle = false );
+        bool ChangeCenter( const fheroes2::Point & centerInPixels );
+
+        const fheroes2::Rect & GetROIinPixels() const;
+        fheroes2::Rect GetROIinTiles() const;
+
+        ZoomLevel _zoomLevel;
+        fheroes2::Point _center;
+        fheroes2::Rect _roiForZoomLevels[4];
+    };
+};
 
 #endif

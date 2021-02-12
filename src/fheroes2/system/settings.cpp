@@ -24,10 +24,10 @@
 #include <fstream>
 #include <sstream>
 
-#include "campaign_data.h"
+#include "audio_music.h"
+#include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "localevent.h"
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
@@ -418,7 +418,6 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
     std::string sval;
     int ival;
-    LocalEvent & le = LocalEvent::Get();
 
     if ( !config.Load( filename ) )
         return false;
@@ -637,25 +636,6 @@ bool Settings::Read( const std::string & filename )
     if ( !sval.empty() )
         video_driver = sval;
 
-    // pocketpc
-    if ( PocketPC() ) {
-        ival = config.IntParams( "pointer offset x" );
-        if ( ival )
-            le.SetMouseOffsetX( ival );
-
-        ival = config.IntParams( "pointer offset y" );
-        if ( ival )
-            le.SetMouseOffsetY( ival );
-
-        ival = config.IntParams( "tap delay" );
-        if ( ival )
-            le.SetTapDelayForRightClickEmulation( ival );
-
-        sval = config.StrParams( "pointer rotate fix" );
-        if ( !sval.empty() )
-            System::SetEnvironment( "GAPI_POINTER_FIX", sval.c_str() );
-    }
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -684,7 +664,6 @@ bool Settings::Read( const std::string & filename )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
             _controllerPointerSpeed = 0;
-        le.SetControllerPointerSpeed( _controllerPointerSpeed );
     }
 
 #ifndef WITH_TTF
@@ -1384,6 +1363,11 @@ u32 Settings::LossCountDays( void ) const
     return current_maps_file.LossCountDays();
 }
 
+int Settings::controllerPointerSpeed() const
+{
+    return _controllerPointerSpeed;
+}
+
 void Settings::SetUnicode( bool f )
 {
     f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
@@ -1876,7 +1860,7 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
         >> conf.opt_addons >> conf.players;
 
     if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
-        msg >> Campaign::CampaignData::Get();
+        msg >> Campaign::CampaignSaveData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

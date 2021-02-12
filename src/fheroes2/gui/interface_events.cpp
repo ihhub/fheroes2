@@ -181,7 +181,7 @@ void Interface::Basic::EventCastSpell( void )
         ResetFocus( GameFocus::HEROES );
         Redraw();
 
-        const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
+        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
         // apply cast spell
         if ( spell.isValid() ) {
             hero->ActionSpellCast( spell );
@@ -209,6 +209,7 @@ int Interface::Basic::EventAdventureDialog( void )
     Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
         break;
 
     case Dialog::PUZZLE:

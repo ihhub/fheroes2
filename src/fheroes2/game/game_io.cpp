@@ -25,7 +25,7 @@
 #include <sstream>
 
 #include "army.h"
-#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
@@ -156,7 +156,7 @@ bool Game::Save( const std::string & fn )
     fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
 
     if ( conf.GameType() & Game::TYPE_CAMPAIGN )
-        fz << Campaign::CampaignData::Get();
+        fz << Campaign::CampaignSaveData::Get();
 
     fz << SAV2ID3; // eof marker
 
@@ -265,7 +265,7 @@ bool Game::Load( const std::string & fn )
     }
 
     if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
-        fz >> Campaign::CampaignData::Get();
+        fz >> Campaign::CampaignSaveData::Get();
 
     fz >> end_check;
 

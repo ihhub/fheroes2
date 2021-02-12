@@ -894,7 +894,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
-    bool light = true;
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -906,12 +905,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
     switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
-        light = false;
         icn_frng = ICN::FRNG0004;
         break;
     case Maps::Ground::SNOW:
         icn_cbkg = trees ? ICN::CBKGSNTR : ICN::CBKGSNMT;
-        light = false;
         icn_frng = trees ? ICN::FRNG0006 : ICN::FRNG0007;
         break;
     case Maps::Ground::SWAMP:
@@ -920,12 +917,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
         break;
     case Maps::Ground::WASTELAND:
         icn_cbkg = ICN::CBKGCRCK;
-        light = false;
         icn_frng = ICN::FRNG0003;
         break;
     case Maps::Ground::BEACH:
         icn_cbkg = ICN::CBKGBEAC;
-        light = false;
         icn_frng = ICN::FRNG0002;
         break;
     case Maps::Ground::LAVA:
@@ -950,12 +945,11 @@ Battle::Interface::Interface( Arena & a, s32 center )
 
     if ( grave ) {
         icn_cbkg = ICN::CBKGGRAV;
-        light = true;
         icn_frng = ICN::FRNG0001;
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) );
+    sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
     sf_cursor = DrawHexagonShadow( 2 );
     sf_shadow = DrawHexagonShadow( 4 );
 
@@ -4761,7 +4755,12 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 if ( arena.isDisableCastSpell( Spell::NONE, &msg ) )
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                 else {
-                    const Spell spell = hero->OpenSpellBook( SpellBook::CMBT, true );
+                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
+                        status.SetMessage( statusStr );
+                        status.Redraw();
+                    };
+
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
                     if ( spell.isValid() ) {
                         std::string error;
 
