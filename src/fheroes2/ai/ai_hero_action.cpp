@@ -1580,23 +1580,21 @@ namespace AI
         // pickup object
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
-        case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_SKELETON:
             if ( tile.QuantityIsValid() )
                 return true;
             break;
 
+        case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
-            if ( Settings::Get().ExtWorldExtObjectsCaptured() ) {
-                if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                    if ( tile.CaptureObjectIsProtection() ) {
-                        Army enemy( tile );
-                        return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_MEDUIM );
-                    }
-                    else
-                        return true;
+            if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
+                if ( tile.CaptureObjectIsProtection() ) {
+                    Army enemy( tile );
+                    return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                 }
+                else
+                    return true;
             }
             else if ( tile.QuantityIsValid() )
                 return true;
@@ -1879,8 +1877,6 @@ namespace AI
         case MP2::OBJ_STONELITHS:
             // check later
             return true;
-
-            // or add later
 
         default:
             break;
