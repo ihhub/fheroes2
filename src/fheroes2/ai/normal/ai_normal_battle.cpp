@@ -111,8 +111,6 @@ namespace AI
         // Optimize troops placement before the battle
         Army & army = hero.GetArmy();
 
-        DEBUG( DBG_AI, DBG_TRACE, "Before the battle: " << army.String() );
-
         std::vector<Troop> archers;
         std::vector<Troop> others;
 
@@ -136,15 +134,15 @@ namespace AI
         std::sort( others.begin(), others.end(), []( const Troop & left, const Troop & right ) {
             if ( left.GetSpeed() == right.GetSpeed() ) {
                 if ( left.isFlying() == right.isFlying() ) {
-                    return left.GetStrength() > right.GetStrength();
+                    return left.GetStrength() < right.GetStrength();
                 }
-                return left.isFlying();
+                return right.isFlying();
             }
-            return left.GetSpeed() > right.GetSpeed();
+            return left.GetSpeed() < right.GetSpeed();
         } );
 
         // Archers sorted purely by strength.
-        std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() > right.GetStrength(); } );
+        std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
 
         std::vector<size_t> slotOrder = {2, 1, 3, 0, 4};
         switch ( archers.size() ) {
@@ -183,7 +181,6 @@ namespace AI
                 break;
             }
         }
-        DEBUG( DBG_AI, DBG_TRACE, "After: " << army.String() );
     }
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
