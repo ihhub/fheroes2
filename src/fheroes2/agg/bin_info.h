@@ -68,25 +68,25 @@ namespace Bin_Info
             SHOOT3_END
         };
 
+        std::vector<std::vector<int> > frameXOffset;
         uint32_t moveSpeed;
         uint32_t shootSpeed;
         uint32_t flightSpeed;
-        std::vector<std::vector<int> > frameXOffset;
         Point eyePosition;
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;
         std::vector<Point> projectileOffset;
         std::vector<float> projectileAngles;
         std::vector<float> idlePriority;
-        uint32_t idleAnimationCount;
         std::vector<uint32_t> unusedIdleDelays;
+        uint32_t idleAnimationCount;
         uint32_t idleAnimationDelay;
         std::vector<std::vector<int> > animationFrames;
 
         MonsterAnimInfo( int monsterID = 0, const std::vector<uint8_t> & bytes = std::vector<uint8_t>() );
         bool hasAnim( int animID = MonsterAnimInfo::STATIC ) const;
         bool isValid() const;
-        size_t getProjectileID( float angle ) const;
+        size_t getProjectileID( const double angle ) const;
     };
 
     void InitBinInfo();

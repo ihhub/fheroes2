@@ -23,7 +23,6 @@
 #include <cmath>
 #include <cstring>
 
-#include "agg.h"
 #include "heroes.h"
 #include "icn.h"
 #include "objcrck.h"
@@ -1662,84 +1661,6 @@ int ICN::PORTxxxx( int heroId )
     return ICN::UNKNOWN;
 }
 
-bool ICN::isBattleMonsterICN( int icn )
-{
-    switch ( icn ) {
-    case PEASANT:
-    case ARCHER:
-    case ARCHER2:
-    case PIKEMAN:
-    case PIKEMAN2:
-    case SWORDSMN:
-    case SWORDSM2:
-    case CAVALRYR:
-    case CAVALRYB:
-    case PALADIN:
-    case PALADIN2:
-    case GOBLIN:
-    case ORC:
-    case ORC2:
-    case WOLF:
-    case OGRE:
-    case OGRE2:
-    case TROLL:
-    case TROLL2:
-    case CYCLOPS:
-    case SPRITE:
-    case DWARF:
-    case DWARF2:
-    case ELF:
-    case ELF2:
-    case DRUID:
-    case DRUID2:
-    case UNICORN:
-    case PHOENIX:
-    case CENTAUR:
-    case GARGOYLE:
-    case GRIFFIN:
-    case MINOTAUR:
-    case MINOTAU2:
-    case HYDRA:
-    case DRAGGREE:
-    case DRAGRED:
-    case DRAGBLAK:
-    case HALFLING:
-    case BOAR:
-    case GOLEM:
-    case GOLEM2:
-    case ROC:
-    case MAGE1:
-    case MAGE2:
-    case TITANBLU:
-    case TITANBLA:
-    case SKELETON:
-    case ZOMBIE:
-    case ZOMBIE2:
-    case MUMMYW:
-    case MUMMY2:
-    case VAMPIRE:
-    case VAMPIRE2:
-    case LICH:
-    case LICH2:
-    case DRAGBONE:
-    case ROGUE:
-    case NOMAD:
-    case GHOST:
-    case GENIE:
-    case MEDUSA:
-    case EELEM:
-    case AELEM:
-    case FELEM:
-    case WELEM:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
 int ICN::FromString( const char * str )
 {
     const icnmap_t * ptr = &icnmap[0];
@@ -1818,9 +1739,6 @@ bool ICN::HighlyObjectSprite( int icn, u32 index )
         if ( 160 <= index && index <= 165 )
             return true;
         break;
-
-    case FLAG32:
-        return true;
 
     default:
         break;
@@ -1912,26 +1830,4 @@ int ICN::GetFlagIcnId( int color )
     default:
         return ICN::HEROFL06;
     }
-}
-
-bool ICN::SkipLocalAlpha( int icn )
-{
-    switch ( icn ) {
-    case SYSTEM:
-    case SYSTEME:
-    case BUYBUILD:
-    case BUYBUILE:
-    case BOOK:
-    case CSPANBKE:
-    case CPANBKGE:
-    case CAMPBKGE:
-    case ADVEBTNS:
-    case ADVBTNS:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
 }

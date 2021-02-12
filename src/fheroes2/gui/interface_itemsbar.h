@@ -26,9 +26,9 @@
 #include <algorithm>
 #include <utility>
 
+#include "gamedefs.h"
+#include "localevent.h"
 #include "screen.h"
-#include "splitter.h"
-#include "ui_button.h"
 
 namespace Interface
 {
@@ -53,12 +53,12 @@ namespace Interface
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
 
-        virtual bool ActionBarSingleClick( Item & )
+        virtual bool ActionBarLeftMouseSingleClick( Item & )
         {
             return false;
         }
 
-        virtual bool ActionBarPressRight( Item & )
+        virtual bool ActionBarRightMouseHold( Item & )
         {
             return false;
         }
@@ -224,9 +224,9 @@ namespace Interface
                 if ( ActionBarCursor( **iterPos.first ) )
                     return true;
                 else if ( le.MouseClickLeft( iterPos.second ) )
-                    return ActionBarSingleClick( **iterPos.first );
+                    return ActionBarLeftMouseSingleClick( **iterPos.first );
                 else if ( le.MousePressRight( iterPos.second ) )
-                    return ActionBarPressRight( **iterPos.first );
+                    return ActionBarRightMouseHold( **iterPos.first );
             }
 
             return false;
@@ -301,31 +301,6 @@ namespace Interface
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
-        virtual bool ActionBarSingleClick( Item &, Item & )
-        {
-            return false;
-        }
-
-        virtual bool ActionBarPressRight( Item &, Item & )
-        {
-            return false;
-        }
-
-        virtual bool ActionBarSingleClick( Item & ) override
-        {
-            return false;
-        }
-
-        virtual bool ActionBarDoubleClick( Item & item )
-        {
-            return ActionBarSingleClick( item );
-        }
-
-        virtual bool ActionBarPressRight( Item & ) override
-        {
-            return false;
-        }
-
         virtual bool ActionBarCursor( Item & ) override
         {
             return false;
@@ -334,6 +309,71 @@ namespace Interface
         virtual bool ActionBarCursor( Item &, Item & )
         {
             return false;
+        }
+
+        virtual bool ActionBarLeftMouseSingleClick( Item &, Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseSingleClick( Item & ) override
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseDoubleClick( Item & item )
+        {
+            return ActionBarLeftMouseSingleClick( item );
+        }
+
+        virtual bool ActionBarLeftMouseRelease( Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseRelease( Item &, Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseHold( Item &, Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseHold( Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarLeftMouseHold( Item &, Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseHold( Item & ) override
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseSingleClick( Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseSingleClick( Item &, Item & )
+        {
+            return false;
+        }
+
+        virtual bool ActionBarRightMouseRelease( Item & )
+        {
+            return true;
+        }
+
+        virtual bool ActionBarRightMouseRelease( Item &, Item & )
+        {
+            return true;
         }
 
         // body
@@ -409,10 +449,10 @@ namespace Interface
                 }
                 else if ( le.MouseClickLeft( iterPos.second ) ) {
                     if ( iterPos.first == GetCurItemIter() ) {
-                        return ActionBarDoubleClick( **iterPos.first );
+                        return ActionBarLeftMouseDoubleClick( **iterPos.first );
                     }
                     else {
-                        if ( ActionBarSingleClick( **iterPos.first ) )
+                        if ( ActionBarLeftMouseSingleClick( **iterPos.first ) )
                             curItemPos = iterPos;
                         else
                             ResetSelected();
@@ -420,8 +460,20 @@ namespace Interface
                         return true;
                     }
                 }
+                else if ( le.MousePressLeft( iterPos.second ) ) {
+                    return ActionBarLeftMouseHold( **iterPos.first );
+                }
+                else if ( le.MouseReleaseLeft( iterPos.second ) ) {
+                    return ActionBarLeftMouseRelease( **iterPos.first );
+                }
+                else if ( le.MouseClickRight( iterPos.second ) ) {
+                    return ActionBarRightMouseSingleClick( **iterPos.first );
+                }
                 else if ( le.MousePressRight( iterPos.second ) ) {
-                    return ActionBarPressRight( **iterPos.first );
+                    return ActionBarRightMouseHold( **iterPos.first );
+                }
+                else if ( le.MouseReleaseRight( iterPos.second ) ) {
+                    return ActionBarRightMouseRelease( **iterPos.first );
                 }
             }
 
@@ -440,7 +492,7 @@ namespace Interface
                     return true;
                 }
                 else if ( le.MouseClickLeft( iterPos1.second ) ) {
-                    if ( ActionBarSingleClick( **iterPos1.first, **iterPos2.first ) )
+                    if ( ActionBarLeftMouseSingleClick( **iterPos1.first, **iterPos2.first ) )
                         curItemPos = iterPos1;
                     else
                         ResetSelected();
@@ -448,29 +500,26 @@ namespace Interface
                     other.ResetSelected();
                     return true;
                 }
-                else if ( le.MousePressRight( iterPos1.second ) ) {
+                else if ( le.MousePressLeft( iterPos1.second ) ) {
+                    return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+                    return ActionBarLeftMouseRelease( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MouseClickRight( iterPos1.second ) ) {
                     other.ResetSelected();
-                    return ActionBarPressRight( **iterPos1.first, **iterPos2.first );
+                    return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MousePressRight( iterPos1.second ) ) {
+                    return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );
+                }
+                else if ( le.MouseReleaseRight( iterPos1.second ) ) {
+                    return ActionBarRightMouseRelease( **iterPos1.first, **iterPos2.first );
                 }
             }
 
             return false;
         }
-    };
-}
-
-namespace Interface
-{
-    template <class Item>
-    class ItemsScroll : public ItemsActionBar<Item>
-    {
-    protected:
-        fheroes2::Button buttonPgUp;
-        fheroes2::Button buttonPgDn;
-        Splitter splitterIndicator;
-
-    public:
-        ItemsScroll() {}
     };
 }
 

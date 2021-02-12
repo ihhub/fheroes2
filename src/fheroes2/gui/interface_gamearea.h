@@ -25,34 +25,32 @@
 
 #include "gamedefs.h"
 #include "image.h"
-
-class Sprite;
-
-enum scroll_t
-{
-    SCROLL_NONE = 0x00,
-    SCROLL_LEFT = 0x01,
-    SCROLL_RIGHT = 0x02,
-    SCROLL_TOP = 0x04,
-    SCROLL_BOTTOM = 0x08
-};
-
-enum level_t
-{
-    LEVEL_BOTTOM = 0x01,
-    LEVEL_TOP = 0x02,
-    LEVEL_HEROES = 0x04,
-    LEVEL_OBJECTS = 0x08,
-    LEVEL_FOG = 0x20,
-
-    LEVEL_ALL = 0xFF
-};
-
-typedef std::map<std::pair<int, uint32_t>, Sprite> MapObjectSprite;
+#include "timing.h"
 
 namespace Interface
 {
     class Basic;
+
+    enum ScollingType
+    {
+        SCROLL_NONE = 0x00,
+        SCROLL_LEFT = 0x01,
+        SCROLL_RIGHT = 0x02,
+        SCROLL_TOP = 0x04,
+        SCROLL_BOTTOM = 0x08
+    };
+
+    enum RedrawLevelType
+    {
+        LEVEL_BOTTOM = 0x01,
+        LEVEL_TOP = 0x02,
+        LEVEL_HEROES = 0x04,
+        LEVEL_OBJECTS = 0x08,
+        LEVEL_FOG = 0x20,
+        LEVEL_ROUTES = 0x40,
+
+        LEVEL_ALL = 0xFF
+    };
 
     class GameArea
     {
@@ -65,15 +63,26 @@ namespace Interface
             return _windowROI;
         }
 
+        // Do NOT use this method directly in heavy computation loops
         Rect GetVisibleTileROI( void ) const;
+
         void ShiftCenter( const Point & offset ); // in pixels
 
         int GetScrollCursor( void ) const;
-        bool NeedScroll( void ) const;
+
+        bool NeedScroll() const
+        {
+            return scrollDirection != 0;
+        }
+
         void Scroll( void );
         void SetScroll( int );
 
-        void SetCenter( const Point & );
+        void SetCenter( const Point & point );
+
+        // Do not call this method unless it's needed for manual setup of the position
+        void SetCenterInPixels( const Point & point );
+
         void SetRedraw( void ) const;
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
@@ -84,7 +93,11 @@ namespace Interface
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const Point & mp ) const;
 
-        void SetUpdateCursor( void );
+        void SetUpdateCursor( void )
+        {
+            updateCursor = true;
+        }
+
         void QueueEventProcessing( void );
 
         Rect RectFixed( Point & dst, int rw, int rh ) const;
@@ -94,11 +107,14 @@ namespace Interface
         int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
         Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
 
-        void ResetCursorPosition();
+        void ResetCursorPosition()
+        {
+            _prevIndexPos = -1;
+        }
 
-    private:
         void SetAreaPosition( s32, s32, u32, u32 );
 
+    private:
         Basic & interface;
 
         Rect _windowROI; // visible to draw area of World Map in pixels
@@ -116,12 +132,11 @@ namespace Interface
         int scrollDirection;
         bool updateCursor;
 
-        SDL::Time scrollTime;
+        fheroes2::Time scrollTime;
 
         Point _middlePoint() const; // returns middle point of window ROI
         Point _getStartTileId() const;
         void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
-        void _setCenter( const Point & point ); // in pixels
     };
 }
 

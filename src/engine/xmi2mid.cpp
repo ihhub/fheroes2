@@ -29,6 +29,7 @@
 
 #include "audio_music.h"
 #include "engine.h"
+#include "serialize.h"
 #include "system.h"
 
 #define TAG_FORM 0x464F524D
@@ -198,7 +199,7 @@ struct XMIData
                 sb >> group;
                 if ( group.ID == TAG_CAT0 && group.type == TAG_XMID ) {
                     for ( int track = 0; track < numTracks; ++track ) {
-                        tracks.push_back( XMITrack() );
+                        tracks.emplace_back();
 
                         std::vector<u8> & timb = tracks.back().timb;
                         std::vector<u8> & evnt = tracks.back().evnt;
@@ -355,7 +356,7 @@ struct MidiEvents : std::vector<MidiChunk>
             {
                 // track end
                 if ( 0xFF == *ptr && 0x2F == *( ptr + 1 ) ) {
-                    push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                     // stop parsing
                     break;
                 }
@@ -366,7 +367,7 @@ struct MidiEvents : std::vector<MidiChunk>
                         ptr++; // skip 0xFF
                         const uint8_t metaType = *( ptr++ );
                         const uint8_t metaLength = *( ptr++ );
-                        push_back( MidiChunk( delta, 0xFF, metaType, ptr, metaLength ) );
+                        emplace_back( delta, 0xFF, metaType, ptr, metaLength );
                         // Tempo switch
                         if ( metaType == 0x51 && metaLength == 3 ) {
                             // 24bit big endian
@@ -381,17 +382,17 @@ struct MidiEvents : std::vector<MidiChunk>
                     case 0x0B:
                     // pitch bend
                     case 0x0E: {
-                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                         ptr += 3;
                     } break;
 
                     // XMI events doesn't have note off events
                     // note on
                     case 0x09: {
-                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) ) );
+                        emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                         const XMI_Time duration = readXMITime( ptr + 3 );
                         // note off
-                        push_back( MidiChunk( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F ) );
+                        emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
                         ptr += 3 + duration.second;
                     } break;
 
@@ -399,13 +400,13 @@ struct MidiEvents : std::vector<MidiChunk>
                     case 0x0C:
                     // channel aftertouch
                     case 0x0D: {
-                        push_back( MidiChunk( delta, *ptr, *( ptr + 1 ) ) );
+                        emplace_back( delta, *ptr, *( ptr + 1 ) );
                         ptr += 2;
                     } break;
 
                     // unused command
                     default:
-                        push_back( MidiChunk( 0, 0xFF, 0x2F, 0 ) );
+                        emplace_back( 0, 0xFF, 0x2F, 0 );
                         ERROR( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
                                                 << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
                         break;
@@ -479,7 +480,7 @@ struct MidTracks : std::list<MidTrack>
     MidTracks( const XMITracks & tracks )
     {
         for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
-            push_back( MidTrack( *it ) );
+            emplace_back( *it );
     }
 };
 
@@ -509,7 +510,7 @@ struct MidData
         , tracks( t )
     {
         // XMI files play MIDI at a fixed clock rate of 120 Hz
-        if ( tracks.size() > 0 && tracks.front().events.trackTempo > 0 ) {
+        if ( !tracks.empty() && tracks.front().events.trackTempo > 0 ) {
             ppqn = ( tracks.front().events.trackTempo * 3 / 25000 );
         }
     }

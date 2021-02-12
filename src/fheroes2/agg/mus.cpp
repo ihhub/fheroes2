@@ -28,6 +28,7 @@
 #include "mp2.h"
 #include "mus.h"
 #include "race.h"
+#include "rand.h"
 #include "settings.h"
 
 namespace MUS
@@ -82,7 +83,7 @@ namespace MUS
                   {VICTORY, "Scenario Victory"},
                   {UNKNOWN, "UNKNOWN"}};
 
-    const std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
+    std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
     {
         std::stringstream sstream;
         if ( musicType == MAPPED ) {

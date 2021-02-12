@@ -20,12 +20,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdlib>
 #include <iostream>
 
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "system.h"
 #include "tools.h"
+
+#include <SDL.h>
 
 #ifdef WITH_MIXER
 #include <SDL_mixer.h>
@@ -91,7 +94,7 @@ void Music::SetFadeOut( int f )
     fadeout = f;
 }
 
-u16 Music::Volume( s16 vol )
+u16 Music::Volume( int16_t vol )
 {
     return Mixer::isValid() ? ( Mix_VolumeMusic( vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol ) ) : 0;
 }
@@ -163,7 +166,7 @@ struct info_t
 
 int callbackPlayMusic( void * ptr )
 {
-    if ( ptr && System::ShellCommand( NULL ) ) {
+    if ( ptr && std::system( NULL ) ) {
         info_t * info = reinterpret_cast<info_t *>( ptr );
         std::ostringstream os;
         os << Music::command << " " << info->file;
@@ -171,8 +174,8 @@ int callbackPlayMusic( void * ptr )
         info->status |= Music::PLAY;
 
         do {
-            System::ShellCommand( os.str().c_str() );
-            DELAY( 100 );
+            std::system( os.str().c_str() );
+            fheroes2::delayforMs( 100 );
         } while ( info->status & Music::LOOP );
 
         info->status &= ~Music::PLAY;
@@ -213,7 +216,7 @@ struct play_t : std::pair<SDL::Thread, info_t>
     {
         std::ostringstream os;
         os << System::GetEnvironment( "MUSIC_WRAPPER" ) << " " << action << " " << second.file;
-        System::ShellCommand( os.str().c_str() );
+        std::system( os.str().c_str() );
     }
 
     void Pause( void )
@@ -273,7 +276,7 @@ void Music::Play( const std::string & f, bool loop )
             Pause();
             current = it;
             Resume();
-            DELAY( 100 );
+            fheroes2::delayforMs( 100 );
         }
 
         if ( ( *it ).isPlay() )
@@ -302,7 +305,7 @@ void Music::SetFadeIn( int f ) {}
 
 void Music::SetFadeOut( int f ) {}
 
-u16 Music::Volume( s16 vol )
+u16 Music::Volume( int16_t vol )
 {
     return 0;
 }

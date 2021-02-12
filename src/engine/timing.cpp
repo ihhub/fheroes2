@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,28 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <iostream>
+#include "timing.h"
 
-#include "audio_music.h"
-#include "engine.h"
+#include <thread>
 
-int main( int argc, char ** argv )
+namespace fheroes2
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
-        return EXIT_SUCCESS;
+    Time::Time()
+        : _startTime( std::chrono::high_resolution_clock::now() )
+    {}
+
+    void Time::reset()
+    {
+        _startTime = std::chrono::high_resolution_clock::now();
     }
 
-    std::vector<u8> buf = LoadFileToMem( argv[1] );
-
-    if ( buf.size() ) {
-        buf = Music::Xmi2Mid( buf );
-
-        if ( buf.empty() )
-            std::cerr << ", file: " << argv[1] << std::endl;
-        else
-            SaveMemToFile( buf, std::string( argv[2] ) );
+    double Time::get() const
+    {
+        const std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+        const std::chrono::duration<double> time = endTime - _startTime;
+        return time.count();
     }
 
-    return 0;
+    uint64_t Time::getMs() const
+    {
+        return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
+
+    void delayforMs( const uint32_t delayMs )
+    {
+        std::this_thread::sleep_for( std::chrono::milliseconds( delayMs ) );
+    }
 }

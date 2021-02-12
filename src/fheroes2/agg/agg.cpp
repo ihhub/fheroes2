@@ -27,13 +27,18 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_file.h"
 #include "artifact.h"
+#include "audio.h"
+#include "audio_cdrom.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"
 #include "error.h"
 #include "font.h"
 #include "game.h"
+#include "image_tool.h"
 #include "m82.h"
 #include "mus.h"
 #include "pal.h"
@@ -41,6 +46,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "til.h"
 #include "xmi.h"
 
 #ifdef WITH_ZLIB
@@ -48,52 +54,12 @@
 #include "zzlib.h"
 #endif
 
-#define FATSIZENAME 15
-
 namespace AGG
 {
-    class FAT
-    {
-    public:
-        FAT()
-            : crc( 0 )
-            , offset( 0 )
-            , size( 0 )
-        {}
-
-        u32 crc;
-        u32 offset;
-        u32 size;
-
-        std::string Info( void ) const;
-    };
-
-    class File
-    {
-    public:
-        File();
-        ~File();
-
-        bool Open( const std::string & );
-        bool isGood( void ) const;
-        const std::string & Name( void ) const;
-        const FAT & Fat( const std::string & key );
-
-        const std::vector<u8> & Read( const std::string & key );
-
-    private:
-        std::string filename;
-        std::map<std::string, FAT> fat;
-        u32 count_items;
-        StreamFile stream;
-        std::string key;
-        std::vector<u8> body;
-    };
-
-    struct fnt_cache_t
-    {
-        Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
-    };
+    // struct fnt_cache_t
+    // {
+    //     Surface sfs[4]; /* small_white, small_yellow, medium_white, medium_yellow */
+    // };
 
     struct loop_sound_t
     {
@@ -111,19 +77,18 @@ namespace AGG
         int channel;
     };
 
-    File heroes2_agg;
-    File heroes2x_agg;
+    fheroes2::AGGFile heroes2_agg;
+    fheroes2::AGGFile heroes2x_agg;
 
     std::map<int, std::vector<u8> > wav_cache;
     std::map<int, std::vector<u8> > mid_cache;
     std::vector<loop_sound_t> loop_sounds;
-    std::map<u32, fnt_cache_t> fnt_cache;
+    // std::map<u32, fnt_cache_t> fnt_cache;
 
 #ifdef WITH_TTF
     FontTTF * fonts; /* small, medium */
 
-    void LoadTTFChar( u32 );
-    Surface GetFNT( u32, u32 );
+    // void LoadTTFChar( u32 );
 #endif
 
     const std::vector<u8> & GetWAV( int m82 );
@@ -136,93 +101,31 @@ namespace AGG
 
     bool ReadDataDir( void );
     const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
-}
 
-/*AGG::File constructor */
-AGG::File::File( void )
-    : count_items( 0 )
-{}
-
-bool AGG::File::Open( const std::string & fname )
-{
-    filename = fname;
-
-    if ( !stream.open( filename, "rb" ) ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << filename << ", skipping..." );
-        return false;
-    }
-
-    const size_t size = stream.size();
-    count_items = stream.getLE16();
-    DEBUG( DBG_ENGINE, DBG_INFO, "load: " << filename << ", count items: " << count_items );
-
-    StreamBuf fats = stream.toStreamBuf( count_items * 4 * 3 /* crc, offset, size */ );
-    stream.seek( size - FATSIZENAME * count_items );
-    StreamBuf names = stream.toStreamBuf( FATSIZENAME * count_items );
-
-    for ( u32 ii = 0; ii < count_items; ++ii ) {
-        FAT & f = fat[names.toString( FATSIZENAME )];
-
-        f.crc = fats.getLE32();
-        f.offset = fats.getLE32();
-        f.size = fats.getLE32();
-    }
-
-    return !stream.fail();
-}
-
-AGG::File::~File() {}
-
-bool AGG::File::isGood( void ) const
-{
-    return !stream.fail() && count_items;
-}
-
-/* get AGG file name */
-const std::string & AGG::File::Name( void ) const
-{
-    return filename;
-}
-
-/* get FAT element */
-const AGG::FAT & AGG::File::Fat( const std::string & key_ )
-{
-    return fat[key_];
-}
-
-/* dump FAT */
-std::string AGG::FAT::Info( void ) const
-{
-    std::ostringstream os;
-
-    os << "crc: " << crc << ", offset: " << offset << ", size: " << size;
-    return os.str();
-}
-
-/* read element to body */
-const std::vector<u8> & AGG::File::Read( const std::string & str )
-{
-    if ( key != str ) {
-        std::map<std::string, FAT>::const_iterator it = fat.find( str );
-
-        if ( it != fat.end() ) {
-            const FAT & f = ( *it ).second;
-            key = str;
-
-            if ( f.size ) {
-                DEBUG( DBG_ENGINE, DBG_TRACE, key << ":\t" << f.Info() );
-
-                stream.seek( f.offset );
-                body = stream.getRaw( f.size );
-            }
-        }
-        else if ( body.size() ) {
-            body.clear();
-            key.clear();
-        }
-    }
-
-    return body;
+    /* return letter sprite */
+    // Surface GetUnicodeLetter( u32 ch, u32 ft )
+    // {
+    //     bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
+    //
+    //     if ( !ttf_valid )
+    //         return Surface();
+    //
+    //     if ( !fnt_cache[ch].sfs[0].isValid() )
+    //         LoadTTFChar( ch );
+    //
+    //     switch ( ft ) {
+    //     case Font::YELLOW_SMALL:
+    //         return fnt_cache[ch].sfs[1];
+    //     case Font::BIG:
+    //         return fnt_cache[ch].sfs[2];
+    //     case Font::YELLOW_BIG:
+    //         return fnt_cache[ch].sfs[3];
+    //     default:
+    //         break;
+    //     }
+    //
+    //     return fnt_cache[ch].sfs[0];
+    // }
 }
 
 /* read data directory */
@@ -230,23 +133,23 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = conf.GetListFiles( "data", ".agg" );
+    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
     const std::string & other_data = conf.GetDataParams();
 
     if ( other_data.size() && other_data != "data" )
-        aggs.Append( conf.GetListFiles( other_data, ".agg" ) );
+        aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
 
     // not found agg, exit
-    if ( 0 == aggs.size() )
+    if ( aggs.empty() )
         return false;
 
     // attach agg files
     for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
         std::string lower = StringLower( *it );
         if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() )
-            heroes2_agg.Open( *it );
+            heroes2_agg.open( *it );
         if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() )
-            heroes2x_agg.Open( *it );
+            heroes2x_agg.open( *it );
     }
 
     conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
@@ -257,43 +160,12 @@ bool AGG::ReadDataDir( void )
 const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
-        const std::vector<u8> & buf = heroes2x_agg.Read( key );
+        const std::vector<u8> & buf = heroes2x_agg.read( key );
         if ( buf.size() )
             return buf;
     }
 
-    return heroes2_agg.Read( key );
-}
-
-struct ICNHeader
-{
-    ICNHeader()
-        : offsetX( 0 )
-        , offsetY( 0 )
-        , width( 0 )
-        , height( 0 )
-        , animationFrames( 0 )
-        , offsetData( 0 )
-    {}
-
-    u16 offsetX;
-    u16 offsetY;
-    u16 width;
-    u16 height;
-    u8 animationFrames; // used for adventure map animations, this can replace ICN::AnimationFrame
-    u32 offsetData;
-};
-
-StreamBuf & operator>>( StreamBuf & st, ICNHeader & icn )
-{
-    icn.offsetX = st.getLE16();
-    icn.offsetY = st.getLE16();
-    icn.width = st.getLE16();
-    icn.height = st.getLE16();
-    icn.animationFrames = st.get();
-    icn.offsetData = st.getLE32();
-
-    return st;
+    return heroes2_agg.read( key );
 }
 
 /* load 82M object to AGG::Cache in Audio::CVT */
@@ -565,48 +437,46 @@ void AGG::PlayMusic( int mus, bool loop )
 }
 
 #ifdef WITH_TTF
-void AGG::LoadTTFChar( u32 ch )
-{
-    const Settings & conf = Settings::Get();
-    const RGBA white( 0xFF, 0xFF, 0xFF );
-    const RGBA yellow( 0xFF, 0xFF, 0x00 );
-
-    // small
-    fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
-    fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
-
-    // medium
-    if ( !( conf.QVGA() && !conf.Unicode() ) ) {
-        fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
-        fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
-    }
-
-    DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
-}
+// void AGG::LoadTTFChar( u32 ch )
+// {
+//     const Settings & conf = Settings::Get();
+//      const RGBA white( 0xFF, 0xFF, 0xFF );
+//      const RGBA yellow( 0xFF, 0xFF, 0x00 );
+//
+//      small
+//      fnt_cache[ch].sfs[0] = fonts[0].RenderUnicodeChar( ch, white, !conf.FontSmallRenderBlended() );
+//      fnt_cache[ch].sfs[1] = fonts[0].RenderUnicodeChar( ch, yellow, !conf.FontSmallRenderBlended() );
+//
+//      medium
+//      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
+//      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
+//
+//     DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
+// }
 
 void AGG::LoadFNT( void )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( !conf.Unicode() ) {
-        DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-    }
-    else if ( fnt_cache.empty() ) {
-        const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
-
-        for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
-            LoadTTFChar( *it );
-
-        if ( fnt_cache.empty() ) {
-            DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
-        }
-        else {
-            DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-            DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
-        }
-    }
+    // const Settings & conf = Settings::Get();
+    //
+    // if ( !conf.Unicode() ) {
+    //     DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    // }
+    // else if ( fnt_cache.empty() ) {
+    //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+    //     std::vector<u16> unicode = StringUTF8_to_UNICODE( letters );
+    //
+    //     for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it )
+    //         LoadTTFChar( *it );
+    //
+    //     if ( fnt_cache.empty() ) {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    //     }
+    //     else {
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
+    //         DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
+    //     }
+    // }
 }
 
 u32 AGG::GetFontHeight( bool small )
@@ -614,30 +484,6 @@ u32 AGG::GetFontHeight( bool small )
     return small ? fonts[0].Height() : fonts[1].Height();
 }
 
-/* return letter sprite */
-Surface AGG::GetUnicodeLetter( u32 ch, u32 ft )
-{
-    bool ttf_valid = fonts[0].isValid() && fonts[1].isValid();
-
-    if ( !ttf_valid )
-        return Surface();
-
-    if ( !fnt_cache[ch].sfs[0].isValid() )
-        LoadTTFChar( ch );
-
-    switch ( ft ) {
-    case Font::YELLOW_SMALL:
-        return fnt_cache[ch].sfs[1];
-    case Font::BIG:
-        return fnt_cache[ch].sfs[2];
-    case Font::YELLOW_BIG:
-        return fnt_cache[ch].sfs[3];
-    default:
-        break;
-    }
-
-    return fnt_cache[ch].sfs[0];
-}
 #else
 void AGG::LoadFNT( void )
 {
@@ -706,7 +552,7 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    fnt_cache.clear();
+    // fnt_cache.clear();
 
 #ifdef WITH_TTF
     delete[] fonts;
@@ -787,96 +633,15 @@ namespace fheroes2
                     sizeData = blockSize - header1.offsetData;
                 }
 
-                Sprite & sprite = _icnVsSprite[id][i];
-
-                sprite.resize( header1.width, header1.height );
-                sprite.reset();
-                sprite.setPosition( static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
-
-                uint8_t * imageData = sprite.image();
-                uint8_t * imageTransform = sprite.transform();
-
-                uint32_t posX = 0;
-                const uint32_t width = sprite.width();
-
                 const uint8_t * data = body.data() + headerSize + header1.offsetData;
-                const uint8_t * dataEnd = data + sizeData;
 
-                while ( 1 ) {
-                    if ( 0 == *data ) { // 0x00 - end line
-                        imageData += width;
-                        imageTransform += width;
-                        posX = 0;
-                        ++data;
-                    }
-                    else if ( 0x80 > *data ) { // 0x7F - count data
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- && data != dataEnd ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                            ++data;
-                        }
-                    }
-                    else if ( 0x80 == *data ) { // 0x80 - end data
-                        break;
-                    }
-                    else if ( 0xC0 > *data ) { // 0xBF - skip data
-                        posX += *data - 0x80;
-                        ++data;
-                    }
-                    else if ( 0xC0 == *data ) { // 0xC0 - transform layer
-                        ++data;
-
-                        const uint8_t transformValue = *data;
-                        const uint8_t transformType = static_cast<uint8_t>( ( ( transformValue & 0x3C ) << 6 ) / 256 + 2 ); // 1 is for skipping
-
-                        uint32_t c = *data % 4 ? *data % 4 : *( ++data );
-
-                        if ( ( transformValue & 0x40 ) && ( transformType <= 15 ) ) {
-                            while ( c-- ) {
-                                imageTransform[posX] = transformType;
-                                ++posX;
-                            }
-                        }
-                        else {
-                            posX += c;
-                        }
-
-                        ++data;
-                    }
-                    else if ( 0xC1 == *data ) { // 0xC1
-                        ++data;
-                        uint32_t c = *data;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-                    else {
-                        uint32_t c = *data - 0xC0;
-                        ++data;
-                        while ( c-- ) {
-                            imageData[posX] = *data;
-                            imageTransform[posX] = 0;
-                            ++posX;
-                        }
-                        ++data;
-                    }
-
-                    if ( data >= dataEnd ) {
-                        break;
-                    }
-                }
+                _icnVsSprite[id][i]
+                    = decodeICNSprite( data, sizeData, header1.width, header1.height, static_cast<int16_t>( header1.offsetX ), static_cast<int16_t>( header1.offsetY ) );
             }
         }
 
         // Helper function for LoadModifiedICN
-        void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
+        void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
         {
             GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
 
@@ -891,7 +656,7 @@ namespace fheroes2
         {
             switch ( id ) {
             case ICN::ROUTERED:
-                CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
+                CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
                 LoadOriginalICN( id );
@@ -901,16 +666,16 @@ namespace fheroes2
                 }
                 return true;
             case ICN::YELLOW_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::YELLOW_SMALFONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::GRAY_SMALL_FONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
@@ -1109,18 +874,26 @@ namespace fheroes2
                 // Sprite 23 has incorrect colors, we need to replace them
                 if ( _icnVsSprite[id].size() >= 23 ) {
                     Sprite & out = _icnVsSprite[id][23];
-                    ReplaceColorId( out, 69, 187 );
-                    ReplaceColorId( out, 71, 195 );
-                    ReplaceColorId( out, 73, 188 );
-                    ReplaceColorId( out, 74, 190 );
-                    ReplaceColorId( out, 75, 193 );
-                    ReplaceColorId( out, 76, 191 );
-                    ReplaceColorId( out, 77, 195 );
-                    ReplaceColorId( out, 80, 195 );
-                    ReplaceColorId( out, 81, 196 );
-                    ReplaceColorId( out, 83, 196 );
-                    ReplaceColorId( out, 84, 197 );
-                    ReplaceColorId( out, 151, 197 );
+
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[69] = 187;
+                    indexes[71] = 195;
+                    indexes[73] = 188;
+                    indexes[74] = 190;
+                    indexes[75] = 193;
+                    indexes[76] = 191;
+                    indexes[77] = 195;
+                    indexes[80] = 195;
+                    indexes[81] = 196;
+                    indexes[83] = 196;
+                    indexes[84] = 197;
+                    indexes[151] = 197;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::TROLLMSL:
@@ -1154,32 +927,39 @@ namespace fheroes2
                         out.image()[188] = 24;
                     }
 
-                    ReplaceColorId( out, 10, 152 );
-                    ReplaceColorId( out, 11, 153 );
-                    ReplaceColorId( out, 12, 154 );
-                    ReplaceColorId( out, 13, 155 );
-                    ReplaceColorId( out, 14, 155 );
-                    ReplaceColorId( out, 15, 156 );
-                    ReplaceColorId( out, 16, 157 );
-                    ReplaceColorId( out, 17, 158 );
-                    ReplaceColorId( out, 18, 159 );
-                    ReplaceColorId( out, 19, 160 );
-                    ReplaceColorId( out, 20, 160 );
-                    ReplaceColorId( out, 21, 161 );
-                    ReplaceColorId( out, 22, 162 );
-                    ReplaceColorId( out, 23, 163 );
-                    ReplaceColorId( out, 24, 164 );
-                    ReplaceColorId( out, 25, 165 );
-                    ReplaceColorId( out, 26, 166 );
-                    ReplaceColorId( out, 27, 166 );
-                    ReplaceColorId( out, 28, 167 );
-                    ReplaceColorId( out, 29, 168 );
-                    ReplaceColorId( out, 30, 169 );
-                    ReplaceColorId( out, 31, 170 );
-                    ReplaceColorId( out, 32, 171 );
-                    ReplaceColorId( out, 33, 172 );
-                    ReplaceColorId( out, 34, 172 );
-                    ReplaceColorId( out, 35, 173 );
+                    std::vector<uint8_t> indexes( 256 );
+                    for ( uint32_t i = 0; i < 256; ++i ) {
+                        indexes[i] = static_cast<uint8_t>( i );
+                    }
+
+                    indexes[10] = 152;
+                    indexes[11] = 153;
+                    indexes[12] = 154;
+                    indexes[13] = 155;
+                    indexes[14] = 155;
+                    indexes[15] = 156;
+                    indexes[16] = 157;
+                    indexes[17] = 158;
+                    indexes[18] = 159;
+                    indexes[19] = 160;
+                    indexes[20] = 160;
+                    indexes[21] = 161;
+                    indexes[22] = 162;
+                    indexes[23] = 163;
+                    indexes[24] = 164;
+                    indexes[25] = 165;
+                    indexes[26] = 166;
+                    indexes[27] = 166;
+                    indexes[28] = 167;
+                    indexes[29] = 168;
+                    indexes[30] = 169;
+                    indexes[31] = 170;
+                    indexes[32] = 171;
+                    indexes[33] = 172;
+                    indexes[34] = 172;
+                    indexes[35] = 173;
+
+                    ApplyPalette( out, indexes );
                 }
                 return true;
             case ICN::LOCATORE:
@@ -1218,6 +998,58 @@ namespace fheroes2
                         Copy( temp, 0, 0, out, 1, 0, temp.width(), temp.height() );
                         Copy( temp, temp.width() - 1, 10, out, 0, 10, 1, 3 );
                     }
+                }
+                return true;
+            case ICN::LISTBOX_EVIL:
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    ApplyPalette( _icnVsSprite[id][i], 2 );
+                }
+                return true;
+            case ICN::MONS32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
+                    const Sprite & source = _icnVsSprite[id][1];
+                    Sprite & modified = _icnVsSprite[id][2];
+                    Sprite temp( source.width(), source.height() + 1 );
+                    temp.reset();
+                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
+                    modified.setPosition( 0, 1 );
+                }
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+                    Sprite & modified = _icnVsSprite[id][4];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 7, 0, 4, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                    Sprite & modified = _icnVsSprite[id][6];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 2, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                    Sprite & modified = _icnVsSprite[id][8];
+
+                    Sprite temp( modified.width(), modified.height() + 1 );
+                    temp.reset();
+                    Blit( modified, 0, 0, temp, 0, 1, modified.width(), modified.height() );
+                    modified = temp;
+                    Fill( modified, 12, 0, 5, 1, 36 );
+                }
+                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
+                    Sprite & modified = _icnVsSprite[id][44];
+                    Sprite temp = _icnVsSprite[id][43];
+                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
+                    modified = temp;
                 }
                 return true;
             default:

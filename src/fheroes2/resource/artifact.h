@@ -26,11 +26,12 @@
 
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "serialize.h"
+#include "ui_tool.h"
 
 class Spell;
 class Heroes;
-class StreamBase;
-class StreamBase;
+class StatusBar;
 
 class Artifact
 {
@@ -235,7 +236,7 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
+    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
@@ -243,10 +244,10 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarSingleClick( Artifact & ) override;
-    virtual bool ActionBarSingleClick( Artifact &, Artifact & ) override;
-    virtual bool ActionBarDoubleClick( Artifact & ) override;
-    virtual bool ActionBarPressRight( Artifact & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
+    virtual bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
@@ -255,12 +256,15 @@ public:
     virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
-    const Heroes * hero;
-    fheroes2::Image backsf;
     fheroes2::MovableSprite spcursor;
+
+private:
+    const Heroes * _hero;
+    fheroes2::Image backsf;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
+    StatusBar * _statusBar;
     std::string msg;
 };
 

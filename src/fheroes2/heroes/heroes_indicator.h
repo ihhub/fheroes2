@@ -27,6 +27,12 @@
 
 #include "gamedefs.h"
 
+namespace fheroes2
+{
+    const char * LuckString( const int luck );
+    const char * MoraleString( const int morale );
+}
+
 class Heroes;
 
 class HeroesIndicator
@@ -52,7 +58,7 @@ public:
     LuckIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
-    static void QueueEventProcessing( LuckIndicator & );
+    static void QueueEventProcessing( const LuckIndicator & );
 
 private:
     int luck;
@@ -64,7 +70,7 @@ public:
     MoraleIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
-    static void QueueEventProcessing( MoraleIndicator & );
+    static void QueueEventProcessing( const MoraleIndicator & );
 
 private:
     int morale;

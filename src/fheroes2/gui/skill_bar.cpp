@@ -33,8 +33,8 @@ fheroes2::Image GetBarBackgroundSprite( void )
     return icon;
 }
 
-PrimarySkillsBar::PrimarySkillsBar( const Heroes * hr, bool mini )
-    : hero( hr )
+PrimarySkillsBar::PrimarySkillsBar( const Heroes * hero, bool mini )
+    : _hero( hero )
     , use_mini_sprite( mini )
     , toff( 0, 0 )
 {
@@ -78,33 +78,33 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             switch ( skill ) {
             case Skill::Primary::ATTACK:
                 fheroes2::Blit( backSprite, 217, 52, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( hero )
-                    text.Set( GetString( hero->GetAttack() ) );
+                if ( _hero )
+                    text.Set( std::to_string( _hero->GetAttack() ) );
                 break;
 
             case Skill::Primary::DEFENSE:
                 fheroes2::Blit( backSprite, 217, 85, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( hero )
-                    text.Set( GetString( hero->GetDefense() ) );
+                if ( _hero )
+                    text.Set( std::to_string( _hero->GetDefense() ) );
                 break;
 
             case Skill::Primary::POWER:
                 fheroes2::Blit( backSprite, 217, 118, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( hero )
-                    text.Set( GetString( hero->GetPower() ) );
+                if ( _hero )
+                    text.Set( std::to_string( _hero->GetPower() ) );
                 break;
 
             case Skill::Primary::KNOWLEDGE:
                 fheroes2::Blit( backSprite, 217, 151, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( hero )
-                    text.Set( GetString( hero->GetKnowledge() ) );
+                if ( _hero )
+                    text.Set( std::to_string( _hero->GetKnowledge() ) );
                 break;
 
             default:
                 break;
             }
 
-            if ( hero )
+            if ( _hero )
                 text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
         }
         else {
@@ -114,22 +114,22 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             Text text( Skill::Primary::String( skill ), Font::SMALL );
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 4, dstsf );
 
-            if ( hero ) {
+            if ( _hero ) {
                 switch ( skill ) {
                 case Skill::Primary::ATTACK:
-                    text.Set( GetString( hero->GetAttack() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetAttack() ), Font::BIG );
                     break;
 
                 case Skill::Primary::DEFENSE:
-                    text.Set( GetString( hero->GetDefense() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetDefense() ), Font::BIG );
                     break;
 
                 case Skill::Primary::POWER:
-                    text.Set( GetString( hero->GetPower() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetPower() ), Font::BIG );
                     break;
 
                 case Skill::Primary::KNOWLEDGE:
-                    text.Set( GetString( hero->GetKnowledge() ), Font::BIG );
+                    text.Set( std::to_string( _hero->GetKnowledge() ), Font::BIG );
                     break;
 
                 default:
@@ -142,20 +142,20 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
     }
 }
 
-bool PrimarySkillsBar::ActionBarSingleClick( int & skill )
+bool PrimarySkillsBar::ActionBarLeftMouseSingleClick( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG, Dialog::OK );
+        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Font::BIG, Dialog::OK );
         return true;
     }
 
     return false;
 }
 
-bool PrimarySkillsBar::ActionBarPressRight( int & skill )
+bool PrimarySkillsBar::ActionBarRightMouseHold( int & skill )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
-        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, hero ), Font::BIG );
+        Dialog::Message( Skill::Primary::String( skill ), Skill::Primary::StringDescription( skill, _hero ), Font::BIG );
         return true;
     }
 
@@ -181,9 +181,10 @@ bool PrimarySkillsBar::QueueEventProcessing( std::string * str )
     return res;
 }
 
-SecondarySkillsBar::SecondarySkillsBar( bool mini /* true */, bool change /* false */ )
+SecondarySkillsBar::SecondarySkillsBar( const Heroes & hero, bool mini /* true */, bool change /* false */ )
     : use_mini_sprite( mini )
     , can_change( change )
+    , _hero( hero )
 {
     if ( use_mini_sprite ) {
         backsf = GetBarBackgroundSprite();
@@ -211,23 +212,23 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos,
         fheroes2::Blit( sprite, dstsf, pos.x + ( pos.w - sprite.width() ) / 2, pos.y + ( pos.h - sprite.height() ) / 2 );
 
         if ( use_mini_sprite ) {
-            Text text( GetString( skill.Level() ), Font::SMALL );
+            Text text( std::to_string( skill.Level() ), Font::SMALL );
             text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
         }
         else {
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
 
-            text.Set( Skill::Level::String( skill.Level() ) );
+            text.Set( Skill::Level::StringWithBonus( _hero, skill.Skill(), skill.Level() ) );
             text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
 }
 
-bool SecondarySkillsBar::ActionBarSingleClick( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        Dialog::SecondarySkillInfo( skill, true );
+        Dialog::SecondarySkillInfo( skill, _hero, true );
         return true;
     }
     else if ( can_change ) {
@@ -242,13 +243,13 @@ bool SecondarySkillsBar::ActionBarSingleClick( Skill::Secondary & skill )
     return false;
 }
 
-bool SecondarySkillsBar::ActionBarPressRight( Skill::Secondary & skill )
+bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
         if ( can_change )
             skill.Reset();
         else
-            Dialog::SecondarySkillInfo( skill, false );
+            Dialog::SecondarySkillInfo( skill, _hero, false );
         return true;
     }
 

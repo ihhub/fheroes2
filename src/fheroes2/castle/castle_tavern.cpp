@@ -46,7 +46,7 @@ void Castle::OpenTavern( void )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Text text( tavern, Font::BIG );
+    Text text( tavern, Font::YELLOW_BIG );
     const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
     TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -99,10 +99,11 @@ void Castle::OpenTavern( void )
             cursor.Hide();
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
-            if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame++ ) ) {
+            if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame ) ) {
                 const fheroes2::Sprite & s22 = fheroes2::AGG::GetICN( tavwin, index );
                 fheroes2::Blit( s22, display, dst_pt.x + s22.x(), dst_pt.y + s22.y() );
             }
+            ++frame;
 
             cursor.Show();
             display.render();

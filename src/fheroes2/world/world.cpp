@@ -24,7 +24,6 @@
 #include <assert.h>
 #include <functional>
 
-#include "agg.h"
 #include "ai.h"
 #include "artifact.h"
 #include "castle.h"
@@ -74,10 +73,10 @@ void MapObjects::clear( void )
 void MapObjects::add( MapObjectSimple * obj )
 {
     if ( obj ) {
-        std::map<u32, MapObjectSimple *> & map = *this;
-        if ( map[obj->GetUID()] )
-            delete map[obj->GetUID()];
-        map[obj->GetUID()] = obj;
+        std::map<u32, MapObjectSimple *> & currentMap = *this;
+        if ( currentMap[obj->GetUID()] )
+            delete currentMap[obj->GetUID()];
+        currentMap[obj->GetUID()] = obj;
     }
 }
 
@@ -356,21 +355,21 @@ Maps::Tiles & World::GetTiles( u32 ax, u32 ay )
     return GetTiles( ay * w() + ax );
 }
 
-const Maps::Tiles & World::GetTiles( s32 index ) const
+const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
 {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( index );
+    return vec_tiles.at( tileId );
 #else
-    return vec_tiles[index];
+    return vec_tiles[tileId];
 #endif
 }
 
-Maps::Tiles & World::GetTiles( s32 index )
+Maps::Tiles & World::GetTiles( const int32_t tileId )
 {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( index );
+    return vec_tiles.at( tileId );
 #else
-    return vec_tiles[index];
+    return vec_tiles[tileId];
 #endif
 }
 
@@ -596,7 +595,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         excld.reserve( vec_tiles.size() / 2 );
 
         const u32 dist = 2;
-        const u8 objs[] = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE, 0};
+        const std::vector<uint8_t> objs = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE};
 
         // create exclude list
         {
@@ -612,7 +611,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
         for ( MapsTiles::const_iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
             const Maps::Tiles & tile = *it;
 
-            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true )
+            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true, 0 )
                  && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
                 tiles.push_back( tile.GetIndex() );
                 const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
@@ -665,19 +664,19 @@ s32 World::NextTeleport( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "not found" );
     }
 
-    return teleports.size() ? *Rand::Get( teleports ) : index;
+    const int32_t * randValue = Rand::Get( teleports );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
 {
     if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        MapsIndexes whilrpools = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
-        for ( MapsIndexes::const_iterator it = whilrpools.begin(); it != whilrpools.end(); ++it ) {
+        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
             uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
         }
-        whilrpools.clear();
 
         if ( 2 > uniq_whirlpools.size() ) {
             DEBUG( DBG_GAME, DBG_WARN, "is empty" );
@@ -709,7 +708,9 @@ s32 World::NextWhirlpool( s32 index ) const
         DEBUG( DBG_GAME, DBG_WARN, "is full" );
     }
 
-    return whilrpools.size() ? *Rand::Get( whilrpools ) : index;
+    const int32_t * randValue = Rand::Get( whilrpools );
+
+    return randValue != nullptr ? *randValue : index;
 }
 
 /* return message from sign */
@@ -938,7 +939,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
         }
     }
 
@@ -1058,6 +1059,7 @@ void World::PostLoad()
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
+    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
 
     resetPathfinder();
     ComputeStaticAnalysis();

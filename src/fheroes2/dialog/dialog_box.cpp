@@ -87,37 +87,83 @@ namespace
     }
 }
 
-void BoxRedraw( int32_t posx, int32_t posy, uint32_t count, int32_t middleHeight );
-
 Dialog::NonFixedFrameBox::NonFixedFrameBox( int height, int startYPos, bool showButtons )
+    : _middleFragmentCount( 0 )
+    , _middleFragmentHeight( 0 )
 {
     if ( showButtons )
         height += buttonHeight;
 
     const bool evil = Settings::Get().ExtGameEvilInterface();
-    const int32_t count_middle = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
-    const int32_t height_middle = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
+    _middleFragmentCount = ( height <= 2 * activeAreaHeight ? 0 : 1 + ( height - 2 * activeAreaHeight ) / activeAreaHeight );
+    _middleFragmentHeight = height <= 2 * activeAreaHeight ? 0 : height - 2 * activeAreaHeight;
     const int32_t height_top_bottom = topHeight( evil ) + bottomHeight( evil );
 
     area.width = BOXAREA_WIDTH;
-    area.height = activeAreaHeight + activeAreaHeight + height_middle;
+    area.height = activeAreaHeight + activeAreaHeight + _middleFragmentHeight;
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const int32_t leftSideOffset = leftOffset( evil );
 
-    int32_t posx = ( display.width() - windowWidth ) / 2 - leftSideOffset;
-    int32_t posy = startYPos;
+    _position.x = ( display.width() - windowWidth ) / 2 - leftSideOffset;
+    _position.y = startYPos;
 
     if ( startYPos < 0 ) {
-        posy = ( ( display.height() - height_middle ) / 2 ) - topHeight( evil );
+        _position.y = ( ( display.height() - _middleFragmentHeight ) / 2 ) - topHeight( evil );
     }
 
-    _restorer.reset( new fheroes2::ImageRestorer( display, posx, posy, overallWidth( evil ), height_top_bottom + height_middle ) );
+    _restorer.reset( new fheroes2::ImageRestorer( display, _position.x, _position.y, overallWidth( evil ), height_top_bottom + _middleFragmentHeight ) );
 
-    area.x = posx + ( windowWidth - BOXAREA_WIDTH ) / 2 + leftSideOffset;
-    area.y = posy + ( topHeight( evil ) - activeAreaHeight );
+    area.x = _position.x + ( windowWidth - BOXAREA_WIDTH ) / 2 + leftSideOffset;
+    area.y = _position.y + ( topHeight( evil ) - activeAreaHeight );
 
-    BoxRedraw( posx, posy, count_middle, height_middle );
+    redraw();
+}
+
+void Dialog::NonFixedFrameBox::redraw()
+{
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int buybuild = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
+
+    const int32_t overallLeftWidth = leftWidth( isEvilInterface );
+
+    // right-top
+    const fheroes2::Sprite & part0 = fheroes2::AGG::GetICN( buybuild, 0 );
+    // left-top
+    const fheroes2::Sprite & part4 = fheroes2::AGG::GetICN( buybuild, 4 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    fheroes2::Blit( part4, display, _position.x + overallLeftWidth - part4.width(), _position.y );
+    fheroes2::Blit( part0, display, _position.x + overallLeftWidth, _position.y );
+
+    _position.y += part4.height();
+
+    const int32_t posBeforeMiddle = _position.y;
+    int32_t middleLeftHeight = _middleFragmentHeight;
+    for ( uint32_t i = 0; i < _middleFragmentCount; ++i ) {
+        const int32_t chunkHeight = middleLeftHeight >= activeAreaHeight ? activeAreaHeight : middleLeftHeight;
+        // left-middle
+        const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
+        fheroes2::Blit( sl, 0, 10, display, _position.x + overallLeftWidth - sl.width(), _position.y, sl.width(), chunkHeight );
+
+        // right-middle
+        const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
+        fheroes2::Blit( sr, 0, 10, display, _position.x + overallLeftWidth, _position.y, sr.width(), chunkHeight );
+
+        middleLeftHeight -= chunkHeight;
+        _position.y += chunkHeight;
+    }
+
+    _position.y = posBeforeMiddle + _middleFragmentHeight;
+
+    // right-bottom
+    const fheroes2::Sprite & part2 = fheroes2::AGG::GetICN( buybuild, 2 );
+    // left-bottom
+    const fheroes2::Sprite & part6 = fheroes2::AGG::GetICN( buybuild, 6 );
+
+    fheroes2::Blit( part6, display, _position.x + overallLeftWidth - part6.width(), _position.y );
+    fheroes2::Blit( part2, display, _position.x + overallLeftWidth, _position.y );
 }
 
 Dialog::NonFixedFrameBox::~NonFixedFrameBox()
@@ -132,51 +178,3 @@ Dialog::FrameBox::FrameBox( int height, bool buttons )
 {}
 
 Dialog::FrameBox::~FrameBox() {}
-
-void BoxRedraw( int32_t posx, int32_t posy, uint32_t count, int32_t middleHeight )
-{
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-    const int buybuild = isEvilInterface ? ICN::BUYBUILE : ICN::BUYBUILD;
-
-    const int32_t overallLeftWidth = leftWidth( isEvilInterface );
-
-    fheroes2::Point pt( posx, posy );
-
-    // right-top
-    const fheroes2::Sprite & part0 = fheroes2::AGG::GetICN( buybuild, 0 );
-    // left-top
-    const fheroes2::Sprite & part4 = fheroes2::AGG::GetICN( buybuild, 4 );
-
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    fheroes2::Blit( part4, display, pt.x + overallLeftWidth - part4.width(), pt.y );
-    fheroes2::Blit( part0, display, pt.x + overallLeftWidth, pt.y );
-
-    pt.y += part4.height();
-
-    const int32_t posBeforeMiddle = pt.y;
-    int32_t middleLeftHeight = middleHeight;
-    for ( uint32_t i = 0; i < count; ++i ) {
-        const int32_t chunkHeight = middleLeftHeight >= activeAreaHeight ? activeAreaHeight : middleLeftHeight;
-        // left-middle
-        const fheroes2::Sprite & sl = fheroes2::AGG::GetICN( buybuild, 5 );
-        fheroes2::Blit( sl, 0, 10, display, pt.x + overallLeftWidth - sl.width(), pt.y, sl.width(), chunkHeight );
-
-        // right-middle
-        const fheroes2::Sprite & sr = fheroes2::AGG::GetICN( buybuild, 1 );
-        fheroes2::Blit( sr, 0, 10, display, pt.x + overallLeftWidth, pt.y, sr.width(), chunkHeight );
-
-        middleLeftHeight -= chunkHeight;
-        pt.y += chunkHeight;
-    }
-
-    pt.y = posBeforeMiddle + middleHeight;
-
-    // right-bottom
-    const fheroes2::Sprite & part2 = fheroes2::AGG::GetICN( buybuild, 2 );
-    // left-bottom
-    const fheroes2::Sprite & part6 = fheroes2::AGG::GetICN( buybuild, 6 );
-
-    fheroes2::Blit( part6, display, pt.x + overallLeftWidth - part6.width(), pt.y );
-    fheroes2::Blit( part2, display, pt.x + overallLeftWidth, pt.y );
-}

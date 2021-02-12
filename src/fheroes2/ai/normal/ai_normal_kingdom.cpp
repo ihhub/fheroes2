@@ -73,7 +73,8 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            stats.validObjects.emplace_back( idx, objectID );
+            if ( objectID != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, objectID );
 
             if ( !tile.isFog( color ) ) {
                 _mapObjects.emplace_back( idx, objectID );
@@ -134,7 +135,7 @@ namespace AI
         }
 
         const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
-        std::vector<int> castlesInDanger;
+        std::set<int> castlesInDanger;
 
         for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
             if ( enemy->second == nullptr )
@@ -157,8 +158,7 @@ namespace AI
                         const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, color, attackerStrength );
                         if ( dist && dist < threatDistanceLimit ) {
                             // castle is under threat
-                            castlesInDanger.push_back( castleIndex );
-                            break;
+                            castlesInDanger.insert( castleIndex );
                         }
                     }
                 }
@@ -171,7 +171,12 @@ namespace AI
         if ( slowEarlyGame )
             heroLimit = 2;
 
-        // Step 3. Buy new heroes, adjust roles, sort heroes based on priority or strength
+        // Step 3. Do some hero stuff.
+        HeroesTurn( heroes );
+
+        status.RedrawTurnProgress( 6 );
+
+        // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
 
         // sort castles by value: best first
         VecCastles sortedCastleList( castles );
@@ -185,7 +190,7 @@ namespace AI
             // search for best castle to recruit hero from
             for ( Castle * castle : sortedCastleList ) {
                 if ( castle && castle->isCastle() ) {
-                    Heroes * hero = castle->GetHeroes().Guest();
+                    const Heroes * hero = castle->GetHeroes().Guest();
                     const int mapIndex = castle->GetIndex();
 
                     // make sure there is no hero in castle already and we're not under threat
@@ -225,37 +230,10 @@ namespace AI
             }
         }
 
-        // Copy hero list and sort (original list may be altered during the turn)
-        VecHeroes sortedHeroList = heroes;
-        std::sort( sortedHeroList.begin(), sortedHeroList.end(), []( const Heroes * left, const Heroes * right ) {
-            if ( left && right )
-                return left->GetArmy().GetStrength() > right->GetArmy().GetStrength();
-            return right == NULL;
-        } );
+        status.RedrawTurnProgress( 7 );
 
-        status.RedrawTurnProgress( 2 );
-
-        // Step 4. Move heroes until they have nothing to do (HERO_WAITING or HERO_MOVED state)
-        size_t heroesMovedCount = 0;
-        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
-            if ( *it ) {
-                HeroTurn( **it );
-
-                if ( ( *it )->Modes( HERO_MOVED ) ) {
-                    ++heroesMovedCount;
-                    status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
-                }
-            }
-        }
-
-        // Step 5. Repeat process (maybe there was a path unlocked by a stronger hero)
-        for ( auto it = sortedHeroList.begin(); it != sortedHeroList.end(); ++it ) {
-            if ( *it && !( *it )->Modes( HERO_MOVED ) ) {
-                HeroTurn( **it );
-                ++heroesMovedCount;
-                status.RedrawTurnProgress( 2 + ( 7 * heroesMovedCount / sortedHeroList.size() ) );
-            }
-        }
+        // Step 5. Move newly hired heroes if any.
+        HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 9 );
 

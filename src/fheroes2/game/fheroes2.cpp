@@ -25,6 +25,7 @@
 #include <string>
 
 #include "agg.h"
+#include "audio_mixer.h"
 #include "audio_music.h"
 #include "bin_info.h"
 #include "cursor.h"
@@ -33,8 +34,10 @@
 #include "engine.h"
 #include "error.h"
 #include "game.h"
+#include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -103,7 +106,11 @@ int main( int argc, char ** argv )
     if ( conf.Music() )
         SetTimidityEnvPath();
 
-    u32 subsystem = INIT_VIDEO | INIT_TIMER;
+    u32 subsystem = INIT_VIDEO;
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    subsystem |= INIT_GAMECONTROLLER;
+#endif
 
     if ( conf.Sound() || conf.Music() )
         subsystem |= INIT_AUDIO;
@@ -137,14 +144,17 @@ int main( int argc, char ** argv )
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();
 
-            display.resize( conf.VideoMode().w, conf.VideoMode().h );
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Ensure the mouse position is updated to prevent bad initial values.
-            LocalEvent::Get().RegisterCycling();
+            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
             LocalEvent::Get().GetMouseCursor();
+
+            // Update mouse cursor when switching between software emulation and OS mouse modes.
+            fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
@@ -171,7 +181,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            Video::ShowVideo( Settings::GetLastFile( System::ConcatePath( "heroes2", "anim" ), "H2XINTRO.SMK" ), false );
+            Video::ShowVideo( "H2XINTRO.SMK", false );
 
             for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
@@ -194,8 +204,8 @@ int main( int argc, char ** argv )
                 case Game::NEWSTANDARD:
                     rs = Game::NewStandard();
                     break;
-                case Game::NEWCAMPAIN:
-                    rs = Game::NewCampain();
+                case Game::NEWCAMPAIGN:
+                    rs = Game::NewCampaign();
                     break;
                 case Game::NEWMULTI:
                     rs = Game::NewMulti();
@@ -220,6 +230,12 @@ int main( int argc, char ** argv )
                 case Game::LOADMULTI:
                     rs = Game::LoadMulti();
                     break;
+                case Game::LOADHOTSEAT:
+                    rs = Game::LoadHotseat();
+                    break;
+                case Game::LOADNETWORK:
+                    rs = Game::LoadNetwork();
+                    break;
                 case Game::SCENARIOINFO:
                     rs = Game::ScenarioInfo();
                     break;
@@ -229,6 +245,12 @@ int main( int argc, char ** argv )
                 case Game::STARTGAME:
                     rs = Game::StartGame();
                     break;
+                case Game::SELECT_CAMPAIGN_SCENARIO:
+                    rs = Game::SelectCampaignScenario();
+                    break;
+                case Game::COMPLETE_CAMPAIGN_SCENARIO:
+                    rs = Game::CompleteCampaignScenario();
+                    break;
 
                 default:
                     break;
@@ -236,7 +258,7 @@ int main( int argc, char ** argv )
             }
         }
 #ifndef ANDROID
-        catch ( Error::Exception & ) {
+        catch ( const Error::Exception & ) {
             VERBOSE( std::endl << conf.String() );
         }
 #endif
@@ -248,13 +270,18 @@ int main( int argc, char ** argv )
 bool ReadConfigs( void )
 {
     Settings & conf = Settings::Get();
-    const ListFiles & files = conf.GetListFiles( "", "fheroes2.cfg" );
+    const ListFiles & files = Settings::GetListFiles( "", "fheroes2.cfg" );
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
         if ( System::IsFile( *it ) ) {
             if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
+                const std::string & externalCommand = conf.externalMusicCommand();
+                if ( !externalCommand.empty() )
+                    Music::SetExtCommand( externalCommand );
+
+                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
                 break;
             }
         }

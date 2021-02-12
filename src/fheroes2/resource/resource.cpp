@@ -25,6 +25,7 @@
 #include "image.h"
 #include "mp2.h"
 #include "pairs.h"
+#include "rand.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -257,9 +258,11 @@ int Funds::getLowestQuotient( const Funds & divisor ) const
     int result = ( divisor.gold ) ? gold / divisor.gold : gold;
 
     auto divisionLambda = [&result]( int left, int right ) {
-        const int value = ( right != 0 ) ? left / right : left;
-        if ( value < result )
-            result = value;
+        if ( right > 0 ) {
+            const int value = left / right;
+            if ( value < result )
+                result = value;
+        }
     };
 
     divisionLambda( wood, divisor.wood );
@@ -557,7 +560,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const Point & pos, u32 co
     const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
 
-    const Text text( GetString( value ), Font::SMALL );
+    const Text text( std::to_string( value ), Font::SMALL );
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
 }
 

@@ -24,18 +24,19 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "profit.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
 #include "ui_button.h"
 
-void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const bool ok_button )
+void Dialog::SecondarySkillInfo( const Skill::Secondary & skill, const Heroes & hero, const bool ok_button )
 {
-    SecondarySkillInfo( skill.GetName(), skill.GetDescription(), skill, ok_button );
+    SecondarySkillInfo( skill.GetNameWithBonus( hero ), skill.GetDescription( hero ), skill, hero, ok_button );
 }
 
-void Dialog::SecondarySkillInfo( const std::string & header, const std::string & message, const Skill::Secondary & skill, const bool ok_button )
+void Dialog::SecondarySkillInfo( const std::string & header, const std::string & message, const Skill::Secondary & skill, const Heroes & hero, const bool ok_button )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
@@ -43,7 +44,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // cursor
     Cursor & cursor = Cursor::Get();
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
@@ -65,6 +65,9 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // blit sprite
     pos.x = box.GetArea().x + ( pos.width - border.width() ) / 2;
     fheroes2::Blit( border, display, pos.x, pos.y );
+
+    const fheroes2::Rect skillInfoArea( pos.x, pos.y, border.width(), border.height() );
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
     pos.x = box.GetArea().x + ( pos.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, pos.x, pos.y + 3 );
@@ -76,24 +79,23 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 3 );
 
-    text.Set( Skill::Level::String( skill.Level() ) );
+    text.Set( Skill::Level::StringWithBonus( hero, skill.Skill(), skill.Level() ) );
     pos.x = box.GetArea().x + ( pos.width - text.w() ) / 2;
     text.Blit( pos.x, pos.y + 55 );
 
     LocalEvent & le = LocalEvent::Get();
 
-    fheroes2::Button * button = NULL;
+    std::unique_ptr<fheroes2::Button> button;
 
     if ( ok_button ) {
         const fheroes2::Point pt( box.GetArea().x + ( box.GetArea().width - fheroes2::AGG::GetICN( system, 1 ).width() ) / 2,
                                   box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 1 ).height() );
-        button = new fheroes2::Button( pt.x, pt.y, system, 1, 2 );
+        button.reset( new fheroes2::Button( pt.x, pt.y, system, 1, 2 ) );
     }
 
     if ( button )
         button->draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -108,14 +110,14 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
             break;
         }
 
+        if ( button && le.MousePressRight( skillInfoArea ) ) {
+            SecondarySkillInfo( skill, hero, false );
+        }
+
         if ( HotKeyCloseWindow ) {
             break;
         }
     }
-
-    cursor.Hide();
-    if ( button )
-        delete button;
 }
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )
@@ -162,7 +164,7 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::PRIMSKIL, 4 );
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), Dialog::OK );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + border.height(), true );
     fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )

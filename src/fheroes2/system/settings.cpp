@@ -24,10 +24,9 @@
 #include <fstream>
 
 #include "audio_music.h"
-#include "dialog.h"
+#include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
-#include "maps.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -79,7 +78,6 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000200,
     GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_CHANGE_FULLSCREEN_RESOLUTION = 0x00000800,
     GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
     GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
     GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
@@ -131,10 +129,6 @@ const settings_t settingsGeneral[] = {
         "fullscreen",
     },
     {
-        GLOBAL_FULLSCREEN,
-        "full screen",
-    },
-    {
         GLOBAL_USEUNICODE,
         "unicode",
     },
@@ -157,10 +151,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_KEEP_ASPECT_RATIO,
         "keep aspect ratio",
-    },
-    {
-        GLOBAL_CHANGE_FULLSCREEN_RESOLUTION,
-        "change fullscreen resolution",
     },
     {
         0,
@@ -198,6 +188,10 @@ const settings_t settingsFHeroes2[] = {
         _( "world: show visited content from objects" ),
     },
     {
+        Settings::WORLD_SHOW_TERRAIN_PENALTY,
+        _( "world: show terrain penalty" ),
+    },
+    {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
     },
@@ -208,10 +202,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
-    },
-    {
-        Settings::WORLD_NOREQ_FOR_ARTIFACTS,
-        _( "world: no in-built requirements or guardians for placed artifacts" ),
     },
     {
         Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
@@ -240,10 +230,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
         _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-    },
-    {
-        Settings::WORLD_ARTSPRING_SEPARATELY_VISIT,
-        _( "world: Artesian Springs have two separately visitable squares (h3 ver)" ),
     },
     {
         Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
@@ -318,10 +304,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
     {
-        Settings::HEROES_ALLOW_BANNED_SECSKILLS,
-        _( "heroes: allow banned sec. skills upgrade" ),
-    },
-    {
         Settings::HEROES_ARENA_ANY_SKILLS,
         _( "heroes: in Arena can choose any of primary skills" ),
     },
@@ -340,10 +322,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::BATTLE_SOFT_WAITING,
         _( "battle: soft wait troop" ),
-    },
-    {
-        Settings::BATTLE_OBJECTS_ARCHERS_PENALTY,
-        _( "battle: high objects are an obstacle for archers" ),
     },
     {
         Settings::BATTLE_SKIP_INCREASE_DEFENSE,
@@ -393,25 +371,19 @@ const settings_t settingsFHeroes2[] = {
         Settings::POCKETPC_DRAG_DROP_SCROLL,
         _( "pocketpc: drag&drop gamearea as scroll" ),
     },
-    {
-        Settings::POCKETPC_LOW_MEMORY,
-        _( "pocketpc: low memory" ),
-    },
 
     {0, NULL},
 };
 
 std::string Settings::GetVersion( void )
 {
-    std::ostringstream os;
-    os << static_cast<int>( MAJOR_VERSION ) << "." << static_cast<int>( MINOR_VERSION ) << "." << static_cast<int>( INTERMEDIATE_VERSION );
-    return os.str();
+    return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
 }
 
 /* constructor */
 Settings::Settings()
     : debug( 0 )
-    , video_mode( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
     , game_difficulty( Difficulty::NORMAL )
     , font_normal( "dejavusans.ttf" )
     , font_small( "dejavusans.ttf" )
@@ -420,6 +392,7 @@ Settings::Settings()
     , sound_volume( 6 )
     , music_volume( 6 )
     , _musicType( MUSIC_EXTERNAL )
+    , _controllerPointerSpeed( 10 )
     , heroes_speed( DEFAULT_SPEED_DELAY )
     , ai_speed( DEFAULT_SPEED_DELAY )
     , scroll_speed( SCROLL_NORMAL )
@@ -470,7 +443,6 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
     std::string sval;
     int ival;
-    LocalEvent & le = LocalEvent::Get();
 
     if ( !config.Load( filename ) )
         return false;
@@ -682,40 +654,19 @@ bool Settings::Read( const std::string & filename )
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
     // playmus command
-    sval = config.StrParams( "playmus command" );
-    if ( !sval.empty() )
-        Music::SetExtCommand( sval );
+    _externalMusicCommand = config.StrParams( "playmus command" );
 
     // videodriver
     sval = config.StrParams( "videodriver" );
     if ( !sval.empty() )
         video_driver = sval;
 
-    // pocketpc
-    if ( PocketPC() ) {
-        ival = config.IntParams( "pointer offset x" );
-        if ( ival )
-            le.SetMouseOffsetX( ival );
-
-        ival = config.IntParams( "pointer offset y" );
-        if ( ival )
-            le.SetMouseOffsetY( ival );
-
-        ival = config.IntParams( "tap delay" );
-        if ( ival )
-            le.SetTapDelayForRightClickEmulation( ival );
-
-        sval = config.StrParams( "pointer rotate fix" );
-        if ( !sval.empty() )
-            System::SetEnvironment( "GAPI_POINTER_FIX", sval.c_str() );
-    }
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
         // default
-        video_mode.w = fheroes2::Display::DEFAULT_WIDTH;
-        video_mode.h = fheroes2::Display::DEFAULT_HEIGHT;
+        video_mode.width = fheroes2::Display::DEFAULT_WIDTH;
+        video_mode.height = fheroes2::Display::DEFAULT_HEIGHT;
 
         std::string value = StringLower( sval );
         const size_t pos = value.find( 'x' );
@@ -724,24 +675,21 @@ bool Settings::Read( const std::string & filename )
             std::string width( value.substr( 0, pos ) );
             std::string height( value.substr( pos + 1, value.length() - pos - 1 ) );
 
-            video_mode.w = GetInt( width );
-            video_mode.h = GetInt( height );
+            video_mode.width = GetInt( width );
+            video_mode.height = GetInt( height );
         }
         else {
             DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
         }
     }
 
-#ifdef WITHOUT_MOUSE
-    ival = config.IntParams( "emulate mouse" );
-    if ( ival ) {
-        le.SetEmulateMouse( ival );
-
-        ival = config.IntParams( "emulate mouse step" );
-        if ( ival )
-            le.SetEmulateMouseStep( ival );
+    if ( config.Exists( "controller_pointer_speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+        if ( _controllerPointerSpeed > 100 )
+            _controllerPointerSpeed = 100;
+        else if ( _controllerPointerSpeed < 0 )
+            _controllerPointerSpeed = 0;
     }
-#endif
 
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
@@ -759,7 +707,7 @@ bool Settings::Read( const std::string & filename )
     if ( video_driver.size() )
         video_driver = StringLower( video_driver );
 
-    if ( video_mode.w && video_mode.h )
+    if ( video_mode.width > 0 && video_mode.height > 0 )
         PostLoad();
 
     return true;
@@ -767,16 +715,10 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( QVGA() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( GAME_HIDE_INTERFACE );
-    }
-
     if ( opt_global.Modes( GLOBAL_POCKETPC ) )
         opt_global.SetModes( GLOBAL_FULLSCREEN );
     else {
         ExtResetModes( POCKETPC_TAP_MODE );
-        ExtResetModes( POCKETPC_LOW_MEMORY );
     }
 
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
@@ -848,10 +790,6 @@ std::string Settings::String( void ) const
     os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# change resolution in fullscreen mode (experimental)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) << " = " << ( opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION ) ? "on" : "off" )
-       << std::endl;
-
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
@@ -897,6 +835,9 @@ std::string Settings::String( void ) const
     if ( force_lang.size() )
         os << "lang = " << force_lang << std::endl;
 #endif
+
+    os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
+    os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     return os.str();
 }
@@ -952,6 +893,10 @@ const std::string & Settings::FontsSmall( void ) const
 const std::string & Settings::ForceLang( void ) const
 {
     return force_lang;
+}
+const std::string & Settings::loadedFileLanguage() const
+{
+    return _loadedFileLanguage;
 }
 const std::string & Settings::MapsCharset( void ) const
 {
@@ -1079,11 +1024,6 @@ std::string Settings::GetWriteableDir( const char * subdir )
     return "";
 }
 
-std::string Settings::GetSaveDir( void )
-{
-    return GetWriteableDir( "save" );
-}
-
 bool Settings::MusicExt( void ) const
 {
     return opt_global.Modes( GLOBAL_MUSIC_EXT );
@@ -1165,6 +1105,16 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
+void Settings::setFullScreen( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_FULLSCREEN );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_FULLSCREEN );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -1185,12 +1135,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-/* return full screen */
-bool Settings::QVGA( void ) const
-{
-    return video_mode.w && video_mode.h && ( video_mode.w < fheroes2::Display::DEFAULT_WIDTH || video_mode.h < fheroes2::Display::DEFAULT_HEIGHT );
 }
 
 bool Settings::UseAltResource( void ) const
@@ -1260,8 +1204,7 @@ bool Settings::BattleShowMoveShadow( void ) const
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
-/* get video mode */
-const Size & Settings::VideoMode( void ) const
+const fheroes2::Size & Settings::VideoMode() const
 {
     return video_mode;
 }
@@ -1370,6 +1313,11 @@ const std::string & Settings::MapsDescription( void ) const
     return current_maps_file.description;
 }
 
+const std::string & Settings::externalMusicCommand() const
+{
+    return _externalMusicCommand;
+}
+
 int Settings::MapsDifficulty( void ) const
 {
     return current_maps_file.difficulty;
@@ -1438,6 +1386,11 @@ Point Settings::LossMapsPositionObject( void ) const
 u32 Settings::LossCountDays( void ) const
 {
     return current_maps_file.LossCountDays();
+}
+
+int Settings::controllerPointerSpeed() const
+{
+    return _controllerPointerSpeed;
 }
 
 void Settings::SetUnicode( bool f )
@@ -1604,6 +1557,11 @@ bool Settings::ExtWorldShowVisitedContent( void ) const
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
 
+bool Settings::ExtWorldShowTerrainPenalty() const
+{
+    return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
+}
+
 bool Settings::ExtWorldScouteExtended( void ) const
 {
     return ExtModes( WORLD_SCOUTING_EXTENDED );
@@ -1622,11 +1580,6 @@ bool Settings::ExtWorldAbandonedMineRandom( void ) const
 bool Settings::ExtWorldAllowSetGuardian( void ) const
 {
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-}
-
-bool Settings::ExtWorldNoRequirementsForArtifacts( void ) const
-{
-    return ExtModes( WORLD_NOREQ_FOR_ARTIFACTS );
 }
 
 bool Settings::ExtWorldArtifactCrystalBall( void ) const
@@ -1704,11 +1657,6 @@ bool Settings::ExtBattleSoftWait( void ) const
     return ExtModes( BATTLE_SOFT_WAITING );
 }
 
-bool Settings::ExtBattleObjectsArchersPenalty( void ) const
-{
-    return ExtModes( BATTLE_OBJECTS_ARCHERS_PENALTY );
-}
-
 bool Settings::ExtGameRewriteConfirm( void ) const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
@@ -1731,7 +1679,7 @@ bool Settings::ExtGameAutosaveOn( void ) const
 
 bool Settings::ExtGameUseFade( void ) const
 {
-    return video_mode == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
+    return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
 bool Settings::ExtGameEvilInterface( void ) const
@@ -1747,11 +1695,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtPocketLowMemory( void ) const
-{
-    return ExtModes( POCKETPC_LOW_MEMORY );
 }
 
 bool Settings::ExtPocketTapMode( void ) const
@@ -1779,11 +1722,6 @@ bool Settings::ExtWorldBanMonthOfMonsters( void ) const
     return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
 }
 
-bool Settings::ExtWorldArtesianSpringSeparatelyVisit( void ) const
-{
-    return ExtModes( WORLD_ARTSPRING_SEPARATELY_VISIT );
-}
-
 bool Settings::ExtWorldBanPlagues( void ) const
 {
     return ExtModes( WORLD_BAN_PLAGUES );
@@ -1797,11 +1735,6 @@ bool Settings::ExtBattleReverseWaitOrder( void ) const
 bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
-}
-
-bool Settings::ExtHeroAllowBannedSecSkillsUpgrade( void ) const
-{
-    return ExtModes( HEROES_ALLOW_BANNED_SECSKILLS );
 }
 
 bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const
@@ -1895,7 +1828,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1907,7 +1840,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( GetSaveDir(), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1932,36 +1865,17 @@ bool Settings::KeepAspectRatio( void ) const
     return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
 }
 
-bool Settings::ChangeFullscreenResolution( void ) const
-{
-    return opt_global.Modes( GLOBAL_CHANGE_FULLSCREEN_RESOLUTION );
-}
-
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    return msg <<
-           // lang
-           conf.force_lang <<
-           // current maps
-           conf.current_maps_file <<
-           // game config
-           conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game << conf.opt_world << conf.opt_battle << conf.opt_addons
-               << conf.players;
+    msg << conf.force_lang << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
+        << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
+
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Settings & conf )
 {
-    std::string lang;
-
-    msg >> lang;
-
-    if ( lang != "en" && lang != conf.force_lang && !conf.Unicode() ) {
-        std::string warningMessage( "This is an saved game is localized for lang = " );
-        warningMessage.append( lang );
-        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
-        warningMessage.append( "(tip: set unicode = on)" );
-        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
-    }
+    msg >> conf._loadedFileLanguage;
 
     int debug;
     u32 opt_game = 0; // skip: settings
@@ -1969,6 +1883,9 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
+
+    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
+        msg >> Campaign::CampaignSaveData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

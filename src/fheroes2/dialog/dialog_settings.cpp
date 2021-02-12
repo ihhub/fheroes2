@@ -26,9 +26,11 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "interface_list.h"
+#include "localevent.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_window.h"
 
 class SettingsListBox : public Interface::ListBox<u32>
 {
@@ -57,6 +59,8 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
+    const bool isActive = !readonly || conf.CanChangeInGame( item );
+
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
     const fheroes2::Sprite & mark = fheroes2::AGG::GetICN( ICN::CELLWIN, 2 );
 
@@ -64,7 +68,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
     if ( conf.ExtModes( item ) )
         fheroes2::Blit( mark, display, ox + 3, oy + 2 );
 
-    TextBox msg( conf.ExtName( item ), Font::SMALL, 250 );
+    TextBox msg( conf.ExtName( item ), isActive ? Font::SMALL : Font::GRAY_SMALL, 250 );
     msg.SetAlign( ALIGN_LEFT );
 
     if ( 1 < msg.row() )
@@ -143,8 +147,8 @@ void Dialog::ExtSettings( bool readonly )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 320, 400 ) );
-    const Rect & area = frameborder.GetArea();
+    const fheroes2::StandardWindow frameborder( 320, 400 );
+    const Rect area( frameborder.activeArea() );
 
     Text text( "Experimental Game Settings", Font::YELLOW_BIG );
     text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
@@ -166,17 +170,16 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
-    if ( conf.VideoMode() == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    if ( conf.VideoMode() == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
+    states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
-    states.push_back( Settings::WORLD_NOREQ_FOR_ARTIFACTS );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_ARTSPRING_SEPARATELY_VISIT );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
@@ -199,7 +202,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
     states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
-    states.push_back( Settings::HEROES_ALLOW_BANNED_SECSKILLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
 
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
@@ -210,13 +212,11 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_OBJECTS_ARCHERS_PENALTY );
     states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     if ( conf.PocketPC() ) {
         states.push_back( Settings::POCKETPC_TAP_MODE );
-        states.push_back( Settings::POCKETPC_LOW_MEMORY );
         states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
     }
 
@@ -232,7 +232,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollSplitter( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );

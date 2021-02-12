@@ -54,21 +54,27 @@ namespace fheroes2
         ScreenPaletteRestorer();
         ~ScreenPaletteRestorer();
 
-        void changePalette( const uint8_t * palette );
+        void changePalette( const uint8_t * palette ) const;
     };
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay );
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs );
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount );
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount );
 
-    void FadeDisplay( int delay = 500 );
+    void FadeDisplay( int delayMs = 500 );
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay );
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delayMs );
 
-    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delayMs,
                                   int frameCount );
+
+    // Display pre-render function to show screen system info
+    void PreRenderSystemInfo();
+
+    // Display post-render function to hide screen system info
+    void PostRenderSystemInfo();
 }

@@ -23,14 +23,12 @@
 #ifndef H2SYSTEM_H
 #define H2SYSTEM_H
 
-#include <iostream>
-#include <list>
-#include <sstream>
-#include <string>
+#include "dir.h"
 
-#if defined( __SYMBIAN32__ )
-#define VERBOSE( x )
-#elif defined( ANDROID )
+#include <iostream>
+#include <sstream>
+
+#if defined( ANDROID )
 #include <android/log.h>
 namespace std
 {
@@ -58,8 +56,6 @@ namespace std
     {                                                                                                                                                                    \
         COUT( System::GetTime() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                        \
     }
-
-#include "dir.h"
 
 namespace System
 {
@@ -89,12 +85,6 @@ namespace System
     int Unlink( const std::string & );
 
     bool isEmbededDevice( void );
-    bool isRunning( void );
-    int CreateTrayIcon( bool );
-    void PowerManagerOff( bool );
-
-    int ShellCommand( const char * );
-    int GetRenderFlags( void );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 }

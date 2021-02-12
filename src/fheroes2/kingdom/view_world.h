@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,62 +17,59 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef H2SPLITTER_H
-#define H2SPLITTER_H
+
+#ifndef H2VIEWWORLD_H
+#define H2VIEWWORLD_H
 
 #include "gamedefs.h"
-#include "ui_tool.h"
+#include "image.h"
+#include "math_base.h"
 
-class Splitter : protected fheroes2::MovableSprite
+namespace Interface
+{
+    class Basic;
+}
+
+enum class ViewWorldMode : int
+{
+    OnlyVisible = 0, // Only show what is currently not under fog of war
+
+    ViewArtifacts = 1,
+    ViewMines = 2,
+    ViewResources = 3,
+    ViewHeroes = 4,
+    ViewTowns = 5,
+
+    ViewAll = 6,
+};
+
+class ViewWorld
 {
 public:
-    Splitter();
-    Splitter( const fheroes2::Image & image, const fheroes2::Rect & );
-
-    void Forward( void );
-    void Backward( void );
-    void MoveIndex( int );
-    void MoveCenter( void );
-
-    void RedrawCursor( void );
-    void HideCursor( void );
-    void ShowCursor( void );
-
-    void SetSprite( const fheroes2::Image & image );
-    void SetArea( const fheroes2::Rect & );
-    void SetRange( int smin, int smax );
-
-    bool isVertical( void ) const;
-    int GetCurrent( void ) const
+    enum ZoomLevel : int
     {
-        return cur;
-    }
-    int GetStep( void ) const
-    {
-        return step;
-    }
-    int Max( void ) const
-    {
-        return max;
-    }
-    int Min( void ) const
-    {
-        return min;
-    }
+        ZoomLevel0 = 0,
+        ZoomLevel1 = 1,
+        ZoomLevel2 = 2,
+        ZoomLevel3 = 3, // Max zoom, but should only exists for debug builds
+    };
 
-    const fheroes2::Rect & GetRect( void ) const
+    static void ViewWorldWindow( const int color, const ViewWorldMode type, Interface::Basic & interface );
+
+    struct ZoomROIs
     {
-        return area;
-    }
+        ZoomROIs( const ZoomLevel zoomLevel, const fheroes2::Point & centerInPixels );
 
-private:
-    fheroes2::Point GetPositionCursor();
+        bool ChangeZoom( const bool zoomIn, const bool cycle = false );
+        bool ChangeCenter( const fheroes2::Point & centerInPixels );
 
-    fheroes2::Rect area;
-    int step;
-    int min;
-    int max;
-    int cur;
+        const fheroes2::Rect & GetROIinPixels() const;
+        fheroes2::Rect GetROIinTiles() const;
+
+        ZoomLevel _zoomLevel;
+        fheroes2::Point _center;
+        fheroes2::Rect _roiForZoomLevels[4];
+    };
 };
 
 #endif

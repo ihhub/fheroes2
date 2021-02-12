@@ -127,10 +127,10 @@ struct CapturedObjects : std::map<s32, CapturedObject>
 struct EventDate
 {
     EventDate()
-        : computer( false )
-        , first( 0 )
+        : first( 0 )
         , subsequent( 0 )
         , colors( 0 )
+        , computer( false )
     {}
 
     void LoadFromMP2( StreamBuf );
@@ -139,10 +139,10 @@ struct EventDate
     bool isDeprecated( u32 date ) const;
 
     Funds resource;
-    bool computer;
     u32 first;
     u32 subsequent;
     int colors;
+    bool computer;
     std::string message;
 };
 
@@ -180,8 +180,8 @@ public:
 
     const Maps::Tiles & GetTiles( u32, u32 ) const;
     Maps::Tiles & GetTiles( u32, u32 );
-    const Maps::Tiles & GetTiles( s32 ) const;
-    Maps::Tiles & GetTiles( s32 );
+    const Maps::Tiles & GetTiles( const int32_t tileId ) const;
+    Maps::Tiles & GetTiles( const int32_t tileId );
 
     void InitKingdoms( void );
 
@@ -262,7 +262,7 @@ public:
     size_t getRegionCount() const;
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( int index, int direction ) const;
+    bool isValidPath( int index, int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();
@@ -319,6 +319,7 @@ private:
 
     // This data isn't serialized
     Maps::Indexes _allTeleporters;
+    Maps::Indexes _whirlpoolTiles;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
 };

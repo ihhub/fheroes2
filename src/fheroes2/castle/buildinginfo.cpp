@@ -439,9 +439,9 @@ void BuildingInfo::Redraw( void )
             fheroes2::Blit( infoSprite, display, area.x, area.y );
 
             const fheroes2::Point offset( 6, 59 );
-            fheroes2::Image grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
-            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::GRAY ) );
-            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::Sprite grayedOut = fheroes2::Crop( infoSprite, offset.x, offset.y, 125, 12 );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( grayedOut, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             fheroes2::Blit( grayedOut, display, area.x + offset.x, area.y + offset.y );
         }
         else {
@@ -467,9 +467,9 @@ void BuildingInfo::Redraw( void )
         if ( bcond == ALREADY_BUILT )
             fheroes2::Blit( sprite_allow, display, dst_pt.x, dst_pt.y );
         else if ( bcond == BUILD_DISABLE ) {
-            fheroes2::Image disabledSprite( sprite_deny );
-            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::GRAY ) );
-            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::DARKENING ) );
+            fheroes2::Sprite disabledSprite( sprite_deny );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
             fheroes2::Blit( disabledSprite, display, dst_pt.x, dst_pt.y );
         }
         else if ( bcond != ALLOW_BUILD ) {
@@ -725,23 +725,23 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     bar.ShowMessage( str );
 }
 
-DwellingItem::DwellingItem( Castle & castle, u32 dw )
+DwellingItem::DwellingItem( const Castle & castle, u32 dw )
 {
     type = castle.GetActualDwelling( dw );
     mons = Monster( castle.GetRace(), type );
 }
 
-DwellingsBar::DwellingsBar( Castle & cstl, const Size & sz )
+DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     : castle( cstl )
-    , backsf( sz.w, sz.h )
+    , backsf( sz.width, sz.height )
 {
     for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
-        content.push_back( DwellingItem( castle, dw ) );
+        content.emplace_back( castle, dw );
 
     SetContent( content );
 
     fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-    SetItemSize( sz.w, sz.h );
+    SetItemSize( sz.width, sz.height );
 }
 
 void DwellingsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
@@ -756,7 +756,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
-        Text text( GetString( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
+        Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
@@ -766,14 +766,14 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
             grown += Castle::GetGrownWel2();
 
         // grown
-        text.Set( "+" + GetString( grown ), Font::YELLOW_SMALL );
+        text.Set( "+" + std::to_string( grown ), Font::YELLOW_SMALL );
         text.Blit( pos.x + pos.w - text.w() - 3, pos.y + 2 );
     }
     else
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.w - 10, pos.y + 4 );
 }
 
-bool DwellingsBar::ActionBarSingleClick( DwellingItem & dwl )
+bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
 {
     if ( castle.isBuild( dwl.type ) ) {
         castle.RecruitMonster( Dialog::RecruitMonster( dwl.mons, castle.getMonstersInDwelling( dwl.type ), true ) );
@@ -792,7 +792,7 @@ bool DwellingsBar::ActionBarSingleClick( DwellingItem & dwl )
     return true;
 }
 
-bool DwellingsBar::ActionBarPressRight( DwellingItem & dwl )
+bool DwellingsBar::ActionBarRightMouseHold( DwellingItem & dwl )
 {
     Dialog::DwellingInfo( dwl.mons, castle.getMonstersInDwelling( dwl.type ) );
 

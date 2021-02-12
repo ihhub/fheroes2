@@ -84,17 +84,17 @@ namespace Dialog
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
     // show info cell maps
-    void QuickInfo( const Maps::Tiles & );
-    void QuickInfo( const Castle & );
-    void QuickInfo( const Heroes & hero );
+    void QuickInfo( const Maps::Tiles & tile );
+    void QuickInfo( const Castle & castle, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const Heroes & hero, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
     void SpellInfo( const Spell &, bool ok_button = true );
     void SpellInfo( const std::string &, const std::string &, const Spell &, bool ok_button = true );
-    void SecondarySkillInfo( const Skill::Secondary &, const bool ok_button = true );
-    void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const bool ok_button = true );
+    void SecondarySkillInfo( const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
+    void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
     void PrimarySkillInfo( const std::string &, const std::string &, int );
     int SpriteInfo( const std::string &, const std::string &, const fheroes2::Image &, int buttons = Dialog::OK );
     int ArtifactInfo( const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK );
@@ -127,9 +127,16 @@ namespace Dialog
             return area;
         }
 
+        void redraw();
+
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         fheroes2::Rect area;
+
+    private:
+        fheroes2::Point _position;
+        uint32_t _middleFragmentCount;
+        int32_t _middleFragmentHeight;
     };
 
     class FrameBox : public NonFixedFrameBox
@@ -143,26 +150,27 @@ namespace Dialog
     {
     public:
         FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const Size & );
-        FrameBorder( const Size &, const fheroes2::Image & );
+        FrameBorder( const fheroes2::Size & );
+        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
         FrameBorder( s32, s32, u32, u32 );
         ~FrameBorder();
 
-        void SetBorder( int );
-        int BorderWidth( void ) const;
-        int BorderHeight( void ) const;
-        void SetPosition( s32, s32, u32 = 0, u32 = 0 );
+        int BorderWidth() const;
+        int BorderHeight() const;
+        void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
 
         bool isValid() const;
-        const Rect & GetRect( void ) const;
-        const Rect & GetArea( void ) const;
-        const Rect & GetTop( void ) const;
+        const Rect & GetRect() const;
+        const Rect & GetArea() const;
+        const Rect & GetTop() const;
 
-        static void RenderRegular( const Rect & );
+        static void RenderRegular( const Rect & dstrt );
         static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
 
     protected:
         fheroes2::ImageRestorer restorer;
+
+    private:
         Rect rect;
         Rect area;
         Rect top;

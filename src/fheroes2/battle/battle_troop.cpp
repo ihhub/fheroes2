@@ -36,6 +36,7 @@
 #include "heroes.h"
 #include "luck.h"
 #include "morale.h"
+#include "rand.h"
 #include "settings.h"
 #include "speed.h"
 #include "world.h"
@@ -208,17 +209,18 @@ bool Battle::Unit::isModes( u32 v ) const
 std::string Battle::Unit::GetShotString( void ) const
 {
     if ( Troop::GetShots() == GetShots() )
-        return GetString( Troop::GetShots() );
+        return std::to_string( Troop::GetShots() );
 
     std::ostringstream os;
     os << Troop::GetShots() << " (" << GetShots() << ")";
     return os.str();
 }
 
-std::string Battle::Unit::GetSpeedString( void ) const
+std::string Battle::Unit::GetSpeedString() const
 {
     std::ostringstream os;
-    os << Speed::String( GetSpeed() ) << " (" << GetSpeed() << ")";
+    const uint32_t speedValue = GetSpeed( true );
+    os << Speed::String( speedValue ) << " (" << speedValue << ")";
     return os.str();
 }
 
@@ -240,6 +242,17 @@ u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 u32 Battle::Unit::GetSpeed( void ) const
 {
     return GetSpeed( false );
+}
+
+int Battle::Unit::GetMorale() const
+{
+    int armyTroopMorale = ArmyTroop::GetMorale();
+
+    // enemy Bone dragons affect morale
+    if ( isAffectedByMorale() && GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
+        --armyTroopMorale;
+
+    return armyTroopMorale;
 }
 
 bool Battle::Unit::isUID( u32 v ) const
@@ -284,11 +297,7 @@ s32 Battle::Unit::GetTailIndex( void ) const
 
 void Battle::Unit::SetRandomMorale( void )
 {
-    s32 morale = GetMorale();
-
-    // Bone dragon affects morale, not luck
-    if ( GetArena()->GetForce( GetArmyColor(), true ).HasMonster( Monster::BONE_DRAGON ) && morale > Morale::TREASON )
-        --morale;
+    const int morale = GetMorale();
 
     if ( morale > 0 && static_cast<int32_t>( Rand::Get( 1, 24 ) ) <= morale ) {
         SetModes( MORALE_GOOD );
@@ -488,7 +497,7 @@ u32 Battle::Unit::CalculateMaxDamage( const Unit & enemy ) const
     return CalculateDamageUnit( enemy, ArmyTroop::GetDamageMax() );
 }
 
-u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
+u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
 {
     if ( isArchers() ) {
         if ( !isHandFighting() ) {
@@ -498,7 +507,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, float dmg ) const
             }
 
             // check castle defense
-            if ( GetArena()->GetObstaclesPenalty( *this, enemy ) )
+            if ( GetArena()->IsShootingPenalty( *this, enemy ) )
                 dmg /= 2;
 
             // check spell shield
@@ -690,7 +699,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     if ( killed )
         switch ( enemy.GetID() ) {
         case Monster::GHOST:
-            resurrect = killed * static_cast<Monster>( enemy ).GetHitPoints();
+            resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
             DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
             // grow troop
             enemy.Resurrect( resurrect, true, false );
@@ -725,11 +734,13 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
 {
-    if ( Modes( SP_ANTIMAGIC ) )
+    if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
+    }
 
-    if ( ( Modes( CAP_MIRRORIMAGE ) || Modes( CAP_MIRROROWNER ) ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) )
+    if ( Modes( CAP_MIRROROWNER ) && spell == Spell::MIRRORIMAGE ) {
         return false;
+    }
 
     // check global
     // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!
@@ -1443,6 +1454,9 @@ bool Battle::Unit::isMagicResist( const Spell & spell, u32 spower ) const
 
 u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
 {
+    if ( Modes( SP_ANTIMAGIC ) )
+        return 100;
+
     if ( spell.isMindInfluence() && ( isUndead() || isElemental() || GetID() == Monster::GIANT || GetID() == Monster::TITAN ) )
         return 100;
 

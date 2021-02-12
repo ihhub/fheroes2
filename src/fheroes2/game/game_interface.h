@@ -32,22 +32,6 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "players.h"
-#include "text.h"
-
-enum redraw_t
-{
-    REDRAW_RADAR = 0x01,
-    REDRAW_HEROES = 0x02,
-    REDRAW_CASTLES = 0x04,
-    REDRAW_BUTTONS = 0x08,
-    REDRAW_STATUS = 0x10,
-    REDRAW_BORDER = 0x20,
-    REDRAW_GAMEAREA = 0x40,
-    REDRAW_CURSOR = 0x80,
-
-    REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
-    REDRAW_ALL = 0xFF
-};
 
 class Castle;
 class Heroes;
@@ -71,6 +55,21 @@ namespace GameFocus
 
 namespace Interface
 {
+    enum redraw_t
+    {
+        REDRAW_RADAR = 0x01,
+        REDRAW_HEROES = 0x02,
+        REDRAW_CASTLES = 0x04,
+        REDRAW_BUTTONS = 0x08,
+        REDRAW_STATUS = 0x10,
+        REDRAW_BORDER = 0x20,
+        REDRAW_GAMEAREA = 0x40,
+        REDRAW_CURSOR = 0x80,
+
+        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
+        REDRAW_ALL = 0xFF
+    };
+
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
     Army * GetFocusArmy();
@@ -84,6 +83,7 @@ namespace Interface
 
         bool NeedRedraw( void ) const;
         void SetRedraw( int );
+        int GetRedrawMask() const;
         void Redraw( int f = 0 );
 
         const fheroes2::Rect & GetScrollLeft( void ) const;
@@ -124,8 +124,6 @@ namespace Interface
         void EventSwitchShowButtons( void );
         void EventSwitchShowIcons( void );
         void EventSwitchShowControlPanel( void );
-        void EventDebug1( void );
-        void EventDebug2( void );
 
         int EventNewGame( void );
         int EventLoadGame( void );
@@ -138,7 +136,7 @@ namespace Interface
 
         int StartGame( void );
 
-        void MouseCursorAreaClickLeft( s32 );
+        void MouseCursorAreaClickLeft( const int32_t index_maps );
         void MouseCursorAreaPressRight( s32 );
 
         static int GetCursorTileIndex( s32 );
@@ -151,7 +149,6 @@ namespace Interface
 
     private:
         Basic();
-        void RedrawSystemInfo( s32, s32, u32 );
         void ShowPathOrStartMoveHero( Heroes *, s32 );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         int HumanTurn( bool );
@@ -169,8 +166,6 @@ namespace Interface
         fheroes2::Rect scrollRight;
         fheroes2::Rect scrollBottom;
         fheroes2::Rect scrollTop;
-
-        Text system_info;
     };
 }
 

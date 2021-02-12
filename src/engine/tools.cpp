@@ -35,15 +35,7 @@
 #include "system.h"
 #include "tools.h"
 
-enum KeyMod
-{
-    MOD_NONE = KMOD_NONE,
-    MOD_CTRL = KMOD_CTRL,
-    MOD_SHIFT = KMOD_SHIFT,
-    MOD_ALT = KMOD_ALT,
-    MOD_CAPS = KMOD_CAPS,
-    MOD_NUM = KMOD_NUM
-};
+#include <SDL.h>
 
 /* trim left right space */
 std::string StringTrim( std::string str )
@@ -87,28 +79,17 @@ std::string StringUpper( std::string str )
     return str;
 }
 
-/* int to string */
-std::string GetString( int value )
-{
-    std::ostringstream stream;
-    stream << value;
-    return stream.str();
-}
-
 std::string GetStringShort( int value )
 {
     if ( std::abs( value ) > 1000 ) {
-        std::ostringstream stream;
+        if ( std::abs( value ) > 1000000 ) {
+            return std::to_string( value / 1000000 ) + 'M';
+        }
 
-        if ( std::abs( value ) > 1000000 )
-            stream << value / 1000000 << "M";
-        else
-            stream << value / 1000 << "K";
-
-        return stream.str();
+        return std::to_string( value / 1000 ) + 'K';
     }
 
-    return GetString( value );
+    return std::to_string( value );
 }
 
 std::string GetString( double value, u8 prec )
@@ -116,27 +97,6 @@ std::string GetString( double value, u8 prec )
     std::ostringstream stream;
     stream << std::setprecision( prec ) << value;
     return stream.str();
-}
-
-std::string GetString( const Point & pt )
-{
-    std::ostringstream os;
-    os << "point: x(" << pt.x << "), y(" << pt.y << ")";
-    return os.str();
-}
-
-std::string GetString( const Size & sz )
-{
-    std::ostringstream os;
-    os << "size: w(" << sz.w << "), h(" << sz.h << ")";
-    return os.str();
-}
-
-std::string GetString( const Rect & rt )
-{
-    std::ostringstream os;
-    os << "rect: x(" << rt.x << "), y(" << rt.y << "), w(" << rt.w << "), h(" << rt.h << ")";
-    return os.str();
 }
 
 std::string GetHexString( int value, int width )
@@ -162,19 +122,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
+    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char & c ) { return !std::isdigit( c ); } ) ) {
+              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char & c ) { return !std::isxdigit( c ); } ) ) {
+             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char c ) { return !std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -218,7 +178,7 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 
 void StringReplace( std::string & dst, const char * pred, int value )
 {
-    StringReplace( dst, pred, GetString( value ) );
+    StringReplace( dst, pred, std::to_string( value ) );
 }
 
 std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
@@ -317,364 +277,9 @@ std::string StringUNICODE_to_UTF8( const std::vector<u16> & unicode )
     return utf8;
 }
 
-char CharFromKeySym( KeySym sym, u16 mod )
-{
-    switch ( sym ) {
-    case KEY_1:
-        return ( MOD_SHIFT & mod ? '!' : '1' );
-    case KEY_2:
-        return ( MOD_SHIFT & mod ? '@' : '2' );
-    case KEY_3:
-        return ( MOD_SHIFT & mod ? '#' : '3' );
-    case KEY_4:
-        return ( MOD_SHIFT & mod ? '$' : '4' );
-    case KEY_5:
-        return ( MOD_SHIFT & mod ? '%' : '5' );
-    case KEY_6:
-        return ( MOD_SHIFT & mod ? '^' : '6' );
-    case KEY_7:
-        return ( MOD_SHIFT & mod ? '&' : '7' );
-    case KEY_8:
-        return ( MOD_SHIFT & mod ? '*' : '8' );
-    case KEY_9:
-        return ( MOD_SHIFT & mod ? '(' : '9' );
-    case KEY_0:
-        return ( MOD_SHIFT & mod ? ')' : '0' );
-
-    case KEY_KP0:
-        if ( MOD_NUM & mod )
-            return '0';
-        break;
-    case KEY_KP1:
-        if ( MOD_NUM & mod )
-            return '1';
-        break;
-    case KEY_KP2:
-        if ( MOD_NUM & mod )
-            return '2';
-        break;
-    case KEY_KP3:
-        if ( MOD_NUM & mod )
-            return '3';
-        break;
-    case KEY_KP4:
-        if ( MOD_NUM & mod )
-            return '4';
-        break;
-    case KEY_KP5:
-        if ( MOD_NUM & mod )
-            return '5';
-        break;
-    case KEY_KP6:
-        if ( MOD_NUM & mod )
-            return '6';
-        break;
-    case KEY_KP7:
-        if ( MOD_NUM & mod )
-            return '7';
-        break;
-    case KEY_KP8:
-        if ( MOD_NUM & mod )
-            return '8';
-        break;
-    case KEY_KP9:
-        if ( MOD_NUM & mod )
-            return '9';
-        break;
-
-    case KEY_MINUS:
-        return ( MOD_SHIFT & mod ? '_' : '-' );
-    case KEY_EQUALS:
-        return ( MOD_SHIFT & mod ? '+' : '=' );
-    case KEY_BACKSLASH:
-        return ( MOD_SHIFT & mod ? '|' : '\\' );
-    case KEY_LEFTBRACKET:
-        return ( MOD_SHIFT & mod ? '{' : '[' );
-    case KEY_RIGHTBRACKET:
-        return ( MOD_SHIFT & mod ? '}' : ']' );
-    case KEY_SEMICOLON:
-        return ( MOD_SHIFT & mod ? ':' : ';' );
-    case KEY_QUOTE:
-        return ( MOD_SHIFT & mod ? '"' : '\'' );
-    case KEY_COMMA:
-        return ( MOD_SHIFT & mod ? '<' : ',' );
-    case KEY_PERIOD:
-        return ( MOD_SHIFT & mod ? '>' : '.' );
-    case KEY_SLASH:
-        return ( MOD_SHIFT & mod ? '?' : '/' );
-
-    case KEY_EXCLAIM:
-        return '!';
-    case KEY_AT:
-        return '@';
-    case KEY_HASH:
-        return '#';
-    case KEY_DOLLAR:
-        return '$';
-    case KEY_AMPERSAND:
-        return '&';
-    case KEY_ASTERISK:
-        return '*';
-    case KEY_LEFTPAREN:
-        return '(';
-    case KEY_RIGHTPAREN:
-        return ')';
-    case KEY_QUOTEDBL:
-        return '"';
-    case KEY_PLUS:
-        return '+';
-    case KEY_COLON:
-        return ':';
-    case KEY_LESS:
-        return '<';
-    case KEY_GREATER:
-        return '>';
-    case KEY_QUESTION:
-        return '?';
-    case KEY_CARET:
-        return '^';
-    case KEY_UNDERSCORE:
-        return '_';
-
-    case KEY_SPACE:
-        return ' ';
-
-    case KEY_a:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'A' : 'a' );
-    case KEY_b:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'B' : 'b' );
-    case KEY_c:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'C' : 'c' );
-    case KEY_d:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'D' : 'd' );
-    case KEY_e:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'E' : 'e' );
-    case KEY_f:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'F' : 'f' );
-    case KEY_g:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'G' : 'g' );
-    case KEY_h:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'H' : 'h' );
-    case KEY_i:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'I' : 'i' );
-    case KEY_j:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'J' : 'j' );
-    case KEY_k:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'K' : 'k' );
-    case KEY_l:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'L' : 'l' );
-    case KEY_m:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'M' : 'm' );
-    case KEY_n:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'N' : 'n' );
-    case KEY_o:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'O' : 'o' );
-    case KEY_p:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'P' : 'p' );
-    case KEY_q:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Q' : 'q' );
-    case KEY_r:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'R' : 'r' );
-    case KEY_s:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'S' : 's' );
-    case KEY_t:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'T' : 't' );
-    case KEY_u:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'U' : 'u' );
-    case KEY_v:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'V' : 'v' );
-    case KEY_w:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'W' : 'w' );
-    case KEY_x:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'X' : 'x' );
-    case KEY_y:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Y' : 'y' );
-    case KEY_z:
-        return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Z' : 'z' );
-
-    default:
-        break;
-    }
-
-    return 0;
-}
-
-size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
-{
-    switch ( sym ) {
-    case KEY_BACKSPACE: {
-        if ( res.size() && pos ) {
-            if ( pos >= res.size() )
-                res.resize( res.size() - 1 );
-            else
-                res.erase( pos - 1, 1 );
-            --pos;
-        }
-    } break;
-
-    case KEY_LEFT:
-        if ( pos )
-            --pos;
-        break;
-    case KEY_RIGHT:
-        if ( pos < res.size() )
-            ++pos;
-        break;
-
-    default: {
-        char c = CharFromKeySym( sym, mod );
-
-        if ( c ) {
-            res.insert( pos, 1, c );
-            ++pos;
-        }
-    }
-    }
-
-    return pos;
-}
-
 int Sign( int s )
 {
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
-}
-
-KeySym KeySymFromChar( char c )
-{
-    switch ( c ) {
-    case '!':
-        return KEY_EXCLAIM;
-    case '"':
-        return KEY_QUOTEDBL;
-    case '#':
-        return KEY_HASH;
-    case '$':
-        return KEY_DOLLAR;
-    case '&':
-        return KEY_AMPERSAND;
-    case '\'':
-        return KEY_QUOTE;
-    case '(':
-        return KEY_LEFTPAREN;
-    case ')':
-        return KEY_RIGHTPAREN;
-    case '*':
-        return KEY_ASTERISK;
-    case '+':
-        return KEY_PLUS;
-    case ',':
-        return KEY_COMMA;
-    case '-':
-        return KEY_MINUS;
-    case '.':
-        return KEY_PERIOD;
-    case '/':
-        return KEY_SLASH;
-    case ':':
-        return KEY_COLON;
-    case ';':
-        return KEY_SEMICOLON;
-    case '<':
-        return KEY_LESS;
-    case '=':
-        return KEY_EQUALS;
-    case '>':
-        return KEY_GREATER;
-    case '?':
-        return KEY_QUESTION;
-    case '@':
-        return KEY_AT;
-    case '[':
-        return KEY_LEFTBRACKET;
-    case '\\':
-        return KEY_BACKSLASH;
-    case ']':
-        return KEY_RIGHTBRACKET;
-    case '^':
-        return KEY_CARET;
-    case '_':
-        return KEY_UNDERSCORE;
-    case ' ':
-        return KEY_SPACE;
-
-    case 'a':
-        return KEY_a;
-    case 'b':
-        return KEY_b;
-    case 'c':
-        return KEY_c;
-    case 'd':
-        return KEY_d;
-    case 'e':
-        return KEY_e;
-    case 'f':
-        return KEY_f;
-    case 'g':
-        return KEY_g;
-    case 'h':
-        return KEY_h;
-    case 'i':
-        return KEY_i;
-    case 'j':
-        return KEY_j;
-    case 'k':
-        return KEY_k;
-    case 'l':
-        return KEY_l;
-    case 'm':
-        return KEY_m;
-    case 'n':
-        return KEY_n;
-    case 'o':
-        return KEY_o;
-    case 'p':
-        return KEY_p;
-    case 'q':
-        return KEY_q;
-    case 'r':
-        return KEY_r;
-    case 's':
-        return KEY_s;
-    case 't':
-        return KEY_t;
-    case 'u':
-        return KEY_u;
-    case 'v':
-        return KEY_v;
-    case 'w':
-        return KEY_w;
-    case 'x':
-        return KEY_x;
-    case 'y':
-        return KEY_y;
-    case 'z':
-        return KEY_z;
-
-    case '0':
-        return KEY_0;
-    case '1':
-        return KEY_1;
-    case '2':
-        return KEY_2;
-    case '3':
-        return KEY_3;
-    case '4':
-        return KEY_4;
-    case '5':
-        return KEY_5;
-    case '6':
-        return KEY_6;
-    case '7':
-        return KEY_7;
-    case '8':
-        return KEY_8;
-    case '9':
-        return KEY_9;
-
-    default:
-        break;
-    }
-    return KEY_NONE;
 }
 
 bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
@@ -711,85 +316,6 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     SDL_RWclose( rw );
 
     return data;
-}
-
-bool PressIntKey( u32 max, u32 & result )
-{
-    LocalEvent & le = LocalEvent::Get();
-
-    if ( le.KeyPress( KEY_BACKSPACE ) ) {
-        result /= 10;
-        return true;
-    }
-    else if ( le.KeyPress() && KEY_0 <= le.KeyValue() && KEY_9 >= le.KeyValue() ) {
-        if ( max > result ) {
-            result *= 10;
-            switch ( le.KeyValue() ) {
-            case KEY_1:
-                result += 1;
-                break;
-            case KEY_2:
-                result += 2;
-                break;
-            case KEY_3:
-                result += 3;
-                break;
-            case KEY_4:
-                result += 4;
-                break;
-            case KEY_5:
-                result += 5;
-                break;
-            case KEY_6:
-                result += 6;
-                break;
-            case KEY_7:
-                result += 7;
-                break;
-            case KEY_8:
-                result += 8;
-                break;
-            case KEY_9:
-                result += 9;
-                break;
-
-            case KEY_KP1:
-                result += 1;
-                break;
-            case KEY_KP2:
-                result += 2;
-                break;
-            case KEY_KP3:
-                result += 3;
-                break;
-            case KEY_KP4:
-                result += 4;
-                break;
-            case KEY_KP5:
-                result += 5;
-                break;
-            case KEY_KP6:
-                result += 6;
-                break;
-            case KEY_KP7:
-                result += 7;
-                break;
-            case KEY_KP8:
-                result += 8;
-                break;
-            case KEY_KP9:
-                result += 9;
-                break;
-
-            default:
-                break;
-            }
-            if ( result > max )
-                result = max;
-        }
-        return true;
-    }
-    return false;
 }
 
 #ifdef WITH_ICONV
@@ -840,7 +366,7 @@ std::string cp1251_to_utf8( const std::string & in )
             const size_t index = *it & 0x7f;
 
             if ( index < ARRAY_COUNT( table_1251 ) ) {
-                const u32 & v = table_1251[index];
+                const uint32_t v = table_1251[index];
                 res.append( 1, v );
                 res.append( 1, v >> 8 );
                 if ( v & 0xFFFF0000 )
@@ -881,7 +407,7 @@ Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
 {
     const int dx = pt2.x - pt1.x;
     const int dy = pt2.y - pt1.y;
-    const uint32_t dist = hypot( std::abs( dx ), std::abs( dy ) );
+    const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
     // round up the integer division
     const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
     const double moveX = dx / static_cast<double>( length );
@@ -891,7 +417,7 @@ Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
     line.reserve( length );
 
     for ( uint32_t i = 0; i <= length; ++i ) {
-        line.push_back( Point( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) ) );
+        line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
     }
 
     return line;
@@ -905,7 +431,7 @@ Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step )
     const u16 dx = std::abs( pt2.x - pt1.x );
     const u16 dy = std::abs( pt2.y - pt1.y );
 
-    s16 ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
+    int16_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
     Point pt( pt1 );
 
     for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {

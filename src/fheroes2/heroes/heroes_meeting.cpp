@@ -57,7 +57,7 @@ public:
         if ( !troop.isValid() )
             return;
 
-        Text text( GetString( troop.GetCount() ), Font::SMALL );
+        Text text( std::to_string( troop.GetCount() ), Font::SMALL );
 
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
@@ -145,7 +145,9 @@ public:
 class MeetingSecondarySkillsBar : public SecondarySkillsBar
 {
 public:
-    explicit MeetingSecondarySkillsBar() {}
+    explicit MeetingSecondarySkillsBar( const Heroes & hero )
+        : SecondarySkillsBar( hero )
+    {}
 
     virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
@@ -165,7 +167,7 @@ public:
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
         fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
 
-        Text text( GetString( skill.Level() ), Font::SMALL );
+        Text text( std::to_string( skill.Level() ), Font::SMALL );
         text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
     }
 
@@ -204,40 +206,44 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
+    const int iconsH1XOffset = 34;
+    const int iconsH2XOffset = 566;
+    const int portraitYOffset = 72;
+
     // portrait
     dst_pt.x = cur_pt.x + 93;
-    dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait1 = GetPortrait( PORT_BIG );
+    dst_pt.y = cur_pt.y + portraitYOffset;
+    const fheroes2::Sprite & portrait1 = GetPortrait( PORT_BIG );
     fheroes2::Rect hero1Area( dst_pt.x, dst_pt.y, portrait1.width(), portrait1.height() );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     dst_pt.x = cur_pt.x + 445;
-    dst_pt.y = cur_pt.y + 72;
-    const fheroes2::Image portrait2 = heroes2.GetPortrait( PORT_BIG );
+    dst_pt.y = cur_pt.y + portraitYOffset;
+    const fheroes2::Sprite & portrait2 = heroes2.GetPortrait( PORT_BIG );
     fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
     heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
-    dst_pt.x = cur_pt.x + 34;
-    dst_pt.y = cur_pt.y + 75;
     MoraleIndicator moraleIndicator1( this );
+    dst_pt.x = cur_pt.x + iconsH1XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().h / 3;
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
-    dst_pt.x = cur_pt.x + 34;
-    dst_pt.y = cur_pt.y + 115;
     LuckIndicator luckIndicator1( this );
+    dst_pt.x = cur_pt.x + iconsH1XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().h * 4 / 3;
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
-    dst_pt.x = cur_pt.x + 566;
-    dst_pt.y = cur_pt.y + 75;
     MoraleIndicator moraleIndicator2( &heroes2 );
+    dst_pt.x = cur_pt.x + iconsH2XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().h / 3;
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
-    dst_pt.x = cur_pt.x + 566;
-    dst_pt.y = cur_pt.y + 115;
     LuckIndicator luckIndicator2( &heroes2 );
+    dst_pt.x = cur_pt.x + iconsH2XOffset;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().h * 4 / 3;
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 
@@ -259,14 +265,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
-    MeetingSecondarySkillsBar secskill_bar1;
+    MeetingSecondarySkillsBar secskill_bar1( *this );
     secskill_bar1.SetColRows( 8, 1 );
     secskill_bar1.SetHSpace( -1 );
     secskill_bar1.SetContent( secondary_skills.ToVector() );
     secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
     secskill_bar1.Redraw();
 
-    MeetingSecondarySkillsBar secskill_bar2;
+    MeetingSecondarySkillsBar secskill_bar2( heroes2 );
     secskill_bar2.SetColRows( 8, 1 );
     secskill_bar2.SetHSpace( -1 );
     secskill_bar2.SetContent( heroes2.GetSecondarySkills().ToVector() );
@@ -375,6 +381,10 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
+            if ( bag_artifacts.MakeBattleGarb() || heroes2.bag_artifacts.MakeBattleGarb() ) {
+                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+            }
+
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
@@ -411,11 +421,27 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
         if ( le.MouseClickLeft( hero1Area ) ) {
             OpenDialog( true, true );
+
+            armyCountBackgroundRestorer.restore();
+            selectArtifacts1.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            luckIndicator1.Redraw();
+
             cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
             heroes2.OpenDialog( true, true );
+
+            armyCountBackgroundRestorer.restore();
+            selectArtifacts2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator2.Redraw();
+
             cursor.Show();
             display.render();
         }
@@ -426,6 +452,8 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         heroes2.RecalculateMovePoints();
     }
 
+    backPrimary.reset();
+    armyCountBackgroundRestorer.reset();
     restorer.restore();
     display.render();
 }
@@ -488,8 +516,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     // skip bag artifacts
-    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::ALL );
-    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::ALL );
+    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
+    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
 
     // remove_if for learn spells
     if ( learn.size() ) {

@@ -24,6 +24,7 @@
 #define H2GAMESTATIC_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 namespace Skill
 {
@@ -41,7 +42,7 @@ namespace GameStatic
     };
 
     StreamBase & operator<<( StreamBase &, const Data & );
-    StreamBase & operator>>( StreamBase &, Data & );
+    StreamBase & operator>>( StreamBase &, const Data & );
 
     u32 GetLostOnWhirlpoolPercent( void );
     u32 GetGameOverLostDays( void );
@@ -57,7 +58,9 @@ namespace GameStatic
     u32 GetHeroesRestoreSpellPointsPerDay( void );
     u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
-    float GetMonsterUpgradeRatio( void );
+    bool isCustomMonsterUpgradeOption();
+    float GetMonsterUpgradeRatio();
+
     s32 ObjectVisitedModifiers( int obj );
 
     int GetBattleMoatReduceDefense( void );
@@ -76,6 +79,7 @@ namespace GameStatic
 }
 
 #ifdef WITH_XML
+class TiXmlElement;
 namespace Game
 {
     void CastleUpdateGrowth( const TiXmlElement * );

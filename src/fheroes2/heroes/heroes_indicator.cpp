@@ -30,48 +30,51 @@
 #include "morale.h"
 #include "text.h"
 
-const char * MoraleString( int morale )
+namespace fheroes2
 {
-    switch ( morale ) {
-    case Morale::TREASON:
-    case Morale::AWFUL:
-    case Morale::POOR:
-        return _( "Bad Morale" );
+    const char * MoraleString( const int morale )
+    {
+        switch ( morale ) {
+        case Morale::TREASON:
+        case Morale::AWFUL:
+        case Morale::POOR:
+            return _( "Bad Morale" );
 
-    case Morale::NORMAL:
-        return _( "Neutral Morale" );
+        case Morale::NORMAL:
+            return _( "Neutral Morale" );
 
-    case Morale::GOOD:
-    case Morale::GREAT:
-    case Morale::BLOOD:
-        return _( "Good Morale" );
+        case Morale::GOOD:
+        case Morale::GREAT:
+        case Morale::BLOOD:
+            return _( "Good Morale" );
 
-    default:
-        break;
+        default:
+            break;
+        }
+        return NULL;
     }
-    return NULL;
-}
 
-const char * LuckString( int luck )
-{
-    switch ( luck ) {
-    case Luck::CURSED:
-    case Luck::AWFUL:
-    case Luck::BAD:
-        return _( "Bad Luck" );
+    const char * LuckString( const int luck )
+    {
+        switch ( luck ) {
+        case Luck::CURSED:
+        case Luck::AWFUL:
+        case Luck::BAD:
+            return _( "Bad Luck" );
 
-    case Luck::NORMAL:
-        return _( "Neutral Luck" );
+        case Luck::NORMAL:
+            return _( "Neutral Luck" );
 
-    case Luck::GOOD:
-    case Luck::GREAT:
-    case Luck::IRISH:
-        return _( "Good Luck" );
+        case Luck::GOOD:
+        case Luck::GREAT:
+        case Luck::IRISH:
+            return _( "Good Luck" );
 
-    default:
-        break;
+        default:
+            break;
+        }
+        return NULL;
     }
-    return NULL;
 }
 
 HeroesIndicator::HeroesIndicator( const Heroes * h )
@@ -144,14 +147,14 @@ void LuckIndicator::Redraw( void )
     }
 }
 
-void LuckIndicator::QueueEventProcessing( LuckIndicator & indicator )
+void LuckIndicator::QueueEventProcessing( const LuckIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( LuckString( indicator.luck ), indicator.descriptions, Font::BIG, Dialog::OK );
+        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
+        Dialog::Message( fheroes2::LuckString( indicator.luck ), indicator.descriptions, Font::BIG );
 }
 
 MoraleIndicator::MoraleIndicator( const Heroes * h )
@@ -177,16 +180,21 @@ void MoraleIndicator::Redraw( void )
     descriptions.append( _( "Current Morale Modifiers:" ) );
     descriptions.append( "\n \n" );
 
+    if ( modificators.empty() )
+        descriptions.append( _( "None" ) );
+    else
+        descriptions.append( modificators );
+
+    descriptions.append( "\n \n" );
+    if ( hero->GetArmy().AllTroopsAreUndead() ) {
+        descriptions.append( _( "Entire army is undead, so morale does not apply." ) );
+    }
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
     int count = ( 0 == morale ? 1 : std::abs( morale ) );
     s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
     s32 cy = area.y + ( area.h - sprite.height() ) / 2;
-
-    if ( modificators.size() )
-        descriptions.append( modificators );
-    else
-        descriptions.append( _( "None" ) );
 
     back.restore();
     while ( count-- ) {
@@ -195,27 +203,27 @@ void MoraleIndicator::Redraw( void )
     }
 }
 
-void MoraleIndicator::QueueEventProcessing( MoraleIndicator & indicator )
+void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 {
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( indicator.area ) )
-        Dialog::Message( MoraleString( indicator.morale ), indicator.descriptions, Font::BIG, Dialog::OK );
+        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG, Dialog::OK );
     else if ( le.MousePressRight( indicator.area ) )
-        Dialog::Message( MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
+        Dialog::Message( fheroes2::MoraleString( indicator.morale ), indicator.descriptions, Font::BIG );
 }
 
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
     if ( hero ) {
         const uint32_t experience = hero->GetExperience();
         StringReplace( descriptions, "%{exp1}", experience );
-        StringReplace( descriptions, "%{exp2}", hero->GetExperienceFromLevel( hero->GetLevelFromExperience( experience ) ) );
+        StringReplace( descriptions, "%{exp2}", Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( experience ) ) );
     }
 }
 
@@ -227,7 +235,7 @@ void ExperienceIndicator::Redraw( void )
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 1 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
-    Text text( GetString( hero->GetExperience() ), Font::SMALL );
+    Text text( std::to_string( hero->GetExperience() ), Font::SMALL );
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
@@ -245,7 +253,7 @@ void ExperienceIndicator::QueueEventProcessing( void )
 SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 39;
+    area.w = 35;
     area.h = 36;
 
     descriptions = _(
@@ -265,7 +273,7 @@ void SpellPointsIndicator::Redraw( void )
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::HSICONS, 8 );
     fheroes2::Blit( sprite3, fheroes2::Display::instance(), area.x, area.y );
 
-    Text text( GetString( hero->GetSpellPoints() ) + "/" + GetString( hero->GetMaxSpellPoints() ), Font::SMALL );
+    Text text( std::to_string( hero->GetSpellPoints() ) + "/" + std::to_string( hero->GetMaxSpellPoints() ), Font::SMALL );
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 

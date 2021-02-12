@@ -29,6 +29,7 @@
 #include "rect.h"
 #include "types.h"
 
+class Players;
 class Heroes;
 class Castle;
 
@@ -44,7 +45,7 @@ namespace Game
         HIGHSCORES,
         CREDITS,
         NEWSTANDARD,
-        NEWCAMPAIN,
+        NEWCAMPAIGN,
         NEWMULTI,
         NEWHOTSEAT,
         NEWNETWORK,
@@ -52,6 +53,8 @@ namespace Game
         LOADSTANDARD,
         LOADCAMPAIN,
         LOADMULTI,
+        LOADHOTSEAT,
+        LOADNETWORK,
         SCENARIOINFO,
         SELECTSCENARIO,
         STARTGAME,
@@ -61,7 +64,9 @@ namespace Game
         EDITLOADMAP,
         EDITSAVEMAP,
         EDITSTART,
-        ENDTURN
+        ENDTURN,
+        SELECT_CAMPAIGN_SCENARIO,
+        COMPLETE_CAMPAIGN_SCENARIO
     };
 
     void Init( void );
@@ -102,7 +107,7 @@ namespace Game
         EVENT_BUTTON_HIGHSCORES,
         EVENT_BUTTON_CREDITS,
         EVENT_BUTTON_STANDARD,
-        EVENT_BUTTON_CAMPAIN,
+        EVENT_BUTTON_CAMPAIGN,
         EVENT_BUTTON_MULTI,
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
@@ -117,8 +122,6 @@ namespace Game
         EVENT_DEFAULT_RIGHT,
         EVENT_SYSTEM_FULLSCREEN,
         EVENT_SYSTEM_SCREENSHOT,
-        EVENT_SYSTEM_DEBUG1,
-        EVENT_SYSTEM_DEBUG2,
         EVENT_SLEEPHERO,
         EVENT_ENDTURN,
         EVENT_NEXTHERO,
@@ -158,12 +161,14 @@ namespace Game
         EVENT_SHOWBUTTONS,
         EVENT_SHOWSTATUS,
         EVENT_SHOWICONS,
-        EVENT_SWITCHGROUP,
-        EVENT_EMULATETOGGLE,
-        EVENT_LAST
+        EVENT_STACKSPLIT_SHIFT,
+        EVENT_STACKSPLIT_CTRL,
+        EVENT_JOINSTACKS,
+        EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
+    bool HotKeyHoldEvent( const int eventID );
 
     enum
     {
@@ -193,7 +198,6 @@ namespace Game
         BATTLE_POPUP_DELAY,
         BATTLE_COLOR_CYCLE_DELAY,
         BATTLE_SELECTED_UNIT_DELAY,
-        AUTOHIDE_STATUS_DELAY,
         //
         CURRENT_HERO_DELAY,
         CURRENT_AI_DELAY,
@@ -217,7 +221,7 @@ namespace Game
     int HighScores();
     int Credits( void );
     int NewStandard( void );
-    int NewCampain( void );
+    int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
     int NewNetwork( void );
@@ -225,12 +229,19 @@ namespace Game
     int LoadStandard( void );
     int LoadCampain( void );
     int LoadMulti( void );
+    int LoadHotseat();
+    int LoadNetwork();
     int ScenarioInfo( void );
+    int SelectCampaignScenario();
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
     int NetworkHost( void );
     int NetworkGuest( void );
+    int DisplayLoadGameDialog();
+    int CompleteCampaignScenario();
+
+    bool IsOriginalCampaignPresent();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
@@ -250,9 +261,15 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus = true );
-    void OpenCastleDialog( Castle & );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
+    void LoadPlayers( const std::string & mapFileName, Players & players );
+    void SavePlayers( const std::string & mapFileName, const Players & players );
+
+    std::string GetSaveDir();
+    std::string GetSaveFileExtension();
+    std::string GetSaveFileExtension( const int gameType );
 
     namespace ObjectFadeAnimation
     {
@@ -273,17 +290,9 @@ namespace Game
         Info & Get();
     }
 
-    namespace Editor
-    {
-        int MainMenu( void );
-        int NewMaps( void );
-        int LoadMaps( void );
-        int StartGame( void );
-        int StartGame( void );
-    }
-
     u32 GetStep4Player( u32, u32, u32 );
-    std::string CountScoute( u32 count, int scoute, bool shorts = false );
+    std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
+    std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }
 
 #define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )

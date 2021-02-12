@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "pal.h"
 
+#include <cassert>
 #include <cstring>
 
 #define PALETTE_SIZE 256
@@ -124,6 +125,13 @@ namespace PAL
            197, 197, 197, 197, 197, 197, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 213, 213, 213, 213, 214, 215, 216, 217, 218, 219, 220, 221, 225, 226,
            227, 228, 229, 230, 230, 230, 230, 73,  75,  77,  79,  81,  76,  78,  74,  76,  78,  80,  244, 245, 245, 245, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
 
+    struct CyclingColorSet
+    {
+        uint8_t start;
+        uint8_t length;
+        bool forward;
+    };
+
     const std::vector<CyclingColorSet> & GetCyclingColors()
     {
         static const std::vector<CyclingColorSet> cycleSet = {{0xD6, 4, false}, {0xDA, 4, false}, {0xE7, 5, true}, {0xEE, 4, false}};
@@ -133,7 +141,7 @@ namespace PAL
 
 std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
 {
-    std::vector<uint8_t> palette = PAL::GetPalette( PAL::STANDARD );
+    std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
     const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
     for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
@@ -147,49 +155,54 @@ std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
     return palette;
 }
 
-const std::vector<uint8_t> & PAL::GetPalette( int type )
+const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
 {
     switch ( type ) {
-    case YELLOW_TEXT: {
+    case PaletteType::YELLOW_TEXT: {
         static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
         return palette;
     }
-    case WHITE_TEXT: {
+    case PaletteType::WHITE_TEXT: {
         static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
         return palette;
     }
-    case GRAY_TEXT: {
+    case PaletteType::GRAY_TEXT: {
         static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
         return palette;
     }
-    case RED: {
+    case PaletteType::RED: {
         static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
         return palette;
     }
-    case GRAY: {
+    case PaletteType::GRAY: {
         static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
         return palette;
     }
-    case BROWN: {
+    case PaletteType::BROWN: {
         static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
         return palette;
     }
-    case TAN: {
+    case PaletteType::TAN: {
         static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
         return palette;
     }
-    case NO_CYCLE: {
+    case PaletteType::NO_CYCLE: {
         static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
         return palette;
     }
-    case MIRROR_IMAGE: {
+    case PaletteType::MIRROR_IMAGE: {
         static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
         return palette;
     }
-    case DARKENING: {
+    case PaletteType::DARKENING: {
         static std::vector<uint8_t> palette( darkeningTable, darkeningTable + PALETTE_SIZE );
         return palette;
     }
+    case PaletteType::CUSTOM:
+        assert( 0 );
+        break;
+    case PaletteType::STANDARD:
+        break;
     }
 
     static std::vector<uint8_t> standard;

@@ -169,7 +169,7 @@ void Battle::Units::SortWeakest( void )
 
 void Battle::Units::SortArchers( void )
 {
-    std::sort( begin(), end(), Army::ArchersFirst );
+    std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
 
 Battle::Unit * Battle::Units::FindUID( u32 pid )
@@ -237,49 +237,36 @@ bool Battle::Force::isValid( void ) const
     return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
 }
 
-u32 Battle::Force::GetSurrenderCost( void ) const
+uint32_t Battle::Force::GetSurrenderCost( void ) const
 {
-    float res = 0;
+    double res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetCost();
+            const payment_t & payment = ( *it )->GetCost();
             res += payment.gold;
         }
 
     const HeroBase * commander = GetCommander();
-
     if ( commander ) {
+        const Artifact art( Artifact::STATESMAN_QUILL );
+        double mod = commander->HasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
-        // 40%
         case Skill::Level::BASIC:
-            res = res * 40 / 100;
+            mod *= 0.8;
             break;
-        // 30%
         case Skill::Level::ADVANCED:
-            res = res * 30 / 100;
+            mod *= 0.6;
             break;
-        // 20%
         case Skill::Level::EXPERT:
-            res = res * 20 / 100;
-            break;
-        // 50%
-        default:
-            res = res * 50 / 100;
+            mod *= 0.4;
             break;
         }
-
-        Artifact art( Artifact::STATESMAN_QUILL );
-
-        if ( commander->HasArtifact( art ) )
-            res -= res * art.ExtraValue() / 100;
+        res *= mod;
     }
-
-    // limit
-    if ( res < 100 )
-        res = 100.0;
-
-    return static_cast<u32>( res );
+    // Total cost should always be at least 1 gold
+    return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }
 
 void Battle::Force::NewTurn( void )
@@ -329,7 +316,7 @@ void Battle::Force::UpdateOrderUnits( const Force & army1, const Force & army2, 
     }
 }
 
-Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force & army2, Unit * last, bool part1 )
+Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force & army2, const Unit * last, bool part1 )
 {
     Units units1( army1, true );
     Units units2( army2, true );
@@ -429,7 +416,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), [mons]( const Unit * unit ) { return unit->isMonster( mons() ); } );
+    return end() != std::find_if( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const

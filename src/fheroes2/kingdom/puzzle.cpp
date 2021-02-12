@@ -33,6 +33,7 @@
 #include "puzzle.h"
 #include "settings.h"
 #include "ui_button.h"
+#include "ui_window.h"
 #include "world.h"
 
 const u8 zone1_index[] = {0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47};
@@ -92,7 +93,7 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
 void Puzzle::ShowMapsDialog( void ) const
 {
     Cursor & cursor = Cursor::Get();
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Display & display = fheroes2::Display::instance();
     int old_cursor = cursor.Themes();
 
     if ( !Settings::Get().MusicMIDI() )
@@ -143,7 +144,7 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
@@ -181,10 +182,10 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     const Settings & conf = Settings::Get();
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
-    Dialog::FrameBorder frameborder( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2, gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2,
-                                     sf.width(), sf.height() );
+    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2,
+                                           gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
 
-    Rect blitArea = frameborder.GetArea();
+    Rect blitArea = border.activeArea();
 
     fheroes2::Image background( blitArea.w, blitArea.h );
     if ( conf.ExtGameEvilInterface() )
@@ -195,7 +196,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Blit( background, display, blitArea.x, blitArea.y );
     fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
 
-    Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 

@@ -52,6 +52,16 @@ namespace fheroes2
 
         virtual void setIcon( const Image & ) {}
 
+        virtual fheroes2::Rect getActiveWindowROI() const
+        {
+            return fheroes2::Rect();
+        }
+
+        virtual fheroes2::Size getCurrentScreenResolution() const
+        {
+            return fheroes2::Size();
+        }
+
     protected:
         BaseRenderEngine()
             : _isFullScreen( false )
@@ -136,21 +146,52 @@ namespace fheroes2
         friend Display;
         virtual ~Cursor() {}
 
-        virtual void show( bool ) {}
+        void show( const bool enable )
+        {
+            _show = enable;
+        }
+
         virtual bool isVisible() const
         {
-            return false;
+            return _show;
         }
 
         bool isFocusActive() const;
 
-        virtual void update( const fheroes2::Image &, int32_t, int32_t ) {}
-        virtual void setPosition( int32_t, int32_t ) {}
+        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY )
+        {
+            _image = fheroes2::Sprite( image, offsetX, offsetY );
+        }
+
+        void setPosition( int32_t x, int32_t y )
+        {
+            _image.setPosition( x, y );
+        }
+
+        // Default implementation of Cursor uses software emulation.
+        virtual void enableSoftwareEmulation( const bool ) {}
+
+        bool isSoftwareEmulation() const
+        {
+            return _emulation;
+        }
+
+        void registerUpdater( void ( *cursorUpdater )() )
+        {
+            _cursorUpdater = cursorUpdater;
+        }
 
     protected:
         Sprite _image;
+        bool _emulation;
+        bool _show;
+        void ( *_cursorUpdater )();
 
-        Cursor() {}
+        Cursor()
+            : _emulation( true )
+            , _show( false )
+            , _cursorUpdater( nullptr )
+        {}
     };
 
     BaseRenderEngine & engine();

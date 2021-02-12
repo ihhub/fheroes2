@@ -24,7 +24,6 @@
 #include <functional>
 
 #include "agg.h"
-#include "ai.h"
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -39,6 +38,7 @@
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
+#include "rand.h"
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
@@ -51,7 +51,7 @@ namespace GameStatic
 
 #ifdef WITH_ZLIB
 #include "zzlib.h"
-std::vector<u8> DecodeBase64AndUncomress( std::string base64 )
+std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 {
     std::vector<u8> zdata = decodeBase64( base64 );
     StreamBuf sb( zdata );
@@ -108,7 +108,7 @@ namespace Maps
     }
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const MapsTiles & /*tiles*/ )
 {
     TiXmlElement * xml_tile = doc.FirstChildElement( "tile" );
     for ( ; xml_tile; xml_tile = xml_tile->NextSiblingElement( "tile" ) ) {
@@ -127,14 +127,14 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapsTiles & /*tiles*/ )
 TiXmlElement & operator>>( TiXmlElement & doc, Army & army )
 {
     army.Clean();
-    int position = 0;
 
     TiXmlElement * xml_troop = doc.FirstChildElement( "troop" );
-    for ( ; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
+    for ( int position = 0; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
         int type, count;
         xml_troop->Attribute( "type", &type );
         xml_troop->Attribute( "count", &count );
-        Troop * troop = army.GetTroop( position++ );
+        Troop * troop = army.GetTroop( position );
+        ++position;
         if ( troop )
             troop->Set( type, count );
     }
@@ -363,7 +363,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     return doc;
 }
 
-TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
+TiXmlElement & operator>>( TiXmlElement & doc, const AllHeroes & /*heroes*/ )
 {
     TiXmlElement * xml_hero = doc.FirstChildElement( "hero" );
     for ( ; xml_hero; xml_hero = xml_hero->NextSiblingElement( "hero" ) ) {
@@ -394,7 +394,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllHeroes & /*heroes*/ )
 
         if ( !jail ) {
             colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-            Kingdom & kingdom = world.GetKingdom( colorRace.first );
+            const Kingdom & kingdom = world.GetKingdom( colorRace.first );
 
             if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                 colorRace.second = kingdom.GetRace();
@@ -462,19 +462,19 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
     riddle.valid = true;
 
-    TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
+    const TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
     if ( xml_answers ) {
         TiXmlElement * xml_answer = doc.FirstChildElement( "answer" );
         for ( ; xml_answer; xml_answer = xml_answer->NextSiblingElement( "answer" ) )
             if ( xml_answer->GetText() )
-                riddle.answers.push_back( xml_answer->GetText() );
+                riddle.answers.emplace_back( xml_answer->GetText() );
     }
 
     TiXmlElement * xml_resources = doc.FirstChildElement( "resources" );
     if ( xml_resources )
         *xml_resources >> riddle.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         riddle.message = xml_msg->GetText();
 
@@ -504,7 +504,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
     if ( xml_resources )
         *xml_resources >> event.resources;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -529,7 +529,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventDate & event )
     if ( xml_resources )
         *xml_resources >> event.resource;
 
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
+    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     if ( xml_msg && xml_msg->GetText() )
         event.message = xml_msg->GetText();
 
@@ -540,7 +540,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, EventsDate & events )
 {
     TiXmlElement * xml_event = doc.FirstChildElement( "event" );
     for ( ; xml_event; xml_event = xml_event->NextSiblingElement( "event" ) ) {
-        events.push_back( EventDate() );
+        events.emplace_back( EventDate() );
         *xml_event >> events.back();
     }
 
@@ -552,7 +552,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Rumors & rumors )
     TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
     for ( ; xml_msg; xml_msg = xml_msg->NextSiblingElement( "msg" ) )
         if ( xml_msg->GetText() )
-            rumors.push_back( xml_msg->GetText() );
+            rumors.emplace_back( xml_msg->GetText() );
 
     return doc;
 }
@@ -612,7 +612,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
         }
     }
 
-    if ( obj.monster() == Monster::GHOST || obj.monster.isElemental() )
+    if ( obj.monster.GetID() == Monster::GHOST || obj.monster.isElemental() )
         cond = 0;
 
     if ( count == 0 ) {
@@ -668,10 +668,6 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
         // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
         // 15 - spell
         cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
-
-        // always available
-        if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-            cond = 0;
     }
 
     obj.condition = cond;
@@ -1327,7 +1323,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-                    Kingdom & kingdom = GetKingdom( colorRace.first );
+                    const Kingdom & kingdom = GetKingdom( colorRace.first );
 
                     if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
                         colorRace.second = kingdom.GetRace();
@@ -1383,7 +1379,7 @@ bool World::LoadMapMP2( const std::string & filename )
         else if ( 0x00 == pblock[0] ) {
             // add event day
             if ( SIZEOFMP2EVENT - 1 < pblock.size() && 1 == pblock[42] ) {
-                vec_eventsday.push_back( EventDate() );
+                vec_eventsday.emplace_back( EventDate() );
                 vec_eventsday.back().LoadFromMP2( StreamBuf( pblock ) );
             }
             // add rumors
@@ -1511,7 +1507,7 @@ void World::ProcessNewMap()
 
     // update wins, loss conditions
     if ( GameOver::WINS_HERO & Settings::Get().ConditionWins() ) {
-        Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
+        const Heroes * hero = GetHeroes( Settings::Get().WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
     if ( GameOver::LOSS_HERO & Settings::Get().ConditionLoss() ) {
@@ -1535,12 +1531,12 @@ void World::ProcessNewMap()
         // get first castle position
         Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
 
-        if ( kingdom.GetCastles().size() ) {
+        if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
+            const Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::SANDYSANDY );
 
-            if ( hero ) {
-                const Point & cp = castle->GetCenter();
+            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
                 hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
             }
         }
@@ -1580,44 +1576,42 @@ void World::ProcessNewMap()
         ultimate_pos = ( *it ).GetCenter();
     }
 
-    std::string rumor = _( "The ultimate artifact is really the %{name}." );
-    StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
-    vec_rumors.push_back( rumor );
+    vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );
+    StringReplace( vec_rumors.back(), "%{name}", ultimate_artifact.GetName() );
 
-    rumor = _( "The ultimate artifact may be found in the %{name} regions of the world." );
+    vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
     if ( world.h() / 3 > ultimate_pos.y ) {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "north-west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "north" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
         else
-            StringReplace( rumor, "%{name}", _( "north-east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
     }
     else if ( 2 * world.h() / 3 > ultimate_pos.y ) {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "center" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
         else
-            StringReplace( rumor, "%{name}", _( "east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
     }
     else {
         if ( world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "south-west" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
         else if ( 2 * world.w() / 3 > ultimate_pos.x )
-            StringReplace( rumor, "%{name}", _( "south" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
         else
-            StringReplace( rumor, "%{name}", _( "south-east" ) );
+            StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );
     }
-    vec_rumors.push_back( rumor );
 
-    vec_rumors.push_back( _( "The truth is out there." ) );
-    vec_rumors.push_back( _( "The dark side is stronger." ) );
-    vec_rumors.push_back( _( "The end of the world is near." ) );
-    vec_rumors.push_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
-    vec_rumors.push_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
-    vec_rumors.push_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
+    vec_rumors.emplace_back( _( "The truth is out there." ) );
+    vec_rumors.emplace_back( _( "The dark side is stronger." ) );
+    vec_rumors.emplace_back( _( "The end of the world is near." ) );
+    vec_rumors.emplace_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
+    vec_rumors.emplace_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
+    vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
 
-    vec_rumors.push_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
+    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

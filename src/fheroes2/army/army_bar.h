@@ -26,6 +26,7 @@
 #include "army_troop.h"
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "ui_tool.h"
 
 class Army;
 
@@ -37,7 +38,7 @@ public:
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & ) override;
 
-    void SetBackground( const Size & sz, const uint8_t fillColor );
+    void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
     bool isValid( void ) const;
@@ -45,11 +46,16 @@ public:
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarSingleClick( ArmyTroop & ) override;
-    virtual bool ActionBarSingleClick( ArmyTroop &, ArmyTroop & ) override;
-    virtual bool ActionBarDoubleClick( ArmyTroop & ) override;
-    virtual bool ActionBarPressRight( ArmyTroop & ) override;
-    virtual bool ActionBarPressRight( ArmyTroop &, ArmyTroop & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarLeftMouseDoubleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
+    virtual bool ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
     virtual bool ActionBarCursor( ArmyTroop & ) override;
     virtual bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
@@ -58,12 +64,15 @@ public:
     bool QueueEventProcessing( ArmyBar &, std::string * = NULL );
 
 protected:
-    Army * army;
-    fheroes2::Image backsf;
     fheroes2::MovableSprite spcursor;
+
+private:
+    Army * _army;
+    fheroes2::Image backsf;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
+    bool _isTroopInfoVisible;
     std::string msg;
 };
 

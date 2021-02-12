@@ -51,9 +51,9 @@ void Interface::Basic::SetFocus( Heroes * hero )
 
         GetButtonsArea().Redraw();
 
-        iconsPanel.Select( *hero );
+        iconsPanel.Select( hero );
         gameArea.SetCenter( hero->GetCenter() );
-        statusWindow.SetState( STATUS_ARMY );
+        statusWindow.SetState( StatusType::STATUS_ARMY );
 
         const int heroIndexPos = hero->GetIndex();
         if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
@@ -79,9 +79,9 @@ void Interface::Basic::SetFocus( Castle * castle )
 
         GetButtonsArea().Redraw();
 
-        iconsPanel.Select( *castle );
+        iconsPanel.Select( castle );
         gameArea.SetCenter( castle->GetCenter() );
-        statusWindow.SetState( STATUS_FUNDS );
+        statusWindow.SetState( StatusType::STATUS_FUNDS );
 
         AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ) );
         Game::EnvironmentSoundMixer();
@@ -215,7 +215,7 @@ void Interface::Basic::RedrawFocus( void )
         iconsPanel.SetRedraw();
     }
     else if ( type == FOCUS_HEROES && !iconsPanel.IsSelected( ICON_HEROES ) ) {
-        iconsPanel.Select( *GetFocusHeroes() );
+        iconsPanel.Select( GetFocusHeroes() );
         iconsPanel.SetRedraw();
     }
 
@@ -224,7 +224,7 @@ void Interface::Basic::RedrawFocus( void )
         iconsPanel.SetRedraw();
     }
     else if ( type == FOCUS_CASTLE && !iconsPanel.IsSelected( ICON_CASTLES ) ) {
-        iconsPanel.Select( *GetFocusCastle() );
+        iconsPanel.Select( GetFocusCastle() );
         iconsPanel.SetRedraw();
     }
 

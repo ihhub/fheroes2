@@ -33,14 +33,15 @@
 #include "players.h"
 #include "system.h"
 
-#define FORMAT_VERSION_090_RELEASE 9000
+#define FORMAT_VERSION_090_RELEASE 9001
+#define FORMAT_VERSION_084_RELEASE 9000
 #define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
 #define FORMAT_VERSION_070_RELEASE 3269
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_082_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -131,7 +132,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_LOW_MEMORY = 0x10800000,
         POCKETPC_TAP_MODE = 0x11000000,
         POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
         POCKETPC_LOW_RESOLUTION = 0x14000000,
@@ -140,7 +140,6 @@ public:
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
         WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        WORLD_NOREQ_FOR_ARTIFACTS = 0x20000010,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
@@ -150,19 +149,18 @@ public:
         WORLD_BAN_PLAGUES = 0x20000800,
         UNIONS_ALLOW_HERO_MEETINGS = 0x20001000,
         UNIONS_ALLOW_CASTLE_VISITING = 0x20002000,
-        // UNUSED = 0x20004000,
+        WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
+        // UNUSED = 0x20008000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         WORLD_NEW_VERSION_WEEKOF = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        HEROES_ALLOW_BANNED_SECSKILLS = 0x20400000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
         HEROES_SURRENDERING_GIVE_EXP = 0x22000000,
         HEROES_RECALCULATE_MOVEMENT = 0x24000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
-        WORLD_ARTSPRING_SEPARATELY_VISIT = 0x30000002,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
@@ -180,7 +178,6 @@ public:
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
-        BATTLE_OBJECTS_ARCHERS_PENALTY = 0x42000000,
 
         SETTINGS_LAST
     };
@@ -206,6 +203,7 @@ public:
 
     const std::string & MapsCharset( void ) const;
     const std::string & ForceLang( void ) const;
+    const std::string & loadedFileLanguage() const;
     const std::string & FontsNormal( void ) const;
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
@@ -225,8 +223,6 @@ public:
 
     bool FullScreen( void ) const;
     bool KeepAspectRatio( void ) const;
-    bool ChangeFullscreenResolution( void ) const;
-    bool QVGA( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -260,15 +256,14 @@ public:
     bool ExtHeroSurrenderingGiveExp( void ) const;
     bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
-    bool ExtHeroAllowBannedSecSkillsUpgrade( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
     bool ExtUnionsAllowHeroesMeetings( void ) const;
     bool ExtWorldShowVisitedContent( void ) const;
+    bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
     bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
-    bool ExtWorldNoRequirementsForArtifacts( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
     bool ExtWorldOnlyFirstMonsterAttack( void ) const;
     bool ExtWorldEyeEagleAsScholar( void ) const;
@@ -276,7 +271,6 @@ public:
     bool ExtWorldBanWeekOf( void ) const;
     bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
-    bool ExtWorldArtesianSpringSeparatelyVisit( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
     bool ExtWorldNeutralArmyDifficultyScaling( void ) const;
@@ -292,7 +286,6 @@ public:
     bool ExtBattleShowDamage( void ) const;
     bool ExtBattleShowBattleOrder( void ) const;
     bool ExtBattleSoftWait( void ) const;
-    bool ExtBattleObjectsArchersPenalty( void ) const;
     bool ExtBattleSkipIncreaseDefense( void ) const;
     bool ExtBattleReverseWaitOrder( void ) const;
     bool ExtGameRememberLastFocus( void ) const;
@@ -305,11 +298,10 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketLowMemory( void ) const;
     bool ExtPocketTapMode( void ) const;
     bool ExtPocketDragDropScroll( void ) const;
 
-    const Size & VideoMode( void ) const;
+    const fheroes2::Size & VideoMode() const;
 
     void SetDebug( int );
     void SetUnicode( bool );
@@ -329,6 +321,7 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -359,6 +352,7 @@ public:
     const std::string & MapsFile( void ) const;
     const std::string & MapsName( void ) const;
     const std::string & MapsDescription( void ) const;
+    const std::string & externalMusicCommand() const;
     int MapsDifficulty( void ) const;
     Size MapsSize( void ) const;
     bool GameStartWithHeroes( void ) const;
@@ -372,6 +366,7 @@ public:
     Point WinsMapsPositionObject( void ) const;
     Point LossMapsPositionObject( void ) const;
     u32 LossCountDays( void ) const;
+    int controllerPointerSpeed() const;
 
     std::string GetProgramPath( void ) const
     {
@@ -385,7 +380,6 @@ public:
     static ListDirs GetRootDirs( void );
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetWriteableDir( const char * );
-    static std::string GetSaveDir( void );
     static std::string GetLangDir( void );
 
     // deprecated
@@ -393,7 +387,7 @@ public:
     {
         return data_params;
     }
-    const ListDirs GetMapsParams( void ) const
+    ListDirs GetMapsParams( void ) const
     {
         return maps_params;
     }
@@ -416,7 +410,7 @@ private:
     BitModes opt_addons;
 
     int debug;
-    Size video_mode;
+    fheroes2::Size video_mode;
     int game_difficulty;
 
     std::string path_program;
@@ -426,6 +420,8 @@ private:
     std::string font_normal;
     std::string font_small;
     std::string force_lang;
+    std::string _loadedFileLanguage; // not a part of save or configuration file
+    std::string _externalMusicCommand;
     std::string maps_charset;
     int size_normal;
     int size_small;
@@ -435,6 +431,7 @@ private:
     int sound_volume;
     int music_volume;
     MusicSource _musicType;
+    int _controllerPointerSpeed;
     int heroes_speed;
     int ai_speed;
     int scroll_speed;

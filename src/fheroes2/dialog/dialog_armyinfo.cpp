@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_static.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
@@ -44,6 +45,28 @@ namespace
     const int offsetYAmountBox = 223;
     const int widthAmountBox = 125;
     const int heightAmountBox = 23;
+
+    struct SpellInfo
+    {
+        SpellInfo()
+            : spriteId( 0 )
+            , duration( 0 )
+            , offset( 0 )
+            , space( 0 )
+        {}
+
+        SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
+            : spriteId( spriteId_ )
+            , duration( duration_ )
+            , offset( offset_ )
+            , space( space_ )
+        {}
+
+        uint32_t spriteId;
+        uint32_t duration;
+        int32_t offset;
+        int32_t space;
+    };
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
@@ -84,10 +107,10 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
         pos_rt.y -= 1;
     }
 
-    const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 38 );
+    const fheroes2::Point monsterStatOffset( pos_rt.x + 400, pos_rt.y + 37 );
     DrawMonsterStats( monsterStatOffset, troop );
 
-    const fheroes2::Point battleStatOffset( pos_rt.x + 400, pos_rt.y + ( ( ( BUTTONS & flags ) == BUTTONS ) ? 181 : 190 ) );
+    const fheroes2::Point battleStatOffset( pos_rt.x + 395, pos_rt.y + 184 );
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
@@ -104,18 +127,18 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     // button upgrade
     fheroes2::Point dst_pt( pos_rt.x + 400, pos_rt.y + 40 );
-    dst_pt.x = pos_rt.x + 284;
-    dst_pt.y = pos_rt.y + 190;
+    dst_pt.x = pos_rt.x + 280;
+    dst_pt.y = pos_rt.y + 192;
     fheroes2::Button buttonUpgrade( dst_pt.x, dst_pt.y, viewarmy, 5, 6 );
 
     // button dismiss
-    dst_pt.x = pos_rt.x + 284;
-    dst_pt.y = pos_rt.y + 222;
+    dst_pt.x = pos_rt.x + 280;
+    dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, viewarmy, 1, 2 );
 
     // button exit
     dst_pt.x = pos_rt.x + 415;
-    dst_pt.y = pos_rt.y + ( ( UPGRADE & flags ) ? 222 : 225 ); // in case of battle we shouldn't move this button up
+    dst_pt.y = pos_rt.y + 221;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, viewarmy, 3, 4 );
 
     if ( READONLY & flags ) {
@@ -160,11 +183,16 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
                 else {
-                    std::string msg
-                        = 1.0f != Monster::GetUpgradeRatio() ? _(
-                              "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest number. Do you wish to upgrade them?" )
-                                                             : _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                    StringReplace( msg, "%{ratio}", GetString( Monster::GetUpgradeRatio(), 2 ) );
+                    std::string msg;
+                    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
+                        msg = _( "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest "
+                                 "number. Do you wish to upgrade them?" );
+                        StringReplace( msg, "%{ratio}", GetString( GameStatic::GetMonsterUpgradeRatio(), 2 ) );
+                    }
+                    else {
+                        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    }
+
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
                         result = Dialog::UPGRADE;
                         break;
@@ -269,9 +297,9 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     text.Blit( dst_pt.x, dst_pt.y );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( GetString( troop().GetDamageMin() ) + "-" + GetString( troop().GetDamageMax() ) );
+        text.Set( std::to_string( troop().GetDamageMin() ) + "-" + std::to_string( troop().GetDamageMax() ) );
     else
-        text.Set( GetString( troop().GetDamageMin() ) );
+        text.Set( std::to_string( troop().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -281,7 +309,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    text.Set( GetString( troop().GetHitPoints() ) );
+    text.Set( std::to_string( troop().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -291,7 +319,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
         dst_pt.y += offsetY;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( troop.GetHitPointsLeft() ) );
+        text.Set( std::to_string( troop.GetHitPointsLeft() ) );
         dst_pt.x = dst.x + offsetX;
         text.Blit( dst_pt.x, dst_pt.y );
     }
@@ -367,49 +395,85 @@ fheroes2::Sprite GetModesSprite( u32 mod )
     return fheroes2::Sprite();
 }
 
-bool SortSpells( const std::pair<uint32_t, uint32_t> & first, const std::pair<uint32_t, uint32_t> & second )
-{
-    return first.second > 0 && first.second < second.second;
-}
-
 void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
 {
-    const u32 modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                         Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                         Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
+    const uint32_t modes[] = {Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+                              Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                              Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE};
 
-    // accumulate width
     int32_t ow = 0;
-    std::vector<std::pair<uint32_t, uint32_t> > spellVsDuration;
+    int32_t spritesWidth = 0;
 
-    for ( u32 ii = 0; ii < ARRAY_COUNT( modes ); ++ii )
-        if ( b.isModes( modes[ii] ) ) {
-            const fheroes2::Sprite & sprite = GetModesSprite( modes[ii] );
-            if ( !sprite.empty() ) {
-                ow += sprite.width() + 4;
-                spellVsDuration.push_back( std::make_pair( modes[ii], b.GetAffectedDuration( modes[ii] ) ) );
-            }
+    std::vector<SpellInfo> spellsInfo;
+    for ( const uint32_t mode : modes ) {
+        if ( !b.isModes( mode ) )
+            continue;
+
+        const fheroes2::Sprite & sprite = GetModesSprite( mode );
+        if ( sprite.empty() )
+            continue;
+
+        const uint32_t duration = b.GetAffectedDuration( mode );
+        int offset = 0;
+        if ( duration > 0 ) {
+            offset = duration >= 10 ? 12 : 7;
+            if ( mode >= Battle::SP_BLESS && mode <= Battle::SP_DRAGONSLAYER )
+                offset -= 5;
         }
+        const int space = ( offset == 2 ) ? 10 : 5;
 
-    ow -= 4;
-    ow = dst.x - ow / 2;
+        spellsInfo.emplace_back( mode, duration, offset, space );
+        ow += sprite.width() + offset + space;
+        spritesWidth += sprite.width();
+    }
 
-    std::sort( spellVsDuration.begin(), spellVsDuration.end(), SortSpells );
+    if ( spellsInfo.empty() )
+        return;
+
+    std::sort( spellsInfo.begin(), spellsInfo.end(),
+               []( const SpellInfo & first, const SpellInfo & second ) { return first.duration > 0 && first.duration < second.duration; } );
+
+    ow -= spellsInfo.back().space;
+
+    const int maxSpritesWidth = 212;
+    const int maxSpriteHeight = 32;
 
     Text text;
-
-    // blit centered
-    for ( size_t i = 0; i < spellVsDuration.size(); ++i ) {
-        const fheroes2::Sprite & sprite = GetModesSprite( spellVsDuration[i].first );
-        fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y );
-
-        const uint32_t duration = spellVsDuration[i].second;
-        if ( duration > 0 ) {
-            text.Set( GetString( duration ), Font::SMALL );
-            text.Blit( ow + ( sprite.width() - text.w() ) / 2, dst.y + sprite.height() + 1 );
+    if ( ow <= maxSpritesWidth ) {
+        ow = dst.x - ow / 2;
+        for ( const auto & spell : spellsInfo ) {
+            const fheroes2::Sprite & sprite = GetModesSprite( spell.spriteId );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + maxSpriteHeight - sprite.height() );
+            if ( spell.duration > 0 ) {
+                text.Set( std::to_string( spell.duration ), Font::SMALL );
+                ow += sprite.width() + spell.offset;
+                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+            }
+            ow += spell.space;
+        }
+    }
+    else {
+        // Too many spells
+        const int widthDiff = maxSpritesWidth - spritesWidth;
+        int space = widthDiff / static_cast<int>( spellsInfo.size() - 1 );
+        if ( widthDiff > 0 ) {
+            if ( space > 10 )
+                space = 10;
+            ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
+        }
+        else {
+            ow = dst.x + maxSpritesWidth / 2;
         }
 
-        ow += sprite.width() + 4;
+        for ( auto spellIt = spellsInfo.crbegin(); spellIt != spellsInfo.crend(); ++spellIt ) {
+            const fheroes2::Sprite & sprite = GetModesSprite( spellIt->spriteId );
+            fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
+            if ( spellIt->duration > 0 ) {
+                text.Set( std::to_string( spellIt->duration ), Font::SMALL );
+                text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
+            }
+            ow -= sprite.width() + space;
+        }
     }
 }
 
@@ -421,7 +485,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 
     // amount
-    text.Set( GetString( troop.GetCount() ), Font::BIG );
+    text.Set( std::to_string( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
     pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
     text.Blit( pos.x, pos.y );
@@ -537,6 +601,9 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
             cursor.Show();
             display.render();
         }
+        else if ( le.MousePressRight( btnHeroes.area() ) ) {
+            Dialog::Message( "", _( "View Hero" ), Font::BIG );
+        }
     }
 
     cursor.Hide();
@@ -559,8 +626,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     std::string message;
 
-    if ( troop.GetCount() == 1 )
-        message = _( "The creature is swayed by your diplomatic tongue, and offers to join your army for the sum of %{gold} gold.\nDo you accept?" );
+    if ( troop.GetCount() == 1 ) {
+        message = _( "The %{monster} is swayed by your diplomatic tongue, and offers to join your army for the sum of %{gold} gold.\nDo you accept?" );
+    }
     else {
         message = _( "The creatures are swayed by your diplomatic\ntongue, and make you an offer:\n \n" );
 
@@ -597,8 +665,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
-    TextSprite tsTotal( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL,
-                        pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
+    TextSprite tsTotal( std::to_string( gold ) + " " + "(" + "total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+                        Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
@@ -643,28 +711,37 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
         btnGroup.button( 0 ).disable();
 
-    TextSprite tsEnough;
+    TextSprite tsNotEnoughGold;
+    tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
 
-    if ( kingdom.GetCountMarketplace() ) {
-        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-            btnMarket.disable();
-        else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsEnough.SetText( msg, Font::SMALL );
-            tsEnough.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-            tsEnough.Show();
-            btnMarket.draw();
-        }
+    fheroes2::ImageRestorer marketButtonRestorer( display, btnMarket.area().x, btnMarket.area().y, btnMarket.area().width, btnMarket.area().height );
+
+    if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
+        tsNotEnoughGold.Hide();
+        btnMarket.disable();
+        btnMarket.hide();
     }
+    else {
+        std::string msg = _( "Not enough gold (%{gold})" );
+        StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.Show();
+        btnMarket.enable();
+        btnMarket.draw();
+    }
+
+    TextSprite noRoom1;
+    noRoom1.SetText( _( "No room in" ), Font::SMALL );
+    noRoom1.SetPos( btnHeroesArea.x - 16, btnHeroesArea.y - 30 );
+    TextSprite noRoom2;
+    noRoom2.SetText( _( "the garrison" ), Font::SMALL );
+    noRoom2.SetPos( btnHeroesArea.x - 23, btnHeroesArea.y - 15 );
 
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
-        TextBox textbox2( _( "Not room in\nthe garrison" ), Font::SMALL, 100 );
-        textbox2.Blit( btnHeroesArea.x - 35, btnHeroesArea.y - 30 );
+        noRoom1.Show();
+        noRoom2.Show();
         btnHeroes.draw();
-
         btnGroup.button( 0 ).disable();
     }
 
@@ -688,39 +765,56 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
             Marketplace( false );
-
-            cursor.Hide();
-            tsTotal.Hide();
-            tsTotal.SetText( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
-            tsTotal.Show();
-
-            if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) ) {
-                tsEnough.Hide();
-                btnGroup.button( 0 ).enable();
-                btnGroup.draw();
-            }
-            else {
-                tsEnough.Hide();
-                std::string msg = _( "Not enough gold (%{gold})" );
-                StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-                tsEnough.SetText( msg, Font::SMALL );
-                tsEnough.Show();
-            }
-
-            cursor.Show();
-            display.render();
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );
-
-            if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
-                btnGroup.button( 0 ).enable();
-                btnGroup.draw();
-            }
-
-            cursor.Show();
-            display.render();
         }
+
+        cursor.Hide();
+        tsTotal.Hide();
+        tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
+        tsTotal.Show();
+
+        const bool allowPayment = kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) );
+        const bool enoughRoom = hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop );
+
+        if ( allowPayment && enoughRoom ) {
+            btnGroup.button( 0 ).enable();
+        }
+        else {
+            btnGroup.button( 0 ).disable();
+        }
+
+        btnGroup.draw();
+
+        if ( allowPayment || kingdom.GetCountMarketplace() == 0 ) {
+            tsNotEnoughGold.Hide();
+            btnMarket.disable();
+            btnMarket.hide();
+            marketButtonRestorer.restore();
+        }
+        else {
+            std::string msg = _( "Not enough gold (%{gold})" );
+            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+            tsNotEnoughGold.SetText( msg, Font::SMALL );
+            tsNotEnoughGold.Show();
+            btnMarket.enable();
+            btnMarket.show();
+        }
+
+        btnMarket.draw();
+
+        if ( enoughRoom ) {
+            noRoom1.Hide();
+            noRoom2.Hide();
+        }
+        else {
+            noRoom1.Show();
+            noRoom2.Show();
+        }
+
+        cursor.Show();
+        display.render();
     }
 
     cursor.Hide();

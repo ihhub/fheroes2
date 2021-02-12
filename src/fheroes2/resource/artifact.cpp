@@ -31,8 +31,10 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "rand.h"
 #include "settings.h"
 #include "spell.h"
+#include "statusbar.h"
 #include "text.h"
 #include "world.h"
 
@@ -905,11 +907,12 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */ )
-    : hero( ptr )
+ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar /* = nullptr */ )
+    : _hero( ptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
@@ -977,7 +980,7 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
     }
 }
 
-bool ArtifactsBar::ActionBarSingleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 {
     if ( isSelected() ) {
         if ( !read_only )
@@ -1000,25 +1003,32 @@ bool ArtifactsBar::ActionBarSingleClick( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
+bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
-            const_cast<Heroes *>( hero )->EditSpellBook();
-        else
-            hero->OpenSpellBook( SpellBook::ALL, false );
+            const_cast<Heroes *>( _hero )->EditSpellBook();
+        else {
+            if ( _statusBar != nullptr ) {
+                std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+            }
+            else {
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+            }
+        }
     }
-    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) ) {
+    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
             DEBUG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
-        else if ( hero->CanLearnSpell( spell ) ) {
+        else if ( _hero->CanLearnSpell( spell ) ) {
             payment_t cost = spell.GetCost();
             u32 answer = 0;
             std::string text = _(
-                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your spell book?\nThe Scroll will be consumed.\n Spell point: %{sp}" );
+                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
 
             StringReplace( text, "%{spell}", spell.GetName() );
             StringReplace( text, "%{sp}", spell.SpellPoint() );
@@ -1029,13 +1039,15 @@ bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
                 StringReplace( text, "%{mp}", spell.MovePoint() );
             }
 
+            const std::string title = _( "Transcribe Spell Scroll" );
+
             if ( cost.GetValidItemsCount() )
-                answer = Dialog::ResourceInfo( "", text, cost, Dialog::YES | Dialog::NO );
+                answer = Dialog::ResourceInfo( title, text, cost, Dialog::YES | Dialog::NO );
             else
-                answer = Dialog::Message( "", text, Font::BIG, Dialog::YES | Dialog::NO );
+                answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
 
             if ( answer == Dialog::YES )
-                const_cast<Heroes *>( hero )->TranscribeScroll( art );
+                const_cast<Heroes *>( _hero )->TranscribeScroll( art );
         }
     }
     else if ( art.isValid() ) {
@@ -1047,7 +1059,7 @@ bool ArtifactsBar::ActionBarDoubleClick( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarPressRight( Artifact & art )
+bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
 {
     ResetSelected();
 
@@ -1061,7 +1073,7 @@ bool ArtifactsBar::ActionBarPressRight( Artifact & art )
     return true;
 }
 
-bool ArtifactsBar::ActionBarSingleClick( Artifact & art1, Artifact & art2 )
+bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art1, Artifact & art2 )
 {
     if ( art1() != Artifact::MAGIC_BOOK && art2() != Artifact::MAGIC_BOOK ) {
         std::swap( art1, art2 );
@@ -1074,15 +1086,15 @@ bool ArtifactsBar::ActionBarSingleClick( Artifact & art1, Artifact & art2 )
 bool ArtifactsBar::ActionBarCursor( Artifact & art )
 {
     if ( isSelected() ) {
-        Artifact * art2 = GetSelectedItem();
+        const Artifact * art2 = GetSelectedItem();
 
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )
-                msg = _( "Open book" );
-            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) )
-                msg = _( "Transcribe scroll" );
+                msg = _( "View Spells" );
+            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) )
+                msg = _( "Transcribe Spell Scroll" );
             else {
-                msg = _( "View %{name}" );
+                msg = _( "View %{name} Info" );
                 StringReplace( msg, "%{name}", art.GetName() );
             }
         }

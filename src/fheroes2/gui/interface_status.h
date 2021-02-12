@@ -26,59 +26,59 @@
 #include "interface_border.h"
 #include "thread.h"
 
-enum
-{
-    STATUS_UNKNOWN,
-    STATUS_DAY,
-    STATUS_FUNDS,
-    STATUS_ARMY,
-    STATUS_RESOURCE,
-    STATUS_AITURN
-};
-
 namespace Interface
 {
     class Basic;
 
+    enum class StatusType : int
+    {
+        STATUS_UNKNOWN,
+        STATUS_DAY,
+        STATUS_FUNDS,
+        STATUS_ARMY,
+        STATUS_RESOURCE,
+        STATUS_AITURN
+    };
+
     class StatusWindow : public BorderWindow
     {
     public:
-        StatusWindow( Basic & );
+        StatusWindow( Basic & basic );
 
         void SetPos( s32, s32 );
-        void SavePosition( void );
-        void SetRedraw( void ) const;
+        void SavePosition();
+        void SetRedraw() const;
 
-        void Reset( void );
+        void Reset();
 
-        void Redraw( void );
-        void NextState( void );
-        int GetState( void ) const;
-        void SetState( int );
+        void Redraw();
+        void NextState();
+
+        void SetState( const StatusType status );
         void SetResource( int, u32 );
         void RedrawTurnProgress( u32 );
-        void QueueEventProcessing( void );
+        void QueueEventProcessing();
 
-        static void ResetTimer( void );
+        static void ResetTimer();
 
     private:
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;
         void DrawResourceInfo( int oh = 0 ) const;
-        void DrawBackground( void ) const;
-        void DrawAITurns( void ) const;
+        void DrawBackground() const;
+        void DrawAITurns() const;
         static u32 ResetResourceStatus( u32, void * );
 
         Basic & interface;
 
-        int state;
-        int oldState;
+        StatusType _state;
+        StatusType _oldState;
         int lastResource;
-        u32 countLastResource;
+        uint32_t countLastResource;
+        uint32_t turn_progress;
+
         SDL::Timer timerShowLastResource;
-        SDL::Timer timerRedrawAIStatus;
-        u32 turn_progress;
     };
 }
 

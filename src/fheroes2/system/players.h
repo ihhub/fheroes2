@@ -161,6 +161,7 @@ public:
     Player * GetCurrent( void );
     const Player * GetCurrent( void ) const;
 
+    static void Set( const int color, Player * player );
     static Player * Get( int color );
     static int GetPlayerControl( int color );
     static int GetPlayerRace( int color );

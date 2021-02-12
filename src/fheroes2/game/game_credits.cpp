@@ -20,16 +20,17 @@
 
 #include "game_credits.h"
 #include "agg.h"
-#include "dialog.h"
+#include "localevent.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_window.h"
 
 void Game::ShowCredits()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Dialog::FrameBorder border( Size( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT ) );
+    const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     const fheroes2::Point screenOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
@@ -95,7 +96,7 @@ void Game::ShowCredits()
     title.Blit( screenOffset.x + 2 * columnStep + ( columnStep - title.w() ) / 2, offsetY );
     offsetY += title.h();
 
-    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nAndrey Starodubtsev\nVasilenko Alexey\neos428\nOroty\nKrzysztof Gorecki\nemotionalamoeba\n"
+    const std::string contributors( "LeHerosInconnu\nshprotru\nundef21\nvincent-grosbois\neos428\nAndrey Starodubtsev\nVasilenko Alexey\nemotionalamoeba\ntau3\n"
                                     "and many other contributors!" );
 
     name.Set( contributors, Font::BIG, textWidth );
@@ -112,7 +113,6 @@ void Game::ShowCredits()
 
     name.Set( "Andrey Afletdinov\nhttps://sourceforge.net/\nprojects/fheroes2/", Font::SMALL, textWidth );
     name.Blit( screenOffset.x + 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY );
-    offsetY += name.h();
 
     const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
     fheroes2::Blit( goblin, display, screenOffset.x + ( display.DEFAULT_WIDTH - goblin.width() ) / 2, screenOffset.y + ( display.DEFAULT_HEIGHT - goblin.height() ) / 2 );

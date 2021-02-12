@@ -23,7 +23,6 @@
 #include <sstream>
 
 #include "direction.h"
-#include "maps.h"
 
 std::string Direction::String( int direct )
 {
@@ -200,8 +199,8 @@ int Direction::Reflect( int direct )
     return UNKNOWN;
 }
 
-Directions Direction::All( void )
+const Directions & Direction::All( void )
 {
-    const int directs[] = {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT};
-    return Directions( directs, directs + 8 );
+    static const Directions allDirections = Directions( {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT} );
+    return allDirections;
 }

@@ -23,6 +23,10 @@
 #include <cmath>
 #include <stdint.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 // Below source code was partially taken from https://github.com/ihhub/penguinv open source project
 namespace fheroes2
 {
@@ -198,13 +202,50 @@ namespace fheroes2
             return point.x >= x && point.y >= y && point.x < ( x + width ) && point.y < ( y + height );
         }
 
+        // Check whether rectangles are intersecting each other
+        bool operator&( const RectBase2D & rect ) const
+        {
+            return x <= rect.x + rect.width && rect.x <= x + width && y <= rect.y + rect.height && rect.y <= y + height;
+        }
+
+        // Find intersection rectangle
+        RectBase2D operator^( const RectBase2D & rect ) const
+        {
+            RectBase2D output = rect;
+            if ( output.x < x ) {
+                const _TypePoint diff = x - output.x;
+                output.x = x;
+                output.width -= diff;
+            }
+            if ( output.y < y ) {
+                const _TypePoint diff = y - output.y;
+                output.y = y;
+                output.height -= diff;
+            }
+
+            if ( output.x > x + width || output.y > y + height )
+                return RectBase2D();
+
+            if ( output.x + output.width > x + width ) {
+                const _TypePoint diff = output.x + output.width - ( x + width );
+                output.width -= diff;
+            }
+
+            if ( output.y + output.height > y + height ) {
+                const _TypePoint diff = output.y + output.height - ( y + height );
+                output.height -= diff;
+            }
+
+            return output;
+        }
+
         _TypePoint x;
         _TypePoint y;
         _TypeSize width;
         _TypeSize height;
     };
 
-    typedef PointBase2D<int32_t> Point;
-    typedef SizeBase2D<int32_t> Size;
-    typedef RectBase2D<int32_t, int32_t> Rect;
+    using Point = PointBase2D<int32_t>;
+    using Size = SizeBase2D<int32_t>;
+    using Rect = RectBase2D<int32_t, int32_t>;
 }

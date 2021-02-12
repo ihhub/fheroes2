@@ -31,6 +31,10 @@
 #include "bitmodes.h"
 #include "players.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 class Castle;
 class HeroBase;
 class Heroes;
@@ -93,7 +97,7 @@ public:
 
     Troop * GetFirstValid( void );
     Troop * GetWeakestTroop( void );
-    Troop * GetSlowestTroop( void );
+    const Troop * GetSlowestTroop() const;
 
     void SortStrongest();
     void ArrangeForBattle( bool = false );
@@ -101,8 +105,10 @@ public:
     void JoinStrongest( Troops &, bool );
     void KeepOnlyWeakest( Troops &, bool );
 
-    void DrawMons32LineWithScoute( s32, s32, u32, u32, u32, u32, bool ) const;
+    void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop &, u32 slots );
+    void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
+    void JoinAllTroopsOfType( const Troop & targetTroop );
 };
 
 enum
@@ -134,7 +140,6 @@ public:
     static bool StrongestTroop( const Troop *, const Troop * );
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
-    static bool ArchersFirst( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
@@ -142,11 +147,15 @@ public:
     static bool ArmyStrongerThanEnemy( const Army &, const Army & );
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
-    static void DrawMons32LineWithScoute( const Troops &, s32, s32, u32, u32, u32, u32 );
-    static void DrawMonsterLines( const Troops & troops, s32 posX, s32 posY, u32 lineWidth, u32 scout, bool compact = true );
+    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
+                                  bool isScouteView = true );
 
-    Army( HeroBase * s = NULL );
+    Army( HeroBase * s = nullptr );
     Army( const Maps::Tiles & );
+    Army( const Army & ) = delete;
+    Army( Army && ) = delete;
+    Army & operator=( const Army & ) = delete;
+    Army & operator=( Army && ) = delete;
     ~Army();
 
     void Reset( bool = false ); // reset: soft or hard
@@ -167,7 +176,7 @@ public:
     int GetMorale( void ) const;
     int GetLuck( void ) const;
     int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( std::string * ) const;
+    int GetLuckModificator( const std::string * ) const;
     u32 ActionToSirens( void );
 
     const HeroBase * GetCommander( void ) const;
@@ -197,12 +206,6 @@ protected:
     HeroBase * commander;
     bool combat_format;
     int color;
-
-private:
-    Army & operator=( const Army & )
-    {
-        return *this;
-    }
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );

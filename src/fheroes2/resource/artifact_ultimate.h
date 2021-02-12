@@ -24,7 +24,6 @@
 #define H2ARTIFACT_ULTIMATE_H
 
 #include "artifact.h"
-#include "gamedefs.h"
 
 class UltimateArtifact : public Artifact
 {
@@ -46,8 +45,8 @@ private:
 
     void MakeSurface( void );
 
-    s32 index;
     fheroes2::Image puzzlemap;
+    s32 index;
     bool isfound;
 };
 

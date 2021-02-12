@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "ai.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_command.h"

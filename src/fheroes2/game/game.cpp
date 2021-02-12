@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <map>
 
 #include "agg.h"
-#include "ai.h"
+#include "audio_mixer.h"
 #include "battle.h"
 #include "buildinginfo.h"
 #include "castle.h"
@@ -35,7 +36,6 @@
 #include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
-#include "ground.h"
 #include "kingdom.h"
 #include "maps_tiles.h"
 #include "monster.h"
@@ -43,10 +43,12 @@
 #include "mus.h"
 #include "payment.h"
 #include "profit.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
 #include "system.h"
+#include "text.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "world.h"
@@ -69,6 +71,8 @@ namespace Game
     std::string last_name;
     int save_version = CURRENT_FORMAT_VERSION;
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
+    std::string lastMapFileName;
+    std::vector<Player> savedPlayers;
 
     namespace ObjectFadeAnimation
     {
@@ -97,6 +101,43 @@ namespace Game
         }
 
         Info removeInfo;
+    }
+}
+
+void Game::LoadPlayers( const std::string & mapFileName, Players & players )
+{
+    if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
+        return;
+    }
+
+    const int newHumanCount = std::count_if( players.begin(), players.end(), []( const Player * player ) { return player->GetControl() == CONTROL_HUMAN; } );
+    const int savedHumanCount = std::count_if( savedPlayers.begin(), savedPlayers.end(), []( const Player & player ) { return player.GetControl() == CONTROL_HUMAN; } );
+
+    if ( newHumanCount != savedHumanCount ) {
+        return;
+    }
+
+    players.clear();
+    for ( const Player & p : savedPlayers ) {
+        Player * player = new Player( p.GetColor() );
+        player->SetRace( p.GetRace() );
+        player->SetControl( p.GetControl() );
+        player->SetFriends( p.GetFriends() );
+        players.push_back( player );
+        Players::Set( Color::GetIndex( p.GetColor() ), player );
+    }
+}
+
+void Game::SavePlayers( const std::string & mapFileName, const Players & players )
+{
+    lastMapFileName = mapFileName;
+    savedPlayers.clear();
+    for ( const Player * p : players ) {
+        Player player( p->GetColor() );
+        player.SetRace( p->GetRace() );
+        player.SetControl( p->GetControl() );
+        player.SetFriends( p->GetFriends() );
+        savedPlayers.push_back( player );
     }
 }
 
@@ -139,7 +180,7 @@ void Game::DisableChangeMusic( bool /*f*/ )
 
 void Game::Init( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
 
     // update all global defines
@@ -147,7 +188,7 @@ void Game::Init( void )
         LoadExternalResource();
 
     // default events
-    le.SetStateDefaults();
+    LocalEvent::SetStateDefaults();
 
     // set global events
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
@@ -235,7 +276,7 @@ u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
 
 u32 Game::GetRating( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
     u32 rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
@@ -275,7 +316,7 @@ u32 Game::GetRating( void )
 
 u32 Game::GetGameOverScores( void )
 {
-    Settings & conf = Settings::Get();
+    const Settings & conf = Settings::Get();
 
     u32 k_size = 0;
 
@@ -450,7 +491,7 @@ int Game::GetActualKingdomColors( void )
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::CountScoute( u32 count, int scoute, bool shorts )
+std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
 {
     double infelicity = 0;
     std::string res;
@@ -465,7 +506,7 @@ std::string Game::CountScoute( u32 count, int scoute, bool shorts )
         break;
 
     case Skill::Level::EXPERT:
-        res = shorts ? GetStringShort( count ) : GetString( count );
+        res = shorts ? GetStringShort( count ) : std::to_string( count );
         break;
 
     default:
@@ -473,25 +514,31 @@ std::string Game::CountScoute( u32 count, int scoute, bool shorts )
     }
 
     if ( res.empty() ) {
-        u32 min = Rand::Get( static_cast<u32>( std::floor( count - infelicity + 0.5 ) ), static_cast<u32>( std::floor( count + infelicity + 0.5 ) ) );
-        u32 max = 0;
+        uint32_t min = Rand::Get( static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) ), static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) ) );
+        uint32_t max = 0;
 
         if ( min > count ) {
             max = min;
-            min = static_cast<u32>( std::floor( count - infelicity + 0.5 ) );
+            min = static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) );
         }
         else
-            max = static_cast<u32>( std::floor( count + infelicity + 0.5 ) );
+            max = static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) );
 
-        res = GetString( min );
+        res = std::to_string( min );
 
         if ( min != max ) {
             res.append( "-" );
-            res.append( GetString( max ) );
+            res.append( std::to_string( max ) );
         }
     }
 
     return res;
+}
+
+std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
+{
+    assert( guildCount > 0 );
+    return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
 void Game::PlayPickupSound( void )

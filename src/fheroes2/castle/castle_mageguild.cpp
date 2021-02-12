@@ -96,7 +96,7 @@ void RowSpells::Redraw( void )
 
             fheroes2::Blit( icon, display, dst.x + 3 + ( dst.w - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            TextBox text( std::string( spell.GetName() ) + " [" + GetString( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
+            TextBox text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
         }
     }
@@ -130,8 +130,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes )
     Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
-    Dialog::FrameBorder frameborder( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-    const Point & cur_pt = frameborder.GetArea();
+    const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
+                                            ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
+                                            fheroes2::Display::DEFAULT_HEIGHT );
+
+    const Point cur_pt( restorer.x(), restorer.y() );
+    fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 

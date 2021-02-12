@@ -26,6 +26,7 @@
 #include "game.h"
 #include "settings.h"
 #include "text.h"
+#include "ui_window.h"
 #include "world.h"
 
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
@@ -63,7 +64,7 @@ struct SelectRecipientsColors
             const u32 current = std::distance( colors.begin(), it );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.push_back( fheroes2::Rect( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() ) );
+            positions.emplace_back( pos.x + Game::GetStep4Player( current, sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -90,7 +91,7 @@ struct SelectRecipientsColors
         const s32 index = GetIndexClick();
 
         if ( index >= 0 ) {
-            const int & cols = colors[index];
+            const int cols = colors[index];
 
             if ( recipients & cols )
                 recipients &= ~cols;
@@ -107,23 +108,21 @@ struct SelectRecipientsColors
 struct ResourceBar
 {
     Funds & resource;
-    Point pos;
     std::vector<fheroes2::Rect> positions;
 
     ResourceBar( Funds & funds, s32 posx, s32 posy )
         : resource( funds )
-        , pos( posx, posy )
     {
         positions.reserve( 7 );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
 
-        positions.push_back( fheroes2::Rect( posx, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 40, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 80, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 120, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 160, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 200, posy, sprite.width(), sprite.height() ) );
-        positions.push_back( fheroes2::Rect( posx + 240, posy, sprite.width(), sprite.height() ) );
+        positions.emplace_back( posx, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 40, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 80, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 120, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 160, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 200, posy, sprite.width(), sprite.height() );
+        positions.emplace_back( posx + 240, posy, sprite.width(), sprite.height() );
     }
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
@@ -207,8 +206,8 @@ void Dialog::MakeGiftResource( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
-    Dialog::FrameBorder frameborder( Size( 320, 224 ) );
-    const Rect & box = frameborder.GetArea();
+    const fheroes2::StandardWindow frameborder( 320, 224 );
+    const Rect box( frameborder.activeArea() );
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
 

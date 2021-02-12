@@ -24,6 +24,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
@@ -105,7 +106,7 @@ public:
         const fheroes2::Sprite & sprite_edit = fheroes2::AGG::GetICN( ICN::TOWNWIND, 4 );
         fheroes2::Blit( sprite_edit, display, pos.x, pos.y + 4 );
 
-        Text text( GetString( vcur ), Font::BIG );
+        Text text( std::to_string( vcur ), Font::BIG );
         text.Blit( pos.x + ( sprite_edit.width() - text.w() ) / 2, pos.y + 5 );
 
         btnUp.draw();
@@ -230,7 +231,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), OK | CANCEL );
+    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
     // text
@@ -328,7 +329,11 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const u32 min = 1;
     const int spacer = 10;
 
-    FrameBox box( free_slots > 2 ? 90 + spacer : 45, true );
+    const int defaultYPosition = 160;
+    const int boxHeight = free_slots > 2 ? 90 + spacer : 45;
+    const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
+
+    NonFixedFrameBox box( boxHeight, boxYPosition, true );
     SelectValue sel( min, max, cur, 1 );
     Text text;
 
@@ -342,9 +347,9 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
-    fheroes2::Image sp3;
-    fheroes2::Image sp4;
-    fheroes2::Image sp5;
+    fheroes2::Sprite sp3;
+    fheroes2::Sprite sp4;
+    fheroes2::Sprite sp5;
 
     std::vector<fheroes2::Rect> vrts( 3 );
 

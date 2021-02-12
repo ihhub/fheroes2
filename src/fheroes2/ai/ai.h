@@ -24,12 +24,14 @@
 #define H2AI_H
 
 #include "gamedefs.h"
+#include "rand.h"
 
 class Funds;
 class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
+struct VecHeroes;
 namespace Maps
 {
     class Tiles;
@@ -77,6 +79,7 @@ namespace AI
         virtual void CastleTurn( Castle & castle, bool defensive = false );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
+        virtual void HeroesTurn( VecHeroes & ) {}
 
         virtual void revealFog( const Maps::Tiles & tile );
 
@@ -118,7 +121,7 @@ namespace AI
     Base & Get( AI_TYPE type = NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index );
+    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
     bool HeroesValidObject( const Heroes & hero, s32 index );
     void HeroesMove( Heroes & hero );
 

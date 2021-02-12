@@ -23,6 +23,7 @@
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
@@ -32,6 +33,7 @@
 #endif
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <set>
 
@@ -122,18 +124,22 @@ namespace
             clear();
         }
 
-        virtual void show( bool enable ) override
-        {
-            _show = enable;
-        }
-
         virtual bool isVisible() const override
         {
-            return _show && ( SDL_ShowCursor( -1 ) == 1 );
+            if ( _emulation )
+                return fheroes2::Cursor::isVisible();
+            else
+                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
         }
 
         virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
+            if ( _emulation ) {
+                SDL_ShowCursor( 0 );
+                fheroes2::Cursor::update( image, offsetX, offsetY );
+                return;
+            }
+
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
                 return;
@@ -169,9 +175,27 @@ namespace
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
             SDL_ShowCursor( 1 );
+            SDL_FreeSurface( surface );
 
             clear();
             std::swap( _cursor, tempCursor );
+        }
+
+        virtual void enableSoftwareEmulation( const bool enable ) override
+        {
+            if ( enable == _emulation )
+                return;
+
+            if ( enable ) {
+                clear();
+                _emulation = true;
+            }
+            else {
+                _emulation = false;
+            }
+
+            if ( _cursorUpdater != nullptr )
+                _cursorUpdater();
         }
 
         static RenderCursor * create()
@@ -182,12 +206,13 @@ namespace
     protected:
         RenderCursor()
             : _cursor( NULL )
-            , _show( false )
-        {}
+        {
+            // SDL 2 handles mouse properly without any emulation.
+            _emulation = false;
+        }
 
     private:
         SDL_Cursor * _cursor;
-        bool _show; // TODO: remove this member!
 
         void clear()
         {
@@ -198,42 +223,14 @@ namespace
         }
     };
 #else
+    // SDL 1 doesn't support hardware level cursor.
     class RenderCursor : public fheroes2::Cursor
     {
     public:
-        RenderCursor()
-            : _show( false )
-        {}
-
-        virtual ~RenderCursor() {}
-
-        virtual void show( bool enable ) override
-        {
-            _show = enable;
-        }
-
-        virtual bool isVisible() const override
-        {
-            return _show;
-        }
-
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
-        {
-            _image = fheroes2::Sprite( image, offsetX, offsetY );
-        }
-
-        virtual void setPosition( int32_t offsetX, int32_t offsetY ) override
-        {
-            _image.setPosition( offsetX, offsetY );
-        }
-
         static RenderCursor * create()
         {
             return new RenderCursor;
         }
-
-    private:
-        bool _show;
     };
 #endif
 }
@@ -269,6 +266,7 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
+            _retrieveWindowInfo();
         }
 
         virtual bool isFullScreen() const override
@@ -293,7 +291,7 @@ namespace
                     for ( int i = 0; i < displayModeCount; ++i ) {
                         SDL_DisplayMode videoMode;
                         if ( SDL_GetDisplayMode( 0, i, &videoMode ) == 0 ) {
-                            resolutionSet.insert( std::make_pair( videoMode.w, videoMode.h ) );
+                            resolutionSet.emplace( videoMode.w, videoMode.h );
                         }
                     }
                 }
@@ -350,6 +348,16 @@ namespace
             SDL_SetWindowIcon( _window, surface );
 
             SDL_FreeSurface( surface );
+        }
+
+        virtual fheroes2::Rect getActiveWindowROI() const override
+        {
+            return _activeWindowROI;
+        }
+
+        virtual fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return _currentScreenResolution;
         }
 
         static RenderEngine * create()
@@ -417,7 +425,16 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    if ( display.width() % 4 != 0 ) {
+                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < display.height(); ++i ) {
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
+                        }
+                    }
+                    else {
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    }
                 }
             }
 
@@ -433,7 +450,7 @@ namespace
             else {
                 SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
                 if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                    if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                    if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
                 }
@@ -474,7 +491,19 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0, 0, 0, 0 );
+            bool isPaletteModeSupported = false;
+
+            SDL_RendererInfo rendererInfo;
+            if ( SDL_GetRenderDriverInfo( 0, &rendererInfo ) == 0 ) {
+                for ( uint32_t i = 0; i < rendererInfo.num_texture_formats; ++i ) {
+                    if ( rendererInfo.texture_formats[i] == SDL_PIXELFORMAT_INDEX8 ) {
+                        isPaletteModeSupported = true;
+                        break;
+                    }
+                }
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == NULL ) {
                 clear();
                 return false;
@@ -486,13 +515,18 @@ namespace
             }
 
             _createPalette();
-
+            SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" );
+            if ( SDL_RenderSetLogicalSize( _renderer, width_, height_ ) ) {
+                clear();
+                return false;
+            }
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
             if ( _texture == NULL ) {
                 clear();
                 return false;
             }
 
+            _retrieveWindowInfo();
             return true;
         }
 
@@ -530,6 +564,10 @@ namespace
 
                 SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
             }
+            else {
+                // This is unsupported format. Please implement it.
+                assert( 0 );
+            }
         }
 
         virtual bool isMouseCursorActive() const override
@@ -548,16 +586,12 @@ namespace
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
+        fheroes2::Size _currentScreenResolution;
+        fheroes2::Rect _activeWindowROI;
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_RENDERER_SOFTWARE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
             return SDL_RENDERER_ACCELERATED;
-#else
-            return SDL_RENDERER_ACCELERATED;
-#endif
         }
 
         void _createPalette()
@@ -575,9 +609,24 @@ namespace
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
-                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
+                    if ( _surface->w % 4 == 0 ) {
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    }
                 }
             }
+        }
+
+        void _retrieveWindowInfo()
+        {
+            const int32_t displayIndex = SDL_GetWindowDisplayIndex( _window );
+            SDL_DisplayMode displayMode;
+            SDL_GetCurrentDisplayMode( displayIndex, &displayMode );
+            _currentScreenResolution.width = displayMode.w;
+            _currentScreenResolution.height = displayMode.h;
+
+            SDL_GetWindowPosition( _window, &_activeWindowROI.x, &_activeWindowROI.y );
+            SDL_GetWindowSize( _window, &_activeWindowROI.width, &_activeWindowROI.height );
         }
     };
 #else
@@ -632,7 +681,7 @@ namespace
                 SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
                 if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
                     for ( int i = 0; modes[i]; ++i ) {
-                        resolutionSet.insert( std::make_pair( modes[i]->w, modes[i]->h ) );
+                        resolutionSet.emplace( modes[i]->w, modes[i]->h );
                     }
                 }
 
@@ -719,7 +768,16 @@ namespace
             }
             else if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( _surface->pixels != display.image() ) {
-                    memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    if ( display.width() % 4 != 0 ) {
+                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
+                        for ( int32_t i = 0; i < display.height(); ++i ) {
+                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
+                                    static_cast<size_t>( width ) );
+                        }
+                    }
+                    else {
+                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
+                    }
                 }
             }
 
@@ -806,6 +864,10 @@ namespace
 
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
             }
+            else {
+                // This is unsupported format. Please implement it.
+                assert( 0 );
+            }
         }
 
         virtual bool isMouseCursorActive() const override
@@ -821,9 +883,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __MINGW32CE__ ) || defined( __SYMBIAN32__ )
-            return SDL_SWSURFACE;
-#elif defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ ) || defined( ANDROID )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;
@@ -839,13 +899,16 @@ namespace
 
             if ( _surface->format->BitsPerPixel == 8 ) {
                 if ( !SDL_MUSTLOCK( _surface ) ) {
-                    // copy the image from display buffer to SDL surface
+                    // Copy the image from display buffer to SDL surface in case of fullscreen toggling
                     fheroes2::Display & display = fheroes2::Display::instance();
                     if ( _surface->w == display.width() && _surface->h == display.height() ) {
                         memcpy( _surface->pixels, display.image(), static_cast<size_t>( display.width() * display.height() ) );
                     }
 
-                    linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    // Display class doesn't have support for image pitch so we mustn't link display to surface if width is not divisible by 4.
+                    if ( _surface->w % 4 == 0 ) {
+                        linkRenderSurface( static_cast<uint8_t *>( _surface->pixels ) );
+                    }
                 }
             }
         }
@@ -866,7 +929,9 @@ namespace fheroes2
         , _preprocessing( NULL )
         , _postprocessing( NULL )
         , _renderSurface( NULL )
-    {}
+    {
+        _disableTransformLayer();
+    }
 
     Display::~Display()
     {
@@ -905,21 +970,26 @@ namespace fheroes2
 
     void Display::render()
     {
-        if ( _cursor->isVisible() && !_cursor->_image.empty() ) {
+        if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
             const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
             Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
 
             _renderFrame();
 
-            Blit( backup, *this, backup.x(), backup.y() );
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+
+            Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
             _renderFrame();
-        }
 
-        if ( _postprocessing != NULL )
-            _postprocessing();
+            if ( _postprocessing != nullptr ) {
+                _postprocessing();
+            }
+        }
     }
 
     void Display::_renderFrame()

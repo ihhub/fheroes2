@@ -25,6 +25,7 @@
 
 #include "interface_border.h"
 #include "ui_tool.h"
+#include "view_world.h"
 
 namespace Interface
 {
@@ -34,22 +35,35 @@ namespace Interface
     {
     public:
         Radar( Basic & );
+        Radar( const Radar & radar );
 
         void SetPos( s32, s32 );
         void SetRedraw( void ) const;
         void Build( void );
-        void Redraw( void );
+        void Redraw();
+        void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
+        void RedrawCursor( const Rect * roiRectangle = nullptr );
         void SetHide( bool );
         void ResetAreaSize( void );
         void QueueEventProcessing( void );
+        bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi );
+
+        static Radar MakeRadarViewWorld( const Radar & radar );
 
     private:
+        enum class RadarType : char
+        {
+            WorldMap,
+            ViewWorld
+        };
+
         void SavePosition( void );
         void Generate( void );
-        void RedrawObjects( int color = 0xFF );
-        void RedrawCursor( void );
+        void RedrawObjects( int color, ViewWorldMode flags ) const;
+
         void ChangeAreaSize( const Size & );
 
+        RadarType radarType;
         Basic & interface;
 
         fheroes2::Image spriteArea;

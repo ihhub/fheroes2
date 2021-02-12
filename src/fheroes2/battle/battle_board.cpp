@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 #include <iterator>
 #include <set>
@@ -31,6 +32,8 @@
 #include "castle.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
+#include "rand.h"
 #include "settings.h"
 #include "world.h"
 
@@ -41,10 +44,15 @@ namespace Battle
         return Rand::Get( 3, 6 ) + ( 11 * Rand::Get( 1, 7 ) );
     }
 
-    bool WideDifficultDirection( int where, int whereto )
+    bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
     {
-        return ( ( TOP_LEFT == where ) && ( whereto & ( LEFT | TOP_RIGHT ) ) ) || ( ( TOP_RIGHT == where ) && ( whereto & ( RIGHT | TOP_LEFT ) ) )
-               || ( ( BOTTOM_LEFT == where ) && ( whereto & ( LEFT | BOTTOM_RIGHT ) ) ) || ( ( BOTTOM_RIGHT == where ) && ( whereto & ( RIGHT | BOTTOM_LEFT ) ) );
+        const int startX = startCellId % ARENAW;
+        const int endX = endCellId % ARENAW;
+
+        if ( prevLeftDirection )
+            return endX <= startX;
+        else
+            return endX < startX;
     }
 }
 
@@ -124,7 +132,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
     }
 
     for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-        Unit * enemy = *it;
+        const Unit * enemy = *it;
 
         if ( enemy && enemy->isValid() ) {
             const s32 score = enemy->GetScoreQuality( unit );
@@ -154,152 +162,274 @@ s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
     return 0;
 }
 
-void Battle::Board::SetScanPassability( const Unit & b )
+void Battle::Board::SetScanPassability( const Unit & unit )
 {
     std::for_each( begin(), end(), []( Battle::Cell & cell ) { cell.ResetDirection(); } );
 
-    at( b.GetHeadIndex() ).SetDirection( CENTER );
+    at( unit.GetHeadIndex() ).SetDirection( CENTER );
 
-    if ( b.isFlying() ) {
+    if ( unit.isFlying() ) {
         for ( iterator it = begin(); it != end(); ++it )
-            if ( ( *it ).isPassable3( b, false ) )
+            if ( ( *it ).isPassable3( unit, false ) )
                 ( *it ).SetDirection( CENTER );
     }
     else {
-        Indexes indexes = GetDistanceIndexes( b.GetHeadIndex(), b.GetSpeed() );
+        Indexes indexes = GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() );
+        if ( unit.isWide() ) {
+            const Indexes & tailIndexes = GetDistanceIndexes( unit.GetTailIndex(), unit.GetSpeed() );
+            std::set<int32_t> filteredIndexed( indexes.begin(), indexes.end() );
+            filteredIndexed.insert( tailIndexes.begin(), tailIndexes.end() );
+            indexes = std::vector<int32_t>( filteredIndexed.begin(), filteredIndexed.end() );
+        }
         indexes.resize( std::distance( indexes.begin(), std::remove_if( indexes.begin(), indexes.end(), isImpassableIndex ) ) );
 
-        // set pasable
+        // Set passable cells.
         for ( Indexes::const_iterator it = indexes.begin(); it != indexes.end(); ++it )
-            GetAStarPath( b, Position::GetCorrect( b, *it ), false );
+            GetAStarPath( unit, Position::GetCorrect( unit, *it ), false );
     }
 }
 
-struct bcell_t
+struct CellNode
 {
-    s32 cost;
-    s32 prnt;
+    int32_t cost;
+    int32_t parentCellId;
     bool open;
+    bool leftDirection; // this is used for a wide unit movement to know the current position of tail
 
-    bcell_t()
+    CellNode()
         : cost( MAXU16 )
-        , prnt( -1 )
+        , parentCellId( -1 )
         , open( true )
+        , leftDirection( false )
     {}
 };
 
-Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & dst, bool debug )
+Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position & destination, const bool debug ) const
 {
     Indexes result;
-    const bool isWide = b.isWide();
+    const bool isWideUnit = unit.isWide();
 
     // check if target position is valid
-    if ( !dst.GetHead() || ( isWide && !dst.GetTail() ) ) {
-        ERROR( "Board::GetAStarPath invalid destination for unit " + b.String() );
+    if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
+        ERROR( "Board::GetAStarPath invalid destination for unit " + unit.String() );
         return result;
     }
 
-    s32 cur = b.GetHeadIndex();
-    const Castle * castle = Arena::GetCastle();
+    const int32_t startCellId = unit.GetHeadIndex();
+    int32_t currentCellId = startCellId;
+
     const Bridge * bridge = Arena::GetBridge();
+    const Castle * castle = Arena::GetCastle();
+    const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
+    const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
 
-    std::map<s32, bcell_t> list;
-    list[cur].prnt = -1;
-    list[cur].cost = 0;
-    list[cur].open = false;
+    std::map<int32_t, CellNode> cellMap;
+    cellMap[currentCellId].parentCellId = -1;
+    cellMap[currentCellId].cost = 0;
+    cellMap[currentCellId].open = false;
+    cellMap[currentCellId].leftDirection = unit.isReflect(); // used only for wide (2-hex) creatures
 
-    while ( cur != dst.GetHead()->GetIndex() ) {
-        const Cell & center = at( cur );
-        Indexes around
-            = isWide ? GetMoveWideIndexes( cur, ( 0 > list[cur].prnt ? b.isReflect() : ( RIGHT_SIDE & GetDirection( cur, list[cur].prnt ) ) ) ) : GetAroundIndexes( cur );
+    bool reachedDestination = true;
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            Cell & cell = at( *it );
+    const int32_t targetHeadCellId = destination.GetHead()->GetIndex();
+    const int32_t targetTailCellId = isWideUnit ? destination.GetTail()->GetIndex() : targetHeadCellId;
 
-            if ( list[*it].open && cell.isPassable4( b, center ) &&
-                 // check bridge
-                 ( !bridge || !Board::isBridgeIndex( *it ) || bridge->isPassable( b.GetColor() ) ) ) {
-                const s32 cost = 100 * Board::GetDistance( *it, dst.GetHead()->GetIndex() )
-                                 + ( isWide && WideDifficultDirection( center.GetDirection(), GetDirection( *it, cur ) ) ? 100 : 0 )
-                                 + ( castle && castle->isBuild( BUILD_MOAT ) && Board::isMoatIndex( *it ) ? 100 : 0 );
+    if ( isWideUnit ) {
+        int32_t currentTailCellId = unit.isReflect() ? currentCellId + 1 : currentCellId - 1;
 
-                // new cell
-                if ( 0 > list[*it].prnt ) {
-                    list[*it].prnt = cur;
-                    list[*it].cost = cost + list[cur].cost;
+        while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
+                && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
+            CellNode & currentCellNode = cellMap[currentCellId];
+
+            const Cell & center = at( currentCellId );
+            Indexes aroundCellIds;
+            if ( currentCellNode.parentCellId < 0 )
+                aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
+            else
+                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) );
+
+            for ( const int32_t cellId : aroundCellIds ) {
+                const Cell & cell = at( cellId );
+
+                if ( cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId ) ) ) {
+                    const bool isLeftDirection = IsLeftDirection( currentCellId, cellId, currentCellNode.leftDirection );
+                    const int32_t tailCellId = isLeftDirection ? cellId + 1 : cellId - 1;
+
+                    int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
+                        cost += 100;
+
+                    // Turn back. No movement at all.
+                    if ( isLeftDirection != currentCellNode.leftDirection )
+                        cost = 0;
+
+                    if ( cellMap[cellId].parentCellId < 0 ) {
+                        // It is a new cell (node).
+                        cellMap[cellId].parentCellId = currentCellId;
+                        cellMap[cellId].cost = cost + currentCellNode.cost;
+                        cellMap[cellId].leftDirection = isLeftDirection;
+                    }
+                    else if ( cellMap[cellId].cost > cost + currentCellNode.cost ) {
+                        // Found a better path. Update the existing node.
+                        cellMap[cellId].parentCellId = currentCellId;
+                        cellMap[cellId].cost = cost + currentCellNode.cost;
+                        cellMap[cellId].leftDirection = isLeftDirection;
+                    }
                 }
-                else
-                    // change parent
-                    if ( list[*it].cost > cost + list[cur].cost ) {
-                    list[*it].prnt = cur;
-                    list[*it].cost = cost + list[cur].cost;
+            }
+
+            currentCellNode.open = false;
+            int32_t cost = MAXU16;
+
+            const int32_t prevCellId = currentCellId;
+
+            // Find unused nodes by minimum cost.
+            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
+                const CellNode & cellNode = cellInfoIt->second;
+                if ( cellNode.open && cost > cellNode.cost ) {
+                    currentCellId = cellInfoIt->first;
+                    cost = cellNode.cost;
                 }
+            }
+
+            // Find alternative path if there is any.
+            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
+                const CellNode & cellNode = cellInfoIt->second;
+                if ( cellNode.open && cost == cellNode.cost && cellInfoIt->first != currentCellId && cellNode.parentCellId == prevCellId ) {
+                    currentCellId = cellInfoIt->first;
+                    break;
+                }
+            }
+
+            if ( MAXU16 == cost ) {
+                reachedDestination = false;
+                break;
+            }
+
+            currentTailCellId = IsLeftDirection( prevCellId, currentCellId, currentCellNode.leftDirection ) ? currentCellId + 1 : currentCellId - 1;
+        }
+    }
+    else {
+        while ( currentCellId != targetHeadCellId ) {
+            const Cell & center = at( currentCellId );
+            const Indexes aroundCellIds = GetAroundIndexes( currentCellId );
+
+            for ( const int32_t cellId : aroundCellIds ) {
+                const Cell & cell = at( cellId );
+
+                if ( cellMap[cellId].open && cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId ) ) ) {
+                    int32_t cost = 100 * Board::GetDistance( cellId, targetHeadCellId );
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
+                        cost += 100;
+
+                    if ( cellMap[cellId].parentCellId < 0 ) {
+                        // It is a new cell (node).
+                        cellMap[cellId].parentCellId = currentCellId;
+                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
+                    }
+                    else if ( cellMap[cellId].cost > cost + cellMap[currentCellId].cost ) {
+                        // Found a better path. Update the existing node.
+                        cellMap[cellId].parentCellId = currentCellId;
+                        cellMap[cellId].cost = cost + cellMap[currentCellId].cost;
+                    }
+                }
+            }
+
+            cellMap[currentCellId].open = false;
+            int32_t cost = MAXU16;
+
+            // Find unused nodes by minimum cost.
+            for ( std::map<int32_t, CellNode>::const_iterator cellInfoIt = cellMap.begin(); cellInfoIt != cellMap.end(); ++cellInfoIt ) {
+                const CellNode & cellNode = cellInfoIt->second;
+                if ( cellNode.open && cost > cellNode.cost ) {
+                    currentCellId = cellInfoIt->first;
+                    cost = cellNode.cost;
+                }
+            }
+
+            if ( MAXU16 == cost ) {
+                reachedDestination = false;
+                break;
             }
         }
-
-        list[cur].open = false;
-        s32 cost = MAXU16;
-
-        // find min cost opens
-        for ( std::map<s32, bcell_t>::const_iterator it = list.begin(); it != list.end(); ++it )
-            if ( ( *it ).second.open && cost > ( *it ).second.cost ) {
-                cur = ( *it ).first;
-                cost = ( *it ).second.cost;
-            }
-
-        if ( MAXU16 == cost )
-            break;
     }
 
-    result.reserve( 15 );
-
     // save path
-    if ( cur == dst.GetHead()->GetIndex() ) {
-        while ( cur != b.GetHeadIndex() && isValidIndex( cur ) && ( !isWide || isValidDirection( cur, b.isReflect() ? RIGHT : LEFT ) ) ) {
-            result.push_back( cur );
-            cur = list[cur].prnt;
+    if ( reachedDestination ) {
+        result.reserve( 15 );
+        while ( currentCellId != startCellId && isValidIndex( currentCellId ) ) {
+            if ( isWideUnit && !isValidDirection( currentCellId, cellMap[currentCellId].leftDirection ? RIGHT : LEFT ) )
+                break;
+
+            result.push_back( currentCellId );
+            currentCellId = cellMap[currentCellId].parentCellId;
         }
 
         std::reverse( result.begin(), result.end() );
 
-        // correct wide position
-        if ( isWide && result.size() ) {
-            const s32 head = dst.GetHead()->GetIndex();
-            const s32 tail = dst.GetTail()->GetIndex();
-            const s32 prev = 1 < result.size() ? result[result.size() - 2] : b.GetHeadIndex();
+        // Correct wide creature position.
+        if ( isWideUnit && !result.empty() ) {
+            const int32_t prev = 1 < result.size() ? result[result.size() - 2] : startCellId;
 
-            if ( result.back() == head ) {
-                int side = RIGHT == GetDirection( head, tail ) ? RIGHT_SIDE : LEFT_SIDE;
+            if ( result.back() == targetHeadCellId ) {
+                const int side = RIGHT == GetDirection( targetHeadCellId, targetTailCellId ) ? RIGHT_SIDE : LEFT_SIDE;
 
-                if ( !( side & GetDirection( head, prev ) ) )
-                    result.push_back( tail );
+                if ( !( side & GetDirection( targetHeadCellId, prev ) ) ) {
+                    result.push_back( targetTailCellId );
+                }
             }
-            else if ( result.back() == tail ) {
-                int side = RIGHT == GetDirection( head, tail ) ? LEFT_SIDE : RIGHT_SIDE;
+            else if ( result.back() == targetTailCellId ) {
+                const int side = RIGHT == GetDirection( targetHeadCellId, targetTailCellId ) ? LEFT_SIDE : RIGHT_SIDE;
 
-                if ( !( side & GetDirection( tail, prev ) ) )
-                    result.push_back( head );
+                if ( !( side & GetDirection( targetTailCellId, prev ) ) ) {
+                    result.push_back( targetHeadCellId );
+                }
             }
         }
 
-        if ( result.size() > b.GetSpeed() )
-            result.resize( b.GetSpeed() );
+        if ( isWideUnit ) {
+            uint32_t cellToMoveLeft = unit.GetSpeed();
+            bool prevIsLeftDirection = unit.isReflect();
+            for ( size_t i = 0; i < result.size(); ++i ) {
+                if ( prevIsLeftDirection == cellMap[result[i]].leftDirection ) {
+                    --cellToMoveLeft;
+                    if ( cellToMoveLeft == 0 ) {
+                        result.resize( i + 1 );
+                        break;
+                    }
+                }
+                else {
+                    prevIsLeftDirection = cellMap[result[i]].leftDirection;
+                }
+            }
+        }
+        else {
+            if ( result.size() > unit.GetSpeed() )
+                result.resize( unit.GetSpeed() );
+        }
 
-        // skip moat position
-        if ( castle && castle->isBuild( BUILD_MOAT ) && !Board::isMoatIndex( b.GetHeadIndex() ) ) {
-            Indexes::iterator moat = std::find_if( result.begin(), result.end(), Board::isMoatIndex );
-            if ( moat != result.end() )
-                result.resize( std::distance( result.begin(), ++moat ) );
+        // Skip moat position
+        if ( isMoatBuilt && !Board::isMoatIndex( startCellId ) ) {
+            for ( size_t i = 0; i < result.size(); ++i ) {
+                if ( isWideUnit && result[i] == unit.GetTailIndex() )
+                    continue;
+
+                if ( Board::isMoatIndex( result[i] ) ) {
+                    result.resize( i + 1 );
+                    break;
+                }
+            }
         }
 
         // set passable info
         for ( Indexes::iterator it = result.begin(); it != result.end(); ++it ) {
             Cell * cell = GetCell( *it );
-            cell->SetDirection( cell->GetDirection() | GetDirection( *it, it == result.begin() ? b.GetHeadIndex() : *( it - 1 ) ) );
+            assert( cell != nullptr );
+            cell->SetDirection( cell->GetDirection() | GetDirection( *it, it == result.begin() ? startCellId : *( it - 1 ) ) );
 
-            if ( isWide ) {
-                const s32 head = *it;
-                const s32 prev = it != result.begin() ? *( it - 1 ) : b.GetHeadIndex();
+            if ( isWideUnit ) {
+                const int32_t head = *it;
+                const int32_t prev = it != result.begin() ? *( it - 1 ) : startCellId;
                 Cell * tail = GetCell( head, LEFT_SIDE & GetDirection( head, prev ) ? LEFT : RIGHT );
 
                 if ( tail && UNKNOWN == tail->GetDirection() )
@@ -310,24 +440,11 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & b, const Position & ds
 
     if ( debug && result.empty() ) {
         DEBUG( DBG_BATTLE, DBG_WARN,
-               "path not found: " << b.String() << ", dst: "
-                                  << "(head: " << dst.GetHead()->GetIndex() << ", tail: " << ( dst.GetTail() ? dst.GetTail()->GetIndex() : -1 ) << ")" );
+               "Path is not found for " << unit.String() << ", destination: "
+                                        << "(head cell ID: " << targetHeadCellId << ", tail cell ID: " << ( isWideUnit ? targetTailCellId : -1 ) << ")" );
     }
 
     return result;
-}
-
-std::string Battle::Board::AllUnitsInfo( void ) const
-{
-    std::ostringstream os;
-
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Unit * b = ( *it ).GetUnit();
-        if ( b )
-            os << "\t" << b->String( true ) << std::endl;
-    }
-
-    return os.str();
 }
 
 Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
@@ -358,38 +475,33 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
     return result;
 }
 
-Battle::Indexes Battle::Board::GetNearestTroopIndexes( s32 pos, const Indexes * black ) const
+std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    Indexes result;
-    std::vector<IndexDistance> dists;
-    dists.reserve( 15 );
+    std::vector<std::pair<Battle::Unit *, int32_t> > foundUnits;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        const Battle::Unit * b = ( *it ).GetUnit();
+    for ( Cell & cell : *this ) {
+        Unit * cellUnit = cell.GetUnit();
+        if ( cellUnit == nullptr || startUnit == cellUnit || cell.GetIndex() != cellUnit->GetHeadIndex() ) {
+            continue;
+        }
 
-        if ( b ) {
-            // check black list
-            if ( black && black->end() != std::find( black->begin(), black->end(), b->GetHeadIndex() ) )
-                continue;
-            // added
-            if ( pos != b->GetHeadIndex() )
-                dists.push_back( IndexDistance( b->GetHeadIndex(), GetDistance( pos, b->GetHeadIndex() ) ) );
+        const bool isBlackListed = std::find( blackList.begin(), blackList.end(), cellUnit ) != blackList.end();
+        if ( !isBlackListed ) {
+            foundUnits.emplace_back( cellUnit, GetDistance( startUnit->GetHeadIndex(), cellUnit->GetHeadIndex() ) );
         }
     }
 
-    if ( 1 < dists.size() ) {
-        std::sort( dists.begin(), dists.end(), IndexDistance::Shortest );
-        const uint32_t distFront = dists.front().second;
-        dists.resize( std::count_if( dists.begin(), dists.end(), [distFront]( const IndexDistance & v ) { return v.second == distFront; } ) );
+    std::sort( foundUnits.begin(), foundUnits.end(),
+               []( const std::pair<Battle::Unit *, int32_t> & first, const std::pair<Battle::Unit *, int32_t> & second ) { return first.second < second.second; } );
+
+    std::vector<Battle::Unit *> units;
+    units.reserve( foundUnits.size() );
+
+    for ( const auto & foundUnit : foundUnits ) {
+        units.push_back( foundUnit.first );
     }
 
-    if ( dists.size() ) {
-        result.reserve( dists.size() );
-        for ( std::vector<IndexDistance>::const_iterator it = dists.begin(); it != dists.end(); ++it )
-            result.push_back( ( *it ).first );
-    }
-
-    return result;
+    return units;
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )
@@ -546,16 +658,7 @@ bool Battle::Board::isImpassableIndex( s32 index )
 
 bool Battle::Board::isBridgeIndex( s32 index )
 {
-    switch ( index ) {
-    case 49:
-    case 50:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
+    return index == 49 || index == 50;
 }
 
 bool Battle::Board::isMoatIndex( s32 index )
@@ -829,9 +932,8 @@ void Battle::Board::SetCovrObjects( int icn )
 
 Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 {
-    Board * board = Arena::GetBoard();
-
     if ( isValidIndex( position ) && dir != UNKNOWN ) {
+        Board * board = Arena::GetBoard();
         if ( dir == CENTER )
             return &board->at( position );
         else if ( Board::isValidDirection( position, dir ) )
@@ -844,9 +946,10 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
 Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
 {
     Indexes result;
-    result.reserve( 8 );
 
     if ( isValidIndex( center ) ) {
+        result.reserve( 4 );
+
         if ( reflect ) {
             if ( isValidDirection( center, LEFT ) )
                 result.push_back( GetIndexDirection( center, LEFT ) );
@@ -874,9 +977,10 @@ Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
 Battle::Indexes Battle::Board::GetAroundIndexes( s32 center, s32 ignore )
 {
     Indexes result;
-    result.reserve( 12 );
 
     if ( isValidIndex( center ) ) {
+        result.reserve( 12 );
+
         for ( direction_t dir = TOP_LEFT; dir < CENTER; ++dir )
             if ( isValidDirection( center, dir ) && GetIndexDirection( center, dir ) != ignore )
                 result.push_back( GetIndexDirection( center, dir ) );
@@ -985,8 +1089,8 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     const int mod = y % 2;
 
     auto validateAndInsert = [&result, &currentColor]( const int index ) {
-        Unit * unit = GetCell( index )->GetUnit();
-        if ( unit && currentColor != unit->GetArmyColor() )
+        const Unit * vUnit = GetCell( index )->GetUnit();
+        if ( vUnit && currentColor != vUnit->GetArmyColor() )
             result.push_back( index );
     };
 

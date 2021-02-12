@@ -39,6 +39,7 @@
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
+#include "ui_window.h"
 #include "world.h"
 
 /* readonly: false, fade: false */
@@ -53,8 +54,8 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     if ( fade && Settings::Get().ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    Dialog::FrameBorder background( Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
-    const Point & cur_pt = background.GetArea();
+    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    const Point cur_pt( background.activeArea().x, background.activeArea().y );
     Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -69,7 +70,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     // name
-    message = _( "%{name} the %{race} ( Level %{level} )" );
+    message = _( "%{name} the %{race} (Level %{level})" );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( race ) );
     StringReplace( message, "%{level}", GetLevel() );
@@ -152,24 +153,12 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     selectArmy.Redraw();
 
     // secskill
-    SecondarySkillsBar secskill_bar( false );
+    SecondarySkillsBar secskill_bar( *this, false );
     secskill_bar.SetColRows( 8, 1 );
     secskill_bar.SetHSpace( 5 );
     secskill_bar.SetContent( secondary_skills.ToVector() );
     secskill_bar.SetPos( cur_pt.x + 3, cur_pt.y + 233 );
     secskill_bar.Redraw();
-
-    dst_pt.x = cur_pt.x + 51;
-    dst_pt.y = cur_pt.y + 308;
-
-    ArtifactsBar selectArtifacts( this, false, readonly );
-
-    selectArtifacts.SetColRows( 7, 2 );
-    selectArtifacts.SetHSpace( 15 );
-    selectArtifacts.SetVSpace( 15 );
-    selectArtifacts.SetContent( GetBagArtifacts() );
-    selectArtifacts.SetPos( dst_pt.x, dst_pt.y );
-    selectArtifacts.Redraw();
 
     // bottom small bar
     dst_pt.x = cur_pt.x + 22;
@@ -179,6 +168,19 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     StatusBar statusBar;
     statusBar.SetCenter( dst_pt.x + bar.width() / 2, dst_pt.y + 13 );
+
+    // artifact bar
+    dst_pt.x = cur_pt.x + 51;
+    dst_pt.y = cur_pt.y + 308;
+
+    ArtifactsBar selectArtifacts( this, false, readonly, false, &statusBar );
+
+    selectArtifacts.SetColRows( 7, 2 );
+    selectArtifacts.SetHSpace( 15 );
+    selectArtifacts.SetVSpace( 15 );
+    selectArtifacts.SetContent( GetBagArtifacts() );
+    selectArtifacts.SetPos( dst_pt.x, dst_pt.y );
+    selectArtifacts.Redraw();
 
     // button prev
     dst_pt.x = cur_pt.x;
@@ -262,6 +264,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
+            spellPointsInfo.Redraw();
             redrawMorale = true;
             redrawLuck = true;
         }
@@ -335,10 +338,14 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         // status message
         if ( le.MouseCursor( portPos ) )
             message = _( "View Stats" );
-        else if ( le.MouseCursor( moraleIndicator.GetArea() ) )
-            message = _( "View Morale Info" );
-        else if ( le.MouseCursor( luckIndicator.GetArea() ) )
-            message = _( "View Luck Info" );
+        else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
+            message = _( "View %{morale} Info" );
+            StringReplace( message, "%{morale}", fheroes2::MoraleString( army.GetMorale() ) );
+        }
+        else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
+            message = _( "View %{luck} Info" );
+            StringReplace( message, "%{luck}", fheroes2::LuckString( army.GetLuck() ) );
+        }
         else if ( le.MouseCursor( experienceInfo.GetArea() ) )
             message = _( "View Experience Info" );
         else if ( le.MouseCursor( spellPointsInfo.GetArea() ) )

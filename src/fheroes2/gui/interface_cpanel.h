@@ -45,11 +45,11 @@ namespace Interface
     private:
         Basic & interface;
 
-        fheroes2::Image btn_radr;
-        fheroes2::Image btn_icon;
-        fheroes2::Image btn_bttn;
-        fheroes2::Image btn_stat;
-        fheroes2::Image btn_quit;
+        fheroes2::Sprite btn_radr;
+        fheroes2::Sprite btn_icon;
+        fheroes2::Sprite btn_bttn;
+        fheroes2::Sprite btn_stat;
+        fheroes2::Sprite btn_quit;
 
         fheroes2::Rect rt_radr;
         fheroes2::Rect rt_icon;

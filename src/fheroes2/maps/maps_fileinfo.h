@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 namespace Maps
 {

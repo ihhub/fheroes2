@@ -24,6 +24,7 @@
 #define SDLTHREAD_H
 
 #include "types.h"
+#include <SDL.h>
 #include <SDL_thread.h>
 
 namespace SDL
@@ -61,21 +62,6 @@ namespace SDL
 
     private:
         SDL_TimerID id;
-    };
-
-    class Time
-    {
-    public:
-        Time();
-
-        void Start( void );
-        void Stop( void );
-        u32 Get( void ) const;
-        void Print( const char * header = NULL ) const;
-
-    private:
-        u32 tick1;
-        u32 tick2;
     };
 }
 

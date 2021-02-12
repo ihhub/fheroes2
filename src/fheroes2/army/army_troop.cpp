@@ -42,7 +42,7 @@ Troop::Troop( const Monster & m, u32 c )
 
 bool Troop::operator==( const Monster & m ) const
 {
-    return static_cast<Monster>( *this ) == m;
+    return Monster::operator==( m );
 }
 
 bool Troop::isMonster( int mons ) const
@@ -73,7 +73,7 @@ void Troop::Set( const Monster & m, u32 c )
 
 void Troop::SetMonster( const Monster & m )
 {
-    id = m();
+    id = m.GetID();
 }
 
 void Troop::SetCount( u32 c )
@@ -154,17 +154,17 @@ bool Troop::isModes( u32 ) const
 
 std::string Troop::GetAttackString( void ) const
 {
-    return GetString( GetAttack() );
+    return std::to_string( GetAttack() );
 }
 
 std::string Troop::GetDefenseString( void ) const
 {
-    return GetString( GetDefense() );
+    return std::to_string( GetDefense() );
 }
 
 std::string Troop::GetShotString( void ) const
 {
-    return GetString( GetShots() );
+    return std::to_string( GetShots() );
 }
 
 std::string Troop::GetSpeedString( void ) const
@@ -188,11 +188,11 @@ u32 Troop::GetAffectedDuration( u32 ) const
 }
 
 /* ArmyTroop */
-ArmyTroop::ArmyTroop( Army * a )
+ArmyTroop::ArmyTroop( const Army * a )
     : army( a )
 {}
 
-ArmyTroop::ArmyTroop( Army * a, const Troop & t )
+ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     : Troop( t )
     , army( a )
 {}
@@ -241,7 +241,7 @@ const Army * ArmyTroop::GetArmy( void ) const
 std::string ArmyTroop::GetAttackString( void ) const
 {
     if ( Troop::GetAttack() == GetAttack() )
-        return GetString( Troop::GetAttack() );
+        return std::to_string( Troop::GetAttack() );
 
     std::ostringstream os;
     os << Troop::GetAttack() << " (" << GetAttack() << ")";
@@ -251,7 +251,7 @@ std::string ArmyTroop::GetAttackString( void ) const
 std::string ArmyTroop::GetDefenseString( void ) const
 {
     if ( Troop::GetDefense() == GetDefense() )
-        return GetString( Troop::GetDefense() );
+        return std::to_string( Troop::GetDefense() );
 
     std::ostringstream os;
     os << Troop::GetDefense() << " (" << GetDefense() << ")";

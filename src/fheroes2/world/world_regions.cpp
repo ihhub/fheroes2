@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ground.h"
 #include "world.h"
 
 namespace
@@ -47,9 +46,8 @@ namespace
         return 1 << ( reflect ? ( direction + 4 ) % 8 : direction );
     }
 
-    std::vector<int> GetDirectionOffsets( uint32_t mapWidth )
+    std::vector<int> GetDirectionOffsets( const int width )
     {
-        const int width = static_cast<int>( mapWidth );
         std::vector<int> offsets( 8 );
         offsets[TOP_LEFT] = -width - 1;
         offsets[TOP] = -width;
@@ -70,7 +68,7 @@ namespace
 
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
-        for ( int & current : dataSet ) {
+        for ( const int current : dataSet ) {
             if ( Maps::GetApproximateDistance( current, value ) < distance )
                 return false;
         }
@@ -110,13 +108,13 @@ namespace
         }
     }
 
-    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const Size & mapSize, std::vector<MapRegion> & regions )
+    void FindMissingRegions( std::vector<MapRegionNode> & rawData, const fheroes2::Size & mapSize, std::vector<MapRegion> & regions )
     {
-        const uint32_t extendedWidth = mapSize.w + 2;
+        const uint32_t extendedWidth = mapSize.width + 2;
 
         MapRegionNode * currentTile = rawData.data() + extendedWidth + 1;
-        MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.h + 1 );
-        const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+        const MapRegionNode * mapEnd = rawData.data() + extendedWidth * ( mapSize.height + 1 );
+        const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
 
         for ( ; currentTile != mapEnd; ++currentTile ) {
             if ( currentTile->type == REGION_NODE_OPEN ) {
@@ -229,7 +227,7 @@ void World::ComputeStaticAnalysis()
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
             const int index = rowIndex + x;
-            Maps::Tiles & tile = vec_tiles[index];
+            const Maps::Tiles & tile = vec_tiles[index];
             // If tile is blocked (mountain, trees, etc) then it's applied to both
             if ( tile.GetPassable() == 0 ) {
                 ++obstacles[0][x].second;
@@ -267,7 +265,7 @@ void World::ComputeStaticAnalysis()
     // Step 3. Check all castles on the map and create region centres based on them
     std::vector<int> regionCenters;
     TileDataVector castleCenters;
-    for ( Castle * castle : vec_castles ) {
+    for ( const Castle * castle : vec_castles ) {
         castleCenters.emplace_back( castle->GetIndex(), castle->GetColor() );
     }
     std::sort( castleCenters.begin(), castleCenters.end(), []( const TileData & left, const TileData & right ) {
@@ -325,7 +323,7 @@ void World::ComputeStaticAnalysis()
     for ( int y = 0; y < height; ++y ) {
         const int rowIndex = y * width;
         for ( int x = 0; x < width; ++x ) {
-            const size_t index = rowIndex + x;
+            const int index = rowIndex + x;
             const Maps::Tiles & tile = vec_tiles[index];
             MapRegionNode & node = data[ConvertExtendedIndex( index, extendedWidth )];
 
@@ -344,18 +342,18 @@ void World::ComputeStaticAnalysis()
     // Step 6. Initialize regions
     size_t averageRegionSize = ( static_cast<size_t>( width ) * height * 2 ) / regionCenters.size();
     _regions.clear();
-    for ( size_t baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
+    for ( int baseIDX = 0; baseIDX < REGION_NODE_FOUND; ++baseIDX ) {
         _regions.emplace_back( baseIDX, 0, false, 0 );
     }
 
     for ( const int tileIndex : regionCenters ) {
-        const size_t regionID = _regions.size();
+        const int regionID = static_cast<int>( _regions.size() ); // Safe to do as we can't have so many regions
         _regions.emplace_back( regionID, tileIndex, vec_tiles[tileIndex].isWater(), averageRegionSize );
         data[ConvertExtendedIndex( tileIndex, extendedWidth )].type = regionID;
     }
 
     // Step 7. Grow all regions one step at the time so they would compete for space
-    const std::vector<int> & offsets = GetDirectionOffsets( extendedWidth );
+    const std::vector<int> & offsets = GetDirectionOffsets( static_cast<int>( extendedWidth ) );
     bool stillRoomToExpand = true;
     while ( stillRoomToExpand ) {
         stillRoomToExpand = false;
@@ -368,7 +366,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
-    FindMissingRegions( data, Size( width, height ), _regions );
+    FindMissingRegions( data, fheroes2::Size( width, height ), _regions );
 
     // Step 9. Assign regions to the map tiles and finalize the data
     for ( MapRegion & reg : _regions ) {

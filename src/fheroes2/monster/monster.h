@@ -29,6 +29,7 @@
 #include "gamedefs.h"
 #include "monster_info.h"
 #include "payment.h"
+#include "serialize.h"
 
 class Spell;
 
@@ -171,8 +172,10 @@ public:
     bool operator==( const Monster & ) const;
     bool operator!=( const Monster & ) const;
 
-    int operator()( void ) const;
-    int GetID( void ) const;
+    int GetID( void ) const
+    {
+        return id;
+    }
 
     void Upgrade( void );
     Monster GetUpgrade( void ) const;
@@ -234,7 +237,6 @@ public:
     static u32 GetCountFromHitPoints( const Monster &, u32 );
 
     static void UpdateStats( const std::string & );
-    static float GetUpgradeRatio( void );
 
     static uint32_t GetICNByMonsterID( uint32_t monsterID );
     static uint32_t GetMissileICN( uint32_t monsterID );
@@ -280,9 +282,9 @@ struct MonsterStaticData
 };
 
 StreamBase & operator<<( StreamBase &, const Monster & );
-StreamBase & operator>>( StreamBase &, Monster & );
+StreamBase & operator>>( StreamBase &, const Monster & );
 
 StreamBase & operator<<( StreamBase &, const MonsterStaticData & );
-StreamBase & operator>>( StreamBase &, MonsterStaticData & );
+StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
 
 #endif

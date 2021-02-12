@@ -24,6 +24,7 @@
 #include "difficulty.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "rand.h"
 #include "settings.h"
 #include "skill.h"
 #include "spell.h"
@@ -526,10 +527,6 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 // 15 - spell
                 int cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
 
-                // always available
-                if ( Settings::Get().ExtWorldNoRequirementsForArtifacts() )
-                    cond = 0;
-
                 QuantitySetVariant( cond );
                 QuantitySetArtifact( art );
 
@@ -981,13 +978,13 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 co
     }
 
     // skip join
-    if ( mons() == Monster::GHOST || mons.isElemental() )
+    if ( mons.GetID() == Monster::GHOST || mons.isElemental() )
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
     else
         // fixed count: for money
         if ( tile.MonsterFixedCount() ||
              // month of monster
-             ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons() ) )
+             ( world.GetWeekType().GetType() == Week::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) )
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
     else {
         // 20% chance for join
@@ -1028,7 +1025,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 
         // fixed random sprite
         tile.SetObject( MP2::OBJ_MONSTER );
-        tile.objectIndex = mons() - 1; // ICN::MONS32 start from PEASANT
+        tile.objectIndex = mons.GetID() - 1; // ICN::MONS32 start from PEASANT
     }
 
     u32 count = 0;

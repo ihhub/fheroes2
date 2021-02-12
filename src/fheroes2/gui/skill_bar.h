@@ -26,20 +26,20 @@
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    PrimarySkillsBar( const Heroes *, bool mini );
+    PrimarySkillsBar( const Heroes * hero, bool mini );
 
     void SetTextOff( s32, s32 );
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( int &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarSingleClick( int & ) override;
-    virtual bool ActionBarPressRight( int & ) override;
-    virtual bool ActionBarCursor( int & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( int & skill ) override;
+    virtual bool ActionBarRightMouseHold( int & skill ) override;
+    virtual bool ActionBarCursor( int & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
-    const Heroes * hero;
+private:
+    const Heroes * _hero;
     fheroes2::Image backsf;
     bool use_mini_sprite;
     std::vector<int> content;
@@ -50,20 +50,21 @@ protected:
 class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 {
 public:
-    SecondarySkillsBar( bool mini = true, bool change = false );
+    SecondarySkillsBar( const Heroes & hero, bool mini = true, bool change = false );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarSingleClick( Skill::Secondary & ) override;
-    virtual bool ActionBarPressRight( Skill::Secondary & ) override;
-    virtual bool ActionBarCursor( Skill::Secondary & ) override;
+    virtual bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
+    virtual bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
+    virtual bool ActionBarCursor( Skill::Secondary & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
+private:
     fheroes2::Image backsf;
-    bool use_mini_sprite;
-    bool can_change;
+    const bool use_mini_sprite;
+    const bool can_change;
     std::string msg;
+    const Heroes & _hero;
 };

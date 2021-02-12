@@ -30,6 +30,9 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "heroes.h"
+
+#include <cassert>
+
 using namespace Battle;
 
 namespace AI
@@ -105,6 +108,11 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        if ( currentUnit.Modes( SP_BERSERKER ) != 0 ) {
+            berserkTurn( arena, currentUnit, actions );
+            return;
+        }
+
         const int myColor = currentUnit.GetColor();
         const int myHeadIndex = currentUnit.GetHeadIndex();
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
@@ -118,15 +126,15 @@ namespace AI
         // This should filter out all invalid units
         const Units friendly( friendlyForce, true );
         const Units enemies( enemyForce, true );
-        const size_t enemiesCount = enemies.size();
+        // const size_t enemiesCount = enemies.size();
 
         // Step 1. Friendly and enemy army analysis
         double myArmyStrength = 0;
         double enemyArmyStrength = 0;
         double myShooterStr = 0;
         double enemyShooterStr = 0;
-        double averageAllyDefense = 0;
-        double averageEnemyAttack = 0;
+        // double averageAllyDefense = 0;
+        // double averageEnemyAttack = 0;
         int highestDamageExpected = 0;
 
         for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
@@ -142,7 +150,7 @@ namespace AI
             if ( dmg > highestDamageExpected )
                 highestDamageExpected = dmg;
 
-            averageEnemyAttack += unit.GetAttack();
+            // averageEnemyAttack += unit.GetAttack();
         }
 
         for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
@@ -154,26 +162,26 @@ namespace AI
                 myShooterStr += unitStr;
             }
 
-            averageAllyDefense += unit.GetDefense();
+            // averageAllyDefense += unit.GetDefense();
         }
 
         const double enemyArcherRatio = enemyShooterStr / enemyArmyStrength;
         // Will be used for better unit strength heuristic
-        averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
-        averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
+        // averageAllyDefense = ( enemiesCount > 0 ) ? averageAllyDefense / enemiesCount : 1;
+        // averageEnemyAttack = ( enemiesCount > 0 ) ? averageEnemyAttack / enemiesCount : 1;
 
         // Step 2. Add castle siege (and battle arena) modifiers
         bool attackingCastle = false;
         bool defendingCastle = false;
-        const Castle * castle = arena.GetCastle();
+        const Castle * castle = Arena::GetCastle();
         if ( castle ) {
             const bool attackerIgnoresCover = arena.GetForce1().GetCommander()->HasArtifact( Artifact::GOLDEN_BOW );
 
             auto getTowerStrength = [&currentUnit]( const Tower * tower ) { return ( tower && tower->isValid() ) ? tower->GetScoreQuality( currentUnit ) : 0; };
 
-            double towerStr = getTowerStrength( arena.GetTower( TWR_CENTER ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_LEFT ) );
-            towerStr += getTowerStrength( arena.GetTower( TWR_RIGHT ) );
+            double towerStr = getTowerStrength( Arena::GetTower( TWR_CENTER ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_LEFT ) );
+            towerStr += getTowerStrength( Arena::GetTower( TWR_RIGHT ) );
             DEBUG( DBG_BATTLE, DBG_TRACE, "- Castle strength: " << towerStr );
 
             if ( myColor == castle->GetColor() ) {
@@ -190,7 +198,10 @@ namespace AI
             }
         }
 
-        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
+        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = myArmyStrength > enemyArmyStrength * 10;
+
+        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG( DBG_BATTLE, DBG_TRACE,
                "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
 
@@ -209,7 +220,9 @@ namespace AI
         }
 
         // Step 4. Calculate spell heuristics
-        if ( CheckCommanderCanSpellcast( arena, commander ) ) {
+
+        // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
+        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && CheckCommanderCanSpellcast( arena, commander ) ) {
             // 1. For damage spells - maximum amount of enemy threat lost
             // 2. For buffs - friendly unit strength gained
             // 3. For debuffs - enemy unit threat lost
@@ -294,7 +307,7 @@ namespace AI
         }
         else {
             // Melee unit decision tree (both flyers and walkers)
-            Board & board = *arena.GetBoard();
+            Board & board = *Battle::Arena::GetBoard();
             board.SetPositionQuality( currentUnit );
 
             if ( defensiveTactics ) {
@@ -350,7 +363,8 @@ namespace AI
                                 // Tertiary - Enemy unit threat
                                 if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
-                                          && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
+                                          && ( maxArcherValue < archerValue
+                                               || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
                                     targetCell = moveToEnemy.first;
                                     target = enemy;
                                     maxArcherValue = archerValue;
@@ -387,7 +401,7 @@ namespace AI
                 for ( const Unit * enemy : enemies ) {
                     const Indexes & around = Board::GetAroundIndexes( *enemy );
                     for ( const int cell : around ) {
-                        const int quality = board.GetCell( cell )->GetQuality();
+                        const int quality = Board::GetCell( cell )->GetQuality();
                         const uint32_t dist = arena.CalculateMoveDistance( cell );
                         if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
                             highestValue = quality;
@@ -447,5 +461,45 @@ namespace AI
         }
 
         actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+    }
+
+    void Normal::berserkTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
+    {
+        assert( currentUnit.Modes( SP_BERSERKER ) );
+
+        Board & board = *Battle::Arena::GetBoard();
+        const uint32_t currentUnitUID = currentUnit.GetUID();
+
+        const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );
+        if ( !nearestUnits.empty() ) {
+            for ( size_t i = 0; i < nearestUnits.size(); ++i ) {
+                const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
+                const int32_t targetUnitHead = nearestUnits[i]->GetHeadIndex();
+                if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                    break;
+                }
+                else {
+                    int targetCell = -1;
+                    const Indexes & around = Board::GetAroundIndexes( *nearestUnits[i] );
+                    for ( const int cell : around ) {
+                        if ( arena.hexIsPassable( cell ) ) {
+                            targetCell = cell;
+                            break;
+                        }
+                    }
+
+                    if ( targetCell != -1 ) {
+                        if ( currentUnit.GetHeadIndex() != targetCell )
+                            actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnitUID, targetCell ) );
+
+                        actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                        break;
+                    }
+                }
+            }
+        }
+
+        actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnitUID ) );
     }
 }

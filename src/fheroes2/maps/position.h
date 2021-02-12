@@ -24,6 +24,7 @@
 #define H2POSITION_H
 
 #include "gamedefs.h"
+#include "serialize.h"
 
 class MapPosition
 {
@@ -32,13 +33,20 @@ public:
 
     bool operator==( s32 ) const;
 
-    const Point & GetCenter( void ) const;
+    const Point & GetCenter() const
+    {
+        return center;
+    }
+
     s32 GetIndex( void ) const;
 
     void SetCenter( const Point & );
-    void SetIndex( s32 );
+    void SetIndex( const int32_t index );
 
-    bool isPosition( const Point & ) const;
+    bool isPosition( const Point & pt ) const
+    {
+        return pt == center;
+    }
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const MapPosition & );

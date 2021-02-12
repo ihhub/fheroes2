@@ -31,8 +31,8 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
-        AnimationReference createAnimReference( int monsterID );
+        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim ) const;
+        AnimationReference createAnimReference( int monsterID ) const;
         MonsterAnimInfo getAnimInfo( int monsterID );
 
     private:
@@ -345,7 +345,7 @@ namespace Bin_Info
         return animationFrames.size() == SHOOT3_END + 1 && !animationFrames.at( animID ).empty();
     }
 
-    size_t MonsterAnimInfo::getProjectileID( float angle ) const
+    size_t MonsterAnimInfo::getProjectileID( const double angle ) const
     {
         const std::vector<float> & angles = projectileAngles;
         if ( angles.empty() )
@@ -358,12 +358,12 @@ namespace Bin_Info
         return angles.size() - 1;
     }
 
-    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
+    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID ) const
     {
         return AnimationSequence( info.animationFrames.at( animID ) );
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
+    AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const
     {
         return AnimationReference( monsterID );
     }

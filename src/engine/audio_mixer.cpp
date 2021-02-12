@@ -158,7 +158,7 @@ u16 Mixer::MaxVolume( void )
     return MIX_MAX_VOLUME;
 }
 
-u16 Mixer::Volume( int channel, s16 vol )
+u16 Mixer::Volume( int channel, int16_t vol )
 {
     if ( !valid )
         return 0;
@@ -192,7 +192,7 @@ void Mixer::Reset( void )
 
 u8 Mixer::isPlaying( int channel )
 {
-    return Mix_Playing( channel );
+    return ( Mix_Volume( channel, -1 ) > 0 ) ? Mix_Playing( channel ) : 0;
 }
 
 u8 Mixer::isPaused( int channel )
@@ -225,13 +225,13 @@ struct chunk_t
     bool this_ptr( const chunk_t * ch ) const
     {
         return ch == this;
-    };
+    }
 
     const u8 * data;
     u32 length;
     u32 position;
-    s16 volume1;
-    s16 volume2;
+    int16_t volume1;
+    int16_t volume2;
     u8 state;
 };
 
@@ -330,7 +330,7 @@ u16 Mixer::MaxVolume( void )
     return SDL_MIX_MAXVOLUME;
 }
 
-u16 Mixer::Volume( int ch, s16 vol )
+u16 Mixer::Volume( int ch, int16_t vol )
 {
     if ( !valid )
         return 0;
@@ -367,7 +367,7 @@ int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
 
         if ( 0 > channel ) {
             std::vector<chunk_t>::iterator it
-                = std::find_if( chunks.begin(), chunks.end(), std::bind2nd( std::mem_fun_ref( &chunk_t::this_ptr ), reinterpret_cast<const chunk_t *>( ptr ) ) );
+                = std::find_if( chunks.begin(), chunks.end(), [ptr]( const chunk_t & c ) { return c.this_ptr( reinterpret_cast<const chunk_t *>( ptr ) ); } );
             if ( it == chunks.end() ) {
                 it = std::find_if( chunks.begin() + reserved_channels, chunks.end(), PredicateIsFreeSound );
                 if ( it == chunks.end() ) {
@@ -433,9 +433,16 @@ void Mixer::Resume( int ch )
     }
 }
 
-u8 Mixer::isPlaying( int ch )
+u8 Mixer::isPlaying( int chunkNum )
 {
-    return 0 <= ch && ch < static_cast<int>( chunks.size() ) && ( chunks[ch].state & MIX_PLAY );
+    const bool isValidChunk = ( 0 <= chunkNum ) && ( chunkNum < static_cast<int>( chunks.size() ) );
+    if ( !isValidChunk ) {
+        return 0;
+    }
+
+    const chunk_t & chunk = chunks[chunkNum];
+    const bool isSilence = ( chunk.volume1 <= 0 ) || ( chunk.volume2 <= 0 );
+    return isSilence ? 0 : ( chunk.state & MIX_PLAY );
 }
 
 u8 Mixer::isPaused( int ch )

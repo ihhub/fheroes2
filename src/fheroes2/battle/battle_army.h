@@ -65,7 +65,7 @@ namespace Battle
         u32 GetDeadCounts( void ) const;
         int GetColor( void ) const;
         int GetControl( void ) const;
-        u32 GetSurrenderCost( void ) const;
+        uint32_t GetSurrenderCost( void ) const;
         Troops GetKilledTroops( void ) const;
         bool animateIdleUnits();
         void resetIdleAnimation();
@@ -74,7 +74,7 @@ namespace Battle
         void SyncArmyCount( bool checkResurrected );
 
         static Unit * GetCurrentUnit( const Force &, const Force &, Unit * last, Units * all, bool part1 );
-        static Unit * GetCurrentUnit( const Force &, const Force &, Unit * last, bool part1 );
+        static Unit * GetCurrentUnit( const Force &, const Force &, const Unit * last, bool part1 );
         static void UpdateOrderUnits( const Force &, const Force &, Units & );
 
     private:

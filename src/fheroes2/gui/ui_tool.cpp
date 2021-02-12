@@ -21,9 +21,82 @@
 #include "ui_tool.h"
 #include "localevent.h"
 #include "screen.h"
-#include "types.h"
+#include "settings.h"
+#include "text.h"
 
+#include <chrono>
 #include <cstring>
+#include <ctime>
+#include <deque>
+
+namespace
+{
+    // Renderer of current time and FPS on screen
+    class SystemInfoRenderer
+    {
+    public:
+        SystemInfoRenderer()
+            : _startTime( std::chrono::high_resolution_clock::now() )
+        {}
+
+        void preRender()
+        {
+            if ( !Settings::Get().ExtGameShowSystemInfo() )
+                return;
+
+            const int32_t offsetX = 26;
+            const int32_t offsetY = fheroes2::Display::instance().height() - 30;
+
+            std::time_t rawtime = std::time( nullptr );
+            char mbstr[10] = {0};
+            std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", std::localtime( &rawtime ) );
+
+            std::string info( mbstr );
+
+            std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
+            const std::chrono::duration<double> time = endTime - _startTime;
+            _startTime = endTime;
+
+            const double totalTime = time.count() * 1000.0;
+            const double fps = totalTime < 1 ? 0 : 1000 / totalTime;
+
+            _fps.push_front( fps );
+            while ( _fps.size() > 10 )
+                _fps.pop_back();
+
+            double averageFps = 0;
+            for ( const double value : _fps )
+                averageFps += value;
+
+            averageFps /= static_cast<double>( _fps.size() );
+            const int currentFps = static_cast<int>( averageFps );
+
+            info += ", FPS: ";
+            info += std::to_string( currentFps );
+            if ( averageFps < 10 ) {
+                info += ".";
+                info += std::to_string( static_cast<int>( ( averageFps - currentFps ) * 10 ) );
+            }
+
+            _text.SetPos( offsetX, offsetY );
+            _text.SetText( info );
+            _text.Show();
+        }
+
+        void postRender()
+        {
+            if ( _text.isShow() )
+                _text.Hide();
+        }
+
+    private:
+        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        TextSprite _text;
+        std::deque<double> _fps;
+    };
+
+    SystemInfoRenderer systemInfoRenderer;
+}
 
 namespace fheroes2
 {
@@ -99,7 +172,7 @@ namespace fheroes2
         LocalEvent::Get().ResumeCycling();
     }
 
-    void ScreenPaletteRestorer::changePalette( const uint8_t * palette )
+    void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const
     {
         Display::instance().changePalette( palette );
     }
@@ -139,7 +212,7 @@ namespace fheroes2
 
             uint8_t * outImageY = outImageX + offsetOut;
             uint8_t * outTransformY = outTransformX + offsetOut;
-            uint8_t * outImageYEnd = outImageX + offsetOutEnd;
+            const uint8_t * outImageYEnd = outImageX + offsetOutEnd;
 
             const int32_t offsetIn = offsetY >= 0 ? 0 : -offsetY * width;
 
@@ -195,7 +268,7 @@ namespace fheroes2
         return out;
     }
 
-    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delay )
+    void FadeDisplay( const Image & top, const Point & pos, uint8_t endAlpha, int delayMs )
     {
         Display & display = Display::instance();
 
@@ -203,7 +276,7 @@ namespace fheroes2
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int stepDelay = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -212,14 +285,14 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delay, int frameCount )
+    void FadeDisplayWithPalette( const Image & top, const Point & pos, uint8_t paletteId, int delayMs, int frameCount )
     {
         Display & display = Display::instance();
-        const int stepDelay = delay / frameCount;
+        const int stepDelay = delayMs / frameCount;
 
         Image shadow = top;
 
@@ -229,28 +302,28 @@ namespace fheroes2
 
             display.render();
 
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void FadeDisplay( int delay )
+    void FadeDisplay( int delayMs )
     {
         Display & display = Display::instance();
         const Image temp = display;
 
-        FadeDisplay( temp, Point( 0, 0 ), 5, delay );
+        FadeDisplay( temp, Point( 0, 0 ), 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delay )
+    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delayMs )
     {
         Display & display = Display::instance();
         Image shadow = top;
         uint8_t alpha = 255;
         const uint8_t step = 10;
         const uint8_t min = step + 5;
-        const int stepDelay = ( delay * step ) / ( alpha - min );
+        const int stepDelay = ( delayMs * step ) / ( alpha - min );
 
         while ( alpha > min + endAlpha ) {
             ApplyAlpha( top, shadow, alpha );
@@ -260,16 +333,16 @@ namespace fheroes2
             display.render();
 
             alpha -= step;
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
     }
 
-    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delay,
+    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delayMs,
                                   int frameCount )
     {
         Display & display = Display::instance();
         Image shadow = top;
-        const int stepDelay = delay / frameCount;
+        const int stepDelay = delayMs / frameCount;
 
         for ( int i = 0; i < frameCount; ++i ) {
             ApplyPalette( shadow, paletteId );
@@ -278,7 +351,17 @@ namespace fheroes2
 
             display.render();
 
-            DELAY( stepDelay );
+            delayforMs( stepDelay );
         }
+    }
+
+    void PreRenderSystemInfo()
+    {
+        systemInfoRenderer.preRender();
+    }
+
+    void PostRenderSystemInfo()
+    {
+        systemInfoRenderer.postRender();
     }
 }

@@ -13,19 +13,16 @@ jobs:
         fetch-depth: 50
     - name: install SDL 1
       run: |
-        brew uninstall openssl@1.0.2t
-        brew uninstall python@2.7.17
-        brew untap local/openssl
-        brew untap local/python2
-        brew cask install xquartz
-        brew update
-        brew upgrade
         brew install sdl
         brew install sdl_ttf
         brew install sdl_mixer
         brew install sdl_image
     - name: compile
       run: make -j 2
+      env:
+        FHEROES2_SDL1: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
+        HOMEBREW_NO_AUTO_UPDATE: 1
   sdl2:
     runs-on: macos-10.15
     steps:
@@ -34,13 +31,6 @@ jobs:
         fetch-depth: 50
     - name: install SDL 2
       run: |
-        brew uninstall openssl@1.0.2t
-        brew uninstall python@2.7.17
-        brew untap local/openssl
-        brew untap local/python2
-        brew cask install xquartz
-        brew update
-        brew upgrade
         brew install sdl2
         brew install sdl2_ttf
         brew install sdl2_mixer
@@ -48,4 +38,5 @@ jobs:
     - name: compile
       run: make -j 2
       env:
-        WITH_SDL2: "ON"
+        FHEROES2_STRICT_COMPILATION: "ON"
+        HOMEBREW_NO_AUTO_UPDATE: 1

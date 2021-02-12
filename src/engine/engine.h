@@ -22,24 +22,20 @@
 #ifndef H2ENGINE_H
 #define H2ENGINE_H
 
-#include "audio.h"
-#include "audio_cdrom.h"
-#include "audio_mixer.h"
-#include "font.h"
-#include "rand.h"
-#include "serialize.h"
 #include "tools.h"
 #include "types.h"
 
+#include <SDL.h>
+
 #define INIT_VIDEO SDL_INIT_VIDEO
 #define INIT_AUDIO SDL_INIT_AUDIO
-#define INIT_TIMER SDL_INIT_TIMER
 #define INIT_CDROM SDL_INIT_CDROM
+#define INIT_GAMECONTROLLER SDL_INIT_GAMECONTROLLER
 
 namespace SDL
 {
     bool Init( const u32 system = INIT_VIDEO );
-    void Quit( void );
+    void Quit();
 
     bool SubSystem( const u32 system );
 }
