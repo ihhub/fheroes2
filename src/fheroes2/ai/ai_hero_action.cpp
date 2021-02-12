@@ -203,15 +203,12 @@ namespace AI
             if ( hero.GetColor() == castle->GetColor() ) {
                 return castle->GetHeroes().Guest() == NULL;
             }
-            else {
-                if ( hero.isFriends( castle->GetColor() ) )
-                    return false;
-                else {
-                    const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;
-                    return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
-                }
+            else if ( !hero.isFriends( castle->GetColor() ) ) {
+                const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
             }
         }
+        return false;
     }
 
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
