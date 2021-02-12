@@ -453,7 +453,6 @@ void Interface::Radar::QueueEventProcessing( void )
 
 bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi )
 {
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const Rect & rect = GetArea();
 
