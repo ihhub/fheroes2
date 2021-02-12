@@ -2339,7 +2339,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell, a );
+                MousePressRightBoardAction( themes, *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2545,7 +2545,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell )
 {
     const Unit * b = cell.GetUnit();
 
