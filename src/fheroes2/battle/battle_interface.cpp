@@ -2551,9 +2551,6 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
     const Unit * b = cell.GetUnit();
 
     if ( b ) {
-        const Settings & conf = Settings::Get();
-        const int allow = GetAllowSwordDirection( index );
-
         Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
     }
 }
