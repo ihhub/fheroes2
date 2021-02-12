@@ -65,12 +65,18 @@ namespace Campaign
             return _finishedMaps.empty();
         }
 
+        int getDaysPassed() const
+        {
+            return _daysPassed;
+        }
+
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
         void addCampaignAward( const std::string & award );
         void reset();
+        void addDaysPassed( const int days );
 
         static CampaignSaveData & Get();
 
@@ -82,6 +88,7 @@ namespace Campaign
         std::vector<std::string> _earnedCampaignAwards; // should have its own data format
         int _currentScenarioID;
         int _campaignID;
+        int _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
 }
