@@ -1855,8 +1855,10 @@ namespace AI
                 else {
                     if ( hero.isFriends( castle->GetColor() ) )
                         return false;
-                    else
-                        return army.isStrongerThan( castle->GetActualArmy(), castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                    else {
+                        const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;                        
+                        return army.GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
+                    }
                 }
             }
             break;
