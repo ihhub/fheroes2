@@ -185,8 +185,6 @@ public:
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
     void SetGlobalFilter( bool );
-    void SetTapMode( bool );
-    void SetTapDelayForRightClickEmulation( u32 );
     void SetMouseOffsetX( int16_t );
     void SetMouseOffsetY( int16_t );
 

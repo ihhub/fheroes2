@@ -195,8 +195,6 @@ void Game::Init( void )
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
     le.SetGlobalFilter( true );
 
-    le.SetTapMode( conf.ExtPocketTapMode() );
-
     Game::AnimateDelaysInitialize();
 
     HotKeysDefaults();

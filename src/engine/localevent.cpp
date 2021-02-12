@@ -122,21 +122,6 @@ const Point & LocalEvent::GetMouseReleaseRight( void ) const
     return mouse_rr;
 }
 
-void LocalEvent::SetTapMode( bool f )
-{
-    if ( f )
-        SetModes( TAP_MODE );
-    else {
-        ResetModes( TAP_MODE );
-        ResetModes( CLOCK_ON );
-    }
-}
-
-void LocalEvent::SetTapDelayForRightClickEmulation( u32 d )
-{
-    clock_delay = d < 200 ? TAP_DELAY_EMULATE : d;
-}
-
 void LocalEvent::SetMouseOffsetX( int16_t x )
 {
     SetModes( MOUSE_OFFSET );

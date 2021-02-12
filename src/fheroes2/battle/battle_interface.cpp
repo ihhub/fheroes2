@@ -40,7 +40,6 @@
 #include "interface_list.h"
 #include "kingdom.h"
 #include "pal.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "rand.h"
 #include "settings.h"
@@ -2555,26 +2554,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
         const Settings & conf = Settings::Get();
         const int allow = GetAllowSwordDirection( index );
 
-        if ( arena.GetCurrentColor() == b->GetColor() || !conf.ExtPocketTapMode() || !allow )
-            Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
-        else {
-            int res = PocketPC::GetCursorAttackDialog( cell.GetPos(), allow );
-
-            switch ( res ) {
-            case Cursor::SWORD_TOPLEFT:
-            case Cursor::SWORD_TOPRIGHT:
-            case Cursor::SWORD_RIGHT:
-            case Cursor::SWORD_BOTTOMRIGHT:
-            case Cursor::SWORD_BOTTOMLEFT:
-            case Cursor::SWORD_LEFT:
-                MouseLeftClickBoardAction( res, cell, a );
-                break;
-
-            default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
-                break;
-            }
-        }
+        Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
     }
 }
 
@@ -2582,32 +2562,6 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
-
-    if ( Settings::Get().ExtPocketTapMode() && !_currentUnit->isArchers() ) // archers always attack
-    {
-        // fast tap; attack
-        if ( Board::isNearIndexes( index_pos, _currentUnit->GetHeadIndex() ) )
-            themes = GetSwordCursorDirection( Board::GetDirection( index, _currentUnit->GetHeadIndex() ) );
-        // or show direction attack
-        else if ( b ) {
-            int res = PocketPC::GetCursorAttackDialog( cell.GetPos(), GetAllowSwordDirection( index ) );
-
-            switch ( res ) {
-            case Cursor::SWORD_TOPLEFT:
-            case Cursor::SWORD_TOPRIGHT:
-            case Cursor::SWORD_RIGHT:
-            case Cursor::SWORD_BOTTOMRIGHT:
-            case Cursor::SWORD_BOTTOMLEFT:
-            case Cursor::SWORD_LEFT:
-                themes = res;
-                break;
-
-            default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
-                break;
-            }
-        }
-    }
 
     if ( _currentUnit )
         switch ( themes ) {

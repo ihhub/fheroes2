@@ -432,7 +432,7 @@ void Interface::Radar::QueueEventProcessing( void )
                 }
             }
         }
-        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) )
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         else if ( conf.ExtGameHideInterface() ) {
             Size newSize( rect.w, rect.h );
@@ -474,7 +474,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 }
             }
         }
-        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) ) {
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
         else if ( le.MouseWheelUp() ) {
