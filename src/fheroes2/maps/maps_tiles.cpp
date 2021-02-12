@@ -55,10 +55,6 @@
 #include "trees.h"
 #include "world.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 namespace
 {
     const u8 monsterAnimationSequence[] = {0, 0, 1, 2, 1, 0, 0, 0, 3, 4, 5, 4, 3, 0, 0};

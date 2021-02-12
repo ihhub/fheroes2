@@ -37,6 +37,10 @@
 #include "race.h"
 #include "settings.h"
 
+#ifdef WITH_XML
+#include "tinyxml.h"
+#endif
+
 #define LENGTHNAME 16
 #define LENGTHDESCRIPTION 143
 
