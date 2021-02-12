@@ -76,7 +76,7 @@ namespace Bin_Info
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;
         std::vector<Point> projectileOffset;
-        std::vector<double> projectileAngles;
+        std::vector<float> projectileAngles;
         std::vector<float> idlePriority;
         std::vector<uint32_t> unusedIdleDelays;
         uint32_t idleAnimationCount;

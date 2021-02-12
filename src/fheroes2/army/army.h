@@ -97,7 +97,7 @@ public:
 
     Troop * GetFirstValid( void );
     Troop * GetWeakestTroop( void );
-    Troop * GetSlowestTroop( void );
+    const Troop * GetSlowestTroop() const;
 
     void SortStrongest();
     void ArrangeForBattle( bool = false );

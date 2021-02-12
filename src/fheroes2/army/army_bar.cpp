@@ -31,49 +31,49 @@
 #include "text.h"
 #include "world.h"
 
-void RedistributeArmy( ArmyTroop & troop1 /* from */, ArmyTroop & troop2 /* to */, bool & isTroopInfoVisible )
+void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget, bool & isTroopInfoVisible )
 {
-    const Army * army1 = troop1.GetArmy();
-    const Army * army2 = troop2.GetArmy();
+    const Army * armyFrom = troopFrom.GetArmy();
+    const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
 
-    bool save_last_troop = army1->SaveLastTroop() && army1 != army2;
-
-    if ( 2 > troop1.GetCount() ) {
-        if ( !save_last_troop || troop2.isValid() ) {
-            Army::SwapTroops( troop1, troop2 );
-            isTroopInfoVisible = false;
+    if ( troopFrom.GetCount() <= 1 ) {
+        if ( saveLastTroop || troopTarget.isValid() ) {
+            return;
         }
+
+        Army::SwapTroops( troopFrom, troopTarget );
+        isTroopInfoVisible = false;
     }
     else {
-        const u32 free_slots = ( army1 == army2 ? 1 : 0 ) + army2->Size() - army2->GetCount();
-        const u32 max_count = save_last_troop ? troop1.GetCount() - 1 : troop1.GetCount();
-        u32 redistr_count = troop1.GetCount() / 2;
-        const u32 slots = Dialog::ArmySplitTroop( ( free_slots > max_count ? max_count : free_slots ), max_count, redistr_count, save_last_troop );
+        const uint32_t freeSlots = ( armyFrom == armyTarget ? 1 : 0 ) + armyTarget->Size() - armyTarget->GetCount();
+        const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
+        uint32_t redistributeCount = troopFrom.GetCount() / 2;
+        const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, redistributeCount, saveLastTroop );
 
         switch ( slots ) {
         case 3:
         case 4:
         case 5:
-            if ( save_last_troop ) {
-                const Troop troop( troop1, troop1.GetCount() - 1 );
-                troop1.SetCount( 1 );
-                const_cast<Army *>( army2 )->SplitTroopIntoFreeSlots( troop, slots );
+            if ( saveLastTroop ) {
+                const Troop troop( troopFrom, troopFrom.GetCount() - 1 );
+                troopFrom.SetCount( 1 );
+                armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
             else {
-                const Troop troop( troop1 );
-                troop1.Reset();
-                const_cast<Army *>( army2 )->SplitTroopIntoFreeSlots( troop, slots );
+                const Troop troop( troopFrom );
+                troopFrom.Reset();
+                armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
             break;
 
         case 2:
             // this logic is used when splitting to a stack with the same unit
-            if ( troop1.GetID() == troop2.GetID() )
-                troop2.SetCount( troop2.GetCount() + redistr_count );
+            if ( troopFrom.GetID() == troopTarget.GetID() )
+                troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
             else
-                troop2.Set( troop1, redistr_count );
+                troopTarget.Set( troopFrom, redistributeCount );
 
-            troop1.SetCount( troop1.GetCount() - redistr_count );
+            troopFrom.SetCount( troopFrom.GetCount() - redistributeCount );
             break;
 
         default:
@@ -97,15 +97,15 @@ void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
-    : army( NULL )
-    , spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
+    : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
+    , _army( nullptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
     , _isTroopInfoVisible( true )
 {
     if ( use_mini_sprite )
-        SetBackground( Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
+        SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );
@@ -116,10 +116,10 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
 
 void ArmyBar::SetArmy( Army * ptr )
 {
-    if ( army && isSelected() )
+    if ( _army && isSelected() )
         ResetSelected();
 
-    army = ptr;
+    _army = ptr;
     items.clear();
 
     if ( ptr )
@@ -129,22 +129,22 @@ void ArmyBar::SetArmy( Army * ptr )
     SetContentItems();
 }
 
-bool ArmyBar::isValid( void ) const
+bool ArmyBar::isValid() const
 {
-    return army != NULL;
+    return _army != nullptr;
 }
 
-void ArmyBar::SetBackground( const Size & sz, const uint8_t fillColor )
+void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
 {
     if ( use_mini_sprite ) {
-        SetItemSize( sz.w, sz.h );
+        SetItemSize( sz.width, sz.height );
 
-        backsf.resize( sz.w, sz.h );
+        backsf.resize( sz.width, sz.height );
         backsf.fill( fillColor );
 
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
 
-        spcursor.resize( sz.w, sz.h );
+        spcursor.resize( sz.width, sz.height );
         spcursor.reset();
         fheroes2::DrawBorder( spcursor, 214 );
     }
@@ -161,7 +161,7 @@ void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
 void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( troop.isValid() ) {
-        Text text( GetString( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
+        Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
         if ( use_mini_sprite ) {
             const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
@@ -240,7 +240,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
     if ( troop.isValid() && LocalEvent::Get().MouseClickMiddle() ) {
-        RedistributeArmyByOne( troop, army );
+        RedistributeArmyByOne( troop, _army );
         return true;
     }
 
@@ -309,7 +309,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             // redistribute when clicked troop is empty or is the same one as the selected troop
             if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
                 ResetSelected();
-                RedistributeArmy( *selectedTroop, troop, _isTroopInfoVisible );
+                RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
 
                 return false;
             }
@@ -331,11 +331,11 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         if ( !read_only ) // select
         {
             if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-                RedistributeArmyByOne( troop, army );
+                RedistributeArmyByOne( troop, _army );
                 return false;
             }
             else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-                army->JoinAllTroopsOfType( troop );
+                _army->JoinAllTroopsOfType( troop );
                 return false;
             }
 
@@ -348,8 +348,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         {
             int cur = Monster::UNKNOWN;
 
-            if ( army->GetCommander() )
-                switch ( army->GetCommander()->GetRace() ) {
+            if ( _army->GetCommander() )
+                switch ( _army->GetCommander()->GetRace() ) {
                 case Race::KNGT:
                     cur = Monster::PEASANT;
                     break;
@@ -393,7 +393,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
         if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
             ResetSelected();
-            RedistributeArmy( selectedTroop, destTroop, _isTroopInfoVisible );
+            RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
         }
         return false;
     }
@@ -433,11 +433,11 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     if ( troop.isValid() && !read_only ) {
         if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-            RedistributeArmyByOne( troop, army );
+            RedistributeArmyByOne( troop, _army );
             return false;
         }
         else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-            army->JoinAllTroopsOfType( troop );
+            _army->JoinAllTroopsOfType( troop );
             return false;
         }
     }
@@ -445,21 +445,21 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     const ArmyTroop * troop2 = GetSelectedItem();
 
     if ( &troop == troop2 ) {
-        int flags = ( read_only || army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );
-        const Castle * castle = army->inCastle();
+        int flags = ( read_only || _army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );
+        const Castle * castle = _army->inCastle();
 
         if ( troop.isAllowUpgrade() &&
              // allow upgrade
              castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
             flags |= Dialog::UPGRADE;
 
-            if ( !world.GetKingdom( army->GetColor() ).AllowPayment( troop.GetUpgradeCost() ) )
+            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetUpgradeCost() ) )
                 flags |= Dialog::UPGRADE_DISABLE;
         }
 
         switch ( Dialog::ArmyInfo( troop, flags ) ) {
         case Dialog::UPGRADE:
-            world.GetKingdom( army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
+            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
             troop.Upgrade();
             break;
 
@@ -484,7 +484,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
     ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
     if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
-        RedistributeArmy( *troopPress, troop, _isTroopInfoVisible );
+        RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
         le.ResetPressLeft();
 
         if ( isSelected() )
@@ -506,10 +506,14 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & 
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
+    // Prioritize the click before press - aka prioritize split before showing troop info
+    if ( ActionBarRightMouseSingleClick( troop ) )
+        return true;
+
     if ( troop.isValid() && _isTroopInfoVisible ) {
         ResetSelected();
 
-        if ( can_change && !army->SaveLastTroop() )
+        if ( can_change && !_army->SaveLastTroop() )
             troop.Reset();
         else
             Dialog::ArmyInfo( troop, 0 );
@@ -526,25 +530,28 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 
     ArmyTroop & selectedTroop = *GetSelectedItem();
 
-    if ( troop.GetID() == selectedTroop.GetID() )
+    // prevent troop from splitting into its own stack by checking against their pointers
+    if ( &troop == &selectedTroop )
         return false;
 
-    if ( !troop.isValid() || selectedTroop.GetMonster() == troop.GetMonster() ) {
+    if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
         ResetSelected();
-        RedistributeArmy( selectedTroop, troop, _isTroopInfoVisible );
+        RedistributeArmy( selectedTroop, troop, _army, _isTroopInfoVisible );
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    if ( !destTroop.isValid() || destTroop.GetMonster() == selectedTroop.GetMonster() ) {
+    if ( !destTroop.isValid() || destTroop.GetID() == selectedTroop.GetID() ) {
         ResetSelected();
-        RedistributeArmy( selectedTroop, destTroop, _isTroopInfoVisible );
+        RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*troop*/ )

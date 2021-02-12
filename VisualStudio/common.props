@@ -3,37 +3,37 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>build\$(PlatformTarget)\$(Configuration)\</OutDir>
-    <IntDir>build\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(MSBuildThisFileDirectory)..\build\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(MSBuildThisFileDirectory)..\build\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>src\engine;src\fheroes2\gui;src\fheroes2\maps;src\fheroes2\kingdom;src\fheroes2\campaign;src\fheroes2\game;src\fheroes2\dialog;src\fheroes2\system;src\fheroes2\spell;src\fheroes2\monster;src\fheroes2\castle;src\fheroes2\agg;src\fheroes2\heroes;src\fheroes2\resource;src\fheroes2\ai;src\fheroes2\army;src\fheroes2\battle;src\fheroes2\pocketpc;src\fheroes2\objects;src\fheroes2\world;src\fheroes2\image;src\thirdparty\libsmacker;..\zlib\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\src\engine;$(MSBuildThisFileDirectory)..\src\fheroes2\gui;$(MSBuildThisFileDirectory)..\src\fheroes2\maps;$(MSBuildThisFileDirectory)..\src\fheroes2\kingdom;$(MSBuildThisFileDirectory)..\src\fheroes2\campaign;$(MSBuildThisFileDirectory)..\src\fheroes2\game;$(MSBuildThisFileDirectory)..\src\fheroes2\dialog;$(MSBuildThisFileDirectory)..\src\fheroes2\system;$(MSBuildThisFileDirectory)..\src\fheroes2\spell;$(MSBuildThisFileDirectory)..\src\fheroes2\monster;$(MSBuildThisFileDirectory)..\src\fheroes2\castle;$(MSBuildThisFileDirectory)..\src\fheroes2\agg;$(MSBuildThisFileDirectory)..\src\fheroes2\heroes;$(MSBuildThisFileDirectory)..\src\fheroes2\resource;$(MSBuildThisFileDirectory)..\src\fheroes2\ai;$(MSBuildThisFileDirectory)..\src\fheroes2\army;$(MSBuildThisFileDirectory)..\src\fheroes2\battle;$(MSBuildThisFileDirectory)..\src\fheroes2\pocketpc;$(MSBuildThisFileDirectory)..\src\fheroes2\objects;$(MSBuildThisFileDirectory)..\src\fheroes2\world;$(MSBuildThisFileDirectory)..\src\fheroes2\image;$(MSBuildThisFileDirectory)..\src\thirdparty\libsmacker;$(MSBuildThisFileDirectory)..\..\zlib\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;WITH_ZLIB;WITH_MIXER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\zlib\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)..\..\zlib\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if exist "$(ProjectDir)data" (
+      <Command>if exist "$(MSBuildThisFileDirectory)..\data" (
     if not exist "$(OutDir)data" (
         mkdir "$(OutDir)data"
-        xcopy /Y /s /Q "$(ProjectDir)data" "$(OutDir)data"
+        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\data" "$(OutDir)data"
     )
 )
 
-if exist "$(ProjectDir)maps" (
+if exist "$(MSBuildThisFileDirectory)..\maps" (
     if not exist "$(OutDir)maps" (
         mkdir "$(OutDir)maps"
-        xcopy /Y /s /Q "$(ProjectDir)maps" "$(OutDir)maps"
+        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\maps" "$(OutDir)maps"
     )
 )
 
-xcopy /Y "$(ProjectDir)fheroes2.cfg" "$(OutDir)"
-xcopy /Y "$(ProjectDir)fheroes2.key" "$(OutDir)"
+xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.cfg" "$(OutDir)"
+xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.key" "$(OutDir)"
 
 %(Command)</Command>
     </PostBuildEvent>

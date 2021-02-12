@@ -25,7 +25,7 @@
 #include <sstream>
 
 #include "army.h"
-#include "campaign_data.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "dialog.h"
 #include "game.h"
@@ -42,8 +42,11 @@
 #include "world.h"
 #include "zzlib.h"
 
-static u16 SAV2ID2 = 0xFF02;
-static u16 SAV2ID3 = 0xFF03;
+namespace
+{
+    const uint16_t SAV2ID2 = 0xFF02;
+    const uint16_t SAV2ID3 = 0xFF03;
+}
 
 namespace Game
 {
@@ -98,9 +101,9 @@ namespace Game
             , gameType( 0 )
         {}
 
-        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType )
+        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType_ )
             : HeaderSAVBase( fi, loyalty )
-            , gameType( gameType )
+            , gameType( gameType_ )
         {}
 
         int gameType;
@@ -141,7 +144,7 @@ bool Game::Save( const std::string & fn )
         Game::SetLastSavename( fn );
 
     // raw info content
-    fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << GetString( loadver ) << loadver
+    fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << std::to_string( loadver ) << loadver
        << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion(), conf.GameType() );
     fs.close();
 
@@ -152,7 +155,7 @@ bool Game::Save( const std::string & fn )
     fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
 
     if ( conf.GameType() & Game::TYPE_CAMPAIGN )
-        fz << Campaign::CampaignData::Get();
+        fz << Campaign::CampaignSaveData::Get();
 
     fz << SAV2ID3; // eof marker
 
@@ -196,7 +199,7 @@ bool Game::Load( const std::string & fn )
 
     int fileGameType = Game::TYPE_STANDARD;
     HeaderSAVBase header;
-    // starting from 0.9.0, headers also include gameType
+    // starting from 0.8.4, headers also include gameType
     if ( binver >= FORMAT_VERSION_084_RELEASE ) {
         HeaderSAV currentFormatHeader;
         fs >> currentFormatHeader;
@@ -251,10 +254,22 @@ bool Game::Load( const std::string & fn )
     SetLoadVersion( binver );
     u16 end_check = 0;
 
-    fz >> World::Get() >> Settings::Get() >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    fz >> World::Get() >> conf;
+    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE ) {
+        fz >> Campaign::CampaignSaveData::Get();
+    }
+
+    fz >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
+        std::string warningMessage( "This is an saved game is localized for lang = " );
+        warningMessage.append( conf.loadedFileLanguage() );
+        warningMessage.append( ", and most of the messages will be displayed incorrectly.\n \n" );
+        warningMessage.append( "(tip: set unicode = on)" );
+        Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
+    }
 
     if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
-        fz >> Campaign::CampaignData::Get();
+        fz >> Campaign::CampaignSaveData::Get();
 
     fz >> end_check;
 

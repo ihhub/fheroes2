@@ -37,6 +37,7 @@
 #include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
+#include "localevent.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -143,7 +144,7 @@ int main( int argc, char ** argv )
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();
 
-            display.resize( conf.VideoMode().w, conf.VideoMode().h );
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
@@ -244,6 +245,12 @@ int main( int argc, char ** argv )
                 case Game::STARTGAME:
                     rs = Game::StartGame();
                     break;
+                case Game::SELECT_CAMPAIGN_SCENARIO:
+                    rs = Game::SelectCampaignScenario();
+                    break;
+                case Game::COMPLETE_CAMPAIGN_SCENARIO:
+                    rs = Game::CompleteCampaignScenario();
+                    break;
 
                 default:
                     break;
@@ -270,6 +277,11 @@ bool ReadConfigs( void )
         if ( System::IsFile( *it ) ) {
             if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
+                const std::string & externalCommand = conf.externalMusicCommand();
+                if ( !externalCommand.empty() )
+                    Music::SetExtCommand( externalCommand );
+
+                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
                 break;
             }
         }

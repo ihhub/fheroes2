@@ -23,6 +23,7 @@
 #include "agg.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "player_info.h"
 #include "race.h"
 #include "settings.h"

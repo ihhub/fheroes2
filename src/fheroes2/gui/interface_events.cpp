@@ -36,6 +36,7 @@
 #include "kingdom.h"
 #include "m82.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
@@ -179,7 +180,7 @@ void Interface::Basic::EventCastSpell( void )
         ResetFocus( GameFocus::HEROES );
         Redraw();
 
-        const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
+        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
         // apply cast spell
         if ( spell.isValid() ) {
             hero->ActionSpellCast( spell );
@@ -207,6 +208,7 @@ int Interface::Basic::EventAdventureDialog( void )
     Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
         break;
 
     case Dialog::PUZZLE:
@@ -359,7 +361,7 @@ int Interface::Basic::EventDigArtifact( void )
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact( hero->GetColor() ) ) {
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
                 AGG::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
@@ -413,7 +415,7 @@ void Interface::Basic::EventDefaultAction( void )
 
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
-            hero->Action( hero->GetIndex() );
+            hero->Action( hero->GetIndex(), true );
             if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
                 SetRedraw( REDRAW_HEROES );
             SetRedraw( REDRAW_GAMEAREA );
@@ -424,7 +426,7 @@ void Interface::Basic::EventDefaultAction( void )
             hero->SetMove( true );
         else
             // 3. hero dialog
-            Game::OpenHeroesDialog( *hero );
+            Game::OpenHeroesDialog( *hero, true, true );
     }
     else
         // 4. town dialog
@@ -436,7 +438,7 @@ void Interface::Basic::EventDefaultAction( void )
 void Interface::Basic::EventOpenFocus( void )
 {
     if ( GetFocusHeroes() )
-        Game::OpenHeroesDialog( *GetFocusHeroes() );
+        Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
     else if ( GetFocusCastle() )
         Game::OpenCastleDialog( *GetFocusCastle() );
 }

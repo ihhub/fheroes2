@@ -174,7 +174,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
 
     fheroes2::ButtonSprite button_hero( pt.x, pt.y, armyButtonReleasedBack, armyButtonPressedBack );
 
-    text.Set( GetString( HEROESMAXSKILL ) + "/" + GetString( hero.GetSecondarySkills().Count() ), Font::BIG );
+    text.Set( std::to_string( hero.GetSecondarySkills().Count() ) + "/" + std::to_string( HEROESMAXSKILL ), Font::BIG );
     text.Blit( box.GetArea().x + ( box.GetArea().width - text.w() ) / 2, pt.y - 15 );
 
     button_learn1.draw();

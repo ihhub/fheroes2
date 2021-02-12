@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "localevent.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
@@ -67,15 +68,15 @@ int Dialog::SystemOptions( void )
     const fheroes2::Point optionStep( 92, 110 );
 
     std::vector<fheroes2::Rect> rects;
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) );
-    rects.push_back( fheroes2::Rect( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ) ); // not in use
+    rects.emplace_back( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ); // not in use
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -220,7 +221,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
     if ( conf.Music() && conf.MusicVolume() )
-        str = GetString( conf.MusicVolume() );
+        str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
     text.Set( str );
@@ -235,7 +236,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
     if ( conf.Sound() && conf.SoundVolume() )
-        str = GetString( conf.SoundVolume() );
+        str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );
     text.Set( str, Font::SMALL );
@@ -276,7 +277,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
     if ( heroSpeed )
-        str = GetString( heroSpeed );
+        str = std::to_string( heroSpeed );
     else
         str = _( "off" );
     text.Set( str );
@@ -293,7 +294,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     if ( aiSpeed )
-        str = GetString( aiSpeed );
+        str = std::to_string( aiSpeed );
     else
         str = _( "off" );
     text.Set( str );
@@ -308,7 +309,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
-    str = GetString( conf.ScrollSpeed() );
+    str = std::to_string( conf.ScrollSpeed() );
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 

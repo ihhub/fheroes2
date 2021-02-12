@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
 #include "agg.h"
 #include "army.h"
 #include "castle.h"
@@ -52,7 +50,7 @@ std::string GetMinesIncomeString( int type )
         res.append( " " );
         res.append( "(" );
         res.append( value > 0 ? "+" : "-" );
-        res.append( GetString( value ) );
+        res.append( std::to_string( value ) );
         res.append( ")" );
     }
 
@@ -82,11 +80,11 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
     }
 
     if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
-        str.append( "\n" );
-        str.append( _( "guarded by %{count} of %{monster}" ) );
+        str.append( "\n \n" );
+        str.append( _( "guarded by %{count} %{monster}" ) );
 
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) ) );
     }
 
     return str;
@@ -300,23 +298,28 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
     return str;
 }
 
-std::string ShowGroundInfo( const Maps::Tiles & tile, bool showVisitedOption, bool showTerrainPenaltyOption, const Heroes * hero )
+std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    std::string str = tile.isRoad() ? _( "Road" ) : Maps::Ground::String( tile.GetGround() );
+    const int objectType = tile.GetObject( false );
 
-    if ( showVisitedOption && hero ) {
-        int dir = Maps::GetDirection( hero->GetIndex(), tile.GetIndex() );
-        if ( dir != Direction::UNKNOWN ) {
-            if ( tile.GoodForUltimateArtifact( hero->GetColor() ) ) {
-                str.append( "\n" );
-                str.append( _( "(digging ok)" ) );
-            }
-        }
+    std::string str;
+    if ( objectType == MP2::OBJ_COAST ) {
+        str = MP2::StringObject( objectType );
+    }
+    else if ( tile.isRoad() ) {
+        str = _( "Road" );
+    }
+    else {
+        str = Maps::Ground::String( tile.GetGround() );
+    }
+
+    if ( tile.GoodForUltimateArtifact() ) {
+        str.append( "\n \n" );
+        str.append( _( "(digging ok)" ) );
     }
 
     if ( showTerrainPenaltyOption && hero ) {
         const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
-
         if ( cost > 0 ) {
             str.append( "\n" );
             str.append( _( "penalty: %{cost}" ) );
@@ -364,10 +367,6 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
     const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
     const int tileObject = world.GetTiles( dst ).GetObject();
-
-    // logic for these is handled in other QuickInfo dialogs
-    assert( tileObject != MP2::OBJ_CASTLE );
-    assert( tileObject != MP2::OBJ_HEROES );
 
     const bool monsterInfo = tileObject == MP2::OBJ_MONSTER;
 
@@ -468,7 +467,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
         case MP2::OBJ_EVENT:
         case MP2::OBJ_ZERO:
-            name_object = ShowGroundInfo( tile, showVisitedOption, showTerrainPenaltyOption, from_hero );
+        case MP2::OBJ_COAST:
+            name_object = ShowGroundInfo( tile, showTerrainPenaltyOption, from_hero );
             break;
 
         case MP2::OBJ_DERELICTSHIP:
@@ -895,7 +895,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += port.height();
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetAttack() ) );
+        text.Set( std::to_string( hero.GetAttack() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -905,7 +905,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetDefense() ) );
+        text.Set( std::to_string( hero.GetDefense() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -915,7 +915,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetPower() ) );
+        text.Set( std::to_string( hero.GetPower() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -925,7 +925,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetKnowledge() ) );
+        text.Set( std::to_string( hero.GetKnowledge() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -935,7 +935,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetSpellPoints() ) + "/" + GetString( hero.GetMaxSpellPoints() ) );
+        text.Set( std::to_string( hero.GetSpellPoints() ) + "/" + std::to_string( hero.GetMaxSpellPoints() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 
@@ -945,7 +945,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( hero.GetMobilityIndexSprite() ) + "/" + GetString( hero.GetMovePoints() ) + "/" + GetString( hero.GetMaxMovePoints() ) );
+        text.Set( std::to_string( hero.GetMobilityIndexSprite() ) + "/" + std::to_string( hero.GetMovePoints() ) + "/" + std::to_string( hero.GetMaxMovePoints() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 

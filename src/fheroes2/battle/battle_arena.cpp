@@ -296,7 +296,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
-        interface->Redraw();
+        interface->fullRedraw();
         cursor.Show();
         display.render();
 
@@ -732,7 +732,7 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
     const HeroBase * hero = army1->GetColor() == color ? army1->GetCommander() : army2->GetCommander();
-    return hero && hero->isHeroes() && NULL == hero->inCastle() && world.GetKingdom( hero->GetColor() ).GetCastles().size();
+    return hero && hero->isHeroes() && NULL == hero->inCastle();
 }
 
 bool Battle::Arena::isSpellcastDisabled() const

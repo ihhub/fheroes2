@@ -194,6 +194,10 @@ public:
     std::string GetStringBuilding( u32 ) const;
     std::string GetDescriptionBuilding( u32 ) const;
 
+    // Returns message displayed in the status bar on the castle view
+    // when hover over the building
+    std::string buildingStatusMessage( const uint32_t buildingId ) const;
+
     static const char * GetStringBuilding( u32, int race );
     static const char * GetDescriptionBuilding( u32, int race );
 
@@ -226,7 +230,7 @@ private:
     void OpenTavern( void );
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes );
-    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo );
+    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
@@ -255,7 +259,7 @@ namespace CastleDialog
     {
     public:
         FadeBuilding()
-            : _alpha( 0 )
+            : _alpha( 255 )
             , _build( BUILD_NOTHING )
         {}
 

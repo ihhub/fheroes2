@@ -37,7 +37,6 @@
 #include "settings.h"
 #include "skill.h"
 #include "text.h"
-#include "ui_window.h"
 #include "world.h"
 
 namespace Battle
@@ -93,8 +92,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     if ( local )
         AGG::ResetMixer();
-
-    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     Arena arena( army1, army2, mapsindex, local );
 
@@ -281,7 +278,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
 
         const fheroes2::Sprite & sf2 = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
         fheroes2::Blit( sf2, sf1, ( sf1.width() - sf2.width() ) / 2, 0 );
-        Text text( GetString( count ), Font::SMALL );
+        Text text( std::to_string( count ), Font::SMALL );
         text.Blit( ( sf1.width() - text.w() ) / 2, sf2.height() + 3, sf1 );
         Game::PlayPickupSound();
 

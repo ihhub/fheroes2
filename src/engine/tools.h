@@ -25,15 +25,10 @@
 #include <list>
 #include <string>
 
-#include "localevent.h"
 #include "rect.h"
 #include "types.h"
 
-std::string GetString( int );
 std::string GetStringShort( int );
-std::string GetString( const Point & );
-std::string GetString( const Size & );
-std::string GetString( const Rect & );
 std::string GetString( double, u8 );
 std::string GetHexString( int value, int width = 8 );
 
@@ -60,10 +55,6 @@ std::string StringUNICODE_to_UTF8( const std::vector<u16> & );
 std::vector<u8> decodeBase64( const std::string & );
 
 std::string InsertString( const std::string &, size_t, const char * );
-size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
-KeySym KeySymFromChar( char );
-char CharFromKeySym( KeySym, u16 mod = 0 );
-bool PressIntKey( u32 max, u32 & result );
 
 bool SaveMemToFile( const std::vector<u8> &, const std::string & );
 std::vector<u8> LoadFileToMem( const std::string & );

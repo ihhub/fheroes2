@@ -127,9 +127,16 @@ namespace Dialog
             return area;
         }
 
+        void redraw();
+
     protected:
         std::unique_ptr<fheroes2::ImageRestorer> _restorer;
         fheroes2::Rect area;
+
+    private:
+        fheroes2::Point _position;
+        uint32_t _middleFragmentCount;
+        int32_t _middleFragmentHeight;
     };
 
     class FrameBox : public NonFixedFrameBox
@@ -143,8 +150,8 @@ namespace Dialog
     {
     public:
         FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const Size & );
-        FrameBorder( const Size &, const fheroes2::Image & );
+        FrameBorder( const fheroes2::Size & );
+        FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
         FrameBorder( s32, s32, u32, u32 );
         ~FrameBorder();
 

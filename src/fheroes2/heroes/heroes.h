@@ -41,6 +41,11 @@ namespace Battle
     class Only;
 }
 
+namespace Interface
+{
+    class GameArea;
+}
+
 struct HeroSeedsForLevelUp
 {
     uint32_t seedPrimarySkill = 0;
@@ -282,12 +287,12 @@ public:
     void SetMove( bool );
     bool isAction( void ) const;
     void ResetAction( void );
-    void Action( s32 );
+    void Action( int tileIndex, bool isDestination );
     void ActionNewPosition( void );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gamearea ) const;
     virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 

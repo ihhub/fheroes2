@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Uninstall dev tools
+brew remove gettext
+
+# Install dev tools
+brew install gettext
+
 # Uninstall SDL 1.2
 brew remove sdl_image
 brew remove sdl_mixer

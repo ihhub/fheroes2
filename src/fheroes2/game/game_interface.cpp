@@ -166,6 +166,11 @@ void Interface::Basic::SetRedraw( int f )
     redraw |= f;
 }
 
+int Interface::Basic::GetRedrawMask() const
+{
+    return redraw;
+}
+
 void Interface::Basic::Redraw( int force )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -197,7 +202,7 @@ void Interface::Basic::Redraw( int force )
         controlPanel.Redraw();
 
     if ( combinedRedraw & REDRAW_BORDER )
-        GameBorderRedraw();
+        GameBorderRedraw( false );
 
     redraw = 0;
 }

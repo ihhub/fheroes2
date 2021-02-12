@@ -30,12 +30,18 @@
 #include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
+#include "localevent.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
 #include "ui_button.h"
 
 class Settings;
+
+namespace fheroes2
+{
+    class StandardWindow;
+}
 
 namespace Battle
 {
@@ -127,7 +133,7 @@ namespace Battle
         {
             listlog = logs;
         };
-        void SetMessage( const std::string &, bool = false );
+        void SetMessage( const std::string & message, bool top = false );
         void Redraw( void );
         const std::string & GetMessage( void ) const;
 
@@ -168,15 +174,15 @@ namespace Battle
     public:
         PopupDamageInfo();
 
-        void SetInfo( const Cell * c, const Unit * a, const Unit * b, const Point & offset );
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Point & offset );
         void Reset();
         void Redraw( int, int );
 
     private:
-        const Cell * cell;
-        const Unit * attacker;
-        const Unit * defender;
-        bool redraw;
+        const Cell * _cell;
+        const Unit * _attacker;
+        const Unit * _defender;
+        bool _redraw;
     };
 
     class Interface
@@ -185,6 +191,7 @@ namespace Battle
         Interface( Arena &, s32 );
         ~Interface();
 
+        void fullRedraw(); // only at the start of the battle
         void Redraw();
         void RedrawPartialStart();
         void RedrawPartialFinish();
@@ -340,6 +347,8 @@ namespace Battle
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
+
+        std::unique_ptr<fheroes2::StandardWindow> _background;
     };
 }
 

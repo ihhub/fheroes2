@@ -44,6 +44,7 @@
 #include "payment.h"
 #include "race.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
 
 namespace AI
@@ -195,7 +196,7 @@ namespace AI
         hero.SetFreeman( reason );
     }
 
-    void HeroesAction( Heroes & hero, s32 dst_index )
+    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
@@ -290,7 +291,8 @@ namespace AI
             AIToTeleports( hero, dst_index );
             break;
         case MP2::OBJ_WHIRLPOOL:
-            AIToWhirlpools( hero, dst_index );
+            if ( isDestination )
+                AIToWhirlpools( hero, dst_index );
             break;
 
         // primary skill modification
@@ -2011,7 +2013,7 @@ namespace AI
                         }
                     }
 
-                    I.Redraw( REDRAW_GAMEAREA );
+                    I.Redraw( Interface::REDRAW_GAMEAREA );
                     cursor.Show();
                     fheroes2::Display::instance().render();
                 }
@@ -2027,7 +2029,7 @@ namespace AI
         }
         else if ( path.size() && path.GetFrontDirection() == Direction::UNKNOWN ) {
             if ( MP2::isActionObject( hero.GetMapsObject(), hero.isShipMaster() ) )
-                hero.Action( hero.GetIndex() );
+                hero.Action( hero.GetIndex(), true );
         }
     }
 

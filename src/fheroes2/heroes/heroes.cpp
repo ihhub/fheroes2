@@ -47,6 +47,7 @@
 #include "race.h"
 #include "settings.h"
 #include "speed.h"
+#include "text.h"
 #include "world.h"
 
 namespace
@@ -643,7 +644,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
-        const Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
+        const Troop * troop = army.GetSlowestTroop();
 
         if ( troop )
             switch ( troop->GetSpeed() ) {
@@ -786,6 +787,7 @@ bool Heroes::Recruit( int cl, const Point & pt )
         SetColor( cl );
         killer_color.SetColor( Color::NONE );
         SetCenter( pt );
+        setDirection( Direction::RIGHT );
         if ( !Modes( SAVE_MP_POINTS ) )
             move_point = GetMaxMovePoints();
         MovePointsScaleFixed();
@@ -1621,7 +1623,7 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
         // force flip, for monster attack show sprite
         fheroes2::Display::instance().render();
     }
-    hero.Action( dst );
+    hero.Action( dst, true );
 }
 
 void Heroes::ActionNewPosition( void )
@@ -1656,7 +1658,7 @@ void Heroes::ActionNewPosition( void )
         const MapEvent * event = world.GetMapEvent( GetCenter() );
 
         if ( event && event->isAllow( GetColor() ) ) {
-            Action( GetIndex() );
+            Action( GetIndex(), false );
             SetMove( false );
         }
     }

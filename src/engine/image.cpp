@@ -203,8 +203,54 @@ namespace
         if ( image.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
             return false;
 
-        if ( x < 0 || y < 0 || x > image.width() || y > image.height() )
+        if ( x < 0 || y < 0 || x + width > image.width() || y + height > image.height() )
             return false;
+
+        return true;
+    }
+
+    bool Verify( const fheroes2::Image & image, int32_t & x, int32_t & y, int32_t & width, int32_t & height )
+    {
+        if ( image.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
+            return false;
+
+        const int32_t widthOut = image.width();
+        const int32_t heightOut = image.height();
+
+        if ( x < 0 ) {
+            const int32_t offsetX = -x;
+            if ( offsetX >= width )
+                return false;
+
+            x = 0;
+            width -= offsetX;
+        }
+
+        if ( y < 0 ) {
+            const int32_t offsetY = -y;
+            if ( offsetY >= height )
+                return false;
+
+            y = 0;
+            height -= offsetY;
+        }
+
+        if ( x > widthOut || y > heightOut )
+            return false;
+
+        if ( x + width > widthOut ) {
+            const int32_t offsetX = x + width - widthOut;
+            if ( offsetX >= width )
+                return false;
+            width -= offsetX;
+        }
+
+        if ( y + height > heightOut ) {
+            const int32_t offsetY = y + height - heightOut;
+            if ( offsetY >= height )
+                return false;
+            height -= offsetY;
+        }
 
         return true;
     }
@@ -791,7 +837,7 @@ namespace fheroes2
 
     void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId )
     {
-        if ( !Validate( image, x, y, width, height ) )
+        if ( !Verify( image, x, y, width, height ) )
             return;
 
         const int32_t imageWidth = image.width();
@@ -810,11 +856,11 @@ namespace fheroes2
             }
         }
         else {
-            uint8_t * transformY = image.transform() + y * imageWidth + x;
+            const uint8_t * transformY = image.transform() + y * imageWidth + x;
 
             for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
                 uint8_t * imageX = imageY;
-                uint8_t * transformX = transformY;
+                const uint8_t * transformX = transformY;
                 const uint8_t * imageXEnd = imageX + width;
 
                 for ( ; imageX != imageXEnd; ++imageX, ++transformX ) {
@@ -1364,7 +1410,7 @@ namespace fheroes2
 
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId )
     {
-        if ( !Validate( image, x, y, width, height ) )
+        if ( !Verify( image, x, y, width, height ) )
             return;
 
         if ( image.width() == width && image.height() == height ) { // we need to fill whole image

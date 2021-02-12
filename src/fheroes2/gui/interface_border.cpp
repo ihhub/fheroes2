@@ -23,14 +23,15 @@
 #include "interface_border.h"
 #include "agg.h"
 #include "game_interface.h"
+#include "localevent.h"
 #include "maps.h"
 #include "settings.h"
 #include "ui_tool.h"
 
-void Interface::GameBorderRedraw( void )
+void Interface::GameBorderRedraw( const bool viewWorldMode )
 {
     const Settings & conf = Settings::Get();
-    if ( conf.ExtGameHideInterface() )
+    if ( conf.ExtGameHideInterface() && !viewWorldMode )
         return;
 
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -103,10 +104,14 @@ void Interface::GameBorderRedraw( void )
     srcrt.height = TILEWIDTH;
     dstpt.x = displayWidth - RADARWIDTH - 2 * BORDERWIDTH;
     dstpt.y = srcrt.y;
-    for ( int32_t i = 0; i < count_h + 1; ++i ) {
+
+    const int32_t countHMiddleBorder = viewWorldMode ? 0 : count_h;
+
+    for ( int32_t i = 0; i < countHMiddleBorder + 1; ++i ) {
         fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
         dstpt.y += TILEWIDTH;
     }
+
     srcrt.y += TILEWIDTH;
     srcrt.height = icnadv.height() - srcrt.y;
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -161,6 +166,9 @@ void Interface::GameBorderRedraw( void )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     dstpt.y = srcrt.y + BORDERWIDTH + count_icons * 32;
     srcrt.y = srcrt.y + BORDERWIDTH + 4 * 32;
+    if ( viewWorldMode && displayHeight > fheroes2::Display::DEFAULT_HEIGHT ) {
+        dstpt.y = 464;
+    }
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 }
 
@@ -178,7 +186,7 @@ const Rect & Interface::BorderWindow::GetArea( void ) const
     return area;
 }
 
-void Interface::BorderWindow::Redraw( void )
+void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }

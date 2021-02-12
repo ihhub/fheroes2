@@ -27,31 +27,31 @@
 #include "settings.h"
 
 Dialog::FrameBorder::FrameBorder( int v )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( v )
 {}
 
-Dialog::FrameBorder::FrameBorder( const Size & sz, const fheroes2::Image & sf )
-    : restorer( fheroes2::Display::instance() )
+Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz, const fheroes2::Image & sf )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
     const Rect & currentArea = GetRect();
     RenderOther( sf, fheroes2::Rect( currentArea.x, currentArea.y, currentArea.w, currentArea.h ) );
 }
 
-Dialog::FrameBorder::FrameBorder( const Size & sz )
-    : restorer( fheroes2::Display::instance() )
+Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    SetPosition( ( display.width() - sz.w - border * 2 ) / 2, ( display.height() - sz.h - border * 2 ) / 2, sz.w, sz.h );
+    SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
     RenderRegular( GetRect() );
 }
 
 Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : restorer( fheroes2::Display::instance() )
+    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
     , border( BORDERWIDTH )
 {
     SetPosition( posx, posy, encw, ench );

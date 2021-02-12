@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,52 +21,21 @@
 #ifndef H2CAMPAIGN_DATA_H
 #define H2CAMPAIGN_DATA_H
 
+#include "campaign_scenariodata.h"
 #include "gamedefs.h"
+#include "maps_fileinfo.h"
 #include "serialize.h"
 
 namespace Campaign
 {
-    struct ScenarioBonusData
-    {
-    public:
-        enum
-        {
-            RESOURCES,
-            ARTIFACT,
-            TROOP
-        };
-
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
-
-        ScenarioBonusData();
-        ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount );
-
-        friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
-        friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
-
-        std::string ToString() const;
-    };
-
     class CampaignData
     {
     public:
         CampaignData();
 
-        const ScenarioBonusData & getCurrentScenarioBonus() const
+        const std::string & getCampaignDescription() const
         {
-            return _currentScenarioBonus;
-        }
-
-        const std::vector<int> & getFinishedMaps() const
-        {
-            return _finishedMaps;
-        }
-
-        const std::vector<std::string> & getEarnedCampaignAwards() const
-        {
-            return _earnedCampaignAwards;
+            return _campaignDescription;
         }
 
         int getCampaignID() const
@@ -74,34 +43,34 @@ namespace Campaign
             return _campaignID;
         }
 
-        int getCurrentScenarioID() const
+        bool isGoodCampaign() const
         {
-            return _currentScenarioID;
+            return _isGoodCampaign;
         }
 
-        int getLastCompletedScenarioID() const
+        const std::vector<ScenarioData> & getAllScenarios() const
         {
-            return _finishedMaps.back();
+            return _scenarios;
         }
 
-        void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
-        void setCurrentScenarioID( const int scenarioID );
+        const std::vector<int> getScenariosBefore( const int scenarioID ) const;
+        const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
+        const std::vector<int> getStartingScenarios() const;
+
+        bool isAllCampaignMapsPresent() const;
+        bool isLastScenario( const int scenarioID ) const;
+        bool isStartingScenario( const int scenarioID ) const;
+
         void setCampaignID( const int campaignID );
-        void addCurrentMapToFinished();
-        void addCampaignAward( const std::string & award );
-        void reset();
-
-        static CampaignData & Get();
+        void setCampaignAlignment( const bool isGoodCampaign );
+        void setCampaignDescription( const std::string & campaignDescription );
+        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
 
     private:
-        friend StreamBase & operator<<( StreamBase & msg, const CampaignData & data );
-        friend StreamBase & operator>>( StreamBase & msg, CampaignData & data );
-
-        std::vector<int> _finishedMaps;
-        std::vector<std::string> _earnedCampaignAwards; // should have its own data format
-        int _currentScenarioID;
         int _campaignID;
-        ScenarioBonusData _currentScenarioBonus;
+        bool _isGoodCampaign;
+        std::string _campaignDescription;
+        std::vector<ScenarioData> _scenarios;
     };
 }
 

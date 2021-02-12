@@ -501,12 +501,10 @@ Troop * Troops::GetWeakestTroop( void )
     return *lowest;
 }
 
-Troop * Troops::GetSlowestTroop( void )
+const Troop * Troops::GetSlowestTroop() const
 {
-    iterator first, last, lowest;
-
-    first = begin();
-    last = end();
+    const_iterator first = begin();
+    const_iterator last = end();
 
     while ( first != last )
         if ( ( *first )->isValid() )
@@ -515,8 +513,8 @@ Troop * Troops::GetSlowestTroop( void )
             ++first;
 
     if ( first == end() )
-        return NULL;
-    lowest = first;
+        return nullptr;
+    const_iterator lowest = first;
 
     if ( first != last )
         while ( ++first != last )
@@ -568,12 +566,12 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
+// Pre-battle arrangement for Monster or Neutral troops
 void Troops::ArrangeForBattle( bool upgrade )
 {
     const Troops & priority = GetOptimized();
 
-    switch ( priority.size() ) {
-    case 1: {
+    if ( priority.size() == 1 ) {
         const Monster & m = *priority.back();
         const u32 count = priority.back()->GetCount();
 
@@ -601,31 +599,9 @@ void Troops::ArrangeForBattle( bool upgrade )
         }
         else
             at( 2 )->Set( m, count );
-        break;
     }
-    case 2: {
-        // TODO: need modify army for 2 troops
+    else {
         Assign( priority );
-        break;
-    }
-    case 3: {
-        // TODO: need modify army for 3 troops
-        Assign( priority );
-        break;
-    }
-    case 4: {
-        // TODO: need modify army for 4 troops
-        Assign( priority );
-        break;
-    }
-    case 5: {
-        // possible change orders monster
-        // store
-        Assign( priority );
-        break;
-    }
-    default:
-        break;
     }
 }
 

@@ -32,22 +32,6 @@
 #include "interface_radar.h"
 #include "interface_status.h"
 #include "players.h"
-#include "text.h"
-
-enum redraw_t
-{
-    REDRAW_RADAR = 0x01,
-    REDRAW_HEROES = 0x02,
-    REDRAW_CASTLES = 0x04,
-    REDRAW_BUTTONS = 0x08,
-    REDRAW_STATUS = 0x10,
-    REDRAW_BORDER = 0x20,
-    REDRAW_GAMEAREA = 0x40,
-    REDRAW_CURSOR = 0x80,
-
-    REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
-    REDRAW_ALL = 0xFF
-};
 
 class Castle;
 class Heroes;
@@ -71,6 +55,21 @@ namespace GameFocus
 
 namespace Interface
 {
+    enum redraw_t
+    {
+        REDRAW_RADAR = 0x01,
+        REDRAW_HEROES = 0x02,
+        REDRAW_CASTLES = 0x04,
+        REDRAW_BUTTONS = 0x08,
+        REDRAW_STATUS = 0x10,
+        REDRAW_BORDER = 0x20,
+        REDRAW_GAMEAREA = 0x40,
+        REDRAW_CURSOR = 0x80,
+
+        REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
+        REDRAW_ALL = 0xFF
+    };
+
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
     Army * GetFocusArmy();
@@ -84,6 +83,7 @@ namespace Interface
 
         bool NeedRedraw( void ) const;
         void SetRedraw( int );
+        int GetRedrawMask() const;
         void Redraw( int f = 0 );
 
         const fheroes2::Rect & GetScrollLeft( void ) const;

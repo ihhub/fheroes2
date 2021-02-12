@@ -87,7 +87,7 @@ public:
     HGSData() {}
 
     bool Load( const std::string & );
-    bool Save( const std::string & );
+    bool Save( const std::string & ) const;
     void ScoreRegistry( const std::string &, const std::string &, u32, u32 );
     void RedrawList( int32_t ox, int32_t oy );
 
@@ -114,7 +114,7 @@ bool HGSData::Load( const std::string & fn )
     return false;
 }
 
-bool HGSData::Save( const std::string & fn )
+bool HGSData::Save( const std::string & fn ) const
 {
     ZStreamFile hdata;
     hdata.setbigendian( true );
@@ -169,10 +169,10 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
         text.Set( hgs.land );
         text.Blit( ox + 260, oy + 70 );
 
-        text.Set( GetString( hgs.days ) );
+        text.Set( std::to_string( hgs.days ) );
         text.Blit( ox + 420, oy + 70 );
 
-        text.Set( GetString( hgs.rating ) );
+        text.Set( std::to_string( hgs.rating ) );
         text.Blit( ox + 480, oy + 70 );
 
         oy += 40;
@@ -183,7 +183,7 @@ int Game::HighScores()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + GetString( GetGameOverScores() );
+        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
         return MAINMENU;
     }
@@ -249,7 +249,7 @@ int Game::HighScores()
     while ( le.HandleEvents() ) {
         // key code info
         if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
-            Dialog::Message( "Key Press:", GetString( le.KeyValue() ), Font::SMALL, Dialog::OK );
+            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
         if ( buttonCampain.isEnabled() ) {
             le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
         }

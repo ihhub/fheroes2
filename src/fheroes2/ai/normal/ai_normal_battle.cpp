@@ -106,6 +106,83 @@ namespace AI
         }
     }
 
+    void Normal::HeroesPreBattle( HeroBase & hero )
+    {
+        // Optimize troops placement before the battle
+        Army & army = hero.GetArmy();
+
+        std::vector<Troop> archers;
+        std::vector<Troop> others;
+
+        // Validate and pick the troops
+        for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+            Troop * troop = army.GetTroop( slot );
+            if ( troop && troop->isValid() ) {
+                if ( troop->isArchers() ) {
+                    archers.push_back( *troop );
+                }
+                else {
+                    others.push_back( *troop );
+                }
+            }
+        }
+
+        // Sort troops by tactical priority. For melee:
+        // 1. Faster units first
+        // 2. Flyers first
+        // 3. Finally if unit type and speed is same, compare by strength
+        std::sort( others.begin(), others.end(), []( const Troop & left, const Troop & right ) {
+            if ( left.GetSpeed() == right.GetSpeed() ) {
+                if ( left.isFlying() == right.isFlying() ) {
+                    return left.GetStrength() < right.GetStrength();
+                }
+                return right.isFlying();
+            }
+            return left.GetSpeed() < right.GetSpeed();
+        } );
+
+        // Archers sorted purely by strength.
+        std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
+
+        std::vector<size_t> slotOrder = {2, 1, 3, 0, 4};
+        switch ( archers.size() ) {
+        case 1:
+            slotOrder = {0, 2, 1, 3, 4};
+            break;
+        case 2:
+            // 1, 5 or 4 -> 3, 2, 5
+            slotOrder = {0, 4, 2, 1, 3};
+            break;
+        case 3:
+            slotOrder = {0, 4, 2, 1, 3};
+            break;
+        case 4:
+            slotOrder = {0, 4, 2, 3, 1};
+            break;
+        case 5:
+            slotOrder = {0, 4, 1, 2, 3};
+            break;
+        default:
+            break;
+        }
+
+        // Re-arrange troops in army
+        army.Clean();
+        for ( const size_t slot : slotOrder ) {
+            if ( !archers.empty() ) {
+                army.GetTroop( slot )->Set( archers.back() );
+                archers.pop_back();
+            }
+            else if ( !others.empty() ) {
+                army.GetTroop( slot )->Set( others.back() );
+                others.pop_back();
+            }
+            else {
+                break;
+            }
+        }
+    }
+
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
         if ( currentUnit.Modes( SP_BERSERKER ) != 0 ) {
@@ -198,7 +275,10 @@ namespace AI
             }
         }
 
-        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr );
+        // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
+        const bool myOverpoweredArmy = myArmyStrength > enemyArmyStrength * 10;
+
+        const bool defensiveTactics = enemyArcherRatio < 0.75 && ( defendingCastle || myShooterStr > enemyShooterStr ) && !myOverpoweredArmy;
         DEBUG( DBG_BATTLE, DBG_TRACE,
                "Tactic " << defensiveTactics << " chosen. Archers: " << myShooterStr << ", vs enemy " << enemyShooterStr << " ratio is " << enemyArcherRatio );
 
@@ -217,7 +297,9 @@ namespace AI
         }
 
         // Step 4. Calculate spell heuristics
-        if ( CheckCommanderCanSpellcast( arena, commander ) ) {
+
+        // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
+        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && CheckCommanderCanSpellcast( arena, commander ) ) {
             // 1. For damage spells - maximum amount of enemy threat lost
             // 2. For buffs - friendly unit strength gained
             // 3. For debuffs - enemy unit threat lost
@@ -358,7 +440,8 @@ namespace AI
                                 // Tertiary - Enemy unit threat
                                 if ( ( canReach != hadAnotherTarget && canReach )
                                      || ( canReach == hadAnotherTarget
-                                          && ( maxArcherValue < archerValue || ( maxArcherValue == archerValue && maxEnemyThreat < enemyThreat ) ) ) ) {
+                                          && ( maxArcherValue < archerValue
+                                               || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
                                     targetCell = moveToEnemy.first;
                                     target = enemy;
                                     maxArcherValue = archerValue;

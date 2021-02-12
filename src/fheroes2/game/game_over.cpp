@@ -31,7 +31,10 @@
 #include "kingdom.h"
 #include "mus.h"
 #include "settings.h"
+#include "text.h"
 #include "world.h"
+
+#include <cassert>
 
 const char * GameOver::GetString( int cond )
 {
@@ -337,14 +340,22 @@ int GameOver::Result::LocalCheckGameOver( void )
     }
 
     if ( isSinglePlayer ) {
+        assert( activeHumanColors <= 1 );
+
+        const Kingdom & myKingdom = world.GetKingdom( humanColors );
         const Settings & conf = Settings::Get();
-        const int currentColor = conf.CurrentColor();
-        const Kingdom & myKingdom = world.GetKingdom( currentColor );
+
         if ( myKingdom.isControlHuman() ) {
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
-                Video::ShowVideo( "WIN.SMK", false );
-                res = Game::HIGHSCORES;
+
+                if ( conf.GameType() & Game::TYPE_CAMPAIGN ) {
+                    res = Game::COMPLETE_CAMPAIGN_SCENARIO;
+                }
+                else {
+                    Video::ShowVideo( "WIN.SMK", false );
+                    res = Game::HIGHSCORES;
+                }
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );
@@ -360,7 +371,7 @@ int GameOver::Result::LocalCheckGameOver( void )
                 if ( res == Game::HIGHSCORES )
                     Game::HighScores();
                 res = Game::CANCEL;
-                Interface::Basic::Get().SetRedraw( REDRAW_ALL );
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
             }
         }
     }

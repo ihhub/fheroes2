@@ -50,8 +50,6 @@ struct LastLoseHero
     u32 date;
 };
 
-StreamBase & operator>>( StreamBase &, LastLoseHero & );
-
 struct KingdomCastles : public VecCastles
 {};
 
@@ -63,7 +61,7 @@ class Kingdom : public BitModes, public Control
 public:
     enum
     {
-        // UNDEF	     = 0x0001,
+        // UNDEF      = 0x0001,
         IDENTIFYHERO = 0x0002,
         DISABLEHIRES = 0x0004,
         OVERVIEWCSTL = 0x0008
@@ -140,7 +138,7 @@ public:
     void AddHeroes( Heroes * );
     void RemoveHeroes( const Heroes * );
     void ApplyPlayWithStartingHero( void );
-    void HeroesActionNewPosition( void );
+    void HeroesActionNewPosition() const;
 
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );

@@ -209,7 +209,7 @@ bool Battle::Unit::isModes( u32 v ) const
 std::string Battle::Unit::GetShotString( void ) const
 {
     if ( Troop::GetShots() == GetShots() )
-        return GetString( Troop::GetShots() );
+        return std::to_string( Troop::GetShots() );
 
     std::ostringstream os;
     os << Troop::GetShots() << " (" << GetShots() << ")";
@@ -734,9 +734,6 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
 {
-    if ( Modes( SP_ANTIMAGIC ) )
-        return false;
-
     if ( Modes( CAP_MIRRORIMAGE ) && ( spell == Spell::ANTIMAGIC || spell == Spell::MIRRORIMAGE ) ) {
         return false;
     }
@@ -1457,6 +1454,9 @@ bool Battle::Unit::isMagicResist( const Spell & spell, u32 spower ) const
 
 u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
 {
+    if ( Modes( SP_ANTIMAGIC ) )
+        return 100;
+
     if ( spell.isMindInfluence() && ( isUndead() || isElemental() || GetID() == Monster::GIANT || GetID() == Monster::TITAN ) )
         return 100;
 

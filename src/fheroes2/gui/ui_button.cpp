@@ -22,6 +22,7 @@
 #include "agg.h"
 #include "dialog.h"
 #include "game.h"
+#include "localevent.h"
 #include "pal.h"
 #include "settings.h"
 
@@ -153,7 +154,7 @@ namespace fheroes2
             else {
                 // TODO: cache this Sprite to speed up everything
                 Sprite image = sprite;
-                ApplyPalette( image, PAL::GetPalette( PAL::DARKENING ) );
+                ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 Blit( image, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
         }

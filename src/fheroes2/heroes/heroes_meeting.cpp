@@ -57,7 +57,7 @@ public:
         if ( !troop.isValid() )
             return;
 
-        Text text( GetString( troop.GetCount() ), Font::SMALL );
+        Text text( std::to_string( troop.GetCount() ), Font::SMALL );
 
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
@@ -167,7 +167,7 @@ public:
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
         fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
 
-        Text text( GetString( skill.Level() ), Font::SMALL );
+        Text text( std::to_string( skill.Level() ), Font::SMALL );
         text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
     }
 
@@ -516,8 +516,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     }
 
     // skip bag artifacts
-    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::ALL );
-    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::ALL );
+    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
+    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
 
     // remove_if for learn spells
     if ( learn.size() ) {

@@ -40,12 +40,12 @@ struct MapRegionNode
     bool isWater = false;
 
     MapRegionNode() {}
-    MapRegionNode( int index )
-        : index( index )
+    MapRegionNode( int index_ )
+        : index( index_ )
         , type( REGION_NODE_OPEN )
     {}
-    MapRegionNode( int index, uint16_t pass, bool water )
-        : index( index )
+    MapRegionNode( int index_, uint16_t pass, bool water )
+        : index( index_ )
         , type( REGION_NODE_OPEN )
         , passable( pass )
         , isWater( water )

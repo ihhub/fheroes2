@@ -543,10 +543,10 @@ TextBox::TextBox()
     : align( ALIGN_CENTER )
 {}
 
-TextBox::TextBox( const std::string & msg, int ft, u32 width )
+TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )
 {
-    Set( msg, ft, width );
+    Set( msg, ft, width_ );
 }
 
 TextBox::TextBox( const std::string & msg, int ft, const fheroes2::Rect & rt )
@@ -556,7 +556,7 @@ TextBox::TextBox( const std::string & msg, int ft, const fheroes2::Rect & rt )
     Blit( rt.x, rt.y );
 }
 
-void TextBox::Set( const std::string & msg, int ft, u32 width_ )
+void TextBox::Set( const std::string & msg, int ft, uint32_t width_ )
 {
     messages.clear();
     fheroes2::Rect::height = 0;

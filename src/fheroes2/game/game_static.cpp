@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cmath>
 #include <cstring>
 
 #include "difficulty.h"
@@ -264,10 +265,10 @@ namespace GameStatic
     u16 spell_dd_hp = 0;
 
     // monsters
-    float monster_upgrade_ratio = 1.0;
+    float monsterUpgradeRatio = 1.0f;
 
-    // visit objects mod:	OBJ_BUOY, OBJ_OASIS, OBJ_WATERINGHOLE, OBJ_TEMPLE, OBJ_GRAVEYARD, OBJ_DERELICTSHIP,
-    //			        OBJ_SHIPWRECK, OBJ_MERMAID, OBJ_FAERIERING, OBJ_FOUNTAIN, OBJ_IDOL, OBJ_PYRAMID
+    // visit objects mod: OBJ_BUOY, OBJ_OASIS, OBJ_WATERINGHOLE, OBJ_TEMPLE, OBJ_GRAVEYARD, OBJ_DERELICTSHIP,
+    // OBJ_SHIPWRECK, OBJ_MERMAID, OBJ_FAERIERING, OBJ_FOUNTAIN, OBJ_IDOL, OBJ_PYRAMID
     int8_t objects_mod[] = {1, 1, 1, 2, -1, -1, -1, 1, 1, 1, 1, -2};
 
     // world
@@ -299,7 +300,7 @@ StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
     for ( u32 ii = 0; ii < array_size; ++ii )
         msg << objects_mod[ii];
 
-    msg << monster_upgrade_ratio << uniq;
+    msg << monsterUpgradeRatio << uniq;
 
     // skill statics
     array_size = ARRAY_COUNT( Skill::_stats );
@@ -340,7 +341,10 @@ StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
     for ( u32 ii = 0; ii < array_size; ++ii )
         msg >> objects_mod[ii];
 
-    msg >> monster_upgrade_ratio >> uniq;
+    msg >> monsterUpgradeRatio >> uniq;
+    if ( monsterUpgradeRatio < 0 ) {
+        monsterUpgradeRatio = 1.0f;
+    }
 
     msg >> array_size;
     for ( u32 ii = 0; ii < array_size; ++ii )
@@ -355,9 +359,14 @@ StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
     return msg;
 }
 
-float GameStatic::GetMonsterUpgradeRatio( void )
+bool GameStatic::isCustomMonsterUpgradeOption()
 {
-    return monster_upgrade_ratio;
+    return std::fabs( monsterUpgradeRatio - 1.0f ) > 0.001;
+}
+
+float GameStatic::GetMonsterUpgradeRatio()
+{
+    return monsterUpgradeRatio;
 }
 
 u32 GameStatic::GetLostOnWhirlpoolPercent( void )
@@ -650,7 +659,7 @@ void Game::MonsterUpdateStatic( const TiXmlElement * xml )
     if ( xml ) {
         double res;
         xml->Attribute( "rate", &res );
-        GameStatic::monster_upgrade_ratio = static_cast<float>( res );
+        GameStatic::monsterUpgradeRatio = static_cast<float>( res );
     }
 }
 

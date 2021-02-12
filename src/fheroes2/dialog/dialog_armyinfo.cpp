@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_static.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
@@ -182,11 +183,16 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
                 else {
-                    std::string msg
-                        = 1.0f != Monster::GetUpgradeRatio() ? _(
-                              "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest number. Do you wish to upgrade them?" )
-                                                             : _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                    StringReplace( msg, "%{ratio}", GetString( Monster::GetUpgradeRatio(), 2 ) );
+                    std::string msg;
+                    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
+                        msg = _( "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest "
+                                 "number. Do you wish to upgrade them?" );
+                        StringReplace( msg, "%{ratio}", GetString( GameStatic::GetMonsterUpgradeRatio(), 2 ) );
+                    }
+                    else {
+                        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    }
+
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
                         result = Dialog::UPGRADE;
                         break;
@@ -291,9 +297,9 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     text.Blit( dst_pt.x, dst_pt.y );
 
     if ( troop().GetDamageMin() != troop().GetDamageMax() )
-        text.Set( GetString( troop().GetDamageMin() ) + "-" + GetString( troop().GetDamageMax() ) );
+        text.Set( std::to_string( troop().GetDamageMin() ) + "-" + std::to_string( troop().GetDamageMax() ) );
     else
-        text.Set( GetString( troop().GetDamageMin() ) );
+        text.Set( std::to_string( troop().GetDamageMin() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -303,7 +309,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.y += offsetY;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    text.Set( GetString( troop().GetHitPoints() ) );
+    text.Set( std::to_string( troop().GetHitPoints() ) );
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
@@ -313,7 +319,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
         dst_pt.y += offsetY;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( GetString( troop.GetHitPointsLeft() ) );
+        text.Set( std::to_string( troop.GetHitPointsLeft() ) );
         dst_pt.x = dst.x + offsetX;
         text.Blit( dst_pt.x, dst_pt.y );
     }
@@ -439,7 +445,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
             const fheroes2::Sprite & sprite = GetModesSprite( spell.spriteId );
             fheroes2::Blit( sprite, fheroes2::Display::instance(), ow, dst.y + maxSpriteHeight - sprite.height() );
             if ( spell.duration > 0 ) {
-                text.Set( GetString( spell.duration ), Font::SMALL );
+                text.Set( std::to_string( spell.duration ), Font::SMALL );
                 ow += sprite.width() + spell.offset;
                 text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
             }
@@ -463,7 +469,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
             const fheroes2::Sprite & sprite = GetModesSprite( spellIt->spriteId );
             fheroes2::Blit( sprite, fheroes2::Display::instance(), ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
             if ( spellIt->duration > 0 ) {
-                text.Set( GetString( spellIt->duration ), Font::SMALL );
+                text.Set( std::to_string( spellIt->duration ), Font::SMALL );
                 text.Blit( ow - text.w(), dst.y + maxSpriteHeight - text.h() + 1 );
             }
             ow -= sprite.width() + space;
@@ -479,7 +485,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 
     // amount
-    text.Set( GetString( troop.GetCount() ), Font::BIG );
+    text.Set( std::to_string( troop.GetCount() ), Font::BIG );
     pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
     pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
     text.Blit( pos.x, pos.y );
@@ -659,8 +665,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
-    TextSprite tsTotal( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL,
-                        pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
+    TextSprite tsTotal( std::to_string( gold ) + " " + "(" + "total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+                        Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
     fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
@@ -706,18 +712,21 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         btnGroup.button( 0 ).disable();
 
     TextSprite tsNotEnoughGold;
+    tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
 
-    if ( kingdom.GetCountMarketplace() ) {
-        if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-            btnMarket.disable();
-        else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsNotEnoughGold.SetText( msg, Font::SMALL );
-            tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-            tsNotEnoughGold.Show();
-            btnMarket.draw();
-        }
+    fheroes2::ImageRestorer marketButtonRestorer( display, btnMarket.area().x, btnMarket.area().y, btnMarket.area().width, btnMarket.area().height );
+
+    if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
+        tsNotEnoughGold.Hide();
+        btnMarket.disable();
+        btnMarket.hide();
+    }
+    else {
+        std::string msg = _( "Not enough gold (%{gold})" );
+        StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.Show();
+        btnMarket.enable();
+        btnMarket.draw();
     }
 
     TextSprite noRoom1;
@@ -763,7 +772,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         cursor.Hide();
         tsTotal.Hide();
-        tsTotal.SetText( GetString( gold ) + " (total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
+        tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
         tsTotal.Show();
 
         const bool allowPayment = kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) );
@@ -778,15 +787,22 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         btnGroup.draw();
 
-        if ( allowPayment ) {
+        if ( allowPayment || kingdom.GetCountMarketplace() == 0 ) {
             tsNotEnoughGold.Hide();
+            btnMarket.disable();
+            btnMarket.hide();
+            marketButtonRestorer.restore();
         }
         else {
             std::string msg = _( "Not enough gold (%{gold})" );
             StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
             tsNotEnoughGold.SetText( msg, Font::SMALL );
             tsNotEnoughGold.Show();
+            btnMarket.enable();
+            btnMarket.show();
         }
+
+        btnMarket.draw();
 
         if ( enoughRoom ) {
             noRoom1.Hide();

@@ -28,6 +28,8 @@
 #include "system.h"
 #include "tools.h"
 
+#include <SDL.h>
+
 #ifdef WITH_MIXER
 #include <SDL_mixer.h>
 

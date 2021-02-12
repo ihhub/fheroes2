@@ -61,7 +61,7 @@ Rand::Queue::Queue( u32 size )
 void Rand::Queue::Push( s32 value, u32 percent )
 {
     if ( percent > 0 )
-        push_back( std::make_pair( value, percent ) );
+        emplace_back( value, percent );
 }
 
 size_t Rand::Queue::Size( void ) const

@@ -25,6 +25,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "localevent.h"
 #include "settings.h"
 #include "text.h"
 
@@ -86,17 +87,8 @@ int Dialog::FileOptions( void )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
-                if ( Interface::Basic::Get().EventLoadGame() == Game::LOADGAME ) {
-                    const int gameType = Settings::Get().GameType();
-
-                    if ( gameType & Game::TYPE_STANDARD )
-                        result = Game::LOADSTANDARD;
-                    else if ( gameType & Game::TYPE_CAMPAIGN )
-                        result = Game::LOADCAMPAIN;
-                    else
-                        result = Game::LOADGAME;
-                    break;
-                }
+                result = Interface::Basic::Get().EventLoadGame();
+                break;
             }
         }
         else if ( le.MouseClickLeft( buttonSave.area() ) ) {

@@ -34,6 +34,7 @@
 #include "rand.h"
 #include "settings.h"
 #include "spell.h"
+#include "statusbar.h"
 #include "text.h"
 #include "world.h"
 
@@ -906,11 +907,12 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */ )
-    : hero( ptr )
+ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar /* = nullptr */ )
+    : _hero( ptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
@@ -1005,17 +1007,24 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
-            const_cast<Heroes *>( hero )->EditSpellBook();
-        else
-            hero->OpenSpellBook( SpellBook::ALL, false );
+            const_cast<Heroes *>( _hero )->EditSpellBook();
+        else {
+            if ( _statusBar != nullptr ) {
+                std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+            }
+            else {
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+            }
+        }
     }
-    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) ) {
+    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
             DEBUG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
-        else if ( hero->CanLearnSpell( spell ) ) {
+        else if ( _hero->CanLearnSpell( spell ) ) {
             payment_t cost = spell.GetCost();
             u32 answer = 0;
             std::string text = _(
@@ -1038,7 +1047,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
                 answer = Dialog::Message( title, text, Font::BIG, Dialog::YES | Dialog::NO );
 
             if ( answer == Dialog::YES )
-                const_cast<Heroes *>( hero )->TranscribeScroll( art );
+                const_cast<Heroes *>( _hero )->TranscribeScroll( art );
         }
     }
     else if ( art.isValid() ) {
@@ -1082,7 +1091,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )
                 msg = _( "View Spells" );
-            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && hero->CanTranscribeScroll( art ) )
+            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );

@@ -46,7 +46,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
 
     Text text;
-    text.Set( GetString( gold ) + " " + "(" + "total: " + GetString( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")", Font::SMALL );
+    text.Set( std::to_string( gold ) + " " + "(" + "total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
+              Font::SMALL );
 
     const int spacer = 10;
     FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite_expr.height() + 2 + text.h(), true );
@@ -81,7 +82,8 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     pos.x = box.GetArea().x + box.GetArea().width / 2 + 30;
     fheroes2::Blit( sprite_expr, display, pos.x, pos.y - sprite_expr.height() );
     // text
-    text.Set( GetString( expr ) + " " + "(" + "need: " + GetString( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")", Font::SMALL );
+    text.Set( std::to_string( expr ) + " " + "(" + "need: " + std::to_string( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() ) + ")",
+              Font::SMALL );
     text.Blit( pos.x + sprite_expr.width() / 2 - text.w() / 2, pos.y + 2 );
 
     button_yes.draw();
