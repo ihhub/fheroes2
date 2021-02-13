@@ -22,6 +22,7 @@ jobs:
       env:
         FHEROES2_SDL1: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
+        WITH_TOOLS: "ON"
         HOMEBREW_NO_AUTO_UPDATE: 1
   sdl2:
     runs-on: macos-10.15
@@ -39,4 +40,5 @@ jobs:
       run: make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: "ON"
+        WITH_TOOLS: "ON"
         HOMEBREW_NO_AUTO_UPDATE: 1
