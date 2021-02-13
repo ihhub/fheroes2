@@ -159,6 +159,10 @@ namespace AI
         else if ( MP2::isPickupObject( objectID ) ) {
             return 850.0;
         }
+        else if ( MP2::isCaptureObject( objectID ) && MP2::isQuantityObject( objectID ) ) {
+            // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
+            return 500.0;
+        }
         else if ( objectID == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
