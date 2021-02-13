@@ -78,7 +78,6 @@ namespace Logging
     void SetDebugLevel( const int debugLevel );
 }
 
-
 #if defined( ANDROID ) // Android has a specific logging function
 #include <android/log.h>
 namespace std
