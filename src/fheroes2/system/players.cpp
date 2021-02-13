@@ -83,11 +83,11 @@ bool Control::isControlRemote( void ) const
 
 Player::Player( int col )
     : control( CONTROL_NONE )
-    , _ai( std::make_shared<AI::Normal>() )
     , color( col )
     , race( Race::NONE )
     , friends( col )
     , id( World::GetUniq() )
+    , _ai( std::make_shared<AI::Normal>() )
 {
     name = Color::String( color );
 }
