@@ -2043,7 +2043,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * skill would always be the same once the 1st one is selected.
      * */
 
-    size_t hash = static_cast<size_t>( world.GetMapSeed() );
+    size_t hash = world.GetMapSeed();
     hash_combine( hash, hid );
     hash_combine( hash, race );
     hash_combine( hash, attack );
