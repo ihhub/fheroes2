@@ -36,6 +36,7 @@
 #include "logging.h"
 #include "maps_fileinfo.h"
 #include "race.h"
+#include "settings.h"
 
 #ifdef WITH_XML
 #include "tinyxml.h"
