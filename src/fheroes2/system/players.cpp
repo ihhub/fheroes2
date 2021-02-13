@@ -23,10 +23,10 @@
 #include <algorithm>
 #include <assert.h>
 
-#include "normal/ai_normal.h"
 #include "game.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
 #include "world.h"

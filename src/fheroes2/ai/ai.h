@@ -129,5 +129,4 @@ namespace AI
     StreamBase & operator>>( StreamBase &, AI::Base & );
 }
 
-
 #endif
