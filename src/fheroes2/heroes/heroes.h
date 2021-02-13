@@ -157,7 +157,19 @@ public:
         VISIONS = 0x00004000,
         PATROL = 0x00008000,
         CUSTOMARMY = 0x00010000,
-        CUSTOMSKILLS = 0x00020000
+        CUSTOMSKILLS = 0x00020000,
+        SKIPPED_TURN = 0x00040000,
+        WAITING = 0x00080000,
+        MOVED = 0x00100000
+    };
+
+    // Values are set by BitModes; shared with previous enum
+    enum class Role
+    {
+        SCOUT = 0x01000000,
+        HUNTER = 0x02000000,
+        COURIER = 0x04000000,
+        CHAMPION = 0x08000000
     };
 
     Heroes();

@@ -57,17 +57,6 @@ namespace AI
         EXPLORER
     };
 
-    enum modes_t
-    {
-        HERO_SKIP_TURN = 0x02000000,
-        HERO_WAITING = 0x04000000,
-        HERO_MOVED = 0x08000000,
-        HERO_SCOUT = 0x10000000,
-        HERO_HUNTER = 0x20000000,
-        HERO_COURIER = 0x40000000,
-        HERO_CHAMPION = 0x80000000
-    };
-
     const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
     const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
     const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
