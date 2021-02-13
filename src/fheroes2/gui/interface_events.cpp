@@ -34,8 +34,9 @@
 #include "game_over.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
-#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "world.h"
 
@@ -52,7 +53,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();

@@ -22,8 +22,6 @@
 #define H2BIN_FRM_H
 
 #include "settings.h"
-
-#include <map>
 #include <vector>
 
 namespace Bin_Info

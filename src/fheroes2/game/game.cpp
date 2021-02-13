@@ -37,6 +37,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -405,7 +406,7 @@ void Game::UpdateGlobalDefines( const std::string & spec )
         MonsterUpdateStatic( xml_globals->FirstChildElement( "monster_upgrade" ) );
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

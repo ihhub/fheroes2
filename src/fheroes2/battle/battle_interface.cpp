@@ -39,11 +39,11 @@
 #include "ground.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "pal.h"
 #include "pocketpc.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -2380,9 +2380,9 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
-                DEBUG( DBG_BATTLE, DBG_WARN,
-                       "dst: "
-                           << "out of range" );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                           "dst: "
+                               << "out of range" );
                 return;
             }
 
@@ -2395,7 +2395,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
                 listlog->AddMessage( str );
             }
 
-            DEBUG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
                 if ( 0 > teleport_src )
@@ -3054,7 +3054,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-#ifdef DEBUG
+#ifdef DEBUG_LOG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
@@ -3113,7 +3113,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = NULL;
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-#ifdef DEBUG
+#ifdef DEBUG_LOG
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
 #endif
     status.SetMessage( msg, true );
