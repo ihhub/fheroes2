@@ -372,7 +372,6 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
-    // persist this value later
     uint32_t _lastGroundRegion = 0;
 
     mutable int _alphaValue;
