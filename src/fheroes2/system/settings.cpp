@@ -464,6 +464,8 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
+    Logging::SetDebugLevel( debug );
+
     // opt_globals
     const settings_t * ptr = settingsGeneral;
     while ( ptr->id ) {
@@ -1187,6 +1189,7 @@ const fheroes2::Size & Settings::VideoMode() const
 void Settings::SetDebug( int d )
 {
     debug = d;
+    Logging::SetDebugLevel( debug );
 }
 
 /**/
