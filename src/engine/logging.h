@@ -66,13 +66,18 @@ enum
     DBG_ALL_TRACE = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_BATTLE_TRACE | DBG_AI_TRACE | DBG_NETWORK_TRACE | DBG_OTHER_TRACE
 };
 
-#define DEFAULT_DEBUG DBG_ALL_WARN
+namespace Logging
+{
+    const char * GetDebugOptionName( const int name );
 
-const char * StringDebug( int );
+    std::string GetTimeString();
 
-std::string GetLogTime( void );
+    // Initialize logging. Some systems require writing logging information into a file.
+    void InitLog();
 
-void InitLog( int debug_setting = DEFAULT_DEBUG );
+    void SetDebugLevel( const int debugLevel );
+}
+
 
 #if defined( ANDROID ) // Android has a specific logging function
 #include <android/log.h>
@@ -105,23 +110,23 @@ extern std::ofstream log_file;
 
 #define VERBOSE_LOG( x )                                                                                                                                                 \
     {                                                                                                                                                                    \
-        COUT( GetLogTime() << ": [VERBOSE]\t" << __FUNCTION__ << ":  " << x );                                                                                           \
+        COUT( Logging::GetTimeString() << ": [VERBOSE]\t" << __FUNCTION__ << ":  " << x );                                                                               \
     }
 #define ERROR_LOG( x )                                                                                                                                                   \
     {                                                                                                                                                                    \
-        COUT( GetLogTime() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                             \
+        COUT( Logging::GetTimeString() << ": [ERROR]\t" << __FUNCTION__ << ":  " << x );                                                                                 \
     }
 
 #ifdef WITH_DEBUG
 #define DEBUG_LOG( x, y, z )                                                                                                                                             \
     if ( IS_DEBUG( x, y ) ) {                                                                                                                                            \
-        COUT( GetLogTime() << ": [" << StringDebug( x ) << "]\t" << __FUNCTION__ << ":  " << z );                                                                        \
+        COUT( Logging::GetTimeString() << ": [" << Logging::GetDebugOptionName( x ) << "]\t" << __FUNCTION__ << ":  " << z );                                            \
     }
 #else
 #define DEBUG_LOG( x, y, z )
 #endif
 #define IS_DEVEL() IS_DEBUG( DBG_DEVEL, DBG_INFO )
 
-bool IS_DEBUG( int name, int level );
+bool IS_DEBUG( const int name, const int level );
 
 #endif // H2LOGGING_H
