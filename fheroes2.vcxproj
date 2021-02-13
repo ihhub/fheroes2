@@ -357,7 +357,6 @@
     <ClCompile Include="src\fheroes2\objects\objwatr.cpp" />
     <ClCompile Include="src\fheroes2\objects\objxloc.cpp" />
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
     <ClCompile Include="src\fheroes2\resource\maps_text.cpp" />
@@ -519,7 +518,6 @@
     <ClInclude Include="src\fheroes2\objects\objwatr.h" />
     <ClInclude Include="src\fheroes2\objects\objxloc.h" />
     <ClInclude Include="src\fheroes2\objects\trees.h" />
-    <ClInclude Include="src\fheroes2\pocketpc\pocketpc.h" />
     <ClInclude Include="src\fheroes2\resource\artifact.h" />
     <ClInclude Include="src\fheroes2\resource\artifact_ultimate.h" />
     <ClInclude Include="src\fheroes2\resource\resource.h" />
