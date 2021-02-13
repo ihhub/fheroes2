@@ -273,15 +273,40 @@ namespace Game
     {
         struct FadeTask
         {
-            uint8_t object = MP2::OBJ_ZERO;
-            uint32_t objectIndex = 0;
-            uint32_t animationIndex = 0;
-            uint32_t fromIndex = 0;
-            uint32_t toIndex = 0;
-            uint32_t alpha = 0;
-            bool fadeOut = false;
-            bool fadeIn = false;
-            uint8_t objectTileset = 0;
+            FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
+                      bool fadeIn_, uint8_t objectTileset_ )
+            {
+                object = object_;
+                objectIndex = objectIndex_;
+                animationIndex = animationIndex_;
+                fromIndex = fromIndex_;
+                toIndex = toIndex_;
+                alpha = alpha_;
+                fadeOut = fadeOut_;
+                fadeIn = fadeIn_;
+                objectTileset = objectTileset_;
+            }
+            FadeTask()
+            {
+                object = MP2::OBJ_ZERO;
+                objectIndex = 0;
+                animationIndex = 0;
+                fromIndex = 0;
+                toIndex = 0;
+                alpha = 0;
+                fadeOut = false;
+                fadeIn = false;
+                objectTileset = 0;
+            }
+            uint8_t object;
+            uint32_t objectIndex;
+            uint32_t animationIndex;
+            uint32_t fromIndex;
+            uint32_t toIndex;
+            uint32_t alpha;
+            bool fadeOut;
+            bool fadeIn;
+            uint8_t objectTileset;
         };
         FadeTask & GetFadeTask();
         void StartFadeTask( uint8_t object, uint32_t fromTile, uint32_t toTile, bool fadeOut, bool fadeIn );
