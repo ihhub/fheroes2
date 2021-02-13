@@ -484,60 +484,6 @@ void Interface::GameArea::QueueEventProcessing( void )
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
-    if ( conf.ExtPocketTapMode() ) {
-        // drag&drop gamearea: scroll
-        if ( conf.ExtPocketDragDropScroll() && le.MousePressLeft() ) {
-            Point pt1 = le.GetMouseCursor();
-            const int16_t speed = Settings::Get().ScrollSpeed();
-
-            while ( le.HandleEvents() && le.MousePressLeft() ) {
-                const Point & pt2 = le.GetMouseCursor();
-
-                if ( pt1 != pt2 ) {
-                    s32 dx = pt2.x - pt1.x;
-                    s32 dy = pt2.y - pt1.y;
-                    s32 d2x = speed;
-                    s32 d2y = speed;
-
-                    while ( 1 ) {
-                        if ( d2x <= dx ) {
-                            SetScroll( SCROLL_LEFT );
-                            dx -= d2x;
-                        }
-                        else if ( -d2x >= dx ) {
-                            SetScroll( SCROLL_RIGHT );
-                            dx += d2x;
-                        }
-
-                        if ( d2y <= dy ) {
-                            SetScroll( SCROLL_TOP );
-                            dy -= d2y;
-                        }
-                        else if ( -d2y >= dy ) {
-                            SetScroll( SCROLL_BOTTOM );
-                            dy += d2y;
-                        }
-
-                        if ( NeedScroll() ) {
-                            cursor.Hide();
-                            Scroll();
-                            interface.SetRedraw( REDRAW_GAMEAREA );
-                            interface.Redraw();
-                            cursor.Show();
-                            fheroes2::Display::instance().render();
-                        }
-                        else
-                            break;
-                    }
-                }
-            }
-        }
-
-        // fixed pocket pc: click on maps after scroll (pause: ~800 ms)
-        if ( 800 > scrollTime.getMs() )
-            return;
-    }
-
     const Point tileOffset = _topLeftTileOffset + mp - Point( _windowROI.x, _windowROI.y );
     const Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                          ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );

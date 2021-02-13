@@ -75,9 +75,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_TAP_MODE = 0x11000000,
-        POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
-        POCKETPC_LOW_RESOLUTION = 0x14000000,
 
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
@@ -174,7 +171,6 @@ public:
     bool ShowButtons( void ) const;
     bool ShowStatus( void ) const;
     bool Unicode( void ) const;
-    bool PocketPC( void ) const;
     bool BattleShowGrid( void ) const;
     bool BattleShowMouseShadow( void ) const;
     bool BattleShowMoveShadow( void ) const;
@@ -241,8 +237,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketTapMode( void ) const;
-    bool ExtPocketDragDropScroll( void ) const;
 
     const fheroes2::Size & VideoMode() const;
 

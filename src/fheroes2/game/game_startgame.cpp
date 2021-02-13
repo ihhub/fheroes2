@@ -800,41 +800,18 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
-        if ( conf.ExtPocketTapMode() ) {
-            // scroll area maps left
-            if ( le.MouseCursor( GetScrollLeft() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_LEFT );
-            else
-                // scroll area maps right
-                if ( le.MouseCursor( GetScrollRight() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_RIGHT );
-            else
-                // scroll area maps top
-                if ( le.MouseCursor( GetScrollTop() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_TOP );
-            else
-                // scroll area maps bottom
-                if ( le.MouseCursor( GetScrollBottom() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_BOTTOM );
-
-            // disable right click emulation
-            if ( gameArea.NeedScroll() )
-                le.SetTapMode( false );
-        }
-        else {
-            if ( fheroes2::cursor().isFocusActive() ) {
-                int scrollPosition = SCROLL_NONE;
-                if ( le.MouseCursor( GetScrollLeft() ) )
-                    scrollPosition |= SCROLL_LEFT;
-                else if ( le.MouseCursor( GetScrollRight() ) )
-                    scrollPosition |= SCROLL_RIGHT;
-                if ( le.MouseCursor( GetScrollTop() ) )
-                    scrollPosition |= SCROLL_TOP;
-                else if ( le.MouseCursor( GetScrollBottom() ) )
-                    scrollPosition |= SCROLL_BOTTOM;
-                if ( scrollPosition != SCROLL_NONE )
-                    gameArea.SetScroll( scrollPosition );
-            }
+        if ( fheroes2::cursor().isFocusActive() ) {
+            int scrollPosition = SCROLL_NONE;
+            if ( le.MouseCursor( GetScrollLeft() ) )
+                scrollPosition |= SCROLL_LEFT;
+            else if ( le.MouseCursor( GetScrollRight() ) )
+                scrollPosition |= SCROLL_RIGHT;
+            if ( le.MouseCursor( GetScrollTop() ) )
+                scrollPosition |= SCROLL_TOP;
+            else if ( le.MouseCursor( GetScrollBottom() ) )
+                scrollPosition |= SCROLL_BOTTOM;
+            if ( scrollPosition != SCROLL_NONE )
+                gameArea.SetScroll( scrollPosition );
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
@@ -911,10 +888,6 @@ int Interface::Basic::HumanTurn( bool isload )
             Redraw();
             cursor.Show();
             display.render();
-
-            // enable right click emulation
-            if ( conf.ExtPocketTapMode() )
-                le.SetTapMode( true );
 
             continue;
         }

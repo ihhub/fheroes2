@@ -40,7 +40,7 @@ enum
     // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000008,
+    // GLOBAL_POCKETPC = 0x00000008,
     GLOBAL_DEDICATEDSERVER = 0x00000010,
     GLOBAL_LOCALCLIENT = 0x00000020,
 
@@ -107,14 +107,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_ALTRESOURCE,
         "alt resource",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocketpc",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocket pc",
     },
     {
         GLOBAL_USESWSURFACE,
@@ -335,14 +327,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::GAME_CONTINUE_AFTER_VICTORY,
         _( "game: offer to continue the game afer victory condition" ),
     },
-    {
-        Settings::POCKETPC_TAP_MODE,
-        _( "pocketpc: tap mode" ),
-    },
-    {
-        Settings::POCKETPC_DRAG_DROP_SCROLL,
-        _( "pocketpc: drag&drop gamearea as scroll" ),
-    },
 
     {0, NULL},
 };
@@ -389,12 +373,6 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-
-    if ( System::isEmbededDevice() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_TAP_MODE );
-        ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
-    }
 }
 
 Settings::~Settings()
@@ -689,12 +667,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        opt_global.SetModes( GLOBAL_FULLSCREEN );
-    else {
-        ExtResetModes( POCKETPC_TAP_MODE );
-    }
-
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
         opt_global.SetModes( GLOBAL_SHOWCPANEL );
         opt_global.ResetModes( GLOBAL_SHOWRADAR );
@@ -1157,12 +1129,6 @@ bool Settings::ShowStatus( void ) const
 bool Settings::Unicode( void ) const
 {
     return opt_global.Modes( GLOBAL_USEUNICODE );
-}
-
-/* pocketpc mode */
-bool Settings::PocketPC( void ) const
-{
-    return opt_global.Modes( GLOBAL_POCKETPC );
 }
 
 bool Settings::BattleShowGrid( void ) const
@@ -1672,16 +1638,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtPocketTapMode( void ) const
-{
-    return ExtModes( POCKETPC_TAP_MODE );
-}
-
-bool Settings::ExtPocketDragDropScroll( void ) const
-{
-    return ExtModes( POCKETPC_DRAG_DROP_SCROLL );
 }
 
 bool Settings::ExtWorldNewVersionWeekOf( void ) const
