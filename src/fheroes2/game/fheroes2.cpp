@@ -72,9 +72,9 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
-    Settings & conf = Settings::Get();
+    Logging::InitLog();
 
-    InitLog( Settings::Get().Debug() );
+    Settings & conf = Settings::Get();
 
     DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
