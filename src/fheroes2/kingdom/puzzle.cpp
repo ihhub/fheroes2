@@ -29,7 +29,6 @@
 #include "logging.h"
 #include "mus.h"
 #include "puzzle.h"
-#include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
 
