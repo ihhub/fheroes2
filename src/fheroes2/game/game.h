@@ -26,9 +26,9 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "mp2.h"
 #include "rect.h"
 #include "types.h"
-#include "mp2.h"
 
 class Players;
 class Heroes;
