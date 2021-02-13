@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <assert.h>
 
+#include "normal/ai_normal.h"
 #include "game.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
@@ -82,6 +83,7 @@ bool Control::isControlRemote( void ) const
 
 Player::Player( int col )
     : control( CONTROL_NONE )
+    , _ai( std::make_shared<AI::Normal>() )
     , color( col )
     , race( Race::NONE )
     , friends( col )
@@ -128,6 +130,11 @@ int Player::GetFriends( void ) const
 int Player::GetID( void ) const
 {
     return id;
+}
+
+std::weak_ptr<AI::Base> Player::getAIInstance() const
+{
+    return _ai;
 }
 
 bool Player::isID( u32 id2 ) const
@@ -226,14 +233,28 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
 {
     const BitModes & modes = player;
 
-    return msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus;
+    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai;
+    if ( player._ai ) {
+        msg << *player._ai;
+    }
+    else {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Player object without AI" );
+        msg << AI::Normal();
+    }
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Player & player )
 {
     BitModes & modes = player;
 
-    return msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
+        assert( player._ai );
+        msg >> *player._ai;
+    }
+
+    return msg;
 }
 
 Players::Players()
@@ -473,6 +494,10 @@ std::string Players::String( void ) const
         default:
             os << "unknown";
             break;
+        }
+
+        if ( std::shared_ptr<AI::Base> ai = ( *it )->getAIInstance().lock() ) {
+            os << ", " << ai->GetPersonalityString();
         }
 
         os << ")"

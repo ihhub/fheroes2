@@ -23,9 +23,11 @@
 #ifndef H2PLAYERS_H
 #define H2PLAYERS_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
+#include "ai.h"
 #include "bitmodes.h"
 #include "color.h"
 
@@ -122,6 +124,7 @@ public:
     int GetRace( void ) const;
     int GetFriends( void ) const;
     int GetID( void ) const;
+    std::weak_ptr<AI::Base> getAIInstance() const;
 
     const std::string & GetName( void ) const;
     Focus & GetFocus( void );
@@ -138,6 +141,7 @@ protected:
     std::string name;
     u32 id;
     Focus focus;
+    std::shared_ptr<AI::Base> _ai;
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );
