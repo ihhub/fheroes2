@@ -28,6 +28,7 @@
 #include "gamedefs.h"
 #include "rect.h"
 #include "types.h"
+#include "mp2.h"
 
 class Players;
 class Heroes;
@@ -272,15 +273,15 @@ namespace Game
     {
         struct FadeTask
         {
-            uint8_t object;
-            uint32_t objectIndex;
-            uint32_t animationIndex;
-            uint32_t fromIndex;
-            uint32_t toIndex;
-            uint32_t alpha;
-            bool fadeOut;
-            bool fadeIn;
-            uint8_t objectTileset;
+            uint8_t object = MP2::OBJ_ZERO;
+            uint32_t objectIndex = 0;
+            uint32_t animationIndex = 0;
+            uint32_t fromIndex = 0;
+            uint32_t toIndex = 0;
+            uint32_t alpha = 0;
+            bool fadeOut = false;
+            bool fadeIn = false;
+            uint8_t objectTileset = 0;
         };
         FadeTask & GetFadeTask();
         void StartFadeTask( uint8_t object, uint32_t fromTile, uint32_t toTile, bool fadeOut, bool fadeIn );

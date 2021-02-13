@@ -1533,7 +1533,7 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTile
     const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
 
     const Monster & monster = QuantityMonster();
-    const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
     area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
@@ -1552,8 +1552,8 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
         const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
-        const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-        const auto alpha = ( MP2::OBJ_BOAT == fadeTask.object
+        const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+        const uint32_t alpha = ( MP2::OBJ_BOAT == fadeTask.object
                              && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
                                ? fadeTask.alpha
                                : 255;

@@ -1031,7 +1031,7 @@ int Interface::Basic::HumanTurn( bool isload )
                                 tile.setBoat( Direction::RIGHT );
                             }
                         }
-                        if ( fadeTask.alpha < ( 235 ) ) {
+                        if ( fadeTask.alpha < 235 ) {
                             fadeTask.alpha += 20;
                         }
                         else {

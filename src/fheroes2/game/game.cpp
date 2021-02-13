@@ -225,7 +225,7 @@ void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromInde
     }
     else {
         const int icn = MP2::GetICNObject( object );
-        const auto animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() );
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() );
         fadeTask = {object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset()};
     }
 }
