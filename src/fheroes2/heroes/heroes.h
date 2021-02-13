@@ -337,7 +337,7 @@ private:
 
     HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
-    void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int, bool autoselect = false );
+    void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 to, bool newpos );
