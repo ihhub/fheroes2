@@ -22,12 +22,8 @@
 
 #include <math.h>
 
-#include "agg.h"
-#include "bin_info.h"
 #include "castle.h"
 #include "difficulty.h"
-#include "error.h"
-#include "game.h"
 #include "game_static.h"
 #include "icn.h"
 #include "logging.h"
@@ -39,7 +35,6 @@
 #include "race.h"
 #include "rand.h"
 #include "speed.h"
-#include "spell.h"
 #include "translations.h"
 
 struct monstats_t

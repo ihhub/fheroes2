@@ -24,11 +24,8 @@
 #include <vector>
 
 #include "agg.h"
-#include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
-#include "interface_gamearea.h"
-#include "interface_radar.h"
 #include "logging.h"
 #include "mus.h"
 #include "puzzle.h"

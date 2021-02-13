@@ -24,12 +24,9 @@
 #include <fstream>
 #include <sstream>
 
-#include "audio_music.h"
-#include "campaign_savedata.h"
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
-#include "race.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
@@ -1124,7 +1121,9 @@ bool Settings::PriceLoyaltyVersion( void ) const
 
 bool Settings::LoadedGameVersion( void ) const
 {
-    return ( game_type & Game::TYPE_LOADFILE ) != 0;
+    // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value
+    // This constant not used here, to not drag dependency on the game.h and game.cpp in compilation target.
+    return ( game_type & 0x80 ) != 0;
 }
 
 bool Settings::ShowControlPanel( void ) const
@@ -1803,7 +1802,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1815,7 +1814,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1858,9 +1857,6 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
-
-    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
-        msg >> Campaign::CampaignSaveData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;
