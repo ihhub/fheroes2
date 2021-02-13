@@ -83,5 +83,3 @@ bool IS_DEBUG( const int name, const int level )
            || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & g_debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & g_debug ) >> 8 ) >= level )
            || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & g_debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
 }
-
-
