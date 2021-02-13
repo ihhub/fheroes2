@@ -21,56 +21,67 @@
 #include "logging.h"
 #include <ctime>
 
-static int debug = DEFAULT_DEBUG;
-
-#if defined( __SWITCH__ ) // Platforms which log to file
-std::ofstream log_file;
-#endif
-
-void InitLog( int debug_setting )
+namespace
 {
-    debug = debug_setting;
+    int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
+
 #if defined( __SWITCH__ ) // Platforms which log to file
-    log_file.open( "fheroes2.log", std::ofstream::out );
+    std::ofstream logFile;
 #endif
 }
 
-std::string GetLogTime()
+namespace Logging
 {
-    time_t raw;
-    struct tm * tmi;
-    char buf[13] = {0};
+    const char * GetDebugOptionName( const int name )
+    {
+        if ( name & DBG_ENGINE )
+            return "DBG_ENGINE";
+        else if ( name & DBG_GAME )
+            return "DBG_GAME";
+        else if ( name & DBG_BATTLE )
+            return "DBG_BATTLE";
+        else if ( name & DBG_AI )
+            return "DBG_AI";
+        else if ( name & DBG_NETWORK )
+            return "DBG_NETWORK";
+        else if ( name & DBG_OTHER )
+            return "DBG_OTHER";
+        else if ( name & DBG_DEVEL )
+            return "DBG_DEVEL";
 
-    std::time( &raw );
-    tmi = std::localtime( &raw );
+        return "";
+    }
 
-    std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );
+    std::string GetTimeString()
+    {
+        time_t raw;
+        std::time( &raw );
+        struct tm * tmi = std::localtime( &raw );
 
-    return std::string( buf );
+        char buf[13] = {0};
+        std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );
+
+        return std::string( buf );
+    }
+
+    void InitLog()
+    {
+#if defined( __SWITCH__ ) // Platforms which log to file
+        logFile.open( "fheroes2.log", std::ofstream::out );
+#endif
+    }
+
+    void SetDebugLevel( const int debugLevel )
+    {
+        g_debug = debugLevel;
+    }
 }
 
-bool IS_DEBUG( int name, int level )
+bool IS_DEBUG( const int name, const int level )
 {
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
+    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & g_debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & g_debug ) >> 4 ) >= level )
+           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & g_debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & g_debug ) >> 8 ) >= level )
+           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & g_debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
 }
 
-const char * StringDebug( int name )
-{
-    if ( name & DBG_ENGINE )
-        return "DBG_ENGINE";
-    else if ( name & DBG_GAME )
-        return "DBG_GAME";
-    else if ( name & DBG_BATTLE )
-        return "DBG_BATTLE";
-    else if ( name & DBG_AI )
-        return "DBG_AI";
-    else if ( name & DBG_NETWORK )
-        return "DBG_NETWORK";
-    else if ( name & DBG_OTHER )
-        return "DBG_OTHER";
-    else if ( name & DBG_DEVEL )
-        return "DBG_DEVEL";
-    return "";
-}
+
