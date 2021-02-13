@@ -196,4 +196,14 @@ namespace AI
         // end action
         actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
     }
+
+    StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
+    {
+        return msg << instance._personality;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, AI::Base & instance )
+    {
+        return msg >> instance._personality;
+    }
 }

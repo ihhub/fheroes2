@@ -26,6 +26,7 @@
 #include "gamedefs.h"
 #include "rand.h"
 
+class StreamBase;
 class Funds;
 class Castle;
 class HeroBase;
@@ -105,6 +106,10 @@ namespace AI
         int _personality = NONE;
 
         Base() {}
+
+    private:
+        friend StreamBase & operator<<( StreamBase &, const AI::Base & );
+        friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
     Base & Get( AI_TYPE type = NORMAL );
@@ -119,6 +124,10 @@ namespace AI
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
+
+    StreamBase & operator<<( StreamBase &, const AI::Base & );
+    StreamBase & operator>>( StreamBase &, AI::Base & );
 }
+
 
 #endif
