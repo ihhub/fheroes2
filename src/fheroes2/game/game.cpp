@@ -75,7 +75,7 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask fadeTask = {MP2::OBJ_ZERO, 0, 0, 0, 0, 0, false, false, 0};
+        FadeTask fadeTask;
     }
 }
 
