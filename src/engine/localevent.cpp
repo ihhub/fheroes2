@@ -27,8 +27,6 @@
 #include "pal.h"
 #include "screen.h"
 
-#define TAP_DELAY_EMULATE 1050
-
 namespace
 {
     enum KeyMod
@@ -50,7 +48,6 @@ LocalEvent::LocalEvent()
     , mouse_st( 0, 0 )
     , redraw_cursor_func( NULL )
     , keyboard_filter_func( NULL )
-    , clock_delay( TAP_DELAY_EMULATE )
     , loop_delay( 1 )
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
@@ -1120,17 +1117,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #endif
     }
 
-    // emulate press right
-    if ( ( modes & TAP_MODE ) && ( modes & CLOCK_ON ) ) {
-        if ( clock_delay < clock.getMs() ) {
-            ResetModes( CLICK_LEFT );
-            ResetModes( CLOCK_ON );
-            mouse_pr = mouse_cu;
-            SetModes( MOUSE_PRESSED );
-            mouse_button = SDL_BUTTON_RIGHT;
-        }
-    }
-
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( _gameController != nullptr ) {
         ProcessControllerAxisMotion();
@@ -1438,12 +1424,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
             SetModes( CLICK_LEFT );
-
-            // emulate press right
-            if ( modes & TAP_MODE ) {
-                clock.reset();
-                SetModes( CLOCK_ON );
-            }
             break;
 
         case SDL_BUTTON_MIDDLE:
@@ -1472,11 +1452,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         case SDL_BUTTON_LEFT:
             SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
-
-            // emulate press right
-            if ( modes & TAP_MODE ) {
-                ResetModes( CLOCK_ON );
-            }
             break;
 
         case SDL_BUTTON_MIDDLE:
