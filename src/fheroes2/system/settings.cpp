@@ -22,41 +22,17 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
 #include "difficulty.h"
+#include "game.h"
+#include "logging.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
 
 #define DEFAULT_PORT 5154
-#define DEFAULT_DEBUG DBG_ALL_WARN
-
-bool IS_DEBUG( int name, int level )
-{
-    const int debug = Settings::Get().Debug();
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
-}
-
-const char * StringDebug( int name )
-{
-    if ( name & DBG_ENGINE )
-        return "DBG_ENGINE";
-    else if ( name & DBG_GAME )
-        return "DBG_GAME";
-    else if ( name & DBG_BATTLE )
-        return "DBG_BATTLE";
-    else if ( name & DBG_AI )
-        return "DBG_AI";
-    else if ( name & DBG_NETWORK )
-        return "DBG_NETWORK";
-    else if ( name & DBG_OTHER )
-        return "DBG_OTHER";
-    else if ( name & DBG_DEVEL )
-        return "DBG_DEVEL";
-    return "";
-}
 
 enum
 {
@@ -64,7 +40,7 @@ enum
     // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000008,
+    // GLOBAL_POCKETPC = 0x00000008,
     GLOBAL_DEDICATEDSERVER = 0x00000010,
     GLOBAL_LOCALCLIENT = 0x00000020,
 
@@ -131,14 +107,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_ALTRESOURCE,
         "alt resource",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocketpc",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocket pc",
     },
     {
         GLOBAL_USESWSURFACE,
@@ -359,14 +327,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::GAME_CONTINUE_AFTER_VICTORY,
         _( "game: offer to continue the game afer victory condition" ),
     },
-    {
-        Settings::POCKETPC_TAP_MODE,
-        _( "pocketpc: tap mode" ),
-    },
-    {
-        Settings::POCKETPC_DRAG_DROP_SCROLL,
-        _( "pocketpc: drag&drop gamearea as scroll" ),
-    },
 
     {0, NULL},
 };
@@ -413,12 +373,6 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-
-    if ( System::isEmbededDevice() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_TAP_MODE );
-        ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
-    }
 }
 
 Settings::~Settings()
@@ -487,6 +441,8 @@ bool Settings::Read( const std::string & filename )
         debug = ival;
         break;
     }
+
+    Logging::SetDebugLevel( debug );
 
     // opt_globals
     const settings_t * ptr = settingsGeneral;
@@ -675,7 +631,7 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
         }
     }
 
@@ -711,12 +667,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        opt_global.SetModes( GLOBAL_FULLSCREEN );
-    else {
-        ExtResetModes( POCKETPC_TAP_MODE );
-    }
-
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
         opt_global.SetModes( GLOBAL_SHOWCPANEL );
         opt_global.ResetModes( GLOBAL_SHOWRADAR );
@@ -1015,7 +965,7 @@ std::string Settings::GetWriteableDir( const char * subdir )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "writable directory not found" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }
@@ -1181,12 +1131,6 @@ bool Settings::Unicode( void ) const
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
 
-/* pocketpc mode */
-bool Settings::PocketPC( void ) const
-{
-    return opt_global.Modes( GLOBAL_POCKETPC );
-}
-
 bool Settings::BattleShowGrid( void ) const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
@@ -1211,6 +1155,7 @@ const fheroes2::Size & Settings::VideoMode() const
 void Settings::SetDebug( int d )
 {
     debug = d;
+    Logging::SetDebugLevel( debug );
 }
 
 /**/
@@ -1693,16 +1638,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtPocketTapMode( void ) const
-{
-    return ExtModes( POCKETPC_TAP_MODE );
-}
-
-bool Settings::ExtPocketDragDropScroll( void ) const
-{
-    return ExtModes( POCKETPC_DRAG_DROP_SCROLL );
 }
 
 bool Settings::ExtWorldNewVersionWeekOf( void ) const

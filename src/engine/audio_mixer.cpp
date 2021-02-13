@@ -27,7 +27,7 @@
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "engine.h"
-#include "system.h"
+#include "logging.h"
 
 namespace Mixer
 {
@@ -63,7 +63,7 @@ void Mixer::Init( void )
         hardware.samples = 2048;
 
         if ( 0 != Mix_OpenAudio( hardware.freq, hardware.format, hardware.channels, hardware.samples ) ) {
-            ERROR( SDL_GetError() );
+            ERROR_LOG( SDL_GetError() );
             valid = false;
         }
         else {
@@ -75,7 +75,7 @@ void Mixer::Init( void )
         }
     }
     else {
-        ERROR( "audio subsystem not initialize" );
+        ERROR_LOG( "audio subsystem not initialize" );
         valid = false;
     }
 }
@@ -109,7 +109,7 @@ Mixer::chunk_t * Mixer::LoadWAV( const char * file )
 {
     Mix_Chunk * sample = Mix_LoadWAV( file );
     if ( !sample )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
     return sample;
 }
 
@@ -117,7 +117,7 @@ Mixer::chunk_t * Mixer::LoadWAV( const u8 * ptr, u32 size )
 {
     Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
     if ( !sample )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
     return sample;
 }
 
@@ -125,7 +125,7 @@ int Mixer::Play( chunk_t * sample, int channel, bool loop )
 {
     int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
     if ( res == -1 )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
     return res;
 }
 
@@ -292,7 +292,7 @@ void Mixer::Init( void )
         spec.callback = AudioCallBack;
 
         if ( 0 > SDL_OpenAudio( &spec, &Audio::GetHardwareSpec() ) ) {
-            ERROR( SDL_GetError() );
+            ERROR_LOG( SDL_GetError() );
             valid = false;
         }
         else {
@@ -302,7 +302,7 @@ void Mixer::Init( void )
         }
     }
     else {
-        ERROR( "audio subsystem not initialize" );
+        ERROR_LOG( "audio subsystem not initialize" );
         valid = false;
     }
 }
@@ -371,7 +371,7 @@ int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
             if ( it == chunks.end() ) {
                 it = std::find_if( chunks.begin() + reserved_channels, chunks.end(), PredicateIsFreeSound );
                 if ( it == chunks.end() ) {
-                    ERROR( "mixer is full" );
+                    ERROR_LOG( "mixer is full" );
                     return -1;
                 }
             }

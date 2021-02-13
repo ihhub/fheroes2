@@ -32,6 +32,7 @@
 #include "localevent.h"
 #include "mus.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 

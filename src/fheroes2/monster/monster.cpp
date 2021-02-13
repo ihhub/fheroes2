@@ -26,6 +26,7 @@
 #include "difficulty.h"
 #include "game_static.h"
 #include "icn.h"
+#include "logging.h"
 #include "luck.h"
 #include "m82.h"
 #include "monster.h"
@@ -34,6 +35,7 @@
 #include "race.h"
 #include "rand.h"
 #include "speed.h"
+#include "translations.h"
 
 struct monstats_t
 {
@@ -448,7 +450,7 @@ void Monster::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

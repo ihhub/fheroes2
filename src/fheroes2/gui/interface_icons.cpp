@@ -30,8 +30,8 @@
 #include "heroes.h"
 #include "interface_icons.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "race.h"
-#include "settings.h"
 #include "world.h"
 
 #define ICONS_WIDTH 46
@@ -81,7 +81,7 @@ void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
         index_sprite = castle.isCastle() ? 14 : 20;
         break;
     default:
-        DEBUG( DBG_ENGINE, DBG_WARN, "unknown race" );
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
     }
 
     fheroes2::Blit( fheroes2::AGG::GetICN( evil ? ICN::LOCATORE : ICN::LOCATORS, index_sprite ), display, sx, sy );
