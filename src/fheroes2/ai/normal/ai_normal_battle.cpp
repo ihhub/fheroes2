@@ -618,11 +618,6 @@ namespace AI
         return actions;
     }
 
-    double BattlePlanner::selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander )
-    {
-        return 0.0;
-    }
-
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );

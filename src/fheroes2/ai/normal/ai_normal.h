@@ -63,7 +63,6 @@ namespace AI
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
-        double selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander );
 
         // turn variables that wouldn't persist
         int _myColor = Color::NONE;
