@@ -36,6 +36,12 @@ namespace AI
         std::vector<IndexObject> validObjects;
     };
 
+    struct BattleTargetPair
+    {
+        int cell = -1;
+        const Battle::Unit * unit = nullptr;
+    };
+
     class BattlePlanner
     {
     public:
@@ -54,8 +60,8 @@ namespace AI
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
         Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        Battle::Actions meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Unit * target, int & targetCell );
-        Battle::Actions meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Unit * target, int & targetCell );
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
         double selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander );
 

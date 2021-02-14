@@ -250,28 +250,27 @@ namespace AI
             board.SetPositionQuality( currentUnit );
 
             // Determine unit target/cell to move
-            const Unit * target = NULL;
-            int targetCell = -1;
+            BattleTargetPair target;
 
             if ( defensiveTactics ) {
-                meleeUnitDefense( arena, currentUnit, target, targetCell );
+                target = meleeUnitDefense( arena, currentUnit );
             }
             else {
-                meleeUnitOffense( arena, currentUnit, target, targetCell );
+                target = meleeUnitOffense( arena, currentUnit );
             }
 
             // Melee unit final stage - add actions to the queue
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << targetCell );
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Melee phase end, targetCell is " << target.cell );
 
-            if ( targetCell != -1 ) {
-                if ( currentUnit.GetHeadIndex() != targetCell )
-                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), targetCell ) );
+            if ( target.cell != -1 ) {
+                if ( currentUnit.GetHeadIndex() != target.cell )
+                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell ) );
 
-                if ( target ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
+                if ( target.unit ) {
+                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 ) );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                               currentUnit.GetName() << " melee offense, focus enemy " << target->GetName()
-                                                     << " threat level: " << target->GetScoreQuality( currentUnit ) );
+                               currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
+                                                     << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
                 }
             }
             // else skip
@@ -428,9 +427,9 @@ namespace AI
         return actions;
     }
 
-    Actions BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit, const Unit * target, int & targetCell )
+    BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit )
     {
-        Actions actions;
+        BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
@@ -446,45 +445,45 @@ namespace AI
                 const uint32_t dist = arena.CalculateMoveDistance( cell );
                 if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
                     highestValue = quality;
-                    target = enemy;
-                    targetCell = cell;
+                    target.unit = enemy;
+                    target.cell = cell;
                     break;
                 }
             }
 
             // For walking units that don't have a target within reach, pick based on distance priority
-            if ( target == NULL ) {
+            if ( target.unit == nullptr ) {
                 // move node pair consists of move hex index and distance
                 const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
 
                 const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
                 if ( unitPriority > maxPriority ) {
                     maxPriority = unitPriority;
-                    targetCell = move.first;
+                    target.cell = move.first;
                 }
             }
         }
 
         // Walkers: move closer to the castle walls during siege
-        if ( _attackingCastle && targetCell == -1 ) {
+        if ( _attackingCastle && target.cell == -1 ) {
             uint32_t shortestDist = MAXU16;
 
             for ( const int wallIndex : underWallsIndicies ) {
                 const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
                 if ( dist < shortestDist ) {
                     shortestDist = dist;
-                    targetCell = wallIndex;
+                    target.cell = wallIndex;
                 }
             }
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << targetCell );
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Walker unit moving towards castle walls " << currentUnit.GetName() << " cell " << target.cell );
         }
 
-        return actions;
+        return target;
     }
 
-    Actions BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit, const Unit * target, int & targetCell )
+    BattleTargetPair BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit )
     {
-        Actions actions;
+        BattleTargetPair target;
 
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
@@ -512,8 +511,8 @@ namespace AI
                 // Pick highest value unit if there's multiple
                 if ( maxEnemyValue < enemyValue ) {
                     maxEnemyValue = enemyValue;
-                    target = enemy;
-                    targetCell = move.first;
+                    target.unit = enemy;
+                    target.cell = move.first;
                 }
             }
         }
@@ -536,7 +535,7 @@ namespace AI
                         const double enemyThreat = enemy->GetScoreQuality( currentUnit );
                         const std::pair<int, uint32_t> moveToEnemy = arena.CalculateMoveToUnit( *enemy );
                         const bool canReach = moveToEnemy.first != -1 && moveToEnemy.second <= currentUnitMoveRange;
-                        const bool hadAnotherTarget = target != NULL;
+                        const bool hadAnotherTarget = target.unit != NULL;
 
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << enemyThreat << " distance " << moveToEnemy.second );
 
@@ -547,11 +546,11 @@ namespace AI
                         if ( ( canReach != hadAnotherTarget && canReach )
                              || ( canReach == hadAnotherTarget
                                   && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < enemyThreat ) ) ) ) {
-                            targetCell = moveToEnemy.first;
-                            target = enemy;
+                            target.cell = moveToEnemy.first;
+                            target.unit = enemy;
                             maxArcherValue = archerValue;
                             maxEnemyThreat = enemyThreat;
-                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << targetCell << " archer value " << archerValue );
+                            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << target.cell << " archer value " << archerValue );
                         }
                     }
                     else {
@@ -560,21 +559,21 @@ namespace AI
                 }
 
                 // 4. No enemies found anywhere - move in closer to the friendly ranged unit
-                if ( !target && maxArcherValue < archerValue ) {
-                    targetCell = move.first;
+                if ( !target.unit && maxArcherValue < archerValue ) {
+                    target.cell = move.first;
                     maxArcherValue = archerValue;
                 }
             }
         }
 
-        if ( target ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target->GetName() << " threat level: " << maxEnemyThreat );
+        if ( target.unit ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << " threat level: " << maxEnemyThreat );
         }
-        else if ( targetCell != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << targetCell );
+        else if ( target.cell != -1 ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << target.cell );
         }
 
-        return actions;
+        return target;
     }
 
     Actions BattlePlanner::berserkTurn( Arena & arena, const Unit & currentUnit )
@@ -619,7 +618,7 @@ namespace AI
         return actions;
     }
 
-    double selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander )
+    double BattlePlanner::selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander )
     {
         return 0.0;
     }
