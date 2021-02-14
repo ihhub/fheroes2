@@ -59,7 +59,7 @@ namespace
                 temp._disableTransformLayer();
             }
             fheroes2::Resize( image, temp );
-            std::swap( image, temp );
+            image.swap( temp );
         }
     }
 }
