@@ -36,6 +36,43 @@ namespace AI
         std::vector<IndexObject> validObjects;
     };
 
+    class BattlePlanner
+    {
+    public:
+        BattlePlanner() {}
+
+        Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        void analyzeBattleState( Battle::Arena & arena, const Battle::Unit & currentUnit );
+
+        // decision-making helpers
+        bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
+        bool isHeroWorthSaving( const Heroes * hero ) const;
+        bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
+        bool checkRetreatCondition( double myArmy, double enemy ) const;
+
+    private:
+        // to be exposed later once every BattlePlanner will be re-initialized at combat start
+        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Unit * target, int & targetCell );
+        Battle::Actions meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Unit * target, int & targetCell );
+        Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
+        double selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander );
+
+        std::weak_ptr<Battle::Arena> _arena;
+        std::weak_ptr<Battle::Unit> _currentUnit;
+
+        // turn variables that wouldn't persist
+        int _myColor = Color::NONE;
+        double _myArmyStrength = 0;
+        double _enemyArmyStrength = 0;
+        double _myShooterStr = 0;
+        double _enemyShooterStr = 0;
+        int _highestDamageExpected = 0;
+        bool _attackingCastle = false;
+        bool _defendingCastle = false;
+    };
+
     class Normal : public Base
     {
     public:
@@ -60,20 +97,7 @@ namespace AI
         std::vector<IndexObject> _mapObjects;
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
-
-        void berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions );
-    };
-
-    class BattlePlanner
-    {
-    public:
-        BattlePlanner();
-
-        Battle::Actions planUnitTurn(); 
-        int getColor() const;
-
-    private:
-
+        BattlePlanner _battlePlanner;
     };
 }
 
