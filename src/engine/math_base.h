@@ -112,6 +112,11 @@ namespace fheroes2
             return !( *this == size );
         }
 
+        bool operator<( const SizeBase2D & size ) const
+        {
+            return width < size.width || ( width == size.width && height < size.height );
+        }
+
         SizeBase2D & operator+=( const SizeBase2D & size )
         {
             width += size.width;

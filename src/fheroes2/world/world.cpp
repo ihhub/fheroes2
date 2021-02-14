@@ -493,7 +493,8 @@ void World::pickRumor()
         assert( 0 );
         return;
     }
-    else if ( vec_rumors.size() == 1 ) {
+
+    if ( vec_rumors.size() == 1 ) {
         _rumor = &vec_rumors.front();
         assert( 0 );
         return;
@@ -853,9 +854,9 @@ EventsDate World::GetEventsDate( int color ) const
 std::string World::DateString( void ) const
 {
     std::ostringstream os;
-    os << "month: " << static_cast<int>( GetMonth() ) << ", "
-       << "week: " << static_cast<int>( GetWeek() ) << ", "
-       << "day: " << static_cast<int>( GetDay() );
+    os << "month: " << GetMonth() << ", "
+       << "week: " << GetWeek() << ", "
+       << "day: " << GetDay();
     return os.str();
 }
 
