@@ -50,7 +50,7 @@ namespace AI
 
     bool CheckCommanderCanSpellcast( const Arena & arena, const HeroBase * commander )
     {
-        return commander && ( !commander->isControlHuman() || Settings::Get().ExtBattleAutoSpellcast() ) && commander->HaveSpellBook()
+        return commander && ( !commander->isControlHuman() || Settings::Get().BattleAutoSpellcast() ) && commander->HaveSpellBook()
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 

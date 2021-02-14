@@ -84,7 +84,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
-    bool showBattle = !Settings::Get().ExtBattleAutoResolve() && isHumanBattle;
+    bool showBattle = !Settings::Get().BattleAutoResolve() && isHumanBattle;
 
 #ifdef WITH_DEBUG
     if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) )

@@ -185,7 +185,19 @@ int Dialog::SystemOptions( void )
 
         // toggle manual/auto battles
         if ( le.MouseClickLeft( rect9 ) ) {
-            conf.setBattleAutoResolve( !conf.ExtBattleAutoResolve() );
+            if ( conf.BattleAutoResolve() ) {
+                if ( conf.BattleAutoSpellcast() ) {
+                    conf.setBattleAutoSpellcast( false );
+                }
+                else {
+                    conf.setBattleAutoResolve( false );
+                }
+            }
+            else {
+                conf.setBattleAutoResolve( true );
+                conf.setBattleAutoSpellcast( true );
+            }
+
             result |= 0x20;
             redraw = true;
             saveConfig = true;
@@ -363,9 +375,9 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y - text.h() - textOffset );
 
-    if ( conf.ExtBattleAutoResolve() ) {
-        const bool spellcast = conf.ExtBattleAutoSpellcast();
-        str = spellcast ? _( "Auto Resolve" ) : str = _( "Auto, no spells" );
+    if ( conf.BattleAutoResolve() ) {
+        const bool spellcast = conf.BattleAutoSpellcast();
+        str = spellcast ? _( "Auto Resolve" ) : str = _( "Auto, No Spells" );
 
         const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
         fheroes2::Blit( sprite9, display, rect9.x, rect9.y );

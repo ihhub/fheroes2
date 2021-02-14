@@ -117,8 +117,6 @@ public:
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_AUTO_RESOLVE = 0x40040000,
-        BATTLE_AUTO_SPELLCAST = 0x40080000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
 
         SETTINGS_LAST
@@ -176,6 +174,8 @@ public:
     bool BattleShowGrid( void ) const;
     bool BattleShowMouseShadow( void ) const;
     bool BattleShowMoveShadow( void ) const;
+    bool BattleAutoResolve() const;
+    bool BattleAutoSpellcast() const;
     bool UseAltResource( void ) const;
     bool PriceLoyaltyVersion( void ) const;
     bool LoadedGameVersion( void ) const;
@@ -239,8 +239,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtBattleAutoResolve() const;
-    bool ExtBattleAutoSpellcast() const;
 
     const fheroes2::Size & VideoMode() const;
 
@@ -263,7 +261,7 @@ public:
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
     void setBattleAutoResolve( bool enable );
-    void setAutoBattleSpellcast( bool enable );
+    void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
