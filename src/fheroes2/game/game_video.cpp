@@ -55,6 +55,9 @@ namespace
         // Detecting such videos and rescaling helps to deal with such situations.
         if ( image.width() == fheroes2::Display::DEFAULT_WIDTH && image.height() == fheroes2::Display::DEFAULT_HEIGHT / 2 ) {
             fheroes2::Image temp( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+            if ( image.singleLayer() ) {
+                temp._disableTransformLayer();
+            }
             fheroes2::Resize( image, temp );
             std::swap( image, temp );
         }
