@@ -1051,6 +1051,26 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
+void Settings::setBattleAutoResolve( bool enable )
+{
+    if ( enable ) {
+        opt_battle.SetModes( BATTLE_AUTO_RESOLVE );
+    }
+    else {
+        opt_battle.ResetModes( BATTLE_AUTO_RESOLVE );
+    }
+}
+
+void Settings::setAutoBattleSpellcast( bool enable )
+{
+    if ( enable ) {
+        opt_battle.SetModes( BATTLE_AUTO_SPELLCAST );
+    }
+    else {
+        opt_battle.ResetModes( BATTLE_AUTO_SPELLCAST );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -1483,6 +1503,16 @@ void Settings::ExtResetModes( u32 f )
     default:
         break;
     }
+}
+
+bool Settings::ExtBattleAutoResolve( void ) const
+{
+    return ExtModes( BATTLE_AUTO_RESOLVE );
+}
+
+bool Settings::ExtBattleAutoSpellcast( void ) const
+{
+    return ExtModes( BATTLE_AUTO_SPELLCAST );
 }
 
 bool Settings::ExtCastleGuildRestorePointsTurn( void ) const

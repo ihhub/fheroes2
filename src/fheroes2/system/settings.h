@@ -117,6 +117,8 @@ public:
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
+        BATTLE_AUTO_RESOLVE = 0x40040000,
+        BATTLE_AUTO_SPELLCAST = 0x40080000,
         BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
 
         SETTINGS_LAST
@@ -237,6 +239,8 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
+    bool ExtBattleAutoResolve() const;
+    bool ExtBattleAutoSpellcast() const;
 
     const fheroes2::Size & VideoMode() const;
 
@@ -258,6 +262,8 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setBattleAutoResolve( bool enable );
+    void setAutoBattleSpellcast( bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
