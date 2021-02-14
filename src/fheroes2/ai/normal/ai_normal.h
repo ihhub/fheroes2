@@ -65,9 +65,6 @@ namespace AI
         Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
         double selectBestSpellToCast( Battle::Arena & arena, const HeroBase * commander );
 
-        std::weak_ptr<Battle::Arena> _arena;
-        std::weak_ptr<Battle::Unit> _currentUnit;
-
         // turn variables that wouldn't persist
         int _myColor = Color::NONE;
         double _myArmyStrength = 0;
