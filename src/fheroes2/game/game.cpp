@@ -37,6 +37,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -194,8 +195,6 @@ void Game::Init( void )
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
     le.SetGlobalFilter( true );
-
-    le.SetTapMode( conf.ExtPocketTapMode() );
 
     Game::AnimateDelaysInitialize();
 
@@ -405,7 +404,7 @@ void Game::UpdateGlobalDefines( const std::string & spec )
         MonsterUpdateStatic( xml_globals->FirstChildElement( "monster_upgrade" ) );
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "audio.h"
-#include "system.h"
+#include "logging.h"
 
 namespace Audio
 {
@@ -69,7 +69,7 @@ bool Audio::CVT::Build( const Audio::Spec & src, const Audio::Spec & dst )
     if ( 1 == SDL_BuildAudioCVT( this, src.format, src.channels, src.freq, dst.format, dst.channels, dst.freq ) )
         return true;
 
-    ERROR( SDL_GetError() );
+    ERROR_LOG( SDL_GetError() );
     return false;
 }
 
@@ -78,7 +78,7 @@ bool Audio::CVT::Convert( void )
     if ( 0 == SDL_ConvertAudio( this ) )
         return true;
 
-    ERROR( SDL_GetError() );
+    ERROR_LOG( SDL_GetError() );
     return false;
 }
 

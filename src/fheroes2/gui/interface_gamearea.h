@@ -47,6 +47,7 @@ namespace Interface
         LEVEL_HEROES = 0x04,
         LEVEL_OBJECTS = 0x08,
         LEVEL_FOG = 0x20,
+        LEVEL_ROUTES = 0x40,
 
         LEVEL_ALL = 0xFF
     };
@@ -77,7 +78,11 @@ namespace Interface
         void Scroll( void );
         void SetScroll( int );
 
-        void SetCenter( const Point & );
+        void SetCenter( const Point & point );
+
+        // Do not call this method unless it's needed for manual setup of the position
+        void SetCenterInPixels( const Point & point );
+
         void SetRedraw( void ) const;
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
@@ -107,9 +112,9 @@ namespace Interface
             _prevIndexPos = -1;
         }
 
-    private:
         void SetAreaPosition( s32, s32, u32, u32 );
 
+    private:
         Basic & interface;
 
         Rect _windowROI; // visible to draw area of World Map in pixels
@@ -132,7 +137,6 @@ namespace Interface
         Point _middlePoint() const; // returns middle point of window ROI
         Point _getStartTileId() const;
         void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
-        void _setCenter( const Point & point ); // in pixels
     };
 }
 

@@ -29,6 +29,9 @@
 #include "system.h"
 #include "tools.h"
 #include <cstring>
+#if defined( __SWITCH__ )
+#include <strings.h> // for strcasecmp
+#endif
 
 void ListFiles::Append( const ListFiles & files )
 {

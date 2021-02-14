@@ -23,24 +23,26 @@
 #ifndef H2SPELLBOOK_H
 #define H2SPELLBOOK_H
 
-#include "gamedefs.h"
+#include <functional>
+#include <string>
+
 #include "spell_storage.h"
 
 class HeroBase;
 
 struct SpellBook : public SpellStorage
 {
-    enum
+    enum class Filter : int
     {
         ADVN = 0x01,
         CMBT = 0x02,
         ALL = ADVN | CMBT
     };
 
-    Spell Open( const HeroBase &, int filter, bool canselect ) const;
-    void Edit( const HeroBase & );
+    Spell Open( const HeroBase & hero, const Filter displayableSpells, bool canselect, std::function<void( const std::string & )> * statusCallback = nullptr ) const;
+    void Edit( const HeroBase & hero );
 
-    SpellStorage SetFilter( int, const HeroBase * = NULL ) const;
+    SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
 };
 
 #endif

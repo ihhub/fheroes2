@@ -31,11 +31,11 @@
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps.h"
 #include "monster.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "spell.h"
 #include "text.h"
 #include "world.h"
@@ -80,11 +80,11 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
     }
 
     if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
-        str.append( "\n" );
-        str.append( _( "guarded by %{count} of %{monster}" ) );
+        str.append( "\n \n" );
+        str.append( _( "guarded by %{count} %{monster}" ) );
 
         StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) ) );
     }
 
     return str;
@@ -651,7 +651,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         index = ( castle.isCastle() ? 14 : 20 );
         break;
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown race" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
         return;
     }
 

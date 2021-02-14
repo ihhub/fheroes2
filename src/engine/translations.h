@@ -36,4 +36,7 @@ namespace Translation
     const char * dngettext( const char * domain, const char * str, const char * plural, size_t num );
 }
 
+#define _( s ) Translation::gettext( s )
+#define _n( a, b, c ) Translation::ngettext( a, b, c )
+
 #endif

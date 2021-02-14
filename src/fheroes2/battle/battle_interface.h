@@ -133,7 +133,7 @@ namespace Battle
         {
             listlog = logs;
         };
-        void SetMessage( const std::string &, bool = false );
+        void SetMessage( const std::string & message, bool top = false );
         void Redraw( void );
         const std::string & GetMessage( void ) const;
 
@@ -292,7 +292,7 @@ namespace Battle
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell &, Actions & );
+        void MousePressRightBoardAction( u32, const Cell & );
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;

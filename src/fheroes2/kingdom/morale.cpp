@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "morale.h"
-#include "gamedefs.h"
+#include "translations.h"
 
 const std::string & Morale::String( int morale )
 {

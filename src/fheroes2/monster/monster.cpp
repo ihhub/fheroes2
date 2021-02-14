@@ -22,14 +22,11 @@
 
 #include <math.h>
 
-#include "agg.h"
-#include "bin_info.h"
 #include "castle.h"
 #include "difficulty.h"
-#include "error.h"
-#include "game.h"
 #include "game_static.h"
 #include "icn.h"
+#include "logging.h"
 #include "luck.h"
 #include "m82.h"
 #include "monster.h"
@@ -37,9 +34,8 @@
 #include "mp2.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "speed.h"
-#include "spell.h"
+#include "translations.h"
 
 struct monstats_t
 {
@@ -454,7 +450,7 @@ void Monster::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

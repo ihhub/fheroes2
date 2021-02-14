@@ -33,11 +33,12 @@
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_fileinfo.h"
 #include "mus.h"
 #include "player_info.h"
 #include "race.h"
-#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -257,7 +258,7 @@ int Game::ScenarioInfo( void )
         else
             // click ok
             if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-            DEBUG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( conf.GameDifficulty() ) );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( conf.GameDifficulty() ) );
             result = STARTGAME;
             break;
         }
@@ -335,16 +336,16 @@ int Game::ScenarioInfo( void )
             }
             else {
                 result = MAINMENU;
-                DEBUG( DBG_GAME, DBG_WARN,
-                       conf.MapsFile() << ", "
-                                       << "unknown map format" );
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           conf.MapsFile() << ", "
+                                           << "unknown map format" );
             }
         }
         else {
             result = MAINMENU;
-            DEBUG( DBG_GAME, DBG_WARN,
-                   conf.MapsFile() << ", "
-                                   << "unknown map format" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
         }
     }
 

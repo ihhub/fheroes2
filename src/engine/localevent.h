@@ -185,8 +185,6 @@ public:
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
     void SetGlobalFilter( bool );
-    void SetTapMode( bool );
-    void SetTapDelayForRightClickEmulation( u32 );
     void SetMouseOffsetX( int16_t );
     void SetMouseOffsetY( int16_t );
 
@@ -275,7 +273,9 @@ public:
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
-        _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+        if ( newSpeed > 0 ) {
+            _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
+        }
     }
 
 private:
@@ -305,9 +305,9 @@ private:
         CLICK_LEFT = 0x0010, // either there is a click on left button or it was just released
         CLICK_RIGHT = 0x0020, // either there is a click on right button or it was just released
         CLICK_MIDDLE = 0x0040, // either there is a click on middle button or it was just released
-        TAP_MODE = 0x0080,
+        UNUSED_1 = 0x0080,
         MOUSE_OFFSET = 0x0100,
-        CLOCK_ON = 0x0200,
+        UNUSED_2 = 0x0200,
         MOUSE_WHEEL = 0x0400,
         KEY_HOLD = 0x0800
     };
@@ -337,8 +337,6 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    fheroes2::Time clock;
-    u32 clock_delay;
     int loop_delay;
 
     // These members are used for restoring music and sounds when an user reopens the window

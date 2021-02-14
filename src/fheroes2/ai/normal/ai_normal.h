@@ -47,6 +47,7 @@ namespace AI
 
         virtual void revealFog( const Maps::Tiles & tile ) override;
 
+        virtual void HeroesPreBattle( HeroBase & hero ) override;
         virtual void HeroesActionComplete( Heroes & hero ) override;
 
         double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;

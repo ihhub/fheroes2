@@ -22,45 +22,17 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
-#include "campaign_data.h"
 #include "difficulty.h"
 #include "game.h"
-#include "localevent.h"
-#include "race.h"
+#include "logging.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
 
 #define DEFAULT_PORT 5154
-#define DEFAULT_DEBUG DBG_ALL_WARN
-
-bool IS_DEBUG( int name, int level )
-{
-    const int debug = Settings::Get().Debug();
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
-}
-
-const char * StringDebug( int name )
-{
-    if ( name & DBG_ENGINE )
-        return "DBG_ENGINE";
-    else if ( name & DBG_GAME )
-        return "DBG_GAME";
-    else if ( name & DBG_BATTLE )
-        return "DBG_BATTLE";
-    else if ( name & DBG_AI )
-        return "DBG_AI";
-    else if ( name & DBG_NETWORK )
-        return "DBG_NETWORK";
-    else if ( name & DBG_OTHER )
-        return "DBG_OTHER";
-    else if ( name & DBG_DEVEL )
-        return "DBG_DEVEL";
-    return "";
-}
 
 enum
 {
@@ -68,7 +40,7 @@ enum
     // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000008,
+    // GLOBAL_POCKETPC = 0x00000008,
     GLOBAL_DEDICATEDSERVER = 0x00000010,
     GLOBAL_LOCALCLIENT = 0x00000020,
 
@@ -135,14 +107,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_ALTRESOURCE,
         "alt resource",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocketpc",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocket pc",
     },
     {
         GLOBAL_USESWSURFACE,
@@ -363,14 +327,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::GAME_CONTINUE_AFTER_VICTORY,
         _( "game: offer to continue the game afer victory condition" ),
     },
-    {
-        Settings::POCKETPC_TAP_MODE,
-        _( "pocketpc: tap mode" ),
-    },
-    {
-        Settings::POCKETPC_DRAG_DROP_SCROLL,
-        _( "pocketpc: drag&drop gamearea as scroll" ),
-    },
 
     {0, NULL},
 };
@@ -417,12 +373,6 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-
-    if ( System::isEmbededDevice() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_TAP_MODE );
-        ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
-    }
 }
 
 Settings::~Settings()
@@ -443,7 +393,6 @@ bool Settings::Read( const std::string & filename )
     TinyConfig config( '=', '#' );
     std::string sval;
     int ival;
-    LocalEvent & le = LocalEvent::Get();
 
     if ( !config.Load( filename ) )
         return false;
@@ -492,6 +441,8 @@ bool Settings::Read( const std::string & filename )
         debug = ival;
         break;
     }
+
+    Logging::SetDebugLevel( debug );
 
     // opt_globals
     const settings_t * ptr = settingsGeneral;
@@ -662,25 +613,6 @@ bool Settings::Read( const std::string & filename )
     if ( !sval.empty() )
         video_driver = sval;
 
-    // pocketpc
-    if ( PocketPC() ) {
-        ival = config.IntParams( "pointer offset x" );
-        if ( ival )
-            le.SetMouseOffsetX( ival );
-
-        ival = config.IntParams( "pointer offset y" );
-        if ( ival )
-            le.SetMouseOffsetY( ival );
-
-        ival = config.IntParams( "tap delay" );
-        if ( ival )
-            le.SetTapDelayForRightClickEmulation( ival );
-
-        sval = config.StrParams( "pointer rotate fix" );
-        if ( !sval.empty() )
-            System::SetEnvironment( "GAPI_POINTER_FIX", sval.c_str() );
-    }
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -699,7 +631,7 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
         }
     }
 
@@ -709,7 +641,6 @@ bool Settings::Read( const std::string & filename )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
             _controllerPointerSpeed = 0;
-        le.SetControllerPointerSpeed( _controllerPointerSpeed );
     }
 
 #ifndef WITH_TTF
@@ -736,12 +667,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        opt_global.SetModes( GLOBAL_FULLSCREEN );
-    else {
-        ExtResetModes( POCKETPC_TAP_MODE );
-    }
-
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
         opt_global.SetModes( GLOBAL_SHOWCPANEL );
         opt_global.ResetModes( GLOBAL_SHOWRADAR );
@@ -1040,7 +965,7 @@ std::string Settings::GetWriteableDir( const char * subdir )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "writable directory not found" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }
@@ -1170,7 +1095,9 @@ bool Settings::PriceLoyaltyVersion( void ) const
 
 bool Settings::LoadedGameVersion( void ) const
 {
-    return ( game_type & Game::TYPE_LOADFILE ) != 0;
+    // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value
+    // This constant not used here, to not drag dependency on the game.h and game.cpp in compilation target.
+    return ( game_type & 0x80 ) != 0;
 }
 
 bool Settings::ShowControlPanel( void ) const
@@ -1204,12 +1131,6 @@ bool Settings::Unicode( void ) const
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
 
-/* pocketpc mode */
-bool Settings::PocketPC( void ) const
-{
-    return opt_global.Modes( GLOBAL_POCKETPC );
-}
-
 bool Settings::BattleShowGrid( void ) const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
@@ -1234,6 +1155,7 @@ const fheroes2::Size & Settings::VideoMode() const
 void Settings::SetDebug( int d )
 {
     debug = d;
+    Logging::SetDebugLevel( debug );
 }
 
 /**/
@@ -1407,6 +1329,11 @@ Point Settings::LossMapsPositionObject( void ) const
 u32 Settings::LossCountDays( void ) const
 {
     return current_maps_file.LossCountDays();
+}
+
+int Settings::controllerPointerSpeed() const
+{
+    return _controllerPointerSpeed;
 }
 
 void Settings::SetUnicode( bool f )
@@ -1713,16 +1640,6 @@ bool Settings::ExtGameHideInterface( void ) const
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtPocketTapMode( void ) const
-{
-    return ExtModes( POCKETPC_TAP_MODE );
-}
-
-bool Settings::ExtPocketDragDropScroll( void ) const
-{
-    return ExtModes( POCKETPC_DRAG_DROP_SCROLL );
-}
-
 bool Settings::ExtWorldNewVersionWeekOf( void ) const
 {
     return ExtModes( WORLD_NEW_VERSION_WEEKOF );
@@ -1844,7 +1761,7 @@ void Settings::SetPosStatus( const Point & pt )
 
 void Settings::BinarySave( void ) const
 {
-    const std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1856,7 +1773,7 @@ void Settings::BinarySave( void ) const
 
 void Settings::BinaryLoad( void )
 {
-    std::string fname = System::ConcatePath( Game::GetSaveDir(), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );
@@ -1899,9 +1816,6 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
         >> conf.opt_addons >> conf.players;
-
-    if ( conf.game_type & Game::TYPE_CAMPAIGN && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE )
-        msg >> Campaign::CampaignData::Get();
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

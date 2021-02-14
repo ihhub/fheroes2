@@ -31,9 +31,10 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "logging.h"
 #include "rand.h"
-#include "settings.h"
 #include "spell.h"
+#include "statusbar.h"
 #include "text.h"
 #include "world.h"
 
@@ -257,7 +258,7 @@ void Artifact::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif
@@ -666,7 +667,7 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
     else if ( 0xAB == index )
         return Rand( ART_LEVEL3 );
 
-    DEBUG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
 
     return Artifact( UNKNOWN );
 }
@@ -906,11 +907,12 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change /* false */ )
-    : _hero( hero )
+ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar /* = nullptr */ )
+    : _hero( ptr )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, 0 );
@@ -1006,14 +1008,21 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
     if ( art() == Artifact::MAGIC_BOOK ) {
         if ( can_change )
             const_cast<Heroes *>( _hero )->EditSpellBook();
-        else
-            _hero->OpenSpellBook( SpellBook::ALL, false );
+        else {
+            if ( _statusBar != nullptr ) {
+                std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+            }
+            else {
+                _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+            }
+        }
     }
     else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "invalid spell" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
         else if ( _hero->CanLearnSpell( spell ) ) {
             payment_t cost = spell.GetCost();

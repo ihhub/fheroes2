@@ -25,10 +25,11 @@
 #include "game.h"
 #include "game_static.h"
 #include "heroes_base.h"
+#include "logging.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
-#include "settings.h"
+#include "translations.h"
 
 enum
 {
@@ -182,7 +183,7 @@ void Spell::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

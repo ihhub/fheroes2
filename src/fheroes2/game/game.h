@@ -64,7 +64,9 @@ namespace Game
         EDITLOADMAP,
         EDITSAVEMAP,
         EDITSTART,
-        ENDTURN
+        ENDTURN,
+        SELECT_CAMPAIGN_SCENARIO,
+        COMPLETE_CAMPAIGN_SCENARIO
     };
 
     void Init( void );
@@ -83,6 +85,9 @@ namespace Game
         TYPE_HOTSEAT = 0x04,
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
+
+        // TYPE_LOADTYPE used in the Settings::LoadedGameVersion, if you change that value,
+        // change in that function as well.
         TYPE_LOADFILE = 0x80,
         TYPE_MULTI = TYPE_HOTSEAT | TYPE_NETWORK
     };
@@ -237,6 +242,7 @@ namespace Game
     int NetworkHost( void );
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
+    int CompleteCampaignScenario();
 
     bool IsOriginalCampaignPresent();
 

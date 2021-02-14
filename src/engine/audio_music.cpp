@@ -25,7 +25,7 @@
 
 #include "audio_mixer.h"
 #include "audio_music.h"
-#include "system.h"
+#include "logging.h"
 #include "tools.h"
 
 #include <SDL.h>
@@ -49,7 +49,7 @@ void Music::Play( Mix_Music * mix, /*u32 id,*/ bool loop )
     int res = fadein ? Mix_FadeInMusic( mix, loop ? -1 : 0, fadein ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
     if ( res < 0 ) {
-        ERROR( Mix_GetError() );
+        ERROR_LOG( Mix_GetError() );
     }
     else
         music = mix;
@@ -77,7 +77,7 @@ void Music::Play( const std::string & file, bool loop )
         Mix_Music * mix = Mix_LoadMUS( file.c_str() );
 
         if ( !mix ) {
-            ERROR( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() );
         }
         else
             Music::Play( mix, /*id,*/ loop );

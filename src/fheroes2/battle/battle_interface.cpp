@@ -39,11 +39,10 @@
 #include "ground.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "pal.h"
-#include "pocketpc.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -894,7 +893,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
-    bool light = true;
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -906,12 +904,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
     switch ( groundType ) {
     case Maps::Ground::DESERT:
         icn_cbkg = ICN::CBKGDSRT;
-        light = false;
         icn_frng = ICN::FRNG0004;
         break;
     case Maps::Ground::SNOW:
         icn_cbkg = trees ? ICN::CBKGSNTR : ICN::CBKGSNMT;
-        light = false;
         icn_frng = trees ? ICN::FRNG0006 : ICN::FRNG0007;
         break;
     case Maps::Ground::SWAMP:
@@ -920,12 +916,10 @@ Battle::Interface::Interface( Arena & a, s32 center )
         break;
     case Maps::Ground::WASTELAND:
         icn_cbkg = ICN::CBKGCRCK;
-        light = false;
         icn_frng = ICN::FRNG0003;
         break;
     case Maps::Ground::BEACH:
         icn_cbkg = ICN::CBKGBEAC;
-        light = false;
         icn_frng = ICN::FRNG0002;
         break;
     case Maps::Ground::LAVA:
@@ -950,12 +944,11 @@ Battle::Interface::Interface( Arena & a, s32 center )
 
     if ( grave ) {
         icn_cbkg = ICN::CBKGGRAV;
-        light = true;
         icn_frng = ICN::FRNG0001;
     }
 
     // hexagon
-    sf_hexagon = DrawHexagon( light ? fheroes2::GetColorId( 0x78, 0x94, 0 ) : fheroes2::GetColorId( 0x38, 0x48, 0 ) );
+    sf_hexagon = DrawHexagon( fheroes2::GetColorId( 0x68, 0x8C, 0x04 ) );
     sf_cursor = DrawHexagonShadow( 2 );
     sf_shadow = DrawHexagonShadow( 4 );
 
@@ -2346,7 +2339,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell, a );
+                MousePressRightBoardAction( themes, *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2386,9 +2379,9 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
         if ( le.MouseClickLeft() && Cursor::WAR_NONE != cursor.Themes() ) {
             if ( !Board::isValidIndex( index_pos ) ) {
-                DEBUG( DBG_BATTLE, DBG_WARN,
-                       "dst: "
-                           << "out of range" );
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                           "dst: "
+                               << "out of range" );
                 return;
             }
 
@@ -2401,7 +2394,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
                 listlog->AddMessage( str );
             }
 
-            DEBUG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
                 if ( 0 > teleport_src )
@@ -2552,35 +2545,12 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell, Actions & a )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell )
 {
-    const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
 
     if ( b ) {
-        const Settings & conf = Settings::Get();
-        const int allow = GetAllowSwordDirection( index );
-
-        if ( arena.GetCurrentColor() == b->GetColor() || !conf.ExtPocketTapMode() || !allow )
-            Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
-        else {
-            int res = PocketPC::GetCursorAttackDialog( cell.GetPos(), allow );
-
-            switch ( res ) {
-            case Cursor::SWORD_TOPLEFT:
-            case Cursor::SWORD_TOPRIGHT:
-            case Cursor::SWORD_RIGHT:
-            case Cursor::SWORD_BOTTOMRIGHT:
-            case Cursor::SWORD_BOTTOMLEFT:
-            case Cursor::SWORD_LEFT:
-                MouseLeftClickBoardAction( res, cell, a );
-                break;
-
-            default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
-                break;
-            }
-        }
+        Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
     }
 }
 
@@ -2588,32 +2558,6 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
-
-    if ( Settings::Get().ExtPocketTapMode() && !_currentUnit->isArchers() ) // archers always attack
-    {
-        // fast tap; attack
-        if ( Board::isNearIndexes( index_pos, _currentUnit->GetHeadIndex() ) )
-            themes = GetSwordCursorDirection( Board::GetDirection( index, _currentUnit->GetHeadIndex() ) );
-        // or show direction attack
-        else if ( b ) {
-            int res = PocketPC::GetCursorAttackDialog( cell.GetPos(), GetAllowSwordDirection( index ) );
-
-            switch ( res ) {
-            case Cursor::SWORD_TOPLEFT:
-            case Cursor::SWORD_TOPRIGHT:
-            case Cursor::SWORD_RIGHT:
-            case Cursor::SWORD_BOTTOMRIGHT:
-            case Cursor::SWORD_BOTTOMLEFT:
-            case Cursor::SWORD_LEFT:
-                themes = res;
-                break;
-
-            default:
-                Dialog::ArmyInfo( *b, Dialog::READONLY | Dialog::BUTTONS, b->isReflect() );
-                break;
-            }
-        }
-    }
 
     if ( _currentUnit )
         switch ( themes ) {
@@ -3060,7 +3004,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-#ifdef DEBUG
+#ifdef DEBUG_LOG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
     StringReplace( msg, "%{monster}", unit.GetName() );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
@@ -3119,7 +3063,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = NULL;
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-#ifdef DEBUG
+#ifdef DEBUG_LOG
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
 #endif
     status.SetMessage( msg, true );
@@ -4761,7 +4705,12 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 if ( arena.isDisableCastSpell( Spell::NONE, &msg ) )
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                 else {
-                    const Spell spell = hero->OpenSpellBook( SpellBook::CMBT, true );
+                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
+                        status.SetMessage( statusStr );
+                        status.Redraw();
+                    };
+
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
                     if ( spell.isValid() ) {
                         std::string error;
 

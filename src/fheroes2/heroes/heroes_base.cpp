@@ -32,6 +32,7 @@
 #include "kingdom.h"
 #include "race.h"
 #include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 int ArtifactsModifiersResult( int type, const u8 * arts, u32 size, const HeroBase & base, std::string * strs )
@@ -215,9 +216,9 @@ void HeroBase::EditSpellBook( void )
     spell_book.Edit( *this );
 }
 
-Spell HeroBase::OpenSpellBook( int filter, bool canselect ) const
+Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, bool canCastSpell, std::function<void( const std::string & )> * statusCallback ) const
 {
-    return spell_book.Open( *this, filter, canselect );
+    return spell_book.Open( *this, filter, canCastSpell, statusCallback );
 }
 
 bool HeroBase::HaveSpellBook( void ) const
