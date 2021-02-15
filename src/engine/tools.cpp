@@ -32,7 +32,7 @@
 #include <sstream>
 
 #include "error.h"
-#include "system.h"
+#include "logging.h"
 #include "tools.h"
 
 #include <SDL.h>
@@ -79,28 +79,17 @@ std::string StringUpper( std::string str )
     return str;
 }
 
-/* int to string */
-std::string GetString( int value )
-{
-    std::ostringstream stream;
-    stream << value;
-    return stream.str();
-}
-
 std::string GetStringShort( int value )
 {
     if ( std::abs( value ) > 1000 ) {
-        std::ostringstream stream;
+        if ( std::abs( value ) > 1000000 ) {
+            return std::to_string( value / 1000000 ) + 'M';
+        }
 
-        if ( std::abs( value ) > 1000000 )
-            stream << value / 1000000 << "M";
-        else
-            stream << value / 1000 << "K";
-
-        return stream.str();
+        return std::to_string( value / 1000 ) + 'K';
     }
 
-    return GetString( value );
+    return std::to_string( value );
 }
 
 std::string GetString( double value, u8 prec )
@@ -108,27 +97,6 @@ std::string GetString( double value, u8 prec )
     std::ostringstream stream;
     stream << std::setprecision( prec ) << value;
     return stream.str();
-}
-
-std::string GetString( const Point & pt )
-{
-    std::ostringstream os;
-    os << "point: x(" << pt.x << "), y(" << pt.y << ")";
-    return os.str();
-}
-
-std::string GetString( const Size & sz )
-{
-    std::ostringstream os;
-    os << "size: w(" << sz.w << "), h(" << sz.h << ")";
-    return os.str();
-}
-
-std::string GetString( const Rect & rt )
-{
-    std::ostringstream os;
-    os << "rect: x(" << rt.x << "), y(" << rt.y << "), w(" << rt.w << "), h(" << rt.h << ")";
-    return os.str();
 }
 
 std::string GetHexString( int value, int width )
@@ -210,7 +178,7 @@ void StringReplace( std::string & dst, const char * pred, const std::string & sr
 
 void StringReplace( std::string & dst, const char * pred, int value )
 {
-    StringReplace( dst, pred, GetString( value ) );
+    StringReplace( dst, pred, std::to_string( value ) );
 }
 
 std::list<std::string> StringSplit( const std::string & str, const std::string & sep )
@@ -321,7 +289,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
     if ( rw && 1 == SDL_RWwrite( rw, &data[0], data.size(), 1 ) )
         SDL_RWclose( rw );
     else {
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
         return false;
     }
 
@@ -333,11 +301,11 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
     if ( rw == NULL )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
     if ( length < 0 )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
 
     if ( length > 0 ) {
         data.resize( length );

@@ -69,7 +69,7 @@ struct DwellingItem
 class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 {
 public:
-    DwellingsBar( Castle &, const Size & );
+    DwellingsBar( Castle &, const fheroes2::Size & );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & ) override;

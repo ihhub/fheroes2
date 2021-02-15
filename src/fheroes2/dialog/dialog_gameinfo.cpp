@@ -72,7 +72,7 @@ void Dialog::GameInfo( void )
     text.Set( Difficulty::String( conf.GameDifficulty() ), Font::SMALL, 80 );
     text.Blit( pt.x + 140, pt.y + 80 );
 
-    text.Set( GetString( Game::GetRating() ) + " %", Font::SMALL, 80 );
+    text.Set( std::to_string( Game::GetRating() ) + " %", Font::SMALL, 80 );
     text.Blit( pt.x + 230, pt.y + 80 );
 
     text.Set( Maps::SizeString( conf.MapsSize().w ), Font::SMALL, 80 );
@@ -104,7 +104,7 @@ void Dialog::GameInfo( void )
     text.Set( GameOver::GetActualDescription( conf.ConditionLoss() ), Font::SMALL, 272 );
     text.Blit( pt.x + 130, pt.y + 396 );
 
-    text.Set( "score: " + GetString( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
+    text.Set( "score: " + std::to_string( Game::GetGameOverScores() ), Font::YELLOW_SMALL, 80 );
     text.Blit( pt.x + 415 - text.w(), pt.y + 434 );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );

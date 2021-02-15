@@ -27,16 +27,17 @@
 #include "monster_info.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
-class RandomizedDelay : TimeDelay
+class RandomizedDelay : protected TimeDelay
 {
-    uint32_t halfDelay;
-    bool timerIsSet;
-
 public:
     RandomizedDelay( uint32_t delay );
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();
+
+private:
+    uint32_t halfDelay;
+    bool timerIsSet;
 };
 
 struct monsterReturnAnim

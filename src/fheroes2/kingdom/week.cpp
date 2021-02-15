@@ -23,9 +23,9 @@
 #include "week.h"
 #include "engine.h"
 #include "game.h"
-#include "gamedefs.h"
 #include "rand.h"
 #include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 const char * Week::GetName( void ) const

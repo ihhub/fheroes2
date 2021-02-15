@@ -28,8 +28,8 @@
 #include "game_interface.h"
 #include "gamedefs.h"
 #include "localevent.h"
+#include "logging.h"
 #include "settings.h"
-#include "system.h"
 #include "tinyconfig.h"
 
 namespace Game
@@ -296,7 +296,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
                 if ( ival ) {
                     const KeySym sym = GetKeySym( ival );
                     key_events[evnt] = sym;
-                    DEBUG( DBG_GAME, DBG_INFO, "events: " << EventsName( evnt ) << ", key: " << KeySymGetName( sym ) );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "events: " << EventsName( evnt ) << ", key: " << KeySymGetName( sym ) );
                 }
             }
         }
@@ -305,25 +305,16 @@ void Game::HotKeysLoad( const std::string & hotkeys )
 
 void Game::KeyboardGlobalFilter( int sym, int mod )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // system hotkeys
     if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         Cursor::Get().Hide();
         fheroes2::engine().toggleFullScreen();
         Cursor::Get().Show();
-        display.render();
+        fheroes2::Display::instance().render();
+
+        Settings & conf = Settings::Get();
+        conf.setFullScreen( fheroes2::engine().isFullScreen() );
+        conf.Save( "fheroes2.cfg" );
     }
-//     else if ( sym == key_events[EVENT_SYSTEM_SCREENSHOT] ) {
-//         std::ostringstream stream;
-//         stream << System::ConcatePath( Settings::GetSaveDir(), "screenshot_" ) << std::time( 0 );
-//
-// #ifndef WITH_IMAGE
-//         stream << ".bmp";
-// #else
-//         stream << ".png";
-// #endif
-//         if ( display.Save( stream.str().c_str() ) )
-//             DEBUG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
-//     }
+    // DEBUG_LOG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
 }

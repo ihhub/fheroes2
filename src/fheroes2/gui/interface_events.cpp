@@ -34,8 +34,10 @@
 #include "game_over.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
-#include "settings.h"
+#include "system.h"
+#include "text.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
@@ -51,7 +53,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
@@ -179,7 +181,7 @@ void Interface::Basic::EventCastSpell( void )
         ResetFocus( GameFocus::HEROES );
         Redraw();
 
-        const Spell spell = hero->OpenSpellBook( SpellBook::ADVN, true );
+        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
         // apply cast spell
         if ( spell.isValid() ) {
             hero->ActionSpellCast( spell );
@@ -207,6 +209,7 @@ int Interface::Basic::EventAdventureDialog( void )
     Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
     case Dialog::WORLD:
+        ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::OnlyVisible, *this );
         break;
 
     case Dialog::PUZZLE:

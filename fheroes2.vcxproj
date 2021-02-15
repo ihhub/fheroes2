@@ -182,6 +182,7 @@
     <ClCompile Include="src\engine\image.cpp" />
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
+    <ClCompile Include="src\engine\logging.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
     <ClCompile Include="src\engine\rect.cpp" />
@@ -233,6 +234,8 @@
     <ClCompile Include="src\fheroes2\battle\battle_tower.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_troop.cpp" />
     <ClCompile Include="src\fheroes2\campaign\campaign_data.cpp" />
+    <ClCompile Include="src\fheroes2\campaign\campaign_savedata.cpp" />
+    <ClCompile Include="src\fheroes2\campaign\campaign_scenariodata.cpp" />
     <ClCompile Include="src\fheroes2\castle\buildinginfo.cpp" />
     <ClCompile Include="src\fheroes2\castle\captain.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle.cpp" />
@@ -329,6 +332,7 @@
     <ClCompile Include="src\fheroes2\kingdom\puzzle.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\race.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\speed.cpp" />
+    <ClCompile Include="src\fheroes2\kingdom\view_world.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\week.cpp" />
     <ClCompile Include="src\fheroes2\maps\ground.cpp" />
     <ClCompile Include="src\fheroes2\maps\maps.cpp" />
@@ -354,7 +358,6 @@
     <ClCompile Include="src\fheroes2\objects\objwatr.cpp" />
     <ClCompile Include="src\fheroes2\objects\objxloc.cpp" />
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
-    <ClCompile Include="src\fheroes2\pocketpc\pocketpc_dialog.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
     <ClCompile Include="src\fheroes2\resource\maps_text.cpp" />
@@ -385,6 +388,7 @@
     <ClInclude Include="src\engine\font.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_tool.h" />
+    <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
@@ -432,6 +436,8 @@
     <ClInclude Include="src\fheroes2\battle\battle_tower.h" />
     <ClInclude Include="src\fheroes2\battle\battle_troop.h" />
     <ClInclude Include="src\fheroes2\campaign\campaign_data.h" />
+    <ClInclude Include="src\fheroes2\campaign\campaign_savedata.h" />
+    <ClInclude Include="src\fheroes2\campaign\campaign_scenariodata.h" />
     <ClInclude Include="src\fheroes2\castle\buildinginfo.h" />
     <ClInclude Include="src\fheroes2\castle\captain.h" />
     <ClInclude Include="src\fheroes2\castle\castle.h" />
@@ -487,6 +493,7 @@
     <ClInclude Include="src\fheroes2\kingdom\puzzle.h" />
     <ClInclude Include="src\fheroes2\kingdom\race.h" />
     <ClInclude Include="src\fheroes2\kingdom\speed.h" />
+    <ClInclude Include="src\fheroes2\kingdom\view_world.h" />
     <ClInclude Include="src\fheroes2\kingdom\week.h" />
     <ClInclude Include="src\fheroes2\maps\ground.h" />
     <ClInclude Include="src\fheroes2\maps\maps.h" />
@@ -513,7 +520,6 @@
     <ClInclude Include="src\fheroes2\objects\objwatr.h" />
     <ClInclude Include="src\fheroes2\objects\objxloc.h" />
     <ClInclude Include="src\fheroes2\objects\trees.h" />
-    <ClInclude Include="src\fheroes2\pocketpc\pocketpc.h" />
     <ClInclude Include="src\fheroes2\resource\artifact.h" />
     <ClInclude Include="src\fheroes2\resource\artifact_ultimate.h" />
     <ClInclude Include="src\fheroes2\resource\resource.h" />

@@ -29,10 +29,6 @@
 #define MINOR_VERSION 9
 #define INTERMEDIATE_VERSION 0
 
-#include "translations.h"
-#define _( s ) Translation::gettext( s )
-#define _n( a, b, c ) Translation::ngettext( a, b, c )
-
 // hardcore defines: kingdom
 #define KINGDOMMAX 6
 

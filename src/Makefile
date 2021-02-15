@@ -18,7 +18,7 @@ CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
 # Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls
 
 ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror

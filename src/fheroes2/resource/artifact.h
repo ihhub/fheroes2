@@ -31,6 +31,7 @@
 
 class Spell;
 class Heroes;
+class StatusBar;
 
 class Artifact
 {
@@ -235,7 +236,7 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes *, bool mini, bool ro, bool change = false );
+    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
@@ -255,12 +256,15 @@ public:
     virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
-    const Heroes * hero;
-    fheroes2::Image backsf;
     fheroes2::MovableSprite spcursor;
+
+private:
+    const Heroes * _hero;
+    fheroes2::Image backsf;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
+    StatusBar * _statusBar;
     std::string msg;
 };
 

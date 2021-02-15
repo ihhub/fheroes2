@@ -133,7 +133,7 @@ namespace Battle
         {
             listlog = logs;
         };
-        void SetMessage( const std::string &, bool = false );
+        void SetMessage( const std::string & message, bool top = false );
         void Redraw( void );
         const std::string & GetMessage( void ) const;
 
@@ -174,15 +174,15 @@ namespace Battle
     public:
         PopupDamageInfo();
 
-        void SetInfo( const Cell * c, const Unit * a, const Unit * b, const Point & offset );
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const Point & offset );
         void Reset();
         void Redraw( int, int );
 
     private:
-        const Cell * cell;
-        const Unit * attacker;
-        const Unit * defender;
-        bool redraw;
+        const Cell * _cell;
+        const Unit * _attacker;
+        const Unit * _defender;
+        bool _redraw;
     };
 
     class Interface
@@ -292,7 +292,7 @@ namespace Battle
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell &, Actions & );
+        void MousePressRightBoardAction( u32, const Cell & );
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;

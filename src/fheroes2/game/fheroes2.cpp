@@ -38,9 +38,10 @@
 #include "game_video.h"
 #include "gamedefs.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
-#include "settings.h"
 #include "system.h"
+#include "translations.h"
 #include "zzlib.h"
 
 #if defined( FHEROES2_VITA )
@@ -85,10 +86,11 @@ int main( int argc, char ** argv )
     scePowerSetGpuClockFrequency( 222 );
     scePowerSetGpuXbarClockFrequency( 166 );
 #endif
+    Logging::InitLog();
 
     Settings & conf = Settings::Get();
 
-    DEBUG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
+    DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
     conf.SetProgramPath( argv[0] );
 
@@ -159,7 +161,7 @@ int main( int argc, char ** argv )
             if ( conf.FullScreen() != fheroes2::engine().isFullScreen() )
                 fheroes2::engine().toggleFullScreen();
 
-            display.resize( conf.VideoMode().w, conf.VideoMode().h );
+            display.resize( conf.VideoMode().width, conf.VideoMode().height );
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
@@ -176,8 +178,8 @@ int main( int argc, char ** argv )
             fheroes2::engine().setIcon( appIcon );
 #endif
 
-            DEBUG( DBG_GAME, DBG_INFO, conf.String() );
-            // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+            // DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
             if ( !AGG::Init() ) {
@@ -260,6 +262,12 @@ int main( int argc, char ** argv )
                 case Game::STARTGAME:
                     rs = Game::StartGame();
                     break;
+                case Game::SELECT_CAMPAIGN_SCENARIO:
+                    rs = Game::SelectCampaignScenario();
+                    break;
+                case Game::COMPLETE_CAMPAIGN_SCENARIO:
+                    rs = Game::CompleteCampaignScenario();
+                    break;
 
                 default:
                     break;
@@ -268,7 +276,7 @@ int main( int argc, char ** argv )
         }
 #ifndef ANDROID
         catch ( const Error::Exception & ) {
-            VERBOSE( std::endl << conf.String() );
+            VERBOSE_LOG( std::endl << conf.String() );
         }
 #endif
     fheroes2::Display::instance().release();
@@ -290,6 +298,11 @@ bool ReadConfigs( void )
         if ( System::IsFile( *it ) ) {
             if ( conf.Read( *it ) ) {
                 isValidConfigurationFile = true;
+                const std::string & externalCommand = conf.externalMusicCommand();
+                if ( !externalCommand.empty() )
+                    Music::SetExtCommand( externalCommand );
+
+                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
                 break;
             }
         }
@@ -354,7 +367,7 @@ void SetLangEnvPath( const Settings & conf )
                 Translation::setDomain( "fheroes2" );
         }
         else
-            ERROR( "translation not found: " << mofile );
+            ERROR_LOG( "translation not found: " << mofile );
     }
 #else
     (void)conf;

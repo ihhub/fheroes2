@@ -28,11 +28,12 @@
 #include "heroes.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "monster.h"
 #include "rand.h"
-#include "settings.h"
 #include "spell.h"
+#include "text.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -249,7 +250,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
     }
 
     if ( apply ) {
-        DEBUG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
         SpellCasted( spell );
         return true;
     }

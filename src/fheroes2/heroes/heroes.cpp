@@ -38,6 +38,7 @@
 #include "ground.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
@@ -45,8 +46,8 @@
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "speed.h"
+#include "text.h"
 #include "world.h"
 
 const char * Heroes::GetName( int id )
@@ -345,7 +346,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         portrait = st.get();
 
         if ( UNKNOWN <= portrait ) {
-            DEBUG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait );
             portrait = hid;
         }
 
@@ -452,7 +453,7 @@ void Heroes::PostLoad( void )
         AI::Get().HeroesPostLoad( *this );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
 }
 
 int Heroes::GetID( void ) const
@@ -633,7 +634,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
-        const Troop * troop = const_cast<Army &>( army ).GetSlowestTroop();
+        const Troop * troop = army.GetSlowestTroop();
 
         if ( troop )
             switch ( troop->GetSpeed() ) {
@@ -765,7 +766,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 bool Heroes::Recruit( int cl, const Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
-        DEBUG( DBG_GAME, DBG_WARN, "not freeman" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not freeman" );
         return false;
     }
 
@@ -1402,7 +1403,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     const u32 maxMovePoints = GetMaxMovePoints();
 
     uint32_t total = world.getDistance( *this, dst );
-    DEBUG( DBG_GAME, DBG_TRACE, "path distance: " << total );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total );
 
     if ( total > 0 ) {
         // check if last step is diagonal and pre-adjust the total
@@ -1425,7 +1426,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
         return 4;
     }
     else {
-        DEBUG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
     }
 
     return 0;
@@ -1445,7 +1446,7 @@ int Heroes::LevelUpPrimarySkill( void )
 {
     int skill = Skill::Primary::LevelUp( race, GetLevel() );
 
-    DEBUG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( skill ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( skill ) );
     return skill;
 }
 
@@ -1455,7 +1456,7 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
     Skill::Secondary sec2;
 
     secondary_skills.FindSkillsForLevelUp( race, sec1, sec2 );
-    DEBUG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
     const Skill::Secondary * selected = NULL;
 
     if ( autoselect ) {
@@ -1478,7 +1479,7 @@ void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
 
     // level up sec. skill
     if ( selected ) {
-        DEBUG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected->Skill() ) );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected->Skill() ) );
         Skill::Secondary * secs = secondary_skills.FindSkill( selected->Skill() );
 
         if ( secs )
@@ -2002,7 +2003,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
 
     // not found, all heroes busy
     if ( freeman_heroes.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
         return NULL;
     }
 

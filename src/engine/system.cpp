@@ -31,6 +31,7 @@
 #include <clocale>
 #endif
 
+#include "logging.h"
 #include "system.h"
 #include <SDL.h>
 
@@ -133,7 +134,7 @@ ListFiles System::GetListFiles( const std::string & prog, const std::string & pr
     ListFiles res;
 
 #if defined( ANDROID )
-    VERBOSE( prefix << ", " << filter );
+    VERBOSE_LOG( prefix << ", " << filter );
 
     // check assets
     StreamFile sf;
@@ -299,20 +300,6 @@ size_t System::GetMemoryUsage( void )
 #else
     return 0;
 #endif
-}
-
-std::string System::GetTime( void )
-{
-    time_t raw;
-    struct tm * tmi;
-    char buf[13] = {0};
-
-    std::time( &raw );
-    tmi = std::localtime( &raw );
-
-    std::strftime( buf, sizeof( buf ) - 1, "%X", tmi );
-
-    return std::string( buf );
 }
 
 bool System::IsFile( const std::string & name, bool writable )

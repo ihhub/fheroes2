@@ -225,7 +225,7 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i )
         skills[i] = i;
 
-    Dialog::FrameBorder frameborder( Size( 310, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( fheroes2::Size( 310, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSecSkill listbox( area );
@@ -276,14 +276,14 @@ Spell Dialog::SelectSpell( int cur )
     for ( size_t i = 0; i < spells.size(); ++i )
         spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion
 
-    Dialog::FrameBorder frameborder( Size( 340, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( fheroes2::Size( 340, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumSpell listbox( area );
 
     listbox.SetListContent( spells );
     if ( cur != Spell::NONE )
-        listbox.SetCurrent( static_cast<int>( cur ) );
+        listbox.SetCurrent( cur );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
@@ -321,14 +321,14 @@ Artifact Dialog::SelectArtifact( int cur )
     for ( size_t i = 0; i < artifacts.size(); ++i )
         artifacts[i] = static_cast<int>( i ); // safe to do this as the number of artifacts can't be more than 2 billion
 
-    Dialog::FrameBorder frameborder( Size( 370, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( fheroes2::Size( 370, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumArtifact listbox( area );
 
     listbox.SetListContent( artifacts );
     if ( cur != Artifact::UNKNOWN )
-        listbox.SetCurrent( static_cast<int>( cur ) );
+        listbox.SetCurrent( cur );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
@@ -366,7 +366,7 @@ Monster Dialog::SelectMonster( int id )
     for ( size_t i = 0; i < monsters.size(); ++i )
         monsters[i] = static_cast<int>( i + 1 ); // skip Monser::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
 
-    Dialog::FrameBorder frameborder( Size( 260, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( fheroes2::Size( 260, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumMonster listbox( area );
@@ -411,7 +411,7 @@ int Dialog::SelectHeroes( int cur )
     for ( size_t i = 0; i < heroes.size(); ++i )
         heroes[i] = static_cast<int>( i ); // safe to do this as the heroes of spells can't be more than 2 billion
 
-    Dialog::FrameBorder frameborder( Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
+    Dialog::FrameBorder frameborder( fheroes2::Size( 240, 280 ), fheroes2::AGG::GetICN( ICN::TEXTBAK2, 0 ) );
     const Rect & area = frameborder.GetArea();
 
     SelectEnumHeroes listbox( area );

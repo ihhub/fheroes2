@@ -164,13 +164,12 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::GAME_HIDE_INTERFACE );
 
-    if ( !conf.PocketPC() )
-        states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
+    states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
 
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 
-    if ( conf.VideoMode() == Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    if ( conf.VideoMode() == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
         states.push_back( Settings::GAME_USE_FADE );
 
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
@@ -214,11 +213,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
-
-    if ( conf.PocketPC() ) {
-        states.push_back( Settings::POCKETPC_TAP_MODE );
-        states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
-    }
 
     std::sort( states.begin(), states.end(),
                [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
@@ -269,6 +263,5 @@ void Dialog::ExtSettings( bool readonly )
         }
     }
 
-    le.SetTapMode( conf.ExtPocketTapMode() );
     Settings::Get().BinarySave();
 }

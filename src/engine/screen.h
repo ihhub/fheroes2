@@ -43,9 +43,9 @@ namespace fheroes2
             return _isFullScreen;
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
+        virtual std::vector<Size> getAvailableResolutions() const
         {
-            return std::vector<std::pair<int, int> >();
+            return std::vector<Size>();
         }
 
         virtual void setTitle( const std::string & ) {}

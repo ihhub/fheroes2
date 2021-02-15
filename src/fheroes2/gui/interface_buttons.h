@@ -55,14 +55,14 @@ namespace Interface
         fheroes2::Button buttonFile;
         fheroes2::Button buttonSystem;
 
-        Rect nextHeroRect;
-        Rect movementRect;
-        Rect kingdomRect;
-        Rect spellRect;
-        Rect endTurnRect;
-        Rect adventureRect;
-        Rect fileRect;
-        Rect systemRect;
+        fheroes2::Rect nextHeroRect;
+        fheroes2::Rect movementRect;
+        fheroes2::Rect kingdomRect;
+        fheroes2::Rect spellRect;
+        fheroes2::Rect endTurnRect;
+        fheroes2::Rect adventureRect;
+        fheroes2::Rect fileRect;
+        fheroes2::Rect systemRect;
 
         void SetButtonStatus();
     };

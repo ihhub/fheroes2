@@ -22,7 +22,7 @@
 
 #include "font.h"
 #include "engine.h"
-#include "system.h"
+#include "logging.h"
 
 #ifdef WITH_TTF
 
@@ -39,7 +39,7 @@ FontTTF::~FontTTF()
 void FontTTF::Init( void )
 {
     if ( 0 != TTF_Init() )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
 }
 
 void FontTTF::Quit( void )
@@ -58,7 +58,7 @@ bool FontTTF::Open( const std::string & filename, int size )
         TTF_CloseFont( ptr );
     ptr = TTF_OpenFont( filename.c_str(), size );
     if ( !ptr )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
     return ptr;
 }
 
@@ -120,7 +120,7 @@ FontPSF::FontPSF( const std::string & filePath, const fheroes2::Size & size )
     , _size( size )
 {
     if ( _data.empty() )
-        ERROR( "empty buffer" );
+        ERROR_LOG( "empty buffer" );
 }
 
 fheroes2::Image FontPSF::RenderText( const std::string & text, const uint8_t color ) const

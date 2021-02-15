@@ -639,8 +639,9 @@ int Castle::OpenDialog( bool readonly )
                     else if ( le.MousePressRight( ( *it ).coord ) )
                         Dialog::Message( GetStringBuilding( ( *it ).id ), GetDescriptionBuilding( ( *it ).id ), Font::BIG );
 
-                    if ( le.MouseCursor( ( *it ).coord ) )
-                        msg_status = GetStringBuilding( ( *it ).id );
+                    if ( le.MouseCursor( ( *it ).coord ) ) {
+                        msg_status = buildingStatusMessage( ( *it ).id );
+                    }
                 }
             }
         }
@@ -671,7 +672,6 @@ int Castle::OpenDialog( bool readonly )
                 buttonExit.draw();
             cursor.Show();
             display.render();
-            need_redraw = false;
         }
 
         // status message exit
@@ -773,7 +773,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( wood, display, dst_pt.x, dst_pt.y );
 
     // count wood
-    text.Set( GetString( resource.wood ), Font::SMALL );
+    text.Set( std::to_string( resource.wood ), Font::SMALL );
     dst_pt.y += 22;
     text.Blit( dst_pt.x + ( wood.width() - text.w() ) / 2, dst_pt.y );
 
@@ -784,7 +784,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( sulfur, display, dst_pt.x, dst_pt.y );
 
     // count sulfur
-    text.Set( GetString( resource.sulfur ) );
+    text.Set( std::to_string( resource.sulfur ) );
     dst_pt.y += 26;
     text.Blit( dst_pt.x + ( sulfur.width() - text.w() ) / 2, dst_pt.y );
 
@@ -795,7 +795,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( crystal, display, dst_pt.x, dst_pt.y );
 
     // count crystal
-    text.Set( GetString( resource.crystal ) );
+    text.Set( std::to_string( resource.crystal ) );
     dst_pt.y += 33;
     text.Blit( dst_pt.x + ( crystal.width() - text.w() ) / 2, dst_pt.y );
 
@@ -806,7 +806,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( mercury, display, dst_pt.x, dst_pt.y );
 
     // count mercury
-    text.Set( GetString( resource.mercury ) );
+    text.Set( std::to_string( resource.mercury ) );
     dst_pt.y += 34;
     text.Blit( dst_pt.x + ( mercury.width() - text.w() ) / 2, dst_pt.y );
 
@@ -817,7 +817,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( ore, display, dst_pt.x, dst_pt.y );
 
     // count ore
-    text.Set( GetString( resource.ore ) );
+    text.Set( std::to_string( resource.ore ) );
     dst_pt.y += 26;
     text.Blit( dst_pt.x + ( ore.width() - text.w() ) / 2, dst_pt.y );
 
@@ -828,7 +828,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( gems, display, dst_pt.x, dst_pt.y );
 
     // count gems
-    text.Set( GetString( resource.gems ) );
+    text.Set( std::to_string( resource.gems ) );
     dst_pt.y += 26;
     text.Blit( dst_pt.x + ( gems.width() - text.w() ) / 2, dst_pt.y );
 
@@ -839,7 +839,7 @@ Rect Castle::RedrawResourcePanel( const Point & pt ) const
     fheroes2::Blit( gold, display, dst_pt.x, dst_pt.y );
 
     // count gold
-    text.Set( GetString( resource.gold ) );
+    text.Set( std::to_string( resource.gold ) );
     dst_pt.y += 24;
     text.Blit( dst_pt.x + ( gold.width() - text.w() ) / 2, dst_pt.y );
 

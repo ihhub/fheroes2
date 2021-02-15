@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "luck.h"
-#include "gamedefs.h"
+#include "translations.h"
 
 const std::string & Luck::String( int luck )
 {

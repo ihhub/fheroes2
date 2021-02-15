@@ -22,6 +22,7 @@
 
 #include "difficulty.h"
 #include "resource.h"
+#include "translations.h"
 
 const std::string & Difficulty::String( int difficulty )
 {

@@ -26,7 +26,7 @@
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {
 public:
-    PrimarySkillsBar( const Heroes *, bool mini );
+    PrimarySkillsBar( const Heroes * hero, bool mini );
 
     void SetTextOff( s32, s32 );
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
@@ -38,8 +38,8 @@ public:
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
-    const Heroes * hero;
+private:
+    const Heroes * _hero;
     fheroes2::Image backsf;
     bool use_mini_sprite;
     std::vector<int> content;
@@ -61,10 +61,10 @@ public:
 
     bool QueueEventProcessing( std::string * = NULL );
 
-protected:
+private:
     fheroes2::Image backsf;
     const bool use_mini_sprite;
     const bool can_change;
     std::string msg;
-    const Heroes & hero;
+    const Heroes & _hero;
 };

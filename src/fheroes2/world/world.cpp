@@ -32,12 +32,12 @@
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
+#include "logging.h"
 #include "maps_actions.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 
@@ -73,10 +73,10 @@ void MapObjects::clear( void )
 void MapObjects::add( MapObjectSimple * obj )
 {
     if ( obj ) {
-        std::map<u32, MapObjectSimple *> & map = *this;
-        if ( map[obj->GetUID()] )
-            delete map[obj->GetUID()];
-        map[obj->GetUID()] = obj;
+        std::map<u32, MapObjectSimple *> & currentMap = *this;
+        if ( currentMap[obj->GetUID()] )
+            delete currentMap[obj->GetUID()];
+        currentMap[obj->GetUID()] = obj;
     }
 }
 
@@ -493,7 +493,8 @@ void World::pickRumor()
         assert( 0 );
         return;
     }
-    else if ( vec_rumors.size() == 1 ) {
+
+    if ( vec_rumors.size() == 1 ) {
         _rumor = &vec_rumors.front();
         assert( 0 );
         return;
@@ -661,7 +662,7 @@ s32 World::NextTeleport( s32 index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
     }
 
     const int32_t * randValue = Rand::Get( teleports );
@@ -679,7 +680,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "is empty" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
             return MapsIndexes();
         }
 
@@ -705,7 +706,7 @@ s32 World::NextWhirlpool( s32 index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
     }
 
     const int32_t * randValue = Rand::Get( whilrpools );
@@ -853,9 +854,9 @@ EventsDate World::GetEventsDate( int color ) const
 std::string World::DateString( void ) const
 {
     std::ostringstream os;
-    os << "month: " << static_cast<int>( GetMonth() ) << ", "
-       << "week: " << static_cast<int>( GetWeek() ) << ", "
-       << "day: " << static_cast<int>( GetDay() );
+    os << "month: " << GetMonth() << ", "
+       << "week: " << GetWeek() << ", "
+       << "day: " << GetDay();
     return os.str();
 }
 
@@ -1257,12 +1258,12 @@ void EventDate::LoadFromMP2( StreamBuf st )
 
         // message
         message = Game::GetEncodeString( st.toString() );
-        DEBUG( DBG_GAME, DBG_INFO,
-               "event"
-                   << ": " << message );
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                   "event"
+                       << ": " << message );
     }
     else {
-        DEBUG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
     }
 }
 

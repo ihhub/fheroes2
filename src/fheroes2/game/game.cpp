@@ -37,6 +37,7 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_tiles.h"
 #include "monster.h"
 #include "mp2.h"
@@ -48,6 +49,7 @@
 #include "skill.h"
 #include "spell.h"
 #include "system.h"
+#include "text.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "world.h"
@@ -193,8 +195,6 @@ void Game::Init( void )
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
     le.SetGlobalFilter( true );
-
-    le.SetTapMode( conf.ExtPocketTapMode() );
 
     Game::AnimateDelaysInitialize();
 
@@ -404,7 +404,7 @@ void Game::UpdateGlobalDefines( const std::string & spec )
         MonsterUpdateStatic( xml_globals->FirstChildElement( "monster_upgrade" ) );
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif
@@ -505,7 +505,7 @@ std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
         break;
 
     case Skill::Level::EXPERT:
-        res = shorts ? GetStringShort( count ) : GetString( count );
+        res = shorts ? GetStringShort( count ) : std::to_string( count );
         break;
 
     default:
@@ -523,11 +523,11 @@ std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
         else
             max = static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) );
 
-        res = GetString( min );
+        res = std::to_string( min );
 
         if ( min != max ) {
             res.append( "-" );
-            res.append( GetString( max ) );
+            res.append( std::to_string( max ) );
         }
     }
 

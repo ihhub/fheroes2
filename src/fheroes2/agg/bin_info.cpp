@@ -21,6 +21,7 @@
 #include "bin_info.h"
 #include "agg.h"
 #include "battle_cell.h"
+#include "logging.h"
 #include "monster.h"
 
 #include <algorithm>
@@ -31,8 +32,8 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim );
-        AnimationReference createAnimReference( int monsterID );
+        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim ) const;
+        AnimationReference createAnimReference( int monsterID ) const;
         MonsterAnimInfo getAnimInfo( int monsterID );
 
     private:
@@ -315,7 +316,7 @@ namespace Bin_Info
                 return info;
             }
             else {
-                DEBUG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
             }
         }
         return MonsterAnimInfo();
@@ -358,12 +359,12 @@ namespace Bin_Info
         return angles.size() - 1;
     }
 
-    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID )
+    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID ) const
     {
         return AnimationSequence( info.animationFrames.at( animID ) );
     }
 
-    AnimationReference MonsterAnimCache::createAnimReference( int monsterID )
+    AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const
     {
         return AnimationReference( monsterID );
     }

@@ -21,10 +21,7 @@
  ***************************************************************************/
 
 #include "position.h"
-#include "game.h"
 #include "maps.h"
-#include "settings.h"
-#include "world.h"
 
 MapPosition::MapPosition( const Point & pt )
     : center( pt )

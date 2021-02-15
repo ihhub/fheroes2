@@ -39,6 +39,7 @@
 #include "font.h"
 #include "game.h"
 #include "image_tool.h"
+#include "logging.h"
 #include "m82.h"
 #include "mus.h"
 #include "pal.h"
@@ -192,13 +193,13 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
         }
 
         if ( v.size() ) {
-            DEBUG( DBG_ENGINE, DBG_INFO, sound );
+            DEBUG_LOG( DBG_ENGINE, DBG_INFO, sound );
             return;
         }
     }
 #endif
 
-    DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadChunk( M82::GetString( m82 ) );
 
     if ( body.size() ) {
@@ -254,7 +255,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 /* load XMI object */
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
-    DEBUG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     const std::vector<u8> & body = ReadChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
     if ( body.size() )
@@ -332,7 +333,7 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols )
                     else
                         loop_sounds.push_back( loop_sound_t( m82, ch ) );
 
-                    DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+                    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
                 }
             }
         }
@@ -345,7 +346,7 @@ void AGG::PlaySound( int m82 )
     const Settings & conf = Settings::Get();
 
     if ( conf.Sound() ) {
-        DEBUG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
         const std::vector<u8> & v = AGG::GetWAV( m82 );
         const int ch = Mixer::Play( &v[0], v.size(), -1, false );
         Mixer::Pause( ch );
@@ -385,7 +386,8 @@ void AGG::PlayMusic( int mus, bool loop )
                 StringReplace( filename, ".ogg", ".mp3" );
 
                 if ( !System::IsFile( filename ) ) {
-                    DEBUG( DBG_ENGINE, DBG_WARN, "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) ) << ", skipping..." );
+                    DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) ) << ", skipping..." );
                     filename.clear();
                 }
             }
@@ -395,13 +397,13 @@ void AGG::PlayMusic( int mus, bool loop )
             Music::Play( filename, loop );
             isSongFound = true;
         }
-        DEBUG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::MAPPED ) );
+        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::MAPPED ) );
     }
 #ifdef WITH_AUDIOCD
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         isSongFound = true;
-        DEBUG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
+        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
 
@@ -432,7 +434,7 @@ void AGG::PlayMusic( int mus, bool loop )
             Music::Play( file, loop );
 #endif
         }
-        DEBUG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
+        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     }
 }
 
@@ -451,7 +453,7 @@ void AGG::PlayMusic( int mus, bool loop )
 //      fnt_cache[ch].sfs[2] = fonts[1].RenderUnicodeChar( ch, white, !conf.FontNormalRenderBlended() );
 //      fnt_cache[ch].sfs[3] = fonts[1].RenderUnicodeChar( ch, yellow, !conf.FontNormalRenderBlended() );
 //
-//     DEBUG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
+//     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "0x" << std::hex << ch );
 // }
 
 void AGG::LoadFNT( void )
@@ -459,7 +461,7 @@ void AGG::LoadFNT( void )
     // const Settings & conf = Settings::Get();
     //
     // if ( !conf.Unicode() ) {
-    //     DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    //     DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
     // }
     // else if ( fnt_cache.empty() ) {
     //     const std::string letters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
@@ -469,12 +471,12 @@ void AGG::LoadFNT( void )
     //         LoadTTFChar( *it );
     //
     //     if ( fnt_cache.empty() ) {
-    //         DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
     //     }
     //     else {
-    //         DEBUG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
-    //         DEBUG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
-    //         DEBUG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
+    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "normal fonts " << conf.FontsNormal() );
+    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "small fonts " << conf.FontsSmall() );
+    //         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "preload english charsets" );
     //     }
     // }
 }
@@ -487,14 +489,14 @@ u32 AGG::GetFontHeight( bool small )
 #else
 void AGG::LoadFNT( void )
 {
-    DEBUG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
+    DEBUG_LOG( DBG_ENGINE, DBG_INFO, "use bitmap fonts" );
 }
 #endif
 
 // This exists to avoid exposing AGG::ReadChunk
 std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
 {
-    DEBUG( DBG_ENGINE, DBG_TRACE, frm_file );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, frm_file );
     return AGG::ReadChunk( frm_file );
 }
 
@@ -509,7 +511,7 @@ bool AGG::Init( void )
 {
     // read data dir
     if ( !ReadDataDir() ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "data files not found" );
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "data files not found" );
 
 #ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -535,7 +537,7 @@ bool AGG::Init( void )
     fonts = new FontTTF[2];
 
     if ( conf.Unicode() ) {
-        DEBUG( DBG_ENGINE, DBG_INFO, "fonts: " << font1 << ", " << font2 );
+        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "fonts: " << font1 << ", " << font2 );
         if ( !fonts[1].Open( font1, conf.FontsNormalSize() ) || !fonts[0].Open( font2, conf.FontsSmallSize() ) )
             conf.SetUnicode( false );
     }
@@ -641,7 +643,7 @@ namespace fheroes2
         }
 
         // Helper function for LoadModifiedICN
-        void CopyICNWithPalette( int icnId, int originalIcnId, int paletteType )
+        void CopyICNWithPalette( int icnId, int originalIcnId, const PAL::PaletteType paletteType )
         {
             GetICN( originalIcnId, 0 ); // always avoid calling LoadOriginalICN directly
 
@@ -656,7 +658,7 @@ namespace fheroes2
         {
             switch ( id ) {
             case ICN::ROUTERED:
-                CopyICNWithPalette( id, ICN::ROUTE, PAL::RED );
+                CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
                 LoadOriginalICN( id );
@@ -666,16 +668,16 @@ namespace fheroes2
                 }
                 return true;
             case ICN::YELLOW_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::YELLOW_SMALFONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::GRAY_SMALL_FONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
                 return true;
             case ICN::BTNBATTLEONLY:
                 _icnVsSprite[id].resize( 2 );
@@ -1001,7 +1003,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::LISTBOX_EVIL:
-                CopyICNWithPalette( id, ICN::LISTBOX, PAL::GRAY );
+                CopyICNWithPalette( id, ICN::LISTBOX, PAL::PaletteType::GRAY );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     ApplyPalette( _icnVsSprite[id][i], 2 );
                 }

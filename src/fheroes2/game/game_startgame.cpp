@@ -41,12 +41,13 @@
 #include "game_over.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "maps_tiles.h"
 #include "mus.h"
 #include "route.h"
-#include "settings.h"
 #include "system.h"
+#include "text.h"
 #include "world.h"
 
 namespace
@@ -154,7 +155,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         }
     }
     else if ( castle.isFriends( conf.CurrentColor() ) ) {
-        ( *it )->OpenDialog( true );
+        castle.OpenDialog( true );
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
@@ -162,7 +163,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else {
+        else if ( it != myCastles.end() ) {
             basicInterface.SetFocus( *it );
         }
     }
@@ -532,10 +533,10 @@ int Interface::Basic::StartGame( void )
                 if ( !kingdom.isPlay() || ( skip_turns && !player.isColor( conf.CurrentColor() ) ) )
                     continue;
 
-                DEBUG( DBG_GAME, DBG_INFO,
-                       std::endl
-                           << world.DateString() << ", "
-                           << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+                DEBUG_LOG( DBG_GAME, DBG_INFO,
+                           std::endl
+                               << world.DateString() << ", "
+                               << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -573,7 +574,7 @@ int Interface::Basic::StartGame( void )
                 default:
                     if ( res == Game::ENDTURN ) {
                         statusWindow.Reset();
-                        statusWindow.SetState( STATUS_AITURN );
+                        statusWindow.SetState( StatusType::STATUS_AITURN );
 
                         cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
@@ -799,41 +800,18 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
-        if ( conf.ExtPocketTapMode() ) {
-            // scroll area maps left
-            if ( le.MouseCursor( GetScrollLeft() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_LEFT );
-            else
-                // scroll area maps right
-                if ( le.MouseCursor( GetScrollRight() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_RIGHT );
-            else
-                // scroll area maps top
-                if ( le.MouseCursor( GetScrollTop() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_TOP );
-            else
-                // scroll area maps bottom
-                if ( le.MouseCursor( GetScrollBottom() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_BOTTOM );
-
-            // disable right click emulation
-            if ( gameArea.NeedScroll() )
-                le.SetTapMode( false );
-        }
-        else {
-            if ( fheroes2::cursor().isFocusActive() ) {
-                int scrollPosition = SCROLL_NONE;
-                if ( le.MouseCursor( GetScrollLeft() ) )
-                    scrollPosition |= SCROLL_LEFT;
-                else if ( le.MouseCursor( GetScrollRight() ) )
-                    scrollPosition |= SCROLL_RIGHT;
-                if ( le.MouseCursor( GetScrollTop() ) )
-                    scrollPosition |= SCROLL_TOP;
-                else if ( le.MouseCursor( GetScrollBottom() ) )
-                    scrollPosition |= SCROLL_BOTTOM;
-                if ( scrollPosition != SCROLL_NONE )
-                    gameArea.SetScroll( scrollPosition );
-            }
+        if ( fheroes2::cursor().isFocusActive() ) {
+            int scrollPosition = SCROLL_NONE;
+            if ( le.MouseCursor( GetScrollLeft() ) )
+                scrollPosition |= SCROLL_LEFT;
+            else if ( le.MouseCursor( GetScrollRight() ) )
+                scrollPosition |= SCROLL_RIGHT;
+            if ( le.MouseCursor( GetScrollTop() ) )
+                scrollPosition |= SCROLL_TOP;
+            else if ( le.MouseCursor( GetScrollBottom() ) )
+                scrollPosition |= SCROLL_BOTTOM;
+            if ( scrollPosition != SCROLL_NONE )
+                gameArea.SetScroll( scrollPosition );
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
@@ -910,10 +888,6 @@ int Interface::Basic::HumanTurn( bool isload )
             Redraw();
             cursor.Show();
             display.render();
-
-            // enable right click emulation
-            if ( conf.ExtPocketTapMode() )
-                le.SetTapMode( true );
 
             continue;
         }
@@ -1140,7 +1114,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
         const Settings & conf = Settings::Get();
         const Maps::Tiles & tile = world.GetTiles( index_maps );
 
-        DEBUG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
 
         if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
             Dialog::QuickInfo( tile );

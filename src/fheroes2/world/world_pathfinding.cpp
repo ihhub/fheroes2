@@ -20,9 +20,10 @@
 
 #include <set>
 
-#include "world_pathfinding.h"
 #include "ground.h"
+#include "logging.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool fromWater )
 {
@@ -239,7 +240,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
         else {
@@ -300,7 +301,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill )
 {
-    if ( _pathStart != start || _currentColor != color || _armyStrength != armyStrength || _pathfindingSkill != skill ) {
+    if ( _pathStart != start || _currentColor != color || std::fabs( _armyStrength - armyStrength ) > 0.001 || _pathfindingSkill != skill ) {
         _pathStart = start;
         _currentColor = color;
         _armyStrength = armyStrength;
@@ -450,7 +451,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
 
@@ -483,7 +484,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
         else {

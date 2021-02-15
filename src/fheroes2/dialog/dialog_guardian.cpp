@@ -51,7 +51,7 @@ public:
         fheroes2::DrawBorder( curs, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
 
-    void Redraw( void )
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Blit( back, display, x, y );
@@ -62,13 +62,13 @@ public:
             if ( readonly )
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LOCATORS, 24 ), display, x + 33, y + 5 );
 
-            Text text( GetString( troop.GetCount() ), Font::SMALL );
+            Text text( std::to_string( troop.GetCount() ), Font::SMALL );
             text.Blit( x + ( back.width() - text.w() ) / 2, y + back.height() - 11 );
         }
 
         if ( select )
             fheroes2::Blit( curs, display, x, y );
-    };
+    }
 
     const Troop & troop;
     bool select;

@@ -44,10 +44,10 @@
 namespace
 {
     // Returns nearest screen supported resolution
-    std::pair<int, int> GetNearestResolution( int width, int height, const std::vector<std::pair<int, int> > & resolutions )
+    fheroes2::Size GetNearestResolution( int width, int height, const std::vector<fheroes2::Size> & resolutions )
     {
         if ( resolutions.empty() )
-            return std::make_pair( width, height );
+            return fheroes2::Size( width, height );
 
         if ( width < 1 )
             width = 1;
@@ -59,7 +59,7 @@ namespace
 
         std::vector<double> similarity( resolutions.size(), 0 );
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            similarity[i] = std::fabs( resolutions[i].first - x ) / x + std::fabs( resolutions[i].second - y ) / y;
+            similarity[i] = std::fabs( resolutions[i].width - x ) / x + std::fabs( resolutions[i].height - y ) / y;
         }
 
         const std::vector<double>::difference_type id = std::distance( similarity.begin(), std::min_element( similarity.begin(), similarity.end() ) );
@@ -67,26 +67,46 @@ namespace
         return resolutions[id];
     }
 
-    bool SortResolutions( const std::pair<int, int> & first, const std::pair<int, int> & second )
+    bool SortResolutions( const fheroes2::Size & first, const fheroes2::Size & second )
     {
-        return first.first > second.first || ( first.first == second.first && first.second >= second.second );
+        return first.width > second.width || ( first.width == second.width && first.height >= second.height );
     }
 
-    bool IsLowerThanDefaultRes( const std::pair<int, int> & value )
+    bool IsLowerThanDefaultRes( const fheroes2::Size & value )
     {
-        return value.first < fheroes2::Display::DEFAULT_WIDTH || value.second < fheroes2::Display::DEFAULT_HEIGHT;
+        return value.width < fheroes2::Display::DEFAULT_WIDTH || value.height < fheroes2::Display::DEFAULT_HEIGHT;
     }
 
-    std::vector<std::pair<int, int> > FilterResolutions( const std::set<std::pair<int, int> > & resolutionSet )
+    std::vector<fheroes2::Size> FilterResolutions( const std::set<fheroes2::Size> & resolutionSet )
     {
-        if ( resolutionSet.empty() )
-            return std::vector<std::pair<int, int> >();
+        if ( resolutionSet.empty() ) {
+            const std::vector<fheroes2::Size> resolutions = {fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )};
+            return resolutions;
+        }
 
-        std::vector<std::pair<int, int> > resolutions( resolutionSet.begin(), resolutionSet.end() );
+        std::vector<fheroes2::Size> resolutions( resolutionSet.begin(), resolutionSet.end() );
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
-        if ( resolutions.front().first >= fheroes2::Display::DEFAULT_WIDTH && resolutions.front().first >= fheroes2::Display::DEFAULT_HEIGHT ) {
+        // Remove all resolutions lower than the original.
+        if ( resolutions.front().width >= fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height >= fheroes2::Display::DEFAULT_HEIGHT ) {
             resolutions.erase( std::remove_if( resolutions.begin(), resolutions.end(), IsLowerThanDefaultRes ), resolutions.end() );
+        }
+
+        // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
+        // In this case populate the list with missing resolutions.
+        if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
+            assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480 );
+            const std::vector<fheroes2::Size> possibleResolutions
+                = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
+            const fheroes2::Size & currentResolution = resolutions.front();
+            for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
+                if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
+                    break;
+                }
+                resolutions.emplace_back( possibleResolutions[i] );
+            }
+
+            std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
         }
 
         return resolutions;
@@ -282,12 +302,12 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
+        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
-            static std::vector<std::pair<int, int> > filteredResolutions;
+            static std::vector<fheroes2::Size> filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
-                std::set<std::pair<int, int> > resolutionSet;
+                std::set<fheroes2::Size> resolutionSet;
 
                 const int displayCount = SDL_GetNumVideoDisplays();
                 if ( displayCount > 0 ) {
@@ -465,11 +485,11 @@ namespace
         {
             clear();
 
-            const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
+            const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
             if ( !resolutions.empty() ) {
-                const std::pair<int, int> correctResolution = GetNearestResolution( width_, height_, resolutions );
-                width_ = correctResolution.first;
-                height_ = correctResolution.second;
+                const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.width;
+                height_ = correctResolution.height;
             }
 
             uint32_t flags = SDL_WINDOW_SHOWN;
@@ -675,12 +695,12 @@ namespace
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
+        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
-            static std::vector<std::pair<int, int> > filteredResolutions;
+            static std::vector<fheroes2::Size> filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
-                std::set<std::pair<int, int> > resolutionSet;
+                std::set<fheroes2::Size> resolutionSet;
                 SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
                 if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
                     for ( int i = 0; modes[i]; ++i ) {
@@ -807,11 +827,11 @@ namespace
         {
             clear();
 
-            const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
+            const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
             if ( !resolutions.empty() ) {
-                const std::pair<int, int> correctResolution = GetNearestResolution( width_, height_, resolutions );
-                width_ = correctResolution.first;
-                height_ = correctResolution.second;
+                const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.width;
+                height_ = correctResolution.height;
             }
 
             uint32_t flags = renderFlags();
@@ -942,9 +962,9 @@ namespace
             return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const override
+        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
-            static std::vector<std::pair<int, int> > filteredResolutions;
+            static std::vector<fheroes2::Size> filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
                 filteredResolutions.emplace_back( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
@@ -994,11 +1014,11 @@ namespace
         {
             clear();
 
-            const std::vector<std::pair<int, int> > resolutions = getAvailableResolutions();
+            const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
             if ( !resolutions.empty() ) {
-                const std::pair<int, int> correctResolution = GetNearestResolution( width_, height_, resolutions );
-                width_ = correctResolution.first;
-                height_ = correctResolution.second;
+                const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.width;
+                height_ = correctResolution.height;
             }
 
             vita2d_init();

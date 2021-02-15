@@ -27,8 +27,6 @@
 #include "pal.h"
 #include "screen.h"
 
-#define TAP_DELAY_EMULATE 1050
-
 namespace
 {
     enum KeyMod
@@ -88,7 +86,6 @@ LocalEvent::LocalEvent()
     , mouse_st( 0, 0 )
     , redraw_cursor_func( NULL )
     , keyboard_filter_func( NULL )
-    , clock_delay( TAP_DELAY_EMULATE )
     , loop_delay( 1 )
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
@@ -158,21 +155,6 @@ const Point & LocalEvent::GetMouseReleaseMiddle( void ) const
 const Point & LocalEvent::GetMouseReleaseRight( void ) const
 {
     return mouse_rr;
-}
-
-void LocalEvent::SetTapMode( bool f )
-{
-    if ( f )
-        SetModes( TAP_MODE );
-    else {
-        ResetModes( TAP_MODE );
-        ResetModes( CLOCK_ON );
-    }
-}
-
-void LocalEvent::SetTapDelayForRightClickEmulation( u32 d )
-{
-    clock_delay = d < 200 ? TAP_DELAY_EMULATE : d;
 }
 
 void LocalEvent::SetMouseOffsetX( int16_t x )
@@ -1214,7 +1196,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
-                SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
+                const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
                 if ( removedController == _gameController ) {
                     SDL_GameControllerClose( _gameController );
                     _gameController = nullptr;
@@ -1267,17 +1249,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         if ( SDL_BUTTON_WHEELDOWN == event.button.button || SDL_BUTTON_WHEELUP == event.button.button )
             break;
 #endif
-    }
-
-    // emulate press right
-    if ( ( modes & TAP_MODE ) && ( modes & CLOCK_ON ) ) {
-        if ( clock_delay < clock.getMs() ) {
-            ResetModes( CLICK_LEFT );
-            ResetModes( CLOCK_ON );
-            mouse_pr = mouse_cu;
-            SetModes( MOUSE_PRESSED );
-            mouse_button = SDL_BUTTON_RIGHT;
-        }
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1585,12 +1556,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
             SetModes( CLICK_LEFT );
-
-            // emulate press right
-            if ( modes & TAP_MODE ) {
-                clock.reset();
-                SetModes( CLOCK_ON );
-            }
             break;
 
         case SDL_BUTTON_MIDDLE:
@@ -1619,11 +1584,6 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
         case SDL_BUTTON_LEFT:
             SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
-
-            // emulate press right
-            if ( modes & TAP_MODE ) {
-                ResetModes( CLOCK_ON );
-            }
             break;
 
         case SDL_BUTTON_MIDDLE:
@@ -1663,7 +1623,6 @@ bool LocalEvent::MouseClickLeft( void )
 
 bool LocalEvent::MouseClickLeft( const Rect & rt )
 {
-    // if(MouseReleaseLeft() && (rt & mouse_rl) && (CLICK_LEFT & modes) && ((modes & TAP_MODE) || (rt & mouse_pl)))
     if ( MouseReleaseLeft() && ( rt & mouse_pl ) && ( rt & mouse_rl ) && ( CLICK_LEFT & modes ) ) {
         ResetModes( CLICK_LEFT );
         return true;
@@ -1852,7 +1811,7 @@ int LocalEvent::GlobalFilterEvents( void * /*userdata*/, SDL_Event * event )
 int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
 #endif
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
 
     // motion
     if ( ( le.modes & GLOBAL_FILTER ) && SDL_MOUSEMOTION == event->type ) {
