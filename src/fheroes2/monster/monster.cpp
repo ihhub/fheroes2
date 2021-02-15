@@ -736,7 +736,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
         uint32_t factor = 100;
 
-        switch ( Game::GetDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             factor = 80;
             break;

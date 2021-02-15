@@ -337,7 +337,7 @@ void Maps::ClearFog( s32 index, int scoute, int color )
         // AI advantage
         const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
         if ( isAIPlayer ) {
-            scoute += Difficulty::GetScoutingBonus( Game::GetDifficulty() );
+            scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
         }
 
         const int alliedColors = Players::GetPlayerFriends( color );

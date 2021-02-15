@@ -106,7 +106,7 @@ namespace Game
 }
 
 // Returns the difficulty level based on the type of game.
-int Game::GetDifficulty()
+int Game::getDifficulty()
 {
     return ( ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) != 0 ) ? Difficulty::NORMAL : Settings::Get().GameDifficulty();
 }
@@ -135,7 +135,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     }
 }
 
-void Game::SaveDifficulty( const int difficulty )
+void Game::saveDifficulty( const int difficulty )
 {
     Settings::Get().SetGameDifficulty( difficulty );
 }
@@ -304,7 +304,7 @@ u32 Game::GetRating( void )
         break;
     }
 
-    switch ( Game::GetDifficulty() ) {
+    switch ( Game::getDifficulty() ) {
     case Difficulty::NORMAL:
         rating += 30;
         break;

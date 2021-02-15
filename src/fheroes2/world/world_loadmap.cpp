@@ -180,7 +180,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
     if ( 1 != custom3 && 1 != custom2 ) {
         town.building |= DWELLING_MONSTER1;
         u32 dwelling2 = 0;
-        switch ( Game::GetDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             dwelling2 = 80;
             break;
@@ -619,7 +619,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
         int mul = 4;
 
         // set random count
-        switch ( Game::GetDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             mul = 3;
             break;

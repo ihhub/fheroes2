@@ -101,7 +101,7 @@ int Kingdom::GetRace( void ) const
 
 void Kingdom::UpdateStartingResource( void )
 {
-    resource = Difficulty::GetKingdomStartingResources( Game::GetDifficulty(), isControlAI() );
+    resource = Difficulty::GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -597,7 +597,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::GetDifficulty() ) );
+        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
     return totalIncome;
