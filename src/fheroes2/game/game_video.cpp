@@ -48,20 +48,6 @@ namespace
 
         return false;
     }
-
-    void RescaleFrameIfNeeded( fheroes2::Image & image )
-    {
-        // Some videos are written in compressed format where video's height is exactly a half of the original height of the screen.
-        // Detecting such videos and rescaling helps to deal with such situations.
-        if ( image.width() == fheroes2::Display::DEFAULT_WIDTH && image.height() == fheroes2::Display::DEFAULT_HEIGHT / 2 ) {
-            fheroes2::Image temp( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-            if ( image.singleLayer() ) {
-                temp._disableTransformLayer();
-            }
-            fheroes2::Resize( image, temp );
-            image.swap( temp );
-        }
-    }
 }
 
 namespace Video
@@ -146,7 +132,6 @@ namespace Video
                         video.resetFrame();
 
                     video.getNextFrame( frame, palette );
-                    RescaleFrameIfNeeded( frame );
 
                     fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
 
@@ -186,7 +171,6 @@ namespace Video
                         video.resetFrame();
 
                     video.getNextFrame( frame, palette );
-                    RescaleFrameIfNeeded( frame );
 
                     fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
 
