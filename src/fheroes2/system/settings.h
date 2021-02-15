@@ -31,7 +31,6 @@
 #include "gamedefs.h"
 #include "maps_fileinfo.h"
 #include "players.h"
-#include "system.h"
 
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
@@ -43,50 +42,6 @@
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
 #define CURRENT_FORMAT_VERSION FORMAT_VERSION_091_RELEASE // TODO: update this value for a new release
-
-enum
-{
-    DBG_WARN = 0x0001,
-    DBG_INFO = 0x0002,
-    DBG_TRACE = 0x0003,
-
-    DBG_ENGINE = 0x000C,
-    DBG_GAME = 0x0030,
-    DBG_BATTLE = 0x00C0,
-    DBG_AI = 0x0300,
-    DBG_NETWORK = 0x0C00,
-    DBG_OTHER = 0x3000,
-    DBG_DEVEL = 0xC000,
-
-    DBG_ENGINE_WARN = 0x0004,
-    DBG_GAME_WARN = 0x0010,
-    DBG_BATTLE_WARN = 0x0040,
-    DBG_AI_WARN = 0x0100,
-    DBG_NETWORK_WARN = 0x0400,
-    DBG_OTHER_WARN = 0x1000,
-
-    DBG_ENGINE_INFO = 0x0008,
-    DBG_GAME_INFO = 0x0020,
-    DBG_BATTLE_INFO = 0x0080,
-    DBG_AI_INFO = 0x0200,
-    DBG_NETWORK_INFO = 0x0800,
-    DBG_OTHER_INFO = 0x2000,
-
-    DBG_ENGINE_TRACE = DBG_ENGINE,
-    DBG_GAME_TRACE = DBG_GAME,
-    DBG_BATTLE_TRACE = DBG_BATTLE,
-    DBG_AI_TRACE = DBG_AI,
-    DBG_NETWORK_TRACE = DBG_NETWORK,
-    DBG_OTHER_TRACE = DBG_OTHER,
-
-    DBG_ALL = DBG_ENGINE | DBG_GAME | DBG_BATTLE | DBG_AI | DBG_NETWORK | DBG_OTHER,
-
-    DBG_ALL_WARN = DBG_ENGINE_WARN | DBG_GAME_WARN | DBG_BATTLE_WARN | DBG_AI_WARN | DBG_NETWORK_WARN | DBG_OTHER_WARN,
-    DBG_ALL_INFO = DBG_ENGINE_INFO | DBG_GAME_INFO | DBG_BATTLE_INFO | DBG_AI_INFO | DBG_NETWORK_INFO | DBG_OTHER_INFO,
-    DBG_ALL_TRACE = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_BATTLE_TRACE | DBG_AI_TRACE | DBG_NETWORK_TRACE | DBG_OTHER_TRACE
-};
-
-const char * StringDebug( int );
 
 enum
 {
@@ -103,18 +58,6 @@ enum MusicSource
     MUSIC_EXTERNAL,
     MUSIC_CDROM
 };
-
-#ifdef WITH_DEBUG
-#define DEBUG( x, y, z )                                                                                                                                                 \
-    if ( IS_DEBUG( x, y ) ) {                                                                                                                                            \
-        COUT( System::GetTime() << ": [" << StringDebug( x ) << "]\t" << __FUNCTION__ << ":  " << z );                                                                   \
-    }
-#else
-#define DEBUG( x, y, z )
-#endif
-#define IS_DEVEL() IS_DEBUG( DBG_DEVEL, DBG_INFO )
-
-bool IS_DEBUG( int name, int level );
 
 class Settings
 {
@@ -133,9 +76,6 @@ public:
         GAME_DYNAMIC_INTERFACE = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
-        POCKETPC_TAP_MODE = 0x11000000,
-        POCKETPC_DRAG_DROP_SCROLL = 0x12000000,
-        POCKETPC_LOW_RESOLUTION = 0x14000000,
 
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
@@ -232,7 +172,6 @@ public:
     bool ShowButtons( void ) const;
     bool ShowStatus( void ) const;
     bool Unicode( void ) const;
-    bool PocketPC( void ) const;
     bool BattleShowGrid( void ) const;
     bool BattleShowMouseShadow( void ) const;
     bool BattleShowMoveShadow( void ) const;
@@ -299,8 +238,6 @@ public:
     bool ExtGameEvilInterface( void ) const;
     bool ExtGameDynamicInterface( void ) const;
     bool ExtGameHideInterface( void ) const;
-    bool ExtPocketTapMode( void ) const;
-    bool ExtPocketDragDropScroll( void ) const;
 
     const fheroes2::Size & VideoMode() const;
 

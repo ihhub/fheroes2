@@ -31,8 +31,8 @@
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "logging.h"
 #include "rand.h"
-#include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
@@ -258,7 +258,7 @@ void Artifact::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif
@@ -667,7 +667,7 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
     else if ( 0xAB == index )
         return Rand( ART_LEVEL3 );
 
-    DEBUG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
 
     return Artifact( UNKNOWN );
 }
@@ -1022,7 +1022,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "invalid spell" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
         }
         else if ( _hero->CanLearnSpell( spell ) ) {
             payment_t cost = spell.GetCost();

@@ -25,6 +25,7 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "mus.h"
 #include "world.h"
 
@@ -47,8 +48,8 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
-        DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
-        DEBUG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
         std::vector<std::pair<int, const Army *> > enemyArmies;
@@ -121,7 +122,7 @@ namespace AI
             }
         }
 
-        DEBUG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( color ) << " found " << _mapObjects.size() << " valid objects" );
 
         status.RedrawTurnProgress( 1 );
 

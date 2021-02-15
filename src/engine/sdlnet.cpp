@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <cstring>
 
+#include "logging.h"
 #include "sdlnet.h"
 
 Network::Socket::Socket()
@@ -76,7 +77,7 @@ u32 Network::Socket::Host( void ) const
     IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
     if ( remoteIP )
         return SDLNet_Read32( &remoteIP->host );
-    ERROR( SDLNet_GetError() );
+    ERROR_LOG( SDLNet_GetError() );
     return 0;
 }
 
@@ -85,7 +86,7 @@ u16 Network::Socket::Port( void ) const
     IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
     if ( remoteIP )
         return SDLNet_Read16( &remoteIP->port );
-    ERROR( SDLNet_GetError() );
+    ERROR_LOG( SDLNet_GetError() );
     return 0;
 }
 
@@ -158,7 +159,7 @@ bool Network::Socket::Open( IPaddress & ip )
     Assign( SDLNet_TCP_Open( &ip ) );
 
     if ( !sd )
-        ERROR( SDLNet_GetError() );
+        ERROR_LOG( SDLNet_GetError() );
 
     return sd;
 }
@@ -191,7 +192,7 @@ TCPsocket Network::Server::Accept( void )
 bool Network::Init( void )
 {
     if ( SDLNet_Init() < 0 ) {
-        ERROR( SDLNet_GetError() );
+        ERROR_LOG( SDLNet_GetError() );
         return false;
     }
     return true;
@@ -205,7 +206,7 @@ void Network::Quit( void )
 bool Network::ResolveHost( IPaddress & ip, const char * host, u16 port )
 {
     if ( SDLNet_ResolveHost( &ip, host, port ) < 0 ) {
-        ERROR( SDLNet_GetError() );
+        ERROR_LOG( SDLNet_GetError() );
         return false;
     }
     return true;

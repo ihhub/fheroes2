@@ -33,8 +33,8 @@
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "race.h"
-#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
 #include "ui_window.h"
@@ -121,7 +121,7 @@ StreamBase & operator>>( StreamBase & msg, Battle::Only & b )
         msg >> *b.hero1;
     }
     else {
-        DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_NETWORK, DBG_WARN, "unknown id" );
     }
 
     msg >> id;
@@ -130,7 +130,7 @@ StreamBase & operator>>( StreamBase & msg, Battle::Only & b )
         msg >> *b.hero2;
     }
     else {
-        DEBUG( DBG_NETWORK, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_NETWORK, DBG_WARN, "unknown id" );
     }
 
     msg >> b.player1 >> b.player2;

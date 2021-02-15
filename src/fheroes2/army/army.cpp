@@ -33,6 +33,7 @@
 #include "heroes.h"
 #include "heroes_base.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
@@ -40,7 +41,6 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
-#include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "tools.h"
@@ -321,7 +321,7 @@ bool Troops::JoinTroop( const Monster & mons, u32 count )
             else
                 ( *it )->Set( mons, count );
 
-            DEBUG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() );
             return true;
         }
     }
@@ -1034,7 +1034,7 @@ int Army::GetRace( void ) const
     races.resize( std::distance( races.begin(), std::unique( races.begin(), races.end() ) ) );
 
     if ( races.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "empty" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "empty" );
         return Race::NONE;
     }
 
@@ -1395,7 +1395,7 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     const double str1 = GetStrength();
     const double str2 = target.GetStrength() * safetyRatio;
 
-    DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
 }

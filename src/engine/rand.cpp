@@ -23,8 +23,8 @@
 #include <cstdlib>
 #include <random>
 
+#include "logging.h"
 #include "rand.h"
-#include "system.h"
 
 namespace
 {
@@ -102,7 +102,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
             return ( *it ).first;
     }
 
-    ERROR( "weight not found, return 0" );
+    ERROR_LOG( "weight not found, return 0" );
     return 0;
 }
 

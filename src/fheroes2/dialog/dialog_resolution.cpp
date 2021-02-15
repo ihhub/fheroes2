@@ -33,23 +33,20 @@ namespace
 {
     const int editBoxLength = 266;
 
-    std::string GetResolutionString( const std::pair<int, int> & resolution )
+    std::string GetResolutionString( const fheroes2::Size & resolution )
     {
-        std::string msg = _( "%{width} x %{height}" );
-        StringReplace( msg, "%{width}", resolution.first );
-        StringReplace( msg, "%{height}", resolution.second );
-        return msg;
+        return std::to_string( resolution.width ) + " x " + std::to_string( resolution.height );
     }
 
-    class ResolutionList : public Interface::ListBox<std::pair<int, int> >
+    class ResolutionList : public Interface::ListBox<fheroes2::Size>
     {
     public:
         ResolutionList( const Point & offset )
-            : Interface::ListBox<std::pair<int, int> >( offset )
+            : Interface::ListBox<fheroes2::Size>( offset )
             , _isDoubleClicked( false )
         {}
 
-        virtual void RedrawItem( const std::pair<int, int> & resolution, s32 offsetX, s32 offsetY, bool current ) override
+        virtual void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
         {
             const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
@@ -63,10 +60,10 @@ namespace
 
         virtual void ActionCurrentUp() override {}
         virtual void ActionCurrentDn() override {}
-        virtual void ActionListSingleClick( std::pair<int, int> & ) override {}
-        virtual void ActionListPressRight( std::pair<int, int> & ) override {}
+        virtual void ActionListSingleClick( fheroes2::Size & ) override {}
+        virtual void ActionListPressRight( fheroes2::Size & ) override {}
 
-        virtual void ActionListDoubleClick( std::pair<int, int> & ) override
+        virtual void ActionListDoubleClick( fheroes2::Size & ) override
         {
             _isDoubleClicked = true;
         }
@@ -80,12 +77,12 @@ namespace
         bool _isDoubleClicked;
     };
 
-    void RedrawInfo( const fheroes2::Point & dst, const std::pair<int, int> & resolution )
+    void RedrawInfo( const fheroes2::Point & dst, const fheroes2::Size & resolution )
     {
         Text text( "Select Game Resolution:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( 377 - text.w() ) / 2, dst.y + 30 );
 
-        if ( resolution.first > 0 && resolution.second > 0 ) {
+        if ( resolution.width > 0 && resolution.height > 0 ) {
             text.Set( GetResolutionString( resolution ), Font::YELLOW_BIG );
             text.Blit( dst.x + ( editBoxLength - text.w() ) / 2 + 41, dst.y + 287 + ( 19 - text.h() + 2 ) / 2, editBoxLength );
         }
@@ -96,7 +93,7 @@ namespace Dialog
 {
     bool SelectResolution()
     {
-        std::vector<std::pair<int, int> > resolutions = fheroes2::engine().getAvailableResolutions();
+        std::vector<fheroes2::Size> resolutions = fheroes2::engine().getAvailableResolutions();
         if ( resolutions.empty() )
             return false;
 
@@ -133,9 +130,9 @@ namespace Dialog
 
         const fheroes2::Size currentResolution( display.width(), display.height() );
 
-        std::pair<int, int> selectedResolution;
+        fheroes2::Size selectedResolution;
         for ( size_t i = 0; i < resolutions.size(); ++i ) {
-            if ( resolutions[i].first == currentResolution.width && resolutions[i].second == currentResolution.height ) {
+            if ( resolutions[i].width == currentResolution.width && resolutions[i].height == currentResolution.height ) {
                 resList.SetCurrent( i );
                 selectedResolution = resList.GetCurrent();
                 break;
@@ -165,7 +162,7 @@ namespace Dialog
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                selectedResolution = std::make_pair( 0, 0 );
+                selectedResolution = fheroes2::Size( 0, 0 );
                 break;
             }
             else if ( resList.isSelected() ) {
@@ -184,9 +181,9 @@ namespace Dialog
 
         cursor.Hide();
 
-        if ( selectedResolution.first > 0 && selectedResolution.second > 0
-             && ( selectedResolution.first != currentResolution.width || selectedResolution.second != currentResolution.height ) ) {
-            display.resize( selectedResolution.first, selectedResolution.second );
+        if ( selectedResolution.width > 0 && selectedResolution.height > 0
+             && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
+            display.resize( selectedResolution.width, selectedResolution.height );
 
 #ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );

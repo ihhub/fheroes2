@@ -34,10 +34,10 @@
 #include "game.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "logging.h"
 #include "luck.h"
 #include "morale.h"
 #include "rand.h"
-#include "settings.h"
 #include "speed.h"
 #include "world.h"
 
@@ -604,7 +604,7 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
             killed = GetCount();
         }
 
-        DEBUG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
 
         if ( killed >= GetCount() ) {
             dead += GetCount();
@@ -661,7 +661,7 @@ void Battle::Unit::PostKilledAction( void )
     if ( tail )
         tail->SetUnit( NULL );
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." );
     // possible also..
 }
 
@@ -700,14 +700,14 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
         switch ( enemy.GetID() ) {
         case Monster::GHOST:
             resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
-            DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
             // grow troop
             enemy.Resurrect( resurrect, true, false );
             break;
 
         case Monster::VAMPIRE_LORD:
             resurrect = killed * Monster::GetHitPoints();
-            DEBUG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
             // restore hit points
             enemy.Resurrect( resurrect, false, false );
             break;
@@ -811,7 +811,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
     if ( !AllowApplySpell( spell, hero, NULL, isForceApply ) )
         return false;
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
 
     const u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 

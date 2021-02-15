@@ -35,8 +35,9 @@
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "monster.h"
-#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tools.h"
 #include "world.h"
@@ -127,7 +128,7 @@ bool Game::AutoSave()
 
 bool Game::Save( const std::string & fn )
 {
-    DEBUG( DBG_GAME, DBG_INFO, fn );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
     const bool autosave = ( System::GetBasename( fn ) == "AUTOSAVE" + GetSaveFileExtension() );
     const Settings & conf = Settings::Get();
 
@@ -135,7 +136,7 @@ bool Game::Save( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "wb" ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
         return false;
     }
 
@@ -164,7 +165,7 @@ bool Game::Save( const std::string & fn )
 
 bool Game::Load( const std::string & fn )
 {
-    DEBUG( DBG_GAME, DBG_INFO, fn );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
     Settings & conf = Settings::Get();
     // loading info
     Game::ShowMapLoadingText();
@@ -173,7 +174,7 @@ bool Game::Load( const std::string & fn )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
         return false;
     }
 
@@ -183,7 +184,7 @@ bool Game::Load( const std::string & fn )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
         return false;
     }
 
@@ -221,7 +222,7 @@ bool Game::Load( const std::string & fn )
 
 #ifndef WITH_ZLIB
     if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
         return false;
     }
 #endif
@@ -230,7 +231,7 @@ bool Game::Load( const std::string & fn )
     fz.setbigendian( true );
 
     if ( !fz.read( fn, offset ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, ", uncompress: error" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, ", uncompress: error" );
         return false;
     }
 
@@ -250,7 +251,7 @@ bool Game::Load( const std::string & fn )
         return false;
     }
 
-    DEBUG( DBG_GAME, DBG_TRACE, "load version: " << binver );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
     u16 end_check = 0;
 
@@ -274,7 +275,7 @@ bool Game::Load( const std::string & fn )
     fz >> end_check;
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
-        DEBUG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );
         return false;
     }
 
@@ -292,7 +293,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", error open" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
         return false;
     }
 
@@ -302,7 +303,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
         return false;
     }
 
@@ -336,7 +337,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 #ifndef WITH_ZLIB
     // check: compress game data
     if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
         return false;
     }
 #endif

@@ -24,6 +24,7 @@
 #include <assert.h>
 
 #include "game.h"
+#include "logging.h"
 #include "maps_fileinfo.h"
 #include "players.h"
 #include "race.h"
@@ -271,7 +272,7 @@ void Players::Init( int colors )
         _players[Color::GetIndex( *it )] = back();
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, "Players: " << String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
 }
 
 void Players::Init( const Maps::FileInfo & fi )
@@ -303,12 +304,12 @@ void Players::Init( const Maps::FileInfo & fi )
         if ( first )
             first->SetControl( CONTROL_HUMAN );
 
-        DEBUG( DBG_GAME, DBG_INFO, "Players: " << String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
     }
     else {
-        DEBUG( DBG_GAME, DBG_INFO,
-               "Players: "
-                   << "unknown colors" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                   "Players: "
+                       << "unknown colors" );
     }
 }
 
@@ -418,7 +419,7 @@ void Players::SetStartGame( void )
     current_color = Color::NONE;
     human_colors = Color::NONE;
 
-    DEBUG( DBG_GAME, DBG_INFO, String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, String() );
 }
 
 int Players::HumanColors( void )

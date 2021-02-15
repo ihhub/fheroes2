@@ -27,9 +27,9 @@
 #include <string>
 
 #include "endian_h2.h"
+#include "logging.h"
 #include "rect.h"
 #include "serialize.h"
-#include "system.h"
 
 #define MINCAPACITY 1024
 
@@ -550,7 +550,7 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file = std::fopen( fn.c_str(), mode.c_str() );
     if ( !_file )
-        ERROR( fn );
+        ERROR_LOG( fn );
     return _file != NULL;
 }
 

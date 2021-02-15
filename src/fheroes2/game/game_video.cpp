@@ -23,9 +23,11 @@
 #include "cursor.h"
 #include "game.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
+#include "system.h"
 #include "ui_tool.h"
 
 namespace
@@ -54,7 +56,7 @@ namespace Video
     {
         std::string videoPath;
         if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
-            DEBUG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
             return 0;
         }
 
