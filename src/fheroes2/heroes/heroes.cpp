@@ -53,7 +53,7 @@
 namespace
 {
     template <class T>
-    void hash_combine( std::size_t & seed, const T & v )
+    void hashCombine( std::size_t & seed, const T & v )
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
@@ -2044,14 +2044,14 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
      * */
 
     size_t hash = world.GetMapSeed();
-    hash_combine( hash, hid );
-    hash_combine( hash, race );
-    hash_combine( hash, attack );
-    hash_combine( hash, defense );
-    hash_combine( hash, power );
-    hash_combine( hash, knowledge );
+    hashCombine( hash, hid );
+    hashCombine( hash, race );
+    hashCombine( hash, attack );
+    hashCombine( hash, defense );
+    hashCombine( hash, power );
+    hashCombine( hash, knowledge );
     for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
-        hash_combine( hash, GetLevelSkill( skillId ) );
+        hashCombine( hash, GetLevelSkill( skillId ) );
     }
 
     HeroSeedsForLevelUp seeds;
