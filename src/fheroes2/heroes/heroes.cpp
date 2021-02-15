@@ -1449,7 +1449,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     // level up primary skill
     const int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
 
-    DEBUG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
 
     if ( !skipsecondary )
         LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
