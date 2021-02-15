@@ -241,8 +241,7 @@ int Game::ScenarioInfo( void )
                 playersInfo.resetSelection();
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
-                levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
-                Game::SaveDifficulty( Difficulty::NORMAL );
+                levelCursor.setPosition( coordDifficulty[Game::GetDifficulty()].x, coordDifficulty[Game::GetDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                 buttonOk.draw();
                 buttonCancel.draw();
             }

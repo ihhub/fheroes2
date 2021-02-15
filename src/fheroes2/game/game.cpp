@@ -106,17 +106,9 @@ namespace Game
 }
 
 // Returns the difficulty level based on the type of game.
-int Game::GetDifficulty( void )
+int Game::GetDifficulty()
 {
-    switch ( Settings::Get().GameType() ) {
-    // The specified types use a static value.
-    case Game::TYPE_MENU:
-    case Game::TYPE_CAMPAIGN:
-    case Game::TYPE_BATTLEONLY:
-        return Difficulty::NORMAL;
-    default:
-        return Settings::Get().GameDifficulty();
-    }
+    return ( ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) != 0 ) ? Difficulty::NORMAL : Settings::Get().GameDifficulty();
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
@@ -143,18 +135,9 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
     }
 }
 
-void Game::SaveDifficulty( const int d )
+void Game::SaveDifficulty( const int difficulty )
 {
-    switch ( Settings::Get().GameType() ) {
-    // The specified types use a static value.
-    case Game::TYPE_MENU:
-    case Game::TYPE_CAMPAIGN:
-    case Game::TYPE_BATTLEONLY:
-        return;
-    default:
-        Settings::Get().SetGameDifficulty( d );
-        break;
-    }
+    Settings::Get().SetGameDifficulty( difficulty );
 }
 
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )

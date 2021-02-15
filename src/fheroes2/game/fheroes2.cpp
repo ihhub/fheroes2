@@ -29,7 +29,6 @@
 #include "audio_music.h"
 #include "bin_info.h"
 #include "cursor.h"
-#include "difficulty.h"
 #include "dir.h"
 #include "embedded_image.h"
 #include "engine.h"
@@ -75,7 +74,7 @@ int main( int argc, char ** argv )
 {
     Logging::InitLog();
 
-    Settings & conf = Settings::Get( Difficulty::NORMAL );
+    Settings & conf = Settings::Get();
 
     DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
