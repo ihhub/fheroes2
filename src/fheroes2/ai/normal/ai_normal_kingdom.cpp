@@ -166,7 +166,7 @@ namespace AI
             }
         }
 
-        size_t heroLimit = world.w() / Maps::SMALL + 1;
+        int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
             heroLimit++;
         if ( slowEarlyGame )

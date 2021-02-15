@@ -131,7 +131,7 @@ public:
         MARTINE,
         JARKONAS,
         // debugger
-        SANDYSANDY,
+        DEBUG_HERO,
         UNKNOWN
     };
 

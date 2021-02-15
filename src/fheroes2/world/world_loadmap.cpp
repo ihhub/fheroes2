@@ -935,7 +935,7 @@ bool World::LoadMapMP2( const std::string & filename )
         return false;
 
     // endof
-    const u32 endof_mp2 = fs.size();
+    const size_t endof_mp2 = fs.size();
     fs.seek( endof_mp2 - 4 );
 
     // read uniq
@@ -987,15 +987,15 @@ bool World::LoadMapMP2( const std::string & filename )
         return false;
     }
 
+    const int32_t worldSize = w() * h();
+
     // seek to ADDONS block
-    fs.skip( w() * h() * SIZEOFMP2TILE );
+    fs.skip( worldSize * SIZEOFMP2TILE );
 
     // read all addons
     std::vector<MP2::mp2addon_t> vec_mp2addons( fs.getLE32() /* count mp2addon_t */ );
 
-    for ( std::vector<MP2::mp2addon_t>::iterator it = vec_mp2addons.begin(); it != vec_mp2addons.end(); ++it ) {
-        MP2::mp2addon_t & mp2addon = *it;
-
+    for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
         mp2addon.indexAddon = fs.getLE16();
         mp2addon.objectNameN1 = fs.get() * 2;
         mp2addon.indexNameN1 = fs.get();
@@ -1007,18 +1007,17 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2addon.editorObjectOverlay = fs.getLE32();
     }
 
-    const u32 endof_addons = fs.tell();
+    const size_t endof_addons = fs.tell();
     DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons );
 
     // offset data
     fs.seek( MP2OFFSETDATA );
 
-    vec_tiles.resize( w() * h() );
+    vec_tiles.resize( worldSize );
 
     // read all tiles
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
-        const size_t index = std::distance( vec_tiles.begin(), it );
-        Maps::Tiles & tile = *it;
+    for ( int32_t i = 0; i < worldSize; ++i ) {
+        Maps::Tiles & tile = vec_tiles[i];
 
         MP2::mp2tile_t mp2tile;
 
@@ -1042,7 +1041,7 @@ bool World::LoadMapMP2( const std::string & filename )
         case MP2::OBJ_EVENT:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_JAIL:
-            vec_object.push_back( index );
+            vec_object.push_back( i );
             break;
         default:
             break;
@@ -1054,7 +1053,7 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.editorObjectLink = fs.getLE32();
         mp2tile.editorObjectOverlay = fs.getLE32();
 
-        tile.Init( index, mp2tile );
+        tile.Init( i, mp2tile );
 
         // load all addon for current tils
         while ( offsetAddonsBlock ) {
@@ -1534,7 +1533,7 @@ void World::ProcessNewMap()
         if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
             const Point & cp = castle->GetCenter();
-            Heroes * hero = vec_heroes.Get( Heroes::SANDYSANDY );
+            Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
                 hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
@@ -1562,7 +1561,7 @@ void World::ProcessNewMap()
         }
 
         if ( pools.size() ) {
-            const s32 pos = *Rand::Get( pools );
+            const s32 pos = Rand::Get( pools );
             ultimate_artifact.Set( pos, Artifact::Rand( Artifact::ART_ULTIMATE ) );
             ultimate_pos = Maps::GetPoint( pos );
         }
@@ -1612,6 +1611,7 @@ void World::ProcessNewMap()
     vec_rumors.emplace_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
     vec_rumors.emplace_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
     vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
+    vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
 
     vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

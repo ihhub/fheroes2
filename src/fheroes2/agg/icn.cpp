@@ -1651,7 +1651,7 @@ int ICN::PORTxxxx( int heroId )
     case Heroes::JARKONAS:
         return ICN::PORT0070;
 
-    case Heroes::SANDYSANDY:
+    case Heroes::DEBUG_HERO:
         return ICN::PORT0059;
 
     default:
