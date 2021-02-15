@@ -25,8 +25,8 @@
 #include "smacker.h"
 #include "smk_decoder.h"
 
-#include <cstring>
 #include <cassert>
+#include <cstring>
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
