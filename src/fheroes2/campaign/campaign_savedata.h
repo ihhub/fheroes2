@@ -88,7 +88,7 @@ namespace Campaign
         std::vector<std::string> _earnedCampaignAwards; // should have its own data format
         int _currentScenarioID;
         int _campaignID;
-        int _daysPassed;
+        uint32_t _daysPassed;
         ScenarioBonusData _currentScenarioBonus;
     };
 }
