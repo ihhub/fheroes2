@@ -174,6 +174,8 @@ public:
     bool BattleShowGrid( void ) const;
     bool BattleShowMouseShadow( void ) const;
     bool BattleShowMoveShadow( void ) const;
+    bool BattleAutoResolve() const;
+    bool BattleAutoSpellcast() const;
     bool UseAltResource( void ) const;
     bool PriceLoyaltyVersion( void ) const;
     bool LoadedGameVersion( void ) const;
@@ -258,6 +260,8 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setBattleAutoResolve( bool enable );
+    void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );
