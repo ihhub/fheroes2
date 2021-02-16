@@ -94,10 +94,12 @@ namespace std
 
 #elif defined( __SWITCH__ ) // Platforms which log to file
 #include <fstream>
+
 namespace Logging
 {
     extern std::ofstream logFile;
 }
+
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         Logging::logFile << x << std::endl;                                                                                                                              \
