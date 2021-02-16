@@ -37,11 +37,13 @@
 
 namespace fheroes2
 {
-    void AddOSSpecificDirectories( ListDirs &dirs )
+    void AddOSSpecificDirectories( ListDirs & dirs )
     {
 #if defined( FHEROES2_VITA )
         dirs.push_back( "ux0:app/FHOMM0002" );
         dirs.push_back( "ux0:data/fheroes2" );
+#else
+        (void)dirs;
 #endif
     }
 }

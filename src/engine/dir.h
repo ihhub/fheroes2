@@ -39,7 +39,7 @@ struct ListDirs : public std::list<std::string>
 
 namespace fheroes2
 {
-    void AddOSSpecificDirectories( ListDirs &dirs );
+    void AddOSSpecificDirectories( ListDirs & dirs );
 }
 
 #endif
