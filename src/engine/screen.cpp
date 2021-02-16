@@ -605,6 +605,7 @@ namespace
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
 
+        std::vector<uint32_t> _palette32Bit;
         std::vector<SDL_Color> _palette8Bit;
 
         std::string _previousWindowTitle;
@@ -1029,14 +1030,9 @@ namespace
                 return false;
             }
 
-            _surface = SDL_CreateRGBSurface( 0, width_, height_, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 
-            if ( _surface == nullptr ) {
-                clear();
-                return false;
-            }
-
-            if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
+            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
                 clear();
                 return false;
             }
@@ -1046,7 +1042,6 @@ namespace
             _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
             memset( _palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
             _createPalette();
-            // linkRenderSurface( _palettedTexturePointer );
 
             // screen scaling calculation
             _destRect.x = 0;
@@ -1058,13 +1053,13 @@ namespace
                 if ( isFullScreen ) {
                     vita2d_texture_set_filters( _texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
                     if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
-                        float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
                         _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
                         _destRect.height = VITA_FULLSCREEN_HEIGHT;
                         _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
                     }
                     else {
-                        float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
                         _destRect.width = VITA_FULLSCREEN_WIDTH;
                         _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
                         _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
@@ -1102,23 +1097,15 @@ namespace
             if ( _surface == nullptr || colorIds.size() != 256 )
                 return;
 
-            _palette32Bit.resize( 256u );
+            uint32_t _palette32Bit[256u];
 
-            if ( _surface->format->Amask > 0 ) {
-                for ( size_t i = 0; i < 256u; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
-                    _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
-                }
-            }
-            else {
-                for ( size_t i = 0; i < 256u; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
-                    _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
-                }
+            for ( size_t i = 0; i < 256u; ++i ) {
+                const uint8_t * value = currentPalette + colorIds[i] * 3;
+                _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
             }
 
             if ( _texBuffer != nullptr )
-                memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit.data(), sizeof( uint32_t ) * 256 );
+                memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
         virtual bool isMouseCursorActive() const override
@@ -1135,9 +1122,6 @@ namespace
 
         void _createPalette()
         {
-            if ( _surface == nullptr )
-                return;
-
             updatePalette( StandardPaletteIndexes() );
         }
     };

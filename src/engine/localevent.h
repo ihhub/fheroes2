@@ -265,6 +265,9 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+    void OpenVirtualKeyboard();
+    void CloseVirtualKeyboard();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void OpenController();
     void CloseController();
@@ -277,13 +280,6 @@ public:
             _controllerPointerSpeed = newSpeed / CONTROLLER_SPEED_MOD;
         }
     }
-
-#if defined( FHEROES2_VITA )
-    void SetDPadTextInputStatus( const bool active )
-    {
-        _dpadInputActive = active;
-    }
-#endif
 
 private:
     LocalEvent();
@@ -378,10 +374,6 @@ private:
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     int16_t _numTouches = 0;
-#endif
-
-#if defined( FHEROES2_VITA )
-    bool _dpadInputActive = false;
 #endif
 };
 

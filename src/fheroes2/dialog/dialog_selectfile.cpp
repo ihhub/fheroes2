@@ -278,13 +278,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     cursor.Show();
     display.render();
+    le.OpenVirtualKeyboard();
 
     std::string result;
     bool is_limit = false;
-
-#if defined( FHEROES2_VITA )
-    le.SetDPadTextInputStatus( true );
-#endif
 
     while ( le.HandleEvents() && result.empty() ) {
         le.MousePressLeft( buttonOk.area() ) && buttonOk.isEnabled() ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -351,10 +348,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     cursor.Hide();
-
-#if defined( FHEROES2_VITA )
-    le.SetDPadTextInputStatus( false );
-#endif
+    le.CloseVirtualKeyboard();
 
     return result;
 }

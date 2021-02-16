@@ -35,6 +35,17 @@
 #include <strings.h> // for strcasecmp
 #endif
 
+namespace fheroes2
+{
+    void AddOSSpecificDirectories( ListDirs &dirs )
+    {
+#if defined( FHEROES2_VITA )
+        dirs.push_back( "ux0:app/FHOMM0002" );
+        dirs.push_back( "ux0:data/fheroes2" );
+#endif
+    }
+}
+
 void ListFiles::Append( const ListFiles & files )
 {
     insert( end(), files.begin(), files.end() );
@@ -56,7 +67,7 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
     }
 #elif defined( FHEROES2_VITA )
     // open the directory
-    int uid = sceIoDopen( path.c_str() );
+    const int uid = sceIoDopen( path.c_str() );
     if ( uid <= 0 )
         return;
 
@@ -65,26 +76,24 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
     SceIoDirent dir;
 
     while ( sceIoDread( uid, &dir ) > 0 ) {
-        const std::string fullname = System::ConcatePath( path, dir.d_name );
+        std::string fullname = System::ConcatePath( path, dir.d_name );
 
         // if not regular file
         if ( !SCE_STM_ISREG( dir.d_stat.st_mode ) )
             continue;
 
-        if ( filter.size() ) {
+        if ( !filter.empty() ) {
             const std::string filename( dir.d_name );
 
             if ( sensitive ) {
                 if ( std::string::npos == filename.find( filter ) )
                     continue;
             }
-            else {
-                if ( std::string::npos == StringLower( filename ).find( StringLower( filter ) ) )
-                    continue;
-            }
+            else if ( std::string::npos == StringLower( filename ).find( StringLower( filter ) ) )
+                continue;
         }
 
-        push_back( fullname );
+        emplace_back( std::move( fullname ) );
     }
 
     // clean up

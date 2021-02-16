@@ -40,4 +40,7 @@ namespace SDL
     bool SubSystem( const u32 system );
 }
 
+void InitHardware();
+void CloseHardware();
+
 #endif

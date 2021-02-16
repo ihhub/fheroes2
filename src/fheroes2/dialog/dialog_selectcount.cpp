@@ -268,11 +268,8 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
+    le.OpenVirtualKeyboard();
     bool redraw = true;
-
-#if defined( FHEROES2_VITA )
-    le.SetDPadTextInputStatus( true );
-#endif
 
     // message loop
     while ( le.HandleEvents() ) {
@@ -312,10 +309,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     cursor.SetThemes( oldcursor );
     cursor.Hide();
-
-#if defined( FHEROES2_VITA )
-    le.SetDPadTextInputStatus( false );
-#endif
+    le.CloseVirtualKeyboard();
 
     return !res.empty();
 }

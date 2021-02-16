@@ -38,45 +38,46 @@ namespace
         MOD_CAPS = KMOD_CAPS,
         MOD_NUM = KMOD_NUM
     };
-}
 
 #if defined( FHEROES2_VITA )
-static const int TOTAL_CHARACTERS_DPAD = 38;
-bool currentUpper = false;
-int currentCharIndex = 0;
+    const int totalCharactersDPad = 38;
+    bool _dpadInputActive = false;
+    bool currentUpper = false;
+    int currentCharIndex = 0;
 
-const KeySym dPadKeys[TOTAL_CHARACTERS_DPAD] = {
-    // lowercase letters
-    KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
-    KEY_x, KEY_y, KEY_z,
-    // space, underscore
-    KEY_SPACE, KEY_UNDERSCORE,
-    // nums
-    KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
+    const KeySym dPadKeys[totalCharactersDPad] = {
+        // lowercase letters
+        KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
+        KEY_x, KEY_y, KEY_z,
+        // space, underscore
+        KEY_SPACE, KEY_UNDERSCORE,
+        // nums
+        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
 
-char GetCurrentDPadChar()
-{
-    return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
-}
-
-void SetCurrentDPadCharIndex( char currentChar )
-{
-    if ( currentChar >= 'A' && currentChar <= 'Z' ) {
-        currentUpper = true;
-        currentChar += 32;
+    char GetCurrentDPadChar()
+    {
+        return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
     }
 
-    const KeySym keySym = KeySymFromChar( currentChar );
-    for ( int i = 0; i < TOTAL_CHARACTERS_DPAD; ++i ) {
-        if ( dPadKeys[i] == keySym ) {
-            currentCharIndex = i;
-            return;
+    void SetCurrentDPadCharIndex( char currentChar )
+    {
+        if ( currentChar >= 'A' && currentChar <= 'Z' ) {
+            currentUpper = true;
+            currentChar += 32;
         }
-    }
 
-    currentCharIndex = 0;
-}
+        const KeySym keySym = KeySymFromChar( currentChar );
+        for ( int i = 0; i < totalCharactersDPad; ++i ) {
+            if ( dPadKeys[i] == keySym ) {
+                currentCharIndex = i;
+                return;
+            }
+        }
+
+        currentCharIndex = 0;
+    }
 #endif
+}
 
 LocalEvent::LocalEvent()
     : modes( 0 )
@@ -126,6 +127,20 @@ void LocalEvent::OpenTouchpad()
     }
 }
 #endif
+
+void LocalEvent::OpenVirtualKeyboard()
+{
+#if defined( FHEROES2_VITA )
+    _dpadInputActive = true;
+#endif
+}
+
+void LocalEvent::CloseVirtualKeyboard()
+{
+#if defined( FHEROES2_VITA )
+    _dpadInputActive = false;
+#endif
+}
 
 const Point & LocalEvent::GetMousePressLeft( void ) const
 {
@@ -728,7 +743,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     switch ( sym ) {
     // delete char
     case KEY_KP4: {
-        if ( res.size() && pos ) {
+        if ( !res.empty() && pos ) {
             res.resize( res.size() - 1 );
             --pos;
         }
@@ -737,7 +752,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     }
     // add new char
     case KEY_KP6: {
-        currentUpper = ( res.size() == 0 );
+        currentUpper = res.empty();
         currentCharIndex = 0;
 
         const char c = GetCurrentDPadChar();
@@ -752,10 +767,10 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     // next char
     case KEY_KP2: {
         ++currentCharIndex;
-        if ( currentCharIndex >= TOTAL_CHARACTERS_DPAD )
+        if ( currentCharIndex >= totalCharactersDPad )
             currentCharIndex = 0;
 
-        if ( res.size() )
+        if ( !res.empty() )
             res.resize( res.size() - 1 );
         else
             ++pos;
@@ -771,9 +786,9 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     case KEY_KP8: {
         --currentCharIndex;
         if ( currentCharIndex < 0 )
-            currentCharIndex = TOTAL_CHARACTERS_DPAD - 1;
+            currentCharIndex = totalCharactersDPad - 1;
 
-        if ( res.size() )
+        if ( !res.empty() )
             res.resize( res.size() - 1 );
         else
             ++pos;
@@ -789,7 +804,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     case KEY_SHIFT: {
         currentUpper = !currentUpper;
 
-        if ( res.size() )
+        if ( !res.empty() )
             res.resize( res.size() - 1 );
         else
             ++pos;

@@ -44,14 +44,6 @@
 #include "translations.h"
 #include "zzlib.h"
 
-#if defined( FHEROES2_VITA )
-#include <psp2/kernel/processmgr.h>
-#include <psp2/power.h>
-
-// allocating memory for application on Vita
-int _newlib_heap_size_user = 192 * 1024 * 1024;
-#endif
-
 void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath();
 void SetLangEnvPath( const Settings & );
@@ -80,12 +72,7 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
-#if defined( FHEROES2_VITA )
-    scePowerSetArmClockFrequency( 444 );
-    scePowerSetBusClockFrequency( 222 );
-    scePowerSetGpuClockFrequency( 222 );
-    scePowerSetGpuXbarClockFrequency( 166 );
-#endif
+    InitHardware();
     Logging::InitLog();
 
     Settings & conf = Settings::Get();
@@ -280,10 +267,7 @@ int main( int argc, char ** argv )
         }
 #endif
     fheroes2::Display::instance().release();
-
-#if defined( FHEROES2_VITA )
-    sceKernelExitProcess( 0 );
-#endif
+    CloseHardware();
 
     return EXIT_SUCCESS;
 }

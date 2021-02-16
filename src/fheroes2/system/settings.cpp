@@ -898,10 +898,7 @@ ListDirs Settings::GetRootDirs( void )
     if ( !home.empty() )
         dirs.push_back( home );
 
-#if defined( FHEROES2_VITA )
-    dirs.push_back( "ux0:app/FHOMM0002" );
-    dirs.push_back( "ux0:data/fheroes2" );
-#endif
+    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }
