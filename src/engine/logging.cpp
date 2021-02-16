@@ -24,14 +24,14 @@
 namespace
 {
     int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
-
-#if defined( __SWITCH__ ) // Platforms which log to file
-    std::ofstream logFile;
-#endif
 }
 
 namespace Logging
 {
+#if defined( __SWITCH__ ) // Platforms which log to file
+    std::ofstream logFile;
+#endif
+
     const char * GetDebugOptionName( const int name )
     {
         if ( name & DBG_ENGINE )
