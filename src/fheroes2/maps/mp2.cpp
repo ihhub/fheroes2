@@ -234,10 +234,7 @@ bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
 {
     const int icnID = tileset >> 2;
     // Values extracted from 64-byte array in original game
-    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) )
-        return true;
-
-    return false;
+    return ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) );
 }
 
 const char * MP2::StringObject( int object )

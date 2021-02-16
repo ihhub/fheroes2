@@ -20,21 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 
 #include "agg_file.h"
-#include "engine.h"
 #include "image_tool.h"
-#include "palette_h2.h"
+#include "serialize.h"
 #include "system.h"
-
-#if defined( _MSC_VER )
-#undef main
-#endif
 
 int main( int argc, char ** argv )
 {
@@ -91,8 +84,6 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    SDL::Init();
-
     fs << "<?xml version=\"1.0\" ?>" << std::endl << "<icn name=\"" << shortname << ".icn\" count=\"" << count_sprite << "\">" << std::endl;
 
     u32 save_pos = sf.tell();
@@ -137,6 +128,5 @@ int main( int argc, char ** argv )
     fs.close();
     std::cout << "expand to: " << prefix << std::endl;
 
-    SDL::Quit();
     return EXIT_SUCCESS;
 }

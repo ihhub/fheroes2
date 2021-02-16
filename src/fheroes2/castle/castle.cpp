@@ -2413,6 +2413,23 @@ Army & Castle::GetActualArmy( void )
     return hero ? hero->GetArmy() : army;
 }
 
+double Castle::GetGarrisonStrength() const
+{
+    double totalStrength = 0;
+
+    CastleHeroes heroes = world.GetHeroes( *this );
+    if ( heroes.Guest() ) {
+        totalStrength += heroes.Guest()->GetArmy().GetStrength();
+    }
+    if ( Settings::Get().ExtCastleAllowGuardians() && heroes.Guard() ) {
+        totalStrength += heroes.Guard()->GetArmy().GetStrength();
+    }
+    else {
+        totalStrength += army.GetStrength();
+    }
+    return totalStrength;
+}
+
 bool Castle::AllowBuyBoat( void ) const
 {
     // check payment and present other boat
