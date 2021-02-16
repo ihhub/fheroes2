@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include "speed.h"
-#include "gamedefs.h"
+#include "translations.h"
 
 const std::string & Speed::String( int speed )
 {

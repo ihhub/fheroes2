@@ -23,8 +23,8 @@
 #include <cstdlib>
 #include <random>
 
+#include "logging.h"
 #include "rand.h"
-#include "system.h"
 
 namespace
 {
@@ -96,6 +96,6 @@ s32 Rand::Queue::Get( void )
             return ( *it ).first;
     }
 
-    ERROR( "weight not found, return 0" );
+    ERROR_LOG( "weight not found, return 0" );
     return 0;
 }

@@ -38,9 +38,10 @@
 #include "game_video.h"
 #include "gamedefs.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
-#include "settings.h"
 #include "system.h"
+#include "translations.h"
 #include "zzlib.h"
 
 void SetVideoDriver( const std::string & );
@@ -71,9 +72,11 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
+    Logging::InitLog();
+
     Settings & conf = Settings::Get();
 
-    DEBUG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
+    DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
     conf.SetProgramPath( argv[0] );
 
@@ -161,8 +164,8 @@ int main( int argc, char ** argv )
             fheroes2::engine().setIcon( appIcon );
 #endif
 
-            DEBUG( DBG_GAME, DBG_INFO, conf.String() );
-            // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+            // DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
             if ( !AGG::Init() ) {
@@ -259,7 +262,7 @@ int main( int argc, char ** argv )
         }
 #ifndef ANDROID
         catch ( const Error::Exception & ) {
-            VERBOSE( std::endl << conf.String() );
+            VERBOSE_LOG( std::endl << conf.String() );
         }
 #endif
     fheroes2::Display::instance().release();
@@ -346,7 +349,7 @@ void SetLangEnvPath( const Settings & conf )
                 Translation::setDomain( "fheroes2" );
         }
         else
-            ERROR( "translation not found: " << mofile );
+            ERROR_LOG( "translation not found: " << mofile );
     }
 #else
     (void)conf;

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <iostream>
+#include <sstream>
 
 #include "game.h"
 #include "heroes.h"

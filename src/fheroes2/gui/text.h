@@ -27,8 +27,8 @@
 #include <vector>
 
 #include "gamedefs.h"
-
 #include "screen.h"
+#include "translations.h"
 #include "ui_tool.h"
 
 namespace Font

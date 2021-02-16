@@ -20,6 +20,7 @@
 
 #include "battle_pathfinding.h"
 #include "battle_troop.h"
+#include "logging.h"
 #include <algorithm>
 
 namespace Battle
@@ -134,7 +135,7 @@ namespace Battle
 
         const Cell * unitHead = unit.GetPosition().GetHead();
         if ( !unitHead ) {
-            DEBUG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
             return;
         }
 

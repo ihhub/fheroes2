@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "difficulty.h"
+#include "translations.h"
 
 const std::string & Difficulty::String( int difficulty )
 {

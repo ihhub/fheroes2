@@ -32,7 +32,7 @@
 #include <sstream>
 
 #include "error.h"
-#include "system.h"
+#include "logging.h"
 #include "tools.h"
 
 #include <SDL.h>
@@ -289,7 +289,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
     if ( rw && 1 == SDL_RWwrite( rw, &data[0], data.size(), 1 ) )
         SDL_RWclose( rw );
     else {
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
         return false;
     }
 
@@ -301,11 +301,11 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
     if ( rw == NULL )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
     if ( length < 0 )
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
 
     if ( length > 0 ) {
         data.resize( length );

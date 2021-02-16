@@ -25,7 +25,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "localevent.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
@@ -275,11 +274,6 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     while ( le.HandleEvents() ) {
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-
-        if ( Settings::Get().PocketPC() && le.MousePressLeft( text_rt ) ) {
-            PocketPC::KeyboardDialog( res );
-            redraw = true;
-        }
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
             break;

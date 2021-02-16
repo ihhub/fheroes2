@@ -23,10 +23,10 @@
 #include "resource.h"
 #include "agg.h"
 #include "image.h"
+#include "logging.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "rand.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 
@@ -83,7 +83,7 @@ Funds::Funds( int rs, u32 count )
         break;
 
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
         break;
     }
 }
@@ -382,7 +382,7 @@ u32 Resource::GetIndexSprite( int resource )
     case Resource::GOLD:
         return 13;
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
     }
 
     return 0;
@@ -432,7 +432,7 @@ u32 Resource::GetIndexSprite2( int resource )
     case Resource::GOLD:
         return 6;
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
     }
 
     return 0;

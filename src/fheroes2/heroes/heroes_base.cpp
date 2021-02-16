@@ -32,6 +32,7 @@
 #include "kingdom.h"
 #include "race.h"
 #include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 int ArtifactsModifiersResult( int type, const u8 * arts, u32 size, const HeroBase & base, std::string * strs )
