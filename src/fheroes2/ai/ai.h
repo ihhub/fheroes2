@@ -26,6 +26,7 @@
 #include "gamedefs.h"
 #include "rand.h"
 
+class StreamBase;
 class Funds;
 class Castle;
 class HeroBase;
@@ -55,17 +56,6 @@ namespace AI
         WARRIOR,
         BUILDER,
         EXPLORER
-    };
-
-    enum modes_t
-    {
-        HERO_SKIP_TURN = 0x02000000,
-        HERO_WAITING = 0x04000000,
-        HERO_MOVED = 0x08000000,
-        HERO_SCOUT = 0x10000000,
-        HERO_HUNTER = 0x20000000,
-        HERO_COURIER = 0x40000000,
-        HERO_CHAMPION = 0x80000000
     };
 
     const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
@@ -116,6 +106,10 @@ namespace AI
         int _personality = NONE;
 
         Base() {}
+
+    private:
+        friend StreamBase & operator<<( StreamBase &, const AI::Base & );
+        friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
     Base & Get( AI_TYPE type = NORMAL );
@@ -130,6 +124,9 @@ namespace AI
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
+
+    StreamBase & operator<<( StreamBase &, const AI::Base & );
+    StreamBase & operator>>( StreamBase &, AI::Base & );
 }
 
 #endif

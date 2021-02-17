@@ -2096,16 +2096,9 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     return msg << base <<
            // heroes
            hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-               << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index << hero.patrol_center << hero.patrol_square << hero.visit_object;
+               << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index << hero.patrol_center << hero.patrol_square << hero.visit_object
+               << hero._lastGroundRegion;
 }
-
-enum deprecated_t
-{
-    AIWAITING = 0x00000002,
-    HUNTER = 0x00000010,
-    SCOUTER = 0x00000020,
-    STUPID = 0x00000040
-};
 
 StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 {
@@ -2114,6 +2107,10 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
     msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
         >> hero.race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index >> hero.patrol_center >> hero.patrol_square >> hero.visit_object;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
+        msg >> hero._lastGroundRegion;
+    }
 
     hero.army.SetCommander( &hero );
     return msg;
