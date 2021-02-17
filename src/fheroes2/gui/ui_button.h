@@ -21,6 +21,7 @@
 #pragma once
 
 #include "screen.h"
+#include <memory>
 
 namespace fheroes2
 {
@@ -29,6 +30,7 @@ namespace fheroes2
     {
     public:
         ActionObject();
+        virtual ~ActionObject() {}
 
         void subscribe( ActionObject * receiver );
         void unsubscribe();
@@ -65,7 +67,7 @@ namespace fheroes2
 
         void setPosition( int32_t offsetX_, int32_t offsetY_ );
 
-        void draw( Image & area = Display::instance() ) const; // will draw on screen by default
+        void draw( Image & area = Display::instance() ); // will draw on screen by default
         bool drawOnPress( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
         bool drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
 
@@ -74,6 +76,8 @@ namespace fheroes2
     protected:
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
+
+        std::shared_ptr<Sprite> releasedDisabled;
 
     private:
         int32_t _offsetX;

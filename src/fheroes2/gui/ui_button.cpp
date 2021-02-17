@@ -50,7 +50,8 @@ namespace fheroes2
     }
 
     ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
-        : _offsetX( offsetX )
+        : releasedDisabled()
+        , _offsetX( offsetX )
         , _offsetY( offsetY )
         , _isPressed( false )
         , _isEnabled( true )
@@ -136,7 +137,7 @@ namespace fheroes2
         _offsetY = offsetY_;
     }
 
-    void ButtonBase::draw( Image & area ) const
+    void ButtonBase::draw( Image & area )
     {
         if ( !isVisible() )
             return;
@@ -152,10 +153,11 @@ namespace fheroes2
                 Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
             else {
-                // TODO: cache this Sprite to speed up everything
-                Sprite image = sprite;
-                ApplyPalette( image, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-                Blit( image, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+                if ( !releasedDisabled ) {
+                    releasedDisabled.reset( new Sprite( sprite ) );
+                    ApplyPalette( *releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+                }
+                Blit( *releasedDisabled, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
         }
     }
@@ -209,6 +211,7 @@ namespace fheroes2
         _icnId = icnId;
         _releasedIndex = releasedIndex;
         _pressedIndex = pressedIndex;
+        releasedDisabled.reset();
     }
 
     const Sprite & Button::_getPressed() const
@@ -237,6 +240,7 @@ namespace fheroes2
     {
         _released = released;
         _pressed = pressed;
+        releasedDisabled.reset();
     }
 
     const Sprite & ButtonSprite::_getPressed() const
