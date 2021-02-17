@@ -239,6 +239,15 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         armies_order->reserve( 25 );
         interface->SetArmiesOrder( armies_order );
     }
+    else {
+        // no interface - force auto battle mode for human player
+        if ( a1.isControlHuman() ) {
+            auto_battle |= a1.GetColor();
+        }
+        if ( a2.isControlHuman() ) {
+            auto_battle |= a2.GetColor();
+        }
+    }
 
     towers[0] = NULL;
     towers[1] = NULL;
@@ -391,7 +400,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        fheroes2::delayforMs( 10 );
+        if ( interface ) {
+            fheroes2::delayforMs( 10 );
+        }
     }
 }
 

@@ -172,6 +172,7 @@ void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
     Text text( str, Font::SMALL );
     text.Blit( areas[0].x + ( sprite.width() - text.w() ) / 2, areas[0].y + sprite.height() + 3 );
 
+    RedrawOnOffSetting( areas[2], _( "Auto Spell Casting" ), 6, conf.BattleAutoSpellcast() );
     RedrawOnOffSetting( areas[3], _( "Grid" ), 8, conf.BattleShowGrid() );
     RedrawOnOffSetting( areas[4], _( "Shadow Movement" ), 10, conf.BattleShowMoveShadow() );
     RedrawOnOffSetting( areas[5], _( "Shadow Cursor" ), 12, conf.BattleShowMouseShadow() );
@@ -247,6 +248,12 @@ void Battle::DialogBattleSettings( void )
             fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
             RedrawBattleSettings( optionAreas );
             display.render();
+            saveConfiguration = true;
+        }
+        else if ( le.MouseClickLeft( optionAreas[2] ) ) {
+            conf.setBattleAutoSpellcast( !conf.BattleAutoSpellcast() );
+            fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+            RedrawBattleSettings( optionAreas );
             saveConfiguration = true;
         }
         else if ( le.MouseClickLeft( optionAreas[3] ) ) {
