@@ -65,7 +65,7 @@ namespace Campaign
             return _finishedMaps.empty();
         }
 
-        int getDaysPassed() const
+        uint32_t getDaysPassed() const
         {
             return _daysPassed;
         }
@@ -76,7 +76,7 @@ namespace Campaign
         void addCurrentMapToFinished();
         void addCampaignAward( const std::string & award );
         void reset();
-        void addDaysPassed( const int days );
+        void addDaysPassed( const uint32_t days );
 
         static CampaignSaveData & Get();
 
