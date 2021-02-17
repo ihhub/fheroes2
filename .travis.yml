@@ -21,10 +21,7 @@ matrix:
       name: "SonarCloud analysis"
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl2-dev
-        - sudo apt-get install -y libsdl2-ttf-dev
-        - sudo apt-get install -y libsdl2-mixer-dev
-        - sudo apt-get install -y libsdl2-image-dev
+        - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
         - export FHEROES2_STRICT_COMPILATION="ON"
       script:
         # Wraps the compilation with the Build Wrapper to generate configuration (used
@@ -37,10 +34,7 @@ matrix:
       name: "Ubuntu (Linux) with SDL 1.2"
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl1.2-dev
-        - sudo apt-get install -y libsdl-ttf2.0-dev
-        - sudo apt-get install -y libsdl-mixer1.2-dev
-        - sudo apt-get install -y libsdl-image1.2-dev
+        - sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev
         - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
@@ -62,10 +56,7 @@ matrix:
       name: "Ubuntu (Linux) with SDL 2.0"
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl2-dev
-        - sudo apt-get install -y libsdl2-ttf-dev
-        - sudo apt-get install -y libsdl2-mixer-dev
-        - sudo apt-get install -y libsdl2-image-dev
+        - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
         - export FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
@@ -88,12 +79,7 @@ matrix:
       name: "Ubuntu (Linux) ARM with SDL 1.2"
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl1.2-dev
-        - sudo apt-get install -y libsdl-ttf2.0-dev
-        - sudo apt-get install -y libsdl-mixer1.2-dev
-        - sudo apt-get install -y libsdl-image1.2-dev
-        - sudo apt-get install -y gettext
-        - sudo apt-get install -y zip
+        - sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext zip
         - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
@@ -116,12 +102,7 @@ matrix:
       name: "Ubuntu (Linux) ARM with SDL 2.0"
       before_install:
         - sudo apt-get update
-        - sudo apt-get install -y libsdl2-dev
-        - sudo apt-get install -y libsdl2-ttf-dev
-        - sudo apt-get install -y libsdl2-mixer-dev
-        - sudo apt-get install -y libsdl2-image-dev
-        - sudo apt-get install -y gettext
-        - sudo apt-get install -y zip
+        - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext zip
         - export FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .

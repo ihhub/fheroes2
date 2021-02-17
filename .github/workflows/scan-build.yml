@@ -16,12 +16,7 @@ jobs:
     - name: install SDL 2 and clang-tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y libsdl2-dev
-        sudo apt-get install -y libsdl2-ttf-dev
-        sudo apt-get install -y libsdl2-mixer-dev
-        sudo apt-get install -y libsdl2-image-dev
-        sudo apt-get install -y gettext
-        sudo apt-get install -y clang-tools
+        sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools
     - name: compile
       run: scan-build -v make -j 2
       env:
