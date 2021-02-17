@@ -23,6 +23,7 @@
 #define H2RAND_H
 
 #include <cstdlib>
+#include <functional>
 #include <list>
 #include <utility>
 #include <vector>
@@ -32,6 +33,7 @@
 namespace Rand
 {
     uint32_t Get( uint32_t from, uint32_t to = 0 );
+    uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
 
     template <typename T>
     const T * Get( const std::vector<T> & vec )
@@ -61,10 +63,13 @@ namespace Rand
     public:
         Queue( u32 size = 0 );
 
-        void Reset( void );
-        void Push( s32, u32 );
+        void Push( s32 value, u32 percent );
         size_t Size( void ) const;
-        s32 Get( void );
+        int32_t Get();
+        int32_t GetWithSeed( uint32_t seed );
+
+    private:
+        int32_t Get( const std::function<uint32_t( uint32_t )> & randomFunc );
     };
 }
 

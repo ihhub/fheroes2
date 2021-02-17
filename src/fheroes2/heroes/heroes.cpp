@@ -50,6 +50,16 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    template <class T>
+    void hashCombine( std::size_t & seed, const T & v )
+    {
+        std::hash<T> hasher;
+        seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
+    }
+}
+
 const char * Heroes::GetName( int id )
 {
     const char * names[]
@@ -1432,69 +1442,60 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     return 0;
 }
 
-/* up level */
 void Heroes::LevelUp( bool skipsecondary, bool autoselect )
 {
-    int primary = LevelUpPrimarySkill();
+    const HeroSeedsForLevelUp seeds = GetSeedsForLevelUp();
+
+    // level up primary skill
+    const int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
+
     if ( !skipsecondary )
-        LevelUpSecondarySkill( primary, ( autoselect || isControlAI() ) );
+        LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
     if ( isControlAI() )
         AI::Get().HeroesLevelUp( *this );
 }
 
-int Heroes::LevelUpPrimarySkill( void )
-{
-    int skill = Skill::Primary::LevelUp( race, GetLevel() );
-
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( skill ) );
-    return skill;
-}
-
-void Heroes::LevelUpSecondarySkill( int primary, bool autoselect )
+void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect )
 {
     Skill::Secondary sec1;
     Skill::Secondary sec2;
 
-    secondary_skills.FindSkillsForLevelUp( race, sec1, sec2 );
+    secondary_skills.FindSkillsForLevelUp( race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
     DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
-    const Skill::Secondary * selected = NULL;
+
+    Skill::Secondary selected;
 
     if ( autoselect ) {
-        if ( Skill::Secondary::UNKNOWN == sec1.Skill() || Skill::Secondary::UNKNOWN == sec2.Skill() ) {
-            if ( Skill::Secondary::UNKNOWN != sec1.Skill() )
-                selected = &sec1;
-            else if ( Skill::Secondary::UNKNOWN != sec2.Skill() )
-                selected = &sec2;
+        if ( sec1.isValid() && sec2.isValid() ) {
+            selected = Rand::GetWithSeed( 0, 1, seeds.seedSecondaySkillRandomChoose ) ? sec1 : sec2;
         }
-        else if ( Skill::Secondary::UNKNOWN != sec1.Skill() && Skill::Secondary::UNKNOWN != sec2.Skill() )
-            selected = ( Rand::Get( 0, 1 ) ? &sec1 : &sec2 );
+        else {
+            selected = sec1.isValid() ? sec1 : sec2;
+        }
     }
     else {
         AGG::PlaySound( M82::NWHEROLV );
         int result = Dialog::LevelUpSelectSkill( name, Skill::Primary::String( primary ), sec1, sec2, *this );
 
         if ( Skill::Secondary::UNKNOWN != result )
-            selected = result == sec2.Skill() ? &sec2 : &sec1;
+            selected = result == sec2.Skill() ? sec2 : sec1;
     }
 
     // level up sec. skill
-    if ( selected ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected->Skill() ) );
-        Skill::Secondary * secs = secondary_skills.FindSkill( selected->Skill() );
+    if ( selected.isValid() ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) );
+        Skill::Secondary * secs = secondary_skills.FindSkill( selected.Skill() );
 
         if ( secs )
             secs->NextLevel();
         else
-            secondary_skills.AddSkill( Skill::Secondary( selected->Skill(), Skill::Level::BASIC ) );
+            secondary_skills.AddSkill( Skill::Secondary( selected.Skill(), Skill::Level::BASIC ) );
 
         // post action
-        switch ( selected->Skill() ) {
-        case Skill::Secondary::SCOUTING:
+        if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
             Scoute();
-            break;
-
-        default:
-            break;
         }
     }
 }
@@ -2026,6 +2027,39 @@ Heroes * AllHeroes::FromJail( s32 index ) const
 bool AllHeroes::HaveTwoFreemans( void ) const
 {
     return 2 <= std::count_if( begin(), end(), []( const Heroes * hero ) { return hero->isFreeman(); } );
+}
+
+HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
+{
+    /* We generate seeds based on the hero and global world map seed
+     * The idea is that, we want the skill selection to be randomized at each map restart,
+     * but deterministic for a given hero.
+     * We also want the available skills to change depending on current skills/stats of the hero,
+     * to avoid giving out the same skills/stats at each level up. We can't use the level field for this, as it
+     * doesn't change when we level up several levels at once.
+     * We also need to generate different seeds for each possible call to the random number generator,
+     * in order to avoid always drawing the same random number at level-up: otherwise this
+     * would mean that for all possible games, the 2nd secondary
+     * skill would always be the same once the 1st one is selected.
+     * */
+
+    size_t hash = world.GetMapSeed();
+    hashCombine( hash, hid );
+    hashCombine( hash, race );
+    hashCombine( hash, attack );
+    hashCombine( hash, defense );
+    hashCombine( hash, power );
+    hashCombine( hash, knowledge );
+    for ( int skillId = Skill::Secondary::PATHFINDING; skillId <= Skill::Secondary::ESTATES; ++skillId ) {
+        hashCombine( hash, GetLevelSkill( skillId ) );
+    }
+
+    HeroSeedsForLevelUp seeds;
+    seeds.seedPrimarySkill = static_cast<uint32_t>( hash );
+    seeds.seedSecondaySkill1 = seeds.seedPrimarySkill + 1;
+    seeds.seedSecondaySkill2 = seeds.seedPrimarySkill + 2;
+    seeds.seedSecondaySkillRandomChoose = seeds.seedPrimarySkill + 3;
+    return seeds;
 }
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )

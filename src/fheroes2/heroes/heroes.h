@@ -46,6 +46,14 @@ namespace Interface
     class GameArea;
 }
 
+struct HeroSeedsForLevelUp
+{
+    uint32_t seedPrimarySkill = 0;
+    uint32_t seedSecondaySkill1 = 0;
+    uint32_t seedSecondaySkill2 = 0;
+    uint32_t seedSecondaySkillRandomChoose = 0;
+};
+
 class Heroes : public HeroBase, public ColorBase
 {
 public:
@@ -327,9 +335,9 @@ private:
     friend class Recruits;
     friend class Battle::Only;
 
+    HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
-    int LevelUpPrimarySkill( void );
-    void LevelUpSecondarySkill( int, bool autoselect = false );
+    void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 to, bool newpos );
