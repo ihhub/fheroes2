@@ -69,7 +69,7 @@ namespace Campaign
             _finishedMaps.emplace_back( _currentScenarioID );
     }
 
-    void CampaignSaveData::addDaysPassed( const int days )
+    void CampaignSaveData::addDaysPassed( const uint32_t days )
     {
         _daysPassed += days;
     }
