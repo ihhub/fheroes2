@@ -27,13 +27,17 @@
 #include <string>
 #include <vector>
 
-#include "ai.h"
 #include "bitmodes.h"
 #include "color.h"
 
 namespace Maps
 {
     class FileInfo;
+}
+
+namespace AI
+{
+    class Base;
 }
 
 class Castle;
@@ -124,7 +128,7 @@ public:
     int GetRace( void ) const;
     int GetFriends( void ) const;
     int GetID( void ) const;
-    std::weak_ptr<AI::Base> getAIInstance() const;
+    std::string GetPersonalityString() const;
 
     const std::string & GetName( void ) const;
     Focus & GetFocus( void );

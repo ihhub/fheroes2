@@ -132,9 +132,9 @@ int Player::GetID( void ) const
     return id;
 }
 
-std::weak_ptr<AI::Base> Player::getAIInstance() const
+std::string Player::GetPersonalityString() const
 {
-    return _ai;
+    return _ai->GetPersonalityString();
 }
 
 bool Player::isID( u32 id2 ) const
@@ -233,14 +233,8 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
 {
     const BitModes & modes = player;
 
+    assert( player._ai != nullptr );
     msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai;
-    if ( player._ai ) {
-        msg << *player._ai;
-    }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Player object without AI" );
-        msg << AI::Normal();
-    }
     return msg;
 }
 
@@ -476,11 +470,11 @@ std::string Players::String( void ) const
 
         switch ( ( *it )->GetControl() ) {
         case CONTROL_AI | CONTROL_HUMAN:
-            os << "ai|human";
+            os << "ai|human, " << ( *it )->GetPersonalityString();
             break;
 
         case CONTROL_AI:
-            os << "ai";
+            os << "ai, " << (*it)->GetPersonalityString();
             break;
 
         case CONTROL_HUMAN:
@@ -494,10 +488,6 @@ std::string Players::String( void ) const
         default:
             os << "unknown";
             break;
-        }
-
-        if ( std::shared_ptr<AI::Base> ai = ( *it )->getAIInstance().lock() ) {
-            os << ", " << ai->GetPersonalityString();
         }
 
         os << ")"
