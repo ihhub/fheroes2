@@ -474,7 +474,7 @@ std::string Players::String( void ) const
             break;
 
         case CONTROL_AI:
-            os << "ai, " << (*it)->GetPersonalityString();
+            os << "ai, " << ( *it )->GetPersonalityString();
             break;
 
         case CONTROL_HUMAN:
