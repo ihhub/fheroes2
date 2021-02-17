@@ -25,6 +25,7 @@
 #include "smacker.h"
 #include "smk_decoder.h"
 
+#include <cassert>
 #include <cstring>
 
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
@@ -147,7 +148,9 @@ unsigned long SMKVideoSequence::width() const
 
 unsigned long SMKVideoSequence::height() const
 {
-    return _height;
+    // Some videos are written in compressed format where video's height is exactly a half of the original height of the screen.
+    // Detecting such videos and rescaling helps to deal with such situations.
+    return ( _width == 640 && _height == 240 ) ? 480 : _height;
 }
 
 double SMKVideoSequence::fps() const
@@ -174,16 +177,34 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_
     if ( _videoFile == NULL )
         return;
 
-    const bool resizedImage = ( image.width() != static_cast<int32_t>( _width ) ) || ( image.height() != static_cast<int32_t>( _height ) );
+    const bool resizedImage = ( image.width() != static_cast<int32_t>( width() ) ) || ( image.height() != static_cast<int32_t>( height() ) );
 
-    image.resize( _width, _height );
+    image.resize( width(), height() );
     image._disableTransformLayer();
 
     const uint8_t * data = smk_get_video( _videoFile );
     const uint8_t * paletteData = smk_get_palette( _videoFile );
 
     const size_t size = static_cast<size_t>( _width ) * _height;
-    std::copy( data, data + size, image.image() );
+
+    // Some videos are written in compressed format where video's height is exactly a half of the original height of the screen.
+    // Detecting such videos and rescaling helps to deal with such situations.
+    if ( _height != height() ) {
+        assert( _height * 2 == height() );
+        uint8_t * imageData = image.image();
+        for ( unsigned long i = 0; i < _height; ++i ) {
+            std::copy( data, data + _width, imageData );
+            imageData += _width;
+            std::copy( data, data + _width, imageData );
+            imageData += _width;
+
+            data += _width;
+        }
+    }
+    else {
+        std::copy( data, data + size, image.image() );
+    }
+
     if ( resizedImage ) {
         std::fill( image.transform(), image.transform() + size, 0 );
     }

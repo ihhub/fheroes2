@@ -23,6 +23,7 @@
 #include "ai_normal.h"
 #include "ground.h"
 #include "heroes.h"
+#include "logging.h"
 #include "maps.h"
 #include "mp2.h"
 #include "world.h"
@@ -158,6 +159,10 @@ namespace AI
         }
         else if ( MP2::isPickupObject( objectID ) ) {
             return 850.0;
+        }
+        else if ( MP2::isCaptureObject( objectID ) && MP2::isQuantityObject( objectID ) ) {
+            // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
+            return 500.0;
         }
         else if ( objectID == MP2::OBJ_XANADU ) {
             return 3000.0;
@@ -299,19 +304,19 @@ namespace AI
                     objectID = node.second;
 #endif
 
-                    DEBUG( DBG_AI, DBG_TRACE,
-                           hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE,
+                               hero.GetName() << ": valid object at " << node.first << " value is " << value << " (" << MP2::StringObject( node.second ) << ")" );
                 }
             }
         }
 
         if ( priorityTarget != -1 ) {
-            DEBUG( DBG_AI, DBG_INFO,
-                   hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+            DEBUG_LOG( DBG_AI, DBG_INFO,
+                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
-            DEBUG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
         }
 
         return priorityTarget;
@@ -332,14 +337,14 @@ namespace AI
         for ( Heroes * hero : heroes ) {
             if ( hero->Modes( Heroes::PATROL ) ) {
                 if ( hero->GetSquarePatrol() == 0 ) {
-                    DEBUG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
-                    hero->SetModes( AI::HERO_MOVED );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
+                    hero->SetModes( Heroes::MOVED );
                     continue;
                 }
             }
-            hero->ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
+            hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
             if ( !hero->MayStillMove() ) {
-                hero->SetModes( AI::HERO_MOVED );
+                hero->SetModes( Heroes::MOVED );
             }
             else {
                 availableHeroes.emplace_back();
@@ -388,7 +393,7 @@ namespace AI
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
                 if ( !availableHeroes[i].hero->MayStillMove() ) {
-                    availableHeroes[i].hero->SetModes( AI::HERO_MOVED );
+                    availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
                 }
@@ -399,7 +404,7 @@ namespace AI
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
             if ( !heroInfo.hero->MayStillMove() ) {
-                heroInfo.hero->SetModes( AI::HERO_MOVED );
+                heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }
     }

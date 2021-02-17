@@ -76,7 +76,7 @@ int Dialog::SystemOptions( void )
     rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
     rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
     rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ); // not in use
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -86,6 +86,7 @@ int Dialog::SystemOptions( void )
     const fheroes2::Rect & rect6 = rects[5];
     const fheroes2::Rect & rect7 = rects[6];
     const fheroes2::Rect & rect8 = rects[7];
+    const fheroes2::Rect & rect9 = rects[8];
 
     DrawSystemInfo( rects );
 
@@ -178,6 +179,26 @@ int Dialog::SystemOptions( void )
         if ( le.MouseClickLeft( rect8 ) ) {
             conf.SetHideInterface( !conf.ExtGameHideInterface() );
             result |= 0x04;
+            redraw = true;
+            saveConfig = true;
+        }
+
+        // toggle manual/auto battles
+        if ( le.MouseClickLeft( rect9 ) ) {
+            if ( conf.BattleAutoResolve() ) {
+                if ( conf.BattleAutoSpellcast() ) {
+                    conf.setBattleAutoSpellcast( false );
+                }
+                else {
+                    conf.setBattleAutoResolve( false );
+                }
+            }
+            else {
+                conf.setBattleAutoResolve( true );
+                conf.setBattleAutoSpellcast( true );
+            }
+
+            result |= 0x20;
             redraw = true;
             saveConfig = true;
         }
@@ -348,10 +369,23 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h + textOffset );
 
-    // unused
-    // const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN(ICN::SPANEL, 17);
+    // auto-battles
     const Rect & rect9 = rects[8];
-    str = "unused";
+    str = _( "Battles" );
+    text.Set( str );
+    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y - text.h() - textOffset );
+
+    if ( conf.BattleAutoResolve() ) {
+        const bool spellcast = conf.BattleAutoSpellcast();
+        str = spellcast ? _( "Auto Resolve" ) : str = _( "Auto, No Spells" );
+
+        const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
+        fheroes2::Blit( sprite9, display, rect9.x, rect9.y );
+    }
+    else {
+        str = _( "Manual" );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), display, rect9.x, rect9.y );
+    }
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );
 }

@@ -41,9 +41,9 @@
 #include "castle.h"
 #include "cursor.h"
 #include "ground.h"
+#include "logging.h"
 #include "mus.h"
 #include "race.h"
-#include "settings.h"
 #include "speed.h"
 #include "tools.h"
 #include "world.h"
@@ -239,6 +239,15 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         armies_order->reserve( 25 );
         interface->SetArmiesOrder( armies_order );
     }
+    else {
+        // no interface - force auto battle mode for human player
+        if ( a1.isControlHuman() ) {
+            auto_battle |= a1.GetColor();
+        }
+        if ( a2.isControlHuman() ) {
+            auto_battle |= a2.GetColor();
+        }
+    }
 
     towers[0] = NULL;
     towers[1] = NULL;
@@ -329,7 +338,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
     end_turn = false;
     const bool isImmovable = current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
 
     // morale check right before the turn
     if ( !isImmovable ) {
@@ -391,7 +400,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        fheroes2::delayforMs( 10 );
+        if ( interface ) {
+            fheroes2::delayforMs( 10 );
+        }
     }
 }
 
@@ -405,7 +416,7 @@ void Battle::Arena::Turns( void )
     const Settings & conf = Settings::Get();
 
     ++current_turn;
-    DEBUG( DBG_BATTLE, DBG_TRACE, current_turn );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
         AGG::PlayMusic( MUS::GetBattleRandom() );
@@ -501,7 +512,7 @@ void Battle::Arena::Turns( void )
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
     AI::Get().BattleTurn( *this, b, a );
 }
 
@@ -560,7 +571,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
         std::stringstream ss;
         for ( u32 ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
-        DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
     }
 
     return result;
@@ -1048,7 +1059,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const s32 pos = GetFreePositionNearHero( current_color );
 
     if ( 0 > pos || !hero ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
         return NULL;
     }
 
@@ -1079,18 +1090,18 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         }
 
     if ( !affect ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
         return NULL;
     }
 
     Monster mons( spell );
 
     if ( !mons.isValid() ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" );
         return NULL;
     }
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
     u32 count = spell.ExtraValue() * hero->GetPower();
     u32 acount = hero->HasArtifact( Artifact::BOOK_ELEMENTS );
     if ( acount )
@@ -1104,7 +1115,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         army.push_back( elem );
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_WARN, "is NULL" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is NULL" );
     }
 
     return elem;
@@ -1124,7 +1135,7 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         GetCurrentForce().push_back( image );
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
     }
 
     return image;

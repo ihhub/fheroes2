@@ -22,41 +22,17 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 
 #include "difficulty.h"
+#include "game.h"
+#include "logging.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
 
 #define DEFAULT_PORT 5154
-#define DEFAULT_DEBUG DBG_ALL_WARN
-
-bool IS_DEBUG( int name, int level )
-{
-    const int debug = Settings::Get().Debug();
-    return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & debug ) >> 4 ) >= level )
-           || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & debug ) >> 12 ) >= level );
-}
-
-const char * StringDebug( int name )
-{
-    if ( name & DBG_ENGINE )
-        return "DBG_ENGINE";
-    else if ( name & DBG_GAME )
-        return "DBG_GAME";
-    else if ( name & DBG_BATTLE )
-        return "DBG_BATTLE";
-    else if ( name & DBG_AI )
-        return "DBG_AI";
-    else if ( name & DBG_NETWORK )
-        return "DBG_NETWORK";
-    else if ( name & DBG_OTHER )
-        return "DBG_OTHER";
-    else if ( name & DBG_DEVEL )
-        return "DBG_DEVEL";
-    return "";
-}
 
 enum
 {
@@ -64,7 +40,7 @@ enum
     // ??? = 0x00000002,
     GLOBAL_PRICELOYALTY = 0x00000004,
 
-    GLOBAL_POCKETPC = 0x00000008,
+    // GLOBAL_POCKETPC = 0x00000008,
     GLOBAL_DEDICATEDSERVER = 0x00000010,
     GLOBAL_LOCALCLIENT = 0x00000020,
 
@@ -91,6 +67,8 @@ enum
     GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
     GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
     GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
+    GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
+    GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
 
     GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
 };
@@ -131,14 +109,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_ALTRESOURCE,
         "alt resource",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocketpc",
-    },
-    {
-        GLOBAL_POCKETPC,
-        "pocket pc",
     },
     {
         GLOBAL_USESWSURFACE,
@@ -359,14 +329,6 @@ const settings_t settingsFHeroes2[] = {
         Settings::GAME_CONTINUE_AFTER_VICTORY,
         _( "game: offer to continue the game afer victory condition" ),
     },
-    {
-        Settings::POCKETPC_TAP_MODE,
-        _( "pocketpc: tap mode" ),
-    },
-    {
-        Settings::POCKETPC_DRAG_DROP_SCROLL,
-        _( "pocketpc: drag&drop gamearea as scroll" ),
-    },
 
     {0, NULL},
 };
@@ -413,12 +375,7 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-
-    if ( System::isEmbededDevice() ) {
-        opt_global.SetModes( GLOBAL_POCKETPC );
-        ExtSetModes( POCKETPC_TAP_MODE );
-        ExtSetModes( POCKETPC_DRAG_DROP_SCROLL );
-    }
+    opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
 Settings::~Settings()
@@ -487,6 +444,8 @@ bool Settings::Read( const std::string & filename )
         debug = ival;
         break;
     }
+
+    Logging::SetDebugLevel( debug );
 
     // opt_globals
     const settings_t * ptr = settingsGeneral;
@@ -646,6 +605,14 @@ bool Settings::Read( const std::string & filename )
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
     }
 
+    if ( config.Exists( "auto resolve battles" ) ) {
+        setBattleAutoResolve( config.StrParams( "auto resolve battles" ) == "on" );
+    }
+
+    if ( config.Exists( "auto spell casting" ) ) {
+        setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
+    }
+
     // network port
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
@@ -675,12 +642,12 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
         }
     }
 
-    if ( config.Exists( "controller_pointer_speed" ) ) {
-        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+    if ( config.Exists( "controller pointer speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
         if ( _controllerPointerSpeed > 100 )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
@@ -711,12 +678,6 @@ bool Settings::Read( const std::string & filename )
 
 void Settings::PostLoad( void )
 {
-    if ( opt_global.Modes( GLOBAL_POCKETPC ) )
-        opt_global.SetModes( GLOBAL_FULLSCREEN );
-    else {
-        ExtResetModes( POCKETPC_TAP_MODE );
-    }
-
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
         opt_global.SetModes( GLOBAL_SHOWCPANEL );
         opt_global.ResetModes( GLOBAL_SHOWRADAR );
@@ -815,6 +776,12 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# show battle shadow cursor: on off" << std::endl;
     os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# auto resolve battles: on off" << std::endl;
+    os << "auto resolve battles = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# auto combat spell casting: on off" << std::endl;
+    os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     if ( video_driver.size() ) {
         os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
@@ -1015,7 +982,7 @@ std::string Settings::GetWriteableDir( const char * subdir )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "writable directory not found" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }
@@ -1101,6 +1068,26 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
+void Settings::setBattleAutoResolve( bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    }
+}
+
+void Settings::setBattleAutoSpellcast( bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -1181,12 +1168,6 @@ bool Settings::Unicode( void ) const
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
 
-/* pocketpc mode */
-bool Settings::PocketPC( void ) const
-{
-    return opt_global.Modes( GLOBAL_POCKETPC );
-}
-
 bool Settings::BattleShowGrid( void ) const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
@@ -1202,6 +1183,16 @@ bool Settings::BattleShowMoveShadow( void ) const
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
+bool Settings::BattleAutoResolve( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
+}
+
+bool Settings::BattleAutoSpellcast( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+}
+
 const fheroes2::Size & Settings::VideoMode() const
 {
     return video_mode;
@@ -1211,6 +1202,7 @@ const fheroes2::Size & Settings::VideoMode() const
 void Settings::SetDebug( int d )
 {
     debug = d;
+    Logging::SetDebugLevel( debug );
 }
 
 /**/
@@ -1693,16 +1685,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtPocketTapMode( void ) const
-{
-    return ExtModes( POCKETPC_TAP_MODE );
-}
-
-bool Settings::ExtPocketDragDropScroll( void ) const
-{
-    return ExtModes( POCKETPC_DRAG_DROP_SCROLL );
 }
 
 bool Settings::ExtWorldNewVersionWeekOf( void ) const

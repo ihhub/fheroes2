@@ -26,12 +26,12 @@
 #include "dialog.h"
 #include "game.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "monster.h"
 #include "pal.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "statusbar.h"
 #include "world.h"
 
@@ -200,11 +200,11 @@ void BuildingInfo::UpdateCosts( const std::string & spec )
             }
         }
         else {
-            VERBOSE( spec << ": " << doc.ErrorDesc() );
+            VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
         }
     }
     else {
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
     }
 #else
     (void)spec;

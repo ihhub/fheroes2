@@ -24,7 +24,7 @@
 
 #include "audio_cdrom.h"
 #include "audio_mixer.h"
-#include "system.h"
+#include "logging.h"
 
 namespace Cdrom
 {
@@ -63,7 +63,7 @@ void Cdrom::Open( void )
         cdLock = SDL_CreateMutex();
     }
 
-    ERROR( cd ? "found CD audio device." : "no CDROM devices available." );
+    ERROR_LOG( cd ? "found CD audio device." : "no CDROM devices available." );
 }
 
 void Cdrom::Close( void )
@@ -101,7 +101,7 @@ void Cdrom::Play( const u8 track, bool loop, bool force )
 
         if ( currentTrack != track || force ) {
             if ( SDL_CDPlayTracks( cd, track, 0, 1, 0 ) < 0 )
-                ERROR( "Couldn't play track " << static_cast<int>( track ) );
+                ERROR_LOG( "Couldn't play track " << static_cast<int>( track ) );
 
             currentTrack = track;
             if ( loop ) {
@@ -112,7 +112,7 @@ void Cdrom::Play( const u8 track, bool loop, bool force )
                 startTime = 0;
 
             if ( SDL_CDStatus( cd ) != CD_PLAYING )
-                ERROR( "CD is not playing" << SDL_GetError() );
+                ERROR_LOG( "CD is not playing" << SDL_GetError() );
         }
 
         SDL_UnlockMutex( cdLock );

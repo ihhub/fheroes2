@@ -30,10 +30,10 @@
 #include "game_interface.h"
 #include "game_static.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "players.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "visit.h"
 #include "world.h"
 
@@ -62,7 +62,7 @@ void Kingdom::Init( int clr )
         UpdateStartingResource();
     }
     else {
-        DEBUG( DBG_GAME, DBG_INFO, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
     }
 }
 
@@ -101,7 +101,7 @@ int Kingdom::GetRace( void ) const
 
 void Kingdom::UpdateStartingResource( void )
 {
-    resource = Difficulty::GetKingdomStartingResources( Settings::Get().GameDifficulty(), isControlAI() );
+    resource = GetKingdomStartingResources( Settings::Get().GameDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -188,7 +188,7 @@ void Kingdom::ActionNewWeek( void )
         // debug an gift
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
-            DEBUG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
             resource += gift;
         }
     }
@@ -825,6 +825,37 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
         }
     }
     return false;
+}
+
+cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
+{
+    static cost_t startingResourcesSet[] = {{10000, 30, 10, 30, 10, 10, 10},
+                                            {7500, 20, 5, 20, 5, 5, 5},
+                                            {5000, 10, 2, 10, 2, 2, 2},
+                                            {2500, 5, 0, 5, 0, 0, 0},
+                                            {0, 0, 0, 0, 0, 0, 0},
+                                            // ai resource
+                                            {10000, 30, 10, 30, 10, 10, 10}};
+
+    if ( isAIKingdom )
+        return startingResourcesSet[5];
+
+    switch ( difficulty ) {
+    case Difficulty::EASY:
+        return startingResourcesSet[0];
+    case Difficulty::NORMAL:
+        return startingResourcesSet[1];
+    case Difficulty::HARD:
+        return startingResourcesSet[2];
+    case Difficulty::EXPERT:
+        return startingResourcesSet[3];
+    case Difficulty::IMPOSSIBLE:
+        return startingResourcesSet[4];
+    default:
+        break;
+    }
+
+    return startingResourcesSet[1];
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )

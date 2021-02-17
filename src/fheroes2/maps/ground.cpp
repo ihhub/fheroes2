@@ -22,6 +22,7 @@
 
 #include "ground.h"
 #include "direction.h"
+#include "translations.h"
 #include "world.h"
 
 const char * Maps::Ground::String( int ground )

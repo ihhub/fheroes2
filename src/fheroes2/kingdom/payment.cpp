@@ -23,6 +23,7 @@
 #include <cstring>
 
 #include "buildinginfo.h"
+#include "logging.h"
 #include "payment.h"
 
 struct paymentstats_t
@@ -86,7 +87,7 @@ void PaymentConditions::UpdateCosts( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

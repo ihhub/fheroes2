@@ -26,9 +26,9 @@
 #include "agg.h"
 #include "game.h"
 #include "game_interface.h"
+#include "logging.h"
 #include "mus.h"
 #include "puzzle.h"
-#include "settings.h"
 #include "ui_window.h"
 #include "world.h"
 

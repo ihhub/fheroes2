@@ -20,22 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 
-#include <SDL.h>
-
-#include "engine.h"
 #include "image_tool.h"
-#include "palette_h2.h"
 #include "serialize.h"
 #include "system.h"
-
-#if defined( _MSC_VER )
-#undef main
-#endif
 
 int main( int argc, char ** argv )
 {
@@ -71,16 +61,14 @@ int main( int argc, char ** argv )
     int count = sf.getLE16();
     int width = sf.getLE16();
     int height = sf.getLE16();
-    std::vector<u8> buf = sf.getRaw( width * height * count );
+    std::vector<uint8_t> buf = sf.getRaw( width * height * count );
     if ( debugMode ) {
         std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
         std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl;
     }
 
-    SDL::Init();
-
     for ( int cur = 0; cur < count; ++cur ) {
-        u32 offset = width * height * cur;
+        uint32_t offset = width * height * cur;
         if ( offset < buf.size() ) {
             fheroes2::Image image( width, height );
             memcpy( image.image(), &buf[offset], static_cast<size_t>( width * height ) );
@@ -106,6 +94,5 @@ int main( int argc, char ** argv )
 
     sf.close();
     std::cout << "expand to: " << prefix << std::endl;
-    SDL::Quit();
     return EXIT_SUCCESS;
 }

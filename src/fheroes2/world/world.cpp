@@ -32,12 +32,12 @@
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
+#include "logging.h"
 #include "maps_actions.h"
 #include "mp2.h"
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 
@@ -261,6 +261,9 @@ void World::Defaults( void )
     vec_heroes.Init();
 
     vec_castles.Init();
+
+    // map seed is random and persisted on saves
+    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 }
 
 void World::Reset( void )
@@ -299,6 +302,8 @@ void World::Reset( void )
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
+
+    _seed = 0;
 }
 
 /* new maps */
@@ -493,7 +498,8 @@ void World::pickRumor()
         assert( 0 );
         return;
     }
-    else if ( vec_rumors.size() == 1 ) {
+
+    if ( vec_rumors.size() == 1 ) {
         _rumor = &vec_rumors.front();
         assert( 0 );
         return;
@@ -661,7 +667,7 @@ s32 World::NextTeleport( s32 index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
     }
 
     const int32_t * randValue = Rand::Get( teleports );
@@ -679,7 +685,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "is empty" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
             return MapsIndexes();
         }
 
@@ -705,7 +711,7 @@ s32 World::NextWhirlpool( s32 index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
     }
 
     const int32_t * randValue = Rand::Get( whilrpools );
@@ -853,9 +859,9 @@ EventsDate World::GetEventsDate( int color ) const
 std::string World::DateString( void ) const
 {
     std::ostringstream os;
-    os << "month: " << static_cast<int>( GetMonth() ) << ", "
-       << "week: " << static_cast<int>( GetWeek() ) << ", "
-       << "day: " << static_cast<int>( GetDay() );
+    os << "month: " << GetMonth() << ", "
+       << "week: " << GetWeek() << ", "
+       << "day: " << GetDay();
     return os.str();
 }
 
@@ -1065,6 +1071,11 @@ void World::PostLoad()
     ComputeStaticAnalysis();
 }
 
+uint32_t World::GetMapSeed() const
+{
+    return _seed;
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
@@ -1191,7 +1202,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const Size & sz = w;
 
     return msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj << w.ultimate_artifact
-               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects;
+               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1200,6 +1211,14 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
+        msg >> w._seed;
+    }
+    else {
+        // For old versions, generate a different seed at each map loading
+        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
+    }
 
     w.PostLoad();
 
@@ -1257,12 +1276,12 @@ void EventDate::LoadFromMP2( StreamBuf st )
 
         // message
         message = Game::GetEncodeString( st.toString() );
-        DEBUG( DBG_GAME, DBG_INFO,
-               "event"
-                   << ": " << message );
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                   "event"
+                       << ": " << message );
     }
     else {
-        DEBUG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
     }
 }
 

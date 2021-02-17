@@ -148,6 +148,7 @@ public:
     Army & GetArmy( void );
     const Army & GetActualArmy( void ) const;
     Army & GetActualArmy( void );
+    double GetGarrisonStrength() const;
     u32 getMonstersInDwelling( u32 ) const;
     u32 GetActualDwelling( u32 ) const;
 

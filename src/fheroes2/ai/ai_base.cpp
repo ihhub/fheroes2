@@ -29,8 +29,8 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "mus.h"
-#include "settings.h"
 
 namespace AI
 {
@@ -116,14 +116,14 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove() && !hero.Modes( HERO_MOVED );
+        return hero.MayStillMove() && !hero.Modes( Heroes::MOVED );
     }
 
     void Base::HeroTurn( Heroes & hero )
     {
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
-        hero.ResetModes( HERO_MOVED );
+        hero.ResetModes( Heroes::MOVED );
 
         while ( Base::HeroesCanMove( hero ) ) {
             // turn indicator
@@ -139,14 +139,14 @@ namespace AI
 
             // heroes AI turn
             AI::HeroesMove( hero );
-            hero.SetModes( HERO_MOVED );
+            hero.SetModes( Heroes::MOVED );
 
             // turn indicator
             status.RedrawTurnProgress( 7 );
             status.RedrawTurnProgress( 8 );
         }
 
-        DEBUG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
     }
 
     void Base::KingdomTurn( Kingdom & kingdom )
@@ -188,12 +188,22 @@ namespace AI
         status.RedrawTurnProgress( 8 );
         status.RedrawTurnProgress( 9 );
 
-        DEBUG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" );
     }
 
     void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
         actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
+    {
+        return msg << instance._personality;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, AI::Base & instance )
+    {
+        return msg >> instance._personality;
     }
 }
