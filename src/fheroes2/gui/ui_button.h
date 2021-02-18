@@ -77,7 +77,7 @@ namespace fheroes2
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
 
-        std::shared_ptr<Sprite> releasedDisabled;
+        std::unique_ptr<Sprite> _releasedDisabled;
 
     private:
         int32_t _offsetX;
