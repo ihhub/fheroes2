@@ -67,6 +67,8 @@ enum
     GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
     GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
     GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
+    GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
+    GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
 
     GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
 };
@@ -373,6 +375,7 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
 Settings::~Settings()
@@ -602,6 +605,14 @@ bool Settings::Read( const std::string & filename )
         SetBattleMouseShaded( config.StrParams( "battle shadow cursor" ) == "on" );
     }
 
+    if ( config.Exists( "auto resolve battles" ) ) {
+        setBattleAutoResolve( config.StrParams( "auto resolve battles" ) == "on" );
+    }
+
+    if ( config.Exists( "auto spell casting" ) ) {
+        setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
+    }
+
     // network port
     port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
@@ -635,8 +646,8 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-    if ( config.Exists( "controller_pointer_speed" ) ) {
-        _controllerPointerSpeed = config.IntParams( "controller_pointer_speed" );
+    if ( config.Exists( "controller pointer speed" ) ) {
+        _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
         if ( _controllerPointerSpeed > 100 )
             _controllerPointerSpeed = 100;
         else if ( _controllerPointerSpeed < 0 )
@@ -765,6 +776,12 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# show battle shadow cursor: on off" << std::endl;
     os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# auto resolve battles: on off" << std::endl;
+    os << "auto resolve battles = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# auto combat spell casting: on off" << std::endl;
+    os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     if ( video_driver.size() ) {
         os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
@@ -1051,6 +1068,26 @@ void Settings::SetBattleSpeed( int speed )
     battle_speed = speed;
 }
 
+void Settings::setBattleAutoResolve( bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    }
+}
+
+void Settings::setBattleAutoSpellcast( bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -1144,6 +1181,16 @@ bool Settings::BattleShowMouseShadow( void ) const
 bool Settings::BattleShowMoveShadow( void ) const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+}
+
+bool Settings::BattleAutoResolve( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
+}
+
+bool Settings::BattleAutoSpellcast( void ) const
+{
+    return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
 const fheroes2::Size & Settings::VideoMode() const

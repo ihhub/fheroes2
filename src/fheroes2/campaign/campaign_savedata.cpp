@@ -19,7 +19,9 @@
  ***************************************************************************/
 
 #include "campaign_savedata.h"
+#include "game.h"
 #include "serialize.h"
+#include "settings.h"
 #include <algorithm>
 #include <cassert>
 
@@ -30,6 +32,7 @@ namespace Campaign
         , _earnedCampaignAwards()
         , _currentScenarioID( 0 )
         , _campaignID( 0 )
+        , _daysPassed( 0 )
         , _currentScenarioBonus()
     {}
 
@@ -66,21 +69,32 @@ namespace Campaign
             _finishedMaps.emplace_back( _currentScenarioID );
     }
 
+    void CampaignSaveData::addDaysPassed( const uint32_t days )
+    {
+        _daysPassed += days;
+    }
+
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
         _earnedCampaignAwards.clear();
         _currentScenarioID = 0;
         _campaignID = 0;
+        _daysPassed = 0;
     }
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
     {
-        return msg << data._earnedCampaignAwards << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps;
+        return msg << data._earnedCampaignAwards << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
-        return msg >> data._earnedCampaignAwards >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+        msg >> data._earnedCampaignAwards >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+
+        if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE )
+            msg >> data._campaignID >> data._daysPassed;
+
+        return msg;
     }
 }

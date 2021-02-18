@@ -116,14 +116,14 @@ namespace AI
 
     bool Base::HeroesCanMove( const Heroes & hero )
     {
-        return hero.MayStillMove() && !hero.Modes( HERO_MOVED );
+        return hero.MayStillMove() && !hero.Modes( Heroes::MOVED );
     }
 
     void Base::HeroTurn( Heroes & hero )
     {
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 
-        hero.ResetModes( HERO_MOVED );
+        hero.ResetModes( Heroes::MOVED );
 
         while ( Base::HeroesCanMove( hero ) ) {
             // turn indicator
@@ -139,7 +139,7 @@ namespace AI
 
             // heroes AI turn
             AI::HeroesMove( hero );
-            hero.SetModes( HERO_MOVED );
+            hero.SetModes( Heroes::MOVED );
 
             // turn indicator
             status.RedrawTurnProgress( 7 );
@@ -195,5 +195,15 @@ namespace AI
     {
         // end action
         actions.push_back( Battle::Command( Battle::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
+    {
+        return msg << instance._personality;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, AI::Base & instance )
+    {
+        return msg >> instance._personality;
     }
 }
