@@ -266,6 +266,11 @@ private:
     bool can_change;
     StatusBar * _statusBar;
     std::string msg;
+
+    bool isMagicBook( const Artifact & artifact ) const;
+    bool isMagicBookSelected();
+
+    void messageMagicBookAbortTrading() const;
 };
 
 #endif
