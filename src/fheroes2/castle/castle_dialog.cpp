@@ -305,7 +305,7 @@ int Castle::OpenDialog( bool readonly )
     buttonNextCastle.draw();
     buttonExit.draw();
 
-    AGG::PlayMusic( MUS::FromRace( race ) );
+    AGG::PlayMusic( MUS::FromRace( race ), true, true );
 
     LocalEvent & le = LocalEvent::Get();
     cursor.Show();

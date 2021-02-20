@@ -92,7 +92,7 @@ int Game::ScenarioInfo( void )
 {
     Settings & conf = Settings::Get();
 
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     MapsFileInfoList lists;
     if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {

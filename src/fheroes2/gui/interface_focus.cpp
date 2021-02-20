@@ -57,8 +57,8 @@ void Interface::Basic::SetFocus( Heroes * hero )
 
         const int heroIndexPos = hero->GetIndex();
         if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ) );
             Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
     }
 }
@@ -83,8 +83,8 @@ void Interface::Basic::SetFocus( Castle * castle )
         gameArea.SetCenter( castle->GetCenter() );
         statusWindow.SetState( StatusType::STATUS_FUNDS );
 
-        AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ) );
         Game::EnvironmentSoundMixer();
+        AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
     }
 }
 
