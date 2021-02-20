@@ -149,8 +149,7 @@ namespace AGG
         AsyncSoundManager()
             : _exitFlag( 0 )
             , _runFlag( 1 )
-        {
-        }
+        {}
 
         ~AsyncSoundManager()
         {
@@ -233,9 +232,10 @@ namespace AGG
 
             _mutex.unlock();
 
-            std::unique_lock < std::mutex > mutexLock( _mutex );
+            std::unique_lock<std::mutex> mutexLock( _mutex );
             _masterNotification.wait( mutexLock, [&] { return _runFlag == 0; } );
         }
+
     private:
         std::unique_ptr<std::thread> _worker;
         std::mutex _mutex;
@@ -243,9 +243,9 @@ namespace AGG
         std::condition_variable _workerNotification;
         std::condition_variable _masterNotification;
 
-        std::queue<std::pair<int, bool>> _musicTasks;
+        std::queue<std::pair<int, bool> > _musicTasks;
         std::queue<int> _soundTasks;
-        std::queue<std::vector<int>> _loopSoundTasks;
+        std::queue<std::vector<int> > _loopSoundTasks;
 
         uint8_t _exitFlag;
         uint8_t _runFlag;
@@ -254,9 +254,9 @@ namespace AGG
         {
             if ( !_worker ) {
                 _runFlag = 1;
-                _worker.reset( new std::thread ( AsyncSoundManager::_workerThread, this ) );
+                _worker.reset( new std::thread( AsyncSoundManager::_workerThread, this ) );
 
-                std::unique_lock < std::mutex > mutexLock( _mutex );
+                std::unique_lock<std::mutex> mutexLock( _mutex );
                 _masterNotification.wait( mutexLock, [&] { return _runFlag == 0; } );
             }
         }
@@ -271,7 +271,7 @@ namespace AGG
             manager->_mutex.unlock();
 
             while ( manager->_exitFlag == 0 ) {
-                std::unique_lock < std::mutex > mutexLock( manager->_mutex );
+                std::unique_lock<std::mutex> mutexLock( manager->_mutex );
                 manager->_workerNotification.wait( mutexLock, [&] { return manager->_runFlag == 1; } );
                 mutexLock.unlock();
 
