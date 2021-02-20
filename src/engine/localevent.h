@@ -343,6 +343,7 @@ private:
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
+    u16 _volume;
 
     enum
     {

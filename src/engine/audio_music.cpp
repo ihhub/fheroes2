@@ -101,8 +101,10 @@ u16 Music::Volume( int16_t vol )
 
 void Music::Pause( void )
 {
-    if ( music )
+    if ( music ) {
+        std::cout << "sdl pausing music" << std::endl;
         Mix_PauseMusic();
+    }
 }
 
 void Music::Resume( void )
@@ -312,10 +314,14 @@ u16 Music::Volume( int16_t vol )
 
 void Music::Pause( void )
 {
-    if ( !System::GetEnvironment( "MUSIC_WRAPPER" ) )
+    if ( !System::GetEnvironment( "MUSIC_WRAPPER" ) ) {
+        std::cout << "reset" << std::endl;
         Reset();
-    else if ( current != musics.end() && ( *current ).isPlay() && !( *current ).isPaused() )
+    }
+    else if ( current != musics.end() && ( *current ).isPlay() && !( *current ).isPaused() ) {
+        std::cout << "pause music" << std::endl;
         ( *current ).Pause();
+    }
 }
 
 void Music::Resume( void )

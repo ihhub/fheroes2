@@ -26,6 +26,7 @@
 #include "error.h"
 #include "pal.h"
 #include "screen.h"
+#include <iostream>
 
 namespace
 {
@@ -52,6 +53,7 @@ LocalEvent::LocalEvent()
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
     , _isSoundPaused( false )
+    , _volume( 0 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -992,23 +994,32 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         case SDL_WINDOWEVENT:
             if ( Mixer::isValid() ) {
-                if ( event.window.event == SDL_WINDOWEVENT_HIDDEN ) {
+                const int eventId = static_cast<int>( event.window.event );
+                if ( eventId == SDL_WINDOWEVENT_FOCUS_LOST ) { // 7 or 13
+                    std::cout << "focus lost" << std::endl;
                     _isHiddenWindow = true;
                     _isMusicPaused = Music::isPaused();
                     _isSoundPaused = Mixer::isPaused( -1 );
                     Mixer::Pause();
                     Music::Pause();
+                    _volume = Music::Volume( 0 );
                     loop_delay = 100;
                 }
-                else if ( event.window.event == SDL_WINDOWEVENT_SHOWN ) {
+                else if ( eventId == SDL_WINDOWEVENT_FOCUS_GAINED ) { // or 12
+                    std::cout << "focus gained" << std::endl;
                     if ( _isHiddenWindow ) {
-                        if ( !_isMusicPaused )
+                        if ( !_isMusicPaused ) {
+                            Music::Volume( _volume );
                             Music::Resume();
+                        }
                         if ( !_isSoundPaused )
                             Mixer::Resume();
                         _isHiddenWindow = false;
                     }
                     loop_delay = 1;
+                }
+                else {
+                    std::cout << "unhandled window event '" << eventId << "'" << std::endl;
                 }
             }
             break;
