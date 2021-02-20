@@ -12,7 +12,7 @@ endif
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS)
-LIBS :=
+LIBS := -pthread
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
