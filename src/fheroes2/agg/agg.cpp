@@ -101,7 +101,7 @@ namespace AGG
     void LoadFNT( void );
 
     bool ReadDataDir( void );
-    const std::vector<u8> & ReadChunk( const std::string & key, bool ignoreExpansion = false );
+    std::vector<u8> ReadChunk( const std::string & key, bool ignoreExpansion = false );
 
     /* return letter sprite */
     // Surface GetUnicodeLetter( u32 ch, u32 ft )
@@ -158,7 +158,7 @@ bool AGG::ReadDataDir( void )
     return heroes2_agg.isGood();
 }
 
-const std::vector<u8> & AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
+std::vector<uint8_t> AGG::ReadChunk( const std::string & key, bool ignoreExpansion )
 {
     if ( !ignoreExpansion && heroes2x_agg.isGood() ) {
         const std::vector<u8> & buf = heroes2x_agg.read( key );
