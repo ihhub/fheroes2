@@ -150,39 +150,41 @@ namespace AI
     Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander )
     {
         Actions result;
+        if ( !isCommanderCanSpellcast( arena, commander ) ) {
+            return result;
+        }
 
-        if ( isCommanderCanSpellcast( arena, commander ) ) {
-            const std::vector<Spell> allSpells = commander->GetSpells();
-            int bestSpell = -1;
-            double bestHeuristic = 0;
-            int targetIdx = -1;
+        const std::vector<Spell> allSpells = commander->GetSpells();
+        int bestSpell = -1;
+        double bestHeuristic = 0;
+        int targetIdx = -1;
 
-            const Units friendly( arena.GetForce( commander->GetColor() ), true );
-            const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
+        const Units friendly( arena.GetForce( commander->GetColor() ), true );
+        const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
 
-            const int spellPower = commander->GetPower();
-            for ( const Spell & spell : allSpells ) {
-                if ( !commander->HaveSpellPoints( spell ) )
-                    continue;
+        const int spellPower = commander->GetPower();
+        for ( const Spell & spell : allSpells ) {
+            if ( !commander->HaveSpellPoints( spell ) )
+                continue;
 
-                if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
-                    const uint32_t totalDamage = spell.Damage() * spellPower;
-                    for ( const Unit * enemy : enemies ) {
-                        const double spellHeuristic
-                            = enemy->GetMonsterStrength() * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
+            // TODO: add mass spells
+            if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
+                const uint32_t totalDamage = spell.Damage() * spellPower;
+                for ( const Unit * enemy : enemies ) {
+                    const double spellHeuristic
+                        = enemy->GetMonsterStrength() * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
 
-                        if ( spellHeuristic > bestHeuristic ) {
-                            bestHeuristic = spellHeuristic;
-                            bestSpell = spell.GetID();
-                            targetIdx = enemy->GetHeadIndex();
-                        }
+                    if ( spellHeuristic > bestHeuristic ) {
+                        bestHeuristic = spellHeuristic;
+                        bestSpell = spell.GetID();
+                        targetIdx = enemy->GetHeadIndex();
                     }
                 }
             }
+        }
 
-            if ( bestSpell != -1 ) {
-                result.push_back( Battle::Command( MSG_BATTLE_CAST, bestSpell, targetIdx ) );
-            }
+        if ( bestSpell != -1 ) {
+            result.emplace_back( MSG_BATTLE_CAST, bestSpell, targetIdx );
         }
         return result;
     }
@@ -217,8 +219,8 @@ namespace AI
             // Cast maximum damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
 
-            actions.push_back( Command( MSG_BATTLE_RETREAT ) );
-            actions.push_back( Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+            actions.emplace_back( MSG_BATTLE_RETREAT );
+            actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
             return actions;
         }
 
@@ -265,10 +267,10 @@ namespace AI
 
             if ( target.cell != -1 ) {
                 if ( currentUnit.GetHeadIndex() != target.cell )
-                    actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell ) );
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
 
                 if ( target.unit ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 ) );
+                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
@@ -279,7 +281,7 @@ namespace AI
 
         // no action was taken - skip
         if ( actions.size() == actionsSize ) {
-            actions.push_back( Command( MSG_BATTLE_SKIP, currentUnit.GetUID(), true ) );
+            actions.emplace_back( MSG_BATTLE_SKIP, currentUnit.GetUID(), true );
         }
 
         return actions;
@@ -394,7 +396,7 @@ namespace AI
             if ( target && targetCell != -1 ) {
                 // attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
-                actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 ) );
+                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 );
             }
             else if ( canOutrunEnemy ) {
                 // Kiting enemy
@@ -418,7 +420,7 @@ namespace AI
             }
 
             if ( target ) {
-                actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 ) );
+                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                            currentUnit.GetName() << " archer focusing enemy " << target->GetName() << " threat level: " << target->GetScoreQuality( currentUnit ) );
@@ -591,7 +593,7 @@ namespace AI
                 const uint32_t targetUnitUID = nearestUnits[i]->GetUID();
                 const int32_t targetUnitHead = nearestUnits[i]->GetHeadIndex();
                 if ( currentUnit.isArchers() && !currentUnit.isHandFighting() ) {
-                    actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
                     break;
                 }
                 else {
@@ -606,16 +608,16 @@ namespace AI
 
                     if ( targetCell != -1 ) {
                         if ( currentUnit.GetHeadIndex() != targetCell )
-                            actions.push_back( Battle::Command( MSG_BATTLE_MOVE, currentUnitUID, targetCell ) );
+                            actions.emplace_back( MSG_BATTLE_MOVE, currentUnitUID, targetCell );
 
-                        actions.push_back( Battle::Command( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 ) );
+                        actions.emplace_back( MSG_BATTLE_ATTACK, currentUnitUID, targetUnitUID, targetUnitHead, 0 );
                         break;
                     }
                 }
             }
         }
 
-        actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnitUID ) );
+        actions.emplace_back( MSG_BATTLE_END_TURN, currentUnitUID );
         return actions;
     }
 
@@ -624,6 +626,6 @@ namespace AI
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
 
-        actions.push_back( Battle::Command( MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+        actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }

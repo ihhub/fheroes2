@@ -45,8 +45,6 @@ namespace AI
     class BattlePlanner
     {
     public:
-        BattlePlanner() {}
-
         Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
         void analyzeBattleState( Battle::Arena & arena, const Battle::Unit & currentUnit );
 
