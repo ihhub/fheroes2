@@ -269,6 +269,7 @@ public:
     void OpenController();
     void CloseController();
     void OpenTouchpad();
+    void OnSdl2WindowEvent( const SDL_Event & event );
 #endif
 
     void SetControllerPointerSpeed( const int newSpeed )
