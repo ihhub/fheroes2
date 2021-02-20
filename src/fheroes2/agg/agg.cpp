@@ -171,7 +171,7 @@ namespace AGG
         {
             _createThreadIfNeeded();
 
-            _mutex.lock();
+            std::lock_guard<std::mutex> mutexLock( _mutex );
 
             while ( !_musicTasks.empty() ) {
                 _musicTasks.pop();
@@ -180,39 +180,33 @@ namespace AGG
             _musicTasks.emplace( musicId, isLooped );
             _runFlag = 1;
             _workerNotification.notify_all();
-
-            _mutex.unlock();
         }
 
         void pushSound( const int m82Sound )
         {
             _createThreadIfNeeded();
 
-            _mutex.lock();
+            std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _soundTasks.emplace( m82Sound );
             _runFlag = 1;
             _workerNotification.notify_all();
-
-            _mutex.unlock();
         }
 
         void pushLoopSound( const std::vector<int> & vols )
         {
             _createThreadIfNeeded();
 
-            _mutex.lock();
+            std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _loopSoundTasks.emplace( vols );
             _runFlag = 1;
             _workerNotification.notify_all();
-
-            _mutex.unlock();
         }
 
         void sync()
         {
-            _mutex.lock();
+            std::lock_guard<std::mutex> mutexLock( _mutex );
 
             while ( !_musicTasks.empty() ) {
                 _musicTasks.pop();
@@ -225,8 +219,6 @@ namespace AGG
             while ( !_loopSoundTasks.empty() ) {
                 _loopSoundTasks.pop();
             }
-
-            _mutex.unlock();
         }
 
         // This mutex is used to avoid access to global objects and classes related to SDL Mixer.
