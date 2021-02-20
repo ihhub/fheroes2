@@ -212,10 +212,6 @@ namespace AGG
 
         void sync()
         {
-            if ( !_worker ) {
-                return;
-            }
-
             _mutex.lock();
 
             while ( !_musicTasks.empty() ) {
@@ -231,9 +227,12 @@ namespace AGG
             }
 
             _mutex.unlock();
+        }
 
-            std::unique_lock<std::mutex> mutexLock( _mutex );
-            _masterNotification.wait( mutexLock, [&] { return _runFlag == 0; } );
+        // This mutex is used to avoid access to global objects and classes related to SDL Mixer.
+        std::mutex & resourceMutex()
+        {
+            return _resourceMutex;
         }
 
     private:
@@ -249,6 +248,8 @@ namespace AGG
 
         uint8_t _exitFlag;
         uint8_t _runFlag;
+
+        std::mutex _resourceMutex;
 
         void _createThreadIfNeeded()
         {
@@ -309,7 +310,6 @@ namespace AGG
                 }
                 else {
                     manager->_runFlag = 0;
-                    manager->_masterNotification.notify_one();
 
                     manager->_mutex.unlock();
                 }
@@ -502,6 +502,8 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
     const Settings & conf = Settings::Get();
 
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
     if ( conf.Sound() ) {
         // set volume loop sounds
         for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
@@ -574,6 +576,8 @@ void AGG::PlaySoundInternally( const int m82 )
 {
     const Settings & conf = Settings::Get();
 
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
     if ( conf.Sound() ) {
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
         const std::vector<u8> & v = AGG::GetWAV( m82 );
@@ -599,6 +603,8 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
     const Settings & conf = Settings::Get();
+
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     if ( !conf.Music() || MUS::UNUSED == mus || MUS::UNKNOWN == mus || ( Game::CurrentMusic() == mus && Music::isPlaying() ) )
         return;
@@ -743,6 +749,9 @@ std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
 void AGG::ResetMixer()
 {
     g_asyncSoundManager.sync();
+
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
     Mixer::Reset();
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
