@@ -183,7 +183,7 @@ namespace AI
         VecCastles sortedCastleList( castles );
         sortedCastleList.SortByBuildingValue();
 
-        if ( heroes.size() < heroLimit ) {
+        if ( heroes.size() < static_cast<size_t>( heroLimit ) ) { // safe to cast as heroLimit is > 0
             Recruits & rec = kingdom.GetRecruits();
             Castle * recruitmentCastle = NULL;
             int lowestHeroCount = heroLimit;
