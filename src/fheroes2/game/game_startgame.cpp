@@ -127,6 +127,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
+    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -163,7 +165,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() ) {
+        else if ( it != myCastles.end() && updateCastleFocus ) {
             basicInterface.SetFocus( *it );
         }
     }
