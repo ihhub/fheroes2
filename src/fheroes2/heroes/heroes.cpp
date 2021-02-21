@@ -81,7 +81,7 @@ const char * Heroes::GetName( int id )
            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
            _( "Martine" ), _( "Jarkonas" ),
            // debug
-           "SandySandy", "Unknown"};
+           "Debug Hero", "Unknown"};
 
     return names[id];
 }
@@ -284,7 +284,7 @@ Heroes::Heroes( int heroid, int rc )
     case JARKONAS:
         break;
 
-    case SANDYSANDY:
+    case DEBUG_HERO:
         army.Clean();
         army.JoinTroop( Monster::BLACK_DRAGON, 2 );
         army.JoinTroop( Monster::RED_DRAGON, 3 );
@@ -1713,9 +1713,9 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         case PORT_BIG:
             return fheroes2::AGG::GetICN( ICN::PORTxxxx( id ), 0 );
         case PORT_MEDIUM:
-            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::PORTMEDI, id + 1 ) : fheroes2::AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
+            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::PORTMEDI, id + 1 ) : fheroes2::AGG::GetICN( ICN::PORTMEDI, BAX + 1 );
         case PORT_SMALL:
-            return Heroes::SANDYSANDY > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
+            return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
         default:
             break;
         }
@@ -1897,7 +1897,7 @@ void AllHeroes::Init( void )
     push_back( new Heroes( loyalty ? Heroes::JARKONAS : Heroes::UNKNOWN, Race::BARB ) );
 
     // devel
-    push_back( new Heroes( IS_DEVEL() ? Heroes::SANDYSANDY : Heroes::UNKNOWN, Race::WRLK ) );
+    push_back( new Heroes( IS_DEVEL() ? Heroes::DEBUG_HERO : Heroes::UNKNOWN, Race::WRLK ) );
     push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
 }
 
@@ -2008,7 +2008,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
         return NULL;
     }
 
-    return at( *Rand::Get( freeman_heroes ) );
+    return at( Rand::Get( freeman_heroes ) );
 }
 
 void AllHeroes::Scoute( int colors ) const

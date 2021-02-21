@@ -559,7 +559,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
 
     // Attack bonus is 20% to 300%
-    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
+    dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
 
     return static_cast<u32>( dmg ) < 1 ? 1 : static_cast<u32>( dmg );
 }

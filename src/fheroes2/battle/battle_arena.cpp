@@ -98,7 +98,7 @@ int GetCovr( int ground )
         break;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : *Rand::Get( covrs );
+    return covrs.empty() ? ICN::UNKNOWN : Rand::Get( covrs );
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )

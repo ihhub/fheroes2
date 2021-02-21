@@ -353,7 +353,7 @@ namespace Bin_Info
             return 0;
 
         for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
-            if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 )
                 return id;
         }
         return angles.size() - 1;

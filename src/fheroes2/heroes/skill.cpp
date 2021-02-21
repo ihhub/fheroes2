@@ -359,7 +359,7 @@ int Skill::Secondary::RandForWitchsHut( void )
             v.push_back( WISDOM );
     }
 
-    return v.empty() ? UNKNOWN : *Rand::Get( v );
+    return v.empty() ? UNKNOWN : Rand::Get( v );
 }
 
 /* index sprite from SECSKILL */
