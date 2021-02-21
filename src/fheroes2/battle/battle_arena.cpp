@@ -419,7 +419,7 @@ void Battle::Arena::Turns( void )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom() );
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
 
     army1->NewTurn();
     army2->NewTurn();

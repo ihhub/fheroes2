@@ -76,7 +76,7 @@ void PlayWalkSound( int ground )
     }
 
     if ( wav != M82::UNKNOWN )
-        AGG::PlaySound( wav );
+        AGG::PlaySound( wav, true );
 }
 
 bool ReflectSprite( int from )

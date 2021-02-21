@@ -199,7 +199,7 @@ int Game::HighScores()
 
     cursor.SetThemes( cursor.POINTER );
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     hgs.Load( stream.str().c_str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );

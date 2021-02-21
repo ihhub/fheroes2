@@ -650,7 +650,7 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true );
+            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day

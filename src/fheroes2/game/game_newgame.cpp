@@ -108,7 +108,7 @@ int Game::NewCampaign()
     campaignSaveData.setCampaignID( chosenCampaign );
     campaignSaveData.setCurrentScenarioID( 0 );
 
-    AGG::PlayMusic( MUS::VICTORY );
+    AGG::PlayMusic( MUS::VICTORY, true, true );
 
     return Game::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -176,7 +176,7 @@ int Game::NewNetwork( void )
 int Game::NewGame( void )
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     Settings & conf = Settings::Get();
 
     // reset last save name
