@@ -38,13 +38,41 @@
 #include "translations.h"
 #include "world.h"
 
-namespace Battle
+namespace
 {
-    int GetObstaclePosition( void )
+    int GetRandomObstaclePosition()
     {
         return Rand::Get( 3, 6 ) + ( 11 * Rand::Get( 1, 7 ) );
     }
 
+    bool isTwoHexObject( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::COBJ0004:
+        case ICN::COBJ0005:
+        case ICN::COBJ0007:
+        case ICN::COBJ0011:
+        case ICN::COBJ0014:
+        case ICN::COBJ0015:
+        case ICN::COBJ0017:
+        case ICN::COBJ0018:
+        case ICN::COBJ0019:
+        case ICN::COBJ0020:
+        case ICN::COBJ0022:
+        case ICN::COBJ0030:
+        case ICN::COBJ0031:
+            return true;
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+}
+
+namespace Battle
+{
     bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
     {
         const int startX = startCellId % ARENAW;
@@ -779,9 +807,12 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
     std::random_shuffle( objs.begin(), objs.end() );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
-        s32 dest = GetObstaclePosition();
-        while ( at( dest ).GetObject() )
-            dest = GetObstaclePosition();
+        const bool checkRightCell = isTwoHexObject( objs[i] );
+
+        int32_t dest = GetRandomObstaclePosition();
+        while ( at( dest ).GetObject() != 0 && ( !checkRightCell || at( dest + 1 ).GetObject() != 0 ) ) {
+            dest = GetRandomObstaclePosition();
+        }
 
         SetCobjObject( objs[i], dest );
     }
@@ -791,25 +822,9 @@ void Battle::Board::SetCobjObject( int icn, s32 dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 
-    switch ( icn ) {
-    case ICN::COBJ0004:
-    case ICN::COBJ0005:
-    case ICN::COBJ0007:
-    case ICN::COBJ0011:
-    case ICN::COBJ0014:
-    case ICN::COBJ0015:
-    case ICN::COBJ0017:
-    case ICN::COBJ0018:
-    case ICN::COBJ0019:
-    case ICN::COBJ0020:
-    case ICN::COBJ0022:
-    case ICN::COBJ0030:
-    case ICN::COBJ0031:
+    if ( isTwoHexObject( icn ) ) {
+        assert( at( dst + 1 ).GetObject() == 0 );
         at( dst + 1 ).SetObject( 0x40 );
-        break;
-
-    default:
-        break;
     }
 }
 
