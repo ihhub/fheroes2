@@ -2819,6 +2819,8 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
+    AGG::PlayMusic( MUS::FromGround( tile.GetGround() ) );
+
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
