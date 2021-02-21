@@ -13,10 +13,7 @@ jobs:
         fetch-depth: 50
     - name: install SDL 1
       run: |
-        brew install sdl
-        brew install sdl_ttf
-        brew install sdl_mixer
-        brew install sdl_image
+        brew install sdl sdl_ttf sdl_mixer sdl_image
     - name: compile
       run: make -j 2
       env:
@@ -45,10 +42,7 @@ jobs:
         fetch-depth: 50
     - name: install SDL 2
       run: |
-        brew install sdl2
-        brew install sdl2_ttf
-        brew install sdl2_mixer
-        brew install sdl2_image
+        brew install sdl2 sdl2_ttf sdl2_mixer sdl2_image
     - name: compile
       run: make -j 2
       env:
