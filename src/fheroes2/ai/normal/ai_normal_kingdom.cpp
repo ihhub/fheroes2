@@ -44,7 +44,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AGG::PlayMusic( MUS::COMPUTER_TURN );
+        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 

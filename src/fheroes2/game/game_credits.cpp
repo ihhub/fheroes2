@@ -117,7 +117,7 @@ void Game::ShowCredits()
     const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
     fheroes2::Blit( goblin, display, screenOffset.x + ( display.DEFAULT_WIDTH - goblin.width() ) / 2, screenOffset.y + ( display.DEFAULT_HEIGHT - goblin.height() ) / 2 );
 
-    AGG::PlayMusic( MUS::VICTORY );
+    AGG::PlayMusic( MUS::VICTORY, true, true );
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
