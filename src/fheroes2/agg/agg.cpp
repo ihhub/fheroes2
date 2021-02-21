@@ -481,6 +481,10 @@ const std::vector<u8> & AGG::GetMID( int xmi )
 
 void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall )
 {
+    if ( vols.empty() ) {
+        return;
+    }
+
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushLoopSound( vols );
     }
@@ -493,60 +497,61 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
 void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
     const Settings & conf = Settings::Get();
+    if ( !conf.Sound() ) {
+        return;
+    }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    if ( conf.Sound() ) {
-        // set volume loop sounds
-        for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
-            int vol = *itv;
-            int m82 = M82::GetLOOP00XX( std::distance( vols.begin(), itv ) );
-            if ( M82::UNKNOWN == m82 )
-                continue;
+    // set volume loop sounds
+    for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
+        int vol = *itv;
+        int m82 = M82::GetLOOP00XX( std::distance( vols.begin(), itv ) );
+        if ( M82::UNKNOWN == m82 )
+            continue;
 
-            // find loops
-            std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), m82 );
+        // find loops
+        std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), m82 );
 
-            if ( itl != loop_sounds.end() ) {
-                // unused and free
-                if ( 0 == vol ) {
-                    if ( Mixer::isPlaying( ( *itl ).channel ) ) {
-                        Mixer::Pause( ( *itl ).channel );
-                        Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
-                        Mixer::Stop( ( *itl ).channel );
-                    }
-                    ( *itl ).sound = M82::UNKNOWN;
-                }
-                // used and set vols
-                else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
+        if ( itl != loop_sounds.end() ) {
+            // unused and free
+            if ( 0 == vol ) {
+                if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                     Mixer::Pause( ( *itl ).channel );
-                    Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
-                    Mixer::Resume( ( *itl ).channel );
+                    Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+                    Mixer::Stop( ( *itl ).channel );
                 }
+                ( *itl ).sound = M82::UNKNOWN;
             }
-            else
-                // new sound
-                if ( 0 != vol ) {
-                const std::vector<u8> & v = GetWAV( m82 );
-                const int ch = Mixer::Play( &v[0], v.size(), -1, true );
+            // used and set vols
+            else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
+                Mixer::Pause( ( *itl ).channel );
+                Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
+                Mixer::Resume( ( *itl ).channel );
+            }
+        }
+        else
+            // new sound
+            if ( 0 != vol ) {
+            const std::vector<u8> & v = GetWAV( m82 );
+            const int ch = Mixer::Play( &v[0], v.size(), -1, true );
 
-                if ( 0 <= ch ) {
-                    Mixer::Pause( ch );
-                    Mixer::Volume( ch, vol * conf.SoundVolume() / 10 );
-                    Mixer::Resume( ch );
+            if ( 0 <= ch ) {
+                Mixer::Pause( ch );
+                Mixer::Volume( ch, vol * conf.SoundVolume() / 10 );
+                Mixer::Resume( ch );
 
-                    // find unused
-                    itl = std::find( loop_sounds.begin(), loop_sounds.end(), static_cast<int>( M82::UNKNOWN ) );
+                // find unused
+                itl = std::find( loop_sounds.begin(), loop_sounds.end(), static_cast<int>( M82::UNKNOWN ) );
 
-                    if ( itl != loop_sounds.end() ) {
-                        ( *itl ).sound = m82;
-                        ( *itl ).channel = ch;
-                    }
-                    else
-                        loop_sounds.emplace_back( m82, ch );
-
-                    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+                if ( itl != loop_sounds.end() ) {
+                    ( *itl ).sound = m82;
+                    ( *itl ).channel = ch;
                 }
+                else
+                    loop_sounds.emplace_back( m82, ch );
+
+                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
             }
         }
     }
@@ -567,22 +572,27 @@ void AGG::PlaySound( int m82, bool asyncronizedCall )
 void AGG::PlaySoundInternally( const int m82 )
 {
     const Settings & conf = Settings::Get();
+    if ( !conf.Sound() ) {
+        return;
+    }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    if ( conf.Sound() ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
-        const std::vector<u8> & v = AGG::GetWAV( m82 );
-        const int ch = Mixer::Play( &v[0], v.size(), -1, false );
-        Mixer::Pause( ch );
-        Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
-        Mixer::Resume( ch );
-    }
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+    const std::vector<u8> & v = AGG::GetWAV( m82 );
+    const int ch = Mixer::Play( &v[0], v.size(), -1, false );
+    Mixer::Pause( ch );
+    Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+    Mixer::Resume( ch );
 }
 
 /* wrapper Audio::Play */
 void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 {
+    if ( MUS::UNUSED == mus || MUS::UNKNOWN == mus ) {
+        return;
+    }
+
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushMusic( mus, loop );
     }
@@ -595,11 +605,15 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
     const Settings & conf = Settings::Get();
+    if ( !conf.Music() ) {
+        return;
+    }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    if ( !conf.Music() || MUS::UNUSED == mus || MUS::UNKNOWN == mus || ( Game::CurrentMusic() == mus && Music::isPlaying() ) )
+    if ( Game::CurrentMusic() == mus && Music::isPlaying() ) {
         return;
+    }
 
     Game::SetCurrentMusic( mus );
     const std::string prefix_music( "music" );
