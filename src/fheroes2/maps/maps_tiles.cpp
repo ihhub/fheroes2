@@ -2374,7 +2374,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
 
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {
-        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
         gameArea.DrawTile( dst, sf, mp );
     }
     else {
@@ -2620,7 +2620,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         // unknown
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
-            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             gameArea.DrawTile( dst, sf, mp );
             return;
         }
