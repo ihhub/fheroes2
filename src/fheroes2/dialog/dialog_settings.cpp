@@ -118,10 +118,9 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
             break;
 
         case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) )
+            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
                 conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            else
-                conf.ExtResetModes( Settings::GAME_AUTOSAVE_ON );
+            }
             break;
 
         case Settings::WORLD_NEW_VERSION_WEEKOF:
