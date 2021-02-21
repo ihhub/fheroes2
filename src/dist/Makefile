@@ -59,8 +59,7 @@ $(RES): $(ICOFILE)
 VPATH := $(SRCDIRLIST)
 
 %.o: %.cpp
-	@echo "cxx: $@"
-	@$(CXX) -c -MD $(addprefix -I, $(SRCDIRLIST)) $< $(CFLAGS)
+	$(CXX) -c -MD $(addprefix -I, $(SRCDIRLIST)) $< $(CFLAGS)
 
 include $(wildcard *.d)
 
