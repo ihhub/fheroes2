@@ -812,8 +812,6 @@ void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 
     players.Init( current_maps_file );
 
-    // game difficulty
-    game_difficulty = Difficulty::NORMAL;
     preferably_count_players = 0;
 }
 
@@ -1210,6 +1208,7 @@ void Settings::SetGameDifficulty( int d )
 {
     game_difficulty = d;
 }
+
 void Settings::SetCurrentColor( int color )
 {
     players.current_color = color;

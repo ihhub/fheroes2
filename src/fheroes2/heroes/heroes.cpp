@@ -695,7 +695,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point += acount * 500;
 
     if ( isControlAI() ) {
-        point += Difficulty::GetHeroMovementBonus( Settings::Get().GameDifficulty() );
+        point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
     }
 
     return point;

@@ -24,6 +24,7 @@
 
 #include "castle.h"
 #include "difficulty.h"
+#include "game.h"
 #include "game_static.h"
 #include "icn.h"
 #include "logging.h"
@@ -735,7 +736,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
         uint32_t factor = 100;
 
-        switch ( Settings::Get().GameDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             factor = 80;
             break;
