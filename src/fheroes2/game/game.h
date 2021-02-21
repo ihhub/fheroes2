@@ -26,7 +26,6 @@
 #include <string>
 
 #include "gamedefs.h"
-#include "mp2.h"
 #include "rect.h"
 #include "types.h"
 
@@ -273,31 +272,9 @@ namespace Game
     {
         struct FadeTask
         {
+            FadeTask();
             FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
-                      bool fadeIn_, uint8_t objectTileset_ )
-            {
-                object = object_;
-                objectIndex = objectIndex_;
-                animationIndex = animationIndex_;
-                fromIndex = fromIndex_;
-                toIndex = toIndex_;
-                alpha = alpha_;
-                fadeOut = fadeOut_;
-                fadeIn = fadeIn_;
-                objectTileset = objectTileset_;
-            }
-            FadeTask()
-            {
-                object = MP2::OBJ_ZERO;
-                objectIndex = 0;
-                animationIndex = 0;
-                fromIndex = 0;
-                toIndex = 0;
-                alpha = 0;
-                fadeOut = false;
-                fadeIn = false;
-                objectTileset = 0;
-            }
+                      bool fadeIn_, uint8_t objectTileset_ );
             uint8_t object;
             uint32_t objectIndex;
             uint32_t animationIndex;
