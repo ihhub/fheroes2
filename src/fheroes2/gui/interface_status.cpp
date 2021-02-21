@@ -137,6 +137,28 @@ void Interface::StatusWindow::Redraw( void )
                     DrawResourceInfo( 2 * stonHeight + 10 );
             }
         }
+        else if ( StatusType::STATUS_UNKNOWN != _state && pos.h >= ( stonHeight * 2 + 15 ) ) {
+            DrawDayInfo();
+
+            switch ( _state ) {
+            case StatusType::STATUS_FUNDS:
+                DrawKingdomInfo( stonHeight + 5 );
+                break;
+            case StatusType::STATUS_DAY:
+            case StatusType::STATUS_ARMY:
+                DrawArmyInfo( stonHeight + 5 );
+                break;
+            case StatusType::STATUS_RESOURCE:
+                DrawResourceInfo( stonHeight + 5 );
+                break;
+            case StatusType::STATUS_UNKNOWN:
+            case StatusType::STATUS_AITURN:
+                assert( 0 ); // we shouldn't even reach this code
+                break;
+            default:
+                break;
+            }
+        }
         else {
             switch ( _state ) {
             case StatusType::STATUS_DAY:
@@ -164,12 +186,24 @@ void Interface::StatusWindow::Redraw( void )
 
 void Interface::StatusWindow::NextState( void )
 {
+    const int32_t areaHeight = GetArea().h;
+    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const int32_t stonHeight = ston.height();
+
+    const bool skipDayStatus = areaHeight >= ( stonHeight * 2 + 15 ) && areaHeight < ( stonHeight * 3 + 15 );
+
     if ( StatusType::STATUS_DAY == _state )
         _state = StatusType::STATUS_FUNDS;
     else if ( StatusType::STATUS_FUNDS == _state )
         _state = ( GameFocus::UNSEL == GetFocusType() ? StatusType::STATUS_DAY : StatusType::STATUS_ARMY );
-    else if ( StatusType::STATUS_ARMY == _state )
-        _state = StatusType::STATUS_DAY;
+    else if ( StatusType::STATUS_ARMY == _state ) {
+        if ( skipDayStatus ) {
+            _state = StatusType::STATUS_FUNDS;
+        }
+        else {
+            _state = StatusType::STATUS_DAY;
+        }
+    }
     else if ( StatusType::STATUS_RESOURCE == _state )
         _state = StatusType::STATUS_ARMY;
 
