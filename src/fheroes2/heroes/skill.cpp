@@ -39,7 +39,7 @@
 namespace Skill
 {
     int SecondaryGetWeightSkillFromRace( int race, int skill );
-    int SecondaryPriorityFromRace( int, const std::vector<int> & );
+    int SecondaryPriorityFromRace( int, const std::vector<int> &, uint32_t seed );
 
     const int secskills[]
         = {Secondary::PATHFINDING, Secondary::ARCHERY,   Secondary::LOGISTICS, Secondary::SCOUTING,   Secondary::DIPLOMACY, Secondary::NAVIGATION, Secondary::LEADERSHIP,
@@ -113,7 +113,7 @@ int Skill::Primary::GetInitialSpell( int race )
     return ptr ? ptr->initial_spell : 0;
 }
 
-int Skill::Primary::LevelUp( int race, int level )
+int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
 {
     Rand::Queue percents( MAXPRIMARYSKILL );
 
@@ -133,7 +133,7 @@ int Skill::Primary::LevelUp( int race, int level )
         }
     }
 
-    int result = percents.Size() ? percents.Get() : UNKNOWN;
+    int result = percents.Size() ? percents.GetWithSeed( seed ) : UNKNOWN;
 
     switch ( result ) {
     case ATTACK:
@@ -359,7 +359,7 @@ int Skill::Secondary::RandForWitchsHut( void )
             v.push_back( WISDOM );
     }
 
-    return v.empty() ? UNKNOWN : *Rand::Get( v );
+    return v.empty() ? UNKNOWN : Rand::Get( v );
 }
 
 /* index sprite from SECSKILL */
@@ -744,19 +744,19 @@ int Skill::SecondaryGetWeightSkillFromRace( int race, int skill )
     return 0;
 }
 
-int Skill::SecondaryPriorityFromRace( int race, const std::vector<int> & exclude )
+int Skill::SecondaryPriorityFromRace( int race, const std::vector<int> & exclude, uint32_t seed )
 {
     Rand::Queue parts( MAXSECONDARYSKILL );
 
     for ( u32 ii = 0; ii < ARRAY_COUNT( secskills ); ++ii )
-        if ( exclude.empty() || exclude.end() == std::find( exclude.begin(), exclude.end(), secskills[ii] ) )
+        if ( exclude.end() == std::find( exclude.begin(), exclude.end(), secskills[ii] ) )
             parts.Push( secskills[ii], SecondaryGetWeightSkillFromRace( race, secskills[ii] ) );
 
-    return parts.Size() ? parts.Get() : Secondary::UNKNOWN;
+    return parts.Size() ? parts.GetWithSeed( seed ) : Secondary::UNKNOWN;
 }
 
 /* select secondary skills for level up */
-void Skill::SecSkills::FindSkillsForLevelUp( int race, Secondary & sec1, Secondary & sec2 ) const
+void Skill::SecSkills::FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary & sec1, Secondary & sec2 ) const
 {
     std::vector<int> exclude_skills;
     exclude_skills.reserve( MAXSECONDARYSKILL + HEROESMAXSKILL );
@@ -773,11 +773,11 @@ void Skill::SecSkills::FindSkillsForLevelUp( int race, Secondary & sec1, Seconda
                 exclude_skills.push_back( secskills[ii] );
     }
 
-    sec1.SetSkill( SecondaryPriorityFromRace( race, exclude_skills ) );
+    sec1.SetSkill( SecondaryPriorityFromRace( race, exclude_skills, seedSkill1 ) );
 
     if ( Secondary::UNKNOWN != sec1.Skill() ) {
         exclude_skills.push_back( sec1.Skill() );
-        sec2.SetSkill( SecondaryPriorityFromRace( race, exclude_skills ) );
+        sec2.SetSkill( SecondaryPriorityFromRace( race, exclude_skills, seedSkill2 ) );
 
         sec1.SetLevel( GetLevel( sec1.Skill() ) );
         sec2.SetLevel( GetLevel( sec2.Skill() ) );

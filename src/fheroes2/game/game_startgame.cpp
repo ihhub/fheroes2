@@ -127,6 +127,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
+    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -163,8 +165,14 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() ) {
-            basicInterface.SetFocus( *it );
+        else if ( it != myCastles.end() && updateCastleFocus ) {
+            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+            if ( heroInCastle == nullptr ) {
+                basicInterface.SetFocus( *it );
+            }
+            else {
+                basicInterface.SetFocus( heroInCastle );
+            }
         }
     }
     basicInterface.RedrawFocus();
@@ -650,7 +658,7 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true );
+            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day

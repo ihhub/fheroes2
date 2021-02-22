@@ -46,6 +46,14 @@ namespace Interface
     class GameArea;
 }
 
+struct HeroSeedsForLevelUp
+{
+    uint32_t seedPrimarySkill = 0;
+    uint32_t seedSecondaySkill1 = 0;
+    uint32_t seedSecondaySkill2 = 0;
+    uint32_t seedSecondaySkillRandomChoose = 0;
+};
+
 class Heroes : public HeroBase, public ColorBase
 {
 public:
@@ -131,7 +139,7 @@ public:
         MARTINE,
         JARKONAS,
         // debugger
-        SANDYSANDY,
+        DEBUG_HERO,
         UNKNOWN
     };
 
@@ -157,7 +165,19 @@ public:
         VISIONS = 0x00004000,
         PATROL = 0x00008000,
         CUSTOMARMY = 0x00010000,
-        CUSTOMSKILLS = 0x00020000
+        CUSTOMSKILLS = 0x00020000,
+        SKIPPED_TURN = 0x00040000,
+        WAITING = 0x00080000,
+        MOVED = 0x00100000
+    };
+
+    // Values are set by BitModes; shared with previous enum
+    enum class Role
+    {
+        SCOUT = 0x01000000,
+        HUNTER = 0x02000000,
+        COURIER = 0x04000000,
+        CHAMPION = 0x08000000
     };
 
     Heroes();
@@ -327,9 +347,9 @@ private:
     friend class Recruits;
     friend class Battle::Only;
 
+    HeroSeedsForLevelUp GetSeedsForLevelUp() const;
     void LevelUp( bool skipsecondary, bool autoselect = false );
-    int LevelUpPrimarySkill( void );
-    void LevelUpSecondarySkill( int, bool autoselect = false );
+    void LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int primary, bool autoselect = false );
     void AngleStep( int );
     bool MoveStep( bool fast = false );
     static void MoveStep( Heroes &, s32 to, bool newpos );
@@ -372,7 +392,6 @@ private:
     int patrol_square;
 
     std::list<IndexObject> visit_object;
-    // persist this value later
     uint32_t _lastGroundRegion = 0;
 
     mutable int _alphaValue;

@@ -338,13 +338,13 @@ namespace AI
             if ( hero->Modes( Heroes::PATROL ) ) {
                 if ( hero->GetSquarePatrol() == 0 ) {
                     DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
-                    hero->SetModes( AI::HERO_MOVED );
+                    hero->SetModes( Heroes::MOVED );
                     continue;
                 }
             }
-            hero->ResetModes( AI::HERO_WAITING | AI::HERO_MOVED | AI::HERO_SKIP_TURN );
+            hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
             if ( !hero->MayStillMove() ) {
-                hero->SetModes( AI::HERO_MOVED );
+                hero->SetModes( Heroes::MOVED );
             }
             else {
                 availableHeroes.emplace_back();
@@ -393,7 +393,7 @@ namespace AI
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
                 if ( !availableHeroes[i].hero->MayStillMove() ) {
-                    availableHeroes[i].hero->SetModes( AI::HERO_MOVED );
+                    availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
                 }
@@ -404,7 +404,7 @@ namespace AI
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
             if ( !heroInfo.hero->MayStillMove() ) {
-                heroInfo.hero->SetModes( AI::HERO_MOVED );
+                heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }
     }

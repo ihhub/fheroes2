@@ -24,8 +24,11 @@
 #include <SDL_version.h>
 #include <SDL_video.h>
 
+#if defined( FHEROES2_IMAGE_SUPPORT )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define FHEROES2_ENABLE_PNG 1
 #include <SDL_image.h>
+#endif
 #endif
 
 namespace
@@ -76,7 +79,7 @@ namespace
             }
         }
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_ENABLE_PNG )
         int res = 0;
         const std::string pngExtension( ".png" );
         if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) ) {

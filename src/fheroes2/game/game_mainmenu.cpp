@@ -45,7 +45,7 @@
 int Game::MainMenu( bool isFirstGameRun )
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     Settings & conf = Settings::Get();
 

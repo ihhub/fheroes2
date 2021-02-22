@@ -92,13 +92,6 @@ std::string GetStringShort( int value )
     return std::to_string( value );
 }
 
-std::string GetString( double value, u8 prec )
-{
-    std::ostringstream stream;
-    stream << std::setprecision( prec ) << value;
-    return stream.str();
-}
-
 std::string GetHexString( int value, int width )
 {
     std::ostringstream stream;

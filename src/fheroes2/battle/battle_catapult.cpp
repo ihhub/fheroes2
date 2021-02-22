@@ -150,8 +150,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
             return static_cast<int>( CAT_MISS );
         }
         else {
-            const uint32_t * targetId = Rand::Get( targets );
-            return targetId ? *targetId : targets.front();
+            return Rand::Get( targets );
         }
     }
 

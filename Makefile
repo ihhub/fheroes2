@@ -9,7 +9,7 @@
 # WITHOUT_MIXER: build without SDL_mixer library
 # WITHOUT_AUDIOCD: disable audio CD support
 # WITHOUT_UNICODE: build without unicode (disable translation and ttf font)
-# WITHOUT_IMAGE: build without SDL_image library (disable cache image, icn2png)
+# FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITHOUT_XML: skip build tinyxml, used for load alt. resources
 # WITH_TOOLS: build tools
 # WITHOUT_BUNDLED_LIBS: do not build XML third party library

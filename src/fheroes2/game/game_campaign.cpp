@@ -425,6 +425,8 @@ int Game::CompleteCampaignScenario()
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
     saveData.addCurrentMapToFinished();
+    saveData.addDaysPassed( world.CountDay() );
+
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
@@ -504,7 +506,7 @@ int Game::SelectCampaignScenario()
     for ( uint32_t i = 0; i < bonusChoiceCount; ++i )
         buttonChoices.button( i ).draw();
 
-    Text textDaysSpent( "0", Font::BIG );
+    Text textDaysSpent( std::to_string( campaignSaveData.getDaysPassed() ), Font::BIG );
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );

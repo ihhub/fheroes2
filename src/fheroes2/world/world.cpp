@@ -261,6 +261,9 @@ void World::Defaults( void )
     vec_heroes.Init();
 
     vec_castles.Init();
+
+    // map seed is random and persisted on saves
+    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 }
 
 void World::Reset( void )
@@ -299,6 +302,8 @@ void World::Reset( void )
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
+
+    _seed = 0;
 }
 
 /* new maps */
@@ -503,7 +508,7 @@ void World::pickRumor()
     const std::string * current = _rumor;
     while ( current == _rumor ) {
         // vec_rumors always contain values
-        _rumor = Rand::Get( vec_rumors );
+        _rumor = &Rand::Get( vec_rumors );
     }
 }
 
@@ -663,11 +668,10 @@ s32 World::NextTeleport( s32 index ) const
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        return index;
     }
 
-    const int32_t * randValue = Rand::Get( teleports );
-
-    return randValue != nullptr ? *randValue : index;
+    return Rand::Get( teleports );
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
@@ -695,7 +699,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
             uniqs.push_back( uniq );
         }
 
-        return uniq_whirlpools[*Rand::Get( uniqs )];
+        return uniq_whirlpools[Rand::Get( uniqs )];
     }
 
     return MapsIndexes();
@@ -707,11 +711,10 @@ s32 World::NextWhirlpool( s32 index ) const
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        return index;
     }
 
-    const int32_t * randValue = Rand::Get( whilrpools );
-
-    return randValue != nullptr ? *randValue : index;
+    return Rand::Get( whilrpools );
 }
 
 /* return message from sign */
@@ -860,15 +863,10 @@ std::string World::DateString( void ) const
     return os.str();
 }
 
-bool IsObeliskOnMaps( const Maps::Tiles & tile )
-{
-    return MP2::OBJ_OBELISK == tile.GetObject( false );
-}
-
 u32 World::CountObeliskOnMaps( void )
 {
-    u32 res = std::count_if( vec_tiles.begin(), vec_tiles.end(), IsObeliskOnMaps );
-    return res ? res : 6;
+    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
+    return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 
 void World::ActionForMagellanMaps( int color )
@@ -1066,6 +1064,11 @@ void World::PostLoad()
     ComputeStaticAnalysis();
 }
 
+uint32_t World::GetMapSeed() const
+{
+    return _seed;
+}
+
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
 {
     return msg << obj.objcol << obj.guardians << obj.split;
@@ -1192,7 +1195,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const Size & sz = w;
 
     return msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj << w.ultimate_artifact
-               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects;
+               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1201,6 +1204,14 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
         >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
+        msg >> w._seed;
+    }
+    else {
+        // For old versions, generate a different seed at each map loading
+        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
+    }
 
     w.PostLoad();
 

@@ -686,6 +686,9 @@ namespace
                 flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
             }
+            else {
+                flags |= SDL_WINDOW_RESIZABLE;
+            }
 
             _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
             if ( _window == NULL ) {

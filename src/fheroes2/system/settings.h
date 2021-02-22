@@ -32,6 +32,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
 #define FORMAT_VERSION_084_RELEASE 9000
 #define FORMAT_VERSION_082_RELEASE 8200
@@ -40,7 +41,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_090_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_091_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -174,6 +175,8 @@ public:
     bool BattleShowGrid( void ) const;
     bool BattleShowMouseShadow( void ) const;
     bool BattleShowMoveShadow( void ) const;
+    bool BattleAutoResolve() const;
+    bool BattleAutoSpellcast() const;
     bool UseAltResource( void ) const;
     bool PriceLoyaltyVersion( void ) const;
     bool LoadedGameVersion( void ) const;
@@ -258,6 +261,8 @@ public:
     void SetScrollSpeed( int );
     void SetHeroesMoveSpeed( int );
     void SetBattleSpeed( int );
+    void setBattleAutoResolve( bool enable );
+    void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
 
     void SetSoundVolume( int v );

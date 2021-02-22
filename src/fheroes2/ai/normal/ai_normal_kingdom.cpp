@@ -44,7 +44,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AGG::PlayMusic( MUS::COMPUTER_TURN );
+        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
         KingdomHeroes & heroes = kingdom.GetHeroes();
         KingdomCastles & castles = kingdom.GetCastles();
 
@@ -166,7 +166,7 @@ namespace AI
             }
         }
 
-        size_t heroLimit = world.w() / Maps::SMALL + 1;
+        int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
             heroLimit++;
         if ( slowEarlyGame )
@@ -183,7 +183,7 @@ namespace AI
         VecCastles sortedCastleList( castles );
         sortedCastleList.SortByBuildingValue();
 
-        if ( heroes.size() < heroLimit ) {
+        if ( heroes.size() < static_cast<size_t>( heroLimit ) ) { // safe to cast as heroLimit is > 0
             Recruits & rec = kingdom.GetRecruits();
             Castle * recruitmentCastle = NULL;
             int lowestHeroCount = heroLimit;

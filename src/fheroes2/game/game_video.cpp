@@ -88,7 +88,7 @@ namespace Video
             }
         }
 
-        fheroes2::ScreenPaletteRestorer screenRestorer;
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         fheroes2::Image frame;
         std::vector<uint8_t> palette;

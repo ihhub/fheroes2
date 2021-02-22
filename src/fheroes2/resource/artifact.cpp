@@ -644,7 +644,7 @@ int Artifact::Rand( level_t lvl )
                 v.push_back( art );
     }
 
-    int res = v.size() ? *Rand::Get( v ) : Artifact::UNKNOWN;
+    int res = v.size() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifacts[res].bits |= ART_RNDUSED;
 
     return res;

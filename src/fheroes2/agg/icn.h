@@ -916,6 +916,8 @@ namespace ICN
 
         TROLL2MSL,
         LISTBOX_EVIL, // alias to LISTBOX, but black and white colored
+        MONSTER_SWITCH_LEFT_ARROW,
+        MONSTER_SWITCH_RIGHT_ARROW,
 
         LASTICN, // just a marker, indicating end of the enumeration
     };

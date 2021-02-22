@@ -98,7 +98,7 @@ int GetCovr( int ground )
         break;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : *Rand::Get( covrs );
+    return covrs.empty() ? ICN::UNKNOWN : Rand::Get( covrs );
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )
@@ -238,6 +238,15 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         armies_order = new Units();
         armies_order->reserve( 25 );
         interface->SetArmiesOrder( armies_order );
+    }
+    else {
+        // no interface - force auto battle mode for human player
+        if ( a1.isControlHuman() ) {
+            auto_battle |= a1.GetColor();
+        }
+        if ( a2.isControlHuman() ) {
+            auto_battle |= a2.GetColor();
+        }
     }
 
     towers[0] = NULL;
@@ -391,7 +400,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        fheroes2::delayforMs( 10 );
+        if ( interface ) {
+            fheroes2::delayforMs( 10 );
+        }
     }
 }
 
@@ -408,7 +419,7 @@ void Battle::Arena::Turns( void )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom() );
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
 
     army1->NewTurn();
     army2->NewTurn();

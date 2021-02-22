@@ -26,6 +26,7 @@
 #include "game.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
 #include "world.h"
@@ -86,6 +87,7 @@ Player::Player( int col )
     , race( Race::NONE )
     , friends( col )
     , id( World::GetUniq() )
+    , _ai( std::make_shared<AI::Normal>() )
 {
     name = Color::String( color );
 }
@@ -128,6 +130,11 @@ int Player::GetFriends( void ) const
 int Player::GetID( void ) const
 {
     return id;
+}
+
+std::string Player::GetPersonalityString() const
+{
+    return _ai->GetPersonalityString();
 }
 
 bool Player::isID( u32 id2 ) const
@@ -226,14 +233,22 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
 {
     const BitModes & modes = player;
 
-    return msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus;
+    assert( player._ai != nullptr );
+    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai;
+    return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, Player & player )
 {
     BitModes & modes = player;
 
-    return msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
+        assert( player._ai );
+        msg >> *player._ai;
+    }
+
+    return msg;
 }
 
 Players::Players()
@@ -455,11 +470,11 @@ std::string Players::String( void ) const
 
         switch ( ( *it )->GetControl() ) {
         case CONTROL_AI | CONTROL_HUMAN:
-            os << "ai|human";
+            os << "ai|human, " << ( *it )->GetPersonalityString();
             break;
 
         case CONTROL_AI:
-            os << "ai";
+            os << "ai, " << ( *it )->GetPersonalityString();
             break;
 
         case CONTROL_HUMAN:

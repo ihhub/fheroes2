@@ -94,11 +94,16 @@ namespace std
 
 #elif defined( __SWITCH__ ) // Platforms which log to file
 #include <fstream>
-extern std::ofstream log_file;
+
+namespace Logging
+{
+    extern std::ofstream logFile;
+}
+
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        log_file << x << std::endl;                                                                                                                                      \
-        log_file.flush();                                                                                                                                                \
+        Logging::logFile << x << std::endl;                                                                                                                              \
+        Logging::logFile.flush();                                                                                                                                        \
     }
 #elif defined( FHEROES2_VITA )
 #include <psp2/kernel/clib.h>

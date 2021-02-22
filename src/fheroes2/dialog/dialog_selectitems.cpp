@@ -403,7 +403,7 @@ int Dialog::SelectHeroes( int cur )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> heroes( static_cast<int>( Heroes::SANDYSANDY ), Heroes::UNKNOWN );
+    std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
