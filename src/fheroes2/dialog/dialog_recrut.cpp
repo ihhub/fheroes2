@@ -96,11 +96,11 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
 
     // sprite monster
     const int monsterId = monster.GetID();
-    const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo(  monsterId );
+    const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
     const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
-    dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0);
+    dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
     dst_pt.y = pos.y + 135 - smon.height();
 
     if ( monsterId == Monster::CHAMPION ) {
@@ -327,7 +327,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     bool redraw = false;
 
-    std::vector<Monster> upgrades = { monster0 };
+    std::vector<Monster> upgrades = {monster0};
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
