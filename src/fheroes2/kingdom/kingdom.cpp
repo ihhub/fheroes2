@@ -82,6 +82,8 @@ void Kingdom::clear( void )
 
     heroes_cond_loss.clear();
     puzzle_maps.reset();
+
+    ResetLastLostHero();
 }
 
 int Kingdom::GetControl( void ) const
