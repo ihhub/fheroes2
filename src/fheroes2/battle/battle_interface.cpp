@@ -3532,7 +3532,7 @@ void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
     RedrawActionWincesKills( targets );
 
     // draw status for first defender
-    std::string msg = _( "Tower does %{damage} damage." );
+    std::string msg = _( "Ballista does %{damage} damage." );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
