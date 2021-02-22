@@ -210,7 +210,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
 
             if ( castle.isBuild( currentBuildId ) ) {
                 CastleDialog::CastleRedrawBuilding( castle, dst_pt, currentBuildId, frame );
-                if ( currentBuildId == BUILD_SHIPYARD ) {
+                if ( currentBuildId == BUILD_SHIPYARD && fadeBuilding.GetBuild() == BUILD_SHIPYARD ) {
                     CastleDialog::CastleRedrawBuildingExtended( castle, dst_pt, currentBuildId, frame, fadeBuilding.GetAlpha() );
                 }
                 else {
