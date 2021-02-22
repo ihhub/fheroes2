@@ -166,7 +166,13 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
         else if ( it != myCastles.end() && updateCastleFocus ) {
-            basicInterface.SetFocus( *it );
+            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+            if ( heroInCastle == nullptr ) {
+                basicInterface.SetFocus( *it );
+            }
+            else {
+                basicInterface.SetFocus( heroInCastle );
+            }
         }
     }
     basicInterface.RedrawFocus();
