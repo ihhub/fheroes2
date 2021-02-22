@@ -22,7 +22,11 @@
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
 #include <windows.h>
 #elif defined( FHEROES2_VITA )
+#if defined( USE_VITASDK )
+#include <psp2/io/dirent.h>
+#else
 #include <psp2/kernel/iofilemgr.h>
+#endif
 #else
 #include <dirent.h>
 #endif
@@ -81,7 +85,11 @@ void ListFiles::ReadDir( const std::string & path, const std::string & filter, b
         std::string fullname = System::ConcatePath( path, dir.d_name );
 
         // if not regular file
+#if defined( USE_VITASDK )
+        if ( !SCE_S_ISREG( dir.d_stat.st_mode ) )
+#else
         if ( !SCE_STM_ISREG( dir.d_stat.st_mode ) )
+#endif
             continue;
 
         if ( !filter.empty() ) {

@@ -1,0 +1,43 @@
+TARGET	:= fheroes2
+MAKE	:= make
+
+PROJECT_TITLE := Free Heroes 2
+PROJECT_TITLEID := FHOMM0002
+PROJECT := fheroes2
+
+all: package
+
+package: $(PROJECT).vpk
+
+$(PROJECT).vpk: eboot.bin param.sfo
+	dolce-make-pkg -f vpk -t app \
+		--add eboot.bin eboot.bin \
+		--add param.sfo sce_sys/param.sfo \
+		--add platforms/vita/sce_sys/icon0.png sce_sys/icon0.png \
+		--add platforms/vita/sce_sys/livearea/contents/bg.png sce_sys/livearea/contents/bg.png \
+		--add platforms/vita/sce_sys/livearea/contents/startup.png sce_sys/livearea/contents/startup.png \
+		--add platforms/vita/sce_sys/livearea/contents/template.xml sce_sys/livearea/contents/template.xml \
+		--add files/fonts/bigfonts.ttf files/fonts/bigfonts.ttf \
+		--add files/fonts/dejavusans.ttf files/fonts/dejavusans.ttf \
+		--add files/fonts/smallfonts.ttf files/fonts/smallfonts.ttf \
+	$(PROJECT).vpk
+	
+eboot.bin: $(PROJECT).velf
+	dolce-make-fself $(PROJECT).velf eboot.bin
+
+param.sfo:
+	dolce-mksfoex -s CONTENT_ID=HB0000-${PROJECT_TITLEID}_00-${PROJECT_TITLEID}0000000 "$(PROJECT_TITLE)" param.sfo
+
+$(PROJECT).velf: $(PROJECT).elf
+	arm-dolce-eabi-strip -g $<
+	dolce-elf-create $< $@
+
+$(PROJECT).elf:
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true
+	$(MAKE) -f files/lang/Makefile
+	@cp src/dist/$(TARGET) ./$(PROJECT).elf
+
+clean:
+	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -f files/lang/Makefile clean
+	@rm -rf $(TARGET).velf $(TARGET).elf $(OBJS) $(TARGET).elf.unstripped.elf $(TARGET).vpk eboot.bin sce_sys/param.sfo ./param.sfo

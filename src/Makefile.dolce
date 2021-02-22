@@ -1,0 +1,24 @@
+AR := arm-dolce-eabi-gcc-ar
+CC := arm-dolce-eabi-gcc
+CXX := arm-dolce-eabi-g++
+LIBS :=
+
+CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(DOLCESDK)/arm-dolce-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -fgraphite-identity -floop-nest-optimize -fno-lto
+LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive
+
+SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lvita2d -lz -lpib -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
+                                             -lSceGxm_stub -lSceDisplayUser_stub -lSceAppMgr_stub -lSceAppMgrUser_stub -lSceGxmInternalForVsh_stub \
+                                             -lSceSysmodule_stub -lSceSharedFb_stub -lSceCommonDialog_stub -lSceMotion_stub
+SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL2 -D_REENTRANT
+
+ifndef WITHOUT_MIXER
+SDL_LIBS := -lSDL2_mixer $(SDL_LIBS) -lFLAC -lmikmod -lmpg123 -lvorbisfile -lvorbis -logg
+endif
+
+ifndef WITHOUT_IMAGE
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
+endif
+
+ifndef WITHOUT_UNICODE
+SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf -lfreetype
+endif
