@@ -1310,6 +1310,28 @@ namespace fheroes2
                     modified = temp;
                 }
                 return true;
+            case ICN::MONSTER_SWITCH_LEFT_ARROW:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    const Sprite & source = GetICN( ICN::RECRUIT, i );
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( source.height(), source.width() );
+                    Transpose( source, out );
+                    out = Flip( out, false, true );
+                    out.setPosition( source.y(), source.x() );
+                }
+                return true;
+            case ICN::MONSTER_SWITCH_RIGHT_ARROW:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    const Sprite & source = GetICN( ICN::RECRUIT, i + 2 );
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( source.height(), source.width() );
+                    Transpose( source, out );
+                    out = Flip( out, false, true );
+                    out.setPosition( source.y(), source.x() );
+                }
+                return true;
             default:
                 break;
             }
