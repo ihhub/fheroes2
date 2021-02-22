@@ -41,7 +41,7 @@ namespace
 
 #if defined( FHEROES2_VITA )
     const int totalCharactersDPad = 38;
-    bool _dpadInputActive = false;
+    bool dpadInputActive = false;
     bool currentUpper = false;
     int currentCharIndex = 0;
 
@@ -131,14 +131,14 @@ void LocalEvent::OpenTouchpad()
 void LocalEvent::OpenVirtualKeyboard()
 {
 #if defined( FHEROES2_VITA )
-    _dpadInputActive = true;
+    dpadInputActive = true;
 #endif
 }
 
 void LocalEvent::CloseVirtualKeyboard()
 {
 #if defined( FHEROES2_VITA )
-    _dpadInputActive = false;
+    dpadInputActive = false;
 #endif
 }
 
@@ -1118,7 +1118,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     if ( _gameController != nullptr ) {
         // fast map scroll with dpad
 #if defined( FHEROES2_VITA )
-        if ( !_dpadScrollActive || _dpadInputActive )
+        if ( !_dpadScrollActive || dpadInputActive )
 #else
         if ( !_dpadScrollActive )
 #endif
