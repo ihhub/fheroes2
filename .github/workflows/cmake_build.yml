@@ -42,10 +42,10 @@ jobs:
       - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
         if: matrix.config.os != 'windows-latest'
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON
           cmake --build build -j2
       - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
         if: matrix.config.os == 'windows-latest'
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_TOOLCHAIN_FILE="${env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DCMAKE_TOOLCHAIN_FILE="${env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
           cmake --build build -j2 --config Release
