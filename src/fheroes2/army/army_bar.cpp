@@ -353,7 +353,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
-            if ( IsSplitHotkeyUsed(troop, _army ))
+            if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
 
             Cursor::Get().Hide();
