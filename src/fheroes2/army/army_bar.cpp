@@ -48,12 +48,22 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
         const uint32_t freeSlots = ( armyFrom == armyTarget ? 1 : 0 ) + armyTarget->Size() - armyTarget->GetCount();
         const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
         uint32_t redistributeCount = troopFrom.GetCount() / 2;
-        const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, redistributeCount, saveLastTroop );
+        bool useFastSplit = false;
+        const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, saveLastTroop, redistributeCount, useFastSplit );
 
-        switch ( slots ) {
-        case 3:
-        case 4:
-        case 5:
+        if ( slots < 2 || slots > 5 )
+            return;
+
+        if ( !useFastSplit && slots == 2 ) {
+            // this logic is used when splitting to a stack with the same unit
+            if ( troopFrom.GetID() == troopTarget.GetID() )
+                troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
+            else
+                troopTarget.Set( troopFrom, redistributeCount );
+
+            troopFrom.SetCount( troopFrom.GetCount() - redistributeCount );
+        }
+        else {
             if ( saveLastTroop ) {
                 const Troop troop( troopFrom, troopFrom.GetCount() - 1 );
                 troopFrom.SetCount( 1 );
@@ -64,36 +74,32 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
                 troopFrom.Reset();
                 armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
-            break;
-
-        case 2:
-            // this logic is used when splitting to a stack with the same unit
-            if ( troopFrom.GetID() == troopTarget.GetID() )
-                troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
-            else
-                troopTarget.Set( troopFrom, redistributeCount );
-
-            troopFrom.SetCount( troopFrom.GetCount() - redistributeCount );
-            break;
-
-        default:
-            break;
         }
     }
 }
 
-void RedistributeArmyByOne( ArmyTroop & troopFrom, Army * armyTarget )
+void RedistributeTroopToFirstFreeSlot( ArmyTroop & troopFrom, Army * armyTarget, const uint32_t count )
 {
-    // can't split up a stack with just 1 unit...
-    if ( troopFrom.GetCount() <= 1 )
+    // can't split up a stack with just 1 unit, and obviously on count == 0, there's no splitting at all
+    if ( troopFrom.GetCount() <= 1 || count == 0 )
         return;
 
     const uint32_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
     if ( freeSlots == 0 )
         return;
 
-    armyTarget->AssignToFirstFreeSlot( troopFrom, 1 );
-    troopFrom.SetCount( troopFrom.GetCount() - 1 );
+    armyTarget->AssignToFirstFreeSlot( troopFrom, count );
+    troopFrom.SetCount( troopFrom.GetCount() - count );
+}
+
+void RedistributeTroopByOne( ArmyTroop & troopFrom, Army * armyTarget )
+{
+    RedistributeTroopToFirstFreeSlot( troopFrom, armyTarget, 1 );
+}
+
+void RedistributeTroopEvenly( ArmyTroop & troopFrom, Army * armyTarget )
+{
+    RedistributeTroopToFirstFreeSlot( troopFrom, armyTarget, troopFrom.GetCount() / 2 );
 }
 
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
@@ -240,7 +246,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
     if ( troop.isValid() && LocalEvent::Get().MouseClickMiddle() ) {
-        RedistributeArmyByOne( troop, _army );
+        RedistributeTroopByOne( troop, _army );
         return true;
     }
 
@@ -304,7 +310,6 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
         ArmyTroop * selectedTroop = GetSelectedItem();
-
         if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
             // redistribute when clicked troop is empty or is the same one as the selected troop
             if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
@@ -331,11 +336,17 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         if ( !read_only ) // select
         {
             if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-                RedistributeArmyByOne( troop, _army );
+                RedistributeTroopByOne( troop, _army );
+                //selectedTroop->Reset();
                 return false;
             }
             else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
                 _army->JoinAllTroopsOfType( troop );
+                //selectedTroop->Reset();
+                return false;
+            }
+            else if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+                RedistributeTroopEvenly( troop, _army );
                 return false;
             }
 
@@ -433,7 +444,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     if ( troop.isValid() && !read_only ) {
         if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-            RedistributeArmyByOne( troop, _army );
+            RedistributeTroopByOne( troop, _army );
             return false;
         }
         else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
