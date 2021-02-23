@@ -352,7 +352,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
 
     for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
         sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx++ );
-        const float spriteWidth = sprites[i].width() * ( i - minus );
+        const int spriteWidth = static_cast<int>(sprites[i].width() * ( i - minus ));
         const int deltaXWidth = deltaXStart + i * deltaX;
         vrts[i] = fheroes2::Rect( center + spriteWidth + deltaXWidth, pos.y + 95, sprites[i].width(), sprites[i].height() );
     }
