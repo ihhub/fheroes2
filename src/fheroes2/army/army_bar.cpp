@@ -45,14 +45,16 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
         isTroopInfoVisible = false;
     }
     else {
-        const uint32_t freeSlots = ( armyFrom == armyTarget ? 1 : 0 ) + armyTarget->Size() - armyTarget->GetCount();
+        const uint32_t freeSlots = 1 + armyTarget->Size() - armyTarget->GetCount();
         const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
         uint32_t redistributeCount = troopFrom.GetCount() / 2;
         bool useFastSplit = false;
         const uint32_t slots = Dialog::ArmySplitTroop( ( freeSlots > maxCount ? maxCount : freeSlots ), maxCount, saveLastTroop, redistributeCount, useFastSplit );
 
-        if ( slots < 2 || slots > 5 )
+        if ( slots < 2 || slots > 6 )
             return;
+
+        const uint32_t troopFromCount = troopFrom.GetCount();
 
         if ( !useFastSplit && slots == 2 ) {
             // this logic is used when splitting to a stack with the same unit
@@ -61,18 +63,27 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
             else
                 troopTarget.Set( troopFrom, redistributeCount );
 
-            troopFrom.SetCount( troopFrom.GetCount() - redistributeCount );
+            troopFrom.SetCount( troopFromCount - redistributeCount );
         }
         else {
-            if ( saveLastTroop ) {
-                const Troop troop( troopFrom, troopFrom.GetCount() - 1 );
-                troopFrom.SetCount( 1 );
+            int targetArmyTroopCount = troopFrom.GetCount();
+
+            if ( armyFrom != armyTarget )
+                targetArmyTroopCount -= targetArmyTroopCount / slots;
+
+            if ( armyFrom == armyTarget ) {
+                const Troop troop( troopFrom, troopFromCount );
+                troopFrom.Reset();
                 armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
             else {
-                const Troop troop( troopFrom );
-                troopFrom.Reset();
-                armyTarget->SplitTroopIntoFreeSlots( troop, slots );
+                int remainingTroops = troopFromCount / slots;
+
+                if ( troopFromCount % slots != 0 )
+                    remainingTroops++;
+
+                troopFrom.SetCount( remainingTroops );
+                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, troopFromCount - remainingTroops ), slots - 1 );
             }
         }
     }

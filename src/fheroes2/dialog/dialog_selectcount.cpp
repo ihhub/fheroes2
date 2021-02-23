@@ -346,13 +346,13 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     std::vector<fheroes2::Rect> vrts( freeSlots );
     const int deltaX = 10;
 
-    float minus = 0.5 * ( freeSlots - 1 );
+    float spriteWidthStart = -0.5f * ( freeSlots - 1 );
     int spriteIconIdx = 21;
     int deltaXStart = ( freeSlots - 2 ) * -5;
 
     for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
         sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx++ );
-        const int spriteWidth = static_cast<int>( sprites[i].width() * ( i - minus ) );
+        const int spriteWidth = static_cast<int>( sprites[i].width() * ( i + spriteWidthStart ) );
         const int deltaXWidth = deltaXStart + i * deltaX;
         vrts[i] = fheroes2::Rect( center + spriteWidth + deltaXWidth, pos.y + 95, sprites[i].width(), sprites[i].height() );
     }
