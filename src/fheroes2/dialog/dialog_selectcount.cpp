@@ -344,16 +344,15 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
 
     std::vector<fheroes2::Sprite> sprites( freeSlots );
     std::vector<fheroes2::Rect> vrts( freeSlots );
-    const bool isEven = freeSlots % 2 == 0;
     const int deltaX = 10;
 
     float minus = 0.5 * ( freeSlots - 1 );
     int spriteIconIdx = 21;
     int deltaXStart = ( freeSlots - 2 ) * -5;
 
-    for ( int i = 0; i < freeSlots - 1; ++i ) {
+    for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
         sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx++ );
-        const int spriteWidth = sprites[i].width() * ( i - minus );
+        const float spriteWidth = sprites[i].width() * ( i - minus );
         const int deltaXWidth = deltaXStart + i * deltaX;
         vrts[i] = fheroes2::Rect( center + spriteWidth + deltaXWidth, pos.y + 95, sprites[i].width(), sprites[i].height() );
     }
@@ -362,7 +361,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
         text.Set( _( "Fast separation into slots:" ), Font::BIG );
         text.Blit( center - text.w() / 2, pos.y + 65 );
 
-        for ( int i = 0; i < freeSlots - 1; ++i ) {
+        for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
         }
 
@@ -462,7 +461,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
 
-            for ( int i = 0; i < freeSlots - 1; ++i ) {
+            for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
                 if ( rt == vrts[i] ) {
                     result = i + 2;
                     break;
