@@ -324,7 +324,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     const int spacer = 10;
 
     const int defaultYPosition = 160;
-    const int boxHeight = 90 + spacer;
+    const int boxHeight = freeSlots > 1 ? 90 + spacer : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     NonFixedFrameBox box( boxHeight, boxYPosition, true );
@@ -341,17 +341,13 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
-    fheroes2::Sprite sp2;
-    fheroes2::Sprite sp3;
-    fheroes2::Sprite sp4;
-    fheroes2::Sprite sp5;
 
-    std::vector<fheroes2::Sprite> sprites(freeSlots);
+    std::vector<fheroes2::Sprite> sprites( freeSlots );
     std::vector<fheroes2::Rect> vrts( freeSlots );
     const bool isEven = freeSlots % 2 == 0;
     const int deltaX = 10;
 
-    float minus = 0.5 * (freeSlots - 1);
+    float minus = 0.5 * ( freeSlots - 1 );
     int spriteIconIdx = 21;
     int deltaXStart = ( freeSlots - 2 ) * -5;
 
