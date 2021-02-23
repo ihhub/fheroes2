@@ -102,6 +102,24 @@ void RedistributeTroopEvenly( ArmyTroop & troopFrom, Army * armyTarget )
     RedistributeTroopToFirstFreeSlot( troopFrom, armyTarget, troopFrom.GetCount() / 2 );
 }
 
+bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, Army * armyTarget )
+{
+    if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
+        RedistributeTroopByOne( troopFrom, armyTarget );
+        return true;
+    }
+    else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+        armyTarget->JoinAllTroopsOfType( troopFrom );
+        return true;
+    }
+    else if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        RedistributeTroopEvenly( troopFrom, armyTarget );
+        return true;
+    }
+
+    return false;
+}
+
 ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     : spcursor( fheroes2::AGG::GetICN( ICN::STRIP, 1 ) )
     , _army( nullptr )
@@ -335,20 +353,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
     else if ( troop.isValid() ) {
         if ( !read_only ) // select
         {
-            if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-                RedistributeTroopByOne( troop, _army );
-                //selectedTroop->Reset();
+            if ( IsSplitHotkeyUsed(troop, _army ))
                 return false;
-            }
-            else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-                _army->JoinAllTroopsOfType( troop );
-                //selectedTroop->Reset();
-                return false;
-            }
-            else if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-                RedistributeTroopEvenly( troop, _army );
-                return false;
-            }
 
             Cursor::Get().Hide();
             spcursor.hide();
@@ -442,15 +448,9 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
 bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
-    if ( troop.isValid() && !read_only ) {
-        if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
-            RedistributeTroopByOne( troop, _army );
-            return false;
-        }
-        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
-            _army->JoinAllTroopsOfType( troop );
-            return false;
-        }
+    if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
+        ResetSelected();
+        return false;
     }
 
     const ArmyTroop * troop2 = GetSelectedItem();
