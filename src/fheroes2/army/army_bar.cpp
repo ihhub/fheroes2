@@ -331,8 +331,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
             // redistribute when clicked troop is empty or is the same one as the selected troop
             if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
-                ResetSelected();
                 RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
+                ResetSelected();
 
                 return false;
             }
@@ -409,8 +409,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 {
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
         if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
-            ResetSelected();
             RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+            ResetSelected();
         }
         return false;
     }
@@ -546,8 +546,9 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
         return false;
 
     if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
-        ResetSelected();
         RedistributeArmy( selectedTroop, troop, _army, _isTroopInfoVisible );
+        ResetSelected();
+
         return true;
     }
 
@@ -557,8 +558,9 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
     if ( !destTroop.isValid() || destTroop.GetID() == selectedTroop.GetID() ) {
-        ResetSelected();
         RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+        ResetSelected();
+
         return true;
     }
 
