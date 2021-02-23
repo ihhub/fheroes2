@@ -5,16 +5,27 @@ on: [push, pull_request]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         config:
           - { os: ubuntu-latest,  sdl_version: "SDL",  sdl_packages: "libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev" }
           - { os: ubuntu-latest,  sdl_version: "SDL2", sdl_packages: "libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev" }
           - { os: macos-latest,   sdl_version: "SDL",  sdl_packages: "sdl sdl_image sdl_mixer sdl_ttf" }
           - { os: macos-latest,   sdl_version: "SDL2", sdl_packages: "sdl2 sdl2_image sdl2_mixer sdl2_ttf" }
+          - { os: windows-latest, sdl_version: "SDL2", sdl_packages: "libiconv sdl2 sdl2-image sdl2-mixer sdl2-ttf zlib" }
     runs-on: ${{ matrix.config.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Cache vcpkg dependencies (Windows)
+        if: matrix.config.os == 'windows-latest'
+        uses: actions/cache@v2.1.4
+        id: vcpkgcache
+        with:
+          # FIXME: Need to rework as environmental variable between steps. For now there goes hardcode
+          # path: ${env:VCPKG_INSTALLATION_ROOT}/installed
+          path: C:/vcpkg/installed
+          key: ${{ runner.os }}-vcpkg
       - name: Install dependencies (Linux)
         if: matrix.config.os == 'ubuntu-latest'
         run: |
@@ -24,8 +35,17 @@ jobs:
         if: matrix.config.os == 'macos-latest'
         run: |
           brew install ${{ matrix.config.sdl_packages }}
-      - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
+      - name: Install dependencies (Windows)
+        if: matrix.config.os == 'windows-latest' && steps.vcpkgcache.outputs.cache-hit != 'true'
         run: |
-          cmake -B build -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON
+          vcpkg --triplet x64-windows install ${{ matrix.config.sdl_packages }}
+      - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
+        if: matrix.config.os != 'windows-latest'
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON
           cmake --build build -j2
-
+      - name: Build on ${{ matrix.config.os }} with ${{ matrix.config.sdl_version }}
+        if: matrix.config.os == 'windows-latest'
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON -DFHEROES2_STRICT_COMPILATION=ON -DCMAKE_TOOLCHAIN_FILE="${env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake --build build -j2 --config Release
