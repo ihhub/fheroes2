@@ -32,6 +32,7 @@ set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACH
 
 # Find libraries and enable/disable features
 find_package(${USE_SDL_VERSION} REQUIRED)
+find_package(Threads)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)

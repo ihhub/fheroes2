@@ -17,6 +17,7 @@ target_include_directories(engine PUBLIC
 	)
 target_link_libraries(engine
 	smacker
+	${${USE_SDL_VERSION}MAIN_LIBRARY}
 	${${USE_SDL_VERSION}_LIBRARY}
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>
 	$<$<BOOL:${ENABLE_IMAGE}>:PNG::PNG>
