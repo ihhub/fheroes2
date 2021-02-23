@@ -508,7 +508,7 @@ void World::pickRumor()
     const std::string * current = _rumor;
     while ( current == _rumor ) {
         // vec_rumors always contain values
-        _rumor = Rand::Get( vec_rumors );
+        _rumor = &Rand::Get( vec_rumors );
     }
 }
 
@@ -668,11 +668,10 @@ s32 World::NextTeleport( s32 index ) const
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        return index;
     }
 
-    const int32_t * randValue = Rand::Get( teleports );
-
-    return randValue != nullptr ? *randValue : index;
+    return Rand::Get( teleports );
 }
 
 MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
@@ -700,7 +699,7 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
             uniqs.push_back( uniq );
         }
 
-        return uniq_whirlpools[*Rand::Get( uniqs )];
+        return uniq_whirlpools[Rand::Get( uniqs )];
     }
 
     return MapsIndexes();
@@ -712,11 +711,10 @@ s32 World::NextWhirlpool( s32 index ) const
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        return index;
     }
 
-    const int32_t * randValue = Rand::Get( whilrpools );
-
-    return randValue != nullptr ? *randValue : index;
+    return Rand::Get( whilrpools );
 }
 
 /* return message from sign */
@@ -865,15 +863,10 @@ std::string World::DateString( void ) const
     return os.str();
 }
 
-bool IsObeliskOnMaps( const Maps::Tiles & tile )
-{
-    return MP2::OBJ_OBELISK == tile.GetObject( false );
-}
-
 u32 World::CountObeliskOnMaps( void )
 {
-    u32 res = std::count_if( vec_tiles.begin(), vec_tiles.end(), IsObeliskOnMaps );
-    return res ? res : 6;
+    const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
+    return res > 0 ? static_cast<uint32_t>( res ) : 6;
 }
 
 void World::ActionForMagellanMaps( int color )

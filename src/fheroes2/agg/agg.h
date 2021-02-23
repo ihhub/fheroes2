@@ -38,10 +38,10 @@ namespace AGG
 #ifdef WITH_TTF
     u32 GetFontHeight( bool small );
 #endif
-    void LoadLOOPXXSounds( const std::vector<int> & );
-    void PlaySound( int m82 );
-    void PlayMusic( int mus, bool loop = true );
-    void ResetMixer( void );
+    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
+    void PlaySound( int m82, bool asyncronizedCall = false );
+    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
+    void ResetMixer();
 }
 
 namespace fheroes2

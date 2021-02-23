@@ -105,6 +105,12 @@ namespace Game
     }
 }
 
+// Returns the difficulty level based on the type of game.
+int Game::getDifficulty()
+{
+    return ( ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) != 0 ) ? Difficulty::NORMAL : Settings::Get().GameDifficulty();
+}
+
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
 {
     if ( lastMapFileName != mapFileName || savedPlayers.size() != players.size() ) {
@@ -127,6 +133,11 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
         players.push_back( player );
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
+}
+
+void Game::saveDifficulty( const int difficulty )
+{
+    Settings::Get().SetGameDifficulty( difficulty );
 }
 
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
@@ -237,31 +248,31 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
+    if ( !Settings::Get().Sound() ) {
+        return;
+    }
+
     const Point abs_pt( Interface::GetFocusCenter() );
-    const Settings & conf = Settings::Get();
+    std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
-    if ( conf.Sound() ) {
-        std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
+    // scan 4x4 square from focus
+    for ( s32 yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
+        for ( s32 xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
+            if ( Maps::isValidAbsPoint( xx, yy ) ) {
+                const u32 channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
+                if ( channel < reserved_vols.size() ) {
+                    // calculation volume
+                    const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
+                    const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
 
-        // scan 4x4 square from focus
-        for ( s32 yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
-            for ( s32 xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
-                if ( Maps::isValidAbsPoint( xx, yy ) ) {
-                    const u32 channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
-                    if ( channel < reserved_vols.size() ) {
-                        // calculation volume
-                        const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
-                        const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
-
-                        if ( volume > reserved_vols[channel] )
-                            reserved_vols[channel] = volume;
-                    }
+                    if ( volume > reserved_vols[channel] )
+                        reserved_vols[channel] = volume;
                 }
             }
         }
-
-        AGG::LoadLOOPXXSounds( reserved_vols );
     }
+
+    AGG::LoadLOOPXXSounds( reserved_vols, true );
 }
 
 u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
@@ -293,7 +304,7 @@ u32 Game::GetRating( void )
         break;
     }
 
-    switch ( conf.GameDifficulty() ) {
+    switch ( Game::getDifficulty() ) {
     case Difficulty::NORMAL:
         rating += 30;
         break;

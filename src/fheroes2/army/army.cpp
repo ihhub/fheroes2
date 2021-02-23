@@ -371,7 +371,7 @@ u32 Troops::GetUniqueCount( void ) const
             monsters.insert( troop->GetID() );
     }
 
-    return monsters.size();
+    return static_cast<uint32_t>( monsters.size() ); // safe to cast as usually the army has no more than 5 monsters
 }
 
 double Troops::GetStrength() const
@@ -1013,7 +1013,8 @@ bool Army::isSpreadFormat( void ) const
 
 int Army::GetColor( void ) const
 {
-    return GetCommander() ? GetCommander()->GetColor() : color;
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetColor() : color;
 }
 
 void Army::SetColor( int cl )
@@ -1043,7 +1044,8 @@ int Army::GetRace( void ) const
 
 int Army::GetLuck( void ) const
 {
-    return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator( NULL );
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( NULL );
 }
 
 int Army::GetLuckModificator( const std::string * ) const
@@ -1053,7 +1055,8 @@ int Army::GetLuckModificator( const std::string * ) const
 
 int Army::GetMorale( void ) const
 {
-    return GetCommander() ? GetCommander()->GetMorale() : GetMoraleModificator( NULL );
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( NULL );
 }
 
 // TODO:: need optimize

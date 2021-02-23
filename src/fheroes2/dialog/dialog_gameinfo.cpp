@@ -69,7 +69,7 @@ void Dialog::GameInfo( void )
     text.Set( Difficulty::String( conf.MapsDifficulty() ), Font::SMALL, 80 );
     text.Blit( pt.x + 50, pt.y + 80 );
 
-    text.Set( Difficulty::String( conf.GameDifficulty() ), Font::SMALL, 80 );
+    text.Set( Difficulty::String( Game::getDifficulty() ), Font::SMALL, 80 );
     text.Blit( pt.x + 140, pt.y + 80 );
 
     text.Set( std::to_string( Game::GetRating() ) + " %", Font::SMALL, 80 );

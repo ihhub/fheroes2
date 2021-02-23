@@ -251,4 +251,6 @@ namespace fheroes2
     void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value );
 
     Image Stretch( const Image & in, int32_t inX, int32_t inY, int32_t widthIn, int32_t heightIn, int32_t widthOut, int32_t heightOut );
+
+    void Transpose( const Image & in, Image & out );
 }

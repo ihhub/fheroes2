@@ -267,7 +267,10 @@ namespace Game
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
+    // Returns the difficulty level based on the type of game.
+    int getDifficulty();
     void LoadPlayers( const std::string & mapFileName, Players & players );
+    void saveDifficulty( const int difficulty );
     void SavePlayers( const std::string & mapFileName, const Players & players );
 
     std::string GetSaveDir();

@@ -82,6 +82,8 @@ void Kingdom::clear( void )
 
     heroes_cond_loss.clear();
     puzzle_maps.reset();
+
+    ResetLastLostHero();
 }
 
 int Kingdom::GetControl( void ) const
@@ -101,7 +103,7 @@ int Kingdom::GetRace( void ) const
 
 void Kingdom::UpdateStartingResource( void )
 {
-    resource = GetKingdomStartingResources( Settings::Get().GameDifficulty(), isControlAI() );
+    resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -597,7 +599,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() ) );
+        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
     return totalIncome;

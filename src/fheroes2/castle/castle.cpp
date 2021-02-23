@@ -161,7 +161,7 @@ void Castle::LoadFromMP2( StreamBuf st )
         // default building
         building |= DWELLING_MONSTER1;
         u32 dwelling2 = 0;
-        switch ( Settings::Get().GameDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             dwelling2 = 75;
             break;
@@ -517,7 +517,7 @@ void Castle::ActionNewWeek( void )
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() ) );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Game::getDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
