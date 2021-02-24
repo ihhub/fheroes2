@@ -380,7 +380,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
-    
+
     for ( auto it = freeTiles.cbegin(); it != freeTiles.cend(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
