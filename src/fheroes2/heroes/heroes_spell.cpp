@@ -47,22 +47,22 @@ namespace
     const uint32_t townGatePenalty = 225;
 }
 
-void DialogSpellFailed( const Spell & );
-void DialogNotAvailable( void );
+void DialogSpellFailed( const Spell & spell );
+void DialogNotAvailable();
 
-bool ActionSpellViewMines( const Heroes & );
-bool ActionSpellViewResources( const Heroes & );
-bool ActionSpellViewArtifacts( Heroes & );
-bool ActionSpellViewTowns( const Heroes & );
-bool ActionSpellViewHeroes( const Heroes & );
-bool ActionSpellViewAll( const Heroes & );
-bool ActionSpellIdentifyHero( const Heroes & );
-bool ActionSpellSummonBoat( const Heroes & );
-bool ActionSpellDimensionDoor( Heroes & );
-bool ActionSpellTownGate( Heroes & );
-bool ActionSpellTownPortal( Heroes & );
-bool ActionSpellVisions( Heroes & );
-bool ActionSpellSetGuardian( Heroes &, const Spell & );
+bool ActionSpellViewMines( const Heroes & hero );
+bool ActionSpellViewResources( const Heroes & hero );
+bool ActionSpellViewArtifacts( Heroes & hero );
+bool ActionSpellViewTowns( const Heroes & hero );
+bool ActionSpellViewHeroes( const Heroes & hero );
+bool ActionSpellViewAll( const Heroes & hero );
+bool ActionSpellIdentifyHero( const Heroes & hero );
+bool ActionSpellSummonBoat( const Heroes & hero );
+bool ActionSpellDimensionDoor( Heroes & hero );
+bool ActionSpellTownGate( Heroes & hero );
+bool ActionSpellTownPortal( Heroes & hero );
+bool ActionSpellVisions( Heroes & hero );
+bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
@@ -364,11 +364,11 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    const s32 center = hero.GetIndex();
+    const int32_t center = hero.GetIndex();
     const Point & centerPoint = Maps::GetPoint( center );
 
     // find water
-    s32 dst_water = -1;
+    int32_t dst_water = -1;
     MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const Point & leftPoint = Maps::GetPoint( left );
@@ -380,7 +380,8 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
-    for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
+    
+    for ( auto it = freeTiles.cbegin(); it != freeTiles.cend(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
             break;
@@ -392,32 +393,14 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    u32 chance = 0;
-
-    switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
-    case Skill::Level::BASIC:
-        chance = 50;
-        break;
-    case Skill::Level::ADVANCED:
-        chance = 75;
-        break;
-    case Skill::Level::EXPERT:
-        chance = 100;
-        break;
-    default:
-        chance = 30;
-        break;
-    }
-
     const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( size_t i = 0; i < boats.size(); ++i ) {
-        const s32 boat = boats[i];
-        if ( Maps::isValidAbsIndex( boat ) ) {
-            if ( Rand::Get( 1, 100 ) <= chance ) {
-                Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, boat, dst_water, true, true );
+    for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
+        if ( Maps::isValidAbsIndex( *it ) ) {
+            const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
+            if ( distance > 1 ) {
+                Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
                 return true;
             }
-            break;
         }
     }
 
