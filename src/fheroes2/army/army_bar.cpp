@@ -77,10 +77,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
                 armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
             else {
-                int remainingTroops = troopFromCount / slots;
-
-                if ( troopFromCount % slots != 0 )
-                    remainingTroops++;
+                const uint32_t remainingTroops = (troopFromCount + slots - 1) / slots;
 
                 troopFrom.SetCount( remainingTroops );
                 armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, troopFromCount - remainingTroops ), slots - 1 );

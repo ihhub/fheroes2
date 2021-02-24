@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
+#include <cassert>
 
 namespace
 {
@@ -314,6 +315,8 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
 int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
 {
+    assert( freeSlots > 0 );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
@@ -344,17 +347,18 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
 
     std::vector<fheroes2::Sprite> sprites( freeSlots );
     std::vector<fheroes2::Rect> vrts( freeSlots );
-    const int deltaX = 10;
 
-    float spriteWidthStart = -0.5f * ( freeSlots - 1 );
     int spriteIconIdx = 21;
-    int deltaXStart = ( freeSlots - 2 ) * -5;
+    const int deltaX = 10;
+    const int deltaXStart = ( freeSlots - 2 ) * -5;
 
     for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
-        sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx++ );
-        const int spriteWidth = static_cast<int>( sprites[i].width() * ( i + spriteWidthStart ) );
-        const int deltaXWidth = deltaXStart + i * deltaX;
-        vrts[i] = fheroes2::Rect( center + spriteWidth + deltaXWidth, pos.y + 95, sprites[i].width(), sprites[i].height() );
+        sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx );
+        ++spriteIconIdx;
+
+        const int spriteWidth = sprites[i].width();
+        const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
+        vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, sprites[i].width(), sprites[i].height() );
     }
 
     if ( !sprites.empty() ) {
