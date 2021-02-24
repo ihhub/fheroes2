@@ -2935,7 +2935,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             bool redrawBattleField = false;
 
-            if ( attacker != NULL ) {
+            if ( attacker != nullptr ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
                 }
@@ -2944,19 +2944,18 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
 
                 redrawBattleField = true;
-                RedrawPartialStart();
             }
-
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( !redrawBattleField ) {
+            else {
+                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                    if ( ( *it ).defender ) {
                         redrawBattleField = true;
-                        RedrawPartialStart();
+                        break;
                     }
                 }
             }
 
             if ( redrawBattleField ) {
+                RedrawPartialStart();
                 RedrawPartialFinish();
             }
 
