@@ -316,8 +316,6 @@ fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
         return fheroes2::AGG::GetICN( ICN::BOATSHAD, indexSprite + ( index % 9 ) );
     }
     else {
-        const int icnShad = hero.isShipMaster() ? ICN::BOATSHAD : ICN::SHADOW32;
-
         int indexSprite = index;
 
         if ( indexSprite == 51 )
