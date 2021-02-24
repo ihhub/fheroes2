@@ -219,22 +219,26 @@ void Game::SetCurrentMusic( int mus )
 
 void Game::ObjectFadeAnimation::FinishFadeTask()
 {
-    if ( fadeTask.object != MP2::OBJ_ZERO ) {
-        if ( fadeTask.fadeOut ) {
-            Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
-            if ( tile.GetObject() == fadeTask.object ) {
-                tile.RemoveObjectSprite();
-                tile.SetObject( MP2::OBJ_ZERO );
-            }
-        }
-        if ( fadeTask.fadeIn ) {
-            Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
-            if ( MP2::OBJ_BOAT == fadeTask.object ) {
-                tile.setBoat( Direction::RIGHT );
-            }
-        }
-        fadeTask.object = MP2::OBJ_ZERO;
+    if ( fadeTask.object == MP2::OBJ_ZERO ) {
+        return;
     }
+
+    if ( fadeTask.fadeOut ) {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+        if ( tile.GetObject() == fadeTask.object ) {
+            tile.RemoveObjectSprite();
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
+    }
+
+    if ( fadeTask.fadeIn ) {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+        if ( MP2::OBJ_BOAT == fadeTask.object ) {
+            tile.setBoat( Direction::RIGHT );
+        }
+    }
+
+    fadeTask.object = MP2::OBJ_ZERO;
 }
 
 void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromIndex, uint32_t toIndex, bool fadeOut, bool fadeIn )
