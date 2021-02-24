@@ -75,7 +75,6 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask fadeTask;
         FadeTask::FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
                             bool fadeIn_, uint8_t objectTileset_ )
             : object( object_ )
@@ -88,6 +87,7 @@ namespace Game
             , fadeIn( fadeIn_ )
             , objectTileset( objectTileset_ )
         {}
+
         FadeTask::FadeTask()
             : object( MP2::OBJ_ZERO )
             , objectIndex( 0 )
@@ -100,6 +100,9 @@ namespace Game
             , objectTileset( 0 )
 
         {}
+
+        // Single instance of FadeTask.
+        FadeTask fadeTask;
     }
 }
 
