@@ -117,10 +117,10 @@ int Game::MainMenu( bool isFirstGameRun )
     u32 lantern_frame = 0;
 
     ButtonInfo buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
-                   {LOADGAME_DEFAULT, buttonLoadGame, false, false},
-                   {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
-                   {CREDITS_DEFAULT, buttonCredits, false, false},
-                   {QUIT_DEFAULT, buttonQuit, false, false}};
+                            {LOADGAME_DEFAULT, buttonLoadGame, false, false},
+                            {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
+                            {CREDITS_DEFAULT, buttonCredits, false, false},
+                            {QUIT_DEFAULT, buttonQuit, false, false}};
 
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
         cursor.Hide();
