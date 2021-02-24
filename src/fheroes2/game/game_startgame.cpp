@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #ifdef AI
@@ -1022,8 +1023,6 @@ int Interface::Basic::HumanTurn( bool isload )
                             fadeTask.object = MP2::OBJ_ZERO;
                         }
                     }
-
-                    gameArea.SetRedraw();
                 }
                 else if ( fadeTask.fadeIn ) {
                     if ( fadeTask.alpha == 0 ) {
@@ -1041,9 +1040,12 @@ int Interface::Basic::HumanTurn( bool isload )
                         fadeTask.alpha = 255;
                         fadeTask.object = MP2::OBJ_ZERO;
                     }
-
-                    gameArea.SetRedraw();
                 }
+                else {
+                    assert( 0 ); // incorrect fading animation setup!
+                }
+
+                gameArea.SetRedraw();
             }
         }
 
