@@ -1017,30 +1017,32 @@ int Interface::Basic::HumanTurn( bool isload )
                             tile.RemoveObjectSprite();
                             tile.SetObject( MP2::OBJ_ZERO );
                         }
+
                         if ( !fadeTask.fadeIn ) {
                             fadeTask.object = MP2::OBJ_ZERO;
                         }
                     }
+
                     gameArea.SetRedraw();
                 }
-                else {
-                    if ( fadeTask.fadeIn ) {
-                        if ( fadeTask.alpha == 0 ) {
-                            Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
-                            if ( MP2::OBJ_BOAT == fadeTask.object ) {
-                                tile.setBoat( Direction::RIGHT );
-                            }
+                else if ( fadeTask.fadeIn ) {
+                    if ( fadeTask.alpha == 0 ) {
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+                        if ( MP2::OBJ_BOAT == fadeTask.object ) {
+                            tile.setBoat( Direction::RIGHT );
                         }
-                        if ( fadeTask.alpha < 235 ) {
-                            fadeTask.alpha += 20;
-                        }
-                        else {
-                            fadeTask.fadeIn = false;
-                            fadeTask.alpha = 255;
-                            fadeTask.object = MP2::OBJ_ZERO;
-                        }
-                        gameArea.SetRedraw();
                     }
+
+                    if ( fadeTask.alpha < 235 ) {
+                        fadeTask.alpha += 20;
+                    }
+                    else {
+                        fadeTask.fadeIn = false;
+                        fadeTask.alpha = 255;
+                        fadeTask.object = MP2::OBJ_ZERO;
+                    }
+
+                    gameArea.SetRedraw();
                 }
             }
         }
