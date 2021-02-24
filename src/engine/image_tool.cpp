@@ -35,12 +35,9 @@ namespace
 {
     std::vector<uint8_t> PALPAlette()
     {
-        std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
-            palette.resize( 256 * 3 );
-            for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = kb_pal[i] << 2;
-            }
+        std::vector<uint8_t> palette( 256 * 3 );
+        for ( size_t i = 0; i < palette.size(); ++i ) {
+            palette[i] = kb_pal[i] << 2;
         }
 
         return palette;

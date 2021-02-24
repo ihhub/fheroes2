@@ -23,7 +23,6 @@
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
-#include "error.h"
 #include "pal.h"
 #include "screen.h"
 
@@ -1099,7 +1098,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         case SDL_WINDOWEVENT_CLOSE:
 #endif
-            // Error::Except(__FUNCTION__, "SDL_QUIT");
             if ( allowExit )
                 return false; // try to perform clear exit to catch all memory leaks, for example
             break;

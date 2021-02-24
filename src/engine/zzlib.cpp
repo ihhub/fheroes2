@@ -25,7 +25,6 @@
 #include <sstream>
 #include <zlib.h>
 
-#include "error.h"
 #include "logging.h"
 #include "zzlib.h"
 
