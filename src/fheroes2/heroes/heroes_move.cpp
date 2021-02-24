@@ -321,15 +321,15 @@ fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
         int indexSprite = index;
 
         if ( indexSprite == 51 )
-          indexSprite = 56;
+            indexSprite = 56;
         else if ( indexSprite == 50 )
-          indexSprite = 57;
+            indexSprite = 57;
         else if ( indexSprite == 49 )
-          indexSprite = 58;
+            indexSprite = 58;
         else if ( indexSprite == 47 )
-          indexSprite = 55;
+            indexSprite = 55;
         else if ( indexSprite == 46 )
-          indexSprite = 55;
+            indexSprite = 55;
 
         const int indexOffset = ( indexSprite < 9 || indexSprite >= 36 ) ? 0 : 50;
 
