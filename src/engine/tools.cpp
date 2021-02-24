@@ -31,7 +31,6 @@
 #include <math.h>
 #include <sstream>
 
-#include "error.h"
 #include "logging.h"
 #include "tools.h"
 
