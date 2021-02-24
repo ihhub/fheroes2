@@ -2899,10 +2899,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
                 deathColor = defender->GetArmyColor();
             }
-            else
+            else if ( it->damage ) {
                 // wince animation
-                if ( it->damage ) {
-                // wnce animation
                 defender->SwitchAnimation( Monster_Info::WNCE );
                 AGG::PlaySound( defender->M82Wnce() );
                 ++finish;
@@ -2930,13 +2928,14 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // targets damage animation loop
-    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
+    bool finishedAnimation = false;
+    while ( le.HandleEvents() && !finishedAnimation ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             bool redrawBattleField = false;
 
-            if ( attacker != NULL ) {
+            if ( attacker != nullptr ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
                 }
@@ -2945,21 +2944,22 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
 
                 redrawBattleField = true;
-                RedrawPartialStart();
             }
-
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( !redrawBattleField ) {
+            else {
+                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                    if ( ( *it ).defender ) {
                         redrawBattleField = true;
-                        RedrawPartialStart();
+                        break;
                     }
                 }
             }
 
             if ( redrawBattleField ) {
+                RedrawPartialStart();
                 RedrawPartialFinish();
             }
+
+            finishedAnimation = ( finish == std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) );
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
@@ -2977,16 +2977,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     // Fade away animation for destroyed mirror images
     if ( mirrorImages.size() )
         RedrawActionRemoveMirrorImage( mirrorImages );
-
-    // Set to static animation as attacker might still continue its animation
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        Unit * unit = ( *it ).defender;
-        if ( unit ) {
-            if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
-                unit->SwitchAnimation( Monster_Info::STATIC );
-            }
-        }
-    }
 }
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
