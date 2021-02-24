@@ -133,11 +133,21 @@ namespace Maps
         void SetObjectSpriteIndex( const uint8_t index );
 
         u32 GetObjectUID() const;
-        int GetQuantity1() const;
-        int GetQuantity2() const;
+
+        // Get Tile metadata field #1 (used for things like monster count or resource amount)
+        uint8_t GetQuantity1() const
+        {
+            return quantity1;
+        }
+
+        // Get Tile metadata field #2 (used for things like animations or resource type )
+        uint8_t GetQuantity2() const
+        {
+            return quantity2;
+        }
 
         // Get third field containing Tile metadata (adventure spell ID)
-        int GetQuantity3() const
+        uint8_t GetQuantity3() const
         {
             return quantity3;
         }

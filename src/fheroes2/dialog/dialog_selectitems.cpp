@@ -373,7 +373,7 @@ Monster Dialog::SelectMonster( int id )
 
     listbox.SetListContent( monsters );
     if ( id != Monster::UNKNOWN )
-        listbox.SetCurrent( static_cast<int>( id ) );
+        listbox.SetCurrent( id );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );

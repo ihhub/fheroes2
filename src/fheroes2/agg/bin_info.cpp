@@ -207,7 +207,7 @@ namespace Bin_Info
             uint8_t count = data[243 + idx];
             if ( count > 16 )
                 count = 16; // here we need to reset our object
-            for ( uint8_t frame = 0; frame < count; frame++ ) {
+            for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
             animationFrames.push_back( anim );
