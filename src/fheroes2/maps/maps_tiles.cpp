@@ -1268,18 +1268,6 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
-// Get Tile metadata field #1 (used for things like monster count or resource amount)
-int Maps::Tiles::GetQuantity1( void ) const
-{
-    return quantity1;
-}
-
-// Get Tile metadata field #2 (used for things like animations or resource type )
-int Maps::Tiles::GetQuantity2( void ) const
-{
-    return quantity2;
-}
-
 int Maps::Tiles::GetPassable( void ) const
 {
     return tilePassable;
@@ -1726,7 +1714,7 @@ std::string Maps::Tiles::String( void ) const
        << "maps index      : " << GetIndex() << ", "
        << "point: x(" << GetCenter().x << "), y(" << GetCenter().y << ")" << std::endl
        << "id              : " << uniq << std::endl
-       << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
+       << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
        << "region          : " << _region << std::endl
@@ -1739,7 +1727,7 @@ std::string Maps::Tiles::String( void ) const
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "quantity 3      : " << static_cast<int>( GetQuantity3() ) << std::endl;
+       << "quantity 3      : " << static_cast<int>( quantity3 ) << std::endl;
 
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it )
         os << ( *it ).String( 1 );

@@ -347,9 +347,12 @@ namespace
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = kb_pal + *correctorX * 3;
 
-                    const int32_t offsetRed = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( r );
-                    const int32_t offsetGreen = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( g );
-                    const int32_t offsetBlue = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( b );
+                    const int32_t offsetRed = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( r );
+                    ++palette;
+                    const int32_t offsetGreen = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( g );
+                    ++palette;
+                    const int32_t offsetBlue = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( b );
+                    ++palette;
                     const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
@@ -826,9 +829,12 @@ namespace fheroes2
         const uint8_t * value = kb_pal;
 
         for ( uint32_t i = 0; i < 256; ++i ) {
-            const uint32_t red = static_cast<uint32_t>( *value++ ) * alpha / 255;
-            const uint32_t green = static_cast<uint32_t>( *value++ ) * alpha / 255;
-            const uint32_t blue = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
+            const uint32_t green = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
+            const uint32_t blue = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
@@ -1114,9 +1120,12 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX ) {
                         const uint8_t * palette = kb_pal + *imageInX * 3;
 
-                        sumRed += ( *palette++ );
-                        sumGreen += ( *palette++ );
-                        sumBlue += ( *palette++ );
+                        sumRed += ( *palette );
+                        ++palette;
+                        sumGreen += ( *palette );
+                        ++palette;
+                        sumBlue += ( *palette );
+                        ++palette;
                     }
                 }
 

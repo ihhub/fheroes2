@@ -43,8 +43,7 @@ Cursor & Cursor::Get( void )
     return _cursor;
 }
 
-/* get theme cursor */
-int Cursor::Themes( void )
+int Cursor::Themes() const
 {
     return SP_ARROW >= theme ? theme : NONE;
 }
@@ -90,8 +89,7 @@ void Cursor::Redraw( s32 x, s32 y )
     }
 }
 
-/* move cursor */
-void Cursor::Move( s32 x, s32 y )
+void Cursor::Move( int32_t x, int32_t y ) const
 {
     fheroes2::cursor().setPosition( x + offset_x, y + offset_y );
 }
@@ -161,12 +159,12 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     }
 }
 
-void Cursor::Show( void )
+void Cursor::Show() const
 {
     fheroes2::cursor().show( true );
 }
 
-void Cursor::Hide( void )
+void Cursor::Hide() const
 {
     fheroes2::cursor().show( false );
 }

@@ -584,7 +584,7 @@ namespace AI
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;
 
-        Board & board = *arena.GetBoard();
+        Board & board = *Arena::GetBoard();
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );

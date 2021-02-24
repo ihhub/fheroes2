@@ -34,7 +34,7 @@ namespace Campaign
         , _scenarios()
     {}
 
-    const std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
+    std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
         std::vector<int> scenarioIDs;
 
@@ -62,7 +62,7 @@ namespace Campaign
         return _scenarios[scenarioID].getNextMaps();
     }
 
-    const std::vector<int> CampaignData::getStartingScenarios() const
+    std::vector<int> CampaignData::getStartingScenarios() const
     {
         std::vector<int> startingScenarios;
 
