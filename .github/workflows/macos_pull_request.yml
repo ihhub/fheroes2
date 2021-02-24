@@ -1,4 +1,4 @@
-name: OSX
+name: macOS
 
 on:
   pull_request:
