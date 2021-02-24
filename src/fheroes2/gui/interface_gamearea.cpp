@@ -197,12 +197,41 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+
+    // fade out animation for objects only
+    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
+        const int icn = MP2::GetICNObject( fadeTask.objectTileset );
+        const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeTask.objectIndex );
+        BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeTask.alpha );
+
+        // possible animation
+        if ( fadeTask.animationIndex ) {
+            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, fadeTask.animationIndex );
+            BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, fadeTask.alpha );
+        }
+    }
+
     // Monsters and boats.
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     if ( drawMonstersAndBoats ) {
         for ( int32_t y = minY; y < maxY; ++y ) {
             for ( int32_t x = minX; x < maxX; ++x ) {
                 world.GetTiles( x, y ).RedrawMonstersAndBoat( dst, tileROI, true, *this );
+            }
+        }
+
+        // fade out animation for monsters only
+        if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
+            const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
+            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+
+            if ( fadeTask.animationIndex ) {
+                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
+                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
             }
         }
     }
@@ -227,36 +256,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     heroList.emplace_back( GetRelativeTilePosition( Point( x, y ) ), hero );
                 }
             }
-        }
-    }
-
-    // Object fade in/fade out animation
-    const Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
-    if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-        const Point & mp = Maps::GetPoint( fadeInfo.tile );
-        const int icn = MP2::GetICNObject( fadeInfo.object );
-
-        if ( icn == ICN::MONS32 ) {
-            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( fadeInfo.tile ), fadeInfo.index );
-
-            // base monster sprite
-            if ( monsterIndicies.first >= 0 ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
-            }
-            // animated monster part
-            if ( monsterIndicies.second >= 0 ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
-            }
-        }
-        else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH - 11, mp, false, fadeInfo.alpha );
-        }
-        else {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeInfo.alpha );
         }
     }
 

@@ -270,7 +270,7 @@ namespace Maps
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
         static int GetPassable( uint32_t tileset, uint32_t index );
         static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
-        static std::pair<int, int> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
+        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
         static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
         static void UpdateAbandoneMineSprite( Tiles & );
         static void FixedPreload( Tiles & );
