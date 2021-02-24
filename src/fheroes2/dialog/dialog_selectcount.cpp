@@ -373,7 +373,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         sp5 = fheroes2::AGG::GetICN( ICN::REQUESTS, 24 );
         rt3 = fheroes2::Rect( center - sp3.width() / 2 - 10 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
         rt4 = fheroes2::Rect( center - sp4.width() / 2, pos.y + 95, sp4.width(), sp4.height() );
-        rt5 = fheroes2::Rect( center + sp5.width() / 2 + 10, pos.y + 95, sp5.width(), sp5.height() );
+        rt5 = fheroes2::Rect( center - sp5.width() / 2 + 10 + sp5.width(), pos.y + 95, sp5.width(), sp5.height() );
         break;
     }
 
