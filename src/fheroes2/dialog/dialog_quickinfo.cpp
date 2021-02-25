@@ -276,9 +276,9 @@ std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingd
 {
     std::string str = MP2::StringObject( tile.GetObject() );
 
-    if ( showVisitedOption && kingdom.isVisited( tile ) ) {
+    if ( showVisitedOption ) {
         str.append( "\n \n" );
-        str.append( _( "(already visited)" ) );
+        str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
     return str;
@@ -453,7 +453,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
 
     if ( tile.isFog( settings.CurrentColor() ) )
-        name_object = _( "Unchartered Territory" );
+        name_object = _( "Uncharted Territory" );
     else
         // check guardians mine
         if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
