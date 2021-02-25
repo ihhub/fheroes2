@@ -474,6 +474,10 @@ namespace AI
             uint32_t shortestDist = MAXU16;
 
             for ( const int wallIndex : underWallsIndicies ) {
+                if ( !arena.hexIsPassable( wallIndex ) ) {
+                    continue;
+                }
+
                 const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
                 if ( dist < shortestDist ) {
                     shortestDist = dist;
