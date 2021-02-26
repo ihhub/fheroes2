@@ -171,8 +171,11 @@ namespace Battle
 
                         // Check if we're turning back. No movement at all.
                         uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0 : 1;
-                        if ( isMoatBuilt && Board::isMoatIndex( newNode ) )
-                            additionalCost += std::max( moatPenalty - previousNode._cost, 1u );
+
+                        // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values
+                        if ( isMoatBuilt && Board::isMoatIndex( newNode ) ) {
+                            additionalCost += ( moatPenalty > previousNode._cost ) ? moatPenalty - previousNode._cost : 1u;
+                        }
 
                         if ( headCell->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;
