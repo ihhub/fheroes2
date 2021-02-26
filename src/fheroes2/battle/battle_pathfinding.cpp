@@ -162,9 +162,9 @@ namespace Battle
                     const Cell * headCell = Board::GetCell( newNode );
 
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
-                    const int32_t tailCellId = isLeftDirection ? newNode + 1 : newNode - 1;
+                    const Cell * tailCell = unitIsWide ? Board::GetCell( isLeftDirection ? newNode + 1 : newNode - 1 ) : nullptr;
 
-                    if ( headCell->isPassable1( false ) && ( !unitIsWide || Board::GetCell( tailCellId )->isPassable1( false ) )
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( false ) )
                          && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
                         const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
