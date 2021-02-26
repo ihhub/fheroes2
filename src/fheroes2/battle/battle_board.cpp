@@ -273,7 +273,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
                     int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
                     if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
-                        cost += std::max(moatPenalty - currentCellNode.cost, 100);
+                        cost += std::max( moatPenalty - currentCellNode.cost, 100 );
 
                     // Turn back. No movement at all.
                     if ( isLeftDirection != currentCellNode.leftDirection )
