@@ -45,7 +45,11 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
         isTroopInfoVisible = false;
     }
     else {
-        const uint32_t freeSlots = 1 + armyTarget->Size() - armyTarget->GetCount();
+        uint32_t freeSlots = 1 + armyTarget->Size() - armyTarget->GetCount();
+
+        if ( troopFrom.GetID() == troopTarget.GetID() )
+            ++freeSlots;
+
         const uint32_t maxCount = saveLastTroop ? troopFrom.GetCount() - 1 : troopFrom.GetCount();
         uint32_t redistributeCount = troopFrom.GetCount() / 2;
         bool useFastSplit = false;
@@ -66,21 +70,23 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
             troopFrom.SetCount( troopFromCount - redistributeCount );
         }
         else {
-            int targetArmyTroopCount = troopFrom.GetCount();
+            uint32_t totalSplitTroopCount = troopFrom.GetCount();
 
-            if ( armyFrom != armyTarget )
-                targetArmyTroopCount -= targetArmyTroopCount / slots;
+            if ( troopFrom.GetID() == troopTarget.GetID() ) {
+                totalSplitTroopCount += troopTarget.GetCount();
+                troopTarget.Reset();
+            }
 
             if ( armyFrom == armyTarget ) {
-                const Troop troop( troopFrom, troopFromCount );
+                const Troop troop( troopFrom, totalSplitTroopCount );
                 troopFrom.Reset();
                 armyTarget->SplitTroopIntoFreeSlots( troop, slots );
             }
             else {
-                const uint32_t remainingTroops = ( troopFromCount + slots - 1 ) / slots;
+                const uint32_t remainingTroops = ( totalSplitTroopCount + slots - 1 ) / slots;
 
                 troopFrom.SetCount( remainingTroops );
-                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, troopFromCount - remainingTroops ), slots - 1 );
+                armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount - remainingTroops ), slots - 1 );
             }
         }
     }
