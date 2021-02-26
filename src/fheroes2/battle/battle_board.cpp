@@ -71,20 +71,6 @@ namespace
     }
 }
 
-namespace Battle
-{
-    bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
-    {
-        const int startX = startCellId % ARENAW;
-        const int endX = endCellId % ARENAW;
-
-        if ( prevLeftDirection )
-            return endX <= startX;
-        else
-            return endX < startX;
-    }
-}
-
 Battle::Board::Board()
 {
     reserve( ARENASIZE );
@@ -587,6 +573,18 @@ bool Battle::Board::isReflectDirection( int d )
 
     return false;
 }
+
+bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
+{
+    const int startX = startCellId % ARENAW;
+    const int endX = endCellId % ARENAW;
+
+    if ( prevLeftDirection )
+        return endX <= startX;
+    else
+        return endX < startX;
+}
+
 
 bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
 {

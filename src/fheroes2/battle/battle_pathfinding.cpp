@@ -91,6 +91,7 @@ namespace Battle
         _cost = MAX_MOVE_COST;
         _objectID = 0;
         _isOpen = true;
+        _isLeftDirection = false;
     }
 
     ArenaPathfinder::ArenaPathfinder()
@@ -187,12 +188,52 @@ namespace Battle
                 }
             }
         }
-        else {
+        else if ( unitIsWide ) {
             std::vector<int> nodesToExplore;
             nodesToExplore.push_back( headIdx );
 
-            if ( tailIdx != -1 )
-                nodesToExplore.push_back( tailIdx );
+            for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+                const int fromNode = nodesToExplore[lastProcessedNode];
+                ArenaNode & previousNode = _cache[fromNode];
+                
+                Indexes aroundCellIds;
+                if ( previousNode._from < 0 )
+                    aroundCellIds = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
+                else
+                    aroundCellIds = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) );
+
+                for ( const int32_t newNode : aroundCellIds ) {
+                    const Cell * headCell = Board::GetCell( newNode );
+                    const bool isLeftDirection = Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
+                    const int32_t tailCellId = isLeftDirection ? newNode + 1 : newNode - 1;
+
+                    if ( headCell->isPassable1( false ) && Board::GetCell( tailCellId )->isPassable1( false ) ) {
+                        const uint32_t cost = _cache[fromNode]._cost;
+                        ArenaNode & node = _cache[newNode];
+
+                        // Turn back. No movement at all.
+                        const uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0 : 1;
+
+                        if ( headCell->GetUnit() && cost < node._cost ) {
+                            node._isOpen = false;
+                            node._from = fromNode;
+                            node._cost = cost;
+                            node._isLeftDirection = isLeftDirection;
+                        }
+                        else if ( cost + additionalCost < node._cost ) {
+                            node._isOpen = true;
+                            node._from = fromNode;
+                            node._cost = cost + additionalCost;
+                            node._isLeftDirection = isLeftDirection;
+                            nodesToExplore.push_back( newNode );
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            std::vector<int> nodesToExplore;
+            nodesToExplore.push_back( headIdx );
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int fromNode = nodesToExplore[lastProcessedNode];
