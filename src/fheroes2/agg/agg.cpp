@@ -1331,6 +1331,13 @@ namespace fheroes2
                     out.setPosition( source.y(), source.x() );
                 }
                 return true;
+            case ICN::SURRENDR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // Fix incorrect font color.
+                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                }
+                return true;
             default:
                 break;
             }
