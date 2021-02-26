@@ -90,6 +90,7 @@ namespace Battle
 
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+        const uint32_t moatPenalty = unit.GetSpeed();
 
         // Initialize the starting cells
         const int32_t headIdx = unitHead->GetIndex();
@@ -168,10 +169,10 @@ namespace Battle
                         const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
 
-                        uint32_t additionalCost = ( isMoatBuilt && Board::isMoatIndex( newNode ) ) ? 2 : 1;
-                        // Turn back. No movement at all.
-                        if ( isLeftDirection != previousNode._isLeftDirection )
-                            additionalCost = 0;
+                        // Check if we're turning back. No movement at all.
+                        uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0 : 1;
+                        if ( isMoatBuilt && Board::isMoatIndex( newNode ) )
+                            additionalCost += std::max( moatPenalty - previousNode._cost, 1u );
 
                         if ( headCell->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;

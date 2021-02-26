@@ -237,6 +237,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     const Castle * castle = Arena::GetCastle();
     const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
     const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+    const int32_t moatPenalty = unit.GetSpeed() * 100;
 
     std::map<int32_t, CellNode> cellMap;
     cellMap[currentCellId].parentCellId = -1;
@@ -272,7 +273,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
                     int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
                     if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
-                        cost += 100;
+                        cost += std::max(moatPenalty - currentCellNode.cost, 100);
 
                     // Turn back. No movement at all.
                     if ( isLeftDirection != currentCellNode.leftDirection )
