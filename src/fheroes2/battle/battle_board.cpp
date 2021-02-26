@@ -585,7 +585,6 @@ bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t en
         return endX < startX;
 }
 
-
 bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
 {
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
