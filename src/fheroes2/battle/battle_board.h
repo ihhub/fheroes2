@@ -79,6 +79,7 @@ namespace Battle
         static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
+        static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
