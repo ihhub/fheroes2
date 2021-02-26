@@ -25,66 +25,6 @@
 
 namespace Battle
 {
-    // If move is not valid this function returns -1 otherwise returns new index after the move.
-    int GetValidMoveIndex( int fromCell, int directionMask, bool isWide )
-    {
-        int newIndex = -1;
-        int wideUnitOffset = 0;
-        const int x = fromCell % ARENAW;
-        const int y = fromCell / ARENAW;
-        const bool isOddRow = ( y % 2 ) == 1;
-
-        switch ( directionMask ) {
-        case Battle::TOP_LEFT:
-            if ( y > 0 && ( x > 0 || !isOddRow ) ) {
-                newIndex = fromCell - ARENAW - ( isOddRow ? 1 : 0 );
-                wideUnitOffset = 1;
-            }
-            break;
-        case Battle::TOP_RIGHT:
-            if ( y > 0 && ( x < ARENAW - 1 || isOddRow ) ) {
-                newIndex = fromCell - ARENAW + ( isOddRow ? 0 : 1 );
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::RIGHT:
-            if ( x < ARENAW - 1 ) {
-                newIndex = fromCell + 1;
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::BOTTOM_RIGHT:
-            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || isOddRow ) ) {
-                newIndex = fromCell + ARENAW + ( isOddRow ? 0 : 1 );
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::BOTTOM_LEFT:
-            if ( y < ARENAH - 1 && ( x > 0 || !isOddRow ) ) {
-                newIndex = fromCell + ARENAW - ( isOddRow ? 1 : 0 );
-                wideUnitOffset = 1;
-            }
-            break;
-        case Battle::LEFT:
-            if ( x > 0 ) {
-                newIndex = fromCell - 1;
-                wideUnitOffset = 1;
-            }
-            break;
-        default:
-            return -1;
-        }
-
-        // invalidate move
-        if ( newIndex == -1 || !Board::GetCell( newIndex )->isPassable1( false ) )
-            return -1;
-
-        if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( false ) ) )
-            return -1;
-
-        return newIndex;
-    }
-
     void ArenaNode::resetNode()
     {
         _from = -1;
@@ -146,12 +86,15 @@ namespace Battle
         const int headIdx = unitHead->GetIndex();
         _cache[headIdx]._cost = 0;
         _cache[headIdx]._isOpen = false;
+        _cache[headIdx]._isLeftDirection = unit.isReflect();
 
         int tailIdx = -1;
         if ( unitTail ) {
             tailIdx = unitTail->GetIndex();
+            _cache[tailIdx]._from = headIdx;
             _cache[tailIdx]._cost = 0;
-            _cache[tailIdx]._isOpen = false;
+            _cache[tailIdx]._isOpen = true;
+            _cache[headIdx]._isLeftDirection = !unit.isReflect();
         }
 
         if ( unit.isFlying() ) {
@@ -188,26 +131,31 @@ namespace Battle
                 }
             }
         }
-        else if ( unitIsWide ) {
+        else {
             std::vector<int> nodesToExplore;
             nodesToExplore.push_back( headIdx );
+            if ( unitIsWide )
+                nodesToExplore.push_back( tailIdx );
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int fromNode = nodesToExplore[lastProcessedNode];
                 ArenaNode & previousNode = _cache[fromNode];
-                
+
                 Indexes aroundCellIds;
-                if ( previousNode._from < 0 )
+                if ( !unitIsWide )
+                    aroundCellIds = Board::GetAroundIndexes( fromNode );
+                else if ( previousNode._from < 0 )
                     aroundCellIds = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
                 else
                     aroundCellIds = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) );
 
                 for ( const int32_t newNode : aroundCellIds ) {
                     const Cell * headCell = Board::GetCell( newNode );
-                    const bool isLeftDirection = Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
+
+                    const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
                     const int32_t tailCellId = isLeftDirection ? newNode + 1 : newNode - 1;
 
-                    if ( headCell->isPassable1( false ) && Board::GetCell( tailCellId )->isPassable1( false ) ) {
+                    if ( headCell->isPassable1( false ) && ( !unitIsWide || Board::GetCell( tailCellId )->isPassable1( false ) ) ) {
                         const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
 
@@ -225,35 +173,6 @@ namespace Battle
                             node._from = fromNode;
                             node._cost = cost + additionalCost;
                             node._isLeftDirection = isLeftDirection;
-                            nodesToExplore.push_back( newNode );
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            std::vector<int> nodesToExplore;
-            nodesToExplore.push_back( headIdx );
-
-            for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-                const int fromNode = nodesToExplore[lastProcessedNode];
-
-                for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
-                    const int newNode = GetValidMoveIndex( fromNode, direction, unitIsWide );
-
-                    if ( newNode != -1 ) {
-                        const uint32_t cost = _cache[fromNode]._cost;
-                        ArenaNode & node = _cache[newNode];
-
-                        if ( Board::GetCell( newNode )->GetUnit() && cost < node._cost ) {
-                            node._isOpen = false;
-                            node._from = fromNode;
-                            node._cost = cost;
-                        }
-                        else if ( cost + 1 < node._cost ) {
-                            node._isOpen = true;
-                            node._from = fromNode;
-                            node._cost = cost + 1;
                             nodesToExplore.push_back( newNode );
                         }
                     }
