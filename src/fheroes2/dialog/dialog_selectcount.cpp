@@ -345,8 +345,8 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
 
     fheroes2::MovableSprite ssp;
 
-    std::vector<fheroes2::Sprite> sprites( freeSlots );
-    std::vector<fheroes2::Rect> vrts( freeSlots );
+    std::vector<fheroes2::Sprite> sprites( freeSlots - 1 );
+    std::vector<fheroes2::Rect> vrts( freeSlots - 1 );
 
     int spriteIconIdx = 21;
     const int deltaX = 10;
@@ -358,10 +358,10 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
 
         const int spriteWidth = sprites[i].width();
         const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
-        vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, sprites[i].width(), sprites[i].height() );
+        vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
     }
 
-    if ( !sprites.empty() ) {
+    if ( freeSlots > 1 ) {
         text.Set( _( "Fast separation into slots:" ), Font::BIG );
         text.Blit( center - text.w() / 2, pos.y + 65 );
 
