@@ -3512,7 +3512,7 @@ void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit 
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
-void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
+void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target )
 {
     TargetsInfo targets;
     targets.push_back( target );
@@ -3522,7 +3522,8 @@ void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
     RedrawActionWincesKills( targets );
 
     // draw status for first defender
-    std::string msg = _( "Tower does %{damage} damage." );
+    std::string msg = _( "%{tower} does %{damage} damage." );
+    StringReplace( msg, "%{tower}", tower.GetName() );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );
