@@ -90,6 +90,7 @@ namespace Battle
 
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+        const uint32_t moatPenalty = unit.GetSpeed();
 
         // Initialize the starting cells
         const int32_t headIdx = unitHead->GetIndex();
@@ -161,17 +162,19 @@ namespace Battle
                     const Cell * headCell = Board::GetCell( newNode );
 
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
-                    const int32_t tailCellId = isLeftDirection ? newNode + 1 : newNode - 1;
+                    const Cell * tailCell = unitIsWide ? Board::GetCell( isLeftDirection ? newNode + 1 : newNode - 1 ) : nullptr;
 
-                    if ( headCell->isPassable1( false ) && ( !unitIsWide || Board::GetCell( tailCellId )->isPassable1( false ) )
-                         && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( false ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
                         const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
 
-                        uint32_t additionalCost = ( isMoatBuilt && Board::isMoatIndex( newNode ) ) ? 2 : 1;
-                        // Turn back. No movement at all.
-                        if ( isLeftDirection != previousNode._isLeftDirection )
-                            additionalCost = 0;
+                        // Check if we're turning back. No movement at all.
+                        uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0 : 1;
+
+                        // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values
+                        if ( isMoatBuilt && Board::isMoatIndex( newNode ) ) {
+                            additionalCost += ( moatPenalty > previousNode._cost ) ? moatPenalty - previousNode._cost : 1u;
+                        }
 
                         if ( headCell->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;
