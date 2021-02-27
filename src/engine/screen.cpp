@@ -178,6 +178,11 @@ namespace
                         const uint8_t * value = currentPalette + *in * 3;
                         *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
                     }
+                    else if ( *transform > 1 ) {
+                        // SDL2 uses RGBA image on OS level separately from frame rendering.
+                        // Here we are trying to simulate cursor's shadow as close as possible to the original game.
+                        *out = SDL_MapRGBA( surface->format, 0, 0, 0, 64 );
+                    }
                 }
             }
             else {

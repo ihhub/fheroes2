@@ -196,7 +196,13 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         else if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
-            hero.OpenDialog( true /* read only */, false );
+            const bool noDismiss = hero.Modes( Heroes::NOTDISMISS );
+            hero.SetModes( Heroes::NOTDISMISS );
+            hero.OpenDialog( false, true );
+
+            if ( !noDismiss ) {
+                hero.ResetModes( Heroes::NOTDISMISS );
+            }
             cursor.Show();
             display.render();
         }

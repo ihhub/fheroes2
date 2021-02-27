@@ -458,8 +458,10 @@ namespace AI
             if ( target.unit == nullptr ) {
                 // move node pair consists of move hex index and distance
                 const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+                // Do not chase after faster units that might kite away and avoid engagement
+                const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ) ? move.second + ARENAW + ARENAH : move.second;
 
-                const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
+                const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxPriority ) {
                     maxPriority = unitPriority;
                     target.cell = move.first;
@@ -472,6 +474,10 @@ namespace AI
             uint32_t shortestDist = MAXU16;
 
             for ( const int wallIndex : underWallsIndicies ) {
+                if ( !arena.hexIsPassable( wallIndex ) ) {
+                    continue;
+                }
+
                 const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
                 if ( dist < shortestDist ) {
                     shortestDist = dist;
@@ -584,7 +590,7 @@ namespace AI
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;
 
-        Board & board = *arena.GetBoard();
+        Board & board = *Arena::GetBoard();
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );

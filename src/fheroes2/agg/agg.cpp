@@ -39,7 +39,6 @@
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"
-#include "error.h"
 #include "font.h"
 #include "game.h"
 #include "image_tool.h"
@@ -1330,6 +1329,13 @@ namespace fheroes2
                     Transpose( source, out );
                     out = Flip( out, false, true );
                     out.setPosition( source.y(), source.x() );
+                }
+                return true;
+            case ICN::SURRENDR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // Fix incorrect font color.
+                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
                 }
                 return true;
             default:
