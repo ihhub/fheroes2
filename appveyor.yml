@@ -46,7 +46,7 @@ install:
   - cd C:\projects\fheroes2
 
 build:
-  project: fheroes2.vcxproj
+  project: fheroes2-vs2015.vcxproj
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
