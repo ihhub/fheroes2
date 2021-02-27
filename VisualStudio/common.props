@@ -5,6 +5,7 @@
   <PropertyGroup>
     <OutDir>$(MSBuildThisFileDirectory)..\build\$(PlatformTarget)\$(Configuration)\</OutDir>
     <IntDir>$(MSBuildThisFileDirectory)..\build\$(PlatformTarget)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>fheroes2</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
