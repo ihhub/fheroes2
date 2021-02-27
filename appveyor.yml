@@ -45,6 +45,9 @@ install:
   - if not exist C:\projects\packages call install_packages.bat
   - cd C:\projects\fheroes2
 
+build:
+  project: fheroes2-vs2015.vcxproj
+
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
   - cmd: if "%platform%" == "x86" xcopy /Y /s /Q "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "."
