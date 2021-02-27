@@ -32,6 +32,7 @@ class Castle;
 class HeroBase;
 class Heroes;
 class Kingdom;
+class Army;
 struct VecHeroes;
 namespace Maps
 {
@@ -75,8 +76,8 @@ namespace AI
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
-        virtual void HeroesPreBattle( HeroBase & hero );
-        virtual void HeroesAfterBattle( HeroBase & hero );
+        virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
+        virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
         virtual bool HeroesGetTask( Heroes & hero );
@@ -124,6 +125,7 @@ namespace AI
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
+    void OptimizeTroopsOrder( Army & hero );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );
     StreamBase & operator>>( StreamBase &, AI::Base & );

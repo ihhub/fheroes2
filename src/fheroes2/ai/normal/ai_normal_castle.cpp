@@ -152,6 +152,7 @@ namespace AI
             Build( castle, GetDefensiveStructures( castle.GetRace() ) );
 
             castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
+            OptimizeTroopsOrder( castle.GetArmy() );
         }
         else {
             CastleDevelopment( castle );
