@@ -819,7 +819,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
             interface->RedrawActionTowerPart1( *tower, *b2 );
         target.killed = b2->ApplyDamage( *tower, target.damage );
         if ( interface )
-            interface->RedrawActionTowerPart2( target );
+            interface->RedrawActionTowerPart2( *tower, target );
 
         if ( b2->Modes( SP_BLIND ) )
             b2->ResetBlind();
