@@ -6,7 +6,8 @@ on:
 
 jobs:
   build:
-    strategy:    
+    strategy:
+      fail-fast: false
       matrix:
         config-type: [Release-SDL1, Release-SDL2]
         platform-type: [x86, x64]
