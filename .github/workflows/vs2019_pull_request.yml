@@ -16,5 +16,7 @@ jobs:
         cd script/windows
         ./install_packages.bat
         cd ../..
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: compile
-      run: ./"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe" fheroes2-vs2019.vcxproj /property:Configuration=Release-SDL1 /property:Platform=x64
+      run: MSBuild.exe fheroes2-vs2019.vcxproj /property:Configuration=Release-SDL1 /property:Platform=x64
