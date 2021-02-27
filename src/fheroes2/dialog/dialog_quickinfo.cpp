@@ -263,15 +263,6 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
     return str;
 }
 
-std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-    str.append( "\n \n" );
-    str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-
-    return str;
-}
-
 std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom, bool showVisitedOption )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
@@ -547,7 +538,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_ARTESIANSPRING:
-            name_object = ShowGlobalVisitInfo( tile, kingdom );
+            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
             break;
 
         case MP2::OBJ_MAGICWELL:
@@ -576,7 +567,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_OBELISK:
-            name_object = ShowGlobalVisitInfo( tile, kingdom );
+            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
             break;
 
         case MP2::OBJ_BARRIER:
