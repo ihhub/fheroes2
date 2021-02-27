@@ -5,7 +5,11 @@ on:
     branches: [ master ]
 
 jobs:
-  sdl1:
+  build:
+    strategy:    
+      matrix:
+        config-type: [Release-SDL1, Release-SDL2]
+        platform-type: [x86, x64]
     runs-on: windows-2019
     steps:
     - uses: actions/checkout@v2
@@ -19,4 +23,4 @@ jobs:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
     - name: compile
-      run: MSBuild.exe fheroes2-vs2019.vcxproj /property:Configuration=Release-SDL1 /property:Platform=x64
+      run: MSBuild.exe fheroes2-vs2019.vcxproj /property:Configuration=${{ matrix.config-type }} /property:Platform=${{ matrix.platform-type }}
