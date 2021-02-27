@@ -369,10 +369,12 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
             fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
         }
 
-        ssp.hide();
         ssp.resize( sprites[0].width(), sprites[0].height() );
         ssp.reset();
+
         fheroes2::DrawBorder( ssp, 214 );
+        ssp.setPosition( vrts[0].x, vrts[0].y );
+        ssp.show();
     }
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
