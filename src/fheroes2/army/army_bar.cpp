@@ -73,7 +73,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
             troopFrom.SetCount( totalSplitTroopCount - redistributeCount );
         }
         else {
-            if ( isSameTroopType ) 
+            if ( isSameTroopType )
                 totalSplitTroopCount += troopTarget.GetCount();
 
             const uint32_t troopFromSplitCount = ( totalSplitTroopCount + slots - 1 ) / slots;
@@ -88,7 +88,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
 
             totalSplitTroopCount -= troopFromSplitCount;
             totalSplitTroopCount -= troopTargetSplitCount;
-            armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), slots - 2);
+            armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), slots - 2 );
         }
     }
 }
