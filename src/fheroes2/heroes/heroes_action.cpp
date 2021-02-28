@@ -328,9 +328,6 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             hero.GetArmy().JoinTroop( troop(), recruit );
             hero.MovePointsScaleFixed();
 
-            if ( Settings::Get().ExtHeroRecalculateMovement() )
-                hero.RecalculateMovePoints();
-
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
         }
     }
@@ -2159,9 +2156,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
                 hero.GetArmy().JoinTroop( troop );
                 hero.MovePointsScaleFixed();
 
-                if ( Settings::Get().ExtHeroRecalculateMovement() )
-                    hero.RecalculateMovePoints();
-
                 Interface::Basic::Get().GetStatusWindow().SetRedraw();
             }
         }
@@ -2542,9 +2536,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
             offsetX += border.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
-
-        if ( Settings::Get().ExtHeroRecalculateMovement() )
-            hero.RecalculateMovePoints();
     }
     else {
         Dialog::Message( MP2::StringObject( obj ), msg2, Font::BIG, Dialog::OK );

@@ -258,10 +258,6 @@ const settings_t settingsFHeroes2[] = {
         _( "heroes: remember move points for retreat/surrender result" ),
     },
     {
-        Settings::HEROES_RECALCULATE_MOVEMENT,
-        _( "heroes: recalculate movement points after creatures movement" ),
-    },
-    {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
         _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
     },
@@ -1595,11 +1591,6 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
 bool Settings::ExtHeroRememberPointsForRetreating( void ) const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-}
-
-bool Settings::ExtHeroRecalculateMovement( void ) const
-{
-    return ExtModes( HEROES_RECALCULATE_MOVEMENT );
 }
 
 bool Settings::ExtUnionsAllowCastleVisiting( void ) const

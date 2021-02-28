@@ -98,7 +98,6 @@ public:
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
-        HEROES_RECALCULATE_MOVEMENT = 0x24000000,
 
         CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
         WORLD_STARTHERO_LOSSCOND4HUMANS = 0x30000008,
@@ -194,7 +193,6 @@ public:
     bool ExtHeroBuySpellBookFromShrine( void ) const;
     bool ExtHeroRecruitCostDependedFromLevel( void ) const;
     bool ExtHeroRememberPointsForRetreating( void ) const;
-    bool ExtHeroRecalculateMovement( void ) const;
     bool ExtHeroAllowTranscribingScroll( void ) const;
     bool ExtHeroArenaCanChoiseAnySkills( void ) const;
     bool ExtUnionsAllowCastleVisiting( void ) const;
