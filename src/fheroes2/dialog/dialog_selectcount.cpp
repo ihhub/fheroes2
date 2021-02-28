@@ -373,8 +373,11 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
         ssp.reset();
 
         fheroes2::DrawBorder( ssp, 214 );
-        ssp.setPosition( vrts[0].x, vrts[0].y );
-        ssp.show();
+
+        if ( useFastSplit ) {
+            ssp.setPosition( vrts[0].x, vrts[0].y );
+            ssp.show();
+        }
     }
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
