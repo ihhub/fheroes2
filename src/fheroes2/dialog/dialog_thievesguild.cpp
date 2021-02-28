@@ -149,7 +149,7 @@ void GetObelisksInfo( std::vector<ValueColors> & v, const Colors & colors )
     std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
 }
 
-void GetArtifactsInfo( std::vector<ValueColors> & v, const Colors & colors ) 
+void GetArtifactsInfo( std::vector<ValueColors> & v, const Colors & colors )
 {
     v.clear();
 
