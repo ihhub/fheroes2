@@ -50,9 +50,9 @@ namespace AI
 
         // decision-making helpers
         bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
-        bool isHeroWorthSaving( const Heroes * hero ) const;
+        bool isHeroWorthSaving( const Heroes & hero ) const;
         bool isCommanderCanSpellcast( const Battle::Arena & arena, const HeroBase * commander ) const;
-        bool checkRetreatCondition( double myArmy, double enemy ) const;
+        bool checkRetreatCondition( const Heroes & hero, double myArmy, double enemy ) const;
 
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start

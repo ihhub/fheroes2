@@ -41,6 +41,7 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
+    const double ARMY_RETREAT_RATIO = 100.0 / 10;
     const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -50,9 +51,9 @@ namespace AI
         }
     }
 
-    bool BattlePlanner::isHeroWorthSaving( const Heroes * hero ) const
+    bool BattlePlanner::isHeroWorthSaving( const Heroes & hero ) const
     {
-        return hero && ( hero->GetLevel() > 2 || !hero->GetBagArtifacts().empty() );
+        return hero.GetLevel() > 2 || !hero.GetBagArtifacts().empty();
     }
 
     bool BattlePlanner::isCommanderCanSpellcast( const Arena & arena, const HeroBase * commander ) const
@@ -61,14 +62,11 @@ namespace AI
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
-    bool BattlePlanner::checkRetreatCondition( double myArmy, double enemy ) const
+    bool BattlePlanner::checkRetreatCondition( const Heroes & hero, double myArmy, double enemy ) const
     {
-        // FIXME: more sophisticated logic to see if remaining units are under threat
-        // Consider taking speed/turn order into account as well
-        // Pass in ( const Units & friendly, const Units & enemies ) instead
-
-        // Retreat if remaining army strength is 10% of enemy's army
-        return myArmy * 10 < enemy;
+        // Retreat if remaining army strength is a fraction of enemy's
+        // Consider taking speed/turn order into account in the future
+        return myArmy * ARMY_RETREAT_RATIO < enemy && isHeroWorthSaving( hero ) && !hero.GetArmy().isFullHouse();
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -146,7 +144,7 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && isHeroWorthSaving( actualHero ) && checkRetreatCondition( _myArmyStrength, _enemyArmyStrength ) ) {
+        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero, _myArmyStrength, _enemyArmyStrength ) ) {
             // Cast maximum damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
 
