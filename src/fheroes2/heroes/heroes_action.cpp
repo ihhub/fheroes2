@@ -284,19 +284,7 @@ uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good
 
 void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
 {
-    u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
-
-    if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-        const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
-
-        if ( hero.isControlHuman() ) {
-            std::string msg = _( "Hero %{name} also got a %{count} experience." );
-            StringReplace( msg, "%{name}", hero.GetName() );
-            StringReplace( msg, "%{count}", exp );
-            Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-        }
-        hero.IncreaseExperience( exp );
-    }
+    const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.FadeOut();
