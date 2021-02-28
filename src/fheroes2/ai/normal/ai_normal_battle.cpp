@@ -146,7 +146,8 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && isHeroWorthSaving( actualHero ) && checkRetreatCondition( _myArmyStrength, _enemyArmyStrength ) ) {
+        if ( actualHero && !actualHero->isControlHuman() && arena.CanRetreatOpponent( _myColor ) && isHeroWorthSaving( actualHero ) &&
+             checkRetreatCondition( _myArmyStrength, _enemyArmyStrength ) ) {
             // Cast maximum damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
 
