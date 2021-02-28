@@ -319,7 +319,7 @@ int Castle::OpenDialog( bool readonly )
     fheroes2::Image surfaceHero( 552, 105 );
 
     // dialog menu loop
-    while ( le.HandleEvents() ) {
+    while ( le.HandleEvents( true, true ) ) {
         // During hero purchase or building construction disable any interaction
         if ( alphaHero >= 255 && fadeBuilding.IsFadeDone() ) {
             // exit
