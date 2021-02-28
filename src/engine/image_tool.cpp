@@ -122,6 +122,7 @@ namespace fheroes2
             return false;
         }
 
+        image.resize( surface->w, surface->h );
         memset( image.transform(), 0, surface->w * surface->h );
 
         const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
