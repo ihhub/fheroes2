@@ -731,6 +731,8 @@ char CharFromKeySym( KeySym sym, u16 mod )
 size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 {
 #if defined( FHEROES2_VITA )
+    (void)mod;
+
     // input with D-Pad
     if ( res.size() ) {
         SetCurrentDPadCharIndex( res.back() );
