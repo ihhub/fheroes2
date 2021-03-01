@@ -447,11 +447,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         }
     }
 
-    if ( Settings::Get().ExtHeroRecalculateMovement() ) {
-        RecalculateMovePoints();
-        heroes2.RecalculateMovePoints();
-    }
-
     backPrimary.reset();
     armyCountBackgroundRestorer.reset();
     restorer.restore();

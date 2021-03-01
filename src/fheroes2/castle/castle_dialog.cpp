@@ -742,9 +742,6 @@ int Castle::OpenDialog( bool readonly )
         BuyBuilding( build );
     }
 
-    if ( heroes.Guest() && conf.ExtHeroRecalculateMovement() )
-        heroes.Guest()->RecalculateMovePoints();
-
     if ( conf.ExtGameDynamicInterface() )
         conf.SetEvilInterface( interface );
 
