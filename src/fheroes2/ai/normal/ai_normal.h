@@ -71,6 +71,7 @@ namespace AI
         int _highestDamageExpected = 0;
         bool _attackingCastle = false;
         bool _defendingCastle = false;
+        bool _considerRetreat = false;
     };
 
     class Normal : public Base

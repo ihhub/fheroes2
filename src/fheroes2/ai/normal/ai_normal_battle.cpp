@@ -68,7 +68,7 @@ namespace AI
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
         const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
-        return _myArmyStrength * ratio < _enemyArmyStrength && isHeroWorthSaving( hero );
+        return _considerRetreat && _myArmyStrength * ratio < _enemyArmyStrength && isHeroWorthSaving( hero );
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -224,19 +224,19 @@ namespace AI
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
 
-        // This should filter out all invalid units
-        const Units friendly( friendlyForce, true );
-        const Units enemies( enemyForce, true );
-
         // Friendly and enemy army analysis
         _myArmyStrength = 0;
         _enemyArmyStrength = 0;
         _myShooterStr = 0;
         _enemyShooterStr = 0;
         _highestDamageExpected = 0;
+        _considerRetreat = false;
 
-        for ( Units::const_iterator it = enemies.begin(); it != enemies.end(); ++it ) {
-            const Unit & unit = **it;
+        for ( Unit * unitPtr : enemyForce ) {
+            if ( !unitPtr || !unitPtr->isValid() )
+                continue;
+
+            const Unit & unit = *unitPtr;
             const double unitStr = unit.GetStrength();
 
             _enemyArmyStrength += unitStr;
@@ -249,15 +249,34 @@ namespace AI
                 _highestDamageExpected = dmg;
         }
 
-        for ( Units::const_iterator it = friendly.begin(); it != friendly.end(); ++it ) {
-            const Unit & unit = **it;
-            const double unitStr = unit.GetStrength();
+        uint32_t initialUnitCount = 0;
+        bool lostUnit = false;
+        for ( Unit * unitPtr : friendlyForce ) {
+            // Do not check isValid() here to handle dead troops
+            if ( !unitPtr )
+                continue;
 
+            const Unit & unit = *unitPtr;
+            const uint32_t count = unit.GetCount();
+            const uint32_t dead = unit.GetDead();
+
+            // Count all valid troops in army (both alive and dead)
+            if ( count > 0 || dead > 0 ) {
+                ++initialUnitCount;
+            }
+            // Dead unit: trigger retreat condition and skip strength calculation
+            if ( count == 0 && dead > 0 ) {
+                _considerRetreat = true;
+                continue;
+            }
+
+            const double unitStr = unit.GetStrength();
             _myArmyStrength += unitStr;
             if ( unit.isArchers() ) {
                 _myShooterStr += unitStr;
             }
         }
+        _considerRetreat = _considerRetreat || initialUnitCount < 4;
 
         // Add castle siege (and battle arena) modifiers
         _attackingCastle = false;
