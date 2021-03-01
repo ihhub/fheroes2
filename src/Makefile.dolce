@@ -9,7 +9,7 @@ LDFLAGS := $(LDFLAGS) -L$(DOLCESDK)/arm-dolce-eabi/lib -L$(DOLCESDK)/lib $(CFLAG
 SDL_LIBS := -L$(DOLCESDK)/arm-dolce-eabi/lib -lSDL2 -lvita2d -lz -lpib -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
                                              -lSceGxm_stub -lSceDisplayUser_stub -lSceAppMgr_stub -lSceAppMgrUser_stub -lSceGxmInternalForVsh_stub \
                                              -lSceSysmodule_stub -lSceSharedFb_stub -lSceCommonDialog_stub -lSceMotion_stub
-SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL2 -D_REENTRANT
+SDL_FLAGS := -I$(DOLCESDK)/arm-dolce-eabi/include/SDL2
 
 ifndef WITHOUT_MIXER
 SDL_LIBS := -lSDL2_mixer $(SDL_LIBS) -lFLAC -lmikmod -lmpg123 -lvorbisfile -lvorbis -logg
