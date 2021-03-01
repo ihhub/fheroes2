@@ -62,9 +62,10 @@ namespace
         uint32_t * out = static_cast<uint32_t *>( surface->pixels );
         const uint32_t * outEnd = out + width * height;
         const uint8_t * in = image.image();
-        const uint8_t * transform = image.transform();
 
         if ( surface->format->Amask > 0 ) {
+            const uint8_t * transform = image.transform();
+
             for ( ; out != outEnd; ++out, ++in, ++transform ) {
                 if ( *transform == 1 ) {
                     *out = SDL_MapRGBA( surface->format, 0, 0, 0, 0 );
