@@ -39,7 +39,6 @@
 #include "audio_music.h"
 #include "dir.h"
 #include "engine.h"
-#include "error.h"
 #include "font.h"
 #include "game.h"
 #include "image_tool.h"
@@ -821,11 +820,9 @@ namespace fheroes2
 {
     namespace AGG
     {
-        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
-        const fheroes2::Sprite errorICNImage;
-
-        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage;
-        const fheroes2::Image errorTILImage;
+        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite( ICN::LASTICN );
+        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage( TIL::LASTTIL );
+        const fheroes2::Sprite errorImage;
 
         const uint32_t headerSize = 6;
 
@@ -833,28 +830,12 @@ namespace fheroes2
 
         bool IsValidICNId( int id )
         {
-            if ( id < 0 ) {
-                return false;
-            }
-
-            if ( _icnVsSprite.empty() ) {
-                _icnVsSprite.resize( ICN::LASTICN );
-            }
-
-            return static_cast<size_t>( id ) < _icnVsSprite.size();
+            return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
         }
 
         bool IsValidTILId( int id )
         {
-            if ( id < 0 ) {
-                return false;
-            }
-
-            if ( _tilVsImage.empty() ) {
-                _tilVsImage.resize( TIL::LASTTIL );
-            }
-
-            return static_cast<size_t>( id ) < _tilVsImage.size();
+            return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
         }
 
         void LoadOriginalICN( int id )
@@ -1332,6 +1313,13 @@ namespace fheroes2
                     out.setPosition( source.y(), source.x() );
                 }
                 return true;
+            case ICN::SURRENDR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // Fix incorrect font color.
+                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                }
+                return true;
             default:
                 break;
             }
@@ -1434,11 +1422,11 @@ namespace fheroes2
         const Sprite & GetICN( int icnId, uint32_t index )
         {
             if ( !IsValidICNId( icnId ) ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             if ( index >= GetMaximumICNIndex( icnId ) ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             if ( IsScalableICN( icnId ) ) {
@@ -1460,16 +1448,16 @@ namespace fheroes2
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             if ( !IsValidTILId( tilId ) ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
             if ( index >= maxTILIndex ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             return _tilVsImage[tilId][shapeId][index];
@@ -1478,7 +1466,7 @@ namespace fheroes2
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
         {
             if ( character < 0x21 ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             // TODO: correct naming and standartise the code

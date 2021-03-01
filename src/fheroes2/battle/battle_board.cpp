@@ -71,20 +71,6 @@ namespace
     }
 }
 
-namespace Battle
-{
-    bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
-    {
-        const int startX = startCellId % ARENAW;
-        const int endX = endCellId % ARENAW;
-
-        if ( prevLeftDirection )
-            return endX <= startX;
-        else
-            return endX < startX;
-    }
-}
-
 Battle::Board::Board()
 {
     reserve( ARENASIZE );
@@ -251,6 +237,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     const Castle * castle = Arena::GetCastle();
     const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
     const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+    const int32_t moatPenalty = unit.GetSpeed() * 100;
 
     std::map<int32_t, CellNode> cellMap;
     cellMap[currentCellId].parentCellId = -1;
@@ -286,7 +273,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
                     int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
                     if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
-                        cost += 100;
+                        cost += std::max( moatPenalty - currentCellNode.cost, 100 );
 
                     // Turn back. No movement at all.
                     if ( isLeftDirection != currentCellNode.leftDirection )
@@ -588,6 +575,17 @@ bool Battle::Board::isReflectDirection( int d )
     return false;
 }
 
+bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
+{
+    const int startX = startCellId % ARENAW;
+    const int endX = endCellId % ARENAW;
+
+    if ( prevLeftDirection )
+        return endX <= startX;
+    else
+        return endX < startX;
+}
+
 bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
 {
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
@@ -810,7 +808,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
         int32_t dest = GetRandomObstaclePosition();
-        while ( at( dest ).GetObject() != 0 && ( !checkRightCell || at( dest + 1 ).GetObject() != 0 ) ) {
+        while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
             dest = GetRandomObstaclePosition();
         }
 
@@ -818,7 +816,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
     }
 }
 
-void Battle::Board::SetCobjObject( int icn, s32 dst )
+void Battle::Board::SetCobjObject( const int icn, const int32_t dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 

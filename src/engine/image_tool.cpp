@@ -35,12 +35,9 @@ namespace
 {
     std::vector<uint8_t> PALPAlette()
     {
-        std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
-            palette.resize( 256 * 3 );
-            for ( size_t i = 0; i < palette.size(); ++i ) {
-                palette[i] = kb_pal[i] << 2;
-            }
+        std::vector<uint8_t> palette( 256 * 3 );
+        for ( size_t i = 0; i < palette.size(); ++i ) {
+            palette[i] = kb_pal[i] << 2;
         }
 
         return palette;
@@ -111,6 +108,41 @@ namespace fheroes2
         Blit( image, temp );
 
         return SaveImage( temp, path );
+    }
+
+    bool Load( const std::string & path, Image & image )
+    {
+        SDL_Surface * surface = SDL_LoadBMP( path.c_str() );
+        if ( surface == nullptr ) {
+            return false;
+        }
+
+        if ( surface->format->BytesPerPixel != 3 ) {
+            SDL_FreeSurface( surface );
+            return false;
+        }
+
+        image.resize( surface->w, surface->h );
+        memset( image.transform(), 0, surface->w * surface->h );
+
+        const uint8_t * inY = reinterpret_cast<uint8_t *>( surface->pixels );
+        uint8_t * outY = image.image();
+
+        const uint8_t * inYEnd = inY + surface->h * surface->pitch;
+
+        for ( ; inY != inYEnd; inY += surface->pitch, outY += surface->w ) {
+            const uint8_t * inX = inY;
+            uint8_t * outX = outY;
+            const uint8_t * inXEnd = inX + surface->w * 3;
+
+            for ( ; inX != inXEnd; inX += 3, ++outX ) {
+                *outX = GetColorId( *( inX + 2 ), *( inX + 1 ), *( inX ) );
+            }
+        }
+
+        SDL_FreeSurface( surface );
+
+        return true;
     }
 
     Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY )

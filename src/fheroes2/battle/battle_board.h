@@ -65,7 +65,6 @@ namespace Battle
         void SetScanPassability( const Unit & );
 
         void SetCobjObjects( const Maps::Tiles & );
-        void SetCobjObject( int icn, s32 );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo( void );
@@ -79,6 +78,7 @@ namespace Battle
         static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
+        static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
@@ -106,6 +106,9 @@ namespace Battle
             CASTLE_TOP_GATE_TOWER_POS = 40,
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
+
+    private:
+        void SetCobjObject( const int icn, const int32_t dst );
     };
 }
 

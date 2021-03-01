@@ -43,79 +43,10 @@ namespace AI
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
     const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
-    void Normal::HeroesPreBattle( HeroBase & hero )
+    void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     {
-        // Optimize troops placement before the battle
-        Army & army = hero.GetArmy();
-
-        std::vector<Troop> archers;
-        std::vector<Troop> others;
-
-        // Validate and pick the troops
-        for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
-            Troop * troop = army.GetTroop( slot );
-            if ( troop && troop->isValid() ) {
-                if ( troop->isArchers() ) {
-                    archers.push_back( *troop );
-                }
-                else {
-                    others.push_back( *troop );
-                }
-            }
-        }
-
-        // Sort troops by tactical priority. For melee:
-        // 1. Faster units first
-        // 2. Flyers first
-        // 3. Finally if unit type and speed is same, compare by strength
-        std::sort( others.begin(), others.end(), []( const Troop & left, const Troop & right ) {
-            if ( left.GetSpeed() == right.GetSpeed() ) {
-                if ( left.isFlying() == right.isFlying() ) {
-                    return left.GetStrength() < right.GetStrength();
-                }
-                return right.isFlying();
-            }
-            return left.GetSpeed() < right.GetSpeed();
-        } );
-
-        // Archers sorted purely by strength.
-        std::sort( archers.begin(), archers.end(), []( const Troop & left, const Troop & right ) { return left.GetStrength() < right.GetStrength(); } );
-
-        std::vector<size_t> slotOrder = {2, 1, 3, 0, 4};
-        switch ( archers.size() ) {
-        case 1:
-            slotOrder = {0, 2, 1, 3, 4};
-            break;
-        case 2:
-            slotOrder = {0, 4, 2, 1, 3};
-            break;
-        case 3:
-            slotOrder = {0, 4, 2, 1, 3};
-            break;
-        case 4:
-            slotOrder = {0, 4, 2, 3, 1};
-            break;
-        case 5:
-            slotOrder = {0, 4, 1, 2, 3};
-            break;
-        default:
-            break;
-        }
-
-        // Re-arrange troops in army
-        army.Clean();
-        for ( const size_t slot : slotOrder ) {
-            if ( !archers.empty() ) {
-                army.GetTroop( slot )->Set( archers.back() );
-                archers.pop_back();
-            }
-            else if ( !others.empty() ) {
-                army.GetTroop( slot )->Set( others.back() );
-                others.pop_back();
-            }
-            else {
-                break;
-            }
+        if ( isAttacking ) {
+            OptimizeTroopsOrder( hero.GetArmy() );
         }
     }
 
@@ -215,7 +146,8 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && isHeroWorthSaving( actualHero ) && checkRetreatCondition( _myArmyStrength, _enemyArmyStrength ) ) {
+        if ( actualHero && !actualHero->isControlHuman() && arena.CanRetreatOpponent( _myColor ) && isHeroWorthSaving( actualHero )
+             && checkRetreatCondition( _myArmyStrength, _enemyArmyStrength ) ) {
             // Cast maximum damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
 
@@ -458,8 +390,10 @@ namespace AI
             if ( target.unit == nullptr ) {
                 // move node pair consists of move hex index and distance
                 const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+                // Do not chase after faster units that might kite away and avoid engagement
+                const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ) ? move.second + ARENAW + ARENAH : move.second;
 
-                const double unitPriority = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
+                const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxPriority ) {
                     maxPriority = unitPriority;
                     target.cell = move.first;
@@ -472,6 +406,10 @@ namespace AI
             uint32_t shortestDist = MAXU16;
 
             for ( const int wallIndex : underWallsIndicies ) {
+                if ( !arena.hexIsPassable( wallIndex ) ) {
+                    continue;
+                }
+
                 const uint32_t dist = arena.CalculateMoveDistance( wallIndex );
                 if ( dist < shortestDist ) {
                     shortestDist = dist;
@@ -584,7 +522,7 @@ namespace AI
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;
 
-        Board & board = *arena.GetBoard();
+        Board & board = *Arena::GetBoard();
         const uint32_t currentUnitUID = currentUnit.GetUID();
 
         const std::vector<Unit *> nearestUnits = board.GetNearestTroops( &currentUnit, std::vector<Unit *>() );

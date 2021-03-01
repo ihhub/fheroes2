@@ -96,7 +96,7 @@ Windows
 - **Optional step**: Install **7-zip** archiver at its default location as `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow the instructions shown by batch scripts mentioned below).
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
-- open **fheroes.vcxproj** by Visual Studio and compile the project.
+- open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
 
 MacOS and Linux
 -------------------
