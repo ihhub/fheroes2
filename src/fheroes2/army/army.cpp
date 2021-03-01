@@ -767,27 +767,38 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
     }
 }
 
-void Troops::SplitTroopIntoFreeSlots( const Troop & troop, u32 slots )
+void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
 {
-    if ( slots && slots <= ( Size() - GetCount() ) ) {
-        u32 chunk = troop.GetCount() / slots;
-        u32 limits = slots;
-        std::vector<iterator> iters;
+    if ( slots < 1 || slots > ( Size() - GetCount() ) )
+        return;
 
-        for ( iterator it = begin(); it != end(); ++it )
-            if ( !( *it )->isValid() && limits ) {
-                iters.push_back( it );
-                ( *it )->Set( troop.GetMonster(), chunk );
-                --limits;
-            }
+    const uint32_t chunk = troop.GetCount() / slots;
+    uint32_t remainingCount = troop.GetCount() % slots;
+    uint32_t remainingSlots = slots;
 
-        u32 last = troop.GetCount() - chunk * slots;
+    auto TryCreateTroopChunk = [&]( iterator it ) {
+        if ( remainingSlots <= 0 )
+            return;
 
-        for ( std::vector<iterator>::iterator it = iters.begin(); it != iters.end(); ++it )
-            if ( last ) {
-                ( **it )->SetCount( ( **it )->GetCount() + 1 );
-                --last;
-            }
+        if ( !( *it )->isValid() ) {
+            ( *it )->Set( troop.GetMonster(), remainingCount > 0 ? chunk + 1 : chunk );
+            --remainingSlots;
+
+            if ( remainingCount > 0 )
+                --remainingCount;
+        }
+    };
+
+    const iterator selectedSlotIterator = std::find( begin(), end(), &selectedSlot );
+
+    // try to create chunks to the right of the selected slot
+    for ( iterator it = selectedSlotIterator + 1; it != end(); ++it ) {
+        TryCreateTroopChunk( it );
+    }
+
+    // this time, try to create chunks to the left of the selected slot
+    for ( iterator it = selectedSlotIterator - 1; it != begin(); --it ) {
+        TryCreateTroopChunk( it );
     }
 }
 

@@ -88,7 +88,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
 
             totalSplitTroopCount -= troopFromSplitCount;
             totalSplitTroopCount -= troopTargetSplitCount;
-            armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), slots - 2 );
+            armyTarget->SplitTroopIntoFreeSlots( Troop( troopFrom, totalSplitTroopCount ), troopTarget, slots - 2 );
         }
     }
 }
