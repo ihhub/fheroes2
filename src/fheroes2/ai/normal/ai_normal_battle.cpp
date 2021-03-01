@@ -29,6 +29,8 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
+#include "difficulty.h"
+#include "game.h"
 #include "heroes.h"
 #include "logging.h"
 
@@ -41,7 +43,6 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
-    const double ARMY_RETREAT_RATIO = 100.0 / 10;
     const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -62,11 +63,12 @@ namespace AI
                && !commander->Modes( Heroes::SPELLCASTED ) && !arena.isSpellcastDisabled();
     }
 
-    bool BattlePlanner::checkRetreatCondition( const Heroes & hero, double myArmy, double enemy ) const
+    bool BattlePlanner::checkRetreatCondition( const Heroes & hero ) const
     {
         // Retreat if remaining army strength is a fraction of enemy's
         // Consider taking speed/turn order into account in the future
-        return myArmy * ARMY_RETREAT_RATIO < enemy && isHeroWorthSaving( hero ) && !hero.GetArmy().isFullHouse();
+        const double ratio = Difficulty::GetAIRetreatRatio( Game::getDifficulty() );
+        return _myArmyStrength * ratio < _enemyArmyStrength && isHeroWorthSaving( hero );
     }
 
     bool BattlePlanner::isUnitFaster( const Unit & currentUnit, const Unit & target ) const
@@ -144,7 +146,7 @@ namespace AI
 
         // Step 2. Check retreat/surrender condition
         const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
-        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero, _myArmyStrength, _enemyArmyStrength ) ) {
+        if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
             // Cast maximum damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
 
