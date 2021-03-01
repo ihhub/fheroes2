@@ -65,7 +65,6 @@ namespace Battle
         void SetScanPassability( const Unit & );
 
         void SetCobjObjects( const Maps::Tiles & );
-        void SetCobjObject( int icn, s32 );
         void SetCovrObjects( int icn );
 
         static std::string GetMoatInfo( void );
@@ -107,6 +106,9 @@ namespace Battle
             CASTLE_TOP_GATE_TOWER_POS = 40,
             CASTLE_BOTTOM_GATE_TOWER_POS = 62
         };
+
+    private:
+        void SetCobjObject( const int icn, const int32_t dst );
     };
 }
 

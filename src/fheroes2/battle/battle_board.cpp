@@ -808,7 +808,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
         int32_t dest = GetRandomObstaclePosition();
-        while ( at( dest ).GetObject() != 0 && ( !checkRightCell || at( dest + 1 ).GetObject() != 0 ) ) {
+        while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
             dest = GetRandomObstaclePosition();
         }
 
@@ -816,7 +816,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
     }
 }
 
-void Battle::Board::SetCobjObject( int icn, s32 dst )
+void Battle::Board::SetCobjObject( const int icn, const int32_t dst )
 {
     at( dst ).SetObject( 0x80 + ( icn - ICN::COBJ0000 ) );
 
