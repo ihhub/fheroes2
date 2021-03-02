@@ -21,7 +21,7 @@
 #ifndef ENDIAN_H2_H
 #define ENDIAN_H2_H
 
-#if defined( __linux__ ) || defined( __MINGW32__ )
+#if defined( __linux__ )
 #include <endian.h>
 
 #elif defined( __FreeBSD__ )
