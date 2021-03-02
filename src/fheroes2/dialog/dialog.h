@@ -108,7 +108,7 @@ namespace Dialog
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
-    int ArmySplitTroop( int free_slots, u32 max, u32 &, bool );
+    int ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( bool fromTradingPost = false );
     void MakeGiftResource( void );
     int BuyBoat( bool enable );
