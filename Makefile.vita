@@ -1,7 +1,7 @@
 TARGET	:= fheroes2
 MAKE	:= make
 
-PROJECT_TITLE := Free Heroes 2
+PROJECT_TITLE := Free Heroes of Might & Magic II
 PROJECT_TITLEID := FHOMM0002
 PROJECT := fheroes2
 
@@ -11,13 +11,10 @@ package: $(PROJECT).vpk
 
 $(PROJECT).vpk: eboot.bin param.sfo
 	vita-pack-vpk -s param.sfo -b eboot.bin \
-		--add platforms/vita/sce_sys/icon0.png=sce_sys/icon0.png \
-		--add platforms/vita/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
-		--add platforms/vita/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
-		--add platforms/vita/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
-		--add files/fonts/bigfonts.ttf=files/fonts/bigfonts.ttf \
-		--add files/fonts/dejavusans.ttf=files/fonts/dejavusans.ttf \
-		--add files/fonts/smallfonts.ttf=files/fonts/smallfonts.ttf \
+		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
 	$(PROJECT).vpk
 
 eboot.bin: $(PROJECT).velf
@@ -31,7 +28,7 @@ $(PROJECT).velf: $(PROJECT).elf
 	vita-elf-create $< $@
 
 $(PROJECT).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true USE_VITASDK=true
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true
 	$(MAKE) -f files/lang/Makefile
 	@cp src/dist/$(TARGET) ./$(PROJECT).elf
 

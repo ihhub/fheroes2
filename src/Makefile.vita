@@ -3,7 +3,7 @@ CC := arm-vita-eabi-gcc
 CXX := arm-vita-eabi-g++
 LIBS :=
 
-CFLAGS := $(CFLAGS) -DFHEROES2_VITA -DUSE_VITASDK -I$(VITASDK)/arm-vita-eabi/include -Ofast -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -fgraphite-identity -floop-nest-optimize -fno-lto
+CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(VITASDK)/arm-vita-eabi/include -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -fgraphite-identity -floop-nest-optimize -fno-lto
 LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -Wl,-q
 
 SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2 -lvita2d -lz -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \

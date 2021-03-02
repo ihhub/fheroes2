@@ -101,11 +101,7 @@ endif
 endif
 
 ifdef FHEROES2_VITA
-ifdef USE_VITASDK
 PLATFORM := vita
-else
-PLATFORM := dolce
-endif
 endif
 
 include Makefile.$(PLATFORM)

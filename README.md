@@ -19,7 +19,7 @@ fheroes2 supports ingame cinematics. To play into and/or other videos, make sure
 
 ## Building
 ### Prerequisites
-- DolceSDK / VitaSDK
+- VitaSDK
 - libSDL2
 - libSDL2-mixer (optional)
 - libSDL2-image (optional)
