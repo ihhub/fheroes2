@@ -776,12 +776,12 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
     uint32_t remainingCount = troop.GetCount() % slots;
     uint32_t remainingSlots = slots;
 
-    auto TryCreateTroopChunk = [&]( Troop * emptyTroop ) {
+    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, troop]( Troop & emptyTroop ) {
         if ( remainingSlots <= 0 )
             return;
 
-        if ( !emptyTroop->isValid() ) {
-            emptyTroop->Set( troop.GetMonster(), remainingCount > 0 ? chunk + 1 : chunk );
+        if ( !emptyTroop.isValid() ) {
+            emptyTroop.Set( troop.GetMonster(), remainingCount > 0 ? chunk + 1 : chunk );
             --remainingSlots;
 
             if ( remainingCount > 0 )
@@ -794,12 +794,12 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
 
     // try to create chunks to the right of the selected slot
     for ( iterator it = selectedSlotIterator + 1; it != end(); ++it ) {
-        TryCreateTroopChunk( *it );
+        TryCreateTroopChunk( **it );
     }
 
     // this time, try to create chunks to the left of the selected slot
     for ( reverse_iterator it = selectedSlotReverseIterator - 1; it != rend(); ++it ) {
-        TryCreateTroopChunk( *it );
+        TryCreateTroopChunk( **it );
     }
 }
 
