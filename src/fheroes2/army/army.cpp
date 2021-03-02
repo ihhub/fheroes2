@@ -792,6 +792,10 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
     const iterator selectedSlotIterator = std::find( begin(), end(), &selectedSlot );
     const reverse_iterator selectedSlotReverseIterator = std::find( rbegin(), rend(), &selectedSlot );
 
+    // this means the selected slot is actually not part of the army, which is not the intended logic
+    if ( selectedSlotIterator == end() || selectedSlotReverseIterator == rend() )
+        return;
+
     // try to create chunks to the right of the selected slot
     for ( iterator it = selectedSlotIterator + 1; it != end(); ++it ) {
         TryCreateTroopChunk( **it );
