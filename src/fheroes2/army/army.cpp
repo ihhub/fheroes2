@@ -803,7 +803,7 @@ void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selecte
     }
 
     // this time, try to create chunks to the left of the selected slot
-    for ( int i = static_cast<int>( iteratorIndex - 1 ); i >= 0; --i ) {
+    for ( int i = static_cast<int>( iteratorIndex ) - 1; i >= 0; --i ) {
         TryCreateTroopChunk( *GetTroop( i ) );
     }
 }
