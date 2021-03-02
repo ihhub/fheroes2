@@ -250,7 +250,6 @@ namespace AI
         }
 
         uint32_t initialUnitCount = 0;
-        bool lostUnit = false;
         for ( Unit * unitPtr : friendlyForce ) {
             // Do not check isValid() here to handle dead troops
             if ( !unitPtr )
