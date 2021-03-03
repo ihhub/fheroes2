@@ -329,9 +329,9 @@ uint32_t Kingdom::GetCountThievesGuild() const
         std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD ); } ) );
 }
 
-u32 Kingdom::GetCountArtifacts( void ) const
+uint32_t Kingdom::GetCountArtifacts() const
 {
-    u32 result = 0;
+    uint32_t result = 0;
     for ( const Heroes * hero : heroes )
         result += hero->GetCountArtifacts();
     return result;
