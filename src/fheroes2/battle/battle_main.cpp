@@ -94,16 +94,26 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( showBattle )
         AGG::ResetMixer();
 
-    Arena arena( army1, army2, mapsindex, showBattle );
+    std::unique_ptr<Arena> arena = std::make_unique<Arena>( army1, army2, mapsindex, showBattle );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    while ( arena.BattleValid() ) {
-        arena.Turns();
+    while ( arena->BattleValid() ) {
+        arena->Turns();
     }
 
-    const Result & result = arena.GetResult();
+    if ( isHumanBattle ) {
+        //arena->RestartBattle( army1, army2 );
+        arena.reset();
+        arena = std::make_unique<Arena>( army1, army2, mapsindex, true );
+
+        while ( arena->BattleValid() ) {
+            arena->Turns();
+        }
+    }
+
+    Result result = arena->GetResult();
 
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
@@ -120,7 +130,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // fade arena
         const bool clearMessageLog
             = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
-        arena.FadeArena( clearMessageLog );
+        arena->FadeArena( clearMessageLog );
     }
 
     // summary dialog
@@ -128,7 +138,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( isWinnerHuman ) {
             artifactsTransferred = true;
         }
-        arena.DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
+        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
     }
 
     if ( !artifactsTransferred ) {
@@ -136,8 +146,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena.GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
-    arena.GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
+    arena->GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
+    arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
 
     // after battle army1
     if ( army1.GetCommander() ) {
@@ -157,7 +167,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // eagle eye capability
     if ( hero_wins && hero_loss && hero_wins->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && hero_loss->isHeroes() )
-        EagleEyeSkillAction( *hero_wins, arena.GetUsageSpells(), hero_wins->isControlHuman() );
+        EagleEyeSkillAction( *hero_wins, arena->GetUsageSpells(), hero_wins->isControlHuman() );
 
     // necromancy capability
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
