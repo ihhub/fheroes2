@@ -115,7 +115,7 @@ public:
     u32 GetCountBuilding( u32 ) const;
     uint32_t GetCountThievesGuild() const;
 
-    u32 GetCountArtifacts( void ) const;
+    uint32_t GetCountArtifacts() const;
 
     Recruits & GetRecruits( void );
 
