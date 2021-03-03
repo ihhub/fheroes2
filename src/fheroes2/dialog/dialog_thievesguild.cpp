@@ -383,8 +383,9 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx;
     GetArtifactsInfo( v, colors );
-    if ( 2 < count )
+    if ( count > 2 ) {
         DrawFlags( v, dst_pt, maxw, colors.size() );
+    }
 
     text.Set( _( "Total Army Strength:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
