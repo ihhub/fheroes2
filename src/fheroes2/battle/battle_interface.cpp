@@ -3427,50 +3427,80 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
             std::string msg;
             if ( spell.isUndeadOnly() ) {
                 if ( damagedMonsters == 1 ) {
-                    msg = _( "The %{spell} spell does %{damage} damage to one undead creature." );
-                    StringReplace( msg, "%{damage}", totalDamage );
-                }
-                else {
-                    msg = _( "The %{spell} spell does up to %{damage} damage to %{count} undead creatures" );
+                    msg = _( "The %{spell} does %{damage} damage to one undead creature." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
-                    StringReplace( msg, "%{damage}", maximumDamage );
-                    StringReplace( msg, "%{count}", damagedMonsters );
+                    StringReplace( msg, "%{damage}", totalDamage );
                     status.SetMessage( msg, true );
 
-                    msg = _( "for a total of %{totalDamage} damage." );
-                    StringReplace( msg, "%{totalDamage}", totalDamage );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all undead creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
                 }
             }
             else if ( spell.isALiveOnly() ) {
                 if ( damagedMonsters == 1 ) {
-                    msg = _( "The %{spell} spell does %{damage} damage to one living creature." );
-                    StringReplace( msg, "%{damage}", totalDamage );
-                }
-                else {
-                    msg = _( "The %{spell} spell does up to %{damage} damage to %{count} living creatures" );
+                    msg = _( "The %{spell} does %{damage} damage to one living creature." );
                     StringReplace( msg, "%{spell}", spell.GetName() );
-                    StringReplace( msg, "%{damage}", maximumDamage );
-                    StringReplace( msg, "%{count}", damagedMonsters );
+                    StringReplace( msg, "%{damage}", totalDamage );
                     status.SetMessage( msg, true );
 
-                    msg = _( "for a total of %{totalDamage} damage." );
-                    StringReplace( msg, "%{totalDamage}", totalDamage );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all living creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
                 }
             }
             else {
                 msg = _( "The %{spell} does %{damage} damage." );
+                StringReplace( msg, "%{spell}", spell.GetName() );
                 StringReplace( msg, "%{damage}", totalDamage );
-            }
-
-            StringReplace( msg, "%{spell}", spell.GetName() );
-
-            if ( killed ) {
                 status.SetMessage( msg, true );
-                msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
-                StringReplace( msg, "%{count}", killed );
-            }
 
-            status.SetMessage( msg, true );
+                if ( killed > 0 ) {
+                    msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                    StringReplace( msg, "%{count}", killed );
+                    status.SetMessage( msg, true );
+                }
+            }
         }
     }
 
