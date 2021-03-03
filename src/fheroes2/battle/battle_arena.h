@@ -97,7 +97,7 @@ namespace Battle
 
         const SpellStorage & GetUsageSpells( void ) const;
 
-        void DialogBattleSummary( const Result & res, const bool transferArtifacts ) const;
+        bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase &, bool ) const;
 
         void FadeArena( bool clearMessageLog ) const;

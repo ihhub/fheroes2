@@ -105,12 +105,6 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     if ( isHumanBattle ) {
         //arena->RestartBattle( army1, army2 );
-        arena.reset();
-        arena = std::make_unique<Arena>( army1, army2, mapsindex, true );
-
-        while ( arena->BattleValid() ) {
-            arena->Turns();
-        }
     }
 
     Result result = arena->GetResult();
@@ -135,10 +129,19 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // summary dialog
     if ( isHumanBattle ) {
-        if ( isWinnerHuman ) {
+        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, !showBattle ) ) {
+            arena.reset();
+            arena = std::make_unique<Arena>( army1, army2, mapsindex, true );
+
+            while ( arena->BattleValid() ) {
+                arena->Turns();
+            }
+
+            result = arena->GetResult();
+        }
+        else if ( isWinnerHuman ) {
             artifactsTransferred = true;
         }
-        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
     }
 
     if ( !artifactsTransferred ) {
