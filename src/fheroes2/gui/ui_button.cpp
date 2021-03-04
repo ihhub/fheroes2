@@ -50,12 +50,13 @@ namespace fheroes2
     }
 
     ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
-        : _releasedDisabled()
-        , _offsetX( offsetX )
+        : _offsetX( offsetX )
         , _offsetY( offsetY )
         , _isPressed( false )
         , _isEnabled( true )
         , _isVisible( true )
+        , _released( nullptr )
+        , _releasedDisabled()
     {}
 
     ButtonBase::~ButtonBase() {}
