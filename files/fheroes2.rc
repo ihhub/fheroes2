@@ -1,0 +1,47 @@
+#include <windows.h>
+#include "gamedefs.h"
+
+#define STRINGIFY(DEF)    #DEF
+#define EXPANDDEF(DEF)    STRINGIFY(DEF)
+#define FH2_VERSION_STR   EXPANDDEF(MAJOR_VERSION) "," EXPANDDEF(MINOR_VERSION) "," EXPANDDEF(INTERMEDIATE_VERSION) "," "0\0"
+#define FH2_INTNAME_STR   EXPANDDEF(TARGET) "\0"
+#define FH2_ORGNAME_STR   EXPANDDEF(TARGET) ".exe\0"
+
+#ifdef DEBUG
+#define FH2_DEBUG                   VS_FF_DEBUG
+#else
+#define FH2_DEBUG                   0
+#endif
+
+SHELLICON ICON "fheroes2.ico"
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     MAJOR_VERSION, MINOR_VERSION, INTERMEDIATE_VERSION, 0
+PRODUCTVERSION  MAJOR_VERSION, MINOR_VERSION, INTERMEDIATE_VERSION, 0
+FILEFLAGSMASK   VS_FF_DEBUG
+FILEFLAGS       FH2_DEBUG
+FILEOS          VOS_NT
+FILETYPE        VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "Comments",         "https://ihhub.github.io/fheroes2/\0"
+            VALUE "CompanyName",      "ihhub\0" //Placeholder. What do we put here? Can be omitted.
+            VALUE "FileDescription",  "Free implementation of Heroes of Might and Magic II game engine\0"
+            VALUE "FileVersion",      FH2_VERSION_STR
+            VALUE "InternalName",     FH2_INTNAME_STR
+            VALUE "LegalCopyright",   "\251 2021 Andrey Afletdinov <fheroes2@gmail.com>\0" //Placeholder. Not sure what goes here. NWC? 3DO? Ubisoft? Can be omitted.
+            VALUE "OriginalFilename", FH2_ORGNAME_STR
+            VALUE "ProductName",      "Free Heroes2 Engine\0"
+            VALUE "ProductVersion",   FH2_VERSION_STR
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
