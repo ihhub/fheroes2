@@ -1,3 +1,61 @@
+version 0.9.1 (04 March 2021)
+- add "Artifacts" category in Oracle Screen
+- add barrier fading animation
+- improve AI retreat condition
+- fix Split-related issues and implement some new techniques
+- disable retreat for auto battle mode
+- fix object's visited info and grammar
+- fix issues with path finding during combat to avoid being stopped by moat
+- fix incorrect names of Ballista and Turret during battle
+- add missing shadow for arrow cursor on SDL2
+- fix ACCEPT button font for Good Interface
+- fix AI wide units pathfding and moat logic
+- allow to modify a hero during level up
+- fix summon boat logic
+- fix monster movement nearby moat
+- AI does not chase faster units during battle
+- fix hero shadow drawing on world map
+- fix missing animation frame for wince
+- fix object fading animation on world map
+- fix missing last lost hero condition reset
+- fix simultaneous animation of boat while during another building construction
+- change logic in monster hiring window
+- fix save loading crash for broken saves
+- add middle resolution status support
+- do not show waiting cursor for an exhausted hero
+- fix post Daemon Cave missing music
+- fix well's max button drawing
+- fix incorrect castle focus while visiting by a hero
+- fix fog drawings
+- reduce income window area in towns
+- fix autosave option logic
+- fix overlapped battleground objects
+- remember scenario difficulty while restarting or choosing a new scenario
+- fix multiple game frezes with MIDI music playback
+- add resizable window support on SDL2
+- make deterministic bonus for hero level-up
+- fix wrong controller pointer speed option name and touch coordinates translation
+- add auto battle resolve mode to the game
+- add logic to support video frame rescaling
+- optimize screen resolution logic
+- fix garrison strength estimation by AI
+- fix magic gardens priority if object capture is enabled
+- optimize AI's troop placement before the battle
+- use same colour for all battlegrounds
+- change text in map size hint, to be displayed in more pleasant manner
+- load game button from UI should lead to common load game logic
+- initial implementation of "View World"
+- fix application crash for drawings
+- change building status message for Dwellings
+- fix crash when entering ally castle
+- add Campaign continuation initial support
+- speed up rendering of World Map
+- fix spell book status on hovering
+- save fullscreen mode in configuration file while switching between modes
+- AI should avoid spellcasting if has advantage in battle
+- fix rendering with mouse emulation
+- fix extensive memory usage by dialog windows
+
 version 0.9.0 (04 February 2021)
 - make AI to buy magic books in castles
 - fix infinite AI turns

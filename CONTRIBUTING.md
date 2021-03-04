@@ -28,7 +28,7 @@
 
 #### **Do you want to contribute to the project?**
 
-fheroes2 is a volunteer effort. We encourage you to pitch in and [join the team](https://github.com/ihhub/fheroes2/wiki/Contributors)! If you see that your name is not present in the list, please be free to contact us and report about such terrible mistake.
+fheroes2 is a volunteer effort. We encourage you to pitch in and join the team!
 
 Thanks! :heart: :heart: :heart:
 
