@@ -919,7 +919,8 @@ namespace ICN
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
-        LASTICN, // just a marker, indicating end of the enumeration
+        // IMPORTANT! Put any new entry just above this one.
+        LASTICN
     };
 
     const char * GetString( int );

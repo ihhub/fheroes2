@@ -197,8 +197,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
-    states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
-    states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
 

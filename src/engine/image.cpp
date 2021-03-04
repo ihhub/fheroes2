@@ -919,12 +919,10 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
-                        if ( *transformInX == 1 ) { // skip pixel
-                            continue;
-                        }
-
                         if ( *transformInX > 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            if ( *transformInX != 1 ) { // skip pixel
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            }
                         }
                         else { // copy a pixel
                             *imageOutX = *imageInX;
@@ -975,12 +973,10 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
-                        if ( *transformInX == 1 ) { // skip pixel
-                            continue;
-                        }
-
                         if ( *transformInX > 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            if ( *transformInX != 1 ) { // skip pixel
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            }
                         }
                         else { // copy a pixel
                             *imageOutX = *imageInX;

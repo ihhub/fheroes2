@@ -43,6 +43,7 @@ namespace Difficulty
     double GetUnitGrowthBonus( int difficulty );
     double GetBattleExperienceBonus( int difficulty );
     int GetHeroMovementBonus( int difficulty );
+    double GetAIRetreatRatio( int difficulty );
 }
 
 #endif

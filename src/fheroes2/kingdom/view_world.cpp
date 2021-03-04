@@ -130,7 +130,6 @@ namespace
 #else
             cachedImages.resize( 3 );
 #endif
-            LocalEvent::Get().PauseCycling();
 
             for ( size_t i = 0; i < cachedImages.size(); ++i ) {
                 cachedImages[i].resize( world.w() * tileSizePerZoomLevel[i], world.h() * tileSizePerZoomLevel[i] );
@@ -175,8 +174,6 @@ namespace
                     }
                 }
             }
-
-            LocalEvent::Get().ResumeCycling();
         }
     };
 
@@ -415,6 +412,9 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     fheroes2::ImageRestorer restorer( display );
 
+    LocalEvent & le = LocalEvent::Get();
+    le.PauseCycling();
+
     // Creates fixed radar on top-right, even if hidden interface
     Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
 
@@ -467,7 +467,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::Point initRoiCenter;
 
     // message loop
-    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
         le.MousePressLeft( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
@@ -488,7 +487,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
         }
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
-                Point newMousePos = le.GetMouseCursor();
+                const Point newMousePos = le.GetMouseCursor();
                 const fheroes2::Point
                     newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )],
                                   initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )] );
@@ -524,4 +523,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     }
 
     cursor.SetThemes( oldcursor );
+
+    le.ResumeCycling();
 }
