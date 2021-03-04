@@ -20,7 +20,7 @@ jobs:
         fetch-depth: 1
     - name: install packages
       run: |
-        apt-get install uname
+        sudo apt-get install uname
         cd vdpm
         ./bootstrap-vitasdk.sh
         ./install-all.sh
