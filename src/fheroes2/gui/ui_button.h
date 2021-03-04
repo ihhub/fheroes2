@@ -77,8 +77,6 @@ namespace fheroes2
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
 
-        std::unique_ptr<Sprite> _releasedDisabled;
-
     private:
         int32_t _offsetX;
         int32_t _offsetY;
@@ -86,6 +84,9 @@ namespace fheroes2
         bool _isPressed;
         bool _isEnabled;
         bool _isVisible;
+
+        const Sprite * _released;
+        std::unique_ptr<Sprite> _releasedDisabled;
     };
 
     class Button : public ButtonBase

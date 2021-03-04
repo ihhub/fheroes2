@@ -148,16 +148,17 @@ namespace fheroes2
             Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
         else {
-            const Sprite & sprite = _getReleased();
+            const Sprite & currentReleased = _getReleased();
             if ( isEnabled() ) {
-                Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+                Blit( currentReleased, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
             }
             else {
-                if ( !_releasedDisabled ) {
-                    _releasedDisabled.reset( new Sprite( sprite ) );
+                if ( ( !_releasedDisabled ) || ( _released != &currentReleased ) ) {
+                    _released = &currentReleased;
+                    _releasedDisabled.reset( new Sprite( currentReleased ) );
                     ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 }
-                Blit( *_releasedDisabled, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+                Blit( *_releasedDisabled, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
             }
         }
     }
@@ -211,7 +212,6 @@ namespace fheroes2
         _icnId = icnId;
         _releasedIndex = releasedIndex;
         _pressedIndex = pressedIndex;
-        _releasedDisabled.reset();
     }
 
     const Sprite & Button::_getPressed() const
@@ -240,7 +240,6 @@ namespace fheroes2
     {
         _released = released;
         _pressed = pressed;
-        _releasedDisabled.reset();
     }
 
     const Sprite & ButtonSprite::_getPressed() const
