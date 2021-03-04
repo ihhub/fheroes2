@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 
+#if defined( _WIN32 )
+#undef main
+#endif
+
 int main( int argc, char ** argv )
 {
     if ( argc != 2 ) {

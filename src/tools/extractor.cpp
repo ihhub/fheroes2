@@ -31,6 +31,10 @@
 
 #define FATSIZENAME 15
 
+#if defined( _WIN32 )
+#undef main
+#endif
+
 struct aggfat_t
 {
     u32 crc;
@@ -40,27 +44,20 @@ struct aggfat_t
 
 int main( int argc, char ** argv )
 {
-    if ( argc != 2 && argc != 3 ) {
-        std::cout << "Usage: extractor heroes2(x).agg extract_dir" << std::endl << "       Or just drag and drop heroes2(x).agg onto extractor" << std::endl;
+    if ( argc != 3 ) {
+        std::cout << argv[0] << " path_heroes2.agg extract_to_dir" << std::endl;
+
         return EXIT_SUCCESS;
     }
 
     StreamFile sf1, sf2;
 
     if ( !sf1.open( argv[1], "rb" ) ) {
-        std::cout << "Could not open " << argv[1] << std::endl;
-        return EXIT_FAILURE;
+        std::cout << "error open file: " << argv[1] << std::endl;
+        return EXIT_SUCCESS;
     }
 
-    std::string outPath;
-    if ( argc != 2 ) {
-        outPath = argv[2];
-    }
-    else {
-        outPath = argv[1];
-        outPath.resize( outPath.length() - 4 );
-    }
-    System::MakeDirectory( outPath );
+    System::MakeDirectory( argv[2] );
 
     const u32 size = sf1.size();
     int total = 0;
@@ -82,7 +79,7 @@ int main( int argc, char ** argv )
 
     for ( std::map<std::string, aggfat_t>::const_iterator it = maps.begin(); it != maps.end(); ++it ) {
         const aggfat_t & fat = ( *it ).second;
-        const std::string & fn = System::ConcatePath( outPath, ( *it ).first );
+        const std::string & fn = System::ConcatePath( argv[2], ( *it ).first );
         sf1.seek( fat.offset );
         std::vector<u8> buf = sf1.getRaw( fat.size );
 
@@ -91,11 +88,11 @@ int main( int argc, char ** argv )
             sf2.close();
 
             ++total;
-            std::cout << "Extracting: " << fn << std::endl;
+            std::cout << "extract: " << fn << std::endl;
         }
     }
 
     sf1.close();
-    std::cout << total << " files extracted." << std::endl;
+    std::cout << "total: " << total << std::endl;
     return EXIT_SUCCESS;
 }

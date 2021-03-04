@@ -20,26 +20,44 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <cstring>
 
 #include "agg_file.h"
 #include "image_tool.h"
 #include "serialize.h"
 #include "system.h"
 
+#if defined( _WIN32 )
+#undef main
+#endif
+
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::cout << argv[0] << " infile.icn extract_to_dir" << std::endl;
+        std::cout << argv[0] << " [-s (skip shadow)] [-d (debug on)] infile.icn extract_to_dir" << std::endl;
         return EXIT_SUCCESS;
     }
 
+    bool debug = false;
+    // bool shadow = true;
+
     char ** ptr = argv;
     ++ptr;
+
+    while ( ptr && *ptr ) {
+        if ( 0 == strcmp( "-d", *ptr ) )
+            debug = true;
+        // else
+        // if(0 == strcmp("-s", *ptr))
+        //    shadow = false;
+        else
+            break;
+
+        ++ptr;
+    }
 
     std::string shortname( *ptr );
     ++ptr;
@@ -48,8 +66,8 @@ int main( int argc, char ** argv )
     StreamFile sf;
 
     if ( !sf.open( shortname, "rb" ) ) {
-        std::cout << "Could not open " << shortname << std::endl;
-        return EXIT_FAILURE;
+        std::cout << "error open file: " << shortname << std::endl;
+        return EXIT_SUCCESS;
     }
 
     int count_sprite = sf.getLE16();
@@ -59,16 +77,16 @@ int main( int argc, char ** argv )
     prefix = System::ConcatePath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "Could not create " << prefix << std::endl;
-        return EXIT_FAILURE;
+        std::cout << "error mkdir: " << prefix << std::endl;
+        return EXIT_SUCCESS;
     }
 
     // write file "spec.xml"
     std::string name_spec_file = System::ConcatePath( prefix, "spec.xml" );
     std::fstream fs( name_spec_file.c_str(), std::ios::out );
     if ( fs.fail() ) {
-        std::cout << "Could not write " << name_spec_file << std::endl;
-        return EXIT_FAILURE;
+        std::cout << "error write file: " << name_spec_file << std::endl;
+        return EXIT_SUCCESS;
     }
 
     fs << "<?xml version=\"1.0\" ?>" << std::endl << "<icn name=\"" << shortname << ".icn\" count=\"" << count_sprite << "\">" << std::endl;
@@ -84,7 +102,7 @@ int main( int argc, char ** argv )
 
         u32 data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
         sf.seek( save_pos + head.offsetData );
-        // std::cerr << data_size << std::endl;
+        std::cerr << data_size << std::endl;
         std::vector<u8> buf = sf.getRaw( data_size );
 
         if ( buf.size() ) {
@@ -113,7 +131,7 @@ int main( int argc, char ** argv )
     sf.close();
     fs << "</icn>" << std::endl;
     fs.close();
-    std::cout << "Extracted " << argv[1] << " to: " << prefix << std::endl;
+    std::cout << "expand to: " << prefix << std::endl;
 
     return EXIT_SUCCESS;
 }
