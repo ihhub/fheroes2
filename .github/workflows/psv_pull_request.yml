@@ -8,19 +8,19 @@ jobs:
   psv:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - name: checkout fheroes2
+      uses: actions/checkout@v2
       with:
         fetch-depth: 50
-    - uses: actions/checkout@master
+    - name: checkout pvs SDK
+      uses: actions/checkout@v2
       with:
         repository: vitasdk/vdpm
         path: vdpm
         fetch-depth: 1
     - name: install packages
       run: |
-        ls
         cd vdpm
-        ls
         ./bootstrap-vitasdk.sh
         ./install-all.sh
       env:
