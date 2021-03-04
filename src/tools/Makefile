@@ -1,31 +1,44 @@
 # makefile
 # project: Free Heroes2 Tools
 
+ifndef WITH_TOOLS
 ifdef FHEROES2_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-SDL_FLAGS := $(shell sdl-config --cflags)
+LIBS   := $(shell sdl-config --libs)
+CFLAGS := $(shell sdl-config --cflags)
 else
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
+LIBS   := $(shell sdl2-config --libs)
+CFLAGS := $(shell sdl2-config --cflags)
+endif
+ifeq ($(OS),Windows_NT)
+LIBS   += -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
+ifndef WITHOUT_UNICODE
+CFLAGS += -DWITH_ICONV
+LIBS   += -liconv
+endif
+endif
 endif
 
 ifeq ($(OS),Windows_NT)
-SDL_LIBS   := $(filter-out -mwindows,$(SDL_LIBS))
-MINGW_LIBS := -mconsole -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread -liconv
+LIBS := -static $(subst -mwindows,-mconsole,$(LIBS))
+ifdef FHEROES2_SDL1
+LIBS += -lwinmm -lgdi32 -ldxguid
+else
+LIBS += -lole32 -loleaut32 -limm32 -lwinmm -lgdi32 -dxguid -lsetupapi -lversion
+endif
 endif
 
-TARGETS := extractor 82m2wav til2img icn2img xmi2mid bin2txt
+TARGETS   := 82m2wav bin2txt extractor icn2img til2img xmi2mid
 LIBENGINE := ../engine/libengine.a
-LIBS := $(LIBENGINE) $(SDL_LIBS) $(MINGW_LIBS)
-CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
+LIBS      := $(LIBENGINE) $(LIBS)
+CFLAGS    += -I../engine
 
 all: $(TARGETS)
 
-$(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
+$(TARGETS):
 	$(CXX) -c $@.cpp $(CFLAGS)
 	$(CXX) -o $@ $@.o $(LIBS)
 
 .PHONY: clean
 
 clean:
-	@rm -f *.o *.exe $(TARGETS)
+	@rm -f *.o $(TARGETS)

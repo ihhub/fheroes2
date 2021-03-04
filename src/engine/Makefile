@@ -34,4 +34,4 @@ include $(wildcard *.d)
 .PHONY: clean
 
 clean:
-	rm -f *.a *.so *.d *.o
+	@rm -f *.a *.so *.d *.o
