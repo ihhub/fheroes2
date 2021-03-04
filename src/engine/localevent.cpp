@@ -52,7 +52,7 @@ LocalEvent::LocalEvent()
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
     , _isSoundPaused( false )
-    , _volume( 0 )
+    , _musicVolume( 0 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1121,13 +1121,13 @@ void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
             _isSoundPaused = Mixer::isPaused( -1 );
             Mixer::Pause();
             Music::Pause();
-            _volume = Music::Volume( 0 );
+            _musicVolume = Music::Volume( 0 );
             loop_delay = 100;
         }
         else if ( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
             if ( _isHiddenWindow ) {
                 if ( !_isMusicPaused ) {
-                    Music::Volume( _volume );
+                    Music::Volume( _musicVolume );
                     Music::Resume();
                 }
                 if ( !_isSoundPaused )
