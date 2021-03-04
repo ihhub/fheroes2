@@ -18,8 +18,8 @@ jobs:
         repository: vitasdk/vdpm
         path: vdpm
         fetch-depth: 1
-    - name: install packages
-      run: sudo apt-get install uname
+    #- name: install packages
+    #  run: sudo apt-get install uname
     - name: compile psv SDK
       run: cd vdpm && ./bootstrap-vitasdk.sh && ./install-all.sh
       env:
