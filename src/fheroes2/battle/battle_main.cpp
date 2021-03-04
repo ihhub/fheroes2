@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <memory>
 
 #include "agg.h"
 #include "ai.h"
