@@ -6,7 +6,7 @@ on:
 
 jobs:
   psv:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
     - name: checkout fheroes2
       uses: actions/checkout@v2
@@ -20,12 +20,13 @@ jobs:
         fetch-depth: 1
     - name: install packages
       run: |
+        apt-get install uname
         cd vdpm
         ./bootstrap-vitasdk.sh
         ./install-all.sh
       env:
         VITASDK: /usr/local/vitasdk
-        PATH: $VITASDK/bin:/usr/bin/uname:$PATH
+        PATH: $VITASDK/bin:$PATH
     - name: compile
       run: make -f Makefile.dolce
       env:
