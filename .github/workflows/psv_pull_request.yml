@@ -21,7 +21,7 @@ jobs:
     #- name: install packages
     #  run: sudo apt-get install uname
     - name: compile psv SDK
-      run: cd vdpm && ./bootstrap-vitasdk.sh && ./install-all.sh
+      run: cd vdpm && bash ./bootstrap-vitasdk.sh && bash ./install-all.sh
       env:
         VITASDK: /usr/local/vitasdk
         PATH: $VITASDK/bin:$PATH
