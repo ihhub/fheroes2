@@ -103,20 +103,49 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->Turns();
     }
 
-    if ( isHumanBattle ) {
-        //arena->RestartBattle( army1, army2 );
-    }
-
     Result result = arena->GetResult();
 
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
-    const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+    u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-    const bool transferArtifacts
-        = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+    bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+    bool transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
     bool artifactsTransferred = !transferArtifacts;
+
+    bool battleSummaryShown = false;
+    // Check if it was an auto battle
+    if ( isHumanBattle && !showBattle ) {
+        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, true ) ) {
+            // If dialog returns true we will restart battle in manual mode
+            showBattle = true;
+            arena.reset();
+
+            // Make sure to reset mixer before loading the battle interface
+            AGG::ResetMixer();
+            arena = std::make_unique<Arena>( army1, army2, mapsindex, showBattle );
+
+            while ( arena->BattleValid() ) {
+                arena->Turns();
+            }
+
+            // Override the result
+            result = arena->GetResult();
+            hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
+            hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
+            loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+
+            isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+            transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+            artifactsTransferred = !transferArtifacts;
+        }
+        else {
+            battleSummaryShown = true;
+            if ( isWinnerHuman ) {
+                artifactsTransferred = true;
+            }
+        }
+    }
 
     if ( showBattle ) {
         AGG::ResetMixer();
@@ -127,19 +156,10 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         arena->FadeArena( clearMessageLog );
     }
 
-    // summary dialog
-    if ( isHumanBattle ) {
-        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, !showBattle ) ) {
-            arena.reset();
-            arena = std::make_unique<Arena>( army1, army2, mapsindex, true );
-
-            while ( arena->BattleValid() ) {
-                arena->Turns();
-            }
-
-            result = arena->GetResult();
-        }
-        else if ( isWinnerHuman ) {
+    // final summary dialog
+    if ( isHumanBattle && !battleSummaryShown ) {
+        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, false );
+        if ( isWinnerHuman ) {
             artifactsTransferred = true;
         }
     }
