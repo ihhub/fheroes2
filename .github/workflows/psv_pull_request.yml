@@ -18,7 +18,9 @@ jobs:
         fetch-depth: 1
     - name: install packages
       run: |
+        ls
         cd vdpm
+        ls
         ./bootstrap-vitasdk.sh
         ./install-all.sh
       env:
