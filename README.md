@@ -11,9 +11,9 @@ Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from t
 
 Data from GoG version of the game is working nicely. Files from the demo version are working too.
 
-Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg" (should be set by default now).
+Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg".
 
-fheroes2 supports ingame cinematics. To play into and/or other videos, make sure that all of "*.SMK" files are placed inside "ux0:data/fheroes2/heroes2/anim/" folder (they were inside DATA folder for me).
+fheroes2 supports ingame cinematics. To play into and/or other videos, make sure that all of "*.SMK" files are placed inside "ux0:data/fheroes2/heroes2/anim/" folder.
 
 [rePatch reDux0](https://github.com/dots-tb/rePatch-reDux0) OR [FdFix](https://github.com/TheOfficialFloW/FdFix) plugin is required for proper suspend/resume support (only use one at a time).
 
@@ -26,7 +26,7 @@ fheroes2 supports ingame cinematics. To play into and/or other videos, make sure
 
 To build the game just run
 ```
-make -f Makefile.dolce
+make -f Makefile.vita
 ```
 
 ## Controls
