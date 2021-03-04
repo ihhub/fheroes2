@@ -1,4 +1,11 @@
 version 0.9.1 (04 March 2021)
+- add "Artifacts" category in Oracle Screen
+- add barrier fading animation
+- improve AI retreat condition
+- fix Split-related issues and implement some new techniques
+- disable retreat for auto battle mode
+- fix object's visited info and grammar
+- fix issues with path finding during combat to avoid being stopped by moat
 - fix incorrect names of Ballista and Turret during battle
 - add missing shadow for arrow cursor on SDL2
 - fix ACCEPT button font for Good Interface
