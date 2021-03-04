@@ -123,3 +123,19 @@ int Difficulty::GetHeroMovementBonus( int difficulty )
     }
     return 0;
 }
+
+double Difficulty::GetAIRetreatRatio( int difficulty )
+{
+    switch ( difficulty ) {
+    case Difficulty::NORMAL:
+        return 100.0 / 7.5;
+    case Difficulty::HARD: // fall-through
+    case Difficulty::EXPERT:
+        return 100.0 / 8.5;
+    case Difficulty::IMPOSSIBLE:
+        return 100.0 / 10.0;
+    default:
+        break;
+    }
+    return 100.0 / 6.0;
+}

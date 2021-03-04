@@ -27,7 +27,7 @@
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 0
+#define INTERMEDIATE_VERSION 1
 
 // hardcore defines: kingdom
 #define KINGDOMMAX 6
