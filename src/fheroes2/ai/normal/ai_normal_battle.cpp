@@ -98,17 +98,61 @@ namespace AI
             if ( !commander->HaveSpellPoints( spell ) )
                 continue;
 
-            // TODO: add mass spells
-            if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
+
+            if ( spell.isCombat() && spell.isDamage() ) {
                 const uint32_t totalDamage = spell.Damage() * spellPower;
-                for ( const Unit * enemy : enemies ) {
-                    const double spellHeuristic
-                        = enemy->GetMonsterStrength() * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
+
+                auto damageHeuristic = [&totalDamage, &spell, &spellPower]( const Unit * unit ) {
+                    return unit->GetMonsterStrength() * unit->HowManyWillKilled( totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100 );
+                };
+
+                if ( spell.isSingleTarget() ) {
+                    for ( const Unit * enemy : enemies ) {
+                        const double spellHeuristic = damageHeuristic( enemy );
+
+                        if ( spellHeuristic > bestHeuristic ) {
+                            bestHeuristic = spellHeuristic;
+                            bestSpell = spell.GetID();
+                            targetIdx = enemy->GetHeadIndex();
+                        }
+                    }
+                }
+                else if ( spell.isApplyWithoutFocusObject() ) {
+                    double spellHeuristic = 0;
+                    for ( const Unit * enemy : enemies ) {
+                        spellHeuristic += damageHeuristic( enemy );
+                    }
+                    for ( const Unit * unit : friendly ) {
+                        spellHeuristic -= damageHeuristic( unit );
+                    }
 
                     if ( spellHeuristic > bestHeuristic ) {
                         bestHeuristic = spellHeuristic;
                         bestSpell = spell.GetID();
-                        targetIdx = enemy->GetHeadIndex();
+                    }
+                }
+                else {
+                    // Area of effect spells like Fireball
+                    const Board & board = *arena.GetBoard();
+                    for ( const Cell & cell : board ) {
+                        const int32_t index = cell.GetIndex();
+                        double spellHeuristic = 0;
+
+                        const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index );
+                        for ( const TargetInfo & target : targets ) {
+                            if ( target.defender->GetCurrentColor() == _myColor ) {
+                                spellHeuristic -= target.defender->GetMonsterStrength() * target.killed;
+                            }
+                            else {
+                                spellHeuristic += target.defender->GetMonsterStrength() * target.killed;
+                            }
+                        }
+
+                        if ( spellHeuristic > bestHeuristic ) {
+                            bestHeuristic = spellHeuristic;
+                            bestSpell = spell.GetID();
+                            targetIdx = index;
+                        }
                     }
                 }
             }
@@ -169,6 +213,8 @@ namespace AI
 
             // Temporary: force damage spell
             actions = forceSpellcastBeforeRetreat( arena, commander );
+            if ( !actions.empty() )
+                return actions;
         }
 
         // Step 4. Current unit decision tree
