@@ -300,14 +300,14 @@ private:
     {
         KEY_PRESSED = 0x0001,
         MOUSE_MOTION = 0x0002,
-        MOUSE_PRESSED = 0x0004,
+        MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
         GLOBAL_FILTER = 0x0008,
-        CLICK_LEFT = 0x0010, // either there is a click on left button or it was just released
-        CLICK_RIGHT = 0x0020, // either there is a click on right button or it was just released
-        CLICK_MIDDLE = 0x0040, // either there is a click on middle button or it was just released
-        UNUSED_1 = 0x0080,
+        MOUSE_RELEASED = 0x0010, // mouse button has just been released
+        MOUSE_CLICKED = 0x0020, // mouse button has been clicked
+        UNUSED_1 = 0x0040,
+        UNUSED_2 = 0x0080,
         MOUSE_OFFSET = 0x0100,
-        UNUSED_2 = 0x0200,
+        UNUSED_3 = 0x0200,
         MOUSE_WHEEL = 0x0400,
         KEY_HOLD = 0x0800
     };
