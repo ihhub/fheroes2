@@ -42,6 +42,12 @@ namespace AI
         const Battle::Unit * unit = nullptr;
     };
 
+    struct SpellSeletion
+    {
+        int spellID = -1;
+        int cell = -1;
+    };
+
     class BattlePlanner
     {
     public:
@@ -60,6 +66,7 @@ namespace AI
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        SpellSeletion selectBestSpell( Battle::Arena & arena, const HeroBase * commander, bool retreating = false );
         Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
 
         // turn variables that wouldn't persist

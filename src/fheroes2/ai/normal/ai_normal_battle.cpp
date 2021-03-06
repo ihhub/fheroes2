@@ -78,28 +78,22 @@ namespace AI
         return currentUnit.isFlying();
     }
 
-    Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander )
+    SpellSeletion BattlePlanner::selectBestSpell( Battle::Arena & arena, const HeroBase * commander, bool retreating )
     {
-        Actions result;
-        if ( !isCommanderCanSpellcast( arena, commander ) ) {
-            return result;
-        }
+        SpellSeletion bestSpell;
 
         const std::vector<Spell> allSpells = commander->GetSpells();
-        int bestSpell = -1;
-        double bestHeuristic = 0;
-        int targetIdx = -1;
-
         const Units friendly( arena.GetForce( commander->GetColor() ), true );
         const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
 
+        double bestHeuristic = 0;
+
         const int spellPower = commander->GetPower();
         for ( const Spell & spell : allSpells ) {
-            if ( !commander->HaveSpellPoints( spell ) )
+            if ( !commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
                 continue;
 
-
-            if ( spell.isCombat() && spell.isDamage() ) {
+            if ( spell.isDamage() ) {
                 const uint32_t totalDamage = spell.Damage() * spellPower;
 
                 auto damageHeuristic = [&totalDamage, &spell, &spellPower]( const Unit * unit ) {
@@ -112,8 +106,8 @@ namespace AI
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
-                            bestSpell = spell.GetID();
-                            targetIdx = enemy->GetHeadIndex();
+                            bestSpell.spellID = spell.GetID();
+                            bestSpell.cell = enemy->GetHeadIndex();
                         }
                     }
                 }
@@ -128,38 +122,58 @@ namespace AI
 
                     if ( spellHeuristic > bestHeuristic ) {
                         bestHeuristic = spellHeuristic;
-                        bestSpell = spell.GetID();
+                        bestSpell.spellID = spell.GetID();
                     }
                 }
                 else {
                     // Area of effect spells like Fireball
                     const Board & board = *arena.GetBoard();
+                    double bbest = 0;
                     for ( const Cell & cell : board ) {
                         const int32_t index = cell.GetIndex();
                         double spellHeuristic = 0;
 
+                        if ( spell.GetID() == Spell::CHAINLIGHTNING && !arena.GetTroopBoard( index ) )
+                            continue;
+
+                        // TODO: GetTargetsForSpells shouldn't call interface/play sounds
                         const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index );
                         for ( const TargetInfo & target : targets ) {
                             if ( target.defender->GetCurrentColor() == _myColor ) {
-                                spellHeuristic -= target.defender->GetMonsterStrength() * target.killed;
+                                spellHeuristic -= damageHeuristic( target.defender );
                             }
                             else {
-                                spellHeuristic += target.defender->GetMonsterStrength() * target.killed;
+                                spellHeuristic += damageHeuristic( target.defender );
                             }
                         }
+
+                        if ( bbest < spellHeuristic )
+                            bbest = spellHeuristic;
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
-                            bestSpell = spell.GetID();
-                            targetIdx = index;
+                            bestSpell.spellID = spell.GetID();
+                            bestSpell.cell = index;
                         }
                     }
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, spell.GetName() << " best value is " << bbest );
                 }
             }
         }
+        return bestSpell;
+    }
 
-        if ( bestSpell != -1 ) {
-            result.emplace_back( MSG_BATTLE_CAST, bestSpell, targetIdx );
+    Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander )
+    {
+        Actions result;
+        if ( !isCommanderCanSpellcast( arena, commander ) ) {
+            return result;
+        }
+
+        SpellSeletion bestSpell = selectBestSpell( arena, commander, true );
+
+        if ( bestSpell.spellID != -1 ) {
+            result.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
         }
         return result;
     }
@@ -626,7 +640,7 @@ namespace AI
     {
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
-
+        // do not end if cast
         actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }
