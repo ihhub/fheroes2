@@ -85,7 +85,7 @@ namespace fheroes2
         bool _isEnabled;
         bool _isVisible;
 
-        const Sprite * _released;
+        const Sprite * _releasedSprite;
         std::unique_ptr<Sprite> _releasedDisabled;
     };
 
