@@ -149,14 +149,14 @@ namespace fheroes2
             Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
         else {
-            const Sprite & currentReleased = _getReleased();
+            const Sprite & sprite = _getReleased();
             if ( isEnabled() ) {
-                Blit( currentReleased, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
+                Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
             else {
-                if ( !_releasedDisabled || ( _releasedSprite != &currentReleased ) ) {
-                    _releasedSprite = &currentReleased;
-                    _releasedDisabled.reset( new Sprite( currentReleased ) );
+                if ( !_releasedDisabled || ( _releasedSprite != &sprite ) ) {
+                    _releasedSprite = &sprite;
+                    _releasedDisabled.reset( new Sprite( sprite ) );
                     ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 }
                 Blit( *_releasedDisabled, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
