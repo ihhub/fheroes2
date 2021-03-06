@@ -78,19 +78,32 @@ namespace AI
         return currentUnit.isFlying();
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Battle::Arena & arena, const HeroBase * commander, bool retreating )
+    SpellSeletion BattlePlanner::selectBestSpell( Battle::Arena & arena, bool retreating )
     {
+        // 1. For damage spells - maximum amount of enemy threat lost
+        // 2. For buffs - friendly unit strength gained
+        // 3. For debuffs - enemy unit threat lost
+        // 4. For dispell, resurrect and cure - amount of unit strength recovered
+        // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
+
+        // 6. Cast best spell with highest heuristic on target pointer saved
         SpellSeletion bestSpell;
 
-        const std::vector<Spell> allSpells = commander->GetSpells();
-        const Units friendly( arena.GetForce( commander->GetColor() ), true );
-        const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
+        // Commander must be set before calling this function! Check both debug/release version
+        assert( _commander != nullptr );
+        if ( _commander == nullptr ) {
+            return bestSpell;
+        }
+
+        const std::vector<Spell> allSpells = _commander->GetSpells();
+        const Units friendly( arena.GetForce( _myColor ), true );
+        const Units enemies( arena.GetForce( _myColor, true ), true );
 
         double bestHeuristic = 0;
 
-        const int spellPower = commander->GetPower();
+        const int spellPower = _commander->GetPower();
         for ( const Spell & spell : allSpells ) {
-            if ( !commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
+            if ( !_commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
                 continue;
 
             if ( spell.isDamage() ) {
@@ -132,8 +145,7 @@ namespace AI
                 }
                 else {
                     // Area of effect spells like Fireball
-                    auto areaOfEffectCheck = [&arena, &commander, &spell, &damageHeuristic, &bestHeuristic, &bestSpell]( const int32_t index, int myColor ) {
-                        const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index, false );
+                    auto areaOfEffectCheck = [&arena, &damageHeuristic, &bestHeuristic, &bestSpell]( const TargetsInfo & targets, int myColor ) {
 
                         double spellHeuristic = 0;
                         for ( const TargetInfo & target : targets ) {
@@ -147,20 +159,20 @@ namespace AI
 
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
-                            bestSpell.spellID = spell.GetID();
-                            bestSpell.cell = index;
+                            //bestSpell.spellID = spell.GetID();
+                            //bestSpell.cell = index;
                         }
                     };
 
                     if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                         for ( const Unit * enemy : enemies ) {
-                            areaOfEffectCheck( enemy->GetHeadIndex(), _myColor );
+                            areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, enemy->GetHeadIndex(), false ), _myColor );
                         }
                     }
                     else {
                         const Board & board = *Arena::GetBoard();
                         for ( const Cell & cell : board ) {
-                            areaOfEffectCheck( cell.GetIndex(), _myColor );
+                            areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, cell.GetIndex(), false ), _myColor );
                         }
                     }
                 }
@@ -169,14 +181,90 @@ namespace AI
         return bestSpell;
     }
 
-    Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander )
+    SpellcastOutcome BattlePlanner::spellDamageValue( Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) 
+    {
+        SpellcastOutcome bestOutcome;
+
+        const int spellPower = _commander->GetPower();
+        const uint32_t totalDamage = spell.Damage() * spellPower;
+
+        auto damageHeuristic = [&totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
+            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100;
+            // If we're retreating we don't care about partial damage, only actual units killed
+            if ( retreating )
+                return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
+            // Otherwise calculate amount of strength lost (% of unit times total strength)
+            return std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 ) * unit->GetStrength();
+        };
+
+        if ( spell.isSingleTarget() ) {
+            for ( const Unit * enemy : enemies ) {
+                const double spellHeuristic = damageHeuristic( enemy );
+
+                if ( spellHeuristic > bestOutcome.value ) {
+                    bestOutcome.value = spellHeuristic;
+                    bestOutcome.cell = enemy->GetHeadIndex();
+                }
+            }
+        }
+        else if ( spell.isApplyWithoutFocusObject() ) {
+            double spellHeuristic = 0;
+            for ( const Unit * enemy : enemies ) {
+                spellHeuristic += damageHeuristic( enemy );
+            }
+            for ( const Unit * unit : friendly ) {
+                spellHeuristic -= damageHeuristic( unit );
+            }
+
+            if ( spellHeuristic > bestOutcome.value ) {
+                bestOutcome.value = spellHeuristic;
+            }
+        }
+        else {
+            // Area of effect spells like Fireball
+            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+                double spellHeuristic = 0;
+                for ( const TargetInfo & target : targets ) {
+                    if ( target.defender->GetCurrentColor() == myColor ) {
+                        spellHeuristic -= damageHeuristic( target.defender );
+                    }
+                    else {
+                        spellHeuristic += damageHeuristic( target.defender );
+                    }
+                }
+
+                if ( spellHeuristic > bestOutcome.value ) {
+                    bestOutcome.value = spellHeuristic;
+                    bestOutcome.cell = index;
+                }
+            };
+
+            if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
+                for ( const Unit * enemy : enemies ) {
+                    const int32_t index = enemy->GetHeadIndex();
+                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index, false ), index, _myColor );
+                }
+            }
+            else {
+                const Board & board = *Arena::GetBoard();
+                for ( const Cell & cell : board ) {
+                    const int32_t index = cell.GetIndex();
+                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index, false ), index, _myColor );
+                }
+            }
+        }
+
+        return bestOutcome;
+    }
+
+    Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena )
     {
         Actions result;
-        if ( !isCommanderCanSpellcast( arena, commander ) ) {
+        if ( !isCommanderCanSpellcast( arena, _commander ) ) {
             return result;
         }
 
-        SpellSeletion bestSpell = selectBestSpell( arena, commander, true );
+        SpellSeletion bestSpell = selectBestSpell( arena, true );
 
         if ( bestSpell.spellID != -1 ) {
             result.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
@@ -196,7 +284,6 @@ namespace AI
         analyzeBattleState( arena, currentUnit );
 
         const Force & enemyForce = arena.GetForce( _myColor, true );
-        const HeroBase * commander = currentUnit.GetCommander();
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _myColor );
 
@@ -209,10 +296,10 @@ namespace AI
                    "Tactic " << defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
 
         // Step 2. Check retreat/surrender condition
-        const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
+        const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
         if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
             // Cast maximum damage spell
-            actions = forceSpellcastBeforeRetreat( arena, commander );
+            actions = forceSpellcastBeforeRetreat( arena );
 
             actions.emplace_back( MSG_BATTLE_RETREAT );
             actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
@@ -222,17 +309,9 @@ namespace AI
         // Step 3. Calculate spell heuristics
 
         // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
-        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, commander ) ) {
-            // 1. For damage spells - maximum amount of enemy threat lost
-            // 2. For buffs - friendly unit strength gained
-            // 3. For debuffs - enemy unit threat lost
-            // 4. For dispell, resurrect and cure - amount of unit strength recovered
-            // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
-
-            // 6. Cast best spell with highest heuristic on target pointer saved
-
+        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, _commander ) ) {
             // Temporary: force damage spell
-            actions = forceSpellcastBeforeRetreat( arena, commander );
+            actions = forceSpellcastBeforeRetreat( arena );
             if ( !actions.empty() )
                 return actions;
         }
@@ -286,7 +365,9 @@ namespace AI
 
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
+        _commander = currentUnit.GetCommander();
         _myColor = currentUnit.GetColor();
+
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
 
