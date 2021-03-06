@@ -128,7 +128,6 @@ namespace AI
                 else {
                     // Area of effect spells like Fireball
                     const Board & board = *arena.GetBoard();
-                    double bbest = 0;
                     for ( const Cell & cell : board ) {
                         const int32_t index = cell.GetIndex();
                         double spellHeuristic = 0;
@@ -136,8 +135,7 @@ namespace AI
                         if ( spell.GetID() == Spell::CHAINLIGHTNING && !arena.GetTroopBoard( index ) )
                             continue;
 
-                        // TODO: GetTargetsForSpells shouldn't call interface/play sounds
-                        const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index );
+                        const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index, false );
                         for ( const TargetInfo & target : targets ) {
                             if ( target.defender->GetCurrentColor() == _myColor ) {
                                 spellHeuristic -= damageHeuristic( target.defender );
@@ -147,16 +145,12 @@ namespace AI
                             }
                         }
 
-                        if ( bbest < spellHeuristic )
-                            bbest = spellHeuristic;
-
                         if ( spellHeuristic > bestHeuristic ) {
                             bestHeuristic = spellHeuristic;
                             bestSpell.spellID = spell.GetID();
                             bestSpell.cell = index;
                         }
                     }
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, spell.GetName() << " best value is " << bbest );
                 }
             }
         }
@@ -640,7 +634,8 @@ namespace AI
     {
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
-        // do not end if cast
-        actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+        // Do not end the turn if we only cast a spell
+        if ( !( plannedActions.size() == 1 && plannedActions.front().isType( MSG_BATTLE_CAST ) ) )
+            actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }
