@@ -952,9 +952,8 @@ LocalEvent & LocalEvent::GetClean()
     le.ResetModes( KEY_PRESSED );
     le.ResetModes( MOUSE_MOTION );
     le.ResetModes( MOUSE_PRESSED );
-    le.ResetModes( CLICK_LEFT );
-    le.ResetModes( CLICK_RIGHT );
-    le.ResetModes( CLICK_MIDDLE );
+    le.ResetModes( MOUSE_RELEASED );
+    le.ResetModes( MOUSE_CLICKED );
     le.ResetModes( KEY_HOLD );
     return le;
 }
@@ -968,6 +967,8 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     SDL_Event event;
 
     ResetModes( MOUSE_MOTION );
+    ResetModes( MOUSE_RELEASED );
+    ResetModes( MOUSE_CLICKED );
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( _gameController != nullptr ) {
         // fast map scroll with dpad
@@ -980,9 +981,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #else
     ResetModes( KEY_PRESSED );
 #endif
-    ResetModes( CLICK_LEFT );
-    ResetModes( CLICK_MIDDLE );
-    ResetModes( CLICK_RIGHT );
 
     mouse_wm = Point();
 
@@ -1168,14 +1166,17 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
         if ( event.type == SDL_FINGERDOWN ) {
             mouse_pl = mouse_cu;
-            SetModes( CLICK_LEFT );
+
             SetModes( MOUSE_PRESSED );
         }
         else if ( event.type == SDL_FINGERUP ) {
             mouse_rl = mouse_cu;
-            SetModes( CLICK_LEFT );
+
             ResetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_RELEASED );
+            SetModes( MOUSE_CLICKED );
         }
+
         mouse_button = SDL_BUTTON_LEFT;
     }
 }
@@ -1215,30 +1216,37 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
     else if ( button.state == SDL_RELEASED )
         ResetModes( KEY_PRESSED );
 
-    if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
-        SetModes( CLICK_LEFT );
+    if ( button.button == SDL_CONTROLLER_BUTTON_A || button.button == SDL_CONTROLLER_BUTTON_B ) {
         if ( modes & KEY_PRESSED ) {
-            mouse_pl = mouse_cu;
             SetModes( MOUSE_PRESSED );
         }
         else {
-            mouse_rl = mouse_cu;
             ResetModes( MOUSE_PRESSED );
+            SetModes( MOUSE_RELEASED );
+            SetModes( MOUSE_CLICKED );
         }
-        mouse_button = SDL_BUTTON_LEFT;
-        ResetModes( KEY_PRESSED );
-    }
-    else if ( button.button == SDL_CONTROLLER_BUTTON_B ) {
-        SetModes( CLICK_RIGHT );
-        if ( modes & KEY_PRESSED ) {
-            mouse_pr = mouse_cu;
-            SetModes( MOUSE_PRESSED );
+
+        if ( button.button == SDL_CONTROLLER_BUTTON_A ) {
+            if ( modes & KEY_PRESSED ) {
+                mouse_pl = mouse_cu;
+            }
+            else {
+                mouse_rl = mouse_cu;
+            }
+
+            mouse_button = SDL_BUTTON_LEFT;
         }
-        else {
-            mouse_rr = mouse_cu;
-            ResetModes( MOUSE_PRESSED );
+        else if ( button.button == SDL_CONTROLLER_BUTTON_B ) {
+            if ( modes & KEY_PRESSED ) {
+                mouse_pr = mouse_cu;
+            }
+            else {
+                mouse_rr = mouse_cu;
+            }
+
+            mouse_button = SDL_BUTTON_RIGHT;
         }
-        mouse_button = SDL_BUTTON_RIGHT;
+
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
@@ -1347,7 +1355,7 @@ bool LocalEvent::MousePressLeft( void ) const
 
 bool LocalEvent::MouseReleaseLeft( void ) const
 {
-    return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
+    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
 bool LocalEvent::MousePressMiddle( void ) const
@@ -1357,7 +1365,7 @@ bool LocalEvent::MousePressMiddle( void ) const
 
 bool LocalEvent::MouseReleaseMiddle( void ) const
 {
-    return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_MIDDLE == mouse_button;
+    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_MIDDLE == mouse_button;
 }
 
 bool LocalEvent::MousePressRight( void ) const
@@ -1367,7 +1375,7 @@ bool LocalEvent::MousePressRight( void ) const
 
 bool LocalEvent::MouseReleaseRight( void ) const
 {
-    return !( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
+    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
 void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
@@ -1400,7 +1408,15 @@ void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
 
 void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 {
-    button.state == SDL_PRESSED ? SetModes( MOUSE_PRESSED ) : ResetModes( MOUSE_PRESSED );
+    if ( button.state == SDL_PRESSED ) {
+        SetModes( MOUSE_PRESSED );
+    }
+    else {
+        ResetModes( MOUSE_PRESSED );
+        SetModes( MOUSE_RELEASED );
+        SetModes( MOUSE_CLICKED );
+    }
+
     mouse_button = button.button;
 
     mouse_cu.x = button.x;
@@ -1421,17 +1437,14 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 #endif
         case SDL_BUTTON_LEFT:
             mouse_pl = mouse_cu;
-            SetModes( CLICK_LEFT );
             break;
 
         case SDL_BUTTON_MIDDLE:
             mouse_pm = mouse_cu;
-            SetModes( CLICK_MIDDLE );
             break;
 
         case SDL_BUTTON_RIGHT:
             mouse_pr = mouse_cu;
-            SetModes( CLICK_RIGHT );
             break;
 
         default:
@@ -1448,17 +1461,14 @@ void LocalEvent::HandleMouseButtonEvent( const SDL_MouseButtonEvent & button )
 #endif
 
         case SDL_BUTTON_LEFT:
-            SetModes( CLICK_LEFT );
             mouse_rl = mouse_cu;
             break;
 
         case SDL_BUTTON_MIDDLE:
-            SetModes( CLICK_MIDDLE );
             mouse_rm = mouse_cu;
             break;
 
         case SDL_BUTTON_RIGHT:
-            SetModes( CLICK_RIGHT );
             mouse_rr = mouse_cu;
             break;
 
@@ -1479,8 +1489,9 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 
 bool LocalEvent::MouseClickLeft( void )
 {
-    if ( MouseReleaseLeft() && ( CLICK_LEFT & modes ) ) {
-        ResetModes( CLICK_LEFT );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
@@ -1489,8 +1500,9 @@ bool LocalEvent::MouseClickLeft( void )
 
 bool LocalEvent::MouseClickLeft( const Rect & rt )
 {
-    if ( MouseReleaseLeft() && ( rt & mouse_pl ) && ( rt & mouse_rl ) && ( CLICK_LEFT & modes ) ) {
-        ResetModes( CLICK_LEFT );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button && ( rt & mouse_pl ) && ( rt & mouse_rl ) ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
@@ -1499,8 +1511,9 @@ bool LocalEvent::MouseClickLeft( const Rect & rt )
 
 bool LocalEvent::MouseClickMiddle( void )
 {
-    if ( MouseReleaseMiddle() && ( CLICK_MIDDLE & modes ) ) {
-        ResetModes( CLICK_MIDDLE );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
@@ -1509,8 +1522,9 @@ bool LocalEvent::MouseClickMiddle( void )
 
 bool LocalEvent::MouseClickMiddle( const Rect & rt )
 {
-    if ( MouseReleaseMiddle() && ( rt & mouse_pm ) && ( rt & mouse_rm ) && ( CLICK_MIDDLE & modes ) ) {
-        ResetModes( CLICK_MIDDLE );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
@@ -1519,8 +1533,9 @@ bool LocalEvent::MouseClickMiddle( const Rect & rt )
 
 bool LocalEvent::MouseClickRight( void )
 {
-    if ( MouseReleaseRight() && ( CLICK_RIGHT & modes ) ) {
-        ResetModes( CLICK_RIGHT );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
@@ -1529,8 +1544,9 @@ bool LocalEvent::MouseClickRight( void )
 
 bool LocalEvent::MouseClickRight( const Rect & rt )
 {
-    if ( MouseReleaseRight() && ( rt & mouse_pr ) && ( rt & mouse_rr ) && ( CLICK_RIGHT & modes ) ) {
-        ResetModes( CLICK_RIGHT );
+    if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button && ( rt & mouse_pr ) && ( rt & mouse_rr ) ) {
+        ResetModes( MOUSE_CLICKED );
+
         return true;
     }
 
