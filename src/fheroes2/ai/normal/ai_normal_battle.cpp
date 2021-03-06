@@ -127,17 +127,12 @@ namespace AI
                 }
                 else {
                     // Area of effect spells like Fireball
-                    const Board & board = *arena.GetBoard();
-                    for ( const Cell & cell : board ) {
-                        const int32_t index = cell.GetIndex();
-                        double spellHeuristic = 0;
-
-                        if ( spell.GetID() == Spell::CHAINLIGHTNING && !arena.GetTroopBoard( index ) )
-                            continue;
-
+                    auto areaOfEffectCheck = [&arena, &commander, &spell, &damageHeuristic, &bestHeuristic, &bestSpell]( const int32_t index, int myColor ) {
                         const TargetsInfo & targets = arena.GetTargetsForSpells( commander, spell, index, false );
+
+                        double spellHeuristic = 0;
                         for ( const TargetInfo & target : targets ) {
-                            if ( target.defender->GetCurrentColor() == _myColor ) {
+                            if ( target.defender->GetCurrentColor() == myColor ) {
                                 spellHeuristic -= damageHeuristic( target.defender );
                             }
                             else {
@@ -149,6 +144,18 @@ namespace AI
                             bestHeuristic = spellHeuristic;
                             bestSpell.spellID = spell.GetID();
                             bestSpell.cell = index;
+                        }
+                    };
+
+                    if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
+                        for ( const Unit * enemy : enemies ) {
+                            areaOfEffectCheck( enemy->GetHeadIndex(), _myColor );
+                        }
+                    }
+                    else {
+                        const Board & board = *Arena::GetBoard();
+                        for ( const Cell & cell : board ) {
+                            areaOfEffectCheck( cell.GetIndex(), _myColor );
                         }
                     }
                 }
