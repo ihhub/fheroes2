@@ -96,8 +96,13 @@ namespace AI
             if ( spell.isDamage() ) {
                 const uint32_t totalDamage = spell.Damage() * spellPower;
 
-                auto damageHeuristic = [&totalDamage, &spell, &spellPower]( const Unit * unit ) {
-                    return unit->GetMonsterStrength() * unit->HowManyWillKilled( totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100 );
+                auto damageHeuristic = [&totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
+                    const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100;
+                    // If we're retreating we don't care about partial damage, only actual units killed
+                    if ( retreating )
+                        return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
+                    // Otherwise calculate amount of strength lost (% of unit times total strength)
+                    return std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 ) * unit->GetStrength();
                 };
 
                 if ( spell.isSingleTarget() ) {
