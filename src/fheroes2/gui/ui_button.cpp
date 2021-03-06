@@ -159,7 +159,7 @@ namespace fheroes2
                     _releasedDisabled.reset( new Sprite( sprite ) );
                     ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 }
-                Blit( *_releasedDisabled, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
+                Blit( *_releasedDisabled, area, _offsetX + _releasedDisabled->x(), _offsetY + _releasedDisabled->y() );
             }
         }
     }
