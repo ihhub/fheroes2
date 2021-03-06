@@ -54,7 +54,6 @@ namespace AI
 
         double bestHeuristic = 0;
 
-        const int spellPower = _commander->GetPower();
         for ( const Spell & spell : allSpells ) {
             if ( !_commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
                 continue;
