@@ -199,6 +199,34 @@ int Direction::Reflect( int direct )
     return UNKNOWN;
 }
 
+int Direction::Adjacent( int direct )
+{
+    switch ( direct ) {
+    case TOP_LEFT:
+        return DIRECTION_TOP_LEFT_CORNER;
+    case TOP:
+        return DIRECTION_TOP_ROW;
+    case TOP_RIGHT:
+        return DIRECTION_TOP_RIGHT_CORNER;
+    case RIGHT:
+        return DIRECTION_RIGHT_COL;
+    case BOTTOM_RIGHT:
+        return DIRECTION_BOTTOM_RIGHT_CORNER;
+    case BOTTOM:
+        return DIRECTION_BOTTOM_ROW;
+    case BOTTOM_LEFT:
+        return DIRECTION_BOTTOM_LEFT_CORNER;
+    case LEFT:
+        return DIRECTION_LEFT_COL;
+    case CENTER:
+        return DIRECTION_AROUND;
+    default:
+        break;
+    }
+
+    return UNKNOWN;
+}
+
 const Directions & Direction::All( void )
 {
     static const Directions allDirections = Directions( {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT} );

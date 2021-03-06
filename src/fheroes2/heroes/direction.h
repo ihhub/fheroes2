@@ -47,6 +47,7 @@ namespace Direction
     bool isDiagonal( int direction );
 
     int Reflect( int direct );
+    int Adjacent( int direct );
 
     bool ShortDistanceClockWise( int direct1, int direct2 );
     const Directions & All( void );

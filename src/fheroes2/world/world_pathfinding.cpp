@@ -173,12 +173,16 @@ void WorldPathfinder::processWorldMap( int pathStart )
     }
 }
 
-void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
+void WorldPathfinder::checkAdjacentNodes( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, int excludedDirections, bool fromWater )
 {
     const Directions & directions = Direction::All();
     const PathfindingNode & currentNode = _cache[currentNodeIdx];
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
+        if ( directions[i] & excludedDirections ) {
+            continue;
+        }
+
         if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
             const int newIndex = currentNodeIdx + _mapOffset[i];
             if ( newIndex == pathStart )
@@ -259,10 +263,11 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
+    int excludedDirections = Direction::UNKNOWN;
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
-    // check if current tile is protected, can move only to adjacent monster
-    if ( currentNodeIdx != pathStart && !monsters.empty() ) {
+    // check if current tile is protected, can move only to adjacent monsters
+    if ( !monsters.empty() ) {
         for ( int monsterIndex : monsters ) {
             const int direction = Maps::GetDirection( currentNodeIdx, monsterIndex );
 
@@ -274,11 +279,21 @@ void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplor
                     monsterNode._from = currentNodeIdx;
                     monsterNode._cost = moveCost;
                 }
+
+                // exclude from further analysis directions adjacent to monster
+                excludedDirections |= Direction::Adjacent( direction );
             }
         }
+
+        // if current tile is protected and it isn't a starting tile, we're done here
+        if ( currentNodeIdx != pathStart ) {
+            return;
+        }
     }
-    else if ( currentNodeIdx == pathStart || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
-        checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+
+    // otherwise check adjacent tiles with exclusions
+    if ( currentNodeIdx == pathStart || !world.isTileBlocked( currentNodeIdx, fromWater ) ) {
+        checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, excludedDirections, fromWater );
     }
 }
 
@@ -348,7 +363,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
 
         // do not check adjacent if we're going through the teleport in the middle of the path
         if ( isFirstNode || teleporters.empty() || std::find( teleporters.begin(), teleporters.end(), currentNode._from ) != teleporters.end() ) {
-            checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, fromWater );
+            checkAdjacentNodes( nodesToExplore, pathStart, currentNodeIdx, Direction::UNKNOWN, fromWater );
         }
 
         // special case: move through teleporters
