@@ -55,7 +55,7 @@ namespace fheroes2
         , _isPressed( false )
         , _isEnabled( true )
         , _isVisible( true )
-        , _released( nullptr )
+        , _releasedSprite( nullptr )
         , _releasedDisabled()
     {}
 
@@ -154,8 +154,8 @@ namespace fheroes2
                 Blit( currentReleased, area, _offsetX + currentReleased.x(), _offsetY + currentReleased.y() );
             }
             else {
-                if ( ( !_releasedDisabled ) || ( _released != &currentReleased ) ) {
-                    _released = &currentReleased;
+                if ( !_releasedDisabled || ( _releasedSprite != &currentReleased ) ) {
+                    _releasedSprite = &currentReleased;
                     _releasedDisabled.reset( new Sprite( currentReleased ) );
                     ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 }
