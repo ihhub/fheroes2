@@ -103,7 +103,7 @@ namespace Battle
             _cache[tailIdx]._from = headIdx;
             _cache[tailIdx]._cost = 0;
             _cache[tailIdx]._isOpen = true;
-            _cache[headIdx]._isLeftDirection = !unit.isReflect();
+            _cache[tailIdx]._isLeftDirection = !unit.isReflect();
         }
 
         if ( unit.isFlying() ) {
@@ -113,7 +113,7 @@ namespace Battle
                 const int32_t idx = it->GetIndex();
                 ArenaNode & node = _cache[idx];
 
-                if ( it->isPassable1( true ) ) {
+                if ( it->isPassable3( unit, false ) ) {
                     node._isOpen = true;
                     node._from = headIdx;
                     node._cost = Battle::Board::GetDistance( headIdx, idx );
@@ -162,14 +162,15 @@ namespace Battle
                     const Cell * headCell = Board::GetCell( newNode );
 
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
-                    const Cell * tailCell = unitIsWide ? Board::GetCell( isLeftDirection ? newNode + 1 : newNode - 1 ) : nullptr;
+                    const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
+                    const Cell * tailCell = ( unitIsWide && headIdx != newTailIndex ) ? Board::GetCell( newTailIndex ) : nullptr;
 
-                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( false ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
                         const uint32_t cost = _cache[fromNode]._cost;
                         ArenaNode & node = _cache[newNode];
 
                         // Check if we're turning back. No movement at all.
-                        uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0 : 1;
+                        uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0u : 1u;
 
                         // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values
                         if ( isMoatBuilt && Board::isMoatIndex( newNode ) ) {
