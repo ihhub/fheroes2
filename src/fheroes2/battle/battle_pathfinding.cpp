@@ -96,7 +96,7 @@ namespace Battle
         const int32_t pathStart = unitHead->GetIndex();
         _cache[pathStart]._cost = 0;
         _cache[pathStart]._isOpen = false;
-        _cache[pathStart]._isLeftDirection = unit.isReflect();
+        _cache[pathStart]._isLeftDirection = unitIsWide && unit.isReflect();
 
         if ( unitIsWide ) {
             const int32_t tailIdx = unitTail->GetIndex();
