@@ -187,7 +187,7 @@ void Battle::Unit::UpdateDirection( void )
 
 bool Battle::Unit::UpdateDirection( const Rect & pos )
 {
-    bool need = position.GetRect().x > pos.x;
+    bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
 
     if ( need != reflect ) {
         SetReflection( need );
