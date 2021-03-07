@@ -295,9 +295,11 @@ namespace
             static std::vector<fheroes2::Size> filteredResolutions;
 
             if ( filteredResolutions.empty() ) {
-                filteredResolutions.emplace_back( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-                filteredResolutions.emplace_back( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-                filteredResolutions.emplace_back( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+                std::set<fheroes2::Size> resolutionSet;
+                resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+                filteredResolutions = FilterResolutions( resolutionSet );
             }
 
             return filteredResolutions;
