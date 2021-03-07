@@ -55,7 +55,26 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
+        return targetCell < _cache.size() && nodeIsAccessible(_cache[targetCell]);
+    }
+
+    bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
+    {
+        return node._cost == 0 || ( node._isOpen && node._from != -1 );
+    }
+
+    Indexes ArenaPathfinder::getAllAvailableMoves( uint32_t moveRange ) const
+    {
+        Indexes result;
+        result.reserve( moveRange * 2u );
+
+        for ( size_t index = 0; index < _cache.size(); ++index ) {
+            const ArenaNode & node = _cache[index];
+            if ( nodeIsAccessible(node) && node._cost <= moveRange ) {
+                result.push_back( index );
+            }
+        }
+        return result;
     }
 
     std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
