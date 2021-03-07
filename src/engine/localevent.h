@@ -295,6 +295,7 @@ private:
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+    void TouchpadRMBEmulation();
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -362,6 +363,8 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
+    // touch delay in ms before rmb press is emulated
+    const uint64_t TOUCH_RMB_DELAY = 750;
 
     SDL_GameController * _gameController = nullptr;
     SDL_FingerID _firstFingerId = 0;
@@ -373,6 +376,8 @@ private:
     bool _controllerScrollActive = false;
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
+    fheroes2::Time _touchTimer;
+    bool _touchRmbEmulated = false;
     int16_t _numTouches = 0;
 #endif
 };

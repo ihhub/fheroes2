@@ -1268,6 +1268,9 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     if ( _gameController != nullptr ) {
         ProcessControllerAxisMotion();
     }
+    if ( _touchpadAvailable ) {
+        TouchpadRMBEmulation();
+    }
 #endif
 
     if ( delay )
@@ -1286,6 +1289,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         ++_numTouches;
         if ( _numTouches == 1 ) {
             _firstFingerId = event.fingerId;
+            _touchTimer.reset();
+            _touchRmbEmulated = false;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
@@ -1321,14 +1326,33 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             SetModes( MOUSE_PRESSED );
         }
         else if ( event.type == SDL_FINGERUP ) {
-            mouse_rl = mouse_cu;
+            if (_touchRmbEmulated)
+                mouse_rr = mouse_cu;
+            else
+                mouse_rl = mouse_cu;
 
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
             SetModes( MOUSE_CLICKED );
         }
 
-        mouse_button = SDL_BUTTON_LEFT;
+        if (_touchRmbEmulated)
+            mouse_button = SDL_BUTTON_RIGHT;
+        else
+            mouse_button = SDL_BUTTON_LEFT;
+    }
+}
+
+void LocalEvent::TouchpadRMBEmulation()
+{
+    if (_numTouches == 1 && !_touchRmbEmulated) {
+        const uint64_t touchDelay = _touchTimer.getMs();
+        if (touchDelay > TOUCH_RMB_DELAY) {
+            _touchRmbEmulated = true;
+            mouse_pr = mouse_cu;
+            SetModes( MOUSE_PRESSED );
+            mouse_button = SDL_BUTTON_RIGHT;
+        }
     }
 }
 

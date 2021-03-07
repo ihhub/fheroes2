@@ -5,6 +5,8 @@ LIBS :=
 
 CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(VITASDK)/arm-vita-eabi/include -O3 -mcpu=cortex-a9 -mfpu=neon -ftree-vectorize -fgraphite-identity -floop-nest-optimize -fno-lto
 LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -Wl,-q
+CFLAGS_TP := $(CFLAGS)
+CXXFLAGS_TP := $(CXXFLAGS)
 
 SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2 -lvita2d -lz -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
                                            -lSceGxm_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lSceMotion_stub
