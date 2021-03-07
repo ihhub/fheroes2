@@ -133,7 +133,7 @@ matrix:
         - export FHEROES2_STRICT_COMPILATION="ON"
       script:
         - |
-        make -f Makefile.vita
+          make -f Makefile.vita
 
 script:
   - |
