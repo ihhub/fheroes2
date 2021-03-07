@@ -388,7 +388,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
-    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const Rect buttonArea( 5, 0, 61, 25 );
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
