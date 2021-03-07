@@ -919,6 +919,11 @@ namespace ICN
         MONSTER_SWITCH_LEFT_ARROW,
         MONSTER_SWITCH_RIGHT_ARROW,
 
+        NON_UNIFORM_GOOD_OKAY_BUTTON,
+        NON_UNIFORM_GOOD_CANCEL_BUTTON,
+        NON_UNIFORM_EVIL_OKAY_BUTTON,
+        NON_UNIFORM_EVIL_CANCEL_BUTTON,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

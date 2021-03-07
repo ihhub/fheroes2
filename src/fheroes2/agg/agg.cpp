@@ -1320,6 +1320,50 @@ namespace fheroes2
                     ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
                 }
                 return true;
+            case ICN::NON_UNIFORM_GOOD_OKAY_BUTTON:
+                LoadOriginalICN( ICN::CAMPXTRG );
+                if ( _icnVsSprite[ICN::CAMPXTRG].size() >= 6 ) {
+                    _icnVsSprite[id].resize( 2 );
+                    _icnVsSprite[id][0] = Crop( _icnVsSprite[ICN::CAMPXTRG][4], 6, 0, 96, 25 );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    _icnVsSprite[id][1] = _icnVsSprite[ICN::CAMPXTRG][5];
+                    _icnVsSprite[id][1].setPosition( 0, 0 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON:
+                LoadOriginalICN( ICN::CAMPXTRG );
+                if ( _icnVsSprite[ICN::CAMPXTRG].size() >= 8 ) {
+                    _icnVsSprite[id].resize( 2 );
+                    _icnVsSprite[id][0] = Crop( _icnVsSprite[ICN::CAMPXTRG][6], 6, 0, 96, 25 );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    _icnVsSprite[id][1] = _icnVsSprite[ICN::CAMPXTRG][7];
+                    _icnVsSprite[id][1].setPosition( 0, 0 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
+                LoadOriginalICN( ICN::CAMPXTRE );
+                if ( _icnVsSprite[ICN::CAMPXTRE].size() >= 6 ) {
+                    _icnVsSprite[id].resize( 2 );
+                    _icnVsSprite[id][0] = Crop( _icnVsSprite[ICN::CAMPXTRE][4], 4, 0, 96, 25 );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    _icnVsSprite[id][1] = _icnVsSprite[ICN::CAMPXTRE][5];
+                    _icnVsSprite[id][1].setPosition( 0, 0 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON:
+                LoadOriginalICN( ICN::CAMPXTRE );
+                if ( _icnVsSprite[ICN::CAMPXTRE].size() >= 8 ) {
+                    _icnVsSprite[id].resize( 2 );
+                    _icnVsSprite[id][0] = Crop( _icnVsSprite[ICN::CAMPXTRE][6], 4, 0, 96, 25 );
+                    _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                    _icnVsSprite[id][1] = _icnVsSprite[ICN::CAMPXTRE][7];
+                    _icnVsSprite[id][1].setPosition( 0, 0 );
+                }
+                return true;
             default:
                 break;
             }

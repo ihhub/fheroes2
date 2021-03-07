@@ -536,10 +536,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::REQUESTS;
-
-    btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );
+    btnGroups.createButton( area.x, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1, Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();
