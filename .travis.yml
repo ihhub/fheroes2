@@ -123,6 +123,7 @@ matrix:
     - os: linux
       name: "PSV with SDL 2.0"
       before_install:
+        - sudo apt-get install libgcc1
         - git clone https://github.com/vitasdk/vdpm
         - cd vdpm
         - export VITASDK=/usr/local/vitasdk
