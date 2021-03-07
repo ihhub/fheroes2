@@ -619,6 +619,11 @@ bool Battle::Arena::hexIsPassable( int32_t indexTo )
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
 }
 
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
+}
+
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : NULL;
