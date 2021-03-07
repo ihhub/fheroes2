@@ -213,6 +213,7 @@
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_castle.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_hero.cpp" />
     <ClCompile Include="src\fheroes2\ai\normal\ai_normal_kingdom.cpp" />
+    <ClCompile Include="src\fheroes2\ai\normal\ai_normal_spell.cpp" />
     <ClCompile Include="src\fheroes2\army\army.cpp" />
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
     <ClCompile Include="src\fheroes2\army\army_troop.cpp" />
