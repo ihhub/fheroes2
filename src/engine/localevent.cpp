@@ -1326,7 +1326,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             SetModes( MOUSE_PRESSED );
         }
         else if ( event.type == SDL_FINGERUP ) {
-            if (_touchRmbEmulated)
+            if ( _touchRmbEmulated )
                 mouse_rr = mouse_cu;
             else
                 mouse_rl = mouse_cu;
@@ -1336,7 +1336,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             SetModes( MOUSE_CLICKED );
         }
 
-        if (_touchRmbEmulated)
+        if ( _touchRmbEmulated )
             mouse_button = SDL_BUTTON_RIGHT;
         else
             mouse_button = SDL_BUTTON_LEFT;
@@ -1345,9 +1345,9 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
 void LocalEvent::TouchpadRMBEmulation()
 {
-    if (_numTouches == 1 && !_touchRmbEmulated) {
+    if ( _numTouches == 1 && !_touchRmbEmulated ) {
         const uint64_t touchDelay = _touchTimer.getMs();
-        if (touchDelay > TOUCH_RMB_DELAY) {
+        if ( touchDelay > TOUCH_RMB_DELAY ) {
             _touchRmbEmulated = true;
             mouse_pr = mouse_cu;
             SetModes( MOUSE_PRESSED );
