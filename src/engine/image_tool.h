@@ -24,8 +24,10 @@
 
 namespace fheroes2
 {
-    // Save an image into file. 'background' represents palette index from the original palette
-    bool Save( const Image & image, const std::string & path, uint8_t background = 23 );
+    bool Save( const Image & image, const std::string & path );
+
+    // Save an image into file. 'background' represents palette index from the original palette. Default value is 23.
+    bool Save( const Image & image, const std::string & path, uint8_t background );
 
     bool Load( const std::string & path, Image & image );
 

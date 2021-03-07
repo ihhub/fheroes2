@@ -51,9 +51,11 @@ void SpellStorage::Append( const Spell & sp )
 
 void SpellStorage::Append( const SpellStorage & st )
 {
-    insert( end(), st.begin(), st.end() );
-    std::sort( begin(), end() );
-    resize( std::unique( begin(), end() ) - begin() );
+    for ( const Spell & sp : st ) {
+        if ( std::find( begin(), end(), sp ) == end() ) {
+            push_back( sp );
+        }
+    }
 }
 
 bool SpellStorage::isPresentSpell( const Spell & spell ) const
