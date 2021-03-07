@@ -72,7 +72,7 @@ void Kingdom::clear( void )
 
     color = Color::NONE;
     visited_tents_colors = 0;
-    lost_town_days = Game::GetLostTownDays() + 1;
+    lost_town_days = Game::GetLostTownDays();
 
     heroes.clear();
     castles.clear();
@@ -281,7 +281,7 @@ void Kingdom::AddCastle( const Castle * castle )
         AI::Get().CastleAdd( *castle );
     }
 
-    lost_town_days = Game::GetLostTownDays() + 1;
+    lost_town_days = Game::GetLostTownDays();
 }
 
 void Kingdom::RemoveCastle( const Castle * castle )
