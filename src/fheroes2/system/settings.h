@@ -32,6 +32,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#define FORMAT_VERSION_092_RELEASE 9200
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
 #define FORMAT_VERSION_084_RELEASE 9000
@@ -41,7 +42,7 @@
 #define FORMAT_VERSION_3255 3255
 #define LAST_FORMAT_VERSION FORMAT_VERSION_3255
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_091_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_092_RELEASE // TODO: update this value for a new release
 
 enum
 {

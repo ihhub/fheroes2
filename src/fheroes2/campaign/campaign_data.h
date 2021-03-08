@@ -72,6 +72,43 @@ namespace Campaign
         std::string _campaignDescription;
         std::vector<ScenarioData> _scenarios;
     };
+
+    struct CampaignAwardData
+    {
+    public:
+        enum AwardType
+        {
+            CREATURE_BANE,              // eg: dwarf bane
+            CREATURE_ALLIANCE,          // eg: dwarf alliance
+            GET_ARTIFACT,               // eg: ultimate crown
+            GET_SPELL,                  // eg: guardian spell in wizard's isle
+            CARRY_OVER_FORCES,          // eg: the gauntlet
+            HIREABLE_HERO,              // eg: sorceress guild
+            REMOVE_ENEMY_HERO,          // eg: corlagon defeated
+            RESOURCE_BONUS,             // eg: wood bonus in price of loyalty
+        };
+
+        enum ObtainCondition
+        {
+            CLEAR_SCENARIO,
+            DEFEAT_ENEMY_HERO
+        };
+
+        // NOTE: Carry over forces shouldn't use these other than type and startScenarioID
+        uint32_t _type;
+        uint32_t _subType;
+        uint32_t _amount;
+        uint32_t _startScenarioID;
+
+        CampaignAwardData();
+        CampaignAwardData( uint32_t type, uint32_t subType, int startScenarioID );
+        CampaignAwardData( uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID );
+
+        friend StreamBase & operator<<( StreamBase & msg, const CampaignAwardData & data );
+        friend StreamBase & operator>>( StreamBase & msg, CampaignAwardData & data );
+
+        std::string ToString() const;
+    };
 }
 
 #endif

@@ -330,6 +330,13 @@ namespace
         scenarioDatas.emplace_back( 8, std::vector<int>{9}, getCampaignBonusData( 0, 8 ), std::string( "CAMPG09.H2C" ), rolandCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
 
+        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
+        scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::HIREABLE_HERO, Heroes::ELIZA, 6 ) );
+        //scenarioDatas[6].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CARRY_OVER_FORCES, 0, 10 ) );
+        scenarioDatas[7].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 10 ) );
+        scenarioDatas[8].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::REMOVE_ENEMY_HERO, Heroes::CORLAGON, 10 ) );
+        
+
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 0 );
         campaignData.setCampaignDescription( "Roland Campaign" );
@@ -410,6 +417,50 @@ namespace
                 break;
             default:
                 assert( 0 );
+            }
+        }
+    }
+
+    bool IsPlayerKingdom( Players::const_iterator it ) 
+    {
+        return ( **it ).isControlHuman();
+    }
+
+    // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
+    // the rest will be applied based on the situation required
+    void ApplyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
+    {
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        const Players::const_iterator humanPlayer = std::find( sortedPlayers.begin(), sortedPlayers.end(), IsPlayerKingdom );
+        Kingdom & humanKingdom = world.GetKingdom(( **humanPlayer ).GetColor());
+
+        for ( uint32_t i = 0; i < awards.size(); ++i ) {
+            if ( currentScenarioID < awards[i]._startScenarioID )
+                continue;
+
+            switch ( awards[i]._type ) {
+            case Campaign::CampaignAwardData::GET_ARTIFACT:
+                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+                break;
+            case Campaign::CampaignAwardData::GET_SPELL:
+                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+                break;
+            case Campaign::CampaignAwardData::REMOVE_ENEMY_HERO:
+                for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+                    if ( !*it )
+                        continue;
+
+                    Kingdom & kingdom = world.GetKingdom( ( **it ).GetColor() );
+                    const KingdomHeroes heroes = kingdom.GetHeroes();
+
+                    for ( uint32_t j = 0; j < heroes.size(); ++j ) {
+                        if ( heroes[j]->GetID() == awards[i]._subType ) {
+                            kingdom.RemoveHeroes( heroes[j] );
+                            break;
+                        }
+                    }
+                }
+                break;
             }
         }
     }
@@ -579,6 +630,8 @@ int Game::SelectCampaignScenario()
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
+
+            ApplyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getEarnedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );

@@ -42,7 +42,7 @@ namespace Campaign
         return instance;
     }
 
-    void CampaignSaveData::addCampaignAward( const std::string & award )
+    void CampaignSaveData::addCampaignAward( const CampaignAwardData & award )
     {
         _earnedCampaignAwards.emplace_back( award );
     }
@@ -90,10 +90,13 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
-        msg >> data._earnedCampaignAwards >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+        msg >> data._earnedCampaignAwards_Old >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
 
         if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE )
             msg >> data._campaignID >> data._daysPassed;
+
+        if ( Game::GetLoadVersion() >= FORMAT_VERSION_092_RELEASE )
+            msg >> data._earnedCampaignAwards;
 
         return msg;
     }

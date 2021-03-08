@@ -21,6 +21,7 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
+#include "campaign_data.h"
 #include "campaign_scenariodata.h"
 
 namespace Campaign
@@ -40,7 +41,7 @@ namespace Campaign
             return _finishedMaps;
         }
 
-        const std::vector<std::string> & getEarnedCampaignAwards() const
+        const std::vector<CampaignAwardData> & getEarnedCampaignAwards() const
         {
             return _earnedCampaignAwards;
         }
@@ -74,7 +75,7 @@ namespace Campaign
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
-        void addCampaignAward( const std::string & award );
+        void addCampaignAward( const CampaignAwardData & award );
         void reset();
         void addDaysPassed( const uint32_t days );
 
@@ -85,7 +86,8 @@ namespace Campaign
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
 
         std::vector<int> _finishedMaps;
-        std::vector<std::string> _earnedCampaignAwards; // should have its own data format
+        std::vector<CampaignAwardData> _earnedCampaignAwards;
+        std::vector<std::string> _earnedCampaignAwards_Old;
         int _currentScenarioID;
         int _campaignID;
         uint32_t _daysPassed;

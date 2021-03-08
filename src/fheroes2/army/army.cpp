@@ -27,6 +27,7 @@
 
 #include "agg.h"
 #include "army.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "color.h"
 #include "game.h"
@@ -1464,10 +1465,26 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
-    const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+    bool joinForce = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
 
-    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
-        if ( join_free || join_force )
+    // check for creature alliance
+    if ( Settings::Get().GameType() | Game::TYPE_CAMPAIGN ) {
+        const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
+
+        for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
+            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_ALLIANCE )
+                continue;
+
+            // upgrades...?
+            if ( map_troop->monster.GetID() == campaignAwards[i]._subType ) {
+                joinForce = true;
+                break;
+            }
+        }
+    }
+
+    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || joinForce ) ) {
+        if ( join_free || joinForce )
             return JoinCount( JOIN_FREE, troop.GetCount() );
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             // skill diplomacy

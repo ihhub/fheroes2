@@ -20,9 +20,13 @@
 
 #include "campaign_data.h"
 #include "artifact.h"
+#include "campaign_scenariodata.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
+#include "race.h"
 #include "resource.h"
+#include "skill.h"
+#include "spell.h"
 #include <cassert>
 
 namespace Campaign
@@ -122,5 +126,66 @@ namespace Campaign
     void CampaignData::setCampaignDescription( const std::string & campaignDescription )
     {
         _campaignDescription = campaignDescription;
+    }
+
+    CampaignAwardData::CampaignAwardData()
+        : _type( 0 )
+        , _subType( 0 )
+        , _amount( 0 )
+        , _startScenarioID( 0 )
+    {}
+
+    CampaignAwardData::CampaignAwardData( uint32_t type, uint32_t subType, int startScenarioID )
+        : _type( type )
+        , _subType( subType )
+        , _amount( 0 )
+        , _startScenarioID( startScenarioID )
+    {}
+
+    CampaignAwardData::CampaignAwardData( uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID )
+        : _type( type )
+        , _subType( subType )
+        , _amount( amount )
+        , _startScenarioID( startScenarioID )
+    {}
+
+    std::string CampaignAwardData::ToString() const
+    {
+        std::string objectName;
+
+        switch ( _type ) {
+        case CampaignAwardData::CREATURE_BANE:
+            objectName = Monster( _subType ).GetName() + std::string( " bane" );
+            break;
+        case CampaignAwardData::CREATURE_ALLIANCE:
+            objectName = Monster( _subType ).GetName() + std::string( " alliance" );
+            break;
+        case CampaignAwardData::GET_ARTIFACT:
+            objectName = Artifact( _subType ).GetName();
+            break;
+        case CampaignAwardData::CARRY_OVER_FORCES:
+            objectName = "Carry-over forces";
+            break;
+        case CampaignAwardData::RESOURCE_BONUS:
+            objectName = Resource::String( _subType ) + std::string( " bonus" );
+            break;
+        case CampaignAwardData::GET_SPELL:
+            objectName = Spell( _subType ).GetName();
+            break;
+        default:
+            assert( 0 ); // some new/unhandled award
+        }
+
+        return objectName;
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignAwardData & data )
+    {
+        return msg << data._type << data._subType << data._amount << data._startScenarioID;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, Campaign::CampaignAwardData & data )
+    {
+        return msg >> data._type >> data._subType >> data._amount >> data._startScenarioID;
     }
 }

@@ -20,6 +20,7 @@
 
 #include "campaign_scenariodata.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
@@ -112,12 +113,18 @@ namespace Campaign
         , _bonuses( bonuses )
         , _fileName( fileName )
         , _description( description )
+        , _obtainableAwards()
     {}
 
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;
         return tryGetMatchingFile( _fileName, matchingFilePath );
+    }
+
+    void Campaign::ScenarioData::AddObtainableCampaignAward( const CampaignAwardData & obtainableAward ) 
+    {
+        _obtainableAwards.emplace_back( obtainableAward );
     }
 
     Maps::FileInfo Campaign::ScenarioData::loadMap() const
