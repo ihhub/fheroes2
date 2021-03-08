@@ -160,7 +160,7 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellDebuffValue( const Spell & spell, Arena & arena, const Units & enemies ) const
+    SpellcastOutcome BattlePlanner::spellDebuffValue( const Spell & spell, const Units & enemies ) const
     {
         SpellcastOutcome bestOutcome;
         const int spellID = spell.GetID();
