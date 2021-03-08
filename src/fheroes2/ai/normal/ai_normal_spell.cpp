@@ -33,7 +33,7 @@ namespace AI
 {
     double ReduceEffectivenessByDistance( const Unit * unit )
     {
-        // Reduce slow effectiveness if unit already crossed the battlefield
+        // Reduce spell effectiveness if unit already crossed the battlefield
         const int xPos = unit->GetHeadIndex() % ARENAW;
         return std::max( 1, unit->isReflect() ? ARENAW - xPos - 1 : xPos );
     }
@@ -54,11 +54,13 @@ namespace AI
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         double bestHeuristic = 0;
-        auto checkSelectSpell = [this, &bestHeuristic, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+        auto checkSelectBestSpell = [this, &bestHeuristic, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
             const double spellPointValue = outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell );
+
             if ( spellPointValue > bestHeuristic ) {
                 bestHeuristic = spellPointValue;
                 bestSpell.spellID = spell.GetID();
@@ -71,10 +73,10 @@ namespace AI
                 continue;
 
             if ( spell.isDamage() ) {
-                checkSelectSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
+                checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
             }
             else if ( spell.isApplyToEnemies() ) {
-                checkSelectSpell( spell, spellDebuffValue( spell, arena, enemies ) );
+                checkSelectBestSpell( spell, spellDebuffValue( spell, arena, enemies ) );
             }
         }
         return bestSpell;
