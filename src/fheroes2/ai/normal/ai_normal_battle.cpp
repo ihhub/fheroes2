@@ -45,7 +45,7 @@ namespace AI
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
     const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
-    int32_t correctAttackTarget( const Position & target, int32_t from )
+    int32_t correctAttackTarget( const Position & target, const int32_t from )
     {
         const Cell * tail = target.GetTail();
         if ( tail && Board::isNearIndexes( from, tail->GetIndex() ) ) {
