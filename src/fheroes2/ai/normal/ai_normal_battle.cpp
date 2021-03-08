@@ -122,7 +122,7 @@ namespace AI
 
         // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
         if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, _commander ) ) {
-            const SpellSeletion & bestSpell = selectBestSpell( arena, true );
+            const SpellSeletion & bestSpell = selectBestSpell( arena, false );
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
                 return actions;
@@ -541,7 +541,7 @@ namespace AI
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
         // Do not end the turn if we only cast a spell
-        if ( !( plannedActions.size() == 1 && plannedActions.front().isType( MSG_BATTLE_CAST ) ) )
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( MSG_BATTLE_CAST ) )
             actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }

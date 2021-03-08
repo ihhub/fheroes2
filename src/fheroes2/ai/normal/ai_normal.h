@@ -77,8 +77,8 @@ namespace AI
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating = false );
-        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies, bool retreating );
+        SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
+        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies, bool retreating ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;

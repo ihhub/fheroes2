@@ -31,15 +31,9 @@ using namespace Battle;
 
 namespace AI
 {
-    SpellSeletion BattlePlanner::selectBestSpell( Battle::Arena & arena, bool retreating )
+    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
-        // 1. For damage spells - maximum amount of enemy threat lost
-        // 2. For buffs - friendly unit strength gained
-        // 3. For debuffs - enemy unit threat lost
-        // 4. For dispell, resurrect and cure - amount of unit strength recovered
-        // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
-
-        // 6. Cast best spell with highest heuristic on target pointer saved
+        // Cast best spell with highest heuristic on target pointer saved
         SpellSeletion bestSpell;
 
         // Commander must be set before calling this function! Check both debug/release version
@@ -70,7 +64,7 @@ namespace AI
         return bestSpell;
     }
 
-    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating )
+    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) const
     {
         SpellcastOutcome bestOutcome;
         if ( !spell.isDamage() )
