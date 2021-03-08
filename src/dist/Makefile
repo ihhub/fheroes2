@@ -49,10 +49,11 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SEARCH)))) $(LIBENGINE) 
 	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
 ifeq ($(PLATFORM), mingw)
 ifdef RELEASE
-	@echo "min: $@.exe"
-	@strip $@.exe
-	@echo "upx: $@.exe"
-	@upx -9 $@.exe > /dev/nul
+	@strip -s $@.exe -o $@.stripped.exe
+	@upx -9 -o$@.stripped.UPX.exe $@.stripped.exe > /dev/nul
+	@echo "Size    : $$(ls -sh $@ | cut -d' ' -f1)"
+	@echo "Stripped: $$(ls -sh $@.stripped.exe | cut -d' ' -f1)"
+	@echo "UPX'd   : $$(ls -sh $@.stripped.UPX.exe | cut -d' ' -f1)"
 endif
 endif
 
@@ -75,4 +76,4 @@ include $(wildcard *.d)
 .PHONY: clean
 
 clean:
-	@rm -f *.pot *.o *.d $(RES) *.exe $(TARGET)
+	@rm -f *.pot *.o *.d $(RES) $(TARGET)*
