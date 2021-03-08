@@ -21,6 +21,7 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
+#include "campaign_data.h"
 #include "maps_fileinfo.h"
 
 namespace Campaign

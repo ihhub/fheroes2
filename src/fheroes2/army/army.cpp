@@ -1465,26 +1465,31 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
-    bool joinForce = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+    const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+    int forceJoinType = JOIN_NONE;
 
-    // check for creature alliance
+    // check for creature alliance/bane
     if ( Settings::Get().GameType() | Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_ALLIANCE )
+            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_ALLIANCE || campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_BANE )
                 continue;
 
             // upgrades...?
             if ( map_troop->monster.GetID() == campaignAwards[i]._subType ) {
-                joinForce = true;
+                forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
                 break;
             }
         }
     }
 
-    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || joinForce ) ) {
-        if ( join_free || joinForce )
+    if ( forceJoinType != JOIN_NONE ) {
+        return JoinCount( forceJoinType, troop.GetCount() );
+    }
+
+    if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
+        if ( join_free || join_force )
             return JoinCount( JOIN_FREE, troop.GetCount() );
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             // skill diplomacy
