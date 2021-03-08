@@ -76,7 +76,7 @@ namespace AI
                 checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
             }
             else if ( spell.isApplyToEnemies() ) {
-                checkSelectBestSpell( spell, spellDebuffValue( spell, arena, enemies ) );
+                checkSelectBestSpell( spell, spellDebuffValue( spell, enemies ) );
             }
         }
         return bestSpell;
