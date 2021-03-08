@@ -335,13 +335,13 @@ namespace AI
             }
 
             if ( target.unit && target.cell != -1 ) {
-                // attack selected target
+                // Melee attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
                 actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                double lowestThreat = 1 * ARENASIZE;
+                double lowestThreat = _enemyArmyStrength;
 
                 const Indexes & moves = arena.getAllAvailableMoves( currentUnit.GetMoveRange() );
                 for ( const int moveIndex : moves ) {
@@ -365,7 +365,7 @@ namespace AI
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moves to " << target.cell << " threat is " << lowestThreat );
                 }
                 else {
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer couldn't find a good hex to move out of " << moves.size() );
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " archer couldn't find a good hex to move out of " << moves.size() );
                 }
             }
             // Worst case scenario - Skip turn
@@ -413,9 +413,6 @@ namespace AI
                 const int quality = Board::GetCell( cell )->GetQuality();
                 const uint32_t dist = arena.CalculateMoveDistance( cell );
                 if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                               currentUnit.GetName() << " looking at " << cell << enemy->GetName() << ". dist " << dist << " vs " << currentUnitMoveRange << ", quality "
-                                                     << quality );
                     highestValue = quality;
                     target.unit = enemy;
                     target.cell = cell;
@@ -437,7 +434,7 @@ namespace AI
                 }
             }
             else {
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " is attacking " << target.unit->GetName() << " at " << target.cell );
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " is attacking " << target.unit->GetName() << " at " << target.cell );
             }
         }
 
