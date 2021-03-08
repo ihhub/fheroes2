@@ -149,7 +149,7 @@ namespace Battle
 
                     const Indexes & around = Battle::Board::GetAroundIndexes( unitIdx );
                     for ( const int32_t cell : around ) {
-                        const uint32_t flyingDist = static_cast<uint32_t>( Battle::Board::GetDistance( headIdx, cell ) );
+                        const uint32_t flyingDist = Battle::Board::GetDistance( headIdx, cell );
                         if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = cell;

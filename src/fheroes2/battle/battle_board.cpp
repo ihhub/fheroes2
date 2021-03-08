@@ -163,15 +163,15 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
     }
 }
 
-s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
+uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 {
     if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int dx = std::abs( ( index1 % ARENAW ) - ( index2 % ARENAW ) );
-        const int dy = std::abs( ( index1 / ARENAW ) - ( index2 / ARENAW ) );
-        const int roundingUp = index1 / ARENAW % 2;
+        const uint32_t dx = std::abs( ( index1 % ARENAW ) - ( index2 % ARENAW ) );
+        const uint32_t dy = std::abs( ( index1 / ARENAW ) - ( index2 / ARENAW ) );
+        const uint32_t roundingUp = static_cast<uint32_t>( index1 ) / ARENAW % 2;
 
         // hexagonal grid: you only move half as much on X axis when diagonal!
-        return dy + std::max( dx - ( dy + roundingUp ) / 2, 0 );
+        return dy + std::max( dx - ( dy + roundingUp ) / 2, 0u );
     }
 
     return 0;
@@ -493,7 +493,7 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    std::vector<std::pair<Battle::Unit *, int32_t> > foundUnits;
+    std::vector<std::pair<Battle::Unit *, uint32_t> > foundUnits;
 
     for ( Cell & cell : *this ) {
         Unit * cellUnit = cell.GetUnit();
@@ -508,7 +508,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     }
 
     std::sort( foundUnits.begin(), foundUnits.end(),
-               []( const std::pair<Battle::Unit *, int32_t> & first, const std::pair<Battle::Unit *, int32_t> & second ) { return first.second < second.second; } );
+               []( const std::pair<Battle::Unit *, uint32_t> & first, const std::pair<Battle::Unit *, uint32_t> & second ) { return first.second < second.second; } );
 
     std::vector<Battle::Unit *> units;
     units.reserve( foundUnits.size() );

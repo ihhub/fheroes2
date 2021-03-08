@@ -358,7 +358,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return static_cast<uint32_t>( Board::GetDistance( from, index ) ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -466,6 +466,11 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     }
 
     return speed;
+}
+
+uint32_t Battle::Unit::GetMoveRange() const
+{
+    return isFlying() ? ARENASIZE : GetSpeed( false );
 }
 
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const

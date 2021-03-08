@@ -315,7 +315,6 @@ namespace AI
 
             // Force archer to fight back by setting initial expectation to lowest possible (if we're losing battle)
             int bestOutcome = ( _myArmyStrength < _enemyArmyStrength ) ? -_highestDamageExpected : 0;
-            bool canOutrunEnemy = true;
 
             const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
             for ( const int cell : adjacentEnemies ) {
@@ -329,10 +328,6 @@ namespace AI
                         target.unit = enemy;
                         target.cell = cell;
                     }
-
-                    // try to determine if it's worth running away (canOutrunEnemy stays true ONLY if all enemies are slower)
-                    if ( canOutrunEnemy && !isUnitFaster( currentUnit, *enemy ) )
-                        canOutrunEnemy = false;
                 }
                 else {
                     DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
@@ -344,18 +339,18 @@ namespace AI
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
                 actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
             }
-            else if ( canOutrunEnemy ) {
+            else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
-                double lowestThreat = attackDistanceModifier * ARENASIZE;
+                double lowestThreat = 1 * ARENASIZE;
 
-                const Indexes & moves = arena.getAllAvailableMoves( currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed() );
+                const Indexes & moves = arena.getAllAvailableMoves( currentUnit.GetMoveRange() );
                 for ( const int moveIndex : moves ) {
                     if ( !Board::GetCell( moveIndex )->GetQuality() ) {
                         double cellThreatLevel = 0.0;
 
                         for ( const Unit * enemy : enemies ) {
-                            cellThreatLevel += enemy->GetScoreQuality( currentUnit ) - Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) * attackDistanceModifier;
+                            const double ratio = static_cast<double>( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) ) / std::max( 1u, enemy->GetMoveRange() );
+                            cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - ratio );
                         }
 
                         if ( cellThreatLevel < lowestThreat ) {
@@ -406,7 +401,7 @@ namespace AI
         BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
         double maxPriority = attackDistanceModifier * ARENASIZE * -1;
@@ -418,7 +413,9 @@ namespace AI
                 const int quality = Board::GetCell( cell )->GetQuality();
                 const uint32_t dist = arena.CalculateMoveDistance( cell );
                 if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " looking at " << cell << enemy->GetName() << ". dist " << dist << " vs " << currentUnitMoveRange << ", quality " << quality );
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                               currentUnit.GetName() << " looking at " << cell << enemy->GetName() << ". dist " << dist << " vs " << currentUnitMoveRange << ", quality "
+                                                     << quality );
                     highestValue = quality;
                     target.unit = enemy;
                     target.cell = cell;
@@ -472,7 +469,7 @@ namespace AI
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const int myHeadIndex = currentUnit.GetHeadIndex();
 
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
