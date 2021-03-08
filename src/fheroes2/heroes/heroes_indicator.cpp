@@ -32,48 +32,18 @@
 
 namespace fheroes2
 {
-    const char * MoraleString( const int morale )
+    const std::string MoraleString( const int morale )
     {
-        switch ( morale ) {
-        case Morale::TREASON:
-        case Morale::AWFUL:
-        case Morale::POOR:
-            return _( "Bad Morale" );
-
-        case Morale::NORMAL:
-            return _( "Neutral Morale" );
-
-        case Morale::GOOD:
-        case Morale::GREAT:
-        case Morale::BLOOD:
-            return _( "Good Morale" );
-
-        default:
-            break;
-        }
-        return NULL;
+        std::string str = _( "%{morale} Morale" );
+        StringReplace( str, "%{morale}", Morale::String( morale ) );
+        return str;
     }
 
-    const char * LuckString( const int luck )
+    const std::string LuckString( const int luck )
     {
-        switch ( luck ) {
-        case Luck::CURSED:
-        case Luck::AWFUL:
-        case Luck::BAD:
-            return _( "Bad Luck" );
-
-        case Luck::NORMAL:
-            return _( "Neutral Luck" );
-
-        case Luck::GOOD:
-        case Luck::GREAT:
-        case Luck::IRISH:
-            return _( "Good Luck" );
-
-        default:
-            break;
-        }
-        return NULL;
+        std::string str = _( "%{luck} Luck" );
+        StringReplace( str, "%{luck}", Luck::String( luck ) );
+        return str;
     }
 }
 
