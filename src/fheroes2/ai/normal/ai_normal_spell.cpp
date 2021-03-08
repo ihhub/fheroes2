@@ -38,7 +38,7 @@ namespace AI
         return std::max( 1, unit->isReflect() ? ARENAW - xPos - 1 : xPos );
     }
 
-    SpellSeletion BattlePlanner::selectBestSpell( Battle::Arena & arena, bool retreating )
+    SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
         SpellSeletion bestSpell;
@@ -80,7 +80,7 @@ namespace AI
         return bestSpell;
     }
 
-    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating )
+    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) const
     {
         SpellcastOutcome bestOutcome;
         if ( !spell.isDamage() )
@@ -158,7 +158,7 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellDebuffValue( const Spell & spell, Arena & arena, const Units & enemies )
+    SpellcastOutcome BattlePlanner::spellDebuffValue( const Spell & spell, Arena & arena, const Units & enemies ) const
     {
         SpellcastOutcome bestOutcome;
         const int spellID = spell.GetID();
