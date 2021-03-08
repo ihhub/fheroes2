@@ -55,7 +55,8 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return targetCell < _cache.size() && nodeIsAccessible( _cache[targetCell] );
+        const size_t index = static_cast<size_t>( targetCell );
+        return index < _cache.size() && nodeIsAccessible( _cache[index] );
     }
 
     bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
