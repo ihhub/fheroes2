@@ -948,7 +948,7 @@ namespace fheroes2
                     // clean the button
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
                     // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 34 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
                     Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
                 }
                 return true;
