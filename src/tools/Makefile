@@ -9,21 +9,24 @@ else
 LIBS   := $(shell sdl2-config --libs)
 CFLAGS := $(shell sdl2-config --cflags)
 endif
-ifeq ($(OS),Windows_NT)
-LIBS   += -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
 ifndef WITHOUT_UNICODE
 CFLAGS += -DWITH_ICONV
+ifeq ($(OS),Windows_NT)
 LIBS   += -liconv
 endif
+endif
+ifeq ($(OS),Windows_NT)
+LIBS   += -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
 endif
 endif
 
 ifeq ($(OS),Windows_NT)
-LIBS := -static $(subst -mwindows,-mconsole,$(LIBS))
+LIBS   := -static $(subst -mwindows,-mconsole,$(LIBS))
+CFLAGS := $(filter-out -Dmain=SDL_main,$(CFLAGS))
 ifdef FHEROES2_SDL1
-LIBS += -lwinmm -lgdi32 -ldxguid
+LIBS   += -lwinmm -lgdi32 -ldxguid
 else
-LIBS += -lole32 -loleaut32 -limm32 -lwinmm -lgdi32 -dxguid -lsetupapi -lversion
+LIBS   += -lole32 -loleaut32 -limm32 -lwinmm -lgdi32 -dxguid -lsetupapi -lversion
 endif
 endif
 

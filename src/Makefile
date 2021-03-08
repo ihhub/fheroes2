@@ -133,7 +133,7 @@ export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 all:
 ifndef WITHOUT_XML
 ifndef WITHOUT_BUNDLED_LIBS
-	$(MAKE) -C thirdparty/tinyxml CFLAGS="$(CXXFLAGS_TP)"
+	$(MAKE) -C thirdparty/tinyxml CXXFLAGS="$(CXXFLAGS_TP)"
 endif
 endif
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
