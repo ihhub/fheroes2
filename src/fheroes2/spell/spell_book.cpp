@@ -459,9 +459,9 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
 
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
         int vertOffset = 49 - icon.height();
-        if ( vertOffset > 6 ) vertOffset = 6;
-        const fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2,
-                                   py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
+        if ( vertOffset > 6 )
+            vertOffset = 6;
+        const fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
         fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
 
         TextBox box( spellName, Font::SMALL, 80 );
