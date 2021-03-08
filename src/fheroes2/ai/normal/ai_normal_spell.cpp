@@ -196,8 +196,16 @@ namespace AI
 
         const bool isMassSpell = spell.isMassActions();
         for ( const Unit * unit : enemies ) {
+            // Make sure this spell can be applied to current unit
+            if ( unit->isUnderSpellEffect( spell ) || !unit->AllowApplySpell( spell, _commander ) ) {
+                continue;
+            }
+
             if ( spellID == Spell::SLOW || spellID == Spell::MASSSLOW ) {
-                if ( unit->isArchers() || _attackingCastle ) {
+                if ( unit->Modes( SP_HASTE ) ) {
+                    ratio *= 2;
+                }
+                else if ( unit->isArchers() || _attackingCastle ) {
                     // Slow is useless against archers or troops defending castle
                     ratio = 0.01;
                 }
@@ -207,6 +215,9 @@ namespace AI
             }
             else if ( spellID == Spell::BERSERKER && !unit->isArchers() ) {
                 ratio /= ReduceEffectivenessByDistance( unit );
+            }
+            else if ( unit->Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
+                ratio *= 2;
             }
 
             const double spellValue = unit->GetStrength() * ratio;
