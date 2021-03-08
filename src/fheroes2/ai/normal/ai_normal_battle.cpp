@@ -78,48 +78,6 @@ namespace AI
         return currentUnit.isFlying();
     }
 
-    Actions BattlePlanner::forceSpellcastBeforeRetreat( Arena & arena, const HeroBase * commander )
-    {
-        Actions result;
-        if ( !isCommanderCanSpellcast( arena, commander ) ) {
-            return result;
-        }
-
-        const std::vector<Spell> allSpells = commander->GetSpells();
-        int bestSpell = -1;
-        double bestHeuristic = 0;
-        int targetIdx = -1;
-
-        const Units friendly( arena.GetForce( commander->GetColor() ), true );
-        const Units enemies( arena.GetForce( commander->GetColor(), true ), true );
-
-        const int spellPower = commander->GetPower();
-        for ( const Spell & spell : allSpells ) {
-            if ( !commander->HaveSpellPoints( spell ) )
-                continue;
-
-            // TODO: add mass spells
-            if ( spell.isCombat() && spell.isDamage() && spell.isSingleTarget() ) {
-                const uint32_t totalDamage = spell.Damage() * spellPower;
-                for ( const Unit * enemy : enemies ) {
-                    const double spellHeuristic
-                        = enemy->GetMonsterStrength() * enemy->HowManyWillKilled( totalDamage * ( 100 - enemy->GetMagicResist( spell, spellPower ) ) / 100 );
-
-                    if ( spellHeuristic > bestHeuristic ) {
-                        bestHeuristic = spellHeuristic;
-                        bestSpell = spell.GetID();
-                        targetIdx = enemy->GetHeadIndex();
-                    }
-                }
-            }
-        }
-
-        if ( bestSpell != -1 ) {
-            result.emplace_back( MSG_BATTLE_CAST, bestSpell, targetIdx );
-        }
-        return result;
-    }
-
     Actions BattlePlanner::planUnitTurn( Arena & arena, const Unit & currentUnit )
     {
         if ( currentUnit.Modes( SP_BERSERKER ) != 0 ) {
@@ -132,7 +90,6 @@ namespace AI
         analyzeBattleState( arena, currentUnit );
 
         const Force & enemyForce = arena.GetForce( _myColor, true );
-        const HeroBase * commander = currentUnit.GetCommander();
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _myColor );
 
@@ -145,10 +102,16 @@ namespace AI
                    "Tactic " << defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
 
         // Step 2. Check retreat/surrender condition
-        const Heroes * actualHero = dynamic_cast<const Heroes *>( commander );
+        const Heroes * actualHero = dynamic_cast<const Heroes *>( _commander );
         if ( actualHero && arena.CanRetreatOpponent( _myColor ) && checkRetreatCondition( *actualHero ) ) {
-            // Cast maximum damage spell
-            actions = forceSpellcastBeforeRetreat( arena, commander );
+            if ( isCommanderCanSpellcast( arena, _commander ) ) {
+                // Cast maximum damage spell
+                const SpellSeletion & bestSpell = selectBestSpell( arena, true );
+
+                if ( bestSpell.spellID != -1 ) {
+                    actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                }
+            }
 
             actions.emplace_back( MSG_BATTLE_RETREAT );
             actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
@@ -158,17 +121,12 @@ namespace AI
         // Step 3. Calculate spell heuristics
 
         // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
-        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, commander ) ) {
-            // 1. For damage spells - maximum amount of enemy threat lost
-            // 2. For buffs - friendly unit strength gained
-            // 3. For debuffs - enemy unit threat lost
-            // 4. For dispell, resurrect and cure - amount of unit strength recovered
-            // 5. For antimagic - based on enemy hero spellcasting abilities multiplied by friendly unit strength
-
-            // 6. Cast best spell with highest heuristic on target pointer saved
-
-            // Temporary: force damage spell
-            actions = forceSpellcastBeforeRetreat( arena, commander );
+        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, _commander ) ) {
+            const SpellSeletion & bestSpell = selectBestSpell( arena, false );
+            if ( bestSpell.spellID != -1 ) {
+                actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
+                return actions;
+            }
         }
 
         // Step 4. Current unit decision tree
@@ -220,7 +178,9 @@ namespace AI
 
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
+        _commander = currentUnit.GetCommander();
         _myColor = currentUnit.GetColor();
+
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
 
@@ -580,7 +540,8 @@ namespace AI
     {
         const Actions & plannedActions = _battlePlanner.planUnitTurn( arena, currentUnit );
         actions.insert( actions.end(), plannedActions.begin(), plannedActions.end() );
-
-        actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
+        // Do not end the turn if we only cast a spell
+        if ( plannedActions.size() != 1 || !plannedActions.front().isType( MSG_BATTLE_CAST ) )
+            actions.emplace_back( MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 }
