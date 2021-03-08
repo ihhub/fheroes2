@@ -31,9 +31,10 @@ CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS)
 LIBS := -pthread
 
-CONLYFLAGS := $(CFLAGS)
+CFLAGS_TP := $(CFLAGS)
+CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
+# Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
 CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
 
 ifdef FHEROES2_STRICT_COMPILATION
@@ -41,29 +42,38 @@ CFLAGS := $(CFLAGS) -Werror
 endif
 
 ifdef FHEROES2_SDL1
-SDL    := sdl
-LIBSDL := SDL
+SDL_LIBS := $(shell sdl-config --libs)
+SDL_FLAGS := $(shell sdl-config --cflags)
 else
-SDL    := sdl2
-LIBSDL := SDL2
+SDL_LIBS := $(shell sdl2-config --libs)
+SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
-
-SDL_LIBS := $(shell $(SDL)-config --libs)
-SDL_FLAGS := $(shell $(SDL)-config --cflags)
 
 ifndef WITHOUT_MIXER
 CFLAGS := $(CFLAGS) -DWITH_MIXER
-SDL_LIBS := $(SDL_LIBS) -l$(LIBSDL)_mixer
+ifdef FHEROES2_SDL1
+SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
+endif
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
 CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
-SDL_LIBS := $(SDL_LIBS) -l$(LIBSDL)_image $(shell libpng-config --libs) -lz
+ifdef FHEROES2_SDL1
+SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
+endif
 endif
 
-ifdef FHEROES2_TTF_SUPPORT
+ifndef WITHOUT_UNICODE
 CFLAGS := $(CFLAGS) -DWITH_TTF
-SDL_LIBS := $(SDL_LIBS) -l$(LIBSDL)_ttf
+ifdef FHEROES2_SDL1
+SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
+else
+SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
+endif
 endif
 
 ifndef WITHOUT_XML
@@ -78,6 +88,13 @@ ifndef WITHOUT_ZLIB
 CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
 endif
+
+ifdef RELEASE
+CFLAGS := $(CFLAGS) -DBUILD_RELEASE
+endif
+
+CFLAGS := $(SDL_FLAGS) $(CFLAGS)
+LIBS := $(SDL_LIBS) $(LIBS)
 
 # platform specific flags
 ifndef PLATFORM
@@ -105,9 +122,6 @@ endif
 
 include Makefile.$(PLATFORM)
 
-CFLAGS := $(SDL_FLAGS) $(CFLAGS)
-LIBS := $(SDL_LIBS) $(LIBS)
-
 export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 
 .PHONY: clean
@@ -115,15 +129,22 @@ export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 all:
 ifndef WITHOUT_XML
 ifndef WITHOUT_BUNDLED_LIBS
-	$(MAKE) -C thirdparty/tinyxml
+	$(MAKE) -C thirdparty/tinyxml CXXFLAGS="$(CXXFLAGS_TP)"
 endif
 endif
-	$(MAKE) -C thirdparty/libsmacker
+	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
+ifdef WITH_TOOLS
+	$(MAKE) -C tools
+endif
+ifndef WITHOUT_UNICODE
+	$(MAKE) -C dist pot
+endif
 
 clean:
 	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
+	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean

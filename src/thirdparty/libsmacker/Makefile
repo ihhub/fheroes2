@@ -9,7 +9,7 @@ $(TARGET).a: $(patsubst %.c, %.o, $(wildcard *.c))
 	$(AR) crvs $@ $^
 
 %.o: %.c
-	$(CC) -c -MD $< $(CONLYFLAGS)
+	$(CC) -c -MD $< $(CFLAGS)
 
 include $(wildcard *.d)
 
