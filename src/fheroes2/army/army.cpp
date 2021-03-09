@@ -1473,13 +1473,32 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
         const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_ALLIANCE || campaignAwards[i]._type != Campaign::CampaignAwardData::CREATURE_BANE )
-                continue;
 
-            // upgrades...?
-            if ( map_troop->monster.GetID() == campaignAwards[i]._subType ) {
-                forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
-                break;
+            bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE;
+            bool isBane = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_BANE;
+            if ( isAlliance || isBane ) {
+                const Troop & troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+                Monster monster = Monster( campaignAwards[i]._subType );
+
+                bool isUpgradeAble = true;
+                bool found = false;
+
+                while ( !found ) {
+                    // upgrades...?
+                    if ( troop.GetID() == monster.GetID() ) {
+                        forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
+                        found = true;
+                        break;
+                    }
+
+                    if ( !monster.isAllowUpgrade() )
+                        break;
+
+                    monster = monster.GetUpgrade();
+                }
+
+                if ( found )
+                    break;
             }
         }
     }
