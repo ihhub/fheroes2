@@ -430,18 +430,7 @@ namespace
     void ApplyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        Kingdom & humanKingdom = Kingdom();
-
-        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-            if ( !*it )
-                continue;
-
-            const Player & player = ( **it );
-            if ( player.isControlHuman() ) {
-                humanKingdom = world.GetKingdom( player.GetColor() );
-                break;
-            }
-        }
+        Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
 
         for ( uint32_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioID < awards[i]._startScenarioID )

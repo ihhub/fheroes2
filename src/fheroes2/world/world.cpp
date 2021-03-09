@@ -544,18 +544,10 @@ void World::NewDay( void )
 
         const Players & sortedPlayers = Settings::Get().GetPlayers();
         if ( !resourceBonuses.empty() ) {
-            for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-                const Player & player = ( **it );
+            Kingdom & humanKingdom = GetKingdom( Settings::Get().GetPlayers().HumanColors() );
 
-                if ( !player.isControlHuman() )
-                    continue;
-
-                Kingdom & kingdom = GetKingdom( player.GetColor() );
-                for ( uint32_t i = 0; i < resourceBonuses.size(); ++i )
-                    kingdom.AddFundsResource( resourceBonuses[i] );
-
-                break;
-            }
+            for ( uint32_t i = 0; i < resourceBonuses.size(); ++i )
+                humanKingdom.AddFundsResource( resourceBonuses[i] );
         }
     }
 
