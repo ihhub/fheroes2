@@ -45,6 +45,16 @@ namespace AI
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
     const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
+    int32_t correctAttackTarget( const Position & target, const int32_t from )
+    {
+        const Cell * tail = target.GetTail();
+        if ( tail && Board::isNearIndexes( from, tail->GetIndex() ) ) {
+            return tail->GetIndex();
+        }
+        const Cell * head = target.GetHead();
+        return head ? head->GetIndex() : -1;
+    }
+
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     {
         if ( isAttacking ) {
@@ -159,7 +169,8 @@ namespace AI
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
 
                 if ( target.unit ) {
-                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
+                    actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), correctAttackTarget( target.unit->GetPosition(), target.cell ),
+                                          0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
