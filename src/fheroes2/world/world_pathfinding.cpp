@@ -259,6 +259,11 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
+    // if current tile contains a monster, skip it
+    if ( world.GetTiles( currentNodeIdx ).GetObject() == MP2::OBJ_MONSTER ) {
+        return;
+    }
+
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster

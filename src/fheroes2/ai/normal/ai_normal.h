@@ -24,6 +24,11 @@
 #include "ai.h"
 #include "world_pathfinding.h"
 
+namespace Battle
+{
+    class Units;
+}
+
 namespace AI
 {
     struct RegionStats
@@ -40,6 +45,18 @@ namespace AI
     {
         int cell = -1;
         const Battle::Unit * unit = nullptr;
+    };
+
+    struct SpellSeletion
+    {
+        int spellID = -1;
+        int32_t cell = -1;
+    };
+
+    struct SpellcastOutcome
+    {
+        int32_t cell = -1;
+        double value = 0.0;
     };
 
     class BattlePlanner
@@ -60,9 +77,12 @@ namespace AI
         Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
         BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        Battle::Actions forceSpellcastBeforeRetreat( Battle::Arena & arena, const HeroBase * commander );
+        SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
+        SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
+                                           bool retreating ) const;
 
         // turn variables that wouldn't persist
+        const HeroBase * _commander = nullptr;
         int _myColor = Color::NONE;
         double _myArmyStrength = 0;
         double _enemyArmyStrength = 0;

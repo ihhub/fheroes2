@@ -920,7 +920,6 @@ namespace ICN
                                {BTNBATTLEONLY, "BTNBONLY.ICN"},
                                {BOAT12, "BOAT12.ICN"},
                                {BTNGIFT, "BTNGIFT.ICN"},
-                               {BTNMIN, "BTNMIN.ICN"},
                                {CSLMARKER, "CSLMARKER.ICN"}};
 }
 
