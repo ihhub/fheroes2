@@ -464,7 +464,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();
-        return false;
+        return true;
     }
 
     const ArmyTroop * troop2 = GetSelectedItem();
