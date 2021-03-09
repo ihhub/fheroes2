@@ -263,7 +263,6 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
 
 void ArmyBar::ResetSelected( void )
 {
-    Cursor::Get().Hide();
     spcursor.hide();
     _isTroopInfoVisible = true;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
@@ -465,7 +464,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();
-        return false;
+        return true;
     }
 
     const ArmyTroop * troop2 = GetSelectedItem();
