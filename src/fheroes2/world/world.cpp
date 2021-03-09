@@ -26,6 +26,7 @@
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -527,6 +528,36 @@ void World::NewDay( void )
 
     // action new day
     vec_kingdoms.NewDay();
+
+    // handle campaign awards that give resource bonus
+    const Settings & conf = Settings::Get();
+    if ( day > 1 && conf.GameType() | Game::TYPE_CAMPAIGN ) {
+        std::vector<Funds> resourceBonuses;
+        const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
+
+        for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
+            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::RESOURCE_BONUS )
+                continue;
+
+            resourceBonuses.emplace_back( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
+        }
+
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        if ( !resourceBonuses.empty() ) {
+            for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+                const Player & player = ( **it );
+
+                if ( !player.isControlHuman() )
+                    continue;
+
+                Kingdom & kingdom = GetKingdom( player.GetColor() );
+                for ( uint32_t i = 0; i < resourceBonuses.size(); ++i )
+                    kingdom.AddFundsResource( resourceBonuses[i] );
+
+                break;
+            }
+        }
+    }
 
     // action new week
     if ( BeginWeek() ) {
