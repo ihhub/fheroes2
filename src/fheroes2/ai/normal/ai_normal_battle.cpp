@@ -178,8 +178,8 @@ namespace AI
 
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
-        _commander = currentUnit.GetCommander();
-        _myColor = currentUnit.GetColor();
+        _myColor = currentUnit.GetCurrentColor();
+        _commander = arena.GetCommander( _myColor );
 
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
@@ -348,15 +348,18 @@ namespace AI
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
         double maxPriority = attackDistanceModifier * ARENASIZE * -1;
-        int highestValue = 0;
+        int highestValue = -_enemyArmyStrength;
+        int highestPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
             const Indexes & around = Board::GetAroundIndexes( *enemy );
             for ( const int cell : around ) {
-                const int quality = Board::GetCell( cell )->GetQuality();
+                const int quality = enemy->GetScoreQuality( currentUnit );
+                const int cellQuality = Board::GetCell( cell )->GetQuality();
                 const uint32_t dist = arena.CalculateMoveDistance( cell );
-                if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
+                if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestPositionValue < cellQuality && highestValue < quality ) {
                     highestValue = quality;
+                    highestPositionValue = cellQuality;
                     target.unit = enemy;
                     target.cell = cell;
                     break;
@@ -424,7 +427,7 @@ namespace AI
             const bool isSafeToMove = ( !_defendingCastle && move.second <= ARENAW / 2 ) || ( _defendingCastle && Board::isCastleIndex( move.first ) );
 
             if ( move.first != -1 && isSafeToMove ) {
-                const double enemyValue = enemy->GetStrength() - move.second * attackDistanceModifier;
+                const double enemyValue = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
 
                 // Pick highest value unit if there's multiple
                 if ( maxEnemyValue < enemyValue ) {
