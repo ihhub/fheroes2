@@ -183,7 +183,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            Video::ShowVideo( "H2XINTRO.SMK", false );
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
             for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
