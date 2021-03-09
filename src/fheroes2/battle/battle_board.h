@@ -82,7 +82,7 @@ namespace Battle
         static bool isNegativeDistance( s32 index1, s32 index2 );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
-        static s32 GetDistance( s32, s32 );
+        static uint32_t GetDistance( s32, s32 );
         static bool isValidDirection( s32, int );
         static s32 GetIndexDirection( s32, int );
         static Indexes GetDistanceIndexes( s32, u32 );

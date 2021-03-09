@@ -123,6 +123,7 @@ namespace Battle
         virtual int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
         int GetCurrentControl() const;
+        uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
         virtual int GetControl() const override;
         u32 GetDamage( const Unit & ) const;

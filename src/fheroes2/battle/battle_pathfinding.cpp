@@ -55,7 +55,27 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
+        const size_t index = static_cast<size_t>( targetCell );
+        return index < _cache.size() && nodeIsAccessible( _cache[index] );
+    }
+
+    bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
+    {
+        return node._cost == 0 || ( node._isOpen && node._from != -1 );
+    }
+
+    Indexes ArenaPathfinder::getAllAvailableMoves( uint32_t moveRange ) const
+    {
+        Indexes result;
+        result.reserve( moveRange * 2u );
+
+        for ( size_t index = 0; index < _cache.size(); ++index ) {
+            const ArenaNode & node = _cache[index];
+            if ( nodeIsAccessible( node ) && node._cost <= moveRange ) {
+                result.push_back( index );
+            }
+        }
+        return result;
     }
 
     std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
@@ -133,7 +153,7 @@ namespace Battle
 
                     const Indexes & around = Battle::Board::GetAroundIndexes( unitIdx );
                     for ( const int32_t cell : around ) {
-                        const uint32_t flyingDist = static_cast<uint32_t>( Battle::Board::GetDistance( pathStart, cell ) );
+                        const uint32_t flyingDist = Battle::Board::GetDistance( pathStart, cell );
                         if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = cell;

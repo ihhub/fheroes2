@@ -141,6 +141,7 @@ namespace AI
 
         // Step 4. Current unit decision tree
         const size_t actionsSize = actions.size();
+        Battle::Arena::GetBoard()->SetPositionQuality( currentUnit );
 
         if ( currentUnit.isArchers() ) {
             const Actions & archerActions = archerDecision( arena, currentUnit );
@@ -148,12 +149,9 @@ namespace AI
         }
         else {
             // Melee unit decision tree (both flyers and walkers)
-            Board & board = *Battle::Arena::GetBoard();
-            board.SetPositionQuality( currentUnit );
-
-            // Determine unit target/cell to move
             BattleTargetPair target;
 
+            // Determine unit target or cell to move to
             if ( defensiveTactics ) {
                 target = meleeUnitDefense( arena, currentUnit );
             }
@@ -281,15 +279,13 @@ namespace AI
     {
         Actions actions;
         const Units enemies( arena.GetForce( _myColor, true ), true );
-        const Unit * target = NULL;
-        int targetCell = -1;
+        BattleTargetPair target;
 
         if ( currentUnit.isHandFighting() ) {
             // Current ranged unit is blocked by the enemy
 
-            // force archer to fight back by setting initial expectation to lowest possible (if we're losing battle)
+            // Force archer to fight back by setting initial expectation to lowest possible (if we're losing battle)
             int bestOutcome = ( _myArmyStrength < _enemyArmyStrength ) ? -_highestDamageExpected : 0;
-            bool canOutrunEnemy = true;
 
             const Indexes & adjacentEnemies = Board::GetAdjacentEnemies( currentUnit );
             for ( const int cell : adjacentEnemies ) {
@@ -300,28 +296,48 @@ namespace AI
 
                     if ( bestOutcome < damageDiff ) {
                         bestOutcome = damageDiff;
-                        target = enemy;
-                        targetCell = cell;
+                        target.unit = enemy;
+                        target.cell = cell;
                     }
-
-                    // try to determine if it's worth running away (canOutrunEnemy stays true ONLY if all enemies are slower)
-                    if ( canOutrunEnemy && !isUnitFaster( currentUnit, *enemy ) )
-                        canOutrunEnemy = false;
                 }
                 else {
                     DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Board::GetAdjacentEnemies returned a cell " << cell << " that does not contain a unit!" );
                 }
             }
 
-            if ( target && targetCell != -1 ) {
-                // attack selected target
+            if ( target.unit && target.cell != -1 ) {
+                // Melee attack selected target
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer deciding to fight back: " << bestOutcome );
-                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), targetCell, 0 );
+                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.cell, 0 );
             }
-            else if ( canOutrunEnemy ) {
-                // Kiting enemy
-                // Search for a safe spot unit can move away
-                DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy" );
+            else {
+                // Kiting enemy: Search for a safe spot unit can move to
+                double lowestThreat = _enemyArmyStrength;
+
+                const Indexes & moves = arena.getAllAvailableMoves( currentUnit.GetMoveRange() );
+                for ( const int moveIndex : moves ) {
+                    if ( !Board::GetCell( moveIndex )->GetQuality() ) {
+                        double cellThreatLevel = 0.0;
+
+                        for ( const Unit * enemy : enemies ) {
+                            const double ratio = static_cast<double>( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) ) / std::max( 1u, enemy->GetMoveRange() );
+                            cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - ratio );
+                        }
+
+                        if ( cellThreatLevel < lowestThreat ) {
+                            lowestThreat = cellThreatLevel;
+                            target.cell = moveIndex;
+                        }
+                    }
+                }
+
+                if ( target.cell != -1 ) {
+                    actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moves to " << target.cell << " threat is " << lowestThreat );
+                }
+                else {
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " archer couldn't find a good hex to move out of " << moves.size() );
+                }
             }
             // Worst case scenario - Skip turn
         }
@@ -334,16 +350,17 @@ namespace AI
 
                 if ( highestStrength < attackPriority ) {
                     highestStrength = attackPriority;
-                    target = enemy;
+                    target.unit = enemy;
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "- Set priority on " << enemy->GetName() << " value " << attackPriority );
                 }
             }
 
-            if ( target ) {
-                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target->GetUID(), target->GetHeadIndex(), 0 );
+            if ( target.unit ) {
+                actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(), target.unit->GetHeadIndex(), 0 );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO,
-                           currentUnit.GetName() << " archer focusing enemy " << target->GetName() << " threat level: " << target->GetScoreQuality( currentUnit ) );
+                           currentUnit.GetName() << " archer focusing enemy " << target.unit->GetName()
+                                                 << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
             }
         }
 
@@ -355,7 +372,7 @@ namespace AI
         BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
         double maxPriority = attackDistanceModifier * ARENASIZE * -1;
@@ -387,6 +404,9 @@ namespace AI
                     target.cell = move.first;
                 }
             }
+            else {
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " is attacking " << target.unit->GetName() << " at " << target.cell );
+            }
         }
 
         // Walkers: move closer to the castle walls during siege
@@ -417,7 +437,7 @@ namespace AI
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const uint32_t currentUnitMoveRange = currentUnit.isFlying() ? MAXU16 : currentUnit.GetSpeed();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const int myHeadIndex = currentUnit.GetHeadIndex();
 
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;

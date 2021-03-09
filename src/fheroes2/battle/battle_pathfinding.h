@@ -62,5 +62,9 @@ namespace Battle
         std::list<Route::Step> buildPath( int targetCell ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
+        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
+
+    private:
+        bool nodeIsAccessible( const ArenaNode & node ) const;
     };
 }
