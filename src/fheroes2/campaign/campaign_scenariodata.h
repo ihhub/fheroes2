@@ -21,11 +21,12 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
-#include "campaign_data.h"
 #include "maps_fileinfo.h"
 
 namespace Campaign
 {
+    class CampaignAwardData;
+
     enum ScenarioIcon
     {
         SCENARIOICON_CLEARED = 10,
@@ -91,6 +92,11 @@ namespace Campaign
         const std::string & getDescription() const
         {
             return _description;
+        }
+
+        const std::vector<CampaignAwardData> & getObtainableAwards() const
+        {
+            return _obtainableAwards;
         }
 
         void AddObtainableCampaignAward( const CampaignAwardData & obtainableAward );
