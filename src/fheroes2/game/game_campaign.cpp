@@ -315,7 +315,7 @@ namespace
         }
     }
 
-    void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top ) 
+    void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
     {
         const int textChoiceWidth = 150;
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
@@ -340,12 +340,6 @@ namespace
         scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
 
         scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
-        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::MERCURY, 3, 3 ) );
-        scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 6 ) );
-        ////scenarioDatas[6].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CARRY_OVER_FORCES, 0, 10 ) );
-        //scenarioDatas[7].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 10 ) );
-        //scenarioDatas[8].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::REMOVE_ENEMY_HERO, Heroes::CORLAGON, 10 ) );
-        
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 0 );
@@ -497,8 +491,7 @@ int Game::CompleteCampaignScenario()
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
     const auto scenarioDatas = GetCampaignData( saveData.getCampaignID() ).getAllScenarios();
-    const std::vector<Campaign::CampaignAwardData> & obtainableAwards
-        = scenarioDatas[lastCompletedScenarioID].getObtainableAwards();
+    const std::vector<Campaign::CampaignAwardData> & obtainableAwards = scenarioDatas[lastCompletedScenarioID].getObtainableAwards();
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( uint32_t i = 0; i < obtainableAwards.size(); ++i ) {

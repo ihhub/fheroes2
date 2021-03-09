@@ -122,7 +122,7 @@ namespace Campaign
         return tryGetMatchingFile( _fileName, matchingFilePath );
     }
 
-    void Campaign::ScenarioData::AddObtainableCampaignAward( const CampaignAwardData & obtainableAward ) 
+    void Campaign::ScenarioData::AddObtainableCampaignAward( const CampaignAwardData & obtainableAward )
     {
         _obtainableAwards.emplace_back( obtainableAward );
     }

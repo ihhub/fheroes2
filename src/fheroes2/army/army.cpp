@@ -1473,7 +1473,6 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
         const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-
             bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
             bool isBane = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_BANE;
             if ( isAlliance || isBane ) {
@@ -1486,7 +1485,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 while ( !found ) {
                     // upgrades...?
                     if ( troop.GetID() == monster.GetID() ) {
-                        forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
+                        forceJoinType = campaignAwards[i]._type == isAlliance ? JOIN_FREE : JOIN_FLEE;
                         found = true;
                         break;
                     }

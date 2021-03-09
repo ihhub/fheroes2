@@ -85,7 +85,8 @@ namespace Campaign
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
     {
-        return msg << data._earnedCampaignAwards_Old << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed << data._earnedCampaignAwards;
+        return msg << data._earnedCampaignAwards_Old << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID
+                   << data._daysPassed << data._earnedCampaignAwards;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
