@@ -188,11 +188,11 @@ namespace Video
         }
 
         if ( action == VideoAction::WAIT_FOR_USER_INPUT ) {
-             while ( le.HandleEvents() ) {
+            while ( le.HandleEvents() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     break;
                 }
-             }
+            }
         }
 
         display.fill( 0 );
