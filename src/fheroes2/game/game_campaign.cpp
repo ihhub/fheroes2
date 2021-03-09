@@ -315,6 +315,15 @@ namespace
         }
     }
 
+    void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top ) 
+    {
+        const int textChoiceWidth = 150;
+        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
+            Text award( obtainedAwards[i].ToString(), Font::BIG );
+            award.Blit( top.x + 425, top.y + 100 + 22 * i - award.h() / 2, textChoiceWidth );
+        }
+    }
+
     Campaign::CampaignData GetRolandCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
@@ -330,8 +339,9 @@ namespace
         scenarioDatas.emplace_back( 8, std::vector<int>{9}, getCampaignBonusData( 0, 8 ), std::string( "CAMPG09.H2C" ), rolandCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
 
-        //scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
-        //scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::HIREABLE_HERO, Heroes::ELIZA, 6 ) );
+        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
+        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::RESOURCE_BONUS, Resource::MERCURY, 3, 3 ) );
+        scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::HIREABLE_HERO, Heroes::ELIZA, 6 ) );
         ////scenarioDatas[6].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CARRY_OVER_FORCES, 0, 10 ) );
         //scenarioDatas[7].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 10 ) );
         //scenarioDatas[8].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::REMOVE_ENEMY_HERO, Heroes::CORLAGON, 10 ) );
@@ -421,18 +431,23 @@ namespace
         }
     }
 
-    bool IsPlayerKingdom( Players::const_iterator it ) 
-    {
-        return ( **it ).isControlHuman();
-    }
-
     // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
     // the rest will be applied based on the situation required
     void ApplyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        const Players::const_iterator humanPlayer = std::find( sortedPlayers.begin(), sortedPlayers.end(), IsPlayerKingdom );
-        Kingdom & humanKingdom = world.GetKingdom(( **humanPlayer ).GetColor());
+        Kingdom & humanKingdom = Kingdom();
+
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
+            if ( !*it )
+                continue;
+
+            const Player & player = ( **it );
+            if ( player.isControlHuman() ) {
+                humanKingdom = world.GetKingdom( player.GetColor() );
+                break;
+            }
+        }
 
         for ( uint32_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioID < awards[i]._startScenarioID )
@@ -480,6 +495,15 @@ int Game::CompleteCampaignScenario()
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
+
+    const auto scenarioDatas = GetCampaignData( saveData.getCampaignID() ).getAllScenarios();
+    const std::vector<Campaign::CampaignAwardData> & obtainableAwards
+        = scenarioDatas[lastCompletedScenarioID].getObtainableAwards();
+
+    // TODO: Check for awards that have to be obtained with 'freak' conditions
+    for ( uint32_t i = 0; i < obtainableAwards.size(); ++i ) {
+        saveData.addCampaignAward( obtainableAwards[i] );
+    }
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
@@ -561,6 +585,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
+    DrawObtainedCampaignAwards( campaignSaveData.getEarnedCampaignAwards(), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
