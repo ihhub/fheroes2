@@ -137,6 +137,9 @@ int Game::MainMenu( bool isFirstGameRun )
                 //    display.Fade();
                 break;
             }
+            else {
+                continue;
+            }
         }
 
         bool redrawScreen = false;
