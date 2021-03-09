@@ -363,7 +363,7 @@ namespace AI
                 const int cellQuality = Board::GetCell( cell )->GetQuality();
                 const bool canReach = arena.hexIsPassable( cell ) && arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
                 // Pick target if either position is improved or unit is higher value at the same position quality
-                if ( canReach && ( attackPositionValue < cellQuality || ( attackHighestValue < quality && attackPositionValue == cellQuality ) ) ) {
+                if ( canReach && ( attackPositionValue < cellQuality || ( attackHighestValue < quality && std::fabs( attackPositionValue - cellQuality ) < 0.001 ) ) ) {
                     attackHighestValue = quality;
                     attackPositionValue = cellQuality;
                     target.unit = enemy;
