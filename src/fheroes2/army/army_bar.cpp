@@ -263,7 +263,6 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
 
 void ArmyBar::ResetSelected( void )
 {
-    Cursor::Get().Hide();
     spcursor.hide();
     _isTroopInfoVisible = true;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
