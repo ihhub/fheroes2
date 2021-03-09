@@ -172,27 +172,39 @@ namespace AI
         case Spell::MASSSLOW:
             ratio = 0.3;
             break;
-        case Spell::BLIND:
-            ratio = lastEnemyLeft ? 0.0 : 0.85;
+        case Spell::BLIND: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.85;
             break;
+        }
         case Spell::CURSE:
         case Spell::MASSCURSE:
             ratio = 0.15;
             break;
-        case Spell::BERSERKER:
-            ratio = lastEnemyLeft ? 0.0 : 0.95;
+        case Spell::BERSERKER: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.95;
             break;
-        case Spell::PARALYZE:
-            ratio = lastEnemyLeft ? 0.0 : 0.9;
+        }
+        case Spell::PARALYZE: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.9;
             break;
-        case Spell::HYPNOTIZE:
-            ratio = lastEnemyLeft ? 0.0 : 1.5;
+        }
+        case Spell::HYPNOTIZE: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 1.5;
             break;
+        }
         case Spell::DISRUPTINGRAY:
             ratio = 0.2;
             break;
         default:
-            break;
+            return bestOutcome;
         }
 
         const bool isMassSpell = spell.isMassActions();
