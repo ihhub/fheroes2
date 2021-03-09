@@ -1474,8 +1474,8 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
 
-            bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE;
-            bool isBane = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_BANE;
+            bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
+            bool isBane = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_BANE;
             if ( isAlliance || isBane ) {
                 const Troop & troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
                 Monster monster = Monster( campaignAwards[i]._subType );
@@ -1486,7 +1486,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 while ( !found ) {
                     // upgrades...?
                     if ( troop.GetID() == monster.GetID() ) {
-                        forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
+                        forceJoinType = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE ? JOIN_FREE : JOIN_FLEE;
                         found = true;
                         break;
                     }

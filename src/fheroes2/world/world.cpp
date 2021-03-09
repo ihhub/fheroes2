@@ -536,7 +536,7 @@ void World::NewDay( void )
         const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::RESOURCE_BONUS )
+            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
                 continue;
 
             resourceBonuses.emplace_back( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );

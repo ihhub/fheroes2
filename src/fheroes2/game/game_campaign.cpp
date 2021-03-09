@@ -339,9 +339,9 @@ namespace
         scenarioDatas.emplace_back( 8, std::vector<int>{9}, getCampaignBonusData( 0, 8 ), std::string( "CAMPG09.H2C" ), rolandCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
 
-        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
-        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::RESOURCE_BONUS, Resource::MERCURY, 3, 3 ) );
-        scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::HIREABLE_HERO, Heroes::ELIZA, 6 ) );
+        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
+        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::MERCURY, 3, 3 ) );
+        scenarioDatas[5].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 6 ) );
         ////scenarioDatas[6].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::CARRY_OVER_FORCES, 0, 10 ) );
         //scenarioDatas[7].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 10 ) );
         //scenarioDatas[8].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::REMOVE_ENEMY_HERO, Heroes::CORLAGON, 10 ) );
@@ -454,13 +454,13 @@ namespace
                 continue;
 
             switch ( awards[i]._type ) {
-            case Campaign::CampaignAwardData::GET_ARTIFACT:
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
                 humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
                 break;
-            case Campaign::CampaignAwardData::GET_SPELL:
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
                 humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
                 break;
-            case Campaign::CampaignAwardData::REMOVE_ENEMY_HERO:
+            case Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
                 for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
                     if ( !*it )
                         continue;

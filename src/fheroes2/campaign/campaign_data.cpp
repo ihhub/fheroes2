@@ -154,22 +154,22 @@ namespace Campaign
         std::string objectName;
 
         switch ( _type ) {
-        case CampaignAwardData::CREATURE_BANE:
+        case CampaignAwardData::TYPE_CREATURE_BANE:
             objectName = Monster( _subType ).GetName() + std::string( " bane" );
             break;
-        case CampaignAwardData::CREATURE_ALLIANCE:
+        case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
             objectName = Monster( _subType ).GetName() + std::string( " alliance" );
             break;
-        case CampaignAwardData::GET_ARTIFACT:
+        case CampaignAwardData::TYPE_GET_ARTIFACT:
             objectName = Artifact( _subType ).GetName();
             break;
-        case CampaignAwardData::CARRY_OVER_FORCES:
+        case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
             objectName = "Carry-over forces";
             break;
-        case CampaignAwardData::RESOURCE_BONUS:
+        case CampaignAwardData::TYPE_RESOURCE_BONUS:
             objectName = Resource::String( _subType ) + std::string( " bonus" );
             break;
-        case CampaignAwardData::GET_SPELL:
+        case CampaignAwardData::TYPE_GET_SPELL:
             objectName = Spell( _subType ).GetName();
             break;
         default:

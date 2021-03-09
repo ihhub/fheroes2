@@ -78,14 +78,14 @@ namespace Campaign
     public:
         enum AwardType
         {
-            CREATURE_BANE,              // eg: dwarf bane
-            CREATURE_ALLIANCE,          // eg: dwarf alliance
-            GET_ARTIFACT,               // eg: ultimate crown
-            GET_SPELL,                  // eg: guardian spell in wizard's isle
-            CARRY_OVER_FORCES,          // eg: the gauntlet
-            HIREABLE_HERO,              // eg: sorceress guild
-            REMOVE_ENEMY_HERO,          // eg: corlagon defeated
-            RESOURCE_BONUS,             // eg: wood bonus in price of loyalty
+            TYPE_CREATURE_BANE,              // eg: dwarf bane
+            TYPE_CREATURE_ALLIANCE,          // eg: dwarf alliance
+            TYPE_GET_ARTIFACT,               // eg: ultimate crown
+            TYPE_GET_SPELL,                  // eg: guardian spell in wizard's isle
+            TYPE_CARRY_OVER_FORCES,          // eg: the gauntlet
+            TYPE_HIREABLE_HERO,              // eg: sorceress guild
+            TYPE_REMOVE_ENEMY_HERO,          // eg: corlagon defeated
+            TYPE_RESOURCE_BONUS,             // eg: wood bonus in price of loyalty
         };
 
         enum ObtainCondition
