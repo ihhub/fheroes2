@@ -25,7 +25,7 @@
 
 namespace Campaign
 {
-    class CampaignAwardData;
+    struct CampaignAwardData;
 
     enum ScenarioIcon
     {

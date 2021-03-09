@@ -531,7 +531,7 @@ void World::NewDay( void )
 
     // handle campaign awards that give resource bonus
     const Settings & conf = Settings::Get();
-    if ( day > 1 && conf.GameType() | Game::TYPE_CAMPAIGN ) {
+    if ( day > 1 && conf.GameType() & Game::TYPE_CAMPAIGN ) {
         std::vector<Funds> resourceBonuses;
         const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
 
