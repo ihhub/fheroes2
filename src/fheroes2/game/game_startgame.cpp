@@ -701,6 +701,9 @@ int Interface::Basic::HumanTurn( bool isload )
                 res = Game::QUITGAME;
                 break;
             }
+            else {
+                continue;
+            }
         }
 
         if ( !isOngoingFastScrollEvent )

@@ -217,6 +217,9 @@ int Game::ScenarioInfo( void )
                     fheroes2::FadeDisplay();
                 return QUITGAME;
             }
+            else {
+                continue;
+            }
         }
 
         // press button
