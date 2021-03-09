@@ -164,6 +164,7 @@ namespace AI
     {
         SpellcastOutcome bestOutcome;
         const int spellID = spell.GetID();
+        const bool lastEnemyLeft = enemies.size() == 1;
 
         double ratio = 0.0;
         switch ( spellID ) {
@@ -172,20 +173,20 @@ namespace AI
             ratio = 0.3;
             break;
         case Spell::BLIND:
-            ratio = 0.85;
+            ratio = lastEnemyLeft ? 0.0 : 0.85;
             break;
         case Spell::CURSE:
         case Spell::MASSCURSE:
             ratio = 0.15;
             break;
         case Spell::BERSERKER:
-            ratio = 0.95;
+            ratio = lastEnemyLeft ? 0.0 : 0.95;
             break;
         case Spell::PARALYZE:
-            ratio = 0.9;
+            ratio = lastEnemyLeft ? 0.0 : 0.9;
             break;
         case Spell::HYPNOTIZE:
-            ratio = 1.5;
+            ratio = lastEnemyLeft ? 0.0 : 1.5;
             break;
         case Spell::DISRUPTINGRAY:
             ratio = 0.2;
