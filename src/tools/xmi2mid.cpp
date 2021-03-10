@@ -54,7 +54,7 @@ int main( int argc, char ** argv )
         if ( buf.empty() ) {
             std::cerr << ", file: " << argv[1] << std::endl;
             return EXIT_FAILURE;
-		}
+		 }
         else
             SaveMemToFile( buf, std::string( outFile ) );
     }
