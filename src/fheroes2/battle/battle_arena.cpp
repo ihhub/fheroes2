@@ -362,7 +362,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {

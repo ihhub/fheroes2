@@ -187,8 +187,8 @@ namespace AI
 
     void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
     {
-        _commander = currentUnit.GetCommander();
-        _myColor = currentUnit.GetColor();
+        _myColor = currentUnit.GetCurrentColor();
+        _commander = arena.GetCommander( _myColor );
 
         const Force & friendlyForce = arena.GetForce( _myColor );
         const Force & enemyForce = arena.GetForce( _myColor, true );
@@ -375,19 +375,27 @@ namespace AI
         const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
-        double maxPriority = attackDistanceModifier * ARENASIZE * -1;
-        int highestValue = 0;
+        double maxMovePriority = attackDistanceModifier * ARENASIZE * -1;
+        double attackHighestValue = -_enemyArmyStrength;
+        double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
+            const double quality = enemy->GetScoreQuality( currentUnit );
+            // Skip unit if we already locked in on a better one
+            if ( quality < attackHighestValue )
+                continue;
+
+            // Check if we can reach the target and pick best position to attack from
             const Indexes & around = Board::GetAroundIndexes( *enemy );
             for ( const int cell : around ) {
-                const int quality = Board::GetCell( cell )->GetQuality();
-                const uint32_t dist = arena.CalculateMoveDistance( cell );
-                if ( arena.hexIsPassable( cell ) && dist <= currentUnitMoveRange && highestValue < quality ) {
-                    highestValue = quality;
+                const int cellQuality = Board::GetCell( cell )->GetQuality();
+                const bool canReach = arena.hexIsPassable( cell ) && arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
+                // Pick target if either position is improved or unit is higher value at the same position quality
+                if ( canReach && ( attackPositionValue < cellQuality || ( attackHighestValue < quality && std::fabs( attackPositionValue - cellQuality ) < 0.001 ) ) ) {
+                    attackHighestValue = quality;
+                    attackPositionValue = cellQuality;
                     target.unit = enemy;
                     target.cell = cell;
-                    break;
                 }
             }
 
@@ -399,8 +407,8 @@ namespace AI
                 const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ) ? move.second + ARENAW + ARENAH : move.second;
 
                 const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
-                if ( unitPriority > maxPriority ) {
-                    maxPriority = unitPriority;
+                if ( unitPriority > maxMovePriority ) {
+                    maxMovePriority = unitPriority;
                     target.cell = move.first;
                 }
             }
@@ -455,7 +463,7 @@ namespace AI
             const bool isSafeToMove = ( !_defendingCastle && move.second <= ARENAW / 2 ) || ( _defendingCastle && Board::isCastleIndex( move.first ) );
 
             if ( move.first != -1 && isSafeToMove ) {
-                const double enemyValue = enemy->GetStrength() - move.second * attackDistanceModifier;
+                const double enemyValue = enemy->GetScoreQuality( currentUnit ) - move.second * attackDistanceModifier;
 
                 // Pick highest value unit if there's multiple
                 if ( maxEnemyValue < enemyValue ) {

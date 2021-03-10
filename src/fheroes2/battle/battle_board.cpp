@@ -110,7 +110,7 @@ void Battle::Board::Reset( void )
 void Battle::Board::SetPositionQuality( const Unit & b )
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( b.GetColor(), true ), true );
+    Units enemies( arena->GetForce( b.GetCurrentColor(), true ), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();

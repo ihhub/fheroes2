@@ -31,6 +31,13 @@ using namespace Battle;
 
 namespace AI
 {
+    double ReduceEffectivenessByDistance( const Unit * unit )
+    {
+        // Reduce spell effectiveness if unit already crossed the battlefield
+        const int xPos = unit->GetHeadIndex() % ARENAW;
+        return std::max( 1, unit->isReflect() ? ARENAW - xPos - 1 : xPos );
+    }
+
     SpellSeletion BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
@@ -47,18 +54,29 @@ namespace AI
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         double bestHeuristic = 0;
+        auto checkSelectBestSpell = [this, &bestHeuristic, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+            // Diminish spell effectiveness based on spell point cost
+            // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
+            // 2. Use square root to make sure relationship isn't linear for high-level spells
+            const double spellPointValue = outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell );
+
+            if ( spellPointValue > bestHeuristic ) {
+                bestHeuristic = spellPointValue;
+                bestSpell.spellID = spell.GetID();
+                bestSpell.cell = outcome.cell;
+            }
+        };
 
         for ( const Spell & spell : allSpells ) {
             if ( !_commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
                 continue;
 
             if ( spell.isDamage() ) {
-                const SpellcastOutcome & outcome = spellDamageValue( spell, arena, friendly, enemies, retreating );
-                if ( outcome.value > bestHeuristic ) {
-                    bestHeuristic = outcome.value;
-                    bestSpell.spellID = spell.GetID();
-                    bestSpell.cell = outcome.cell;
-                }
+                checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
+            }
+            else if ( spell.isApplyToEnemies() ) {
+                checkSelectBestSpell( spell, spellDebuffValue( spell, enemies ) );
             }
         }
         return bestSpell;
@@ -139,6 +157,91 @@ namespace AI
             }
         }
 
+        return bestOutcome;
+    }
+
+    SpellcastOutcome BattlePlanner::spellDebuffValue( const Spell & spell, const Units & enemies ) const
+    {
+        SpellcastOutcome bestOutcome;
+        const int spellID = spell.GetID();
+        const bool lastEnemyLeft = enemies.size() == 1;
+
+        double ratio = 0.0;
+        switch ( spellID ) {
+        case Spell::SLOW:
+        case Spell::MASSSLOW:
+            ratio = 0.3;
+            break;
+        case Spell::BLIND: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.85;
+            break;
+        }
+        case Spell::CURSE:
+        case Spell::MASSCURSE:
+            ratio = 0.15;
+            break;
+        case Spell::BERSERKER: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.95;
+            break;
+        }
+        case Spell::PARALYZE: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 0.9;
+            break;
+        }
+        case Spell::HYPNOTIZE: {
+            if ( lastEnemyLeft )
+                return bestOutcome;
+            ratio = 1.5;
+            break;
+        }
+        case Spell::DISRUPTINGRAY:
+            ratio = 0.2;
+            break;
+        default:
+            return bestOutcome;
+        }
+
+        const bool isMassSpell = spell.isMassActions();
+        for ( const Unit * unit : enemies ) {
+            // Make sure this spell can be applied to current unit
+            if ( unit->isUnderSpellEffect( spell ) || !unit->AllowApplySpell( spell, _commander ) ) {
+                continue;
+            }
+
+            if ( spellID == Spell::SLOW || spellID == Spell::MASSSLOW ) {
+                if ( unit->Modes( SP_HASTE ) ) {
+                    ratio *= 2;
+                }
+                else if ( unit->isArchers() || _attackingCastle ) {
+                    // Slow is useless against archers or troops defending castle
+                    ratio = 0.01;
+                }
+                else if ( !unit->isFlying() ) {
+                    ratio /= ReduceEffectivenessByDistance( unit );
+                }
+            }
+            else if ( spellID == Spell::BERSERKER && !unit->isArchers() ) {
+                ratio /= ReduceEffectivenessByDistance( unit );
+            }
+            else if ( unit->Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
+                ratio *= 2;
+            }
+
+            const double spellValue = unit->GetStrength() * ratio;
+            if ( isMassSpell ) {
+                bestOutcome.value += spellValue;
+            }
+            else if ( spellValue > bestOutcome.value ) {
+                bestOutcome.value = spellValue;
+                bestOutcome.cell = unit->GetHeadIndex();
+            }
+        }
         return bestOutcome;
     }
 }
