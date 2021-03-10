@@ -29,6 +29,7 @@
 #include "game_interface.h"
 #include "localevent.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -102,6 +103,8 @@ int Dialog::SystemOptions( void )
     bool redraw = false;
     bool saveConfig = false;
 
+    const bool externalMusicSupported = System::IsDirectory( "music" );
+
     // dialog menu loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -130,6 +133,8 @@ int Dialog::SystemOptions( void )
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
+                ++type;
+            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
                 ++type;
             // CD music is currently not implemented correctly even on SDL1; remove this when done
             if ( type == MUSIC_CDROM )
