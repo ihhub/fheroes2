@@ -39,23 +39,23 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    // bool debug = false;
+    bool debug = false;
     // bool shadow = true;
 
     char ** ptr = argv;
     ++ptr;
 
-    // while ( ptr && *ptr ) {
-        // if ( 0 == strcmp( "-d", *ptr ) )
-            // debug = true;
+    while ( ptr && *ptr ) {
+        if ( 0 == strcmp( "-d", *ptr ) )
+            debug = true;
         // else
         // if(0 == strcmp("-s", *ptr))
         //    shadow = false;
-        // else
-            // break;
+        else
+            break;
 
-        // ++ptr;
-    // }
+        ++ptr;
+    }
 
     std::string shortname( *ptr );
     ++ptr;

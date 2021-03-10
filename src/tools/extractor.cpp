@@ -58,7 +58,7 @@ int main( int argc, char ** argv )
     }
     else {
         outPath = argv[1];
-        outPath.resize(outPath.length() - 4);
+        outPath.resize( outPath.length() - 4 );
     }
     System::MakeDirectory( outPath );
 
