@@ -23,7 +23,7 @@
 #include <iostream>
 
 #include "audio_music.h"
-#include "tools.h"
+#include "engine.h"
 
 #if defined( _WIN32 )
 #undef main
@@ -44,7 +44,7 @@ int main( int argc, char ** argv )
     }
     else {
         outFile = argv[1];
-        outFile.resize( outFile.length() - 4 );
+        outFile.resize(outFile.length() - 4);
         outFile += ".mid";
     }
 
@@ -53,8 +53,8 @@ int main( int argc, char ** argv )
 
         if ( buf.empty() ) {
             std::cerr << ", file: " << argv[1] << std::endl;
-            return EXIT_FAILURE;
-        }
+			return EXIT_FAILURE;
+		}
         else
             SaveMemToFile( buf, std::string( outFile ) );
     }

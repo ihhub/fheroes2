@@ -15,6 +15,14 @@ ifeq ($(OS),Windows_NT)
 LIBS   += -liconv
 endif
 endif
+# ifdef FHEROES2_IMAGE_SUPPORT
+# CFLAGS += -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
+# ifdef FHEROES2_SDL1
+# LIBS   += -lSDL_image $(shell libpng-config --libs) -lz
+# else
+# LIBS   += -lSDL2_image $(shell libpng-config --libs) -lz
+# endif
+# endif
 ifeq ($(OS),Windows_NT)
 LIBS   += -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
 endif
