@@ -45,7 +45,7 @@ int main( int argc, char ** argv )
     }
     else {
         outFile = argv[1];
-        outFile.resize(outFile.length() - 4);
+        outFile.resize( outFile.length() - 4 );
         outFile += ".wav";
     }
 
