@@ -15,7 +15,9 @@ jobs:
       run: |
         brew install sdl sdl_ttf sdl_mixer sdl_image
     - name: compile
-      run: make -j 2
+      run: |
+        g++ --version
+        make -j 2
       env:
         FHEROES2_SDL1: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
@@ -30,7 +32,9 @@ jobs:
       run: |
         brew install sdl2 sdl2_ttf sdl2_mixer sdl2_image
     - name: compile
-      run: make -j 2
+      run: |
+        g++ --version
+        make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: "ON"
         HOMEBREW_NO_AUTO_UPDATE: 1
