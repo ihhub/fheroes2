@@ -269,7 +269,6 @@ public:
     void OpenController();
     void CloseController();
     void OpenTouchpad();
-    void OnSdl2WindowEvent( const SDL_Event & event );
 #endif
 
     void SetControllerPointerSpeed( const int newSpeed )
@@ -285,6 +284,8 @@ private:
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+    void StopSounds();
+    void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
@@ -293,6 +294,7 @@ private:
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+    void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif

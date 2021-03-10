@@ -999,22 +999,10 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
                 if ( Mixer::isValid() ) {
                     // iconify
                     if ( 0 == event.active.gain ) {
-                        _isHiddenWindow = true;
-                        _isMusicPaused = Music::isPaused();
-                        _isSoundPaused = Mixer::isPaused( -1 );
-                        Mixer::Pause();
-                        Music::Pause();
-                        loop_delay = 100;
+                        StopSounds();
                     }
                     else {
-                        if ( _isHiddenWindow ) {
-                            if ( !_isMusicPaused )
-                                Music::Resume();
-                            if ( !_isSoundPaused )
-                                Mixer::Resume();
-                            _isHiddenWindow = false;
-                        }
-                        loop_delay = 1;
+                        ResumeSounds();
                     }
                 }
             }
@@ -1110,31 +1098,48 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     return true;
 }
 
+void LocalEvent::StopSounds()
+{
+    _isHiddenWindow = true;
+    _isMusicPaused = Music::isPaused();
+    _isSoundPaused = Mixer::isPaused( -1 );
+    Mixer::Pause();
+    Music::Pause();
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    _musicVolume = Music::Volume( 0 );
+#endif
+
+    loop_delay = 100;
+}
+
+void LocalEvent::ResumeSounds()
+{
+    if ( _isHiddenWindow ) {
+        if ( !_isMusicPaused ) {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+            Music::Volume( _musicVolume );
+#endif
+            Music::Resume();
+        }
+        if ( !_isSoundPaused )
+            Mixer::Resume();
+        _isHiddenWindow = false;
+    }
+    loop_delay = 1;
+}
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
 {
-    if ( Mixer::isValid() ) {
-        if ( event.window.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
-            _isHiddenWindow = true;
-            _isMusicPaused = Music::isPaused();
-            _isSoundPaused = Mixer::isPaused( -1 );
-            Mixer::Pause();
-            Music::Pause();
-            _musicVolume = Music::Volume( 0 );
-            loop_delay = 100;
-        }
-        else if ( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
-            if ( _isHiddenWindow ) {
-                if ( !_isMusicPaused ) {
-                    Music::Volume( _musicVolume );
-                    Music::Resume();
-                }
-                if ( !_isSoundPaused )
-                    Mixer::Resume();
-                _isHiddenWindow = false;
-            }
-            loop_delay = 1;
-        }
+    if ( !Mixer::isValid() ) {
+        return;
+    }
+    if ( event.window.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
+        StopSounds();
+    }
+    else if ( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
+        ResumeSounds();
     }
 }
 
