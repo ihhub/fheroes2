@@ -99,9 +99,9 @@ int Game::NewCampaign()
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    Video::ShowVideo( "INTRO.SMK", false );
-    Video::ShowVideo( "CHOOSEW.SMK", false );
-    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
+    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
+    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
