@@ -34,27 +34,28 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        std::cout << argv[0] << " [-s (skip shadow)] [-d (debug on)] infile.icn extract_to_dir" << std::endl;
+        // std::cout << argv[0] << " [-s (skip shadow)] [-d (debug on)] infile.icn extract_to_dir" << std::endl;
+        std::cout << argv[0] << " infile.icn extract_to_dir" << std::endl;
         return EXIT_SUCCESS;
     }
 
-    bool debug = false;
+    // bool debug = false;
     // bool shadow = true;
 
     char ** ptr = argv;
     ++ptr;
 
-    while ( ptr && *ptr ) {
-        if ( 0 == strcmp( "-d", *ptr ) )
-            debug = true;
+    // while ( ptr && *ptr ) {
+        // if ( 0 == strcmp( "-d", *ptr ) )
+            // debug = true;
         // else
         // if(0 == strcmp("-s", *ptr))
         //    shadow = false;
-        else
-            break;
+        // else
+            // break;
 
-        ++ptr;
-    }
+        // ++ptr;
+    // }
 
     std::string shortname( *ptr );
     ++ptr;
@@ -63,8 +64,8 @@ int main( int argc, char ** argv )
     StreamFile sf;
 
     if ( !sf.open( shortname, "rb" ) ) {
-        std::cout << "error open file: " << shortname << std::endl;
-        return EXIT_SUCCESS;
+        std::cout << "Could not open " << shortname << std::endl;
+        return EXIT_FAILURE;
     }
 
     int count_sprite = sf.getLE16();
@@ -74,15 +75,15 @@ int main( int argc, char ** argv )
     prefix = System::ConcatePath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "error mkdir: " << prefix << std::endl;
-        return EXIT_SUCCESS;
+        std::cout << "Could not create " << prefix << std::endl << "Make sure the parent directory is writable";
+        return EXIT_FAILURE;
     }
 
     // write file "spec.xml"
     std::string name_spec_file = System::ConcatePath( prefix, "spec.xml" );
     std::fstream fs( name_spec_file.c_str(), std::ios::out );
     if ( fs.fail() ) {
-        std::cout << "error write file: " << name_spec_file << std::endl;
+        std::cout << "Could not write " << name_spec_file << std::endl;
         return EXIT_SUCCESS;
     }
 

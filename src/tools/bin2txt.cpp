@@ -5,8 +5,8 @@
 
 int main( int argc, char ** argv )
 {
-    if ( argc < 2 ) {
-        std::cout << "Please specify input file: " << argv[0] << " <input_monster_frame.bin>" << std::endl;
+    if ( argc != 2 ) {
+        std::cout << "Usage: bin2txt monster_frame.bin" << std::endl << "       Or just drag and drop monster_frame.bin onto bin2txt" << std::endl;
         return EXIT_SUCCESS;
     }
 
@@ -15,7 +15,7 @@ int main( int argc, char ** argv )
     file.open( fileName, std::fstream::in | std::fstream::binary );
 
     if ( !file ) {
-        std::cout << "Cannot open " << fileName << std::endl;
+        std::cout << "Could not open " << fileName << std::endl;
         return EXIT_FAILURE;
     }
 

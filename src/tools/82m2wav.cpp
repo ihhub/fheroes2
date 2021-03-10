@@ -27,18 +27,26 @@
 
 int main( int argc, char ** argv )
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.82m outfile.wav" << std::endl;
-
+    if ( argc != 2 && argc != 3 ) {
+        std::cout << "Usage: 82m2wav infile.82m outfile.wav" << std::endl << "       Or just drag and drop infile.82m onto 82m2wav" << std::endl;
         return EXIT_SUCCESS;
     }
 
     std::fstream fd_data( argv[1], std::ios::in | std::ios::binary );
 
     if ( fd_data.fail() ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
+        std::cout << "Could not open " << argv[1] << std::endl;
+        return EXIT_FAILURE;
+    }
 
-        return EXIT_SUCCESS;
+    std::string outFile;
+    if ( argc != 2 ) {
+        outFile = argv[2];
+    }
+    else {
+        outFile = argv[1];
+        outFile.resize(outFile.length() - 4);
+        outFile += ".wav";
     }
 
     fd_data.seekg( 0, std::ios_base::end );
@@ -48,7 +56,7 @@ int main( int argc, char ** argv )
     fd_data.read( body, size );
     fd_data.close();
 
-    std::fstream fd_body( argv[2], std::ios::out | std::ios::binary );
+    std::fstream fd_body( outFile, std::ios::out | std::ios::binary );
     if ( !fd_body.fail() ) {
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF

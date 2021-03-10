@@ -39,8 +39,8 @@ int main( int argc, char ** argv )
     StreamFile sf;
 
     if ( !sf.open( argv[1], "rb" ) ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-        return EXIT_SUCCESS;
+        std::cout << "Could not open " << argv[1] << std::endl;
+        return EXIT_FAILURE;
     }
 
     std::string prefix( argv[2] );
@@ -55,8 +55,8 @@ int main( int argc, char ** argv )
     prefix = System::ConcatePath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "error mkdir: " << prefix << std::endl;
-        return EXIT_SUCCESS;
+        std::cout << "Could not create " << prefix << std::endl << "Make sure the parent directory is writable";
+        return EXIT_FAILURE;
     }
 
     int size = sf.size();
@@ -66,7 +66,7 @@ int main( int argc, char ** argv )
     std::vector<uint8_t> buf = sf.getRaw( width * height * count );
     if ( debugMode ) {
         std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
-        std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl;
+        std::cout << "Image count    " << count << "(" << width << "," << height << ")" << std::endl;
     }
 
     for ( int cur = 0; cur < count; ++cur ) {

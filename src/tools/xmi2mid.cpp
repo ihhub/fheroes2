@@ -31,21 +31,33 @@
 
 int main( int argc, char ** argv )
 {
-    if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.xmi outfile.mid" << std::endl;
+    if ( argc != 2 && argc != 3 ) {
+        std::cout << "Usage: xmi2mid infile.xmi outfile.mid" << std::endl << "       Or just drag and drop infile.xmi onto xmi2mid" << std::endl;
         return EXIT_SUCCESS;
     }
 
     std::vector<u8> buf = LoadFileToMem( argv[1] );
 
+    std::string outFile;
+    if ( argc != 2 ) {
+        outFile = argv[2];
+    }
+    else {
+        outFile = argv[1];
+        outFile.resize(outFile.length() - 4);
+        outFile += ".mid";
+    }
+
     if ( buf.size() ) {
         buf = Music::Xmi2Mid( buf );
 
-        if ( buf.empty() )
+        if ( buf.empty() ) {
             std::cerr << ", file: " << argv[1] << std::endl;
+			return EXIT_FAILURE;
+		}
         else
-            SaveMemToFile( buf, std::string( argv[2] ) );
+            SaveMemToFile( buf, std::string( outFile ) );
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
