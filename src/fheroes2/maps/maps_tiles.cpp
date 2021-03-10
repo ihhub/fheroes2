@@ -1571,6 +1571,8 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
+
+    RedrawTop( dst, visibleTileROI, area );
 }
 
 bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable )
