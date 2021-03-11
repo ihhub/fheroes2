@@ -46,7 +46,7 @@ namespace Battle
         bool isValid( void ) const;
         bool isDestroy( void ) const;
         bool isDown( void ) const;
-        bool isDeadBodyOnABridge( void ) const;
+        bool isBridgeOccupied( void ) const;
         bool isMoatCell( int cellId ) const;
 
     private:

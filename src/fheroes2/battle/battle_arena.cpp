@@ -280,7 +280,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         board[85].SetObject( 2 );
 
         // bridge
-        board[49].SetObject( 1 );
         board[50].SetObject( 1 );
     }
     else

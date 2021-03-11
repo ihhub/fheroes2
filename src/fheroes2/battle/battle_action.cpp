@@ -307,6 +307,10 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( interface )
                 interface->RedrawActionFly( *b, pos1 );
             pos2 = pos1;
+
+            // check for possible bridge close action, after unit's end of movement
+            if ( bridge && bridge->AllowUp() )
+                bridge->Action( *b, dst );
         }
         else {
             Indexes path;

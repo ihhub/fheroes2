@@ -685,7 +685,7 @@ bool Battle::Board::isImpassableIndex( s32 index )
 
 bool Battle::Board::isBridgeIndex( s32 index )
 {
-    return index == 49 || index == 50;
+    return index == 50;
 }
 
 bool Battle::Board::isMoatIndex( s32 index )
@@ -695,6 +695,7 @@ bool Battle::Board::isMoatIndex( s32 index )
     case 18:
     case 28:
     case 39:
+    case 49:
     case 61:
     case 72:
     case 84:
