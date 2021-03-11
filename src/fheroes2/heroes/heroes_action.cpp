@@ -20,9 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "agg.h"
 #include "ai.h"
-#include "assert.h"
 #include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"

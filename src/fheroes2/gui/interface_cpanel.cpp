@@ -64,7 +64,7 @@ const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
     return *this;
 }
 
-void Interface::ControlPanel::SetPos( s32 ox, s32 oy )
+void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
 {
     x = ox;
     y = oy;

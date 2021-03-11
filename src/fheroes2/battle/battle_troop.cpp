@@ -30,7 +30,6 @@
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "bin_info.h"
-#include "engine.h"
 #include "game.h"
 #include "game_static.h"
 #include "heroes.h"

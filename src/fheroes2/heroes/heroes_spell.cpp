@@ -37,7 +37,7 @@
 #include "ui_window.h"
 #include "world.h"
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
 namespace

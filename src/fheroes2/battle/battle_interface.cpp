@@ -34,7 +34,6 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "cursor.h"
-#include "engine.h"
 #include "game.h"
 #include "ground.h"
 #include "interface_list.h"

@@ -38,7 +38,6 @@
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
-#include "engine.h"
 #include "font.h"
 #include "game.h"
 #include "image_tool.h"
