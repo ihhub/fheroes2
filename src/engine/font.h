@@ -27,7 +27,6 @@
 #include <vector>
 
 #include "image.h"
-#include "types.h"
 
 #ifdef WITH_TTF
 #include <SDL_ttf.h>
@@ -59,8 +58,8 @@ public:
 
     // Surface RenderText( const std::string &, const RGBA &, bool solid /* or blended */ );
     // Surface RenderChar( char, const RGBA &, bool solid /* or blended */ );
-    // Surface RenderUnicodeText( const std::vector<u16> &, const RGBA &, bool solid /* or blended */ );
-    // Surface RenderUnicodeChar( u16, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderUnicodeText( const std::vector<uint16_t> &, const RGBA &, bool solid /* or blended */ );
+    // Surface RenderUnicodeChar( uint16_t, const RGBA &, bool solid /* or blended */ );
 
 protected:
     TTF_Font * ptr;

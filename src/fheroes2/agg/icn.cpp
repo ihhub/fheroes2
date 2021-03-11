@@ -911,15 +911,8 @@ namespace ICN
                                {ROUTERED, "ROUTERED.ICN"},
                                {YELLOW_FONT, "YELLOWBF.ICN"},
                                {YELLOW_SMALFONT, "YELLOWSF.ICN"},
-                               {BATTLESKIP, "BATTLESKIP.ICN"},
-                               {BATTLEWAIT, "BATTLEWAIT.ICN"},
-                               {BATTLEAUTO, "BATTLEAUTO.ICN"},
-                               {BATTLESETS, "BATTLESETS.ICN"},
-                               {BUYMAX, "BUYMAX.ICN"},
                                {BTNCONFIG, "BTNCONFIG.ICN"},
                                {BTNBATTLEONLY, "BTNBONLY.ICN"},
-                               {BOAT12, "BOAT12.ICN"},
-                               {BTNGIFT, "BTNGIFT.ICN"},
                                {CSLMARKER, "CSLMARKER.ICN"}};
 }
 

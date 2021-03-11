@@ -35,7 +35,6 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "engine.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
