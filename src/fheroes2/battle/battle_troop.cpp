@@ -1120,8 +1120,13 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
         attackerThreat = 0;
     // Negative value of units that changed the side
-    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
+    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
+    }
+    // Heavy penalty for hiting our own units
+    else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
+        attackerThreat *= -2;
+    }
 
     // Avoid effectiveness scaling if we're dealing with archers
     if ( !attackerIsArchers || defender.isArchers() )
