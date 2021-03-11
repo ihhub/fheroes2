@@ -23,11 +23,7 @@
 #include <iostream>
 
 #include "audio_music.h"
-#include "engine.h"
-
-#if defined( _WIN32 )
-#undef main
-#endif
+#include "tools.h"
 
 int main( int argc, char ** argv )
 {
