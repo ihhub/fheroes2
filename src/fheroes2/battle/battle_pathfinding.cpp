@@ -56,10 +56,10 @@ namespace Battle
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
         const size_t index = static_cast<size_t>( targetCell );
-        return index < _cache.size() && nodeIsAccessible( _cache[index] );
+        return index < _cache.size() && nodeIsPassable( _cache[index] );
     }
 
-    bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
+    bool ArenaPathfinder::nodeIsPassable( const ArenaNode & node ) const
     {
         return node._cost == 0 || ( node._isOpen && node._from != -1 );
     }
@@ -71,7 +71,7 @@ namespace Battle
 
         for ( size_t index = 0; index < _cache.size(); ++index ) {
             const ArenaNode & node = _cache[index];
-            if ( nodeIsAccessible( node ) && node._cost <= moveRange ) {
+            if ( nodeIsPassable( node ) && node._cost <= moveRange ) {
                 result.push_back( index );
             }
         }

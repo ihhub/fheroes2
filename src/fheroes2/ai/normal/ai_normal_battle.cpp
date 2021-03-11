@@ -158,7 +158,7 @@ namespace AI
 
                 if ( target.unit ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::GetOptimalAttackTarget( target.unit->GetPosition(), target.cell ), 0 );
+                                          Board::OptimalAttackTarget( target.unit->GetPosition(), target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );

@@ -117,34 +117,26 @@ void Battle::Board::SetPositionQuality( const Unit & b )
     enemies.SortArchers();
 
     for ( const Unit * unit : enemies ) {
-        if ( unit && unit->isValid() ) {
-            const int32_t targetValue = unit->GetScoreQuality( b );
-            const Indexes around = GetAroundIndexes( *unit );
+        if ( !unit || !unit->isValid() ) {
+            continue;
+        }
 
-            for ( const int32_t index : around ) {
-                Cell * cell2 = GetCell( index );
-                if ( !cell2 || !cell2->isPassable3( b, false ) )
-                    continue;
+        const int32_t targetValue = unit->GetScoreQuality( b );
+        const Indexes around = GetAroundIndexes( *unit );
 
-                const int32_t quality = cell2->GetQuality();
+        for ( const int32_t index : around ) {
+            Cell * cell2 = GetCell( index );
+            if ( !cell2 || !cell2->isPassable3( b, false ) )
+                continue;
 
-                // Check what's in the cell behind for double attack
-                int32_t attackValue = targetValue;
-                if ( isDoubleCell ) {
-                    const int32_t targetCell = GetOptimalAttackTarget( unit->GetPosition(), index );
-                    const Cell * behind = GetCell( targetCell, GetDirection( index, targetCell ) );
-                    const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
-                    if ( secondaryTarget && secondaryTarget->GetUID() != unit->GetUID() ) {
-                        attackValue += secondaryTarget->GetScoreQuality( b );
-                    }
-                }
+            const int32_t quality = cell2->GetQuality();
+            const int32_t attackValue = isDoubleCell ? DoubleHexAttackValue( b, *unit, index ) + targetValue : targetValue;
 
-                // Only sum up quality score if it's archers; otherwise just pick the highest
-                if ( unit->isArchers() )
-                    cell2->SetQuality( quality + attackValue );
-                else if ( attackValue > quality )
-                    cell2->SetQuality( attackValue );
-            }
+            // Only sum up quality score if it's archers; otherwise just pick the highest
+            if ( unit->isArchers() )
+                cell2->SetQuality( quality + attackValue );
+            else if ( attackValue > quality )
+                cell2->SetQuality( attackValue );
         }
     }
 }
@@ -532,7 +524,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     return units;
 }
 
-int32_t Battle::Board::GetOptimalAttackTarget( const Position & target, const int32_t from )
+int32_t Battle::Board::OptimalAttackTarget( const Position & target, const int32_t from )
 {
     const Cell * tail = target.GetTail();
     if ( tail && Board::isNearIndexes( from, tail->GetIndex() ) ) {
@@ -541,6 +533,17 @@ int32_t Battle::Board::GetOptimalAttackTarget( const Position & target, const in
     }
     const Cell * head = target.GetHead();
     return head ? head->GetIndex() : -1;
+}
+
+int32_t Battle::Board::DoubleHexAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    const int32_t targetCell = OptimalAttackTarget( target.GetPosition(), from );
+    const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
+    const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
+    if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() ) {
+        return secondaryTarget->GetScoreQuality( attacker );
+    }
+    return 0;
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )

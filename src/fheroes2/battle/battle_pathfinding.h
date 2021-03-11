@@ -65,6 +65,6 @@ namespace Battle
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 
     private:
-        bool nodeIsAccessible( const ArenaNode & node ) const;
+        bool nodeIsPassable( const ArenaNode & node ) const;
     };
 }
