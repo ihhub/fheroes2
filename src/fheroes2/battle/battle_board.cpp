@@ -130,7 +130,7 @@ void Battle::Board::SetPositionQuality( const Unit & b )
                 continue;
 
             const int32_t quality = cell2->GetQuality();
-            const int32_t attackValue = isDoubleCell ? DoubleHexAttackValue( b, *unit, index ) + targetValue : targetValue;
+            const int32_t attackValue = isDoubleCell ? DoubleCellAttackValue( b, *unit, index ) + targetValue : targetValue;
 
             // Only sum up quality score if it's archers; otherwise just pick the highest
             if ( unit->isArchers() )
@@ -535,7 +535,7 @@ int32_t Battle::Board::OptimalAttackTarget( const Position & target, const int32
     return head ? head->GetIndex() : -1;
 }
 
-int32_t Battle::Board::DoubleHexAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
 {
     const int32_t targetCell = OptimalAttackTarget( target.GetPosition(), from );
     const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );

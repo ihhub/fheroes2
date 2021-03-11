@@ -43,7 +43,7 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
-    const std::vector<int> underWallsIndicies = { 7, 28, 49, 72, 95 };
+    const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     {
@@ -362,6 +362,7 @@ namespace AI
         BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
+        const bool isDoubleHex = currentUnit.isDoubleCellAttack();
         const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
@@ -371,17 +372,18 @@ namespace AI
 
         for ( const Unit * enemy : enemies ) {
             const double quality = enemy->GetScoreQuality( currentUnit );
-            // Skip unit if we already locked in on a better one
-            if ( quality < attackHighestValue )
-                continue;
 
-            // Check if we can reach the target and pick best position to attack from
             const Indexes & around = Board::GetAroundIndexes( *enemy );
             for ( const int cell : around ) {
+                // Check if we can reach the target and pick best position to attack from
+                if ( !arena.hexIsPassable( cell ) || arena.CalculateMoveDistance( cell ) > currentUnitMoveRange )
+                    continue;
+
                 const int cellQuality = Board::GetCell( cell )->GetQuality();
-                const bool canReach = arena.hexIsPassable( cell ) && arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
+                const double attackValue = isDoubleHex ? Board::DoubleCellAttackValue( currentUnit, *enemy, cell ) + quality : quality;
+
                 // Pick target if either position is improved or unit is higher value at the same position quality
-                if ( canReach && ( attackPositionValue < cellQuality || ( attackHighestValue < quality && std::fabs( attackPositionValue - cellQuality ) < 0.001 ) ) ) {
+                if ( attackPositionValue < cellQuality || ( attackHighestValue < attackValue && std::fabs( attackPositionValue - cellQuality ) < 0.001 ) ) {
                     attackHighestValue = quality;
                     attackPositionValue = cellQuality;
                     target.unit = enemy;
