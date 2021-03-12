@@ -58,7 +58,6 @@ namespace AI
 
         const bool isDoubleCell = attacker.isDoubleCellAttack();
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
-        const double baseQuality = defender.GetScoreQuality( attacker );
 
         const Indexes & around = Board::GetAroundIndexes( defender );
         for ( const int cell : around ) {
@@ -67,7 +66,7 @@ namespace AI
                 continue;
 
             const int cellQuality = Board::GetCell( cell )->GetQuality();
-            const double attackValue = isDoubleCell ? Board::DoubleCellAttackValue( attacker, defender, cell ) + baseQuality : baseQuality;
+            const double attackValue = Board::OptimalAttackValue( attacker, defender, cell );
 
             // Pick target if either position is improved or unit is higher value at the same position quality
             if ( outcome.positionValue < cellQuality || ( outcome.attackValue < attackValue && std::fabs( outcome.positionValue - cellQuality ) < 0.001 ) ) {
@@ -192,7 +191,7 @@ namespace AI
 
                 if ( target.unit ) {
                     actions.emplace_back( MSG_BATTLE_ATTACK, currentUnit.GetUID(), target.unit->GetUID(),
-                                          Board::OptimalAttackTarget( target.unit->GetPosition(), target.cell ), 0 );
+                                          Board::OptimalAttackTarget( currentUnit, *target.unit, target.cell ), 0 );
                     DEBUG_LOG( DBG_BATTLE, DBG_INFO,
                                currentUnit.GetName() << " melee offense, focus enemy " << target.unit->GetName()
                                                      << " threat level: " << target.unit->GetScoreQuality( currentUnit ) );
@@ -468,7 +467,6 @@ namespace AI
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
-
         // 1. Check if there's a target within our half of the battlefield
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
@@ -523,8 +521,8 @@ namespace AI
                 // Secondary - Archer unit value
                 // Tertiary - Enemy unit threat
                 if ( ( canReach != hadAnotherTarget && canReach )
-                        || ( canReach == hadAnotherTarget
-                            && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < outcome.attackValue ) ) ) ) {
+                     || ( canReach == hadAnotherTarget
+                          && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < outcome.attackValue ) ) ) ) {
                     target.cell = outcome.fromIndex;
                     target.unit = enemy;
                     maxArcherValue = archerValue;

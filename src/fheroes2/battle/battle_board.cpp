@@ -121,16 +121,14 @@ void Battle::Board::SetPositionQuality( const Unit & b )
             continue;
         }
 
-        const int32_t targetValue = unit->GetScoreQuality( b );
         const Indexes around = GetAroundIndexes( *unit );
-
         for ( const int32_t index : around ) {
             Cell * cell2 = GetCell( index );
             if ( !cell2 || !cell2->isPassable3( b, false ) )
                 continue;
 
             const int32_t quality = cell2->GetQuality();
-            const int32_t attackValue = isDoubleCell ? DoubleCellAttackValue( b, *unit, index ) + targetValue : targetValue;
+            const int32_t attackValue = OptimalAttackValue( b, *unit, index );
 
             // Only sum up quality score if it's archers; otherwise just pick the highest
             if ( unit->isArchers() )
@@ -524,26 +522,40 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     return units;
 }
 
-int32_t Battle::Board::OptimalAttackTarget( const Position & target, const int32_t from )
+int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
 {
-    const Cell * tail = target.GetTail();
-    if ( tail && Board::isNearIndexes( from, tail->GetIndex() ) ) {
-        // todo - check 2hex attack
-        return tail->GetIndex();
-    }
-    const Cell * head = target.GetHead();
-    return head ? head->GetIndex() : -1;
-}
-
-int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
-{
-    const int32_t targetCell = OptimalAttackTarget( target.GetPosition(), from );
     const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
     const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
     if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() ) {
         return secondaryTarget->GetScoreQuality( attacker );
     }
     return 0;
+}
+
+int32_t Battle::Board::OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    const int32_t headIndex = target.GetHeadIndex();
+    const int32_t tailIndex = target.GetTailIndex();
+
+    // isNearIndexes should return false if we pass in invalid tail index (-1)
+    if ( isNearIndexes( from, tailIndex ) ) {
+        if ( attacker.isDoubleCellAttack() && isNearIndexes( from, headIndex )
+             && DoubleCellAttackValue( attacker, target, headIndex, from ) > DoubleCellAttackValue( attacker, target, tailIndex, from ) ) {
+            // Special case when attacking wide unit from the middle cell and could turn around
+            return headIndex;
+        }
+        return tailIndex;
+    }
+    return headIndex;
+}
+
+int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    if ( attacker.isDoubleCellAttack() ) {
+        const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
+        return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, targetCell, from );
+    }
+    return target.GetScoreQuality( attacker );
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )
