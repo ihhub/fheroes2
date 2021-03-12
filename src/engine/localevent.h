@@ -346,9 +346,7 @@ private:
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     uint16_t _musicVolume;
-#endif
 
     enum
     {

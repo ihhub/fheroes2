@@ -1105,11 +1105,7 @@ void LocalEvent::StopSounds()
     _isSoundPaused = Mixer::isPaused( -1 );
     Mixer::Pause();
     Music::Pause();
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     _musicVolume = Music::Volume( 0 );
-#endif
-
     loop_delay = 100;
 }
 
@@ -1117,9 +1113,7 @@ void LocalEvent::ResumeSounds()
 {
     if ( _isHiddenWindow ) {
         if ( !_isMusicPaused ) {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
             Music::Volume( _musicVolume );
-#endif
             Music::Resume();
         }
         if ( !_isSoundPaused )
