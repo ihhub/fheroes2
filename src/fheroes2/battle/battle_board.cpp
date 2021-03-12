@@ -237,7 +237,6 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     const Castle * castle = Arena::GetCastle();
     const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
     const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-    const int32_t moatPenalty = unit.GetSpeed() * 100;
 
     std::map<int32_t, CellNode> cellMap;
     cellMap[currentCellId].parentCellId = -1;
@@ -255,10 +254,11 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
         while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
                 && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
-            CellNode & currentCellNode = cellMap[currentCellId];
-
             const Cell & center = at( currentCellId );
+
+            CellNode & currentCellNode = cellMap[currentCellId];
             Indexes aroundCellIds;
+
             if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
@@ -272,8 +272,10 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                     const int32_t tailCellId = isLeftDirection ? cellId + 1 : cellId - 1;
 
                     int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) )
-                        cost += std::max( moatPenalty - currentCellNode.cost, 100 );
+
+                    // Moat penalty. Not applied if one of the target cells is located in the moat.
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) && cellId != targetHeadCellId && cellId != targetTailCellId )
+                        cost += 100 * ARENASIZE;
 
                     // Turn back. No movement at all.
                     if ( isLeftDirection != currentCellNode.leftDirection )
@@ -335,8 +337,10 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
                 if ( cellMap[cellId].open && cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId, unit.GetColor() ) ) ) {
                     int32_t cost = 100 * Board::GetDistance( cellId, targetHeadCellId );
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) )
-                        cost += 100;
+
+                    // Moat penalty. Not applied if the target cell is located in the moat.
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) && cellId != targetHeadCellId )
+                        cost += 100 * ARENASIZE;
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
