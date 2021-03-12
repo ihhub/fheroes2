@@ -274,7 +274,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                     int32_t cost = Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId );
 
                     // Moat penalty. Not applied if one of the target cells is located in the moat.
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) && cellId != targetHeadCellId && cellId != targetTailCellId )
+                    if ( isMoatBuilt && ( Board::isMoatIndex( cellId, unit.GetColor() ) || Board::isMoatIndex( tailCellId, unit.GetColor() ) )
+                         && cellId != targetHeadCellId && cellId != targetTailCellId )
                         cost += ARENASIZE;
 
                     // Turn back. No movement at all.
