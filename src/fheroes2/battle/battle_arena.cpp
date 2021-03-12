@@ -604,17 +604,17 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     return result;
 }
 
-uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
-bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+bool Battle::Arena::hexIsAccessible( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
 }
 
-bool Battle::Arena::hexIsPassable( int32_t indexTo )
+bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
 }
