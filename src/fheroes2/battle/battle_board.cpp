@@ -111,7 +111,6 @@ void Battle::Board::SetPositionQuality( const Unit & b )
 {
     Arena * arena = GetArena();
     Units enemies( arena->GetForce( b.GetCurrentColor(), true ), true );
-    const bool isDoubleCell = b.isDoubleCellAttack();
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();
