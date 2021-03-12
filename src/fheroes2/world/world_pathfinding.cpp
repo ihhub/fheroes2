@@ -260,7 +260,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
     // if current tile contains a monster, skip it
-    if ( world.GetTiles( currentNodeIdx ).GetObject() == MP2::OBJ_MONSTER ) {
+    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER ) {
         return;
     }
 
