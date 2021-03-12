@@ -56,7 +56,6 @@ namespace AI
     {
         MeleeAttackOutcome outcome;
 
-        const bool isDoubleCell = attacker.isDoubleCellAttack();
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
 
         const Indexes & around = Board::GetAroundIndexes( defender );
@@ -395,9 +394,6 @@ namespace AI
         BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const bool isDoubleHex = currentUnit.isDoubleCellAttack();
-        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
-
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
 
@@ -462,7 +458,6 @@ namespace AI
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
         const int myHeadIndex = currentUnit.GetHeadIndex();
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
