@@ -61,6 +61,8 @@
 build
 
 # fheroes2 related files
+files/save
+fheroes2
 fheroes2.cfg
 fheroes2.bin
 fheroes2.pot
