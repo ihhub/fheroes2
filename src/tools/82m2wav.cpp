@@ -66,6 +66,7 @@ int main( int argc, char ** argv )
         wavHeader.putLE32( size ); // size
 
         fd_body.write( (const char *)wavHeader.data(), wavHeader.size() );
+        fd_body.write( body, size );
         fd_body.close();
     }
 
