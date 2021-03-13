@@ -731,6 +731,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
     // blind
     if ( Modes( SP_BLIND ) ) {
         blindanswer = true;
+        ResetBlind();
     }
 
     return killed;
