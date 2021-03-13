@@ -200,7 +200,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
                 tile.RedrawObjects( dst, isPuzzleDraw, *this );
             }
-            int object = tile.GetObject();
+            const int object = tile.GetObject();
             if ( MP2::OBJ_ZERO != object ) {
                 if ( drawMonstersAndBoats ) {
                     if ( MP2::OBJ_BOAT == object ) {
