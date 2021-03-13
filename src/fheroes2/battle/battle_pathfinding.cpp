@@ -98,8 +98,9 @@ namespace Battle
 
         const bool unitIsWide = unit.isWide();
 
-        const Cell * unitHead = unit.GetPosition().GetHead();
-        const Cell * unitTail = unit.GetPosition().GetTail();
+        const Position & startPosition = unit.GetPosition();
+        const Cell * unitHead = startPosition.GetHead();
+        const Cell * unitTail = startPosition.GetTail();
         if ( !unitHead || ( unitIsWide && !unitTail ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
             return;
@@ -187,19 +188,21 @@ namespace Battle
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
 
                     const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
-                    const Cell * tailCell = ( unitIsWide && pathStart != newTailIndex ) ? Board::GetCell( newTailIndex ) : nullptr;
+                    const Cell * tailCell = ( unitIsWide && !startPosition.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
 
                     // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
                     if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
-                        const uint32_t cost = _cache[fromNode]._cost;
+                        const uint32_t cost = previousNode._cost;
                         ArenaNode & node = _cache[newNode];
 
                         // Check if we're turning back. No movement at all.
-                        uint32_t additionalCost = ( isLeftDirection != previousNode._isLeftDirection ) ? 0u : 1u;
-
+                        uint32_t additionalCost = 1u;
+                        if ( isLeftDirection != previousNode._isLeftDirection ) {
+                            additionalCost = 0;
+                        }
                         // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
-                        if ( isMoatBuilt && Board::isMoatIndex( newNode ) ) {
-                            additionalCost += ( moatPenalty > previousNode._cost ) ? moatPenalty - previousNode._cost : 1u;
+                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode ) || Board::isMoatIndex( newTailIndex ) ) && moatPenalty > previousNode._cost ) {
+                            additionalCost = moatPenalty - cost;
                         }
 
                         // Now we check if headCell has a unit - this determines if hex is passable or just accessible (for attack)
