@@ -429,8 +429,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                 result.resize( unit.GetSpeed() );
         }
 
-        // Skip moat position
-        if ( isMoatBuilt && !Board::isMoatIndex( startCellId, unit.GetColor() ) ) {
+        // Skip moat position.
+        if ( isMoatBuilt ) {
             for ( size_t i = 0; i < result.size(); ++i ) {
                 if ( isWideUnit && result[i] == unit.GetTailIndex() )
                     continue;
