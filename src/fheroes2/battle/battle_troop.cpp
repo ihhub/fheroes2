@@ -1051,18 +1051,13 @@ u32 Battle::Unit::GetDefense( void ) const
     // check moat
     const Castle * castle = Arena::GetCastle();
 
-    if ( castle && castle->isBuild( BUILD_MOAT ) ) {
-        const Bridge * bridge = Arena::GetBridge();
-        const bool isOnBridgeCell = bridge && !bridge->isDown() && ( bridge->isMoatCell( GetHeadIndex() ) || bridge->isMoatCell( GetTailIndex() ) );
+    if ( castle && castle->isBuild( BUILD_MOAT ) && ( Board::isMoatIndex( GetHeadIndex(), GetColor() ) || Board::isMoatIndex( GetTailIndex(), GetColor() ) ) ) {
+        const u32 step = GameStatic::GetBattleMoatReduceDefense();
 
-        if ( isOnBridgeCell || Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) ) {
-            const u32 step = GameStatic::GetBattleMoatReduceDefense();
-
-            if ( step >= res )
-                res = 1;
-            else
-                res -= step;
-        }
+        if ( step >= res )
+            res = 1;
+        else
+            res -= step;
     }
 
     return res;
