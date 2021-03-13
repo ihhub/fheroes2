@@ -278,9 +278,12 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                         cost = 0;
                     }
                     // Moat penalty. Not applied if one of the target cells is located in the moat.
-                    else if ( isMoatBuilt && ( Board::isMoatIndex( cellId, unit.GetColor() ) || Board::isMoatIndex( tailCellId, unit.GetColor() ) )
-                         && cellId != targetHeadCellId && cellId != targetTailCellId ) {
-                        cost += ARENASIZE;
+                    else if ( isMoatBuilt && cellId != targetHeadCellId && cellId != targetTailCellId ) {
+                        // Don't apply the moat penalty to the unit's tail if the head cell was also in the moat at the previous stage.
+                        if ( Board::isMoatIndex( cellId, unit.GetColor() )
+                             || ( Board::isMoatIndex( tailCellId, unit.GetColor() ) && !Board::isMoatIndex( currentCellId, unit.GetColor() ) ) ) {
+                            cost += ARENASIZE;
+                        }
                     }
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
