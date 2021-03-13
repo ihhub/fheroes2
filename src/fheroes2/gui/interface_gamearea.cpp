@@ -210,10 +210,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         monsterList.emplace_back( tile.GetIndex() );
                     }
                 }
-                if ( drawHeroes ) {
-                    if ( MP2::OBJ_HEROES == object ) {
-                        drawList.emplace_back( tile.GetIndex() );
-                    }
+                if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+                    drawList.emplace_back( tile.GetIndex() );
                 }
             }
         }
