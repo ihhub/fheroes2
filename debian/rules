@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+# output every command that modifies files on the build system.
+export DH_VERBOSE = 1
+
+export FHEROES2_STRICT_COMPILATION = 1
+export WITHOUT_BUNDLED_LIBS = 1
+export RELEASE = 1
+
+%:
+	dh $@ --parallel
