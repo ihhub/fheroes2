@@ -273,14 +273,15 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
                     int32_t cost = Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId );
 
-                    // Moat penalty. Not applied if one of the target cells is located in the moat.
-                    if ( isMoatBuilt && ( Board::isMoatIndex( cellId, unit.GetColor() ) || Board::isMoatIndex( tailCellId, unit.GetColor() ) )
-                         && cellId != targetHeadCellId && cellId != targetTailCellId )
-                        cost += ARENASIZE;
-
                     // Turn back. No movement at all.
-                    if ( isLeftDirection != currentCellNode.leftDirection )
+                    if ( isLeftDirection != currentCellNode.leftDirection ) {
                         cost = 0;
+                    }
+                    // Moat penalty. Not applied if one of the target cells is located in the moat.
+                    else if ( isMoatBuilt && ( Board::isMoatIndex( cellId, unit.GetColor() ) || Board::isMoatIndex( tailCellId, unit.GetColor() ) )
+                         && cellId != targetHeadCellId && cellId != targetTailCellId ) {
+                        cost += ARENASIZE;
+                    }
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
@@ -340,8 +341,9 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                     int32_t cost = Board::GetDistance( cellId, targetHeadCellId );
 
                     // Moat penalty. Not applied if the target cell is located in the moat.
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) && cellId != targetHeadCellId )
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit.GetColor() ) && cellId != targetHeadCellId ) {
                         cost += ARENASIZE;
+                    }
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
