@@ -152,9 +152,8 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
-    if ( Settings::Get().ShowButtons() &&
-         // move border window
-         BorderWindow::QueueEventProcessing() ) {
+    if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
+        // Move border window. No other action is required.
     }
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();

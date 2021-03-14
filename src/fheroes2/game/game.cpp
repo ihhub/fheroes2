@@ -77,32 +77,41 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        Info::Info()
-            : object( MP2::OBJ_ZERO )
-            , index( 0 )
-            , tile( 0 )
-            , alpha( 255 )
-            , isFadeOut( true )
+        FadeTask::FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
+                            bool fadeIn_, uint8_t objectTileset_ )
+            : object( object_ )
+            , objectIndex( objectIndex_ )
+            , animationIndex( animationIndex_ )
+            , fromIndex( fromIndex_ )
+            , toIndex( toIndex_ )
+            , alpha( alpha_ )
+            , fadeOut( fadeOut_ )
+            , fadeIn( fadeIn_ )
+            , objectTileset( objectTileset_ )
         {}
 
-        Info::Info( u8 object_, u8 index_, s32 tile_, u32 alpha_, bool fadeOut )
-            : object( object_ )
-            , tile( tile_ )
-            , alpha( alpha_ )
-            , isFadeOut( fadeOut )
-        {
-            const fheroes2::Image & tileImage = world.GetTiles( tile_ ).GetTileSurface();
-            surfaceSize.width = tileImage.width();
-            surfaceSize.height = tileImage.height();
+        FadeTask::FadeTask()
+            : object( MP2::OBJ_ZERO )
+            , objectIndex( 0 )
+            , animationIndex( 0 )
+            , fromIndex( 0 )
+            , toIndex( 0 )
+            , alpha( 0 )
+            , fadeOut( false )
+            , fadeIn( false )
+            , objectTileset( 0 )
 
-            index = ICN::AnimationFrame( MP2::GetICNObject( object ), index_, 0 );
-            if ( 0 == index ) {
-                index = index_;
-            }
-        }
+        {}
 
-        Info removeInfo;
+        // Single instance of FadeTask.
+        FadeTask fadeTask;
     }
+}
+
+// Returns the difficulty level based on the type of game.
+int Game::getDifficulty()
+{
+    return ( ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) != 0 ) ? Difficulty::NORMAL : Settings::Get().GameDifficulty();
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )
@@ -127,6 +136,11 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
         players.push_back( player );
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
+}
+
+void Game::saveDifficulty( const int difficulty )
+{
+    Settings::Get().SetGameDifficulty( difficulty );
 }
 
 void Game::SavePlayers( const std::string & mapFileName, const Players & players )
@@ -214,14 +228,53 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::Set( const Info & info )
+void Game::ObjectFadeAnimation::FinishFadeTask()
 {
-    removeInfo = info;
+    if ( fadeTask.object == MP2::OBJ_ZERO ) {
+        return;
+    }
+
+    if ( fadeTask.fadeOut ) {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+        if ( tile.GetObject() == fadeTask.object ) {
+            tile.RemoveObjectSprite();
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
+    }
+
+    if ( fadeTask.fadeIn ) {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+        if ( MP2::OBJ_BOAT == fadeTask.object ) {
+            tile.setBoat( Direction::RIGHT );
+        }
+    }
+
+    fadeTask.object = MP2::OBJ_ZERO;
 }
 
-Game::ObjectFadeAnimation::Info & Game::ObjectFadeAnimation::Get()
+void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromIndex, uint32_t toIndex, bool fadeOut, bool fadeIn )
 {
-    return removeInfo;
+    FinishFadeTask();
+
+    const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
+    const uint32_t alpha = fadeOut ? 255u : 0;
+    if ( MP2::OBJ_MONSTER == object ) {
+        const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
+        fadeTask = FadeTask( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+    }
+    else if ( MP2::OBJ_BOAT == object ) {
+        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+    }
+    else {
+        const int icn = MP2::GetICNObject( object );
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() );
+        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
+    }
+}
+
+Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTask()
+{
+    return fadeTask;
 }
 
 u32 & Game::MapsAnimationFrame( void )
@@ -237,31 +290,31 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
+    if ( !Settings::Get().Sound() ) {
+        return;
+    }
+
     const Point abs_pt( Interface::GetFocusCenter() );
-    const Settings & conf = Settings::Get();
+    std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
-    if ( conf.Sound() ) {
-        std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
+    // scan 4x4 square from focus
+    for ( s32 yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
+        for ( s32 xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
+            if ( Maps::isValidAbsPoint( xx, yy ) ) {
+                const u32 channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
+                if ( channel < reserved_vols.size() ) {
+                    // calculation volume
+                    const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
+                    const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
 
-        // scan 4x4 square from focus
-        for ( s32 yy = abs_pt.y - 3; yy <= abs_pt.y + 3; ++yy ) {
-            for ( s32 xx = abs_pt.x - 3; xx <= abs_pt.x + 3; ++xx ) {
-                if ( Maps::isValidAbsPoint( xx, yy ) ) {
-                    const u32 channel = GetMixerChannelFromObject( world.GetTiles( xx, yy ) );
-                    if ( channel < reserved_vols.size() ) {
-                        // calculation volume
-                        const int length = std::max( std::abs( xx - abs_pt.x ), std::abs( yy - abs_pt.y ) );
-                        const int volume = ( 2 < length ? 4 : ( 1 < length ? 8 : ( 0 < length ? 12 : 16 ) ) ) * Mixer::MaxVolume() / 16;
-
-                        if ( volume > reserved_vols[channel] )
-                            reserved_vols[channel] = volume;
-                    }
+                    if ( volume > reserved_vols[channel] )
+                        reserved_vols[channel] = volume;
                 }
             }
         }
-
-        AGG::LoadLOOPXXSounds( reserved_vols );
     }
+
+    AGG::LoadLOOPXXSounds( reserved_vols, true );
 }
 
 u32 Game::GetMixerChannelFromObject( const Maps::Tiles & tile )
@@ -293,7 +346,7 @@ u32 Game::GetRating( void )
         break;
     }
 
-    switch ( conf.GameDifficulty() ) {
+    switch ( Game::getDifficulty() ) {
     case Difficulty::NORMAL:
         rating += 30;
         break;

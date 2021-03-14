@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "race.h"
-#include "engine.h"
 #include "rand.h"
 #include "translations.h"
 

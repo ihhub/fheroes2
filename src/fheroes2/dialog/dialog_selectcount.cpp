@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
+#include <cassert>
 
 namespace
 {
@@ -312,8 +313,10 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     return !res.empty();
 }
 
-int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
+int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool savelastTroop, uint32_t & redistributeCount, bool & useFastSplit )
 {
+    assert( freeSlots > 0 );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // cursor
@@ -324,11 +327,11 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     const int spacer = 10;
 
     const int defaultYPosition = 160;
-    const int boxHeight = free_slots > 2 ? 90 + spacer : 45;
+    const int boxHeight = freeSlots > 1 ? 90 + spacer : 45;
     const int boxYPosition = defaultYPosition + ( ( display.height() - display.DEFAULT_HEIGHT ) / 2 ) - boxHeight;
 
     NonFixedFrameBox box( boxHeight, boxYPosition, true );
-    SelectValue sel( min, max, cur, 1 );
+    SelectValue sel( min, redistributeMax, redistributeCount, 1 );
     Text text;
 
     const fheroes2::Rect & pos = box.GetArea();
@@ -341,75 +344,54 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     sel.Redraw();
 
     fheroes2::MovableSprite ssp;
-    fheroes2::Sprite sp3;
-    fheroes2::Sprite sp4;
-    fheroes2::Sprite sp5;
+    std::vector<fheroes2::Rect> vrts( freeSlots - 1 );
 
-    std::vector<fheroes2::Rect> vrts( 3 );
+    if ( freeSlots > 1 ) {
+        std::vector<fheroes2::Sprite> sprites( freeSlots - 1 );
 
-    fheroes2::Rect & rt3 = vrts[0];
-    fheroes2::Rect & rt4 = vrts[1];
-    fheroes2::Rect & rt5 = vrts[2];
+        int spriteIconIdx = 21;
+        const int deltaX = 10;
+        const int deltaXStart = static_cast<int>( freeSlots - 2 ) * -5;
 
-    switch ( free_slots ) {
-    case 0:
-        break;
+        for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+            sprites[i] = fheroes2::AGG::GetICN( ICN::REQUESTS, spriteIconIdx );
+            ++spriteIconIdx;
 
-    case 3:
-        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
-        rt3 = fheroes2::Rect( center - sp3.width() / 2, pos.y + 95, sp3.width(), sp3.height() );
-        break;
+            const int spriteWidth = sprites[i].width();
+            const int offset = spriteWidth * ( i - freeSlots / 2 ) + spriteWidth / 2;
+            vrts[i] = fheroes2::Rect( center + offset + deltaXStart + i * deltaX, pos.y + 95, spriteWidth, sprites[i].height() );
+        }
 
-    case 4:
-        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
-        sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
-        rt3 = fheroes2::Rect( center - 5 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
-        rt4 = fheroes2::Rect( center + 5, pos.y + 95, sp4.width(), sp4.height() );
-        break;
-
-    case 5:
-        sp3 = fheroes2::AGG::GetICN( ICN::REQUESTS, 22 );
-        sp4 = fheroes2::AGG::GetICN( ICN::REQUESTS, 23 );
-        sp5 = fheroes2::AGG::GetICN( ICN::REQUESTS, 24 );
-        rt3 = fheroes2::Rect( center - sp3.width() / 2 - 10 - sp3.width(), pos.y + 95, sp3.width(), sp3.height() );
-        rt4 = fheroes2::Rect( center - sp4.width() / 2, pos.y + 95, sp4.width(), sp4.height() );
-        rt5 = fheroes2::Rect( center + sp5.width() / 2 + 10, pos.y + 95, sp5.width(), sp5.height() );
-        break;
-    }
-
-    if ( !sp3.empty() ) {
         text.Set( _( "Fast separation into slots:" ), Font::BIG );
         text.Blit( center - text.w() / 2, pos.y + 65 );
 
-        fheroes2::Blit( sp3, display, rt3.x, rt3.y );
+        for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+            fheroes2::Blit( sprites[i], display, vrts[i].x, vrts[i].y );
+        }
 
-        if ( !sp4.empty() )
-            fheroes2::Blit( sp4, display, rt4.x, rt4.y );
-        if ( !sp5.empty() )
-            fheroes2::Blit( sp5, display, rt5.x, rt5.y );
-
-        ssp.hide();
-        ssp.resize( sp3.width(), sp3.height() );
+        ssp.resize( sprites[0].width(), sprites[0].height() );
         ssp.reset();
+
         fheroes2::DrawBorder( ssp, 214 );
+
+        if ( useFastSplit ) {
+            ssp.setPosition( vrts[0].x, vrts[0].y );
+            ssp.show();
+        }
     }
 
     fheroes2::ButtonGroup btnGroups( box.GetArea(), Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    const uint32_t maximumAcceptedValue = savelast ? max : max - 1;
+    const uint32_t maximumAcceptedValue = savelastTroop ? redistributeMax : redistributeMax - 1;
 
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
-    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const Rect buttonArea( 5, 0, 61, 25 );
-    buttonMax.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
-                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
-    buttonMin.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 0 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
-                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 1 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
-
-    SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
+    SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -425,19 +407,19 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
         if ( buttonMin.isVisible() )
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
-        if ( PressIntKey( max, cur ) ) {
-            sel.SetCur( cur );
+        if ( PressIntKey( redistributeMax, redistributeCount ) ) {
+            sel.SetCur( redistributeCount );
             redraw_count = true;
         }
         else if ( buttonMax.isVisible() && le.MouseClickLeft( buttonMax.area() ) ) {
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
-            cur = maximumAcceptedValue;
+            redistributeCount = maximumAcceptedValue;
             sel.SetCur( maximumAcceptedValue );
             redraw_count = true;
         }
         else if ( buttonMin.isVisible() && le.MouseClickLeft( buttonMin.area() ) ) {
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
-            cur = min;
+            redistributeCount = min;
             sel.SetCur( min );
             redraw_count = true;
         }
@@ -456,7 +438,7 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
             }
 
         if ( redraw_count ) {
-            SwitchMaxMinButtons( buttonMin, buttonMax, cur, maximumAcceptedValue );
+            SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
             cursor.Hide();
             if ( !ssp.empty() )
                 ssp.hide();
@@ -479,20 +461,24 @@ int Dialog::ArmySplitTroop( int free_slots, u32 max, u32 & cur, bool savelast )
     int result = 0;
 
     if ( bres == Dialog::OK ) {
-        cur = sel();
+        redistributeCount = sel();
 
         if ( !ssp.isHidden() ) {
             const fheroes2::Rect rt( ssp.x(), ssp.y(), ssp.width(), ssp.height() );
 
-            if ( rt == rt3 )
-                result = 3;
-            else if ( rt == rt4 )
-                result = 4;
-            else if ( rt == rt5 )
-                result = 5;
+            for ( uint32_t i = 0; i < freeSlots - 1; ++i ) {
+                if ( rt == vrts[i] ) {
+                    result = i + 2;
+                    break;
+                }
+            }
+
+            useFastSplit = true;
         }
-        else
+        else {
             result = 2;
+            useFastSplit = false;
+        }
     }
 
     return result;

@@ -20,10 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <sstream>
 
 #include "agg.h"
-#include "assert.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "campaign_savedata.h"
@@ -99,16 +99,16 @@ int Game::NewCampaign()
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
-    Video::ShowVideo( "INTRO.SMK", false );
-    Video::ShowVideo( "CHOOSEW.SMK", false );
-    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", true, campaignRoi );
+    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
+    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
     campaignSaveData.setCampaignID( chosenCampaign );
     campaignSaveData.setCurrentScenarioID( 0 );
 
-    AGG::PlayMusic( MUS::VICTORY );
+    AGG::PlayMusic( MUS::VICTORY, true, true );
 
     return Game::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -153,8 +153,6 @@ int Game::NewNetwork( void )
         le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        // if(le.MouseClickLeft(buttonHost) || HotKeyPressEvent(EVENT_BUTTON_HOST)) return NetworkHost();
-        // if(le.MouseClickLeft(buttonGuest) || HotKeyPressEvent(EVENT_BUTTON_GUEST)) return NetworkGuest();
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return MAINMENU;
 
@@ -176,7 +174,7 @@ int Game::NewNetwork( void )
 int Game::NewGame( void )
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     Settings & conf = Settings::Get();
 
     // reset last save name

@@ -333,12 +333,11 @@ void Maps::ClearFog( s32 index, int scoute, int color )
 {
     if ( 0 != scoute && isValidAbsIndex( index ) ) {
         const Point center = GetPoint( index );
-        const Settings & conf = Settings::Get();
 
         // AI advantage
         const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
         if ( isAIPlayer ) {
-            scoute += Difficulty::GetScoutingBonus( conf.GameDifficulty() );
+            scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
         }
 
         const int alliedColors = Players::GetPlayerFriends( color );

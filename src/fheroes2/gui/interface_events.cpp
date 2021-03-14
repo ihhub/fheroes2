@@ -84,7 +84,9 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         RedrawFocus();
 
         hero->SetMove( true );
-        Cursor::Get().SetThemes( Cursor::WAIT );
+        if ( hero->MayStillMove() ) {
+            Cursor::Get().SetThemes( Cursor::WAIT );
+        }
     }
 }
 

@@ -1,5 +1,9 @@
 AR := ar
+
+ifndef CXX
 CXX := g++
+endif
+
 LINK := libtool
 SIMPLE_LINK_FLAGS := -dynamic -undefined suppress -flat_namespace
 

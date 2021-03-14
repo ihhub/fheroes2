@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #ifdef AI
@@ -34,7 +35,6 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "engine.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
@@ -127,6 +127,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
+    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -163,8 +165,14 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() ) {
-            basicInterface.SetFocus( *it );
+        else if ( it != myCastles.end() && updateCastleFocus ) {
+            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+            if ( heroInCastle == nullptr ) {
+                basicInterface.SetFocus( *it );
+            }
+            else {
+                basicInterface.SetFocus( heroInCastle );
+            }
         }
     }
     basicInterface.RedrawFocus();
@@ -650,7 +658,7 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true );
+            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day
@@ -691,6 +699,9 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
+            }
+            else {
+                continue;
             }
         }
 
@@ -985,23 +996,47 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
-            if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-                if ( fadeInfo.isFadeOut && fadeInfo.alpha < 20 ) {
-                    fadeInfo.object = MP2::OBJ_ZERO;
-                }
-                else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
-                    Maps::Tiles & objectTile = world.GetTiles( fadeInfo.tile );
-                    objectTile.SetObject( fadeInfo.object );
-                    // TODO: we need to expand the logic to all objects.
-                    if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-                        objectTile.SetObjectSpriteIndex( fadeInfo.index );
+            auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+            if ( MP2::OBJ_ZERO != fadeTask.object ) {
+                if ( fadeTask.fadeOut ) {
+                    if ( fadeTask.alpha > 20 ) {
+                        fadeTask.alpha -= 20;
                     }
-                    fadeInfo.object = MP2::OBJ_ZERO;
+                    else {
+                        fadeTask.fadeOut = false;
+                        fadeTask.alpha = 0;
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+                        if ( tile.GetObject() == fadeTask.object ) {
+                            tile.RemoveObjectSprite();
+                            tile.SetObject( MP2::OBJ_ZERO );
+                        }
+
+                        if ( !fadeTask.fadeIn ) {
+                            fadeTask.object = MP2::OBJ_ZERO;
+                        }
+                    }
+                }
+                else if ( fadeTask.fadeIn ) {
+                    if ( fadeTask.alpha == 0 ) {
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+                        if ( MP2::OBJ_BOAT == fadeTask.object ) {
+                            tile.setBoat( Direction::RIGHT );
+                        }
+                    }
+
+                    if ( fadeTask.alpha < 235 ) {
+                        fadeTask.alpha += 20;
+                    }
+                    else {
+                        fadeTask.fadeIn = false;
+                        fadeTask.alpha = 255;
+                        fadeTask.object = MP2::OBJ_ZERO;
+                    }
                 }
                 else {
-                    fadeInfo.alpha += ( fadeInfo.isFadeOut ) ? -20 : 20;
+                    assert( 0 ); // incorrect fading animation setup!
                 }
+
                 gameArea.SetRedraw();
             }
         }
@@ -1024,6 +1059,8 @@ int Interface::Basic::HumanTurn( bool isload )
             Game::DialogPlayers( conf.CurrentColor(),
                                  _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
         }
+
+        Game::ObjectFadeAnimation::FinishFadeTask();
 
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );

@@ -24,10 +24,10 @@
 #include <map>
 #include <string>
 
-#include "engine.h"
 #include "logging.h"
 #include "serialize.h"
 #include "system.h"
+#include "tools.h"
 
 struct chunk
 {

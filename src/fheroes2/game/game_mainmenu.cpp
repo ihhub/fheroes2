@@ -42,10 +42,21 @@
 #define CREDITS_DEFAULT 13
 #define QUIT_DEFAULT 17
 
+namespace
+{
+    struct ButtonInfo
+    {
+        u32 frame;
+        fheroes2::Button & button;
+        bool isOver;
+        bool wasOver;
+    };
+}
+
 int Game::MainMenu( bool isFirstGameRun )
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     Settings & conf = Settings::Get();
 
@@ -105,19 +116,13 @@ int Game::MainMenu( bool isFirstGameRun )
 
     u32 lantern_frame = 0;
 
-    struct ButtonInfo
-    {
-        u32 frame;
-        fheroes2::Button & button;
-        bool isOver;
-        bool wasOver;
-    } buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
-                   {LOADGAME_DEFAULT, buttonLoadGame, false, false},
-                   {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
-                   {CREDITS_DEFAULT, buttonCredits, false, false},
-                   {QUIT_DEFAULT, buttonQuit, false, false}};
+    ButtonInfo buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
+                            {LOADGAME_DEFAULT, buttonLoadGame, false, false},
+                            {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
+                            {CREDITS_DEFAULT, buttonCredits, false, false},
+                            {QUIT_DEFAULT, buttonQuit, false, false}};
 
-    for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); i++ ) {
+    for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
         cursor.Hide();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
@@ -132,11 +137,14 @@ int Game::MainMenu( bool isFirstGameRun )
                 //    display.Fade();
                 break;
             }
+            else {
+                continue;
+            }
         }
 
         bool redrawScreen = false;
 
-        for ( u32 i = 0; i < ARRAY_COUNT( buttons ); i++ ) {
+        for ( u32 i = 0; i < ARRAY_COUNT( buttons ); ++i ) {
             buttons[i].wasOver = buttons[i].isOver;
 
             if ( le.MousePressLeft( buttons[i].button.area() ) ) {
@@ -152,7 +160,7 @@ int Game::MainMenu( bool isFirstGameRun )
                 u32 frame = buttons[i].frame;
 
                 if ( buttons[i].isOver && !buttons[i].wasOver )
-                    frame++;
+                    ++frame;
 
                 if ( !redrawScreen ) {
                     cursor.Hide();

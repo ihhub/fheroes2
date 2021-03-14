@@ -353,8 +353,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
             }
             else {
-                if ( dstx < display.width() && dsty < display.height() )
-                    fheroes2::SetPixel( display, dstx, dsty, fillColor );
+                fheroes2::SetPixel( display, dstx, dsty, fillColor );
             }
         }
     }

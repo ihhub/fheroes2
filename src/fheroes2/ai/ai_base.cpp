@@ -81,9 +81,9 @@ namespace AI
 
     void Base::HeroesRemove( const Heroes & ) {}
 
-    void Base::HeroesPreBattle( HeroBase & ) {}
+    void Base::HeroesPreBattle( HeroBase &, bool ) {}
 
-    void Base::HeroesAfterBattle( HeroBase & ) {}
+    void Base::HeroesAfterBattle( HeroBase &, bool ) {}
 
     void Base::HeroesActionNewPosition( Heroes & ) {}
 
@@ -162,7 +162,7 @@ namespace AI
         }
 
         if ( !Settings::Get().MusicMIDI() )
-            AGG::PlayMusic( MUS::COMPUTER_TURN );
+            AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
 

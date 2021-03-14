@@ -277,7 +277,7 @@ int Castle::OpenDialog( bool readonly )
 
     // resource
     const Rect & rectResource = RedrawResourcePanel( cur_pt );
-    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y - 3 );
 
     // button swap
     SwapButton buttonSwap( cur_pt.x + 4, cur_pt.y + 345 );
@@ -305,7 +305,7 @@ int Castle::OpenDialog( bool readonly )
     buttonNextCastle.draw();
     buttonExit.draw();
 
-    AGG::PlayMusic( MUS::FromRace( race ) );
+    AGG::PlayMusic( MUS::FromRace( race ), true, true );
 
     LocalEvent & le = LocalEvent::Get();
     cursor.Show();
@@ -741,9 +741,6 @@ int Castle::OpenDialog( bool readonly )
     if ( build != BUILD_NOTHING ) {
         BuyBuilding( build );
     }
-
-    if ( heroes.Guest() && conf.ExtHeroRecalculateMovement() )
-        heroes.Guest()->RecalculateMovePoints();
 
     if ( conf.ExtGameDynamicInterface() )
         conf.SetEvilInterface( interface );

@@ -123,6 +123,7 @@ namespace Battle
         virtual int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
         int GetCurrentControl() const;
+        uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
         virtual int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
@@ -138,6 +139,7 @@ namespace Battle
         u32 CalculateDamageUnit( const Unit & enemy, double dmg ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
+        bool isUnderSpellEffect( const Spell & spell ) const;
         void PostAttackAction( Unit & );
         void ResetBlind( void );
         void SpellModesAction( const Spell &, u32, const HeroBase * );

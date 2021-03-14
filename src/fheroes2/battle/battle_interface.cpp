@@ -34,7 +34,6 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "cursor.h"
-#include "engine.h"
 #include "game.h"
 #include "ground.h"
 #include "interface_list.h"
@@ -2899,10 +2898,8 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
 
                 deathColor = defender->GetArmyColor();
             }
-            else
+            else if ( it->damage ) {
                 // wince animation
-                if ( it->damage ) {
-                // wnce animation
                 defender->SwitchAnimation( Monster_Info::WNCE );
                 AGG::PlaySound( defender->M82Wnce() );
                 ++finish;
@@ -2930,13 +2927,14 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     }
 
     // targets damage animation loop
-    while ( le.HandleEvents() && finish != std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) ) {
+    bool finishedAnimation = false;
+    while ( le.HandleEvents() && !finishedAnimation ) {
         CheckGlobalEvents( le );
 
         if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
             bool redrawBattleField = false;
 
-            if ( attacker != NULL ) {
+            if ( attacker != nullptr ) {
                 if ( attacker->isFinishAnimFrame() ) {
                     attacker->SwitchAnimation( Monster_Info::STATIC );
                 }
@@ -2945,21 +2943,22 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
 
                 redrawBattleField = true;
-                RedrawPartialStart();
             }
-
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-                if ( ( *it ).defender ) {
-                    if ( !redrawBattleField ) {
+            else {
+                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                    if ( ( *it ).defender ) {
                         redrawBattleField = true;
-                        RedrawPartialStart();
+                        break;
                     }
                 }
             }
 
             if ( redrawBattleField ) {
+                RedrawPartialStart();
                 RedrawPartialFinish();
             }
+
+            finishedAnimation = ( finish == std::count_if( targets.begin(), targets.end(), TargetInfo::isFinishAnimFrame ) );
 
             for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
@@ -2977,16 +2976,6 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     // Fade away animation for destroyed mirror images
     if ( mirrorImages.size() )
         RedrawActionRemoveMirrorImage( mirrorImages );
-
-    // Set to static animation as attacker might still continue its animation
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        Unit * unit = ( *it ).defender;
-        if ( unit ) {
-            if ( unit->isFinishAnimFrame() && unit->GetAnimationState() == Monster_Info::WNCE ) {
-                unit->SwitchAnimation( Monster_Info::STATIC );
-            }
-        }
-    }
 }
 
 void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
@@ -3348,36 +3337,103 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;
-        uint32_t damage = 0;
+        uint32_t totalDamage = 0;
+        uint32_t maximumDamage = 0;
+        uint32_t damagedMonsters = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
             if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
                 killed += ( *it ).killed;
-                damage += ( *it ).damage;
+
+                ++damagedMonsters;
+                totalDamage += it->damage;
+                if ( maximumDamage < it->damage )
+                    maximumDamage = it->damage;
             }
         }
 
         // targets damage animation
         RedrawActionWincesKills( targets );
 
-        if ( damage ) {
+        if ( totalDamage > 0 ) {
+            assert( damagedMonsters > 0 );
             std::string msg;
-            if ( spell.isUndeadOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all undead creatures." );
-            else if ( spell.isALiveOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all living creatures." );
-            else
-                msg = _( "The %{spell} does %{damage} damage." );
-            StringReplace( msg, "%{spell}", spell.GetName() );
-            StringReplace( msg, "%{damage}", damage );
+            if ( spell.isUndeadOnly() ) {
+                if ( damagedMonsters == 1 ) {
+                    msg = _( "The %{spell} does %{damage} damage to one undead creature." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
 
-            if ( killed ) {
-                status.SetMessage( msg, true );
-                msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
-                StringReplace( msg, "%{count}", killed );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all undead creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
+                }
             }
+            else if ( spell.isALiveOnly() ) {
+                if ( damagedMonsters == 1 ) {
+                    msg = _( "The %{spell} does %{damage} damage to one living creature." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
 
-            status.SetMessage( msg, true );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all living creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
+                }
+            }
+            else {
+                msg = _( "The %{spell} does %{damage} damage." );
+                StringReplace( msg, "%{spell}", spell.GetName() );
+                StringReplace( msg, "%{damage}", totalDamage );
+                status.SetMessage( msg, true );
+
+                if ( killed > 0 ) {
+                    msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                    StringReplace( msg, "%{count}", killed );
+                    status.SetMessage( msg, true );
+                }
+            }
         }
     }
 
@@ -3522,7 +3578,7 @@ void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit 
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
 }
 
-void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
+void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const TargetInfo & target )
 {
     TargetsInfo targets;
     targets.push_back( target );
@@ -3532,7 +3588,8 @@ void Battle::Interface::RedrawActionTowerPart2( const TargetInfo & target )
     RedrawActionWincesKills( targets );
 
     // draw status for first defender
-    std::string msg = _( "Tower does %{damage} damage." );
+    std::string msg = _( "%{tower} does %{damage} damage." );
+    StringReplace( msg, "%{tower}", tower.GetName() );
     StringReplace( msg, "%{damage}", target.damage );
     if ( target.killed ) {
         msg.append( " " );

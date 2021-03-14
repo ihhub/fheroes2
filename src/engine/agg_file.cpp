@@ -53,7 +53,7 @@ namespace fheroes2
             fileEntries.getLE32(); // skip CRC (?) part
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
-            _files[name] = std::make_pair( fileSize, fileOffset );
+            _files.emplace( name, std::make_pair( fileSize, fileOffset ) );
         }
         if ( _files.size() != count ) {
             _files.clear();
@@ -62,27 +62,18 @@ namespace fheroes2
         return !_stream.fail();
     }
 
-    const std::vector<uint8_t> & AGGFile::read( const std::string & fileName )
+    std::vector<uint8_t> AGGFile::read( const std::string & fileName )
     {
-        if ( _key != fileName ) {
-            auto it = _files.find( fileName );
-            if ( it != _files.end() ) {
-                _key = fileName;
-                const auto & fileParams = it->second;
-                if ( fileParams.first > 0 ) {
-                    _stream.seek( fileParams.second );
-                    _body = _stream.getRaw( fileParams.first );
-                }
-                else {
-                    _body.clear();
-                }
-            }
-            else {
-                _key.clear();
-                _body.clear();
+        auto it = _files.find( fileName );
+        if ( it != _files.end() ) {
+            const auto & fileParams = it->second;
+            if ( fileParams.first > 0 ) {
+                _stream.seek( fileParams.second );
+                return _stream.getRaw( fileParams.first );
             }
         }
-        return _body;
+
+        return std::vector<uint8_t>();
     }
 }
 

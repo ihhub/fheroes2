@@ -30,7 +30,6 @@
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "bin_info.h"
-#include "engine.h"
 #include "game.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -187,7 +186,7 @@ void Battle::Unit::UpdateDirection( void )
 
 bool Battle::Unit::UpdateDirection( const Rect & pos )
 {
-    bool need = position.GetRect().x > pos.x;
+    bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
 
     if ( need != reflect ) {
         SetReflection( need );
@@ -358,7 +357,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return static_cast<uint32_t>( Board::GetDistance( from, index ) ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -468,6 +467,11 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
+uint32_t Battle::Unit::GetMoveRange() const
+{
+    return isFlying() ? ARENASIZE : GetSpeed( false );
+}
+
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
     // Check if there will be retaliation in the first place
@@ -559,7 +563,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
         r += Spell( Spell::DRAGONSLAYER ).ExtraValue();
 
     // Attack bonus is 20% to 300%
-    dmg *= 1 + ( 0 < r ? 0.1f * std::min( r, 20 ) : 0.05f * std::max( r, -16 ) );
+    dmg *= 1 + ( 0 < r ? 0.1 * std::min( r, 20 ) : 0.05 * std::max( r, -16 ) );
 
     return static_cast<u32>( dmg ) < 1 ? 1 : static_cast<u32>( dmg );
 }
@@ -801,6 +805,65 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     }
 
     return true;
+}
+
+bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
+{
+    switch ( spell() ) {
+    case Spell::BLESS:
+    case Spell::MASSBLESS:
+        return Modes( SP_BLESS );
+
+    case Spell::BLOODLUST:
+        return Modes( SP_BLOODLUST );
+
+    case Spell::CURSE:
+    case Spell::MASSCURSE:
+        return Modes( SP_CURSE );
+
+    case Spell::HASTE:
+    case Spell::MASSHASTE:
+        return Modes( SP_HASTE );
+
+    case Spell::SHIELD:
+    case Spell::MASSSHIELD:
+        return Modes( SP_SHIELD );
+
+    case Spell::SLOW:
+    case Spell::MASSSLOW:
+        return Modes( SP_SLOW );
+
+    case Spell::STONESKIN:
+    case Spell::STEELSKIN:
+        return Modes( SP_STONESKIN | SP_STEELSKIN );
+
+    case Spell::BLIND:
+    case Spell::PARALYZE:
+    case Spell::STONE:
+        return Modes( SP_BLIND | SP_PARALYZE | SP_STONE );
+
+    case Spell::DRAGONSLAYER:
+        return Modes( SP_DRAGONSLAYER );
+
+    case Spell::ANTIMAGIC:
+        return Modes( SP_ANTIMAGIC );
+
+    case Spell::BERSERKER:
+        return Modes( SP_BERSERKER );
+
+    case Spell::HYPNOTIZE:
+        return Modes( SP_HYPNOTIZE );
+
+    case Spell::MIRRORIMAGE:
+        return Modes( CAP_MIRROROWNER );
+
+    case Spell::DISRUPTINGRAY:
+        return GetDefense() < spell.ExtraValue();
+
+    default:
+        break;
+    }
+    return false;
 }
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )

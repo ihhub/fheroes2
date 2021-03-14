@@ -32,7 +32,6 @@
 #include "dir.h"
 #include "embedded_image.h"
 #include "engine.h"
-#include "error.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_video.h"
@@ -184,7 +183,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            Video::ShowVideo( "H2XINTRO.SMK", false );
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
             for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
@@ -260,11 +259,10 @@ int main( int argc, char ** argv )
                 }
             }
         }
-#ifndef ANDROID
-        catch ( const Error::Exception & ) {
-            VERBOSE_LOG( std::endl << conf.String() );
+        catch ( const std::exception & ex ) {
+            ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
         }
-#endif
+
     fheroes2::Display::instance().release();
 
     return EXIT_SUCCESS;

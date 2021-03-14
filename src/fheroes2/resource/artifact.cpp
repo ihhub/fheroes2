@@ -644,7 +644,7 @@ int Artifact::Rand( level_t lvl )
                 v.push_back( art );
     }
 
-    int res = v.size() ? *Rand::Get( v ) : Artifact::UNKNOWN;
+    int res = v.size() ? Rand::Get( v ) : Artifact::UNKNOWN;
     artifacts[res].bits |= ART_RNDUSED;
 
     return res;
@@ -1022,7 +1022,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
 bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
-    if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
+    if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
@@ -1097,7 +1097,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( isMagicBook( art ) )
                 msg = _( "View Spells" );
-            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) )
+            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
@@ -1110,7 +1110,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
                 StringReplace( msg, "%{name}", art2->GetName() );
             }
         }
-        else {
+        else if ( !read_only ) {
             msg = _( "Exchange %{name2} with %{name}" );
             StringReplace( msg, "%{name}", art.GetName() );
             StringReplace( msg, "%{name2}", art2->GetName() );

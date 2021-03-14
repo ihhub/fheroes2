@@ -68,7 +68,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( army1.GetCommander()->isCaptain() )
             army1.GetCommander()->ActionPreBattle();
         else if ( army1.isControlAI() )
-            AI::Get().HeroesPreBattle( *army1.GetCommander() );
+            AI::Get().HeroesPreBattle( *army1.GetCommander(), true );
         else
             army1.GetCommander()->ActionPreBattle();
     }
@@ -78,7 +78,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( army2.GetCommander()->isCaptain() )
             army2.GetCommander()->ActionPreBattle();
         else if ( army2.isControlAI() )
-            AI::Get().HeroesPreBattle( *army2.GetCommander() );
+            AI::Get().HeroesPreBattle( *army2.GetCommander(), false );
         else
             army2.GetCommander()->ActionPreBattle();
     }
@@ -142,7 +142,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     // after battle army1
     if ( army1.GetCommander() ) {
         if ( army1.isControlAI() )
-            AI::Get().HeroesAfterBattle( *army1.GetCommander() );
+            AI::Get().HeroesAfterBattle( *army1.GetCommander(), true );
         else
             army1.GetCommander()->ActionAfterBattle();
     }
@@ -150,7 +150,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     // after battle army2
     if ( army2.GetCommander() ) {
         if ( army2.isControlAI() )
-            AI::Get().HeroesAfterBattle( *army2.GetCommander() );
+            AI::Get().HeroesAfterBattle( *army2.GetCommander(), false );
         else
             army2.GetCommander()->ActionAfterBattle();
     }

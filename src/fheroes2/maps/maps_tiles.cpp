@@ -1268,18 +1268,6 @@ u32 Maps::Tiles::GetObjectUID() const
     return uniq;
 }
 
-// Get Tile metadata field #1 (used for things like monster count or resource amount)
-int Maps::Tiles::GetQuantity1( void ) const
-{
-    return quantity1;
-}
-
-// Get Tile metadata field #2 (used for things like animations or resource type )
-int Maps::Tiles::GetQuantity2( void ) const
-{
-    return quantity2;
-}
-
 int Maps::Tiles::GetPassable( void ) const
 {
     return tilePassable;
@@ -1534,12 +1522,12 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTile
         return;
 
     const Monster & monster = QuantityMonster();
-    const std::pair<int, int> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
+    const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
     area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp );
 
-    if ( spriteIndicies.second != -1 ) {
+    if ( spriteIndicies.second ) {
         const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
         area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp );
     }
@@ -1551,12 +1539,19 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
 
     if ( visibleTileROI & mp ) {
         const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+
+        const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+        const uint32_t alpha = ( MP2::OBJ_BOAT == fadeTask.object
+                                 && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
+                                   ? fadeTask.alpha
+                                   : 255;
+
         if ( withShadow ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
-            area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ) );
+            area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
         }
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ) );
+        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
     }
 }
 
@@ -1719,7 +1714,7 @@ std::string Maps::Tiles::String( void ) const
        << "maps index      : " << GetIndex() << ", "
        << "point: x(" << GetCenter().x << "), y(" << GetCenter().y << ")" << std::endl
        << "id              : " << uniq << std::endl
-       << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
+       << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
        << "region          : " << _region << std::endl
@@ -1732,7 +1727,7 @@ std::string Maps::Tiles::String( void ) const
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "quantity 3      : " << static_cast<int>( GetQuantity3() ) << std::endl;
+       << "quantity 3      : " << static_cast<int>( quantity3 ) << std::endl;
 
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it )
         os << ( *it ).String( 1 );
@@ -2303,7 +2298,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
     }
 }
 
-std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
+std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex )
 {
     const int tileIndex = tile.GetIndex();
     int attackerIndex = -1;
@@ -2323,7 +2318,7 @@ std::pair<int, int> Maps::Tiles::GetMonsterSpriteIndices( const Tiles & tile, ui
         }
     }
 
-    std::pair<int, int> spriteIndices( monsterIndex * 9, -1 );
+    std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
 
     // draw attack sprite
     if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
@@ -2374,7 +2369,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
 
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {
-        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+        const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
         gameArea.DrawTile( dst, sf, mp );
     }
     else {
@@ -2620,7 +2615,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         // unknown
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
-            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, GetIndex() % 4, 0 );
+            const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             gameArea.DrawTile( dst, sf, mp );
             return;
         }

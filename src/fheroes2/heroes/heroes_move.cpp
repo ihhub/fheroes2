@@ -76,7 +76,7 @@ void PlayWalkSound( int ground )
     }
 
     if ( wav != M82::UNKNOWN )
-        AGG::PlaySound( wav );
+        AGG::PlaySound( wav, true );
 }
 
 bool ReflectSprite( int from )
@@ -280,41 +280,59 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
 
 fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
 {
-    int icn_shad = hero.isShipMaster() ? ICN::BOATSHAD : ICN::SHADOW32;
-    int index_sprite = 0;
+    if ( hero.isShipMaster() ) {
+        int indexSprite = 0;
 
-    switch ( hero.GetDirection() ) {
-    case Direction::TOP:
-        index_sprite = 0;
-        break;
-    case Direction::TOP_RIGHT:
-        index_sprite = 9;
-        break;
-    case Direction::RIGHT:
-        index_sprite = 18;
-        break;
-    case Direction::BOTTOM_RIGHT:
-        index_sprite = 27;
-        break;
-    case Direction::BOTTOM:
-        index_sprite = 36;
-        break;
-    case Direction::BOTTOM_LEFT:
-        index_sprite = 45;
-        break;
-    case Direction::LEFT:
-        index_sprite = 54;
-        break;
-    case Direction::TOP_LEFT:
-        index_sprite = 63;
-        break;
+        switch ( hero.GetDirection() ) {
+        case Direction::TOP:
+            indexSprite = 0;
+            break;
+        case Direction::TOP_RIGHT:
+            indexSprite = 9;
+            break;
+        case Direction::RIGHT:
+            indexSprite = 18;
+            break;
+        case Direction::BOTTOM_RIGHT:
+            indexSprite = 27;
+            break;
+        case Direction::BOTTOM:
+            indexSprite = 36;
+            break;
+        case Direction::BOTTOM_LEFT:
+            indexSprite = 45;
+            break;
+        case Direction::LEFT:
+            indexSprite = 54;
+            break;
+        case Direction::TOP_LEFT:
+            indexSprite = 63;
+            break;
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            break;
+        }
 
-    default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
-        break;
+        return fheroes2::AGG::GetICN( ICN::BOATSHAD, indexSprite + ( index % 9 ) );
     }
+    else {
+        int indexSprite = index;
 
-    return fheroes2::AGG::GetICN( icn_shad, index_sprite + ( index % 9 ) );
+        if ( indexSprite == 51 )
+            indexSprite = 56;
+        else if ( indexSprite == 50 )
+            indexSprite = 57;
+        else if ( indexSprite == 49 )
+            indexSprite = 58;
+        else if ( indexSprite == 47 )
+            indexSprite = 55;
+        else if ( indexSprite == 46 )
+            indexSprite = 55;
+
+        const int indexOffset = ( indexSprite < 9 || indexSprite >= 36 ) ? 0 : 50;
+
+        return fheroes2::AGG::GetICN( ICN::SHADOW32, indexSprite + indexOffset );
+    }
 }
 
 fheroes2::Sprite SpriteFroth( const Heroes & hero, int index )

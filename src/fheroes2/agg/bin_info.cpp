@@ -32,7 +32,6 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim ) const;
         AnimationReference createAnimReference( int monsterID ) const;
         MonsterAnimInfo getAnimInfo( int monsterID );
 
@@ -207,7 +206,7 @@ namespace Bin_Info
             uint8_t count = data[243 + idx];
             if ( count > 16 )
                 count = 16; // here we need to reset our object
-            for ( uint8_t frame = 0; frame < count; frame++ ) {
+            for ( uint8_t frame = 0; frame < count; ++frame ) {
                 anim.push_back( static_cast<int>( data[277 + idx * 16 + frame] ) );
             }
             animationFrames.push_back( anim );
@@ -353,15 +352,10 @@ namespace Bin_Info
             return 0;
 
         for ( size_t id = 0u; id < angles.size() - 1; ++id ) {
-            if ( angle >= ( angles[id] + angles[id + 1] ) / 2 )
+            if ( angle >= static_cast<double>( angles[id] + angles[id + 1] ) / 2.0 )
                 return id;
         }
         return angles.size() - 1;
-    }
-
-    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID ) const
-    {
-        return AnimationSequence( info.animationFrames.at( animID ) );
     }
 
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const

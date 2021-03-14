@@ -1,6 +1,22 @@
-# makefile
-# project: Free Heroes2
-#
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2021                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
 
 ifeq ($(PREFIX),)
 PREFIX := /usr/local
@@ -24,11 +40,12 @@ ifdef PREFIX
 CFLAGS := $(CFLAGS) -I$(PREFIX)/include
 endif
 
-RES	:=
-ICOFILE	:= ../../image/fheroes2_32x32.ico
-
-ifdef WITH_ICONS
-RES	:= $(TARGET).res
+ifeq ($(PLATFORM), mingw)
+RES := ../resources/$(TARGET).res
+RC  := ../resources/fheroes2.rc
+ifdef DEBUG
+DEBUGFLAG := -DDEBUG
+endif
 endif
 
 SOURCEROOT := ../fheroes2
@@ -51,15 +68,14 @@ pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
 	@xgettext -d $(TARGET) -C -k_ -o $(POT) $(wildcard $(SEARCH))
 
-$(RES): $(ICOFILE)
-	@echo "gen: $(RES)"
-	@echo "$(IDICON) ICON \"$(ICOFILE)\"" > $(TARGET).rc
-	$(WINDRES) $(TARGET).rc -O coff -o $(TARGET).res
+$(RES): $(RC)
+	@echo "gen: $@"
+	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SRCDIRLIST)
 
 %.o: %.cpp
-	@echo "cxx: $@"
+	@echo "$(CXX): $@"
 	@$(CXX) -c -MD $(addprefix -I, $(SRCDIRLIST)) $< $(CFLAGS)
 
 include $(wildcard *.d)

@@ -98,7 +98,7 @@ int GetCovr( int ground )
         break;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : *Rand::Get( covrs );
+    return covrs.empty() ? ICN::UNKNOWN : Rand::Get( covrs );
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )
@@ -362,7 +362,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {
@@ -419,7 +419,7 @@ void Battle::Arena::Turns( void )
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom() );
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
 
     army1->NewTurn();
     army2->NewTurn();
@@ -617,6 +617,11 @@ bool Battle::Arena::hexIsAccessible( int32_t indexTo )
 bool Battle::Arena::hexIsPassable( int32_t indexTo )
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+}
+
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

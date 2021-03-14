@@ -19,78 +19,21 @@
  ***************************************************************************/
 
 #include "battle_pathfinding.h"
+#include "battle_bridge.h"
 #include "battle_troop.h"
+#include "castle.h"
 #include "logging.h"
 #include <algorithm>
 
 namespace Battle
 {
-    // If move is not valid this function returns -1 otherwise returns new index after the move.
-    int GetValidMoveIndex( int fromCell, int directionMask, bool isWide )
-    {
-        int newIndex = -1;
-        int wideUnitOffset = 0;
-        const int x = fromCell % ARENAW;
-        const int y = fromCell / ARENAW;
-        const bool isOddRow = ( y % 2 ) == 1;
-
-        switch ( directionMask ) {
-        case Battle::TOP_LEFT:
-            if ( y > 0 && ( x > 0 || !isOddRow ) ) {
-                newIndex = fromCell - ARENAW - ( isOddRow ? 1 : 0 );
-                wideUnitOffset = 1;
-            }
-            break;
-        case Battle::TOP_RIGHT:
-            if ( y > 0 && ( x < ARENAW - 1 || isOddRow ) ) {
-                newIndex = fromCell - ARENAW + ( isOddRow ? 0 : 1 );
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::RIGHT:
-            if ( x < ARENAW - 1 ) {
-                newIndex = fromCell + 1;
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::BOTTOM_RIGHT:
-            if ( y < ARENAH - 1 && ( x < ARENAW - 1 || isOddRow ) ) {
-                newIndex = fromCell + ARENAW + ( isOddRow ? 0 : 1 );
-                wideUnitOffset = -1;
-            }
-            break;
-        case Battle::BOTTOM_LEFT:
-            if ( y < ARENAH - 1 && ( x > 0 || !isOddRow ) ) {
-                newIndex = fromCell + ARENAW - ( isOddRow ? 1 : 0 );
-                wideUnitOffset = 1;
-            }
-            break;
-        case Battle::LEFT:
-            if ( x > 0 ) {
-                newIndex = fromCell - 1;
-                wideUnitOffset = 1;
-            }
-            break;
-        default:
-            return -1;
-        }
-
-        // invalidate move
-        if ( newIndex == -1 || !Board::GetCell( newIndex )->isPassable1( false ) )
-            return -1;
-
-        if ( isWide && ( x + wideUnitOffset < 0 || x + wideUnitOffset > ARENAW - 1 || !Board::GetCell( newIndex + wideUnitOffset )->isPassable1( false ) ) )
-            return -1;
-
-        return newIndex;
-    }
-
     void ArenaNode::resetNode()
     {
         _from = -1;
         _cost = MAX_MOVE_COST;
         _objectID = 0;
         _isOpen = true;
+        _isLeftDirection = false;
     }
 
     ArenaPathfinder::ArenaPathfinder()
@@ -112,7 +55,27 @@ namespace Battle
 
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
-        return _cache[targetCell]._cost == 0 || ( _cache[targetCell]._isOpen && _cache[targetCell]._from != -1 );
+        const size_t index = static_cast<size_t>( targetCell );
+        return index < _cache.size() && nodeIsAccessible( _cache[index] );
+    }
+
+    bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
+    {
+        return node._cost == 0 || ( node._isOpen && node._from != -1 );
+    }
+
+    Indexes ArenaPathfinder::getAllAvailableMoves( uint32_t moveRange ) const
+    {
+        Indexes result;
+        result.reserve( moveRange * 2u );
+
+        for ( size_t index = 0; index < _cache.size(); ++index ) {
+            const ArenaNode & node = _cache[index];
+            if ( nodeIsAccessible( node ) && node._cost <= moveRange ) {
+                result.push_back( index );
+            }
+        }
+        return result;
     }
 
     std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
@@ -133,51 +96,65 @@ namespace Battle
     {
         reset();
 
-        const Cell * unitHead = unit.GetPosition().GetHead();
-        if ( !unitHead ) {
+        const bool unitIsWide = unit.isWide();
+
+        const Position & startPosition = unit.GetPosition();
+        const Cell * unitHead = startPosition.GetHead();
+        const Cell * unitTail = startPosition.GetTail();
+        if ( !unitHead || ( unitIsWide && !unitTail ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
             return;
         }
 
-        const Cell * unitTail = unit.GetPosition().GetTail();
-        const bool unitIsWide = unit.isWide();
+        const Bridge * bridge = Arena::GetBridge();
+        const Castle * castle = Arena::GetCastle();
 
-        const int headIdx = unitHead->GetIndex();
-        _cache[headIdx]._cost = 0;
-        _cache[headIdx]._isOpen = false;
+        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
+        const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
+        const uint32_t moatPenalty = unit.GetSpeed();
 
-        int tailIdx = -1;
-        if ( unitTail ) {
-            tailIdx = unitTail->GetIndex();
+        // Initialize the starting cells
+        const int32_t pathStart = unitHead->GetIndex();
+        _cache[pathStart]._cost = 0;
+        _cache[pathStart]._isOpen = false;
+        _cache[pathStart]._isLeftDirection = unitIsWide && unit.isReflect();
+
+        if ( unitIsWide ) {
+            const int32_t tailIdx = unitTail->GetIndex();
+            _cache[tailIdx]._from = pathStart;
             _cache[tailIdx]._cost = 0;
-            _cache[tailIdx]._isOpen = false;
+            _cache[tailIdx]._isOpen = true;
+            _cache[tailIdx]._isLeftDirection = !unit.isReflect();
         }
 
         if ( unit.isFlying() ) {
             const Board & board = *Arena::GetBoard();
 
+            // Find all free spaces on the battle board - flyers can move to any of them
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-                const int idx = it->GetIndex();
+                const int32_t idx = it->GetIndex();
                 ArenaNode & node = _cache[idx];
 
-                if ( it->isPassable1( true ) ) {
+                // isPassable3 checks if there's space for unit tail (for wide units)
+                if ( it->isPassable3( unit, false ) ) {
                     node._isOpen = true;
-                    node._from = headIdx;
-                    node._cost = Battle::Board::GetDistance( headIdx, idx );
+                    node._from = pathStart;
+                    node._cost = Battle::Board::GetDistance( pathStart, idx );
                 }
                 else {
                     node._isOpen = false;
                 }
             }
+            // Once board movement is determined we look for units save shortest flight path to them
             for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
                 const Unit * boardUnit = it->GetUnit();
                 if ( boardUnit && boardUnit->GetUID() != unit.GetUID() ) {
-                    const int unitIdx = it->GetIndex();
+                    const int32_t unitIdx = it->GetIndex();
                     ArenaNode & unitNode = _cache[unitIdx];
 
                     const Indexes & around = Battle::Board::GetAroundIndexes( unitIdx );
-                    for ( const int cell : around ) {
-                        const uint32_t flyingDist = static_cast<uint32_t>( Battle::Board::GetDistance( headIdx, cell ) );
+                    for ( const int32_t cell : around ) {
+                        const uint32_t flyingDist = Battle::Board::GetDistance( pathStart, cell );
                         if ( hexIsPassable( cell ) && ( flyingDist < unitNode._cost ) ) {
                             unitNode._isOpen = false;
                             unitNode._from = cell;
@@ -188,31 +165,58 @@ namespace Battle
             }
         }
         else {
-            std::vector<int> nodesToExplore;
-            nodesToExplore.push_back( headIdx );
-
-            if ( tailIdx != -1 )
-                nodesToExplore.push_back( tailIdx );
+            // Walkers - explore moves sequentially from both head and tail cells
+            std::vector<int32_t> nodesToExplore;
+            nodesToExplore.push_back( pathStart );
+            if ( unitIsWide )
+                nodesToExplore.push_back( unitTail->GetIndex() );
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
-                const int fromNode = nodesToExplore[lastProcessedNode];
+                const int32_t fromNode = nodesToExplore[lastProcessedNode];
+                ArenaNode & previousNode = _cache[fromNode];
 
-                for ( int direction = TOP_LEFT; direction < CENTER; direction = direction << 1 ) {
-                    const int newNode = GetValidMoveIndex( fromNode, direction, unitIsWide );
+                Indexes availableMoves;
+                if ( !unitIsWide )
+                    availableMoves = Board::GetAroundIndexes( fromNode );
+                else if ( previousNode._from < 0 )
+                    availableMoves = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
+                else
+                    availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) );
 
-                    if ( newNode != -1 ) {
-                        const uint32_t cost = _cache[fromNode]._cost;
+                for ( const int32_t newNode : availableMoves ) {
+                    const Cell * headCell = Board::GetCell( newNode );
+                    const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
+
+                    const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
+                    const Cell * tailCell = ( unitIsWide && !startPosition.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
+
+                    // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
+                        const uint32_t cost = previousNode._cost;
                         ArenaNode & node = _cache[newNode];
 
-                        if ( Board::GetCell( newNode )->GetUnit() && cost < node._cost ) {
+                        // Check if we're turning back. No movement at all.
+                        uint32_t additionalCost = 1u;
+                        if ( isLeftDirection != previousNode._isLeftDirection ) {
+                            additionalCost = 0;
+                        }
+                        // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
+                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode ) || Board::isMoatIndex( newTailIndex ) ) && moatPenalty > previousNode._cost ) {
+                            additionalCost = moatPenalty - cost;
+                        }
+
+                        // Now we check if headCell has a unit - this determines if hex is passable or just accessible (for attack)
+                        if ( headCell->GetUnit() && cost < node._cost ) {
                             node._isOpen = false;
                             node._from = fromNode;
                             node._cost = cost;
+                            node._isLeftDirection = isLeftDirection;
                         }
-                        else if ( cost + 1 < node._cost ) {
+                        else if ( cost + additionalCost < node._cost ) {
                             node._isOpen = true;
                             node._from = fromNode;
-                            node._cost = cost + 1;
+                            node._cost = cost + additionalCost;
+                            node._isLeftDirection = isLeftDirection;
                             nodesToExplore.push_back( newNode );
                         }
                     }

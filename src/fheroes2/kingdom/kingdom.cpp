@@ -72,7 +72,7 @@ void Kingdom::clear( void )
 
     color = Color::NONE;
     visited_tents_colors = 0;
-    lost_town_days = Game::GetLostTownDays() + 1;
+    lost_town_days = Game::GetLostTownDays();
 
     heroes.clear();
     castles.clear();
@@ -82,6 +82,8 @@ void Kingdom::clear( void )
 
     heroes_cond_loss.clear();
     puzzle_maps.reset();
+
+    ResetLastLostHero();
 }
 
 int Kingdom::GetControl( void ) const
@@ -101,7 +103,7 @@ int Kingdom::GetRace( void ) const
 
 void Kingdom::UpdateStartingResource( void )
 {
-    resource = GetKingdomStartingResources( Settings::Get().GameDifficulty(), isControlAI() );
+    resource = GetKingdomStartingResources( Game::getDifficulty(), isControlAI() );
 }
 
 bool Kingdom::isLoss( void ) const
@@ -279,7 +281,7 @@ void Kingdom::AddCastle( const Castle * castle )
         AI::Get().CastleAdd( *castle );
     }
 
-    lost_town_days = Game::GetLostTownDays() + 1;
+    lost_town_days = Game::GetLostTownDays();
 }
 
 void Kingdom::RemoveCastle( const Castle * castle )
@@ -325,6 +327,14 @@ uint32_t Kingdom::GetCountThievesGuild() const
 {
     return static_cast<uint32_t>(
         std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_THIEVESGUILD ); } ) );
+}
+
+uint32_t Kingdom::GetCountArtifacts() const
+{
+    uint32_t result = 0;
+    for ( const Heroes * hero : heroes )
+        result += hero->GetCountArtifacts();
+    return result;
 }
 
 bool Kingdom::AllowPayment( const Funds & funds ) const
@@ -597,7 +607,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( isControlAI() ) {
-        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Settings::Get().GameDifficulty() ) );
+        totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
     return totalIncome;

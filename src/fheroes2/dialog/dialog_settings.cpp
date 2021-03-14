@@ -118,10 +118,9 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
             break;
 
         case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) )
+            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
                 conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            else
-                conf.ExtResetModes( Settings::GAME_AUTOSAVE_ON );
+            }
             break;
 
         case Settings::WORLD_NEW_VERSION_WEEKOF:
@@ -198,8 +197,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
-    states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
-    states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
 

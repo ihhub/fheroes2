@@ -373,7 +373,7 @@ Monster Dialog::SelectMonster( int id )
 
     listbox.SetListContent( monsters );
     if ( id != Monster::UNKNOWN )
-        listbox.SetCurrent( static_cast<int>( id ) );
+        listbox.SetCurrent( id );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
@@ -403,7 +403,7 @@ int Dialog::SelectHeroes( int cur )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> heroes( static_cast<int>( Heroes::SANDYSANDY ), Heroes::UNKNOWN );
+    std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );

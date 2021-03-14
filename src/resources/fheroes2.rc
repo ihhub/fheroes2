@@ -1,0 +1,65 @@
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include <windows.h>
+#include "version.h"
+
+#define STRINGIFY(DEF)   #DEF
+#define EXPANDDEF(DEF)   STRINGIFY(DEF)
+#define FH2_VERSION_STR  EXPANDDEF(MAJOR_VERSION) "," EXPANDDEF(MINOR_VERSION) "," EXPANDDEF(INTERMEDIATE_VERSION) "," "0\0"
+
+#ifdef DEBUG
+#define FH2_DEBUG VS_FF_DEBUG
+#else
+#define FH2_DEBUG 0
+#endif
+
+SHELLICON ICON "fheroes2.ico"
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION    MAJOR_VERSION, MINOR_VERSION, INTERMEDIATE_VERSION, 0
+PRODUCTVERSION MAJOR_VERSION, MINOR_VERSION, INTERMEDIATE_VERSION, 0
+FILEFLAGSMASK  VS_FF_DEBUG
+FILEFLAGS      FH2_DEBUG
+FILEOS         VOS_NT
+FILETYPE       VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "Comments",         "Visit us at https://ihhub.github.io/fheroes2\0"
+            VALUE "CompanyName",      "fheroes2 Resurrection team\0"
+            VALUE "FileDescription",  "Free implementation of Heroes of Might and Magic II game engine\0"
+            VALUE "FileVersion",      FH2_VERSION_STR
+            VALUE "InternalName",     "fheroes2\0"
+            VALUE "LegalCopyright",   "\251 2021 fheroes2 Resurrection team <fhomm2@gmail.com>. All rights for the original HoMM II game belong to Ubisoft\0"
+            VALUE "OriginalFilename", "fheroes2.exe\0"
+            VALUE "ProductName",      "Free Heroes of Might and Magic II engine\0"
+            VALUE "ProductVersion",   FH2_VERSION_STR
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

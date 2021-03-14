@@ -1,8 +1,0 @@
-Prerequisites:
-- Qt 5.2
-
-Create Makefile:
-qmake or qmake-qt5
-
-Build:
-make

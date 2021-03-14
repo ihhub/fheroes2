@@ -216,7 +216,7 @@ namespace Battle
         void RedrawActionMorale( Unit &, bool );
         void RedrawActionLuck( const Unit & );
         void RedrawActionTowerPart1( const Tower &, const Unit & );
-        void RedrawActionTowerPart2( const TargetInfo & );
+        void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );

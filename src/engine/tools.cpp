@@ -31,7 +31,6 @@
 #include <math.h>
 #include <sstream>
 
-#include "error.h"
 #include "logging.h"
 #include "tools.h"
 
@@ -90,13 +89,6 @@ std::string GetStringShort( int value )
     }
 
     return std::to_string( value );
-}
-
-std::string GetString( double value, u8 prec )
-{
-    std::ostringstream stream;
-    stream << std::setprecision( prec ) << value;
-    return stream.str();
 }
 
 std::string GetHexString( int value, int width )
@@ -518,9 +510,9 @@ std::vector<u8> decodeBase64( const std::string & src )
         u32 size = 3 * src.size() / 4;
 
         if ( src[src.size() - 1] == '=' )
-            size--;
+            --size;
         if ( src[src.size() - 2] == '=' )
-            size--;
+            --size;
 
         res.reserve( size );
 

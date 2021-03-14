@@ -323,7 +323,6 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
     StatsCastlesList( const Point & pt, KingdomCastles & );
-    void Refresh();
 
     virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
     virtual void RedrawBackground( const Point & ) override;
@@ -501,15 +500,6 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
         fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
         // fix bar
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 28, 12, display, dst.x + 28, dst.y + 12 + ii * ( back.height() + 4 ), 599, 6 );
-    }
-}
-
-// Make sure that our list doesn't refer to incorrect castle data after castle window was entered
-// We don't need to change the size of the vector as castles can't be added / removed from this view
-void StatsCastlesList::Refresh()
-{
-    for ( CstlRow & row : content ) {
-        row.Init( row.castle );
     }
 }
 
@@ -692,8 +682,6 @@ void Kingdom::OverviewDialog( void )
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
         if ( !cursor.isVisible() || redraw ) {
-            listCastles.Refresh();
-
             // check if graphics in main world map window should change, this can happen in several situations:
             // - hero dismissed -> hero icon list is updated and world map focus changed
             // - hero hired -> hero icon list is updated

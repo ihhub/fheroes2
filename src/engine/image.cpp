@@ -347,9 +347,12 @@ namespace
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = kb_pal + *correctorX * 3;
 
-                    const int32_t offsetRed = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( r );
-                    const int32_t offsetGreen = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( g );
-                    const int32_t offsetBlue = static_cast<int32_t>( *( palette++ ) ) - static_cast<int32_t>( b );
+                    const int32_t offsetRed = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( r );
+                    ++palette;
+                    const int32_t offsetGreen = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( g );
+                    ++palette;
+                    const int32_t offsetBlue = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( b );
+                    ++palette;
                     const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
                         minDistance = distance;
@@ -826,9 +829,12 @@ namespace fheroes2
         const uint8_t * value = kb_pal;
 
         for ( uint32_t i = 0; i < 256; ++i ) {
-            const uint32_t red = static_cast<uint32_t>( *value++ ) * alpha / 255;
-            const uint32_t green = static_cast<uint32_t>( *value++ ) * alpha / 255;
-            const uint32_t blue = static_cast<uint32_t>( *value++ ) * alpha / 255;
+            const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
+            const uint32_t green = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
+            const uint32_t blue = static_cast<uint32_t>( *value ) * alpha / 255;
+            ++value;
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
@@ -913,12 +919,10 @@ namespace fheroes2
                     const uint8_t * imageOutXEnd = imageOutX + width;
 
                     for ( ; imageOutX != imageOutXEnd; --imageInX, --transformInX, ++imageOutX ) {
-                        if ( *transformInX == 1 ) { // skip pixel
-                            continue;
-                        }
-
                         if ( *transformInX > 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            if ( *transformInX != 1 ) { // skip pixel
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            }
                         }
                         else { // copy a pixel
                             *imageOutX = *imageInX;
@@ -969,12 +973,10 @@ namespace fheroes2
                     const uint8_t * imageInXEnd = imageInX + width;
 
                     for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX ) {
-                        if ( *transformInX == 1 ) { // skip pixel
-                            continue;
-                        }
-
                         if ( *transformInX > 0 ) { // apply a transformation
-                            *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            if ( *transformInX != 1 ) { // skip pixel
+                                *imageOutX = *( transformTable + ( *transformInX ) * 256 + *imageOutX );
+                            }
                         }
                         else { // copy a pixel
                             *imageOutX = *imageInX;
@@ -1114,9 +1116,12 @@ namespace fheroes2
                     for ( ; imageInX != imageInXEnd; ++imageInX ) {
                         const uint8_t * palette = kb_pal + *imageInX * 3;
 
-                        sumRed += ( *palette++ );
-                        sumGreen += ( *palette++ );
-                        sumBlue += ( *palette++ );
+                        sumRed += ( *palette );
+                        ++palette;
+                        sumGreen += ( *palette );
+                        ++palette;
+                        sumBlue += ( *palette );
+                        ++palette;
                     }
                 }
 
@@ -1470,7 +1475,7 @@ namespace fheroes2
 
         if ( horizontally && !vertically ) {
             const uint8_t * imageInY = in.image() + width - 1;
-            const uint8_t * transformInY = out.transform() + width - 1;
+            const uint8_t * transformInY = in.transform() + width - 1;
             for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY += width, transformInY += width ) {
                 uint8_t * imageOutX = imageOutY;
                 uint8_t * transformOutX = transformOutY;
@@ -1485,16 +1490,18 @@ namespace fheroes2
             }
         }
         else if ( !horizontally && vertically ) {
-            const uint8_t * imageInY = in.image() + ( height - 1 ) * width;
-            const uint8_t * transformInY = out.transform() + ( height - 1 ) * width;
+            const int32_t offsetIn = ( height - 1 ) * width;
+            const uint8_t * imageInY = in.image() + offsetIn;
+            const uint8_t * transformInY = in.transform() + offsetIn;
             for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY -= width, transformInY -= width ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
                 memcpy( transformOutY, transformInY, static_cast<size_t>( width ) );
             }
         }
         else {
-            const uint8_t * imageInY = in.image() + ( height - 1 ) * width + width - 1;
-            const uint8_t * transformInY = out.transform() + ( height - 1 ) * width + width - 1;
+            const int32_t offsetIn = ( height - 1 ) * width + width - 1;
+            const uint8_t * imageInY = in.image() + offsetIn;
+            const uint8_t * transformInY = in.transform() + offsetIn;
             for ( ; imageOutY != imageOutYEnd; imageOutY += width, transformOutY += width, imageInY -= width, transformInY -= width ) {
                 uint8_t * imageOutX = imageOutY;
                 uint8_t * transformOutX = transformOutY;
@@ -1806,5 +1813,34 @@ namespace fheroes2
         Copy( in, inX + widthIn - cornerWidth, inY + heightIn - cornerHeight, out, widthOut - cornerWidth, heightOut - cornerHeight, cornerWidth, cornerHeight );
 
         return out;
+    }
+
+    void Transpose( const Image & in, Image & out )
+    {
+        if ( in.empty() || out.empty() || in.width() != out.height() || in.height() != out.width() )
+            return;
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        const uint8_t * imageInY = in.image();
+        const uint8_t * imageInYEnd = imageInY + width * height;
+        uint8_t * imageOutX = out.image();
+
+        const uint8_t * transformInY = in.transform();
+        uint8_t * transformOutX = out.transform();
+
+        for ( ; imageInY != imageInYEnd; imageInY += width, transformInY += width, ++imageOutX, ++transformOutX ) {
+            const uint8_t * imageInX = imageInY;
+            const uint8_t * imageInXEnd = imageInX + width;
+            uint8_t * imageOutY = imageOutX;
+
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutY = transformOutX;
+            for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, imageOutY += height, transformOutY += height ) {
+                *imageOutY = *imageInX;
+                *transformOutY = *transformInX;
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@
 #include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
+#include "version.h"
 
 #define DEFAULT_PORT 5154
 
@@ -256,14 +257,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_REMEMBER_POINTS_RETREAT,
         _( "heroes: remember move points for retreat/surrender result" ),
-    },
-    {
-        Settings::HEROES_SURRENDERING_GIVE_EXP,
-        _( "heroes: surrendering gives some experience" ),
-    },
-    {
-        Settings::HEROES_RECALCULATE_MOVEMENT,
-        _( "heroes: recalculate movement points after creatures movement" ),
     },
     {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
@@ -812,8 +805,6 @@ void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
 
     players.Init( current_maps_file );
 
-    // game difficulty
-    game_difficulty = Difficulty::NORMAL;
     preferably_count_players = 0;
 }
 
@@ -1210,6 +1201,7 @@ void Settings::SetGameDifficulty( int d )
 {
     game_difficulty = d;
 }
+
 void Settings::SetCurrentColor( int color )
 {
     players.current_color = color;
@@ -1600,16 +1592,6 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
 bool Settings::ExtHeroRememberPointsForRetreating( void ) const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-}
-
-bool Settings::ExtHeroSurrenderingGiveExp( void ) const
-{
-    return ExtModes( HEROES_SURRENDERING_GIVE_EXP );
-}
-
-bool Settings::ExtHeroRecalculateMovement( void ) const
-{
-    return ExtModes( HEROES_RECALCULATE_MOVEMENT );
 }
 
 bool Settings::ExtUnionsAllowCastleVisiting( void ) const

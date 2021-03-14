@@ -102,7 +102,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
     // magic attack
     if ( defender.isValid() && spell.isValid() ) {
         const std::string name( attacker.GetName() );
-        targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
+        targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex(), true );
 
         bool validSpell = true;
         if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
@@ -258,7 +258,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 // twice attack
                 if ( b1->isValid() && b1->isTwiceAttack() && !b1->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "twice attack" );
-                    BattleProcess( *b1, *b2 );
+                    BattleProcess( *b1, *b2, dst, dir );
                 }
             }
 
@@ -681,7 +681,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
     return targets;
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, s32 dst )
+Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages )
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -690,7 +690,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     bool playResistSound = true;
 
     TargetInfo res;
-    Unit * target = GetTroopBoard( dst );
+    Unit * target = GetTroopBoard( dest );
 
     // from spells
     switch ( spell() ) {
@@ -711,8 +711,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
 
     // resurrect spell? get target from graveyard
-    if ( NULL == target && GraveyardAllowResurrect( dst, spell ) ) {
-        target = GetTroopUID( graveyard.GetLastTroopUID( dst ) );
+    if ( NULL == target && GraveyardAllowResurrect( dest, spell ) ) {
+        target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) ) {
             res.defender = target;
@@ -723,7 +723,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         // check other spells
         switch ( spell() ) {
         case Spell::CHAINLIGHTNING: {
-            TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dst );
+            TargetsInfo targetsForSpell = TargetsForChainLightning( hero, dest );
             targets.insert( targets.end(), targetsForSpell.begin(), targetsForSpell.end() );
             ignoreMagicResistance = true;
             playResistSound = false;
@@ -734,7 +734,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
         case Spell::METEORSHOWER:
         case Spell::COLDRING:
         case Spell::FIREBLAST: {
-            const Indexes positions = Board::GetDistanceIndexes( dst, ( spell == Spell::FIREBLAST ? 2 : 1 ) );
+            const Indexes positions = Board::GetDistanceIndexes( dest, ( spell == Spell::FIREBLAST ? 2 : 1 ) );
 
             for ( Indexes::const_iterator it = positions.begin(); it != positions.end(); ++it ) {
                 Unit * targetUnit = GetTroopBoard( *it );
@@ -787,7 +787,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
             const u32 resist = ( *it ).defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
 
             if ( 0 < resist && 100 > resist && resist >= Rand::Get( 1, 100 ) ) {
-                if ( interface )
+                if ( showMessages && interface )
                     interface->RedrawActionResistSpell( *( *it ).defender, playResistSound );
 
                 it = targets.erase( it );
@@ -819,7 +819,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
             interface->RedrawActionTowerPart1( *tower, *b2 );
         target.killed = b2->ApplyDamage( *tower, target.damage );
         if ( interface )
-            interface->RedrawActionTowerPart2( target );
+            interface->RedrawActionTowerPart2( *tower, target );
 
         if ( b2->Modes( SP_BLIND ) )
             b2->ResetBlind();
@@ -890,7 +890,7 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     const int32_t dst = cmd.GetValue();
 
-    TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst );
+    TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst, true );
     if ( interface )
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, current_commander->GetName(), targets );
 

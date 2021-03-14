@@ -21,12 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
-#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -170,19 +170,7 @@ namespace AI
 
     void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE, const Point * centerOn = nullptr )
     {
-        u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
-
-        if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-            const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
-
-            if ( hero.isControlHuman() ) {
-                std::string msg = _( "Hero %{name} also got a %{count} experience." );
-                StringReplace( msg, "%{name}", hero.GetName() );
-                StringReplace( msg, "%{count}", exp );
-                Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-            }
-            hero.IncreaseExperience( exp );
-        }
+        const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
         if ( centerOn != nullptr ) {
             Interface::Basic::Get().GetGameArea().SetCenter( *centerOn );
@@ -457,7 +445,7 @@ namespace AI
             AI::Get().HeroesActionComplete( hero );
 
         // reset if during an action music was stopped
-        AGG::PlayMusic( MUS::COMPUTER_TURN );
+        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
     }
 
     void AIToHeroes( Heroes & hero, s32 dst_index )

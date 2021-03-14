@@ -361,7 +361,7 @@ StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
 
 bool GameStatic::isCustomMonsterUpgradeOption()
 {
-    return std::fabs( monsterUpgradeRatio - 1.0f ) > 0.001;
+    return std::fabs( monsterUpgradeRatio - 1.0f ) > 0.001f;
 }
 
 float GameStatic::GetMonsterUpgradeRatio()

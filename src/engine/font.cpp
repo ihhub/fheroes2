@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include "font.h"
-#include "engine.h"
 #include "logging.h"
+#include "tools.h"
 
 #ifdef WITH_TTF
 
@@ -100,14 +100,14 @@ int FontTTF::LineSkip( void ) const
 //     return Surface( solid ? TTF_RenderUTF8_Solid( ptr, buf, clr() ) : TTF_RenderUTF8_Blended( ptr, buf, clr() ) );
 // }
 //
-// Surface FontTTF::RenderUnicodeText( const std::vector<u16> & msg, const RGBA & clr, bool solid )
+// Surface FontTTF::RenderUnicodeText( const std::vector<uint16_t> & msg, const RGBA & clr, bool solid )
 // {
 //     return Surface( solid ? TTF_RenderUNICODE_Solid( ptr, &msg[0], clr() ) : TTF_RenderUNICODE_Blended( ptr, &msg[0], clr() ) );
 // }
 //
-// Surface FontTTF::RenderUnicodeChar( u16 ch, const RGBA & clr, bool solid )
+// Surface FontTTF::RenderUnicodeChar( uint16_t ch, const RGBA & clr, bool solid )
 // {
-//     u16 buf[2] = {L'\0', L'\0'};
+//     uint16_t buf[2] = {L'\0', L'\0'};
 //     buf[0] = ch;
 //
 //     return Surface( solid ? TTF_RenderUNICODE_Solid( ptr, buf, clr() ) : TTF_RenderUNICODE_Blended( ptr, buf, clr() ) );

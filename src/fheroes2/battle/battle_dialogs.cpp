@@ -29,7 +29,6 @@
 #include "battle_army.h"
 #include "battle_interface.h"
 #include "cursor.h"
-#include "engine.h"
 #include "game.h"
 #include "heroes.h"
 #include "luck.h"

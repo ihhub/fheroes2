@@ -22,6 +22,7 @@
 #ifndef H2RAND_H
 #define H2RAND_H
 
+#include <cassert>
 #include <cstdlib>
 #include <functional>
 #include <list>
@@ -36,24 +37,22 @@ namespace Rand
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
 
     template <typename T>
-    const T * Get( const std::vector<T> & vec )
+    const T & Get( const std::vector<T> & vec )
     {
-        if ( vec.empty() )
-            return nullptr;
+        assert( !vec.empty() );
 
         const uint32_t id = Rand::Get( static_cast<uint32_t>( vec.size() - 1 ) );
-        return &vec[id];
+        return vec[id];
     }
 
     template <typename T>
-    const T * Get( const std::list<T> & list )
+    const T & Get( const std::list<T> & list )
     {
-        if ( list.empty() )
-            return nullptr;
+        assert( !list.empty() );
 
         typename std::list<T>::const_iterator it = list.begin();
         std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
-        return &( *it );
+        return *it;
     }
 
     typedef std::pair<s32, u32> ValuePercent;
