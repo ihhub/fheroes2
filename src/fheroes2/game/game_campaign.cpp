@@ -516,7 +516,7 @@ namespace
                     const KingdomHeroes heroes = kingdom.GetHeroes();
 
                     for ( uint32_t j = 0; j < heroes.size(); ++j ) {
-                        if ( heroes[j]->GetID() == awards[i]._subType ) {
+                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
                             kingdom.RemoveHeroes( heroes[j] );
                             break;
                         }
@@ -528,8 +528,8 @@ namespace
                 Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
                 bestHeroArmy.Clean();
 
-                for ( uint32_t i = 0; i < carryOverTroops.size(); ++i )
-                    bestHeroArmy.GetTroop( i )->Set( carryOverTroops[i] );
+                for ( uint32_t j = 0; j < carryOverTroops.size(); ++j )
+                    bestHeroArmy.GetTroop( j )->Set( carryOverTroops[j] );
 
                 break;
             }
@@ -580,10 +580,10 @@ const std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( 
     const std::vector<int> finishedMaps = saveData.getFinishedMaps();
     const std::vector<int> obtainedAwardIDs = saveData.getObtainedCampaignAwards();
 
-    for ( int i = 0; i < finishedMaps.size(); ++i ) {
+    for ( size_t i = 0; i < finishedMaps.size(); ++i ) {
         const std::vector<Campaign::CampaignAwardData> awards = getCampaignAwardData( saveData.getCampaignID(), finishedMaps[i] );
 
-        for ( int j = 0; j < awards.size(); ++j ) {
+        for ( size_t j = 0; j < awards.size(); ++j ) {
             if ( std::find( obtainedAwardIDs.begin(), obtainedAwardIDs.end(), awards[j]._id ) != obtainedAwardIDs.end() )
                 obtainedAwards.emplace_back( awards[j] );
         }
