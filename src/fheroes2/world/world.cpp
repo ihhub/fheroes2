@@ -431,7 +431,7 @@ Heroes * World::GetFreemanHeroes( int race ) const
     return vec_heroes.GetFreeman( race );
 }
 
-Heroes * World::GetFreemanHeroesSpecial( int heroID ) const 
+Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
 {
     return vec_heroes.GetFreemanSpecial( heroID );
 }

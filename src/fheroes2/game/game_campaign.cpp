@@ -225,7 +225,7 @@ namespace
         return std::vector<Campaign::ScenarioBonusData>();
     }
 
-    std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID ) 
+    std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID )
     {
         assert( campaignID >= 0 && scenarioID >= 0 );
 
@@ -451,7 +451,6 @@ namespace
         }
     }
 
-
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -529,12 +528,11 @@ namespace
                 Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
                 bestHeroArmy.Clean();
 
-                for ( uint32_t i = 0; i < carryOverTroops.size(); ++i ) 
+                for ( uint32_t i = 0; i < carryOverTroops.size(); ++i )
                     bestHeroArmy.GetTroop( i )->Set( carryOverTroops[i] );
-                
+
                 break;
             }
-
         }
     }
 }

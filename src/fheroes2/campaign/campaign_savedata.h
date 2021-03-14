@@ -72,7 +72,7 @@ namespace Campaign
             return _daysPassed;
         }
 
-        const std::vector<Troop> & getCarryOverTroops() const 
+        const std::vector<Troop> & getCarryOverTroops() const
         {
             return _carryOverTroops;
         }

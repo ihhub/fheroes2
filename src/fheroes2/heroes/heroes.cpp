@@ -138,7 +138,7 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
-    , experience(0)
+    , experience( 0 )
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -2015,7 +2015,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     return at( Rand::Get( freeman_heroes ) );
 }
 
-Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const 
+Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
 {
     assert( at( heroID ) && at( heroID )->isFreeman() );
     return at( heroID );
