@@ -321,7 +321,8 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
     }
 }
 
-void Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts ) const
+// Returns true if player want to restart the battle
+bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
@@ -399,7 +400,12 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     fheroes2::Blit( sequenceBase, display, pos_rt.x + anime_ox + sequenceBase.x(), pos_rt.y + anime_oy + sequenceBase.y() );
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
-    fheroes2::Button btn_ok( pos_rt.x + 121, pos_rt.y + 410, ( conf.ExtGameEvilInterface() ? ICN::WINCMBBE : ICN::WINCMBTB ), 0, 1 );
+    const int buttonOffset = allowToCancel ? 39 : 121;
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const int buttonICN
+        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
+    fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonICN, 0, 1 );
+    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 125, pos_rt.y + 410, ( isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG ), 2, 3 );
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
@@ -439,6 +445,11 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
     }
 
+    if ( allowToCancel ) {
+        fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 65, 170, 100, 25 );
+        fheroes2::Blit( buttonOverride, display, pos_rt.x + 91, pos_rt.y + 410 );
+        btnCancel.draw();
+    }
     btn_ok.draw();
 
     cursor.Show();
@@ -446,10 +457,18 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+        if ( allowToCancel ) {
+            le.MousePressLeft( btnCancel.area() ) ? btnCancel.drawOnPress() : btnCancel.drawOnRelease();
+        }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
             break;
+
+        if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
+            // Skip artifact transfer and return to restart battle in manual mode
+            return true;
+        }
 
         // animation
         if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
@@ -468,7 +487,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
         // Can't transfer artifacts
         if ( hero1 == nullptr || hero2 == nullptr )
-            return;
+            return false;
 
         BagArtifacts & bag1 = hero1->GetBagArtifacts();
         BagArtifacts & bag2 = hero2->GetBagArtifacts();
@@ -531,6 +550,7 @@ void Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
             art = Artifact::UNKNOWN;
         }
     }
+    return false;
 }
 
 int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
