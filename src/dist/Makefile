@@ -1,6 +1,22 @@
-# makefile
-# project: Free Heroes2
-#
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2021                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
 
 ifeq ($(PREFIX),)
 PREFIX := /usr/local
@@ -25,8 +41,8 @@ CFLAGS := $(CFLAGS) -I$(PREFIX)/include
 endif
 
 ifeq ($(PLATFORM), mingw)
-RES := ../../files/$(TARGET).res
-RC  := ../../files/fheroes2.rc
+RES := ../resources/$(TARGET).res
+RC  := ../resources/fheroes2.rc
 ifdef DEBUG
 DEBUGFLAG := -DDEBUG
 endif
@@ -34,7 +50,7 @@ endif
 
 SOURCEROOT := ../fheroes2
 SOURCEDIR  := $(shell ls $(SOURCEROOT))
-POT        := $(TARGET).pot
+POT        := ../../files/lang/$(TARGET).pot
 SRCDIRLIST := $(addprefix $(SOURCEROOT)/, $(SOURCEDIR))
 
 SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/normal
@@ -46,14 +62,10 @@ all: $(TARGET)
 
 $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SEARCH)))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
-	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
+	$(CXX) $(LDFLAGS) $^ $(LIBS) -o ../../$@
 ifeq ($(PLATFORM), mingw)
 ifdef RELEASE
-	@strip -s $@.exe -o $@.stripped.exe
-	@upx -9 -o$@.stripped.UPX.exe $@.stripped.exe > /dev/nul
-	@echo "Size    : $$(ls -sh $@ | cut -d' ' -f1)"
-	@echo "Stripped: $$(ls -sh $@.stripped.exe | cut -d' ' -f1)"
-	@echo "UPX'd   : $$(ls -sh $@.stripped.UPX.exe | cut -d' ' -f1)"
+	@strip -s ../../$@.exe
 endif
 endif
 
@@ -63,7 +75,7 @@ pot: $(wildcard $(SEARCH))
 
 $(RES): $(RC)
 	@echo "gen: $@"
-	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) -DTARGET=$(TARGET) $< -O coff -o $@
+	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SRCDIRLIST)
 
@@ -76,4 +88,4 @@ include $(wildcard *.d)
 .PHONY: clean
 
 clean:
-	@rm -f *.pot *.o *.d $(RES) $(TARGET)*
+	@rm -f *.o *.d $(RES) ../../$(TARGET)
