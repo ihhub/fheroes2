@@ -1,7 +1,7 @@
 # For file(GLOB_RECOURSE CONFIGURE_DEPENDS ...)
 cmake_minimum_required(VERSION 3.12)
 
-project(fheroes2 VERSION 0.8.4 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.1 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
@@ -18,7 +18,6 @@ option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv 
 option(ENABLE_XML      "Enable XML support (requires libtinyxml)" ON)
 option(ENABLE_ZLIB     "Enable Zlib support (for compressed savefiles)" ON)
 option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
-option(ENABLE_EDITOR   "Enable build of editor (requires Qt5)" OFF)
 option(ENABLE_TOOLS    "Enable additional tools" OFF)
 option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
 
@@ -51,10 +50,6 @@ if(ENABLE_ZLIB)
 endif(ENABLE_ZLIB)
 
 add_subdirectory(src)
-
-if(ENABLE_EDITOR)
-	add_subdirectory(editor)
-endif(ENABLE_EDITOR)
 
 install(FILES doc/README.txt changelog.txt DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
