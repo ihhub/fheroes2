@@ -40,11 +40,12 @@ ifdef PREFIX
 CFLAGS := $(CFLAGS) -I$(PREFIX)/include
 endif
 
-RES	:=
-ICOFILE	:= ../../image/fheroes2_32x32.ico
-
-ifdef WITH_ICONS
-RES	:= $(TARGET).res
+ifeq ($(PLATFORM), mingw)
+RES := ../resources/$(TARGET).res
+RC  := ../resources/fheroes2.rc
+ifdef DEBUG
+DEBUGFLAG := -DDEBUG
+endif
 endif
 
 SOURCEROOT := ../fheroes2
@@ -67,10 +68,9 @@ pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
 	@xgettext -d $(TARGET) -C -k_ -o $(POT) $(wildcard $(SEARCH))
 
-$(RES): $(ICOFILE)
-	@echo "gen: $(RES)"
-	@echo "$(IDICON) ICON \"$(ICOFILE)\"" > $(TARGET).rc
-	$(WINDRES) $(TARGET).rc -O coff -o $(TARGET).res
+$(RES): $(RC)
+	@echo "gen: $@"
+	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SRCDIRLIST)
 
