@@ -403,10 +403,10 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
     const int buttonOffset = allowToCancel ? 59 : 121;
     const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const int buttonICN = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE )
-                                          : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
+    const int buttonICN
+        = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
     fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonICN, 0, 1 );
-    fheroes2::Button btn_cancel( pos_rt.x + buttonOffset + 105, pos_rt.y + 410, ( isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG ), 2, 3 );
+    fheroes2::Button btnCancel( pos_rt.x + buttonOffset + 105, pos_rt.y + 410, ( isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG ), 2, 3 );
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
@@ -449,7 +449,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     if ( allowToCancel ) {
         fheroes2::Sprite buttonOverride = fheroes2::Crop( dialog, 65, 170, 100, 25 );
         fheroes2::Blit( buttonOverride, display, pos_rt.x + 91, pos_rt.y + 410 );
-        btn_cancel.draw();
+        btnCancel.draw();
     }
     btn_ok.draw();
 
@@ -459,14 +459,14 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     while ( le.HandleEvents() ) {
         le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
         if ( allowToCancel ) {
-            le.MousePressLeft( btn_cancel.area() ) ? btn_cancel.drawOnPress() : btn_cancel.drawOnRelease();
+            le.MousePressLeft( btnCancel.area() ) ? btnCancel.drawOnPress() : btnCancel.drawOnRelease();
         }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
             break;
 
-        if ( allowToCancel && le.MouseClickLeft( btn_cancel.area() ) ) {
+        if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
             // Skip artifact transfer and return to restart battle in manual mode
             return true;
         }
