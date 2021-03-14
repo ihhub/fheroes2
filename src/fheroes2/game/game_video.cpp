@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include "game_video.h"
+#include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "game.h"
@@ -84,6 +85,7 @@ namespace Video
         const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
+            AGG::ResetMixer();
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                 if ( it->size() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
