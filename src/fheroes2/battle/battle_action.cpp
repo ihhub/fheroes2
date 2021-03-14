@@ -241,6 +241,10 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         const bool handfighting = Unit::isHandFighting( *b1, *b2 );
         // check position
         if ( b1->isArchers() || handfighting ) {
+            if ( b2->Modes( SP_BLIND ) ) {
+                b2->SetBlindAnswer( true );
+            }
+
             // attack
             BattleProcess( *b1, *b2, dst, dir );
 
@@ -249,6 +253,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
                 if ( handfighting && !b1->ignoreRetaliation() && b2->AllowResponse() ) {
                     BattleProcess( *b2, *b1 );
                     b2->SetResponse();
+                    b2->SetBlindAnswer( false );
                 }
 
                 // twice attack

@@ -142,6 +142,7 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         void PostAttackAction( Unit & );
         void ResetBlind( void );
+        void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, u32, const HeroBase * );
         void SpellApplyDamage( const Spell &, u32, const HeroBase *, TargetInfo & );
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );

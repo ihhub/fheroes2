@@ -524,7 +524,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
     }
 
     // after blind
-    if ( Modes( SP_BLIND ) )
+    if ( blindanswer )
         dmg /= 2;
 
     // stone cap.
@@ -730,7 +730,6 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 
     // blind
     if ( Modes( SP_BLIND ) ) {
-        blindanswer = true;
         ResetBlind();
     }
 
@@ -960,14 +959,7 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( !Modes( IS_PARALYZE_MAGIC ) ) {
-        if ( Modes( SP_BLIND ) )
-            return blindanswer;
-        else if ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) )
-            return true;
-    }
-
-    return false;
+    return !Modes( IS_PARALYZE_MAGIC ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )
@@ -1014,6 +1006,11 @@ void Battle::Unit::ResetBlind( void )
         ResetModes( SP_BLIND );
         affected.RemoveMode( SP_BLIND );
     }
+}
+
+void Battle::Unit::SetBlindAnswer( bool value )
+{
+    blindanswer = value;
 }
 
 u32 Battle::Unit::GetAttack( void ) const
@@ -1228,7 +1225,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::BLIND:
         SetModes( SP_BLIND );
-        blindanswer = false;
         affected.AddMode( SP_BLIND, duration );
         break;
 
