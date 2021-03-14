@@ -1112,8 +1112,8 @@ void LocalEvent::StopSounds()
 void LocalEvent::ResumeSounds()
 {
     if ( _isHiddenWindow ) {
+        Music::Volume( _musicVolume );
         if ( !_isMusicPaused ) {
-            Music::Volume( _musicVolume );
             Music::Resume();
         }
         if ( !_isSoundPaused )
