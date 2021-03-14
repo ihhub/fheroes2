@@ -529,6 +529,7 @@
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
+    <ClInclude Include="src\fheroes2\system\version.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\fheroes2\world\world_regions.h" />
@@ -536,6 +537,9 @@
     <ClInclude Include="src\thirdparty\libsmacker\smk_bitstream.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smk_hufftree.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smk_malloc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\resources\fheroes2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
