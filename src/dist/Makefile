@@ -70,7 +70,7 @@ pot: $(wildcard $(SEARCH))
 
 $(RES): $(RC)
 	@echo "gen: $@"
-	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) -DTARGET=$(TARGET) $< -O coff -o $@
+	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SRCDIRLIST)
 
