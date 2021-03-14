@@ -402,11 +402,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
     const int buttonOffset = allowToCancel ? 59 : 121;
-    const int buttonICN = conf.ExtGameEvilInterface() ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE )
-                                                      : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const int buttonICN = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE )
+                                          : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
     fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonICN, 0, 1 );
-    fheroes2::Button btn_cancel( pos_rt.x + buttonOffset + 105, pos_rt.y + 410,
-                                 ( conf.ExtGameEvilInterface() ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON ), 0, 1 );
+    fheroes2::Button btn_cancel( pos_rt.x + buttonOffset + 105, pos_rt.y + 410, ( isEvilInterface ? ICN::CAMPXTRE : ICN::CAMPXTRG ), 2, 3 );
 
     int32_t messageYOffset = 0;
     if ( !title.empty() ) {
