@@ -52,6 +52,7 @@ LocalEvent::LocalEvent()
     , _isHiddenWindow( false )
     , _isMusicPaused( false )
     , _isSoundPaused( false )
+    , _musicVolume( 0 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
