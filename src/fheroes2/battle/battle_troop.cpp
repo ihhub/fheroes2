@@ -1225,6 +1225,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::BLIND:
         SetModes( SP_BLIND );
+        blindanswer = false;
         affected.AddMode( SP_BLIND, duration );
         break;
 
