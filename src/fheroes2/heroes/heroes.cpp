@@ -129,6 +129,7 @@ int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const
 Heroes::Heroes()
     : move_point_scale( -1 )
     , army( this )
+    , experience( 0 )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
     , race( UNKNOWN )
@@ -138,7 +139,6 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
-    , experience( 0 )
 {}
 
 Heroes::Heroes( int heroid, int rc )
