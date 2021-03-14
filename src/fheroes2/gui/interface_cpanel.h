@@ -23,7 +23,6 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
-#include "gamedefs.h"
 #include "image.h"
 
 namespace Interface
@@ -35,7 +34,7 @@ namespace Interface
     public:
         ControlPanel( Basic & );
 
-        void SetPos( s32, s32 );
+        void SetPos( int32_t, int32_t );
         void Redraw( void );
         void ResetTheme( void );
         int QueueEventProcessing( void );

@@ -31,6 +31,8 @@ namespace TIL
         CLOF32,
         GROUND32,
         STON,
+
+        // IMPORTANT! Put any new entry just above this one.
         LASTTIL
     };
 

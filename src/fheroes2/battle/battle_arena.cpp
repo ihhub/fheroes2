@@ -362,7 +362,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {
@@ -617,6 +617,11 @@ bool Battle::Arena::hexIsAccessible( int32_t indexTo )
 bool Battle::Arena::hexIsPassable( int32_t indexTo )
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+}
+
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

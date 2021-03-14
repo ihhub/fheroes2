@@ -31,6 +31,7 @@
 #include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
+#include "version.h"
 
 #define DEFAULT_PORT 5154
 
@@ -256,14 +257,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::HEROES_REMEMBER_POINTS_RETREAT,
         _( "heroes: remember move points for retreat/surrender result" ),
-    },
-    {
-        Settings::HEROES_SURRENDERING_GIVE_EXP,
-        _( "heroes: surrendering gives some experience" ),
-    },
-    {
-        Settings::HEROES_RECALCULATE_MOVEMENT,
-        _( "heroes: recalculate movement points after creatures movement" ),
     },
     {
         Settings::HEROES_TRANSCRIBING_SCROLLS,
@@ -1599,16 +1592,6 @@ bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
 bool Settings::ExtHeroRememberPointsForRetreating( void ) const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-}
-
-bool Settings::ExtHeroSurrenderingGiveExp( void ) const
-{
-    return ExtModes( HEROES_SURRENDERING_GIVE_EXP );
-}
-
-bool Settings::ExtHeroRecalculateMovement( void ) const
-{
-    return ExtModes( HEROES_RECALCULATE_MOVEMENT );
 }
 
 bool Settings::ExtUnionsAllowCastleVisiting( void ) const

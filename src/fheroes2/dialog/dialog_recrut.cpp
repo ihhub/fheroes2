@@ -267,7 +267,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.x = pos.x + 230;
     dst_pt.y = pos.y + 155;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
-    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BTNMIN, 0, 1 );
+    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 154;
@@ -391,13 +391,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
         bool skipEventCheck = false;
         if ( le.MousePressRight( monsterArea ) ) {
-            const bool isUpgradedMonster = ext && ( monster != monster.GetDowngrade() );
-            Dialog::ArmyInfo( Troop( isUpgradedMonster ? monster : monster.GetDowngrade(), available ), Dialog::READONLY );
+            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY );
             redraw = true;
         }
         else if ( le.MouseClickLeft( monsterArea ) ) {
-            const bool isUpgradedMonster = ext && ( monster != monster.GetDowngrade() );
-            Dialog::ArmyInfo( Troop( isUpgradedMonster ? monster : monster.GetDowngrade(), available ), Dialog::READONLY | Dialog::BUTTONS );
+            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY | Dialog::BUTTONS );
             redraw = true;
             skipEventCheck = true;
         }

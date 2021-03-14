@@ -52,7 +52,7 @@ namespace
 
 namespace Video
 {
-    size_t ShowVideo( const std::string & fileName, bool isLooped, const std::vector<fheroes2::Rect> & roi )
+    size_t ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
         std::string videoPath;
         if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
@@ -63,6 +63,8 @@ namespace Video
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
+
+        const bool isLooped = ( action == VideoAction::LOOP_VIDEO );
 
         const bool hideCursor = roi.empty();
 
@@ -181,6 +183,14 @@ namespace Video
                     }
 
                     isFrameReady = true;
+                }
+            }
+        }
+
+        if ( action == VideoAction::WAIT_FOR_USER_INPUT ) {
+            while ( le.HandleEvents() ) {
+                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    break;
                 }
             }
         }

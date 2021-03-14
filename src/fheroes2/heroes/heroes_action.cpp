@@ -20,9 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "agg.h"
 #include "ai.h"
-#include "assert.h"
 #include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
@@ -284,19 +285,7 @@ uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good
 
 void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
 {
-    u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
-
-    if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-        const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
-
-        if ( hero.isControlHuman() ) {
-            std::string msg = _( "Hero %{name} also got a %{count} experience." );
-            StringReplace( msg, "%{name}", hero.GetName() );
-            StringReplace( msg, "%{count}", exp );
-            Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-        }
-        hero.IncreaseExperience( exp );
-    }
+    const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.FadeOut();
@@ -313,7 +302,7 @@ void AnimationRemoveObject( const Maps::Tiles & tile )
     if ( tile.GetObject() == MP2::OBJ_ZERO )
         return;
 
-    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
+    Game::ObjectFadeAnimation::StartFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -339,9 +328,6 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
 
             hero.GetArmy().JoinTroop( troop(), recruit );
             hero.MovePointsScaleFixed();
-
-            if ( Settings::Get().ExtHeroRecalculateMovement() )
-                hero.RecalculateMovePoints();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
         }
@@ -2171,9 +2157,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
                 hero.GetArmy().JoinTroop( troop );
                 hero.MovePointsScaleFixed();
 
-                if ( Settings::Get().ExtHeroRecalculateMovement() )
-                    hero.RecalculateMovePoints();
-
                 Interface::Basic::Get().GetStatusWindow().SetRedraw();
             }
         }
@@ -2554,9 +2537,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
             offsetX += border.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
-
-        if ( Settings::Get().ExtHeroRecalculateMovement() )
-            hero.RecalculateMovePoints();
     }
     else {
         Dialog::Message( MP2::StringObject( obj ), msg2, Font::BIG, Dialog::OK );
@@ -3078,9 +3058,9 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        AnimationRemoveObject( tile );
         tile.SetObject( hero.GetMapsObject() );
         hero.SetMapsObject( MP2::OBJ_ZERO );
-        AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
         // TODO: fix pathfinding
         if ( tile.GetIndex() == hero.GetIndex() ) {

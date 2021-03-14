@@ -133,26 +133,26 @@ public:
 
     static Cursor & Get( void );
 
-    static void Redraw( s32, s32 );
+    static void Redraw( int32_t, int32_t );
     static int DistanceThemes( int, u32 );
     static int WithoutDistanceThemes( int );
     static void Refresh();
 
-    int Themes( void );
+    int Themes() const;
     bool SetThemes( int, bool force = false );
-    void Show( void );
-    void Hide( void );
+    void Show() const;
+    void Hide() const;
     bool isVisible( void ) const;
 
 private:
     Cursor();
     ~Cursor();
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
-    void Move( s32, s32 );
+    void Move( int32_t x, int32_t y ) const;
 
     int theme;
-    s32 offset_x;
-    s32 offset_y;
+    int32_t offset_x;
+    int32_t offset_y;
 };
 
 #endif

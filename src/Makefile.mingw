@@ -16,12 +16,3 @@ ifndef WITHOUT_UNICODE
 CFLAGS := $(CFLAGS) -DWITH_ICONV
 LIBS := $(LIBS) -liconv
 endif
-
-ifdef WITH_ICONS
-export WITH_ICONS=0
-# ifndef WITH_ICONS
-# export WITH_ICONS=1
-endif
-# IDICON := 1099
-# CFLAGS := $(CFLAGS) -DID_ICON=$(IDICON)
-# export IDICON

@@ -27,7 +27,6 @@
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
-#include "error.h"
 #include "game.h"
 #include "game_over.h"
 #include "game_static.h"

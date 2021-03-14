@@ -108,13 +108,14 @@ namespace Battle
         uint32_t CalculateMoveDistance( int32_t indexTo );
         bool hexIsAccessible( int32_t indexTo );
         bool hexIsPassable( int32_t indexTo );
+        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
         Indexes GetPath( const Unit &, const Position & );
 
         void ApplyAction( Command & );
 
         TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 );
         void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & );
-        TargetsInfo GetTargetsForSpells( const HeroBase *, const Spell &, s32 );
+        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
 
         bool isSpellcastDisabled() const;

@@ -263,22 +263,13 @@ std::string ShowLocalVisitObjectInfo( const Maps::Tiles & tile, const Heroes * h
     return str;
 }
 
-std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom )
-{
-    std::string str = MP2::StringObject( tile.GetObject() );
-    str.append( "\n \n" );
-    str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
-
-    return str;
-}
-
 std::string ShowGlobalVisitInfo( const Maps::Tiles & tile, const Kingdom & kingdom, bool showVisitedOption )
 {
     std::string str = MP2::StringObject( tile.GetObject() );
 
-    if ( showVisitedOption && kingdom.isVisited( tile ) ) {
+    if ( showVisitedOption ) {
         str.append( "\n \n" );
-        str.append( _( "(already visited)" ) );
+        str.append( kingdom.isVisited( tile ) ? _( "(already visited)" ) : _( "(not visited)" ) );
     }
 
     return str;
@@ -453,7 +444,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
 
     if ( tile.isFog( settings.CurrentColor() ) )
-        name_object = _( "Unchartered Territory" );
+        name_object = _( "Uncharted Territory" );
     else
         // check guardians mine
         if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
@@ -547,7 +538,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_ARTESIANSPRING:
-            name_object = ShowGlobalVisitInfo( tile, kingdom );
+            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
             break;
 
         case MP2::OBJ_MAGICWELL:
@@ -576,7 +567,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         case MP2::OBJ_OBELISK:
-            name_object = ShowGlobalVisitInfo( tile, kingdom );
+            name_object = ShowGlobalVisitInfo( tile, kingdom, true );
             break;
 
         case MP2::OBJ_BARRIER:

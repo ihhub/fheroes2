@@ -38,8 +38,6 @@
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
-#include "engine.h"
-#include "error.h"
 #include "font.h"
 #include "game.h"
 #include "image_tool.h"
@@ -771,7 +769,7 @@ bool AGG::Init( void )
 
 #ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 288, 200, errorMessage, sizeof( errorMessage ) );
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ) );
 
         display.fill( 0 );
         fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
@@ -821,11 +819,9 @@ namespace fheroes2
 {
     namespace AGG
     {
-        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite;
-        const fheroes2::Sprite errorICNImage;
-
-        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage;
-        const fheroes2::Image errorTILImage;
+        std::vector<std::vector<fheroes2::Sprite> > _icnVsSprite( ICN::LASTICN );
+        std::vector<std::vector<std::vector<fheroes2::Image> > > _tilVsImage( TIL::LASTTIL );
+        const fheroes2::Sprite errorImage;
 
         const uint32_t headerSize = 6;
 
@@ -833,28 +829,12 @@ namespace fheroes2
 
         bool IsValidICNId( int id )
         {
-            if ( id < 0 ) {
-                return false;
-            }
-
-            if ( _icnVsSprite.empty() ) {
-                _icnVsSprite.resize( ICN::LASTICN );
-            }
-
-            return static_cast<size_t>( id ) < _icnVsSprite.size();
+            return id >= 0 && static_cast<size_t>( id ) < _icnVsSprite.size();
         }
 
         bool IsValidTILId( int id )
         {
-            if ( id < 0 ) {
-                return false;
-            }
-
-            if ( _tilVsImage.empty() ) {
-                _tilVsImage.resize( TIL::LASTTIL );
-            }
-
-            return static_cast<size_t>( id ) < _tilVsImage.size();
+            return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
         }
 
         void LoadOriginalICN( int id )
@@ -959,15 +939,16 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
                 return true;
-            case ICN::BTNMIN:
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::RECRUIT, 4 + i );
                     // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 30, 4, 31, 15 );
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
                     // add 'IN'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 23, 20, out, 30, 4, 25, 15 );
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
                 }
                 return true;
             case ICN::SPELLS:
@@ -1332,6 +1313,161 @@ namespace fheroes2
                     out.setPosition( source.y(), source.x() );
                 }
                 return true;
+            case ICN::SURRENDR:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // Fix incorrect font color.
+                    ReplaceColorId( _icnVsSprite[id][0], 28, 56 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_OKAY_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 4 ), 6, 0, 96, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 5 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRG, 6 ), 6, 0, 96, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRG, 7 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_EVIL_OKAY_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 4 ), 4, 0, 96, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 5 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = Crop( GetICN( ICN::CAMPXTRE, 6 ), 4, 0, 96, 25 );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                _icnVsSprite[id][1] = GetICN( ICN::CAMPXTRE, 7 );
+                _icnVsSprite[id][1].setPosition( 0, 0 );
+                return true;
+            case ICN::UNIFORM_GOOD_MAX_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                // Generate background
+                Image background( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 0, 0, background, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 89, 0, background, 53, 0, 7, 25 );
+
+                // Released button
+                Image temp( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 0, 0, temp, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 89, 0, temp, 53, 0, 7, 25 );
+                Copy( GetICN( ICN::RECRUIT, 4 ), 9, 2, temp, 4, 2, 52, 19 );
+
+                _icnVsSprite[id][0] = background;
+                Blit( temp, _icnVsSprite[id][0] );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Pressed button
+                _icnVsSprite[id][1] = background;
+                Copy( GetICN( ICN::RECRUIT, 5 ), 9, 2, _icnVsSprite[id][1], 3, 2, 53, 19 );
+
+                return true;
+            }
+            case ICN::UNIFORM_GOOD_MIN_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                // Generate background
+                Image background( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 0, 0, background, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 12 ), 89, 0, background, 53, 0, 7, 25 );
+
+                // Released button
+                Image temp( 60, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 0, 0, temp, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEM, 11 ), 89, 0, temp, 53, 0, 7, 25 );
+                Copy( GetICN( ICN::RECRUIT, 4 ), 9, 2, temp, 4, 2, 21, 19 ); // letter 'M'
+                Copy( GetICN( ICN::APANEL, 4 ), 23, 21, temp, 28, 5, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANEL, 4 ), 31, 21, temp, 39, 5, 17, 14 ); // letter 'N'
+
+                _icnVsSprite[id][0] = background;
+                Blit( temp, _icnVsSprite[id][0] );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Pressed button
+                _icnVsSprite[id][1] = background;
+                Copy( GetICN( ICN::RECRUIT, 5 ), 9, 3, _icnVsSprite[id][1], 3, 3, 19, 17 ); // letter 'M'
+                Copy( GetICN( ICN::APANEL, 5 ), 21, 22, _icnVsSprite[id][1], 25, 6, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANEL, 5 ), 30, 21, _icnVsSprite[id][1], 37, 5, 17, 15 ); // letter 'N'
+
+                return true;
+            }
+            case ICN::UNIFORM_EVIL_MAX_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                // Generate background
+                Image background( 60, 25 );
+                Copy( GetICN( ICN::SYSTEME, 12 ), 0, 0, background, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEME, 12 ), 89, 0, background, 53, 0, 7, 25 );
+
+                // Released button
+                Image temp( 60, 25 );
+                Copy( GetICN( ICN::SYSTEME, 11 ), 0, 0, temp, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEME, 11 ), 89, 0, temp, 53, 0, 7, 25 );
+                Copy( GetICN( ICN::CPANELE, 0 ), 46, 28, temp, 6, 5, 19, 14 ); // letter 'M'
+                Copy( GetICN( ICN::CSPANBTE, 0 ), 49, 5, temp, 25, 5, 13, 14 ); // letter 'A'
+                Copy( GetICN( ICN::CSPANBTE, 0 ), 62, 10, temp, 38, 10, 2, 9 ); // rest of letter 'A'
+                Copy( GetICN( ICN::LGNDXTRE, 4 ), 28, 5, temp, 41, 5, 15, 14 ); // letter 'X'
+
+                _icnVsSprite[id][0] = background;
+                Blit( temp, _icnVsSprite[id][0] );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Pressed button
+                _icnVsSprite[id][1] = background;
+                Copy( GetICN( ICN::CPANELE, 1 ), 45, 29, _icnVsSprite[id][1], 4, 6, 19, 14 ); // letter 'M'
+                Copy( GetICN( ICN::CSPANBTE, 1 ), 49, 6, _icnVsSprite[id][1], 23, 6, 12, 14 ); // letter 'A'
+                Copy( GetICN( ICN::CSPANBTE, 1 ), 61, 11, _icnVsSprite[id][1], 35, 11, 3, 9 ); // rest of letter 'A'
+                Copy( GetICN( ICN::LGNDXTRE, 5 ), 26, 4, _icnVsSprite[id][1], 38, 4, 15, 16 ); // letter 'X'
+                _icnVsSprite[id][1].image()[353] = 21;
+                _icnVsSprite[id][1].image()[622] = 21;
+                _icnVsSprite[id][1].image()[964] = 21;
+
+                return true;
+            }
+            case ICN::UNIFORM_EVIL_MIN_BUTTON: {
+                _icnVsSprite[id].resize( 2 );
+
+                // Generate background
+                Image background( 60, 25 );
+                Copy( GetICN( ICN::SYSTEME, 12 ), 0, 0, background, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEME, 12 ), 89, 0, background, 53, 0, 7, 25 );
+
+                // Released button
+                Image temp( 60, 25 );
+                Copy( GetICN( ICN::SYSTEME, 11 ), 0, 0, temp, 0, 0, 53, 25 );
+                Copy( GetICN( ICN::SYSTEME, 11 ), 89, 0, temp, 53, 0, 7, 25 );
+                Copy( GetICN( ICN::CPANELE, 0 ), 46, 28, temp, 6, 5, 19, 14 ); // letter 'M'
+                Copy( GetICN( ICN::APANELE, 4 ), 23, 21, temp, 28, 5, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANELE, 4 ), 31, 21, temp, 39, 5, 17, 14 ); // letter 'N'
+
+                _icnVsSprite[id][0] = background;
+                Blit( temp, _icnVsSprite[id][0] );
+                _icnVsSprite[id][0].setPosition( 0, 0 );
+
+                // Pressed button
+                _icnVsSprite[id][1] = background;
+                Copy( GetICN( ICN::CPANELE, 1 ), 45, 29, _icnVsSprite[id][1], 4, 6, 19, 14 ); // letter 'M'
+                Copy( GetICN( ICN::APANELE, 5 ), 21, 22, _icnVsSprite[id][1], 25, 6, 8, 14 ); // letter 'I'
+                Copy( GetICN( ICN::APANELE, 5 ), 30, 21, _icnVsSprite[id][1], 37, 5, 17, 15 ); // letter 'N'
+                _icnVsSprite[id][1].image()[622] = 21;
+                _icnVsSprite[id][1].image()[964] = 21;
+                _icnVsSprite[id][1].image()[1162] = 21;
+
+                return true;
+            }
             default:
                 break;
             }
@@ -1434,11 +1570,11 @@ namespace fheroes2
         const Sprite & GetICN( int icnId, uint32_t index )
         {
             if ( !IsValidICNId( icnId ) ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             if ( index >= GetMaximumICNIndex( icnId ) ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             if ( IsScalableICN( icnId ) ) {
@@ -1460,16 +1596,16 @@ namespace fheroes2
         const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId )
         {
             if ( shapeId > 3 ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             if ( !IsValidTILId( tilId ) ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             const size_t maxTILIndex = GetMaximumTILIndex( tilId );
             if ( index >= maxTILIndex ) {
-                return errorTILImage;
+                return errorImage;
             }
 
             return _tilVsImage[tilId][shapeId][index];
@@ -1478,7 +1614,7 @@ namespace fheroes2
         const Sprite & GetLetter( uint32_t character, uint32_t fontType )
         {
             if ( character < 0x21 ) {
-                return errorICNImage;
+                return errorImage;
             }
 
             // TODO: correct naming and standartise the code

@@ -509,7 +509,7 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) ) {
-        if ( bcond == ALLOW_BUILD ) {
+        if ( bcond == LACK_RESOURCES || bcond == ALLOW_BUILD ) {
             fheroes2::ButtonRestorer exitRestorer( exitButton );
             return DialogBuyBuilding( true );
         }

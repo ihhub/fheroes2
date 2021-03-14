@@ -38,14 +38,16 @@ namespace Battle
     struct ArenaNode : public PathfindingNode
     {
         bool _isOpen = true;
+        bool _isLeftDirection = false;
 
         // ArenaNode uses different default values
         ArenaNode()
             : PathfindingNode( -1, MAX_MOVE_COST, 0 )
         {}
-        ArenaNode( int node, uint16_t cost, bool isOpen )
+        ArenaNode( int node, uint16_t cost, bool isOpen, bool isLeftDirection )
             : PathfindingNode( node, cost, 0 )
             , _isOpen( isOpen )
+            , _isLeftDirection( isLeftDirection )
         {}
         // Override the base version of the call to use proper values
         virtual void resetNode() override;
@@ -60,5 +62,9 @@ namespace Battle
         std::list<Route::Step> buildPath( int targetCell ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
+        Indexes getAllAvailableMoves( uint32_t moveRange ) const;
+
+    private:
+        bool nodeIsAccessible( const ArenaNode & node ) const;
     };
 }

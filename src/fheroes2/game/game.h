@@ -239,8 +239,6 @@ namespace Game
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
-    int NetworkHost( void );
-    int NetworkGuest( void );
     int DisplayLoadGameDialog();
     int CompleteCampaignScenario();
 
@@ -279,21 +277,29 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        struct Info
+        struct FadeTask
         {
-            Info();
-            Info( u8 object_, u8 index_, s32 tile_, u32 alpha_ = 255u, bool fadeOut = true );
+            FadeTask();
+
+            FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
+                      bool fadeIn_, uint8_t objectTileset_ );
 
             uint8_t object;
-            uint8_t index;
-            int32_t tile;
+            uint32_t objectIndex;
+            uint32_t animationIndex;
+            uint32_t fromIndex;
+            uint32_t toIndex;
             uint32_t alpha;
-            fheroes2::Size surfaceSize;
-            bool isFadeOut;
+            bool fadeOut;
+            bool fadeIn;
+            uint8_t objectTileset;
         };
 
-        void Set( const Info & info );
-        Info & Get();
+        FadeTask & GetFadeTask();
+
+        void StartFadeTask( uint8_t object, uint32_t fromTile, uint32_t toTile, bool fadeOut, bool fadeIn );
+
+        void FinishFadeTask();
     }
 
     u32 GetStep4Player( u32, u32, u32 );
