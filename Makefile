@@ -39,8 +39,6 @@ TARGET	:= fheroes2
 
 all:
 	$(MAKE) -C src
-	@cp src/dist/$(TARGET) .
 
 clean:
 	$(MAKE) -C src clean
-	@rm -f ./$(TARGET)
