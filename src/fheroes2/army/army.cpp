@@ -1470,7 +1470,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
     // check for creature alliance/bane
     if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
-        const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
+        const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
             bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;

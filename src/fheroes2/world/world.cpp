@@ -26,7 +26,6 @@
 
 #include "ai.h"
 #include "artifact.h"
-#include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -432,6 +431,11 @@ Heroes * World::GetFreemanHeroes( int race ) const
     return vec_heroes.GetFreeman( race );
 }
 
+Heroes * World::GetFreemanHeroesSpecial( int heroID ) const 
+{
+    return vec_heroes.GetFreemanSpecial( heroID );
+}
+
 Heroes * World::FromJailHeroes( s32 index )
 {
     return vec_heroes.FromJail( index );
@@ -528,28 +532,6 @@ void World::NewDay( void )
 
     // action new day
     vec_kingdoms.NewDay();
-
-    // handle campaign awards that give resource bonus
-    const Settings & conf = Settings::Get();
-    if ( day > 1 && conf.GameType() & Game::TYPE_CAMPAIGN ) {
-        std::vector<Funds> resourceBonuses;
-        const std::vector<Campaign::CampaignAwardData> & campaignAwards = Campaign::CampaignSaveData::Get().getEarnedCampaignAwards();
-
-        for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-            if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
-                continue;
-
-            resourceBonuses.emplace_back( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
-        }
-
-        const Players & sortedPlayers = Settings::Get().GetPlayers();
-        if ( !resourceBonuses.empty() ) {
-            Kingdom & humanKingdom = GetKingdom( Settings::Get().GetPlayers().HumanColors() );
-
-            for ( uint32_t i = 0; i < resourceBonuses.size(); ++i )
-                humanKingdom.AddFundsResource( resourceBonuses[i] );
-        }
-    }
 
     // action new week
     if ( BeginWeek() ) {

@@ -138,6 +138,7 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , experience(0)
 {}
 
 Heroes::Heroes( int heroid, int rc )
@@ -195,6 +196,9 @@ Heroes::Heroes( int heroid, int rc )
         defense = 1;
         power = 2;
         knowledge = 6;
+
+        // start from lv5
+        experience = GetExperienceFromLevel( 4 );
 
         secondary_skills = Skill::SecSkills();
         secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NAVIGATION, Skill::Level::ADVANCED ) );
@@ -2009,6 +2013,12 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     }
 
     return at( Rand::Get( freeman_heroes ) );
+}
+
+Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const 
+{
+    assert( at( heroID ) && at( heroID )->isFreeman() );
+    return at( heroID );
 }
 
 void AllHeroes::Scoute( int colors ) const

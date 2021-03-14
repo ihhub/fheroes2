@@ -94,11 +94,6 @@ namespace Campaign
             return _description;
         }
 
-        const std::vector<CampaignAwardData> & getObtainableAwards() const
-        {
-            return _obtainableAwards;
-        }
-
         void AddObtainableCampaignAward( const CampaignAwardData & obtainableAward );
 
         bool isMapFilePresent() const;
@@ -110,8 +105,6 @@ namespace Campaign
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
         std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
-        // Note that there is a case of 1 scenario having 2 awards, such as Slay the Dwarves (ogre alliance + dwarf bane)
-        std::vector<CampaignAwardData> _obtainableAwards;
     };
 }
 

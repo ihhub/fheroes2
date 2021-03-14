@@ -88,24 +88,18 @@ namespace Campaign
             TYPE_RESOURCE_BONUS, // eg: wood bonus in price of loyalty
         };
 
-        enum ObtainCondition
-        {
-            CLEAR_SCENARIO,
-            DEFEAT_ENEMY_HERO
-        };
-
-        // NOTE: Carry over forces shouldn't use these other than type and startScenarioID
+        // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
+        int _id;
         uint32_t _type;
         uint32_t _subType;
         uint32_t _amount;
         uint32_t _startScenarioID;
+        std::string _customName;
 
         CampaignAwardData();
-        CampaignAwardData( uint32_t type, uint32_t subType, int startScenarioID );
-        CampaignAwardData( uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID );
-
-        friend StreamBase & operator<<( StreamBase & msg, const CampaignAwardData & data );
-        friend StreamBase & operator>>( StreamBase & msg, CampaignAwardData & data );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, std::string customName );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, std::string customName = "" );
 
         std::string ToString() const;
     };

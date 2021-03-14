@@ -21,6 +21,7 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
+#include "army.h"
 #include "campaign_data.h"
 #include "campaign_scenariodata.h"
 
@@ -41,9 +42,9 @@ namespace Campaign
             return _finishedMaps;
         }
 
-        const std::vector<CampaignAwardData> & getEarnedCampaignAwards() const
+        const std::vector<int> & getObtainedCampaignAwards() const
         {
-            return _earnedCampaignAwards;
+            return _obtainedCampaignAwards;
         }
 
         int getCampaignID() const
@@ -71,11 +72,17 @@ namespace Campaign
             return _daysPassed;
         }
 
+        const std::vector<Troop> & getCarryOverTroops() const 
+        {
+            return _carryOverTroops;
+        }
+
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
-        void addCampaignAward( const CampaignAwardData & award );
+        void addCampaignAward( const int awardID );
+        void setCarryOverTroops( const Troops & troops );
         void reset();
         void addDaysPassed( const uint32_t days );
 
@@ -86,8 +93,8 @@ namespace Campaign
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
 
         std::vector<int> _finishedMaps;
-        std::vector<CampaignAwardData> _earnedCampaignAwards;
-        std::vector<std::string> _earnedCampaignAwards_Old;
+        std::vector<int> _obtainedCampaignAwards;
+        std::vector<Troop> _carryOverTroops;
         int _currentScenarioID;
         int _campaignID;
         uint32_t _daysPassed;

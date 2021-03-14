@@ -21,6 +21,7 @@
 #include "campaign_data.h"
 #include "artifact.h"
 #include "campaign_scenariodata.h"
+#include "heroes.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
@@ -129,28 +130,37 @@ namespace Campaign
     }
 
     CampaignAwardData::CampaignAwardData()
-        : _type( 0 )
+        : _id( 0 )
+        , _type( 0 )
         , _subType( 0 )
         , _amount( 0 )
         , _startScenarioID( 0 )
+        , _customName()
     {}
 
-    CampaignAwardData::CampaignAwardData( uint32_t type, uint32_t subType, int startScenarioID )
-        : _type( type )
-        , _subType( subType )
-        , _amount( 0 )
-        , _startScenarioID( startScenarioID )
+    // default amount to 1 for initialized campaign award data
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType )
+        : CampaignAwardData( id, type, subType, 1, 0 )
     {}
 
-    CampaignAwardData::CampaignAwardData( uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID )
-        : _type( type )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, std::string customName )
+        : CampaignAwardData( id, type, subType, 1, 0, customName )
+    {}
+
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, std::string customName /*= ""*/ )
+        : _id( id )
+        , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
+        , _customName( customName )
     {}
 
     std::string CampaignAwardData::ToString() const
     {
+        if ( !_customName.empty() )
+            return _customName;
+
         std::string objectName;
 
         switch ( _type ) {
@@ -172,20 +182,16 @@ namespace Campaign
         case CampaignAwardData::TYPE_GET_SPELL:
             objectName = Spell( _subType ).GetName();
             break;
+        case CampaignAwardData::TYPE_HIREABLE_HERO:
+            objectName = Heroes( _subType, 0 ).GetName();
+            break;
+        case CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
+            objectName = Heroes( _subType, 0 ).GetName() + std::string( " defeated" );
+            break;
         default:
             assert( 0 ); // some new/unhandled award
         }
 
         return objectName;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignAwardData & data )
-    {
-        return msg << data._type << data._subType << data._amount << data._startScenarioID;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, Campaign::CampaignAwardData & data )
-    {
-        return msg >> data._type >> data._subType >> data._amount >> data._startScenarioID;
     }
 }

@@ -29,7 +29,7 @@ namespace Campaign
 {
     CampaignSaveData::CampaignSaveData()
         : _finishedMaps()
-        , _earnedCampaignAwards()
+        , _obtainedCampaignAwards()
         , _currentScenarioID( 0 )
         , _campaignID( 0 )
         , _daysPassed( 0 )
@@ -42,9 +42,9 @@ namespace Campaign
         return instance;
     }
 
-    void CampaignSaveData::addCampaignAward( const CampaignAwardData & award )
+    void CampaignSaveData::addCampaignAward( const int awardID )
     {
-        _earnedCampaignAwards.emplace_back( award );
+        _obtainedCampaignAwards.emplace_back( awardID );
     }
 
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
@@ -77,27 +77,42 @@ namespace Campaign
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
-        _earnedCampaignAwards.clear();
+        _obtainedCampaignAwards.clear();
+        _carryOverTroops.clear();
         _currentScenarioID = 0;
         _campaignID = 0;
         _daysPassed = 0;
     }
 
+    void CampaignSaveData::setCarryOverTroops( const Troops & troops )
+    {
+        _carryOverTroops.clear();
+
+        for ( size_t i = 0; i < troops.Size(); ++i ) {
+            _carryOverTroops.emplace_back( *troops.GetTroop( i ) );
+        }
+    }
+
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
     {
-        return msg << data._earnedCampaignAwards_Old << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID
-                   << data._daysPassed << data._earnedCampaignAwards;
+        return msg << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed << data._obtainedCampaignAwards
+                   << data._carryOverTroops;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
-        msg >> data._earnedCampaignAwards_Old >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+        if ( Game::GetLoadVersion() < FORMAT_VERSION_092_RELEASE ) {
+            std::vector<std::string> temp_OldObtainedCampaignAwards;
+            msg >> temp_OldObtainedCampaignAwards;
+        }
+
+        msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
 
         if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE )
             msg >> data._campaignID >> data._daysPassed;
 
         if ( Game::GetLoadVersion() >= FORMAT_VERSION_092_RELEASE )
-            msg >> data._earnedCampaignAwards;
+            msg >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
         return msg;
     }

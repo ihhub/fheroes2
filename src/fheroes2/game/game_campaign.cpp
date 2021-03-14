@@ -94,6 +94,58 @@ namespace
         return bonus;
     }
 
+    std::vector<Campaign::CampaignAwardData> getRolandCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 2:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF ) );
+            break;
+        case 5:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, "Sorceress Guild" ) );
+            break;
+        case 6:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 ) );
+            break;
+        case 7:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 ) );
+            break;
+        case 8:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 ) );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+
+    std::vector<Campaign::CampaignAwardData> getArchibaldCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 2:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, "Necromancer Guild" ) );
+            break;
+        case 3:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE ) );
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_CREATURE_BANE, Monster::DWARF ) );
+            break;
+        case 6:
+            obtainableAwards.emplace_back(
+                Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, "Dragon Alliance" ) );
+            break;
+        case 8:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN ) );
+            break;
+        case 9:
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON ) );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+
     std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
     {
         std::vector<Campaign::ScenarioBonusData> bonus;
@@ -171,6 +223,20 @@ namespace
 
         // shouldn't be here unless we get an unsupported campaign
         return std::vector<Campaign::ScenarioBonusData>();
+    }
+
+    std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID ) 
+    {
+        assert( campaignID >= 0 && scenarioID >= 0 );
+
+        switch ( campaignID ) {
+        case 0:
+            return getRolandCampaignAwardData( scenarioID );
+        case 1:
+            return getArchibaldCampaignAwardData( scenarioID );
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
     }
 
     const std::string rolandCampaignDescription[10] = {
@@ -339,8 +405,6 @@ namespace
         scenarioDatas.emplace_back( 8, std::vector<int>{9}, getCampaignBonusData( 0, 8 ), std::string( "CAMPG09.H2C" ), rolandCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
 
-        scenarioDatas[2].AddObtainableCampaignAward( Campaign::CampaignAwardData( Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, 3 ) );
-
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( 0 );
         campaignData.setCampaignDescription( "Roland Campaign" );
@@ -386,6 +450,7 @@ namespace
             return Campaign::CampaignData();
         }
     }
+
 
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
     {
@@ -459,7 +524,17 @@ namespace
                     }
                 }
                 break;
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
+                const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+                Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
+                bestHeroArmy.Clean();
+
+                for ( uint32_t i = 0; i < carryOverTroops.size(); ++i ) 
+                    bestHeroArmy.GetTroop( i )->Set( carryOverTroops[i] );
+                
+                break;
             }
+
         }
     }
 }
@@ -480,11 +555,16 @@ int Game::CompleteCampaignScenario()
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
     const auto scenarioDatas = GetCampaignData( saveData.getCampaignID() ).getAllScenarios();
-    const std::vector<Campaign::CampaignAwardData> & obtainableAwards = scenarioDatas[lastCompletedScenarioID].getObtainableAwards();
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards = getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( uint32_t i = 0; i < obtainableAwards.size(); ++i ) {
-        saveData.addCampaignAward( obtainableAwards[i] );
+        saveData.addCampaignAward( obtainableAwards[i]._id );
+
+        if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
+            Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
+            saveData.setCarryOverTroops( humanKingdom.GetBestHero()->GetArmy() );
+        }
     }
 
     // TODO: do proper calc based on all scenarios cleared?
@@ -494,6 +574,24 @@ int Game::CompleteCampaignScenario()
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
     saveData.setCurrentScenarioID( firstNextMap );
     return Game::SELECT_CAMPAIGN_SCENARIO;
+}
+
+const std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData )
+{
+    std::vector<Campaign::CampaignAwardData> obtainedAwards;
+    const std::vector<int> finishedMaps = saveData.getFinishedMaps();
+    const std::vector<int> obtainedAwardIDs = saveData.getObtainedCampaignAwards();
+
+    for ( int i = 0; i < finishedMaps.size(); ++i ) {
+        const std::vector<Campaign::CampaignAwardData> awards = getCampaignAwardData( saveData.getCampaignID(), finishedMaps[i] );
+
+        for ( int j = 0; j < awards.size(); ++j ) {
+            if ( std::find( obtainedAwardIDs.begin(), obtainedAwardIDs.end(), awards[j]._id ) != obtainedAwardIDs.end() )
+                obtainedAwards.emplace_back( awards[j] );
+        }
+    }
+
+    return obtainedAwards;
 }
 
 int Game::SelectCampaignScenario()
@@ -567,7 +665,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
-    DrawObtainedCampaignAwards( campaignSaveData.getEarnedCampaignAwards(), top );
+    DrawObtainedCampaignAwards( GetObtainedCampaignAwards( campaignSaveData ), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
@@ -638,7 +736,7 @@ int Game::SelectCampaignScenario()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
 
-            ApplyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getEarnedCampaignAwards() );
+            ApplyObtainedCampaignAwards( chosenScenarioID, GetObtainedCampaignAwards( campaignSaveData ) );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
