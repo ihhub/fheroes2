@@ -1052,7 +1052,7 @@ u32 Battle::Unit::GetDefense( void ) const
     const Castle * castle = Arena::GetCastle();
 
     if ( castle && castle->isBuild( BUILD_MOAT ) && ( Board::isMoatIndex( GetHeadIndex(), GetColor() ) || Board::isMoatIndex( GetTailIndex(), GetColor() ) ) ) {
-        const u32 step = GameStatic::GetBattleMoatReduceDefense();
+        const uint32_t step = GameStatic::GetBattleMoatReduceDefense();
 
         if ( step >= res )
             res = 1;
