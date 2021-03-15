@@ -368,7 +368,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else {
         fheroes2::Blit( sprite8, display, rect8.x, rect8.y );
-        fheroes2::Blit( sprite81, 13, 13, display, rect8.x + 13, rect8.y + 13, 38, 38 );
+        fheroes2::Blit( sprite81, 14, 14, display, rect8.x + 14, rect8.y + 14, 37, 37 );
         str = _( "Show" );
     }
     text.Set( str );
