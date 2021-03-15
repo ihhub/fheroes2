@@ -112,7 +112,6 @@ namespace Dialog
     void Marketplace( bool fromTradingPost = false );
     void MakeGiftResource( void );
     int BuyBoat( bool enable );
-    void PuzzleMaps( void );
     void ThievesGuild( bool oracle );
     void GameInfo( void );
 

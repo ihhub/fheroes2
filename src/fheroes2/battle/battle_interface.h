@@ -339,7 +339,6 @@ namespace Battle
 
         s32 index_pos;
         s32 teleport_src;
-        Rect pocket_book;
         Rect main_tower;
 
         StatusListBox * listlog;
