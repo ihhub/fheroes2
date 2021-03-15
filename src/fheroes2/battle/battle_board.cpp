@@ -702,8 +702,6 @@ bool Battle::Board::isBridgeIndex( s32 index, int color )
 
 bool Battle::Board::isMoatIndex( s32 index, int color )
 {
-    const Bridge * bridge = Arena::GetBridge();
-
     switch ( index ) {
     case 7:
     case 18:
@@ -714,8 +712,10 @@ bool Battle::Board::isMoatIndex( s32 index, int color )
     case 84:
     case 95:
         return true;
-    case 49:
+    case 49: {
+        const Bridge * bridge = Arena::GetBridge();
         return bridge == nullptr || !bridge->isPassable( color );
+    }
 
     default:
         break;
