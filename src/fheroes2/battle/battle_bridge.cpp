@@ -93,19 +93,20 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 
 bool Battle::Bridge::isPassable( const Unit & b ) const
 {
-    // yes if bridge is lowered, or unit belongs to the castle and there are no any troops (alive or dead) on or under the bridge
+    // yes if bridge is lowered (or destroyed), or unit belongs to the castle and there are no any troops (alive or dead) on or under the bridge
     return isDown() || ( b.GetColor() == Arena::GetCastle()->GetColor() && !isBridgeOccupied() );
 }
 
 void Battle::Bridge::SetDestroy( void )
 {
     destroy = true;
+
     Board::GetCell( GATES_CELL )->SetObject( 0 );
 }
 
 void Battle::Bridge::SetPassable( const Unit & b )
 {
-    if ( Board::isCastleIndex( b.GetHeadIndex() ) || b.GetColor() == Arena::GetCastle()->GetColor() ) {
+    if ( isPassable( b ) ) {
         Board::GetCell( GATES_CELL )->SetObject( 0 );
     }
     else {

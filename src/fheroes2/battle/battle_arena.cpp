@@ -458,7 +458,7 @@ void Battle::Arena::Turns( void )
         }
 
         // set bridge passable
-        if ( bridge && bridge->isValid() && !bridge->isDown() )
+        if ( bridge )
             bridge->SetPassable( *current_troop );
 
         // turn troop
@@ -473,7 +473,7 @@ void Battle::Arena::Turns( void )
             current_color = current_troop->GetArmyColor();
 
             // set bridge passable
-            if ( bridge && bridge->isValid() && !bridge->isDown() )
+            if ( bridge )
                 bridge->SetPassable( *current_troop );
 
             // turn troop
