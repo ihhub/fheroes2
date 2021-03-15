@@ -158,10 +158,7 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
-    states.push_back( Settings::GAME_EVIL_INTERFACE );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
-
-    states.push_back( Settings::GAME_HIDE_INTERFACE );
 
     states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
 

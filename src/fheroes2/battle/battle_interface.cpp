@@ -2214,16 +2214,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     // Add offsets to inner objects
     const Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
-    if ( pocket_book.w && le.MouseCursor( pocket_book ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Spell cast" );
-
-        if ( le.MouseClickLeft( pocket_book ) ) {
-            ProcessingHeroDialogResult( 1, a );
-            humanturn_redraw = true;
-        }
-    }
-    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista Info" );
 
