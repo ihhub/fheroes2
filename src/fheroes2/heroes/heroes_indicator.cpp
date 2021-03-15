@@ -32,14 +32,14 @@
 
 namespace fheroes2
 {
-    const std::string MoraleString( const int morale )
+    std::string MoraleString( const int morale )
     {
         std::string str = _( "%{morale} Morale" );
         StringReplace( str, "%{morale}", Morale::String( morale ) );
         return str;
     }
 
-    const std::string LuckString( const int luck )
+    std::string LuckString( const int luck )
     {
         std::string str = _( "%{luck} Luck" );
         StringReplace( str, "%{luck}", Luck::String( luck ) );
