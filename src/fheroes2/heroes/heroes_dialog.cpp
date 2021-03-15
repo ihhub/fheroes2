@@ -37,6 +37,7 @@
 #include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "ui_window.h"

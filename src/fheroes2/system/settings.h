@@ -28,9 +28,10 @@
 
 #include "bitmodes.h"
 #include "dir.h"
-#include "gamedefs.h"
 #include "maps_fileinfo.h"
 #include "players.h"
+#include "rect.h"
+#include "types.h"
 
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001

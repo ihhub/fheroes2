@@ -48,6 +48,7 @@
 #include "race.h"
 #include "speed.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

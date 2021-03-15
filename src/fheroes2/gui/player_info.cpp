@@ -28,6 +28,7 @@
 #include "race.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 
 bool Interface::PlayerInfo::operator==( const Player * p ) const
 {

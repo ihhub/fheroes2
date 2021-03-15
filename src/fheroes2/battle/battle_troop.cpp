@@ -38,6 +38,7 @@
 #include "morale.h"
 #include "rand.h"
 #include "speed.h"
+#include "tools.h"
 #include "world.h"
 
 Battle::ModeDuration::ModeDuration()

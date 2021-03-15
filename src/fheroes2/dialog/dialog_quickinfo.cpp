@@ -38,6 +38,7 @@
 #include "race.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 std::string GetMinesIncomeString( int type )

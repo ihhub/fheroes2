@@ -23,7 +23,7 @@
 #ifndef H2BATTLE_CATAPULT_H
 #define H2BATTLE_CATAPULT_H
 
-#include "gamedefs.h"
+#include "rect.h"
 
 class HeroBase;
 

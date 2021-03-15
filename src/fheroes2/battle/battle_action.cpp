@@ -35,6 +35,7 @@
 #include "logging.h"
 #include "rand.h"
 #include "spell.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

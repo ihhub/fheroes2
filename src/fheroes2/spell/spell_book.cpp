@@ -33,6 +33,7 @@
 #include "skill.h"
 #include "spell_book.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {

@@ -29,6 +29,7 @@
 #include "luck.h"
 #include "morale.h"
 #include "text.h"
+#include "tools.h"
 
 namespace fheroes2
 {

@@ -36,6 +36,7 @@
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 enum

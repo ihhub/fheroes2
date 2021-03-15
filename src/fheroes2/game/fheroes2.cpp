@@ -40,6 +40,7 @@
 #include "logging.h"
 #include "screen.h"
 #include "system.h"
+#include "tools.h"
 #include "translations.h"
 #include "zzlib.h"
 

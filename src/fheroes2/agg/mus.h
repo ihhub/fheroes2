@@ -25,6 +25,8 @@
 
 #include "gamedefs.h"
 
+#include <string>
+
 namespace MUS
 {
     enum

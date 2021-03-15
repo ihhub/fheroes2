@@ -38,6 +38,7 @@
 #include "m82.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )

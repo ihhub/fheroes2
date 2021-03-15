@@ -41,6 +41,7 @@
 #include "rand.h"
 #include "resource.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace GameStatic

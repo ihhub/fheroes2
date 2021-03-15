@@ -23,12 +23,14 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <list>
 #include <string>
 #include <vector>
 
-#include "gamedefs.h"
+#include "rect.h"
 #include "screen.h"
 #include "translations.h"
+#include "types.h"
 #include "ui_tool.h"
 
 namespace Font

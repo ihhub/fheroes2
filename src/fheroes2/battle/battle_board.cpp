@@ -35,6 +35,7 @@
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "tools.h"
 #include "translations.h"
 #include "world.h"
 

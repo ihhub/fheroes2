@@ -48,6 +48,7 @@
 #include "route.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

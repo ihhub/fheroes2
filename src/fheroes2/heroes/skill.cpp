@@ -34,6 +34,7 @@
 #include "skill.h"
 #include "skill_static.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace Skill

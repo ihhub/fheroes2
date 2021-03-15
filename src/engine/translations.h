@@ -23,6 +23,8 @@
 #ifndef H2TRANSLATIONS_H
 #define H2TRANSLATIONS_H
 
+#include <string>
+
 namespace Translation
 {
     bool bindDomain( const char * domain, const char * file );

@@ -23,7 +23,7 @@
 #ifndef H2OBJTOWN_H
 #define H2OBJTOWN_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjTown
 {

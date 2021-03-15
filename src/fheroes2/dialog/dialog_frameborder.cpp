@@ -67,7 +67,7 @@ Dialog::FrameBorder::~FrameBorder()
 
 bool Dialog::FrameBorder::isValid() const
 {
-    return rect.w != 0 && rect.h != 0;
+    return _rect.width != 0 && _rect.height != 0;
 }
 
 int Dialog::FrameBorder::BorderWidth() const
@@ -84,47 +84,47 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw
 {
     restorer.restore();
 
-    rect.x = posx;
-    rect.y = posy;
+    _rect.x = posx;
+    _rect.y = posy;
 
     if ( encw > 0 && ench > 0 ) {
-        rect.w = encw + 2 * border;
-        rect.h = ench + 2 * border;
+        _rect.width = encw + 2 * border;
+        _rect.height = ench + 2 * border;
 
-        restorer.update( rect.x, rect.y, rect.w, rect.h );
+        restorer.update( _rect.x, _rect.y, _rect.width, _rect.height );
 
-        area.w = encw;
-        area.h = ench;
+        _area.width = encw;
+        _area.height = ench;
     }
     else {
         restorer.update( posx, posy, restorer.width(), restorer.height() );
     }
 
-    area.x = posx + border;
-    area.y = posy + border;
+    _area.x = posx + border;
+    _area.y = posy + border;
 
-    top = Rect( posx, posy, area.w, border );
+    _top = fheroes2::Rect( posx, posy, _area.width, border );
 }
 
-const Rect & Dialog::FrameBorder::GetTop() const
+const fheroes2::Rect & Dialog::FrameBorder::GetTop() const
 {
-    return top;
+    return _top;
 }
 
-const Rect & Dialog::FrameBorder::GetRect() const
+const fheroes2::Rect & Dialog::FrameBorder::GetRect() const
 {
-    return rect;
+    return _rect;
 }
 
-const Rect & Dialog::FrameBorder::GetArea() const
+const fheroes2::Rect & Dialog::FrameBorder::GetArea() const
 {
-    return area;
+    return _area;
 }
 
-void Dialog::FrameBorder::RenderRegular( const Rect & dstrt )
+void Dialog::FrameBorder::RenderRegular( const fheroes2::Rect & dstrt )
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
-    const fheroes2::Image renderedImage = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.w, dstrt.h );
+    const fheroes2::Image renderedImage = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }
 

@@ -33,6 +33,7 @@
 #include "profit.h"
 #include "race.h"
 #include "statusbar.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

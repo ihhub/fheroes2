@@ -34,6 +34,7 @@
 #include "rand.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 

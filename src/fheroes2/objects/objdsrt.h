@@ -23,7 +23,7 @@
 #ifndef H2OBJDSRT_H
 #define H2OBJDSRT_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ObjDsrt
 {

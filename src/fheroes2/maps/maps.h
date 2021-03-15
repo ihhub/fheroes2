@@ -24,10 +24,9 @@
 
 #include "direction.h"
 #include "gamedefs.h"
+#include "rect.h"
 
 #define TILEWIDTH 32
-
-struct Point;
 
 class MapsIndexes : public std::vector<s32>
 {};

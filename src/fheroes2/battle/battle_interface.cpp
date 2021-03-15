@@ -42,6 +42,7 @@
 #include "pal.h"
 #include "race.h"
 #include "rand.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -200,7 +201,7 @@ namespace Battle
             _scrollbar.show();
         }
 
-        const Rect & GetArea() const
+        const fheroes2::Rect & GetArea() const
         {
             return border.GetRect();
         }

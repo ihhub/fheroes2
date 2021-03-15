@@ -112,7 +112,6 @@ namespace Dialog
     void Marketplace( bool fromTradingPost = false );
     void MakeGiftResource( void );
     int BuyBoat( bool enable );
-    void PuzzleMaps( void );
     void ThievesGuild( bool oracle );
     void GameInfo( void );
 
@@ -160,20 +159,20 @@ namespace Dialog
         void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
 
         bool isValid() const;
-        const Rect & GetRect() const;
-        const Rect & GetArea() const;
-        const Rect & GetTop() const;
+        const fheroes2::Rect & GetRect() const;
+        const fheroes2::Rect & GetArea() const;
+        const fheroes2::Rect & GetTop() const;
 
-        static void RenderRegular( const Rect & dstrt );
+        static void RenderRegular( const fheroes2::Rect & dstrt );
         static void RenderOther( const fheroes2::Image &, const fheroes2::Rect & );
 
     protected:
         fheroes2::ImageRestorer restorer;
 
     private:
-        Rect rect;
-        Rect area;
-        Rect top;
+        fheroes2::Rect _rect;
+        fheroes2::Rect _area;
+        fheroes2::Rect _top;
         int border;
     };
 }

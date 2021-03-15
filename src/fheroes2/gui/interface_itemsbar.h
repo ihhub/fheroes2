@@ -24,10 +24,12 @@
 #define H2INTERFACE_ITEMSBAR_H
 
 #include <algorithm>
+#include <list>
 #include <utility>
 
 #include "gamedefs.h"
 #include "localevent.h"
+#include "rect.h"
 #include "screen.h"
 
 namespace Interface

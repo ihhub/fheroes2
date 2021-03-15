@@ -43,6 +43,7 @@
 #include "race.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 void ActionToCastle( Heroes & hero, s32 dst_index );

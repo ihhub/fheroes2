@@ -22,6 +22,7 @@
 #include "logging.h"
 #include "monster.h"
 #include "rand.h"
+#include "rect.h"
 #include <algorithm>
 
 RandomizedDelay::RandomizedDelay( uint32_t delay )

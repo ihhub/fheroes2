@@ -24,6 +24,7 @@
 #define H2INTERFACE_BORDER_H
 
 #include "dialog.h"
+#include "rect.h"
 
 namespace Interface
 {

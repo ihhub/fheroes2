@@ -38,6 +38,7 @@
 #include "logging.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace Battle

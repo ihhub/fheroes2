@@ -25,6 +25,7 @@
 
 #include "gamedefs.h"
 #include "serialize.h"
+#include "rect.h"
 
 #define CELLW 44
 #define CELLH 52

@@ -34,6 +34,7 @@
 #include "logging.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
 
 class MeetingArmyBar : public ArmyBar
 {

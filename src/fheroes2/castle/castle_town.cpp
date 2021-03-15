@@ -36,6 +36,7 @@
 #include "settings.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "world.h"
 

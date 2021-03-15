@@ -29,6 +29,7 @@
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>

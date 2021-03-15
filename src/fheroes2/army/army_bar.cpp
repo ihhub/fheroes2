@@ -29,6 +29,7 @@
 #include "game.h"
 #include "race.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget, bool & isTroopInfoVisible )

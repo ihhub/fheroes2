@@ -24,9 +24,9 @@
 
 #include <vector>
 
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
 #include "serialize.h"
+#include "types.h"
 #include "ui_tool.h"
 
 class Spell;

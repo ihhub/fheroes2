@@ -24,6 +24,8 @@
 
 #include "gamedefs.h"
 
+#include <string>
+
 struct cost_t;
 namespace Difficulty
 {

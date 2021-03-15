@@ -22,7 +22,7 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
-#include "gamedefs.h"
+#include "rect.h"
 
 class Cursor
 {

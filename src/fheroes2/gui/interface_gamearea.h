@@ -25,6 +25,7 @@
 
 #include "gamedefs.h"
 #include "image.h"
+#include "rect.h"
 #include "timing.h"
 
 namespace Interface
