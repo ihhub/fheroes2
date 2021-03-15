@@ -102,8 +102,8 @@ namespace Campaign
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
         if ( Game::GetLoadVersion() < FORMAT_VERSION_092_RELEASE ) {
-            std::vector<std::string> temp_OldObtainedCampaignAwards;
-            msg >> temp_OldObtainedCampaignAwards;
+            std::vector<std::string> tempOldObtainedCampaignAwards;
+            msg >> tempOldObtainedCampaignAwards;
         }
 
         msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;

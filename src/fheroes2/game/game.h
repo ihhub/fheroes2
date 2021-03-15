@@ -249,7 +249,7 @@ namespace Game
     int NetworkGuest( void );
     int DisplayLoadGameDialog();
     int CompleteCampaignScenario();
-    const std::vector<Campaign::CampaignAwardData> GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData );
+    std::vector<Campaign::CampaignAwardData> GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData );
 
     bool IsOriginalCampaignPresent();
 

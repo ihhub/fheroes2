@@ -129,7 +129,7 @@ namespace
             break;
         case 3:
             obtainableAwards.emplace_back( Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE ) );
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_CREATURE_BANE, Monster::DWARF ) );
+            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF ) );
             break;
         case 6:
             obtainableAwards.emplace_back(
@@ -384,8 +384,9 @@ namespace
     void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
     {
         const int textChoiceWidth = 150;
+        Text award;
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
-            Text award( obtainedAwards[i].ToString(), Font::BIG );
+            award.Set( obtainedAwards[i].ToString(), Font::BIG );
             award.Blit( top.x + 425, top.y + 100 + 22 * i - award.h() / 2, textChoiceWidth );
         }
     }
@@ -528,8 +529,8 @@ namespace
                 Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
                 bestHeroArmy.Clean();
 
-                for ( uint32_t j = 0; j < carryOverTroops.size(); ++j )
-                    bestHeroArmy.GetTroop( j )->Set( carryOverTroops[j] );
+                for ( uint32_t troopID = 0; troopID < carryOverTroops.size(); ++troopID )
+                    bestHeroArmy.GetTroop( troopID )->Set( carryOverTroops[troopID] );
 
                 break;
             }
@@ -552,7 +553,6 @@ int Game::CompleteCampaignScenario()
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
-    const auto scenarioDatas = GetCampaignData( saveData.getCampaignID() ).getAllScenarios();
     const std::vector<Campaign::CampaignAwardData> obtainableAwards = getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
@@ -574,7 +574,7 @@ int Game::CompleteCampaignScenario()
     return Game::SELECT_CAMPAIGN_SCENARIO;
 }
 
-const std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData )
+std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData )
 {
     std::vector<Campaign::CampaignAwardData> obtainedAwards;
     const std::vector<int> finishedMaps = saveData.getFinishedMaps();

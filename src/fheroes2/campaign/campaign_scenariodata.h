@@ -94,8 +94,6 @@ namespace Campaign
             return _description;
         }
 
-        void AddObtainableCampaignAward( const CampaignAwardData & obtainableAward );
-
         bool isMapFilePresent() const;
         Maps::FileInfo loadMap() const;
 

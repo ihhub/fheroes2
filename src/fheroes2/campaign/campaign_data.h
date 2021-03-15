@@ -76,9 +76,9 @@ namespace Campaign
     struct CampaignAwardData
     {
     public:
-        enum AwardType
+        enum AwardType : int
         {
-            TYPE_CREATURE_BANE, // eg: dwarf bane
+            TYPE_CREATURE_CURSE, // eg: dwarf bane
             TYPE_CREATURE_ALLIANCE, // eg: dwarf alliance
             TYPE_GET_ARTIFACT, // eg: ultimate crown
             TYPE_GET_SPELL, // eg: guardian spell in wizard's isle
@@ -99,7 +99,7 @@ namespace Campaign
         CampaignAwardData();
         CampaignAwardData( int id, uint32_t type, uint32_t subType );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, std::string customName );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, std::string customName = "" );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = "" );
 
         std::string ToString() const;
     };

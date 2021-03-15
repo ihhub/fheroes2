@@ -1468,34 +1468,38 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
     int forceJoinType = JOIN_NONE;
 
-    // check for creature alliance/bane
+    // check for creature alliance/bane campaign awards, campaign only and of course, for human players
+    // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
+    // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
     if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
         for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
-            bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
-            bool isBane = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_BANE;
-            if ( isAlliance || isBane ) {
-                Monster monster = Monster( campaignAwards[i]._subType );
-                bool found = false;
+            const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
+            const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
 
-                while ( !found ) {
-                    // upgrades...?
-                    if ( troop.GetID() == monster.GetID() ) {
-                        forceJoinType = campaignAwards[i]._type == isAlliance ? JOIN_FREE : JOIN_FLEE;
-                        found = true;
-                        break;
-                    }
+            if ( !isAlliance && !isCurse )
+                continue;
 
-                    if ( !monster.isAllowUpgrade() )
-                        break;
+            Monster monster = Monster( campaignAwards[i]._subType );
+            bool found = false;
 
-                    monster = monster.GetUpgrade();
+            while ( !found ) {
+                if ( troop.GetID() == monster.GetID() ) {
+                    forceJoinType = campaignAwards[i]._type == isAlliance ? JOIN_FREE : JOIN_FLEE;
+                    found = true;
+                    break;
                 }
 
-                if ( found )
+                // try to cycle through the creature's upgrades
+                if ( !monster.isAllowUpgrade() )
                     break;
+
+                monster = monster.GetUpgrade();
             }
+
+            if ( found )
+                break;
         }
     }
 

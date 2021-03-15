@@ -147,7 +147,7 @@ namespace Campaign
         : CampaignAwardData( id, type, subType, 1, 0, customName )
     {}
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, std::string customName /*= ""*/ )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName /*= ""*/ )
         : _id( id )
         , _type( type )
         , _subType( subType )
@@ -164,7 +164,7 @@ namespace Campaign
         std::string objectName;
 
         switch ( _type ) {
-        case CampaignAwardData::TYPE_CREATURE_BANE:
+        case CampaignAwardData::TYPE_CREATURE_CURSE:
             objectName = Monster( _subType ).GetName() + std::string( " bane" );
             break;
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
