@@ -49,8 +49,8 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "tools.h"
 #include "til.h"
+#include "tools.h"
 #include "xmi.h"
 
 #ifdef WITH_ZLIB

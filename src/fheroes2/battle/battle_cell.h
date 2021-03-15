@@ -24,8 +24,8 @@
 #define H2BATTLE_CELL_H
 
 #include "gamedefs.h"
-#include "serialize.h"
 #include "rect.h"
+#include "serialize.h"
 
 #define CELLW 44
 #define CELLH 52
