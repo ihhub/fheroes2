@@ -1041,7 +1041,8 @@ u32 Battle::Unit::GetDefense( void ) const
     // disrupting ray accumulate effect
     if ( disruptingray ) {
         const u32 step = disruptingray * Spell( Spell::DISRUPTINGRAY ).ExtraValue();
-        if ( step > res )
+
+        if ( step >= res )
             res = 1;
         else
             res -= step;
@@ -1049,15 +1050,15 @@ u32 Battle::Unit::GetDefense( void ) const
 
     // check moat
     const Castle * castle = Arena::GetCastle();
-    if ( castle && castle->isBuild( BUILD_MOAT ) ) {
-        const Bridge * bridge = Arena::GetBridge();
-        const bool isOnBridgeCell = bridge && !bridge->isDown() && ( bridge->isMoatCell( GetHeadIndex() ) || bridge->isMoatCell( GetTailIndex() ) );
-        if ( isOnBridgeCell || Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
-            res -= GameStatic::GetBattleMoatReduceDefense();
-    }
 
-    if ( res < 1 ) // cannot be less than 1
-        res = 1;
+    if ( castle && castle->isBuild( BUILD_MOAT ) && ( Board::isMoatIndex( GetHeadIndex(), GetColor() ) || Board::isMoatIndex( GetTailIndex(), GetColor() ) ) ) {
+        const uint32_t step = GameStatic::GetBattleMoatReduceDefense();
+
+        if ( step >= res )
+            res = 1;
+        else
+            res -= step;
+    }
 
     return res;
 }

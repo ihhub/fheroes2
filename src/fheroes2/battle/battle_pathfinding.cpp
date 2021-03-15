@@ -191,7 +191,8 @@ namespace Battle
                     const Cell * tailCell = ( unitIsWide && !startPosition.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
 
                     // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
-                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) )
+                         && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit.GetColor() ) ) ) {
                         const uint32_t cost = previousNode._cost;
                         ArenaNode & node = _cache[newNode];
 
@@ -201,7 +202,8 @@ namespace Battle
                             additionalCost = 0;
                         }
                         // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
-                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode ) || Board::isMoatIndex( newTailIndex ) ) && moatPenalty > previousNode._cost ) {
+                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit.GetColor() ) || Board::isMoatIndex( newTailIndex, unit.GetColor() ) )
+                                  && moatPenalty > previousNode._cost ) {
                             additionalCost = moatPenalty - cost;
                         }
 

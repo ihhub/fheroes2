@@ -3139,6 +3139,13 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     // restore
     _movingUnit = NULL;
 
+    // check for possible bridge close action, after unit's end of movement
+    Bridge * bridge = Arena::GetBridge();
+
+    if ( bridge && bridge->AllowUp() ) {
+        bridge->Action( unit, destIndex );
+    }
+
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
     status.SetMessage( msg, true );
 }
