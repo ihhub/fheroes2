@@ -301,6 +301,18 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                                << ")" );
 
         if ( b->isFlying() ) {
+            const int32_t dstTail = b->isWide() ? pos1.GetTail()->GetIndex() : -1;
+
+            // open the bridge if the unit should land on it
+            if ( bridge ) {
+                if ( bridge->NeedDown( *b, dst ) ) {
+                    bridge->Action( *b, dst );
+                }
+                else if ( b->isWide() && bridge->NeedDown( *b, dstTail ) ) {
+                    bridge->Action( *b, dstTail );
+                }
+            }
+
             b->UpdateDirection( pos1.GetRect() );
             if ( b->isReflect() != pos1.isReflect() )
                 pos1.Swap();

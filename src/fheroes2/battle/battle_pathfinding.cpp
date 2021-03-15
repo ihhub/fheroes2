@@ -109,7 +109,7 @@ namespace Battle
         const Bridge * bridge = Arena::GetBridge();
         const Castle * castle = Arena::GetCastle();
 
-        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
+        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
         const uint32_t moatPenalty = unit.GetSpeed();
 
@@ -136,7 +136,7 @@ namespace Battle
                 ArenaNode & node = _cache[idx];
 
                 // isPassable3 checks if there's space for unit tail (for wide units)
-                if ( it->isPassable3( unit, false ) ) {
+                if ( it->isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
                     node._isOpen = true;
                     node._from = pathStart;
                     node._cost = Battle::Board::GetDistance( pathStart, idx );
@@ -192,7 +192,7 @@ namespace Battle
 
                     // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
                     if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) )
-                         && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit.GetColor() ) ) ) {
+                         && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit ) ) ) {
                         const uint32_t cost = previousNode._cost;
                         ArenaNode & node = _cache[newNode];
 
@@ -202,7 +202,7 @@ namespace Battle
                             additionalCost = 0;
                         }
                         // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
-                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit.GetColor() ) || Board::isMoatIndex( newTailIndex, unit.GetColor() ) )
+                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit ) || Board::isMoatIndex( newTailIndex, unit ) )
                                   && moatPenalty > previousNode._cost ) {
                             additionalCost = moatPenalty - cost;
                         }

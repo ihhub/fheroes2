@@ -3061,6 +3061,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     const int32_t destIndex = pos.GetHead()->GetIndex();
+    const int32_t destTailIndex = unit.isWide() ? pos.GetTail()->GetIndex() : -1;
+
     // check if we're already there
     if ( unit.GetPosition().contains( destIndex ) )
         return;
@@ -3080,6 +3082,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3092,12 +3095,27 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const Points points = GetEuclideanLine( destPos, targetPos, step );
     Points::const_iterator currentPoint = points.begin();
 
-    // jump up
+    // cleanup
     _currentUnit = NULL;
     _movingUnit = NULL;
-    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
+    _flyingUnit = NULL;
+
+    Bridge * bridge = Arena::GetBridge();
+
+    // open the bridge if the unit should land on it
+    if ( bridge ) {
+        if ( bridge->NeedDown( unit, destIndex ) ) {
+            bridge->Action( unit, destIndex );
+        }
+        else if ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) {
+            bridge->Action( unit, destTailIndex );
+        }
+    }
+
+    // jump up
     _flyingUnit = NULL;
     _movingUnit = &unit;
+    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
@@ -3140,8 +3158,6 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     _movingUnit = NULL;
 
     // check for possible bridge close action, after unit's end of movement
-    Bridge * bridge = Arena::GetBridge();
-
     if ( bridge && bridge->AllowUp() ) {
         bridge->Action( unit, destIndex );
     }
