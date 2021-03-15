@@ -48,7 +48,6 @@ namespace
 }
 
 void DialogSpellFailed( const Spell & spell );
-void DialogNotAvailable();
 
 bool ActionSpellViewMines( const Heroes & hero );
 bool ActionSpellViewResources( const Heroes & hero );
@@ -303,45 +302,40 @@ void DialogSpellFailed( const Spell & spell )
     Dialog::Message( "", str, Font::BIG, Dialog::OK );
 }
 
-void DialogNotAvailable( void )
-{
-    Dialog::Message( "", "Not available for current version", Font::BIG, Dialog::OK );
-}
-
 bool ActionSpellViewMines( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewResources( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewArtifacts( Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewTowns( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewHeroes( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewAll( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellIdentifyHero( const Heroes & hero )
