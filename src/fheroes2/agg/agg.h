@@ -24,6 +24,7 @@
 #define H2AGG_H
 
 #include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
 
