@@ -23,12 +23,13 @@
 #include <algorithm>
 #include <cassert>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_status.h"
 #include "kingdom.h"
 #include "resource.h"

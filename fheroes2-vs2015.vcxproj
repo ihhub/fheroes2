@@ -198,6 +198,7 @@
     <ClCompile Include="src\engine\xmi2mid.cpp" />
     <ClCompile Include="src\engine\zzlib.cpp" />
     <ClCompile Include="src\fheroes2\agg\agg.cpp" />
+    <ClCompile Include="src\fheroes2\agg\agg_image.cpp" />
     <ClCompile Include="src\fheroes2\agg\bin_info.cpp" />
     <ClCompile Include="src\fheroes2\agg\icn.cpp" />
     <ClCompile Include="src\fheroes2\agg\m82.cpp" />
@@ -408,6 +409,7 @@
     <ClInclude Include="src\engine\types.h" />
     <ClInclude Include="src\engine\zzlib.h" />
     <ClInclude Include="src\fheroes2\agg\agg.h" />
+    <ClInclude Include="src\fheroes2\agg\agg_image.h" />
     <ClInclude Include="src\fheroes2\agg\bin_info.h" />
     <ClInclude Include="src\fheroes2\agg\icn.h" />
     <ClInclude Include="src\fheroes2\agg\m82.h" />

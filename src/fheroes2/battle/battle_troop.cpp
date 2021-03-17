@@ -24,7 +24,7 @@
 #include <cstring>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_interface.h"

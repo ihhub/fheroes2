@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -28,6 +29,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "mus.h"

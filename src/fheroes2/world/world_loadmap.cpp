@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -31,6 +31,7 @@
 #include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"

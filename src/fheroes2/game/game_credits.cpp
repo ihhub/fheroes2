@@ -20,6 +20,8 @@
 
 #include "game_credits.h"
 #include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "localevent.h"
 #include "mus.h"
 #include "screen.h"

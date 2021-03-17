@@ -24,6 +24,7 @@
 #include <sstream>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "campaign_savedata.h"
@@ -32,6 +33,7 @@
 #include "game.h"
 #include "game_video.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"

@@ -22,6 +22,7 @@
 
 #include "battle_only.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "battle.h"
 #include "castle.h"
@@ -32,6 +33,7 @@
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "race.h"

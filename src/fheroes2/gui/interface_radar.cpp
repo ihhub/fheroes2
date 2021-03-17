@@ -22,12 +22,13 @@
 
 #include <cmath>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_radar.h"
 #include "logging.h"
 #include "text.h"

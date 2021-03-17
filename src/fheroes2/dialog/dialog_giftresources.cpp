@@ -22,10 +22,11 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_window.h"

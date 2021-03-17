@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "direction.h"
@@ -28,6 +29,7 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"

@@ -27,11 +27,12 @@
 #include <sstream>
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
 #include "game.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "maps_fileinfo.h"
 #include "settings.h"

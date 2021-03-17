@@ -19,9 +19,10 @@
  ***************************************************************************/
 
 #include "ui_button.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"

@@ -24,13 +24,14 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "logging.h"
 #include "rand.h"
 #include "spell.h"

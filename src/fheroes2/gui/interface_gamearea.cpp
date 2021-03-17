@@ -22,10 +22,11 @@
 
 #include "interface_gamearea.h"
 
-#include "agg.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "icn.h"
 #include "logging.h"
 #include "maps.h"
 #include "pal.h"

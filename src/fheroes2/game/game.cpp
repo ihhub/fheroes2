@@ -36,6 +36,7 @@
 #include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"

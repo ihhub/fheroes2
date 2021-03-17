@@ -22,7 +22,7 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"

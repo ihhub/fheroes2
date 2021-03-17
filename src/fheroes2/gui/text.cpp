@@ -24,7 +24,7 @@
 #include <cassert>
 #include <cctype>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "settings.h"
 #include "text.h"
 

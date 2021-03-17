@@ -22,11 +22,13 @@
 
 #include "game.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "localevent.h"
 #include "mus.h"
 #include "screen.h"
