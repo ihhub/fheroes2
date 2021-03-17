@@ -57,6 +57,11 @@ struct ListActions : public std::list<ActionSimple *>
 
 struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
+    MapObjects() = default;
+    MapObjects( const MapObjects & other ) = delete;
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects( const MapObjects && other ) = delete;
+    MapObjects & operator=( const MapObjects && other ) = delete;
     ~MapObjects();
     void clear( void );
     void add( MapObjectSimple * );
