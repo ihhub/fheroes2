@@ -38,12 +38,6 @@
 #include "text.h"
 #include "ui_button.h"
 
-#define NEWGAME_DEFAULT 1
-#define LOADGAME_DEFAULT 5
-#define HIGHSCORES_DEFAULT 9
-#define CREDITS_DEFAULT 13
-#define QUIT_DEFAULT 17
-
 namespace
 {
     struct ButtonInfo
@@ -52,6 +46,15 @@ namespace
         fheroes2::Button & button;
         bool isOver;
         bool wasOver;
+    };
+
+    enum
+    {
+        NEWGAME_DEFAULT = 1,
+        LOADGAME_DEFAULT = 5,
+        HIGHSCORES_DEFAULT = 9,
+        CREDITS_DEFAULT = 13,
+        QUIT_DEFAULT = 17
     };
 }
 
