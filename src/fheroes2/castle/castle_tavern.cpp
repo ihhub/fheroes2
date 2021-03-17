@@ -44,7 +44,7 @@ void Castle::OpenTavern( void )
     const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
     Text text( tavern, Font::YELLOW_BIG );

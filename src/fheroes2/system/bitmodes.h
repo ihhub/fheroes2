@@ -25,8 +25,6 @@
 
 #include "gamedefs.h"
 
-#define MODES_ALL 0xFFFFFFFF
-
 class StreamBase;
 
 class BitModes

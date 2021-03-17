@@ -695,10 +695,8 @@ namespace fheroes2
 
         size_t GetMaximumICNIndex( int id )
         {
-            if ( _icnVsSprite[id].empty() ) {
-                if ( !LoadModifiedICN( id ) ) {
-                    LoadOriginalICN( id );
-                }
+            if ( _icnVsSprite[id].empty() && !LoadModifiedICN( id ) ) {
+                LoadOriginalICN( id );
             }
 
             return _icnVsSprite[id].size();

@@ -127,7 +127,7 @@ u32 GetTradeCosts( int rs_from, int rs_to, bool tradingPost );
 class TradeWindowGUI
 {
 public:
-    TradeWindowGUI( const fheroes2::Rect & rt )
+    explicit TradeWindowGUI( const fheroes2::Rect & rt )
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
         , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )

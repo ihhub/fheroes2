@@ -121,7 +121,7 @@ namespace Dialog
         explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
         virtual ~NonFixedFrameBox();
 
-        const fheroes2::Rect & GetArea( void )
+        const fheroes2::Rect & GetArea() const
         {
             return area;
         }

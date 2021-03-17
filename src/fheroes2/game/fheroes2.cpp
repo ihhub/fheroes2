@@ -275,16 +275,14 @@ bool ReadConfigs( void )
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        if ( System::IsFile( *it ) ) {
-            if ( conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        if ( System::IsFile( *it ) && conf.Read( *it ) ) {
+            isValidConfigurationFile = true;
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
+            break;
         }
     }
 

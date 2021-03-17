@@ -47,7 +47,7 @@ namespace Battle
 
 namespace AI
 {
-    enum AI_TYPE
+    enum class AI_TYPE : int
     {
         NORMAL
     };
@@ -113,7 +113,7 @@ namespace AI
         friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
-    Base & Get( AI_TYPE type = NORMAL );
+    Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
