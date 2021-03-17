@@ -25,10 +25,10 @@
 
 #include <cstdint>
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef int32_t s32;
-typedef uint32_t u32;
+using u8 = uint8_t;
+using u16 = uint16_t;
+using s32 = int32_t;
+using u32 = uint32_t;
 
 #define MAXU16 0xFFFF
 

@@ -173,7 +173,7 @@ namespace Battle
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int32_t fromNode = nodesToExplore[lastProcessedNode];
-                ArenaNode & previousNode = _cache[fromNode];
+                const ArenaNode & previousNode = _cache[fromNode];
 
                 Indexes availableMoves;
                 if ( !unitIsWide )

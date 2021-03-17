@@ -615,24 +615,24 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     bool isSongFound = false;
 
     if ( type == MUSIC_EXTERNAL ) {
-        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::DOS_VERSION ) );
+        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
 
         if ( !System::IsFile( filename ) ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::WIN_VERSION ) );
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
             if ( !System::IsFile( filename ) ) {
                 filename.clear();
             }
         }
 
         if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) );
+            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
 
             if ( !System::IsFile( filename ) ) {
                 StringReplace( filename, ".ogg", ".mp3" );
 
                 if ( !System::IsFile( filename ) ) {
                     DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::MAPPED ) ) << ", skipping..." );
+                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) ) << ", skipping..." );
                     filename.clear();
                 }
             }
@@ -642,7 +642,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
             Music::Play( filename, loop );
             isSongFound = true;
         }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::MAPPED ) );
+        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
 #ifdef WITH_AUDIOCD
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {

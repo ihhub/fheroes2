@@ -86,15 +86,15 @@ namespace MUS
     std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
     {
         std::stringstream sstream;
-        if ( musicType == MAPPED ) {
+        if ( musicType == OGG_MUSIC_TYPE::MAPPED ) {
             sstream << std::setw( 2 ) << std::setfill( '0' ) << musicTrack;
             sstream << " " << ( UNUSED <= musicTrack && UNKNOWN > musicTrack ? musmap[musicTrack].string : musmap[UNKNOWN].string ) << ".ogg";
         }
-        else if ( musicType == DOS_VERSION ) {
+        else if ( musicType == OGG_MUSIC_TYPE::DOS_VERSION ) {
             // GOG version format, data track was ignored there so 02 becomes 01
             sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack - 1 << ".ogg";
         }
-        else if ( musicType == WIN_VERSION ) {
+        else if ( musicType == OGG_MUSIC_TYPE::WIN_VERSION ) {
             sstream << "Track" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack << ".ogg";
         }
 

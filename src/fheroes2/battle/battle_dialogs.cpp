@@ -198,14 +198,16 @@ void Battle::RedrawOnOffSetting( const Rect & area, const std::string & name, ui
 void Battle::DialogBattleSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
     cursor.Hide();
 
-    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
-    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG ), 1 );
 
     const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -229,7 +231,7 @@ void Battle::DialogBattleSettings( void )
     optionAreas.push_back( fheroes2::Rect( pos_rt.x + 128, pos_rt.y + 157, panelWidth, panelHeight ) ); // move shadow
     optionAreas.push_back( fheroes2::Rect( pos_rt.x + 220, pos_rt.y + 157, panelWidth, panelHeight ) ); // cursor shadow
 
-    fheroes2::Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( conf.ExtGameEvilInterface() ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
+    fheroes2::Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( isEvilInterface ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
     btn_ok.draw();
 
     RedrawBattleSettings( optionAreas );

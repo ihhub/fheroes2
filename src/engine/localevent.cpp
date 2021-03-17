@@ -416,7 +416,7 @@ KeySym GetKeySym( int key )
 
 bool PressIntKey( u32 max, u32 & result )
 {
-    LocalEvent & le = LocalEvent::Get();
+    const LocalEvent & le = LocalEvent::Get();
 
     if ( le.KeyPress( KEY_BACKSPACE ) ) {
         result /= 10;

@@ -223,7 +223,7 @@ namespace AI
         _highestDamageExpected = 0;
         _considerRetreat = false;
 
-        for ( Unit * unitPtr : enemyForce ) {
+        for ( const Unit * unitPtr : enemyForce ) {
             if ( !unitPtr || !unitPtr->isValid() )
                 continue;
 
@@ -241,7 +241,7 @@ namespace AI
         }
 
         uint32_t initialUnitCount = 0;
-        for ( Unit * unitPtr : friendlyForce ) {
+        for ( const Unit * unitPtr : friendlyForce ) {
             // Do not check isValid() here to handle dead troops
             if ( !unitPtr )
                 continue;

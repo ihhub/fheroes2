@@ -43,7 +43,7 @@ namespace Battle
         return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
     }
 
-    typedef std::vector<s32> Indexes;
+    using Indexes = std::vector<int32_t>;
 
     class Board : public std::vector<Cell>
     {

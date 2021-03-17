@@ -43,7 +43,7 @@ namespace Maps
         XLARGE = 144
     };
 
-    typedef MapsIndexes Indexes;
+    using Indexes = MapsIndexes;
 
     const char * SizeString( int size );
     const char * GetMinesName( int res );

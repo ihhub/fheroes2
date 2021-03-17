@@ -158,7 +158,7 @@ namespace Battle
         void QueueEventProcessing( std::string & msg, const Point & offset );
 
     private:
-        typedef std::pair<const Unit *, Rect> UnitPos;
+        using UnitPos = std::pair<const Unit *, Rect>;
 
         void RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
 

@@ -1930,7 +1930,7 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Cursor & cursor = Cursor::Get();
+            const Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 
