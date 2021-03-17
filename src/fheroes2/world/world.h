@@ -166,6 +166,10 @@ using MapsTiles = std::vector<Maps::Tiles>;
 class World : protected Size
 {
 public:
+    World( const World & other ) = delete;
+    World & operator=( const World & other ) = delete;
+    World( const World && other ) = delete;
+    World & operator=( const World && other ) = delete;
     ~World()
     {
         Reset();
