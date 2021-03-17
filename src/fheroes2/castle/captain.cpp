@@ -21,8 +21,9 @@
  ***************************************************************************/
 
 #include "captain.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "luck.h"
 #include "morale.h"

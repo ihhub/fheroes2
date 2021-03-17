@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,29 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AGG_H
-#define H2AGG_H
+#pragma once
 
 #include <cstdint>
-#include <string>
-#include <utility>
-#include <vector>
 
-namespace AGG
+namespace fheroes2
 {
-    bool Init( void );
-    void Quit( void );
+    class Image;
+    class Sprite;
 
-    std::vector<uint8_t> LoadBINFRM( const char * frm_file );
-#ifdef WITH_TTF
-    uint32_t GetFontHeight( bool small );
-#endif
-    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
-    void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
-    void ResetMixer();
+    namespace AGG
+    {
+        const Sprite & GetICN( int icnId, uint32_t index );
+        uint32_t GetICNCount( int icnId );
 
-    std::vector<uint8_t> ReadChunk( const std::string & key, bool ignoreExpansion = false );
+        // shapeId could be 0, 1, 2 or 3 only
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
+
+        int32_t GetAbsoluteICNHeight( int icnId );
+    }
 }
-
-#endif

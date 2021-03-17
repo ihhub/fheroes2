@@ -22,10 +22,11 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "icn.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"

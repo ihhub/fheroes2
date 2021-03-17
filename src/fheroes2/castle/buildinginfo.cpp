@@ -22,9 +22,11 @@
 
 #include "buildinginfo.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"

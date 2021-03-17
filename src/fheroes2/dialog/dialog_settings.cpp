@@ -22,9 +22,10 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "settings.h"

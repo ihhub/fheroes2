@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
@@ -36,6 +37,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
 #include "logging.h"

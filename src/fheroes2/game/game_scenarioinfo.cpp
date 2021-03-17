@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
@@ -32,6 +33,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_fileinfo.h"

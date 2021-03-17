@@ -23,6 +23,7 @@
 #include <queue>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "battle.h"
 #include "battle_arena.h"

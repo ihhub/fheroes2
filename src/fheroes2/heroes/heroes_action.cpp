@@ -23,6 +23,7 @@
 #include <cassert>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "audio_mixer.h"
 #include "battle.h"
@@ -31,6 +32,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"

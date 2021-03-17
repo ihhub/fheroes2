@@ -21,7 +21,8 @@
  ***************************************************************************/
 
 #include "resource.h"
-#include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "image.h"
 #include "logging.h"
 #include "mp2.h"

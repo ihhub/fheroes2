@@ -21,12 +21,13 @@
  ***************************************************************************/
 
 #include "army_bar.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
+#include "icn.h"
 #include "race.h"
 #include "text.h"
 #include "world.h"

@@ -21,11 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
 #include "logging.h"

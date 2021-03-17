@@ -21,9 +21,10 @@
  ***************************************************************************/
 
 #include "dialog_selectitems.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "army_troop.h"
 #include "dialog.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "text.h"
 

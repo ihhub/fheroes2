@@ -20,9 +20,10 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "player_info.h"
 #include "race.h"

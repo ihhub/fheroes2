@@ -25,13 +25,14 @@
 #include <math.h>
 #include <set>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "castle.h"
 #include "color.h"
 #include "game.h"
 #include "heroes.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"

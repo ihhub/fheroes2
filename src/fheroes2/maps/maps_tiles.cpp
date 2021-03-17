@@ -25,12 +25,13 @@
 #include <iomanip>
 #include <iostream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
+#include "icn.h"
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"

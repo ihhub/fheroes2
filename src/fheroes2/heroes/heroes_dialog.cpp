@@ -22,7 +22,7 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "castle.h"
 #include "cursor.h"
@@ -30,6 +30,7 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "payment.h"
 #include "race.h"

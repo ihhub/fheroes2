@@ -24,6 +24,7 @@
 #include <memory>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
@@ -34,6 +35,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "skill.h"

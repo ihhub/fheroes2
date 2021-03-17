@@ -24,12 +24,13 @@
 #include <cassert>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "skill.h"
 #include "spell_book.h"
 #include "text.h"

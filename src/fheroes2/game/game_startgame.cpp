@@ -29,6 +29,7 @@
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "audio_mixer.h"
 #include "battle_only.h"
@@ -40,6 +41,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"

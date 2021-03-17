@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "castle.h"
 #include "cursor.h"
@@ -33,6 +34,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"

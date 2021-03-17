@@ -22,10 +22,11 @@
 
 #include <cmath>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "text.h"
