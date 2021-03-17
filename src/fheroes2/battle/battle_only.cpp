@@ -93,10 +93,10 @@ Battle::Only::Only()
     , player2( Color::NONE )
     , army1( NULL )
     , army2( NULL )
-    , moraleIndicator1( NULL )
-    , moraleIndicator2( NULL )
-    , luckIndicator1( NULL )
-    , luckIndicator2( NULL )
+    , moraleIndicator1( nullptr )
+    , moraleIndicator2( nullptr )
+    , luckIndicator1( nullptr )
+    , luckIndicator2( nullptr )
     , primskill_bar1( NULL )
     , primskill_bar2( NULL )
     , secskill_bar1( NULL )
@@ -452,16 +452,16 @@ bool Battle::Only::ChangeSettings( void )
         }
     }
 
-    delete moraleIndicator1;
-    delete luckIndicator1;
+    moraleIndicator1.reset();
+    luckIndicator1.reset();
     delete primskill_bar1;
     delete secskill_bar1;
     delete selectArtifacts1;
     delete selectArmy1;
 
     if ( hero2 ) {
-        delete moraleIndicator2;
-        delete luckIndicator2;
+        moraleIndicator2.reset();
+        luckIndicator2.reset();
         delete primskill_bar2;
         delete secskill_bar2;
         delete selectArtifacts2;
@@ -501,7 +501,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         player1.SetRace( hero1->GetRace() );
 
         if ( moraleIndicator1 == NULL ) {
-            moraleIndicator1 = new MoraleIndicator( hero1 );
+            moraleIndicator1.reset( new MoraleIndicator( hero1 ) );
             moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ) );
         }
         else {
@@ -509,7 +509,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         }
 
         if ( luckIndicator1 == NULL ) {
-            luckIndicator1 = new LuckIndicator( hero1 );
+            luckIndicator1.reset( new LuckIndicator( hero1 ) );
             luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ) );
         }
         else {
@@ -571,7 +571,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         player2.SetRace( hero2->GetRace() );
 
         if ( moraleIndicator2 == NULL ) {
-            moraleIndicator2 = new MoraleIndicator( hero2 );
+            moraleIndicator2.reset( new MoraleIndicator( hero2 ) );
             moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ) );
         }
         else {
@@ -579,7 +579,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         }
 
         if ( luckIndicator2 == NULL ) {
-            luckIndicator2 = new LuckIndicator( hero2 );
+            luckIndicator2.reset( new LuckIndicator( hero2 ) );
             luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ) );
         }
         else {

@@ -27,13 +27,15 @@
 #include "heroes_recruits.h"
 #include "image.h"
 #include "players.h"
+#include <memory>
+#include "heroes_indicator.h"
 
 class ArmyBar;
 class PrimarySkillsBar;
 class SecondarySkillsBar;
 class ArtifactsBar;
-class MoraleIndicator;
-class LuckIndicator;
+// class MoraleIndicator;
+// class LuckIndicator;
 
 namespace Battle
 {
@@ -63,11 +65,11 @@ namespace Battle
         Army monsters;
 
     private:
-        MoraleIndicator * moraleIndicator1;
-        MoraleIndicator * moraleIndicator2;
+        std::unique_ptr<MoraleIndicator> moraleIndicator1;
+        std::unique_ptr<MoraleIndicator> moraleIndicator2;
 
-        LuckIndicator * luckIndicator1;
-        LuckIndicator * luckIndicator2;
+        std::unique_ptr<LuckIndicator> luckIndicator1;
+        std::unique_ptr<LuckIndicator> luckIndicator2;
 
         PrimarySkillsBar * primskill_bar1;
         PrimarySkillsBar * primskill_bar2;
