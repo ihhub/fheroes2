@@ -26,6 +26,7 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "image.h"
 
 namespace fheroes2
 {

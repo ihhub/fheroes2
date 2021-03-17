@@ -24,18 +24,17 @@
 #define H2BATTLE_ONLY_H
 
 #include "army.h"
+#include "heroes_indicator.h"
 #include "heroes_recruits.h"
 #include "image.h"
 #include "players.h"
+
 #include <memory>
-#include "heroes_indicator.h"
 
 class ArmyBar;
 class PrimarySkillsBar;
 class SecondarySkillsBar;
 class ArtifactsBar;
-// class MoraleIndicator;
-// class LuckIndicator;
 
 namespace Battle
 {

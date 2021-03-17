@@ -46,6 +46,11 @@ class ActionSimple;
 
 struct ListActions : public std::list<ActionSimple *>
 {
+    ListActions() = default;
+    ListActions( const ListActions & other ) = default;
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions( const ListActions && other ) = delete;
+    ListActions & operator=( const ListActions && other ) = delete;
     ~ListActions();
     void clear( void );
 };
