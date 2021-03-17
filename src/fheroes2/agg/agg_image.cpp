@@ -21,9 +21,9 @@
 #include <map>
 #include <vector>
 
-#include "agg_image.h"
 #include "agg.h"
 #include "agg_file.h"
+#include "agg_image.h"
 #include "icn.h"
 #include "image.h"
 #include "image_tool.h"
