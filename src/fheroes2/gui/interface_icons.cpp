@@ -35,10 +35,16 @@
 #include "race.h"
 #include "world.h"
 
-#define ICONS_WIDTH 46
-#define ICONS_HEIGHT 22
-#define ICONS_CURSOR_WIDTH 56
-#define ICONS_CURSOR_HEIGHT 32
+namespace
+{
+    enum
+    {
+        ICONS_WIDTH = 46,
+        ICONS_HEIGHT = 22,
+        ICONS_CURSOR_WIDTH = 56,
+        ICONS_CURSOR_HEIGHT = 32
+    };
+}
 
 bool Interface::IconsBar::IsVisible( void )
 {
