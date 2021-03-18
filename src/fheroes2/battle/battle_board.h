@@ -73,8 +73,8 @@ namespace Battle
         static bool isNearIndexes( s32, s32 );
         static bool isValidIndex( s32 );
         static bool isCastleIndex( s32 );
-        static bool isMoatIndex( s32, const Unit & );
-        static bool isBridgeIndex( s32, const Unit & );
+        static bool isMoatIndex( s32 index, const Unit & b );
+        static bool isBridgeIndex( s32 index, const Unit & b );
         static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );

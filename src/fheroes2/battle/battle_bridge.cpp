@@ -73,12 +73,10 @@ bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
         return false;
 
     if ( b.isFlying() ) {
-        if ( dstPos == GATES_CELL ) {
-            return true;
-        }
+        return dstPos == GATES_CELL;
     }
     else {
-        const s32 prevPos = b.GetHeadIndex();
+        const int32_t prevPos = b.GetHeadIndex();
 
         if ( dstPos == GATES_CELL && ( prevPos == CELL_AFTER_GATES || prevPos == BELOW_BRIDGE_CELL || prevPos == ABOVE_BRIDGE_CELL ) ) {
             return true;

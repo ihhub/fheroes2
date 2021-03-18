@@ -187,9 +187,9 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const Bridge * bridge = Arena::GetBridge();
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
-        for ( iterator it = begin(); it != end(); ++it ) {
-            if ( ( *it ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - begin(), unit ) ) ) {
-                ( *it ).SetDirection( CENTER );
+        for ( std::size_t i = 0; i < size(); i++ ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( i, unit ) ) ) {
+                at( i ).SetDirection( CENTER );
             }
         }
     }
