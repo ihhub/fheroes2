@@ -642,14 +642,17 @@ int Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // set focus
-    if ( conf.LoadedGameVersion() && conf.ExtGameRememberLastFocus() ) {
-        if ( GetFocusHeroes() )
+    if ( conf.ExtGameRememberLastFocus() ) {
+        if ( GetFocusHeroes() != nullptr )
             ResetFocus( GameFocus::HEROES );
-        else
+        else if ( GetFocusCastle() != nullptr )
             ResetFocus( GameFocus::CASTLE );
+        else
+            ResetFocus( GameFocus::FIRSTHERO );
     }
-    else
+    else {
         ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();
