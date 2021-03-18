@@ -422,16 +422,22 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 else
                     return Cursor::POINTER;
             }
-            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() )
+            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-            else if ( from_hero.GetColor() == castle->GetColor() )
+            }
+            else if ( from_hero.GetColor() == castle->GetColor() ) {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else if ( from_hero.isFriends( castle->GetColor() ) )
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::ACTION : Cursor::POINTER;
-            else if ( castle->GetActualArmy().isValid() )
+            }
+            else if ( from_hero.isFriends( castle->GetColor() ) ) {
+                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                                                           : Cursor::POINTER;
+            }
+            else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else
+            }
+            else {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+            }
         }
     } break;
 
