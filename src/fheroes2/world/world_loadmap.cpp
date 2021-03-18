@@ -44,6 +44,11 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    const int32_t ultimateArtifactOffset = 9;
+}
+
 namespace GameStatic
 {
     extern u32 uniq;
@@ -1552,16 +1557,22 @@ void World::ProcessNewMap()
         MapsIndexes pools;
         pools.reserve( vec_tiles.size() / 2 );
 
-        for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-            const Maps::Tiles & tile = vec_tiles[ii];
-            const s32 x = tile.GetIndex() % w();
-            const s32 y = tile.GetIndex() / w();
-            if ( tile.GoodForUltimateArtifact() && x > 5 && x < w() - 5 && y > 5 && y < h() - 5 )
-                pools.push_back( tile.GetIndex() );
+        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+            const Maps::Tiles & tile = vec_tiles[i];
+            const int32_t x = tile.GetIndex() % w();
+            if ( x < ultimateArtifactOffset || x >= w() - ultimateArtifactOffset )
+                continue;
+
+            const int32_t y = tile.GetIndex() / w();
+            if ( y < ultimateArtifactOffset || y >= h() - ultimateArtifactOffset )
+                continue;
+
+            if ( tile.GoodForUltimateArtifact() )
+                pools.emplace_back( tile.GetIndex() );
         }
 
-        if ( pools.size() ) {
-            const s32 pos = Rand::Get( pools );
+        if ( !pools.empty() ) {
+            const int32_t pos = Rand::Get( pools );
             ultimate_artifact.Set( pos, Artifact::Rand( Artifact::ART_ULTIMATE ) );
             ultimate_pos = Maps::GetPoint( pos );
         }
