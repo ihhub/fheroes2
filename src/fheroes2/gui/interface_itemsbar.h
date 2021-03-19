@@ -535,14 +535,6 @@ namespace Interface
                 else if ( le.MousePressLeft( iterPos1.second ) ) {
                     return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
                 }
-                else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
-                    if ( ActionBarLeftMouseRelease( **iterPos1.first, **iterPos2.first ) ) {
-                        le.ResetPressLeft();
-                        other.ResetSelected();
-                    }
-
-                    return true;
-                }
                 else if ( le.MouseClickRight( iterPos1.second ) ) {
                     other.ResetSelected();
                     return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
