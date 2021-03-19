@@ -251,7 +251,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Monsters and boats.
+    // Monsters.
     if ( drawMonstersAndBoats ) {
         for ( const int32_t index : monsterList ) {
             const Maps::Tiles & tile = world.GetTiles( index );
@@ -271,13 +271,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Top layer and heroes.
+    // Top layer.
     const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
 
     if ( drawTop ) {
         for ( int32_t y = minY; y < maxY; ++y ) {
             for ( int32_t x = minX; x < maxX; ++x ) {
                 const Maps::Tiles & tile = world.GetTiles( x, y );
+                const int object = tile.GetObject();
+
+                if ( MP2::OBJ_HEROES == object || MP2::OBJ_BOAT == object ) {
+                    continue;
+                }
 
                 // top
                 tile.RedrawTop( dst, tileROI, *this );
@@ -285,6 +290,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    // Heroes and boats.
     for ( const int32_t index : drawList ) {
         const Maps::Tiles & tile = world.GetTiles( index );
         const int object = tile.GetObject();
