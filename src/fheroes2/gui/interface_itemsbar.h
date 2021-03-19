@@ -452,7 +452,6 @@ namespace Interface
                 return false;
 
             ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
-            ItemIterPos iterPos2 = other.curItemPos;
 
             if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
                 return false;
