@@ -350,16 +350,10 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             return false; // reset cursor
         }
 
-        ArmyTroop * selectedTroop = GetSelectedItem();
-        if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-            // redistribute when clicked troop is empty or is the same one as the selected troop
-            if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
-                RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
-                ResetSelected();
+        if ( troop.isValid() && IsSplitHotkeyUsed( troop, _army ) )
+            return false;
 
-                return false;
-            }
-        }
+        ArmyTroop * selectedTroop = GetSelectedItem();
 
         // combine
         if ( selectedTroop && troop.GetID() == selectedTroop->GetID() ) {
