@@ -535,6 +535,7 @@ namespace Interface
                 else if ( le.MousePressLeft( iterPos1.second ) ) {
                     return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
                 }
+                // let ActionCrossItemBarDrag handle MousePressRelease instead
                 else if ( le.MouseClickRight( iterPos1.second ) ) {
                     other.ResetSelected();
                     return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
