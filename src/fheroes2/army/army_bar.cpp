@@ -531,13 +531,19 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
     return true;
 }
 
-bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ )
+bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
     if ( isSelected() )
         ResetSelected();
 
+    // cross-army drag split
+    if ( !destTroop.isValid() && selectedTroop.isValid() ) {
+        RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+        return true;
+    }
+
     _isTroopInfoVisible = true;
-    return true;
+    return false;
 }
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
