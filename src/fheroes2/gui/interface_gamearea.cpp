@@ -200,7 +200,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
                 tile.RedrawObjects( dst, isPuzzleDraw, *this );
             }
-            int object = tile.GetObject();
+            const int object = tile.GetObject();
             if ( MP2::OBJ_ZERO != object ) {
                 if ( drawMonstersAndBoats ) {
                     if ( MP2::OBJ_BOAT == object ) {
@@ -210,10 +210,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         monsterList.emplace_back( tile.GetIndex() );
                     }
                 }
-                if ( drawHeroes ) {
-                    if ( MP2::OBJ_HEROES == object ) {
-                        drawList.emplace_back( tile.GetIndex() );
-                    }
+                if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+                    drawList.emplace_back( tile.GetIndex() );
                 }
             }
         }
