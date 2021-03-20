@@ -24,6 +24,7 @@
 
 #include <functional>
 #include <list>
+#include <memory>
 
 #include "army_troop.h"
 #include "artifact.h"
@@ -258,7 +259,7 @@ namespace Maps
         Artifact QuantityArtifact( void ) const;
         ResourceCount QuantityResourceCount( void ) const;
         Funds QuantityFunds( void ) const;
-        Monster QuantityMonster( void ) const;
+        std::shared_ptr<Monster> QuantityMonster( void ) const;
         Troop QuantityTroop( void ) const;
 
         void SetObjectPassable( bool );

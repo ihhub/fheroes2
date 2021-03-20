@@ -352,73 +352,81 @@ int Maps::Tiles::QuantityColor( void ) const
     }
 }
 
-Monster Maps::Tiles::QuantityMonster( void ) const
+std::shared_ptr<Monster> Maps::Tiles::QuantityMonster( void ) const
 {
-    switch ( GetObject( false ) ) {
+    const int objectId = GetObject( false );
+    // TODO those duplicated trains of calls for pointer creation should be refactored
+    switch ( objectId ) {
     case MP2::OBJ_WATCHTOWER:
-        return Monster( Monster::ORC );
+        return std::make_shared<Monster>( Monster( Monster::ORC ) );
     case MP2::OBJ_EXCAVATION:
-        return Monster( Monster::SKELETON );
+        return std::make_shared<Monster>( Monster( Monster::SKELETON ) );
     case MP2::OBJ_CAVE:
-        return Monster( Monster::CENTAUR );
+        return std::make_shared<Monster>( Monster( Monster::CENTAUR ) );
     case MP2::OBJ_TREEHOUSE:
-        return Monster( Monster::SPRITE );
+        return std::make_shared<Monster>( Monster( Monster::SPRITE ) );
     case MP2::OBJ_ARCHERHOUSE:
-        return Monster( Monster::ARCHER );
+        return std::make_shared<Monster>( Monster( Monster::ARCHER ) );
     case MP2::OBJ_GOBLINHUT:
-        return Monster( Monster::GOBLIN );
+        return std::make_shared<Monster>( Monster( Monster::GOBLIN ) );
     case MP2::OBJ_DWARFCOTT:
-        return Monster( Monster::DWARF );
+        return std::make_shared<Monster>( Monster( Monster::DWARF ) );
     case MP2::OBJ_HALFLINGHOLE:
-        return Monster( Monster::HALFLING );
+        return std::make_shared<Monster>( Monster( Monster::HALFLING ) );
     case MP2::OBJ_PEASANTHUT:
     case MP2::OBJ_THATCHEDHUT:
-        return Monster( Monster::PEASANT );
+        return std::make_shared<Monster>( Monster( Monster::PEASANT ) );
 
     case MP2::OBJ_RUINS:
-        return Monster( Monster::MEDUSA );
+        return std::make_shared<Monster>( Monster( Monster::MEDUSA ) );
     case MP2::OBJ_TREECITY:
-        return Monster( Monster::SPRITE );
+        return std::make_shared<Monster>( Monster( Monster::SPRITE ) );
     case MP2::OBJ_WAGONCAMP:
-        return Monster( Monster::ROGUE );
+        return std::make_shared<Monster>( Monster( Monster::ROGUE ) );
     case MP2::OBJ_DESERTTENT:
-        return Monster( Monster::NOMAD );
+        return std::make_shared<Monster>( Monster( Monster::NOMAD ) );
 
     case MP2::OBJ_TROLLBRIDGE:
-        return Monster( Monster::TROLL );
+        return std::make_shared<Monster>( Monster( Monster::TROLL ) );
     case MP2::OBJ_DRAGONCITY:
-        return Monster( Monster::RED_DRAGON );
+        return std::make_shared<Monster>( Monster( Monster::RED_DRAGON ) );
     case MP2::OBJ_CITYDEAD:
-        return Monster( Monster::POWER_LICH );
+        return std::make_shared<Monster>( Monster( Monster::POWER_LICH ) );
 
     case MP2::OBJ_ANCIENTLAMP:
-        return Monster( Monster::GENIE );
+        return std::make_shared<Monster>( Monster( Monster::GENIE ) );
 
     // loyalty version
     case MP2::OBJ_WATERALTAR:
-        return Monster( Monster::WATER_ELEMENT );
+        return std::make_shared<Monster>( Monster( Monster::WATER_ELEMENT ) );
     case MP2::OBJ_AIRALTAR:
-        return Monster( Monster::AIR_ELEMENT );
+        return std::make_shared<Monster>( Monster( Monster::AIR_ELEMENT ) );
     case MP2::OBJ_FIREALTAR:
-        return Monster( Monster::FIRE_ELEMENT );
+        return std::make_shared<Monster>( Monster( Monster::FIRE_ELEMENT ) );
     case MP2::OBJ_EARTHALTAR:
-        return Monster( Monster::EARTH_ELEMENT );
+        return std::make_shared<Monster>( Monster( Monster::EARTH_ELEMENT ) );
     case MP2::OBJ_BARROWMOUNDS:
-        return Monster( Monster::GHOST );
+        return std::make_shared<Monster>( Monster( Monster::GHOST ) );
 
     case MP2::OBJ_MONSTER:
-        return Monster( objectIndex + 1 );
+        return std::make_shared<Monster>( Monster( objectIndex + 1 ) );
 
     default:
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    if ( MP2::isCaptureObject( objectId ) ) {
+        CapturedObject & object = world.GetCapturedObject( GetIndex() );
+        Troop & troop = object.GetTroop();
+        return std::make_shared<Monster>( troop );
+    };
+
+    return std::make_shared<Monster>( Monster( Monster::UNKNOWN ) );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const
 {
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Troop( QuantityMonster(), MonsterCount() );
+    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Troop( *QuantityMonster(), MonsterCount() );
 }
 
 void Maps::Tiles::QuantityReset( void )

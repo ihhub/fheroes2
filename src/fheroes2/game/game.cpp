@@ -260,7 +260,7 @@ void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromInde
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
     const uint32_t alpha = fadeOut ? 255u : 0;
     if ( MP2::OBJ_MONSTER == object ) {
-        const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
+        const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster()->GetSpriteIndex() );
         fadeTask = FadeTask( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else if ( MP2::OBJ_BOAT == object ) {

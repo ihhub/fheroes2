@@ -2085,8 +2085,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         // check guardians
         if ( tile.CaptureObjectIsProtection() ) {
             Army army( tile );
-            const Monster & mons = tile.QuantityMonster();
-
             Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
 
             if ( result.AttackerWins() ) {
@@ -2096,7 +2094,8 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             else {
                 capture = false;
                 BattleLose( hero, result, true );
-                tile.MonsterSetCount( army.GetCountMonsters( mons ) );
+                const std::shared_ptr<Monster> monster = tile.QuantityMonster();
+                tile.MonsterSetCount( army.GetCountMonsters( *monster ) );
             }
         }
 
@@ -2441,14 +2440,14 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
-        monsToUpgrade = {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )};
+        monsToUpgrade = { Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF ) };
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
         msg2 = _( "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
     } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
-        monsToUpgrade = {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )};
+        monsToUpgrade = { Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM ) };
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
         msg2 = _(
