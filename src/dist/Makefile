@@ -41,7 +41,6 @@ CFLAGS := $(CFLAGS) -I$(PREFIX)/include
 endif
 
 ifeq ($(PLATFORM), mingw)
-EXE := .exe
 RES := ../resources/$(TARGET).res
 RC  := ../resources/fheroes2.rc
 ifdef DEBUG
@@ -64,8 +63,10 @@ all: $(TARGET)
 $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SEARCH)))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
 	$(CXX) $(LDFLAGS) $^ $(LIBS) -o ../../$@
+ifeq ($(PLATFORM), mingw)
 ifndef DEBUG
-	@strip -p -s ../../$@$(EXE)
+	@strip -p -s ../../$@.exe
+endif
 endif
 
 pot: $(wildcard $(SEARCH))
