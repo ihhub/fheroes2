@@ -54,5 +54,5 @@ wget -q -c -P package $sdl $mix $ttf
 rm -f package/*.zip
 rm -f fheroes2_${fh2arch}_$fh2sdl-$version.zip
 echo -e "Packing fheroes2_${fh2arch}_$fh2sdl-$version.zip"
-7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* ./doc/README.txt changelog.txt fheroes2.key fheroes2.exe LICENSE ./script/demo/demo_windows.bat
+7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* ./doc/README.txt changelog.txt fheroes2.key fheroes2.exe LICENSE ./script/demo/download_demo.bat
 rm -rf package
