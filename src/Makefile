@@ -34,7 +34,7 @@ LIBS := -pthread
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
+# Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
 CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
 
 ifdef FHEROES2_STRICT_COMPILATION
@@ -89,9 +89,8 @@ CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
 endif
 
-ifdef RELEASE
-CFLAGS := $(CFLAGS) -DBUILD_RELEASE
-endif
+CFLAGS := $(SDL_FLAGS) $(CFLAGS)
+LIBS := $(SDL_LIBS) $(LIBS)
 
 # platform specific flags
 ifndef PLATFORM
@@ -117,14 +116,7 @@ LIBS := -liconv
 endif
 endif
 
-ifdef FHEROES2_VITA
-PLATFORM := vita
-endif
-
 include Makefile.$(PLATFORM)
-
-CFLAGS := $(SDL_FLAGS) $(CFLAGS)
-LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 

@@ -20,7 +20,6 @@
 
 # Options:
 # DEBUG: build in debug mode
-# RELEASE: build with addons extensions
 #
 # WITHOUT_ZLIB: build without zlib (disable compressed save files)
 # WITHOUT_MIXER: build without SDL_mixer library

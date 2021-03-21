@@ -627,7 +627,7 @@ bool Settings::Read( const std::string & filename )
     if ( font_normal.empty() || font_small.empty() )
         opt_global.ResetModes( GLOBAL_USEUNICODE );
 
-#ifdef BUILD_RELEASE
+#ifndef WITH_DEBUG
     // reset devel
     debug &= ~( DBG_DEVEL );
 #endif
