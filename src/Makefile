@@ -89,10 +89,6 @@ CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
 endif
 
-ifdef RELEASE
-CFLAGS := $(CFLAGS) -DBUILD_RELEASE
-endif
-
 CFLAGS := $(SDL_FLAGS) $(CFLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 

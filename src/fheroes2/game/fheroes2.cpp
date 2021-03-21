@@ -34,14 +34,12 @@
 #include "engine.h"
 #include "game.h"
 #include "game_interface.h"
-#include "game_logo.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "system.h"
-#include "text.h"
 #include "translations.h"
 #include "zzlib.h"
 
@@ -55,9 +53,9 @@ int PrintHelp( const char * basename )
 {
     COUT( "Usage: " << basename << " [OPTIONS]" );
 #ifdef WITH_DEBUG
-    COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
+    COUT( "  -d\tdebug mode" );
 #endif
-    COUT( "  -h\t\tprint this help message and exit" );
+    COUT( "  -h\tprint this help and exit" );
 
     return EXIT_SUCCESS;
 }
@@ -73,7 +71,6 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
-    InitHardware();
     Logging::InitLog();
 
     Settings & conf = Settings::Get();
@@ -113,7 +110,7 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO;
 
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
@@ -150,20 +147,19 @@ int main( int argc, char ** argv )
                 fheroes2::engine().toggleFullScreen();
 
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
-            display.fill( 0 ); // start from a black screen
-
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
-            // Initialize local event processing.
+            // Ensure the mouse position is updated to prevent bad initial values.
             LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            LocalEvent::Get().GetMouseCursor();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
             fheroes2::engine().setIcon( appIcon );
 #endif
 
@@ -186,8 +182,6 @@ int main( int argc, char ** argv )
 
             // init game data
             Game::Init();
-
-            fheroes2::showTeamInfo();
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
@@ -270,7 +264,6 @@ int main( int argc, char ** argv )
         }
 
     fheroes2::Display::instance().release();
-    CloseHardware();
 
     return EXIT_SUCCESS;
 }
