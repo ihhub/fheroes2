@@ -8,7 +8,7 @@ fi
 if [ ! -f fheroes2.exe ]; then
 	read -p "fheroes2.exe not found! Would you like to build it now? (default=yes)" yn
         case $yn in
-         ''|[Yy]* ) make -j$(nproc) RELEASE=1; script/msys/release.sh; exit 0;;
+         ''|[Yy]* ) make -j$(nproc); script/msys/release.sh; exit 0;;
             [Nn]* ) echo "You must build fheroes2.exe prior to running this script!"; exit 1;;
         esac
 fi
@@ -50,10 +50,9 @@ fi
 
 echo -e "Downloading $fh2sdl $fh2arch libraries"
 wget -q -c -P package $sdl $mix $ttf
-unzip -qq -o package/\*.zip -x *FLAC* *mikmod* *modplug* *mpg123* *opus* *smpeg* README.txt -d package 2> /dev/null
+7z e package/\*.zip -aos -bs{o,p}0  -x{\!*FLAC*,\!*mikmod*,\!*modplug*,\!*mpg123*,\!*opus*,\!*smpeg*,\!README.txt} -opackage
 rm -f package/*.zip
 rm -f fheroes2_${fh2arch}_$fh2sdl-$version.zip
 echo -e "Packing fheroes2_${fh2arch}_$fh2sdl-$version.zip"
-zip -q -9 -j fheroes2_${fh2arch}_$fh2sdl-$version.zip doc/README.txt package/*
-zip -q -9 -o fheroes2_${fh2arch}_$fh2sdl-$version.zip changelog.txt fheroes2.key fheroes2.exe LICENSE script/demo/demo_windows.bat
+7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* ./doc/README.txt changelog.txt fheroes2.key fheroes2.exe LICENSE ./script/demo/demo_windows.bat
 rm -rf package
