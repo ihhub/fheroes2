@@ -9,11 +9,10 @@ echo [2/3] unpacking archive
 powershell -command "Expand-Archive -Force 'demo\demo.zip' 'demo'"
 
 echo [3/3] copying files
-
-if not exist "..\..\data" mkdir "..\..\data"
-if not exist "..\..\maps" mkdir "..\..\maps"
-xcopy /y /s "demo\DATA" "..\..\data" >nul
-xcopy /y /s "demo\MAPS" "..\..\maps" >nul
+if not exist "data" mkdir "data"
+if not exist "maps" mkdir "maps"
+xcopy /y /s "demo\DATA" "data" >nul
+xcopy /y /s "demo\MAPS" "maps" >nul
 
 rd /S /Q demo
 
