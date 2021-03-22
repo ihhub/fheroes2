@@ -508,7 +508,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 
         if ( itl != loop_sounds.end() ) {
             // unused and free
-            if ( 0 == vol ) {
+            if ( 0 == vol || conf.SoundVolume() == 0 ) {
                 if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                     Mixer::Pause( ( *itl ).channel );
                     Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
