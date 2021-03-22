@@ -68,41 +68,43 @@ bool Battle::Bridge::isBridgeOccupied( void ) const
 
 bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
 {
-    // no if bridge is destroyed or already lowered or there are any troops (alive or dead) on or under the bridge
-    if ( !isValid() || isDown() || isBridgeOccupied() )
+    // no if bridge is destroyed or already lowered or unit does not belong to the castle or there are any troops (alive or dead) on or under the bridge
+    if ( !isValid() || isDown() || b.GetColor() != Arena::GetCastle()->GetColor() || isBridgeOccupied() )
         return false;
 
-    const s32 prevPos = b.GetHeadIndex();
-
-    if ( dstPos == GATES_CELL ) {
-        if ( prevPos == CELL_AFTER_GATES )
-            return true;
-        if ( ( prevPos == BELOW_BRIDGE_CELL || prevPos == ABOVE_BRIDGE_CELL ) && b.GetColor() == Arena::GetCastle()->GetColor() )
-            return true;
+    if ( b.isFlying() ) {
+        return dstPos == GATES_CELL;
     }
-    else if ( dstPos == MOAT_CELL ) {
-        if ( prevPos != GATES_CELL && b.GetColor() == Arena::GetCastle()->GetColor() )
+    else {
+        const int32_t prevPos = b.GetHeadIndex();
+
+        if ( dstPos == GATES_CELL && ( prevPos == CELL_AFTER_GATES || prevPos == BELOW_BRIDGE_CELL || prevPos == ABOVE_BRIDGE_CELL ) ) {
             return true;
+        }
+        else if ( dstPos == MOAT_CELL && prevPos != GATES_CELL ) {
+            return true;
+        }
     }
 
     return false;
 }
 
-bool Battle::Bridge::isPassable( int color ) const
+bool Battle::Bridge::isPassable( const Unit & b ) const
 {
-    // yes if bridge is lowered, or color belongs to the castle and there are no any troops (alive or dead) on or under the bridge
-    return isDown() || ( color == Arena::GetCastle()->GetColor() && !isBridgeOccupied() );
+    // yes if bridge is lowered (or destroyed), or unit belongs to the castle and there are no any troops (alive or dead) on or under the bridge
+    return isDown() || ( b.GetColor() == Arena::GetCastle()->GetColor() && !isBridgeOccupied() );
 }
 
 void Battle::Bridge::SetDestroy( void )
 {
     destroy = true;
+
     Board::GetCell( GATES_CELL )->SetObject( 0 );
 }
 
 void Battle::Bridge::SetPassable( const Unit & b )
 {
-    if ( Board::isCastleIndex( b.GetHeadIndex() ) || b.GetColor() == Arena::GetCastle()->GetColor() ) {
+    if ( isPassable( b ) ) {
         Board::GetCell( GATES_CELL )->SetObject( 0 );
     }
     else {
