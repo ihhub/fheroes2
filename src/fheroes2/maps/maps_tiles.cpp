@@ -1502,20 +1502,6 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const
     }
 }
 
-void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
-{
-    switch ( GetObject() ) {
-    case MP2::OBJ_BOAT:
-        RedrawBoat( dst, visibleTileROI, area );
-        break;
-    case MP2::OBJ_MONSTER:
-        RedrawMonster( dst, visibleTileROI, area );
-        break;
-    default:
-        break;
-    }
-}
-
 void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1640,7 +1626,9 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
 
     if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
         RedrawObjects( dst, false, area );
-        RedrawMonstersAndBoat( dst, visibleTileROI, area );
+        if ( MP2::OBJ_MONSTER == GetObject() ) {
+            RedrawMonster( dst, visibleTileROI, area );
+        }
     }
 }
 
