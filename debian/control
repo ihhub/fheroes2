@@ -1,7 +1,7 @@
 Source: fheroes2
 Section: contrib/games
 Priority: optional
-Maintainer: fheroes2 team <mail@example.org>
+Maintainer: fheroes2 team <fhomm2@gmail.com>
 Build-Depends: debhelper (>= 9), libsdl2-dev,libsdl2-mixer-dev, libsdl2-ttf-dev, libtinyxml-dev, libz-dev
 Standards-Version: 3.9.8
 Homepage: https://github.com/ihhub/fheroes2

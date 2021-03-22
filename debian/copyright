@@ -3,14 +3,14 @@ Upstream-Name: fheroes2
 Source: https://github.com/ihhub/fheroes2/releases
 
 Files: *
-Copyright: 2008-2013 Andrey Afletdinov <fheroes2@gmail.com>
+Copyright: 2019-2021 fheroes2 team <fhomm2@gmail.com>
            2008-2009 Josh Matthews <josh@joshmatthews.net>
-           2019-2021 fheroes2 team <fheroes2@example.org>
+           2008-2013 Andrey Afletdinov <fheroes2@gmail.com>
 License: GPL-2.0+
 
 Files: src/thirdparty/libsmacker/*
 Copyright: 2013-2020 Greg Kennedy <kennedy.greg@gmail.com>
-License: GPL-2.1+
+License: LGPL-2.1+
 
 License: GPL-2.0+
  This package is free software; you can redistribute it and/or modify
@@ -24,16 +24,16 @@ License: GPL-2.0+
  GNU General Public License for more details.
  .
  You should have received a copy of the GNU General Public License
- along with this program. If not, see <https://www.gnu.org/licenses/>
+ along with this package; if not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
 
-License: LGPL-2.0+
+License: LGPL-2.1+
  This package is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
  License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later version.
+ version 2.1 of the License, or (at your option) any later version.
  .
  This package is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -41,7 +41,7 @@ License: LGPL-2.0+
  Lesser General Public License for more details.
  .
  You should have received a copy of the GNU Lesser General Public License
- along with this program. If not, see <https://www.gnu.org/licenses/>.
+ along with this package; if not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the GNU Lesser General
- Public License can be found in "/usr/share/common-licenses/LGPL-2".
+ Public License can be found in "/usr/share/common-licenses/LGPL-2.1".
