@@ -49,24 +49,6 @@ namespace
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
-namespace Battle
-{
-    struct ControlInfo
-    {
-        ControlInfo( const Point & pt, int ctrl )
-            : result( ctrl )
-            , rtLocal( pt.x, pt.y, 24, 24 )
-            , rtAI( pt.x + 75, pt.y, 24, 24 ){};
-
-        void Redraw( void );
-
-        int result;
-
-        const Rect rtLocal;
-        const Rect rtAI;
-    };
-}
-
 void Battle::ControlInfo::Redraw( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -97,15 +79,15 @@ Battle::Only::Only()
     , moraleIndicator2( nullptr )
     , luckIndicator1( nullptr )
     , luckIndicator2( nullptr )
-    , primskill_bar1( NULL )
-    , primskill_bar2( NULL )
-    , secskill_bar1( NULL )
-    , secskill_bar2( NULL )
-    , selectArmy1( NULL )
-    , selectArmy2( NULL )
-    , selectArtifacts1( NULL )
-    , selectArtifacts2( NULL )
-    , cinfo2( NULL )
+    , primskill_bar1( nullptr )
+    , primskill_bar2( nullptr )
+    , secskill_bar1( nullptr )
+    , secskill_bar2( nullptr )
+    , selectArmy1( nullptr )
+    , selectArmy2( nullptr )
+    , selectArtifacts1( nullptr )
+    , selectArtifacts2( nullptr )
+    , cinfo2( nullptr )
 {
     player1.SetControl( CONTROL_HUMAN );
     player2.SetControl( CONTROL_AI );
@@ -205,7 +187,7 @@ bool Battle::Only::ChangeSettings( void )
     secskill_bar1->Redraw();
     selectArtifacts1->Redraw();
 
-    selectArmy1 = new ArmyBar( army1, true, false, true );
+    selectArmy1.reset( new ArmyBar( army1, true, false, true ) );
     selectArmy1->SetColRows( 5, 1 );
     selectArmy1->SetPos( cur_pt.x + 36, cur_pt.y + 267 );
     selectArmy1->SetHSpace( 2 );
@@ -225,7 +207,7 @@ bool Battle::Only::ChangeSettings( void )
     monsters.GetTroop( 0 )->Set( Monster::PEASANT, 100 );
     army2 = hero2 ? &hero2->GetArmy() : &monsters;
 
-    selectArmy2 = new ArmyBar( army2, true, false, true );
+    selectArmy2.reset( new ArmyBar( army2, true, false, true ) );
     selectArmy2->SetColRows( 5, 1 );
     selectArmy2->SetPos( cur_pt.x + 381, cur_pt.y + 267 );
     selectArmy2->SetHSpace( 2 );
@@ -277,8 +259,11 @@ bool Battle::Only::ChangeSettings( void )
                 if ( hero2 )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
-                if ( player2.isControlLocal() && NULL == cinfo2 )
-                    cinfo2 = new ControlInfo( Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() );
+                if ( player2.isControlLocal() && NULL == cinfo2 ) {
+                    const Point point = Point( cur_pt.x + 500, cur_pt.y + 425 );
+                    const int control = player2.GetControl();
+                    cinfo2.reset( new ControlInfo( point, control ) );
+                }
                 redraw = true;
             }
         }
@@ -454,22 +439,22 @@ bool Battle::Only::ChangeSettings( void )
 
     moraleIndicator1.reset();
     luckIndicator1.reset();
-    delete primskill_bar1;
-    delete secskill_bar1;
-    delete selectArtifacts1;
-    delete selectArmy1;
+    primskill_bar1.reset();
+    secskill_bar1.reset();
+    selectArtifacts1.reset();
+    selectArmy1.reset();
 
     if ( hero2 ) {
         moraleIndicator2.reset();
         luckIndicator2.reset();
-        delete primskill_bar2;
-        delete secskill_bar2;
-        delete selectArtifacts2;
-        delete selectArmy2;
+        primskill_bar2.reset();
+        secskill_bar2.reset();
+        selectArtifacts2.reset();
+        selectArmy2.reset();
     }
 
     if ( cinfo2 )
-        delete cinfo2;
+        cinfo2.reset();
 
     return result;
 }
@@ -477,23 +462,19 @@ bool Battle::Only::ChangeSettings( void )
 void Battle::Only::UpdateHero1( const Point & cur_pt )
 {
     if ( primskill_bar1 ) {
-        delete primskill_bar1;
-        primskill_bar1 = NULL;
+        primskill_bar1.reset();
     }
 
     if ( secskill_bar1 ) {
-        delete secskill_bar1;
-        secskill_bar1 = NULL;
+        secskill_bar1.reset();
     }
 
     if ( selectArtifacts1 ) {
-        delete selectArtifacts1;
-        selectArtifacts1 = NULL;
+        selectArtifacts1.reset();
     }
 
     if ( selectArmy1 ) {
-        delete selectArmy1;
-        selectArmy1 = NULL;
+        selectArmy1.reset();
     }
 
     if ( hero1 ) {
@@ -516,19 +497,19 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
             luckIndicator1->SetHero( hero1 );
         }
 
-        primskill_bar1 = new PrimarySkillsBar( hero1, true );
+        primskill_bar1.reset( new PrimarySkillsBar( hero1, true ) );
         primskill_bar1->SetColRows( 1, 4 );
         primskill_bar1->SetVSpace( -1 );
         primskill_bar1->SetTextOff( 70, -25 );
         primskill_bar1->SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-        secskill_bar1 = new SecondarySkillsBar( *hero1, true, true );
+        secskill_bar1.reset( new SecondarySkillsBar( *hero1, true, true ) );
         secskill_bar1->SetColRows( 8, 1 );
         secskill_bar1->SetHSpace( -1 );
         secskill_bar1->SetContent( hero1->GetSecondarySkills().ToVector() );
         secskill_bar1->SetPos( cur_pt.x + 22, cur_pt.y + 199 );
 
-        selectArtifacts1 = new ArtifactsBar( hero1, true, false, true );
+        selectArtifacts1.reset( new ArtifactsBar( hero1, true, false, true ) );
         selectArtifacts1->SetColRows( 7, 2 );
         selectArtifacts1->SetHSpace( 2 );
         selectArtifacts1->SetVSpace( 2 );
@@ -537,7 +518,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 
         army1 = &hero1->GetArmy();
 
-        selectArmy1 = new ArmyBar( army1, true, false, true );
+        selectArmy1.reset( new ArmyBar( army1, true, false, true ) );
         selectArmy1->SetColRows( 5, 1 );
         selectArmy1->SetPos( cur_pt.x + 36, cur_pt.y + 267 );
         selectArmy1->SetHSpace( 2 );
@@ -547,23 +528,19 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 void Battle::Only::UpdateHero2( const Point & cur_pt )
 {
     if ( primskill_bar2 ) {
-        delete primskill_bar2;
-        primskill_bar2 = NULL;
+        primskill_bar2.reset();
     }
 
     if ( secskill_bar2 ) {
-        delete secskill_bar2;
-        secskill_bar2 = NULL;
+        secskill_bar2.reset();
     }
 
     if ( selectArtifacts2 ) {
-        delete selectArtifacts2;
-        selectArtifacts2 = NULL;
+        selectArtifacts2.reset();
     }
 
     if ( selectArmy2 ) {
-        delete selectArmy2;
-        selectArmy2 = NULL;
+        selectArmy2.reset();
     }
 
     if ( hero2 ) {
@@ -586,19 +563,19 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
             luckIndicator2->SetHero( hero2 );
         }
 
-        primskill_bar2 = new PrimarySkillsBar( hero2, true );
+        primskill_bar2.reset( new PrimarySkillsBar( hero2, true ) );
         primskill_bar2->SetColRows( 1, 4 );
         primskill_bar2->SetVSpace( -1 );
         primskill_bar2->SetTextOff( -70, -25 );
         primskill_bar2->SetPos( cur_pt.x + 389, cur_pt.y + 51 );
 
-        secskill_bar2 = new SecondarySkillsBar( *hero2, true, true );
+        secskill_bar2.reset( new SecondarySkillsBar( *hero2, true, true ) );
         secskill_bar2->SetColRows( 8, 1 );
         secskill_bar2->SetHSpace( -1 );
         secskill_bar2->SetContent( hero2->GetSecondarySkills().ToVector() );
         secskill_bar2->SetPos( cur_pt.x + 353, cur_pt.y + 199 );
 
-        selectArtifacts2 = new ArtifactsBar( hero2, true, false, true );
+        selectArtifacts2.reset( new ArtifactsBar( hero2, true, false, true ) );
         selectArtifacts2->SetColRows( 7, 2 );
         selectArtifacts2->SetHSpace( 2 );
         selectArtifacts2->SetVSpace( 2 );
@@ -607,7 +584,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
 
         army2 = &hero2->GetArmy();
 
-        selectArmy2 = new ArmyBar( army2, true, false, true );
+        selectArmy2.reset( new ArmyBar( army2, true, false, true ) );
         selectArmy2->SetColRows( 5, 1 );
         selectArmy2->SetPos( cur_pt.x + 381, cur_pt.y + 267 );
         selectArmy2->SetHSpace( 2 );
@@ -653,7 +630,7 @@ void Battle::Only::RedrawBaseInfo( const Point & top )
     }
 
     // primary skill
-    RedrawPrimarySkillInfo( top, primskill_bar1, primskill_bar2 );
+    RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
 void Battle::Only::StartBattle( void )
