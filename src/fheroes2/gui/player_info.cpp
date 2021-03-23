@@ -298,17 +298,15 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 _( "Opponents" ),
                 _( "This lets you change player starting positions and colors. A particular color will always start in a particular location. Some positions may only be played by a computer player or only by a human player." ),
                 Font::BIG );
-        else
-            // class
-            if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) )
+        // class
+        else if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) )
             Dialog::Message(
                 _( "Class" ),
                 _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
                 Font::BIG );
     }
-    else
-    // if(le.MouseClickLeft())
-    {
+    // le.MouseClickLeft()
+    else {
         // select opponent
         if ( NULL != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();
@@ -337,9 +335,8 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 }
             }
         }
-        else
-            // modify name
-            if ( show_name && NULL != ( player = GetFromOpponentNameClick( le.GetMouseCursor() ) ) ) {
+        // modify name
+        else if ( show_name && NULL != ( player = GetFromOpponentNameClick( le.GetMouseCursor() ) ) ) {
             std::string res;
             std::string str = _( "%{color} player" );
             StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
@@ -347,9 +344,8 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             if ( Dialog::InputString( str, res ) && !res.empty() )
                 player->SetName( res );
         }
-        else
-            // select class
-            if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
+        // select class
+        else if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
             if ( conf.AllowChangeRace( player->GetColor() ) ) {
                 switch ( player->GetRace() ) {
                 case Race::KNGT:
@@ -378,9 +374,8 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 }
             }
         }
-        else
-            // swap players
-            if ( show_swap && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
+        // swap players
+        else if ( show_swap && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
             iterator it = std::find_if( begin(), end(), [player]( const PlayerInfo & pi ) { return pi.player == player; } );
             if ( it != end() && ( it + 1 ) != end() ) {
                 Players & players = conf.GetPlayers();
