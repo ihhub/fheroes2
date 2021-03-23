@@ -368,7 +368,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             }
             else { // combine
                 troop.SetCount( troop.GetCount() + selectedTroop->GetCount() );
-                ResetSelected();
+                selectedTroop->Reset();
             }
         }
         // exchange
