@@ -143,7 +143,7 @@ namespace Campaign
         : CampaignAwardData( id, type, subType, 1, 0 )
     {}
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, std::string customName )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName )
         : CampaignAwardData( id, type, subType, 1, 0, customName )
     {}
 
