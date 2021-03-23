@@ -72,6 +72,66 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const Point & pt1, c
     }
 }
 
+bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) const
+{
+    const Settings & conf = Settings::Get();
+    const Maps::FileInfo & fi = conf.CurrentFileInfo();
+
+    const int player1Color = player1.GetColor();
+    const int player2Color = player2.GetColor();
+
+    bool swap = false;
+
+    if ( player1.isControlAI() == player2.isControlAI() ) {
+        swap = true;
+    }
+    else if ( ( player1Color & fi.AllowCompHumanColors() ) && ( player2Color & fi.AllowCompHumanColors() ) ) {
+        const int humans = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+
+        if ( humans & player1Color ) {
+            Players::SetPlayerControl( player1Color, CONTROL_AI | CONTROL_HUMAN );
+            Players::SetPlayerControl( player2Color, CONTROL_HUMAN );
+        }
+        else {
+            Players::SetPlayerControl( player2Color, CONTROL_AI | CONTROL_HUMAN );
+            Players::SetPlayerControl( player1Color, CONTROL_HUMAN );
+        }
+
+        swap = true;
+    }
+
+    if ( swap ) {
+        const int player1Race = player1.GetRace();
+        const int player2Race = player2.GetRace();
+
+        if ( player1Race != player2Race && conf.AllowChangeRace( player1Color ) && conf.AllowChangeRace( player2Color ) ) {
+            player1.SetRace( player2Race );
+            player2.SetRace( player1Race );
+        }
+
+        const std::string player1Name = player1.GetName();
+        const std::string player2Name = player2.GetName();
+
+        const std::string player1DefaultName = player1.GetDefaultName();
+        const std::string player2DefaultName = player2.GetDefaultName();
+
+        if ( player2Name == player2DefaultName ) {
+            player1.SetName( player1DefaultName );
+        }
+        else {
+            player1.SetName( player2Name );
+        }
+        if ( player1Name == player1DefaultName ) {
+            player2.SetName( player2DefaultName );
+        }
+        else {
+            player2.SetName( player1Name );
+        }
+    }
+
+    return swap;
+}
+
 Player * Interface::PlayersInfo::GetFromOpponentClick( const Point & pt )
 {
     for ( iterator it = begin(); it != end(); ++it )
@@ -252,36 +312,28 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
         // select opponent
         if ( NULL != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();
-            const Players & players = conf.GetPlayers();
-            if ( ( player->GetColor() & fi.AllowHumanColors() )
-                 && ( !Settings::Get().IsGameType( Game::TYPE_MULTI ) || !( player->GetColor() & fi.HumanOnlyColors() ) ) ) {
-                u32 humans = players.GetColors( CONTROL_HUMAN, true );
 
-                if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
-                    if ( currentSelectedPlayer == nullptr ) {
-                        currentSelectedPlayer = player;
-                    }
-                    else if ( currentSelectedPlayer == player ) {
-                        currentSelectedPlayer = nullptr;
-                    }
-                    else if ( player->isControlAI() != currentSelectedPlayer->isControlAI() ) {
-                        if ( !( humans & player->GetColor() ) ) {
-                            player->SetControl( CONTROL_HUMAN );
-                            Players::SetPlayerControl( currentSelectedPlayer->GetColor(), CONTROL_AI | CONTROL_HUMAN );
-                        }
-                        else {
-                            currentSelectedPlayer->SetControl( CONTROL_HUMAN );
-                            Players::SetPlayerControl( player->GetColor(), CONTROL_AI | CONTROL_HUMAN );
-                        }
-
-                        currentSelectedPlayer = nullptr;
-                    }
+            if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
+                if ( currentSelectedPlayer == nullptr ) {
+                    currentSelectedPlayer = player;
                 }
-                else
-                // single play
-                {
-                    Players::SetPlayerControl( humans, CONTROL_AI | CONTROL_HUMAN );
-                    player->SetControl( CONTROL_HUMAN );
+                else if ( currentSelectedPlayer == player ) {
+                    currentSelectedPlayer = nullptr;
+                }
+                else if ( SwapPlayers( *player, *currentSelectedPlayer ) ) {
+                    currentSelectedPlayer = nullptr;
+                }
+            }
+            else {
+                const int playerColor = player->GetColor();
+
+                if ( playerColor & fi.AllowHumanColors() ) {
+                    const int human = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+
+                    if ( playerColor != human ) {
+                        Players::SetPlayerControl( human, CONTROL_AI | CONTROL_HUMAN );
+                        Players::SetPlayerControl( playerColor, CONTROL_HUMAN );
+                    }
                 }
             }
         }
