@@ -350,23 +350,26 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             return false; // reset cursor
         }
 
-        if ( troop.isValid() && IsSplitHotkeyUsed( troop, _army ) )
+        ArmyTroop * selectedTroop = GetSelectedItem();
+
+        if ( !selectedTroop )
             return false;
 
-        ArmyTroop * selectedTroop = GetSelectedItem();
-        if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-            // redistribute when clicked troop is empty or is the same one as the selected troop
-            if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
-                RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
-                ResetSelected();
+        bool isSameTroopID = troop.GetID() == selectedTroop->GetID();
 
+        // prioritize standard split via shift hotkey
+        if ( ( !troop.isValid() || isSameTroopID ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+            RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
+            ResetSelected();
+        }
+        else if ( selectedTroop && isSameTroopID ) {
+            if ( IsSplitHotkeyUsed( troop, _army ) ) {
                 return false;
             }
-        }
-        // combine
-        else if ( selectedTroop && troop.GetID() == selectedTroop->GetID() ) {
-            troop.SetCount( troop.GetCount() + selectedTroop->GetCount() );
-            selectedTroop->Reset();
+            else { // combine
+                troop.SetCount( troop.GetCount() + selectedTroop->GetCount() );
+                ResetSelected();
+            }
         }
         // exchange
         else if ( selectedTroop ) {
@@ -520,7 +523,9 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         LocalEvent & le = LocalEvent::Get();
         ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
-        if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
+        bool isTroopPressValid = troopPress && troopPress->isValid();
+
+        if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
             RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
             le.ResetPressLeft();
 
