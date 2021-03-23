@@ -379,7 +379,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             }
         }
         else
-            // change players
+            // swap players
             if ( show_swap && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
             iterator it = std::find_if( begin(), end(), [player]( const PlayerInfo & pi ) { return pi.player == player; } );
             if ( it != end() && ( it + 1 ) != end() ) {
@@ -388,8 +388,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 Players::iterator it2 = std::find_if( players.begin(), players.end(), [&it]( const Player * p ) { return p == ( *( it + 1 ) ).player; } );
 
                 if ( it1 != players.end() && it2 != players.end() ) {
-                    std::swap( ( *it ).player, ( *( it + 1 ) ).player );
-                    std::swap( *it1, *it2 );
+                    SwapPlayers( **it1, **it2 );
                 }
             }
             else
