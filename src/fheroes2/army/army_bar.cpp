@@ -354,9 +354,17 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             return false;
 
         ArmyTroop * selectedTroop = GetSelectedItem();
+        if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+            // redistribute when clicked troop is empty or is the same one as the selected troop
+            if ( !troop.isValid() || troop.GetID() == selectedTroop->GetID() ) {
+                RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
+                ResetSelected();
 
+                return false;
+            }
+        }
         // combine
-        if ( selectedTroop && troop.GetID() == selectedTroop->GetID() ) {
+        else if ( selectedTroop && troop.GetID() == selectedTroop->GetID() ) {
             troop.SetCount( troop.GetCount() + selectedTroop->GetCount() );
             selectedTroop->Reset();
         }
