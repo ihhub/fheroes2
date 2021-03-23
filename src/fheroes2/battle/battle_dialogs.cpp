@@ -495,6 +495,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         BagArtifacts & bag1 = hero1->GetBagArtifacts();
         BagArtifacts & bag2 = hero2->GetBagArtifacts();
 
+        btn_ok.setICNInfo( isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB, 0, 1 );
+        btn_ok.setPosition( pos_rt.x + 121, pos_rt.y + 410 );
+
         for ( size_t i = 0; i < bag2.size(); ++i ) {
             Artifact & art = bag2[i];
 
@@ -515,6 +518,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 back.update( shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialogShadow, display, pos_rt.x - BORDERWIDTH, pos_rt.y + BORDERWIDTH - 1 );
                 fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
+                btn_ok.draw();
 
                 Game::PlayPickupSound();
 
