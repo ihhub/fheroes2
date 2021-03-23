@@ -415,8 +415,8 @@ namespace Interface
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
                 return false;
-            else if ( other.GetItem( le.GetMousePressLeft() ) )
-                return ActionCrossItemBarDrag( cursor, other );
+            else if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) )
+                return true;
 
             return other.isSelected() ? ActionCursorItemIter( cursor, other ) : ActionCursorItemIter( cursor, ItemsBar<Item>::GetItemIterPos( cursor ) );
         }
