@@ -25,8 +25,6 @@
 
 namespace Campaign
 {
-    struct CampaignAwardData;
-
     enum ScenarioIcon
     {
         SCENARIOICON_CLEARED = 10,

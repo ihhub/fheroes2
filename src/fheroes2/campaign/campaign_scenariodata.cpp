@@ -20,7 +20,6 @@
 
 #include "campaign_scenariodata.h"
 #include "artifact.h"
-#include "campaign_data.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
 #include "race.h"
