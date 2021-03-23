@@ -100,19 +100,19 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF );
             break;
         case 5:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, "Sorceress Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, "Sorceress Guild" );
             break;
         case 6:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 ) );
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
             break;
         case 7:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 );
             break;
         case 8:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 ) );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
             break;
         }
 
@@ -125,21 +125,20 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, "Necromancer Guild" );
             break;
         case 3:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE ) );
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF ) );
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
             break;
         case 6:
-            obtainableAwards.emplace_back(
-                Campaign::CampaignAwardData( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, "Dragon Alliance" ) );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, "Dragon Alliance" );
             break;
         case 8:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN ) );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
             break;
         case 9:
-            obtainableAwards.emplace_back( Campaign::CampaignAwardData( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON ) );
+            obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON );
             break;
         }
 
@@ -577,8 +576,8 @@ int Game::CompleteCampaignScenario()
 std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData )
 {
     std::vector<Campaign::CampaignAwardData> obtainedAwards;
-    const std::vector<int> finishedMaps = saveData.getFinishedMaps();
-    const std::vector<int> obtainedAwardIDs = saveData.getObtainedCampaignAwards();
+    const std::vector<int> & finishedMaps = saveData.getFinishedMaps();
+    const std::vector<int> & obtainedAwardIDs = saveData.getObtainedCampaignAwards();
 
     for ( size_t i = 0; i < finishedMaps.size(); ++i ) {
         const std::vector<Campaign::CampaignAwardData> awards = getCampaignAwardData( saveData.getCampaignID(), finishedMaps[i] );
