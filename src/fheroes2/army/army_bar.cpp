@@ -355,14 +355,14 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         if ( !selectedTroop )
             return false;
 
-        bool isSameTroopID = troop.GetID() == selectedTroop->GetID();
+        const bool isSameTroopType = troop.GetID() == selectedTroop->GetID();
 
         // prioritize standard split via shift hotkey
-        if ( ( !troop.isValid() || isSameTroopID ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
             RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
             ResetSelected();
         }
-        else if ( selectedTroop && isSameTroopID ) {
+        else if ( selectedTroop && isSameTroopType ) {
             if ( IsSplitHotkeyUsed( troop, _army ) ) {
                 return false;
             }
@@ -373,7 +373,11 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         }
         // exchange
         else if ( selectedTroop ) {
-            Army::SwapTroops( troop, *selectedTroop );
+            // count this as an attempt to split to a troop type that is not the same
+            if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) )
+                ResetSelected();
+            else
+                Army::SwapTroops( troop, *selectedTroop );
         }
 
         return false; // reset cursor
@@ -453,7 +457,11 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
     // destination troop has units and both troops are the same creature type
     if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) {
-        if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
+        // prioritize split hotkeys, which does not involve the selected troop
+        if ( IsSplitHotkeyUsed( destTroop, _army ) ) {
+            return false;
+        }
+        else if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
             // move all but one units to destination
             destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
             // leave a single unit behind
