@@ -13,6 +13,68 @@ branches:
 matrix:
   include:
     - os: linux
+      addons:
+        sonarcloud:
+          organization: "ihhub"
+          token:
+            secure: "N4AnvUibHnr/3fksAx/Hv9EIi5l8VDgrgXDFTwVXeVrTJh1X5fuk4lrcmYBBWIgyKemDrnBj8peDRMLgl/MDCJEJU/gm5YYJc7lynRLMiic2W9vCNjRzh3P2QnK9PCjEA7HaJR5ZIDs3+4O+ovPtreZcCiQowqk0r1dEgW5Dvqzns6tRMjLmaab1/9Y3xWuiaZQ9+11Wra/4wQeYbVLNH/4Q1e51ewZ4MIGDlH5Ei6Z+8FJfKsFqaoxmotJat/InbusmolyyS5FhMXqLj6XdwqJk2BVJ5iMly/d76Z4xTtxVsLnMxmHLKHueB+XjCdw8F5hnnYm0wHBxr/8zqUwIKwlHzvb43HwMSeidjU1+kXjqsfq7ZbibBjue2HaEhy+OIVgd4SIcga+sU2RoCjJJBJNYhPAkIAUAiv9B1C0xXorAMBzQLXYlMccMEsDUKtj5wfMZd09lBlqfAtX+Uu0AooJPBLbRl0fl3UR1wxyXvPL1brSQBZmmHnWvM8E45ZljlbMJ/MgZsaynZvd1lBed6Q0N1KsbNMiJcC8cMatAeL+BTIUL9uo9/NBq3meeDh/sG7ryvvk3CSkPdIBn6dg41FlDyhluUrNLGYz5+btrscoARQ786E01Vdx4w+A5RyG10MVnDgIDn+IxIIdfe1gI1Y33BusC1o3mKb2PDxLNqmk=" # encrypted value of your token
+      name: "SonarCloud analysis"
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
+        - export FHEROES2_STRICT_COMPILATION="ON"
+      script:
+        # Wraps the compilation with the Build Wrapper to generate configuration (used
+        # later by the SonarScanner) into the "bw-output" folder
+        - build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
+        # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+        # file to see the specific configuration
+        - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+    - os: linux
+      name: "Ubuntu (Linux) with SDL 1.2"
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev
+        - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
+      before_deploy:
+        - cp doc/README.txt .
+        - zip -j fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - export TRAVIS_TAG=fheroes2-linux-sdl1_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_ubuntu_sdl1.zip"
+        name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        skip_cleanup: true
+        on:
+          branch: master
+    - os: linux
+      name: "Ubuntu (Linux) with SDL 2.0"
+      before_install:
+        - sudo apt-get update
+        - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
+        - export FHEROES2_STRICT_COMPILATION="ON"
+      before_deploy:
+        - cp doc/README.txt .
+        - zip -j fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - export TRAVIS_TAG=fheroes2-linux-sdl2_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_ubuntu_sdl2.zip"
+        name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        skip_cleanup: true
+        on:
+          branch: master
+    - os: linux
       arch: arm64
       name: "Ubuntu (Linux) ARM with SDL 1.2"
       before_install:
@@ -21,7 +83,7 @@ matrix:
         - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
-        - zip fheroes2_ubuntu_arm_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt README.txt
+        - zip -j fheroes2_ubuntu_arm_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl1_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -44,7 +106,7 @@ matrix:
         - export FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
         - cp doc/README.txt .
-        - zip fheroes2_ubuntu_arm_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
+        - zip -j fheroes2_ubuntu_arm_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl2_dev
         - git tag -f $TRAVIS_TAG
       deploy:
