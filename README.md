@@ -1,6 +1,6 @@
 fheroes2
 ======
-[![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases) [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ) [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2) [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2) [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
+[![Github Downloads (monthly)](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases) [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ) [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2) [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2) [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
 
 Free implementation of **Heroes of Might and Magic II** game engine.
 
@@ -23,23 +23,10 @@ Requirements
 ---------------------------
 You are required to have at least a demo version of Heroes of Might and Magic 2 game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
 
-### Mac OS
-Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS do not fully support SDL 1.
+MacOS and Linux
+--------------------------
+Unix OSes need an explicit installation of SDL packages. Please go to `script/macos` or `script/linux` directory depending on your OS package and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer` instead. RPM based distributions like Fedora/Red Hat use the commands `sudo yum/dnf install SDL*`. openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linux`. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS do not fully support SDL 1.
 
-### Debian-based
-Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
-
-### Arch
-For Arch based Linux distributions use the command `sudo pacman -S sdl{,2}_mixer`.
-
-### RedHat-based
-RPM based distributions like Fedora/Red Hat use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
-
-### OpenSUSE
-openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linux`. 
-
-### Gentoo
-If you have Gentoo, in addition to basic distribution you need to run following command `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
 
 Compilation
 ---------------------------
@@ -57,21 +44,15 @@ Windows
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
 
 ### MSYS2 ###
-- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`. Before proceeding, make sure you're in the `MinGW32` or the `MinGW64`, or the `UCRT64` shell, depending on the architecture you'd like to build for.
-- Clone the repo with `git clone https://github.com/ihhub/fheroes2 && cd fheroes2`
-- Now, if you need to quickly generate a playable build, simply run `script/windows/release.sh`.
-- For development, run `script/windows/install_packages.sh dev` to install all the necessary packages.
-- Run `make -j$(nproc)`, or, to build SDL1 version, `make -j$(nproc) FHEROES2_SDL1="1"`.
+- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`.
+- Now, go ahead and run script/msys/install_packages.sh from the `MinGW32` or the `MinGW64`, depending on the architecture you'd like to build for.
+- Run `make -j$(nproc)` to build SDL2 version, or script/msys/release.sh to create a zip archive with all necessary dlls.
 
 MacOS and Linux
 -------------------
 - open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
-- open `script/demo` directory and run **download_demo.sh**. It downloads a demo version of the game which is needed for minimum development.
+- open `script/demo` directory and run **demo_macos.sh** or **demo_linux.sh** file depending on your OS. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
-
-Compilation with CMake
--------------------
-If you would like to build the project using CMake please follow the instructions on [this page](https://github.com/ihhub/fheroes2/blob/master/doc/README_cmake.md). 
 
 Contribution
 ---------------------------
