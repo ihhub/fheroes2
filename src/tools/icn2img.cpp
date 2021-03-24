@@ -84,7 +84,7 @@ int main( int argc, char ** argv )
     std::fstream fs( name_spec_file.c_str(), std::ios::out );
     if ( fs.fail() ) {
         std::cout << "Could not write " << name_spec_file << std::endl;
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     fs << "<?xml version=\"1.0\" ?>" << std::endl << "<icn name=\"" << shortname << ".icn\" count=\"" << count_sprite << "\">" << std::endl;
