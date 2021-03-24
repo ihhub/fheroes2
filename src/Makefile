@@ -131,16 +131,9 @@ endif
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
-ifdef WITH_TOOLS
-	$(MAKE) -C tools
-endif
-ifndef WITHOUT_UNICODE
-	$(MAKE) -C dist pot
-endif
 
 clean:
 	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
-	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean

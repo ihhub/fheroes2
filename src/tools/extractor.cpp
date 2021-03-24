@@ -96,6 +96,6 @@ int main( int argc, char ** argv )
     }
 
     sf1.close();
-    std::cout << total << " files extracted" << std::endl;
+    std::cout << total << " files extracted." << std::endl;
     return EXIT_SUCCESS;
 }

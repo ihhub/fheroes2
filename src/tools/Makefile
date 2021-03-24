@@ -1,53 +1,59 @@
 # makefile
 # project: Free Heroes2 Tools
 
-ifndef WITH_TOOLS
 ifdef FHEROES2_SDL1
-LIBS   := $(shell sdl-config --libs)
-CFLAGS := $(shell sdl-config --cflags)
+SDL := sdl
 else
-LIBS   := $(shell sdl2-config --libs)
-CFLAGS := $(shell sdl2-config --cflags)
-endif
-ifndef WITHOUT_UNICODE
-CFLAGS += -DWITH_ICONV
-ifeq ($(OS),Windows_NT)
-LIBS   += -liconv
-endif
+SDL := sdl2
 endif
 # ifdef FHEROES2_IMAGE_SUPPORT
-# CFLAGS += -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
-# ifdef FHEROES2_SDL1
-# LIBS   += -lSDL_image $(shell libpng-config --libs) -lz
-# else
-# LIBS   += -lSDL2_image $(shell libpng-config --libs) -lz
+# CFLAGS := -DWITH_IMAGE $(shell libpng-config --cflags)
+# LIBS   := -l$(shell X="${SDL}"; echo $${X^^})_image $(shell libpng-config --libs)
 # endif
-# endif
-ifeq ($(OS),Windows_NT)
-LIBS   += -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
-endif
-endif
+
+SDL_LIBS   := $(shell $(SDL)-config --libs)
+SDL_CFLAGS := $(shell $(SDL)-config --cflags)
 
 ifeq ($(OS),Windows_NT)
-LIBS   := -static $(subst -mwindows,-mconsole,$(LIBS))
-CFLAGS := $(filter-out -Dmain=SDL_main,$(CFLAGS))
+LIBS       := -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
+SDL_LIBS   := $(subst -mwindows,-mconsole,$(SDL_LIBS))
+SDL_CFLAGS := $(filter-out -Dmain=SDL_main,$(SDL_CFLAGS))
 ifdef FHEROES2_SDL1
-LIBS   += -lwinmm -lgdi32 -ldxguid
+SDL_LIBS   += -liconv -lwinmm -lgdi32 -ldxguid
 else
-LIBS   += -lole32 -loleaut32 -limm32 -lwinmm -lgdi32 -dxguid -lsetupapi -lversion
+SDL_LIBS   += -lole32 -loleaut32 -limm32 -lwinmm -lgdi32 -ldxguid -lsetupapi -lversion
 endif
 endif
 
-TARGETS   := 82m2wav bin2txt extractor icn2img til2img xmi2mid
-LIBENGINE := ../engine/libengine.a
-LIBS      := $(LIBENGINE) $(LIBS)
-CFLAGS    += -I../engine
+TARGETS := 82m2wav bin2txt extractor icn2img til2img xmi2mid
+AGG     := agg_file.o
+IMAGE   := image.o
+ITOOL   := image_tool.o
+LOG     := logging.o
+RECT    := rect.o
+SER     := serialize.o
+SYS     := system.o
+TOOLS   := tools.o
+XMI     := xmi2mid.o
+PREREQS := $(AGG) $(IMAGE) $(ITOOL) $(LOG) $(RECT) $(SER) $(SYS) $(TOOLS) $(XMI)
+CFLAGS  := -I../engine
 
 all: $(TARGETS)
 
+82m2wav:         $(SER) $(LOG)
+
+extractor:       $(LOG) $(RECT) $(SER) $(SYS) $(TOOLS)
+
+icn2img til2img: $(AGG) $(IMAGE) $(ITOOL) $(LOG) $(RECT) $(SER) $(SYS) $(TOOLS)
+
+xmi2mid:         $(LOG) $(RECT) $(SER) $(TOOLS) $(XMI)
+
 $(TARGETS):
-	$(CXX) -c $@.cpp $(CFLAGS)
-	$(CXX) -o $@ $@.o $(LIBS)
+	@echo "gen: $@"
+	@g++ $@.cpp $(CFLAGS) $^ $(LIBS) $(SDL_LIBS) -o $@
+
+$(PREREQS):
+	@g++ -c $(@:%.o=../engine/%.cpp) $(SDL_CFLAGS) -o $@
 
 .PHONY: clean
 
