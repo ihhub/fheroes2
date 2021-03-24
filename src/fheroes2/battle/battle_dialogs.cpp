@@ -699,7 +699,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     return result;
 }
 
-bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom )
+bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom )
 {
     if ( kingdom.GetColor() == hero.GetColor() ) // this is weird. You're surrending to yourself!
         return false;
@@ -799,12 +799,17 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingd
             result = true;
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarket.area() ) ) {
-            Dialog::Marketplace( false );
+            Dialog::Marketplace( kingdom, false );
 
             if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
-                btnAccept.release();
                 btnAccept.enable();
             }
+            else {
+                btnAccept.disable();
+            }
+
+            btnAccept.draw();
+            display.render();
         }
 
         // exit

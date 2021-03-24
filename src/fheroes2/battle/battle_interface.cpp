@@ -4828,11 +4828,9 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
-                const Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
+                Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
-                if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) )
-                    Dialog::Message( "", _( "You don't have enough gold!" ), Font::BIG, Dialog::OK );
-                else if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
+                if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     a.push_back( Command( MSG_BATTLE_SURRENDER ) );
                     a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                     humanturn_exit = true;
