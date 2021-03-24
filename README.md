@@ -45,7 +45,7 @@ Windows
 
 ### MSYS2 ###
 - If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`.
-- Now, go ahead and run script/msys/install_packages.sh from the `MinGW32` or the `MinGW64`, depending on the architecture you'd like to build for.
+- Now, go ahead and run script/msys/install_packages.sh from the `MinGW32` or the `MinGW64` shell, depending on the architecture you'd like to build for.
 - Run `make -j$(nproc)` to build SDL2 version, or script/msys/release.sh to create a zip archive with all necessary dlls.
 
 MacOS and Linux
