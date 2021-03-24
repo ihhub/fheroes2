@@ -55,7 +55,7 @@ int main( int argc, char ** argv )
     prefix = System::ConcatePath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "Could not create " << prefix << std::endl << "Make sure the parent directory is writable";
+        std::cout << "Could not create " << prefix << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -65,8 +65,8 @@ int main( int argc, char ** argv )
     int height = sf.getLE16();
     std::vector<uint8_t> buf = sf.getRaw( width * height * count );
     if ( debugMode ) {
-        std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
-        std::cout << "Image count    " << count << "(" << width << "," << height << ")" << std::endl;
+        std::cout << "Stream size: " << size << "(" << buf.size() << ")" << std::endl;
+        std::cout << "Image count: " << count << "(" << width << "x" << height << ")" << std::endl;
     }
 
     for ( int cur = 0; cur < count; ++cur ) {
@@ -90,11 +90,11 @@ int main( int argc, char ** argv )
             }
 
             if ( !fheroes2::Save( image, dstfile, 0 ) )
-                std::cout << "error" << std::endl;
+                std::cout << "Error! Could not create " << dstfile << std::endl;
         }
     }
 
     sf.close();
-    std::cout << "expand to: " << prefix << std::endl;
+    std::cout << "Extracted " << argv[1] << " to: " << prefix << std::endl;
     return EXIT_SUCCESS;
 }

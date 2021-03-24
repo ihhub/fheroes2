@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
     prefix = System::ConcatePath( prefix, shortname );
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
-        std::cout << "Could not create " << prefix << std::endl << "Make sure the parent directory is writable";
+        std::cout << "Could not create " << prefix << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -100,7 +100,7 @@ int main( int argc, char ** argv )
 
         u32 data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
         sf.seek( save_pos + head.offsetData );
-        std::cerr << data_size << std::endl;
+        // std::cerr << data_size << std::endl;
         std::vector<u8> buf = sf.getRaw( data_size );
 
         if ( buf.size() ) {
@@ -129,7 +129,7 @@ int main( int argc, char ** argv )
     sf.close();
     fs << "</icn>" << std::endl;
     fs.close();
-    std::cout << "expand to: " << prefix << std::endl;
+    std::cout << "Extracted " << argv[1] << " to: " << prefix << std::endl;
 
     return EXIT_SUCCESS;
 }
