@@ -51,10 +51,15 @@ Please follow below instructions to be able to compile the project:
 
 Windows
 ------------------------
-- **Optional step**: Install **7-zip** archiver at its default location as `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow the instructions shown by batch scripts mentioned below).
+### MSVC ###
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
+
+### MSYS2 ###
+- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`.
+- Now, go ahead and run script/msys/install_packages.sh from the `MinGW32` or the `MinGW64`, depending on the architecture you'd like to build for.
+- Run `make -j$(nproc)` to build SDL2 version, or script/msys/release.sh to create a zip archive with all necessary dlls.
 
 MacOS and Linux
 -------------------
