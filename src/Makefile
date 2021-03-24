@@ -28,7 +28,6 @@ endif
 
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
-LDFLAGS := $(LDFLAGS)
 LIBS := -pthread
 
 CFLAGS_TP := $(CFLAGS)
@@ -118,7 +117,7 @@ endif
 
 include Makefile.$(PLATFORM)
 
-export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
+export CC CXX AR LINK WINDRES CFLAGS LIBS PLATFORM
 
 .PHONY: clean
 

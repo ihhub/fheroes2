@@ -62,7 +62,7 @@ all: $(TARGET)
 
 $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SEARCH)))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
-	$(CXX) $(LDFLAGS) $^ $(LIBS) -o ../../$@
+	$(CXX) $^ $(LIBS) -o ../../$@
 ifeq ($(PLATFORM), mingw)
 ifndef DEBUG
 	@strip -p -s ../../$@.exe
