@@ -1386,13 +1386,14 @@ bool Maps::Tiles::isWater( void ) const
     return 30 > TileSpriteIndex();
 }
 
-void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const
+void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( visibleTileROI & mp ) {
-        gameArea.DrawTile( dst, GetTileSurface(), mp );
-    }
+    if ( !( visibleTileROI & mp ) )
+        return;
+
+    area.DrawTile( dst, GetTileSurface(), mp );
 }
 
 void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, const Rect & visibleTileROI )
@@ -1427,20 +1428,21 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
 
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( visibleTileROI & mp ) {
-        for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
-            const u8 index = ( *it ).index;
-            const int icn = MP2::GetICNObject( ( *it ).object );
+    if ( !( visibleTileROI & mp ) )
+        return;
 
-            if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
-                area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+    for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
+        const u8 index = ( *it ).index;
+        const int icn = MP2::GetICNObject( ( *it ).object );
 
-                // possible animation
-                const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
-                if ( animationIndex ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
-                }
+        if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
+            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+
+            // possible animation
+            const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
+            if ( animationIndex ) {
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
             }
         }
     }
@@ -1501,20 +1503,6 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const
     }
 }
 
-void Maps::Tiles::RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gameArea ) const
-{
-    switch ( GetObject() ) {
-    case MP2::OBJ_BOAT:
-        RedrawBoat( dst, visibleTileROI, withShadow, gameArea );
-        break;
-    case MP2::OBJ_MONSTER:
-        RedrawMonster( dst, visibleTileROI, gameArea );
-        break;
-    default:
-        break;
-    }
-}
-
 void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1534,26 +1522,44 @@ void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const Rect & visibleTile
     }
 }
 
-void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawBoatShadow( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( visibleTileROI & mp ) {
-        const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+    if ( !( visibleTileROI & mp ) )
+        return;
 
-        const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-        const uint32_t alpha = ( MP2::OBJ_BOAT == fadeTask.object
-                                 && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
-                                   ? fadeTask.alpha
-                                   : 255;
+    const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
-        if ( withShadow ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
-            area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
-        }
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
-        area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
-    }
+    const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+    const uint32_t alpha
+        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
+              ? fadeTask.alpha
+              : 255;
+
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
+    area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
+}
+
+void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
+{
+    const Point mp = Maps::GetPoint( GetIndex() );
+
+    if ( !( visibleTileROI & mp ) )
+        return;
+
+    const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
+
+    const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+    const uint32_t alpha
+        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
+              ? fadeTask.alpha
+              : 255;
+
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
+    area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
+
+    RedrawTop( dst, visibleTileROI, area );
 }
 
 bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable )
@@ -1601,25 +1607,28 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( visibleTileROI & mp ) {
-        for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-            const uint8_t object = it->object;
-            const uint8_t index = it->index;
-            if ( !SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
-                const int icn = MP2::GetICNObject( object );
+    if ( !( visibleTileROI & mp ) )
+        return;
 
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
+    for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
+        const uint8_t object = it->object;
+        const uint8_t index = it->index;
+        if ( !SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
+            const int icn = MP2::GetICNObject( object );
 
-                // possible anime
-                if ( it->object & 1 ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
-                }
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
+
+            // possible anime
+            if ( it->object & 1 ) {
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
             }
         }
+    }
 
-        if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-            RedrawObjects( dst, false, area );
-            RedrawMonstersAndBoat( dst, visibleTileROI, false, area );
+    if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
+        RedrawObjects( dst, false, area );
+        if ( MP2::OBJ_MONSTER == GetObject() ) {
+            RedrawMonster( dst, visibleTileROI, area );
         }
     }
 }
@@ -2362,7 +2371,7 @@ int Maps::Tiles::GetFogDirections( int color ) const
     return around;
 }
 
-void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & gameArea ) const
+void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
 
@@ -2371,7 +2380,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
     // TIL::CLOF32
     if ( DIRECTION_ALL == around ) {
         const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-        gameArea.DrawTile( dst, sf, mp );
+        area.DrawTile( dst, sf, mp );
     }
     else {
         u32 index = 0;
@@ -2617,12 +2626,12 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         else {
             DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-            gameArea.DrawTile( dst, sf, mp );
+            area.DrawTile( dst, sf, mp );
             return;
         }
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
-        gameArea.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
+        area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
     }
 }
 
