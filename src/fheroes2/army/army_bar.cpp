@@ -36,18 +36,25 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
 {
     const Army * armyFrom = troopFrom.GetArmy();
     const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
+    const bool isSameTroopType = troopFrom.GetID() == troopTarget.GetID();
 
     if ( troopFrom.GetCount() <= 1 ) {
-        if ( saveLastTroop || troopTarget.isValid() ) {
+        // cross-army split logic - prevent splits where we'd lose the last stack of a hero
+        if ( saveLastTroop )
             return;
+        // join the two stacks if the troop types are same and the source stack is just 1 unit
+        else if ( isSameTroopType ) {
+            troopTarget.SetCount( troopTarget.GetCount() + troopFrom.GetCount() );
+            troopFrom.Reset();
         }
-
-        Army::SwapTroops( troopFrom, troopTarget );
-        isTroopInfoVisible = false;
+        // or else just move the source troop around
+        else if ( !troopTarget.isValid() ) {
+            Army::SwapTroops( troopFrom, troopTarget );
+            isTroopInfoVisible = false;
+        }
     }
     else {
         uint32_t freeSlots = 1 + armyTarget->Size() - armyTarget->GetCount();
-        const bool isSameTroopType = troopFrom.GetID() == troopTarget.GetID();
 
         if ( isSameTroopType )
             ++freeSlots;
