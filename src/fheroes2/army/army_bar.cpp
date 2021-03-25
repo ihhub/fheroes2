@@ -549,7 +549,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         LocalEvent & le = LocalEvent::Get();
         ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
-        bool isTroopPressValid = troopPress && troopPress->isValid();
+        const bool isTroopPressValid = troopPress && troopPress->isValid();
 
         if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
             RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
