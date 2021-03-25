@@ -134,6 +134,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
         player->SetRace( p.GetRace() );
         player->SetControl( p.GetControl() );
         player->SetFriends( p.GetFriends() );
+        player->SetName( p.GetName() );
         players.push_back( player );
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
@@ -153,6 +154,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
+        player.SetName( p->GetName() );
         savedPlayers.push_back( player );
     }
 }
