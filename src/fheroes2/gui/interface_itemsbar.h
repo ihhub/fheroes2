@@ -537,8 +537,11 @@ namespace Interface
                 }
                 // let ActionCrossItemBarDrag handle MousePressRelease instead
                 else if ( le.MouseClickRight( iterPos1.second ) ) {
+                    ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
                     other.ResetSelected();
-                    return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
+
+                    // has to return true to display selection reset
+                    return true;
                 }
                 else if ( le.MousePressRight( iterPos1.second ) ) {
                     return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );

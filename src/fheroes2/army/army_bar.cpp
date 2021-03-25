@@ -376,6 +376,8 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             // count this as an attempt to split to a troop type that is not the same
             if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) )
                 ResetSelected();
+            else if ( IsSplitHotkeyUsed( troop, _army ) )
+                return false;
             else
                 Army::SwapTroops( troop, *selectedTroop );
         }
@@ -439,45 +441,54 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
+    const bool isSameTroopType = destTroop.GetID() == selectedTroop.GetID();
+
+    // specifically for shift hotkey, handle this logic before anything else
+    // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-        if ( destTroop.isEmpty() || destTroop.GetID() == selectedTroop.GetID() ) {
+        if ( destTroop.isEmpty() || isSameTroopType ) {
             RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
             ResetSelected();
         }
         return false;
     }
 
-    // destination troop is empty, source army would be emptied by moving all
-    if ( destTroop.isEmpty() && selectedTroop.GetArmy()->SaveLastTroop() ) {
-        // move all but one units into the empty destination slot
-        destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
-        selectedTroop.SetCount( 1 );
-        return false;
-    }
-
-    // destination troop has units and both troops are the same creature type
-    if ( !destTroop.isEmpty() && destTroop.GetID() == selectedTroop.GetID() ) {
-        // prioritize split hotkeys, which does not involve the selected troop
-        if ( IsSplitHotkeyUsed( destTroop, _army ) ) {
+    if ( !destTroop.isEmpty() ) {
+        // try to do hotkey-based splitting (except for shift, handled above)
+        if ( IsSplitHotkeyUsed( destTroop, _army ) )
             return false;
+
+        if ( !isSameTroopType ) {
+            Army::SwapTroops( destTroop, selectedTroop );
         }
-        else if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
-            // move all but one units to destination
-            destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
-            // leave a single unit behind
+        // destination troop has units and both troops are the same creature type
+        else {
+            if ( selectedTroop.GetArmy()->SaveLastTroop() ) { // this is their army's only troop
+                // move all but one units to destination
+                destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() - 1 );
+                // leave a single unit behind
+                selectedTroop.SetCount( 1 );
+            }
+            else { // source has other troops
+                // move all troops to the destination slot
+                destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() );
+                // empty the source slot
+                selectedTroop.Reset();
+            }
+        }
+    }
+    else {
+        // destination troop is empty, source army would be emptied by moving all
+        if ( selectedTroop.GetArmy()->SaveLastTroop() ) {
+            // move all but one units into the empty destination slot
+            destTroop.Set( selectedTroop, selectedTroop.GetCount() - 1 );
             selectedTroop.SetCount( 1 );
         }
-        else { // source has other troops
-            // move all troops to the destination slot
-            destTroop.SetCount( destTroop.GetCount() + selectedTroop.GetCount() );
-            // empty the source slot
-            selectedTroop.Reset();
+        // no risk of emptying selected troop's army, swap the troops
+        else {
+            Army::SwapTroops( destTroop, selectedTroop );
         }
-        return false;
     }
-
-    // no risk of emptying selected troop's army, swap the troops
-    Army::SwapTroops( destTroop, selectedTroop );
 
     return false; // reset cursor
 }
@@ -552,7 +563,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & sele
         ResetSelected();
 
     // cross-army drag split
-    if ( !destTroop.isValid() && selectedTroop.isValid() ) {
+    if ( selectedTroop.isValid() && ( !destTroop.isValid() || selectedTroop.GetID() == destTroop.GetID() ) ) {
         RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
         return true;
     }
@@ -614,7 +625,7 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop &
         return true;
     }
 
-    return false;
+    return true;
 }
 
 bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*troop*/ )
