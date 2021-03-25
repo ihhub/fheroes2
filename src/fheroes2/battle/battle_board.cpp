@@ -167,12 +167,21 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
 uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 {
     if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int dx = std::abs( ( index1 % ARENAW ) - ( index2 % ARENAW ) );
-        const int dy = std::abs( ( index1 / ARENAW ) - ( index2 / ARENAW ) );
-        const int roundingUp = index1 / ARENAW % 2;
+        const int32_t x1 = index1 % ARENAW;
+        const int32_t y1 = index1 / ARENAW;
 
-        // hexagonal grid: you only move half as much on X axis when diagonal!
-        return static_cast<uint32_t>( dy + std::max( dx - ( dy + roundingUp ) / 2, 0 ) );
+        const int32_t x2 = index2 % ARENAW;
+        const int32_t y2 = index2 / ARENAW;
+
+        const int32_t du = y2 - y1;
+        const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+
+        if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
+            return std::max( std::abs( du ), std::abs( dv ) );
+        }
+        else {
+            return std::abs( du ) + std::abs( dv );
+        }
     }
 
     return 0;
