@@ -239,8 +239,6 @@ namespace Game
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
-    int NetworkHost( void );
-    int NetworkGuest( void );
     int DisplayLoadGameDialog();
     int CompleteCampaignScenario();
 

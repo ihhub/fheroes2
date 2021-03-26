@@ -20,7 +20,7 @@
 
 #include "ui_scrollbar.h"
 
-#include <assert.h>
+#include <cassert>
 
 namespace fheroes2
 {

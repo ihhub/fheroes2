@@ -22,9 +22,11 @@
 
 #include "buildinginfo.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"
@@ -509,7 +511,7 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
     LocalEvent & le = LocalEvent::Get();
 
     if ( le.MouseClickLeft( area ) ) {
-        if ( bcond == ALLOW_BUILD ) {
+        if ( bcond == LACK_RESOURCES || bcond == ALLOW_BUILD ) {
             fheroes2::ButtonRestorer exitRestorer( exitButton );
             return DialogBuyBuilding( true );
         }
@@ -526,7 +528,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
     std::string box1str = description;

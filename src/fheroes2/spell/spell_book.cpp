@@ -24,12 +24,13 @@
 #include <cassert>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "skill.h"
 #include "spell_book.h"
 #include "text.h"
@@ -50,7 +51,7 @@ namespace
 }
 
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, SpellBook::Filter only, const HeroBase & hero );
-void SpellBookRedrawSpells( const SpellStorage &, Rects &, size_t, s32, s32, const HeroBase & hero );
+void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero, bool isRight = false );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
 
 Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bool canCastSpell,
@@ -438,10 +439,10 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
 
     SpellBookRedrawMP( fheroes2::Point( info_rt.x, info_rt.y ), sp );
     SpellBookRedrawSpells( spells, coords, index, pt.x, pt.y, hero );
-    SpellBookRedrawSpells( spells, coords, index + spellsPerPage, pt.x + 220, pt.y, hero );
+    SpellBookRedrawSpells( spells, coords, index + spellsPerPage, pt.x + 220, pt.y, hero, true );
 }
 
-void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t index, s32 px, s32 py, const HeroBase & hero )
+void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero, bool isRight )
 {
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
 
@@ -449,19 +450,24 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
         if ( spells.size() <= index + i )
             return;
 
-        const int32_t ox = 80 + 80 * ( i & 1 );
-        const int32_t oy = 50 + 80 * ( i >> 1 );
+        const int32_t ox = 84 + 81 * ( i & 1 );
+        const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + isRight ) % 2 ) * 5;
 
         const Spell & spell = spells[i + index];
-        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-        const fheroes2::Rect rect( px + ox - icon.width() / 2, py + oy - icon.height() / 2, icon.width(), icon.height() + 10 );
-        fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
-
+        const std::string & spellName = spell.GetName();
         const uint32_t spellCost = spell.SpellPoint( &hero );
         const bool isAvailable = heroSpellPoints >= spellCost;
 
-        TextBox box( std::string( spell.GetName() ) + " [" + std::to_string( spellCost ) + "]", isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
-        box.Blit( px + ox - 40, py + oy + 25 );
+        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
+        int vertOffset = 49 - icon.height();
+        if ( vertOffset > 6 )
+            vertOffset = 6;
+        const fheroes2::Rect rect( px + ox - ( icon.width() + icon.width() % 2 ) / 2, py + oy - icon.height() - vertOffset + 2, icon.width(), icon.height() + 10 );
+        fheroes2::Blit( icon, fheroes2::Display::instance(), rect.x, rect.y );
+
+        TextBox box( spellName, Font::SMALL, 80 );
+        box.Set( spellName + ( box.row() == 1 ? '\n' : ' ' ) + '[' + std::to_string( spellCost ) + ']', isAvailable ? Font::SMALL : Font::GRAY_SMALL, 80 );
+        box.Blit( px + ox - 40, py + oy );
 
         coords.push_back( rect );
     }

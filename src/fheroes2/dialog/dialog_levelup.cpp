@@ -20,11 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
@@ -208,16 +209,10 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1, hero );
-            cursor.Show();
-            display.render();
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2, hero );
-            cursor.Show();
-            display.render();
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {

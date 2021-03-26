@@ -22,12 +22,13 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
 #include "settings.h"
@@ -43,7 +44,7 @@ void Castle::OpenTavern( void )
     const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
     Text text( tavern, Font::YELLOW_BIG );

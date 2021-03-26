@@ -112,7 +112,6 @@ namespace Dialog
     void Marketplace( bool fromTradingPost = false );
     void MakeGiftResource( void );
     int BuyBoat( bool enable );
-    void PuzzleMaps( void );
     void ThievesGuild( bool oracle );
     void GameInfo( void );
 
@@ -122,7 +121,7 @@ namespace Dialog
         explicit NonFixedFrameBox( int height = 0, int startYPos = -1, bool showButtons = false );
         virtual ~NonFixedFrameBox();
 
-        const fheroes2::Rect & GetArea( void )
+        const fheroes2::Rect & GetArea() const
         {
             return area;
         }

@@ -280,7 +280,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         board[85].SetObject( 2 );
 
         // bridge
-        board[49].SetObject( 1 );
         board[50].SetObject( 1 );
     }
     else
@@ -362,7 +361,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {
@@ -459,7 +458,7 @@ void Battle::Arena::Turns( void )
         }
 
         // set bridge passable
-        if ( bridge && bridge->isValid() && !bridge->isDown() )
+        if ( bridge )
             bridge->SetPassable( *current_troop );
 
         // turn troop
@@ -474,7 +473,7 @@ void Battle::Arena::Turns( void )
             current_color = current_troop->GetArmyColor();
 
             // set bridge passable
-            if ( bridge && bridge->isValid() && !bridge->isDown() )
+            if ( bridge )
                 bridge->SetPassable( *current_troop );
 
             // turn troop
@@ -604,19 +603,24 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     return result;
 }
 
-uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
-bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+bool Battle::Arena::hexIsAccessible( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
 }
 
-bool Battle::Arena::hexIsPassable( int32_t indexTo )
+bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+}
+
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

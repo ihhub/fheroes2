@@ -30,13 +30,13 @@
 #include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
-#include "localevent.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
 #include "ui_button.h"
 
 class Settings;
+class LocalEvent;
 
 namespace fheroes2
 {
@@ -158,7 +158,7 @@ namespace Battle
         void QueueEventProcessing( std::string & msg, const Point & offset );
 
     private:
-        typedef std::pair<const Unit *, Rect> UnitPos;
+        using UnitPos = std::pair<const Unit *, Rect>;
 
         void RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
 
@@ -339,7 +339,6 @@ namespace Battle
 
         s32 index_pos;
         s32 teleport_src;
-        Rect pocket_book;
         Rect main_tower;
 
         StatusListBox * listlog;

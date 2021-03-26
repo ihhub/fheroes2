@@ -22,6 +22,7 @@
 
 #include "battle_only.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "battle.h"
 #include "castle.h"
@@ -32,6 +33,7 @@
 #include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "race.h"
@@ -40,7 +42,10 @@
 #include "ui_window.h"
 #include "world.h"
 
-#define PRIMARY_MAX_VALUE 20
+namespace
+{
+    const uint32_t primaryMaxValue = 20;
+}
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
@@ -281,28 +286,28 @@ bool Battle::Only::ChangeSettings( void )
         if ( hero1 && allow1 ) {
             if ( le.MouseClickLeft( rtAttack1 ) ) {
                 u32 value = hero1->attack;
-                if ( Dialog::SelectCount( "Set Attack Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Attack Skill", 0, primaryMaxValue, value ) ) {
                     hero1->attack = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtDefense1 ) ) {
                 u32 value = hero1->defense;
-                if ( Dialog::SelectCount( "Set Defense Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Defense Skill", 0, primaryMaxValue, value ) ) {
                     hero1->defense = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtPower1 ) ) {
                 u32 value = hero1->power;
-                if ( Dialog::SelectCount( "Set Power Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Power Skill", 0, primaryMaxValue, value ) ) {
                     hero1->power = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtKnowledge1 ) ) {
                 u32 value = hero1->knowledge;
-                if ( Dialog::SelectCount( "Set Knowledge Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero1->knowledge = value;
                     redraw = true;
                 }
@@ -312,28 +317,28 @@ bool Battle::Only::ChangeSettings( void )
         if ( hero2 && allow2 ) {
             if ( le.MouseClickLeft( rtAttack2 ) ) {
                 u32 value = hero2->attack;
-                if ( Dialog::SelectCount( "Set Attack Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Attack Skill", 0, primaryMaxValue, value ) ) {
                     hero2->attack = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtDefense2 ) ) {
                 u32 value = hero2->defense;
-                if ( Dialog::SelectCount( "Set Defense Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Defense Skill", 0, primaryMaxValue, value ) ) {
                     hero2->defense = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtPower2 ) ) {
                 u32 value = hero2->power;
-                if ( Dialog::SelectCount( "Set Power Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Power Skill", 0, primaryMaxValue, value ) ) {
                     hero2->power = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtKnowledge2 ) ) {
                 u32 value = hero2->knowledge;
-                if ( Dialog::SelectCount( "Set Knowledge Skill", 0, PRIMARY_MAX_VALUE, value ) ) {
+                if ( Dialog::SelectCount( "Set Knowledge Skill", 0, primaryMaxValue, value ) ) {
                     hero2->knowledge = value;
                     redraw = true;
                 }

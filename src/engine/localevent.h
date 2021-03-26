@@ -287,6 +287,8 @@ private:
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+    void StopSounds();
+    void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
@@ -296,6 +298,7 @@ private:
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
     void TouchpadRMBEmulation();
+    void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -347,6 +350,7 @@ private:
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
+    uint16_t _musicVolume;
 
     enum
     {

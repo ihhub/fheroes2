@@ -21,7 +21,8 @@
  ***************************************************************************/
 
 #include "cursor.h"
-#include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "localevent.h"
 
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
@@ -79,7 +80,7 @@ bool Cursor::SetThemes( int name, bool force )
 }
 
 /* redraw cursor wrapper for local event */
-void Cursor::Redraw( s32 x, s32 y )
+void Cursor::Redraw( int32_t x, int32_t y )
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );

@@ -23,44 +23,26 @@
 #ifndef H2AGG_H
 #define H2AGG_H
 
+#include <cstdint>
+#include <string>
 #include <utility>
 #include <vector>
-
-#include "gamedefs.h"
-#include "icn.h"
 
 namespace AGG
 {
     bool Init( void );
     void Quit( void );
 
-    std::vector<u8> LoadBINFRM( const char * frm_file );
+    std::vector<uint8_t> LoadBINFRM( const char * frm_file );
 #ifdef WITH_TTF
-    u32 GetFontHeight( bool small );
+    uint32_t GetFontHeight( bool small );
 #endif
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
     void ResetMixer();
-}
 
-namespace fheroes2
-{
-    class Image;
-    class Sprite;
-
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
-
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
-        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
-
-        int32_t GetAbsoluteICNHeight( int icnId );
-    }
+    std::vector<uint8_t> ReadChunk( const std::string & key, bool ignoreExpansion = false );
 }
 
 #endif

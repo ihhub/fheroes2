@@ -169,73 +169,18 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\engine\agg_file.cpp" />
-    <ClCompile Include="..\engine\audio.cpp" />
-    <ClCompile Include="..\engine\audio_cdrom.cpp" />
-    <ClCompile Include="..\engine\audio_mixer.cpp" />
-    <ClCompile Include="..\engine\audio_music.cpp" />
-    <ClCompile Include="..\engine\dir.cpp" />
-    <ClCompile Include="..\engine\engine.cpp" />
-    <ClCompile Include="..\engine\error.cpp" />
-    <ClCompile Include="..\engine\font.cpp" />
-    <ClCompile Include="..\engine\image.cpp" />
-    <ClCompile Include="..\engine\image_tool.cpp" />
-    <ClCompile Include="..\engine\localevent.cpp" />
-    <ClCompile Include="..\engine\pal.cpp" />
-    <ClCompile Include="..\engine\rand.cpp" />
+    <ClCompile Include="..\engine\logging.cpp" />
     <ClCompile Include="..\engine\rect.cpp" />
-    <ClCompile Include="..\engine\screen.cpp" />
-    <ClCompile Include="..\engine\sdlnet.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
-    <ClCompile Include="..\engine\smk_decoder.cpp" />
-    <ClCompile Include="..\engine\system.cpp" />
-    <ClCompile Include="..\engine\thread.cpp" />
-    <ClCompile Include="..\engine\timing.cpp" />
-    <ClCompile Include="..\engine\tinyconfig.cpp" />
-    <ClCompile Include="..\engine\tools.cpp" />
-    <ClCompile Include="..\engine\translations.cpp" />
-    <ClCompile Include="..\engine\xmi2mid.cpp" />
-    <ClCompile Include="..\engine\zzlib.cpp" />
     <ClCompile Include="82m2wav.cpp" />
-    <ClCompile Include="..\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine\agg_file.h" />
-    <ClInclude Include="..\engine\audio.h" />
-    <ClInclude Include="..\engine\audio_cdrom.h" />
-    <ClInclude Include="..\engine\audio_mixer.h" />
-    <ClInclude Include="..\engine\audio_music.h" />
-    <ClInclude Include="..\engine\dir.h" />
-    <ClInclude Include="..\engine\engine.h" />
-    <ClInclude Include="..\engine\error.h" />
-    <ClInclude Include="..\engine\font.h" />
-    <ClInclude Include="..\engine\image.h" />
-    <ClInclude Include="..\engine\image_tool.h" />
-    <ClInclude Include="..\engine\localevent.h" />
+    <ClInclude Include="..\engine\endian_h2.h" />
+    <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
-    <ClInclude Include="..\engine\pal.h" />
-    <ClInclude Include="..\engine\palette_h2.h" />
-    <ClInclude Include="..\engine\pathfinding.h" />
-    <ClInclude Include="..\engine\rand.h" />
     <ClInclude Include="..\engine\rect.h" />
-    <ClInclude Include="..\engine\screen.h" />
-    <ClInclude Include="..\engine\sdlnet.h" />
     <ClInclude Include="..\engine\serialize.h" />
-    <ClInclude Include="..\engine\smk_decoder.h" />
-    <ClInclude Include="..\engine\system.h" />
-    <ClInclude Include="..\engine\thread.h" />
-    <ClInclude Include="..\engine\timing.h" />
-    <ClInclude Include="..\engine\tinyconfig.h" />
-    <ClInclude Include="..\engine\tools.h" />
-    <ClInclude Include="..\engine\translations.h" />
     <ClInclude Include="..\engine\types.h" />
-    <ClInclude Include="..\engine\zzlib.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smacker.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_bitstream.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_hufftree.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

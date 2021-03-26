@@ -55,7 +55,7 @@ namespace Rand
         return *it;
     }
 
-    typedef std::pair<s32, u32> ValuePercent;
+    using ValuePercent = std::pair<int32_t, uint32_t>;
 
     class Queue : private std::vector<ValuePercent>
     {

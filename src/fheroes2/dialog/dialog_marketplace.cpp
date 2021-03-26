@@ -23,18 +23,101 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
-#include "marketplace.h"
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
 #include "world.h"
+
+namespace
+{
+    enum
+    {
+        // change uncostly to costly
+        COSTLY_UNCOSTLY1 = 5,
+        COSTLY_UNCOSTLY2 = 4,
+        COSTLY_UNCOSTLY3 = 3,
+        COSTLY_UNCOSTLY4 = 2,
+        COSTLY_UNCOSTLY5 = 2,
+        COSTLY_UNCOSTLY6 = 2,
+        COSTLY_UNCOSTLY7 = 2,
+        COSTLY_UNCOSTLY8 = 2,
+        COSTLY_UNCOSTLY9 = 1,
+
+        // change costly to uncostly
+        UNCOSTLY_COSTLY1 = 20,
+        UNCOSTLY_COSTLY2 = 14,
+        UNCOSTLY_COSTLY3 = 10,
+        UNCOSTLY_COSTLY4 = 8,
+        UNCOSTLY_COSTLY5 = 7,
+        UNCOSTLY_COSTLY6 = 6,
+        UNCOSTLY_COSTLY7 = 5,
+        UNCOSTLY_COSTLY8 = 5,
+        UNCOSTLY_COSTLY9 = 4,
+
+        // change interchangeable
+        COSTLY_COSTLY1 = 10,
+        COSTLY_COSTLY2 = 7,
+        COSTLY_COSTLY3 = 5,
+        COSTLY_COSTLY4 = 4,
+        COSTLY_COSTLY5 = 4,
+        COSTLY_COSTLY6 = 3,
+        COSTLY_COSTLY7 = 3,
+        COSTLY_COSTLY8 = 3,
+        COSTLY_COSTLY9 = 2,
+
+        // sale uncostly
+        SALE_UNCOSTLY1 = 25,
+        SALE_UNCOSTLY2 = 37,
+        SALE_UNCOSTLY3 = 50,
+        SALE_UNCOSTLY4 = 62,
+        SALE_UNCOSTLY5 = 74,
+        SALE_UNCOSTLY6 = 87,
+        SALE_UNCOSTLY7 = 100,
+        SALE_UNCOSTLY8 = 112,
+        SALE_UNCOSTLY9 = 124,
+
+        // sale costly
+        SALE_COSTLY1 = 50,
+        SALE_COSTLY2 = 74,
+        SALE_COSTLY3 = 100,
+        SALE_COSTLY4 = 124,
+        SALE_COSTLY5 = 149,
+        SALE_COSTLY6 = 175,
+        SALE_COSTLY7 = 200,
+        SALE_COSTLY8 = 224,
+        SALE_COSTLY9 = 249,
+
+        // buy uncostly
+        BUY_UNCOSTLY1 = 2500,
+        BUY_UNCOSTLY2 = 1667,
+        BUY_UNCOSTLY3 = 1250,
+        BUY_UNCOSTLY4 = 1000,
+        BUY_UNCOSTLY5 = 834,
+        BUY_UNCOSTLY6 = 715,
+        BUY_UNCOSTLY7 = 625,
+        BUY_UNCOSTLY8 = 556,
+        BUY_UNCOSTLY9 = 500,
+
+        // buy costly
+        BUY_COSTLY1 = 5000,
+        BUY_COSTLY2 = 3334,
+        BUY_COSTLY3 = 2500,
+        BUY_COSTLY4 = 2000,
+        BUY_COSTLY5 = 1667,
+        BUY_COSTLY6 = 1429,
+        BUY_COSTLY7 = 1250,
+        BUY_COSTLY8 = 1112,
+        BUY_COSTLY9 = 1000
+    };
+}
 
 void RedrawFromResource( const fheroes2::Point &, const Funds & );
 void RedrawToResource( const fheroes2::Point &, bool showcost, bool tradingPost, int from_resource = 0 );
@@ -44,7 +127,7 @@ u32 GetTradeCosts( int rs_from, int rs_to, bool tradingPost );
 class TradeWindowGUI
 {
 public:
-    TradeWindowGUI( const fheroes2::Rect & rt )
+    explicit TradeWindowGUI( const fheroes2::Rect & rt )
         : pos_rt( rt )
         , back( fheroes2::Display::instance() )
         , tradpost( Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST )

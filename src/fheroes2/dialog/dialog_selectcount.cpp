@@ -20,10 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
@@ -120,13 +121,13 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp( pos ) || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn( pos ) || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }
@@ -388,15 +389,11 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     const uint32_t maximumAcceptedValue = savelastTroop ? redistributeMax : redistributeMax - 1;
 
     const fheroes2::Point minMaxButtonOffset( pos.x + 165, pos.y + 30 );
-    fheroes2::ButtonSprite buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y );
-    fheroes2::ButtonSprite buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
+    fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     const Rect buttonArea( 5, 0, 61, 25 );
-    buttonMax.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
-                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
-    buttonMin.setSprite( fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 0 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ),
-                         fheroes2::Crop( fheroes2::AGG::GetICN( ICN::BTNMIN, 1 ), buttonArea.x, buttonArea.y, buttonArea.w, buttonArea.h ) );
-
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
 
     LocalEvent & le = LocalEvent::Get();

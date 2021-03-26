@@ -20,15 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -102,6 +104,8 @@ int Dialog::SystemOptions( void )
     bool redraw = false;
     bool saveConfig = false;
 
+    const bool externalMusicSupported = System::IsDirectory( "music" );
+
     // dialog menu loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -130,6 +134,8 @@ int Dialog::SystemOptions( void )
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
+                ++type;
+            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
                 ++type;
             // CD music is currently not implemented correctly even on SDL1; remove this when done
             if ( type == MUSIC_CDROM )
@@ -363,7 +369,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else {
         fheroes2::Blit( sprite8, display, rect8.x, rect8.y );
-        fheroes2::Blit( sprite81, 13, 13, display, rect8.x + 13, rect8.y + 13, 38, 38 );
+        fheroes2::Blit( sprite81, 14, 14, display, rect8.x + 14, rect8.y + 14, 37, 37 );
         str = _( "Show" );
     }
     text.Set( str );

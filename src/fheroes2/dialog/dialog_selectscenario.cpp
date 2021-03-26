@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include "dialog_selectscenario.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "maps.h"
 #include "settings.h"

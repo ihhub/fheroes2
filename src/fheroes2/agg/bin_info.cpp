@@ -32,7 +32,6 @@ namespace Bin_Info
     class MonsterAnimCache
     {
     public:
-        AnimationSequence createSequence( const MonsterAnimInfo & info, int anim ) const;
         AnimationReference createAnimReference( int monsterID ) const;
         MonsterAnimInfo getAnimInfo( int monsterID );
 
@@ -357,11 +356,6 @@ namespace Bin_Info
                 return id;
         }
         return angles.size() - 1;
-    }
-
-    AnimationSequence MonsterAnimCache::createSequence( const MonsterAnimInfo & info, int animID ) const
-    {
-        return AnimationSequence( info.animationFrames.at( animID ) );
     }
 
     AnimationReference MonsterAnimCache::createAnimReference( int monsterID ) const

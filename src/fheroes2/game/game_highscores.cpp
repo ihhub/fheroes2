@@ -28,12 +28,14 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_over.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "logging.h"
 #include "mus.h"
 #include "system.h"

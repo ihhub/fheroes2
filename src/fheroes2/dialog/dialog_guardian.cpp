@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "army_troop.h"
 #include "cursor.h"
@@ -28,6 +28,7 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_window.h"

@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 
 #include "game.h"
 #include "logging.h"
@@ -89,7 +89,12 @@ Player::Player( int col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
 {
-    name = Color::String( color );
+    name = GetDefaultName();
+}
+
+std::string Player::GetDefaultName() const
+{
+    return Color::String( color );
 }
 
 const std::string & Player::GetName( void ) const

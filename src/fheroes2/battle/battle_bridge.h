@@ -42,11 +42,11 @@ namespace Battle
 
         bool AllowUp( void ) const;
         bool NeedDown( const Unit &, s32 ) const;
-        bool isPassable( int ) const;
+        bool isPassable( const Unit & ) const;
         bool isValid( void ) const;
         bool isDestroy( void ) const;
         bool isDown( void ) const;
-        bool isDeadBodyOnABridge( void ) const;
+        bool isBridgeOccupied( void ) const;
         bool isMoatCell( int cellId ) const;
 
     private:

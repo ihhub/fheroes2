@@ -22,7 +22,7 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -496,11 +497,15 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
-    for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
+    const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
+    for ( int i = 0; i < VisibleItemCount(); ++i ) {
+        fheroes2::Copy( back, 0, 0, display, dst.x + 30, dst.y + 17 + i * ( back.height() + 4 ), back.width(), back.height() );
         // fix bar
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 28, 12, display, dst.x + 28, dst.y + 12 + ii * ( back.height() + 4 ), 599, 6 );
+        fheroes2::Copy( overback, 30, 12, display, dst.x + 29, dst.y + 12 + i * ( back.height() + 4 ), 595, 6 );
     }
+
+    // Copy one vertical line in case of previous army selection
+    fheroes2::Copy( overback, 29, 12, display, dst.x + 29, dst.y + 12, 1, 357 );
 }
 
 std::string CapturedExtInfoString( int res, int color, const Funds & funds )

@@ -25,8 +25,6 @@
 
 #include "dir.h"
 
-
-
 namespace System
 {
     int SetEnvironment( const char * name, const char * value );

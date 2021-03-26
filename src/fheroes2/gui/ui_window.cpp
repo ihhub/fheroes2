@@ -19,7 +19,8 @@
  ***************************************************************************/
 
 #include "ui_window.h"
-#include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "settings.h"
 
 namespace

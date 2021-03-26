@@ -20,13 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <ctime>
-#include <sstream>
 
 #include "game.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "localevent.h"
 #include "logging.h"
 #include "settings.h"
@@ -316,5 +313,4 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
         conf.setFullScreen( fheroes2::engine().isFullScreen() );
         conf.Save( "fheroes2.cfg" );
     }
-    // DEBUG_LOG( DBG_GAME, DBG_INFO, "save: " << stream.str() );
 }

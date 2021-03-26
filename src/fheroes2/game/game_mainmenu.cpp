@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -28,6 +29,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "mus.h"
@@ -35,12 +37,6 @@
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
-
-#define NEWGAME_DEFAULT 1
-#define LOADGAME_DEFAULT 5
-#define HIGHSCORES_DEFAULT 9
-#define CREDITS_DEFAULT 13
-#define QUIT_DEFAULT 17
 
 namespace
 {
@@ -50,6 +46,15 @@ namespace
         fheroes2::Button & button;
         bool isOver;
         bool wasOver;
+    };
+
+    enum
+    {
+        NEWGAME_DEFAULT = 1,
+        LOADGAME_DEFAULT = 5,
+        HIGHSCORES_DEFAULT = 9,
+        CREDITS_DEFAULT = 13,
+        QUIT_DEFAULT = 17
     };
 }
 
@@ -136,6 +141,9 @@ int Game::MainMenu( bool isFirstGameRun )
                 // if ( conf.ExtGameUseFade() )
                 //    display.Fade();
                 break;
+            }
+            else {
+                continue;
             }
         }
 

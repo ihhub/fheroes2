@@ -36,9 +36,9 @@ namespace Interface
     class ItemsBar
     {
     protected:
-        typedef std::list<Item *> Items;
+        using Items = std::list<Item *>;
         typedef typename std::list<Item *>::iterator ItemsIterator;
-        typedef std::pair<ItemsIterator, Rect> ItemIterPos;
+        using ItemIterPos = std::pair<ItemsIterator, Rect>;
 
         Items items;
 

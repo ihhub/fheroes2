@@ -21,11 +21,13 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -37,7 +39,7 @@
 #include "ui_window.h"
 #include "world.h"
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
 namespace
@@ -48,7 +50,6 @@ namespace
 }
 
 void DialogSpellFailed( const Spell & spell );
-void DialogNotAvailable();
 
 bool ActionSpellViewMines( const Heroes & hero );
 bool ActionSpellViewResources( const Heroes & hero );
@@ -303,45 +304,40 @@ void DialogSpellFailed( const Spell & spell )
     Dialog::Message( "", str, Font::BIG, Dialog::OK );
 }
 
-void DialogNotAvailable( void )
-{
-    Dialog::Message( "", "Not available for current version", Font::BIG, Dialog::OK );
-}
-
 bool ActionSpellViewMines( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewResources( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewArtifacts( Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewTowns( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewHeroes( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewAll( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellIdentifyHero( const Heroes & hero )
@@ -566,57 +562,55 @@ bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
     const MapsIndexes & monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
-
-    if ( monsters.size() ) {
-        for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
-            const Maps::Tiles & tile = world.GetTiles( *it );
-            const MapMonster * map_troop = NULL;
-            if ( tile.GetObject() == MP2::OBJ_MONSTER )
-                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-
-            Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-            JoinCount join = Army::GetJoinSolution( hero, tile, troop );
-
-            Funds cost;
-            std::string hdr, msg;
-
-            hdr = std::string( "%{count} " ) + StringLower( troop.GetPluralName( join.second ) );
-            StringReplace( hdr, "%{count}", troop.GetCount() );
-
-            switch ( join.first ) {
-            default:
-                msg = _( "I fear these creatures are in the mood for a fight." );
-                break;
-
-            case JOIN_FREE:
-                msg = _( "The creatures are willing to join us!" );
-                break;
-
-            case JOIN_COST:
-                if ( join.second == troop.GetCount() )
-                    msg = _( "All the creatures will join us..." );
-                else {
-                    msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
-                    StringReplace( msg, "%{count}", join.second );
-                }
-                msg.append( "\n" );
-                msg.append( "\n for a fee of %{gold} gold." );
-                StringReplace( msg, "%{gold}", troop.GetCost().gold );
-                break;
-
-            case JOIN_FLEE:
-                msg = _( "These weak creatures will surely flee before us." );
-                break;
-            }
-
-            Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
-        }
-    }
-    else {
+    if ( monsters.empty() ) {
         std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
         StringReplace( msg, "%{count}", dist );
         Dialog::Message( "", msg, Font::BIG, Dialog::OK );
         return false;
+    }
+
+    for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
+        const Maps::Tiles & tile = world.GetTiles( *it );
+        const MapMonster * map_troop = NULL;
+        if ( tile.GetObject() == MP2::OBJ_MONSTER )
+            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
+        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+
+        std::string hdr;
+        std::string msg;
+
+        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.second );
+        StringReplace( hdr, "%{count}", troop.GetCount() );
+
+        switch ( join.first ) {
+        default:
+            msg = _( "I fear these creatures are in the mood for a fight." );
+            break;
+
+        case JOIN_FREE:
+            msg = _( "The creatures are willing to join us!" );
+            break;
+
+        case JOIN_COST:
+            if ( join.second == troop.GetCount() )
+                msg = _( "All the creatures will join us..." );
+            else {
+                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
+                StringReplace( msg, "%{count}", join.second );
+            }
+            msg.append( "\n" );
+            msg.append( "\n for a fee of %{gold} gold." );
+            StringReplace( msg, "%{gold}", troop.GetCost().gold );
+            break;
+
+        case JOIN_FLEE:
+            msg = _( "These weak creatures will surely flee before us." );
+            break;
+        }
+
+        Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
     }
 
     hero.SetModes( Heroes::VISIONS );

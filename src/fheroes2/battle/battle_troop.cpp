@@ -24,13 +24,12 @@
 #include <cstring>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
 #include "bin_info.h"
-#include "engine.h"
 #include "game.h"
 #include "game_static.h"
 #include "heroes.h"
@@ -358,7 +357,7 @@ bool Battle::Unit::canReach( int index ) const
 
     const bool isIndirectAttack = isReflect() == Board::isNegativeDistance( GetHeadIndex(), index );
     const int from = ( isWide() && isIndirectAttack ) ? GetTailIndex() : GetHeadIndex();
-    return static_cast<uint32_t>( Board::GetDistance( from, index ) ) <= GetSpeed( true );
+    return Board::GetDistance( from, index ) <= GetSpeed( true );
 }
 
 bool Battle::Unit::canReach( const Unit & unit ) const
@@ -468,6 +467,11 @@ u32 Battle::Unit::GetSpeed( bool skip_standing_check ) const
     return speed;
 }
 
+uint32_t Battle::Unit::GetMoveRange() const
+{
+    return isFlying() ? ARENASIZE : GetSpeed( false );
+}
+
 uint32_t Battle::Unit::CalculateRetaliationDamage( uint32_t damageTaken ) const
 {
     // Check if there will be retaliation in the first place
@@ -520,7 +524,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
     }
 
     // after blind
-    if ( Modes( SP_BLIND ) )
+    if ( blindanswer )
         dmg /= 2;
 
     // stone cap.
@@ -726,7 +730,7 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
 
     // blind
     if ( Modes( SP_BLIND ) ) {
-        blindanswer = true;
+        ResetBlind();
     }
 
     return killed;
@@ -801,6 +805,65 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
     }
 
     return true;
+}
+
+bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
+{
+    switch ( spell() ) {
+    case Spell::BLESS:
+    case Spell::MASSBLESS:
+        return Modes( SP_BLESS );
+
+    case Spell::BLOODLUST:
+        return Modes( SP_BLOODLUST );
+
+    case Spell::CURSE:
+    case Spell::MASSCURSE:
+        return Modes( SP_CURSE );
+
+    case Spell::HASTE:
+    case Spell::MASSHASTE:
+        return Modes( SP_HASTE );
+
+    case Spell::SHIELD:
+    case Spell::MASSSHIELD:
+        return Modes( SP_SHIELD );
+
+    case Spell::SLOW:
+    case Spell::MASSSLOW:
+        return Modes( SP_SLOW );
+
+    case Spell::STONESKIN:
+    case Spell::STEELSKIN:
+        return Modes( SP_STONESKIN | SP_STEELSKIN );
+
+    case Spell::BLIND:
+    case Spell::PARALYZE:
+    case Spell::STONE:
+        return Modes( SP_BLIND | SP_PARALYZE | SP_STONE );
+
+    case Spell::DRAGONSLAYER:
+        return Modes( SP_DRAGONSLAYER );
+
+    case Spell::ANTIMAGIC:
+        return Modes( SP_ANTIMAGIC );
+
+    case Spell::BERSERKER:
+        return Modes( SP_BERSERKER );
+
+    case Spell::HYPNOTIZE:
+        return Modes( SP_HYPNOTIZE );
+
+    case Spell::MIRRORIMAGE:
+        return Modes( CAP_MIRROROWNER );
+
+    case Spell::DISRUPTINGRAY:
+        return GetDefense() < spell.ExtraValue();
+
+    default:
+        break;
+    }
+    return false;
 }
 
 bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, TargetInfo & target )
@@ -896,14 +959,7 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    if ( !Modes( IS_PARALYZE_MAGIC ) ) {
-        if ( Modes( SP_BLIND ) )
-            return blindanswer;
-        else if ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) )
-            return true;
-    }
-
-    return false;
+    return !Modes( IS_PARALYZE_MAGIC ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )
@@ -952,6 +1008,11 @@ void Battle::Unit::ResetBlind( void )
     }
 }
 
+void Battle::Unit::SetBlindAnswer( bool value )
+{
+    blindanswer = value;
+}
+
 u32 Battle::Unit::GetAttack( void ) const
 {
     u32 res = ArmyTroop::GetAttack();
@@ -978,7 +1039,8 @@ u32 Battle::Unit::GetDefense( void ) const
     // disrupting ray accumulate effect
     if ( disruptingray ) {
         const u32 step = disruptingray * Spell( Spell::DISRUPTINGRAY ).ExtraValue();
-        if ( step > res )
+
+        if ( step >= res )
             res = 1;
         else
             res -= step;
@@ -986,15 +1048,15 @@ u32 Battle::Unit::GetDefense( void ) const
 
     // check moat
     const Castle * castle = Arena::GetCastle();
-    if ( castle && castle->isBuild( BUILD_MOAT ) ) {
-        const Bridge * bridge = Arena::GetBridge();
-        const bool isOnBridgeCell = bridge && !bridge->isDown() && ( bridge->isMoatCell( GetHeadIndex() ) || bridge->isMoatCell( GetTailIndex() ) );
-        if ( isOnBridgeCell || Board::isMoatIndex( GetHeadIndex() ) || Board::isMoatIndex( GetTailIndex() ) )
-            res -= GameStatic::GetBattleMoatReduceDefense();
-    }
 
-    if ( res < 1 ) // cannot be less than 1
-        res = 1;
+    if ( castle && castle->isBuild( BUILD_MOAT ) && ( Board::isMoatIndex( GetHeadIndex(), *this ) || Board::isMoatIndex( GetTailIndex(), *this ) ) ) {
+        const uint32_t step = GameStatic::GetBattleMoatReduceDefense();
+
+        if ( step >= res )
+            res = 1;
+        else
+            res -= step;
+    }
 
     return res;
 }
@@ -1052,19 +1114,25 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     // force big priority on mirror images as they get destroyed in 1 hit
     if ( attacker.Modes( CAP_MIRRORIMAGE ) )
         attackerThreat *= 10;
-    // Ignore disabled units
-    if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) )
-        attackerThreat = 0;
+
     // Negative value of units that changed the side
-    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) )
+    if ( attacker.Modes( SP_BERSERKER ) || attacker.Modes( SP_HYPNOTIZE ) ) {
         attackerThreat *= -1;
+    }
+    // Otherwise heavy penalty for hiting our own units
+    else if ( attacker.GetArmyColor() == defender.GetArmyColor() ) {
+        attackerThreat *= -2;
+    }
+    // Finally ignore disabled units (if belong to the enemy)
+    else if ( attacker.Modes( SP_BLIND ) || attacker.Modes( IS_PARALYZE_MAGIC ) ) {
+        attackerThreat = 0;
+    }
 
     // Avoid effectiveness scaling if we're dealing with archers
     if ( !attackerIsArchers || defender.isArchers() )
         attackerThreat *= attackerPowerLost;
 
-    const int score = static_cast<int>( attackerThreat * 10 );
-    return ( score == 0 ) ? 1 : score;
+    return static_cast<int>( attackerThreat * 100 );
 }
 
 u32 Battle::Unit::GetHitPoints( void ) const

@@ -31,6 +31,7 @@
 #include "system.h"
 #include "text.h"
 #include "tinyconfig.h"
+#include "version.h"
 
 #define DEFAULT_PORT 5154
 

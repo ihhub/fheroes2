@@ -21,12 +21,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
-#include "assert.h"
 #include "battle.h"
 #include "castle.h"
 #include "cursor.h"
@@ -1930,7 +1930,7 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Cursor & cursor = Cursor::Get();
+            const Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 

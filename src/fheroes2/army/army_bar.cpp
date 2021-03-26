@@ -21,12 +21,13 @@
  ***************************************************************************/
 
 #include "army_bar.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
+#include "icn.h"
 #include "race.h"
 #include "text.h"
 #include "world.h"
@@ -263,7 +264,6 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
 
 void ArmyBar::ResetSelected( void )
 {
-    Cursor::Get().Hide();
     spcursor.hide();
     _isTroopInfoVisible = true;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
@@ -278,7 +278,7 @@ void ArmyBar::Redraw( fheroes2::Image & dstsf )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 {
-    if ( troop.isValid() && LocalEvent::Get().MouseClickMiddle() ) {
+    if ( troop.isValid() && !read_only && LocalEvent::Get().MouseClickMiddle() ) {
         RedistributeTroopByOne( troop, _army );
         return true;
     }
@@ -291,14 +291,18 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
             StringReplace( msg, "%{name}", troop.GetName() );
         }
         else if ( !troop.isValid() ) {
-            msg = _( "Move or right click to redistribute %{name}" );
-            StringReplace( msg, "%{name}", troop2->GetName() );
+            if ( !read_only ) {
+                msg = _( "Move or right click to redistribute %{name}" );
+                StringReplace( msg, "%{name}", troop2->GetName() );
+            }
         }
         else if ( troop.GetID() == troop2->GetID() ) {
-            msg = _( "Combine %{name} armies" );
-            StringReplace( msg, "%{name}", troop.GetName() );
+            if ( !read_only ) {
+                msg = _( "Combine %{name} armies" );
+                StringReplace( msg, "%{name}", troop.GetName() );
+            }
         }
-        else {
+        else if ( !read_only ) {
             msg = _( "Exchange %{name2} with %{name}" );
             StringReplace( msg, "%{name}", troop.GetName() );
             StringReplace( msg, "%{name2}", troop2->GetName() );
@@ -342,6 +346,10 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
 bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 {
     if ( isSelected() ) {
+        if ( read_only ) {
+            return false; // reset cursor
+        }
+
         ArmyTroop * selectedTroop = GetSelectedItem();
         if ( selectedTroop && selectedTroop->isValid() && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
             // redistribute when clicked troop is empty or is the same one as the selected troop
@@ -465,7 +473,7 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 {
     if ( troop.isValid() && !read_only && IsSplitHotkeyUsed( troop, _army ) ) {
         ResetSelected();
-        return false;
+        return true;
     }
 
     const ArmyTroop * troop2 = GetSelectedItem();
@@ -505,16 +513,18 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
 {
-    // drag drop - redistribute troops
-    LocalEvent & le = LocalEvent::Get();
-    ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
+    if ( !read_only ) {
+        // drag drop - redistribute troops
+        LocalEvent & le = LocalEvent::Get();
+        ArmyTroop * troopPress = GetItem( le.GetMousePressLeft() );
 
-    if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
-        RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
-        le.ResetPressLeft();
+        if ( !troop.isValid() && troopPress && troopPress->isValid() ) {
+            RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
+            le.ResetPressLeft();
 
-        if ( isSelected() )
-            ResetSelected();
+            if ( isSelected() )
+                ResetSelected();
+        }
     }
 
     _isTroopInfoVisible = true;
@@ -550,6 +560,10 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 {
+    if ( read_only ) {
+        return false;
+    }
+
     // try to redistribute troops if we have a selected troop
     if ( !isSelected() )
         return false;

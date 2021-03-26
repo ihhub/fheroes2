@@ -48,7 +48,7 @@ namespace Cdrom
 }
 #endif
 
-bool SDL::Init( const u32 system )
+bool SDL::Init( const uint32_t system )
 {
     if ( 0 > SDL_Init( system ) ) {
         ERROR_LOG( SDL_GetError() );
@@ -105,7 +105,7 @@ void SDL::Quit()
     SDL_Quit();
 }
 
-bool SDL::SubSystem( const u32 system )
+bool SDL::SubSystem( const uint32_t system )
 {
     return system & SDL_WasInit( system );
 }

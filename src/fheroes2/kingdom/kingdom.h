@@ -26,7 +26,6 @@
 #include <vector>
 
 #include "castle.h"
-#include "heroes.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
 #include "pairs.h"

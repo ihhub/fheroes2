@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include "interface_buttons.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
