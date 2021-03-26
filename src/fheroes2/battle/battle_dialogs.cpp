@@ -718,8 +718,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     fheroes2::Rect pos_rt( ( display.width() - dialog.width() + 16 ) / 2, ( display.height() - dialog.height() + 16 ) / 2, dialog.width(), dialog.height() );
 
-    fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
-
     fheroes2::Blit( dialog, display, pos_rt.x, pos_rt.y );
 
     const int icn = isEvilInterface ? ICN::SURRENDE : ICN::SURRENDR;
@@ -753,11 +751,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
             btnMarket.disable();
         }
         else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", cost - kingdom.GetFunds().Get( Resource::GOLD ) );
-            const Text text( msg, Font::SMALL );
-            const fheroes2::Rect marketRect = btnAccept.area();
-            text.Blit( marketRect.x + ( marketRect.width - text.w() ) / 2, marketRect.y - 15 );
             btnMarket.draw();
         }
     }
@@ -767,6 +760,17 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     btnAccept.draw();
     btnDecline.draw();
+
+    auto drawGoldMsg = [cost, &kingdom, &btnAccept]() {
+        std::string str = _( "Not enough gold (%{gold})" );
+
+        StringReplace( str, "%{gold}", cost - kingdom.GetFunds().Get( Resource::GOLD ) );
+
+        const Text text( str, Font::SMALL );
+        const fheroes2::Rect rect = btnAccept.area();
+
+        text.Blit( rect.x + ( rect.width - text.w() ) / 2, rect.y - 15 );
+    };
 
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( icn, 4 );
     fheroes2::Blit( window, display, pos_rt.x + 55, pos_rt.y + 32 );
@@ -782,10 +786,17 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     TextBox box( str, Font::BIG, 275 );
     box.Blit( pos_rt.x + 175, pos_rt.y + 50 );
-    bool result = false;
+
+    fheroes2::ImageRestorer back( display, pos_rt.x, pos_rt.y, pos_rt.width, pos_rt.height );
+
+    if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
+        drawGoldMsg();
+    }
 
     cursor.Show();
     display.render();
+
+    bool result = false;
 
     while ( le.HandleEvents() && !result ) {
         if ( btnAccept.isEnabled() )
@@ -801,11 +812,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarket.area() ) ) {
             Dialog::Marketplace( kingdom, false );
 
+            back.restore();
+
             if ( kingdom.AllowPayment( payment_t( Resource::GOLD, cost ) ) ) {
                 btnAccept.enable();
             }
             else {
                 btnAccept.disable();
+
+                drawGoldMsg();
             }
 
             btnAccept.draw();
