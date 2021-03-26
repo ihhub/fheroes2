@@ -423,7 +423,7 @@ namespace
 
         virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == nullptr || colorIds.size() != 256 )
+            if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
                 return;
 
             uint32_t _palette32Bit[256u];
@@ -433,8 +433,7 @@ namespace
                 _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
             }
 
-            if ( _texBuffer != nullptr )
-                memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
+            memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
         virtual bool isMouseCursorActive() const override
