@@ -1290,7 +1290,10 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         if ( _numTouches == 1 ) {
             _firstFingerId = event.fingerId;
             _touchTimer.reset();
+            _initialTouchPositionX = event.x;
+            _initialTouchPositionY = event.y;
             _touchRmbEmulated = false;
+            _touchRmbMoved = false;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
@@ -1298,6 +1301,11 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     }
 
     if ( _firstFingerId == event.fingerId ) {
+        if ( !_touchRmbEmulated && !_touchRmbMoved && ( ( std::abs(_initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) ||
+            ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
+            _touchRmbMoved = true;
+        }
+
         const fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
@@ -1345,7 +1353,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
 void LocalEvent::TouchpadRMBEmulation()
 {
-    if ( _numTouches == 1 && !_touchRmbEmulated ) {
+    if ( _numTouches == 1 && !_touchRmbEmulated && !_touchRmbMoved ) {
         const uint64_t touchDelay = _touchTimer.getMs();
         if ( touchDelay > TOUCH_RMB_DELAY ) {
             _touchRmbEmulated = true;

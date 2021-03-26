@@ -363,8 +363,10 @@ private:
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     // bigger value correndsponds to faster pointer movement speed with bigger stick axis values
     const double CONTROLLER_AXIS_SPEEDUP = 1.03;
-    // touch delay in ms before rmb press is emulated
+    // touch delay in ms before right mouse button press is emulated
     const uint64_t TOUCH_RMB_DELAY = 750;
+    // cancel rmb emulation event if cursor moved more than TOUCH_RMB_DEADZONE since initial touch down
+    const float TOUCH_RMB_DEADZONE = 0.01F;
 
     SDL_GameController * _gameController = nullptr;
     SDL_FingerID _firstFingerId = 0;
@@ -377,7 +379,10 @@ private:
     bool _dpadScrollActive = false;
     bool _touchpadAvailable = false;
     fheroes2::Time _touchTimer;
+    float _initialTouchPositionX;
+    float _initialTouchPositionY;
     bool _touchRmbEmulated = false;
+    bool _touchRmbMoved = false;
     int16_t _numTouches = 0;
 #endif
 };
