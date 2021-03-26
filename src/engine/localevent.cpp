@@ -1310,7 +1310,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 
     if ( _firstFingerId == event.fingerId ) {
         if ( !_touchRmbEmulated && !_touchRmbMoved
-             && ( ( std::abs(_initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) || ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
+             && ( ( std::abs( _initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) || ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
             _touchRmbMoved = true;
         }
 
