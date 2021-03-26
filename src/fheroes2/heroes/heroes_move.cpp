@@ -581,12 +581,14 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
 
     if ( 45 > GetSpriteIndex() ) {
         if ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) ) {
-            if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
+            if ( Direction::BOTTOM_LEFT != direction && Direction::BOTTOM_RIGHT != direction
+                 && Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) ) {
                 const Maps::Tiles & tile_dir_bottom = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::BOTTOM ) );
                 tile_dir_bottom.RedrawBottom4Hero( dst, visibleTileROI, gamearea );
                 tile_dir_bottom.RedrawTop( dst, visibleTileROI, gamearea );
             }
-            if ( Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {
+            if ( Direction::TOP_LEFT != direction && Direction::TOP_RIGHT != direction
+                 && Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {
                 const Maps::Tiles & tile_dir_top = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) );
                 tile_dir_top.RedrawTop4Hero( dst, visibleTileROI, skipGround, gamearea );
             }
