@@ -51,7 +51,7 @@ namespace
         // space, underscore
         KEY_SPACE, KEY_UNDERSCORE,
         // nums
-        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9};
+        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 };
 
     char GetCurrentDPadChar()
     {
@@ -1309,8 +1309,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     }
 
     if ( _firstFingerId == event.fingerId ) {
-        if ( !_touchRmbEmulated && !_touchRmbMoved && ( ( std::abs(_initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) ||
-            ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
+        if ( !_touchRmbEmulated && !_touchRmbMoved
+             && ( ( std::abs(_initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) || ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
             _touchRmbMoved = true;
         }
 
