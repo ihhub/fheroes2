@@ -749,10 +749,12 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                     const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 37 ) ? 37 - monster.height() : 0;
                     if ( compact ) {
                         int offset = ( chunk - monster.width() - text.w() ) / 2;
-                        if ( offset < 0 ) offset = 0;
+                        if ( offset < 0 )
+                            offset = 0;
                         fheroes2::Blit( monster, fheroes2::Display::instance(), cx + offset, cy + offsetY + monster.y() );
                         text.Blit( cx + chunk - text.w() - offset, cy + 23 );
-                    } else {
+                    }
+                    else {
                         fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
                         text.Blit( cx - text.w() / 2, cy + 29 );
                     }
