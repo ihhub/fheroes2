@@ -1,72 +1,55 @@
 @echo off
 
-set tempPath="..\..\VisualStudio\packages\installed\temp"
+echo [1/4] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip', '..\..\VisualStudio\packages\sdl.zip')"
 
-if not exist "%tempPath%\zlib"      mkdir "%tempPath%\zlib"
-if not exist "%tempPath%\sdl"       mkdir "%tempPath%\sdl"
-if not exist "%tempPath%\sdl_mixer" mkdir "%tempPath%\sdl_mixer"
-if not exist "%tempPath%\sdl_ttf"   mkdir "%tempPath%\sdl_ttf"
-if not exist "%tempPath%\sdl_image" mkdir "%tempPath%\sdl_image"
+echo [2/4] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.14-VC.zip', '..\..\VisualStudio\packages\sdl2.zip')"
 
-echo [1/7] Copying packages
-xcopy /Y /Q "..\..\VisualStudio\packages\zlib1.2.11.zip" "%tempPath%\zlib\"
-echo [2/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip', '%tempPath%\sdl\sdl.zip')"
-echo [3/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.12-VC.zip', '%tempPath%\sdl\sdl2.zip')"
-echo [4/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer.zip')"
-echo [5/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer2.zip')"
-echo [6/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip', '%tempPath%\sdl_ttf\sdl_ttf2.zip')"
-echo [7/7] Downloading packages
-powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
+echo [3/4] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '..\..\VisualStudio\packages\sdl_mixer.zip')"
 
-xcopy /Y /s /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
-cd "%tempPath%"
+echo [4/4] Downloading packages
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '..\..\VisualStudio\packages\sdl_mixer2.zip')"
 
-set sevenZipPath=
+REM echo [5/6] Downloading packages
+REM powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-VC.zip', '..\..\VisualStudio\packages\sdl_ttf2.zip')"
 
-where 7z.exe >nul 2>nul
-if %errorlevel% == 0 (
-    set sevenZipPath=7z.exe
-) else (
-    if exist "%ProgramFiles%\7-Zip\7z.exe" (
-        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
-    )
-)
+REM echo [6/6] Downloading packages
+REM powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '..\..\VisualStudio\packages\sdl_image2.zip')"
 
-if not "%sevenZipPath%" == "" (
-    echo [1/7] Unpacking packages
-    "%sevenZipPath%" x zlib\zlib1.2.11.zip -aoa -ozlib > nul
+echo [1/5] Unpacking packages
+powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\zlib1.2.11.zip' '..\..\VisualStudio\packages\zlib'"
 
-    echo [2/7] Unpacking packages
-    "%sevenZipPath%" x sdl\sdl.zip -aoa -osdl > nul
+echo [2/5] Unpacking packages
+powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl.zip' '..\..\VisualStudio\packages\sdl'"
 
-    echo [3/7] Unpacking packages
-    "%sevenZipPath%" x sdl\sdl2.zip -aoa -osdl > nul
+echo [3/5] Unpacking packages
+powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl2.zip' '..\..\VisualStudio\packages\sdl2'"
 
-    echo [4/7] Unpacking packages
-    "%sevenZipPath%" x sdl_mixer\sdl_mixer.zip -aoa -osdl_mixer > nul
+echo [4/5] Unpacking packages
+powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl_mixer.zip' '..\..\VisualStudio\packages\sdl'"
 
-    echo [5/7] Unpacking packages
-    "%sevenZipPath%" x sdl_mixer\sdl_mixer2.zip -aoa -osdl_mixer > nul
+echo [5/5] Unpacking packages
+powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl_mixer2.zip' '..\..\VisualStudio\packages\sdl2'"
 
-    echo [6/7] Unpacking packages
-    "%sevenZipPath%" x sdl_ttf\sdl_ttf2.zip -aoa -osdl_ttf > nul
+REM echo [6/7] Unpacking packages
+REM powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl_ttf2.zip' '..\..\VisualStudio\packages\sdl2'"
 
-    echo [7/7] Unpacking packages
-    "%sevenZipPath%" x sdl_image\sdl_image2.zip -aoa -osdl_image > nul
+REM echo [7/7] Unpacking packages
+REM powershell -command "Expand-Archive -Force '..\..\VisualStudio\packages\sdl_image2.zip' '..\..\VisualStudio\packages\sdl2'"
 
-    cd ..
-    call "setup_packages.bat"
-    del "setup_packages.bat"
+echo Cleaning up...
+powershell -command "Remove-Item '..\..\VisualStudio\packages\sdl*\*\docs' -Recurse -Force"
+powershell -command "Copy-Item -Path '..\..\VisualStudio\packages\sdl\SDL*\*' -Exclude "*FLAC*", "*mikmod*", "*smpeg*" -Destination '..\..\VisualStudio\packages\sdl' -Recurse -Force"
+powershell -command "Copy-Item -Path '..\..\VisualStudio\packages\sdl2\SDL*\*' -Exclude "*FLAC*", "*modplug*", "*mpg123*", "*opus*", "*jpeg*", "*tiff*", "*webp*", "*zlib*" -Destination '..\..\VisualStudio\packages\sdl2' -Recurse -Force"
+powershell -command "Remove-Item '..\..\VisualStudio\packages\sdl*\*' -Exclude *LICENSE*, "README-SDL.txt" -Include *.txt,*.html -Recurse -Force"
+powershell -command "Remove-Item '..\..\VisualStudio\packages\sdl*\SDL*' -Recurse -Force"
+powershell -command "Remove-Item '..\..\VisualStudio\packages\*' -Exclude *zlib* -Include *.zip -Recurse -Force"
 
-    echo "SUCCESS! Installation is completed"
-) else (
-    echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after."
-)
+
+echo SUCCESS! Installation is complete.
+
 
 if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
     echo Press any key to exit...

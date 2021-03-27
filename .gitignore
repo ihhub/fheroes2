@@ -43,9 +43,11 @@
 *.obj
 *.pch
 *.tmp
+*.res
 # visual studio directory
 .vs
 .vscode
+VisualStudio/packages/*
 
 # Ignore Heroes of Might & Magic II game files
 *.agg

@@ -8,17 +8,25 @@ fi
 if [ ! -f fheroes2.exe ]; then
 	read -p "fheroes2.exe not found! Would you like to build it now? (default=yes)" yn
         case $yn in
-         ''|[Yy]* ) make -j$(nproc); script/msys/release.sh; exit 0;;
-            [Nn]* ) echo "You must build fheroes2.exe prior to running this script!"; exit 1;;
+         ''|[Yy]* ) script/windows/install_packages.sh; make -j$(nproc); script/windows/release.sh; exit 0;;
+            [Nn]* ) echo "This script requires fheroes2.exe to function!"; exit 1;;
         esac
 fi
 
 fh2arch=x$(objdump -h fheroes2.exe | grep format | tail -c3)
 fh2sdl=$(ldd fheroes2.exe | grep SDL2)
-version=$(cat src/fheroes2/system/version.h | grep define | cut -d" " -f3 | tr '\n' '.' | sed 's/.$//')
+version=$(git rev-parse --short HEAD)
+# current=$(git rev-parse --short HEAD)
+# latest=$(git describe --tags | cut -d"-" -f3)
+# if [ $current = $latest ]; then
+	# version=$(cat src/fheroes2/system/version.h | grep define | cut -d" " -f3 | tr '\n' '.' | sed 's/.$//')
+# else
+	# version=$current
+# fi
 
 if [[ -z $fh2sdl ]]; then
     fh2sdl=SDL1
+    msysmix=$(pacman -Ql ${MINGW_PACKAGE_PREFIX}-SDL_mixer | grep dll$ | cut -d"/" -f4)
 else
     fh2sdl=SDL2
 fi
@@ -55,10 +63,13 @@ fi
 echo "Downloading $fh2sdl $fh2arch libraries"
 wget -q -c -P package $sdl $mix $ttf $img
 7z e package/\*.zip -aos -bs{o,p}0  -x{\!*FLAC*,\!*mikmod*,\!*modplug*,\!*mpg123*,\!*opus*,\!*smpeg*,\!*jpeg*,\!*libpng*,\!*tiff*,\!*webp*,!README.txt} -opackage
+if [ $fh2sdl = SDL1 ]; then
+    mv -f package/SDL_mixer.dll package/$msysmix
+fi
 rm -f package/*.zip
 rm -f fheroes2_${fh2arch}_$fh2sdl-$version.zip
 echo "Packing fheroes2_${fh2arch}_$fh2sdl-$version.zip"
 cp LICENSE package/License.txt
-# 7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* ./doc/README.txt changelog.txt fheroes2.key fheroes2.exe files/fonts/* files/lang/*.po ./script/demo/download_demo.bat
-7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* ./doc/README.txt changelog.txt fheroes2.key fheroes2.exe ./script/demo/download_demo.bat
+# 7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* changelog.txt fheroes2.txt fheroes2.key fheroes2.exe files/fonts/* files/lang/*.po ./script/demo/download_demo.bat
+7z a -tzip fheroes2_${fh2arch}_$fh2sdl-$version.zip -stl -mx9 -bs{o,p}0 ./package/* changelog.txt fheroes2.txt fheroes2.key fheroes2.exe ./script/demo/download_demo.bat
 rm -rf package
