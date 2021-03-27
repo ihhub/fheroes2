@@ -5,16 +5,16 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\sdl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\sdl\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*.txt" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\README-SDL.txt" "$(OutDir)"
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl\lib\$(PlatformTarget)\*.txt" "$(OutDir)"
+	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl\README-SDL.txt" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

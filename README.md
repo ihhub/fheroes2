@@ -44,14 +44,16 @@ Windows
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
 
 ### MSYS2 ###
-- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`.
-- Now, go ahead and run script/msys/install_packages.sh from the `MinGW32` or the `MinGW64` shell, depending on the architecture you'd like to build for.
-- Run `make -j$(nproc)` to build SDL2 version, or script/msys/release.sh to create a zip archive with all necessary dlls.
+- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`. Before proceeding, make sure you're in the `MinGW32` or the `MinGW64`, or the `UCRT64` shell, depending on the architecture you'd like to build for.
+- Clone the repo with `git clone https://github.com/ihhub/fheroes2 && cd fheroes2`
+- Now, if you need to quickly generate a playable build, simply run `script/windows/release.sh`.
+- For development, run `script/windows/install_packages.sh dev` to install all the necessary packages.
+- Run `make -j$(nproc)`, or, to build SDL1 version, `make -j$(nproc) FHEROES2_SDL1="1"`.
 
 MacOS and Linux
 -------------------
 - open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
-- open `script/demo` directory and run **demo_macos.sh** or **demo_linux.sh** file depending on your OS. It downloads a demo version of the game which is needed for minimum development.
+- open `script/demo` directory and run **download_demo.sh**. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 
 Contribution
