@@ -80,7 +80,11 @@ namespace AI
         SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
                                            bool retreating ) const;
+        SpellcastOutcome spellBuffValue( const Spell & spell, const Battle::Units & friendly ) const;
         SpellcastOutcome spellDebuffValue( const Spell & spell, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
+        SpellcastOutcome spellSummonValue( const Spell & spell ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;
@@ -89,10 +93,12 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
+        double _enemyAverageSpeed = 0;
         int _highestDamageExpected = 0;
         bool _attackingCastle = false;
         bool _defendingCastle = false;
         bool _considerRetreat = false;
+        bool _defensiveTactics = false;
     };
 
     class Normal : public Base

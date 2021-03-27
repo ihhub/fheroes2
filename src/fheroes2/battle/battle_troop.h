@@ -140,6 +140,7 @@ namespace Battle
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
+        std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction( Unit & );
         void ResetBlind( void );
         void SetBlindAnswer( bool value );

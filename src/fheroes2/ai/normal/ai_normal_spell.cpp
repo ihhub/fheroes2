@@ -75,6 +75,15 @@ namespace AI
             if ( spell.isDamage() ) {
                 checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
             }
+            else if ( spell.isSummon() ) {
+                checkSelectBestSpell( spell, spellSummonValue( spell ) );
+            }
+            else if ( spell.isResurrect() ) {
+                checkSelectBestSpell( spell, spellResurrectValue( spell, arena ) );
+            }
+            else if ( spell.isApplyToFriends() ) {
+                checkSelectBestSpell( spell, spellBuffValue( spell, friendly ) );
+            }
             else if ( spell.isApplyToEnemies() ) {
                 checkSelectBestSpell( spell, spellDebuffValue( spell, enemies ) );
             }
@@ -157,6 +166,100 @@ namespace AI
             }
         }
 
+        return bestOutcome;
+    }
+
+    SpellcastOutcome BattlePlanner::spellBuffValue( const Spell & spell, const Battle::Units & friendly ) const
+    {
+        SpellcastOutcome bestOutcome;
+        const int spellID = spell.GetID();
+
+        double ratio = 0.0;
+        switch ( spellID ) {
+        case Spell::HASTE:
+        case Spell::MASSHASTE:
+            ratio = 0.3;
+            break;
+        case Spell::BLOODLUST:
+            ratio = 0.1;
+            break;
+        case Spell::BLESS:
+        case Spell::MASSBLESS:
+            ratio = 0.15;
+            break;
+        case Spell::STONESKIN:
+            ratio = 0.1;
+            break;
+        case Spell::STEELSKIN:
+            ratio = 0.2;
+            break;
+        // Following spell usefullness is conditional; ratio will be determined later
+        case Spell::DRAGONSLAYER:
+        case Spell::ANTIMAGIC:
+        case Spell::MIRRORIMAGE:
+            ratio = 0.0;
+            break;
+        default:
+            return bestOutcome;
+        }
+
+        const bool isMassSpell = spell.isMassActions();
+        for ( const Unit * unit : friendly ) {
+            // Make sure this spell can be applied to current unit
+            if ( unit->isUnderSpellEffect( spell ) || !unit->AllowApplySpell( spell, _commander ) ) {
+                continue;
+            }
+
+            if ( spellID == Spell::HASTE || spellID == Spell::MASSHASTE ) {
+                if ( unit->Modes( SP_SLOW ) ) {
+                    ratio *= 2;
+                }
+                else if ( unit->isArchers() ) {
+                    ratio = ( unit->GetSpeed() < _enemyAverageSpeed ) ? 0.05 : 0.2;
+                }
+                else if ( _defensiveTactics ) {
+                    ratio = 0.1;
+                }
+            }
+            else if ( spellID == Spell::BLESS || spellID == Spell::MASSBLESS ) {
+                if ( unit->GetDamageMax() == unit->GetDamageMin() ) {
+                    ratio = 0.0;
+                }
+                else if ( unit->Modes( SP_CURSE ) ) {
+                    ratio *= 2;
+                }
+            }
+            else if ( spellID == Spell::ANTIMAGIC && !unit->Modes( IS_GOOD_MAGIC ) ) {
+                ratio = 0.55;
+
+                const std::vector<Spell> & spellList = _commander->GetSpells();
+                for ( const Spell & otherSpell : spellList ) {
+                    if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && unit->AllowApplySpell( otherSpell, _commander ) ) {
+                        // Can resurrect unit in the future, overwrite the ratio
+                        ratio = 0.15;
+                        break;
+                    }
+                }
+                if ( unit->Modes( IS_BAD_MAGIC ) ) {
+                    ratio *= 2;
+                }
+            }
+            else if ( spellID == Spell::MIRRORIMAGE ) {
+                ratio = unit->isArchers() ? 1.0 : unit->isFlying() ? 0.55 : 0.33;
+                if ( unit->GetSpeed() < _enemyAverageSpeed ) {
+                    ratio /= 5;
+                }
+            }
+
+            const double spellValue = unit->GetStrength() * ratio;
+            if ( isMassSpell ) {
+                bestOutcome.value += spellValue;
+            }
+            else if ( spellValue > bestOutcome.value ) {
+                bestOutcome.value = spellValue;
+                bestOutcome.cell = unit->GetHeadIndex();
+            }
+        }
         return bestOutcome;
     }
 
@@ -244,4 +347,46 @@ namespace AI
         }
         return bestOutcome;
     }
+
+    SpellcastOutcome BattlePlanner::spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Units & enemies ) const
+    {
+        SpellcastOutcome bestOutcome;
+        const int spellID = spell.GetID();
+        const bool isMassSpell = spell.isMassActions();
+
+        for ( const Unit * unit : enemies ) {
+            if ( unit->Modes( IS_MAGIC ) )
+                continue;
+
+            auto spellList = unit->getCurrentSpellEffects();
+            for ( const Spell & spell : spellList ) {
+                if ( spell.isApplyToEnemies() ) {
+                }
+            }
+        }
+
+        return bestOutcome;
+    }
+
+    SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell ) const
+    {
+        SpellcastOutcome bestOutcome;
+        if ( spell.isSummon() ) {
+            Monster monster( spell );
+
+            uint32_t count = spell.ExtraValue() * _commander->GetPower();
+            if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
+                count *= 2;
+
+            bestOutcome.value = monster.GetMonsterStrength() * count;
+        }
+        return bestOutcome;
+    }
 }
+/*
+        IS_GOOD_MAGIC = 0x00FE0000,
+        IS_PARALYZE_MAGIC = 0xC0000000,
+        IS_MIND_MAGIC = 0x78000000,
+        IS_BAD_MAGIC = 0xFE000000,
+        IS_MAGIC = 0xFFFE0000,
+*/
