@@ -368,6 +368,39 @@ namespace AI
         return bestOutcome;
     }
 
+    SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
+    {
+        SpellcastOutcome bestOutcome;
+        uint32_t hpRestored = spell.Resurrect() * _commander->GetPower();
+        if ( _commander->HasArtifact( Artifact::ANKH ) )
+            hpRestored *= 2;
+
+        // Get friendly units list including the invalid and dead ones
+        const Force & friendlyForce = arena.GetForce( _myColor );
+
+        for ( const Unit * unit : friendlyForce ) {
+            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
+                continue;
+
+            const uint32_t missingHP = unit->GetMissingHitPoints();
+            hpRestored = ( missingHP < hpRestored ) ? missingHP : hpRestored;
+
+            double spellValue = hpRestored * unit->GetMonsterStrength() / unit->Monster::GetHitPoints();
+
+            // if we are winning battle; permanent resurrect bonus
+            if ( _myArmyStrength > _enemyArmyStrength && spell.GetID() != Spell::RESURRECT ) {
+                spellValue *= 1.5;
+            }
+
+            if ( spellValue > bestOutcome.value ) {
+                bestOutcome.value = spellValue;
+                bestOutcome.cell = unit->GetHeadIndex();
+            }
+        }
+
+        return bestOutcome;
+    }
+
     SpellcastOutcome BattlePlanner::spellSummonValue( const Spell & spell ) const
     {
         SpellcastOutcome bestOutcome;

@@ -81,6 +81,7 @@ namespace Battle
         virtual std::string GetShotString() const override;
         virtual std::string GetSpeedString() const override;
         virtual u32 GetHitPointsLeft() const override;
+        virtual uint32_t GetMissingHitPoints() const;
         virtual u32 GetAffectedDuration( u32 ) const override;
         virtual u32 GetSpeed() const override;
         virtual int GetMorale() const override;

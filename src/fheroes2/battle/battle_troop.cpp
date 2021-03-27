@@ -233,6 +233,13 @@ u32 Battle::Unit::GetHitPointsLeft( void ) const
     return GetHitPoints() - ( GetCount() - 1 ) * Monster::GetHitPoints();
 }
 
+uint32_t Battle::Unit::GetMissingHitPoints() const
+{
+    const uint32_t totalHitPoints = count0 * Monster::GetHitPoints();
+    assert( totalHitPoints > hp );
+    return totalHitPoints - hp;
+}
+
 u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 {
     return affected.GetMode( mod );
