@@ -1424,9 +1424,8 @@ void ActionToMagicWell( Heroes & hero, s32 dst_index )
 
 void ActionToTradingPost( const Heroes & hero )
 {
-    Dialog::Marketplace( true );
+    Dialog::Marketplace( hero.GetKingdom(), true );
 
-    (void)hero;
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
