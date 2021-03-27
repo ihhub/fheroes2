@@ -374,9 +374,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero1 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // second hero
@@ -392,9 +391,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero2 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // bottom bar
