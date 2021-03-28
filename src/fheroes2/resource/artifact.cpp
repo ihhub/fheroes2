@@ -969,7 +969,6 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
             const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
             fheroes2::Fill( dstsf, pos.x + 1, pos.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
             fheroes2::Blit( artifactSprite, dstsf, pos.x + 1, pos.y + 1 );
-
         }
         else {
             const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
