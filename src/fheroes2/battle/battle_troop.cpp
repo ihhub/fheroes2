@@ -959,7 +959,7 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    return !Modes( IS_PARALYZE_MAGIC ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
+    return !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )
@@ -967,7 +967,7 @@ void Battle::Unit::SetResponse( void )
     SetModes( TR_RESPONSED );
 }
 
-void Battle::Unit::PostAttackAction( Unit & enemy )
+void Battle::Unit::PostAttackAction()
 {
     // decrease shots
     if ( isArchers() ) {
@@ -987,10 +987,6 @@ void Battle::Unit::PostAttackAction( Unit & enemy )
     if ( Modes( SP_HYPNOTIZE ) ) {
         ResetModes( SP_HYPNOTIZE );
         affected.RemoveMode( SP_HYPNOTIZE );
-    }
-    if ( enemy.Modes( SP_HYPNOTIZE ) ) {
-        enemy.ResetModes( SP_HYPNOTIZE );
-        enemy.affected.RemoveMode( SP_HYPNOTIZE );
     }
 
     // clean luck capability

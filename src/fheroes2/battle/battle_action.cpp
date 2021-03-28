@@ -128,7 +128,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
         }
     }
 
-    attacker.PostAttackAction( defender );
+    attacker.PostAttackAction();
 }
 
 void Battle::Arena::ApplyAction( Command & cmd )
