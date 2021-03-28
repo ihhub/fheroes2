@@ -314,19 +314,18 @@ namespace AI
         const bool isDispel = spellID == Spell::DISPEL || spellID == Spell::MASSDISPEL;
         const bool enemyLastUnit = enemies.size() == 1;
 
-        double spellValue = 0;
         for ( const Unit * unit : friendly ) {
             if ( !unit->Modes( IS_MAGIC ) )
                 continue;
 
             double unitValue = 0;
             const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
-            for ( const Spell & spell : spellList ) {
-                const double effectValue = spellEffectValue( spell, *unit, false );
-                if ( spell.isApplyToEnemies() ) {
+            for ( const Spell & spellOnFriend : spellList ) {
+                const double effectValue = spellEffectValue( spellOnFriend, *unit, false );
+                if ( spellOnFriend.isApplyToEnemies() ) {
                     unitValue += effectValue;
                 }
-                else if ( isDispel && spell.isApplyToFriends() ) {
+                else if ( isDispel && spellOnFriend.isApplyToFriends() ) {
                     unitValue -= effectValue;
                 }
             }
@@ -341,9 +340,9 @@ namespace AI
 
                 double unitValue = 0;
                 const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
-                for ( const Spell & spell : spellList ) {
-                    const double effectValue = spellEffectValue( spell, *unit, enemyLastUnit );
-                    unitValue += spell.isApplyToFriends() ? effectValue : -effectValue;
+                for ( const Spell & spellOnEnemy : spellList ) {
+                    const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit );
+                    unitValue += spellOnEnemy.isApplyToFriends() ? effectValue : -effectValue;
                 }
 
                 bestOutcome.updateOutcome( unitValue, unit->GetHeadIndex(), isMassSpell );
