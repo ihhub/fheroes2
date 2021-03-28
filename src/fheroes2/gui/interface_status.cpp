@@ -323,7 +323,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 {
-    const Army * armies = NULL;
+    const Army * armies = nullptr;
 
     if ( GetFocusHeroes() )
         armies = &GetFocusHeroes()->GetArmy();
@@ -332,7 +332,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const Rect & pos = GetArea();
-        Army::DrawMonsterLines( *armies, pos.x, pos.y + 3 + oh, 138, Skill::Level::EXPERT );
+        Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
     }
 }
 
