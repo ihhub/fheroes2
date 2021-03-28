@@ -32,22 +32,18 @@ Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh**
 Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
 
 ## Arch
-
 For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer`.
 
 ## RedHat-based
-
 RPM based distributions like Fedora/Red Hat use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
 ## OpenSUSE
 openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linux`. 
 
 ## Gentoo
-
 If you have Gentoo, in addition to basic distribution you need to run following commands
 ```
-emerge --ask sdl-mixer
-emerge --ask sdl-ttf
+emerge --ask media-libs/sdl-mixer media-libs/sdl-ttf
 ```
 
 Compilation
