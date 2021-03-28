@@ -111,12 +111,7 @@ namespace AI
 
         if ( spell.isSingleTarget() ) {
             for ( const Unit * enemy : enemies ) {
-                const double spellHeuristic = damageHeuristic( enemy );
-
-                if ( spellHeuristic > bestOutcome.value ) {
-                    bestOutcome.value = spellHeuristic;
-                    bestOutcome.cell = enemy->GetHeadIndex();
-                }
+                bestOutcome.updateOutcome( damageHeuristic( enemy ), enemy->GetHeadIndex() );
             }
         }
         else if ( spell.isApplyWithoutFocusObject() ) {
@@ -128,9 +123,7 @@ namespace AI
                 spellHeuristic -= damageHeuristic( unit );
             }
 
-            if ( spellHeuristic > bestOutcome.value ) {
-                bestOutcome.value = spellHeuristic;
-            }
+            bestOutcome.updateOutcome( spellHeuristic, -1 );
         }
         else {
             // Area of effect spells like Fireball
@@ -145,10 +138,7 @@ namespace AI
                     }
                 }
 
-                if ( spellHeuristic > bestOutcome.value ) {
-                    bestOutcome.value = spellHeuristic;
-                    bestOutcome.cell = index;
-                }
+                bestOutcome.updateOutcome( spellHeuristic, index );
             };
 
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
@@ -310,15 +300,7 @@ namespace AI
         const bool isMassSpell = spell.isMassActions();
 
         for ( const Unit * unit : targets ) {
-            const double spellValue = spellEffectValue( spell, *unit, isSingleTargetLeft );
-
-            if ( isMassSpell ) {
-                bestOutcome.value += spellValue;
-            }
-            else if ( spellValue > bestOutcome.value ) {
-                bestOutcome.value = spellValue;
-                bestOutcome.cell = unit->GetHeadIndex();
-            }
+            bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft ), unit->GetHeadIndex(), isMassSpell );
         }
         return bestOutcome;
     }
@@ -326,17 +308,45 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Units & enemies ) const
     {
         SpellcastOutcome bestOutcome;
+
         const int spellID = spell.GetID();
         const bool isMassSpell = spell.isMassActions();
+        const bool isDispel = spellID == Spell::DISPEL || spellID == Spell::MASSDISPEL;
+        const bool enemyLastUnit = enemies.size() == 1;
 
-        for ( const Unit * unit : enemies ) {
-            if ( unit->Modes( IS_MAGIC ) )
+        double spellValue = 0;
+        for ( const Unit * unit : friendly ) {
+            if ( !unit->Modes( IS_MAGIC ) )
                 continue;
 
-            auto spellList = unit->getCurrentSpellEffects();
+            double unitValue = 0;
+            const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
             for ( const Spell & spell : spellList ) {
+                const double effectValue = spellEffectValue( spell, *unit, false );
                 if ( spell.isApplyToEnemies() ) {
+                    unitValue += effectValue;
                 }
+                else if ( isDispel && spell.isApplyToFriends() ) {
+                    unitValue -= effectValue;
+                }
+            }
+
+            bestOutcome.updateOutcome( unitValue, unit->GetHeadIndex(), isMassSpell );
+        }
+
+        if ( isDispel ) {
+            for ( const Unit * unit : enemies ) {
+                if ( !unit->Modes( IS_MAGIC ) )
+                    continue;
+
+                double unitValue = 0;
+                const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
+                for ( const Spell & spell : spellList ) {
+                    const double effectValue = spellEffectValue( spell, *unit, enemyLastUnit );
+                    unitValue += spell.isApplyToFriends() ? effectValue : -effectValue;
+                }
+
+                bestOutcome.updateOutcome( unitValue, unit->GetHeadIndex(), isMassSpell );
             }
         }
 
@@ -367,10 +377,7 @@ namespace AI
                 spellValue *= 1.5;
             }
 
-            if ( spellValue > bestOutcome.value ) {
-                bestOutcome.value = spellValue;
-                bestOutcome.cell = unit->GetHeadIndex();
-            }
+            bestOutcome.updateOutcome( spellValue, unit->GetHeadIndex() );
         }
 
         return bestOutcome;
@@ -391,10 +398,3 @@ namespace AI
         return bestOutcome;
     }
 }
-/*
-        IS_GOOD_MAGIC = 0x00FE0000,
-        IS_PARALYZE_MAGIC = 0xC0000000,
-        IS_MIND_MAGIC = 0x78000000,
-        IS_BAD_MAGIC = 0xFE000000,
-        IS_MAGIC = 0xFFFE0000,
-*/

@@ -57,6 +57,17 @@ namespace AI
     {
         int32_t cell = -1;
         double value = 0.0;
+
+        void updateOutcome( const double potentialValue, const int32_t targetCell, const bool isMassEffect = false )
+        {
+            if ( isMassEffect ) {
+                value += potentialValue;
+            }
+            else if ( potentialValue > value ) {
+                value = potentialValue;
+                cell = targetCell;
+            }
+        }
     };
 
     class BattlePlanner
