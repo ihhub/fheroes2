@@ -80,11 +80,11 @@ namespace AI
         SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
                                            bool retreating ) const;
-        SpellcastOutcome spellBuffValue( const Spell & spell, const Battle::Units & friendly ) const;
-        SpellcastOutcome spellDebuffValue( const Spell & spell, const Battle::Units & enemies ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell ) const;
+        SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;
