@@ -746,8 +746,9 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                 if ( 0 == first && count ) {
                     const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
                     text.Set( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ) );
-                    const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 37 ) ? 37 - monster.height() : 0;
+
                     if ( compact ) {
+                        const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
                         int offset = ( chunk - monster.width() - text.w() ) / 2;
                         if ( offset < 0 )
                             offset = 0;
@@ -755,6 +756,7 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
                         text.Blit( cx + chunk - text.w() - offset, cy + 23 );
                     }
                     else {
+                        const int offsetY = 30 - monster.height();
                         fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
                         text.Blit( cx - text.w() / 2, cy + 29 );
                     }
