@@ -1899,6 +1899,17 @@ int Battle::Unit::GetCurrentColor() const
     return GetColor();
 }
 
+int Battle::Unit::GetCurrentOrArmyColor() const
+{
+    const int color = GetCurrentColor();
+
+    if ( color < 0 ) { // unknown color in case of SP_BERSERKER mode
+        return GetArmyColor();
+    }
+
+    return color;
+}
+
 int Battle::Unit::GetCurrentControl() const
 {
     if ( Modes( SP_BERSERKER ) )
@@ -1918,4 +1929,9 @@ int Battle::Unit::GetCurrentControl() const
 const HeroBase * Battle::Unit::GetCommander( void ) const
 {
     return GetArmy() ? GetArmy()->GetCommander() : NULL;
+}
+
+const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
+{
+    return GetArena()->GetCommander( GetCurrentOrArmyColor(), false );
 }

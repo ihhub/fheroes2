@@ -122,6 +122,7 @@ namespace Battle
         int GetArmyColor( void ) const;
         virtual int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
+        int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
@@ -189,6 +190,7 @@ namespace Battle
         int GetSpellMagic( bool force = false ) const;
 
         const HeroBase * GetCommander( void ) const;
+        const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
         static bool isHandFighting( const Unit &, const Unit & );
 
