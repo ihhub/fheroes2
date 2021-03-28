@@ -959,7 +959,7 @@ StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    return !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
+    return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )
