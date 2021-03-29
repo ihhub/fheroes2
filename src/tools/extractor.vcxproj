@@ -176,11 +176,11 @@
     <ClCompile Include="..\engine\audio_music.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
     <ClCompile Include="..\engine\engine.cpp" />
-    <ClCompile Include="..\engine\error.cpp" />
     <ClCompile Include="..\engine\font.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
     <ClCompile Include="..\engine\image_tool.cpp" />
     <ClCompile Include="..\engine\localevent.cpp" />
+    <ClCompile Include="..\engine\logging.cpp" />
     <ClCompile Include="..\engine\pal.cpp" />
     <ClCompile Include="..\engine\rand.cpp" />
     <ClCompile Include="..\engine\rect.cpp" />
@@ -209,11 +209,11 @@
     <ClInclude Include="..\engine\audio_music.h" />
     <ClInclude Include="..\engine\dir.h" />
     <ClInclude Include="..\engine\engine.h" />
-    <ClInclude Include="..\engine\error.h" />
     <ClInclude Include="..\engine\font.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\localevent.h" />
+    <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\pal.h" />
     <ClInclude Include="..\engine\palette_h2.h" />
