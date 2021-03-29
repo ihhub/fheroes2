@@ -100,7 +100,6 @@ struct Rect : Point, Size
 
 struct Points : std::vector<Point>
 {
-    Rect GetRect( void ) const;
 };
 
 struct Rects : std::vector<Rect>

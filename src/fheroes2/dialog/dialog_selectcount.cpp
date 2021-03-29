@@ -72,16 +72,6 @@ public:
         pos.height = 30;
     }
 
-    u32 Min( void )
-    {
-        return vmin;
-    }
-
-    u32 Max( void )
-    {
-        return vmax;
-    }
-
     void SetCur( u32 v )
     {
         vcur = v;

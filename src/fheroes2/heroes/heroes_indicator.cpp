@@ -60,11 +60,6 @@ const Rect & HeroesIndicator::GetArea( void ) const
     return area;
 }
 
-const std::string & HeroesIndicator::GetDescriptions( void ) const
-{
-    return descriptions;
-}
-
 void HeroesIndicator::SetHero( const Heroes * h )
 {
     hero = h;

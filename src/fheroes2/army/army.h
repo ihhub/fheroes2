@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "army_troop.h"
-#include "bitmodes.h"
 #include "players.h"
 
 #ifdef WITH_XML
