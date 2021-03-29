@@ -7,7 +7,7 @@ fheroes2 requires data files from the original Heroes of Might and Magic II.
 
 Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from the original games "DATA" folder into "ux0:data/fheroes2/data" and everything from "MAPS" folder into "ux0:data/fheroes2/maps".
 
-Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg".
+Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder.
 
 fheroes2 supports ingame cinematics. To play into and/or other videos, make sure that all of "*.SMK" files are placed inside "ux0:data/fheroes2/heroes2/anim/" folder.
 
