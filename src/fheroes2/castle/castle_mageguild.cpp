@@ -24,11 +24,12 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "mageguild.h"
 #include "race.h"
 #include "text.h"
@@ -106,7 +107,7 @@ bool RowSpells::QueueEventProcessing( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
 
     const s32 index = coords.GetIndex( le.GetMouseCursor() );
 
@@ -127,7 +128,7 @@ bool RowSpells::QueueEventProcessing( void )
 void Castle::OpenMageGuild( const CastleHeroes & heroes )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,

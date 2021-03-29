@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "castle.h"
 #include "cursor.h"
@@ -33,9 +34,11 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
-#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "world.h"
 
@@ -52,7 +55,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
         destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
     if ( destinationIdx != -1 ) {
         hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
-        DEBUG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
         gameArea.SetRedraw();
 
         LocalEvent & le = LocalEvent::Get();
@@ -83,7 +86,9 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         RedrawFocus();
 
         hero->SetMove( true );
-        Cursor::Get().SetThemes( Cursor::WAIT );
+        if ( hero->MayStillMove() ) {
+            Cursor::Get().SetThemes( Cursor::WAIT );
+        }
     }
 }
 

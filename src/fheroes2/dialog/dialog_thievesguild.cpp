@@ -23,11 +23,12 @@
 #include <algorithm>
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
 #include "settings.h"
@@ -143,6 +144,18 @@ void GetObelisksInfo( std::vector<ValueColors> & v, const Colors & colors )
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
         const int value = world.GetKingdom( *color ).CountVisitedObjects( MP2::OBJ_OBELISK );
+        UpdateValuesColors( v, value, *color );
+    }
+
+    std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
+}
+
+void GetArtifactsInfo( std::vector<ValueColors> & v, const Colors & colors )
+{
+    v.clear();
+
+    for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
+        const int value = world.GetKingdom( *color ).GetCountArtifacts();
         UpdateValuesColors( v, value, *color );
     }
 
@@ -308,7 +321,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Number of Castles:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 54;
+    dst_pt.y = cur_pt.y + 52;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -317,7 +330,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Number of Heroes:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 80;
+    dst_pt.y = cur_pt.y + 76;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -326,7 +339,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Gold in Treasury:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 106;
+    dst_pt.y = cur_pt.y + 100;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -336,7 +349,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Wood & Ore:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 132;
+    dst_pt.y = cur_pt.y + 124;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -346,7 +359,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Gems, Cr, Slf & Mer:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 158;
+    dst_pt.y = cur_pt.y + 148;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -356,7 +369,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Obelisks Found:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 184;
+    dst_pt.y = cur_pt.y + 172;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -364,9 +377,20 @@ void Dialog::ThievesGuild( bool oracle )
     if ( 2 < count )
         DrawFlags( v, dst_pt, maxw, colors.size() );
 
+    text.Set( _( "Artifacts:" ) );
+    dst_pt.x = cur_pt.x + textx - text.w();
+    dst_pt.y = cur_pt.y + 196;
+    text.Blit( dst_pt.x, dst_pt.y );
+
+    dst_pt.x = cur_pt.x + startx;
+    GetArtifactsInfo( v, colors );
+    if ( count > 2 ) {
+        DrawFlags( v, dst_pt, maxw, colors.size() );
+    }
+
     text.Set( _( "Total Army Strength:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 210;
+    dst_pt.y = cur_pt.y + 220;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -376,7 +400,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Income:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 238;
+    dst_pt.y = cur_pt.y + 248;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -389,14 +413,14 @@ void Dialog::ThievesGuild( bool oracle )
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
         text.Set( Color::String( *color ) );
         dst_pt.x = cur_pt.x + startx + maxw / ( colors.size() * 2 ) + ii * maxw / colors.size() - text.w() / 2;
-        dst_pt.y = cur_pt.y + 270;
+        dst_pt.y = cur_pt.y + 276;
         text.Blit( dst_pt.x, dst_pt.y );
         ++ii;
     }
 
     text.Set( _( "Best Hero:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 306;
+    dst_pt.y = cur_pt.y + 312;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -405,7 +429,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 347;
+    dst_pt.y = cur_pt.y + 353;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -414,7 +438,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Personality:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 388;
+    dst_pt.y = cur_pt.y + 394;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
@@ -423,7 +447,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Best Monster:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 429;
+    dst_pt.y = cur_pt.y + 435;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;

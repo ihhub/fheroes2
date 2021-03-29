@@ -10,7 +10,7 @@ skip_commits:
 skip_tags: true
 
 # version format
-version: 0.9.0.{build}
+version: 0.9.1.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2015
@@ -44,6 +44,9 @@ install:
   - cd C:\projects\fheroes2\script\windows
   - if not exist C:\projects\packages call install_packages.bat
   - cd C:\projects\fheroes2
+
+build:
+  project: fheroes2-vs2015.vcxproj
 
 after_build:
   - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%

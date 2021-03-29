@@ -28,10 +28,11 @@
 #include "game.h"
 #include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
 #include "race.h"
-#include "settings.h"
+#include "translations.h"
 #include "world.h"
 
 struct ComparsionDistance
@@ -238,8 +239,8 @@ s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
     const s32 res = py * world.w() + px;
 
     if ( px < 0 || py < 0 ) {
-        VERBOSE( "Maps::GetIndexFromAbsPoint: error coods, "
-                 << "x: " << px << ", y: " << py );
+        VERBOSE_LOG( "Maps::GetIndexFromAbsPoint: error coods, "
+                     << "x: " << px << ", y: " << py );
         return -1;
     }
 
@@ -332,12 +333,11 @@ void Maps::ClearFog( s32 index, int scoute, int color )
 {
     if ( 0 != scoute && isValidAbsIndex( index ) ) {
         const Point center = GetPoint( index );
-        const Settings & conf = Settings::Get();
 
         // AI advantage
         const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
         if ( isAIPlayer ) {
-            scoute += Difficulty::GetScoutingBonus( conf.GameDifficulty() );
+            scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
         }
 
         const int alliedColors = Players::GetPlayerFriends( color );
@@ -542,9 +542,9 @@ void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bo
     const uint32_t castleID = entranceTile.GetObjectUID();
 
     if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {
-        DEBUG( DBG_GAME, DBG_WARN,
-               "incorrect object"
-                   << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
+        DEBUG_LOG( DBG_GAME, DBG_WARN,
+                   "incorrect object"
+                       << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
         return;
     }
 

@@ -20,16 +20,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
+
+#include <cassert>
 
 void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
                         const std::string & label )
@@ -68,7 +71,7 @@ void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & p
     text.Blit( dst_pt.x, dst_pt.y );
 }
 
-void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label, bool showTotalSum )
+void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const payment_t paymentMonster = monster.GetCost();
@@ -93,16 +96,19 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     text.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );
-    dst_pt.x = pos.x + 27 + smon.x();
-    dst_pt.y = pos.y + 130 - smon.height();
-    fheroes2::Blit( smon, display, dst_pt.x, dst_pt.y );
+    const int monsterId = monster.GetID();
+    const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
+    assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-    // change label
-    if ( label ) {
-        text.Set( "( change )", Font::YELLOW_SMALL );
-        text.Blit( pos.x + 68 - text.w() / 2, pos.y + 80 );
+    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+    dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
+    dst_pt.y = pos.y + 135 - smon.height();
+
+    if ( monsterId == Monster::CHAMPION ) {
+        ++dst_pt.x;
     }
+
+    fheroes2::Blit( smon, display, dst_pt.x, dst_pt.y );
 
     // info resource
     // gold
@@ -172,14 +178,14 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     str = _( "Available: %{count}" );
     StringReplace( str, "%{count}", available );
     text.Set( str, Font::SMALL );
-    text.Blit( pos.x + 70 - text.w() / 2, pos.y + 130 );
+    text.Blit( pos.x + 80 - text.w() / 2, pos.y + 135 );
 }
 
-void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool label )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available )
 {
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::RECRBKG, 0 ), fheroes2::Display::instance(), pos.x, pos.y );
 
-    RedrawMonsterInfo( pos, monster, available, label, true );
+    RedrawMonsterInfo( pos, monster, available, true );
 
     // text number buy
     Text text;
@@ -246,8 +252,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
     fheroes2::Blit( box, display, pos.x, pos.y );
 
-    const fheroes2::Rect rtChange( pos.x + 25, pos.y + 35, 85, 95 );
-    RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
+    RedrawStaticInfo( pos, monster, available );
 
     // buttons
     fheroes2::Point dst_pt;
@@ -260,10 +265,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.y = pos.y + 249;
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::RECRUIT, 6, 7 );
 
-    dst_pt.x = pos.x + 230;
-    dst_pt.y = pos.y + 155;
+    dst_pt.x = pos.x + 229;
+    dst_pt.y = pos.y + 156;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
-    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::BTNMIN, 0, 1 );
+    fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     dst_pt.x = pos.x + 205;
     dst_pt.y = pos.y + 154;
@@ -274,6 +279,27 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::Button buttonDn( dst_pt.x, dst_pt.y, ICN::RECRUIT, 2, 3 );
 
     const fheroes2::Rect rtWheel( pos.x + 130, pos.y + 155, 100, 30 );
+
+    // Create monster switching arrows
+    fheroes2::ButtonSprite monsterSwitchLeft;
+    fheroes2::ButtonSprite monsterSwitchRight;
+
+    if ( ext && monster0.GetDowngrade() != monster0 ) {
+        monsterSwitchLeft.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_LEFT_ARROW, 1 ) );
+        monsterSwitchRight.setSprite( fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 0 ), fheroes2::AGG::GetICN( ICN::MONSTER_SWITCH_RIGHT_ARROW, 1 ) );
+
+        monsterSwitchLeft.setPosition( pos.x + 24, pos.y + 80 );
+        monsterSwitchRight.setPosition( pos.x + 121, pos.y + 80 );
+    }
+    else {
+        monsterSwitchLeft.hide();
+        monsterSwitchRight.hide();
+
+        monsterSwitchLeft.disable();
+        monsterSwitchRight.disable();
+    }
+
+    const fheroes2::Rect monsterArea( pos.x + 40, pos.y + 35, 75, 95 );
 
     if ( 0 == result ) {
         buttonOk.disable();
@@ -294,11 +320,18 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         buttonMin.draw();
     buttonUp.draw();
     buttonDn.draw();
+    monsterSwitchLeft.draw();
+    monsterSwitchRight.draw();
 
     cursor.Show();
     display.render();
 
     bool redraw = false;
+
+    std::vector<Monster> upgrades = {monster0};
+    while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
+        upgrades.emplace_back( upgrades.back().GetDowngrade() );
+    }
 
     // str loop
     while ( le.HandleEvents() ) {
@@ -308,38 +341,64 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         le.MousePressLeft( buttonUp.area() ) ? buttonUp.drawOnPress() : buttonUp.drawOnRelease();
         le.MousePressLeft( buttonDn.area() ) ? buttonDn.drawOnPress() : buttonDn.drawOnRelease();
 
+        le.MousePressLeft( monsterSwitchLeft.area() ) ? monsterSwitchLeft.drawOnPress() : monsterSwitchLeft.drawOnRelease();
+        le.MousePressLeft( monsterSwitchRight.area() ) ? monsterSwitchRight.drawOnPress() : monsterSwitchRight.drawOnRelease();
+
         if ( buttonMax.isEnabled() )
             le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         if ( buttonMin.isEnabled() )
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
-        if ( ext && le.MouseClickLeft( rtChange ) ) {
-            if ( monster != monster.GetDowngrade() ) {
-                monster = monster.GetDowngrade();
-                max = CalculateMax( monster, kingdom, available );
-                result = max;
-                paymentMonster = monster.GetCost();
-                paymentCosts = paymentMonster * result;
-                redraw = true;
+        bool updateCost = false;
+        if ( ext && upgrades.size() > 1 ) {
+            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( KEY_LEFT ) ) {
+                for ( size_t i = 0; i < upgrades.size(); ++i ) {
+                    if ( upgrades[i] == monster ) {
+                        if ( i < upgrades.size() - 1 ) {
+                            monster = upgrades[i + 1];
+                        }
+                        else {
+                            monster = upgrades[0];
+                        }
+                        break;
+                    }
+                }
+                updateCost = true;
             }
-            else if ( monster != monster0 ) {
-                monster = monster0;
-                max = CalculateMax( monster, kingdom, available );
-                result = max;
-                paymentMonster = monster.GetCost();
-                paymentCosts = paymentMonster * result;
-                redraw = true;
-            }
-
-            if ( result == max ) {
-                maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
+            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( KEY_RIGHT ) ) {
+                for ( size_t i = 0; i < upgrades.size(); ++i ) {
+                    if ( upgrades[i] == monster ) {
+                        if ( i > 0 ) {
+                            monster = upgrades[i - 1];
+                        }
+                        else {
+                            monster = upgrades.back();
+                        }
+                        break;
+                    }
+                }
+                updateCost = true;
             }
         }
 
-        if ( le.MousePressRight( rtChange ) ) {
-            const bool isUpgradedMonster = ext && ( monster != monster.GetDowngrade() );
-            Dialog::ArmyInfo( Troop( isUpgradedMonster ? monster : monster.GetDowngrade(), available ), Dialog::READONLY );
+        if ( updateCost ) {
+            max = CalculateMax( monster, kingdom, available );
+            result = max;
+            paymentMonster = monster.GetCost();
+            paymentCosts = paymentMonster * result;
             redraw = true;
+            maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
+        }
+
+        bool skipEventCheck = false;
+        if ( le.MousePressRight( monsterArea ) ) {
+            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY );
+            redraw = true;
+        }
+        else if ( le.MouseClickLeft( monsterArea ) ) {
+            Dialog::ArmyInfo( Troop( monster, available ), Dialog::READONLY | Dialog::BUTTONS );
+            redraw = true;
+            skipEventCheck = true;
         }
 
         if ( PressIntKey( max, result ) ) {
@@ -355,7 +414,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) ) && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -368,7 +427,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) ) && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;
@@ -396,7 +455,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
         if ( redraw ) {
             cursor.Hide();
-            RedrawStaticInfo( pos, monster, available, ext && monster0.GetDowngrade() != monster0 );
+            RedrawStaticInfo( pos, monster, available );
             RedrawCurrentInfo( fheroes2::Point( pos.x, pos.y ), result, paymentMonster, paymentCosts, funds, maxmin );
 
             if ( 0 == result ) {
@@ -412,6 +471,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 buttonMax.draw();
             if ( buttonMin.isEnabled() )
                 buttonMin.draw();
+
+            monsterSwitchLeft.draw();
+            monsterSwitchRight.draw();
+
             cursor.Show();
             display.render();
             redraw = false;
@@ -420,7 +483,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
             break;
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) && !skipEventCheck ) ) {
             result = 0;
             break;
         }
@@ -461,7 +524,7 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 
     LocalEvent & le = LocalEvent::Get();
 
-    RedrawMonsterInfo( pos, monster, available, false, false );
+    RedrawMonsterInfo( pos, monster, available, false );
 
     cursor.Show();
     display.render();

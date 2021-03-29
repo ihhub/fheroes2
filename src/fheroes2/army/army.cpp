@@ -25,14 +25,16 @@
 #include <math.h>
 #include <set>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "castle.h"
 #include "color.h"
 #include "game.h"
 #include "heroes.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
@@ -40,7 +42,6 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
-#include "settings.h"
 #include "speed.h"
 #include "text.h"
 #include "tools.h"
@@ -321,7 +322,7 @@ bool Troops::JoinTroop( const Monster & mons, u32 count )
             else
                 ( *it )->Set( mons, count );
 
-            DEBUG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() );
             return true;
         }
     }
@@ -371,7 +372,7 @@ u32 Troops::GetUniqueCount( void ) const
             monsters.insert( troop->GetID() );
     }
 
-    return monsters.size();
+    return static_cast<uint32_t>( monsters.size() ); // safe to cast as usually the army has no more than 5 monsters
 }
 
 double Troops::GetStrength() const
@@ -566,12 +567,12 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
+// Pre-battle arrangement for Monster or Neutral troops
 void Troops::ArrangeForBattle( bool upgrade )
 {
     const Troops & priority = GetOptimized();
 
-    switch ( priority.size() ) {
-    case 1: {
+    if ( priority.size() == 1 ) {
         const Monster & m = *priority.back();
         const u32 count = priority.back()->GetCount();
 
@@ -599,31 +600,9 @@ void Troops::ArrangeForBattle( bool upgrade )
         }
         else
             at( 2 )->Set( m, count );
-        break;
     }
-    case 2: {
-        // TODO: need modify army for 2 troops
+    else {
         Assign( priority );
-        break;
-    }
-    case 3: {
-        // TODO: need modify army for 3 troops
-        Assign( priority );
-        break;
-    }
-    case 4: {
-        // TODO: need modify army for 4 troops
-        Assign( priority );
-        break;
-    }
-    case 5: {
-        // possible change orders monster
-        // store
-        Assign( priority );
-        break;
-    }
-    default:
-        break;
     }
 }
 
@@ -755,8 +734,9 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
         if ( 0 == count )
             count = GetCount();
 
-        const uint32_t chunk = width / count;
-        cx += chunk / 2;
+        const int chunk = width / count;
+        if ( !compact )
+            cx += chunk / 2;
 
         Text text;
         text.Set( Font::SMALL );
@@ -764,21 +744,22 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
         for ( const_iterator it = begin(); it != end(); ++it ) {
             if ( ( *it )->isValid() ) {
                 if ( 0 == first && count ) {
-                    const uint32_t spriteIndex = ( *it )->GetSpriteIndex();
-                    const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, spriteIndex );
-                    const int offsetY = !compact ? 30 - monster.height() : ( monster.height() < 35 ) ? 35 - monster.height() : 0;
+                    const fheroes2::Sprite & monster = fheroes2::AGG::GetICN( ICN::MONS32, ( *it )->GetSpriteIndex() );
+                    text.Set( isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower ) );
 
-                    fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
-
-                    const std::string countText
-                        = isScouteView ? Game::CountScoute( ( *it )->GetCount(), drawPower, compact ) : Game::CountThievesGuild( ( *it )->GetCount(), drawPower );
-
-                    text.Set( countText );
-                    if ( compact )
-                        text.Blit( cx + monster.width() / 2, cy + 23 );
-                    else
+                    if ( compact ) {
+                        const int offsetY = ( monster.height() < 37 ) ? 37 - monster.height() : 0;
+                        int offset = ( chunk - monster.width() - text.w() ) / 2;
+                        if ( offset < 0 )
+                            offset = 0;
+                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx + offset, cy + offsetY + monster.y() );
+                        text.Blit( cx + chunk - text.w() - offset, cy + 23 );
+                    }
+                    else {
+                        const int offsetY = 30 - monster.height();
+                        fheroes2::Blit( monster, fheroes2::Display::instance(), cx - monster.width() / 2 + monster.x(), cy + offsetY + monster.y() );
                         text.Blit( cx - text.w() / 2, cy + 29 );
-
+                    }
                     cx += chunk;
                     --count;
                 }
@@ -789,27 +770,44 @@ void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t fi
     }
 }
 
-void Troops::SplitTroopIntoFreeSlots( const Troop & troop, u32 slots )
+void Troops::SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots )
 {
-    if ( slots && slots <= ( Size() - GetCount() ) ) {
-        u32 chunk = troop.GetCount() / slots;
-        u32 limits = slots;
-        std::vector<iterator> iters;
+    if ( slots < 1 || slots > ( Size() - GetCount() ) )
+        return;
 
-        for ( iterator it = begin(); it != end(); ++it )
-            if ( !( *it )->isValid() && limits ) {
-                iters.push_back( it );
-                ( *it )->Set( troop.GetMonster(), chunk );
-                --limits;
-            }
+    const uint32_t chunk = troop.GetCount() / slots;
+    uint32_t remainingCount = troop.GetCount() % slots;
+    uint32_t remainingSlots = slots;
 
-        u32 last = troop.GetCount() - chunk * slots;
+    auto TryCreateTroopChunk = [&remainingSlots, &remainingCount, chunk, troop]( Troop & newTroop ) {
+        if ( remainingSlots <= 0 )
+            return;
 
-        for ( std::vector<iterator>::iterator it = iters.begin(); it != iters.end(); ++it )
-            if ( last ) {
-                ( **it )->SetCount( ( **it )->GetCount() + 1 );
-                --last;
-            }
+        if ( !newTroop.isValid() ) {
+            newTroop.Set( troop.GetMonster(), remainingCount > 0 ? chunk + 1 : chunk );
+            --remainingSlots;
+
+            if ( remainingCount > 0 )
+                --remainingCount;
+        }
+    };
+
+    const iterator selectedSlotIterator = std::find( begin(), end(), &selectedSlot );
+
+    // this means the selected slot is actually not part of the army, which is not the intended logic
+    if ( selectedSlotIterator == end() )
+        return;
+
+    const size_t iteratorIndex = selectedSlotIterator - begin();
+
+    // try to create chunks to the right of the selected slot
+    for ( size_t i = iteratorIndex + 1; i < Size(); ++i ) {
+        TryCreateTroopChunk( *GetTroop( i ) );
+    }
+
+    // this time, try to create chunks to the left of the selected slot
+    for ( int i = static_cast<int>( iteratorIndex ) - 1; i >= 0; --i ) {
+        TryCreateTroopChunk( *GetTroop( i ) );
     }
 }
 
@@ -1035,7 +1033,8 @@ bool Army::isSpreadFormat( void ) const
 
 int Army::GetColor( void ) const
 {
-    return GetCommander() ? GetCommander()->GetColor() : color;
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetColor() : color;
 }
 
 void Army::SetColor( int cl )
@@ -1056,7 +1055,7 @@ int Army::GetRace( void ) const
     races.resize( std::distance( races.begin(), std::unique( races.begin(), races.end() ) ) );
 
     if ( races.empty() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "empty" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "empty" );
         return Race::NONE;
     }
 
@@ -1065,7 +1064,8 @@ int Army::GetRace( void ) const
 
 int Army::GetLuck( void ) const
 {
-    return GetCommander() ? GetCommander()->GetLuck() : GetLuckModificator( NULL );
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( NULL );
 }
 
 int Army::GetLuckModificator( const std::string * ) const
@@ -1075,7 +1075,8 @@ int Army::GetLuckModificator( const std::string * ) const
 
 int Army::GetMorale( void ) const
 {
-    return GetCommander() ? GetCommander()->GetMorale() : GetMoraleModificator( NULL );
+    const HeroBase * currentCommander = GetCommander();
+    return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( NULL );
 }
 
 // TODO:: need optimize
@@ -1417,7 +1418,7 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     const double str1 = GetStrength();
     const double str2 = target.GetStrength() * safetyRatio;
 
-    DEBUG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
 }
@@ -1437,12 +1438,10 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 {
     const uint32_t count = troops.GetCount();
     const int offsetX = lineWidth / 6;
-    const int offsetY = compact ? 29 : 50;
+    const int offsetY = compact ? 31 : 50;
 
-    const bool useSingleLine = count < 4;
-
-    if ( useSingleLine ) {
-        troops.DrawMons32Line( posX, posY + offsetY / 2, lineWidth, 0, 0, drawType, compact, isScouteView );
+    if ( count < 3 ) {
+        troops.DrawMons32Line( posX + offsetX, posY + offsetY / 2 + 1, lineWidth * 2 / 3, 0, 0, drawType, compact, isScouteView );
     }
     else {
         const int firstLineTroopCount = 2;

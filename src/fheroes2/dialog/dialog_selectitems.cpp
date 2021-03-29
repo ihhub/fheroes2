@@ -21,9 +21,10 @@
  ***************************************************************************/
 
 #include "dialog_selectitems.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "army_troop.h"
 #include "dialog.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "text.h"
 
@@ -373,7 +374,7 @@ Monster Dialog::SelectMonster( int id )
 
     listbox.SetListContent( monsters );
     if ( id != Monster::UNKNOWN )
-        listbox.SetCurrent( static_cast<int>( id ) );
+        listbox.SetCurrent( id );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK | Dialog::CANCEL );
@@ -403,7 +404,7 @@ int Dialog::SelectHeroes( int cur )
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> heroes( static_cast<int>( Heroes::SANDYSANDY ), Heroes::UNKNOWN );
+    std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );

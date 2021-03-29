@@ -21,8 +21,9 @@
  ***************************************************************************/
 
 #include "interface_border.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "maps.h"
 #include "settings.h"
@@ -191,7 +192,7 @@ void Interface::BorderWindow::Redraw() const
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
 }
 
-void Interface::BorderWindow::SetPosition( s32 px, s32 py, u32 pw, u32 ph )
+void Interface::BorderWindow::SetPosition( int32_t px, int32_t py, uint32_t pw, uint32_t ph )
 {
     area.w = pw;
     area.h = ph;
@@ -199,7 +200,7 @@ void Interface::BorderWindow::SetPosition( s32 px, s32 py, u32 pw, u32 ph )
     SetPosition( px, py );
 }
 
-void Interface::BorderWindow::SetPosition( s32 px, s32 py )
+void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
 {
     if ( Settings::Get().ExtGameHideInterface() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
@@ -242,8 +243,8 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
         moveIndicator.reset();
         fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ), 6 );
 
-        const s32 ox = mp.x - pos.x;
-        const s32 oy = mp.y - pos.y;
+        const int32_t ox = mp.x - pos.x;
+        const int32_t oy = mp.y - pos.y;
 
         cursor.Hide();
         moveIndicator.setPosition( pos.x, pos.y );

@@ -30,13 +30,13 @@
 #include "game_delays.h"
 #include "gamedefs.h"
 #include "icn.h"
-#include "localevent.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
 #include "ui_button.h"
 
 class Settings;
+class LocalEvent;
 
 namespace fheroes2
 {
@@ -57,7 +57,7 @@ namespace Battle
     struct Result;
 
     void DialogBattleSettings( void );
-    bool DialogBattleSurrender( const HeroBase & hero, u32 cost, const Kingdom & kingdom );
+    bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );
 
     enum HeroAnimation
     {
@@ -158,7 +158,7 @@ namespace Battle
         void QueueEventProcessing( std::string & msg, const Point & offset );
 
     private:
-        typedef std::pair<const Unit *, Rect> UnitPos;
+        using UnitPos = std::pair<const Unit *, Rect>;
 
         void RedrawUnit( const Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
 
@@ -216,7 +216,7 @@ namespace Battle
         void RedrawActionMorale( Unit &, bool );
         void RedrawActionLuck( const Unit & );
         void RedrawActionTowerPart1( const Tower &, const Unit & );
-        void RedrawActionTowerPart2( const TargetInfo & );
+        void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
         void RedrawActionCatapult( int );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
@@ -292,7 +292,7 @@ namespace Battle
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell &, Actions & );
+        void MousePressRightBoardAction( u32, const Cell & );
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
@@ -339,7 +339,6 @@ namespace Battle
 
         s32 index_pos;
         s32 teleport_src;
-        Rect pocket_book;
         Rect main_tower;
 
         StatusListBox * listlog;

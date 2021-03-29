@@ -22,11 +22,12 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "maps.h"
 #include "mp2.h"
 #include "settings.h"
@@ -173,14 +174,13 @@ int Interface::Basic::GetRedrawMask() const
 
 void Interface::Basic::Redraw( int force )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     const int combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
 
     if ( combinedRedraw & REDRAW_GAMEAREA )
-        gameArea.Redraw( display, LEVEL_ALL );
+        gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) )
         radar.Redraw();

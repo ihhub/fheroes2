@@ -22,12 +22,13 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "battle_cell.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
 #include "speed.h"
@@ -216,7 +217,8 @@ void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomM
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width(), cur_pt.y + 461, src_rt.width, src_rt.height );
+    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width() + 1, cur_pt.y + 461, src_rt.width, src_rt.height );
+    fheroes2::Fill( display, cur_pt.x + button.width(), cur_pt.y + 461, 1, src_rt.height, 0 );
 
     text.Set( _( "Town Population Information and Statistics" ), Font::BIG );
     dst_pt.x = cur_pt.x + 315 - text.w() / 2;

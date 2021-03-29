@@ -185,8 +185,6 @@ public:
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
     void SetGlobalFilter( bool );
-    void SetTapMode( bool );
-    void SetTapDelayForRightClickEmulation( u32 );
     void SetMouseOffsetX( int16_t );
     void SetMouseOffsetY( int16_t );
 
@@ -286,6 +284,8 @@ private:
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+    void StopSounds();
+    void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
@@ -294,6 +294,7 @@ private:
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+    void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
 #endif
@@ -302,14 +303,14 @@ private:
     {
         KEY_PRESSED = 0x0001,
         MOUSE_MOTION = 0x0002,
-        MOUSE_PRESSED = 0x0004,
+        MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
         GLOBAL_FILTER = 0x0008,
-        CLICK_LEFT = 0x0010, // either there is a click on left button or it was just released
-        CLICK_RIGHT = 0x0020, // either there is a click on right button or it was just released
-        CLICK_MIDDLE = 0x0040, // either there is a click on middle button or it was just released
-        TAP_MODE = 0x0080,
+        MOUSE_RELEASED = 0x0010, // mouse button has just been released
+        MOUSE_CLICKED = 0x0020, // mouse button has been clicked
+        UNUSED_1 = 0x0040,
+        UNUSED_2 = 0x0080,
         MOUSE_OFFSET = 0x0100,
-        CLOCK_ON = 0x0200,
+        UNUSED_3 = 0x0200,
         MOUSE_WHEEL = 0x0400,
         KEY_HOLD = 0x0800
     };
@@ -339,14 +340,13 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    fheroes2::Time clock;
-    u32 clock_delay;
     int loop_delay;
 
     // These members are used for restoring music and sounds when an user reopens the window
     bool _isHiddenWindow;
     bool _isMusicPaused;
     bool _isSoundPaused;
+    uint16_t _musicVolume;
 
     enum
     {

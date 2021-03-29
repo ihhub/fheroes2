@@ -23,6 +23,7 @@
 #ifndef H2PLAYERS_H
 #define H2PLAYERS_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -32,6 +33,11 @@
 namespace Maps
 {
     class FileInfo;
+}
+
+namespace AI
+{
+    class Base;
 }
 
 class Castle;
@@ -123,7 +129,11 @@ public:
     int GetFriends( void ) const;
     int GetID( void ) const;
 
+    std::string GetDefaultName() const;
     const std::string & GetName( void ) const;
+
+    std::string GetPersonalityString() const;
+
     Focus & GetFocus( void );
     const Focus & GetFocus( void ) const;
 
@@ -138,6 +148,7 @@ protected:
     std::string name;
     u32 id;
     Focus focus;
+    std::shared_ptr<AI::Base> _ai;
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );

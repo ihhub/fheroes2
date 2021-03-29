@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #ifdef AI
@@ -28,24 +29,25 @@
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "audio_mixer.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "engine.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "maps_tiles.h"
 #include "mus.h"
 #include "route.h"
-#include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "world.h"
@@ -127,6 +129,8 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
     Mixer::Pause();
 
+    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -163,8 +167,14 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() ) {
-            basicInterface.SetFocus( *it );
+        else if ( it != myCastles.end() && updateCastleFocus ) {
+            Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
+            if ( heroInCastle == nullptr ) {
+                basicInterface.SetFocus( *it );
+            }
+            else {
+                basicInterface.SetFocus( heroInCastle );
+            }
         }
     }
     basicInterface.RedrawFocus();
@@ -412,16 +422,22 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 else
                     return Cursor::POINTER;
             }
-            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() )
+            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-            else if ( from_hero.GetColor() == castle->GetColor() )
+            }
+            else if ( from_hero.GetColor() == castle->GetColor() ) {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else if ( from_hero.isFriends( castle->GetColor() ) )
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::ACTION : Cursor::POINTER;
-            else if ( castle->GetActualArmy().isValid() )
+            }
+            else if ( from_hero.isFriends( castle->GetColor() ) ) {
+                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                                                           : Cursor::POINTER;
+            }
+            else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else
+            }
+            else {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+            }
         }
     } break;
 
@@ -533,10 +549,10 @@ int Interface::Basic::StartGame( void )
                 if ( !kingdom.isPlay() || ( skip_turns && !player.isColor( conf.CurrentColor() ) ) )
                     continue;
 
-                DEBUG( DBG_GAME, DBG_INFO,
-                       std::endl
-                           << world.DateString() << ", "
-                           << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+                DEBUG_LOG( DBG_GAME, DBG_INFO,
+                           std::endl
+                               << world.DateString() << ", "
+                               << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -626,14 +642,17 @@ int Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // set focus
-    if ( conf.LoadedGameVersion() && conf.ExtGameRememberLastFocus() ) {
-        if ( GetFocusHeroes() )
+    if ( conf.ExtGameRememberLastFocus() ) {
+        if ( GetFocusHeroes() != nullptr )
             ResetFocus( GameFocus::HEROES );
-        else
+        else if ( GetFocusCastle() != nullptr )
             ResetFocus( GameFocus::CASTLE );
+        else
+            ResetFocus( GameFocus::FIRSTHERO );
     }
-    else
+    else {
         ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();
@@ -650,7 +669,7 @@ int Interface::Basic::HumanTurn( bool isload )
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             const int currentMusic = Game::CurrentMusic();
             ShowNewWeekDialog();
-            AGG::PlayMusic( currentMusic, true );
+            AGG::PlayMusic( currentMusic, true, true );
         }
 
         // show event day
@@ -691,6 +710,9 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
+            }
+            else {
+                continue;
             }
         }
 
@@ -800,41 +822,18 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
-        if ( conf.ExtPocketTapMode() ) {
-            // scroll area maps left
-            if ( le.MouseCursor( GetScrollLeft() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_LEFT );
-            else
-                // scroll area maps right
-                if ( le.MouseCursor( GetScrollRight() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_RIGHT );
-            else
-                // scroll area maps top
-                if ( le.MouseCursor( GetScrollTop() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_TOP );
-            else
-                // scroll area maps bottom
-                if ( le.MouseCursor( GetScrollBottom() ) && le.MousePressLeft() )
-                gameArea.SetScroll( SCROLL_BOTTOM );
-
-            // disable right click emulation
-            if ( gameArea.NeedScroll() )
-                le.SetTapMode( false );
-        }
-        else {
-            if ( fheroes2::cursor().isFocusActive() ) {
-                int scrollPosition = SCROLL_NONE;
-                if ( le.MouseCursor( GetScrollLeft() ) )
-                    scrollPosition |= SCROLL_LEFT;
-                else if ( le.MouseCursor( GetScrollRight() ) )
-                    scrollPosition |= SCROLL_RIGHT;
-                if ( le.MouseCursor( GetScrollTop() ) )
-                    scrollPosition |= SCROLL_TOP;
-                else if ( le.MouseCursor( GetScrollBottom() ) )
-                    scrollPosition |= SCROLL_BOTTOM;
-                if ( scrollPosition != SCROLL_NONE )
-                    gameArea.SetScroll( scrollPosition );
-            }
+        if ( fheroes2::cursor().isFocusActive() ) {
+            int scrollPosition = SCROLL_NONE;
+            if ( le.MouseCursor( GetScrollLeft() ) )
+                scrollPosition |= SCROLL_LEFT;
+            else if ( le.MouseCursor( GetScrollRight() ) )
+                scrollPosition |= SCROLL_RIGHT;
+            if ( le.MouseCursor( GetScrollTop() ) )
+                scrollPosition |= SCROLL_TOP;
+            else if ( le.MouseCursor( GetScrollBottom() ) )
+                scrollPosition |= SCROLL_BOTTOM;
+            if ( scrollPosition != SCROLL_NONE )
+                gameArea.SetScroll( scrollPosition );
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
@@ -911,10 +910,6 @@ int Interface::Basic::HumanTurn( bool isload )
             Redraw();
             cursor.Show();
             display.render();
-
-            // enable right click emulation
-            if ( conf.ExtPocketTapMode() )
-                le.SetTapMode( true );
 
             continue;
         }
@@ -1012,23 +1007,47 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
-            if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-                if ( fadeInfo.isFadeOut && fadeInfo.alpha < 20 ) {
-                    fadeInfo.object = MP2::OBJ_ZERO;
-                }
-                else if ( !fadeInfo.isFadeOut && fadeInfo.alpha > 235 ) {
-                    Maps::Tiles & objectTile = world.GetTiles( fadeInfo.tile );
-                    objectTile.SetObject( fadeInfo.object );
-                    // TODO: we need to expand the logic to all objects.
-                    if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-                        objectTile.SetObjectSpriteIndex( fadeInfo.index );
+            auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+            if ( MP2::OBJ_ZERO != fadeTask.object ) {
+                if ( fadeTask.fadeOut ) {
+                    if ( fadeTask.alpha > 20 ) {
+                        fadeTask.alpha -= 20;
                     }
-                    fadeInfo.object = MP2::OBJ_ZERO;
+                    else {
+                        fadeTask.fadeOut = false;
+                        fadeTask.alpha = 0;
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+                        if ( tile.GetObject() == fadeTask.object ) {
+                            tile.RemoveObjectSprite();
+                            tile.SetObject( MP2::OBJ_ZERO );
+                        }
+
+                        if ( !fadeTask.fadeIn ) {
+                            fadeTask.object = MP2::OBJ_ZERO;
+                        }
+                    }
+                }
+                else if ( fadeTask.fadeIn ) {
+                    if ( fadeTask.alpha == 0 ) {
+                        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+                        if ( MP2::OBJ_BOAT == fadeTask.object ) {
+                            tile.setBoat( Direction::RIGHT );
+                        }
+                    }
+
+                    if ( fadeTask.alpha < 235 ) {
+                        fadeTask.alpha += 20;
+                    }
+                    else {
+                        fadeTask.fadeIn = false;
+                        fadeTask.alpha = 255;
+                        fadeTask.object = MP2::OBJ_ZERO;
+                    }
                 }
                 else {
-                    fadeInfo.alpha += ( fadeInfo.isFadeOut ) ? -20 : 20;
+                    assert( 0 ); // incorrect fading animation setup!
                 }
+
                 gameArea.SetRedraw();
             }
         }
@@ -1051,6 +1070,8 @@ int Interface::Basic::HumanTurn( bool isload )
             Game::DialogPlayers( conf.CurrentColor(),
                                  _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
         }
+
+        Game::ObjectFadeAnimation::FinishFadeTask();
 
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
@@ -1141,7 +1162,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps )
         const Settings & conf = Settings::Get();
         const Maps::Tiles & tile = world.GetTiles( index_maps );
 
-        DEBUG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
 
         if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
             Dialog::QuickInfo( tile );

@@ -22,12 +22,10 @@
 
 #include <cstring>
 
-#include "artifact.h"
 #include "castle.h"
+#include "logging.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
-#include "skill.h"
 
 struct profitstats_t
 {
@@ -84,7 +82,7 @@ void ProfitConditions::UpdateCosts( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif

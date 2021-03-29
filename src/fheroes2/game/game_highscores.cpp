@@ -28,14 +28,16 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_over.h"
 #include "gamedefs.h"
+#include "icn.h"
+#include "logging.h"
 #include "mus.h"
-#include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
@@ -199,7 +201,7 @@ int Game::HighScores()
 
     cursor.SetThemes( cursor.POINTER );
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     hgs.Load( stream.str().c_str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );

@@ -22,11 +22,13 @@
 
 #include "game.h"
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "localevent.h"
 #include "mus.h"
 #include "screen.h"
@@ -134,7 +136,7 @@ int Game::LoadMulti( void )
 int Game::LoadGame( void )
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     fheroes2::Display & display = fheroes2::Display::instance();
 
     Cursor & cursor = Cursor::Get();
@@ -232,7 +234,7 @@ int Game::LoadStandard( void )
 int Game::DisplayLoadGameDialog()
 {
     Mixer::Pause();
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
     // cursor
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( cursor.POINTER );

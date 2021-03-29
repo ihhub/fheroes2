@@ -26,7 +26,6 @@
 #include <vector>
 
 #include "castle.h"
-#include "heroes.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
 #include "pairs.h"
@@ -115,6 +114,8 @@ public:
     u32 GetCountBuilding( u32 ) const;
     uint32_t GetCountThievesGuild() const;
 
+    uint32_t GetCountArtifacts() const;
+
     Recruits & GetRecruits( void );
 
     const KingdomHeroes & GetHeroes( void ) const
@@ -170,6 +171,7 @@ public:
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
     static u32 GetMaxHeroes( void );
+    static cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );

@@ -58,12 +58,24 @@ void MageGuild::initialize( int race, bool libraryCap )
     --spellCountByLevel[guaranteedDamageSpellLevel - 1];
     --spellCountByLevel[guaranteedNonDamageSpellLevel - 1];
 
+    SpellStorage all( general );
+
     for ( int i = 0; i < 5; ++i ) {
         for ( int j = 0; j < spellCountByLevel[i]; ++j ) {
-            const Spell spell = GetUniqueSpellCompatibility( general, race, i + 1 );
+            const Spell spell = GetUniqueSpellCompatibility( all, race, i + 1 );
 
-            if ( spell != Spell::NONE )
+            if ( spell == Spell::NONE ) {
+                continue;
+            }
+
+            if ( libraryCap && j == spellCountByLevel[i] - 1 ) {
+                library.Append( spell );
+            }
+            else {
                 general.Append( spell );
+            }
+
+            all.Append( spell );
         }
     }
 }
@@ -129,7 +141,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
             v.push_back( spell );
     }
 
-    return v.size() ? *Rand::Get( v ) : Spell( Spell::NONE );
+    return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
 }
 
 Spell GetCombatSpellCompatibility( int race, int lvl )

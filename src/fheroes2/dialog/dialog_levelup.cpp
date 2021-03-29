@@ -20,11 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_button.h"
@@ -196,22 +197,22 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         else if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
-            hero.OpenDialog( true /* read only */, false );
+            const bool noDismiss = hero.Modes( Heroes::NOTDISMISS );
+            hero.SetModes( Heroes::NOTDISMISS );
+            hero.OpenDialog( false, true );
+
+            if ( !noDismiss ) {
+                hero.ResetModes( Heroes::NOTDISMISS );
+            }
             cursor.Show();
             display.render();
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1, hero );
-            cursor.Show();
-            display.render();
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2, hero );
-            cursor.Show();
-            display.render();
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {

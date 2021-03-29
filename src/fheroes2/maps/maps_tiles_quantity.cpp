@@ -20,14 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "artifact.h"
-#include "difficulty.h"
-#include "maps_tiles.h"
-#include "pairs.h"
 #include "rand.h"
-#include "settings.h"
-#include "skill.h"
-#include "spell.h"
 #include "world.h"
 
 bool Maps::Tiles::QuantityIsValid( void ) const
@@ -396,7 +389,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
     case MP2::OBJ_DRAGONCITY:
         return Monster( Monster::RED_DRAGON );
     case MP2::OBJ_CITYDEAD:
-        return Monster( Monster::LICH );
+        return Monster( Monster::POWER_LICH );
 
     case MP2::OBJ_ANCIENTLAMP:
         return Monster( Monster::GENIE );

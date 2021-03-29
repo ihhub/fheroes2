@@ -20,9 +20,10 @@
 
 #include <set>
 
-#include "world_pathfinding.h"
 #include "ground.h"
+#include "logging.h"
 #include "world.h"
+#include "world_pathfinding.h"
 
 bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool fromWater )
 {
@@ -239,7 +240,7 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
         else {
@@ -258,6 +259,11 @@ std::list<Route::Step> PlayerWorldPathfinder::buildPath( int targetIndex ) const
 // Follows regular (for user's interface) passability rules
 void PlayerWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, int pathStart, int currentNodeIdx, bool fromWater )
 {
+    // if current tile contains a monster, skip it
+    if ( _cache[currentNodeIdx]._objectID == MP2::OBJ_MONSTER ) {
+        return;
+    }
+
     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( currentNodeIdx );
 
     // check if current tile is protected, can move only to adjacent monster
@@ -450,7 +456,7 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
 
@@ -483,7 +489,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
 
         // Sanity check
         if ( node._from != -1 && _cache[node._from]._from == currentNode ) {
-            DEBUG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Circular path found! " << node._from << " to " << currentNode );
             break;
         }
         else {

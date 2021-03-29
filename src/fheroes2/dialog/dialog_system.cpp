@@ -20,15 +20,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -76,7 +78,7 @@ int Dialog::SystemOptions( void )
     rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
     rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
     rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() ); // not in use
+    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -86,6 +88,7 @@ int Dialog::SystemOptions( void )
     const fheroes2::Rect & rect6 = rects[5];
     const fheroes2::Rect & rect7 = rects[6];
     const fheroes2::Rect & rect8 = rects[7];
+    const fheroes2::Rect & rect9 = rects[8];
 
     DrawSystemInfo( rects );
 
@@ -100,6 +103,8 @@ int Dialog::SystemOptions( void )
     int result = 0;
     bool redraw = false;
     bool saveConfig = false;
+
+    const bool externalMusicSupported = System::IsDirectory( "music" );
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
@@ -129,6 +134,8 @@ int Dialog::SystemOptions( void )
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.PriceLoyaltyVersion() )
+                ++type;
+            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
                 ++type;
             // CD music is currently not implemented correctly even on SDL1; remove this when done
             if ( type == MUSIC_CDROM )
@@ -178,6 +185,26 @@ int Dialog::SystemOptions( void )
         if ( le.MouseClickLeft( rect8 ) ) {
             conf.SetHideInterface( !conf.ExtGameHideInterface() );
             result |= 0x04;
+            redraw = true;
+            saveConfig = true;
+        }
+
+        // toggle manual/auto battles
+        if ( le.MouseClickLeft( rect9 ) ) {
+            if ( conf.BattleAutoResolve() ) {
+                if ( conf.BattleAutoSpellcast() ) {
+                    conf.setBattleAutoSpellcast( false );
+                }
+                else {
+                    conf.setBattleAutoResolve( false );
+                }
+            }
+            else {
+                conf.setBattleAutoResolve( true );
+                conf.setBattleAutoSpellcast( true );
+            }
+
+            result |= 0x20;
             redraw = true;
             saveConfig = true;
         }
@@ -342,16 +369,29 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else {
         fheroes2::Blit( sprite8, display, rect8.x, rect8.y );
-        fheroes2::Blit( sprite81, 13, 13, display, rect8.x + 13, rect8.y + 13, 38, 38 );
+        fheroes2::Blit( sprite81, 14, 14, display, rect8.x + 14, rect8.y + 14, 37, 37 );
         str = _( "Show" );
     }
     text.Set( str );
     text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h + textOffset );
 
-    // unused
-    // const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN(ICN::SPANEL, 17);
+    // auto-battles
     const Rect & rect9 = rects[8];
-    str = "unused";
+    str = _( "Battles" );
+    text.Set( str );
+    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y - text.h() - textOffset );
+
+    if ( conf.BattleAutoResolve() ) {
+        const bool spellcast = conf.BattleAutoSpellcast();
+        str = spellcast ? _( "Auto Resolve" ) : str = _( "Auto, No Spells" );
+
+        const fheroes2::Sprite & sprite9 = fheroes2::AGG::GetICN( ICN::CSPANEL, spellcast ? 7 : 6 );
+        fheroes2::Blit( sprite9, display, rect9.x, rect9.y );
+    }
+    else {
+        str = _( "Manual" );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), display, rect9.x, rect9.y );
+    }
     text.Set( str );
     text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );
 }

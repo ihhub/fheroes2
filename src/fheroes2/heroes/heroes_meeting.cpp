@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "cursor.h"
@@ -31,7 +31,8 @@
 #include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
-#include "settings.h"
+#include "icn.h"
+#include "logging.h"
 #include "skill_bar.h"
 #include "text.h"
 
@@ -420,7 +421,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         }
 
         if ( le.MouseClickLeft( hero1Area ) ) {
-            OpenDialog( true, true );
+            const bool noDismiss = Modes( Heroes::NOTDISMISS );
+
+            SetModes( Heroes::NOTDISMISS );
+            OpenDialog( false, true );
+
+            if ( !noDismiss ) {
+                ResetModes( Heroes::NOTDISMISS );
+            }
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts1.ResetSelected();
@@ -433,7 +441,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            heroes2.OpenDialog( true, true );
+            const bool noDismiss = heroes2.Modes( Heroes::NOTDISMISS );
+
+            heroes2.SetModes( Heroes::NOTDISMISS );
+            heroes2.OpenDialog( false, true );
+
+            if ( !noDismiss ) {
+                heroes2.ResetModes( Heroes::NOTDISMISS );
+            }
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts2.ResetSelected();
@@ -445,11 +460,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             cursor.Show();
             display.render();
         }
-    }
-
-    if ( Settings::Get().ExtHeroRecalculateMovement() ) {
-        RecalculateMovePoints();
-        heroes2.RecalculateMovePoints();
     }
 
     backPrimary.reset();
@@ -485,11 +495,11 @@ void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, Prim
 void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
 {
     if ( !hero1.HaveSpellBook() || !hero2.HaveSpellBook() ) {
-        DEBUG( DBG_GAME, DBG_INFO, "spell_book disabled" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "spell_book disabled" );
         return;
     }
     else if ( !Settings::Get().ExtWorldEyeEagleAsScholar() ) {
-        DEBUG( DBG_GAME, DBG_WARN, "EyeEagleAsScholar settings disabled" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "EyeEagleAsScholar settings disabled" );
         return;
     }
 
@@ -511,7 +521,7 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
         scholar = scholar2;
     }
     else {
-        DEBUG( DBG_GAME, DBG_WARN, "Eagle Eye skill not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Eagle Eye skill not found" );
         return;
     }
 

@@ -21,9 +21,10 @@
  ***************************************************************************/
 
 #include "interface_cpanel.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 
@@ -64,7 +65,7 @@ const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
     return *this;
 }
 
-void Interface::ControlPanel::SetPos( s32 ox, s32 oy )
+void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
 {
     x = ox;
     y = oy;

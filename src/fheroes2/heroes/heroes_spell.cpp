@@ -21,23 +21,25 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "m82.h"
 #include "monster.h"
 #include "rand.h"
-#include "settings.h"
 #include "spell.h"
 #include "text.h"
 #include "ui_window.h"
 #include "world.h"
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
 namespace
@@ -47,22 +49,21 @@ namespace
     const uint32_t townGatePenalty = 225;
 }
 
-void DialogSpellFailed( const Spell & );
-void DialogNotAvailable( void );
+void DialogSpellFailed( const Spell & spell );
 
-bool ActionSpellViewMines( const Heroes & );
-bool ActionSpellViewResources( const Heroes & );
-bool ActionSpellViewArtifacts( Heroes & );
-bool ActionSpellViewTowns( const Heroes & );
-bool ActionSpellViewHeroes( const Heroes & );
-bool ActionSpellViewAll( const Heroes & );
-bool ActionSpellIdentifyHero( const Heroes & );
-bool ActionSpellSummonBoat( const Heroes & );
-bool ActionSpellDimensionDoor( Heroes & );
-bool ActionSpellTownGate( Heroes & );
-bool ActionSpellTownPortal( Heroes & );
-bool ActionSpellVisions( Heroes & );
-bool ActionSpellSetGuardian( Heroes &, const Spell & );
+bool ActionSpellViewMines( const Heroes & hero );
+bool ActionSpellViewResources( const Heroes & hero );
+bool ActionSpellViewArtifacts( Heroes & hero );
+bool ActionSpellViewTowns( const Heroes & hero );
+bool ActionSpellViewHeroes( const Heroes & hero );
+bool ActionSpellViewAll( const Heroes & hero );
+bool ActionSpellIdentifyHero( const Heroes & hero );
+bool ActionSpellSummonBoat( const Heroes & hero );
+bool ActionSpellDimensionDoor( Heroes & hero );
+bool ActionSpellTownGate( Heroes & hero );
+bool ActionSpellTownPortal( Heroes & hero );
+bool ActionSpellVisions( Heroes & hero );
+bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
@@ -250,7 +251,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
     }
 
     if ( apply ) {
-        DEBUG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
         SpellCasted( spell );
         return true;
     }
@@ -303,45 +304,40 @@ void DialogSpellFailed( const Spell & spell )
     Dialog::Message( "", str, Font::BIG, Dialog::OK );
 }
 
-void DialogNotAvailable( void )
-{
-    Dialog::Message( "", "Not available for current version", Font::BIG, Dialog::OK );
-}
-
 bool ActionSpellViewMines( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewResources( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewArtifacts( Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewTowns( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewHeroes( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellViewAll( const Heroes & )
 {
-    DialogNotAvailable();
-    return false;
+    ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::Basic::Get() );
+    return true;
 }
 
 bool ActionSpellIdentifyHero( const Heroes & hero )
@@ -364,11 +360,11 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    const s32 center = hero.GetIndex();
+    const int32_t center = hero.GetIndex();
     const Point & centerPoint = Maps::GetPoint( center );
 
     // find water
-    s32 dst_water = -1;
+    int32_t dst_water = -1;
     MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const Point & leftPoint = Maps::GetPoint( left );
@@ -380,6 +376,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
         return ( leftDiffX * leftDiffX + leftDiffY * leftDiffY ) < ( rightDiffX * rightDiffX + rightDiffY * rightDiffY );
     } );
+
     for ( MapsIndexes::const_iterator it = freeTiles.begin(); it != freeTiles.end(); ++it ) {
         if ( world.GetTiles( *it ).isWater() ) {
             dst_water = *it;
@@ -392,35 +389,14 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         return false;
     }
 
-    u32 chance = 0;
-
-    switch ( hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) {
-    case Skill::Level::BASIC:
-        chance = 50;
-        break;
-    case Skill::Level::ADVANCED:
-        chance = 75;
-        break;
-    case Skill::Level::EXPERT:
-        chance = 100;
-        break;
-    default:
-        chance = 30;
-        break;
-    }
-
     const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-    for ( size_t i = 0; i < boats.size(); ++i ) {
-        const s32 boat = boats[i];
-        if ( Maps::isValidAbsIndex( boat ) ) {
-            if ( Rand::Get( 1, 100 ) <= chance ) {
-                Maps::Tiles & boatFile = world.GetTiles( boat );
-                boatFile.RemoveObjectSprite();
-                boatFile.SetObject( MP2::OBJ_ZERO );
-                Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( MP2::OBJ_BOAT, 18, dst_water, 0, false ) );
+    for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
+        if ( Maps::isValidAbsIndex( *it ) ) {
+            const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
+            if ( distance > 1 ) {
+                Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
                 return true;
             }
-            break;
         }
     }
 
@@ -556,10 +532,9 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;
-    const int buttonIcnId = isEvilInterface ? ICN::SYSTEME : ICN::REQUESTS;
-
-    btnGroups.createButton( area.x, area.y + 222, buttonIcnId, 1, 2, Dialog::OK );
-    btnGroups.createButton( area.x + 182, area.y + 222, buttonIcnId, 3, 4, Dialog::CANCEL );
+    btnGroups.createButton( area.x, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON, 0, 1, Dialog::OK );
+    btnGroups.createButton( area.x + 182, area.y + 222, isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON, 0, 1,
+                            Dialog::CANCEL );
     btnGroups.draw();
 
     cursor.Show();
@@ -587,57 +562,55 @@ bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
     const MapsIndexes & monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
-
-    if ( monsters.size() ) {
-        for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
-            const Maps::Tiles & tile = world.GetTiles( *it );
-            const MapMonster * map_troop = NULL;
-            if ( tile.GetObject() == MP2::OBJ_MONSTER )
-                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-
-            Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
-            JoinCount join = Army::GetJoinSolution( hero, tile, troop );
-
-            Funds cost;
-            std::string hdr, msg;
-
-            hdr = std::string( "%{count} " ) + StringLower( troop.GetPluralName( join.second ) );
-            StringReplace( hdr, "%{count}", troop.GetCount() );
-
-            switch ( join.first ) {
-            default:
-                msg = _( "I fear these creatures are in the mood for a fight." );
-                break;
-
-            case JOIN_FREE:
-                msg = _( "The creatures are willing to join us!" );
-                break;
-
-            case JOIN_COST:
-                if ( join.second == troop.GetCount() )
-                    msg = _( "All the creatures will join us..." );
-                else {
-                    msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
-                    StringReplace( msg, "%{count}", join.second );
-                }
-                msg.append( "\n" );
-                msg.append( "\n for a fee of %{gold} gold." );
-                StringReplace( msg, "%{gold}", troop.GetCost().gold );
-                break;
-
-            case JOIN_FLEE:
-                msg = _( "These weak creatures will surely flee before us." );
-                break;
-            }
-
-            Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
-        }
-    }
-    else {
+    if ( monsters.empty() ) {
         std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
         StringReplace( msg, "%{count}", dist );
         Dialog::Message( "", msg, Font::BIG, Dialog::OK );
         return false;
+    }
+
+    for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
+        const Maps::Tiles & tile = world.GetTiles( *it );
+        const MapMonster * map_troop = NULL;
+        if ( tile.GetObject() == MP2::OBJ_MONSTER )
+            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
+
+        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+
+        std::string hdr;
+        std::string msg;
+
+        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.second );
+        StringReplace( hdr, "%{count}", troop.GetCount() );
+
+        switch ( join.first ) {
+        default:
+            msg = _( "I fear these creatures are in the mood for a fight." );
+            break;
+
+        case JOIN_FREE:
+            msg = _( "The creatures are willing to join us!" );
+            break;
+
+        case JOIN_COST:
+            if ( join.second == troop.GetCount() )
+                msg = _( "All the creatures will join us..." );
+            else {
+                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
+                StringReplace( msg, "%{count}", join.second );
+            }
+            msg.append( "\n" );
+            msg.append( "\n for a fee of %{gold} gold." );
+            StringReplace( msg, "%{gold}", troop.GetCost().gold );
+            break;
+
+        case JOIN_FLEE:
+            msg = _( "These weak creatures will surely flee before us." );
+            break;
+        }
+
+        Dialog::Message( hdr, msg, Font::BIG, Dialog::OK );
     }
 
     hero.SetModes( Heroes::VISIONS );

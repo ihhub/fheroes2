@@ -23,7 +23,9 @@
 #include "mp2.h"
 #include "direction.h"
 #include "icn.h"
+#include "logging.h"
 #include "settings.h"
+#include "translations.h"
 
 /* return name icn object */
 int MP2::GetICNObject( int tileset )
@@ -223,7 +225,7 @@ int MP2::GetICNObject( int tileset )
         break;
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) );
 
     return ICN::UNKNOWN;
 }
@@ -232,10 +234,7 @@ bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
 {
     const int icnID = tileset >> 2;
     // Values extracted from 64-byte array in original game
-    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) )
-        return true;
-
-    return false;
+    return ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) );
 }
 
 const char * MP2::StringObject( int object )
@@ -688,7 +687,7 @@ const char * MP2::StringObject( int object )
         return "OBJ_UNKNW_FA";
 
     default:
-        DEBUG( DBG_GAME, DBG_WARN, "unknown object: " << static_cast<int>( object ) );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown object: " << static_cast<int>( object ) );
         break;
     }
 

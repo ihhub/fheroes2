@@ -20,16 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <ctime>
-#include <sstream>
 
 #include "game.h"
 #include "game_interface.h"
-#include "gamedefs.h"
 #include "localevent.h"
+#include "logging.h"
 #include "settings.h"
-#include "system.h"
 #include "tinyconfig.h"
 
 namespace Game
@@ -296,7 +293,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
                 if ( ival ) {
                     const KeySym sym = GetKeySym( ival );
                     key_events[evnt] = sym;
-                    DEBUG( DBG_GAME, DBG_INFO, "events: " << EventsName( evnt ) << ", key: " << KeySymGetName( sym ) );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "events: " << EventsName( evnt ) << ", key: " << KeySymGetName( sym ) );
                 }
             }
         }

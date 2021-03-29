@@ -28,20 +28,25 @@
 #include <vector>
 
 #include "audio_music.h"
-#include "engine.h"
+#include "logging.h"
 #include "serialize.h"
-#include "system.h"
 
-#define TAG_FORM 0x464F524D
-#define TAG_XDIR 0x58444952
-#define TAG_INFO 0x494E464F
-#define TAG_CAT0 0x43415420
-#define TAG_XMID 0x584D4944
-#define TAG_TIMB 0x54494D42
-#define TAG_EVNT 0x45564E54
-#define TAG_RBRN 0x5242524E
-#define TAG_MTHD 0x4D546864
-#define TAG_MTRK 0x4D54726B
+namespace
+{
+    enum
+    {
+        TAG_FORM = 0x464F524D,
+        TAG_XDIR = 0x58444952,
+        TAG_INFO = 0x494E464F,
+        TAG_CAT0 = 0x43415420,
+        TAG_XMID = 0x584D4944,
+        TAG_TIMB = 0x54494D42,
+        TAG_EVNT = 0x45564E54,
+        TAG_RBRN = 0x5242524E,
+        TAG_MTHD = 0x4D546864,
+        TAG_MTRK = 0x4D54726B
+    };
+}
 
 // Pair: time and length
 struct XMI_Time : public std::pair<u32, u32>
@@ -58,7 +63,7 @@ XMI_Time readXMITime( const uint8_t * data )
 
     while ( *p & 0x80 ) {
         if ( 4 <= p - data ) {
-            ERROR( "Can't read XMI time: field bigger than 4 bytes" );
+            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" );
             break;
         }
 
@@ -212,8 +217,8 @@ struct XMIData
                             if ( iff.ID == TAG_TIMB ) {
                                 timb = sb.getRaw( iff.length );
                                 if ( timb.size() != iff.length ) {
-                                    ERROR( "parse error: "
-                                           << "out of range" );
+                                    ERROR_LOG( "parse error: "
+                                               << "out of range" );
                                     break;
                                 }
                                 sb >> iff;
@@ -227,34 +232,34 @@ struct XMIData
 
                             // EVNT
                             if ( iff.ID != TAG_EVNT ) {
-                                ERROR( "parse error: "
-                                       << "evnt" );
+                                ERROR_LOG( "parse error: "
+                                           << "evnt" );
                                 break;
                             }
 
                             evnt = sb.getRaw( iff.length );
 
                             if ( evnt.size() != iff.length ) {
-                                ERROR( "parse error: "
-                                       << "out of range" );
+                                ERROR_LOG( "parse error: "
+                                           << "out of range" );
                                 break;
                             }
                         }
                         else
-                            ERROR( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" );
+                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" );
                     }
                 }
                 else
-                    ERROR( "parse error: "
-                           << "cat xmid" );
+                    ERROR_LOG( "parse error: "
+                               << "cat xmid" );
             }
             else
-                ERROR( "parse error: "
-                       << "info" );
+                ERROR_LOG( "parse error: "
+                           << "info" );
         }
         else
-            ERROR( "parse error: "
-                   << "form xdir" );
+            ERROR_LOG( "parse error: "
+                       << "form xdir" );
     }
 
     bool isvalid( void ) const
@@ -407,8 +412,8 @@ struct MidiEvents : std::vector<MidiChunk>
                     // unused command
                     default:
                         emplace_back( 0, 0xFF, 0x2F, 0 );
-                        ERROR( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
-                                                << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
+                        ERROR_LOG( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
+                                                    << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
                         break;
                     }
             }

@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-typedef std::vector<int> Directions;
+using Directions = std::vector<int>;
 
 namespace Direction
 {

@@ -32,15 +32,15 @@
 #include "dir.h"
 #include "embedded_image.h"
 #include "engine.h"
-#include "error.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
-#include "settings.h"
 #include "system.h"
+#include "translations.h"
 #include "zzlib.h"
 
 void SetVideoDriver( const std::string & );
@@ -71,9 +71,11 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
+    Logging::InitLog();
+
     Settings & conf = Settings::Get();
 
-    DEBUG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
+    DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
 
     conf.SetProgramPath( argv[0] );
 
@@ -161,8 +163,8 @@ int main( int argc, char ** argv )
             fheroes2::engine().setIcon( appIcon );
 #endif
 
-            DEBUG( DBG_GAME, DBG_INFO, conf.String() );
-            // DEBUG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+            // DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
             if ( !AGG::Init() ) {
@@ -181,7 +183,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            Video::ShowVideo( "H2XINTRO.SMK", false );
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
             for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
                 switch ( rs ) {
@@ -257,11 +259,10 @@ int main( int argc, char ** argv )
                 }
             }
         }
-#ifndef ANDROID
-        catch ( const Error::Exception & ) {
-            VERBOSE( std::endl << conf.String() );
+        catch ( const std::exception & ex ) {
+            ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
         }
-#endif
+
     fheroes2::Display::instance().release();
 
     return EXIT_SUCCESS;
@@ -274,16 +275,14 @@ bool ReadConfigs( void )
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        if ( System::IsFile( *it ) ) {
-            if ( conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        if ( System::IsFile( *it ) && conf.Read( *it ) ) {
+            isValidConfigurationFile = true;
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
+            break;
         }
     }
 
@@ -346,7 +345,7 @@ void SetLangEnvPath( const Settings & conf )
                 Translation::setDomain( "fheroes2" );
         }
         else
-            ERROR( "translation not found: " << mofile );
+            ERROR_LOG( "translation not found: " << mofile );
     }
 #else
     (void)conf;

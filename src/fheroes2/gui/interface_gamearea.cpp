@@ -22,14 +22,15 @@
 
 #include "interface_gamearea.h"
 
-#include "agg.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "icn.h"
+#include "logging.h"
 #include "maps.h"
 #include "pal.h"
 #include "route.h"
-#include "settings.h"
 #include "world.h"
 
 #include <cassert>
@@ -185,83 +186,123 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         return;
     }
 
+    MapsIndexes drawList;
+    MapsIndexes monsterList;
+
     // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
-    if ( drawBottom ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tiles & tile = world.GetTiles( x, y );
-                tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                tile.RedrawObjects( dst, isPuzzleDraw, *this );
-            }
-        }
-    }
-
-    // Monsters and boats.
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
-    if ( drawMonstersAndBoats ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                world.GetTiles( x, y ).RedrawMonstersAndBoat( dst, tileROI, true, *this );
-            }
-        }
-    }
-
-    // Top layer and heroes.
-    const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
-    std::vector<std::pair<Point, const Heroes *> > heroList;
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-
-            // top
-            if ( drawTop )
-                tile.RedrawTop( dst, tileROI, *this );
-
-            // heroes will be drawn later
-            if ( tile.GetObject() == MP2::OBJ_HEROES && drawHeroes ) {
-                const Heroes * hero = tile.GetHeroes();
-                if ( hero ) {
-                    heroList.emplace_back( GetRelativeTilePosition( Point( x, y ) ), hero );
+            if ( drawBottom ) {
+                tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                tile.RedrawObjects( dst, isPuzzleDraw, *this );
+            }
+            const int object = tile.GetObject();
+            if ( MP2::OBJ_ZERO != object ) {
+                if ( drawMonstersAndBoats ) {
+                    if ( MP2::OBJ_BOAT == object ) {
+                        drawList.emplace_back( tile.GetIndex() );
+                    }
+                    else if ( MP2::OBJ_MONSTER == object ) {
+                        monsterList.emplace_back( tile.GetIndex() );
+                    }
+                }
+                if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+                    drawList.emplace_back( tile.GetIndex() );
                 }
             }
         }
     }
 
-    // Object fade in/fade out animation
-    const Game::ObjectFadeAnimation::Info & fadeInfo = Game::ObjectFadeAnimation::Get();
-    if ( fadeInfo.object != MP2::OBJ_ZERO ) {
-        const Point & mp = Maps::GetPoint( fadeInfo.tile );
-        const int icn = MP2::GetICNObject( fadeInfo.object );
-
-        if ( icn == ICN::MONS32 ) {
-            const std::pair<int, int> monsterIndicies = Maps::Tiles::GetMonsterSpriteIndices( world.GetTiles( fadeInfo.tile ), fadeInfo.index );
-
-            // base monster sprite
-            if ( monsterIndicies.first >= 0 ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.first );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
-            }
-            // animated monster part
-            if ( monsterIndicies.second >= 0 ) {
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, monsterIndicies.second );
-                BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeInfo.alpha );
+    for ( const int32_t index : drawList ) {
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const int object = tile.GetObject();
+        if ( MP2::OBJ_HEROES == object ) {
+            const Heroes * hero = tile.GetHeroes();
+            if ( hero ) {
+                const Point & pos = GetRelativeTilePosition( Maps::GetPoint( index ) );
+                hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
             }
         }
-        else if ( fadeInfo.object == MP2::OBJ_BOAT ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, fadeInfo.index );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y() + TILEWIDTH - 11, mp, false, fadeInfo.alpha );
-        }
-        else {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeInfo.index );
-            BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeInfo.alpha );
+        else if ( MP2::OBJ_BOAT == object ) {
+            tile.RedrawBoatShadow( dst, tileROI, *this );
         }
     }
 
-    for ( const std::pair<Point, const Heroes *> & hero : heroList ) {
-        hero.second->Redraw( dst, hero.first.x, hero.first.y - 1, tileROI, true, *this );
+    const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+
+    // fade out animation for objects only
+    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
+        const int icn = MP2::GetICNObject( fadeTask.objectTileset );
+        const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeTask.objectIndex );
+        BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeTask.alpha );
+
+        // possible animation
+        if ( fadeTask.animationIndex ) {
+            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, fadeTask.animationIndex );
+            BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, fadeTask.alpha );
+        }
+    }
+
+    // Monsters.
+    if ( drawMonstersAndBoats ) {
+        for ( const int32_t index : monsterList ) {
+            const Maps::Tiles & tile = world.GetTiles( index );
+            tile.RedrawMonster( dst, tileROI, *this );
+        }
+
+        // fade out animation for monsters only
+        if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
+            const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
+            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+
+            if ( fadeTask.animationIndex ) {
+                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
+                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
+            }
+        }
+    }
+
+    // Top layer.
+    const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
+
+    if ( drawTop ) {
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
+                const int object = tile.GetObject();
+
+                if ( MP2::OBJ_HEROES == object || MP2::OBJ_BOAT == object ) {
+                    continue;
+                }
+
+                // top
+                tile.RedrawTop( dst, tileROI, *this );
+            }
+        }
+    }
+
+    // Heroes and boats.
+    for ( const int32_t index : drawList ) {
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const int object = tile.GetObject();
+        if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+            const Heroes * hero = tile.GetHeroes();
+            if ( hero ) {
+                const Point & pos = GetRelativeTilePosition( Maps::GetPoint( index ) );
+                hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
+            }
+        }
+        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
+            tile.RedrawBoat( dst, tileROI, *this );
+        }
     }
 
     // Route
@@ -374,7 +415,7 @@ void Interface::GameArea::SetCenter( const Point & pt )
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_t index )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG( DBG_ENGINE, DBG_WARN, "artifact not found" );
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" );
         return fheroes2::Image();
     }
 
@@ -483,60 +524,6 @@ void Interface::GameArea::QueueEventProcessing( void )
     // fixed pocket pc tap mode
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
-
-    if ( conf.ExtPocketTapMode() ) {
-        // drag&drop gamearea: scroll
-        if ( conf.ExtPocketDragDropScroll() && le.MousePressLeft() ) {
-            Point pt1 = le.GetMouseCursor();
-            const int16_t speed = Settings::Get().ScrollSpeed();
-
-            while ( le.HandleEvents() && le.MousePressLeft() ) {
-                const Point & pt2 = le.GetMouseCursor();
-
-                if ( pt1 != pt2 ) {
-                    s32 dx = pt2.x - pt1.x;
-                    s32 dy = pt2.y - pt1.y;
-                    s32 d2x = speed;
-                    s32 d2y = speed;
-
-                    while ( 1 ) {
-                        if ( d2x <= dx ) {
-                            SetScroll( SCROLL_LEFT );
-                            dx -= d2x;
-                        }
-                        else if ( -d2x >= dx ) {
-                            SetScroll( SCROLL_RIGHT );
-                            dx += d2x;
-                        }
-
-                        if ( d2y <= dy ) {
-                            SetScroll( SCROLL_TOP );
-                            dy -= d2y;
-                        }
-                        else if ( -d2y >= dy ) {
-                            SetScroll( SCROLL_BOTTOM );
-                            dy += d2y;
-                        }
-
-                        if ( NeedScroll() ) {
-                            cursor.Hide();
-                            Scroll();
-                            interface.SetRedraw( REDRAW_GAMEAREA );
-                            interface.Redraw();
-                            cursor.Show();
-                            fheroes2::Display::instance().render();
-                        }
-                        else
-                            break;
-                    }
-                }
-            }
-        }
-
-        // fixed pocket pc: click on maps after scroll (pause: ~800 ms)
-        if ( 800 > scrollTime.getMs() )
-            return;
-    }
 
     const Point tileOffset = _topLeftTileOffset + mp - Point( _windowROI.x, _windowROI.y );
     const Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,

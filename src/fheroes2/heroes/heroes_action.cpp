@@ -20,9 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
-#include "assert.h"
 #include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
@@ -30,7 +32,9 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_actions.h"
 #include "monster.h"
 #include "morale.h"
@@ -39,7 +43,6 @@
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "skill.h"
 #include "text.h"
 #include "world.h"
@@ -284,19 +287,7 @@ uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good
 
 void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
 {
-    u32 reason = attacker ? res.AttackerResult() : res.DefenderResult();
-
-    if ( Settings::Get().ExtHeroSurrenderingGiveExp() && Battle::RESULT_SURRENDER == reason ) {
-        const uint32_t exp = attacker ? res.GetExperienceAttacker() : res.GetExperienceDefender();
-
-        if ( hero.isControlHuman() ) {
-            std::string msg = _( "Hero %{name} also got a %{count} experience." );
-            StringReplace( msg, "%{name}", hero.GetName() );
-            StringReplace( msg, "%{count}", exp );
-            Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-        }
-        hero.IncreaseExperience( exp );
-    }
+    const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.FadeOut();
@@ -313,7 +304,7 @@ void AnimationRemoveObject( const Maps::Tiles & tile )
     if ( tile.GetObject() == MP2::OBJ_ZERO )
         return;
 
-    Game::ObjectFadeAnimation::Set( Game::ObjectFadeAnimation::Info( tile.GetObjectTileset(), tile.GetObjectSpriteIndex(), tile.GetIndex() ) );
+    Game::ObjectFadeAnimation::StartFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -339,9 +330,6 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
 
             hero.GetArmy().JoinTroop( troop(), recruit );
             hero.MovePointsScaleFixed();
-
-            if ( Settings::Get().ExtHeroRecalculateMovement() )
-                hero.RecalculateMovePoints();
 
             Interface::Basic::Get().GetStatusWindow().SetRedraw();
         }
@@ -710,7 +698,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
     // free join
     if ( JOIN_FREE == join.first ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
 
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
@@ -726,7 +714,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         if ( JOIN_COST == join.first ) {
         const u32 gold = troop.GetCost().gold;
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
-            DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
 
             hero.GetArmy().JoinTroop( troop(), join.second );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
@@ -753,7 +741,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
     // fight
     if ( JOIN_NONE == join.first ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
         Army army( tile );
         Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
@@ -801,17 +789,17 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
         return;
 
     if ( hero.GetColor() == other_hero->GetColor() || ( conf.ExtUnionsAllowHeroesMeetings() && Players::isFriends( hero.GetColor(), other_hero->GetColor() ) ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() );
         hero.MeetingDialog( *other_hero );
     }
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" );
     }
     else if ( !hero.AllowBattle( true ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " currently can not allow battle" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " currently can not allow battle" );
     }
     else if ( !other_hero->AllowBattle( false ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
     }
     else {
         const Castle * other_hero_castle = other_hero->inCastle();
@@ -820,7 +808,7 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
             return;
         }
 
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() );
 
         // new battle
         Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
@@ -851,17 +839,17 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
     const Settings & conf = Settings::Get();
 
     if ( !castle ) {
-        DEBUG( DBG_GAME, DBG_INFO, "castle not found " << dst_index );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "castle not found " << dst_index );
     }
     else if ( hero.GetColor() == castle->GetColor() || ( conf.ExtUnionsAllowCastleVisiting() && Players::isFriends( hero.GetColor(), castle->GetColor() ) ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " goto castle " << castle->GetName() );
         Mixer::Reduce();
         castle->MageGuildEducateHero( hero );
         Game::OpenCastleDialog( *castle );
         Mixer::Enhance();
     }
     else if ( hero.isFriends( castle->GetColor() ) ) {
-        DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable visiting" );
     }
     else {
         CastleHeroes heroes = castle->GetHeroes();
@@ -875,7 +863,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
         Army & army = castle->GetActualArmy();
 
         if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
-            DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
 
             Heroes * defender = heroes.GuardFirst();
             castle->ActionPreBattle();
@@ -910,7 +898,7 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
             }
         }
         else {
-            DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " capture enemy castle " << castle->GetName() );
 
             castle->GetKingdom().RemoveCastle( castle );
             hero.GetKingdom().AddCastle( castle );
@@ -953,7 +941,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
     hero.SetShipMaster( true );
     hero.GetPath().Reset();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToCoast( Heroes & hero, s32 dst_index )
@@ -977,7 +965,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
@@ -1019,7 +1007,7 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
     if ( map_resource )
         world.RemoveMapObject( map_resource );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
@@ -1085,7 +1073,7 @@ void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
     tile.QuantityReset();
     hero.SetVisited( dst_index, Visit::GLOBAL );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
@@ -1122,7 +1110,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
 
     hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToWagon( Heroes & hero, s32 dst_index )
@@ -1167,7 +1155,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index )
@@ -1192,7 +1180,7 @@ void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index )
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToShrine( Heroes & hero, s32 dst_index )
@@ -1253,7 +1241,7 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
@@ -1289,7 +1277,7 @@ void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
     }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
@@ -1334,7 +1322,7 @@ void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
         DialogLuck( MP2::StringObject( obj ), msg, true, 1 );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToPyramid( Heroes & hero, u32 obj, s32 dst_index )
@@ -1400,7 +1388,7 @@ void ActionToPyramid( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToSign( const Heroes & hero, s32 dst_index )
@@ -1409,7 +1397,7 @@ void ActionToSign( const Heroes & hero, s32 dst_index )
     Dialog::Message( _( "Sign" ), ( sign ? sign->message : "" ), Font::BIG, Dialog::OK );
 
     (void)hero;
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToMagicWell( Heroes & hero, s32 dst_index )
@@ -1431,15 +1419,14 @@ void ActionToMagicWell( Heroes & hero, s32 dst_index )
         Dialog::Message( MP2::StringObject( MP2::OBJ_MAGICWELL ), _( "A drink from the well has restored your spell points to maximum." ), Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToTradingPost( const Heroes & hero )
 {
-    Dialog::Marketplace( true );
+    Dialog::Marketplace( hero.GetKingdom(), true );
 
-    (void)hero;
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
@@ -1497,7 +1484,7 @@ void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisitedWideTile( dst_index, obj );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
@@ -1560,19 +1547,18 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( complete ) {
             tile.QuantityReset();
-            hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
         else if ( 0 == gold ) {
             // modify morale
-            hero.SetVisited( dst_index );
+            hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
             AGG::PlaySound( M82::BADMRLE );
             DialogMorale( MP2::StringObject( obj ), msg, false, 1 );
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
@@ -1624,7 +1610,7 @@ void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisitedWideTile( dst_index, obj );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
@@ -1665,7 +1651,7 @@ void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
         hero.IncreaseExperience( exp );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
@@ -1695,7 +1681,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
@@ -1840,7 +1826,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
@@ -1919,7 +1905,7 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     tile.RemoveObjectSprite();
     tile.QuantityReset();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToAncientLamp( Heroes & hero, u32 obj, s32 dst_index )
@@ -1933,7 +1919,7 @@ void ActionToAncientLamp( Heroes & hero, u32 obj, s32 dst_index )
                                     Font::BIG, Dialog::YES | Dialog::NO ) )
         RecruitMonsterFromTile( hero, tile, MP2::StringObject( obj ), troop, true );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToTeleports( Heroes & hero, s32 index_from )
@@ -1942,7 +1928,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     if ( index_from == index_to ) {
         AGG::PlaySound( M82::RSBRYFZL );
-        DEBUG( DBG_GAME, DBG_WARN, "action unsuccessfully..." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." );
         return;
     }
 
@@ -1955,7 +1941,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
             return;
         }
         else if ( !other_hero->isFreeman() ) {
-            DEBUG( DBG_GAME, DBG_WARN, "is busy..." );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "is busy..." );
             return;
         }
     }
@@ -1981,7 +1967,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
     hero.ActionNewPosition();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToWhirlpools( Heroes & hero, s32 index_from )
@@ -1990,7 +1976,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
 
     if ( index_from == index_to ) {
         AGG::PlaySound( M82::RSBRYFZL );
-        DEBUG( DBG_GAME, DBG_WARN, "action unsuccessfully..." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." );
         return;
     }
 
@@ -2016,7 +2002,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index )
@@ -2144,7 +2130,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
     if ( obj == MP2::OBJ_LIGHTHOUSE )
         world.CaptureObject( dst_index, hero.GetColor() );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( obj ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( obj ) );
 }
 
 void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
@@ -2171,9 +2157,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
                 hero.GetArmy().JoinTroop( troop );
                 hero.MovePointsScaleFixed();
 
-                if ( Settings::Get().ExtHeroRecalculateMovement() )
-                    hero.RecalculateMovePoints();
-
                 Interface::Basic::Get().GetStatusWindow().SetRedraw();
             }
         }
@@ -2184,7 +2167,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
 void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
@@ -2258,7 +2241,7 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
 void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
@@ -2336,7 +2319,7 @@ void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
 void ActionToObservationTower( const Heroes & hero, u32 obj, s32 dst_index )
@@ -2370,7 +2353,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
@@ -2420,7 +2403,7 @@ void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1, std::string & str2, const bool combineWithAnd )
@@ -2471,13 +2454,13 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     } break;
 
     default:
-        ERROR( "Incorrect object type passed to ActionToUpgradeArmyObject" );
+        ERROR_LOG( "Incorrect object type passed to ActionToUpgradeArmyObject" );
         assert( 0 );
         return;
     }
 
     if ( monsToUpgrade.empty() ) {
-        ERROR( "monsToUpgrade mustn't be empty." );
+        ERROR_LOG( "monsToUpgrade mustn't be empty." );
         assert( 0 );
         return;
     }
@@ -2554,15 +2537,12 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
             offsetX += border.width() + 4;
         }
         Dialog::SpriteInfo( MP2::StringObject( obj ), msg1, surface );
-
-        if ( Settings::Get().ExtHeroRecalculateMovement() )
-            hero.RecalculateMovePoints();
     }
     else {
         Dialog::Message( MP2::StringObject( obj ), msg2, Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
@@ -2593,7 +2573,7 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
                          Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToEvent( Heroes & hero, s32 dst_index )
@@ -2629,7 +2609,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index )
@@ -2648,7 +2628,7 @@ void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index )
     else
         Dialog::Message( MP2::StringObject( obj ), _( "You have already been to this obelisk." ), Font::BIG, Dialog::OK );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
@@ -2704,7 +2684,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToOracle( const Heroes & hero )
@@ -2712,7 +2692,7 @@ void ActionToOracle( const Heroes & hero )
     Dialog::ThievesGuild( true );
 
     (void)hero;
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
@@ -2819,7 +2799,9 @@ void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
         hero.SetVisited( dst_index, Visit::GLOBAL );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    AGG::PlayMusic( MUS::FromGround( tile.GetGround() ) );
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToAlchemistsTower( Heroes & hero )
@@ -2858,7 +2840,7 @@ void ActionToAlchemistsTower( Heroes & hero )
         Dialog::Message( "", _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
@@ -2892,7 +2874,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
 
     Dialog::Message( "", body, Font::BIG, Dialog::OK );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
@@ -2906,7 +2888,7 @@ void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
         hero.IncreasePrimarySkill( Dialog::SelectSkillFromArena() );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
@@ -2928,7 +2910,7 @@ void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
         hero.IncreaseExperience( exp );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
@@ -2960,7 +2942,7 @@ void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
         Dialog::Message( MP2::StringObject( obj ), str, Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
@@ -2995,7 +2977,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToEyeMagi( const Heroes & hero, u32 obj )
@@ -3003,7 +2985,7 @@ void ActionToEyeMagi( const Heroes & hero, u32 obj )
     Dialog::Message( MP2::StringObject( obj ), _( "This eye seems to be intently studying its surroundings." ), Font::BIG, Dialog::OK );
 
     (void)hero;
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
@@ -3062,7 +3044,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
         Dialog::Message( MP2::StringObject( obj ), _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
@@ -3076,9 +3058,9 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
+        AnimationRemoveObject( tile );
         tile.SetObject( hero.GetMapsObject() );
         hero.SetMapsObject( MP2::OBJ_ZERO );
-        AnimationRemoveObject( tile );
         tile.RemoveObjectSprite();
         // TODO: fix pathfinding
         if ( tile.GetIndex() == hero.GetIndex() ) {
@@ -3096,7 +3078,7 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             Font::BIG, Dialog::OK );
     }
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
 void ActionToTravellersTent( const Heroes & hero, u32 obj, s32 dst_index )
@@ -3112,5 +3094,5 @@ void ActionToTravellersTent( const Heroes & hero, u32 obj, s32 dst_index )
 
     kingdom.SetVisitTravelersTent( tile.QuantityColor() );
 
-    DEBUG( DBG_GAME, DBG_INFO, hero.GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

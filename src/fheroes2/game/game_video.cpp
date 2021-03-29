@@ -19,13 +19,16 @@
  ***************************************************************************/
 
 #include "game_video.h"
+#include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "game.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "smk_decoder.h"
+#include "system.h"
 #include "ui_tool.h"
 
 namespace
@@ -50,17 +53,19 @@ namespace
 
 namespace Video
 {
-    size_t ShowVideo( const std::string & fileName, bool isLooped, const std::vector<fheroes2::Rect> & roi )
+    size_t ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
         std::string videoPath;
         if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
-            DEBUG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
             return 0;
         }
 
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
+
+        const bool isLooped = ( action == VideoAction::LOOP_VIDEO );
 
         const bool hideCursor = roi.empty();
 
@@ -80,13 +85,14 @@ namespace Video
         const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
+            AGG::ResetMixer();
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                 if ( it->size() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
         }
 
-        fheroes2::ScreenPaletteRestorer screenRestorer;
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         fheroes2::Image frame;
         std::vector<uint8_t> palette;
@@ -179,6 +185,14 @@ namespace Video
                     }
 
                     isFrameReady = true;
+                }
+            }
+        }
+
+        if ( action == VideoAction::WAIT_FOR_USER_INPUT ) {
+            while ( le.HandleEvents() ) {
+                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    break;
                 }
             }
         }

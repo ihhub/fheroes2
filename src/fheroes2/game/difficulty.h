@@ -38,12 +38,12 @@ namespace Difficulty
 
     const std::string & String( int );
 
-    cost_t GetKingdomStartingResources( int difficulty, bool isAIKingdom );
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );
     double GetUnitGrowthBonus( int difficulty );
     double GetBattleExperienceBonus( int difficulty );
     int GetHeroMovementBonus( int difficulty );
+    double GetAIRetreatRatio( int difficulty );
 }
 
 #endif

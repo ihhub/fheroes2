@@ -24,15 +24,13 @@
 #include <vector>
 
 #include "agg.h"
-#include "cursor.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
-#include "interface_gamearea.h"
-#include "interface_radar.h"
+#include "icn.h"
+#include "logging.h"
 #include "mus.h"
 #include "puzzle.h"
-#include "settings.h"
-#include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
 

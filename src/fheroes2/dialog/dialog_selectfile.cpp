@@ -27,14 +27,14 @@
 #include <sstream>
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
 #include "game.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "maps_fileinfo.h"
-#include "pocketpc.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"
@@ -301,8 +301,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         else if ( le.MouseClickLeft( enter_field ) && editor ) {
             edit_mode = true;
             charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
-            if ( Settings::Get().PocketPC() )
-                PocketPC::KeyboardDialog( filename );
             if ( filename.empty() )
                 buttonOk.disable();
             cursor.Hide();

@@ -1,5 +1,22 @@
-# makefile
-# project: Free Heroes of Might and Magic II (https://github.com/ihhub/fheroes2)
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2021                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
 
 TARGET := fheroes2
 
@@ -12,13 +29,13 @@ endif
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS)
-LIBS :=
+LIBS := -pthread
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
 # Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
 
 ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
@@ -41,7 +58,7 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 endif
 
-ifndef WITHOUT_IMAGE
+ifdef FHEROES2_IMAGE_SUPPORT
 CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz

@@ -77,7 +77,7 @@ namespace MUS
         UNKNOWN
     };
 
-    enum OGG_MUSIC_TYPE
+    enum class OGG_MUSIC_TYPE : int
     {
         MAPPED,
         DOS_VERSION,

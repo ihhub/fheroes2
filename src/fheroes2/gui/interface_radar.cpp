@@ -22,14 +22,15 @@
 
 #include <cmath>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_radar.h"
-#include "settings.h"
+#include "logging.h"
 #include "text.h"
 #include "world.h"
 
@@ -47,27 +48,30 @@ namespace
 
         return 1;
     }
+
+    enum
+    {
+        RADARCOLOR = 0xB5, // index palette
+        COLOR_DESERT = 0x76,
+        COLOR_SNOW = 0x0D,
+        COLOR_SWAMP = 0x68,
+        COLOR_WASTELAND = 0xCD,
+        COLOR_BEACH = 0x29,
+        COLOR_LAVA = 0x20,
+        COLOR_DIRT = 0x36,
+        COLOR_GRASS = 0x63,
+        COLOR_WATER = 0x4D,
+        COLOR_ROAD = 0x7A,
+
+        COLOR_BLUE = 0x47,
+        COLOR_GREEN = 0x67,
+        COLOR_RED = 0xbd,
+        COLOR_YELLOW = 0x70,
+        COLOR_ORANGE = 0xcd,
+        COLOR_PURPLE = 0x87,
+        COLOR_GRAY = 0x10
+    };
 }
-
-#define RADARCOLOR 0xB5 // index palette
-#define COLOR_DESERT 0x76
-#define COLOR_SNOW 0x0D
-#define COLOR_SWAMP 0x68
-#define COLOR_WASTELAND 0xCD
-#define COLOR_BEACH 0x29
-#define COLOR_LAVA 0x20
-#define COLOR_DIRT 0x36
-#define COLOR_GRASS 0x63
-#define COLOR_WATER 0x4D
-#define COLOR_ROAD 0x7A
-
-#define COLOR_BLUE 0x47
-#define COLOR_GREEN 0x67
-#define COLOR_RED 0xbd
-#define COLOR_YELLOW 0x70
-#define COLOR_ORANGE 0xcd
-#define COLOR_PURPLE 0x87
-#define COLOR_GRAY 0x10
 
 uint8_t GetPaletteIndexFromGround( int ground )
 {
@@ -353,8 +357,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 fheroes2::Fill( display, dstx, dsty, sw, sw, fillColor );
             }
             else {
-                if ( dstx < display.width() && dsty < display.height() )
-                    fheroes2::SetPixel( display, dstx, dsty, fillColor );
+                fheroes2::SetPixel( display, dstx, dsty, fillColor );
             }
         }
     }
@@ -432,7 +435,7 @@ void Interface::Radar::QueueEventProcessing( void )
                 }
             }
         }
-        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) )
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         else if ( conf.ExtGameHideInterface() ) {
             Size newSize( rect.w, rect.h );
@@ -453,7 +456,6 @@ void Interface::Radar::QueueEventProcessing( void )
 
 bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi )
 {
-    const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const Rect & rect = GetArea();
 
@@ -474,7 +476,7 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 }
             }
         }
-        else if ( !conf.ExtPocketTapMode() && le.MousePressRight( GetRect() ) ) {
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
         else if ( le.MouseWheelUp() ) {

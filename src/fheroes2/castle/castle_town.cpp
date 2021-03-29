@@ -23,13 +23,14 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "buildinginfo.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "payment.h"
 #include "race.h"
@@ -348,7 +349,9 @@ u32 Castle::OpenTown( void )
     Kingdom & kingdom = GetKingdom();
 
     Heroes * hero1 = kingdom.GetRecruits().GetHero1();
-    Heroes * hero2 = kingdom.GetLastLostHero() && kingdom.GetLastLostHero() != hero1 ? kingdom.GetLastLostHero() : kingdom.GetRecruits().GetHero2();
+
+    Heroes * lastLostHero = kingdom.GetLastLostHero();
+    Heroes * hero2 = lastLostHero && lastLostHero != hero1 ? lastLostHero : kingdom.GetRecruits().GetHero2();
 
     std::string not_allow1_msg, not_allow2_msg;
     const bool allow_buy_hero1 = hero1 ? AllowBuyHero( *hero1, &not_allow1_msg ) : false;
@@ -371,9 +374,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero1 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // second hero
@@ -389,9 +391,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero2 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // bottom bar
@@ -411,7 +412,7 @@ u32 Castle::OpenTown( void )
 
     // redraw resource panel
     const Rect & rectResource = RedrawResourcePanel( cur_pt );
-    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y - 3 );
 
     cursor.Show();
     display.render();

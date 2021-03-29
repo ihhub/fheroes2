@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "battle.h"
 #include "battle_cell.h"
@@ -28,6 +28,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_static.h"
+#include "icn.h"
 #include "luck.h"
 #include "monster.h"
 #include "morale.h"
@@ -38,6 +39,8 @@
 #include "text.h"
 #include "ui_button.h"
 #include "world.h"
+
+#include <sstream>
 
 namespace
 {
@@ -67,6 +70,13 @@ namespace
         int32_t offset;
         int32_t space;
     };
+
+    std::string GetString( const float value, const uint8_t prec )
+    {
+        std::ostringstream stream;
+        stream << std::setprecision( prec ) << value;
+        return stream.str();
+    }
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
@@ -703,7 +713,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     fheroes2::ButtonSprite btnHeroes( buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, armyButtonPressedBack );
 
-    const Kingdom & kingdom = hero.GetKingdom();
+    Kingdom & kingdom = hero.GetKingdom();
 
     Rect btnMarketArea = btnMarket.area();
     Rect btnHeroesArea = btnHeroes.area();
@@ -764,7 +774,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         result = btnGroup.processEvents();
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
-            Marketplace( false );
+            Marketplace( kingdom, false );
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );

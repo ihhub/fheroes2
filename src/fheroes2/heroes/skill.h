@@ -122,7 +122,7 @@ namespace Skill
         int GetLevel( int skill ) const;
         u32 GetValues( int skill ) const;
         void AddSkill( const Skill::Secondary & );
-        void FindSkillsForLevelUp( int race, Secondary &, Secondary & ) const;
+        void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
         Secondary * FindSkill( int );
         std::string String( void ) const;
@@ -164,7 +164,7 @@ namespace Skill
         virtual bool isCaptain( void ) const;
         virtual bool isHeroes( void ) const;
 
-        int LevelUp( int race, int level );
+        int LevelUp( int race, int level, uint32_t seed );
 
         static const char * String( int );
         static std::string StringDescription( int, const Heroes * );

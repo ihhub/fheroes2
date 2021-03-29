@@ -21,11 +21,12 @@
  ***************************************************************************/
 
 #include "interface_buttons.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
@@ -152,9 +153,8 @@ int Interface::ButtonsArea::QueueEventProcessing( void )
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
-    if ( Settings::Get().ShowButtons() &&
-         // move border window
-         BorderWindow::QueueEventProcessing() ) {
+    if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
+        // Move border window. No other action is required.
     }
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();

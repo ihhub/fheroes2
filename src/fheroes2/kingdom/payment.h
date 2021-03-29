@@ -27,7 +27,7 @@
 
 #include "resource.h"
 
-typedef Funds payment_t;
+using payment_t = Funds;
 
 enum
 {

@@ -22,14 +22,12 @@
 
 #include <math.h>
 
-#include "agg.h"
-#include "bin_info.h"
 #include "castle.h"
 #include "difficulty.h"
-#include "error.h"
 #include "game.h"
 #include "game_static.h"
 #include "icn.h"
+#include "logging.h"
 #include "luck.h"
 #include "m82.h"
 #include "monster.h"
@@ -37,9 +35,8 @@
 #include "mp2.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "speed.h"
-#include "spell.h"
+#include "translations.h"
 
 struct monstats_t
 {
@@ -454,7 +451,7 @@ void Monster::UpdateStats( const std::string & spec )
         }
     }
     else
-        VERBOSE( spec << ": " << doc.ErrorDesc() );
+        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
 #else
     (void)spec;
 #endif
@@ -739,7 +736,7 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     if ( !skip_factor && Settings::Get().ExtWorldNeutralArmyDifficultyScaling() ) {
         uint32_t factor = 100;
 
-        switch ( Settings::Get().GameDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             factor = 80;
             break;
@@ -1345,7 +1342,7 @@ Monster Monster::Rand( level_t level )
                 monstersVec[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
         }
     }
-    return *Rand::Get( monstersVec[level - LEVEL0 - 1] );
+    return Rand::Get( monstersVec[level - LEVEL0 - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )
@@ -2040,7 +2037,7 @@ void RandomMonsterAnimation::increment()
         // make sure both are empty to avoid leftovers in case of mismatch
         _offsetSet.clear();
 
-        const int moveId = *Rand::Get( _validMoves );
+        const int moveId = Rand::Get( _validMoves );
 
         if ( moveId == Monster_Info::STATIC ) {
             const u32 counter = Rand::Get( 10, 20 );

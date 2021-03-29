@@ -41,9 +41,9 @@
 #include "castle.h"
 #include "cursor.h"
 #include "ground.h"
+#include "logging.h"
 #include "mus.h"
 #include "race.h"
-#include "settings.h"
 #include "speed.h"
 #include "tools.h"
 #include "world.h"
@@ -98,7 +98,7 @@ int GetCovr( int ground )
         break;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : *Rand::Get( covrs );
+    return covrs.empty() ? ICN::UNKNOWN : Rand::Get( covrs );
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )
@@ -239,6 +239,15 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         armies_order->reserve( 25 );
         interface->SetArmiesOrder( armies_order );
     }
+    else {
+        // no interface - force auto battle mode for human player
+        if ( a1.isControlHuman() ) {
+            auto_battle |= a1.GetColor();
+        }
+        if ( a2.isControlHuman() ) {
+            auto_battle |= a2.GetColor();
+        }
+    }
 
     towers[0] = NULL;
     towers[1] = NULL;
@@ -271,7 +280,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         board[85].SetObject( 2 );
 
         // bridge
-        board[49].SetObject( 1 );
         board[50].SetObject( 1 );
     }
     else
@@ -329,7 +337,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
     end_turn = false;
     const bool isImmovable = current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
 
     // morale check right before the turn
     if ( !isImmovable ) {
@@ -353,7 +361,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {
@@ -391,7 +399,9 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
 
         board.Reset();
 
-        fheroes2::delayforMs( 10 );
+        if ( interface ) {
+            fheroes2::delayforMs( 10 );
+        }
     }
 }
 
@@ -405,10 +415,10 @@ void Battle::Arena::Turns( void )
     const Settings & conf = Settings::Get();
 
     ++current_turn;
-    DEBUG( DBG_BATTLE, DBG_TRACE, current_turn );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
 
     if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom() );
+        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
 
     army1->NewTurn();
     army2->NewTurn();
@@ -448,7 +458,7 @@ void Battle::Arena::Turns( void )
         }
 
         // set bridge passable
-        if ( bridge && bridge->isValid() && !bridge->isDown() )
+        if ( bridge )
             bridge->SetPassable( *current_troop );
 
         // turn troop
@@ -463,7 +473,7 @@ void Battle::Arena::Turns( void )
             current_color = current_troop->GetArmyColor();
 
             // set bridge passable
-            if ( bridge && bridge->isValid() && !bridge->isDown() )
+            if ( bridge )
                 bridge->SetPassable( *current_troop );
 
             // turn troop
@@ -489,10 +499,12 @@ void Battle::Arena::Turns( void )
         result_game.exp1 = army2->GetDeadHitPoints();
         result_game.exp2 = army1->GetDeadHitPoints();
 
-        if ( army1->GetCommander() )
+        if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
-        if ( army2->GetCommander() )
+        }
+        if ( army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
+        }
 
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
@@ -501,7 +513,7 @@ void Battle::Arena::Turns( void )
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
     AI::Get().BattleTurn( *this, b, a );
 }
 
@@ -560,7 +572,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
         std::stringstream ss;
         for ( u32 ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
-        DEBUG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
     }
 
     return result;
@@ -593,19 +605,24 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     return result;
 }
 
-uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
-bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+bool Battle::Arena::hexIsAccessible( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
 }
 
-bool Battle::Arena::hexIsPassable( int32_t indexTo )
+bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+}
+
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
@@ -1048,7 +1065,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const s32 pos = GetFreePositionNearHero( current_color );
 
     if ( 0 > pos || !hero ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
         return NULL;
     }
 
@@ -1079,18 +1096,18 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         }
 
     if ( !affect ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
         return NULL;
     }
 
     Monster mons( spell );
 
     if ( !mons.isValid() ) {
-        DEBUG( DBG_BATTLE, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" );
         return NULL;
     }
 
-    DEBUG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
     u32 count = spell.ExtraValue() * hero->GetPower();
     u32 acount = hero->HasArtifact( Artifact::BOOK_ELEMENTS );
     if ( acount )
@@ -1104,7 +1121,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         army.push_back( elem );
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_WARN, "is NULL" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is NULL" );
     }
 
     return elem;
@@ -1124,7 +1141,7 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         GetCurrentForce().push_back( image );
     }
     else {
-        DEBUG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
     }
 
     return image;

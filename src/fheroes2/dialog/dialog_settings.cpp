@@ -22,9 +22,10 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "settings.h"
@@ -118,10 +119,9 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
             break;
 
         case Settings::GAME_AUTOSAVE_BEGIN_DAY:
-            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) )
+            if ( conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
                 conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-            else
-                conf.ExtResetModes( Settings::GAME_AUTOSAVE_ON );
+            }
             break;
 
         case Settings::WORLD_NEW_VERSION_WEEKOF:
@@ -159,13 +159,9 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
-    states.push_back( Settings::GAME_EVIL_INTERFACE );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
-    states.push_back( Settings::GAME_HIDE_INTERFACE );
-
-    if ( !conf.PocketPC() )
-        states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
+    states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
 
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
@@ -199,8 +195,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
-    states.push_back( Settings::HEROES_SURRENDERING_GIVE_EXP );
-    states.push_back( Settings::HEROES_RECALCULATE_MOVEMENT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
 
@@ -215,11 +209,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
-    if ( conf.PocketPC() ) {
-        states.push_back( Settings::POCKETPC_TAP_MODE );
-        states.push_back( Settings::POCKETPC_DRAG_DROP_SCROLL );
-    }
-
     std::sort( states.begin(), states.end(),
                [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
@@ -232,7 +221,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.RedrawBackground( area );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 46 ) );
+    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 47 ) );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
@@ -269,6 +258,5 @@ void Dialog::ExtSettings( bool readonly )
         }
     }
 
-    le.SetTapMode( conf.ExtPocketTapMode() );
     Settings::Get().BinarySave();
 }

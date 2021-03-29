@@ -25,6 +25,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
@@ -32,12 +33,14 @@
 #include "game.h"
 #include "game_interface.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "maps_fileinfo.h"
 #include "mus.h"
 #include "player_info.h"
 #include "race.h"
-#include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -91,7 +94,7 @@ int Game::ScenarioInfo( void )
 {
     Settings & conf = Settings::Get();
 
-    AGG::PlayMusic( MUS::MAINMENU );
+    AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     MapsFileInfoList lists;
     if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
@@ -183,7 +186,7 @@ int Game::ScenarioInfo( void )
 
     fheroes2::MovableSprite levelCursor( ngextra );
 
-    switch ( conf.GameDifficulty() ) {
+    switch ( Game::getDifficulty() ) {
     case Difficulty::EASY:
         levelCursor.setPosition( coordDifficulty[0].x, coordDifficulty[0].y );
         break;
@@ -216,6 +219,9 @@ int Game::ScenarioInfo( void )
                     fheroes2::FadeDisplay();
                 return QUITGAME;
             }
+            else {
+                continue;
+            }
         }
 
         // press button
@@ -240,8 +246,7 @@ int Game::ScenarioInfo( void )
                 playersInfo.resetSelection();
                 playersInfo.RedrawInfo();
                 RedrawRatingInfo( rating );
-                levelCursor.setPosition( coordDifficulty[1].x, coordDifficulty[1].y );
-                conf.SetGameDifficulty( Difficulty::NORMAL );
+                levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                 buttonOk.draw();
                 buttonCancel.draw();
             }
@@ -257,7 +262,7 @@ int Game::ScenarioInfo( void )
         else
             // click ok
             if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-            DEBUG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( conf.GameDifficulty() ) );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
             result = STARTGAME;
             break;
         }
@@ -269,7 +274,7 @@ int Game::ScenarioInfo( void )
                 cursor.Hide();
                 levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                 levelCursor.redraw();
-                conf.SetGameDifficulty( index );
+                Game::saveDifficulty( index );
                 RedrawRatingInfo( rating );
                 cursor.Show();
                 display.render();
@@ -335,16 +340,16 @@ int Game::ScenarioInfo( void )
             }
             else {
                 result = MAINMENU;
-                DEBUG( DBG_GAME, DBG_WARN,
-                       conf.MapsFile() << ", "
-                                       << "unknown map format" );
+                DEBUG_LOG( DBG_GAME, DBG_WARN,
+                           conf.MapsFile() << ", "
+                                           << "unknown map format" );
             }
         }
         else {
             result = MAINMENU;
-            DEBUG( DBG_GAME, DBG_WARN,
-                   conf.MapsFile() << ", "
-                                   << "unknown map format" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       conf.MapsFile() << ", "
+                                       << "unknown map format" );
         }
     }
 

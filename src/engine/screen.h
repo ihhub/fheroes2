@@ -43,9 +43,9 @@ namespace fheroes2
             return _isFullScreen;
         }
 
-        virtual std::vector<std::pair<int, int> > getAvailableResolutions() const
+        virtual std::vector<Size> getAvailableResolutions() const
         {
-            return std::vector<std::pair<int, int> >();
+            return std::vector<Size>();
         }
 
         virtual void setTitle( const std::string & ) {}
@@ -108,8 +108,8 @@ namespace fheroes2
         bool isDefaultSize() const;
 
         // this function must return true if new palette has been generated
-        typedef bool ( *PreRenderProcessing )( std::vector<uint8_t> & palette );
-        typedef void ( *PostRenderProcessing )();
+        using PreRenderProcessing = bool ( * )( std::vector<uint8_t> & palette );
+        using PostRenderProcessing = void ( * )();
         void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen

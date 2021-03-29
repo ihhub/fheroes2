@@ -23,8 +23,8 @@
 #include "engine.h"
 #include "font.h"
 #include "localevent.h"
+#include "logging.h"
 #include "sdlnet.h"
-#include "system.h"
 
 namespace Mixer
 {
@@ -40,10 +40,10 @@ namespace Cdrom
 }
 #endif
 
-bool SDL::Init( const u32 system )
+bool SDL::Init( const uint32_t system )
 {
     if ( 0 > SDL_Init( system ) ) {
-        ERROR( SDL_GetError() );
+        ERROR_LOG( SDL_GetError() );
         return false;
     }
 
@@ -97,7 +97,7 @@ void SDL::Quit()
     SDL_Quit();
 }
 
-bool SDL::SubSystem( const u32 system )
+bool SDL::SubSystem( const uint32_t system )
 {
     return system & SDL_WasInit( system );
 }

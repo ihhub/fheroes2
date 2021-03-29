@@ -61,7 +61,7 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
     void remove( u32 uid );
 };
 
-typedef std::map<s32, ListActions> MapActions;
+using MapActions = std::map<s32, ListActions>;
 
 struct CapturedObject
 {
@@ -149,9 +149,9 @@ struct EventDate
 StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
-typedef std::list<std::string> Rumors;
-typedef std::list<EventDate> EventsDate;
-typedef std::vector<Maps::Tiles> MapsTiles;
+using Rumors = std::list<std::string>;
+using EventsDate = std::list<EventDate>;
+using MapsTiles = std::vector<Maps::Tiles>;
 
 class World : protected Size
 {
@@ -270,6 +270,8 @@ public:
     void ComputeStaticAnalysis();
     static u32 GetUniq( void );
 
+    uint32_t GetMapSeed() const;
+
 private:
     World()
         : Size( 0, 0 )
@@ -322,6 +324,8 @@ private:
     Maps::Indexes _whirlpoolTiles;
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
+
+    uint32_t _seed;
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );

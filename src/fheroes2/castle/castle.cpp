@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "battle_board.h"
 #include "battle_tower.h"
@@ -32,14 +33,15 @@
 #include "game.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
 #include "kingdom.h"
+#include "logging.h"
 #include "luck.h"
 #include "maps_tiles.h"
 #include "morale.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 
@@ -161,7 +163,7 @@ void Castle::LoadFromMP2( StreamBuf st )
         // default building
         building |= DWELLING_MONSTER1;
         u32 dwelling2 = 0;
-        switch ( Settings::Get().GameDifficulty() ) {
+        switch ( Game::getDifficulty() ) {
         case Difficulty::EASY:
             dwelling2 = 75;
             break;
@@ -330,8 +332,8 @@ void Castle::PostLoad( void )
     SetModes( ALLOWBUILD );
 
     // end
-    DEBUG( DBG_GAME, DBG_INFO,
-           ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO,
+               ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
 }
 
 Captain & Castle::GetCaptain( void )
@@ -517,7 +519,7 @@ void Castle::ActionNewWeek( void )
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Settings::Get().GameDifficulty() ) );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Game::getDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
@@ -979,7 +981,7 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( Settings::Get().ExtCastleOneHeroHiredEveryWeek() )
         SetModes( DISABLEHIRES );
 
-    DEBUG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
 
     return hero;
 }
@@ -1049,7 +1051,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     kingdom.OddFundsResource( paymentCosts );
     dwelling[dwellingIndex] -= count;
 
-    DEBUG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
 
     return true;
 }
@@ -1063,8 +1065,8 @@ bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force
         if ( force ) {
             Troop * weak = GetArmy().GetWeakestTroop();
             if ( weak && weak->GetStrength() < troop.GetStrength() ) {
-                DEBUG( DBG_GAME, DBG_INFO,
-                       name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() );
+                DEBUG_LOG( DBG_GAME, DBG_INFO,
+                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() );
                 weak->Set( troop );
                 return true;
             }
@@ -1587,7 +1589,7 @@ bool Castle::BuyBuilding( u32 build )
     // disable day build
     ResetModes( ALLOWBUILD );
 
-    DEBUG( DBG_GAME, DBG_INFO, name << " build " << GetStringBuilding( build, race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << " build " << GetStringBuilding( build, race ) );
     return true;
 }
 
@@ -1713,7 +1715,7 @@ int Castle::GetICNBoat( int race )
         break;
     }
 
-    DEBUG( DBG_GAME, DBG_WARN, "return unknown" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "return unknown" );
     return ICN::UNKNOWN;
 }
 
@@ -2076,9 +2078,9 @@ int Castle::GetICNBuilding( u32 build, int race )
         }
     }
 
-    DEBUG( DBG_GAME, DBG_WARN,
-           "return unknown"
-               << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( build, race ) << ", " << build );
+    DEBUG_LOG( DBG_GAME, DBG_WARN,
+               "return unknown"
+                   << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( build, race ) << ", " << build );
 
     return ICN::UNKNOWN;
 }
@@ -2411,6 +2413,23 @@ Army & Castle::GetActualArmy( void )
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
     return hero ? hero->GetArmy() : army;
+}
+
+double Castle::GetGarrisonStrength() const
+{
+    double totalStrength = 0;
+
+    CastleHeroes heroes = world.GetHeroes( *this );
+    if ( heroes.Guest() ) {
+        totalStrength += heroes.Guest()->GetArmy().GetStrength();
+    }
+    if ( Settings::Get().ExtCastleAllowGuardians() && heroes.Guard() ) {
+        totalStrength += heroes.Guard()->GetArmy().GetStrength();
+    }
+    else {
+        totalStrength += army.GetStrength();
+    }
+    return totalStrength;
 }
 
 bool Castle::AllowBuyBoat( void ) const

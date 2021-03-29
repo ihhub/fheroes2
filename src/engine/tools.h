@@ -29,7 +29,6 @@
 #include "types.h"
 
 std::string GetStringShort( int );
-std::string GetString( double, u8 );
 std::string GetHexString( int value, int width = 8 );
 
 int GetInt( const std::string & );

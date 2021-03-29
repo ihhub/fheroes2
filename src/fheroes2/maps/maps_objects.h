@@ -85,7 +85,7 @@ struct MapEvent : public MapObjectSimple
 StreamBase & operator<<( StreamBase &, const MapEvent & );
 StreamBase & operator>>( StreamBase &, MapEvent & );
 
-typedef std::list<std::string> RiddleAnswers;
+using RiddleAnswers = std::list<std::string>;
 
 struct MapSphinx : public MapObjectSimple
 {
