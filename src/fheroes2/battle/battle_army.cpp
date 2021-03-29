@@ -307,6 +307,9 @@ void Battle::Force::UpdateOrderUnits( const Force & army1, const Force & army2, 
             units2.SortFastest( true );
         }
         else {
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
+
             units1.SortSlowest( true );
             units2.SortSlowest( true );
         }
@@ -326,6 +329,9 @@ Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force &
         units2.SortFastest( false );
     }
     else {
+        std::reverse( units1.begin(), units1.end() );
+        std::reverse( units2.begin(), units2.end() );
+
         units1.SortSlowest( false );
         units2.SortSlowest( false );
     }
