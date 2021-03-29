@@ -43,7 +43,7 @@ openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linu
 ## Gentoo
 If you have Gentoo, in addition to basic distribution you need to run following commands
 ```
-emerge --ask media-libs/sdl-mixer media-libs/sdl-ttf
+emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf
 ```
 
 Compilation
