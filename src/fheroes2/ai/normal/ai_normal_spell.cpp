@@ -268,7 +268,7 @@ namespace AI
             ratio *= 2;
         }
         else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) ) {
-            ratio = 0.55;
+            ratio = 0.45;
 
             const std::vector<Spell> & spellList = _commander->GetSpells();
             for ( const Spell & otherSpell : spellList ) {
@@ -283,7 +283,14 @@ namespace AI
             }
         }
         else if ( spellID == Spell::MIRRORIMAGE ) {
-            ratio = target.isArchers() ? 1.0 : target.isFlying() ? 0.55 : 0.33;
+            if ( target.isArchers() ) {
+                ratio = 1.0;
+            }
+            else {
+                ratio = target.isFlying() ? 0.55 : 0.33;
+            }
+
+            // Slow unit might be destroyed before taking its turn
             if ( target.GetSpeed() < _enemyAverageSpeed ) {
                 ratio /= 5;
             }
@@ -315,7 +322,6 @@ namespace AI
         const int spellID = spell.GetID();
         const bool isMassSpell = spell.isMassActions();
         const bool isDispel = spellID == Spell::DISPEL || spellID == Spell::MASSDISPEL;
-        const bool enemyLastUnit = enemies.size() == 1;
 
         for ( const Unit * unit : friendly ) {
             if ( !unit->Modes( IS_MAGIC ) )
@@ -337,6 +343,8 @@ namespace AI
         }
 
         if ( isDispel ) {
+            const bool enemyLastUnit = enemies.size() == 1;
+
             for ( const Unit * unit : enemies ) {
                 if ( !unit->Modes( IS_MAGIC ) )
                     continue;
@@ -389,7 +397,7 @@ namespace AI
     {
         SpellcastOutcome bestOutcome;
         if ( spell.isSummon() ) {
-            Monster monster( spell );
+            const Monster monster( spell );
 
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
             if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
