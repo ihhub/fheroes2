@@ -749,7 +749,6 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
             res.resize( res.size() - 1 );
             --pos;
         }
-
         break;
     }
     // add new char
@@ -758,12 +757,10 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         currentCharIndex = 0;
 
         const char c = GetCurrentDPadChar();
-
         if ( c )
             res.push_back( c );
 
         ++pos;
-
         break;
     }
     // next char
@@ -772,13 +769,14 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         if ( currentCharIndex >= totalCharactersDPad )
             currentCharIndex = 0;
 
-        if ( !res.empty() )
+        if ( !res.empty() ) {
             res.resize( res.size() - 1 );
-        else
+        }
+        else {
             ++pos;
+        }
 
         const char c = GetCurrentDPadChar();
-
         if ( c )
             res.push_back( c );
 
@@ -790,13 +788,14 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         if ( currentCharIndex < 0 )
             currentCharIndex = totalCharactersDPad - 1;
 
-        if ( !res.empty() )
+        if ( !res.empty() ) {
             res.resize( res.size() - 1 );
-        else
+        }
+        else {
             ++pos;
+        }
 
         const char c = GetCurrentDPadChar();
-
         if ( c )
             res.push_back( c );
 
@@ -806,13 +805,14 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     case KEY_SHIFT: {
         currentUpper = !currentUpper;
 
-        if ( !res.empty() )
+        if ( !res.empty() ) {
             res.resize( res.size() - 1 );
-        else
+        }
+        else {
             ++pos;
+        }
 
         const char c = GetCurrentDPadChar();
-
         if ( c )
             res.push_back( c );
 
