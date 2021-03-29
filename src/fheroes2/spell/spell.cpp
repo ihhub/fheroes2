@@ -692,6 +692,22 @@ bool Spell::isSummon( void ) const
     return false;
 }
 
+bool Spell::isEffectDispel() const
+{
+    switch ( id ) {
+    case CURE:
+    case MASSCURE:
+    case DISPEL:
+    case MASSDISPEL:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
 bool Spell::isApplyToAnyTroops( void ) const
 {
     switch ( id ) {
