@@ -161,37 +161,25 @@ namespace Campaign
         if ( !_customName.empty() )
             return _customName;
 
-        std::string objectName;
-
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
-            objectName = Monster( _subType ).GetName() + std::string( " bane" );
-            break;
+            return Monster( _subType ).GetName() + std::string( " bane" );
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
-            objectName = Monster( _subType ).GetName() + std::string( " alliance" );
-            break;
+            return Monster( _subType ).GetName() + std::string( " alliance" );
         case CampaignAwardData::TYPE_GET_ARTIFACT:
-            objectName = Artifact( _subType ).GetName();
-            break;
+            return Artifact( _subType ).GetName();
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-            objectName = "Carry-over forces";
-            break;
+            return "Carry-over forces";
         case CampaignAwardData::TYPE_RESOURCE_BONUS:
-            objectName = Resource::String( _subType ) + std::string( " bonus" );
-            break;
+            return Resource::String( _subType ) + std::string( " bonus" );
         case CampaignAwardData::TYPE_GET_SPELL:
-            objectName = Spell( _subType ).GetName();
-            break;
+            return Spell( _subType ).GetName();
         case CampaignAwardData::TYPE_HIREABLE_HERO:
-            objectName = Heroes( _subType, 0 ).GetName();
-            break;
+            return Heroes( _subType, 0 ).GetName();
         case CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
-            objectName = Heroes( _subType, 0 ).GetName() + std::string( " defeated" );
-            break;
+            return Heroes( _subType, 0 ).GetName() + std::string( " defeated" );
         default:
             assert( 0 ); // some new/unhandled award
         }
-
-        return objectName;
     }
 }

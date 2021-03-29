@@ -1475,14 +1475,14 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
-        for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
+        for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
             const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
 
             if ( !isAlliance && !isCurse )
                 continue;
 
-            Monster monster = Monster( campaignAwards[i]._subType );
+            Monster monster( campaignAwards[i]._subType );
             bool found = false;
 
             while ( !found ) {

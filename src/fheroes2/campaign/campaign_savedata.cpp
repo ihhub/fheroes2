@@ -101,17 +101,19 @@ namespace Campaign
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
-        if ( Game::GetLoadVersion() < FORMAT_VERSION_092_RELEASE ) {
+        const int loadVersion = Game::GetLoadVersion();
+
+        if ( loadVersion >= FORMAT_VERSION_090_RELEASE && loadVersion < FORMAT_VERSION_092_RELEASE ) {
             std::vector<std::string> tempOldObtainedCampaignAwards;
             msg >> tempOldObtainedCampaignAwards;
         }
 
         msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
 
-        if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE )
+        if ( loadVersion >= FORMAT_VERSION_091_RELEASE )
             msg >> data._campaignID >> data._daysPassed;
 
-        if ( Game::GetLoadVersion() >= FORMAT_VERSION_092_RELEASE )
+        if ( loadVersion >= FORMAT_VERSION_092_RELEASE )
             msg >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
         return msg;

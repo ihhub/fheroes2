@@ -171,14 +171,14 @@ void Kingdom::ActionNewDay( void )
             std::vector<Funds> resourceBonuses;
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
-            for ( uint32_t i = 0; i < campaignAwards.size(); ++i ) {
+            for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
                 if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
                     continue;
 
                 resourceBonuses.emplace_back( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
             }
 
-            for ( uint32_t i = 0; i < resourceBonuses.size(); ++i )
+            for ( size_t i = 0; i < resourceBonuses.size(); ++i )
                 AddFundsResource( resourceBonuses[i] );
         }
     }
@@ -485,7 +485,7 @@ void Kingdom::UpdateRecruits( void )
     if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
-        for ( uint32_t i = 0; i < obtainedAwards.size(); ++i ) {
+        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
             if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
                 continue;
 

@@ -518,7 +518,7 @@ namespace
                     Kingdom & kingdom = world.GetKingdom( ( **it ).GetColor() );
                     const KingdomHeroes heroes = kingdom.GetHeroes();
 
-                    for ( uint32_t j = 0; j < heroes.size(); ++j ) {
+                    for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
                             kingdom.RemoveHeroes( heroes[j] );
                             break;
@@ -558,7 +558,7 @@ int Game::CompleteCampaignScenario()
     const std::vector<Campaign::CampaignAwardData> obtainableAwards = getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
-    for ( uint32_t i = 0; i < obtainableAwards.size(); ++i ) {
+    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
         saveData.addCampaignAward( obtainableAwards[i]._id );
 
         if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
