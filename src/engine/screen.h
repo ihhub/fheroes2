@@ -125,7 +125,10 @@ namespace fheroes2
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
 #if CAN_OVERRIDE_RENDERING
-        void setRenderingEngine( BaseRenderEngine * engine ){ _engine = engine; }
+        void setRenderingEngine( BaseRenderEngine * engine )
+        {
+            _engine = engine;
+        }
         void setCursor( Cursor * cursor )
         {
             _cursor = cursor;
