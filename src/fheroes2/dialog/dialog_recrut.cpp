@@ -40,7 +40,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
     Text text;
 
     text.Set( std::to_string( result ), Font::BIG );
-    text.Blit( pos.x + 167 - text.w() / 2, pos.y + 160 );
+    text.Blit( pos.x + 167 - text.w() / 2, pos.y + 161 );
     const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
