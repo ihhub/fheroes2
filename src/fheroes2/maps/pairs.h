@@ -29,26 +29,6 @@
 #include "mp2.h"
 #include "resource.h"
 
-class IndexDistance : public std::pair<s32, u32>
-{
-public:
-    IndexDistance()
-        : std::pair<s32, u32>( -1, 0 ){};
-    IndexDistance( s32 i, u32 d )
-        : std::pair<s32, u32>( i, d ){};
-
-    static bool Shortest( const IndexDistance & id1, const IndexDistance & id2 )
-    {
-        return id1.second < id2.second;
-    };
-    static bool Longest( const IndexDistance & id1, const IndexDistance & id2 )
-    {
-        return id1.second > id2.second;
-    };
-};
-
-StreamBase & operator>>( StreamBase &, IndexDistance & );
-
 class IndexObject : public std::pair<s32, int>
 {
 public:

@@ -41,7 +41,6 @@ public:
     HeroesIndicator( const Heroes * h = nullptr );
 
     const Rect & GetArea( void ) const;
-    const std::string & GetDescriptions( void ) const;
     void SetPos( const Point & );
     void SetHero( const Heroes * hero );
 

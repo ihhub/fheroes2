@@ -45,10 +45,6 @@ public:
     {
         modes &= ~f;
     }
-    void ToggleModes( u32 f )
-    {
-        modes ^= f;
-    }
 
     bool Modes( u32 f ) const
     {

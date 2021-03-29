@@ -493,11 +493,6 @@ const char * BuildingInfo::GetName( void ) const
     return Castle::GetStringBuilding( building, castle.GetRace() );
 }
 
-const std::string & BuildingInfo::GetDescription( void ) const
-{
-    return description;
-}
-
 bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
 {
     LocalEvent & le = LocalEvent::Get();

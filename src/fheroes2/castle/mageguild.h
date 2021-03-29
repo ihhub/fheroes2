@@ -49,16 +49,4 @@ private:
 StreamBase & operator<<( StreamBase &, const MageGuild & );
 StreamBase & operator>>( StreamBase &, MageGuild & );
 
-class RowSpells
-{
-public:
-    RowSpells( const Point &, const Castle &, int );
-    void Redraw( void );
-    bool QueueEventProcessing( void );
-
-private:
-    Rects coords;
-    SpellStorage spells;
-};
-
 #endif

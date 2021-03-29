@@ -190,11 +190,6 @@ int Captain::GetControl( void ) const
     return home.GetControl();
 }
 
-s32 Captain::GetIndex( void ) const
-{
-    return home.GetIndex();
-}
-
 void Captain::ActionAfterBattle( void )
 {
     SetSpellPoints( GetMaxSpellPoints() );

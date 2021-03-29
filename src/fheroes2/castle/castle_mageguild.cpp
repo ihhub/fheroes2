@@ -34,6 +34,21 @@
 #include "race.h"
 #include "text.h"
 
+namespace
+{
+    class RowSpells
+    {
+    public:
+        RowSpells( const Point &, const Castle &, int );
+        void Redraw( void );
+        bool QueueEventProcessing( void );
+
+    private:
+        Rects coords;
+        SpellStorage spells;
+    };
+}
+
 RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
 {
     const MageGuild & guild = castle.GetMageGuild();

@@ -43,7 +43,6 @@ public:
     virtual int GetColor() const override;
     virtual int GetType() const override;
     virtual int GetControl() const override;
-    s32 GetIndex() const;
 
     virtual const std::string & GetName() const override;
 
