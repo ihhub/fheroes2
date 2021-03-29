@@ -803,6 +803,7 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
+    fheroes2::AGG::_icnVsSprite.clear();
     // fnt_cache.clear();
 
 #ifdef WITH_TTF
