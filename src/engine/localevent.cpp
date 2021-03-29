@@ -1238,9 +1238,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     if ( _gameController != nullptr ) {
         ProcessControllerAxisMotion();
     }
-    if ( _touchpadAvailable ) {
-        TouchpadRMBEmulation();
-    }
 #endif
 
     if ( delay )
@@ -1297,11 +1294,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         ++_numTouches;
         if ( _numTouches == 1 ) {
             _firstFingerId = event.fingerId;
-            _touchTimer.reset();
-            _initialTouchPositionX = event.x;
-            _initialTouchPositionY = event.y;
-            _touchRmbEmulated = false;
-            _touchRmbMoved = false;
         }
     }
     else if ( event.type == SDL_FINGERUP ) {
@@ -1309,11 +1301,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
     }
 
     if ( _firstFingerId == event.fingerId ) {
-        if ( !_touchRmbEmulated && !_touchRmbMoved
-             && ( ( std::abs( _initialTouchPositionX - event.x ) > TOUCH_RMB_DEADZONE ) || ( std::abs( _initialTouchPositionY - event.y ) > TOUCH_RMB_DEADZONE ) ) ) {
-            _touchRmbMoved = true;
-        }
-
         const fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Size screenResolution = fheroes2::engine().getCurrentScreenResolution(); // current resolution of screen
         const fheroes2::Size gameSurfaceRes( display.width(), display.height() ); // native game (surface) resolution
@@ -1342,10 +1329,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             SetModes( MOUSE_PRESSED );
         }
         else if ( event.type == SDL_FINGERUP ) {
-            if ( _touchRmbEmulated )
-                mouse_rr = mouse_cu;
-            else
-                mouse_rl = mouse_cu;
+            mouse_rl = mouse_cu;
 
             ResetModes( MOUSE_PRESSED );
             SetModes( MOUSE_RELEASED );
@@ -1356,19 +1340,6 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             mouse_button = SDL_BUTTON_RIGHT;
         else
             mouse_button = SDL_BUTTON_LEFT;
-    }
-}
-
-void LocalEvent::TouchpadRMBEmulation()
-{
-    if ( _numTouches == 1 && !_touchRmbEmulated && !_touchRmbMoved ) {
-        const uint64_t touchDelay = _touchTimer.getMs();
-        if ( touchDelay > TOUCH_RMB_DELAY ) {
-            _touchRmbEmulated = true;
-            mouse_pr = mouse_cu;
-            SetModes( MOUSE_PRESSED );
-            mouse_button = SDL_BUTTON_RIGHT;
-        }
     }
 }
 
