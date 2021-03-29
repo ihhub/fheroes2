@@ -39,10 +39,7 @@ RPM based distributions like Fedora/Red Hat use the commands `sudo yum install S
 openSUSE supports the One-Click-Install via `SDL_mixer.ymp` file in `script/linux`. 
 
 ### Gentoo
-If you have Gentoo, in addition to basic distribution you need to run following commands
-```
-emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf
-```
+If you have Gentoo, in addition to basic distribution you need to run following command `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
 
 Compilation
 ---------------------------
