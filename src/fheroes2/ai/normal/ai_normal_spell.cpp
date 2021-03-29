@@ -210,7 +210,8 @@ namespace AI
             break;
         case Spell::HASTE:
         case Spell::MASSHASTE:
-            ratio = 0.3;
+            // Haste isn't effective if target is fast already
+            ratio = target.GetSpeed() < _enemyAverageSpeed ? 0.3 : 0.1;
             break;
         case Spell::BLOODLUST:
             ratio = 0.1;
@@ -254,11 +255,9 @@ namespace AI
             if ( target.Modes( SP_SLOW ) ) {
                 ratio *= 2;
             }
-            else if ( target.isArchers() ) {
-                ratio = ( target.GetSpeed() < _enemyAverageSpeed ) ? 0.05 : 0.2;
-            }
-            else if ( _defensiveTactics ) {
-                ratio = 0.1;
+            // Reduce effectiveness if we don't have to move
+            else if ( target.isArchers() || _defensiveTactics ) {
+                ratio /= 2;
             }
         }
         else if ( target.Modes( SP_BLESS ) && ( spellID == Spell::CURSE || spellID == Spell::MASSCURSE ) ) {
@@ -268,7 +267,7 @@ namespace AI
             ratio *= 2;
         }
         else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) ) {
-            ratio = 0.45;
+            ratio = 0.35;
 
             const std::vector<Spell> & spellList = _commander->GetSpells();
             for ( const Spell & otherSpell : spellList ) {
