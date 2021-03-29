@@ -30,6 +30,7 @@
 
 #include "agg.h"
 #include "agg_file.h"
+#include "agg_image.h"
 #include "audio.h"
 #include "audio_cdrom.h"
 #include "audio_mixer.h"
@@ -803,7 +804,7 @@ void AGG::Quit( void )
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
-    fheroes2::AGG::_icnVsSprite.clear();
+    fheroes2::AGG::clearICNSprites();
     // fnt_cache.clear();
 
 #ifdef WITH_TTF
