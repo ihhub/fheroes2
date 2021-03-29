@@ -3,11 +3,9 @@
 ## Install
 Install fheroes2.vpk to your Vita.
 
-FHeroes2 requires data files from the original Heroes of Might and Magic 2.
+fheroes2 requires data files from the original Heroes of Might and Magic II.
 
 Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from the original games "DATA" folder into "ux0:data/fheroes2/data" and everything from "MAPS" folder into "ux0:data/fheroes2/maps".
-
-Data from GoG version of the game is working nicely. Files from the demo version are working too.
 
 Music files in OGG format (from GoG release of the game) should be placed into the "ux0:data/fheroes2/music/" folder. To enable OGG music set "music = external" option in "ux0:data/fheroes2/fheroes2.cfg".
 
