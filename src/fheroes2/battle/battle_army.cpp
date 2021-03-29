@@ -147,14 +147,14 @@ void Battle::Units::SortSlowest( bool f )
 {
     SlowestUnits CompareFunc( f );
 
-    std::sort( begin(), end(), CompareFunc );
+    std::stable_sort( begin(), end(), CompareFunc );
 }
 
 void Battle::Units::SortFastest( bool f )
 {
     FastestUnits CompareFunc( f );
 
-    std::sort( begin(), end(), CompareFunc );
+    std::stable_sort( begin(), end(), CompareFunc );
 }
 
 void Battle::Units::SortStrongest( void )
