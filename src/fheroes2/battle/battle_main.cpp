@@ -67,23 +67,29 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // pre battle army1
-    if ( army1.GetCommander() ) {
-        if ( army1.GetCommander()->isCaptain() )
-            army1.GetCommander()->ActionPreBattle();
+    HeroBase * commander1 = army1.GetCommander();
+    uint32_t initialSpellPoints1 = 0;
+    if ( commander1 ) {
+        initialSpellPoints1 = commander1->GetSpellPoints();
+        if ( commander1->isCaptain() )
+            commander1->ActionPreBattle();
         else if ( army1.isControlAI() )
-            AI::Get().HeroesPreBattle( *army1.GetCommander(), true );
+            AI::Get().HeroesPreBattle( *commander1, true );
         else
-            army1.GetCommander()->ActionPreBattle();
+            commander1->ActionPreBattle();
     }
 
     // pre battle army2
-    if ( army2.GetCommander() ) {
-        if ( army2.GetCommander()->isCaptain() )
-            army2.GetCommander()->ActionPreBattle();
+    HeroBase * commander2 = army2.GetCommander();
+    uint32_t initialSpellPoints2 = 0;
+    if ( commander2 ) {
+        initialSpellPoints2 = commander2->GetSpellPoints();
+        if ( commander2->isCaptain() )
+            commander2->ActionPreBattle();
         else if ( army2.isControlAI() )
-            AI::Get().HeroesPreBattle( *army2.GetCommander(), false );
+            AI::Get().HeroesPreBattle( *commander2, false );
         else
-            army2.GetCommander()->ActionPreBattle();
+            commander2->ActionPreBattle();
     }
 
     const bool isHumanBattle = army1.isControlHuman() || army2.isControlHuman();
@@ -108,8 +114,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     Result result = arena->GetResult();
 
-    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
-    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
+    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
+    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
     bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
@@ -122,6 +128,12 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, true ) ) {
             // If dialog returns true we will restart battle in manual mode
             showBattle = true;
+
+            // Reset army commander state
+            if ( commander1 )
+                commander1->SetSpellPoints( initialSpellPoints1 );
+            if ( commander2 )
+                commander2->SetSpellPoints( initialSpellPoints2 );
 
             // Have to destroy old Arena instance first
             arena.reset();
@@ -136,8 +148,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
             // Override the result
             result = arena->GetResult();
-            hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
-            hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
+            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
+            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
             isWinnerHuman = hero_wins && hero_wins->isControlHuman();
@@ -178,19 +190,19 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
 
     // after battle army1
-    if ( army1.GetCommander() ) {
+    if ( commander1 ) {
         if ( army1.isControlAI() )
-            AI::Get().HeroesAfterBattle( *army1.GetCommander(), true );
+            AI::Get().HeroesAfterBattle( *commander1, true );
         else
-            army1.GetCommander()->ActionAfterBattle();
+            commander1->ActionAfterBattle();
     }
 
     // after battle army2
-    if ( army2.GetCommander() ) {
+    if ( commander2 ) {
         if ( army2.isControlAI() )
-            AI::Get().HeroesAfterBattle( *army2.GetCommander(), false );
+            AI::Get().HeroesAfterBattle( *commander2, false );
         else
-            army2.GetCommander()->ActionAfterBattle();
+            commander2->ActionAfterBattle();
     }
 
     // eagle eye capability
@@ -205,14 +217,14 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
 
     // update army
-    if ( army1.GetCommander() && army1.GetCommander()->isHeroes() ) {
+    if ( commander1 && commander1->isHeroes() ) {
         // hard reset army
         if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
             army1.Reset( false );
     }
 
     // update army
-    if ( army2.GetCommander() && army2.GetCommander()->isHeroes() ) {
+    if ( commander2 && commander2->isHeroes() ) {
         // hard reset army
         if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
             army2.Reset( false );

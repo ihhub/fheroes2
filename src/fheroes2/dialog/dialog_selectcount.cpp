@@ -121,13 +121,13 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp( pos ) || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn( pos ) || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }

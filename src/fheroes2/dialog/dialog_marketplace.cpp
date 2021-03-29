@@ -306,7 +306,7 @@ void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_s
     _scrollbar.show();
 }
 
-void Dialog::Marketplace( bool fromTradingPost )
+void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int tradpost = Settings::Get().ExtGameEvilInterface() ? ICN::TRADPOSE : ICN::TRADPOST;
@@ -329,8 +329,6 @@ void Dialog::Marketplace( bool fromTradingPost )
     text.Blit( dst_pt.x, dst_pt.y );
 
     TradeWindowGUI gui( pos_rt );
-
-    Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     const std::string & header_from = _( "Your Resources" );
 
@@ -421,7 +419,7 @@ void Dialog::Marketplace( bool fromTradingPost )
 
         if ( buttonGift.isEnabled() && le.MouseClickLeft( buttonGift.area() ) ) {
             cursor.Hide();
-            Dialog::MakeGiftResource();
+            Dialog::MakeGiftResource( kingdom );
             fundsFrom = kingdom.GetFunds();
             RedrawFromResource( pt1, fundsFrom );
             cursor.Show();

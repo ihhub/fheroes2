@@ -128,9 +128,12 @@ public:
     int GetRace( void ) const;
     int GetFriends( void ) const;
     int GetID( void ) const;
+
+    std::string GetDefaultName() const;
+    const std::string & GetName( void ) const;
+
     std::string GetPersonalityString() const;
 
-    const std::string & GetName( void ) const;
     Focus & GetFocus( void );
     const Focus & GetFocus( void ) const;
 
