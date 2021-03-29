@@ -48,6 +48,7 @@
 .vs
 .vscode
 VisualStudio/packages/*
+!zlib*.zip
 
 # Ignore Heroes of Might & Magic II game files
 *.agg
