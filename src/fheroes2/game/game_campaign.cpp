@@ -499,7 +499,7 @@ namespace
         const Players & sortedPlayers = Settings::Get().GetPlayers();
         Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
 
-        for ( uint32_t i = 0; i < awards.size(); ++i ) {
+        for ( size_t i = 0; i < awards.size(); ++i ) {
             if ( currentScenarioID < awards[i]._startScenarioID )
                 continue;
 
