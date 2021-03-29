@@ -1336,10 +1336,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
             SetModes( MOUSE_CLICKED );
         }
 
-        if ( _touchRmbEmulated )
-            mouse_button = SDL_BUTTON_RIGHT;
-        else
-            mouse_button = SDL_BUTTON_LEFT;
+        mouse_button = SDL_BUTTON_LEFT;
     }
 }
 
