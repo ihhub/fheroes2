@@ -29,8 +29,8 @@
 
 namespace fheroes2
 {
-    const char * LuckString( const int luck );
-    const char * MoraleString( const int morale );
+    std::string LuckString( const int luck );
+    std::string MoraleString( const int morale );
 }
 
 class Heroes;

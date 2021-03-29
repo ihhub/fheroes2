@@ -21,8 +21,10 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <memory>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
@@ -33,6 +35,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "heroes_base.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "skill.h"
@@ -94,25 +97,60 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( showBattle )
         AGG::ResetMixer();
 
-    Arena arena( army1, army2, mapsindex, showBattle );
+    std::unique_ptr<Arena> arena( new Arena( army1, army2, mapsindex, showBattle ) );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    while ( arena.BattleValid() ) {
-        arena.Turns();
+    while ( arena->BattleValid() ) {
+        arena->Turns();
     }
 
-    const Result & result = arena.GetResult();
+    Result result = arena->GetResult();
 
     HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
     HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
-    const u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+    u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
-    const bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
-    const bool transferArtifacts
-        = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+    bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+    bool transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
     bool artifactsTransferred = !transferArtifacts;
+
+    bool battleSummaryShown = false;
+    // Check if it was an auto battle
+    if ( isHumanBattle && !showBattle ) {
+        if ( arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, true ) ) {
+            // If dialog returns true we will restart battle in manual mode
+            showBattle = true;
+
+            // Have to destroy old Arena instance first
+            arena.reset();
+            // Make sure to reset mixer before loading the battle interface
+            AGG::ResetMixer();
+
+            arena = std::unique_ptr<Arena>( new Arena( army1, army2, mapsindex, true ) );
+
+            while ( arena->BattleValid() ) {
+                arena->Turns();
+            }
+
+            // Override the result
+            result = arena->GetResult();
+            hero_wins = ( result.army1 & RESULT_WINS ? army1.GetCommander() : ( result.army2 & RESULT_WINS ? army2.GetCommander() : NULL ) );
+            hero_loss = ( result.army1 & RESULT_LOSS ? army1.GetCommander() : ( result.army2 & RESULT_LOSS ? army2.GetCommander() : NULL ) );
+            loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
+
+            isWinnerHuman = hero_wins && hero_wins->isControlHuman();
+            transferArtifacts = ( hero_wins && hero_loss && !( ( RESULT_RETREAT | RESULT_SURRENDER ) & loss_result ) && hero_wins->isHeroes() && hero_loss->isHeroes() );
+            artifactsTransferred = !transferArtifacts;
+        }
+        else {
+            battleSummaryShown = true;
+            if ( isWinnerHuman ) {
+                artifactsTransferred = true;
+            }
+        }
+    }
 
     if ( showBattle ) {
         AGG::ResetMixer();
@@ -120,15 +158,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // fade arena
         const bool clearMessageLog
             = ( result.army1 & RESULT_RETREAT ) || ( result.army2 & RESULT_RETREAT ) || ( result.army1 & RESULT_SURRENDER ) || ( result.army2 & RESULT_SURRENDER );
-        arena.FadeArena( clearMessageLog );
+        arena->FadeArena( clearMessageLog );
     }
 
-    // summary dialog
-    if ( isHumanBattle ) {
+    // final summary dialog
+    if ( isHumanBattle && !battleSummaryShown ) {
+        arena->DialogBattleSummary( result, transferArtifacts && isWinnerHuman, false );
         if ( isWinnerHuman ) {
             artifactsTransferred = true;
         }
-        arena.DialogBattleSummary( result, transferArtifacts && isWinnerHuman );
     }
 
     if ( !artifactsTransferred ) {
@@ -136,8 +174,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     // save count troop
-    arena.GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
-    arena.GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
+    arena->GetForce1().SyncArmyCount( ( result.army1 & RESULT_WINS ) != 0 );
+    arena->GetForce2().SyncArmyCount( ( result.army2 & RESULT_WINS ) != 0 );
 
     // after battle army1
     if ( army1.GetCommander() ) {
@@ -157,7 +195,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // eagle eye capability
     if ( hero_wins && hero_loss && hero_wins->GetLevelSkill( Skill::Secondary::EAGLEEYE ) && hero_loss->isHeroes() )
-        EagleEyeSkillAction( *hero_wins, arena.GetUsageSpells(), hero_wins->isControlHuman() );
+        EagleEyeSkillAction( *hero_wins, arena->GetUsageSpells(), hero_wins->isControlHuman() );
 
     // necromancy capability
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )

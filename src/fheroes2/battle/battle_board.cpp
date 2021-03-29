@@ -110,29 +110,30 @@ void Battle::Board::Reset( void )
 void Battle::Board::SetPositionQuality( const Unit & b )
 {
     Arena * arena = GetArena();
-    Units enemies( arena->GetForce( b.GetColor(), true ), true );
+    Units enemies( arena->GetForce( b.GetCurrentColor(), true ), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
     enemies.SortArchers();
 
-    for ( Units::const_iterator it1 = enemies.begin(); it1 != enemies.end(); ++it1 ) {
-        const Unit * unit = *it1;
+    for ( const Unit * unit : enemies ) {
+        if ( !unit || !unit->isValid() ) {
+            continue;
+        }
 
-        if ( unit && unit->isValid() ) {
-            const s32 unitStrength = unit->GetScoreQuality( b );
-            const Indexes around = GetAroundIndexes( *unit );
+        const Indexes around = GetAroundIndexes( *unit );
+        for ( const int32_t index : around ) {
+            Cell * cell2 = GetCell( index );
+            if ( !cell2 || !cell2->isPassable3( b, false ) )
+                continue;
 
-            for ( Indexes::const_iterator it2 = around.begin(); it2 != around.end(); ++it2 ) {
-                Cell * cell2 = GetCell( *it2 );
-                if ( cell2 && cell2->isPassable3( b, false ) ) {
-                    const s32 quality = cell2->GetQuality();
-                    // Only sum up quality score if it's archers; otherwise just pick the strongest
-                    if ( unit->isArchers() )
-                        cell2->SetQuality( quality + unitStrength );
-                    else if ( unitStrength > quality )
-                        cell2->SetQuality( unitStrength );
-                }
-            }
+            const int32_t quality = cell2->GetQuality();
+            const int32_t attackValue = OptimalAttackValue( b, *unit, index );
+
+            // Only sum up quality score if it's archers; otherwise just pick the highest
+            if ( unit->isArchers() )
+                cell2->SetQuality( quality + attackValue );
+            else if ( attackValue > quality )
+                cell2->SetQuality( attackValue );
         }
     }
 }
@@ -163,15 +164,24 @@ void Battle::Board::SetEnemyQuality( const Unit & unit )
     }
 }
 
-s32 Battle::Board::GetDistance( s32 index1, s32 index2 )
+uint32_t Battle::Board::GetDistance( s32 index1, s32 index2 )
 {
     if ( isValidIndex( index1 ) && isValidIndex( index2 ) ) {
-        const int dx = std::abs( ( index1 % ARENAW ) - ( index2 % ARENAW ) );
-        const int dy = std::abs( ( index1 / ARENAW ) - ( index2 / ARENAW ) );
-        const int roundingUp = index1 / ARENAW % 2;
+        const int32_t x1 = index1 % ARENAW;
+        const int32_t y1 = index1 / ARENAW;
 
-        // hexagonal grid: you only move half as much on X axis when diagonal!
-        return dy + std::max( dx - ( dy + roundingUp ) / 2, 0 );
+        const int32_t x2 = index2 % ARENAW;
+        const int32_t y2 = index2 / ARENAW;
+
+        const int32_t du = y2 - y1;
+        const int32_t dv = ( x2 + y2 / 2 ) - ( x1 + y1 / 2 );
+
+        if ( ( du >= 0 && dv >= 0 ) || ( du < 0 && dv < 0 ) ) {
+            return std::max( std::abs( du ), std::abs( dv ) );
+        }
+        else {
+            return std::abs( du ) + std::abs( dv );
+        }
     }
 
     return 0;
@@ -184,9 +194,14 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     at( unit.GetHeadIndex() ).SetDirection( CENTER );
 
     if ( unit.isFlying() ) {
-        for ( iterator it = begin(); it != end(); ++it )
-            if ( ( *it ).isPassable3( unit, false ) )
-                ( *it ).SetDirection( CENTER );
+        const Bridge * bridge = Arena::GetBridge();
+        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
+
+        for ( std::size_t i = 0; i < size(); i++ ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( i, unit ) ) ) {
+                at( i ).SetDirection( CENTER );
+            }
+        }
     }
     else {
         Indexes indexes = GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() );
@@ -235,9 +250,8 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
     const Bridge * bridge = Arena::GetBridge();
     const Castle * castle = Arena::GetCastle();
-    const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
+    const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
     const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
-    const int32_t moatPenalty = unit.GetSpeed() * 100;
 
     std::map<int32_t, CellNode> cellMap;
     cellMap[currentCellId].parentCellId = -1;
@@ -255,10 +269,11 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
 
         while ( !( currentCellId == targetHeadCellId && currentTailCellId == targetTailCellId )
                 && !( currentCellId == targetTailCellId && currentTailCellId == targetHeadCellId ) ) {
-            CellNode & currentCellNode = cellMap[currentCellId];
-
             const Cell & center = at( currentCellId );
+
+            CellNode & currentCellNode = cellMap[currentCellId];
             Indexes aroundCellIds;
+
             if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
@@ -267,17 +282,23 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );
 
-                if ( cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId ) ) ) {
+                if ( cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId, unit ) ) ) {
                     const bool isLeftDirection = IsLeftDirection( currentCellId, cellId, currentCellNode.leftDirection );
                     const int32_t tailCellId = isLeftDirection ? cellId + 1 : cellId - 1;
 
-                    int32_t cost = 100 * ( Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId ) );
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
-                        cost += std::max( moatPenalty - currentCellNode.cost, 100 );
+                    int32_t cost = Board::GetDistance( cellId, targetHeadCellId ) + Board::GetDistance( tailCellId, targetTailCellId );
 
                     // Turn back. No movement at all.
-                    if ( isLeftDirection != currentCellNode.leftDirection )
+                    if ( isLeftDirection != currentCellNode.leftDirection ) {
                         cost = 0;
+                    }
+                    // Moat penalty. Not applied if one of the target cells is located in the moat.
+                    else if ( isMoatBuilt && cellId != targetHeadCellId && cellId != targetTailCellId ) {
+                        // Don't apply the moat penalty to the unit's tail if the head cell was also in the moat at the previous stage.
+                        if ( Board::isMoatIndex( cellId, unit ) || ( Board::isMoatIndex( tailCellId, unit ) && !Board::isMoatIndex( currentCellId, unit ) ) ) {
+                            cost += ARENASIZE;
+                        }
+                    }
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
@@ -333,10 +354,13 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );
 
-                if ( cellMap[cellId].open && cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId ) ) ) {
-                    int32_t cost = 100 * Board::GetDistance( cellId, targetHeadCellId );
-                    if ( isMoatBuilt && Board::isMoatIndex( cellId ) )
-                        cost += 100;
+                if ( cellMap[cellId].open && cell.isPassable4( unit, center ) && ( isPassableBridge || !Board::isBridgeIndex( cellId, unit ) ) ) {
+                    int32_t cost = Board::GetDistance( cellId, targetHeadCellId );
+
+                    // Moat penalty. Not applied if the target cell is located in the moat.
+                    if ( isMoatBuilt && Board::isMoatIndex( cellId, unit ) && cellId != targetHeadCellId ) {
+                        cost += ARENASIZE;
+                    }
 
                     if ( cellMap[cellId].parentCellId < 0 ) {
                         // It is a new cell (node).
@@ -424,13 +448,13 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
                 result.resize( unit.GetSpeed() );
         }
 
-        // Skip moat position
-        if ( isMoatBuilt && !Board::isMoatIndex( startCellId ) ) {
+        // Skip moat position.
+        if ( isMoatBuilt ) {
             for ( size_t i = 0; i < result.size(); ++i ) {
                 if ( isWideUnit && result[i] == unit.GetTailIndex() )
                     continue;
 
-                if ( Board::isMoatIndex( result[i] ) ) {
+                if ( Board::isMoatIndex( result[i], unit ) ) {
                     result.resize( i + 1 );
                     break;
                 }
@@ -493,7 +517,7 @@ Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
 
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
-    std::vector<std::pair<Battle::Unit *, int32_t> > foundUnits;
+    std::vector<std::pair<Battle::Unit *, uint32_t> > foundUnits;
 
     for ( Cell & cell : *this ) {
         Unit * cellUnit = cell.GetUnit();
@@ -508,7 +532,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     }
 
     std::sort( foundUnits.begin(), foundUnits.end(),
-               []( const std::pair<Battle::Unit *, int32_t> & first, const std::pair<Battle::Unit *, int32_t> & second ) { return first.second < second.second; } );
+               []( const std::pair<Battle::Unit *, uint32_t> & first, const std::pair<Battle::Unit *, uint32_t> & second ) { return first.second < second.second; } );
 
     std::vector<Battle::Unit *> units;
     units.reserve( foundUnits.size() );
@@ -518,6 +542,42 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
     }
 
     return units;
+}
+
+int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
+{
+    const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
+    const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
+    if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
+        return secondaryTarget->GetScoreQuality( attacker );
+    }
+    return 0;
+}
+
+int32_t Battle::Board::OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    const int32_t headIndex = target.GetHeadIndex();
+    const int32_t tailIndex = target.GetTailIndex();
+
+    // isNearIndexes should return false if we pass in invalid tail index (-1)
+    if ( isNearIndexes( from, tailIndex ) ) {
+        if ( attacker.isDoubleCellAttack() && isNearIndexes( from, headIndex )
+             && DoubleCellAttackValue( attacker, target, from, headIndex ) > DoubleCellAttackValue( attacker, target, from, tailIndex ) ) {
+            // Special case when attacking wide unit from the middle cell and could turn around
+            return headIndex;
+        }
+        return tailIndex;
+    }
+    return headIndex;
+}
+
+int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from )
+{
+    if ( attacker.isDoubleCellAttack() ) {
+        const int32_t targetCell = OptimalAttackTarget( attacker, target, from );
+        return target.GetScoreQuality( attacker ) + DoubleCellAttackValue( attacker, target, from, targetCell );
+    }
+    return target.GetScoreQuality( attacker );
 }
 
 int Battle::Board::GetDirection( s32 index1, s32 index2 )
@@ -683,12 +743,14 @@ bool Battle::Board::isImpassableIndex( s32 index )
     return !cell || !cell->isPassable1( true );
 }
 
-bool Battle::Board::isBridgeIndex( s32 index )
+bool Battle::Board::isBridgeIndex( s32 index, const Unit & b )
 {
-    return index == 49 || index == 50;
+    const Bridge * bridge = Arena::GetBridge();
+
+    return ( index == 49 && !b.isFlying() && bridge && bridge->isPassable( b ) ) || index == 50;
 }
 
-bool Battle::Board::isMoatIndex( s32 index )
+bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
 {
     switch ( index ) {
     case 7:
@@ -700,6 +762,10 @@ bool Battle::Board::isMoatIndex( s32 index )
     case 84:
     case 95:
         return true;
+    case 49: {
+        const Bridge * bridge = Arena::GetBridge();
+        return b.isFlying() || bridge == nullptr || !bridge->isPassable( b );
+    }
 
     default:
         break;

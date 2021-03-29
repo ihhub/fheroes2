@@ -20,9 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
-#include "assert.h"
 #include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
@@ -30,6 +32,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"
@@ -1421,9 +1424,8 @@ void ActionToMagicWell( Heroes & hero, s32 dst_index )
 
 void ActionToTradingPost( const Heroes & hero )
 {
-    Dialog::Marketplace( true );
+    Dialog::Marketplace( hero.GetKingdom(), true );
 
-    (void)hero;
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
@@ -1545,12 +1547,11 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
 
         if ( complete ) {
             tile.QuantityReset();
-            hero.SetVisited( dst_index );
             hero.SetVisited( dst_index, Visit::GLOBAL );
         }
         else if ( 0 == gold ) {
             // modify morale
-            hero.SetVisited( dst_index );
+            hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
             AGG::PlaySound( M82::BADMRLE );
             DialogMorale( MP2::StringObject( obj ), msg, false, 1 );

@@ -19,9 +19,10 @@
  ***************************************************************************/
 
 #include "dialog_resolution.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "embedded_image.h"
 #include "game.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
 #include "screen.h"
@@ -41,7 +42,7 @@ namespace
     class ResolutionList : public Interface::ListBox<fheroes2::Size>
     {
     public:
-        ResolutionList( const Point & offset )
+        explicit ResolutionList( const Point & offset )
             : Interface::ListBox<fheroes2::Size>( offset )
             , _isDoubleClicked( false )
         {}

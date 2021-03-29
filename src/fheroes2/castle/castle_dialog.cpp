@@ -25,12 +25,14 @@
 #include <utility>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "m82.h"
 #include "mus.h"
@@ -558,7 +560,7 @@ int Castle::OpenDialog( bool readonly )
 
                             case BUILD_MARKETPLACE: {
                                 fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                                Dialog::Marketplace();
+                                Dialog::Marketplace( world.GetKingdom( GetColor() ), false );
                                 need_redraw = true;
                                 break;
                             }

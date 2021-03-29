@@ -28,20 +28,25 @@
 #include <vector>
 
 #include "audio_music.h"
-#include "engine.h"
 #include "logging.h"
 #include "serialize.h"
 
-#define TAG_FORM 0x464F524D
-#define TAG_XDIR 0x58444952
-#define TAG_INFO 0x494E464F
-#define TAG_CAT0 0x43415420
-#define TAG_XMID 0x584D4944
-#define TAG_TIMB 0x54494D42
-#define TAG_EVNT 0x45564E54
-#define TAG_RBRN 0x5242524E
-#define TAG_MTHD 0x4D546864
-#define TAG_MTRK 0x4D54726B
+namespace
+{
+    enum
+    {
+        TAG_FORM = 0x464F524D,
+        TAG_XDIR = 0x58444952,
+        TAG_INFO = 0x494E464F,
+        TAG_CAT0 = 0x43415420,
+        TAG_XMID = 0x584D4944,
+        TAG_TIMB = 0x54494D42,
+        TAG_EVNT = 0x45564E54,
+        TAG_RBRN = 0x5242524E,
+        TAG_MTHD = 0x4D546864,
+        TAG_MTRK = 0x4D54726B
+    };
+}
 
 // Pair: time and length
 struct XMI_Time : public std::pair<u32, u32>

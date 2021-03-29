@@ -22,10 +22,11 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 #include "ui_window.h"
@@ -56,8 +57,8 @@ struct SelectRecipientsColors
     int recipients;
     std::vector<fheroes2::Rect> positions;
 
-    SelectRecipientsColors( const Point & pos )
-        : colors( Settings::Get().GetPlayers().GetColors() & ~Settings::Get().GetPlayers().current_color )
+    SelectRecipientsColors( const Point & pos, int senderColor )
+        : colors( Settings::Get().GetPlayers().GetColors() & ~senderColor )
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
@@ -198,12 +199,11 @@ struct ResourceBar
     }
 };
 
-void Dialog::MakeGiftResource( void )
+void Dialog::MakeGiftResource( Kingdom & kingdom )
 {
     Cursor & cursor = Cursor::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
-    const Settings & conf = Settings::Get();
 
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
@@ -211,16 +211,14 @@ void Dialog::MakeGiftResource( void )
     const fheroes2::StandardWindow frameborder( 320, 224 );
     const Rect box( frameborder.activeArea() );
 
-    Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-
-    Funds funds1( myKingdom.GetFunds() );
+    Funds funds1( kingdom.GetFunds() );
     Funds funds2;
     Text text;
 
     text.Set( "Select Recipients" );
     text.Blit( box.x + ( box.w - text.w() ) / 2, box.y + 5 );
 
-    SelectRecipientsColors selector( Point( box.x + 65, box.y + 28 ) );
+    SelectRecipientsColors selector( Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
     text.Set( "Your Funds" );
@@ -256,7 +254,7 @@ void Dialog::MakeGiftResource( void )
                 btnGroups.button( 0 ).enable();
 
             if ( count != new_count ) {
-                funds1 = myKingdom.GetFunds();
+                funds1 = kingdom.GetFunds();
                 funds2.Reset();
                 info1.Redraw();
                 info2.Redraw();
@@ -294,7 +292,7 @@ void Dialog::MakeGiftResource( void )
         event.subsequent = 0;
         event.colors = selector.recipients;
         event.message = "Gift from %{name}";
-        const Player * player = Settings::Get().GetPlayers().GetCurrent();
+        const Player * player = Settings::Get().GetPlayers().Get( kingdom.GetColor() );
         if ( player )
             StringReplace( event.message, "%{name}", player->GetName() );
 
@@ -302,6 +300,6 @@ void Dialog::MakeGiftResource( void )
 
         if ( 1 < count )
             funds2 *= count;
-        myKingdom.OddFundsResource( funds2 );
+        kingdom.OddFundsResource( funds2 );
     }
 }

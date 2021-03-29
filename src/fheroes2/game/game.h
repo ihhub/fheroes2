@@ -245,8 +245,6 @@ namespace Game
     int SelectScenario( void );
     int StartGame( void );
     int StartBattleOnly( void );
-    int NetworkHost( void );
-    int NetworkGuest( void );
     int DisplayLoadGameDialog();
     int CompleteCampaignScenario();
     std::vector<Campaign::CampaignAwardData> GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData );

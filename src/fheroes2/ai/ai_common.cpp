@@ -78,7 +78,7 @@ namespace AI
 
         // Validate and pick the troops
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
-            Troop * troop = army.GetTroop( slot );
+            const Troop * troop = army.GetTroop( slot );
             if ( troop && troop->isValid() ) {
                 if ( troop->isArchers() ) {
                     archers.push_back( *troop );

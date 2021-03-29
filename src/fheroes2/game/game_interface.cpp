@@ -22,11 +22,12 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "direction.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "maps.h"
 #include "mp2.h"
 #include "settings.h"

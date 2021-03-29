@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,20 +18,25 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef _EDITOR_PROGRAM_H_
-#define _EDITOR_PROGRAM_H_
+#pragma once
 
-QT_BEGIN_NAMESPACE
-class QString;
-class QStringList;
-class QSettings;
-QT_END_NAMESPACE
+#include <cstdint>
 
-namespace Resource
+namespace fheroes2
 {
-    QString FindFile( const QString & dir, const QString & file );
-    QStringList FindFiles( const QString & dir, const QString & file );
-    QSettings & localSettings( void );
-}
+    class Image;
+    class Sprite;
 
-#endif
+    namespace AGG
+    {
+        const Sprite & GetICN( int icnId, uint32_t index );
+        uint32_t GetICNCount( int icnId );
+
+        // shapeId could be 0, 1, 2 or 3 only
+        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
+        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
+        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
+
+        int32_t GetAbsoluteICNHeight( int icnId );
+    }
+}

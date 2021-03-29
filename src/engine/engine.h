@@ -22,9 +22,6 @@
 #ifndef H2ENGINE_H
 #define H2ENGINE_H
 
-#include "tools.h"
-#include "types.h"
-
 #include <SDL.h>
 
 #define INIT_VIDEO SDL_INIT_VIDEO
@@ -34,10 +31,10 @@
 
 namespace SDL
 {
-    bool Init( const u32 system = INIT_VIDEO );
+    bool Init( const uint32_t system = INIT_VIDEO );
     void Quit();
 
-    bool SubSystem( const u32 system );
+    bool SubSystem( const uint32_t system );
 }
 
 #endif

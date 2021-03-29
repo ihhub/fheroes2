@@ -35,8 +35,8 @@ enum icons_t
 
 namespace Interface
 {
-    typedef Heroes * HEROES;
-    typedef Castle * CASTLE;
+    using HEROES = Heroes *;
+    using CASTLE = Castle *;
 
     class IconsBar
     {

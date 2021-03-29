@@ -24,8 +24,10 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "logging.h"
 #include "mus.h"
 #include "puzzle.h"

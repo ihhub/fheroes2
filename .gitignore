@@ -61,6 +61,8 @@
 build
 
 # fheroes2 related files
+files/save
+# Never put 'fheroes2' in this list. It breaks SonarQube analysis
 fheroes2.cfg
 fheroes2.bin
 fheroes2.pot

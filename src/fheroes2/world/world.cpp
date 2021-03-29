@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <functional>
 
 #include "ai.h"
@@ -600,45 +600,47 @@ void World::NewMonth( void )
 
 void World::MonthOfMonstersAction( const Monster & mons )
 {
-    if ( mons.isValid() ) {
-        MapsIndexes tiles, excld;
-        tiles.reserve( vec_tiles.size() / 2 );
-        excld.reserve( vec_tiles.size() / 2 );
-
-        const u32 dist = 2;
-        const std::vector<uint8_t> objs = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE};
-
-        // create exclude list
-        {
-            const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
-
-            for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
-                const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
-                excld.insert( excld.end(), obja.begin(), obja.end() );
-            }
-        }
-
-        // create valid points
-        for ( MapsTiles::const_iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
-            const Maps::Tiles & tile = *it;
-
-            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true, 0 )
-                 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
-                tiles.push_back( tile.GetIndex() );
-                const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
-                excld.insert( excld.end(), obja.begin(), obja.end() );
-            }
-        }
-
-        const u32 area = 12;
-        const u32 maxc = ( w() / area ) * ( h() / area );
-        std::random_shuffle( tiles.begin(), tiles.end() );
-        if ( tiles.size() > maxc )
-            tiles.resize( maxc );
-
-        for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
-            Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
+    if ( !mons.isValid() ) {
+        return;
     }
+
+    MapsIndexes tiles, excld;
+    tiles.reserve( vec_tiles.size() / 2 );
+    excld.reserve( vec_tiles.size() / 2 );
+
+    const int32_t dist = 2;
+    const std::vector<uint8_t> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+
+    // create exclude list
+    const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
+
+    for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
+        const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
+        excld.insert( excld.end(), obja.begin(), obja.end() );
+    }
+
+    // create valid points
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() || MP2::OBJ_ZERO != tile.GetObject() || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+            continue;
+        }
+
+        // Cell should have at least 2 empty neighbor cells
+        if ( Maps::ScanAroundObject( tile.GetIndex(), MP2::OBJ_ZERO ).size() > 2 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
+            tiles.push_back( tile.GetIndex() );
+            const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
+            excld.insert( excld.end(), obja.begin(), obja.end() );
+        }
+    }
+
+    const int32_t area = 12;
+    const int32_t maxc = ( w() / area ) * ( h() / area );
+    std::random_shuffle( tiles.begin(), tiles.end() );
+    if ( tiles.size() > static_cast<size_t>( maxc ) )
+        tiles.resize( maxc );
+
+    for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
 }
 
 const std::string & World::GetRumors( void )

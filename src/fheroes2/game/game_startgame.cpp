@@ -29,18 +29,19 @@
 #endif
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "audio_mixer.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "engine.h"
 #include "game.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"
@@ -421,16 +422,22 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 else
                     return Cursor::POINTER;
             }
-            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() )
+            else if ( from_hero.Modes( Heroes::GUARDIAN ) || from_hero.GetIndex() == castle->GetIndex() ) {
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
-            else if ( from_hero.GetColor() == castle->GetColor() )
+            }
+            else if ( from_hero.GetColor() == castle->GetColor() ) {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else if ( from_hero.isFriends( castle->GetColor() ) )
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::ACTION : Cursor::POINTER;
-            else if ( castle->GetActualArmy().isValid() )
+            }
+            else if ( from_hero.isFriends( castle->GetColor() ) ) {
+                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                                                           : Cursor::POINTER;
+            }
+            else if ( castle->GetActualArmy().isValid() ) {
                 return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
-            else
+            }
+            else {
                 return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+            }
         }
     } break;
 
@@ -635,14 +642,17 @@ int Interface::Basic::HumanTurn( bool isload )
     GameOver::Result & gameResult = GameOver::Result::Get();
 
     // set focus
-    if ( conf.LoadedGameVersion() && conf.ExtGameRememberLastFocus() ) {
-        if ( GetFocusHeroes() )
+    if ( conf.ExtGameRememberLastFocus() ) {
+        if ( GetFocusHeroes() != nullptr )
             ResetFocus( GameFocus::HEROES );
-        else
+        else if ( GetFocusCastle() != nullptr )
             ResetFocus( GameFocus::CASTLE );
+        else
+            ResetFocus( GameFocus::FIRSTHERO );
     }
-    else
+    else {
         ResetFocus( GameFocus::FIRSTHERO );
+    }
 
     radar.SetHide( false );
     statusWindow.Reset();
@@ -700,6 +710,9 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
+            }
+            else {
+                continue;
             }
         }
 

@@ -21,8 +21,9 @@
  ***************************************************************************/
 
 #include "captain.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "luck.h"
 #include "morale.h"
@@ -261,6 +262,8 @@ void Captain::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image
         return;
     }
 
+    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
+
     const int iconWidth = Interface::IconsBar::GetItemWidth();
     const int iconHeight = Interface::IconsBar::GetItemHeight();
     const int barWidth = 7;
@@ -277,6 +280,13 @@ void Captain::PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image
 
     // spell points
     fheroes2::Fill( dstsf, px + barWidth + port.width() + 2, py, barWidth, iconHeight, blueColor );
-    const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetMaxSpellPoints() );
     fheroes2::Blit( mana, dstsf, px + barWidth + port.width() + 2, py + mana.y() );
+}
+
+int Captain::GetManaIndexSprite() const
+{
+    // valid range (0 - 25)
+    const int r = GetMaxSpellPoints() / 5;
+
+    return 25 >= r ? r : 25;
 }

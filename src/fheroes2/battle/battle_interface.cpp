@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
@@ -34,9 +35,9 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "cursor.h"
-#include "engine.h"
 #include "game.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -194,7 +195,7 @@ namespace Battle
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.h - 11 ) );
             SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
+                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7 ) );
             _scrollbar.hide();
             SetAreaItems( fheroes2::Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
@@ -2215,16 +2216,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     // Add offsets to inner objects
     const Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
-    if ( pocket_book.w && le.MouseCursor( pocket_book ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Spell cast" );
-
-        if ( le.MouseClickLeft( pocket_book ) ) {
-            ProcessingHeroDialogResult( 1, a );
-            humanturn_redraw = true;
-        }
-    }
-    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista Info" );
 
@@ -2759,7 +2751,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         const Point targetPos = defender.GetCenterPoint();
 
-        const double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        // This check is made only for situations when a target stands on the same row as shooter.
+        if ( attacker.GetHeadIndex() / ARENAW == defender.GetHeadIndex() / ARENAW ) {
+            angle = 0;
+        }
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -3062,6 +3058,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     const int32_t destIndex = pos.GetHead()->GetIndex();
+    const int32_t destTailIndex = unit.isWide() ? pos.GetTail()->GetIndex() : -1;
+
     // check if we're already there
     if ( unit.GetPosition().contains( destIndex ) )
         return;
@@ -3081,6 +3079,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3093,12 +3092,27 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const Points points = GetEuclideanLine( destPos, targetPos, step );
     Points::const_iterator currentPoint = points.begin();
 
-    // jump up
+    // cleanup
     _currentUnit = NULL;
     _movingUnit = NULL;
-    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
+    _flyingUnit = NULL;
+
+    Bridge * bridge = Arena::GetBridge();
+
+    // open the bridge if the unit should land on it
+    if ( bridge ) {
+        if ( bridge->NeedDown( unit, destIndex ) ) {
+            bridge->Action( unit, destIndex );
+        }
+        else if ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) {
+            bridge->Action( unit, destTailIndex );
+        }
+    }
+
+    // jump up
     _flyingUnit = NULL;
     _movingUnit = &unit;
+    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
@@ -3139,6 +3153,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     // restore
     _movingUnit = NULL;
+
+    // check for possible bridge close action, after unit's end of movement
+    if ( bridge && bridge->AllowUp() ) {
+        bridge->Action( unit, destIndex );
+    }
 
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
     status.SetMessage( msg, true );
@@ -3338,36 +3357,103 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, Targets
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;
-        uint32_t damage = 0;
+        uint32_t totalDamage = 0;
+        uint32_t maximumDamage = 0;
+        uint32_t damagedMonsters = 0;
 
         for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
             if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
                 killed += ( *it ).killed;
-                damage += ( *it ).damage;
+
+                ++damagedMonsters;
+                totalDamage += it->damage;
+                if ( maximumDamage < it->damage )
+                    maximumDamage = it->damage;
             }
         }
 
         // targets damage animation
         RedrawActionWincesKills( targets );
 
-        if ( damage ) {
+        if ( totalDamage > 0 ) {
+            assert( damagedMonsters > 0 );
             std::string msg;
-            if ( spell.isUndeadOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all undead creatures." );
-            else if ( spell.isALiveOnly() )
-                msg = _( "The %{spell} spell does %{damage} damage to all living creatures." );
-            else
-                msg = _( "The %{spell} does %{damage} damage." );
-            StringReplace( msg, "%{spell}", spell.GetName() );
-            StringReplace( msg, "%{damage}", damage );
+            if ( spell.isUndeadOnly() ) {
+                if ( damagedMonsters == 1 ) {
+                    msg = _( "The %{spell} does %{damage} damage to one undead creature." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
 
-            if ( killed ) {
-                status.SetMessage( msg, true );
-                msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
-                StringReplace( msg, "%{count}", killed );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all undead creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
+                }
             }
+            else if ( spell.isALiveOnly() ) {
+                if ( damagedMonsters == 1 ) {
+                    msg = _( "The %{spell} does %{damage} damage to one living creature." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
 
-            status.SetMessage( msg, true );
+                    if ( killed > 0 ) {
+                        msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                        StringReplace( msg, "%{count}", killed );
+                        status.SetMessage( msg, true );
+                    }
+                }
+                else {
+                    msg = _( "The %{spell} does %{damage} damage to all living creatures." );
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", maximumDamage );
+                    status.SetMessage( msg, true );
+
+                    if ( killed > 0 ) {
+                        msg = _( "The %{spell} does %{damage} damage, %{count} creatures perish." );
+                        StringReplace( msg, "%{count}", killed );
+                    }
+                    else {
+                        msg = _( "The %{spell} does %{damage} damage." );
+                    }
+
+                    StringReplace( msg, "%{spell}", spell.GetName() );
+                    StringReplace( msg, "%{damage}", totalDamage );
+                    status.SetMessage( msg, true );
+                }
+            }
+            else {
+                msg = _( "The %{spell} does %{damage} damage." );
+                StringReplace( msg, "%{spell}", spell.GetName() );
+                StringReplace( msg, "%{damage}", totalDamage );
+                status.SetMessage( msg, true );
+
+                if ( killed > 0 ) {
+                    msg = _n( "1 creature perishes.", "%{count} creatures perish.", killed );
+                    StringReplace( msg, "%{count}", killed );
+                    status.SetMessage( msg, true );
+                }
+            }
         }
     }
 
@@ -4746,11 +4832,9 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
-                const Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
+                Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
-                if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) )
-                    Dialog::Message( "", _( "You don't have enough gold!" ), Font::BIG, Dialog::OK );
-                else if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
+                if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     a.push_back( Command( MSG_BATTLE_SURRENDER ) );
                     a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                     humanturn_exit = true;

@@ -280,7 +280,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         board[85].SetObject( 2 );
 
         // bridge
-        board[49].SetObject( 1 );
         board[50].SetObject( 1 );
     }
     else
@@ -362,7 +361,7 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             if ( current_troop->isControlRemote() )
                 RemoteTurn( *current_troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_color & auto_battle ) ) {
+                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
                     AI::Get().BattleTurn( *this, *current_troop, actions );
                 }
                 else {
@@ -459,7 +458,7 @@ void Battle::Arena::Turns( void )
         }
 
         // set bridge passable
-        if ( bridge && bridge->isValid() && !bridge->isDown() )
+        if ( bridge )
             bridge->SetPassable( *current_troop );
 
         // turn troop
@@ -474,7 +473,7 @@ void Battle::Arena::Turns( void )
             current_color = current_troop->GetArmyColor();
 
             // set bridge passable
-            if ( bridge && bridge->isValid() && !bridge->isDown() )
+            if ( bridge )
                 bridge->SetPassable( *current_troop );
 
             // turn troop
@@ -500,10 +499,12 @@ void Battle::Arena::Turns( void )
         result_game.exp1 = army2->GetDeadHitPoints();
         result_game.exp2 = army1->GetDeadHitPoints();
 
-        if ( army1->GetCommander() )
+        if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
-        if ( army2->GetCommander() )
+        }
+        if ( army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
+        }
 
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
@@ -604,19 +605,24 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     return result;
 }
 
-uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo )
+uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
-bool Battle::Arena::hexIsAccessible( int32_t indexTo )
+bool Battle::Arena::hexIsAccessible( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
 }
 
-bool Battle::Arena::hexIsPassable( int32_t indexTo )
+bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+}
+
+Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
+{
+    return _pathfinder.getAllAvailableMoves( moveRange );
 }
 
 Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )

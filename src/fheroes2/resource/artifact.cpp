@@ -24,13 +24,14 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "logging.h"
 #include "rand.h"
 #include "spell.h"
@@ -964,10 +965,16 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
     if ( art.isValid() ) {
         Cursor::Get().Hide();
 
-        if ( use_mini_sprite )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), dstsf, pos.x + 1, pos.y + 1 );
-        else
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ), dstsf, pos.x, pos.y );
+        if ( use_mini_sprite ) {
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+            fheroes2::Fill( dstsf, pos.x + 1, pos.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
+            fheroes2::Blit( artifactSprite, dstsf, pos.x + 1, pos.y + 1 );
+        }
+        else {
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+            fheroes2::Fill( dstsf, pos.x, pos.y, artifactSprite.width(), artifactSprite.height(), 0 );
+            fheroes2::Blit( artifactSprite, dstsf, pos.x, pos.y );
+        }
 
         if ( selected ) {
             if ( use_mini_sprite )
@@ -1018,7 +1025,7 @@ bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
             }
         }
     }
-    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) ) {
+    else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
         Spell spell = art.GetSpell();
 
         if ( !spell.isValid() ) {
@@ -1091,7 +1098,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( art() == Artifact::MAGIC_BOOK )
                 msg = _( "View Spells" );
-            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && _hero->CanTranscribeScroll( art ) )
+            else if ( art() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
                 msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
@@ -1104,7 +1111,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
                 StringReplace( msg, "%{name}", art2->GetName() );
             }
         }
-        else {
+        else if ( !read_only ) {
             msg = _( "Exchange %{name2} with %{name}" );
             StringReplace( msg, "%{name}", art.GetName() );
             StringReplace( msg, "%{name2}", art2->GetName() );

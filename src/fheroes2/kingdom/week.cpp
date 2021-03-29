@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "week.h"
-#include "engine.h"
 #include "game.h"
 #include "rand.h"
 #include "settings.h"
