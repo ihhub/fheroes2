@@ -42,7 +42,6 @@ namespace Race
 
     const std::string & String( int );
     int Rand( void );
-    int FromInt( int );
 }
 
 #endif

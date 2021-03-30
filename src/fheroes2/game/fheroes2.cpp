@@ -71,6 +71,7 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
+    InitHardware();
     Logging::InitLog();
 
     Settings & conf = Settings::Get();
@@ -264,6 +265,7 @@ int main( int argc, char ** argv )
         }
 
     fheroes2::Display::instance().release();
+    CloseHardware();
 
     return EXIT_SUCCESS;
 }

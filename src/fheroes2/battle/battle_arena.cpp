@@ -499,10 +499,12 @@ void Battle::Arena::Turns( void )
         result_game.exp1 = army2->GetDeadHitPoints();
         result_game.exp2 = army1->GetDeadHitPoints();
 
-        if ( army1->GetCommander() )
+        if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
-        if ( army2->GetCommander() )
+        }
+        if ( army2->GetCommander() && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
+        }
 
         const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : NULL ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;

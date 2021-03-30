@@ -81,6 +81,7 @@ namespace Battle
         virtual std::string GetShotString() const override;
         virtual std::string GetSpeedString() const override;
         virtual u32 GetHitPointsLeft() const override;
+        virtual uint32_t GetMissingHitPoints() const;
         virtual u32 GetAffectedDuration( u32 ) const override;
         virtual u32 GetSpeed() const override;
         virtual int GetMorale() const override;
@@ -140,7 +141,8 @@ namespace Battle
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
-        void PostAttackAction( Unit & );
+        std::vector<Spell> getCurrentSpellEffects() const;
+        void PostAttackAction();
         void ResetBlind( void );
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, u32, const HeroBase * );

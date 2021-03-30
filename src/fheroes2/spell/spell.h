@@ -146,6 +146,7 @@ public:
     bool isUndeadOnly( void ) const;
     bool isALiveOnly( void ) const;
     bool isSummon( void ) const;
+    bool isEffectDispel() const;
     bool isApplyWithoutFocusObject( void ) const;
     bool isApplyToAnyTroops( void ) const;
     bool isApplyToFriends( void ) const;

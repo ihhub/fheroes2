@@ -930,7 +930,6 @@ namespace ICN
     };
 
     const char * GetString( int );
-    int FromString( const char * );
     u32 AnimationFrame( int icn, u32, u32, bool = false );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );

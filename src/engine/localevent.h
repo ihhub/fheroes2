@@ -265,6 +265,9 @@ public:
     void PauseCycling();
     void ResumeCycling();
 
+    void OpenVirtualKeyboard();
+    void CloseVirtualKeyboard();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void OpenController();
     void CloseController();

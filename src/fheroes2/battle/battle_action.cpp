@@ -128,7 +128,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
         }
     }
 
-    attacker.PostAttackAction( defender );
+    attacker.PostAttackAction();
 }
 
 void Battle::Arena::ApplyAction( Command & cmd )
@@ -241,8 +241,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         const bool handfighting = Unit::isHandFighting( *b1, *b2 );
         // check position
         if ( b1->isArchers() || handfighting ) {
-            if ( b2->Modes( SP_BLIND ) )
-                b2->SetBlindAnswer( true );
+            b2->SetBlindAnswer( b2->Modes( SP_BLIND ) );
 
             // attack
             BattleProcess( *b1, *b2, dst, dir );

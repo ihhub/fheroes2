@@ -37,4 +37,7 @@ namespace SDL
     bool SubSystem( const uint32_t system );
 }
 
+void InitHardware();
+void CloseHardware();
+
 #endif

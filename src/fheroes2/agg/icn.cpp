@@ -1653,14 +1653,6 @@ int ICN::PORTxxxx( int heroId )
     return ICN::UNKNOWN;
 }
 
-int ICN::FromString( const char * str )
-{
-    const icnmap_t * ptr = &icnmap[0];
-    while ( ptr->type != ICN::UNKNOWN && str && 0 != std::strcmp( str, ptr->string ) )
-        ++ptr;
-    return ptr->type;
-}
-
 bool ICN::HighlyObjectSprite( int icn, u32 index )
 {
     switch ( icn ) {

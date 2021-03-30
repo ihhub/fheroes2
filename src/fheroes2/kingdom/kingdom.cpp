@@ -261,6 +261,12 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
         if ( heroes.size() )
             heroes.erase( std::find( heroes.begin(), heroes.end(), hero ) );
 
+        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+
+        if ( player && player->GetFocus().GetHeroes() == hero ) {
+            player->GetFocus().Reset();
+        }
+
         AI::Get().HeroesRemove( *hero );
     }
 
@@ -289,6 +295,12 @@ void Kingdom::RemoveCastle( const Castle * castle )
     if ( castle ) {
         if ( castles.size() )
             castles.erase( std::find( castles.begin(), castles.end(), castle ) );
+
+        Player * player = Settings::Get().GetPlayers().Get( GetColor() );
+
+        if ( player && player->GetFocus().GetCastle() == castle ) {
+            player->GetFocus().Reset();
+        }
 
         AI::Get().CastleRemove( *castle );
     }
