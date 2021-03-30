@@ -1,0 +1,45 @@
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2021                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+AR := arm-vita-eabi-gcc-ar
+CC := arm-vita-eabi-gcc
+CXX := arm-vita-eabi-g++
+LIBS :=
+
+CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(VITASDK)/arm-vita-eabi/include -O3 -mcpu=cortex-a9 -mfpu=neon -fgraphite-identity -floop-nest-optimize -fno-lto -fno-tree-slp-vectorize
+LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -Wl,-q
+CFLAGS_TP := $(CFLAGS)
+CXXFLAGS_TP := $(CXXFLAGS)
+
+SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2 -lvita2d -lz -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
+                                           -lSceGxm_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lSceMotion_stub
+SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2
+
+ifndef WITHOUT_MIXER
+SDL_LIBS := -lSDL2_mixer $(SDL_LIBS) -lFLAC -lmikmod -lmpg123 -lvorbisfile -lvorbis -logg
+endif
+
+ifndef WITHOUT_IMAGE
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
+endif
+
+ifndef WITHOUT_UNICODE
+SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf -lfreetype
+endif

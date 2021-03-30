@@ -93,9 +93,6 @@ ifdef RELEASE
 CFLAGS := $(CFLAGS) -DBUILD_RELEASE
 endif
 
-CFLAGS := $(SDL_FLAGS) $(CFLAGS)
-LIBS := $(SDL_LIBS) $(LIBS)
-
 # platform specific flags
 ifndef PLATFORM
 ifndef OS
@@ -120,7 +117,14 @@ LIBS := -liconv
 endif
 endif
 
+ifdef FHEROES2_VITA
+PLATFORM := vita
+endif
+
 include Makefile.$(PLATFORM)
+
+CFLAGS := $(SDL_FLAGS) $(CFLAGS)
+LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 

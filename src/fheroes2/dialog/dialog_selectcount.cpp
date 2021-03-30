@@ -260,6 +260,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
+    le.OpenVirtualKeyboard();
     bool redraw = true;
 
     // message loop
@@ -300,6 +301,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     cursor.SetThemes( oldcursor );
     cursor.Hide();
+    le.CloseVirtualKeyboard();
 
     return !res.empty();
 }

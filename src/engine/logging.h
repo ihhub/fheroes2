@@ -105,6 +105,14 @@ namespace Logging
         Logging::logFile << x << std::endl;                                                                                                                              \
         Logging::logFile.flush();                                                                                                                                        \
     }
+#elif defined( FHEROES2_VITA )
+#include <psp2/kernel/clib.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream osss;                                                                                                                                         \
+        osss << x << std::endl;                                                                                                                                          \
+        sceClibPrintf( osss.str().c_str() );                                                                                                                             \
+    }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \

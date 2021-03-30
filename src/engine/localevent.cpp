@@ -37,6 +37,45 @@ namespace
         MOD_CAPS = KMOD_CAPS,
         MOD_NUM = KMOD_NUM
     };
+
+#if defined( FHEROES2_VITA )
+    const int totalCharactersDPad = 38;
+    bool dpadInputActive = false;
+    bool currentUpper = false;
+    int currentCharIndex = 0;
+
+    const KeySym dPadKeys[totalCharactersDPad] = {
+        // lowercase letters
+        KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
+        KEY_x, KEY_y, KEY_z,
+        // space, underscore
+        KEY_SPACE, KEY_UNDERSCORE,
+        // nums
+        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 };
+
+    char GetCurrentDPadChar()
+    {
+        return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
+    }
+
+    void SetCurrentDPadCharIndex( char currentChar )
+    {
+        if ( currentChar >= 'A' && currentChar <= 'Z' ) {
+            currentUpper = true;
+            currentChar += 32;
+        }
+
+        const KeySym keySym = KeySymFromChar( currentChar );
+        for ( int i = 0; i < totalCharactersDPad; ++i ) {
+            if ( dPadKeys[i] == keySym ) {
+                currentCharIndex = i;
+                return;
+            }
+        }
+
+        currentCharIndex = 0;
+    }
+#endif
 }
 
 LocalEvent::LocalEvent()
@@ -88,6 +127,20 @@ void LocalEvent::OpenTouchpad()
     }
 }
 #endif
+
+void LocalEvent::OpenVirtualKeyboard()
+{
+#if defined( FHEROES2_VITA )
+    dpadInputActive = true;
+#endif
+}
+
+void LocalEvent::CloseVirtualKeyboard()
+{
+#if defined( FHEROES2_VITA )
+    dpadInputActive = false;
+#endif
+}
 
 const Point & LocalEvent::GetMousePressLeft( void ) const
 {
@@ -677,6 +730,99 @@ char CharFromKeySym( KeySym sym, u16 mod )
 
 size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
 {
+#if defined( FHEROES2_VITA )
+    (void)mod;
+
+    // input with D-Pad
+    if ( res.size() ) {
+        SetCurrentDPadCharIndex( res.back() );
+    }
+    else {
+        currentUpper = true;
+        currentCharIndex = 0;
+    }
+
+    switch ( sym ) {
+    // delete char
+    case KEY_KP4: {
+        if ( !res.empty() && pos ) {
+            res.resize( res.size() - 1 );
+            --pos;
+        }
+        break;
+    }
+    // add new char
+    case KEY_KP6: {
+        currentUpper = res.empty();
+        currentCharIndex = 0;
+
+        const char c = GetCurrentDPadChar();
+        if ( c )
+            res.push_back( c );
+
+        ++pos;
+        break;
+    }
+    // next char
+    case KEY_KP2: {
+        ++currentCharIndex;
+        if ( currentCharIndex >= totalCharactersDPad )
+            currentCharIndex = 0;
+
+        if ( !res.empty() ) {
+            res.resize( res.size() - 1 );
+        }
+        else {
+            ++pos;
+        }
+
+        const char c = GetCurrentDPadChar();
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+    // previous char
+    case KEY_KP8: {
+        --currentCharIndex;
+        if ( currentCharIndex < 0 )
+            currentCharIndex = totalCharactersDPad - 1;
+
+        if ( !res.empty() ) {
+            res.resize( res.size() - 1 );
+        }
+        else {
+            ++pos;
+        }
+
+        const char c = GetCurrentDPadChar();
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+    // switch uppler/lowercase
+    case KEY_SHIFT: {
+        currentUpper = !currentUpper;
+
+        if ( !res.empty() ) {
+            res.resize( res.size() - 1 );
+        }
+        else {
+            ++pos;
+        }
+
+        const char c = GetCurrentDPadChar();
+        if ( c )
+            res.push_back( c );
+
+        break;
+    }
+
+    default:
+        break;
+    }
+#else
     switch ( sym ) {
     case KEY_BACKSPACE: {
         if ( res.size() && pos ) {
@@ -712,6 +858,7 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
         }
     }
     }
+#endif
 
     return pos;
 }
@@ -973,7 +1120,11 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( _gameController != nullptr ) {
         // fast map scroll with dpad
+#if defined( FHEROES2_VITA )
+        if ( !_dpadScrollActive || dpadInputActive )
+#else
         if ( !_dpadScrollActive )
+#endif
             ResetModes( KEY_PRESSED );
     }
     else {

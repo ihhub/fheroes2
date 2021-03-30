@@ -1,0 +1,58 @@
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2021                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
+TARGET	:= fheroes2
+MAKE	:= make
+
+PROJECT_TITLE := Free Heroes of Might & Magic II
+PROJECT_TITLEID := FHOMM0002
+PROJECT := fheroes2
+
+all: package
+
+package: $(PROJECT).vpk
+
+$(PROJECT).vpk: eboot.bin param.sfo
+	vita-pack-vpk -s param.sfo -b eboot.bin \
+		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
+	$(PROJECT).vpk
+
+eboot.bin: $(PROJECT).velf
+	vita-make-fself $(PROJECT).velf eboot.bin
+
+param.sfo:
+	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
+
+$(PROJECT).velf: $(PROJECT).elf
+	arm-vita-eabi-strip -g $<
+	vita-elf-create $< $@
+
+$(PROJECT).elf:
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true
+	$(MAKE) -f files/lang/Makefile
+	@cp src/dist/$(TARGET) ./$(PROJECT).elf
+
+clean:
+	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -f files/lang/Makefile clean
+	@rm -rf $(TARGET).velf $(TARGET).elf $(OBJS) $(TARGET).elf.unstripped.elf $(TARGET).vpk eboot.bin sce_sys/param.sfo ./param.sfo
