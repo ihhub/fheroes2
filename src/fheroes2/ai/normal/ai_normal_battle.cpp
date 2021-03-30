@@ -215,6 +215,7 @@ namespace AI
         _myShooterStr = 0;
         _enemyShooterStr = 0;
         _enemyAverageSpeed = 0;
+        _enemySpellStrength = 0;
         _highestDamageExpected = 0;
         _considerRetreat = false;
 

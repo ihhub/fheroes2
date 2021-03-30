@@ -291,7 +291,7 @@ namespace AI
                     break;
                 }
             }
-            // 0...3000 spell strength (15 power * max knowledge) scales from 0.0 to 0.9 ratio
+            // 0...3000 spell strength (20 power * 200 SP) scales from 0.0 to 0.9 ratio
             ratio = std::min( _enemySpellStrength / ANTIMAGIC_LOW_LIMIT * 0.06, ratioLimit );
 
             if ( target.Modes( IS_BAD_MAGIC ) ) {
