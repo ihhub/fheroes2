@@ -1030,7 +1030,7 @@ void Battle::Unit::SetResponse( void )
 void Battle::Unit::PostAttackAction()
 {
     // decrease shots
-    if ( isArchers() ) {
+    if ( isArchers() && !isHandFighting() ) {
         // check ammo cart artifact
         const HeroBase * hero = GetCommander();
         if ( !hero || !hero->HasArtifact( Artifact::AMMO_CART ) )
