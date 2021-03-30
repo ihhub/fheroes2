@@ -339,16 +339,16 @@ public:
 
     Point MovementDirection() const;
 
-    const int32_t DrawTopOnBottomIndex() const;
-    const int32_t DrawTopOnDirectionBottomIndex() const;
-    const int32_t DrawTopOnDirectionIndex() const;
-    const int32_t DrawObjectsOnBottomIndex() const;
-    const int32_t DrawObjectsOnDirectionBottomIndex() const;
+    int32_t DrawTopOnBottomIndex() const;
+    int32_t DrawTopOnDirectionBottomIndex() const;
+    int32_t DrawTopOnDirectionIndex() const;
+    int32_t DrawObjectsOnBottomIndex() const;
+    int32_t DrawObjectsOnDirectionBottomIndex() const;
 
     void InitDependencesTiles();
     void UpdateDependencesTiles( const int32_t index );
-    const void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    const void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );

@@ -612,7 +612,7 @@ void Heroes::UpdateDependencesTiles( const int32_t index )
     }
 }
 
-const void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const Maps::Tiles & tile = world.GetTiles( center.x, center.y );
     const bool skipGround = MP2::isActionObject( tile.GetObject( false ), isShipMaster() );
@@ -645,7 +645,7 @@ const void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI
     }
 }
 
-const void Heroes::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Heroes::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( drawObjectsOnDirectionBottomIndex != -1 ) {
         const Maps::Tiles & tile = world.GetTiles( drawObjectsOnDirectionBottomIndex );
@@ -659,27 +659,27 @@ const void Heroes::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTile
     }
 }
 
-const int32_t Heroes::DrawTopOnBottomIndex() const
+int32_t Heroes::DrawTopOnBottomIndex() const
 {
     return drawTopOnBottomIndex;
 }
 
-const int32_t Heroes::DrawTopOnDirectionBottomIndex() const
+int32_t Heroes::DrawTopOnDirectionBottomIndex() const
 {
     return drawTopOnDirectionBottomIndex;
 }
 
-const int32_t Heroes::DrawTopOnDirectionIndex() const
+int32_t Heroes::DrawTopOnDirectionIndex() const
 {
     return drawTopOnDirectionIndex;
 }
 
-const int32_t Heroes::DrawObjectsOnBottomIndex() const
+int32_t Heroes::DrawObjectsOnBottomIndex() const
 {
     return drawObjectsOnBottomIndex;
 }
 
-const int32_t Heroes::DrawObjectsOnDirectionBottomIndex() const
+int32_t Heroes::DrawObjectsOnDirectionBottomIndex() const
 {
     return drawObjectsOnDirectionBottomIndex;
 }
