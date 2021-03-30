@@ -22,6 +22,7 @@
 
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include "image_tool.h"
 #include "serialize.h"
