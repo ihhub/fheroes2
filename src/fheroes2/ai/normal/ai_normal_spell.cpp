@@ -93,6 +93,8 @@ namespace AI
                 checkSelectBestSpell( spell, spellEffectValue( spell, enemies ) );
             }
         }
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+
         return bestSpell;
     }
 
@@ -190,7 +192,7 @@ namespace AI
             ratio = 0.15;
             break;
         case Spell::BERSERKER: {
-            if ( targetIsLast )
+            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
                 return 0.0;
             ratio = 0.95;
             break;
@@ -202,7 +204,7 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast )
+            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
                 return 0.0;
             ratio = 1.5;
             break;
@@ -401,13 +403,17 @@ namespace AI
     {
         SpellcastOutcome bestOutcome;
         if ( spell.isSummon() ) {
-            const Monster monster( spell );
-
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
             if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;
 
-            bestOutcome.value = monster.GetMonsterStrength() * count;
+            const Troop summon( Monster( spell ), count );
+            bestOutcome.value = summon.GetStrengthWithBonus( _commander->GetAttack(), _commander->GetDefense() );
+
+            // Spell is less effective if we already winning this battle
+            if ( _myArmyStrength > _enemyArmyStrength * 2 ) {
+                bestOutcome.value /= 2;
+            }
         }
         return bestOutcome;
     }

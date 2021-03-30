@@ -87,7 +87,7 @@ namespace AI
         static const uint32_t AVERAGE_SPELL_COST = 6;
 
         // Use integer division here to force strength to be 0 if not enough SP to cast one spell; limit to 10
-        const uint32_t castCount = std::max( commander->GetSpellPoints() / AVERAGE_SPELL_COST, 10u );
+        const uint32_t castCount = std::min( commander->GetSpellPoints() / AVERAGE_SPELL_COST, 10u );
         return commander->GetPower() * AVERAGE_SPELL_DAMAGE * castCount;
     }
 
