@@ -233,6 +233,13 @@ u32 Battle::Unit::GetHitPointsLeft( void ) const
     return GetHitPoints() - ( GetCount() - 1 ) * Monster::GetHitPoints();
 }
 
+uint32_t Battle::Unit::GetMissingHitPoints() const
+{
+    const uint32_t totalHitPoints = count0 * Monster::GetHitPoints();
+    assert( totalHitPoints > hp );
+    return totalHitPoints - hp;
+}
+
 u32 Battle::Unit::GetAffectedDuration( u32 mod ) const
 {
     return affected.GetMode( mod );
@@ -887,6 +894,59 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
     }
 
     return true;
+}
+
+std::vector<Spell> Battle::Unit::getCurrentSpellEffects() const
+{
+    std::vector<Spell> spellList;
+
+    if ( Modes( SP_BLESS ) ) {
+        spellList.emplace_back( Spell::BLESS );
+    }
+    if ( Modes( SP_CURSE ) ) {
+        spellList.emplace_back( Spell::CURSE );
+    }
+    if ( Modes( SP_HASTE ) ) {
+        spellList.emplace_back( Spell::HASTE );
+    }
+    if ( Modes( SP_SLOW ) ) {
+        spellList.emplace_back( Spell::SLOW );
+    }
+    if ( Modes( SP_SHIELD ) ) {
+        spellList.emplace_back( Spell::SHIELD );
+    }
+    if ( Modes( SP_BLOODLUST ) ) {
+        spellList.emplace_back( Spell::BLOODLUST );
+    }
+    if ( Modes( SP_STONESKIN ) ) {
+        spellList.emplace_back( Spell::STONESKIN );
+    }
+    if ( Modes( SP_STEELSKIN ) ) {
+        spellList.emplace_back( Spell::STEELSKIN );
+    }
+    if ( Modes( SP_BLIND ) ) {
+        spellList.emplace_back( Spell::BLIND );
+    }
+    if ( Modes( SP_PARALYZE ) ) {
+        spellList.emplace_back( Spell::PARALYZE );
+    }
+    if ( Modes( SP_STONE ) ) {
+        spellList.emplace_back( Spell::STONE );
+    }
+    if ( Modes( SP_DRAGONSLAYER ) ) {
+        spellList.emplace_back( Spell::DRAGONSLAYER );
+    }
+    if ( Modes( SP_BERSERKER ) ) {
+        spellList.emplace_back( Spell::BERSERKER );
+    }
+    if ( Modes( SP_HYPNOTIZE ) ) {
+        spellList.emplace_back( Spell::HYPNOTIZE );
+    }
+    if ( Modes( CAP_MIRROROWNER ) ) {
+        spellList.emplace_back( Spell::MIRRORIMAGE );
+    }
+
+    return spellList;
 }
 
 std::string Battle::Unit::String( bool more ) const
