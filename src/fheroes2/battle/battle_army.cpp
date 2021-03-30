@@ -147,14 +147,14 @@ void Battle::Units::SortSlowest( bool f )
 {
     SlowestUnits CompareFunc( f );
 
-    std::sort( begin(), end(), CompareFunc );
+    std::stable_sort( begin(), end(), CompareFunc );
 }
 
 void Battle::Units::SortFastest( bool f )
 {
     FastestUnits CompareFunc( f );
 
-    std::sort( begin(), end(), CompareFunc );
+    std::stable_sort( begin(), end(), CompareFunc );
 }
 
 void Battle::Units::SortStrongest( void )
@@ -307,6 +307,9 @@ void Battle::Force::UpdateOrderUnits( const Force & army1, const Force & army2, 
             units2.SortFastest( true );
         }
         else {
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
+
             units1.SortSlowest( true );
             units2.SortSlowest( true );
         }
@@ -326,6 +329,9 @@ Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force &
         units2.SortFastest( false );
     }
     else {
+        std::reverse( units1.begin(), units1.end() );
+        std::reverse( units2.begin(), units2.end() );
+
         units1.SortSlowest( false );
         units2.SortSlowest( false );
     }
