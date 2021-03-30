@@ -105,6 +105,7 @@ namespace AI
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
         double _enemyAverageSpeed = 0;
+        double _enemySpellStrength = 0;
         int _highestDamageExpected = 0;
         bool _attackingCastle = false;
         bool _defendingCastle = false;
