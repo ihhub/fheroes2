@@ -134,7 +134,24 @@ matrix:
         - export FHEROES2_STRICT_COMPILATION="ON"
       script:
         - |
-          make -f Makefile.vita
+          make -f Makefile.vita -j 2
+      before_deploy:
+        - cp doc/README.txt .
+        - cp doc/README_PSV.md .
+        - zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+        - export TRAVIS_TAG=fheroes2-psv-sdl2_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_psv_sdl2.zip"
+        name: PS Vita build with SDL 2.0 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        skip_cleanup: true
+        on:
+          branch: master
 
 script:
   - |
