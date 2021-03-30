@@ -26,7 +26,7 @@ SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
-TARGETS := extractor 82m2wav til2img icn2img xmi2mid bin2txt
+TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
 LIBENGINE := ../engine/libengine.a
 LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
 CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
