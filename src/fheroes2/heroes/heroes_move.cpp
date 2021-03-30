@@ -490,7 +490,6 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
     if ( !( visibleTileROI & GetCenter() ) )
         return;
 
-    const int32_t centerIndex = GetIndex();
     const bool reflect = ReflectSprite( direction );
 
     int flagFrameID = sprite_index;
