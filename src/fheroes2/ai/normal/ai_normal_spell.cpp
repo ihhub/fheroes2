@@ -112,8 +112,15 @@ namespace AI
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
                 return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
+
             // Otherwise calculate amount of strength lost (% of unit times total strength)
-            return std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 ) * unit->GetStrength();
+            double unitPercentageLost = std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 );
+
+            // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
+            if ( unit->Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) ) {
+                unitPercentageLost += unitPercentageLost - 1.0;
+            }
+            return unitPercentageLost * unit->GetStrength();
         };
 
         if ( spell.isSingleTarget() ) {
