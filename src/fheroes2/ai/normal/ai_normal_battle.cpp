@@ -78,19 +78,6 @@ namespace AI
         return outcome;
     }
 
-    double CalculateSpellcastStrength( const HeroBase * commander )
-    {
-        if ( !commander || commander->GetSpells().empty() )
-            return 0.0;
-
-        static const double AVERAGE_SPELL_DAMAGE = 20.0;
-        static const uint32_t AVERAGE_SPELL_COST = 6;
-
-        // Use integer division here to force strength to be 0 if not enough SP to cast one spell; limit to 10
-        const uint32_t castCount = std::min( commander->GetSpellPoints() / AVERAGE_SPELL_COST, 10u );
-        return commander->GetPower() * AVERAGE_SPELL_DAMAGE * castCount;
-    }
-
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
     {
         if ( isAttacking ) {
@@ -318,9 +305,14 @@ namespace AI
         }
 
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
-        _myShooterStr += CalculateSpellcastStrength( _commander );
-        _enemySpellStrength = CalculateSpellcastStrength( arena.GetCommander( _myColor, true ) );
-        _enemyShooterStr += _enemySpellStrength;
+        if ( _commander && _myShooterStr > 1 ) {
+            _myShooterStr += _commander->GetSpellcastStrength();
+        }
+        const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
+        if ( enemyCommander ) {
+            _enemySpellStrength = enemyCommander->GetSpellcastStrength();
+            _enemyShooterStr += _enemySpellStrength;
+        }
 
         // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
         const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * 10;

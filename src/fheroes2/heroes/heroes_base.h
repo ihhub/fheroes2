@@ -99,6 +99,7 @@ public:
     int GetKnowledgeModificator( std::string * = NULL ) const;
     int GetMoraleModificator( std::string * = NULL ) const;
     int GetLuckModificator( std::string * = NULL ) const;
+    double GetSpellcastStrength() const;
 
     u32 GetSpellPoints( void ) const;
     bool HaveSpellPoints( const Spell & ) const;

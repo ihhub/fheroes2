@@ -93,7 +93,10 @@ namespace AI
                 checkSelectBestSpell( spell, spellEffectValue( spell, enemies ) );
             }
         }
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+
+        if ( bestSpell.spellID != -1 ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+        }
 
         return bestSpell;
     }
@@ -386,7 +389,7 @@ namespace AI
         const Force & friendlyForce = arena.GetForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
-            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
+            if ( !unit || !unit->AllowApplySpell( spell, _commander ) || arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();
