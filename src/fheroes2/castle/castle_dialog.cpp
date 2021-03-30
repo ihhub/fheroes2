@@ -560,7 +560,7 @@ int Castle::OpenDialog( bool readonly )
 
                             case BUILD_MARKETPLACE: {
                                 fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                                Dialog::Marketplace();
+                                Dialog::Marketplace( world.GetKingdom( GetColor() ), false );
                                 need_redraw = true;
                                 break;
                             }

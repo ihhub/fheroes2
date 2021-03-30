@@ -1821,11 +1821,6 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
     return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true, 0 );
 }
 
-bool TileIsGround( s32 index, int ground )
-{
-    return ground == world.GetTiles( index ).GetGround();
-}
-
 bool Maps::Tiles::validateWaterRules( bool fromWater ) const
 {
     const bool tileIsWater = isWater();

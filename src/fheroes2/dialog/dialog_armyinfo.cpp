@@ -713,7 +713,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     fheroes2::ButtonSprite btnHeroes( buttonArmyPos.x, buttonArmyPos.y, armyButtonReleasedBack, armyButtonPressedBack );
 
-    const Kingdom & kingdom = hero.GetKingdom();
+    Kingdom & kingdom = hero.GetKingdom();
 
     Rect btnMarketArea = btnMarket.area();
     Rect btnHeroesArea = btnHeroes.area();
@@ -774,7 +774,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
         result = btnGroup.processEvents();
 
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
-            Marketplace( false );
+            Marketplace( kingdom, false );
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );

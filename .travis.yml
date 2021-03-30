@@ -120,6 +120,21 @@ matrix:
         skip_cleanup: true
         on:
           branch: master
+    - os: linux
+      name: "PSV with SDL 2.0"
+      before_install:
+        - sudo apt-get install libgcc1
+        - git clone https://github.com/vitasdk/vdpm
+        - cd vdpm
+        - export VITASDK=/usr/local/vitasdk
+        - export PATH=$VITASDK/bin:$PATH # add vitasdk tool to $PATH
+        - ./bootstrap-vitasdk.sh
+        - ./install-all.sh
+        - cd ..
+        - export FHEROES2_STRICT_COMPILATION="ON"
+      script:
+        - |
+          make -f Makefile.vita
 
 script:
   - |

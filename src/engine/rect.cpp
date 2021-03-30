@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <climits>
 #include <cmath>
 #include <iterator>
 #include <sstream>
@@ -244,29 +243,6 @@ bool Rect::operator&( const Rect & rt ) const
 const Point & Rect::getPosition() const
 {
     return *this;
-}
-
-Rect Points::GetRect( void ) const
-{
-    Rect res;
-
-    if ( 1 < size() ) {
-        res = Rect::Get( at( 0 ), at( 1 ) );
-
-        for ( const_iterator it = begin() + 2; it != end(); ++it ) {
-            if ( ( *it ).x < res.x )
-                res.x = ( *it ).x;
-            else if ( ( *it ).x > res.x + res.w )
-                res.w = ( *it ).x - res.x + 1;
-
-            if ( ( *it ).y < res.y )
-                res.y = ( *it ).y;
-            else if ( ( *it ).y > res.y + res.h )
-                res.h = ( *it ).y - res.y + 1;
-        }
-    }
-
-    return res;
 }
 
 Rect Rects::GetRect( void ) const

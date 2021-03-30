@@ -37,7 +37,6 @@ public:
     void SetPos( s32, s32 );
     const fheroes2::Rect & GetArea( void ) const;
     const char * GetName( void ) const;
-    const std::string & GetDescription( void ) const;
     void SetStatusMessage( StatusBar & ) const;
     bool IsDwelling( void ) const;
     void Redraw( void );

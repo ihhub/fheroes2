@@ -34,6 +34,7 @@
 #define BOXAREA_WIDTH 244
 
 class Castle;
+class Kingdom;
 class Heroes;
 class Artifact;
 class Spell;
@@ -109,8 +110,8 @@ namespace Dialog
     int ArmyJoinFree( const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
     int ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistributeMax, const bool saveLastTroop, uint32_t & redistributeCount, bool & useFastSplit );
-    void Marketplace( bool fromTradingPost = false );
-    void MakeGiftResource( void );
+    void Marketplace( Kingdom & kingdom, bool fromTradingPost );
+    void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
     void GameInfo( void );

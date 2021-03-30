@@ -195,7 +195,7 @@ namespace Battle
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.h - 11 ) );
             SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
+                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7 ) );
             _scrollbar.hide();
             SetAreaItems( fheroes2::Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
@@ -2751,7 +2751,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         const Point targetPos = defender.GetCenterPoint();
 
-        const double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        // This check is made only for situations when a target stands on the same row as shooter.
+        if ( attacker.GetHeadIndex() / ARENAW == defender.GetHeadIndex() / ARENAW ) {
+            angle = 0;
+        }
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -4828,11 +4832,9 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
-                const Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
+                Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
-                if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) )
-                    Dialog::Message( "", _( "You don't have enough gold!" ), Font::BIG, Dialog::OK );
-                else if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
+                if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     a.push_back( Command( MSG_BATTLE_SURRENDER ) );
                     a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                     humanturn_exit = true;

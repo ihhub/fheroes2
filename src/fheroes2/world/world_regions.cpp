@@ -139,11 +139,6 @@ MapRegion::MapRegion( int regionIndex, int mapIndex, bool water, size_t expected
     _nodes[0].type = regionIndex;
 }
 
-std::vector<int> MapRegion::getNeighbours() const
-{
-    return std::vector<int>( _neighbours.begin(), _neighbours.end() );
-}
-
 size_t MapRegion::getNeighboursCount() const
 {
     return _neighbours.size();
@@ -159,26 +154,6 @@ std::vector<IndexObject> MapRegion::getObjectList() const
         }
     }
     return result;
-}
-
-int MapRegion::getObjectCount() const
-{
-    int result = 0;
-    for ( const MapRegionNode & node : _nodes ) {
-        if ( node.mapObject != 0 )
-            ++result;
-    }
-    return result;
-}
-
-double MapRegion::getFogRatio( int color ) const
-{
-    size_t fogCount = 0;
-    for ( const MapRegionNode & node : _nodes ) {
-        if ( world.GetTiles( node.index ).isFog( color ) )
-            ++fogCount;
-    }
-    return static_cast<double>( fogCount ) / _nodes.size();
 }
 
 size_t World::getRegionCount() const
@@ -302,7 +277,7 @@ void World::ComputeStaticAnalysis()
                         const int newIndex = tileIndex + directionOffsets[direction];
                         if ( newIndex >= 0 && static_cast<size_t>( newIndex ) < totalMapTiles ) {
                             const Maps::Tiles & newTile = vec_tiles[newIndex];
-                            if ( newTile.GetPassable() && tile.isWater() == static_cast<bool>( waterOrGround ) ) {
+                            if ( newTile.GetPassable() != 0 && tile.isWater() == ( waterOrGround != 0 ) ) {
                                 centerIndex = newIndex;
                                 break;
                             }

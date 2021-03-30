@@ -279,6 +279,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     cursor.Show();
     display.render();
+    le.OpenVirtualKeyboard();
 
     std::string result;
     bool is_limit = false;
@@ -348,6 +349,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     cursor.Hide();
+    le.CloseVirtualKeyboard();
 
     return result;
 }

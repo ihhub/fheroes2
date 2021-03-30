@@ -69,6 +69,8 @@ int System::MakeDirectory( const std::string & path )
     return CreateDirectoryA( path.c_str(), NULL );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
+#elif defined( FHEROES2_VITA )
+    return sceIoMkdir( path.c_str(), 0777 );
 #else
     return mkdir( path.c_str(), S_IRWXU );
 #endif
@@ -81,6 +83,10 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 
 std::string System::GetHomeDirectory( const std::string & prog )
 {
+#if defined( FHEROES2_VITA )
+    return "ux0:data/fheroes2";
+#endif
+
     std::string res;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -207,7 +213,7 @@ int System::SetEnvironment( const char * name, const char * value )
     // SDL 1.2.12 (char *)
     return SDL_putenv( &str[0] );
 #endif
-#elif defined( __SWITCH__ )
+#elif defined( __SWITCH__ ) || defined( FHEROES2_VITA )
     return SDL_setenv( name, value, 1 );
 #else
     return setenv( name, value, 1 );
@@ -302,6 +308,8 @@ bool System::IsFile( const std::string & name, bool writable )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
+#elif defined( FHEROES2_VITA )
+    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
     if ( !GetCaseInsensitivePath( name, correctedPath ) )
@@ -322,6 +330,8 @@ bool System::IsDirectory( const std::string & name, bool writable )
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
 #elif defined( ANDROID )
     return writable ? 0 == access( name.c_str(), W_OK ) : true;
+#elif defined( FHEROES2_VITA )
+    return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
     if ( !GetCaseInsensitivePath( name, correctedPath ) )

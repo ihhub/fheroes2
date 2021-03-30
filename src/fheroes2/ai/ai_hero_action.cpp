@@ -1850,7 +1850,7 @@ namespace AI
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
-                const bool otherHeroInCastle = hero2->inCastle();
+                const bool otherHeroInCastle = ( hero2->inCastle() != nullptr );
 
                 if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
                     return !otherHeroInCastle;
