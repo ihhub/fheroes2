@@ -379,9 +379,8 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        uint32_t hpRestored = spell.Resurrect() * _commander->GetPower();
-        if ( _commander->HasArtifact( Artifact::ANKH ) )
-            hpRestored *= 2;
+        const uint32_t ankhModifier = _commander->HasArtifact( Artifact::ANKH ) ? 2 : 1;
+        const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
         const Force & friendlyForce = arena.GetForce( _myColor );
@@ -390,10 +389,10 @@ namespace AI
             if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
                 continue;
 
-            const uint32_t missingHP = unit->GetMissingHitPoints();
-            hpRestored = ( missingHP < hpRestored ) ? missingHP : hpRestored;
+            uint32_t missingHP = unit->GetMissingHitPoints();
+            missingHP = ( missingHP < hpRestored ) ? missingHP : hpRestored;
 
-            double spellValue = hpRestored * unit->GetMonsterStrength() / unit->Monster::GetHitPoints();
+            double spellValue = missingHP * unit->GetMonsterStrength() / unit->Monster::GetHitPoints();
 
             // if we are winning battle; permanent resurrect bonus
             if ( _myArmyStrength > _enemyArmyStrength && spell.GetID() != Spell::RESURRECT ) {
