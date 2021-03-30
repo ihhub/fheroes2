@@ -1558,13 +1558,15 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
-
-    RedrawTop( dst, visibleTileROI, area );
 }
 
-bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable )
+const bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
+    case ICN::TREFALL:
+        return ( icnIndex == 13 || icnIndex == 10 || icnIndex == 3 || icnIndex == 0 );
+    case ICN::MTNDSRT:
+        return ( icnIndex == 45 );
     case ICN::UNKNOWN:
     case ICN::MINIHERO:
     case ICN::MONS32:
@@ -1622,13 +1624,6 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
             if ( it->object & 1 ) {
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
             }
-        }
-    }
-
-    if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-        RedrawObjects( dst, false, area );
-        if ( MP2::OBJ_MONSTER == GetObject() ) {
-            RedrawMonster( dst, visibleTileROI, area );
         }
     }
 }

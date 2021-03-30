@@ -46,6 +46,8 @@ namespace MP2
     struct mp2addon_t;
 }
 
+const bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable );
+
 namespace Interface
 {
     class GameArea;

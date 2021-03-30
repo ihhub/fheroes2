@@ -188,41 +188,141 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     MapsIndexes drawList;
     MapsIndexes monsterList;
+    std::set<int32_t> topList;
+    std::set<int32_t> objectList;
 
     // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
+    const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            if ( drawBottom ) {
-                tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                tile.RedrawObjects( dst, isPuzzleDraw, *this );
-            }
             const int object = tile.GetObject();
-            if ( MP2::OBJ_ZERO != object ) {
-                if ( drawMonstersAndBoats ) {
-                    if ( MP2::OBJ_BOAT == object ) {
-                        drawList.emplace_back( tile.GetIndex() );
-                    }
-                    else if ( MP2::OBJ_MONSTER == object ) {
-                        monsterList.emplace_back( tile.GetIndex() );
+
+            switch ( object ) {
+            case MP2::OBJ_ZERO: {
+                if ( drawBottom ) {
+                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                    const uint8_t objectTileset = tile.GetObjectTileset();
+                    const int icn = MP2::GetICNObject( objectTileset );
+                    if ( ICN::UNKNOWN != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, tile.GetObjectSpriteIndex() ) ) ) {
+                        objectList.insert( tile.GetIndex() );
                     }
                 }
-                if ( drawHeroes && MP2::OBJ_HEROES == object ) {
+                if ( drawTop ) {
+                    topList.insert( tile.GetIndex() );
+                }
+            }; break;
+            case MP2::OBJ_BOAT: {
+                if ( drawBottom ) {
+                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                }
+                if ( drawMonstersAndBoats ) {
                     drawList.emplace_back( tile.GetIndex() );
+                }
+                else if ( drawTop ) {
+                    topList.insert( tile.GetIndex() );
+                }
+            }; break;
+            case MP2::OBJ_MONSTER: {
+                if ( drawBottom ) {
+                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                }
+                if ( drawTop ) {
+                    topList.insert( tile.GetIndex() );
+                }
+                if ( drawMonstersAndBoats ) {
+                    monsterList.emplace_back( tile.GetIndex() );
+                }
+            }; break;
+            case MP2::OBJ_HEROES: {
+                if ( drawBottom ) {
+                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                    if ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetObjectTileset(), tile.GetObjectSpriteIndex() ) ) {
+                        objectList.insert( tile.GetIndex() );
+                    }
+                }
+                if ( drawHeroes ) {
+                    drawList.emplace_back( tile.GetIndex() );
+                    Heroes * hero = tile.GetHeroes();
+                    if ( hero ) {
+                        if ( drawTop ) {
+                            hero->InitDependencesTiles();
+                        }
+                    }
+                }
+                else if ( drawTop ) {
+                    topList.insert( tile.GetIndex() );
+                }
+            }; break;
+            default: {
+                if ( drawBottom ) {
+                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
+                    if ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetObjectTileset(), tile.GetObjectSpriteIndex() ) ) {
+                        objectList.insert( tile.GetIndex() );
+                    }
+                }
+                if ( drawTop ) {
+                    topList.insert( tile.GetIndex() );
+                }
+            }; break;
+            }
+        }
+    }
+
+    for ( MapsIndexes::iterator it = drawList.begin(); it != drawList.end(); ++it ) {
+        const Maps::Tiles & tile = world.GetTiles( *it );
+        const int object = tile.GetObject();
+        if ( MP2::OBJ_HEROES == object ) {
+            Heroes * hero = tile.GetHeroes();
+            if ( hero ) {
+                if ( drawTop ) {
+                    for ( MapsIndexes::iterator it0 = it + 1; it0 != drawList.end(); ++it0 ) {
+                        const Maps::Tiles & tile0 = world.GetTiles( *it0 );
+                        const int object0 = tile0.GetObject();
+                        if ( MP2::OBJ_HEROES == object0 || MP2::OBJ_BOAT == object0 ) {
+                            hero->UpdateDependencesTiles( *it0 );
+                        }
+                    }
+                    int32_t index = hero->DrawTopOnBottomIndex();
+                    if ( index > -1 ) {
+                        topList.erase( index );
+                    }
+                    index = hero->DrawTopOnDirectionBottomIndex();
+                    if ( index > -1 ) {
+                        topList.erase( index );
+                    }
+                    index = hero->DrawTopOnDirectionIndex();
+                    if ( index > -1 ) {
+                        topList.erase( index );
+                    }
+                }
+                if ( drawBottom ) {
+                    int32_t index = hero->DrawObjectsOnBottomIndex();
+                    if ( index > -1 ) {
+                        objectList.erase( index );
+                    }
+                    index = hero->DrawObjectsOnDirectionBottomIndex();
+                    if ( index > -1 ) {
+                        objectList.erase( index );
+                    }
                 }
             }
         }
+    }
+
+    for ( const int32_t index : objectList ) {
+        world.GetTiles( index ).RedrawObjects( dst, isPuzzleDraw, *this );
     }
 
     for ( const int32_t index : drawList ) {
         const Maps::Tiles & tile = world.GetTiles( index );
         const int object = tile.GetObject();
         if ( MP2::OBJ_HEROES == object ) {
-            const Heroes * hero = tile.GetHeroes();
+            Heroes * hero = tile.GetHeroes();
             if ( hero ) {
                 const Point & pos = GetRelativeTilePosition( Maps::GetPoint( index ) );
                 hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
@@ -271,22 +371,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     // Top layer.
-    const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
-
-    if ( drawTop ) {
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tiles & tile = world.GetTiles( x, y );
-                const int object = tile.GetObject();
-
-                if ( MP2::OBJ_HEROES == object || MP2::OBJ_BOAT == object ) {
-                    continue;
-                }
-
-                // top
-                tile.RedrawTop( dst, tileROI, *this );
-            }
-        }
+    for ( const int32_t index : topList ) {
+        world.GetTiles( index ).RedrawTop( dst, tileROI, *this );
     }
 
     // Heroes and boats.
@@ -298,10 +384,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( hero ) {
                 const Point & pos = GetRelativeTilePosition( Maps::GetPoint( index ) );
                 hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
+                if ( drawBottom ) {
+                    hero->RedrawBottom( dst, tileROI, *this );
+                }
+                if ( drawTop ) {
+                    hero->RedrawTop( dst, tileROI, *this );
+                }
             }
         }
         else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == object ) {
             tile.RedrawBoat( dst, tileROI, *this );
+            if ( drawTop ) {
+                tile.RedrawTop( dst, tileROI, *this );
+            }
         }
     }
 

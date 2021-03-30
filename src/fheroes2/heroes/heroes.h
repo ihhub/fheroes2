@@ -304,8 +304,8 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & gamearea ) const;
-    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & gamearea ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
     virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
@@ -338,6 +338,17 @@ public:
     static void ScholarAction( Heroes &, Heroes & );
 
     Point MovementDirection() const;
+
+    const int32_t DrawTopOnBottomIndex() const;
+    const int32_t DrawTopOnDirectionBottomIndex() const;
+    const int32_t DrawTopOnDirectionIndex() const;
+    const int32_t DrawObjectsOnBottomIndex() const;
+    const int32_t DrawObjectsOnDirectionBottomIndex() const;
+
+    void InitDependencesTiles();
+    void UpdateDependencesTiles( const int32_t index );
+    const void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    const void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
@@ -394,6 +405,12 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
+
+    int32_t drawTopOnBottomIndex;
+    int32_t drawTopOnDirectionBottomIndex;
+    int32_t drawTopOnDirectionIndex;
+    int32_t drawObjectsOnBottomIndex;
+    int32_t drawObjectsOnDirectionBottomIndex;
 
     mutable int _alphaValue;
 
