@@ -22,6 +22,7 @@
 #ifndef H2RAND_H
 #define H2RAND_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <functional>
