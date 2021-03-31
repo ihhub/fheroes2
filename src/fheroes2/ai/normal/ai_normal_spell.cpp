@@ -29,10 +29,13 @@
 
 using namespace Battle;
 
+namespace
+{
+    const double antimagicLowLimit = 200.0;
+}
+
 namespace AI
 {
-    const double ANTIMAGIC_LOW_LIMIT = 200.0;
-
     double ReduceEffectivenessByDistance( const Unit & unit )
     {
         // Reduce spell effectiveness if unit already crossed the battlefield
@@ -280,7 +283,7 @@ namespace AI
         else if ( target.Modes( SP_CURSE ) && ( spellID == Spell::BLESS || spellID == Spell::MASSBLESS ) ) {
             ratio *= 2;
         }
-        else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > ANTIMAGIC_LOW_LIMIT ) {
+        else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > antimagicLowLimit ) {
             double ratioLimit = 0.9;
 
             const std::vector<Spell> & spellList = _commander->GetSpells();
@@ -291,8 +294,9 @@ namespace AI
                     break;
                 }
             }
-            // 0...3000 spell strength (20 power * 200 SP) scales from 0.0 to 0.9 ratio
-            ratio = std::min( _enemySpellStrength / ANTIMAGIC_LOW_LIMIT * 0.06, ratioLimit );
+            // With 20 spell power and 200 spell points _enemySpellStrength will be 3000.0 (anything over is ignored here)
+            // Then convert 0...3000 range into 0.0 to 0.9 ratio and clamp it
+            ratio = std::min( _enemySpellStrength / antimagicLowLimit * 0.06, ratioLimit );
 
             if ( target.Modes( IS_BAD_MAGIC ) ) {
                 ratio *= 2;
