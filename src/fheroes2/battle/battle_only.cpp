@@ -461,21 +461,10 @@ bool Battle::Only::ChangeSettings( void )
 
 void Battle::Only::UpdateHero1( const Point & cur_pt )
 {
-    if ( primskill_bar1 ) {
-        primskill_bar1.reset();
-    }
-
-    if ( secskill_bar1 ) {
-        secskill_bar1.reset();
-    }
-
-    if ( selectArtifacts1 ) {
-        selectArtifacts1.reset();
-    }
-
-    if ( selectArmy1 ) {
-        selectArmy1.reset();
-    }
+    primskill_bar1.reset();
+    secskill_bar1.reset();
+    selectArtifacts1.reset();
+    selectArmy1.reset();
 
     if ( hero1 ) {
         player1.SetColor( Color::BLUE );
@@ -527,21 +516,10 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 
 void Battle::Only::UpdateHero2( const Point & cur_pt )
 {
-    if ( primskill_bar2 ) {
-        primskill_bar2.reset();
-    }
-
-    if ( secskill_bar2 ) {
-        secskill_bar2.reset();
-    }
-
-    if ( selectArtifacts2 ) {
-        selectArtifacts2.reset();
-    }
-
-    if ( selectArmy2 ) {
-        selectArmy2.reset();
-    }
+    primskill_bar2.reset();
+    secskill_bar2.reset();
+    selectArtifacts2.reset();
+    selectArmy2.reset();
 
     if ( hero2 ) {
         player2.SetColor( Color::RED );
