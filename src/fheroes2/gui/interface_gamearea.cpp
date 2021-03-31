@@ -273,14 +273,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    for ( MapsIndexes::iterator it = drawList.begin(); it != drawList.end(); ++it ) {
+    for ( auto it = drawList.cbegin(); it != drawList.cend(); ++it ) {
         const Maps::Tiles & tile = world.GetTiles( *it );
         const int object = tile.GetObject();
         if ( MP2::OBJ_HEROES == object ) {
             Heroes * hero = tile.GetHeroes();
             if ( hero ) {
                 if ( drawTop ) {
-                    for ( MapsIndexes::iterator it0 = it + 1; it0 != drawList.end(); ++it0 ) {
+                    for ( auto it0 = it + 1; it0 != drawList.end(); ++it0 ) {
                         const Maps::Tiles & tile0 = world.GetTiles( *it0 );
                         const int object0 = tile0.GetObject();
                         if ( MP2::OBJ_HEROES == object0 || MP2::OBJ_BOAT == object0 ) {
