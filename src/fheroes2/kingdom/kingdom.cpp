@@ -450,8 +450,11 @@ u32 Kingdom::GetLostTownDays( void ) const
 Recruits & Kingdom::GetRecruits( void )
 {
     // update hero1
-    if ( Heroes::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) )
-        recruits.SetHero1( world.GetFreemanHeroes( GetRace() ) );
+    if ( Heroes::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
+        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+
+        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
+    }
 
     // update hero2
     if ( Heroes::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
@@ -465,7 +468,9 @@ Recruits & Kingdom::GetRecruits( void )
 
 void Kingdom::UpdateRecruits( void )
 {
-    recruits.SetHero1( world.GetFreemanHeroes( GetRace() ) );
+    const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+
+    recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
     recruits.SetHero2( world.GetFreemanHeroes() );
 
     if ( recruits.GetID1() == recruits.GetID2() )
