@@ -651,6 +651,12 @@ bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
+int Battle::Board::DistanceFromOriginX( int32_t index, bool reflect )
+{
+    const int xPos = index % ARENAW;
+    return std::max( 1, reflect ? ARENAW - xPos - 1 : xPos );
+}
+
 bool Battle::Board::isValidDirection( s32 index, int dir )
 {
     if ( isValidIndex( index ) ) {
