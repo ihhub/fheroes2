@@ -59,7 +59,7 @@ namespace AI
 
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
 
-        Indexes & around = Board::GetAroundIndexes( defender );
+        Indexes around = Board::GetAroundIndexes( defender );
         // Shuffle to make equal quality moves a bit unpredictable
         Rand::Shuffle( around );
 
