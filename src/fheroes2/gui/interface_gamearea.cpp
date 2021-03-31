@@ -280,7 +280,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             Heroes * hero = tile.GetHeroes();
             if ( hero ) {
                 if ( drawTop ) {
-                    for ( auto it0 = it + 1; it0 != drawList.end(); ++it0 ) {
+                    for ( auto it0 = it + 1; it0 != drawList.cend(); ++it0 ) {
                         const Maps::Tiles & tile0 = world.GetTiles( *it0 );
                         const int object0 = tile0.GetObject();
                         if ( MP2::OBJ_HEROES == object0 || MP2::OBJ_BOAT == object0 ) {
