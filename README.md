@@ -30,7 +30,7 @@ Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh**
 Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
 
 ### Arch
-For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer`.
+For Arch based Linux distributions use the command `sudo pacman -S sdl{,2}_mixer`.
 
 ### RedHat-based
 RPM based distributions like Fedora/Red Hat use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
