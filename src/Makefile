@@ -60,7 +60,7 @@ CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
 SDL_LIBS := $(SDL_LIBS) -l$(LIBSDL)_image $(shell libpng-config --libs) -lz
 endif
 
-ifdef WITH_FONT
+ifdef FHEROES2_TTF_SUPPORT
 CFLAGS := $(CFLAGS) -DWITH_TTF
 SDL_LIBS := $(SDL_LIBS) -l$(LIBSDL)_ttf
 endif
