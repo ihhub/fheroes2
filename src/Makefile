@@ -28,7 +28,7 @@ endif
 
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
-LIBS := -pthread
+LIBS := $(LDFLAGS) -pthread
 
 CFLAGS_TP := $(CFLAGS)
 
@@ -73,8 +73,10 @@ LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
 endif
 endif
 
-CFLAGS := $(SDL_FLAGS) $(CFLAGS)
-LIBS := $(SDL_LIBS) $(LIBS)
+ifndef WITHOUT_ZLIB
+CFLAGS := $(CFLAGS) -DWITH_ZLIB
+LIBS := $(LIBS) -lz
+endif
 
 # platform specific flags
 ifndef PLATFORM
@@ -100,12 +102,14 @@ LIBS := -liconv
 endif
 endif
 
+ifdef FHEROES2_VITA
+PLATFORM := vita
+endif
+
 include Makefile.$(PLATFORM)
 
-ifndef WITHOUT_ZLIB
-CFLAGS := $(CFLAGS) -DWITH_ZLIB
-LIBS := $(LIBS) -lz
-endif
+CFLAGS := $(SDL_FLAGS) $(CFLAGS)
+LIBS := $(SDL_LIBS) $(LIBS)
 
 export CC CXX AR LINK WINDRES CFLAGS LIBS PLATFORM
 
