@@ -38,7 +38,5 @@ namespace fheroes2
         const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
 
         int32_t GetAbsoluteICNHeight( int icnId );
-
-        void clearICNSprites();
     }
 }
