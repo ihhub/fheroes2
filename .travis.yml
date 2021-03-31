@@ -37,8 +37,7 @@ matrix:
         - sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev
         - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
-        - cp doc/README.txt .
-        - zip -j fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - zip -j fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt doc/fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-sdl1_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -59,8 +58,7 @@ matrix:
         - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev
         - export FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
-        - cp doc/README.txt .
-        - zip -j fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - zip -j fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt doc/fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-sdl2_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -82,8 +80,7 @@ matrix:
         - sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext zip
         - export FHEROES2_SDL1="ON" FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
-        - cp doc/README.txt .
-        - zip -j fheroes2_ubuntu_arm_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - zip -j fheroes2_ubuntu_arm_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt doc/fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl1_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -105,8 +102,7 @@ matrix:
         - sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext zip
         - export FHEROES2_STRICT_COMPILATION="ON"
       before_deploy:
-        - cp doc/README.txt .
-        - zip -j fheroes2_ubuntu_arm_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt fheroes2.txt
+        - zip -j fheroes2_ubuntu_arm_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt doc/fheroes2.txt
         - export TRAVIS_TAG=fheroes2-linux-arm-sdl2_dev
         - git tag -f $TRAVIS_TAG
       deploy:
@@ -114,6 +110,36 @@ matrix:
         api_key: "$GITHUB_OAUTH_TOKEN"
         file: "fheroes2_ubuntu_arm_sdl2.zip"
         name: Ubuntu (Linux) ARM build with SDL 2.0 support (latest commit)
+        body: Compiled version of $TRAVIS_COMMIT commit
+        prerelease: true
+        overwrite: true
+        skip_cleanup: true
+        on:
+          branch: master
+    - os: linux
+      name: "PSV with SDL 2.0"
+      before_install:
+        - sudo apt-get install libgcc1
+        - git clone https://github.com/vitasdk/vdpm
+        - cd vdpm
+        - export VITASDK=/usr/local/vitasdk
+        - export PATH=$VITASDK/bin:$PATH # add vitasdk tool to $PATH
+        - ./bootstrap-vitasdk.sh
+        - ./install-all.sh
+        - cd ..
+        - export FHEROES2_STRICT_COMPILATION="ON"
+      script:
+        - |
+          make -f Makefile.vita -j 2
+      before_deploy:
+        - zip -j fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt doc/fheroes2.txt doc/README_PSV.md
+        - export TRAVIS_TAG=fheroes2-psv-sdl2_dev
+        - git tag -f $TRAVIS_TAG
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_OAUTH_TOKEN"
+        file: "fheroes2_psv_sdl2.zip"
+        name: PS Vita build with SDL 2.0 support (latest commit)
         body: Compiled version of $TRAVIS_COMMIT commit
         prerelease: true
         overwrite: true
