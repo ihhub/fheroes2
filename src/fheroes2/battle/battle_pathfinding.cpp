@@ -103,6 +103,11 @@ namespace Battle
             return path;
 
         const uint32_t pathCost = _cache[targetCell]._cost;
+        if ( pathCost >= movementRange * 2 ) {
+            path.push_back( targetCell );
+            return path;
+        }
+
         int currentNode = targetCell;
         uint32_t nodeCost = pathCost;
 
@@ -119,7 +124,6 @@ namespace Battle
             if ( movementRange > 0 && !path.empty() && pathCost - nodeCost >= movementRange )
                 break;
         }
-        std::reverse( path.begin(), path.end() );
 
         return path;
     }

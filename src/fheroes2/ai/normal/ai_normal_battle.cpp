@@ -99,10 +99,8 @@ namespace AI
                     }
                     else if ( dist <= range + 1 ) {
                         cellThreatLevel += enemy->GetScoreQuality( currentUnit );
-                        std::cout << moveIndex << " and " << enemy->GetHeadIndex() << " dist: " << Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
                     }
                 }
-                std::cout << "Cell " << moveIndex << " threat: " << cellThreatLevel << std::endl;
 
                 if ( cellThreatLevel < lowestThreat ) {
                     lowestThreat = cellThreatLevel;
@@ -470,19 +468,10 @@ namespace AI
                 const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
+                    target.cell = FindLowestThreatMove( arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange ), currentUnit, enemies, true );
 
-                    if ( move.second < currentUnitMoveRange * 2 ) {
-                        auto path = arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange );
-                        target.cell = FindLowestThreatMove( path, currentUnit, enemies, true );
-
+                    if ( target.cell != move.first ) {
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
-                        for ( auto idx : path ) {
-                            std::cout << idx << " ";
-                        }
-                        std::cout << std::endl;
-                    }
-                    else {
-                        target.cell = move.first;
                     }
                 }
             }
