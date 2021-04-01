@@ -305,6 +305,7 @@ namespace AI
             }
         }
 
+        // TODO: replace this hacky code for archers
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
         if ( _commander && _myShooterStr > 1 ) {
             _myShooterStr += _commander->GetSpellcastStrength();
