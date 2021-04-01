@@ -53,7 +53,7 @@ namespace AI
         double positionValue = -INT32_MAX;
     };
 
-    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender )
+    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender, bool withinReach )
     {
         MeleeAttackOutcome outcome;
 
@@ -62,7 +62,7 @@ namespace AI
         const Indexes & around = Board::GetAroundIndexes( defender );
         for ( const int cell : around ) {
             // Check if we can reach the target and pick best position to attack from
-            if ( !arena.hexIsPassable( cell ) || arena.CalculateMoveDistance( cell ) > currentUnitMoveRange )
+            if ( !arena.hexIsPassable( cell ) || ( withinReach && arena.CalculateMoveDistance( cell ) > currentUnitMoveRange ) )
                 continue;
 
             const int cellQuality = Board::GetCell( cell )->GetQuality();
@@ -426,7 +426,7 @@ namespace AI
         double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, true );
             if ( outcome.positionValue > attackPositionValue
                  || ( outcome.attackValue > attackHighestValue && std::fabs( attackPositionValue - outcome.positionValue ) < 0.001 ) ) {
                 attackHighestValue = outcome.attackValue;
@@ -487,6 +487,7 @@ namespace AI
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
@@ -494,11 +495,11 @@ namespace AI
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
-            if ( ( !_defendingCastle && arena.CalculateMoveDistance( outcome.fromIndex ) <= ARENAW / 2 )
-                 || ( _defendingCastle && Board::isCastleIndex( outcome.fromIndex ) ) )
+            if ( ( !_defendingCastle && Board::DistanceFromOriginX( outcome.fromIndex, currentUnit.isReflect() ) > ARENAW / 2 )
+                 || ( _defendingCastle && !Board::isCastleIndex( outcome.fromIndex ) ) )
                 continue;
 
             if ( outcome.positionValue > attackPositionValue
@@ -533,8 +534,8 @@ namespace AI
                     continue;
                 }
 
-                const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
-                const bool canReach = outcome.fromIndex != -1;
+                const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
+                const bool canReach = arena.CalculateMoveDistance( outcome.fromIndex ) <= currentUnitMoveRange;
                 const bool hadAnotherTarget = target.unit != NULL;
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << outcome.attackValue );
@@ -543,7 +544,7 @@ namespace AI
                 // Primary - Enemy is within move range
                 // Secondary - Archer unit value
                 // Tertiary - Enemy unit threat
-                if ( ( canReach != hadAnotherTarget && canReach )
+                if ( ( canReach && !hadAnotherTarget )
                      || ( canReach == hadAnotherTarget
                           && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < outcome.attackValue ) ) ) ) {
                     target.cell = outcome.fromIndex;
