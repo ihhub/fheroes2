@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! [ '$(command -v wget)' ]; then
+if ! [[ -x $(type -p wget) ]]; then
 	get='curl > demo.zip -L'
 else
 	get='wget -O demo.zip'
