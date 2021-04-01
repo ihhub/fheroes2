@@ -79,33 +79,54 @@ namespace AI
         return outcome;
     }
 
-    int32_t FindLowestThreatMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies, bool forAttack = false )
+    int32_t FindMoveToRetreat( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
     {
         double lowestThreat = std::numeric_limits<double>::max();
         int32_t targetCell = -1;
 
         for ( const int moveIndex : moves ) {
-            if ( !Board::GetCell( moveIndex )->GetQuality() ) {
-                double cellThreatLevel = 0.0;
+            // Skip if this cell has adjacent enemies
+            if ( !Board::GetCell( moveIndex )->GetQuality() )
+                continue;
 
-                for ( const Unit * enemy : enemies ) {
-                    if ( forAttack && ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) )
-                        continue;
+            double cellThreatLevel = 0.0;
 
-                    const uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
-                    const uint32_t range = std::max( 1u, enemy->GetMoveRange() );
-                    if ( !forAttack ) {
-                        cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
-                    }
-                    else if ( dist <= range + 1 ) {
-                        cellThreatLevel += enemy->GetScoreQuality( currentUnit );
-                    }
+            for ( const Unit * enemy : enemies ) {
+                const uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                const uint32_t range = std::max( 1u, enemy->GetMoveRange() );
+                cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
+            }
+
+            if ( cellThreatLevel < lowestThreat ) {
+                lowestThreat = cellThreatLevel;
+                targetCell = moveIndex;
+            }
+        }
+        return targetCell;
+    }
+
+    int32_t FindNextTurnAttackMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
+    {
+        double lowestThreat = std::numeric_limits<double>::max();
+        int32_t targetCell = -1;
+
+        for ( const int moveIndex : moves ) {
+            double cellThreatLevel = 0.0;
+
+            for ( const Unit * enemy : enemies ) {
+                // Archers and Flyers are always threatning, skip
+                if ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) )
+                    continue;
+
+                if ( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) <= enemy->GetMoveRange() + 1 ) {
+                    cellThreatLevel += enemy->GetScoreQuality( currentUnit );
                 }
+            }
 
-                if ( cellThreatLevel < lowestThreat ) {
-                    lowestThreat = cellThreatLevel;
-                    targetCell = moveIndex;
-                }
+            // Also allow to move up closer if there's still no threat
+            if ( cellThreatLevel < lowestThreat || std::fabs( cellThreatLevel ) < 0.001 ) {
+                lowestThreat = cellThreatLevel;
+                targetCell = moveIndex;
             }
         }
         return targetCell;
@@ -395,7 +416,7 @@ namespace AI
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                target.cell = FindLowestThreatMove( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
+                target.cell = FindMoveToRetreat( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
@@ -469,9 +490,9 @@ namespace AI
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
 
-                    const Indexes & path = arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange );
+                    const Indexes & path = arena.CalculateTwoMoveOverlap( move.first, currentUnitMoveRange );
                     if ( !path.empty() ) {
-                        target.cell = FindLowestThreatMove( path, currentUnit, enemies, true );
+                        target.cell = FindNextTurnAttackMove( path, currentUnit, enemies );
                         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
                     }
                     else {

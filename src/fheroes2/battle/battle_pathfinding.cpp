@@ -96,17 +96,18 @@ namespace Battle
         return path;
     }
 
-    Indexes ArenaPathfinder::buildNextTurnPath( int targetCell, uint32_t movementRange ) const
+    Indexes ArenaPathfinder::findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const
     {
         Indexes path;
-        if ( targetCell < 0 || targetCell > _cache.size() )
+        const size_t target = static_cast<size_t>( targetCell );
+        if ( target >= _cache.size() )
             return path;
 
-        const uint32_t pathCost = _cache[targetCell]._cost;
+        const uint32_t pathCost = _cache[target]._cost;
         if ( pathCost >= movementRange * 2 )
             return path;
 
-        int currentNode = targetCell;
+        int currentNode = target;
         uint32_t nodeCost = pathCost;
 
         while ( !_start.contains( currentNode ) && nodeCost != 0 ) {
@@ -122,6 +123,7 @@ namespace Battle
             if ( movementRange > 0 && !path.empty() && pathCost - nodeCost >= movementRange )
                 break;
         }
+        std::reverse( path.begin(), path.end() );
 
         return path;
     }
