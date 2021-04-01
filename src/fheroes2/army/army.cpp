@@ -344,7 +344,7 @@ bool Troops::CanJoinTroops( const Troops & troops2 ) const
     if ( this == &troops2 )
         return false;
 
-    Army troops1;
+    Troops troops1;
     troops1.Insert( *this );
 
     for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it )
