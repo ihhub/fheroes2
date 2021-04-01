@@ -686,6 +686,15 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::WHITE_LARGE_FONT:
+                LoadModifiedICN( ICN::FONT );
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::FONT].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    _icnVsSprite[id][i].resize( _icnVsSprite[ICN::FONT][i].width() * 2, _icnVsSprite[ICN::FONT][i].height() * 2 );
+                    Resize( _icnVsSprite[ICN::FONT][i], _icnVsSprite[id][i], true );
+                    _icnVsSprite[id][i].setPosition( _icnVsSprite[ICN::FONT][i].x() * 2, _icnVsSprite[ICN::FONT][i].y() * 2 );
+                }
+                return true;
             default:
                 break;
             }
@@ -847,6 +856,8 @@ namespace fheroes2
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
                 return GetICN( ICN::SMALFONT, character - 0x20 );
+            case Font::WHITE_LARGE:
+                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
             default:
                 break;
             }
