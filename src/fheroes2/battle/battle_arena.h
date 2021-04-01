@@ -109,7 +109,7 @@ namespace Battle
         bool hexIsAccessible( int32_t indexTo ) const;
         bool hexIsPassable( int32_t indexTo ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
-        Indexes getCurrentUnitPath( int32_t indexTo, uint32_t slicingRange = 0 ) const;
+        Indexes CalculateTwoTurnPath( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & );
 
         void ApplyAction( Command & );

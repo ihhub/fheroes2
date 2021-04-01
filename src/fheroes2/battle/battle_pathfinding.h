@@ -59,7 +59,8 @@ namespace Battle
         ArenaPathfinder();
         virtual void reset() override;
         void calculate( const Unit & unit );
-        Indexes buildPath( int targetCell, uint32_t slicingRange = 0 ) const;
+        Indexes buildPath( int targetCell ) const;
+        Indexes buildNextTurnPath( int targetCell, uint32_t movementRange ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;

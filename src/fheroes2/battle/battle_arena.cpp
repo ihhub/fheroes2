@@ -579,9 +579,9 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
 }
 
 
-Battle::Indexes Battle::Arena::getCurrentUnitPath( int32_t indexTo, uint32_t slicingRange ) const
+Battle::Indexes Battle::Arena::CalculateTwoTurnPath( int32_t indexTo, uint32_t movementRange ) const
 {
-    return _pathfinder.buildPath( indexTo, slicingRange );
+    return _pathfinder.buildNextTurnPath( indexTo, movementRange );
 }
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )

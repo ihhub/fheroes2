@@ -79,7 +79,7 @@ namespace AI
         return outcome;
     }
 
-    int32_t FindLowestThreatMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
+    int32_t FindLowestThreatMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies, bool forAttack = false )
     {
         double lowestThreat = std::numeric_limits<double>::max();
         int32_t targetCell = -1;
@@ -89,13 +89,20 @@ namespace AI
                 double cellThreatLevel = 0.0;
 
                 for ( const Unit * enemy : enemies ) {
-                    const double ratio = static_cast<double>( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) ) / std::max( 1u, enemy->GetMoveRange() );
-                    if ( ratio < 1.0 ) {
-                        std::cout << ratio << " ";
-                        cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - ratio );
+                    if ( forAttack && ( enemy->isFlying() || ( enemy->isArchers() && !enemy->isHandFighting() ) ) )
+                        continue;
+
+                    const uint32_t dist = Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
+                    const uint32_t range = std::max( 1u, enemy->GetMoveRange() );
+                    if ( !forAttack ) {
+                        cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
+                    }
+                    else if ( dist <= range + 1 ) {
+                        cellThreatLevel += enemy->GetScoreQuality( currentUnit );
+                        std::cout << moveIndex << " and " << enemy->GetHeadIndex() << " dist: " << Board::GetDistance( moveIndex, enemy->GetHeadIndex() );
                     }
                 }
-                std::cout << std::endl;
+                std::cout << "Cell " << moveIndex << " threat: " << cellThreatLevel << std::endl;
 
                 if ( cellThreatLevel < lowestThreat ) {
                     lowestThreat = cellThreatLevel;
@@ -465,8 +472,8 @@ namespace AI
                     maxMovePriority = unitPriority;
 
                     if ( move.second < currentUnitMoveRange * 2 ) {
-                        auto path = arena.getCurrentUnitPath( move.first, currentUnitMoveRange );
-                        target.cell = FindLowestThreatMove( path, currentUnit, enemies );
+                        auto path = arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange );
+                        target.cell = FindLowestThreatMove( path, currentUnit, enemies, true );
 
                         DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
                         for ( auto idx : path ) {

@@ -79,7 +79,24 @@ namespace Battle
         return result;
     }
 
-    Indexes ArenaPathfinder::buildPath( int targetCell, uint32_t slicingRange ) const
+    Indexes ArenaPathfinder::buildPath( int targetCell ) const
+    {
+        Indexes path;
+        if ( targetCell < 0 || targetCell > _cache.size() )
+            return path;
+
+        int currentNode = targetCell;
+        while ( !_start.contains( currentNode ) && _cache[currentNode]._cost != 0 ) {
+            const ArenaNode & node = _cache[currentNode];
+            path.push_back( currentNode );
+            currentNode = node._from;
+        }
+        std::reverse( path.begin(), path.end() );
+
+        return path;
+    }
+
+    Indexes ArenaPathfinder::buildNextTurnPath( int targetCell, uint32_t movementRange ) const
     {
         Indexes path;
         if ( targetCell < 0 || targetCell > _cache.size() )
@@ -92,14 +109,14 @@ namespace Battle
         while ( !_start.contains( currentNode ) && nodeCost != 0 ) {
             const ArenaNode & node = _cache[currentNode];
             // Upper limit
-            if ( slicingRange == 0 || node._cost <= slicingRange ) {
+            if ( movementRange == 0 || node._cost <= movementRange ) {
                 path.push_back( currentNode );
             }
             currentNode = node._from;
             nodeCost = _cache[currentNode]._cost;
 
             // Lower limit
-            if ( slicingRange > 0 && pathCost - nodeCost >= slicingRange )
+            if ( movementRange > 0 && !path.empty() && pathCost - nodeCost >= movementRange )
                 break;
         }
         std::reverse( path.begin(), path.end() );
