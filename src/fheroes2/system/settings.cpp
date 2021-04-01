@@ -689,6 +689,9 @@ bool Settings::Save( const std::string & filename ) const
 #if defined( FHEROES2_VITA )
     const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
     file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
+#elif defined( WITHOUT_CWD )
+    const std::string path = System::ConcatePath( System::GetHomeDirectory( "fheroes2" ), filename );
+    file.open( path.data(), std::fstream::out | std::fstream::trunc );
 #else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
 #endif
@@ -897,10 +900,10 @@ ListDirs Settings::GetRootDirs( void )
     // from env
     if ( System::GetEnvironment( "FHEROES2_DATA" ) )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
-
+#ifndef WITHOUT_CWD
     // from dirname
     dirs.push_back( System::GetDirname( conf.path_program ) );
-
+#endif
     // from HOME
     const std::string & home = System::GetHomeDirectory( "fheroes2" );
     if ( !home.empty() )
