@@ -2415,7 +2415,7 @@ Army & Castle::GetActualArmy( void )
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength() const
+double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 {
     double totalStrength = 0;
 
@@ -2428,6 +2428,28 @@ double Castle::GetGarrisonStrength() const
     }
     else {
         totalStrength += army.GetStrength();
+    }
+
+    // Add castle bonus if there are any troops defending it
+    if ( isCastle() && totalStrength > 1 ) {
+        const Battle::Tower tower( *this, Battle::TWR_CENTER );
+        const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
+
+        totalStrength += towerStr;
+        if ( isBuild( BUILD_LEFTTURRET ) ) {
+            totalStrength += towerStr / 2;
+        }
+        if ( isBuild( BUILD_RIGHTTURRET ) ) {
+            totalStrength += towerStr / 2;
+        }
+
+        if ( attackingHero && ( !attackingHero->GetArmy().isFootsloggingArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
+        }
+        else {
+            // heavy penalty if no ballistics skill and army is melee infantry based
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
     }
     return totalStrength;
 }

@@ -1427,6 +1427,24 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     return str1 > str2;
 }
 
+bool Army::isFootsloggingArmy() const
+{
+    double meleeInfantry = 0;
+    double other = 0;
+
+    for ( const Troop * troop : *this ) {
+        if ( troop != NULL && troop->isValid() ) {
+            if ( !troop->isArchers() && !troop->isFlying() ) {
+                meleeInfantry += troop->GetStrength();
+            }
+            else {
+                other += troop->GetStrength();
+            }
+        }
+    }
+    return meleeInfantry > other;
+}
+
 bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
 {
     return army1.isStrongerThan( army2 );
