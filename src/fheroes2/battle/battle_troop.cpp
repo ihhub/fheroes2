@@ -126,6 +126,9 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
             pos += ( reflect ? -1 : 1 );
         SetPosition( pos );
     }
+    else {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" );
+    }
 }
 
 Battle::Unit::~Unit()

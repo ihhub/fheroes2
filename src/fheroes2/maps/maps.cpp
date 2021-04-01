@@ -210,6 +210,7 @@ bool Maps::isValidDirection( s32 from, int vector )
 
 Point Maps::GetPoint( s32 index )
 {
+    assert( world.w() != 0 );
     return Point( index % world.w(), index / world.w() );
 }
 
