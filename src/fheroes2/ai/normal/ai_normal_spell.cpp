@@ -29,6 +29,11 @@
 
 using namespace Battle;
 
+namespace
+{
+    const double antimagicLowLimit = 200.0;
+}
+
 namespace AI
 {
     double ReduceEffectivenessByDistance( const Unit & unit )
@@ -91,6 +96,11 @@ namespace AI
                 checkSelectBestSpell( spell, spellEffectValue( spell, enemies ) );
             }
         }
+
+        if ( bestSpell.spellID != -1 ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+        }
+
         return bestSpell;
     }
 
@@ -108,8 +118,15 @@ namespace AI
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
                 return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
+
             // Otherwise calculate amount of strength lost (% of unit times total strength)
-            return std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 ) * unit->GetStrength();
+            double unitPercentageLost = std::min( static_cast<double>( damage ) / unit->GetHitPoints(), 1.0 );
+
+            // Penalty for waking up disabled unit (if you kill only 30%, rest 70% is your penalty)
+            if ( unit->Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) ) {
+                unitPercentageLost += unitPercentageLost - 1.0;
+            }
+            return unitPercentageLost * unit->GetStrength();
         };
 
         if ( spell.isSingleTarget() ) {
@@ -188,7 +205,7 @@ namespace AI
             ratio = 0.15;
             break;
         case Spell::BERSERKER: {
-            if ( targetIsLast )
+            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
                 return 0.0;
             ratio = 0.95;
             break;
@@ -200,7 +217,7 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast )
+            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
                 return 0.0;
             ratio = 1.5;
             break;
@@ -266,17 +283,21 @@ namespace AI
         else if ( target.Modes( SP_CURSE ) && ( spellID == Spell::BLESS || spellID == Spell::MASSBLESS ) ) {
             ratio *= 2;
         }
-        else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) ) {
-            ratio = 0.35;
+        else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > antimagicLowLimit ) {
+            double ratioLimit = 0.9;
 
             const std::vector<Spell> & spellList = _commander->GetSpells();
             for ( const Spell & otherSpell : spellList ) {
                 if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && target.AllowApplySpell( otherSpell, _commander ) ) {
-                    // Can resurrect unit in the future, overwrite the ratio
-                    ratio = 0.15;
+                    // Can resurrect unit in the future, limit the ratio
+                    ratioLimit = 0.15;
                     break;
                 }
             }
+            // With 20 spell power and 200 spell points _enemySpellStrength will be 3000.0 (anything over is ignored here)
+            // Then convert 0...3000 range into 0.0 to 0.9 ratio and clamp it
+            ratio = std::min( _enemySpellStrength / antimagicLowLimit * 0.06, ratioLimit );
+
             if ( target.Modes( IS_BAD_MAGIC ) ) {
                 ratio *= 2;
             }
@@ -365,21 +386,20 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        uint32_t hpRestored = spell.Resurrect() * _commander->GetPower();
-        if ( _commander->HasArtifact( Artifact::ANKH ) )
-            hpRestored *= 2;
+        const uint32_t ankhModifier = _commander->HasArtifact( Artifact::ANKH ) ? 2 : 1;
+        const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
 
         // Get friendly units list including the invalid and dead ones
         const Force & friendlyForce = arena.GetForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
-            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
+            if ( !unit || !unit->AllowApplySpell( spell, _commander ) || arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
-            const uint32_t missingHP = unit->GetMissingHitPoints();
-            hpRestored = ( missingHP < hpRestored ) ? missingHP : hpRestored;
+            uint32_t missingHP = unit->GetMissingHitPoints();
+            missingHP = ( missingHP < hpRestored ) ? missingHP : hpRestored;
 
-            double spellValue = hpRestored * unit->GetMonsterStrength() / unit->Monster::GetHitPoints();
+            double spellValue = missingHP * unit->GetMonsterStrength() / unit->Monster::GetHitPoints();
 
             // if we are winning battle; permanent resurrect bonus
             if ( _myArmyStrength > _enemyArmyStrength && spell.GetID() != Spell::RESURRECT ) {
@@ -396,13 +416,17 @@ namespace AI
     {
         SpellcastOutcome bestOutcome;
         if ( spell.isSummon() ) {
-            const Monster monster( spell );
-
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
             if ( _commander->HasArtifact( Artifact::BOOK_ELEMENTS ) )
                 count *= 2;
 
-            bestOutcome.value = monster.GetMonsterStrength() * count;
+            const Troop summon( Monster( spell ), count );
+            bestOutcome.value = summon.GetStrengthWithBonus( _commander->GetAttack(), _commander->GetDefense() );
+
+            // Spell is less effective if we already winning this battle
+            if ( _myArmyStrength > _enemyArmyStrength * 2 ) {
+                bestOutcome.value /= 2;
+            }
         }
         return bestOutcome;
     }

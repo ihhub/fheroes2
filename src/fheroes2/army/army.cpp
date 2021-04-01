@@ -1248,7 +1248,7 @@ u32 Army::GetDefense( void ) const
 
 double Army::GetStrength( void ) const
 {
-    double res = 0;
+    double result = ( commander ) ? commander->GetSpellcastStrength() : 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
     // Hero bonus calculation is slow, cache it
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
@@ -1271,14 +1271,11 @@ double Army::GetStrength( void ) const
 
             strength *= 1 + armyLuck / 24.0;
 
-            res += strength;
+            result += strength;
         }
     }
 
-    // hero spell STR
-    // composition
-
-    return res;
+    return result;
 }
 
 double Army::getReinforcementValue( const Troops & reinforcement ) const

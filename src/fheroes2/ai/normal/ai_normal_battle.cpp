@@ -215,6 +215,7 @@ namespace AI
         _myShooterStr = 0;
         _enemyShooterStr = 0;
         _enemyAverageSpeed = 0;
+        _enemySpellStrength = 0;
         _highestDamageExpected = 0;
         _considerRetreat = false;
 
@@ -302,6 +303,17 @@ namespace AI
                 if ( !attackerIgnoresCover )
                     _myShooterStr /= 2;
             }
+        }
+
+        // TODO: replace this hacky code for archers
+        // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
+        if ( _commander && _myShooterStr > 1 ) {
+            _myShooterStr += _commander->GetSpellcastStrength();
+        }
+        const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
+        if ( enemyCommander ) {
+            _enemySpellStrength = enemyCommander->GetSpellcastStrength();
+            _enemyShooterStr += _enemySpellStrength;
         }
 
         // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
