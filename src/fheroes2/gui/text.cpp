@@ -254,7 +254,7 @@ size_t TextUnicode::Size( void ) const
 
 int TextUnicode::CharWidth( int c, int f )
 {
-    if ( c < c < 0x0021 ) {
+    if ( c < 0x0021 ) {
         if ( isSmallFont( f ) )
             return 4;
         else if ( isLargeFont( f ) )
