@@ -1566,7 +1566,7 @@ bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, c
     case ICN::TREFALL:
         return ( icnIndex == 13 || icnIndex == 10 || icnIndex == 3 || icnIndex == 0 );
     case ICN::MTNDSRT:
-        return ( icnIndex == 45 );
+        return ( icnIndex == 45 || icnIndex == 55 );
     case ICN::UNKNOWN:
     case ICN::MINIHERO:
     case ICN::MONS32:
@@ -1574,7 +1574,7 @@ bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, c
 
     // whirlpool
     case ICN::OBJNWATR:
-        return icnIndex >= 202 && icnIndex <= 225;
+        return ( icnIndex >= 202 && icnIndex <= 225 ) || icnIndex == 69;
 
     // river delta
     case ICN::OBJNMUL2:
