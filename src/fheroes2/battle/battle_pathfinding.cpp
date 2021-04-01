@@ -82,10 +82,12 @@ namespace Battle
     Indexes ArenaPathfinder::buildPath( int targetCell ) const
     {
         Indexes path;
-        if ( targetCell < 0 || targetCell > _cache.size() )
+
+        size_t target = static_cast<size_t>( targetCell );
+        if ( target >= _cache.size() )
             return path;
 
-        int currentNode = targetCell;
+        int currentNode = target;
         while ( !_start.contains( currentNode ) && _cache[currentNode]._cost != 0 ) {
             const ArenaNode & node = _cache[currentNode];
             path.push_back( currentNode );
