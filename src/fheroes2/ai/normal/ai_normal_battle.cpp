@@ -36,6 +36,7 @@
 #include "speed.h"
 
 #include <cassert>
+#include <limits>
 
 using namespace Battle;
 
@@ -76,6 +77,33 @@ namespace AI
             }
         }
         return outcome;
+    }
+
+    int32_t FindLowestThreatMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
+    {
+        double lowestThreat = std::numeric_limits<double>::max();
+        int32_t targetCell = -1;
+
+        for ( const int moveIndex : moves ) {
+            if ( !Board::GetCell( moveIndex )->GetQuality() ) {
+                double cellThreatLevel = 0.0;
+
+                for ( const Unit * enemy : enemies ) {
+                    const double ratio = static_cast<double>( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) ) / std::max( 1u, enemy->GetMoveRange() );
+                    if ( ratio < 1.0 ) {
+                        std::cout << ratio << " ";
+                        cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - ratio );
+                    }
+                }
+                std::cout << std::endl;
+
+                if ( cellThreatLevel < lowestThreat ) {
+                    lowestThreat = cellThreatLevel;
+                    targetCell = moveIndex;
+                }
+            }
+        }
+        return targetCell;
     }
 
     void Normal::HeroesPreBattle( HeroBase & hero, bool isAttacking )
@@ -362,31 +390,11 @@ namespace AI
             }
             else {
                 // Kiting enemy: Search for a safe spot unit can move to
-                double lowestThreat = _enemyArmyStrength;
-
-                const Indexes & moves = arena.getAllAvailableMoves( currentUnit.GetMoveRange() );
-                for ( const int moveIndex : moves ) {
-                    if ( !Board::GetCell( moveIndex )->GetQuality() ) {
-                        double cellThreatLevel = 0.0;
-
-                        for ( const Unit * enemy : enemies ) {
-                            const double ratio = static_cast<double>( Board::GetDistance( moveIndex, enemy->GetHeadIndex() ) ) / std::max( 1u, enemy->GetMoveRange() );
-                            cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - ratio );
-                        }
-
-                        if ( cellThreatLevel < lowestThreat ) {
-                            lowestThreat = cellThreatLevel;
-                            target.cell = moveIndex;
-                        }
-                    }
-                }
+                target.cell = FindLowestThreatMove( arena.getAllAvailableMoves( currentUnit.GetMoveRange() ), currentUnit, enemies );
 
                 if ( target.cell != -1 ) {
                     actions.emplace_back( MSG_BATTLE_MOVE, currentUnit.GetUID(), target.cell );
-                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moves to " << target.cell << " threat is " << lowestThreat );
-                }
-                else {
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " archer couldn't find a good hex to move out of " << moves.size() );
+                    DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " archer kiting enemy, moving to " << target.cell );
                 }
             }
             // Worst case scenario - Skip turn
@@ -438,19 +446,37 @@ namespace AI
 
         // For walking units that don't have a target within reach, pick based on distance priority
         if ( target.unit == nullptr ) {
+            const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
             const double attackDistanceModifier = _enemyArmyStrength / STRENGTH_DISTANCE_FACTOR;
             double maxMovePriority = attackDistanceModifier * ARENASIZE * -1;
 
             for ( const Unit * enemy : enemies ) {
                 // move node pair consists of move hex index and distance
                 const std::pair<int, uint32_t> move = arena.CalculateMoveToUnit( *enemy );
+
+                if ( move.first == -1 ) // Skip unit if no path found
+                    continue;
+
                 // Do not chase after faster units that might kite away and avoid engagement
                 const uint32_t distance = ( !enemy->isArchers() && isUnitFaster( *enemy, currentUnit ) ) ? move.second + ARENAW + ARENAH : move.second;
 
                 const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
-                    target.cell = move.first;
+
+                    if ( move.second < currentUnitMoveRange * 2 ) {
+                        auto path = arena.getCurrentUnitPath( move.first, currentUnitMoveRange );
+                        target.cell = FindLowestThreatMove( path, currentUnit, enemies );
+
+                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
+                        for ( auto idx : path ) {
+                            std::cout << idx << " ";
+                        }
+                        std::cout << std::endl;
+                    }
+                    else {
+                        target.cell = move.first;
+                    }
                 }
             }
         }

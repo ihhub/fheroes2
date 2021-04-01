@@ -578,6 +578,12 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     return result;
 }
 
+
+Battle::Indexes Battle::Arena::getCurrentUnitPath( int32_t indexTo, uint32_t slicingRange ) const
+{
+    return _pathfinder.buildPath( indexTo, slicingRange );
+}
+
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
 {
     std::pair<int, uint32_t> result = {-1, MAXU16};

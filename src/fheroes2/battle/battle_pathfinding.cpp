@@ -43,6 +43,7 @@ namespace Battle
 
     void ArenaPathfinder::reset()
     {
+        _start.Set( -1, false, false );
         for ( size_t i = 0; i < _cache.size(); ++i ) {
             _cache[i].resetNode();
         }
@@ -78,16 +79,30 @@ namespace Battle
         return result;
     }
 
-    std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
+    Indexes ArenaPathfinder::buildPath( int targetCell, uint32_t slicingRange ) const
     {
-        std::list<Route::Step> path;
+        Indexes path;
+        if ( targetCell < 0 || targetCell > _cache.size() )
+            return path;
 
+        const uint32_t pathCost = _cache[targetCell]._cost;
         int currentNode = targetCell;
-        while ( currentNode != targetCell && _cache[currentNode]._cost != 0 ) {
+        uint32_t nodeCost = pathCost;
+
+        while ( !_start.contains( currentNode ) && nodeCost != 0 ) {
             const ArenaNode & node = _cache[currentNode];
-            path.emplace_front( currentNode, node._from, Board::GetDirection( node._from, currentNode ), 1 );
+            // Upper limit
+            if ( slicingRange == 0 || node._cost <= slicingRange ) {
+                path.push_back( currentNode );
+            }
             currentNode = node._from;
+            nodeCost = _cache[currentNode]._cost;
+
+            // Lower limit
+            if ( slicingRange > 0 && pathCost - nodeCost >= slicingRange )
+                break;
         }
+        std::reverse( path.begin(), path.end() );
 
         return path;
     }
@@ -98,9 +113,9 @@ namespace Battle
 
         const bool unitIsWide = unit.isWide();
 
-        const Position & startPosition = unit.GetPosition();
-        const Cell * unitHead = startPosition.GetHead();
-        const Cell * unitTail = startPosition.GetTail();
+        _start = unit.GetPosition();
+        const Cell * unitHead = _start.GetHead();
+        const Cell * unitTail = _start.GetTail();
         if ( !unitHead || ( unitIsWide && !unitTail ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
             return;
@@ -188,7 +203,7 @@ namespace Battle
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
 
                     const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
-                    const Cell * tailCell = ( unitIsWide && !startPosition.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
+                    const Cell * tailCell = ( unitIsWide && !_start.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
 
                     // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
                     if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) )
