@@ -103,10 +103,8 @@ namespace Battle
             return path;
 
         const uint32_t pathCost = _cache[targetCell]._cost;
-        if ( pathCost >= movementRange * 2 ) {
-            path.push_back( targetCell );
+        if ( pathCost >= movementRange * 2 )
             return path;
-        }
 
         int currentNode = targetCell;
         uint32_t nodeCost = pathCost;

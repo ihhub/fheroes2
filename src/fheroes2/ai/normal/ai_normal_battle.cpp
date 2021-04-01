@@ -468,10 +468,14 @@ namespace AI
                 const double unitPriority = enemy->GetScoreQuality( currentUnit ) - distance * attackDistanceModifier;
                 if ( unitPriority > maxMovePriority ) {
                     maxMovePriority = unitPriority;
-                    target.cell = FindLowestThreatMove( arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange ), currentUnit, enemies, true );
 
-                    if ( target.cell != move.first ) {
-                        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
+                    const Indexes & path = arena.CalculateTwoTurnPath( move.first, currentUnitMoveRange );
+                    if ( !path.empty() ) {
+                        target.cell = FindLowestThreatMove( path, currentUnit, enemies, true );
+                        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Going after target " << enemy->GetName() << " stopping at " << target.cell );
+                    }
+                    else {
+                        target.cell = move.first;
                     }
                 }
             }
