@@ -2443,7 +2443,7 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
             totalStrength += towerStr / 2;
         }
 
-        if ( attackingHero && ( !attackingHero->GetArmy().isFootsloggingArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
+        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
             totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
         }
         else {

@@ -169,7 +169,7 @@ public:
     double GetStrength() const;
     double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
-    bool isFootsloggingArmy() const;
+    bool isMeleeDominantArmy() const;
 
     void SetColor( int );
 

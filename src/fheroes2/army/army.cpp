@@ -1427,7 +1427,7 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     return str1 > str2;
 }
 
-bool Army::isFootsloggingArmy() const
+bool Army::isMeleeDominantArmy() const
 {
     double meleeInfantry = 0;
     double other = 0;
