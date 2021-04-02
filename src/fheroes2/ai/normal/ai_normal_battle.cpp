@@ -52,9 +52,26 @@ namespace AI
         int32_t fromIndex = -1;
         double attackValue = -INT32_MAX;
         double positionValue = -INT32_MAX;
+        bool canReach = false;
     };
 
-    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender, bool withinReach )
+    bool ValueHasImproved( double primary, double primaryMax, double secondary, double secondaryMax )
+    {
+        return primaryMax < primary || ( secondaryMax < secondary && std::fabs( primaryMax - primary ) < 0.001 );
+    }
+
+    bool IsOutcomeImproved( const MeleeAttackOutcome & newOutcome, const MeleeAttackOutcome & previous )
+    {
+        // Composite priority criteria:
+        // Primary - Enemy is within move range and can be attacked this turn
+        // Secondary - Postion quality (to attack from, or protect friendly unit)
+        // Tertiary - Enemy unit threat
+        return ( newOutcome.canReach && !previous.canReach )
+               || ( newOutcome.canReach == previous.canReach
+                    && ValueHasImproved( newOutcome.positionValue, previous.positionValue, newOutcome.attackValue, previous.attackValue ) );
+    }
+
+    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender )
     {
         MeleeAttackOutcome outcome;
 
@@ -63,17 +80,20 @@ namespace AI
         const Indexes & around = Board::GetAroundIndexes( defender );
         for ( const int cell : around ) {
             // Check if we can reach the target and pick best position to attack from
-            if ( !arena.hexIsPassable( cell ) || ( withinReach && arena.CalculateMoveDistance( cell ) > currentUnitMoveRange ) )
+            if ( !arena.hexIsPassable( cell ) )
                 continue;
 
             const int cellQuality = Board::GetCell( cell )->GetQuality();
             const double attackValue = Board::OptimalAttackValue( attacker, defender, cell );
+            const bool canReach = arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
 
-            // Pick target if either position is improved or unit is higher value at the same position quality
-            if ( outcome.positionValue < cellQuality || ( outcome.attackValue < attackValue && std::fabs( outcome.positionValue - cellQuality ) < 0.001 ) ) {
+            // Pick target if either position has improved or unit is higher value at the same position quality
+            if ( ( !outcome.canReach && canReach )
+                 || ( outcome.canReach == canReach && ValueHasImproved( cellQuality, outcome.positionValue, attackValue, outcome.attackValue ) ) ) {
                 outcome.attackValue = attackValue;
                 outcome.positionValue = cellQuality;
                 outcome.fromIndex = cell;
+                outcome.canReach = canReach;
             }
         }
         return outcome;
@@ -460,9 +480,9 @@ namespace AI
         double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, true );
-            if ( outcome.positionValue > attackPositionValue
-                 || ( outcome.attackValue > attackHighestValue && std::fabs( attackPositionValue - outcome.positionValue ) < 0.001 ) ) {
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+
+            if ( outcome.canReach && ValueHasImproved( outcome.positionValue, attackPositionValue, outcome.attackValue, attackHighestValue ) ) {
                 attackHighestValue = outcome.attackValue;
                 attackPositionValue = outcome.positionValue;
                 target.cell = outcome.fromIndex;
@@ -534,33 +554,33 @@ namespace AI
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
-        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
         // 1. Check if there's a target within our half of the battlefield
-        double attackHighestValue = -_enemyArmyStrength;
-        double attackPositionValue = -_enemyArmyStrength;
+        MeleeAttackOutcome attackOption;
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
             if ( ( !_defendingCastle && Board::DistanceFromOriginX( outcome.fromIndex, currentUnit.isReflect() ) > ARENAW / 2 )
                  || ( _defendingCastle && !Board::isCastleIndex( outcome.fromIndex ) ) )
                 continue;
 
-            if ( outcome.positionValue > attackPositionValue
-                 || ( outcome.attackValue > attackHighestValue && std::fabs( attackPositionValue - outcome.positionValue ) < 0.001 ) ) {
-                attackHighestValue = outcome.attackValue;
-                attackPositionValue = outcome.positionValue;
+            if ( IsOutcomeImproved( outcome, attackOption ) ) {
+                attackOption.attackValue = outcome.attackValue;
+                attackOption.positionValue = outcome.positionValue;
                 target.cell = outcome.fromIndex;
-                target.unit = enemy;
+
+                if ( outcome.canReach ) {
+                    attackOption.canReach = true;
+                    target.unit = enemy;
+                }
             }
         }
 
         // 2. Check if our archer units are under threat - overwrite target and protect
-        double maxArcherValue = defenceDistanceModifier * ARENASIZE * -1;
-        double maxEnemyThreat = -_enemyArmyStrength;
+        MeleeAttackOutcome protectOption;
         for ( const Unit * unitToDefend : friendly ) {
             if ( unitToDefend->GetUID() == currentUnit.GetUID() || !unitToDefend->isArchers() ) {
                 continue;
@@ -581,36 +601,33 @@ namespace AI
                     continue;
                 }
 
-                const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
-                const bool canReach = arena.CalculateMoveDistance( outcome.fromIndex ) <= currentUnitMoveRange;
-                const bool hadAnotherTarget = target.unit != NULL;
+                MeleeAttackOutcome outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+                outcome.positionValue = archerValue;
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << outcome.attackValue );
 
-                // Composite priority criteria:
-                // Primary - Enemy is within move range
-                // Secondary - Archer unit value
-                // Tertiary - Enemy unit threat
-                if ( ( canReach && !hadAnotherTarget )
-                     || ( canReach == hadAnotherTarget
-                          && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < outcome.attackValue ) ) ) ) {
+                if ( IsOutcomeImproved( outcome, protectOption ) ) {
+                    protectOption.attackValue = outcome.attackValue;
+                    protectOption.positionValue = archerValue;
                     target.cell = outcome.fromIndex;
-                    target.unit = enemy;
-                    maxArcherValue = archerValue;
-                    maxEnemyThreat = outcome.attackValue;
+
+                    if ( outcome.canReach ) {
+                        protectOption.canReach = true;
+                        target.unit = enemy;
+                    }
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Target selected " << enemy->GetName() << " cell " << target.cell << " archer value " << archerValue );
                 }
             }
 
             // 4. No enemies found anywhere - move in closer to the friendly ranged unit
-            if ( !target.unit && maxArcherValue < archerValue ) {
+            if ( !target.unit && protectOption.positionValue < archerValue ) {
                 target.cell = move.first;
-                maxArcherValue = archerValue;
+                protectOption.positionValue = archerValue;
             }
         }
 
         if ( target.unit ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << " threat level: " << maxEnemyThreat );
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " defending against " << target.unit->GetName() << " threat level: " << protectOption.attackValue );
         }
         else if ( target.cell != -1 ) {
             DEBUG_LOG( DBG_BATTLE, DBG_INFO, currentUnit.GetName() << " protecting friendly archer, moving to " << target.cell );
