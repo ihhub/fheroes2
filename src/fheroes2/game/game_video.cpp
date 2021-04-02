@@ -96,7 +96,7 @@ namespace Video
             if ( hideCursor ) {
                 Cursor::Get().Show();
             }
-             return 0;
+            return 0;
         }
 
         const fheroes2::ScreenPaletteRestorer screenRestorer;
