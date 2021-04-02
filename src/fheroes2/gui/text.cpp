@@ -263,7 +263,7 @@ int TextUnicode::CharWidth( int c, int f )
             return 6;
     }
     else {
-        fheroes2::AGG::GetUnicodeLetter( c, f ).width();
+        return fheroes2::AGG::GetUnicodeLetter( c, f ).width();
     }
 }
 
