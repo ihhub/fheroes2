@@ -265,7 +265,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask( uint8_t object, uint32_t fromIn
     auto addObject = []() {
         Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
 
-        if ( fadeTask.object == MP2::OBJ_BOAT ) {
+        if ( tile.GetObject() != fadeTask.object && fadeTask.object == MP2::OBJ_BOAT ) {
             tile.setBoat( Direction::RIGHT );
         }
     };
