@@ -385,11 +385,16 @@ namespace
 
     void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
     {
-        const int textChoiceWidth = 150;
+        const int textAwardWidth = 180;
+
+        // if there are more than 3 awards, we need to reduce the offset between text so that it doesn't overflow out of the text box
+        const size_t awardCount = obtainedAwards.size();
+        const int yOffset = obtainedAwards.size() > 3 ? 16 : 22;
+
         Text award;
-        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
+        for ( size_t i = 0; i < awardCount; ++i ) {
             award.Set( obtainedAwards[i].ToString(), Font::BIG );
-            award.Blit( top.x + 425, top.y + 100 + 16 * i - award.h() / 2, textChoiceWidth );
+            award.Blit( top.x + 425, top.y + 100 + yOffset * i - award.h() / 2, textAwardWidth );
         }
     }
 
