@@ -98,6 +98,7 @@ namespace Campaign
 
         CampaignAwardData();
         CampaignAwardData( int id, uint32_t type, uint32_t subType );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
 
