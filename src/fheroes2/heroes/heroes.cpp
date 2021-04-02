@@ -1527,6 +1527,11 @@ bool Heroes::MayStillMove( void ) const
     return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
+bool Heroes::MayCastAdventureSpells() const
+{
+    return !Modes( GUARDIAN ) && !isFreeman();
+}
+
 bool Heroes::isValid( void ) const
 {
     return hid != UNKNOWN;

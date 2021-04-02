@@ -81,6 +81,7 @@ namespace Battle
         virtual std::string GetShotString() const override;
         virtual std::string GetSpeedString() const override;
         virtual u32 GetHitPointsLeft() const override;
+        virtual uint32_t GetMissingHitPoints() const;
         virtual u32 GetAffectedDuration( u32 ) const override;
         virtual u32 GetSpeed() const override;
         virtual int GetMorale() const override;
@@ -122,6 +123,7 @@ namespace Battle
         int GetArmyColor( void ) const;
         virtual int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
+        int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
@@ -140,6 +142,7 @@ namespace Battle
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
+        std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
         void ResetBlind( void );
         void SetBlindAnswer( bool value );
@@ -189,6 +192,7 @@ namespace Battle
         int GetSpellMagic( bool force = false ) const;
 
         const HeroBase * GetCommander( void ) const;
+        const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
         static bool isHandFighting( const Unit &, const Unit & );
 

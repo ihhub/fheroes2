@@ -310,12 +310,16 @@ bool Troops::CanJoinTroop( const Monster & mons ) const
     return it != end();
 }
 
-bool Troops::JoinTroop( const Monster & mons, u32 count )
+bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst )
 {
     if ( mons.isValid() && count ) {
-        iterator it = std::find_if( begin(), end(), [&mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); } );
-        if ( it == end() )
-            it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
+        auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
+        auto findMonster = [&mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); };
+
+        iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
+        if ( it == end() ) {
+            it = emptySlotFirst ? std::find_if( begin(), end(), findMonster ) : std::find_if( begin(), end(), findEmptySlot );
+        }
 
         if ( it != end() ) {
             if ( ( *it )->isValid() )
@@ -341,7 +345,7 @@ bool Troops::CanJoinTroops( const Troops & troops2 ) const
     if ( this == &troops2 )
         return false;
 
-    Army troops1;
+    Troops troops1;
     troops1.Insert( *this );
 
     for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it )
@@ -637,7 +641,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     // there's still unmerged units left and there's empty room for them
     for ( size_t slot = 0; slot < troops2.size(); ++slot ) {
         Troop * rightTroop = troops2[slot];
-        if ( rightTroop && rightTroop->isValid() && JoinTroop( *rightTroop ) ) {
+        if ( rightTroop && JoinTroop( rightTroop->GetMonster(), rightTroop->GetCount(), true ) ) {
             rightTroop->Reset();
         }
     }
@@ -1245,7 +1249,7 @@ u32 Army::GetDefense( void ) const
 
 double Army::GetStrength( void ) const
 {
-    double res = 0;
+    double result = ( commander ) ? commander->GetSpellcastStrength() : 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
     // Hero bonus calculation is slow, cache it
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
@@ -1268,14 +1272,11 @@ double Army::GetStrength( void ) const
 
             strength *= 1 + armyLuck / 24.0;
 
-            res += strength;
+            result += strength;
         }
     }
 
-    // hero spell STR
-    // composition
-
-    return res;
+    return result;
 }
 
 double Army::getReinforcementValue( const Troops & reinforcement ) const

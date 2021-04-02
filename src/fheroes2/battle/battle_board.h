@@ -80,6 +80,7 @@ namespace Battle
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
+        static int DistanceFromOriginX( int32_t index, bool reflect );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
         static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );

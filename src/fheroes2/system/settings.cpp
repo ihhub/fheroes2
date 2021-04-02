@@ -686,7 +686,12 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
+#if defined( FHEROES2_VITA )
+    const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
+    file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
+#else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+#endif
     if ( !file )
         return false;
 
@@ -900,6 +905,8 @@ ListDirs Settings::GetRootDirs( void )
     const std::string & home = System::GetHomeDirectory( "fheroes2" );
     if ( !home.empty() )
         dirs.push_back( home );
+
+    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }

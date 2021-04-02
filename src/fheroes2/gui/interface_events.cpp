@@ -81,14 +81,13 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() ) {
+    else if ( path.isValid() && hero->MayStillMove() ) {
         SetFocus( hero );
         RedrawFocus();
 
         hero->SetMove( true );
-        if ( hero->MayStillMove() ) {
-            Cursor::Get().SetThemes( Cursor::WAIT );
-        }
+
+        Cursor::Get().SetThemes( Cursor::WAIT );
     }
 }
 

@@ -50,8 +50,3 @@ void StatusBar::Redraw( void )
     Hide();
     Show();
 }
-
-const std::string & StatusBar::GetMessage( void ) const
-{
-    return prev;
-}

@@ -28,7 +28,6 @@
 #include <vector>
 
 #include "army_troop.h"
-#include "bitmodes.h"
 #include "players.h"
 
 #ifdef WITH_XML
@@ -75,7 +74,7 @@ public:
     u32 GetUniqueCount( void ) const;
 
     bool JoinTroop( const Troop & );
-    bool JoinTroop( const Monster &, u32 );
+    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
     bool CanJoinTroop( const Monster & ) const;
 
     void JoinTroops( Troops & );

@@ -18,26 +18,41 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifdef FHEROES2_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-SDL_FLAGS := $(shell sdl-config --cflags)
-else
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-endif
+TARGET	:= fheroes2
+MAKE	:= make
 
-TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
-LIBENGINE := ../engine/libengine.a
-LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
-CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
+PROJECT_TITLE := Free Heroes of Might & Magic II
+PROJECT_TITLEID := FHOMM0002
+PROJECT := fheroes2
 
-all: $(TARGETS)
+all: package
 
-$(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) -c $@.cpp $(CFLAGS)
-	$(CXX) -o $@ $@.o $(LIBS)
+package: $(PROJECT).vpk
 
-.PHONY: clean
+$(PROJECT).vpk: eboot.bin param.sfo
+	vita-pack-vpk -s param.sfo -b eboot.bin \
+		--add files/images/platform/psv/sce_sys/icon0.png=sce_sys/icon0.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/bg.png=sce_sys/livearea/contents/bg.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/startup.png=sce_sys/livearea/contents/startup.png \
+		--add files/images/platform/psv/sce_sys/livearea/contents/template.xml=sce_sys/livearea/contents/template.xml \
+	$(PROJECT).vpk
+
+eboot.bin: $(PROJECT).velf
+	vita-make-fself $(PROJECT).velf eboot.bin
+
+param.sfo:
+	vita-mksfoex -s TITLE_ID="$(PROJECT_TITLEID)" "$(PROJECT_TITLE)" param.sfo
+
+$(PROJECT).velf: $(PROJECT).elf
+	arm-vita-eabi-strip -g $<
+	vita-elf-create $< $@
+
+$(PROJECT).elf:
+	$(MAKE) -f Makefile -C src FHEROES2_VITA=true RELEASE=true WITHOUT_UNICODE=true
+	$(MAKE) -f files/lang/Makefile
+	@cp src/dist/$(TARGET) ./$(PROJECT).elf
 
 clean:
-	rm -f *.o *.exe $(TARGETS)
+	$(MAKE) -f Makefile -C src clean
+	$(MAKE) -f files/lang/Makefile clean
+	@rm -rf $(TARGET).velf $(TARGET).elf $(OBJS) $(TARGET).elf.unstripped.elf $(TARGET).vpk eboot.bin sce_sys/param.sfo ./param.sfo

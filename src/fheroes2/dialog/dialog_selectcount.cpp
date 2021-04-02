@@ -72,16 +72,6 @@ public:
         pos.height = 30;
     }
 
-    u32 Min( void )
-    {
-        return vmin;
-    }
-
-    u32 Max( void )
-    {
-        return vmax;
-    }
-
     void SetCur( u32 v )
     {
         vcur = v;
@@ -270,6 +260,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
+    le.OpenVirtualKeyboard();
     bool redraw = true;
 
     // message loop
@@ -310,6 +301,7 @@ bool Dialog::InputString( const std::string & header, std::string & res )
 
     cursor.SetThemes( oldcursor );
     cursor.Hide();
+    le.CloseVirtualKeyboard();
 
     return !res.empty();
 }
