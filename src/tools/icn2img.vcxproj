@@ -213,7 +213,7 @@
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_tool.h" />
     <ClInclude Include="..\engine\localevent.h" />
-    <ClCompile Include="..\engine\logging.h" />
+    <ClInclude Include="..\engine\logging.h" />
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\pal.h" />
     <ClInclude Include="..\engine\palette_h2.h" />
