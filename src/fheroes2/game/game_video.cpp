@@ -85,11 +85,18 @@ namespace Video
         const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
-            AGG::ResetMixer();
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                 if ( it->size() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
+        }
+
+        // Detect some non-existing video such such using 1 FPS or the size of 20 x 20 pixels.
+        if ( video.fps() < 2 || ( video.width() == 20 && video.height() == 20 ) ) {
+            if ( hideCursor ) {
+                Cursor::Get().Show();
+            }
+            return 0;
         }
 
         const fheroes2::ScreenPaletteRestorer screenRestorer;
