@@ -392,7 +392,11 @@ namespace AI
         const Force & friendlyForce = arena.GetForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
-            if ( !unit || !unit->AllowApplySpell( spell, _commander ) || arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
+            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
+                continue;
+
+            // For dead units: skip if there's another unit standing on top
+            if ( !unit->isValid() && arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();
