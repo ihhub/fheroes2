@@ -1006,52 +1006,6 @@ int Interface::Basic::HumanTurn( bool isload )
             gameArea.SetRedraw();
         }
 
-        if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
-            auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-            if ( MP2::OBJ_ZERO != fadeTask.object ) {
-                if ( fadeTask.fadeOut ) {
-                    if ( fadeTask.alpha > 20 ) {
-                        fadeTask.alpha -= 20;
-                    }
-                    else {
-                        fadeTask.fadeOut = false;
-                        fadeTask.alpha = 0;
-                        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
-                        if ( tile.GetObject() == fadeTask.object ) {
-                            tile.RemoveObjectSprite();
-                            tile.SetObject( MP2::OBJ_ZERO );
-                        }
-
-                        if ( !fadeTask.fadeIn ) {
-                            fadeTask.object = MP2::OBJ_ZERO;
-                        }
-                    }
-                }
-                else if ( fadeTask.fadeIn ) {
-                    if ( fadeTask.alpha == 0 ) {
-                        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
-                        if ( MP2::OBJ_BOAT == fadeTask.object ) {
-                            tile.setBoat( Direction::RIGHT );
-                        }
-                    }
-
-                    if ( fadeTask.alpha < 235 ) {
-                        fadeTask.alpha += 20;
-                    }
-                    else {
-                        fadeTask.fadeIn = false;
-                        fadeTask.alpha = 255;
-                        fadeTask.object = MP2::OBJ_ZERO;
-                    }
-                }
-                else {
-                    assert( 0 ); // incorrect fading animation setup!
-                }
-
-                gameArea.SetRedraw();
-            }
-        }
-
         if ( NeedRedraw() ) {
             cursor.Hide();
             Redraw();
@@ -1070,8 +1024,6 @@ int Interface::Basic::HumanTurn( bool isload )
             Game::DialogPlayers( conf.CurrentColor(),
                                  _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
         }
-
-        Game::ObjectFadeAnimation::FinishFadeTask();
 
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
