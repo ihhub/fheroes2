@@ -389,7 +389,7 @@ namespace
         Text award;
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
             award.Set( obtainedAwards[i].ToString(), Font::BIG );
-            award.Blit( top.x + 425, top.y + 100 + 22 * i - award.h() / 2, textChoiceWidth );
+            award.Blit( top.x + 425, top.y + 100 + 16 * i - award.h() / 2, textChoiceWidth );
         }
     }
 
