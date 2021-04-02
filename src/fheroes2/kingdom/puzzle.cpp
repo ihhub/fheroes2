@@ -35,14 +35,6 @@
 #include "ui_window.h"
 #include "world.h"
 
-namespace
-{
-    const uint8_t zone1_index[] = {0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47};
-    const uint8_t zone2_index[] = {7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40};
-    const uint8_t zone3_index[] = {14, 15, 32, 33};
-    const uint8_t zone4_index[] = {20, 21, 26, 27};
-}
-
 bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
 void ZoneOpenFirstTiles( Puzzle &, u32 &, const std::vector<uint8_t> & );
 void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
@@ -51,10 +43,10 @@ void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, s32, s32 );
 
 Puzzle::Puzzle()
 {
-    std::copy( zone1_index, zone1_index + ARRAY_COUNT( zone1_index ), zone1_order );
-    std::copy( zone2_index, zone2_index + ARRAY_COUNT( zone2_index ), zone2_order );
-    std::copy( zone3_index, zone3_index + ARRAY_COUNT( zone3_index ), zone3_order );
-    std::copy( zone4_index, zone4_index + ARRAY_COUNT( zone4_index ), zone4_order );
+    zone1_order = { 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
+    zone2_order = { 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };
+    zone3_order = { 14, 15, 32, 33 };
+    zone4_order = { 20, 21, 26, 27 };
 
     Rand::Shuffle( zone1_order );
     Rand::Shuffle( zone2_order );
@@ -290,7 +282,6 @@ StreamBase & operator>>( StreamBase & msg, Puzzle & pzl )
     pzl = str.c_str();
 
     uint8_t size;
-    uint8_t tile;
 
     msg >> size;
     pzl.zone1_order.resize( size );
