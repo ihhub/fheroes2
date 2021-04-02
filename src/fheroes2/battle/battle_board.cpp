@@ -868,7 +868,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::Get( 0, 4 ) ) );
-    std::random_shuffle( objs.begin(), objs.end() );
+    Rand::Shuffle( objs );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
