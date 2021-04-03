@@ -377,6 +377,15 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
+double HeroBase::GetSpellcastStrength() const
+{
+    if ( GetSpells().empty() )
+        return 0.0;
+
+    // Benchmark for strength is 20 power * 20 knowledge (200 spell points) is 3000.0
+    return GetPower() * sqrt( GetSpellPoints() / 2 ) * 15.0;
+}
+
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
 {
     const Kingdom & kingdom = world.GetKingdom( GetColor() );

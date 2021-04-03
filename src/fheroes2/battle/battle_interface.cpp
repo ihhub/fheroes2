@@ -2049,7 +2049,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             statusMsg = _( "Invalid Teleport Destination" );
             return Cursor::WAR_NONE;
         }
-        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCommander() ) ) {
+        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
             StringReplace( statusMsg, "%{monster}", b_stats->GetName() );
@@ -4775,7 +4775,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     switch ( res ) {
     // cast
     case 1: {
-        const HeroBase * hero = _currentUnit ? _currentUnit->GetCommander() : NULL;
+        const HeroBase * hero = _currentUnit->GetCurrentOrArmyCommander();
+
         if ( hero ) {
             if ( hero->HaveSpellBook() ) {
                 std::string msg;
@@ -4813,8 +4814,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     } break;
 
     // retreat
-    case 2:
-        if ( _currentUnit->GetCommander() && arena.CanRetreatOpponent( _currentUnit->GetColor() ) ) {
+    case 2: {
+        if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to retreat?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 a.push_back( Command( MSG_BATTLE_RETREAT ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
@@ -4823,11 +4824,11 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         }
         else
             Dialog::Message( "", _( "Retreat disabled" ), Font::BIG, Dialog::OK );
-        break;
+    } break;
 
     // surrender
-    case 3:
-        if ( arena.CanSurrenderOpponent( _currentUnit->GetColor() ) ) {
+    case 3: {
+        if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             const HeroBase * enemy = arena.GetCommander( arena.GetCurrentColor(), true );
 
             if ( enemy ) {
@@ -4843,7 +4844,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         }
         else
             Dialog::Message( "", _( "Surrender disabled" ), Font::BIG, Dialog::OK );
-        break;
+    } break;
 
     default:
         break;

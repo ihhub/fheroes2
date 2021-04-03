@@ -937,7 +937,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         dst_pt.y += 12;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        text.Set( std::to_string( hero.GetMobilityIndexSprite() ) + "/" + std::to_string( hero.GetMovePoints() ) + "/" + std::to_string( hero.GetMaxMovePoints() ) );
+        text.Set( std::to_string( hero.GetMovePoints() ) + "/" + std::to_string( hero.GetMaxMovePoints() ) );
         dst_pt.x += 75;
         text.Blit( dst_pt.x, dst_pt.y );
 

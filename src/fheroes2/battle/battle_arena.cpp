@@ -433,7 +433,7 @@ void Battle::Arena::Turns( void )
         Force::UpdateOrderUnits( *army1, *army2, *armies_order );
 
     while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, true ) ) ) {
-        current_color = current_troop->GetArmyColor();
+        current_color = current_troop->GetCurrentOrArmyColor();
 
         // first turn: castle and catapult action
         if ( castle ) {
@@ -470,7 +470,7 @@ void Battle::Arena::Turns( void )
     // can skip move ?
     if ( Settings::Get().ExtBattleSoftWait() ) {
         while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false ) ) ) {
-            current_color = current_troop->GetArmyColor();
+            current_color = current_troop->GetCurrentOrArmyColor();
 
             // set bridge passable
             if ( bridge )

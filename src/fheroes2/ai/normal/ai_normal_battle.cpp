@@ -53,16 +53,19 @@ namespace AI
         double positionValue = -INT32_MAX;
     };
 
-    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender )
+    MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender, bool withinReach )
     {
         MeleeAttackOutcome outcome;
 
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
 
-        const Indexes & around = Board::GetAroundIndexes( defender );
+        Indexes around = Board::GetAroundIndexes( defender );
+        // Shuffle to make equal quality moves a bit unpredictable
+        Rand::Shuffle( around );
+
         for ( const int cell : around ) {
             // Check if we can reach the target and pick best position to attack from
-            if ( !arena.hexIsPassable( cell ) || arena.CalculateMoveDistance( cell ) > currentUnitMoveRange )
+            if ( !arena.hexIsPassable( cell ) || ( withinReach && arena.CalculateMoveDistance( cell ) > currentUnitMoveRange ) )
                 continue;
 
             const int cellQuality = Board::GetCell( cell )->GetQuality();
@@ -215,6 +218,7 @@ namespace AI
         _myShooterStr = 0;
         _enemyShooterStr = 0;
         _enemyAverageSpeed = 0;
+        _enemySpellStrength = 0;
         _highestDamageExpected = 0;
         _considerRetreat = false;
 
@@ -302,6 +306,17 @@ namespace AI
                 if ( !attackerIgnoresCover )
                     _myShooterStr /= 2;
             }
+        }
+
+        // TODO: replace this hacky code for archers
+        // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
+        if ( _commander && _myShooterStr > 1 ) {
+            _myShooterStr += _commander->GetSpellcastStrength();
+        }
+        const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
+        if ( enemyCommander ) {
+            _enemySpellStrength = enemyCommander->GetSpellcastStrength();
+            _enemyShooterStr += _enemySpellStrength;
         }
 
         // When we have in 10 times stronger army than the enemy we could consider it as an overpowered and we most likely will win.
@@ -414,7 +429,7 @@ namespace AI
         double attackPositionValue = -_enemyArmyStrength;
 
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, true );
             if ( outcome.positionValue > attackPositionValue
                  || ( outcome.attackValue > attackHighestValue && std::fabs( attackPositionValue - outcome.positionValue ) < 0.001 ) ) {
                 attackHighestValue = outcome.attackValue;
@@ -475,6 +490,7 @@ namespace AI
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
         const int myHeadIndex = currentUnit.GetHeadIndex();
+        const uint32_t currentUnitMoveRange = currentUnit.GetMoveRange();
 
         const double defenceDistanceModifier = _myArmyStrength / STRENGTH_DISTANCE_FACTOR;
 
@@ -482,11 +498,11 @@ namespace AI
         double attackHighestValue = -_enemyArmyStrength;
         double attackPositionValue = -_enemyArmyStrength;
         for ( const Unit * enemy : enemies ) {
-            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
+            const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
 
             // Allow to move only within our half of the battlefield. If in castle make sure to stay inside.
-            if ( ( !_defendingCastle && arena.CalculateMoveDistance( outcome.fromIndex ) <= ARENAW / 2 )
-                 || ( _defendingCastle && Board::isCastleIndex( outcome.fromIndex ) ) )
+            if ( ( !_defendingCastle && Board::DistanceFromOriginX( outcome.fromIndex, currentUnit.isReflect() ) > ARENAW / 2 )
+                 || ( _defendingCastle && !Board::isCastleIndex( outcome.fromIndex ) ) )
                 continue;
 
             if ( outcome.positionValue > attackPositionValue
@@ -521,8 +537,8 @@ namespace AI
                     continue;
                 }
 
-                const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy );
-                const bool canReach = outcome.fromIndex != -1;
+                const MeleeAttackOutcome & outcome = BestAttackOutcome( arena, currentUnit, *enemy, false );
+                const bool canReach = arena.CalculateMoveDistance( outcome.fromIndex ) <= currentUnitMoveRange;
                 const bool hadAnotherTarget = target.unit != NULL;
 
                 DEBUG_LOG( DBG_BATTLE, DBG_TRACE, " - Found enemy, cell " << cell << " threat " << outcome.attackValue );
@@ -531,7 +547,7 @@ namespace AI
                 // Primary - Enemy is within move range
                 // Secondary - Archer unit value
                 // Tertiary - Enemy unit threat
-                if ( ( canReach != hadAnotherTarget && canReach )
+                if ( ( canReach && !hadAnotherTarget )
                      || ( canReach == hadAnotherTarget
                           && ( maxArcherValue < archerValue || ( std::fabs( maxArcherValue - archerValue ) < 0.001 && maxEnemyThreat < outcome.attackValue ) ) ) ) {
                     target.cell = outcome.fromIndex;

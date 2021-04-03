@@ -315,6 +315,9 @@ public:
 
     void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+
+    bool MayCastAdventureSpells() const;
+
     virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
