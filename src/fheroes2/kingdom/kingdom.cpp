@@ -168,18 +168,14 @@ void Kingdom::ActionNewDay( void )
         // handle resource bonus campaign awards
         const Settings & conf = Settings::Get();
         if ( isControlHuman() && conf.GameType() & Game::TYPE_CAMPAIGN ) {
-            std::vector<Funds> resourceBonuses;
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
                 if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
                     continue;
 
-                resourceBonuses.emplace_back( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
+                AddFundsResource( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
             }
-
-            for ( size_t i = 0; i < resourceBonuses.size(); ++i )
-                AddFundsResource( resourceBonuses[i] );
         }
     }
 
@@ -485,6 +481,7 @@ Recruits & Kingdom::GetRecruits( void )
 
 void Kingdom::UpdateRecruits( void )
 {
+    bool hasSpecialHireableHero = false;
     if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
 
@@ -493,10 +490,12 @@ void Kingdom::UpdateRecruits( void )
                 continue;
 
             recruits.SetHero1( world.GetFreemanHeroesSpecial( obtainedAwards[i]._subType ) );
+            hasSpecialHireableHero = true;
             break;
         }
     }
-    else {
+
+    if ( !hasSpecialHireableHero ) {
         const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
         recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
     }

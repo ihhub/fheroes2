@@ -1468,13 +1468,13 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
-    int forceJoinType = JOIN_NONE;
 
-    // check for creature alliance/bane campaign awards, campaign only and of course, for human players
+    // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
     if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
+        int forceJoinType = JOIN_NONE;
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
@@ -1503,10 +1503,10 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
             if ( found )
                 break;
         }
-    }
 
-    if ( forceJoinType != JOIN_NONE ) {
-        return JoinCount( forceJoinType, troop.GetCount() );
+        if ( forceJoinType != JOIN_NONE ) {
+            return JoinCount( forceJoinType, troop.GetCount() );
+        }
     }
 
     if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {

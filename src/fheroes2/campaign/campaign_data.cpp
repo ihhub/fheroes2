@@ -151,7 +151,7 @@ namespace Campaign
         : CampaignAwardData( id, type, subType, 1, 0, customName )
     {}
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName /*= ""*/ )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName )
         : _id( id )
         , _type( type )
         , _subType( subType )
@@ -167,21 +167,21 @@ namespace Campaign
 
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
-            return Monster( _subType ).GetName() + std::string( " bane" );
+            return _( Monster( _subType ).GetName() + std::string( " bane" ) );
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
-            return Monster( _subType ).GetName() + std::string( " alliance" );
+            return _( Monster( _subType ).GetName() + std::string( " alliance" ) );
         case CampaignAwardData::TYPE_GET_ARTIFACT:
-            return Artifact( _subType ).GetName();
+            return _( Artifact( _subType ).GetName() );
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
-            return "Carry-over forces";
+            return _( "Carry-over forces" );
         case CampaignAwardData::TYPE_RESOURCE_BONUS:
-            return Resource::String( _subType ) + std::string( " bonus" );
+            return _( Resource::String( _subType ) + std::string( " bonus" ) );
         case CampaignAwardData::TYPE_GET_SPELL:
-            return Spell( _subType ).GetName();
+            return _( Spell( _subType ).GetName() );
         case CampaignAwardData::TYPE_HIREABLE_HERO:
-            return Heroes( _subType, 0 ).GetName();
+            return _( Heroes( _subType, 0 ).GetName() );
         case CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
-            return Heroes( _subType, 0 ).GetName() + std::string( " defeated" );
+            return _( Heroes( _subType, 0 ).GetName() + std::string( " defeated" ) );
         default:
             assert( 0 ); // some new/unhandled award
         }
