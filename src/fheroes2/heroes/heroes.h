@@ -180,6 +180,15 @@ public:
         CHAMPION = 0x08000000
     };
 
+    struct RedrawIndex
+    {
+        int32_t topOnBottom = -1;
+        int32_t topOnDirectionBottom = -1;
+        int32_t topOnDirection = -1;
+        int32_t objectsOnBottom = -1;
+        int32_t objectsOnDirectionBottom = -1;
+    };
+
     Heroes();
     Heroes( int heroid, int rc );
 
@@ -339,16 +348,12 @@ public:
 
     Point MovementDirection() const;
 
-    int32_t DrawTopOnBottomIndex() const;
-    int32_t DrawTopOnDirectionBottomIndex() const;
-    int32_t DrawTopOnDirectionIndex() const;
-    int32_t DrawObjectsOnBottomIndex() const;
-    int32_t DrawObjectsOnDirectionBottomIndex() const;
-
+    const RedrawIndex & GetRedrawIndex() const;
     void InitDependencesTiles();
-    void UpdateDependencesTiles( const int32_t index );
+    void UpdateTop( const Maps::Tiles & tile );
+    void UpdateObjects( const Maps::Tiles & tile );
     void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
@@ -406,11 +411,7 @@ private:
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
 
-    int32_t drawTopOnBottomIndex;
-    int32_t drawTopOnDirectionBottomIndex;
-    int32_t drawTopOnDirectionIndex;
-    int32_t drawObjectsOnBottomIndex;
-    int32_t drawObjectsOnDirectionBottomIndex;
+    struct RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
 
