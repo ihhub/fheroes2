@@ -31,31 +31,27 @@
 #include "logging.h"
 #include "mus.h"
 #include "puzzle.h"
+#include "rand.h"
 #include "ui_window.h"
 #include "world.h"
 
-const u8 zone1_index[] = {0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47};
-const u8 zone2_index[] = {7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40};
-const u8 zone3_index[] = {14, 15, 32, 33};
-const u8 zone4_index[] = {20, 21, 26, 27};
-
-bool ClosedTilesExists( const Puzzle &, const u8 *, const u8 * );
-void ZoneOpenFirstTiles( Puzzle &, u32 &, const u8 *, const u8 * );
+bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
+void ZoneOpenFirstTiles( Puzzle &, u32 &, const std::vector<uint8_t> & );
 void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
 void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
 void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, s32, s32 );
 
 Puzzle::Puzzle()
 {
-    std::copy( zone1_index, zone1_index + ARRAY_COUNT( zone1_index ), zone1_order );
-    std::copy( zone2_index, zone2_index + ARRAY_COUNT( zone2_index ), zone2_order );
-    std::copy( zone3_index, zone3_index + ARRAY_COUNT( zone3_index ), zone3_order );
-    std::copy( zone4_index, zone4_index + ARRAY_COUNT( zone4_index ), zone4_order );
+    zone1_order = { 0, 1, 2, 3, 4, 5, 6, 11, 12, 17, 18, 23, 24, 29, 30, 35, 36, 41, 42, 43, 44, 45, 46, 47 };
+    zone2_order = { 7, 8, 9, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 38, 39, 40 };
+    zone3_order = { 14, 15, 32, 33 };
+    zone4_order = { 20, 21, 26, 27 };
 
-    std::random_shuffle( zone1_order, zone1_order + ARRAY_COUNT( zone1_order ) );
-    std::random_shuffle( zone2_order, zone2_order + ARRAY_COUNT( zone2_order ) );
-    std::random_shuffle( zone3_order, zone3_order + ARRAY_COUNT( zone3_order ) );
-    std::random_shuffle( zone4_order, zone4_order + ARRAY_COUNT( zone4_order ) );
+    Rand::Shuffle( zone1_order );
+    Rand::Shuffle( zone2_order );
+    Rand::Shuffle( zone3_order );
+    Rand::Shuffle( zone4_order );
 }
 
 Puzzle & Puzzle::operator=( const char * str )
@@ -75,17 +71,17 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
     u32 open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
     u32 need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
 
-    if ( need_puzzle && ClosedTilesExists( *this, zone1_order, ARRAY_COUNT_END( zone1_order ) ) )
-        ZoneOpenFirstTiles( *this, need_puzzle, zone1_order, ARRAY_COUNT_END( zone1_order ) );
+    if ( need_puzzle && ClosedTilesExists( *this, zone1_order ) )
+        ZoneOpenFirstTiles( *this, need_puzzle, zone1_order );
 
-    if ( need_puzzle && ClosedTilesExists( *this, zone2_order, ARRAY_COUNT_END( zone2_order ) ) )
-        ZoneOpenFirstTiles( *this, need_puzzle, zone2_order, ARRAY_COUNT_END( zone2_order ) );
+    if ( need_puzzle && ClosedTilesExists( *this, zone2_order ) )
+        ZoneOpenFirstTiles( *this, need_puzzle, zone2_order );
 
-    if ( need_puzzle && ClosedTilesExists( *this, zone3_order, ARRAY_COUNT_END( zone3_order ) ) )
-        ZoneOpenFirstTiles( *this, need_puzzle, zone3_order, ARRAY_COUNT_END( zone3_order ) );
+    if ( need_puzzle && ClosedTilesExists( *this, zone3_order ) )
+        ZoneOpenFirstTiles( *this, need_puzzle, zone3_order );
 
-    if ( need_puzzle && ClosedTilesExists( *this, zone4_order, ARRAY_COUNT_END( zone4_order ) ) )
-        ZoneOpenFirstTiles( *this, need_puzzle, zone4_order, ARRAY_COUNT_END( zone4_order ) );
+    if ( need_puzzle && ClosedTilesExists( *this, zone4_order ) )
+        ZoneOpenFirstTiles( *this, need_puzzle, zone4_order );
 }
 
 void Puzzle::ShowMapsDialog( void ) const
@@ -113,22 +109,23 @@ void Puzzle::ShowMapsDialog( void ) const
     }
 }
 
-bool ClosedTilesExists( const Puzzle & pzl, const u8 * it1, const u8 * it2 )
+bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
 {
-    while ( it1 < it2 )
-        if ( !pzl.test( *it1++ ) )
+    for ( const uint8_t tile : zone ) {
+        if ( !pzl.test( tile ) )
             return true;
+    }
     return false;
 }
 
-void ZoneOpenFirstTiles( Puzzle & pzl, u32 & opens, const u8 * it1, const u8 * it2 )
+void ZoneOpenFirstTiles( Puzzle & pzl, u32 & opens, const std::vector<uint8_t> & zone )
 {
     while ( opens ) {
-        const u8 * it = it1;
-        while ( it < it2 && pzl.test( *it ) )
+        std::vector<uint8_t>::const_iterator it = zone.begin();
+        while ( it != zone.end() && pzl.test( *it ) )
             ++it;
 
-        if ( it != it2 ) {
+        if ( it != zone.end() ) {
             pzl.set( *it );
             --opens;
         }
@@ -258,21 +255,21 @@ StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
     msg << pzl.to_string<char, std::char_traits<char>, std::allocator<char> >();
 
     // orders
-    msg << static_cast<u8>( ARRAY_COUNT( pzl.zone1_order ) );
-    for ( u32 ii = 0; ii < ARRAY_COUNT( pzl.zone1_order ); ++ii )
-        msg << pzl.zone1_order[ii];
+    msg << static_cast<uint8_t>( pzl.zone1_order.size() );
+    for ( const uint8_t tile : pzl.zone1_order )
+        msg << tile;
 
-    msg << static_cast<u8>( ARRAY_COUNT( pzl.zone2_order ) );
-    for ( u32 ii = 0; ii < ARRAY_COUNT( pzl.zone2_order ); ++ii )
-        msg << pzl.zone2_order[ii];
+    msg << static_cast<uint8_t>( pzl.zone2_order.size() );
+    for ( const uint8_t tile : pzl.zone2_order )
+        msg << tile;
 
-    msg << static_cast<u8>( ARRAY_COUNT( pzl.zone3_order ) );
-    for ( u32 ii = 0; ii < ARRAY_COUNT( pzl.zone3_order ); ++ii )
-        msg << pzl.zone3_order[ii];
+    msg << static_cast<uint8_t>( pzl.zone3_order.size() );
+    for ( const uint8_t tile : pzl.zone3_order )
+        msg << tile;
 
-    msg << static_cast<u8>( ARRAY_COUNT( pzl.zone4_order ) );
-    for ( u32 ii = 0; ii < ARRAY_COUNT( pzl.zone4_order ); ++ii )
-        msg << pzl.zone4_order[ii];
+    msg << static_cast<uint8_t>( pzl.zone4_order.size() );
+    for ( const uint8_t tile : pzl.zone4_order )
+        msg << tile;
 
     return msg;
 }
@@ -284,22 +281,26 @@ StreamBase & operator>>( StreamBase & msg, Puzzle & pzl )
     msg >> str;
     pzl = str.c_str();
 
-    u8 size;
+    uint8_t size;
 
     msg >> size;
-    for ( u32 ii = 0; ii < size; ++ii )
+    pzl.zone1_order.resize( size );
+    for ( uint8_t ii = 0; ii < size; ++ii )
         msg >> pzl.zone1_order[ii];
 
     msg >> size;
-    for ( u32 ii = 0; ii < size; ++ii )
+    pzl.zone2_order.resize( size );
+    for ( uint8_t ii = 0; ii < size; ++ii )
         msg >> pzl.zone2_order[ii];
 
     msg >> size;
-    for ( u32 ii = 0; ii < size; ++ii )
+    pzl.zone3_order.resize( size );
+    for ( uint8_t ii = 0; ii < size; ++ii )
         msg >> pzl.zone3_order[ii];
 
     msg >> size;
-    for ( u32 ii = 0; ii < size; ++ii )
+    pzl.zone4_order.resize( size );
+    for ( uint8_t ii = 0; ii < size; ++ii )
         msg >> pzl.zone4_order[ii];
 
     return msg;

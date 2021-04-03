@@ -39,10 +39,10 @@ public:
     void Update( u32 open, u32 total );
     void ShowMapsDialog( void ) const;
 
-    u8 zone1_order[24];
-    u8 zone2_order[16];
-    u8 zone3_order[4];
-    u8 zone4_order[4];
+    std::vector<uint8_t> zone1_order;
+    std::vector<uint8_t> zone2_order;
+    std::vector<uint8_t> zone3_order;
+    std::vector<uint8_t> zone4_order;
 };
 
 StreamBase & operator<<( StreamBase &, const Puzzle & );

@@ -22,10 +22,12 @@
 #ifndef H2RAND_H
 #define H2RAND_H
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <functional>
 #include <list>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -35,6 +37,13 @@ namespace Rand
 {
     uint32_t Get( uint32_t from, uint32_t to = 0 );
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
+    std::mt19937 & CurrentThreadRandomDevice();
+
+    template <typename T>
+    void Shuffle( std::vector<T> & vec )
+    {
+        std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+    }
 
     template <typename T>
     const T & Get( const std::vector<T> & vec )

@@ -59,7 +59,10 @@ namespace AI
 
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
 
-        const Indexes & around = Board::GetAroundIndexes( defender );
+        Indexes around = Board::GetAroundIndexes( defender );
+        // Shuffle to make equal quality moves a bit unpredictable
+        Rand::Shuffle( around );
+
         for ( const int cell : around ) {
             // Check if we can reach the target and pick best position to attack from
             if ( !arena.hexIsPassable( cell ) || ( withinReach && arena.CalculateMoveDistance( cell ) > currentUnitMoveRange ) )
