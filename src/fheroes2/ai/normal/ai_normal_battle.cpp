@@ -122,8 +122,6 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        const Force & enemyForce = arena.GetForce( _myColor, true );
-
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _myColor );
 
         // Step 2. Check retreat/surrender condition
