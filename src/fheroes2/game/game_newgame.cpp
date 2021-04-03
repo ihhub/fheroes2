@@ -104,6 +104,8 @@ int Game::NewCampaign()
     // Reset all sound and music before playing videos
     AGG::ResetMixer();
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+
+    AGG::ResetMixer();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 

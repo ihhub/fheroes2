@@ -353,12 +353,14 @@ int GameOver::Result::LocalCheckGameOver( void )
                     res = Game::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {
+                    AGG::ResetMixer();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
                     res = Game::HIGHSCORES;
                 }
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );
+                AGG::ResetMixer();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
                 res = Game::MAINMENU;
             }
