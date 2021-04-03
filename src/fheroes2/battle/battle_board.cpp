@@ -651,6 +651,12 @@ bool Battle::Board::isNegativeDistance( s32 index1, s32 index2 )
     return ( index1 % ARENAW ) - ( index2 % ARENAW ) < 0;
 }
 
+int Battle::Board::DistanceFromOriginX( int32_t index, bool reflect )
+{
+    const int xPos = index % ARENAW;
+    return std::max( 1, reflect ? ARENAW - xPos - 1 : xPos );
+}
+
 bool Battle::Board::isValidDirection( s32 index, int dir )
 {
     if ( isValidIndex( index ) ) {
@@ -868,7 +874,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::Get( 0, 4 ) ) );
-    std::random_shuffle( objs.begin(), objs.end() );
+    Rand::Shuffle( objs );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );

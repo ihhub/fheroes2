@@ -209,7 +209,7 @@ void Interface::ButtonsArea::SetButtonStatus()
     else
         buttonMovement.enable();
 
-    if ( currentHero == NULL || !currentHero->HaveSpellBook() )
+    if ( currentHero == NULL || !currentHero->HaveSpellBook() || !currentHero->MayCastAdventureSpells() )
         buttonSpell.disable();
     else
         buttonSpell.enable();

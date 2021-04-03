@@ -74,7 +74,7 @@ public:
     u32 GetUniqueCount( void ) const;
 
     bool JoinTroop( const Troop & );
-    bool JoinTroop( const Monster &, u32 );
+    bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
     bool CanJoinTroop( const Monster & ) const;
 
     void JoinTroops( Troops & );
@@ -169,6 +169,7 @@ public:
     double GetStrength() const;
     double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
+    bool isMeleeDominantArmy() const;
 
     void SetColor( int );
 
