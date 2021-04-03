@@ -28,6 +28,7 @@
 #include "resource.h"
 #include "skill.h"
 #include "spell.h"
+#include "translations.h"
 #include <cassert>
 
 namespace Campaign
