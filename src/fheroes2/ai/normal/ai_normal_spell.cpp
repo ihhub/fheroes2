@@ -184,7 +184,7 @@ namespace AI
 
         // Make sure this spell can be applied to the current unit (skip check for dispell estimation)
         if ( !forDispell
-             && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && !spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
+             && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
                   || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
         }
