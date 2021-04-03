@@ -92,7 +92,7 @@ namespace Video
         }
 
         // Detect some non-existing video such such using 1 FPS or the size of 20 x 20 pixels.
-        if ( std::fabs(video.fps() - 1.0 ) < 0.001 || ( video.width() == 20 && video.height() == 20 ) ) {
+        if ( std::fabs( video.fps() - 1.0 ) < 0.001 || ( video.width() == 20 && video.height() == 20 ) ) {
             if ( hideCursor ) {
                 Cursor::Get().Show();
             }
