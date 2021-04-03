@@ -1,4 +1,10 @@
 version 0.9.2 (04 April 2021)
+- fix incorrect window resolution in fullscreen mode for SDL 2
+- fix Choose Your Lord video sound
+- improve castle garrison estimation for AI
+- remove the mobility index sprite info from the hero Quick Info dialog
+- prohibit the guardian hero from casting adventure spells
+- fix merging of the castle guardian army
 - fix AI defensive unit behavior
 - add AI estimation of hero spell strength
 - force units into empty slots first during merge

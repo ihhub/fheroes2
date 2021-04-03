@@ -690,9 +690,11 @@ namespace fheroes2
                 LoadModifiedICN( ICN::FONT );
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::FONT].size() );
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    _icnVsSprite[id][i].resize( _icnVsSprite[ICN::FONT][i].width() * 2, _icnVsSprite[ICN::FONT][i].height() * 2 );
-                    Resize( _icnVsSprite[ICN::FONT][i], _icnVsSprite[id][i], true );
-                    _icnVsSprite[id][i].setPosition( _icnVsSprite[ICN::FONT][i].x() * 2, _icnVsSprite[ICN::FONT][i].y() * 2 );
+                    const Sprite & in = _icnVsSprite[ICN::FONT][i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() * 2, in.height() * 2 );
+                    Resize( in, out, true );
+                    out.setPosition( in.x() * 2, in.y() * 2 );
                 }
                 return true;
             default:
