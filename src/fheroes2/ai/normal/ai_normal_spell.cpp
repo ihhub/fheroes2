@@ -57,18 +57,29 @@ namespace AI
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        double bestHeuristic = 0;
-        auto checkSelectBestSpell = [this, &bestHeuristic, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+        // Hero should conserve spellpoints if already spent more than half or his army is stronger
+        // Threshold is 0.04 when armies are equal (= 20% of single unit)
+        double spellValueThreshold = _myArmyStrength * _myArmyStrength / _enemyArmyStrength * 0.04;
+        if ( _enemyShooterStr / _enemyArmyStrength > 0.5 ) {
+            spellValueThreshold *= 0.5;
+        }
+        if ( _commander->GetSpellPoints() * 2 < _commander->GetMaxSpellPoints() ) {
+            spellValueThreshold *= 2;
+        }
+
+        auto checkSelectBestSpell = [this, &retreating, &spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
-            const double spellPointValue = outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const bool ignoreThreshold = retreating || spell.isResurrect();
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell );
 
-            if ( spellPointValue > bestHeuristic ) {
-                bestHeuristic = spellPointValue;
+            if ( spellPointValue > bestSpell.value && ( ignoreThreshold || spellPointValue > spellValueThreshold ) ) {
                 bestSpell.spellID = spell.GetID();
                 bestSpell.cell = outcome.cell;
+                bestSpell.value = spellPointValue;
             }
         };
 
@@ -96,8 +107,9 @@ namespace AI
             }
         }
 
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Spell threshold is " << spellValueThreshold << ", unit ratio is " << ( spellValueThreshold * 5 / _myArmyStrength ) );
         if ( bestSpell.spellID != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell is " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestSpell.value );
         }
 
         return bestSpell;
