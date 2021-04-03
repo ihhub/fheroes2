@@ -441,6 +441,11 @@ CastleHeroes World::GetHeroes( const Castle & castle ) const
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
 }
 
+void World::RescanAllHeroesPathPassable() const
+{
+    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
+}
+
 int World::GetDay( void ) const
 {
     return LastDay() ? DAYOFWEEK : day % DAYOFWEEK;
@@ -1216,9 +1221,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     }
 
     w.PostLoad();
-
-    // heroes postfix
-    std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 
     return msg;
 }
