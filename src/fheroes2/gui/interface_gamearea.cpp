@@ -273,7 +273,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     for ( const int32_t index : drawList ) {
         const Maps::Tiles & tile = world.GetTiles( index );
-        const int object = tile.GetObject();
         Heroes * hero = tile.GetHeroes();
         if ( hero == nullptr ) {
             continue;

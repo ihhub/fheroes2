@@ -590,8 +590,8 @@ void Heroes::InitDependencesTiles()
         }
     }
     _redrawIndex.topOnDirection = ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) )
-                                  ? Maps::GetDirectionIndex( centerIndex, direction )
-                                  : -1;
+                                      ? Maps::GetDirectionIndex( centerIndex, direction )
+                                      : -1;
 }
 
 void Heroes::UpdateObjects( const Maps::Tiles & tile )
@@ -683,7 +683,8 @@ void Heroes::RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, c
     }
 }
 
-const Heroes::RedrawIndex & Heroes::GetRedrawIndex() const {
+const Heroes::RedrawIndex & Heroes::GetRedrawIndex() const
+{
     return _redrawIndex;
 }
 
