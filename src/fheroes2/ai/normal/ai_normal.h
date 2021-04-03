@@ -95,7 +95,7 @@ namespace AI
         SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
-        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;

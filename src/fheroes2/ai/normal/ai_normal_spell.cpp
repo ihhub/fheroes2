@@ -178,14 +178,16 @@ namespace AI
         return bestOutcome;
     }
 
-    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast ) const
+    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
-        // Make sure this spell can be applied to current unit
-        if ( target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) {
+        const int spellID = spell.GetID();
+
+        // Make sure this spell can be applied to the current unit (skip check for dispell estimation)
+        if ( !forDispell
+             && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && !spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
+                  || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
         }
-
-        const int spellID = spell.GetID();
 
         double ratio = 0.0;
         switch ( spellID ) {
@@ -204,7 +206,7 @@ namespace AI
             ratio = 0.15;
             break;
         case Spell::BERSERKER: {
-            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
+            if ( targetIsLast )
                 return 0.0;
             ratio = 0.95;
             break;
@@ -216,7 +218,7 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
+            if ( targetIsLast )
                 return 0.0;
             ratio = 1.5;
             break;
@@ -329,7 +331,7 @@ namespace AI
         const bool isMassSpell = spell.isMassActions();
 
         for ( const Unit * unit : targets ) {
-            bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft ), unit->GetHeadIndex(), isMassSpell );
+            bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
         }
         return bestOutcome;
     }
@@ -349,7 +351,7 @@ namespace AI
             double unitValue = 0;
             const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
             for ( const Spell & spellOnFriend : spellList ) {
-                const double effectValue = spellEffectValue( spellOnFriend, *unit, false );
+                const double effectValue = spellEffectValue( spellOnFriend, *unit, false, true );
                 if ( spellOnFriend.isApplyToEnemies() ) {
                     unitValue += effectValue;
                 }
@@ -371,7 +373,7 @@ namespace AI
                 double unitValue = 0;
                 const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
                 for ( const Spell & spellOnEnemy : spellList ) {
-                    const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit );
+                    const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit, true );
                     unitValue += spellOnEnemy.isApplyToFriends() ? effectValue : -effectValue;
                 }
 
