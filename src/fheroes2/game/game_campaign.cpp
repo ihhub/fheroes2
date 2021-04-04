@@ -383,7 +383,7 @@ namespace
         }
     }
 
-    void DrawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
+    void drawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
     {
         const int textAwardWidth = 180;
 
@@ -499,7 +499,7 @@ namespace
 
     // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
     // the rest will be applied based on the situation required
-    void ApplyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
+    void applyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
         Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
@@ -516,11 +516,8 @@ namespace
                 humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
                 break;
             case Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
-                for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-                    if ( !*it )
-                        continue;
-
-                    Kingdom & kingdom = world.GetKingdom( ( **it ).GetColor() );
+                for ( const Player * player : sortedPlayers ) {
+                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
@@ -670,7 +667,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
-    DrawObtainedCampaignAwards( GetObtainedCampaignAwards( campaignSaveData ), top );
+    drawObtainedCampaignAwards( GetObtainedCampaignAwards( campaignSaveData ), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
@@ -741,7 +738,7 @@ int Game::SelectCampaignScenario()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
 
-            ApplyObtainedCampaignAwards( chosenScenarioID, GetObtainedCampaignAwards( campaignSaveData ) );
+            applyObtainedCampaignAwards( chosenScenarioID, GetObtainedCampaignAwards( campaignSaveData ) );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );

@@ -89,6 +89,8 @@ namespace Campaign
         };
 
         // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
+        // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
+        // also usable when we have to remove specific awards when completing a mission (PoL campaign)
         int _id;
         uint32_t _type;
         uint32_t _subType;
