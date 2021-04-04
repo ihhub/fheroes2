@@ -51,6 +51,7 @@ namespace AI
     {
         int spellID = -1;
         int32_t cell = -1;
+        double value = 0.0;
     };
 
     struct SpellcastOutcome

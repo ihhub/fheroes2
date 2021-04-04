@@ -125,8 +125,6 @@ namespace AI
         // Step 1. Analyze current battle state and update variables
         analyzeBattleState( arena, currentUnit );
 
-        const Force & enemyForce = arena.GetForce( _myColor, true );
-
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, currentUnit.GetName() << " start their turn. Side: " << _myColor );
 
         // Step 2. Check retreat/surrender condition
@@ -147,11 +145,9 @@ namespace AI
         }
 
         // Step 3. Calculate spell heuristics
-
-        // Hero should conserve spellpoints if fighting against monsters or AI and has advantage
-        const bool myOverpoweredArmy = _myArmyStrength > _enemyArmyStrength * 10;
-        if ( !( myOverpoweredArmy && enemyForce.GetControl() == CONTROL_AI ) && isCommanderCanSpellcast( arena, _commander ) ) {
+        if ( isCommanderCanSpellcast( arena, _commander ) ) {
             const SpellSeletion & bestSpell = selectBestSpell( arena, false );
+
             if ( bestSpell.spellID != -1 ) {
                 actions.emplace_back( MSG_BATTLE_CAST, bestSpell.spellID, bestSpell.cell );
                 return actions;
