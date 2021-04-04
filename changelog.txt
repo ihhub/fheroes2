@@ -1,4 +1,9 @@
 version 0.9.2 (04 April 2021)
+- fast AI units should try to get the first strike
+- fix sphinx missing rewards
+- reset paralyze state when receiving spell damage
+- randomize attack position of AI monsters
+- fix missing hero paths after loading a save
 - fix incorrect window resolution in fullscreen mode for SDL 2
 - fix Choose Your Lord video sound
 - improve castle garrison estimation for AI
