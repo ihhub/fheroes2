@@ -324,11 +324,16 @@ namespace
 
         // if there are more than 3 awards, we need to reduce the offset between text so that it doesn't overflow out of the text box
         const size_t awardCount = obtainedAwards.size();
-        const int yOffset = obtainedAwards.size() > 3 ? 16 : 22;
+        const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
+        const int yOffset = awardCount > 3 ? 16 : 22;
 
         Text award;
-        for ( size_t i = 0; i < awardCount; ++i ) {
-            award.Set( obtainedAwards[i].ToString(), Font::BIG );
+        for ( size_t i = 0; i < indexEnd; ++i ) {
+            if ( i < 3 )
+                award.Set( obtainedAwards[i].ToString(), Font::BIG );
+            else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
+                award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
+
             award.Blit( top.x + 425, top.y + 100 + yOffset * i - award.h() / 2, textAwardWidth );
         }
     }
