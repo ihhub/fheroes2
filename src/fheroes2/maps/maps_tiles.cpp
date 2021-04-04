@@ -1566,7 +1566,7 @@ bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, c
     case ICN::TREFALL:
         return ( icnIndex == 13 || icnIndex == 10 || icnIndex == 3 || icnIndex == 0 );
     case ICN::MTNDSRT:
-        return ( icnIndex == 45 || icnIndex == 55 || icnIndex == 32 );
+        return ( icnIndex == 45 || icnIndex == 55 || icnIndex == 32 || icnIndex == 38 || icnIndex == 26 );
     case ICN::MTNMULT:
         return ( icnIndex == 11 );
     case ICN::TREFIR:

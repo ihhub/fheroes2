@@ -596,16 +596,13 @@ void Heroes::InitDependencesTiles()
 
 void Heroes::UpdateObjects( const Maps::Tiles & tile )
 {
-    const int object = tile.GetObject();
-    if ( MP2::OBJ_HEROES == object ) {
-        const Heroes * hero = tile.GetHeroes();
-        if ( hero == nullptr ) {
-            return;
-        }
-        const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
-        if ( _redrawIndex.objectsOnBottom == redrawIndex.objectsOnDirectionBottom ) {
-            _redrawIndex.objectsOnBottom = -1;
-        }
+    const Heroes * hero = tile.GetHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
+    const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
+    if ( _redrawIndex.objectsOnBottom == redrawIndex.objectsOnDirectionBottom ) {
+        _redrawIndex.objectsOnBottom = -1;
     }
 }
 

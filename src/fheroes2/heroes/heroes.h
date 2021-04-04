@@ -313,10 +313,10 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
+    bool MayCastAdventureSpells() const;
+
     void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-
-    bool MayCastAdventureSpells() const;
 
     virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
@@ -414,7 +414,7 @@ private:
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
 
-    struct RedrawIndex _redrawIndex;
+    RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
 
