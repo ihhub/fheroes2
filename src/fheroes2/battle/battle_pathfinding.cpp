@@ -83,12 +83,11 @@ namespace Battle
     {
         Indexes path;
 
-        size_t target = static_cast<size_t>( targetCell );
-        if ( target >= _cache.size() )
+        if ( static_cast<size_t>( targetCell ) >= _cache.size() )
             return path;
 
-        int currentNode = target;
-        while ( !_start.contains( currentNode ) && _cache[currentNode]._cost != 0 ) {
+        int currentNode = targetCell;
+        while ( _cache[currentNode]._cost != 0 && !_start.contains( currentNode ) ) {
             const ArenaNode & node = _cache[currentNode];
             path.push_back( currentNode );
             currentNode = node._from;
@@ -101,18 +100,17 @@ namespace Battle
     Indexes ArenaPathfinder::findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const
     {
         Indexes path;
-        const size_t target = static_cast<size_t>( targetCell );
-        if ( target >= _cache.size() )
+        if ( static_cast<size_t>( targetCell ) >= _cache.size() )
             return path;
 
-        const uint32_t pathCost = _cache[target]._cost;
+        const uint32_t pathCost = _cache[targetCell]._cost;
         if ( pathCost >= movementRange * 2 )
             return path;
 
-        int currentNode = target;
+        int currentNode = targetCell;
         uint32_t nodeCost = pathCost;
 
-        while ( !_start.contains( currentNode ) && nodeCost != 0 ) {
+        while ( nodeCost != 0 && !_start.contains( currentNode ) ) {
             const ArenaNode & node = _cache[currentNode];
             // Upper limit
             if ( movementRange == 0 || node._cost <= movementRange ) {

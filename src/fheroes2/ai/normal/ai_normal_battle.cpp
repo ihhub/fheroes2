@@ -36,7 +36,6 @@
 #include "speed.h"
 
 #include <cassert>
-#include <limits>
 
 using namespace Battle;
 
@@ -45,7 +44,7 @@ namespace AI
     // Usual distance between units at the start of the battle is 10-14 tiles
     // 20% of maximum value lost for every tile travelled to make sure 4 tiles difference matters
     const double STRENGTH_DISTANCE_FACTOR = 5.0;
-    const std::vector<int> underWallsIndicies = {7, 28, 49, 72, 95};
+    const std::vector<int> underWallsIndicies = { 7, 28, 49, 72, 95 };
 
     struct MeleeAttackOutcome
     {
@@ -73,7 +72,7 @@ namespace AI
 
     MeleeAttackOutcome BestAttackOutcome( const Arena & arena, const Unit & attacker, const Unit & defender )
     {
-        MeleeAttackOutcome outcome;
+        MeleeAttackOutcome bestOutcome;
 
         const uint32_t currentUnitMoveRange = attacker.GetMoveRange();
 
@@ -83,25 +82,25 @@ namespace AI
             if ( !arena.hexIsPassable( cell ) )
                 continue;
 
-            const int cellQuality = Board::GetCell( cell )->GetQuality();
-            const double attackValue = Board::OptimalAttackValue( attacker, defender, cell );
-            const bool canReach = arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
+            MeleeAttackOutcome current;
+            current.positionValue = Board::GetCell( cell )->GetQuality();
+            current.attackValue = Board::OptimalAttackValue( attacker, defender, cell );
+            current.canReach = arena.CalculateMoveDistance( cell ) <= currentUnitMoveRange;
 
             // Pick target if either position has improved or unit is higher value at the same position quality
-            if ( ( !outcome.canReach && canReach )
-                 || ( outcome.canReach == canReach && ValueHasImproved( cellQuality, outcome.positionValue, attackValue, outcome.attackValue ) ) ) {
-                outcome.attackValue = attackValue;
-                outcome.positionValue = cellQuality;
-                outcome.fromIndex = cell;
-                outcome.canReach = canReach;
+            if ( IsOutcomeImproved( current, bestOutcome ) ) {
+                bestOutcome.attackValue = current.attackValue;
+                bestOutcome.positionValue = current.positionValue;
+                bestOutcome.fromIndex = cell;
+                bestOutcome.canReach = current.canReach;
             }
         }
-        return outcome;
+        return bestOutcome;
     }
 
     int32_t FindMoveToRetreat( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
     {
-        double lowestThreat = std::numeric_limits<double>::max();
+        double lowestThreat = 0.0;
         int32_t targetCell = -1;
 
         for ( const int moveIndex : moves ) {
@@ -117,7 +116,7 @@ namespace AI
                 cellThreatLevel += enemy->GetScoreQuality( currentUnit ) * ( 1.0 - static_cast<double>( dist ) / range );
             }
 
-            if ( cellThreatLevel < lowestThreat ) {
+            if ( targetCell == -1 || cellThreatLevel < lowestThreat ) {
                 lowestThreat = cellThreatLevel;
                 targetCell = moveIndex;
             }
@@ -127,7 +126,7 @@ namespace AI
 
     int32_t FindNextTurnAttackMove( const Indexes & moves, const Unit & currentUnit, const Battle::Units & enemies )
     {
-        double lowestThreat = std::numeric_limits<double>::max();
+        double lowestThreat = 0.0;
         int32_t targetCell = -1;
 
         for ( const int moveIndex : moves ) {
@@ -144,7 +143,7 @@ namespace AI
             }
 
             // Also allow to move up closer if there's still no threat
-            if ( cellThreatLevel < lowestThreat || std::fabs( cellThreatLevel ) < 0.001 ) {
+            if ( targetCell == -1 || cellThreatLevel < lowestThreat || std::fabs( cellThreatLevel ) < 0.001 ) {
                 lowestThreat = cellThreatLevel;
                 targetCell = moveIndex;
             }
