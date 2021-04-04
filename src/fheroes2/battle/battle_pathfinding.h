@@ -59,12 +59,15 @@ namespace Battle
         ArenaPathfinder();
         virtual void reset() override;
         void calculate( const Unit & unit );
-        std::list<Route::Step> buildPath( int targetCell ) const;
+        Indexes buildPath( int targetCell ) const;
+        Indexes findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 
     private:
         bool nodeIsPassable( const ArenaNode & node ) const;
+
+        Position _start;
     };
 }

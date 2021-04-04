@@ -578,9 +578,14 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     return result;
 }
 
+Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
+{
+    return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
+}
+
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
 {
-    std::pair<int, uint32_t> result = {-1, MAXU16};
+    std::pair<int, uint32_t> result = { -1, MAXU16 };
 
     const Position & pos = target.GetPosition();
     const Cell * head = pos.GetHead();
