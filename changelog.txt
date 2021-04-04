@@ -1,4 +1,8 @@
 version 0.9.2 (04 April 2021)
+- fix full artifact bag message
+- add missing dot to sentences in few windows
+- display Lighthouse count in Kingdom Overview
+- add proper Large Obstacle generation for battlefields
 - fast AI units should try to get the first strike
 - fix sphinx missing rewards
 - reset paralyze state when receiving spell damage
