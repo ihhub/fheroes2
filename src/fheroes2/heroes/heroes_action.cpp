@@ -3020,14 +3020,14 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
                 else if ( art.isValid() )
                     Dialog::ArtifactInfo( "", say, art );
 
-                riddle->SetQuiet();
-                hero.SetVisited( dst_index, Visit::GLOBAL );
-
                 if ( art.isValid() )
                     hero.PickupArtifact( art );
 
                 if ( count )
                     hero.GetKingdom().AddFundsResource( res );
+
+                riddle->SetQuiet();
+                hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
                 Dialog::Message(
