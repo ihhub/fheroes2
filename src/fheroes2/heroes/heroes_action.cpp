@@ -1693,7 +1693,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
-        Dialog::Message( "", _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
     else {
         u32 cond = tile.QuantityVariant();
         Artifact art = tile.QuantityArtifact();
