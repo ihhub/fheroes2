@@ -294,7 +294,7 @@ void Interface::Basic::EventNextTown( void )
 
 int Interface::Basic::EventNewGame( void )
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
                ? Game::NEWGAME
                : Game::CANCEL;
 }
@@ -326,7 +326,7 @@ int Interface::Basic::EventSaveGame( void )
 
 int Interface::Basic::EventLoadGame( void )
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
                ? Game::LOADGAME
                : Game::CANCEL;
 }
