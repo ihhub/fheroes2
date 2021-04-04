@@ -285,7 +285,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     else
     // set obstacles
     {
-        icn_covr = Maps::ScanAroundObject( index, MP2::OBJ_CRATER ).size() ? GetCovr( world.GetTiles( index ).GetGround() ) : ICN::UNKNOWN;
+        icn_covr = Rand::Get( 0, 99 ) < 40 ? GetCovr( world.GetTiles( index ).GetGround() ) : ICN::UNKNOWN;
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
