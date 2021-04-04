@@ -1473,7 +1473,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
     if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
-        const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
+        const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
         int forceJoinType = JOIN_NONE;
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {

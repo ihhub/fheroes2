@@ -247,7 +247,6 @@ namespace Game
     int StartBattleOnly( void );
     int DisplayLoadGameDialog();
     int CompleteCampaignScenario();
-    std::vector<Campaign::CampaignAwardData> GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData );
 
     bool IsOriginalCampaignPresent();
 

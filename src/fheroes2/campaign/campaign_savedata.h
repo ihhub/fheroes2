@@ -42,11 +42,6 @@ namespace Campaign
             return _finishedMaps;
         }
 
-        const std::vector<int> & getObtainedCampaignAwards() const
-        {
-            return _obtainedCampaignAwards;
-        }
-
         int getCampaignID() const
         {
             return _campaignID;
@@ -76,6 +71,8 @@ namespace Campaign
         {
             return _carryOverTroops;
         }
+
+        const std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
 
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );

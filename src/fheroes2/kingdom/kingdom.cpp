@@ -168,7 +168,7 @@ void Kingdom::ActionNewDay( void )
         // handle resource bonus campaign awards
         const Settings & conf = Settings::Get();
         if ( isControlHuman() && conf.GameType() & Game::TYPE_CAMPAIGN ) {
-            const std::vector<Campaign::CampaignAwardData> campaignAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
+            const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
                 if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
@@ -483,7 +483,7 @@ void Kingdom::UpdateRecruits( void )
 {
     bool hasSpecialHireableHero = false;
     if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
-        const std::vector<Campaign::CampaignAwardData> obtainedAwards = Game::GetObtainedCampaignAwards( Campaign::CampaignSaveData::Get() );
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
             if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )

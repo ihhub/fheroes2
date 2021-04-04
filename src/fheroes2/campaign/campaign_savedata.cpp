@@ -19,9 +19,12 @@
  ***************************************************************************/
 
 #include "campaign_savedata.h"
+#include "artifact.h"
 #include "game.h"
+#include "heroes.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include <algorithm>
 #include <cassert>
 
@@ -91,6 +94,22 @@ namespace Campaign
         for ( size_t i = 0; i < troops.Size(); ++i ) {
             _carryOverTroops.emplace_back( *troops.GetTroop( i ) );
         }
+    }
+
+    const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
+    {
+        std::vector<Campaign::CampaignAwardData> obtainedAwards;
+
+        for ( size_t i = 0; i < _finishedMaps.size(); ++i ) {
+            const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignAwardData::getCampaignAwardData( _campaignID, _finishedMaps[i] );
+
+            for ( size_t j = 0; j < awards.size(); ++j ) {
+                if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awards[j]._id ) != _obtainedCampaignAwards.end() )
+                    obtainedAwards.emplace_back( awards[j] );
+            }
+        }
+
+        return obtainedAwards;
     }
 
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )

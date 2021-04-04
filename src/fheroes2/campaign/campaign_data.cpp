@@ -31,6 +31,57 @@
 #include "translations.h"
 #include <cassert>
 
+namespace
+{
+    std::vector<Campaign::CampaignAwardData> getRolandCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 2:
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF );
+            break;
+        case 5:
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
+            break;
+        case 6:
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
+            break;
+        case 7:
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 );
+            break;
+        case 8:
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+
+    std::vector<Campaign::CampaignAwardData> getArchibaldCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 2:
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, _( "Necromancer Guild" ) );
+            break;
+        case 3:
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
+            break;
+        case 6:
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon Alliance" ) );
+            break;
+        case 8:
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+}
+
 namespace Campaign
 {
     CampaignData::CampaignData()
@@ -39,6 +90,20 @@ namespace Campaign
         , _campaignDescription()
         , _scenarios()
     {}
+
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const int campaignID, const int scenarioID )
+    {
+        assert( campaignID >= 0 && scenarioID >= 0 );
+
+        switch ( campaignID ) {
+        case 0:
+            return getRolandCampaignAwardData( scenarioID );
+        case 1:
+            return getArchibaldCampaignAwardData( scenarioID );
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
+    }
 
     std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
@@ -168,21 +233,21 @@ namespace Campaign
 
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
-            return Monster( _subType ).GetName() + _( std::string( " bane" ) );
+            return Monster( _subType ).GetName() + std::string( _( " bane" ) );
         case CampaignAwardData::TYPE_CREATURE_ALLIANCE:
-            return Monster( _subType ).GetName() + _( std::string( " alliance" ) );
+            return Monster( _subType ).GetName() + std::string( _( " alliance" ) );
         case CampaignAwardData::TYPE_GET_ARTIFACT:
             return Artifact( _subType ).GetName();
         case CampaignAwardData::TYPE_CARRY_OVER_FORCES:
             return _( "Carry-over forces" );
         case CampaignAwardData::TYPE_RESOURCE_BONUS:
-            return Resource::String( _subType ) + _( std::string( " bonus" ) );
+            return Resource::String( _subType ) + std::string( _( " bonus" ) );
         case CampaignAwardData::TYPE_GET_SPELL:
             return Spell( _subType ).GetName();
         case CampaignAwardData::TYPE_HIREABLE_HERO:
             return Heroes( _subType, 0 ).GetName();
         case CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
-            return Heroes( _subType, 0 ).GetName() + _( std::string( " defeated" ) );
+            return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
         default:
             assert( 0 ); // some new/unhandled award
         }

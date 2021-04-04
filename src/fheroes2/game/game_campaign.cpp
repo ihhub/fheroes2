@@ -97,57 +97,6 @@ namespace
         return bonus;
     }
 
-    std::vector<Campaign::CampaignAwardData> getRolandCampaignAwardData( const int scenarioID )
-    {
-        std::vector<Campaign::CampaignAwardData> obtainableAwards;
-
-        switch ( scenarioID ) {
-        case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF );
-            break;
-        case 5:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
-            break;
-        case 6:
-            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
-            break;
-        case 7:
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 );
-            break;
-        case 8:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
-            break;
-        }
-
-        return obtainableAwards;
-    }
-
-    std::vector<Campaign::CampaignAwardData> getArchibaldCampaignAwardData( const int scenarioID )
-    {
-        std::vector<Campaign::CampaignAwardData> obtainableAwards;
-
-        switch ( scenarioID ) {
-        case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, _( "Necromancer Guild" ) );
-            break;
-        case 3:
-            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
-            break;
-        case 6:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon Alliance" ) );
-            break;
-        case 8:
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
-            break;
-        case 9:
-            obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON );
-            break;
-        }
-
-        return obtainableAwards;
-    }
-
     std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
     {
         std::vector<Campaign::ScenarioBonusData> bonus;
@@ -225,20 +174,6 @@ namespace
 
         // shouldn't be here unless we get an unsupported campaign
         return std::vector<Campaign::ScenarioBonusData>();
-    }
-
-    std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID )
-    {
-        assert( campaignID >= 0 && scenarioID >= 0 );
-
-        switch ( campaignID ) {
-        case 0:
-            return getRolandCampaignAwardData( scenarioID );
-        case 1:
-            return getArchibaldCampaignAwardData( scenarioID );
-        }
-
-        return std::vector<Campaign::CampaignAwardData>();
     }
 
     const std::string rolandCampaignDescription[10] = {
@@ -557,7 +492,8 @@ int Game::CompleteCampaignScenario()
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
 
-    const std::vector<Campaign::CampaignAwardData> obtainableAwards = getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards
+        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
@@ -576,24 +512,6 @@ int Game::CompleteCampaignScenario()
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
     saveData.setCurrentScenarioID( firstNextMap );
     return Game::SELECT_CAMPAIGN_SCENARIO;
-}
-
-std::vector<Campaign::CampaignAwardData> Game::GetObtainedCampaignAwards( const Campaign::CampaignSaveData & saveData )
-{
-    std::vector<Campaign::CampaignAwardData> obtainedAwards;
-    const std::vector<int> & finishedMaps = saveData.getFinishedMaps();
-    const std::vector<int> & obtainedAwardIDs = saveData.getObtainedCampaignAwards();
-
-    for ( size_t i = 0; i < finishedMaps.size(); ++i ) {
-        const std::vector<Campaign::CampaignAwardData> awards = getCampaignAwardData( saveData.getCampaignID(), finishedMaps[i] );
-
-        for ( size_t j = 0; j < awards.size(); ++j ) {
-            if ( std::find( obtainedAwardIDs.begin(), obtainedAwardIDs.end(), awards[j]._id ) != obtainedAwardIDs.end() )
-                obtainedAwards.emplace_back( awards[j] );
-        }
-    }
-
-    return obtainedAwards;
 }
 
 int Game::SelectCampaignScenario()
@@ -667,7 +585,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
-    drawObtainedCampaignAwards( GetObtainedCampaignAwards( campaignSaveData ), top );
+    drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
@@ -738,7 +656,7 @@ int Game::SelectCampaignScenario()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
 
-            applyObtainedCampaignAwards( chosenScenarioID, GetObtainedCampaignAwards( campaignSaveData ) );
+            applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
