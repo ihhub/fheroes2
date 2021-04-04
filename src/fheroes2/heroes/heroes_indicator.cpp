@@ -36,7 +36,9 @@ namespace fheroes2
     std::string MoraleString( const int morale )
     {
         std::string str = _( "%{morale} Morale" );
-        StringReplace( str, "%{morale}", Morale::String( morale ) );
+        std::string moraleStr = Morale::String( morale );
+        StringReplace( moraleStr, "!", "" );
+        StringReplace( str, "%{morale}", moraleStr );
         return str;
     }
 
