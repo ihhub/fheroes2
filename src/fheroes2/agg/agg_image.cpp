@@ -686,6 +686,30 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::SWAP_ARROW: {
+                const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
+                std::vector<Image> input( 4 );
+
+                const int32_t width = 43;
+                const int32_t height = 20;
+
+                for ( Image & image : input )
+                    image.resize( width, height );
+
+                Copy( original, 297, 270, input[0], 0, 0, width, height );
+                Copy( original, 295, 291, input[1], 0, 0, width, height );
+                Copy( original, 297, 363, input[2], 0, 0, width, height );
+                Copy( original, 295, 384, input[3], 0, 0, width, height );
+
+                input[1] = Flip( input[1], true, false );
+                input[3] = Flip( input[3], true, false );
+
+                Image output = ExtractCommonPattern( input );
+
+                ApplyPalette( output, 4 );
+
+                return true;
+            }
             default:
                 break;
             }
