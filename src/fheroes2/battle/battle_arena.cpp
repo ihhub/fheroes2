@@ -334,11 +334,9 @@ Battle::Arena::~Arena()
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
-    Actions actions;
-    end_turn = false;
-    const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
-
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
+
+    const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 
     // morale check right before the turn
     if ( !isImmovable ) {
@@ -346,7 +344,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             troop->SetRandomMorale();
     }
 
+    end_turn = false;
+
     while ( !end_turn ) {
+        Actions actions;
+
         if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
         }
@@ -371,6 +373,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
+        bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
+
         // apply task
         while ( actions.size() ) {
             // apply action
@@ -389,15 +393,15 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
 
             // good morale
-            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD )
-                 && !isImmovable ) {
+            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
                 actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
                 end_turn = false;
             }
         }
 
-        if ( troop->Modes( TR_SKIPMOVE | TR_MOVED ) )
+        if ( troop->Modes( TR_MOVED ) || ( troop->Modes( TR_SKIPMOVE ) && !troopHasAlreadySkippedMove ) ) {
             end_turn = true;
+        }
 
         board.Reset();
 
