@@ -48,7 +48,7 @@ public:
     SwapButton( s32, s32 );
 };
 
-enum building_t
+enum building_t : uint32_t
 {
     BUILD_NOTHING = 0x00000000,
     BUILD_THIEVESGUILD = 0x00000001,
