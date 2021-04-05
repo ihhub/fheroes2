@@ -49,7 +49,7 @@ void FontTTF::Quit( void )
 
 bool FontTTF::isValid( void ) const
 {
-    return ptr;
+    return ptr != nullptr;
 }
 
 bool FontTTF::Open( const std::string & filename, int size )
@@ -59,7 +59,7 @@ bool FontTTF::Open( const std::string & filename, int size )
     ptr = TTF_OpenFont( filename.c_str(), size );
     if ( !ptr )
         ERROR_LOG( SDL_GetError() );
-    return ptr;
+    return ptr != nullptr;
 }
 
 void FontTTF::SetStyle( int style )
