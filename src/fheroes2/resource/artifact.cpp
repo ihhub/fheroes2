@@ -594,7 +594,7 @@ int Artifact::GetSpell( void ) const
 
 void Artifact::SetSpell( int v )
 {
-    bool adv = Rand::Get( 1 );
+    const bool adv = Rand::Get( 1 ) != 0;
 
     switch ( v ) {
     case Spell::RANDOM:

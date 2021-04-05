@@ -277,7 +277,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
-                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) );
+                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) != 0 );
 
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );

@@ -184,7 +184,7 @@ void Castle::LoadFromMP2( StreamBuf st )
     }
 
     // custom troops
-    bool custom_troops = st.get();
+    bool custom_troops = ( st.get() != 0 );
     if ( custom_troops ) {
         Troop troops[5];
 

@@ -68,10 +68,10 @@ void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
         artifact = st.getLE16();
 
         // allow computer
-        computer = st.get();
+        computer = ( st.get() != 0 );
 
         // cancel event after first visit
-        cancel = st.get();
+        cancel = ( st.get() != 0 );
 
         st.skip( 10 );
 

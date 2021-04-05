@@ -1250,7 +1250,7 @@ void LocalEvent::StopSounds()
 {
     _isHiddenWindow = true;
     _isMusicPaused = Music::isPaused();
-    _isSoundPaused = Mixer::isPaused( -1 );
+    _isSoundPaused = ( Mixer::isPaused( -1 ) != 0 );
     Mixer::Pause();
     Music::Pause();
     _musicVolume = Music::Volume( 0 );
