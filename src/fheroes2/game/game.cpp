@@ -231,13 +231,13 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::PerformFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
     const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
 
     if ( object == MP2::OBJ_ZERO ) {
-        return;
+        fadeTask = FadeTask();
     }
     else if ( object == MP2::OBJ_MONSTER ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
@@ -253,7 +253,10 @@ void Game::ObjectFadeAnimation::PerformFadeTask( int object, int32_t fromIndex, 
 
         fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
     }
+}
 
+void Game::ObjectFadeAnimation::PerformFadeTask()
+{
     auto removeObject = []() {
         Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
 

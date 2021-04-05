@@ -297,7 +297,8 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PerformFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PrepareFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PerformFadeTask();
     }
 
     u32 GetStep4Player( u32, u32, u32 );
