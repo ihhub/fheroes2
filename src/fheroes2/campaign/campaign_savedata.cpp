@@ -122,7 +122,7 @@ namespace Campaign
     {
         const int loadVersion = Game::GetLoadVersion();
 
-        if ( loadVersion >= FORMAT_VERSION_090_RELEASE && loadVersion < FORMAT_VERSION_092_RELEASE ) {
+        if ( loadVersion >= FORMAT_VERSION_090_RELEASE && loadVersion < FORMAT_VERSION_093_RELEASE ) {
             std::vector<std::string> tempOldObtainedCampaignAwards;
             msg >> tempOldObtainedCampaignAwards;
         }
@@ -132,7 +132,7 @@ namespace Campaign
         if ( loadVersion >= FORMAT_VERSION_091_RELEASE )
             msg >> data._campaignID >> data._daysPassed;
 
-        if ( loadVersion >= FORMAT_VERSION_092_RELEASE )
+        if ( loadVersion >= FORMAT_VERSION_093_RELEASE )
             msg >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
         return msg;
