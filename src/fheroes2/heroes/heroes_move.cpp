@@ -649,8 +649,8 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, cons
         if ( Direction::BOTTOM != direction && Direction::TOP != direction && Maps::isValidDirection( centerIndex, direction ) ) {
             if ( Direction::TOP_LEFT != direction && Direction::TOP_RIGHT != direction
                  && Maps::isValidDirection( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) ) {
-                const Maps::Tiles & tileDirectionBottom = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) );
-                tileDirectionBottom.RedrawTop4Hero( dst, visibleTileROI, skipGround, area );
+                const Maps::Tiles & tileDirectionTop = world.GetTiles( Maps::GetDirectionIndex( Maps::GetDirectionIndex( centerIndex, direction ), Direction::TOP ) );
+                tileDirectionTop.RedrawTop4Hero( dst, visibleTileROI, skipGround, area );
             }
         }
     }
