@@ -684,8 +684,9 @@ int Interface::Basic::HumanTurn( bool isload )
     res = gameResult.LocalCheckGameOver();
 
     // warning lost all town
-    if ( myCastles.empty() )
+    if ( res == Game::CANCEL && myCastles.empty() ) {
         res = ShowWarningLostTownsDialog();
+    }
 
     // check around actions (and skip for h2 orig, bug?)
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
@@ -746,8 +747,6 @@ int Interface::Basic::HumanTurn( bool isload )
             // load game
             else if ( HotKeyPressEvent( Game::EVENT_LOADGAME ) ) {
                 res = EventLoadGame();
-                if ( Game::LOADGAME == res )
-                    break;
             }
             // file options
             else if ( HotKeyPressEvent( Game::EVENT_FILEOPTIONS ) )
@@ -860,7 +859,13 @@ int Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            res = buttonsArea.QueueEventProcessing();
+
+            const int eventProcRes = buttonsArea.QueueEventProcessing();
+
+            if ( eventProcRes != Game::CANCEL ) {
+                res = eventProcRes;
+            }
+
             isCursorOverButtons = true;
         }
         // cursor over status area
@@ -873,7 +878,12 @@ int Interface::Basic::HumanTurn( bool isload )
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            res = controlPanel.QueueEventProcessing();
+
+            const int eventProcRes = controlPanel.QueueEventProcessing();
+
+            if ( eventProcRes != Game::CANCEL ) {
+                res = eventProcRes;
+            }
         }
         // cursor over game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
@@ -981,7 +991,12 @@ int Interface::Basic::HumanTurn( bool isload )
 
                         if ( hero->isAction() ) {
                             // check game over
-                            res = gameResult.LocalCheckGameOver();
+                            const int gameOverRes = gameResult.LocalCheckGameOver();
+
+                            if ( gameOverRes != Game::CANCEL ) {
+                                res = gameOverRes;
+                            }
+
                             hero->ResetAction();
                         }
                     }
