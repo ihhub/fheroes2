@@ -1532,7 +1532,7 @@ void Maps::Tiles::RedrawBoatShadow( fheroes2::Image & dst, const Rect & visibleT
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint32_t alpha
+    const uint8_t alpha
         = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
               ? fadeTask.alpha
               : 255;
@@ -1551,7 +1551,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint32_t alpha
+    const uint8_t alpha
         = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
               ? fadeTask.alpha
               : 255;

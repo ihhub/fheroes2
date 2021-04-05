@@ -281,15 +281,15 @@ namespace Game
         {
             FadeTask();
 
-            FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
-                      bool fadeIn_, uint8_t objectTileset_ );
+            FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_, bool fadeIn_,
+                      uint8_t objectTileset_ );
 
-            uint8_t object;
+            int object;
             uint32_t objectIndex;
             uint32_t animationIndex;
-            uint32_t fromIndex;
-            uint32_t toIndex;
-            uint32_t alpha;
+            int32_t fromIndex;
+            int32_t toIndex;
+            uint8_t alpha;
             bool fadeOut;
             bool fadeIn;
             uint8_t objectTileset;
@@ -297,7 +297,7 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PerformFadeTask( uint8_t object, uint32_t fromTile, uint32_t toTile, bool fadeOut, bool fadeIn );
+        void PerformFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
     }
 
     u32 GetStep4Player( u32, u32, u32 );

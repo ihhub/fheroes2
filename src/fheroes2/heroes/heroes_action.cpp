@@ -310,8 +310,8 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             if ( remove && recruit == troop.GetCount() ) {
                 Game::PlayPickupSound();
 
-                const uint8_t tileObj = tile.GetObject();
-                const uint32_t tileIdx = tile.GetIndex();
+                const int tileObj = tile.GetObject();
+                const int32_t tileIdx = tile.GetIndex();
 
                 tile.MonsterSetCount( 0 );
                 tile.RemoveObjectSprite();
@@ -413,8 +413,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
     /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( object ) ) {
-            const uint8_t tileObj = tile.GetObject();
-            const uint32_t tileIdx = tile.GetIndex();
+            const int tileObj = tile.GetObject();
+            const int32_t tileIdx = tile.GetIndex();
 
             tile.RemoveObjectSprite();
             tile.QuantityReset();
@@ -772,8 +772,8 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
 
-        const uint8_t tileObj = tile.GetObject();
-        const uint32_t tileIdx = tile.GetIndex();
+        const int tileObj = tile.GetObject();
+        const int32_t tileIdx = tile.GetIndex();
 
         tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
@@ -1007,8 +1007,8 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
 
     Game::PlayPickupSound();
 
-    const uint8_t tileObj = tile.GetObject();
-    const uint32_t tileIdx = tile.GetIndex();
+    const int tileObj = tile.GetObject();
+    const int32_t tileIdx = tile.GetIndex();
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
@@ -1188,8 +1188,8 @@ void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index )
 
     Game::PlayPickupSound();
 
-    const uint8_t tileObj = tile.GetObject();
-    const uint32_t tileIdx = tile.GetIndex();
+    const int tileObj = tile.GetObject();
+    const int32_t tileIdx = tile.GetIndex();
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
@@ -1693,8 +1693,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
 
     Game::PlayPickupSound();
 
-    const uint8_t tileObj = tile.GetObject();
-    const uint32_t tileIdx = tile.GetIndex();
+    const int tileObj = tile.GetObject();
+    const int32_t tileIdx = tile.GetIndex();
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
@@ -1840,8 +1840,8 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            const uint8_t tileObj = tile.GetObject();
-            const uint32_t tileIdx = tile.GetIndex();
+            const int tileObj = tile.GetObject();
+            const int32_t tileIdx = tile.GetIndex();
 
             tile.RemoveObjectSprite();
             tile.QuantityReset();
@@ -1925,8 +1925,8 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
 
     Game::PlayPickupSound();
 
-    const uint8_t tileObj = tile.GetObject();
-    const uint32_t tileIdx = tile.GetIndex();
+    const int tileObj = tile.GetObject();
+    const int32_t tileIdx = tile.GetIndex();
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
@@ -2953,8 +2953,8 @@ void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
             _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
             Font::BIG, Dialog::OK );
 
-        const uint8_t tileObj = tile.GetObject();
-        const uint32_t tileIdx = tile.GetIndex();
+        const int tileObj = tile.GetObject();
+        const int32_t tileIdx = tile.GetIndex();
 
         tile.RemoveObjectSprite();
         tile.SetObject( MP2::OBJ_ZERO );
@@ -3090,8 +3090,8 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
-        const uint8_t tileObj = tile.GetObject();
-        const uint32_t tileIdx = tile.GetIndex();
+        const int tileObj = tile.GetObject();
+        const int32_t tileIdx = tile.GetIndex();
 
         tile.SetObject( hero.GetMapsObject() );
         hero.SetMapsObject( MP2::OBJ_ZERO );
