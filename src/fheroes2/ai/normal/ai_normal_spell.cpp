@@ -57,18 +57,29 @@ namespace AI
         const Units friendly( arena.GetForce( _myColor ), true );
         const Units enemies( arena.GetForce( _myColor, true ), true );
 
-        double bestHeuristic = 0;
-        auto checkSelectBestSpell = [this, &bestHeuristic, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
+        // Hero should conserve spellpoints if already spent more than half or his army is stronger
+        // Threshold is 0.04 when armies are equal (= 20% of single unit)
+        double spellValueThreshold = _myArmyStrength * _myArmyStrength / _enemyArmyStrength * 0.04;
+        if ( _enemyShooterStr / _enemyArmyStrength > 0.5 ) {
+            spellValueThreshold *= 0.5;
+        }
+        if ( _commander->GetSpellPoints() * 2 < _commander->GetMaxSpellPoints() ) {
+            spellValueThreshold *= 2;
+        }
+
+        auto checkSelectBestSpell = [this, &retreating, &spellValueThreshold, &bestSpell]( const Spell & spell, const SpellcastOutcome & outcome ) {
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
-            const double spellPointValue = outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const bool ignoreThreshold = retreating || spell.isResurrect();
+
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell );
 
-            if ( spellPointValue > bestHeuristic ) {
-                bestHeuristic = spellPointValue;
+            if ( spellPointValue > bestSpell.value && ( ignoreThreshold || spellPointValue > spellValueThreshold ) ) {
                 bestSpell.spellID = spell.GetID();
                 bestSpell.cell = outcome.cell;
+                bestSpell.value = spellPointValue;
             }
         };
 
@@ -96,8 +107,9 @@ namespace AI
             }
         }
 
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Spell threshold is " << spellValueThreshold << ", unit ratio is " << ( spellValueThreshold * 5 / _myArmyStrength ) );
         if ( bestSpell.spellID != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestHeuristic );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell is " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestSpell.value );
         }
 
         return bestSpell;
@@ -178,14 +190,16 @@ namespace AI
         return bestOutcome;
     }
 
-    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast ) const
+    double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
-        // Make sure this spell can be applied to current unit
-        if ( target.isUnderSpellEffect( spell ) || !target.AllowApplySpell( spell, _commander ) ) {
+        const int spellID = spell.GetID();
+
+        // Make sure this spell can be applied to the current unit (skip check for dispell estimation)
+        if ( !forDispell
+             && ( ( target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) && spellID != Spell::ANTIMAGIC ) || target.isUnderSpellEffect( spell )
+                  || !target.AllowApplySpell( spell, _commander ) ) ) {
             return 0.0;
         }
-
-        const int spellID = spell.GetID();
 
         double ratio = 0.0;
         switch ( spellID ) {
@@ -204,7 +218,7 @@ namespace AI
             ratio = 0.15;
             break;
         case Spell::BERSERKER: {
-            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
+            if ( targetIsLast )
                 return 0.0;
             ratio = 0.95;
             break;
@@ -216,7 +230,7 @@ namespace AI
             break;
         }
         case Spell::HYPNOTIZE: {
-            if ( targetIsLast || target.Modes( SP_BLIND | SP_PARALYZE | SP_STONE ) )
+            if ( targetIsLast )
                 return 0.0;
             ratio = 1.5;
             break;
@@ -329,7 +343,7 @@ namespace AI
         const bool isMassSpell = spell.isMassActions();
 
         for ( const Unit * unit : targets ) {
-            bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft ), unit->GetHeadIndex(), isMassSpell );
+            bestOutcome.updateOutcome( spellEffectValue( spell, *unit, isSingleTargetLeft, false ), unit->GetHeadIndex(), isMassSpell );
         }
         return bestOutcome;
     }
@@ -349,7 +363,7 @@ namespace AI
             double unitValue = 0;
             const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
             for ( const Spell & spellOnFriend : spellList ) {
-                const double effectValue = spellEffectValue( spellOnFriend, *unit, false );
+                const double effectValue = spellEffectValue( spellOnFriend, *unit, false, true );
                 if ( spellOnFriend.isApplyToEnemies() ) {
                     unitValue += effectValue;
                 }
@@ -371,7 +385,7 @@ namespace AI
                 double unitValue = 0;
                 const std::vector<Spell> & spellList = unit->getCurrentSpellEffects();
                 for ( const Spell & spellOnEnemy : spellList ) {
-                    const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit );
+                    const double effectValue = spellEffectValue( spellOnEnemy, *unit, enemyLastUnit, true );
                     unitValue += spellOnEnemy.isApplyToFriends() ? effectValue : -effectValue;
                 }
 
@@ -392,7 +406,11 @@ namespace AI
         const Force & friendlyForce = arena.GetForce( _myColor );
 
         for ( const Unit * unit : friendlyForce ) {
-            if ( !unit || !unit->AllowApplySpell( spell, _commander ) || arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
+            if ( !unit || !unit->AllowApplySpell( spell, _commander ) )
+                continue;
+
+            // For dead units: skip if there's another unit standing on top
+            if ( !unit->isValid() && arena.GetBoard()->GetCell( unit->GetHeadIndex() )->GetUnit() )
                 continue;
 
             uint32_t missingHP = unit->GetMissingHitPoints();

@@ -1693,7 +1693,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
-        Dialog::Message( "", _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
     else {
         u32 cond = tile.QuantityVariant();
         Artifact art = tile.QuantityArtifact();
@@ -3020,14 +3020,14 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
                 else if ( art.isValid() )
                     Dialog::ArtifactInfo( "", say, art );
 
-                riddle->SetQuiet();
-                hero.SetVisited( dst_index, Visit::GLOBAL );
-
                 if ( art.isValid() )
                     hero.PickupArtifact( art );
 
                 if ( count )
                     hero.GetKingdom().AddFundsResource( res );
+
+                riddle->SetQuiet();
+                hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
                 Dialog::Message(

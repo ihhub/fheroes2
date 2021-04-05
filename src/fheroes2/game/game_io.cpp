@@ -284,6 +284,9 @@ bool Game::Load( const std::string & fn )
     Game::SetLastSavename( fn );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
+    // rescan path passability for all heroes, for this we need actual info about players from Settings
+    World::Get().RescanAllHeroesPathPassable();
+
     return true;
 }
 

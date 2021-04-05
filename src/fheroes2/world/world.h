@@ -206,6 +206,8 @@ public:
 
     CastleHeroes GetHeroes( const Castle & ) const;
 
+    void RescanAllHeroesPathPassable() const;
+
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const Point & );
 

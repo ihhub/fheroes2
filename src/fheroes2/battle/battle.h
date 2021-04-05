@@ -100,7 +100,7 @@ namespace Battle
     StreamBase & operator<<( StreamBase &, const TargetsInfo & );
     StreamBase & operator>>( StreamBase &, TargetsInfo & );
 
-    enum stats_t
+    enum MonsterState : uint32_t
     {
         TR_RESPONSED = 0x00000001,
         TR_MOVED = 0x00000002,

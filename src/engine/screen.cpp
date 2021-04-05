@@ -472,6 +472,10 @@ namespace
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
                 flags = 0;
+
+                if ( _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+                    SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
+                }
             }
             else {
 #if defined( __WIN32__ )
@@ -479,6 +483,12 @@ namespace
 #else
                 flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
+
+                fheroes2::Display & display = fheroes2::Display::instance();
+                if ( display.width() != 0 && display.height() != 0 ) {
+                    SDL_SetWindowSize( _window, display.width(), display.height() );
+                }
             }
 
             SDL_SetWindowFullscreen( _window, flags );
@@ -617,6 +627,8 @@ namespace
                 SDL_FreeSurface( _surface );
                 _surface = NULL;
             }
+
+            _windowedSize = fheroes2::Size();
         }
 
         virtual void render( const fheroes2::Display & display ) override
@@ -807,6 +819,8 @@ namespace
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
+
+        fheroes2::Size _windowedSize;
 
         int renderFlags() const
         {
