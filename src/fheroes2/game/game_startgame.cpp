@@ -861,7 +861,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
 
             const int eventProcRes = buttonsArea.QueueEventProcessing();
-
             if ( eventProcRes != Game::CANCEL ) {
                 res = eventProcRes;
             }
@@ -880,7 +879,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::POINTER );
 
             const int eventProcRes = controlPanel.QueueEventProcessing();
-
             if ( eventProcRes != Game::CANCEL ) {
                 res = eventProcRes;
             }
@@ -992,7 +990,6 @@ int Interface::Basic::HumanTurn( bool isload )
                         if ( hero->isAction() ) {
                             // check game over
                             const int gameOverRes = gameResult.LocalCheckGameOver();
-
                             if ( gameOverRes != Game::CANCEL ) {
                                 res = gameOverRes;
                             }
