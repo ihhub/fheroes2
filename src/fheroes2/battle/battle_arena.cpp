@@ -373,7 +373,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
         }
 
-        bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
+        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
 
         // apply task
         while ( actions.size() ) {
