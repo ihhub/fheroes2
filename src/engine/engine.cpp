@@ -107,7 +107,7 @@ void SDL::Quit()
 
 bool SDL::SubSystem( const uint32_t system )
 {
-    return system & SDL_WasInit( system );
+    return ( system & SDL_WasInit( system ) ) != 0;
 }
 
 void InitHardware()

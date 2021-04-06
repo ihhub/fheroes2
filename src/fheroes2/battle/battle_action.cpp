@@ -374,7 +374,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const s32 dst1 = path.back();
                 const s32 dst2 = 1 < path.size() ? path[path.size() - 2] : head;
 
-                pos2.Set( dst1, b->isWide(), RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) );
+                pos2.Set( dst1, b->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
             }
             else
                 pos2.Set( path.back(), false, b->isReflect() );
@@ -476,7 +476,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
         }
 
         if ( interface )
-            interface->RedrawActionMorale( *b, morale );
+            interface->RedrawActionMorale( *b, morale != 0 );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << b->String() );
     }

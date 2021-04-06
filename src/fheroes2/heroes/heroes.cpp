@@ -349,7 +349,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         st.skip( 15 );
 
     // custom portrate
-    bool custom_portrait = st.get();
+    bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
         SetModes( NOTDEFAULTS );
@@ -383,7 +383,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     if ( experience == 0 )
         experience = GetStartingXp();
 
-    bool custom_secskill = st.get();
+    bool custom_secskill = ( st.get() != 0 );
 
     // custom skill
     if ( custom_secskill ) {
