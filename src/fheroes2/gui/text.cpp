@@ -35,6 +35,11 @@ namespace
     {
         return font == Font::SMALL || font == Font::YELLOW_SMALL || font == Font::GRAY_SMALL;
     }
+
+    bool isLargeFont( int font )
+    {
+        return font == Font::WHITE_LARGE;
+    }
 }
 
 TextInterface::TextInterface( int ft )
@@ -68,7 +73,17 @@ size_t TextAscii::Size( void ) const
 
 int TextAscii::CharWidth( int c, int f )
 {
-    return ( c < 0x21 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetLetter( c, f ).width() );
+    if ( c < 0x21 ) {
+        if ( isSmallFont( f ) )
+            return 4;
+        else if ( isLargeFont( f ) )
+            return 12;
+        else
+            return 6;
+    }
+    else {
+        return fheroes2::AGG::GetLetter( c, f ).width();
+    }
 }
 
 int TextAscii::CharHeight( int f )
@@ -78,12 +93,22 @@ int TextAscii::CharHeight( int f )
 
 int TextAscii::CharAscent( int f )
 {
-    return isSmallFont( f ) ? 8 : 13;
+    if ( isSmallFont( f ) )
+        return 8;
+    else if ( isLargeFont( f ) )
+        return 26;
+    else
+        return 13;
 }
 
 int TextAscii::CharDescent( int f )
 {
-    return isSmallFont( f ) ? 2 : 3;
+    if ( isSmallFont( f ) )
+        return 2;
+    else if ( isLargeFont( f ) )
+        return 6;
+    else
+        return 3;
 }
 
 int TextAscii::w( u32 s, u32 c ) const
@@ -229,7 +254,17 @@ size_t TextUnicode::Size( void ) const
 
 int TextUnicode::CharWidth( int c, int f )
 {
-    return ( c < 0x0021 ? ( isSmallFont( f ) ? 4 : 6 ) : fheroes2::AGG::GetUnicodeLetter( c, f ).width() );
+    if ( c < 0x0021 ) {
+        if ( isSmallFont( f ) )
+            return 4;
+        else if ( isLargeFont( f ) )
+            return 12;
+        else
+            return 6;
+    }
+    else {
+        return fheroes2::AGG::GetUnicodeLetter( c, f ).width();
+    }
 }
 
 int TextUnicode::CharHeight( int f )

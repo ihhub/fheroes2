@@ -40,8 +40,40 @@
 #include "logging.h"
 #include "screen.h"
 #include "system.h"
+#include "text.h"
 #include "translations.h"
 #include "zzlib.h"
+
+namespace
+{
+    void showTeamInfo()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Image image( display.width(), display.height() );
+        image.fill( 0 );
+
+        TextBox text( "fheroes2 Resurrection Team presents", Font::WHITE_LARGE, 500 );
+        text.Blit( ( image.width() - text.w() ) / 2, ( image.height() - text.h() ) / 2, image );
+
+        LocalEvent & le = LocalEvent::Get();
+
+        uint8_t alpha = 250;
+
+        while ( le.HandleEvents() && alpha > 20 ) {
+            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+                break;
+
+            if ( Game::AnimateCustomDelay( 40 ) ) {
+                fheroes2::Copy( image, display );
+                fheroes2::ApplyAlpha( display, alpha );
+                display.render();
+
+                alpha -= 5;
+            }
+        }
+    }
+}
 
 void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath();
@@ -183,6 +215,8 @@ int main( int argc, char ** argv )
 
             // init game data
             Game::Init();
+
+            showTeamInfo();
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 

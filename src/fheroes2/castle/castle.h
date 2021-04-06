@@ -48,7 +48,7 @@ public:
     SwapButton( s32, s32 );
 };
 
-enum building_t
+enum building_t : uint32_t
 {
     BUILD_NOTHING = 0x00000000,
     BUILD_THIEVESGUILD = 0x00000001,
@@ -148,7 +148,7 @@ public:
     Army & GetArmy( void );
     const Army & GetActualArmy( void ) const;
     Army & GetActualArmy( void );
-    double GetGarrisonStrength() const;
+    double GetGarrisonStrength( const Heroes * attackingHero ) const;
     u32 getMonstersInDwelling( u32 ) const;
     u32 GetActualDwelling( u32 ) const;
 

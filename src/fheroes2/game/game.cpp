@@ -325,6 +325,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     if ( fadeTask.fadeOut ) {
         removeObject();
     }
+
     if ( fadeTask.fadeIn ) {
         addObject();
     }

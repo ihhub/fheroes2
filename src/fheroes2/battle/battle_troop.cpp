@@ -617,6 +617,19 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
 
+        // clean paralyze or stone magic
+        if ( Modes( IS_PARALYZE_MAGIC ) ) {
+            SetModes( TR_RESPONSED );
+            SetModes( TR_MOVED );
+            ResetModes( IS_PARALYZE_MAGIC );
+            affected.RemoveMode( IS_PARALYZE_MAGIC );
+        }
+
+        // blind
+        if ( Modes( SP_BLIND ) ) {
+            ResetBlind();
+        }
+
         if ( killed >= GetCount() ) {
             dead += GetCount();
             SetCount( 0 );
@@ -726,19 +739,6 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
         default:
             break;
         }
-
-    // clean paralyze or stone magic
-    if ( Modes( IS_PARALYZE_MAGIC ) ) {
-        SetModes( TR_RESPONSED );
-        SetModes( TR_MOVED );
-        ResetModes( IS_PARALYZE_MAGIC );
-        affected.RemoveMode( IS_PARALYZE_MAGIC );
-    }
-
-    // blind
-    if ( Modes( SP_BLIND ) ) {
-        ResetBlind();
-    }
 
     return killed;
 }
@@ -1506,8 +1506,6 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
     if ( dmg ) {
         target.damage = dmg;
         target.killed = ApplyDamage( dmg );
-        if ( target.defender && target.defender->Modes( SP_BLIND ) )
-            target.defender->ResetBlind();
     }
 }
 

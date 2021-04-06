@@ -587,6 +587,14 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
     StringReplace( msg, "%{day}", world.GetDay() );
     text.Set( msg );
     text.Blit( pt.x + 360, pt.y + 462 );
+
+    // Show Lighthouse count
+    const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, myKingdom.GetColor() );
+    text.Set( std::to_string( lighthouseCount ) );
+    text.Blit( pt.x + 105, pt.y + 462 );
+
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    fheroes2::Blit( lighthouse, 0, 0, fheroes2::Display::instance(), pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
 }
 
 void Kingdom::OverviewDialog( void )

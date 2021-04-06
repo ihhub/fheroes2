@@ -43,12 +43,12 @@ void StreamBase::setconstbuf( bool f )
 
 bool StreamBase::isconstbuf( void ) const
 {
-    return flags & 0x00001000;
+    return ( flags & 0x00001000 ) != 0;
 }
 
 bool StreamBase::bigendian( void ) const
 {
-    return flags & 0x80000000;
+    return ( flags & 0x80000000 ) != 0;
 }
 
 void StreamBase::setbigendian( bool f )
@@ -84,7 +84,7 @@ u32 StreamBase::get32()
 
 StreamBase & StreamBase::operator>>( bool & v )
 {
-    v = get8();
+    v = ( get8() != 0 );
     return *this;
 }
 

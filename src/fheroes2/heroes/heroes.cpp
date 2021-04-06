@@ -349,7 +349,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         st.skip( 15 );
 
     // custom portrate
-    bool custom_portrait = st.get();
+    bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
         SetModes( NOTDEFAULTS );
@@ -383,7 +383,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     if ( experience == 0 )
         experience = GetStartingXp();
 
-    bool custom_secskill = st.get();
+    bool custom_secskill = ( st.get() != 0 );
 
     // custom skill
     if ( custom_secskill ) {
@@ -1061,7 +1061,8 @@ bool Heroes::PickupArtifact( const Artifact & art )
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
-                                          : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
+                                          : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
+                                                             Dialog::OK );
         }
         return false;
     }
@@ -1522,6 +1523,11 @@ bool Heroes::MayStillMove( void ) const
         return false;
 
     return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
+}
+
+bool Heroes::MayCastAdventureSpells() const
+{
+    return !Modes( GUARDIAN ) && !isFreeman();
 }
 
 bool Heroes::isValid( void ) const

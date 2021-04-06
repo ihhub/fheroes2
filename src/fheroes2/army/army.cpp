@@ -344,7 +344,7 @@ bool Troops::CanJoinTroops( const Troops & troops2 ) const
     if ( this == &troops2 )
         return false;
 
-    Army troops1;
+    Troops troops1;
     troops1.Insert( *this );
 
     for ( const_iterator it = troops2.begin(); it != troops2.end(); ++it )
@@ -1422,6 +1422,24 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
 
     return str1 > str2;
+}
+
+bool Army::isMeleeDominantArmy() const
+{
+    double meleeInfantry = 0;
+    double other = 0;
+
+    for ( const Troop * troop : *this ) {
+        if ( troop != NULL && troop->isValid() ) {
+            if ( !troop->isArchers() && !troop->isFlying() ) {
+                meleeInfantry += troop->GetStrength();
+            }
+            else {
+                other += troop->GetStrength();
+            }
+        }
+    }
+    return meleeInfantry > other;
 }
 
 bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )

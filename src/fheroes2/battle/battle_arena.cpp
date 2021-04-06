@@ -285,7 +285,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     else
     // set obstacles
     {
-        icn_covr = Maps::ScanAroundObject( index, MP2::OBJ_CRATER ).size() ? GetCovr( world.GetTiles( index ).GetGround() ) : ICN::UNKNOWN;
+        icn_covr = Rand::Get( 0, 99 ) < 40 ? GetCovr( world.GetTiles( index ).GetGround() ) : ICN::UNKNOWN;
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
@@ -578,9 +578,14 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
     return result;
 }
 
+Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
+{
+    return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
+}
+
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
 {
-    std::pair<int, uint32_t> result = {-1, MAXU16};
+    std::pair<int, uint32_t> result = { -1, MAXU16 };
 
     const Position & pos = target.GetPosition();
     const Cell * head = pos.GetHead();

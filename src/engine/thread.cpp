@@ -73,7 +73,7 @@ void Thread::Kill( void )
 
 bool Thread::IsRun( void ) const
 {
-    return GetID();
+    return GetID() != 0;
 }
 
 u32 Thread::GetID( void ) const
@@ -103,5 +103,5 @@ void Timer::Remove( void )
 
 bool Timer::IsValid( void ) const
 {
-    return id;
+    return id != 0;
 }

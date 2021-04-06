@@ -1440,7 +1440,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
-            const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 );
+            const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 != 0 );
             if ( animationIndex ) {
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
             }
@@ -1493,7 +1493,7 @@ void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
             // possible animation
-            const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 );
+            const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
             if ( animationIndex ) {
                 const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
@@ -1622,7 +1622,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
 
             // possible anime
             if ( it->object & 1 ) {
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 ) ), mp );
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 != 0 ) ), mp );
             }
         }
     }

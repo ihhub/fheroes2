@@ -548,12 +548,12 @@ u32 Spell::Resurrect( void ) const
 
 bool Spell::isRestore( void ) const
 {
-    return Restore();
+    return Restore() != 0;
 }
 
 bool Spell::isResurrect( void ) const
 {
-    return Resurrect();
+    return Resurrect() != 0;
 }
 
 u32 Spell::ExtraValue( void ) const

@@ -277,7 +277,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
-                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) );
+                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) != 0 );
 
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );
@@ -874,7 +874,7 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
         }
 
     const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::Get( 0, 4 ) ) );
-    std::random_shuffle( objs.begin(), objs.end() );
+    Rand::Shuffle( objs );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );

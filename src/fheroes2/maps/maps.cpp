@@ -187,7 +187,7 @@ bool Maps::isValidDirection( s32 from, int vector )
     case Direction::BOTTOM:
         return ( from < width * ( world.h() - 1 ) );
     case Direction::LEFT:
-        return ( from % width );
+        return ( from % width ) != 0;
 
     case Direction::TOP_RIGHT:
         return ( from >= width ) && ( ( from % width ) < ( width - 1 ) );
@@ -434,12 +434,12 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
 
 bool Maps::IsNearTiles( s32 index1, s32 index2 )
 {
-    return DIRECTION_ALL & Maps::GetDirection( index1, index2 );
+    return ( DIRECTION_ALL & Maps::GetDirection( index1, index2 ) ) != 0;
 }
 
 bool Maps::TileIsUnderProtection( s32 center )
 {
-    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : GetTilesUnderProtection( center ).size();
+    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : !GetTilesUnderProtection( center ).empty();
 }
 
 Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
