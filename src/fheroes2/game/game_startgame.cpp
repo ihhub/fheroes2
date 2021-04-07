@@ -724,6 +724,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // hot keys
         if ( le.KeyPress() ) {
+            // stop moving hero first if needed
             if ( isMovingHero )
                 stopHero = true;
             // exit dialog
@@ -843,9 +844,17 @@ int Interface::Basic::HumanTurn( bool isload )
         const bool isHiddenInterface = conf.ExtGameHideInterface();
         const bool prevIsCursorOverButtons = isCursorOverButtons;
         isCursorOverButtons = false;
-        // Stop moving hero first
-        if ( isMovingHero && ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) ) {
-            stopHero = true;
+
+        if ( isMovingHero ) {
+            // hero is moving, set the appropriate cursor
+            if ( cursor.Themes() != Cursor::WAIT ) {
+                cursor.SetThemes( Cursor::WAIT );
+            }
+
+            // stop moving hero if needed
+            if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
+                stopHero = true;
+            }
         }
         // cursor over radar
         else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
@@ -929,11 +938,10 @@ int Interface::Basic::HumanTurn( bool isload )
                             RedrawFocus();
 
                             if ( stopHero ) {
-                                hero->SetMove( false );
                                 stopHero = false;
-                            }
 
-                            gameArea.SetUpdateCursor();
+                                hero->SetMove( false );
+                            }
                         }
                         else {
                             Point movement( hero->MovementDirection() );
@@ -968,9 +976,10 @@ int Interface::Basic::HumanTurn( bool isload )
                     else {
                         isMovingHero = false;
                         stopHero = false;
+
                         hero->SetMove( false );
-                        if ( Cursor::WAIT == cursor.Themes() )
-                            gameArea.SetUpdateCursor();
+
+                        gameArea.SetUpdateCursor();
                     }
                 }
             }
