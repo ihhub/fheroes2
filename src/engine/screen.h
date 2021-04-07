@@ -128,8 +128,8 @@ namespace fheroes2
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
 
-        void setEngine( std::unique_ptr<BaseRenderEngine> && engine );
-        void setCursor( std::unique_ptr<Cursor> && cursor );
+        void setEngine( std::unique_ptr<BaseRenderEngine> & engine );
+        void setCursor( std::unique_ptr<Cursor> & cursor );
 
     private:
         std::unique_ptr<BaseRenderEngine> _engine;

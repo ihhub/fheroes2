@@ -1273,7 +1273,7 @@ namespace fheroes2
         _engine->updatePalette( StandardPaletteIndexes() );
     }
 
-    void Display::setEngine( std::unique_ptr<BaseRenderEngine> && engine )
+    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
     {
         assert( engine.get() != nullptr );
         if ( engine.get() == nullptr ) {
@@ -1282,7 +1282,7 @@ namespace fheroes2
         std::swap( engine, _engine );
     }
 
-    void Display::setCursor( std::unique_ptr<Cursor> && cursor )
+    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
     {
         assert( cursor.get() != nullptr );
         if ( cursor.get() == nullptr ) {
