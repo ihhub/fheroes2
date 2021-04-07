@@ -693,8 +693,7 @@ int Interface::Basic::HumanTurn( bool isload )
         myKingdom.HeroesActionNewPosition();
 
     int fastScrollRepeatCount = 0;
-    const int fastScrollThreshold = 2;
-    bool isOngoingFastScrollEvent = false;
+    const int fastScrollStartThreshold = 2;
 
     bool isMovingHero = false;
     bool stopHero = false;
@@ -716,11 +715,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 continue;
             }
         }
-
-        if ( !isOngoingFastScrollEvent )
-            fastScrollRepeatCount = 0;
-
-        isOngoingFastScrollEvent = false;
 
         // hot keys
         if ( le.KeyPress() ) {
@@ -991,28 +985,35 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
-            isOngoingFastScrollEvent = true;
-
             if ( Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
-                ++fastScrollRepeatCount;
-                if ( fastScrollRepeatCount < fastScrollThreshold )
+                if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
+                    ++fastScrollRepeatCount;
+
                     continue;
+                }
 
                 cursor.Hide();
 
-                if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() ) || le.MouseCursor( GetScrollBottom() ) )
+                if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
+                     || le.MouseCursor( GetScrollBottom() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
+                }
 
                 gameArea.Scroll();
 
                 gameArea.SetRedraw();
                 radar.SetRedraw();
                 Redraw();
+
                 cursor.Show();
+
                 display.render();
 
                 continue;
             }
+        }
+        else {
+            fastScrollRepeatCount = 0;
         }
 
         // slow maps objects animation
