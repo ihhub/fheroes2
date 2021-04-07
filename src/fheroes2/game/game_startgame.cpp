@@ -692,9 +692,6 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
         myKingdom.HeroesActionNewPosition();
 
-    int fastScrollRepeatCount = 0;
-    const int fastScrollStartThreshold = 2;
-
     bool isMovingHero = false;
     bool stopHero = false;
 
@@ -986,12 +983,6 @@ int Interface::Basic::HumanTurn( bool isload )
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
             if ( Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
-                if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
-                    ++fastScrollRepeatCount;
-
-                    continue;
-                }
-
                 cursor.Hide();
 
                 if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
@@ -1011,9 +1002,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
                 continue;
             }
-        }
-        else {
-            fastScrollRepeatCount = 0;
         }
 
         // slow maps objects animation
