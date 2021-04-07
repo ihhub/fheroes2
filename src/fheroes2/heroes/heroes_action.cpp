@@ -299,14 +299,6 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int c
     I.RedrawFocus();
 }
 
-void AnimationRemoveObject( const Maps::Tiles & tile )
-{
-    if ( tile.GetObject() == MP2::OBJ_ZERO )
-        return;
-
-    Game::ObjectFadeAnimation::StartFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
-}
-
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
 {
     if ( !hero.GetArmy().CanJoinTroop( troop ) )
@@ -317,10 +309,14 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
         if ( recruit ) {
             if ( remove && recruit == troop.GetCount() ) {
                 Game::PlayPickupSound();
-                AnimationRemoveObject( tile );
+
+                Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
                 tile.MonsterSetCount( 0 );
                 tile.RemoveObjectSprite();
                 tile.SetObject( MP2::OBJ_ZERO );
+
+                Game::ObjectFadeAnimation::PerformFadeTask();
             }
             else
                 tile.MonsterSetCount( troop.GetCount() - recruit );
@@ -416,10 +412,13 @@ void Heroes::Action( int tileIndex, bool isDestination )
     /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( object ) ) {
-            AnimationRemoveObject( tile );
+            Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
             tile.RemoveObjectSprite();
             tile.QuantityReset();
             tile.SetObject( MP2::OBJ_ZERO );
+
+            Game::ObjectFadeAnimation::PerformFadeTask();
         }
     }
     else
@@ -770,10 +769,14 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
-        AnimationRemoveObject( tile );
+
+        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
         tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
+
+        Game::ObjectFadeAnimation::PerformFadeTask();
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
@@ -1000,10 +1003,14 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
     }
 
     Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
-    tile.RemoveObjectSprite();
 
+    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
+    tile.RemoveObjectSprite();
     tile.QuantityReset();
+
+    Game::ObjectFadeAnimation::PerformFadeTask();
+
     if ( map_resource )
         world.RemoveMapObject( map_resource );
 
@@ -1176,9 +1183,13 @@ void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index )
     }
 
     Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
+
+    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
     tile.RemoveObjectSprite();
     tile.QuantityReset();
+
+    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1676,10 +1687,13 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     }
 
     Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
+
+    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
+
+    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1819,10 +1833,13 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
 
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
-            AnimationRemoveObject( tile );
+
+            Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
             tile.RemoveObjectSprite();
             tile.QuantityReset();
+
+            Game::ObjectFadeAnimation::PerformFadeTask();
         }
     }
 
@@ -1900,10 +1917,13 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
 
     Game::PlayPickupSound();
-    AnimationRemoveObject( tile );
+
+    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
     tile.RemoveObjectSprite();
     tile.QuantityReset();
+
+    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2925,9 +2945,12 @@ void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
             _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
             Font::BIG, Dialog::OK );
 
-        AnimationRemoveObject( tile );
+        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
         tile.RemoveObjectSprite();
         tile.SetObject( MP2::OBJ_ZERO );
+
+        Game::ObjectFadeAnimation::PerformFadeTask();
 
         Heroes * prisoner = world.FromJailHeroes( dst_index );
 
@@ -3058,10 +3081,14 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
-        AnimationRemoveObject( tile );
+        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+
         tile.SetObject( hero.GetMapsObject() );
         hero.SetMapsObject( MP2::OBJ_ZERO );
         tile.RemoveObjectSprite();
+
+        Game::ObjectFadeAnimation::PerformFadeTask();
+
         // TODO: fix pathfinding
         if ( tile.GetIndex() == hero.GetIndex() ) {
             tile.SetObject( MP2::OBJ_HEROES );

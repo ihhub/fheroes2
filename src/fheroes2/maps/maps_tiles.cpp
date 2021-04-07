@@ -1532,10 +1532,11 @@ void Maps::Tiles::RedrawBoatShadow( fheroes2::Image & dst, const Rect & visibleT
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint32_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
-              ? fadeTask.alpha
-              : 255;
+    const uint8_t alpha = ( MP2::OBJ_BOAT == fadeTask.object
+                            && ( ( fadeTask.fadeOut && fadeTask.fromIndex == static_cast<int32_t>( maps_index ) )
+                                 || ( fadeTask.fadeIn && fadeTask.toIndex == static_cast<int32_t>( maps_index ) ) ) )
+                              ? fadeTask.alpha
+                              : 255;
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
@@ -1551,10 +1552,11 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint32_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == maps_index ) || ( fadeTask.fadeIn && fadeTask.toIndex == maps_index ) ) )
-              ? fadeTask.alpha
-              : 255;
+    const uint8_t alpha = ( MP2::OBJ_BOAT == fadeTask.object
+                            && ( ( fadeTask.fadeOut && fadeTask.fromIndex == static_cast<int32_t>( maps_index ) )
+                                 || ( fadeTask.fadeIn && fadeTask.toIndex == static_cast<int32_t>( maps_index ) ) ) )
+                              ? fadeTask.alpha
+                              : 255;
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
