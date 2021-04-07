@@ -821,6 +821,10 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
+        if ( res != Game::CANCEL ) {
+            break;
+        }
+
         if ( fheroes2::cursor().isFocusActive() ) {
             int scrollPosition = SCROLL_NONE;
             if ( le.MouseCursor( GetScrollLeft() ) )
@@ -859,12 +863,7 @@ int Interface::Basic::HumanTurn( bool isload )
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-
-            const int eventProcRes = buttonsArea.QueueEventProcessing();
-            if ( eventProcRes != Game::CANCEL ) {
-                res = eventProcRes;
-            }
-
+            res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
         // cursor over status area
@@ -877,11 +876,7 @@ int Interface::Basic::HumanTurn( bool isload )
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-
-            const int eventProcRes = controlPanel.QueueEventProcessing();
-            if ( eventProcRes != Game::CANCEL ) {
-                res = eventProcRes;
-            }
+            res = controlPanel.QueueEventProcessing();
         }
         // cursor over game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
@@ -895,6 +890,10 @@ int Interface::Basic::HumanTurn( bool isload )
 
         if ( prevIsCursorOverButtons && !isCursorOverButtons ) {
             buttonsArea.ResetButtons();
+        }
+
+        if ( res != Game::CANCEL ) {
+            break;
         }
 
         // fast scroll
@@ -989,10 +988,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
                         if ( hero->isAction() ) {
                             // check game over
-                            const int gameOverRes = gameResult.LocalCheckGameOver();
-                            if ( gameOverRes != Game::CANCEL ) {
-                                res = gameOverRes;
-                            }
+                            res = gameResult.LocalCheckGameOver();
 
                             hero->ResetAction();
                         }
