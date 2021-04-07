@@ -1166,12 +1166,6 @@ namespace fheroes2
         _disableTransformLayer();
     }
 
-    Display::~Display()
-    {
-        delete _cursor;
-        delete _engine;
-    }
-
     void Display::resize( int32_t width_, int32_t height_ )
     {
         if ( width() > 0 && height() > 0 && width_ == width() && height_ == height() ) // nothing to resize
@@ -1277,6 +1271,24 @@ namespace fheroes2
         currentPalette = ( palette == NULL ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
+    }
+
+    void Display::setEngine( std::unique_ptr<BaseRenderEngine> && engine )
+    {
+        assert( engine.get() != nullptr );
+        if ( engine.get() == nullptr ) {
+            return;
+        }
+        std::swap( engine, _engine );
+    }
+
+    void Display::setCursor( std::unique_ptr<Cursor> && cursor )
+    {
+        assert( cursor.get() != nullptr );
+        if ( cursor.get() == nullptr ) {
+            return;
+        }
+        std::swap( cursor, _cursor );
     }
 
     bool Cursor::isFocusActive() const
