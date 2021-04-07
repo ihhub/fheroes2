@@ -21,6 +21,8 @@
 
 #include "image.h"
 
+#include <memory>
+
 namespace fheroes2
 {
     class Cursor;
@@ -31,7 +33,7 @@ namespace fheroes2
     public:
         friend class Cursor;
         friend class Display;
-        virtual ~BaseRenderEngine() {}
+        virtual ~BaseRenderEngine() = default;
 
         virtual void toggleFullScreen()
         {
@@ -92,7 +94,8 @@ namespace fheroes2
     {
     public:
         friend class BaseRenderEngine;
-        enum
+
+        enum : int32_t
         {
             DEFAULT_WIDTH = 640,
             DEFAULT_HEIGHT = 480
@@ -100,9 +103,9 @@ namespace fheroes2
 
         static Display & instance();
 
-        virtual ~Display();
+        virtual ~Display() = default;
 
-        void render(); // render the image on screen
+        void render(); // render full image on screen
 
         virtual void resize( int32_t width_, int32_t height_ ) override;
         bool isDefaultSize() const;
@@ -120,14 +123,17 @@ namespace fheroes2
 
         // Change whole color representation on the screen. Make sure that palette exists all the time!!!
         // NULL input parameters means to set to default value
-        void changePalette( const uint8_t * palette = NULL );
+        void changePalette( const uint8_t * palette = nullptr );
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
 
+        void setEngine( std::unique_ptr<BaseRenderEngine> & engine );
+        void setCursor( std::unique_ptr<Cursor> & cursor );
+
     private:
-        BaseRenderEngine * _engine;
-        Cursor * _cursor;
+        std::unique_ptr<BaseRenderEngine> _engine;
+        std::unique_ptr<Cursor> _cursor;
         PreRenderProcessing _preprocessing;
         PostRenderProcessing _postprocessing;
 
@@ -144,7 +150,7 @@ namespace fheroes2
     {
     public:
         friend Display;
-        virtual ~Cursor() {}
+        virtual ~Cursor() = default;
 
         void show( const bool enable )
         {
