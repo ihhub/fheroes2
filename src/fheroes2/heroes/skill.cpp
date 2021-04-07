@@ -565,7 +565,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case NECROMANCY: {
-        const uint32_t necroCount = Skill::GetNecromancyPercent( hero );
+        const uint32_t necroCount = std::max( Skill::GetNecromancyPercent( hero ), count );
         const std::string tmpDescription(
             std::string( GetNameWithBonus( hero ) )
             + std::string( " allows %{necrocount} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );
