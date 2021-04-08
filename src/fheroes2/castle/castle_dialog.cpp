@@ -153,11 +153,11 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 11 ), display, pt.x + 112, pt.y + 361 );
 }
 
-fheroes2::Image GetMeetingSprite( void )
+fheroes2::Sprite GetMeetingSprite()
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
 
-    fheroes2::Image result( sprite.width() + 4, sprite.height() + 4 );
+    fheroes2::Sprite result( sprite.width() + 4, sprite.height() + 4 );
     result.fill( 0 );
 
     fheroes2::DrawBorder( result, fheroes2::GetColorId( 0xe0, 0xb4, 0 ) );
@@ -168,14 +168,14 @@ fheroes2::Image GetMeetingSprite( void )
 
 MeetingButton::MeetingButton( s32 px, s32 py )
 {
-    const fheroes2::Image & sprite = GetMeetingSprite();
+    const fheroes2::Sprite & sprite = GetMeetingSprite();
     setSprite( sprite, sprite );
     setPosition( px, py );
 }
 
 SwapButton::SwapButton( s32 px, s32 py )
 {
-    const fheroes2::Image & sprite = GetMeetingSprite();
+    const fheroes2::Sprite & sprite = GetMeetingSprite();
     // Custom graphics: rotate existing sprtie
     // sf = GetMeetingSprite().RenderRotate( 1 );
     setSprite( sprite, sprite );

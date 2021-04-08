@@ -393,6 +393,7 @@ namespace fheroes2
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
+        , _data( nullptr )
         , _singleLayer( false )
     {
         resize( width_, height_ );
@@ -401,6 +402,7 @@ namespace fheroes2
     Image::Image( const Image & image_ )
         : _width( 0 )
         , _height( 0 )
+        , _data( nullptr )
         , _singleLayer( false )
     {
         resize( image_.width(), image_.height() );
@@ -414,6 +416,7 @@ namespace fheroes2
     Image::Image( Image && image_ )
         : _width( 0 )
         , _height( 0 )
+        , _data( nullptr )
         , _singleLayer( false )
     {
         swap( image_ );
@@ -429,9 +432,21 @@ namespace fheroes2
         // We shouldn't copy different types of images.
         assert( _singleLayer == image_._singleLayer );
 
-        _width = image_.width();
-        _height = image_.height();
-        _data = image_._data;
+        // resize if needed
+        if ( image_._width != _width || image_._height != _height ) {
+            _width = image_.width();
+            _height = image_.height();
+
+            delete[] _data;
+            if ( image_._data != nullptr ) {
+                _data = new uint8_t[static_cast<size_t>( _width * _height * 2 )];
+            }
+        }
+
+        if ( image_._data != nullptr ) {
+            memcpy( _data, image_._data, static_cast<size_t>( _width * _height * 2 ) );
+        }
+
         return *this;
     }
 
@@ -443,27 +458,28 @@ namespace fheroes2
 
     uint8_t * Image::image()
     {
-        return _data.data();
+        return _data;
     }
 
     const uint8_t * Image::image() const
     {
-        return _data.data();
+        return _data;
     }
 
     uint8_t * Image::transform()
     {
-        return _data.data() + _width * _height;
+        return _data + _width * _height;
     }
 
     const uint8_t * Image::transform() const
     {
-        return _data.data() + _width * _height;
+        return _data + _width * _height;
     }
 
     void Image::clear()
     {
-        _data.clear();
+        delete[] _data;
+        _data = nullptr;
 
         _width = 0;
         _height = 0;
@@ -489,7 +505,7 @@ namespace fheroes2
         _height = height_;
 
         const size_t totalSize = static_cast<size_t>( _width * _height );
-        _data.resize( totalSize * 2 );
+        _data = new uint8_t[totalSize * 2];
     }
 
     void Image::reset()
@@ -531,11 +547,12 @@ namespace fheroes2
     {}
 
     Sprite::Sprite( Sprite && image )
+        : Image()
+        , _x( 0 )
+        , _y( 0 )
     {
         swap( image );
     }
-
-    Sprite::~Sprite() {}
 
     Sprite & Sprite::operator=( const Sprite & image )
     {
@@ -1135,12 +1152,12 @@ namespace fheroes2
         return out;
     }
 
-    Image CreateContour( const Image & image, uint8_t value )
+    Sprite CreateContour( const Image & image, uint8_t value )
     {
         const int32_t width = image.width();
         const int32_t height = image.height();
 
-        Image contour( width, height );
+        Sprite contour( width, height );
         contour.reset();
         if ( width < 2 || height < 2 ) {
             return contour;

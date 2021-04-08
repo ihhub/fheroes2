@@ -62,7 +62,7 @@ namespace fheroes2
 
         bool empty() const
         {
-            return _data.empty();
+            return _data == nullptr;
         }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
@@ -89,7 +89,7 @@ namespace fheroes2
     private:
         int32_t _width;
         int32_t _height;
-        std::vector<uint8_t> _data; // holds 2 image layers
+        uint8_t * _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
     };
@@ -101,7 +101,8 @@ namespace fheroes2
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & image );
         Sprite( Sprite && image );
-        virtual ~Sprite();
+
+        virtual ~Sprite() = default;
 
         Sprite & operator=( const Sprite & image );
         Sprite & operator=( Sprite && image );
@@ -210,7 +211,7 @@ namespace fheroes2
 
     Image CreateBlurredImage( const Image & in, int32_t blurRadius );
 
-    Image CreateContour( const Image & image, uint8_t value );
+    Sprite CreateContour( const Image & image, uint8_t value );
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 
