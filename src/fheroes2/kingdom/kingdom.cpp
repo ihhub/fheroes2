@@ -166,8 +166,7 @@ void Kingdom::ActionNewDay( void )
         AddFundsResource( GetIncome() );
 
         // handle resource bonus campaign awards
-        const Settings & conf = Settings::Get();
-        if ( isControlHuman() && conf.GameType() & Game::TYPE_CAMPAIGN ) {
+        if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {

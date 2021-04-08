@@ -458,7 +458,7 @@ namespace
             case Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
                     Kingdom & kingdom = world.GetKingdom( player->GetColor() );
-                    const KingdomHeroes heroes = kingdom.GetHeroes();
+                    const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
