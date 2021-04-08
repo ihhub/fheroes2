@@ -409,27 +409,25 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
 
 bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: monster */
 {
-    bool result = false;
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
     if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
         const int monsterDirection = Maps::GetDirection( index, from );
-        /* if monster can attack to */
-        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) );
+        // if monster can attack to
+        if ( ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) ) )
+            return true;
 
-        if ( !result ) {
-            /* h2 specific monster attack: BOTTOM_LEFT impassable! */
-            if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-                result = true;
-            else
-                /* h2 specific monster attack: BOTTOM_RIGHT impassable! */
-                if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-                result = true;
-        }
+        // h2 specific monster attack: BOTTOM_LEFT impassable!
+        if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            return true;
+
+        // h2 specific monster attack: BOTTOM_RIGHT impassable!
+        if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            return true;
     }
 
-    return result;
+    return false;
 }
 
 bool Maps::IsNearTiles( s32 index1, s32 index2 )

@@ -180,6 +180,8 @@ int main( int argc, char ** argv )
                 fheroes2::engine().toggleFullScreen();
 
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.fill( 0 ); // start from a black screen
+
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor

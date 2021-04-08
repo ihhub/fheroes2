@@ -96,7 +96,7 @@ bool ReflectSprite( int from )
     return false;
 }
 
-fheroes2::Sprite SpriteHero( const Heroes & hero, int index, bool rotate )
+const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate )
 {
     int icn_hero = ICN::UNKNOWN;
     int index_sprite = 0;
@@ -166,7 +166,7 @@ fheroes2::Sprite SpriteHero( const Heroes & hero, int index, bool rotate )
     return fheroes2::AGG::GetICN( icn_hero, index_sprite + ( index % 9 ) );
 }
 
-fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
+const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate, fheroes2::Point & offset )
 {
     int icn_flag = ICN::UNKNOWN;
     int index_sprite = 0;
@@ -231,29 +231,37 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
         }
 
     const int frameId = index % heroFrameCount;
-    fheroes2::Sprite flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
+    const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
     if ( !hero.isMoveEnabled() ) {
-        static const Point offsetTop[heroFrameCount]
-            = {Point( 0, 0 ), Point( 0, 2 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 3 ), Point( 0, 2 ), Point( 0, 1 )};
-        static const Point offsetBottom[heroFrameCount]
-            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, -2 ), Point( 0, -3 ), Point( 0, 0 ), Point( 0, -1 )};
-        static const Point offsetSideways[heroFrameCount]
-            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 ), Point( 1, -1 ), Point( 2, -1 ), Point( 1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-        static const Point offsetTopSideways[heroFrameCount]
-            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( -1, -1 ), Point( -2, -1 ), Point( -2, 0 ), Point( -1, 0 ), Point( 0, 0 ), Point( 1, 0 )};
-        static const Point offsetBottomSideways[heroFrameCount]
-            = {Point( 0, 0 ), Point( -1, 0 ), Point( 0, -1 ), Point( 2, -2 ), Point( 0, -2 ), Point( -1, -3 ), Point( -1, -2 ), Point( -1, -1 ), Point( 1, 0 )};
+        static const fheroes2::Point offsetTop[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 0 ),
+                fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetBottom[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, -1 ),
+                fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -3 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ) };
+        static const fheroes2::Point offsetSideways[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ), fheroes2::Point( 1, -1 ),
+                fheroes2::Point( 2, -1 ), fheroes2::Point( 1, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+        static const fheroes2::Point offsetTopSideways[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( -1, -1 ), fheroes2::Point( -2, -1 ),
+                fheroes2::Point( -2, 0 ), fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+        static const fheroes2::Point offsetBottomSideways[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ),   fheroes2::Point( -1, 0 ),  fheroes2::Point( 0, -1 ),  fheroes2::Point( 2, -2 ), fheroes2::Point( 0, -2 ),
+                fheroes2::Point( -1, -3 ), fheroes2::Point( -1, -2 ), fheroes2::Point( -1, -1 ), fheroes2::Point( 1, 0 ) };
 
-        static const Point offsetShipTopBottom[heroFrameCount]
-            = {Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 1 ), Point( 0, 1 )};
-        static const Point offsetShipSideways[heroFrameCount]
-            = {Point( 0, -2 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
-        static const Point offsetShipTopSideways[heroFrameCount]
-            = {Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, 1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 0 ), Point( 0, -1 ), Point( 0, 1 )};
-        static const Point offsetShipBottomSideways[heroFrameCount]
-            = {Point( 0, -2 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 ), Point( 0, 0 )};
+        static const fheroes2::Point offsetShipTopBottom[heroFrameCount]
+            = { fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ),
+                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetShipSideways[heroFrameCount]
+            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
+                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetShipTopSideways[heroFrameCount]
+            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
+                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetShipBottomSideways[heroFrameCount]
+            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ),
+                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ) };
 
-        Point offset;
         switch ( hero.GetDirection() ) {
         case Direction::TOP:
             offset = hero.isShipMaster() ? offsetShipTopBottom[frameId] : offsetTop[frameId];
@@ -274,13 +282,11 @@ fheroes2::Sprite SpriteFlag( const Heroes & hero, int index, bool rotate )
             offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
             break;
         }
-
-        flag.setPosition( flag.x() + offset.x, flag.y() + offset.y );
     }
     return flag;
 }
 
-fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
+const fheroes2::Sprite & SpriteShad( const Heroes & hero, int index )
 {
     if ( hero.isShipMaster() ) {
         int indexSprite = 0;
@@ -337,7 +343,7 @@ fheroes2::Sprite SpriteShad( const Heroes & hero, int index )
     }
 }
 
-fheroes2::Sprite SpriteFroth( const Heroes & hero, int index )
+const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
 {
     int index_sprite = 0;
 
@@ -502,11 +508,13 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
     if ( isShipMaster() )
         dy -= 10;
 
+    fheroes2::Point flagOffset;
     const fheroes2::Sprite & sprite1 = SpriteHero( *this, sprite_index, false );
-    const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false );
+    const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false, flagOffset );
 
     Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.width() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - sprite2.width() : sprite2.x() ), dy + sprite2.y() + TILEWIDTH );
+    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - flagOffset.x - sprite2.width() : sprite2.x() + flagOffset.x ),
+                   dy + sprite2.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {

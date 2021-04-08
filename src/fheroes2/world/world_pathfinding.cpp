@@ -74,10 +74,9 @@ bool World::isTileBlocked( int tileIndex, bool fromWater ) const
     return false;
 }
 
-bool World::isValidPath( int index, int direction, const int heroColor ) const
+bool World::isValidPath( const int index, const int direction, const int heroColor ) const
 {
     const Maps::Tiles & fromTile = GetTiles( index );
-    const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
     const bool fromWater = fromTile.isWater();
 
     // check corner water/coast
@@ -112,6 +111,7 @@ bool World::isValidPath( int index, int direction, const int heroColor ) const
     if ( !fromTile.isPassable( direction, fromWater, false, heroColor ) )
         return false;
 
+    const Maps::Tiles & toTile = GetTiles( Maps::GetDirectionIndex( index, direction ) );
     return toTile.isPassable( Direction::Reflect( direction ), fromWater, false, heroColor );
 }
 
