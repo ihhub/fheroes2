@@ -545,7 +545,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const int buttons = Dialog::YES | Dialog::NO;
     int posy = 0;
 
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, buttons );
+    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
@@ -663,7 +663,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
     text.Set( message, Font::BIG );
 
-    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, buttons );
+    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
