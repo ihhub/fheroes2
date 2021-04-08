@@ -444,17 +444,14 @@ bool Battle::Only::ChangeSettings( void )
     selectArtifacts1.reset();
     selectArmy1.reset();
 
-    if ( hero2 ) {
-        moraleIndicator2.reset();
-        luckIndicator2.reset();
-        primskill_bar2.reset();
-        secskill_bar2.reset();
-        selectArtifacts2.reset();
-        selectArmy2.reset();
-    }
+    moraleIndicator2.reset();
+    luckIndicator2.reset();
+    primskill_bar2.reset();
+    secskill_bar2.reset();
+    selectArtifacts2.reset();
+    selectArmy2.reset();
 
-    if ( cinfo2 )
-        cinfo2.reset();
+    cinfo2.reset();
 
     return result;
 }
