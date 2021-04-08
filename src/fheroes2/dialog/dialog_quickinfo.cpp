@@ -305,9 +305,13 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPena
         str = Maps::Ground::String( tile.GetGround() );
     }
 
+    str.append( "\n \n" );
+
     if ( tile.GoodForUltimateArtifact() ) {
-        str.append( "\n \n" );
         str.append( _( "(digging ok)" ) );
+    }
+    else {
+        str.append( _( "(no digging)" ) );
     }
 
     if ( showTerrainPenaltyOption && hero ) {

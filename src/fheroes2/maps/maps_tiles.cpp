@@ -1825,7 +1825,15 @@ void Maps::Tiles::FixObject( void )
 
 bool Maps::Tiles::GoodForUltimateArtifact() const
 {
-    return !isWater() && ( ( addons_level1.empty() && objectTileset == 0 ) || isShadow() ) && isPassable( Direction::CENTER, false, true, 0 );
+    if ( isWater() || !isPassable( Direction::CENTER, false, true, 0 ) ) {
+        return false;
+    }
+
+    if ( objectTileset == 0 || isShadowSprite( objectTileset, objectIndex ) ) {
+        return addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+    }
+
+    return false;
 }
 
 bool Maps::Tiles::validateWaterRules( bool fromWater ) const
