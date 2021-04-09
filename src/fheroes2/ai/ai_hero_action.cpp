@@ -788,6 +788,7 @@ namespace AI
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
+                    tile.SetQuantity3( 0 );
                 }
                 else {
                     capture = false;
