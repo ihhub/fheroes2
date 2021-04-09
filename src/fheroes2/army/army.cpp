@@ -1506,7 +1506,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
             while ( !found ) {
                 if ( troop.GetID() == monster.GetID() ) {
-                    forceJoinType = campaignAwards[i]._type == isAlliance ? JOIN_FREE : JOIN_FLEE;
+                    forceJoinType = isAlliance ? JOIN_FREE : JOIN_FLEE;
                     found = true;
                     break;
                 }
