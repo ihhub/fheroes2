@@ -255,7 +255,7 @@ void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, 
     }
 }
 
-void Game::ObjectFadeAnimation::PerformFadeTask()
+void Game::ObjectFadeAnimation::PerformFadeTask( bool fast /* = true */ )
 {
     auto removeObject = []() {
         Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
@@ -285,13 +285,15 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
         display.render();
     };
 
+    const uint8_t alphaStep = fast ? 20 : 8;
+
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && ( fadeTask.fadeOut || fadeTask.fadeIn ) ) {
         if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
             if ( fadeTask.fadeOut ) {
-                if ( fadeTask.alpha > 20 ) {
-                    fadeTask.alpha -= 20;
+                if ( fadeTask.alpha > alphaStep ) {
+                    fadeTask.alpha -= alphaStep;
                 }
                 else {
                     removeObject();
@@ -310,8 +312,8 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
                     addObject();
                 }
 
-                if ( fadeTask.alpha < 235 ) {
-                    fadeTask.alpha += 20;
+                if ( fadeTask.alpha < 255 - alphaStep ) {
+                    fadeTask.alpha += alphaStep;
                 }
                 else {
                     fadeTask = FadeTask();

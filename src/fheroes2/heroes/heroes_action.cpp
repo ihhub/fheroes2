@@ -776,7 +776,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         tile.MonsterSetCount( 0 );
         tile.SetObject( MP2::OBJ_ZERO );
 
-        Game::ObjectFadeAnimation::PerformFadeTask();
+        Game::ObjectFadeAnimation::PerformFadeTask( false );
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );
