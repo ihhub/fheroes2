@@ -433,43 +433,44 @@ u32 Game::GetGameOverScores( void )
 {
     const Settings & conf = Settings::Get();
 
-    u32 k_size = 0;
+    uint32_t mapSizeFactor = 0;
 
     switch ( conf.MapsSize().w ) {
     case Maps::SMALL:
-        k_size = 140;
+        mapSizeFactor = 140;
         break;
     case Maps::MEDIUM:
-        k_size = 100;
+        mapSizeFactor = 100;
         break;
     case Maps::LARGE:
-        k_size = 80;
+        mapSizeFactor = 80;
         break;
     case Maps::XLARGE:
-        k_size = 60;
-        break;
-    default:
+        mapSizeFactor = 60;
         break;
     }
 
-    u32 flag = 0;
-    u32 nk = 0;
-    u32 end_days = world.CountDay();
+    const uint32_t daysFactor = world.CountDay() * mapSizeFactor / 100;
 
-    for ( u32 ii = 1; ii <= end_days; ++ii ) {
-        nk = ii * k_size / 100;
+    uint32_t daysScore = 0;
 
-        if ( 0 == flag && nk > 60 ) {
-            end_days = ii + ( world.CountDay() - ii ) / 2;
-            flag = 1;
-        }
-        else if ( 1 == flag && nk > 120 )
-            end_days = ii + ( world.CountDay() - ii ) / 2;
-        else if ( nk > 180 )
-            break;
+    if ( daysFactor <= 60 ) {
+        daysScore = daysFactor;
+    }
+    else if ( daysFactor <= 120 ) {
+        daysScore = daysFactor / 2 + 30;
+    }
+    else if ( daysFactor <= 360 ) {
+        daysScore = daysFactor / 4 + 60;
+    }
+    else if ( daysFactor <= 600 ) {
+        daysScore = daysFactor / 8 + 105;
+    }
+    else {
+        daysScore = 180;
     }
 
-    return GetRating() * ( 200 - nk ) / 100;
+    return GetRating() * ( 200 - daysScore ) / 100;
 }
 
 void Game::ShowMapLoadingText( void )
