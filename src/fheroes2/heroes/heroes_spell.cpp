@@ -425,6 +425,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
+        hero.GetPath().Hide();
         hero.FadeOut();
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
@@ -445,7 +446,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         // No action is being made. Uncomment this code if the logic will be changed
         // hero.ActionNewPosition();
 
-        Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+        I.ResetFocus( GameFocus::HEROES );
 
         return false; /* SpellCasted apply */
     }
