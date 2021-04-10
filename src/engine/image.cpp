@@ -441,6 +441,9 @@ namespace fheroes2
             if ( image_._data != nullptr ) {
                 _data = new uint8_t[static_cast<size_t>( _width * _height * 2 )];
             }
+            else {
+                _data = nullptr;
+            }
         }
 
         if ( image_._data != nullptr ) {
@@ -506,6 +509,8 @@ namespace fheroes2
 
         const size_t totalSize = static_cast<size_t>( _width * _height );
         _data = new uint8_t[totalSize * 2];
+        // TODO: remove this, Image should be able to work with uninitialized data
+        std::fill( _data, _data + totalSize * 2, 0 );
     }
 
     void Image::reset()
