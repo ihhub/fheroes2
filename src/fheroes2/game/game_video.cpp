@@ -40,10 +40,12 @@ namespace
         std::string temp;
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            temp = Settings::GetLastFile( videoDir[i], fileName );
-            if ( System::IsFile( temp ) ) { // file doesn't exist, so no need to even try to load it
-                path.swap( temp );
-                return true;
+            ListFiles files = Settings::FindFiles( videoDir[i], fileName );
+            for ( std::string & fileName : files ) {
+                if ( System::IsFile( fileName ) ) { // file doesn't exist, so no need to even try to load it
+                    path.swap( fileName );
+                    return true;
+                }
             }
         }
 
