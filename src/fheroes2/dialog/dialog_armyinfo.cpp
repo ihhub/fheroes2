@@ -773,11 +773,21 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         result = btnGroup.processEvents();
 
+        bool needRedraw = false;
+
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
             Marketplace( kingdom, false );
+
+            needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );
+
+            needRedraw = true;
+        }
+
+        if ( !needRedraw ) {
+            continue;
         }
 
         cursor.Hide();
