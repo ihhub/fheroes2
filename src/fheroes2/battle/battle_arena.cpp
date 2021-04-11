@@ -194,8 +194,9 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     : army1( NULL )
     , army2( NULL )
     , armies_order( NULL )
+    , current_color( Color::NONE )
+    , preferredColor( -1 ) // be aware of unknown color
     , castle( NULL )
-    , current_color( 0 )
     , catapult( NULL )
     , bridge( NULL )
     , interface( NULL )
@@ -331,44 +332,48 @@ Battle::Arena::~Arena()
     arena = nullptr;
 }
 
-void Battle::Arena::TurnTroop( Unit * current_troop )
+void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
-    Actions actions;
-    end_turn = false;
-    const bool isImmovable = current_troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_troop->String( true ) );
+    const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
 
     // morale check right before the turn
     if ( !isImmovable ) {
-        if ( current_troop->isAffectedByMorale() )
-            current_troop->SetRandomMorale();
+        if ( troop->isAffectedByMorale() )
+            troop->SetRandomMorale();
     }
 
+    end_turn = false;
+
     while ( !end_turn ) {
-        if ( !current_troop->isValid() ) { // looks like the unit died
+        Actions actions;
+
+        if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
         }
-        else if ( current_troop->Modes( MORALE_BAD ) ) { // bad morale
-            actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), false ) );
+        else if ( troop->Modes( MORALE_BAD ) ) { // bad morale
+            actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), false ) );
             end_turn = true;
         }
         else {
             // re-calculate possible paths in case unit moved or it's a new turn
-            _pathfinder.calculate( *current_troop );
+            _pathfinder.calculate( *troop );
 
             // turn opponents
-            if ( current_troop->isControlRemote() )
-                RemoteTurn( *current_troop, actions );
+            if ( troop->isControlRemote() )
+                RemoteTurn( *troop, actions );
             else {
-                if ( ( current_troop->GetCurrentControl() & CONTROL_AI ) || ( current_troop->GetCurrentColor() & auto_battle ) ) {
-                    AI::Get().BattleTurn( *this, *current_troop, actions );
+                if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & auto_battle ) ) {
+                    AI::Get().BattleTurn( *this, *troop, actions );
                 }
                 else {
-                    HumanTurn( *current_troop, actions );
+                    HumanTurn( *troop, actions );
                 }
             }
         }
+
+        const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
 
         // apply task
         while ( actions.size() ) {
@@ -376,9 +381,10 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             ApplyAction( actions.front() );
             actions.pop_front();
 
-            // rescan orders
-            if ( armies_order )
-                Force::UpdateOrderUnits( *army1, *army2, *armies_order );
+            if ( armies_order ) {
+                // some spell could kill someone or affect the speed of some unit, update units order
+                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+            }
 
             // check end battle
             if ( !BattleValid() ) {
@@ -387,15 +393,15 @@ void Battle::Arena::TurnTroop( Unit * current_troop )
             }
 
             // good morale
-            if ( !end_turn && current_troop->isValid() && !current_troop->Modes( TR_SKIPMOVE ) && current_troop->Modes( TR_MOVED ) && current_troop->Modes( MORALE_GOOD )
-                 && !isImmovable ) {
-                actions.push_back( Command( MSG_BATTLE_MORALE, current_troop->GetUID(), true ) );
+            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
+                actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
                 end_turn = false;
             }
         }
 
-        if ( current_troop->Modes( TR_SKIPMOVE | TR_MOVED ) )
+        if ( troop->Modes( TR_MOVED ) || ( troop->Modes( TR_SKIPMOVE ) && !troopHasAlreadySkippedMove ) ) {
             end_turn = true;
+        }
 
         board.Reset();
 
@@ -412,10 +418,11 @@ bool Battle::Arena::BattleValid( void ) const
 
 void Battle::Arena::Turns( void )
 {
-    const Settings & conf = Settings::Get();
-
     ++current_turn;
+
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
+
+    const Settings & conf = Settings::Get();
 
     if ( interface && conf.Music() && !Music::isPlaying() )
         AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
@@ -423,61 +430,116 @@ void Battle::Arena::Turns( void )
     army1->NewTurn();
     army2->NewTurn();
 
-    bool tower_moved = false;
-    bool catapult_moved = false;
+    // order history on the current turn
+    Units orderHistory;
 
-    Unit * current_troop = NULL;
+    if ( armies_order ) {
+        orderHistory.reserve( 25 );
 
-    // rescan orders
-    if ( armies_order )
-        Force::UpdateOrderUnits( *army1, *army2, *armies_order );
-
-    while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, true ) ) ) {
-        current_color = current_troop->GetCurrentOrArmyColor();
-
-        // first turn: castle and catapult action
-        if ( castle ) {
-            if ( !catapult_moved && current_troop->GetColor() == army1->GetColor() ) {
-                CatapultAction();
-                catapult_moved = true;
-            }
-
-            if ( !tower_moved && current_troop->GetColor() == army2->GetColor() ) {
-                if ( towers[1] && towers[1]->isValid() )
-                    TowerAction( *towers[1] );
-                if ( towers[0] && towers[0]->isValid() )
-                    TowerAction( *towers[0] );
-                if ( towers[2] && towers[2]->isValid() )
-                    TowerAction( *towers[2] );
-                tower_moved = true;
-
-                // check dead last army from towers
-                if ( !BattleValid() )
-                    break;
-            }
-        }
-
-        // set bridge passable
-        if ( bridge )
-            bridge->SetPassable( *current_troop );
-
-        // turn troop
-        TurnTroop( current_troop );
+        // build initial units order
+        Force::UpdateOrderUnits( *army1, *army2, nullptr, preferredColor, orderHistory, *armies_order );
     }
 
-    current_troop = NULL;
+    {
+        bool tower_moved = false;
+        bool catapult_moved = false;
 
-    // can skip move ?
-    if ( Settings::Get().ExtBattleSoftWait() ) {
-        while ( BattleValid() && NULL != ( current_troop = Force::GetCurrentUnit( *army1, *army2, current_troop, false ) ) ) {
-            current_color = current_troop->GetCurrentOrArmyColor();
+        Unit * troop = nullptr;
+
+        while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, true, preferredColor ) ) != nullptr ) {
+            current_color = troop->GetCurrentOrArmyColor();
+
+            // switch preferred color for the next unit
+            preferredColor = troop->GetArmyColor() == army1->GetColor() ? army2->GetColor() : army1->GetColor();
+
+            if ( armies_order ) {
+                // add unit to the order history
+                orderHistory.push_back( troop );
+
+                // update units order
+                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+            }
+
+            // first turn: castle and catapult action
+            if ( castle ) {
+                if ( !catapult_moved && troop->GetColor() == army1->GetColor() ) {
+                    CatapultAction();
+                    catapult_moved = true;
+                }
+
+                if ( !tower_moved && troop->GetColor() == army2->GetColor() ) {
+                    if ( towers[1] && towers[1]->isValid() ) {
+                        TowerAction( *towers[1] );
+
+                        if ( armies_order ) {
+                            // tower could kill someone, update units order
+                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                        }
+                    }
+                    if ( towers[0] && towers[0]->isValid() ) {
+                        TowerAction( *towers[0] );
+
+                        if ( armies_order ) {
+                            // tower could kill someone, update units order
+                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                        }
+                    }
+                    if ( towers[2] && towers[2]->isValid() ) {
+                        TowerAction( *towers[2] );
+
+                        if ( armies_order ) {
+                            // tower could kill someone, update units order
+                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                        }
+                    }
+                    tower_moved = true;
+
+                    // check dead last army from towers
+                    if ( !BattleValid() )
+                        break;
+                }
+            }
 
             // set bridge passable
             if ( bridge )
-                bridge->SetPassable( *current_troop );
+                bridge->SetPassable( *troop );
 
             // turn troop
-            TurnTroop( current_troop );
+            TurnTroop( troop, orderHistory );
+
+            if ( armies_order ) {
+                // if unit hasn't finished its turn yet, then remove it from the order history
+                if ( troop->Modes( TR_SKIPMOVE ) && !troop->Modes( TR_MOVED ) ) {
+                    orderHistory.pop_back();
+                }
+            }
+        }
+    }
+
+    // can skip move ?
+    if ( Settings::Get().ExtBattleSoftWait() ) {
+        Unit * troop = nullptr;
+
+        while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, false, preferredColor ) ) != nullptr ) {
+            current_color = troop->GetCurrentOrArmyColor();
+
+            // switch preferred color for the next unit
+            preferredColor = troop->GetArmyColor() == army1->GetColor() ? army2->GetColor() : army1->GetColor();
+
+            if ( armies_order ) {
+                // add unit to the order history
+                orderHistory.push_back( troop );
+
+                // update units order
+                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+            }
+
+            // set bridge passable
+            if ( bridge )
+                bridge->SetPassable( *troop );
+
+            // turn troop
+            TurnTroop( troop, orderHistory );
         }
     }
 

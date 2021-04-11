@@ -161,7 +161,7 @@ namespace Battle
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
-        void TurnTroop( Unit * );
+        void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
         void SetCastleTargetValue( int, u32 );
@@ -193,8 +193,10 @@ namespace Battle
         Force * army2;
         Units * armies_order;
 
-        const Castle * castle;
         int current_color;
+        int preferredColor; // preferred color for the next unit in the battle queue
+
+        const Castle * castle;
 
         Tower * towers[3];
         Catapult * catapult;
