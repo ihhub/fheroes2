@@ -412,9 +412,11 @@ namespace fheroes2
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
+        // We shouldn't copy or move different types of images.
+        assert( _singleLayer == image_._singleLayer );
+
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
-        std::swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -429,10 +431,12 @@ namespace fheroes2
     Image & Image::operator=( Image && image_ )
     {
         if ( this != &image_ ) {
+            // We shouldn't copy or move different types of images.
+            assert( _singleLayer == image_._singleLayer );
+
             std::swap( _width, image_._width );
             std::swap( _height, image_._height );
             std::swap( _data, image_._data );
-            std::swap( _singleLayer, image_._singleLayer );
         }
 
         return *this;
@@ -509,7 +513,7 @@ namespace fheroes2
 
     void Image::copy( const Image & image )
     {
-        // We shouldn't copy different types of images.
+        // We shouldn't copy or move different types of images.
         assert( _singleLayer == image._singleLayer );
 
         if ( !image._data ) {
