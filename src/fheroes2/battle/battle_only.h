@@ -24,20 +24,34 @@
 #define H2BATTLE_ONLY_H
 
 #include "army.h"
+#include "army_bar.h"
+#include "heroes_indicator.h"
 #include "heroes_recruits.h"
 #include "image.h"
 #include "players.h"
+#include "skill_bar.h"
 
-class ArmyBar;
+#include <memory>
+
 class PrimarySkillsBar;
-class SecondarySkillsBar;
 class ArtifactsBar;
-class MoraleIndicator;
-class LuckIndicator;
 
 namespace Battle
 {
-    struct ControlInfo;
+    struct ControlInfo
+    {
+        ControlInfo( const Point & pt, int ctrl )
+            : result( ctrl )
+            , rtLocal( pt.x, pt.y, 24, 24 )
+            , rtAI( pt.x + 75, pt.y, 24, 24 ){};
+
+        void Redraw( void );
+
+        int result;
+
+        const Rect rtLocal;
+        const Rect rtAI;
+    };
 
     class Only
     {
@@ -63,25 +77,25 @@ namespace Battle
         Army monsters;
 
     private:
-        MoraleIndicator * moraleIndicator1;
-        MoraleIndicator * moraleIndicator2;
+        std::unique_ptr<MoraleIndicator> moraleIndicator1;
+        std::unique_ptr<MoraleIndicator> moraleIndicator2;
 
-        LuckIndicator * luckIndicator1;
-        LuckIndicator * luckIndicator2;
+        std::unique_ptr<LuckIndicator> luckIndicator1;
+        std::unique_ptr<LuckIndicator> luckIndicator2;
 
-        PrimarySkillsBar * primskill_bar1;
-        PrimarySkillsBar * primskill_bar2;
+        std::unique_ptr<PrimarySkillsBar> primskill_bar1;
+        std::unique_ptr<PrimarySkillsBar> primskill_bar2;
 
-        SecondarySkillsBar * secskill_bar1;
-        SecondarySkillsBar * secskill_bar2;
+        std::unique_ptr<SecondarySkillsBar> secskill_bar1;
+        std::unique_ptr<SecondarySkillsBar> secskill_bar2;
 
-        ArmyBar * selectArmy1;
-        ArmyBar * selectArmy2;
+        std::unique_ptr<ArmyBar> selectArmy1;
+        std::unique_ptr<ArmyBar> selectArmy2;
 
-        ArtifactsBar * selectArtifacts1;
-        ArtifactsBar * selectArtifacts2;
+        std::unique_ptr<ArtifactsBar> selectArtifacts1;
+        std::unique_ptr<ArtifactsBar> selectArtifacts2;
 
-        ControlInfo * cinfo2;
+        std::unique_ptr<ControlInfo> cinfo2;
 
         Rect rtPortrait1;
         Rect rtPortrait2;
