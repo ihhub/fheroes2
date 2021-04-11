@@ -497,9 +497,6 @@ namespace fheroes2
 
         _width = width_;
         _height = height_;
-
-        // TODO: remove this, Image should be able to work with uninitialized data
-        std::fill( _data.get(), _data.get() + size * 2, 0 );
     }
 
     void Image::reset()
