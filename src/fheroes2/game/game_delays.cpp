@@ -66,37 +66,37 @@ namespace Game
 
     static const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
-    TimeDelay delays[] = {20, // SCROLL_DELAY
-                          500, // SCROLL_START_DELAY
-                          250, // MAIN_MENU_DELAY
-                          250, // MAPS_DELAY
-                          200, // CASTLE_TAVERN_DELAY
-                          200, // CASTLE_AROUND_DELAY
-                          130, // CASTLE_BUYHERO_DELAY
-                          130, // CASTLE_BUILD_DELAY
-                          150, // CASTLE_UNIT_DELAY
-                          32, // HEROES_FADE_DELAY
-                          40, // HEROES_PICKUP_DELAY
-                          50, // PUZZLE_FADE_DELAY
-                          75, // BATTLE_DIALOG_DELAY
-                          120, // BATTLE_FRAME_DELAY
-                          40, // BATTLE_MISSILE_DELAY
-                          90, // BATTLE_SPELL_DELAY
-                          20, // BATTLE_DISRUPTING_DELAY
-                          90, // BATTLE_CATAPULT_DELAY  // catapult
-                          40, // BATTLE_CATAPULT2_DELAY // boulder
-                          40, // BATTLE_CATAPULT3_DELAY // cloud
-                          90, // BATTLE_BRIDGE_DELAY
-                          150, // BATTLE_IDLE_DELAY
-                          350, // BATTLE_OPPONENTS_DELAY
-                          250, // BATTLE_FLAGS_DELAY
-                          800, // BATTLE_POPUP_DELAY
-                          220, // BATTLE_COLOR_CYCLE_DELAY
-                          160, // BATTLE_SELECTED_UNIT_DELAY
-                          10, // CURRENT_HERO_DELAY
-                          10, // CURRENT_AI_DELAY
-                          0, // CUSTOM_DELAY
-                          0};
+    TimeDelay delays[] = { 20, // SCROLL_DELAY
+                           500, // SCROLL_START_DELAY
+                           250, // MAIN_MENU_DELAY
+                           250, // MAPS_DELAY
+                           200, // CASTLE_TAVERN_DELAY
+                           200, // CASTLE_AROUND_DELAY
+                           130, // CASTLE_BUYHERO_DELAY
+                           130, // CASTLE_BUILD_DELAY
+                           150, // CASTLE_UNIT_DELAY
+                           32, // HEROES_FADE_DELAY
+                           40, // HEROES_PICKUP_DELAY
+                           50, // PUZZLE_FADE_DELAY
+                           75, // BATTLE_DIALOG_DELAY
+                           120, // BATTLE_FRAME_DELAY
+                           40, // BATTLE_MISSILE_DELAY
+                           90, // BATTLE_SPELL_DELAY
+                           20, // BATTLE_DISRUPTING_DELAY
+                           90, // BATTLE_CATAPULT_DELAY  // catapult
+                           40, // BATTLE_CATAPULT2_DELAY // boulder
+                           40, // BATTLE_CATAPULT3_DELAY // cloud
+                           90, // BATTLE_BRIDGE_DELAY
+                           150, // BATTLE_IDLE_DELAY
+                           350, // BATTLE_OPPONENTS_DELAY
+                           250, // BATTLE_FLAGS_DELAY
+                           800, // BATTLE_POPUP_DELAY
+                           220, // BATTLE_COLOR_CYCLE_DELAY
+                           160, // BATTLE_SELECTED_UNIT_DELAY
+                           10, // CURRENT_HERO_DELAY
+                           10, // CURRENT_AI_DELAY
+                           0, // CUSTOM_DELAY
+                           0 };
 
     int humanHeroMultiplier = 1;
     int aiHeroMultiplier = 1;
