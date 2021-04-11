@@ -3,6 +3,7 @@ Type=Application
 Name=fheroes2
 Comment=Free implementation of Heroes of Might and Magic II game engine
 Icon=fheroes2
+TryExec=fheroes2
 Exec=fheroes2
 Terminal=false
 StartupNotify=false

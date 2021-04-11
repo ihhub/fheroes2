@@ -1,3 +1,6 @@
-fheroes2 usr/games
+#!/usr/bin/dh-exec
+
+fheroes2 usr/lib/games/fheroes2
+debian/fheroes2.sh => /usr/games/fheroes2
 debian/fheroes2.desktop usr/share/applications
 debian/fheroes2.xpm usr/share/pixmaps
