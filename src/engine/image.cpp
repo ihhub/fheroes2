@@ -412,11 +412,9 @@ namespace fheroes2
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
-        using namespace std;
-
-        swap( _width, image_._width );
-        swap( _height, image_._height );
-        swap( _singleLayer, image_._singleLayer );
+        std::swap( _width, image_._width );
+        std::swap( _height, image_._height );
+        std::swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -431,12 +429,10 @@ namespace fheroes2
     Image & Image::operator=( Image && image_ )
     {
         if ( this != &image_ ) {
-            using namespace std;
-
-            swap( _width, image_._width );
-            swap( _height, image_._height );
-            swap( _data, image_._data );
-            swap( _singleLayer, image_._singleLayer );
+            std::swap( _width, image_._width );
+            std::swap( _height, image_._height );
+            std::swap( _data, image_._data );
+            std::swap( _singleLayer, image_._singleLayer );
         }
 
         return *this;
@@ -567,10 +563,8 @@ namespace fheroes2
         , _x( 0 )
         , _y( 0 )
     {
-        using namespace std;
-
-        swap( _x, sprite._x );
-        swap( _y, sprite._y );
+        std::swap( _x, sprite._x );
+        std::swap( _y, sprite._y );
     }
 
     Sprite & Sprite::operator=( const Sprite & sprite )
@@ -590,10 +584,8 @@ namespace fheroes2
         if ( this != &sprite ) {
             Image::operator=( std::move( sprite ) );
 
-            using namespace std;
-
-            swap( _x, sprite._x );
-            swap( _y, sprite._y );
+            std::swap( _x, sprite._x );
+            std::swap( _y, sprite._y );
         }
 
         return *this;
