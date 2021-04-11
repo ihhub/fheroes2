@@ -450,19 +450,11 @@ namespace fheroes2
 
     uint8_t * Image::transform()
     {
-        if ( empty() ) {
-            return nullptr;
-        }
-
         return _data.get() + _width * _height;
     }
 
     const uint8_t * Image::transform() const
     {
-        if ( empty() ) {
-            return nullptr;
-        }
-
         return _data.get() + _width * _height;
     }
 
