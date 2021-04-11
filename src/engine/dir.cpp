@@ -37,8 +37,7 @@
 
 namespace
 {
-    void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter,
-        ListFiles & files)
+    void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files)
     {
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
         (void)sensitive;
