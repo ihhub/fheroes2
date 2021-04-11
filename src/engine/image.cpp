@@ -393,7 +393,6 @@ namespace fheroes2
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
-        , _data( nullptr )
         , _singleLayer( false )
     {
         resize( width_, height_ );
@@ -402,52 +401,23 @@ namespace fheroes2
     Image::Image( const Image & image_ )
         : _width( 0 )
         , _height( 0 )
-        , _data( nullptr )
         , _singleLayer( false )
     {
-        resize( image_.width(), image_.height() );
-
-        const size_t totalSize = static_cast<size_t>( _width * _height );
-
-        memcpy( image(), image_.image(), totalSize );
-        memcpy( transform(), image_.transform(), totalSize );
+        copy( image_ );
     }
 
     Image::Image( Image && image_ )
         : _width( 0 )
         , _height( 0 )
-        , _data( nullptr )
         , _singleLayer( false )
     {
         swap( image_ );
     }
 
-    Image::~Image()
-    {
-        clear();
-    }
-
     Image & Image::operator=( const Image & image_ )
     {
-        // We shouldn't copy different types of images.
-        assert( _singleLayer == image_._singleLayer );
-
-        // resize if needed
-        if ( image_._width != _width || image_._height != _height ) {
-            _width = image_.width();
-            _height = image_.height();
-
-            delete[] _data;
-            if ( image_._data != nullptr ) {
-                _data = new uint8_t[static_cast<size_t>( _width * _height * 2 )];
-            }
-            else {
-                _data = nullptr;
-            }
-        }
-
-        if ( image_._data != nullptr ) {
-            memcpy( _data, image_._data, static_cast<size_t>( _width * _height * 2 ) );
+        if ( this != &image_ ) {
+            copy( image_ );
         }
 
         return *this;
@@ -455,34 +425,44 @@ namespace fheroes2
 
     Image & Image::operator=( Image && image_ )
     {
-        swap( image_ );
+        if ( this != &image_ ) {
+            swap( image_ );
+        }
+
         return *this;
     }
 
     uint8_t * Image::image()
     {
-        return _data;
+        return _data.get();
     }
 
     const uint8_t * Image::image() const
     {
-        return _data;
+        return _data.get();
     }
 
     uint8_t * Image::transform()
     {
-        return _data + _width * _height;
+        if ( empty() ) {
+            return nullptr;
+        }
+
+        return _data.get() + _width * _height;
     }
 
     const uint8_t * Image::transform() const
     {
-        return _data + _width * _height;
+        if ( empty() ) {
+            return nullptr;
+        }
+
+        return _data.get() + _width * _height;
     }
 
     void Image::clear()
     {
-        delete[] _data;
-        _data = nullptr;
+        _data.reset();
 
         _width = 0;
         _height = 0;
@@ -491,34 +471,43 @@ namespace fheroes2
     void Image::fill( uint8_t value )
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, value );
-            std::fill( transform(), transform() + totalSize, 0 );
+            const size_t size = static_cast<size_t>( _width * _height );
+
+            std::fill( image(), image() + size, value );
+            std::fill( transform(), transform() + size, 0 );
         }
     }
 
     void Image::resize( int32_t width_, int32_t height_ )
     {
-        if ( width_ <= 0 || height_ <= 0 || ( width_ == _width && height_ == _height ) ) // nothing to resize
+        if ( width_ == _width && height_ == _height ) {
             return;
+        }
 
-        clear();
+        if ( width_ <= 0 || height_ <= 0 ) {
+            clear();
+
+            return;
+        }
+
+        const size_t size = static_cast<size_t>( width_ * height_ );
+
+        _data.reset( new uint8_t[size * 2] );
 
         _width = width_;
         _height = height_;
 
-        const size_t totalSize = static_cast<size_t>( _width * _height );
-        _data = new uint8_t[totalSize * 2];
         // TODO: remove this, Image should be able to work with uninitialized data
-        std::fill( _data, _data + totalSize * 2, 0 );
+        std::fill( _data.get(), _data.get() + size * 2, 0 );
     }
 
     void Image::reset()
     {
         if ( !empty() ) {
-            const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, 0 );
-            std::fill( transform(), transform() + totalSize, 1 ); // skip all data
+            const size_t size = static_cast<size_t>( _width * _height );
+
+            std::fill( image(), image() + size, 0 );
+            std::fill( transform(), transform() + size, 1 ); // skip all data
         }
     }
 
@@ -533,6 +522,29 @@ namespace fheroes2
         std::swap( _data, image._data );
     }
 
+    void Image::copy( const Image & image )
+    {
+        // We shouldn't copy different types of images.
+        assert( _singleLayer == image._singleLayer );
+
+        if ( !image._data || image._width <= 0 || image._height <= 0 ) {
+            clear();
+
+            return;
+        }
+
+        const size_t size = static_cast<size_t>( image._width * image._height );
+
+        if ( image._width != _width || image._height != _height ) {
+            _data.reset( new uint8_t[size * 2] );
+
+            _width = image._width;
+            _height = image._height;
+        }
+
+        memcpy( _data.get(), image._data.get(), size * 2 );
+    }
+
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
         , _x( x_ )
@@ -545,31 +557,38 @@ namespace fheroes2
         , _y( y_ )
     {}
 
-    Sprite::Sprite( const Sprite & image )
-        : Image( image )
-        , _x( image._x )
-        , _y( image._y )
+    Sprite::Sprite( const Sprite & sprite )
+        : Image( sprite )
+        , _x( sprite._x )
+        , _y( sprite._y )
     {}
 
-    Sprite::Sprite( Sprite && image )
+    Sprite::Sprite( Sprite && sprite )
         : Image()
         , _x( 0 )
         , _y( 0 )
     {
-        swap( image );
+        swap( sprite );
     }
 
-    Sprite & Sprite::operator=( const Sprite & image )
+    Sprite & Sprite::operator=( const Sprite & sprite )
     {
-        Image::operator=( image );
-        _x = image._x;
-        _y = image._y;
+        if ( this != &sprite ) {
+            Image::operator=( sprite );
+
+            _x = sprite._x;
+            _y = sprite._y;
+        }
+
         return *this;
     }
 
-    Sprite & Sprite::operator=( Sprite && image )
+    Sprite & Sprite::operator=( Sprite && sprite )
     {
-        swap( image );
+        if ( this != &sprite ) {
+            swap( sprite );
+        }
+
         return *this;
     }
 
@@ -579,11 +598,12 @@ namespace fheroes2
         _y = y_;
     }
 
-    void Sprite::swap( Sprite & image )
+    void Sprite::swap( Sprite & sprite )
     {
-        Image::swap( image );
-        std::swap( _x, image._x );
-        std::swap( _y, image._y );
+        Image::swap( sprite );
+
+        std::swap( _x, sprite._x );
+        std::swap( _y, sprite._y );
     }
 
     ImageRestorer::ImageRestorer( Image & image )
