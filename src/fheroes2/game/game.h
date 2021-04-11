@@ -176,6 +176,7 @@ namespace Game
     enum
     {
         SCROLL_DELAY,
+        SCROLL_START_DELAY,
         MAIN_MENU_DELAY,
         MAPS_DELAY,
         CASTLE_TAVERN_DELAY,

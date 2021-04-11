@@ -692,6 +692,9 @@ int Interface::Basic::HumanTurn( bool isload )
     if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
         myKingdom.HeroesActionNewPosition();
 
+    int fastScrollRepeatCount = 0;
+    const int fastScrollStartThreshold = 2;
+
     bool isMovingHero = false;
     bool stopHero = false;
 
@@ -819,6 +822,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
         if ( fheroes2::cursor().isFocusActive() ) {
             int scrollPosition = SCROLL_NONE;
+
             if ( le.MouseCursor( GetScrollLeft() ) )
                 scrollPosition |= SCROLL_LEFT;
             else if ( le.MouseCursor( GetScrollRight() ) )
@@ -827,8 +831,24 @@ int Interface::Basic::HumanTurn( bool isload )
                 scrollPosition |= SCROLL_TOP;
             else if ( le.MouseCursor( GetScrollBottom() ) )
                 scrollPosition |= SCROLL_BOTTOM;
-            if ( scrollPosition != SCROLL_NONE )
-                gameArea.SetScroll( scrollPosition );
+
+            if ( scrollPosition != SCROLL_NONE ) {
+                if ( Game::AnimateInfrequentDelay( Game::SCROLL_START_DELAY ) ) {
+                    if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
+                        ++fastScrollRepeatCount;
+                    }
+                }
+
+                if ( fastScrollRepeatCount >= fastScrollStartThreshold ) {
+                    gameArea.SetScroll( scrollPosition );
+                }
+            }
+            else {
+                fastScrollRepeatCount = 0;
+            }
+        }
+        else {
+            fastScrollRepeatCount = 0;
         }
 
         const fheroes2::Rect displayArea( 0, 0, display.width(), display.height() );
