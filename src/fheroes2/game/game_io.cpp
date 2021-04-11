@@ -195,7 +195,7 @@ bool Game::Load( const std::string & fn )
     fs >> strver >> binver;
 
     // hide: unsupported version
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
@@ -242,11 +242,11 @@ bool Game::Load( const std::string & fn )
     fz >> binver;
 
     // check version: false
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION ) {
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
         std::ostringstream os;
         os << "usupported save format: " << binver << std::endl
            << "game version: " << CURRENT_FORMAT_VERSION << std::endl
-           << "last supported version: " << LAST_FORMAT_VERSION;
+           << "last supported version: " << LAST_SUPPORTED_FORMAT_VERSION;
         Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
         return false;
     }
@@ -317,7 +317,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     fs >> strver >> binver;
 
     // hide: unsupported version
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
