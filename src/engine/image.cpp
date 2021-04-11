@@ -514,7 +514,7 @@ namespace fheroes2
         // We shouldn't copy different types of images.
         assert( _singleLayer == image._singleLayer );
 
-        if ( !image._data || image._width <= 0 || image._height <= 0 ) {
+        if ( !image._data ) {
             clear();
 
             return;
