@@ -99,6 +99,7 @@ namespace Battle
 
         bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase &, bool ) const;
+        void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
 
         void FadeArena( bool clearMessageLog ) const;
 
