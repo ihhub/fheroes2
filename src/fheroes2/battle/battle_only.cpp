@@ -260,9 +260,7 @@ bool Battle::Only::ChangeSettings( void )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
                 if ( player2.isControlLocal() && NULL == cinfo2 ) {
-                    const Point point = Point( cur_pt.x + 500, cur_pt.y + 425 );
-                    const int control = player2.GetControl();
-                    cinfo2.reset( new ControlInfo( point, control ) );
+                    cinfo2.reset( new ControlInfo( Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
                 }
                 redraw = true;
             }
