@@ -393,9 +393,10 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             }
 
             // good morale
-            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
-                actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
-                end_turn = false;
+            if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
+                if ( troopHasAlreadySkippedMove ? !troop->Modes( TR_HARDSKIP ) : !troop->Modes( TR_SKIPMOVE ) ) {
+                    actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
+                }
             }
         }
 
