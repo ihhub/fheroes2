@@ -41,9 +41,9 @@ namespace
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
             ListFiles files = Settings::FindFiles( videoDir[i], fileName );
-            for ( std::string & fileName : files ) {
-                if ( System::IsFile( fileName ) ) { // file doesn't exist, so no need to even try to load it
-                    path.swap( fileName );
+            for ( std::string & name : files ) {
+                if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
+                    path.swap( name );
                     return true;
                 }
             }
