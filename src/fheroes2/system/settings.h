@@ -318,6 +318,8 @@ public:
     static std::string GetWriteableDir( const char * );
     static std::string GetLangDir( void );
 
+    static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
+
     // deprecated
     const std::string & GetDataParams( void ) const
     {
