@@ -86,9 +86,6 @@ namespace fheroes2
             _singleLayer = true;
         }
 
-    protected:
-        void swap( Image & image );
-
     private:
         void copy( const Image & image );
 
@@ -123,9 +120,6 @@ namespace fheroes2
         }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
-
-    protected:
-        void swap( Sprite & sprite );
 
     private:
         int32_t _x;

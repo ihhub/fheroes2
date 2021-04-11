@@ -409,9 +409,14 @@ namespace fheroes2
     Image::Image( Image && image_ )
         : _width( 0 )
         , _height( 0 )
+        , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
-        swap( image_ );
+        using namespace std;
+
+        swap( _width, image_._width );
+        swap( _height, image_._height );
+        swap( _singleLayer, image_._singleLayer );
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -426,7 +431,12 @@ namespace fheroes2
     Image & Image::operator=( Image && image_ )
     {
         if ( this != &image_ ) {
-            swap( image_ );
+            using namespace std;
+
+            swap( _width, image_._width );
+            swap( _height, image_._height );
+            swap( _data, image_._data );
+            swap( _singleLayer, image_._singleLayer );
         }
 
         return *this;
@@ -511,17 +521,6 @@ namespace fheroes2
         }
     }
 
-    void Image::swap( Image & image )
-    {
-        // We shouldn't swap different types of images.
-        assert( _singleLayer == image._singleLayer );
-
-        std::swap( _width, image._width );
-        std::swap( _height, image._height );
-
-        std::swap( _data, image._data );
-    }
-
     void Image::copy( const Image & image )
     {
         // We shouldn't copy different types of images.
@@ -564,11 +563,14 @@ namespace fheroes2
     {}
 
     Sprite::Sprite( Sprite && sprite )
-        : Image()
+        : Image( std::move( sprite ) )
         , _x( 0 )
         , _y( 0 )
     {
-        swap( sprite );
+        using namespace std;
+
+        swap( _x, sprite._x );
+        swap( _y, sprite._y );
     }
 
     Sprite & Sprite::operator=( const Sprite & sprite )
@@ -586,7 +588,12 @@ namespace fheroes2
     Sprite & Sprite::operator=( Sprite && sprite )
     {
         if ( this != &sprite ) {
-            swap( sprite );
+            Image::operator=( std::move( sprite ) );
+
+            using namespace std;
+
+            swap( _x, sprite._x );
+            swap( _y, sprite._y );
         }
 
         return *this;
@@ -596,14 +603,6 @@ namespace fheroes2
     {
         _x = x_;
         _y = y_;
-    }
-
-    void Sprite::swap( Sprite & sprite )
-    {
-        Image::swap( sprite );
-
-        std::swap( _x, sprite._x );
-        std::swap( _y, sprite._y );
     }
 
     ImageRestorer::ImageRestorer( Image & image )
