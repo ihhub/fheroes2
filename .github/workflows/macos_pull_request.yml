@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
+    - uses: Homebrew/actions/setup-homebrew@master
     - name: install SDL 1
       run: |
         brew install sdl sdl_ttf sdl_mixer sdl_image
@@ -26,6 +27,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
+    - uses: Homebrew/actions/setup-homebrew@master
     - name: install SDL 2
       run: |
         brew install sdl2 sdl2_ttf sdl2_mixer sdl2_image
