@@ -2709,7 +2709,10 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToOracle( const Heroes & hero, uint32_t obj )
 {
-    Dialog::Message( MP2::StringObject( obj ), _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents."), Font::BIG, Dialog::OK );
+    Dialog::Message(
+        MP2::StringObject( obj ),
+        _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
+        Font::BIG, Dialog::OK );
     Dialog::ThievesGuild( true );
 
     (void)hero;
