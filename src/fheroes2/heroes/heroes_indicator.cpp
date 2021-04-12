@@ -35,10 +35,11 @@ namespace fheroes2
 {
     std::string MoraleString( const int morale )
     {
+        if ( morale == Morale::BLOOD ) {
+            return _( "Blood Morale" );
+        }
         std::string str = _( "%{morale} Morale" );
-        std::string moraleStr = Morale::String( morale );
-        StringReplace( moraleStr, "!", "" );
-        StringReplace( str, "%{morale}", moraleStr );
+        StringReplace( str, "%{morale}", Morale::String( morale ) );
         return str;
     }
 
