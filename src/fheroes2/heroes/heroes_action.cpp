@@ -87,7 +87,7 @@ void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToEvent( Heroes & hero, s32 dst_index );
 void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToOracle( const Heroes & hero );
+void ActionToOracle( const Heroes & hero, uint32_t obj );
 void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToAlchemistsTower( Heroes & hero );
 void ActionToStables( Heroes & hero, u32 obj, s32 dst_index );
@@ -629,7 +629,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             break;
 
         case MP2::OBJ_ORACLE:
-            ActionToOracle( *this );
+            ActionToOracle( *this, object );
             break;
         case MP2::OBJ_SPHINX:
             ActionToSphinx( *this, object, tileIndex );
@@ -2707,8 +2707,9 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToOracle( const Heroes & hero )
+void ActionToOracle( const Heroes & hero, uint32_t obj )
 {
+    Dialog::Message( MP2::StringObject( obj ), _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents."), Font::BIG, Dialog::OK );
     Dialog::ThievesGuild( true );
 
     (void)hero;
