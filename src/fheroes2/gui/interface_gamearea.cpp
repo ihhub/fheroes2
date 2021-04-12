@@ -190,6 +190,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<std::reference_wrapper<const Maps::Tiles> > monsterList;
     std::set<std::reference_wrapper<const Maps::Tiles> > topList;
     std::set<std::reference_wrapper<const Maps::Tiles> > objectList;
+    auto hintTop = topList.cbegin();
+    auto hintObject = objectList.cbegin();
 
     // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
@@ -209,11 +211,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     const uint8_t objectTileset = tile.GetObjectTileset();
                     const int icn = MP2::GetICNObject( objectTileset );
                     if ( ICN::UNKNOWN != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, tile.GetObjectSpriteIndex() ) ) ) {
-                        objectList.insert( tile );
+                        hintObject = objectList.insert( hintObject, tile );
                     }
                 }
                 if ( drawTop ) {
-                    topList.insert( tile );
+                    hintTop = topList.insert( hintTop, tile );
                 }
             } break;
             case MP2::OBJ_BOAT: {
@@ -224,7 +226,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     drawList.emplace_back( tile );
                 }
                 else if ( drawTop ) {
-                    topList.insert( tile );
+                    hintTop = topList.insert( hintTop, tile );
                 }
             } break;
             case MP2::OBJ_MONSTER: {
@@ -232,7 +234,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
                 }
                 if ( drawTop ) {
-                    topList.insert( tile );
+                    hintTop = topList.insert( hintTop, tile );
                 }
                 if ( drawMonstersAndBoats ) {
                     monsterList.emplace_back( tile );
@@ -242,7 +244,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
                     if ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetObjectTileset(), tile.GetObjectSpriteIndex() ) ) {
-                        objectList.insert( tile );
+                        hintObject = objectList.insert( hintObject, tile );
                     }
                 }
                 if ( drawHeroes ) {
@@ -253,7 +255,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
                 else if ( drawTop ) {
-                    topList.insert( tile );
+                    hintTop = topList.insert( hintTop, tile );
                 }
             } break;
             default: {
@@ -264,7 +266,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
                 if ( drawTop ) {
-                    topList.insert( tile );
+                    hintTop = topList.insert( hintTop, tile );
                 }
             } break;
             }
