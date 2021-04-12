@@ -315,6 +315,12 @@ public:
 
     bool MayCastAdventureSpells() const;
 
+    const RedrawIndex & GetRedrawIndex() const;
+    void SetRedrawIndexes();
+    void UpdateRedrawTop( const Maps::Tiles & tile );
+    void UpdateRedrawBottom( const Maps::Tiles & tile );
+    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
     void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
@@ -350,13 +356,6 @@ public:
     static void ScholarAction( Heroes &, Heroes & );
 
     Point MovementDirection() const;
-
-    const RedrawIndex & GetRedrawIndex() const;
-    void InitDependencesTiles();
-    void UpdateTop( const Maps::Tiles & tile );
-    void UpdateObjects( const Maps::Tiles & tile );
-    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );

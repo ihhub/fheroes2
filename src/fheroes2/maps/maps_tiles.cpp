@@ -1560,7 +1560,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
 }
 
-bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
+bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::TREFALL:
@@ -1619,7 +1619,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         const uint8_t object = it->object;
         const uint8_t index = it->index;
-        if ( !SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
+        if ( !Interface::SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
             const int icn = MP2::GetICNObject( object );
 
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );

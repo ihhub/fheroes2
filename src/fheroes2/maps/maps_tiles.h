@@ -46,11 +46,10 @@ namespace MP2
     struct mp2addon_t;
 }
 
-bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable );
-
 namespace Interface
 {
     class GameArea;
+    bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable );
 }
 
 namespace Maps
@@ -313,6 +312,10 @@ namespace Maps
 #ifdef WITH_XML
         friend TiXmlElement & operator>>( TiXmlElement &, Tiles & );
 #endif
+        friend bool operator<( const Tiles & l, const Tiles & r )
+        {
+            return l.GetIndex() < r.GetIndex();
+        }
 
         Addons addons_level1;
         Addons addons_level2; // 16
