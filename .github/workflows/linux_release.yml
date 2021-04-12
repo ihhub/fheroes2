@@ -62,3 +62,44 @@ jobs:
         allowUpdates: true
         prerelease: true
         replacesArtifacts: true
+  psv-sdl2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install libs
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgcc1 gettext
+    - name: setup Vita SDK
+      run: |
+        git clone https://github.com/vitasdk/vdpm
+        cd vdpm
+        export PATH=$VITASDK/bin:$PATH
+        ./bootstrap-vitasdk.sh
+        ./install-all.sh
+      env:
+        VITASDK: "/usr/local/vitasdk"
+    - name: compile
+      run: |
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j 2
+      env:
+        FHEROES2_STRICT_COMPILATION: "ON"
+        VITASDK: "/usr/local/vitasdk"
+    - name: create package
+      run: |
+        cp doc/README.txt .
+        cp doc/README_PSV.md .
+        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: fheroes2_psv_sdl2.zip
+        body: ${{ github.event.commits[0].message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: PS Vita build with SDL 2.0 support (latest commit)
+        tag: fheroes2-psv-sdl2_dev
+        allowUpdates: true
+        prerelease: true
+        replacesArtifacts: true
