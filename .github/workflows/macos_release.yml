@@ -27,7 +27,7 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_macos10_15_sdl1.zip
-        body: Compiled version of ${{ github.sha }} commit
+        body: ${{ github.event.commits[0].message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: MacOS build with SDL 1 support (latest commit)
         tag: fheroes2-osx-sdl1_dev
@@ -55,7 +55,7 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_macos10_15_sdl2.zip
-        body: Compiled version of ${{ github.sha }} commit
+        body: ${{ github.event.commits[0].message }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: MacOS build with SDL 2 support (latest commit)
         tag: fheroes2-osx-sdl2_dev
