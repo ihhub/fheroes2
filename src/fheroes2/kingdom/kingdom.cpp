@@ -267,6 +267,8 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
             player->GetFocus().Reset();
         }
 
+        assert( hero != nullptr );
+
         AI::Get().HeroesRemove( *hero );
     }
 
@@ -301,6 +303,8 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
         }
+
+        assert( castle != nullptr );
 
         AI::Get().CastleRemove( *castle );
     }
