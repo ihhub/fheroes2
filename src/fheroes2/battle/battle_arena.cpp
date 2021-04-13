@@ -614,14 +614,18 @@ void Battle::Arena::CatapultAction( void )
 
         Command cmd( MSG_BATTLE_CATAPULT );
 
+        cmd << shots;
+
         while ( shots-- ) {
             int target = catapult->GetTarget( values );
             u32 damage = std::min( catapult->GetDamage(), values[target] );
-            cmd << damage << target;
+            cmd << target << damage;
             values[target] -= damage;
         }
 
-        cmd << catapult->GetShots();
+        // preserve the order of shots - command arguments will be extracted in reverse order
+        std::reverse( cmd.begin(), cmd.end() );
+
         ApplyAction( cmd );
     }
 }
