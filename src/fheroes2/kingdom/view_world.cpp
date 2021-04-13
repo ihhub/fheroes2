@@ -39,7 +39,7 @@ namespace
 {
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
     const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
-    const int icnLetterPerZoomLevel[4] = {ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12};
+    const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
     const int icnPerZoomLevelFlags[4] = {ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12};
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
