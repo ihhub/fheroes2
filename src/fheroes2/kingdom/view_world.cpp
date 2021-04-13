@@ -39,6 +39,7 @@ namespace
 {
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
     const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
+    const int icnLetterPerZoomLevel[4] = {ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12};
     const int icnPerZoomLevelFlags[4] = {ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12};
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
@@ -221,6 +222,7 @@ namespace
 
         const int tileSize = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )];
         const int icnBase = icnPerZoomLevel[static_cast<int>( ROI._zoomLevel )];
+        const int icnLetterId = icnLetterPerZoomLevel[static_cast<int>( ROI._zoomLevel )];
         const int icnFlagsBase = icnPerZoomLevelFlags[static_cast<int>( ROI._zoomLevel )];
 
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -253,6 +255,8 @@ namespace
                 const Maps::Tiles & tile = world.GetTiles( posX, posY );
                 int icn = icnBase;
                 int index = -1;
+
+                int letterIndex = -1;
 
                 int spriteOffsetX = 0;
                 int spriteOffsetY = 0;
@@ -306,10 +310,10 @@ namespace
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:
                 case MP2::OBJ_SAWMILL:
-                    // TODO show mine name
                     if ( revealMines || !tile.isFog( color ) ) {
                         index = colorToOffsetICN( tile.QuantityColor() );
                         spriteOffsetX = -6; // TODO -4 , -3
+                        letterIndex = tile.QuantityResourceCount().first;
                     }
                     break;
 
@@ -320,9 +324,9 @@ namespace
                     break;
 
                 case MP2::OBJ_RESOURCE:
-                    // TODO show resource name
                     if ( revealResources || !tile.isFog( color ) ) {
                         index = 13;
+                        letterIndex = tile.GetQuantity1();
                     }
                     break;
 
@@ -333,6 +337,38 @@ namespace
                 if ( index >= 0 ) {
                     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
                     fheroes2::Blit( sprite, display, dstx + spriteOffsetX, dsty + spriteOffsetY );
+
+                    if ( letterIndex >= 0 ) {
+                        switch ( letterIndex ) {
+                        case Resource::WOOD:
+                            letterIndex = 0;
+                            break;
+                        case Resource::MERCURY:
+                            letterIndex = 1;
+                            break;
+                        case Resource::ORE:
+                            letterIndex = 2;
+                            break;
+                        case Resource::SULFUR:
+                            letterIndex = 3;
+                            break;
+                        case Resource::CRYSTAL:
+                            letterIndex = 4;
+                            break;
+                        case Resource::GEMS:
+                            letterIndex = 5;
+                            break;
+                        case Resource::GOLD:
+                            letterIndex = 6;
+                            break;
+                        default:
+                            break;
+                        }
+
+                        const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
+                        fheroes2::Blit( letter, display, dstx + spriteOffsetX + ( sprite.width() - letter.width() ) / 2,
+                                        dsty + spriteOffsetY + ( sprite.height() - letter.height() ) / 2 );
+                    }
                 }
             }
         }
