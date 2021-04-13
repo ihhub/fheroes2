@@ -1569,6 +1569,8 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
         return ( icnIndex == 45 || icnIndex == 55 || icnIndex == 32 || icnIndex == 38 || icnIndex == 26 );
     case ICN::MTNMULT:
         return ( icnIndex == 11 );
+    case ICN::MTNSNOW:
+        return ( icnIndex == 32 || icnIndex == 79 || icnIndex == 11 || icnIndex == 5 );
     case ICN::TREFIR:
         return ( icnIndex == 17 || icnIndex == 7 );
     case ICN::UNKNOWN:
