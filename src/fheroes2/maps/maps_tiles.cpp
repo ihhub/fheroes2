@@ -1563,16 +1563,26 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
 bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
-    case ICN::TREFALL:
-        return ( icnIndex == 13 || icnIndex == 10 || icnIndex == 3 || icnIndex == 0 );
     case ICN::MTNDSRT:
-        return ( icnIndex == 45 || icnIndex == 55 || icnIndex == 32 || icnIndex == 38 || icnIndex == 26 );
+    case ICN::MTNGRAS:
+    case ICN::MTNLAVA:
     case ICN::MTNMULT:
-        return ( icnIndex == 11 );
     case ICN::MTNSNOW:
-        return ( icnIndex == 32 || icnIndex == 79 || icnIndex == 11 || icnIndex == 5 );
+    case ICN::MTNSWMP:
+        return ObjMnts1::isShadow( icnIndex );
+
+    case ICN::MTNCRCK:
+    case ICN::MTNDIRT:
+        return ObjMnts2::isShadow( icnIndex );
+
+    case ICN::TREDECI:
+    case ICN::TREEVIL:
+    case ICN::TREFALL:
     case ICN::TREFIR:
-        return ( icnIndex == 17 || icnIndex == 7 );
+    case ICN::TREJNGL:
+    case ICN::TRESNOW:
+        return ObjTree::isShadow( icnIndex );
+
     case ICN::UNKNOWN:
     case ICN::MINIHERO:
     case ICN::MONS32:
