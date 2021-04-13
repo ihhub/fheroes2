@@ -560,6 +560,89 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     return false;
 }
 
+void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const
+{
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
+    const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
+
+    fheroes2::ImageRestorer back( display, shadowOffset.x, shadowOffset.y, dialog.width() + BORDERWIDTH, dialog.height() + BORDERWIDTH - 1 );
+    const fheroes2::Rect renderArea( dialogOffset.x, dialogOffset.y, dialog.width(), dialog.height() );
+
+    fheroes2::Blit( dialogShadow, display, renderArea.x - BORDERWIDTH, renderArea.y + BORDERWIDTH - 1 );
+    fheroes2::Blit( dialog, display, renderArea.x, renderArea.y );
+
+    LoopedAnimationSequence sequence;
+    sequence.push( ICN::WINCMBT, true );
+
+    if ( sequence.isFinished() ) // Cannot be!
+        sequence.push( ICN::UNKNOWN, false );
+
+    const fheroes2::Sprite & sequenceBase = fheroes2::AGG::GetICN( sequence.id(), 0 );
+    const fheroes2::Sprite & sequenceStart = fheroes2::AGG::GetICN( sequence.id(), 1 );
+
+    const fheroes2::Point sequenceRenderAreaOffset( 47, 36 );
+
+    fheroes2::Blit( sequenceBase, display, renderArea.x + sequenceRenderAreaOffset.x + sequenceBase.x(), renderArea.y + sequenceRenderAreaOffset.y + sequenceBase.y() );
+    fheroes2::Blit( sequenceStart, display, renderArea.x + sequenceRenderAreaOffset.x + sequenceStart.x(),
+                    renderArea.y + sequenceRenderAreaOffset.y + sequenceStart.y() );
+
+    int xOffset = renderArea.x + bsTextXOffset;
+    int yOffset = renderArea.y + bsTextYOffset;
+
+    TextBox titleBox( _( "Necromancy!" ), Font::YELLOW_BIG, bsTextWidth );
+    titleBox.Blit( xOffset, yOffset );
+
+    const Monster mons( raisedMonsterType );
+    std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
+    StringReplace( msg, "%{count}", raiseCount );
+    StringReplace( msg, "%{monster}", mons.GetPluralName( raiseCount ) );
+
+    TextBox messageBox( msg, Font::BIG, bsTextWidth );
+    yOffset += bsTextIndent;
+    messageBox.Blit( xOffset, yOffset );
+
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
+    yOffset += messageBox.h() + monsterSprite.height();
+    fheroes2::Blit( monsterSprite, display, ( display.width() - monsterSprite.width() ) / 2, yOffset );
+
+    const Text raiseCountText( std::to_string( raiseCount ), Font::SMALL );
+    yOffset += 30;
+    raiseCountText.Blit( ( display.width() - raiseCountText.w() ) / 2, yOffset, bsTextWidth );
+    Game::PlayPickupSound();
+
+    const int buttonOffset = 121;
+    const int buttonICN = isEvilInterface ? ICN::WINCMBBE : ICN::WINCMBTB;
+    fheroes2::Button buttonOk( renderArea.x + buttonOffset, renderArea.y + 410, buttonICN, 0, 1 );
+    buttonOk.draw();
+
+    display.render();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+
+        // exit
+        if ( HotKeyCloseWindow || le.MouseClickLeft( buttonOk.area() ) )
+            break;
+
+        // animation
+        if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+            const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
+            const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
+
+            fheroes2::Blit( base, display, renderArea.x + sequenceRenderAreaOffset.x + sequenceBase.x(), renderArea.y + sequenceRenderAreaOffset.y + sequenceBase.y() );
+            fheroes2::Blit( sequenceCurrent, display, renderArea.x + sequenceRenderAreaOffset.x + sequenceCurrent.x(),
+                            renderArea.y + sequenceRenderAreaOffset.y + sequenceCurrent.y() );
+            display.render();
+        }
+    }
+}
+
 int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();

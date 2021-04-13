@@ -46,7 +46,7 @@ namespace Battle
 {
     void PickupArtifactsAction( HeroBase &, HeroBase & );
     void EagleEyeSkillAction( HeroBase &, const SpellStorage &, bool );
-    void NecromancySkillAction( HeroBase &, u32, bool );
+    void NecromancySkillAction( HeroBase & hero, const uint32_t, const bool isControlHuman, const Battle::Arena & arena );
 }
 
 Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
@@ -211,7 +211,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     // necromancy capability
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
-        NecromancySkillAction( *hero_wins, result.killed, hero_wins->isControlHuman() );
+        NecromancySkillAction( *hero_wins, result.killed, hero_wins->isControlHuman(), *arena );
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
@@ -307,38 +307,26 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
     hero.AppendSpellsToBook( new_spells, true );
 }
 
-void Battle::NecromancySkillAction( HeroBase & hero, u32 killed, bool local )
+void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsKilled, const bool isControlHuman, const Battle::Arena & arena )
 {
     Army & army = hero.GetArmy();
 
-    if ( 0 == killed || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
+    if ( 0 == enemyTroopsKilled || ( army.isFullHouse() && !army.HasMonster( Monster::SKELETON ) ) )
         return;
 
     const uint32_t necromancyPercent = GetNecromancyPercent( hero );
+    const uint32_t raisedMonsterType = Monster::SKELETON;
 
     const Monster mons( Monster::SKELETON );
-    uint32_t count = Monster::GetCountFromHitPoints( Monster::SKELETON, mons.GetHitPoints() * killed * necromancyPercent / 100 );
-    if ( count == 0u )
-        count = 1;
-    army.JoinTroop( mons, count );
+    uint32_t raiseCount = Monster::GetCountFromHitPoints( raisedMonsterType, mons.GetHitPoints() * enemyTroopsKilled * necromancyPercent / 100 );
+    if ( raiseCount == 0u )
+        raiseCount = 1;
+    army.JoinTroop( mons, raiseCount );
 
-    if ( local ) {
-        std::string msg = _( "Practicing the dark arts of necromancy, you are able to raise %{count} of the enemy's dead to return under your service as %{monster}." );
-        StringReplace( msg, "%{count}", count );
-        StringReplace( msg, "%{monster}", mons.GetPluralName( count ) );
-        fheroes2::Image sf1( 40, 45 );
-        sf1.reset();
+    if ( isControlHuman )
+        arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );
 
-        const fheroes2::Sprite & sf2 = fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() );
-        fheroes2::Blit( sf2, sf1, ( sf1.width() - sf2.width() ) / 2, 0 );
-        Text text( std::to_string( count ), Font::SMALL );
-        text.Blit( ( sf1.width() - text.w() ) / 2, sf2.height() + 3, sf1 );
-        Game::PlayPickupSound();
-
-        Dialog::SpriteInfo( "", msg, sf1 );
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << count << mons.GetMultiName() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() );
 }
 
 u32 Battle::Result::AttackerResult( void ) const
