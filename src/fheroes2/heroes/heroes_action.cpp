@@ -2055,6 +2055,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
         break;
 
+    case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MINES: {
         resource = tile.QuantityResourceCount().first;
         header = Maps::GetMinesName( resource );
@@ -2079,10 +2080,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             break;
         }
     } break;
-
-    case MP2::OBJ_ABANDONEDMINE:
-        body = _( "You beat the Ghosts and are able to restore the mine to production." );
-        break;
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( obj );
