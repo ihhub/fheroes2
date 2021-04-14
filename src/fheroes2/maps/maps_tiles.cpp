@@ -1560,13 +1560,31 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
-
-    RedrawTop( dst, visibleTileROI, area );
 }
 
-bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable )
+bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
+    case ICN::MTNDSRT:
+    case ICN::MTNGRAS:
+    case ICN::MTNLAVA:
+    case ICN::MTNMULT:
+    case ICN::MTNSNOW:
+    case ICN::MTNSWMP:
+        return ObjMnts1::isShadow( icnIndex );
+
+    case ICN::MTNCRCK:
+    case ICN::MTNDIRT:
+        return ObjMnts2::isShadow( icnIndex );
+
+    case ICN::TREDECI:
+    case ICN::TREEVIL:
+    case ICN::TREFALL:
+    case ICN::TREFIR:
+    case ICN::TREJNGL:
+    case ICN::TRESNOW:
+        return ObjTree::isShadow( icnIndex );
+
     case ICN::UNKNOWN:
     case ICN::MINIHERO:
     case ICN::MONS32:
@@ -1574,7 +1592,7 @@ bool SkipRedrawTileBottom4Hero( uint8_t tileset, uint8_t icnIndex, int passable 
 
     // whirlpool
     case ICN::OBJNWATR:
-        return icnIndex >= 202 && icnIndex <= 225;
+        return ( icnIndex >= 202 && icnIndex <= 225 ) || icnIndex == 69;
 
     // river delta
     case ICN::OBJNMUL2:
@@ -1615,7 +1633,7 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
     for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         const uint8_t object = it->object;
         const uint8_t index = it->index;
-        if ( !SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
+        if ( !Interface::SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
             const int icn = MP2::GetICNObject( object );
 
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
@@ -1624,13 +1642,6 @@ void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visible
             if ( it->object & 1 ) {
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 != 0 ) ), mp );
             }
-        }
-    }
-
-    if ( !SkipRedrawTileBottom4Hero( objectTileset, objectIndex, tilePassable ) ) {
-        RedrawObjects( dst, false, area );
-        if ( MP2::OBJ_MONSTER == GetObject() ) {
-            RedrawMonster( dst, visibleTileROI, area );
         }
     }
 }
