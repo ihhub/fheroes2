@@ -1019,8 +1019,6 @@ int Interface::Basic::HumanTurn( bool isload )
                 cursor.Show();
 
                 display.render();
-
-                continue;
             }
         }
 
