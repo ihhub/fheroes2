@@ -67,7 +67,7 @@ namespace Game
     static const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
     TimeDelay delays[] = { 20, // SCROLL_DELAY
-                           500, // SCROLL_START_DELAY
+                           250, // SCROLL_START_DELAY
                            250, // MAIN_MENU_DELAY
                            250, // MAPS_DELAY
                            200, // CASTLE_TAVERN_DELAY
