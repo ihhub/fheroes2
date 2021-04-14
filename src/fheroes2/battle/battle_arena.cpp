@@ -812,8 +812,8 @@ s32 Battle::Arena::GetFreePositionNearHero( int color ) const
 
 bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
-    const HeroBase * hero1 = GetCommander( color, false ); // enemy
-    const HeroBase * hero2 = GetCommander( color, true );
+    const HeroBase * hero1 = GetCommander( color, true ); // enemy
+    const HeroBase * hero2 = GetCommander( color, false );
     return hero1 && hero1->isHeroes() && hero2 && world.GetKingdom( hero2->GetColor() ).GetCastles().size();
 }
 
