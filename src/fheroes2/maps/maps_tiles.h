@@ -232,7 +232,7 @@ namespace Maps
             return ( fog_colors & colors ) == colors;
         }
 
-        const bool isFogAllAraound( int color ) const;
+        bool isFogAllAround( int color ) const;
         void ClearFog( int color );
 
         /* monster operation */

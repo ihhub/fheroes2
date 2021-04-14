@@ -2372,7 +2372,7 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
-const bool Maps::Tiles::isFogAllAraound( int color ) const
+bool Maps::Tiles::isFogAllAround( int color ) const
 {
     const uint32_t center = GetIndex();
     const Point mp = Maps::GetPoint( center );
