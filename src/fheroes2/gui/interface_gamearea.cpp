@@ -210,11 +210,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             if ( drawFog && tile.isFog( colors ) ) {
                 // don't redraw tile if fog all around
+                fogList.emplace_back( tile );
                 if ( tile.isFogAllAround( colors ) ) {
-                    tile.RedrawFogAllAround( dst, mp, *this );
                     continue;
                 }
-                fogList.emplace_back( tile );
             }
 
             const int object = tile.GetObject();

@@ -207,7 +207,6 @@ namespace Maps
         void RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
-        void RedrawFogAllAround( fheroes2::Image & dst, const Point & mp, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const Rect & visibleTileROI ) const;
 

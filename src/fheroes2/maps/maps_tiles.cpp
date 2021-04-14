@@ -2432,12 +2432,6 @@ int Maps::Tiles::GetFogDirections( int color ) const
     return around;
 }
 
-void Maps::Tiles::RedrawFogAllAround( fheroes2::Image & dst, const Point & mp, const Interface::GameArea & area ) const
-{
-    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
-    area.DrawTile( dst, sf, mp );
-}
-
 void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
