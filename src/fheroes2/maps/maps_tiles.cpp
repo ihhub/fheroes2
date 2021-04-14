@@ -1671,7 +1671,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI,
     RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
 }
 
-void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
     if ( !Maps::isValidDirection( maps_index, Direction::BOTTOM ) ) {
         return;
