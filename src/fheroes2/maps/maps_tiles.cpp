@@ -1671,6 +1671,21 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI,
     RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
 }
 
+void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const
+{
+    if ( !Maps::isValidDirection( maps_index, Direction::BOTTOM ) ) {
+        return;
+    }
+    const Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( maps_index, Direction::BOTTOM ) );
+    const Point mp = Maps::GetPoint( tile.GetIndex() );
+    for ( const Maps::TilesAddon & addon : tile.addons_level2 ) {
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( icn == ICN::FLAG32 ) {
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, addon.index ), mp );
+        }
+    }
+}
+
 void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
