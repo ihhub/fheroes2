@@ -2353,12 +2353,13 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.GetKingdom().isVisited( dst_index, obj ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
         Dialog::Message( name, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
                          Dialog::OK );
+        hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
     else {
         if ( Settings::Get().MusicMIDI() ) {
