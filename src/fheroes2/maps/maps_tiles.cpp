@@ -2372,6 +2372,51 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
+const bool Maps::Tiles::isFogAllAraound( int color ) const
+{
+    const uint32_t center = GetIndex();
+    const Point mp = Maps::GetPoint( center );
+    const int width = world.w();
+
+    if ( mp.y > 0 ) {
+        if ( mp.x > 0 && !world.GetTiles( center - width - 1 ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( !world.GetTiles( center - width ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( mp.x < width - 1 && !world.GetTiles( center - width + 1 ).isFog( color ) ) {
+            return false;
+        }
+    }
+
+    if ( mp.x > 0 && !world.GetTiles( center - 1 ).isFog( color ) ) {
+        return false;
+    }
+
+    if ( mp.x < width - 1 && !world.GetTiles( center + 1 ).isFog( color ) ) {
+        return false;
+    }
+
+    if ( mp.y < world.h() - 1 ) {
+        if ( mp.x > 0 && !world.GetTiles( center + width - 1 ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( !world.GetTiles( center + width ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( mp.x < width - 1 && !world.GetTiles( center + width + 1 ).isFog( color ) ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int Maps::Tiles::GetFogDirections( int color ) const
 {
     int around = 0;
@@ -2385,6 +2430,12 @@ int Maps::Tiles::GetFogDirections( int color ) const
         around |= Direction::CENTER;
 
     return around;
+}
+
+void Maps::Tiles::RedrawFogAllAround( fheroes2::Image & dst, const Point & mp, const Interface::GameArea & area ) const
+{
+    const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
+    area.DrawTile( dst, sf, mp );
 }
 
 void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const

@@ -190,6 +190,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<std::reference_wrapper<const Maps::Tiles> > monsterList;
     std::set<std::reference_wrapper<const Maps::Tiles> > topList;
     std::set<std::reference_wrapper<const Maps::Tiles> > objectList;
+    std::vector<std::reference_wrapper<const Maps::Tiles> > fogList;
     auto hintTop = topList.cbegin();
     auto hintObject = objectList.cbegin();
 
@@ -198,10 +199,24 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
     const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
+    const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
+
+    const int colors = Players::FriendColors();
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+            const Point mp(x, y);
+           
+            if ( drawFog && tile.isFog( colors ) ) {
+                // don't redraw tile if fog all around
+                if ( tile.isFogAllAraound( colors ) ) {
+                    tile.RedrawFogAllAround( dst, mp, *this );
+                    continue;
+                }
+                fogList.emplace_back( tile );
+            }
+
             const int object = tile.GetObject();
 
             switch ( object ) {
@@ -477,16 +492,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     else
 #endif
         // redraw fog
-        if ( flag & LEVEL_FOG ) {
-        const int colors = Players::FriendColors();
-
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tiles & tile = world.GetTiles( x, y );
-
-                if ( tile.isFog( colors ) )
-                    tile.RedrawFogs( dst, colors, *this );
-            }
+        if ( drawFog ) {
+        for ( const Maps::Tiles & tile : fogList ) {
+            tile.RedrawFogs( dst, colors, *this );
         }
     }
 }
