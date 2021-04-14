@@ -1003,8 +1003,6 @@ int Interface::Basic::HumanTurn( bool isload )
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
             if ( Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
-                cursor.Hide();
-
                 if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
                      || le.MouseCursor( GetScrollBottom() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
@@ -1014,11 +1012,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
                 gameArea.SetRedraw();
                 radar.SetRedraw();
-                Redraw();
-
-                cursor.Show();
-
-                display.render();
             }
         }
 
