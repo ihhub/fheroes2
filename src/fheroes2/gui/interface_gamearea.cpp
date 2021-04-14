@@ -206,8 +206,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            const Point mp(x, y);
-           
+            const Point mp( x, y );
+
             if ( drawFog && tile.isFog( colors ) ) {
                 // don't redraw tile if fog all around
                 if ( tile.isFogAllAraound( colors ) ) {
