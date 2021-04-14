@@ -669,17 +669,17 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, cons
     if ( _redrawIndex.topOnBottom != -1 ) {
         const Maps::Tiles & tileBottom = world.GetTiles( _redrawIndex.topOnBottom );
         tileBottom.RedrawTop( dst, visibleTileROI, area );
-        tileBottom.RedrawTopFromBottom( dst, visibleTileROI, area );
+        tileBottom.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirection != -1 ) {
         const Maps::Tiles & tileDirection = world.GetTiles( _redrawIndex.topOnDirection );
         tileDirection.RedrawTop( dst, visibleTileROI, area );
-        tileDirection.RedrawTopFromBottom( dst, visibleTileROI, area );
+        tileDirection.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirectionBottom != -1 ) {
         const Maps::Tiles & tileDirectionBottom = world.GetTiles( _redrawIndex.topOnDirectionBottom );
         tileDirectionBottom.RedrawTop( dst, visibleTileROI, area );
-        tileDirectionBottom.RedrawTopFromBottom( dst, visibleTileROI, area );
+        tileDirectionBottom.RedrawTopFromBottom( dst, area );
     }
 }
 
