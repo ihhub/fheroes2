@@ -31,7 +31,7 @@
 class SelectEnum : public Interface::ListBox<int>
 {
 public:
-    SelectEnum( const Rect & rt )
+    explicit SelectEnum( const Rect & rt )
         : Interface::ListBox<int>( rt )
         , area( rt )
         , ok( false )
@@ -77,7 +77,7 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    SelectEnumMonster( const Rect & rt )
+    explicit SelectEnumMonster( const Rect & rt )
         : SelectEnum( rt ){};
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
@@ -107,7 +107,7 @@ public:
 class SelectEnumHeroes : public SelectEnum
 {
 public:
-    SelectEnumHeroes( const Rect & rt )
+    explicit SelectEnumHeroes( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 6 );
@@ -136,7 +136,7 @@ public:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    SelectEnumArtifact( const Rect & rt )
+    explicit SelectEnumArtifact( const Rect & rt )
         : SelectEnum( rt )
     {}
 
@@ -161,7 +161,7 @@ public:
 class SelectEnumSpell : public SelectEnum
 {
 public:
-    SelectEnumSpell( const Rect & rt )
+    explicit SelectEnumSpell( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 4 );
@@ -188,7 +188,7 @@ public:
 class SelectEnumSecSkill : public SelectEnum
 {
 public:
-    SelectEnumSecSkill( const Rect & rt )
+    explicit SelectEnumSecSkill( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 5 );

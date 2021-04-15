@@ -69,7 +69,7 @@ namespace Rand
     class Queue : private std::vector<ValuePercent>
     {
     public:
-        Queue( u32 size = 0 );
+        explicit Queue( u32 size = 0 );
 
         void Push( s32 value, u32 percent );
         size_t Size( void ) const;

@@ -32,7 +32,7 @@ namespace Interface
     class BorderWindow
     {
     public:
-        BorderWindow( const Rect & );
+        explicit BorderWindow( const Rect & );
         virtual ~BorderWindow() = default;
 
         virtual void SetPos( int32_t, int32_t ) = 0;

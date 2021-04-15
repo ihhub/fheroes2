@@ -29,9 +29,9 @@
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    ScenarioListBox( const Point & pt )
+    explicit ScenarioListBox( const Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
-        , selectOk( false ){};
+        , selectOk( false ) {};
 
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
     void RedrawBackground( const Point & ) override;

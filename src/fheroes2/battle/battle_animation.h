@@ -30,7 +30,7 @@
 class RandomizedDelay : protected TimeDelay
 {
 public:
-    RandomizedDelay( uint32_t delay );
+    explicit RandomizedDelay( uint32_t delay );
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();
@@ -49,7 +49,7 @@ struct monsterReturnAnim
 class AnimationSequence
 {
 public:
-    AnimationSequence( const std::vector<int> & seq );
+    explicit AnimationSequence( const std::vector<int> & seq );
     AnimationSequence( const AnimationSequence & ) = default;
 
     AnimationSequence & operator=( const AnimationSequence & ) = delete;
@@ -100,7 +100,7 @@ class AnimationReference
 {
 public:
     AnimationReference();
-    AnimationReference( int id );
+    explicit AnimationReference( int id );
 
     virtual ~AnimationReference() = default;
 
@@ -139,7 +139,7 @@ protected:
 class AnimationState : public AnimationReference
 {
 public:
-    AnimationState( int monsterID );
+    explicit AnimationState( int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
     ~AnimationState() override = default;
 

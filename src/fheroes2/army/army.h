@@ -152,8 +152,8 @@ public:
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
                                   bool isScouteView = true );
 
-    Army( HeroBase * s = nullptr );
-    Army( const Maps::Tiles & );
+    explicit Army( HeroBase * s = nullptr );
+    explicit Army( const Maps::Tiles & );
     Army( const Army & ) = delete;
     Army( Army && ) = delete;
     Army & operator=( const Army & ) = delete;

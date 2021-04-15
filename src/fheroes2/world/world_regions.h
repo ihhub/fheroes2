@@ -40,7 +40,7 @@ struct MapRegionNode
     bool isWater = false;
 
     MapRegionNode() = default;
-    MapRegionNode( int index_ )
+    explicit MapRegionNode( int index_ )
         : index( index_ )
         , type( REGION_NODE_OPEN )
     {}

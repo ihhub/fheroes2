@@ -109,7 +109,7 @@ struct Control
 class Player : public BitModes, public Control
 {
 public:
-    Player( int col = Color::NONE );
+    explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
     bool isID( u32 ) const;

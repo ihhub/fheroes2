@@ -203,9 +203,9 @@ class ZStreamBuf;
 class StreamBuf : public StreamBase
 {
 public:
-    StreamBuf( size_t = 0 );
+    explicit StreamBuf( size_t = 0 );
     StreamBuf( const StreamBuf & );
-    StreamBuf( const std::vector<u8> & );
+    explicit StreamBuf( const std::vector<u8> & );
     StreamBuf( const u8 *, size_t );
 
     ~StreamBuf() override;

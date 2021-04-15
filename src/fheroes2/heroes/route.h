@@ -62,7 +62,7 @@ namespace Route
     class Path : public std::list<Step>
     {
     public:
-        Path( const Heroes & );
+        explicit Path( const Heroes & );
         Path( const Path & );
 
         Path & operator=( const Path & );

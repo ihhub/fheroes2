@@ -43,7 +43,7 @@ namespace Interface
     class ListBox : public ListBasic
     {
     public:
-        ListBox( const Point & pt = Point() )
+        explicit ListBox( const Point & pt = Point() )
             : content( NULL )
             , _currentId( -1 )
             , _topId( -1 )

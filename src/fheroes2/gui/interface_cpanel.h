@@ -34,7 +34,7 @@ namespace Interface
     class ControlPanel : protected fheroes2::Rect
     {
     public:
-        ControlPanel( Basic & );
+        explicit ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
         void Redraw( void ) const;

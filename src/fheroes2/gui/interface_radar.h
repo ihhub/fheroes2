@@ -34,7 +34,7 @@ namespace Interface
     class Radar : public BorderWindow
     {
     public:
-        Radar( Basic & );
+        explicit Radar( Basic & );
         Radar( const Radar & radar );
 
         ~Radar() override = default;

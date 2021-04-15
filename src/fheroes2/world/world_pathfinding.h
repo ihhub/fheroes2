@@ -68,7 +68,7 @@ private:
 class AIWorldPathfinder : public WorldPathfinder
 {
 public:
-    AIWorldPathfinder( double advantage )
+    explicit AIWorldPathfinder( double advantage )
         : _advantage( advantage )
     {}
 

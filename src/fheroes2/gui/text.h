@@ -55,7 +55,7 @@ enum
 class TextInterface
 {
 public:
-    TextInterface( int ft = Font::BIG );
+    explicit TextInterface( int ft = Font::BIG );
     virtual ~TextInterface() = default;
 
     virtual void SetText( const std::string & ) = 0;

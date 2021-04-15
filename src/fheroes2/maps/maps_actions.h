@@ -40,7 +40,7 @@ enum
 class ActionSimple
 {
 public:
-    ActionSimple( int v = 0 )
+    explicit ActionSimple( int v = 0 )
         : uid( 0 )
         , type( v )
     {}

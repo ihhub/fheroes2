@@ -33,7 +33,7 @@ namespace Interface
     class ButtonsArea : public BorderWindow
     {
     public:
-        ButtonsArea( Basic & );
+        explicit ButtonsArea( Basic & );
 
         void SetPos( s32, s32 ) override;
         void SavePosition( void ) override;
