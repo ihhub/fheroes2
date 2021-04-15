@@ -3029,7 +3029,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
             std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
             StringReplace( header, "%{riddle}", riddle->message );
             std::string answer;
-            Dialog::InputString( header, answer );
+            Dialog::InputString( header, answer, title );
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;

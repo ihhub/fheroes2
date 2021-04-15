@@ -204,7 +204,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     return result == Dialog::OK;
 }
 
-bool Dialog::InputString( const std::string & header, std::string & res )
+bool Dialog::InputString( const std::string & header, std::string & res, const std::string & title )
 {
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
@@ -219,19 +219,24 @@ bool Dialog::InputString( const std::string & header, std::string & res )
     res.reserve( 48 );
     size_t charInsertPos = 0;
 
+    TextBox titlebox( title, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    FrameBox box( 10 + textbox.h() + 10 + sprite.height(), true );
+    const uint32_t titleHeight = title.size() ? titlebox.h() + 10 : 0;
+    FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
+
+    if( title.size() )
+        titlebox.Blit( box_rt.x + ( box_rt.width - textbox.w() ) / 2, box_rt.y + 10 );
 
     // text
     fheroes2::Point dst_pt;
     dst_pt.x = box_rt.x + ( box_rt.width - textbox.w() ) / 2;
-    dst_pt.y = box_rt.y + 10;
+    dst_pt.y = box_rt.y + 10 + titleHeight;
     textbox.Blit( dst_pt.x, dst_pt.y );
 
-    dst_pt.y = box_rt.y + 10 + textbox.h() + 10;
+    dst_pt.y = box_rt.y + 10 + titleHeight + textbox.h() + 10;
     dst_pt.x = box_rt.x + ( box_rt.width - sprite.width() ) / 2;
     fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
     const fheroes2::Rect text_rt( dst_pt.x, dst_pt.y, sprite.width(), sprite.height() );
