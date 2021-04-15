@@ -25,7 +25,7 @@
 
 struct TimeDelay : std::pair<fheroes2::Time, uint32_t>
 {
-    explicit TimeDelay( uint32_t dl );
+    TimeDelay( uint32_t dl );
     uint32_t operator()( void ) const;
     TimeDelay & operator=( uint32_t dl );
     void Reset( void );
