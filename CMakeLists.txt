@@ -1,7 +1,7 @@
 # For file(GLOB_RECOURSE CONFIGURE_DEPENDS ...)
 cmake_minimum_required(VERSION 3.12)
 
-project(fheroes2 VERSION 0.9.1 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.2 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
@@ -9,7 +9,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Compile-time options
 set(SDL_VERSIONS SDL SDL2)
-set(USE_SDL_VERSION SDL CACHE STRING "SDL version")
+set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE    "Enable SDL/SDL2 Image support (requires libpng)" ON)
