@@ -59,10 +59,6 @@ namespace Interface
 
         void RedrawBackground( const Point & );
 
-        u32 CountIcons( void ) const
-        {
-            return iconsCount;
-        }
         void SetIconsCount( u32 c )
         {
             iconsCount = c;
@@ -141,8 +137,6 @@ namespace Interface
 
         void Redraw( void );
         void QueueEventProcessing( void );
-
-        u32 CountIcons( void ) const;
 
         void Select( Heroes * const );
         void Select( Castle * const );

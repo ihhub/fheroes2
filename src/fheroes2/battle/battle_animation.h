@@ -103,9 +103,6 @@ public:
     AnimationReference( int id );
     virtual ~AnimationReference();
 
-    int getStaticFrame() const;
-    int getDeathFrame() const;
-
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
     AnimationSequence getAnimationSequence( int animState ) const;
@@ -156,7 +153,7 @@ public:
 
     int getFrame() const;
     int firstFrame() const;
-    int animationLength() const;
+    size_t animationLength() const;
     double movementProgress() const;
     bool isFirstFrame() const;
     bool isLastFrame() const;

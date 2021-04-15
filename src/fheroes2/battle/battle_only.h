@@ -64,8 +64,6 @@ namespace Battle
         void UpdateHero1( const Point & );
         void UpdateHero2( const Point & );
 
-        static Recruits GetHeroesFromStreamBuf( StreamBuf & );
-
         Heroes * hero1;
         Heroes * hero2;
 
@@ -101,8 +99,5 @@ namespace Battle
         Rect rtPortrait2;
     };
 }
-
-StreamBase & operator<<( StreamBase &, const Battle::Only & );
-StreamBase & operator>>( StreamBase &, Battle::Only & );
 
 #endif

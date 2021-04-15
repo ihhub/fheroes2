@@ -36,7 +36,7 @@
 #include "world.h"
 
 bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
-void ZoneOpenFirstTiles( Puzzle &, u32 &, const std::vector<uint8_t> & );
+void ZoneOpenFirstTiles( Puzzle &, size_t &, const std::vector<uint8_t> & );
 void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
 void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
 void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, s32, s32 );
@@ -68,8 +68,8 @@ Puzzle & Puzzle::operator=( const char * str )
 
 void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
 {
-    u32 open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
-    u32 need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
+    const uint32_t open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
+    size_t need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
 
     if ( need_puzzle && ClosedTilesExists( *this, zone1_order ) )
         ZoneOpenFirstTiles( *this, need_puzzle, zone1_order );
@@ -118,7 +118,7 @@ bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
     return false;
 }
 
-void ZoneOpenFirstTiles( Puzzle & pzl, u32 & opens, const std::vector<uint8_t> & zone )
+void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t> & zone )
 {
     while ( opens ) {
         std::vector<uint8_t>::const_iterator it = zone.begin();
@@ -174,7 +174,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
-    const Settings & conf = Settings::Get();
+
     const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
     const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2,
@@ -183,7 +183,9 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     Rect blitArea = border.activeArea();
 
     fheroes2::Image background( blitArea.w, blitArea.h );
-    if ( conf.ExtGameEvilInterface() )
+
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    if ( isEvilInterface )
         background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
     else
         background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
@@ -193,7 +195,6 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 
     const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const Rect & radarPos = radar.GetArea();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
 

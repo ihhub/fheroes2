@@ -124,8 +124,3 @@ void Battle::Bridge::Action( const Unit & b, s32 dst )
 
     SetDown( action_down );
 }
-
-bool Battle::Bridge::isMoatCell( int cellId ) const
-{
-    return cellId == MOAT_CELL;
-}

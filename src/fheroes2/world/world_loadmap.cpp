@@ -1409,8 +1409,8 @@ bool World::LoadMapMP2( const std::string & filename )
 void World::ProcessNewMap()
 {
     // modify other objects
-    for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-        Maps::Tiles & tile = vec_tiles[ii];
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        Maps::Tiles & tile = vec_tiles[i];
 
         Maps::Tiles::FixedPreload( tile );
 
@@ -1495,7 +1495,7 @@ void World::ProcessNewMap()
             if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
-            tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
+            tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
         } break;
 
         default:

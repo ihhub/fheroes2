@@ -51,14 +51,6 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
     RenderRegular( GetRect() );
 }
 
-Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , border( BORDERWIDTH )
-{
-    SetPosition( posx, posy, encw, ench );
-    RenderRegular( GetRect() );
-}
-
 Dialog::FrameBorder::~FrameBorder()
 {
     if ( Cursor::Get().isVisible() ) {

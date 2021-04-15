@@ -76,13 +76,13 @@ RowSpells::RowSpells( const Point & pos, const Castle & castle, int lvl )
     }
 
     for ( u32 ii = 0; ii < count; ++ii )
-        coords.push_back( Rect( pos.x + coords.size() * 110 - roll.width() / 2, pos.y, roll.width(), roll.height() ) );
+        coords.emplace_back( pos.x + coords.size() * 110 - roll.width() / 2, pos.y, roll.width(), roll.height() );
 
     if ( castle.HaveLibraryCapability() ) {
         if ( !hide && castle.isLibraryBuild() )
-            coords.push_back( Rect( pos.x + coords.size() * 110 - roll_show.width() / 2, pos.y, roll_show.width(), roll_show.height() ) );
+            coords.emplace_back( pos.x + coords.size() * 110 - roll_show.width() / 2, pos.y, roll_show.width(), roll_show.height() );
         else
-            coords.push_back( Rect( pos.x + coords.size() * 110 - roll_hide.width() / 2, pos.y, roll_hide.width(), roll_hide.height() ) );
+            coords.emplace_back( pos.x + coords.size() * 110 - roll_hide.width() / 2, pos.y, roll_hide.width(), roll_hide.height() );
     }
 
     spells.reserve( 6 );
