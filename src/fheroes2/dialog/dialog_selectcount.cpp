@@ -227,7 +227,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
-    if( title.size() )
+    if ( title.size() )
         titlebox.Blit( box_rt.x + ( box_rt.width - textbox.w() ) / 2, box_rt.y + 10 );
 
     // text
