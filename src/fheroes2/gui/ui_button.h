@@ -99,8 +99,8 @@ namespace fheroes2
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
 
     protected:
-        virtual const Sprite & _getPressed() const override;
-        virtual const Sprite & _getReleased() const override;
+        const Sprite & _getPressed() const override;
+        const Sprite & _getReleased() const override;
 
     private:
         int _icnId;
@@ -119,8 +119,8 @@ namespace fheroes2
         void setSprite( const Sprite & released, const Sprite & pressed );
 
     protected:
-        virtual const Sprite & _getPressed() const override;
-        virtual const Sprite & _getReleased() const override;
+        const Sprite & _getPressed() const override;
+        const Sprite & _getReleased() const override;
 
     private:
         Sprite _released;
@@ -174,7 +174,7 @@ namespace fheroes2
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
     protected:
-        virtual void senderUpdate( const ActionObject * sender ) override;
+        void senderUpdate( const ActionObject * sender ) override;
 
     private:
         std::vector<ButtonBase *> _button;

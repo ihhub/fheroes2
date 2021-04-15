@@ -55,7 +55,7 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() {}
-    virtual void reset() override;
+    void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
     std::list<Route::Step> buildPath( int targetIndex ) const;
@@ -70,7 +70,7 @@ public:
     AIWorldPathfinder( double advantage )
         : _advantage( advantage )
     {}
-    virtual void reset() override;
+    void reset() override;
 
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );

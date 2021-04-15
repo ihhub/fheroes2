@@ -107,7 +107,7 @@ namespace fheroes2
 
         void render(); // render full image on screen
 
-        virtual void resize( int32_t width_, int32_t height_ ) override;
+        void resize( int32_t width_, int32_t height_ ) override;
         bool isDefaultSize() const;
 
         // this function must return true if new palette has been generated
@@ -116,8 +116,8 @@ namespace fheroes2
         void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
-        virtual uint8_t * image() override;
-        virtual const uint8_t * image() const override;
+        uint8_t * image() override;
+        const uint8_t * image() const override;
 
         void release(); // to release all allocated resources. Should be used at the end of the application
 

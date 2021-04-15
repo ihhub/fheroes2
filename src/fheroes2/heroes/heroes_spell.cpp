@@ -75,21 +75,21 @@ public:
         , _listBoxIcnId( isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX )
     {}
 
-    virtual void RedrawItem( const s32 &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const s32 &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    virtual void ActionCurrentUp( void ) override {}
+    void ActionCurrentUp( void ) override {}
 
-    virtual void ActionCurrentDn( void ) override {}
+    void ActionCurrentDn( void ) override {}
 
-    virtual void ActionListDoubleClick( s32 & ) override
+    void ActionListDoubleClick( s32 & ) override
     {
         result = Dialog::OK;
     }
 
-    virtual void ActionListSingleClick( s32 & ) override {}
+    void ActionListSingleClick( s32 & ) override {}
 
-    virtual void ActionListPressRight( int32_t & index ) override
+    void ActionListPressRight( int32_t & index ) override
     {
         const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
         if ( castle != nullptr ) {

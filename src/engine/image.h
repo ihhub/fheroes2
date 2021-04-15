@@ -104,7 +104,7 @@ namespace fheroes2
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite );
 
-        virtual ~Sprite() = default;
+        ~Sprite() override = default;
 
         Sprite & operator=( const Sprite & sprite );
         Sprite & operator=( Sprite && sprite );

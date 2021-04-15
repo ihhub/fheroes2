@@ -70,11 +70,11 @@ class DwellingsBar : public Interface::ItemsBar<DwellingItem>
 public:
     DwellingsBar( Castle &, const fheroes2::Size & );
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    virtual void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    void RedrawItem( DwellingItem &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarLeftMouseSingleClick( DwellingItem & dwelling ) override;
-    virtual bool ActionBarRightMouseHold( DwellingItem & dwelling ) override;
+    bool ActionBarLeftMouseSingleClick( DwellingItem & dwelling ) override;
+    bool ActionBarRightMouseHold( DwellingItem & dwelling ) override;
 
 protected:
     Castle & castle;

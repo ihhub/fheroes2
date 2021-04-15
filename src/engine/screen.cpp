@@ -148,7 +148,7 @@ namespace
             clear();
         }
 
-        virtual bool isVisible() const override
+        bool isVisible() const override
         {
             if ( _emulation )
                 return fheroes2::Cursor::isVisible();
@@ -156,7 +156,7 @@ namespace
                 return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
         }
 
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
                 SDL_ShowCursor( 0 );
@@ -210,7 +210,7 @@ namespace
             std::swap( _cursor, tempCursor );
         }
 
-        virtual void enableSoftwareEmulation( const bool enable ) override
+        void enableSoftwareEmulation( const bool enable ) override
         {
             if ( enable == _emulation )
                 return;
@@ -285,12 +285,12 @@ namespace
             return _destRect;
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const override
+        fheroes2::Size getCurrentScreenResolution() const override
         {
             return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -320,7 +320,7 @@ namespace
             VITA_ASPECT_CORRECTED_WIDTH = 848
         };
 
-        virtual void clear() override
+        void clear() override
         {
             if ( _window != nullptr ) {
                 SDL_DestroyWindow( _window );
@@ -340,7 +340,7 @@ namespace
             }
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -404,7 +404,7 @@ namespace
             return true;
         }
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display ) override
         {
             if ( _texBuffer == nullptr )
                 return;
@@ -421,7 +421,7 @@ namespace
             vita2d_swap_buffers();
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
                 return;
@@ -436,7 +436,7 @@ namespace
             memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return true;
         }
@@ -462,7 +462,7 @@ namespace
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        void toggleFullScreen() override
         {
             if ( _window == NULL ) {
                 BaseRenderEngine::toggleFullScreen();
@@ -495,7 +495,7 @@ namespace
             _retrieveWindowInfo();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _window == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -504,7 +504,7 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -528,13 +528,13 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             if ( _window != NULL )
                 SDL_SetWindowTitle( _window, title.c_str() );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
             if ( _window == NULL )
                 return;
@@ -576,12 +576,12 @@ namespace
             SDL_FreeSurface( surface );
         }
 
-        virtual fheroes2::Rect getActiveWindowROI() const override
+        fheroes2::Rect getActiveWindowROI() const override
         {
             return _activeWindowROI;
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const override
+        fheroes2::Size getCurrentScreenResolution() const override
         {
             return _currentScreenResolution;
         }
@@ -600,7 +600,7 @@ namespace
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
         {}
 
-        virtual void clear() override
+        void clear() override
         {
             if ( _texture != NULL ) {
                 SDL_DestroyTexture( _texture );
@@ -631,7 +631,7 @@ namespace
             _windowedSize = fheroes2::Size();
         }
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display ) override
         {
             if ( _surface == NULL )
                 return;
@@ -685,7 +685,7 @@ namespace
             }
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -761,7 +761,7 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
@@ -801,7 +801,7 @@ namespace
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
@@ -866,12 +866,12 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        ~RenderEngine() override
         {
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        void toggleFullScreen() override
         {
             if ( _surface == NULL ) { // nothing to render
                 BaseRenderEngine::toggleFullScreen();
@@ -897,7 +897,7 @@ namespace
             _createPalette();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _surface == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -905,7 +905,7 @@ namespace
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -924,12 +924,12 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             SDL_WM_SetCaption( title.c_str(), NULL );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
@@ -979,7 +979,7 @@ namespace
             , _bitDepth( 8 )
         {}
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display ) override
         {
             if ( _surface == NULL ) // nothing to render on
                 return;
@@ -1020,7 +1020,7 @@ namespace
             SDL_Flip( _surface );
         }
 
-        virtual void clear() override
+        void clear() override
         {
             linkRenderSurface( NULL );
 
@@ -1033,7 +1033,7 @@ namespace
             _palette8Bit.clear();
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -1063,7 +1063,7 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
@@ -1103,7 +1103,7 @@ namespace
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
         }

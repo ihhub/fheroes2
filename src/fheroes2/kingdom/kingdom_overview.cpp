@@ -98,19 +98,19 @@ public:
 
     bool Refresh( KingdomHeroes & heroes );
 
-    virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    virtual void ActionCurrentUp() override {}
-    virtual void ActionCurrentDn() override {}
-    virtual void ActionListSingleClick( HeroRow & ) override {}
-    virtual void ActionListDoubleClick( HeroRow & ) override {}
-    virtual void ActionListPressRight( HeroRow & ) override {}
+    void ActionCurrentUp() override {}
+    void ActionCurrentDn() override {}
+    void ActionListSingleClick( HeroRow & ) override {}
+    void ActionListDoubleClick( HeroRow & ) override {}
+    void ActionListPressRight( HeroRow & ) override {}
 
-    virtual void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( HeroRow &, const Point & ) override;
+    void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
+    void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
+    void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
+    bool ActionListCursor( HeroRow &, const Point & ) override;
 
 private:
     std::vector<HeroRow> content;
@@ -325,19 +325,19 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 public:
     StatsCastlesList( const Point & pt, KingdomCastles & );
 
-    virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    virtual void ActionCurrentUp( void ) override {}
-    virtual void ActionCurrentDn( void ) override {}
-    virtual void ActionListDoubleClick( CstlRow & ) override {}
-    virtual void ActionListSingleClick( CstlRow & ) override {}
-    virtual void ActionListPressRight( CstlRow & ) override {}
+    void ActionCurrentUp( void ) override {}
+    void ActionCurrentDn( void ) override {}
+    void ActionListDoubleClick( CstlRow & ) override {}
+    void ActionListSingleClick( CstlRow & ) override {}
+    void ActionListPressRight( CstlRow & ) override {}
 
-    virtual void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( CstlRow &, const Point & ) override;
+    void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
+    void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
+    void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
+    bool ActionListCursor( CstlRow &, const Point & ) override;
 
 private:
     std::vector<CstlRow> content;
