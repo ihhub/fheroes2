@@ -194,7 +194,7 @@ int main( int argc, char ** argv )
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
 
