@@ -46,8 +46,7 @@ public:
     bool write( const std::string &, bool append = false ) const;
 };
 
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize );
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, const uint8_t * transformData, size_t transformSize );
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
 
 class ImageZlib : public fheroes2::Image
 {
