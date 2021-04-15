@@ -764,7 +764,27 @@ std::string Settings::String( void ) const
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
-    os << "scroll speed = " << scroll_speed << std::endl;
+    os << "scroll speed = ";
+
+    switch ( scroll_speed ) {
+    case SCROLL_SLOW:
+        os << 1;
+        break;
+    case SCROLL_NORMAL:
+        os << 2;
+        break;
+    case SCROLL_FAST1:
+        os << 3;
+        break;
+    case SCROLL_FAST2:
+        os << 4;
+        break;
+    default:
+        os << 2;
+        break;
+    }
+
+    os << std::endl;
 
     os << std::endl << "# show battle grid: on off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
