@@ -79,7 +79,7 @@ void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 {
     iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it == end() )
-        push_back( ModeDuration( mode, duration ) );
+        emplace_back( mode, duration );
     else
         ( *it ).second = duration;
 }
@@ -592,11 +592,6 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
         res >>= 1; // div 2
 
     return res;
-}
-
-u32 Battle::Unit::HowManyCanKill( const Unit & b ) const
-{
-    return b.HowManyWillKilled( ( CalculateMinDamage( b ) + CalculateMaxDamage( b ) ) / 2 );
 }
 
 u32 Battle::Unit::HowManyWillKilled( u32 dmg ) const
@@ -1780,11 +1775,6 @@ uint32_t Battle::Unit::GetCustomAlpha() const
     return customAlphaMask;
 }
 
-int Battle::Unit::GetFrameCount( void ) const
-{
-    return animation.animationLength();
-}
-
 void Battle::Unit::IncreaseAnimFrame( bool loop )
 {
     animation.playAnimation( loop );
@@ -1899,11 +1889,6 @@ int Battle::Unit::M82Expl( void ) const
 int Battle::Unit::ICNFile( void ) const
 {
     return GetMonsterSprite().icn_file;
-}
-
-int Battle::Unit::ICNMiss( void ) const
-{
-    return Monster::GetMissileICN( GetID() );
 }
 
 Rect Battle::Unit::GetRectPosition( void ) const

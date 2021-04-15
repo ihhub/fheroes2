@@ -340,15 +340,17 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
     // interface themes
-    const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( conf.ExtGameEvilInterface() ? 17 : 16 ) );
+    const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( isEvilInterface ? 17 : 16 ) );
     const Rect & rect7 = rects[6];
     fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
     str = _( "Interface" );
     text.Set( str );
     text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() - textOffset );
 
-    if ( conf.ExtGameEvilInterface() )
+    if ( isEvilInterface )
         str = _( "Evil" );
     else
         str = _( "Good" );

@@ -333,11 +333,6 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
-u32 Interface::IconsPanel::CountIcons( void ) const
-{
-    return castleIcons.CountIcons();
-}
-
 void Interface::IconsPanel::SavePosition( void )
 {
     Settings::Get().SetPosIcons( GetRect() );

@@ -308,7 +308,6 @@ namespace CastleDialog
     struct CacheBuildings : std::vector<builds_t>
     {
         CacheBuildings( const Castle &, const Point & );
-        const Rect & GetRect( building_t ) const;
     };
 
     void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
