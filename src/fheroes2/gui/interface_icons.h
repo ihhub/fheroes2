@@ -57,7 +57,7 @@ namespace Interface
             return show;
         }
 
-        void RedrawBackground( const Point & );
+        void RedrawBackground( const Point & ) const;
 
         void SetIconsCount( u32 c )
         {

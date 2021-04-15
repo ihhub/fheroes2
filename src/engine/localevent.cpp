@@ -1009,7 +1009,7 @@ namespace
                 _posRenderDrawing();
         }
 
-        bool isRedrawRequired()
+        bool isRedrawRequired() const
         {
             return _prevDraw.getMs() >= 220;
         }
@@ -1059,12 +1059,12 @@ void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRend
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
-void LocalEvent::PauseCycling()
+void LocalEvent::PauseCycling() const
 {
     fheroes2::Display::instance().subscribe( NULL, NULL );
 }
 
-void LocalEvent::ResumeCycling()
+void LocalEvent::ResumeCycling() const
 {
     RegisterCycling();
 }

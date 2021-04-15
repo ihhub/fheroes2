@@ -37,11 +37,11 @@ namespace Interface
         ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
-        void Redraw( void );
+        void Redraw( void ) const;
         void ResetTheme( void );
         int QueueEventProcessing( void );
 
-        const fheroes2::Rect & GetArea( void );
+        const fheroes2::Rect & GetArea( void ) const;
 
     private:
         Basic & interface;

@@ -39,15 +39,15 @@ public:
     const char * GetName( void ) const;
     void SetStatusMessage( StatusBar & ) const;
     bool IsDwelling( void ) const;
-    void Redraw( void );
-    bool QueueEventProcessing( fheroes2::ButtonBase & exitButton );
+    void Redraw( void ) const;
+    bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
     static void UpdateCosts( const std::string & );
     static payment_t GetCost( u32, int );
 
 private:
-    void RedrawCaptain( void );
+    void RedrawCaptain( void ) const;
     std::string GetConditionDescription( void ) const;
 
     const Castle & castle;

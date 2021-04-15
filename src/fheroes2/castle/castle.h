@@ -126,7 +126,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL );
+    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
     bool isPosition( const Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -185,7 +185,7 @@ public:
     bool isBuild( u32 bd ) const;
     bool BuyBuilding( u32 );
     bool AllowBuyBoat( void ) const;
-    bool BuyBoat( void );
+    bool BuyBoat( void ) const;
     u32 GetBuildingRequirement( u32 ) const;
 
     int CheckBuyBuilding( u32 ) const;
@@ -219,7 +219,7 @@ public:
 
     std::string String( void ) const;
 
-    int DialogBuyHero( const Heroes * );
+    int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
     void SwapCastleHeroes( CastleHeroes & );
@@ -229,9 +229,9 @@ private:
     void EducateHeroes( void );
     Rect RedrawResourcePanel( const Point & ) const;
     u32 OpenTown( void );
-    void OpenTavern( void );
+    void OpenTavern( void ) const;
     void OpenWell( void );
-    void OpenMageGuild( const CastleHeroes & heroes );
+    void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );

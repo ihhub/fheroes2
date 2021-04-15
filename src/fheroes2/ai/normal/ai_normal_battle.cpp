@@ -397,7 +397,7 @@ namespace AI
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio );
     }
 
-    Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit )
+    Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
         const Units enemies( arena.GetForce( _myColor, true ), true );
@@ -469,7 +469,7 @@ namespace AI
         return actions;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit )
+    BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
         const Units enemies( arena.GetForce( _myColor, true ), true );
@@ -544,7 +544,7 @@ namespace AI
         return target;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit )
+    BattleTargetPair BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
 
@@ -634,7 +634,7 @@ namespace AI
         return target;
     }
 
-    Actions BattlePlanner::berserkTurn( Arena & arena, const Unit & currentUnit )
+    Actions BattlePlanner::berserkTurn( Arena & arena, const Unit & currentUnit ) const
     {
         assert( currentUnit.Modes( SP_BERSERKER ) );
         Actions actions;

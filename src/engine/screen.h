@@ -123,7 +123,7 @@ namespace fheroes2
 
         // Change whole color representation on the screen. Make sure that palette exists all the time!!!
         // NULL input parameters means to set to default value
-        void changePalette( const uint8_t * palette = nullptr );
+        void changePalette( const uint8_t * palette = nullptr ) const;
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
@@ -143,7 +143,7 @@ namespace fheroes2
 
         Display();
 
-        void _renderFrame(); // prepare and render a frame
+        void _renderFrame() const; // prepare and render a frame
     };
 
     class Cursor

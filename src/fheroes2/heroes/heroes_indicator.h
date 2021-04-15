@@ -81,8 +81,8 @@ class ExperienceIndicator : public HeroesIndicator
 public:
     ExperienceIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 class SpellPointsIndicator : public HeroesIndicator
@@ -90,8 +90,8 @@ class SpellPointsIndicator : public HeroesIndicator
 public:
     SpellPointsIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 #endif

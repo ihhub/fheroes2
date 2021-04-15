@@ -46,7 +46,7 @@ namespace Interface
         void SetHide( bool );
         void ResetAreaSize( void );
         void QueueEventProcessing( void );
-        bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi );
+        bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
         static Radar MakeRadarViewWorld( const Radar & radar );
 

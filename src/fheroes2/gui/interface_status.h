@@ -51,7 +51,7 @@ namespace Interface
 
         void Reset();
 
-        void Redraw();
+        void Redraw() const;
         void NextState();
 
         void SetState( const StatusType status );

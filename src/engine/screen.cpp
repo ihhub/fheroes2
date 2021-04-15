@@ -1219,7 +1219,7 @@ namespace fheroes2
         }
     }
 
-    void Display::_renderFrame()
+    void Display::_renderFrame() const
     {
         bool updateImage = true;
         if ( _preprocessing != NULL ) {
@@ -1263,7 +1263,7 @@ namespace fheroes2
         clear();
     }
 
-    void Display::changePalette( const uint8_t * palette )
+    void Display::changePalette( const uint8_t * palette ) const
     {
         if ( currentPalette == palette || ( palette == NULL && currentPalette == PALPAlette() ) )
             return;

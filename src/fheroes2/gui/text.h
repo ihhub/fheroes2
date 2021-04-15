@@ -190,8 +190,8 @@ public:
     bool isHide( void ) const;
     bool isShow( void ) const;
 
-    int w( void );
-    int h( void );
+    int w( void ) const;
+    int h( void ) const;
 
     fheroes2::Rect GetRect( void ) const;
 
