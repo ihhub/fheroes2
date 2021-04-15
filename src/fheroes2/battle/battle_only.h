@@ -64,6 +64,7 @@ namespace Battle
         void UpdateHero1( const Point & );
         void UpdateHero2( const Point & );
 
+    private:
         Heroes * hero1;
         Heroes * hero2;
 
@@ -74,7 +75,6 @@ namespace Battle
         Army * army2;
         Army monsters;
 
-    private:
         std::unique_ptr<MoraleIndicator> moraleIndicator1;
         std::unique_ptr<MoraleIndicator> moraleIndicator2;
 

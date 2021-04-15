@@ -120,7 +120,7 @@ Battle::Cell::Cell()
     , troop( NULL )
 {}
 
-Battle::Cell::Cell( s32 ii )
+Battle::Cell::Cell( int32_t ii )
     : index( ii )
     , object( 0 )
     , direction( UNKNOWN )

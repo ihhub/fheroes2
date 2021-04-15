@@ -37,7 +37,7 @@
 
 struct ComparsionDistance
 {
-    ComparsionDistance( const int32_t index )
+    explicit ComparsionDistance( const int32_t index )
         : center( index )
     {}
 

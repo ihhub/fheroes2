@@ -30,7 +30,7 @@ class Castle;
 class Captain : public HeroBase
 {
 public:
-    Captain( Castle & );
+    explicit Captain( Castle & );
 
     virtual bool isValid() const override;
     virtual int GetAttack() const override;
