@@ -399,15 +399,14 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
     Battle::Unit * battle = GetTroopUID( uid );
     if ( battle && battle->isValid() ) {
         if ( !battle->Modes( TR_MOVED ) ) {
-            if ( hard ) {
+            if ( hard || battle->Modes( TR_SKIPMOVE ) ) {
                 battle->SetModes( TR_HARDSKIP );
-                battle->SetModes( TR_SKIPMOVE );
                 battle->SetModes( TR_MOVED );
                 if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
                     battle->SetModes( TR_DEFENSED );
             }
-            else
-                battle->SetModes( battle->Modes( TR_SKIPMOVE ) ? TR_MOVED : TR_SKIPMOVE );
+
+            battle->SetModes( TR_SKIPMOVE );
 
             if ( interface )
                 interface->RedrawActionSkipStatus( *battle );

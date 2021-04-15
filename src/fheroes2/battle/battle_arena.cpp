@@ -352,7 +352,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
         }
-        else if ( troop->Modes( MORALE_BAD ) ) { // bad morale
+        else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
+            // bad morale, happens only if the unit wasn't waiting for a turn
             actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), false ) );
             end_turn = true;
         }
@@ -392,10 +393,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 break;
             }
 
+            const bool troopSkipsMove = troopHasAlreadySkippedMove ? troop->Modes( TR_HARDSKIP ) : troop->Modes( TR_SKIPMOVE );
+
             // good morale
-            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
-                actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
-                end_turn = false;
+            if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
+                actions.emplace_back( MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 

@@ -423,13 +423,13 @@ void Battle::Unit::NewTurn( void )
 
     ResetModes( TR_RESPONSED );
     ResetModes( TR_MOVED );
-    ResetModes( TR_SKIPMOVE );
     ResetModes( TR_HARDSKIP );
+    ResetModes( TR_SKIPMOVE );
     ResetModes( TR_DEFENSED );
-    ResetModes( MORALE_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( LUCK_BAD );
     ResetModes( LUCK_GOOD );
+    ResetModes( LUCK_BAD );
+    ResetModes( MORALE_GOOD );
+    ResetModes( MORALE_BAD );
 
     // decrease spell duration
     affected.DecreaseDuration();
@@ -663,13 +663,15 @@ void Battle::Unit::PostKilledAction( void )
         mirror = NULL;
     }
 
-    ResetModes( IS_MAGIC );
     ResetModes( TR_RESPONSED );
+    ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
+    ResetModes( IS_MAGIC );
 
     SetModes( TR_MOVED );
 
