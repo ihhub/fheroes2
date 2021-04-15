@@ -155,7 +155,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
     if ( static_cast<size_t>( width * height ) != uncompressedSize )
         return fheroes2::Image();
 
-    fheroes2::Image out( width, height );;
+    fheroes2::Image out( width, height );
 
     std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
     if ( doubleLayer ) {
