@@ -115,7 +115,7 @@ public:
 private:
     std::vector<HeroRow> content;
 
-    void SetContent( KingdomHeroes & heroes );
+    void SetContent( const KingdomHeroes & heroes );
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -132,7 +132,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     SetContent( heroes );
 }
 
-void StatsHeroesList::SetContent( KingdomHeroes & heroes )
+void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
@@ -323,7 +323,7 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const Point & pt, KingdomCastles & );
+    StatsCastlesList( const Point & pt, const KingdomCastles & );
 
     void RedrawItem( const CstlRow &, s32, s32, bool ) override;
     void RedrawBackground( const Point & ) override;
@@ -343,7 +343,7 @@ private:
     std::vector<CstlRow> content;
 };
 
-StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
+StatsCastlesList::StatsCastlesList( const Point & pt, const KingdomCastles & castles )
     : Interface::ListBox<CstlRow>( pt )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );

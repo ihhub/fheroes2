@@ -53,7 +53,7 @@ void DialogSpellFailed( const Spell & spell );
 
 bool ActionSpellViewMines( const Heroes & hero );
 bool ActionSpellViewResources( const Heroes & hero );
-bool ActionSpellViewArtifacts( Heroes & hero );
+bool ActionSpellViewArtifacts( const Heroes & hero );
 bool ActionSpellViewTowns( const Heroes & hero );
 bool ActionSpellViewHeroes( const Heroes & hero );
 bool ActionSpellViewAll( const Heroes & hero );
@@ -316,7 +316,7 @@ bool ActionSpellViewResources( const Heroes & )
     return true;
 }
 
-bool ActionSpellViewArtifacts( Heroes & )
+bool ActionSpellViewArtifacts( const Heroes & )
 {
     ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
     return true;
