@@ -414,7 +414,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const
