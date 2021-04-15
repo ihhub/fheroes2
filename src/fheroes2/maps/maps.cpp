@@ -53,7 +53,7 @@ Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const in
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
             result.push_back( indexes[idx] );
         }
     }
@@ -65,7 +65,7 @@ Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
     Maps::Indexes result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
             result.push_back( idx );
         }
     }
