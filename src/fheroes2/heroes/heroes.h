@@ -432,7 +432,11 @@ struct VecHeroes : public std::vector<Heroes *>
 struct AllHeroes : public VecHeroes
 {
     AllHeroes();
+    AllHeroes( const AllHeroes & ) = delete;
+
     ~AllHeroes();
+
+    AllHeroes & operator=( const AllHeroes & ) = delete;
 
     void Init( void );
     void clear( void );

@@ -119,6 +119,10 @@ public:
         SETTINGS_LAST
     };
 
+    Settings( const Settings & ) = delete;
+
+    Settings & operator=( const Settings & ) = delete;
+
     static Settings & Get( void );
 
     bool Read( const std::string & );

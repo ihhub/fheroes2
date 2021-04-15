@@ -74,7 +74,11 @@ namespace Battle
     {
     public:
         Unit( const Troop &, s32 pos, bool reflect );
+        Unit( const Unit & ) = default;
+
         ~Unit() override;
+
+        Unit & operator=( const Unit & ) = delete;
 
         bool isModes( u32 ) const override;
         bool isBattle() const override;

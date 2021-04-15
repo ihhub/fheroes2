@@ -132,7 +132,11 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
+        ButtonGroup( const ButtonGroup & ) = delete;
+
         ~ButtonGroup();
+
+        ButtonGroup & operator=( const ButtonGroup & ) = delete;
 
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
@@ -156,7 +160,11 @@ namespace fheroes2
     {
     public:
         explicit ButtonRestorer( ButtonBase & button, Image & area = Display::instance() );
+        ButtonRestorer( const ButtonRestorer & ) = delete;
+
         ~ButtonRestorer();
+
+        ButtonRestorer & operator=( const ButtonRestorer & ) = delete;
 
     private:
         ButtonBase & _button;

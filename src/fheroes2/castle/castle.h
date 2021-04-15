@@ -333,7 +333,11 @@ class AllCastles
 {
 public:
     AllCastles();
+    AllCastles( AllCastles & ) = delete;
+
     ~AllCastles();
+
+    AllCastles & operator=( const AllCastles & ) = delete;
 
     void Init( void );
     void Clear( void );

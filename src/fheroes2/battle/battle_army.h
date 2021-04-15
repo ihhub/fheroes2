@@ -54,7 +54,11 @@ namespace Battle
     {
     public:
         Force( Army &, bool );
+        Force( const Force & ) = delete;
+
         ~Force() override;
+
+        Force & operator=( const Force & ) = delete;
 
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;

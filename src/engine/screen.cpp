@@ -270,10 +270,14 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
+        RenderEngine( const RenderEngine & ) = delete;
+
         ~RenderEngine() override
         {
             clear();
         }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
 
         static RenderEngine * create()
         {
@@ -457,10 +461,14 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
+        RenderEngine( const RenderEngine & ) = delete;
+
         ~RenderEngine() override
         {
             clear();
         }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
 
         void toggleFullScreen() override
         {
@@ -866,10 +874,14 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
+        RenderEngine( const RenderEngine & ) = delete;
+
         ~RenderEngine() override
         {
             clear();
         }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
 
         void toggleFullScreen() override
         {

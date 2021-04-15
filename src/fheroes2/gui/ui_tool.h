@@ -52,7 +52,11 @@ namespace fheroes2
     {
     public:
         ScreenPaletteRestorer();
+        ScreenPaletteRestorer( const ScreenPaletteRestorer & ) = delete;
+
         ~ScreenPaletteRestorer();
+
+        ScreenPaletteRestorer & operator=( const ScreenPaletteRestorer & ) = delete;
 
         void changePalette( const uint8_t * palette ) const;
     };

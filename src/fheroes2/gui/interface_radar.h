@@ -37,6 +37,10 @@ namespace Interface
         Radar( Basic & );
         Radar( const Radar & radar );
 
+        ~Radar() override = default;
+
+        Radar & operator=( const Radar & ) = delete;
+
         void SetPos( s32, s32 ) override;
         void SetRedraw( void ) const;
         void Build( void );

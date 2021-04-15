@@ -50,8 +50,11 @@ class AnimationSequence
 {
 public:
     AnimationSequence( const std::vector<int> & seq );
+    AnimationSequence( const AnimationSequence & ) = default;
 
+    AnimationSequence & operator=( const AnimationSequence & ) = delete;
     AnimationSequence & operator=( const std::vector<int> & rhs );
+
     virtual ~AnimationSequence();
 
     int playAnimation( bool loop = false );
@@ -69,9 +72,6 @@ public:
 protected:
     std::vector<int> _seq;
     size_t _currentFrame;
-
-private:
-    AnimationSequence();
 };
 
 class TimedSequence : public AnimationSequence

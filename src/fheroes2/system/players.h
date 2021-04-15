@@ -158,7 +158,11 @@ class Players : public std::vector<Player *>
 {
 public:
     Players();
+    Players( const Players & ) = delete;
+
     ~Players();
+
+    Players & operator=( const Players & ) = delete;
 
     void Init( int colors );
     void Init( const Maps::FileInfo & );
