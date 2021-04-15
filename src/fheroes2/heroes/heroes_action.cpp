@@ -3018,11 +3018,12 @@ void ActionToEyeMagi( const Heroes & hero, u32 obj )
 void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 {
     MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
+    std::string title = MP2::StringObject( obj );
     if ( riddle && riddle->valid ) {
         if (
             Dialog::YES
             == Dialog::Message(
-                "",
+                title,
                 _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
                 Font::BIG, Dialog::YES | Dialog::NO ) ) {
             std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
@@ -3037,15 +3038,15 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 
                 if ( count ) {
                     if ( 1 == count && res.gold && art.isValid() )
-                        DialogWithArtifactAndGold( "", say, art, res.gold );
+                        DialogWithArtifactAndGold( title, say, art, res.gold );
                     else {
-                        Dialog::ResourceInfo( "", say, res );
+                        Dialog::ResourceInfo( title, say, res );
                         if ( art.isValid() )
-                            Dialog::ArtifactInfo( "", say, art );
+                            Dialog::ArtifactInfo( title, say, art );
                     }
                 }
                 else if ( art.isValid() )
-                    Dialog::ArtifactInfo( "", say, art );
+                    Dialog::ArtifactInfo( title, say, art );
 
                 if ( art.isValid() )
                     hero.PickupArtifact( art );
@@ -3058,7 +3059,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
             }
             else {
                 Dialog::Message(
-                    "",
+                    title,
                     _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
                     Font::BIG, Dialog::OK );
                 Battle::Result res;
@@ -3068,7 +3069,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
     else {
-        Dialog::Message( MP2::StringObject( obj ), _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
+        Dialog::Message( title, _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
