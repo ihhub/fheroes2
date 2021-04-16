@@ -501,7 +501,7 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
             ox += HERO_MOVE_STEP * frame;
 
         dstHero.x += ox;
-        dstFlag.x += ox;        
+        dstFlag.x += ox;
 
         int32_t oy = _offset.y;
         if ( direction & DIRECTION_TOP_ROW )
