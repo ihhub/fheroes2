@@ -448,7 +448,7 @@ void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const s
     SpellStorage tmpSpells = spells;
     std::sort( tmpSpells.begin(), tmpSpells.end() );
     for ( int32_t i = 0; i < spellsPerPage; ++i ) {
-        if ( spells.size() <= index + i )
+        if ( tmpSpells.size() <= index + i )
             return;
 
         const int32_t ox = 84 + 81 * ( i & 1 );
