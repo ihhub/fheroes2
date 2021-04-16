@@ -401,8 +401,10 @@ bool Heroes::isInVisibleMapArea() const
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
-bool Heroes::isDeepOcean() const {
-    const int32_t centerIndex = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
+bool Heroes::isDeepOcean() const
+{
+    const int32_t centerIndex
+        = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
     for ( const int _direction : Direction::All() ) {
         if ( Maps::isValidDirection( centerIndex, _direction ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, _direction ) ).isWater() ) {
             return false;
