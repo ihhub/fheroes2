@@ -1598,6 +1598,9 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
     case ICN::OBJNMUL2:
         return icnIndex < 14;
 
+    case ICN::OBJNMULT:
+        return icnIndex == 121;
+
     case ICN::OBJNTWSH:
     case ICN::OBJNTWBA:
     case ICN::ROAD:
