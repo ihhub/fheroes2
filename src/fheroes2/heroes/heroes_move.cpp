@@ -401,6 +401,16 @@ bool Heroes::isInVisibleMapArea() const
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
+bool Heroes::isDeepOcean() const {
+    const int32_t centerIndex = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
+    for ( const int _direction : Direction::All() ) {
+        if ( Maps::isValidDirection( centerIndex, _direction ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, _direction ) ).isWater() ) {
+            return false;
+        }
+    }
+    return true;
+}
+
 void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
@@ -412,83 +422,44 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
     if ( isShipMaster() )
         dy -= 10;
 
-    const fheroes2::Sprite & sprite3 = SpriteShad( *this, sprite_index );
-    const fheroes2::Sprite & sprite4 = SpriteFroth( *this, sprite_index );
+    const fheroes2::Sprite & spriteShad = SpriteShad( *this, sprite_index );
+    const fheroes2::Sprite & spriteFroth = SpriteFroth( *this, sprite_index );
 
-    Point dst_pt3( dx + sprite3.x(), dy + sprite3.y() + TILEWIDTH );
-    Point dst_pt4( dx + ( reflect ? TILEWIDTH - sprite4.x() - sprite4.width() : sprite4.x() ), dy + sprite4.y() + TILEWIDTH );
+    Point dstShad( dx + spriteShad.x(), dy + spriteShad.y() + TILEWIDTH );
+    Point dstFroth( dx + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ), dy + spriteFroth.y() + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
-        int32_t ox = 0;
-        int32_t oy = 0;
         int frame = ( sprite_index % 9 );
         if ( frame > 0 )
             --frame;
 
-        switch ( direction ) {
-        case Direction::TOP:
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM:
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            break;
-        default:
-            break;
-        }
+        int32_t ox = _offset.x;
+        if ( direction & DIRECTION_LEFT_COL )
+            ox -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_RIGHT_COL )
+            ox += HERO_MOVE_STEP * frame;
 
-        ox += _offset.x;
-        oy += _offset.y;
+        dstShad.x += ox;
+        dstFroth.x += ox;
 
-        dst_pt3.x += ox;
-        dst_pt3.y += oy;
-        dst_pt4.x += ox;
-        dst_pt4.y += oy;
+        int32_t oy = _offset.y;
+        if ( direction & DIRECTION_TOP_ROW )
+            oy -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_BOTTOM_ROW )
+            oy += HERO_MOVE_STEP * frame;
+
+        dstShad.y += oy;
+        dstFroth.y += oy;
     }
 
-    if ( isShipMaster() ) {
-        const Directions & directions = Direction::All();
-        const int filter = DIRECTION_BOTTOM_ROW | Direction::LEFT | Direction::RIGHT;
-        const int32_t centerIndex = GetIndex();
-
-        bool ocean = true;
-        for ( Directions::const_iterator it = directions.begin(); it != directions.end(); ++it ) {
-            if ( ( *it & filter ) && Maps::isValidDirection( centerIndex, *it ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, *it ) ).isWater() ) {
-                ocean = false;
-                break;
-            }
-        }
-
-        if ( ocean ) {
-            const Rect blitArea = area.RectFixed( dst_pt4, sprite4.width(), sprite4.height() );
-            fheroes2::AlphaBlit( sprite4, blitArea.x, blitArea.y, dst, dst_pt4.x, dst_pt4.y, blitArea.w, blitArea.h, _alphaValue, reflect );
-        }
+    if ( isShipMaster() && isMoveEnabled() && isDeepOcean() ) {
+        const Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
+        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.w, blitArea.h, _alphaValue, reflect );
     }
 
-    const Rect blitArea = area.RectFixed( dst_pt3, sprite3.width(), sprite3.height() );
-    fheroes2::AlphaBlit( sprite3, blitArea.x, blitArea.y, dst, dst_pt3.x, dst_pt3.y, blitArea.w, blitArea.h, _alphaValue );
+    const Rect blitArea = area.RectFixed( dstShad, spriteShad.width(), spriteShad.height() );
+    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.w, blitArea.h, _alphaValue );
 }
 
 void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const
@@ -508,68 +479,43 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect &
         dy -= 10;
 
     fheroes2::Point flagOffset;
-    const fheroes2::Sprite & sprite1 = SpriteHero( *this, sprite_index, false );
-    const fheroes2::Sprite & sprite2 = SpriteFlag( *this, flagFrameID, false, flagOffset );
+    const fheroes2::Sprite & spriteHero = SpriteHero( *this, sprite_index, false );
+    const fheroes2::Sprite & spriteFlag = SpriteFlag( *this, flagFrameID, false, flagOffset );
 
-    Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.width() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
-    Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - flagOffset.x - sprite2.width() : sprite2.x() + flagOffset.x ),
-                   dy + sprite2.y() + flagOffset.y + TILEWIDTH );
+    Point dstHero( dx + ( reflect ? TILEWIDTH - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
+    Point dstFlag( dx + ( reflect ? TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() : spriteFlag.x() + flagOffset.x ),
+                   dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
-        int32_t ox = 0;
-        int32_t oy = 0;
         int frame = ( sprite_index % 9 );
         if ( frame > 0 )
             --frame;
 
-        switch ( direction ) {
-        case Direction::TOP:
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::TOP_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = -HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM:
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::BOTTOM_LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            oy = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::RIGHT:
-            ox = HERO_MOVE_STEP * frame;
-            break;
-        case Direction::LEFT:
-            ox = -HERO_MOVE_STEP * frame;
-            break;
-        default:
-            break;
-        }
+        int32_t ox = _offset.x;
+        if ( direction & DIRECTION_LEFT_COL )
+            ox -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_RIGHT_COL )
+            ox += HERO_MOVE_STEP * frame;
 
-        ox += _offset.x;
-        oy += _offset.y;
+        dstHero.x += ox;
+        dstFlag.x += ox;        
 
-        dst_pt1.x += ox;
-        dst_pt1.y += oy;
-        dst_pt2.x += ox;
-        dst_pt2.y += oy;
+        int32_t oy = _offset.y;
+        if ( direction & DIRECTION_TOP_ROW )
+            oy -= HERO_MOVE_STEP * frame;
+        else if ( direction & DIRECTION_BOTTOM_ROW )
+            oy += HERO_MOVE_STEP * frame;
+
+        dstHero.y += oy;
+        dstFlag.y += oy;
     }
 
     // redraw sprites hero and flag
-    const Rect blitAreaHero = area.RectFixed( dst_pt1, sprite1.width(), sprite1.height() );
-    fheroes2::AlphaBlit( sprite1, blitAreaHero.x, blitAreaHero.y, dst, dst_pt1.x, dst_pt1.y, blitAreaHero.w, blitAreaHero.h, _alphaValue, reflect );
-    const Rect blitAreaFlag = area.RectFixed( dst_pt2, sprite2.width(), sprite2.height() );
-    fheroes2::AlphaBlit( sprite2, blitAreaFlag.x, blitAreaFlag.y, dst, dst_pt2.x, dst_pt2.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
+    const Rect blitAreaHero = area.RectFixed( dstHero, spriteHero.width(), spriteHero.height() );
+    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.w, blitAreaHero.h, _alphaValue, reflect );
+    const Rect blitAreaFlag = area.RectFixed( dstFlag, spriteFlag.width(), spriteFlag.height() );
+    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.w, blitAreaFlag.h, _alphaValue, reflect );
 }
 
 void Heroes::SetRedrawIndexes()

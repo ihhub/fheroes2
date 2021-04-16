@@ -337,6 +337,7 @@ public:
     int GetScoute( void ) const;
     u32 GetVisionsDistance( void ) const;
 
+    bool isDeepOcean() const;
     bool isShipMaster( void ) const;
     void SetShipMaster( bool );
     uint32_t lastGroundRegion() const;
