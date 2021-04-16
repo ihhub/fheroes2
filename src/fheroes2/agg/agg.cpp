@@ -102,7 +102,7 @@ namespace AGG
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
     void PlayMusicInternally( const int mus, const bool loop );
-    void PlaySoundInternally( const int m82 );
+    int PlaySoundInternally( const int m82 );
     void LoadLOOPXXSoundsInternally( const std::vector<int> & vols );
 
     /* return letter sprite */
@@ -551,32 +551,37 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 }
 
 /* wrapper Audio::Play */
-void AGG::PlaySound( int m82, bool asyncronizedCall )
+int AGG::PlaySound( int m82, bool asyncronizedCall )
 {
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushSound( m82 );
+        return -1;
     }
     else {
         g_asyncSoundManager.sync();
-        PlaySoundInternally( m82 );
+        return PlaySoundInternally( m82 );
     }
 }
 
-void AGG::PlaySoundInternally( const int m82 )
+int AGG::PlaySoundInternally( const int m82 )
 {
     const Settings & conf = Settings::Get();
     if ( !conf.Sound() ) {
-        return;
+        return -1;
     }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], v.size(), -1, false );
+
     Mixer::Pause( ch );
     Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
     Mixer::Resume( ch );
+
+    return ch;
 }
 
 /* wrapper Audio::Play */

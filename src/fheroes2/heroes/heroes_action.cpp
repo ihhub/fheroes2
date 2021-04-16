@@ -768,7 +768,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         destroy = true;
 
     if ( destroy ) {
-        AGG::PlaySound( M82::KILLFADE );
+        const int ch = AGG::PlaySound( M82::KILLFADE );
 
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
@@ -777,6 +777,12 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         tile.SetObject( MP2::OBJ_ZERO );
 
         Game::ObjectFadeAnimation::PerformFadeTask();
+
+        if ( ch >= 0 ) {
+            // wait for the M82::KILLFADE to finish playing
+            while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( ch ) )
+                ;
+        }
 
         if ( map_troop )
             world.RemoveMapObject( map_troop );

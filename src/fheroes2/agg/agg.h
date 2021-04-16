@@ -38,7 +38,8 @@ namespace AGG
     uint32_t GetFontHeight( bool small );
 #endif
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
-    void PlaySound( int m82, bool asyncronizedCall = false );
+    // Returns the mixer channel number if asyncronizedCall is false and playback was started, -1 otherwise
+    int PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
     void ResetMixer();
 
