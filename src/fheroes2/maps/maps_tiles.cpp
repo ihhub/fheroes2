@@ -1599,7 +1599,7 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
         return icnIndex < 14;
 
     case ICN::OBJNMULT:
-        return icnIndex == 121;
+        return ObjMult::isShadow( icnIndex );
 
     case ICN::OBJNTWSH:
     case ICN::OBJNTWBA:
