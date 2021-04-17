@@ -925,6 +925,7 @@ namespace ICN
         UNIFORM_EVIL_MAX_BUTTON,
         UNIFORM_EVIL_MIN_BUTTON,
 
+        WHITE_LARGE_FONT,
         SWAP_ARROW,
 
         // IMPORTANT! Put any new entry just above this one.

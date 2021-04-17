@@ -46,12 +46,22 @@ class ActionSimple;
 
 struct ListActions : public std::list<ActionSimple *>
 {
+    ListActions() = default;
+    ListActions( const ListActions & other ) = default;
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions( const ListActions && other ) = delete;
+    ListActions & operator=( const ListActions && other ) = delete;
     ~ListActions();
     void clear( void );
 };
 
 struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
+    MapObjects() = default;
+    MapObjects( const MapObjects & other ) = delete;
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects( const MapObjects && other ) = delete;
+    MapObjects & operator=( const MapObjects && other ) = delete;
     ~MapObjects();
     void clear( void );
     void add( MapObjectSimple * );
@@ -156,6 +166,10 @@ using MapsTiles = std::vector<Maps::Tiles>;
 class World : protected Size
 {
 public:
+    World( const World & other ) = delete;
+    World & operator=( const World & other ) = delete;
+    World( const World && other ) = delete;
+    World & operator=( const World && other ) = delete;
     ~World()
     {
         Reset();
@@ -264,7 +278,7 @@ public:
     size_t getRegionCount() const;
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( int index, int direction, const int heroColor ) const;
+    bool isValidPath( const int index, const int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();

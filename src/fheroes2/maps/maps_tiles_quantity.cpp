@@ -46,16 +46,16 @@ bool Maps::Tiles::QuantityIsValid( void ) const
     case MP2::OBJ_WINDMILL:
     case MP2::OBJ_LEANTO:
     case MP2::OBJ_MAGICGARDEN:
-        return quantity2;
+        return quantity2 != 0;
 
     case MP2::OBJ_SKELETON:
         return QuantityArtifact() != Artifact::UNKNOWN;
 
     case MP2::OBJ_WAGON:
-        return QuantityArtifact() != Artifact::UNKNOWN || quantity2;
+        return QuantityArtifact() != Artifact::UNKNOWN || quantity2 != 0;
 
     case MP2::OBJ_DAEMONCAVE:
-        return QuantityVariant();
+        return QuantityVariant() != 0;
 
     default:
         break;
@@ -232,6 +232,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
+        case 3:
         case 4:
             return 2500;
         default:
@@ -413,7 +414,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const
@@ -915,7 +916,7 @@ void Maps::Tiles::MonsterSetFixedCount( void )
 
 bool Maps::Tiles::MonsterFixedCount( void ) const
 {
-    return mp2_object == MP2::OBJ_MONSTER ? quantity3 & 0x80 : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? ( quantity3 & 0x80 ) != 0 : false;
 }
 
 bool Maps::Tiles::MonsterJoinConditionSkip( void ) const

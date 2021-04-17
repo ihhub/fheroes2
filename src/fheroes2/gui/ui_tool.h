@@ -29,7 +29,7 @@ namespace fheroes2
     public:
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
-        MovableSprite( const Sprite & sprite );
+        explicit MovableSprite( const Sprite & sprite );
         virtual ~MovableSprite();
 
         MovableSprite & operator=( const Sprite & sprite );

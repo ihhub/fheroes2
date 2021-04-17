@@ -465,9 +465,9 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     fs.seek( 0x1D );
     conditions_wins = fs.get();
     // data wins
-    comp_also_wins = fs.get();
+    comp_also_wins = ( fs.get() != 0 );
     // data wins
-    allow_normal_victory = fs.get();
+    allow_normal_victory = ( fs.get() != 0 );
     // data wins
     wins1 = fs.getLE16();
     // data wins

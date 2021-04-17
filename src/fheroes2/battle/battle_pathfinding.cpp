@@ -217,7 +217,7 @@ namespace Battle
                 else if ( previousNode._from < 0 )
                     availableMoves = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
                 else
-                    availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) );
+                    availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) != 0 );
 
                 for ( const int32_t newNode : availableMoves ) {
                     const Cell * headCell = Board::GetCell( newNode );

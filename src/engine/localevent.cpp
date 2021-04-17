@@ -58,6 +58,144 @@ namespace
         return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
     }
 
+    KeySym KeySymFromChar( char c )
+    {
+        switch ( c ) {
+        case '!':
+            return KEY_EXCLAIM;
+        case '"':
+            return KEY_QUOTEDBL;
+        case '#':
+            return KEY_HASH;
+        case '$':
+            return KEY_DOLLAR;
+        case '&':
+            return KEY_AMPERSAND;
+        case '\'':
+            return KEY_QUOTE;
+        case '(':
+            return KEY_LEFTPAREN;
+        case ')':
+            return KEY_RIGHTPAREN;
+        case '*':
+            return KEY_ASTERISK;
+        case '+':
+            return KEY_PLUS;
+        case ',':
+            return KEY_COMMA;
+        case '-':
+            return KEY_MINUS;
+        case '.':
+            return KEY_PERIOD;
+        case '/':
+            return KEY_SLASH;
+        case ':':
+            return KEY_COLON;
+        case ';':
+            return KEY_SEMICOLON;
+        case '<':
+            return KEY_LESS;
+        case '=':
+            return KEY_EQUALS;
+        case '>':
+            return KEY_GREATER;
+        case '?':
+            return KEY_QUESTION;
+        case '@':
+            return KEY_AT;
+        case '[':
+            return KEY_LEFTBRACKET;
+        case '\\':
+            return KEY_BACKSLASH;
+        case ']':
+            return KEY_RIGHTBRACKET;
+        case '^':
+            return KEY_CARET;
+        case '_':
+            return KEY_UNDERSCORE;
+        case ' ':
+            return KEY_SPACE;
+
+        case 'a':
+            return KEY_a;
+        case 'b':
+            return KEY_b;
+        case 'c':
+            return KEY_c;
+        case 'd':
+            return KEY_d;
+        case 'e':
+            return KEY_e;
+        case 'f':
+            return KEY_f;
+        case 'g':
+            return KEY_g;
+        case 'h':
+            return KEY_h;
+        case 'i':
+            return KEY_i;
+        case 'j':
+            return KEY_j;
+        case 'k':
+            return KEY_k;
+        case 'l':
+            return KEY_l;
+        case 'm':
+            return KEY_m;
+        case 'n':
+            return KEY_n;
+        case 'o':
+            return KEY_o;
+        case 'p':
+            return KEY_p;
+        case 'q':
+            return KEY_q;
+        case 'r':
+            return KEY_r;
+        case 's':
+            return KEY_s;
+        case 't':
+            return KEY_t;
+        case 'u':
+            return KEY_u;
+        case 'v':
+            return KEY_v;
+        case 'w':
+            return KEY_w;
+        case 'x':
+            return KEY_x;
+        case 'y':
+            return KEY_y;
+        case 'z':
+            return KEY_z;
+
+        case '0':
+            return KEY_0;
+        case '1':
+            return KEY_1;
+        case '2':
+            return KEY_2;
+        case '3':
+            return KEY_3;
+        case '4':
+            return KEY_4;
+        case '5':
+            return KEY_5;
+        case '6':
+            return KEY_6;
+        case '7':
+            return KEY_7;
+        case '8':
+            return KEY_8;
+        case '9':
+            return KEY_9;
+
+        default:
+            break;
+        }
+        return KEY_NONE;
+    }
+
     void SetCurrentDPadCharIndex( char currentChar )
     {
         if ( currentChar >= 'A' && currentChar <= 'Z' ) {
@@ -145,31 +283,6 @@ void LocalEvent::CloseVirtualKeyboard()
 const Point & LocalEvent::GetMousePressLeft( void ) const
 {
     return mouse_pl;
-}
-
-const Point & LocalEvent::GetMousePressMiddle( void ) const
-{
-    return mouse_pm;
-}
-
-const Point & LocalEvent::GetMousePressRight( void ) const
-{
-    return mouse_pr;
-}
-
-const Point & LocalEvent::GetMouseReleaseLeft( void ) const
-{
-    return mouse_rl;
-}
-
-const Point & LocalEvent::GetMouseReleaseMiddle( void ) const
-{
-    return mouse_rm;
-}
-
-const Point & LocalEvent::GetMouseReleaseRight( void ) const
-{
-    return mouse_rr;
 }
 
 void LocalEvent::SetMouseOffsetX( int16_t x )
@@ -863,144 +976,6 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     return pos;
 }
 
-KeySym KeySymFromChar( char c )
-{
-    switch ( c ) {
-    case '!':
-        return KEY_EXCLAIM;
-    case '"':
-        return KEY_QUOTEDBL;
-    case '#':
-        return KEY_HASH;
-    case '$':
-        return KEY_DOLLAR;
-    case '&':
-        return KEY_AMPERSAND;
-    case '\'':
-        return KEY_QUOTE;
-    case '(':
-        return KEY_LEFTPAREN;
-    case ')':
-        return KEY_RIGHTPAREN;
-    case '*':
-        return KEY_ASTERISK;
-    case '+':
-        return KEY_PLUS;
-    case ',':
-        return KEY_COMMA;
-    case '-':
-        return KEY_MINUS;
-    case '.':
-        return KEY_PERIOD;
-    case '/':
-        return KEY_SLASH;
-    case ':':
-        return KEY_COLON;
-    case ';':
-        return KEY_SEMICOLON;
-    case '<':
-        return KEY_LESS;
-    case '=':
-        return KEY_EQUALS;
-    case '>':
-        return KEY_GREATER;
-    case '?':
-        return KEY_QUESTION;
-    case '@':
-        return KEY_AT;
-    case '[':
-        return KEY_LEFTBRACKET;
-    case '\\':
-        return KEY_BACKSLASH;
-    case ']':
-        return KEY_RIGHTBRACKET;
-    case '^':
-        return KEY_CARET;
-    case '_':
-        return KEY_UNDERSCORE;
-    case ' ':
-        return KEY_SPACE;
-
-    case 'a':
-        return KEY_a;
-    case 'b':
-        return KEY_b;
-    case 'c':
-        return KEY_c;
-    case 'd':
-        return KEY_d;
-    case 'e':
-        return KEY_e;
-    case 'f':
-        return KEY_f;
-    case 'g':
-        return KEY_g;
-    case 'h':
-        return KEY_h;
-    case 'i':
-        return KEY_i;
-    case 'j':
-        return KEY_j;
-    case 'k':
-        return KEY_k;
-    case 'l':
-        return KEY_l;
-    case 'm':
-        return KEY_m;
-    case 'n':
-        return KEY_n;
-    case 'o':
-        return KEY_o;
-    case 'p':
-        return KEY_p;
-    case 'q':
-        return KEY_q;
-    case 'r':
-        return KEY_r;
-    case 's':
-        return KEY_s;
-    case 't':
-        return KEY_t;
-    case 'u':
-        return KEY_u;
-    case 'v':
-        return KEY_v;
-    case 'w':
-        return KEY_w;
-    case 'x':
-        return KEY_x;
-    case 'y':
-        return KEY_y;
-    case 'z':
-        return KEY_z;
-
-    case '0':
-        return KEY_0;
-    case '1':
-        return KEY_1;
-    case '2':
-        return KEY_2;
-    case '3':
-        return KEY_3;
-    case '4':
-        return KEY_4;
-    case '5':
-        return KEY_5;
-    case '6':
-        return KEY_6;
-    case '7':
-        return KEY_7;
-    case '8':
-        return KEY_8;
-    case '9':
-        return KEY_9;
-
-    default:
-        break;
-    }
-    return KEY_NONE;
-}
-
 namespace
 {
     class ColorCycling
@@ -1134,7 +1109,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
     ResetModes( KEY_PRESSED );
 #endif
 
-    mouse_wm = Point();
+    mouse_wm = fheroes2::Point();
 
     while ( SDL_PollEvent( &event ) ) {
         switch ( event.type ) {
@@ -1250,7 +1225,7 @@ void LocalEvent::StopSounds()
 {
     _isHiddenWindow = true;
     _isMusicPaused = Music::isPaused();
-    _isSoundPaused = Mixer::isPaused( -1 );
+    _isSoundPaused = ( Mixer::isPaused( -1 ) != 0 );
     Mixer::Pause();
     Music::Pause();
     _musicVolume = Music::Volume( 0 );
@@ -1502,11 +1477,6 @@ bool LocalEvent::MouseMotion( void ) const
     return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
 }
 
-bool LocalEvent::MouseMotion( const Rect & rt ) const
-{
-    return modes & MOUSE_MOTION ? rt & mouse_cu : false;
-}
-
 bool LocalEvent::MousePressLeft( void ) const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
@@ -1735,11 +1705,6 @@ bool LocalEvent::MousePressLeft( const Rect & rt ) const
     return MousePressLeft() && ( rt & mouse_pl );
 }
 
-bool LocalEvent::MousePressLeft( const Point & pt, u32 w, u32 h ) const
-{
-    return MousePressLeft() && ( Rect( pt.x, pt.y, w, h ) & mouse_pl );
-}
-
 bool LocalEvent::MousePressMiddle( const Rect & rt ) const
 {
     return MousePressMiddle() && ( rt & mouse_pm );
@@ -1769,36 +1734,6 @@ void LocalEvent::ResetPressLeft( void )
 {
     mouse_pl.x = -1;
     mouse_pl.y = -1;
-}
-
-void LocalEvent::ResetPressRight( void )
-{
-    mouse_pr.x = -1;
-    mouse_pr.y = -1;
-}
-
-void LocalEvent::ResetPressMiddle( void )
-{
-    mouse_pm.x = -1;
-    mouse_pm.y = -1;
-}
-
-void LocalEvent::ResetReleaseLeft( void )
-{
-    mouse_rl.x = -1;
-    mouse_rl.y = -1;
-}
-
-void LocalEvent::ResetReleaseRight( void )
-{
-    mouse_rr.x = -1;
-    mouse_rr.y = -1;
-}
-
-void LocalEvent::ResetReleaseMiddle( void )
-{
-    mouse_rm.x = -1;
-    mouse_rm.y = -1;
 }
 
 bool LocalEvent::MouseWheelUp( const Rect & rt ) const

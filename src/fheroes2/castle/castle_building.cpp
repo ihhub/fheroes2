@@ -57,12 +57,6 @@ CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point
     }
 }
 
-const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
-{
-    const_iterator it = std::find( begin(), end(), b );
-    return it != end() ? ( *it ).coord : back().coord;
-}
-
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
     _alpha = 0;

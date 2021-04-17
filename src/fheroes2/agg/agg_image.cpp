@@ -686,6 +686,21 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::WHITE_LARGE_FONT: {
+                LoadModifiedICN( ICN::FONT );
+                const std::vector<Sprite> & original = _icnVsSprite[ICN::FONT];
+                _icnVsSprite[id].resize( original.size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    const Sprite & in = original[i];
+                    Sprite & out = _icnVsSprite[id][i];
+                    out.resize( in.width() * 2, in.height() * 2 );
+                    Resize( in, out, true );
+                    out.setPosition( in.x() * 2, in.y() * 2 );
+                }
+
+                return true;
+            }
+
             case ICN::SWAP_ARROW: {
                 const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
                 std::vector<Image> input( 4 );
@@ -709,7 +724,6 @@ namespace fheroes2
                 ApplyPalette( output, 4 );
 
                 return true;
-            }
             default:
                 break;
             }
@@ -871,6 +885,8 @@ namespace fheroes2
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
                 return GetICN( ICN::SMALFONT, character - 0x20 );
+            case Font::WHITE_LARGE:
+                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
             default:
                 break;
             }

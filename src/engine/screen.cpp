@@ -180,7 +180,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                     else if ( *transform > 1 ) {
                         // SDL2 uses RGBA image on OS level separately from frame rendering.
@@ -193,7 +193,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -430,7 +430,7 @@ namespace
 
             for ( size_t i = 0; i < 256u; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
-                _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
             }
 
             memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
@@ -555,7 +555,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
@@ -563,7 +563,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -772,13 +772,13 @@ namespace
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
@@ -788,7 +788,7 @@ namespace
                     const uint8_t * value = currentPalette + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *( value );
+                    col.r = *value;
                     col.g = *( value + 1 );
                     col.b = *( value + 2 );
                 }
@@ -947,7 +947,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
@@ -955,7 +955,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -1074,13 +1074,13 @@ namespace
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
@@ -1164,12 +1164,6 @@ namespace fheroes2
         , _renderSurface( NULL )
     {
         _disableTransformLayer();
-    }
-
-    Display::~Display()
-    {
-        delete _cursor;
-        delete _engine;
     }
 
     void Display::resize( int32_t width_, int32_t height_ )
@@ -1277,6 +1271,24 @@ namespace fheroes2
         currentPalette = ( palette == NULL ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
+    }
+
+    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
+    {
+        assert( engine.get() != nullptr );
+        if ( engine.get() == nullptr ) {
+            return;
+        }
+        std::swap( engine, _engine );
+    }
+
+    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
+    {
+        assert( cursor.get() != nullptr );
+        if ( cursor.get() == nullptr ) {
+            return;
+        }
+        std::swap( cursor, _cursor );
     }
 
     bool Cursor::isFocusActive() const

@@ -277,7 +277,7 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
             if ( currentCellNode.parentCellId < 0 )
                 aroundCellIds = GetMoveWideIndexes( currentCellId, unit.isReflect() );
             else
-                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) );
+                aroundCellIds = GetMoveWideIndexes( currentCellId, ( RIGHT_SIDE & GetDirection( currentCellId, currentCellNode.parentCellId ) ) != 0 );
 
             for ( const int32_t cellId : aroundCellIds ) {
                 const Cell & cell = at( cellId );
@@ -905,9 +905,6 @@ void Battle::Board::SetCovrObjects( int icn )
     case ICN::COVR0007:
     case ICN::COVR0013:
     case ICN::COVR0019:
-        at( 15 ).SetObject( 0x40 );
-        at( 16 ).SetObject( 0x40 );
-        at( 17 ).SetObject( 0x40 );
         at( 25 ).SetObject( 0x40 );
         at( 26 ).SetObject( 0x40 );
         at( 27 ).SetObject( 0x40 );
@@ -932,13 +929,12 @@ void Battle::Board::SetCovrObjects( int icn )
     case ICN::COVR0015:
     case ICN::COVR0021:
         at( 35 ).SetObject( 0x40 );
-        at( 41 ).SetObject( 0x40 );
+        at( 40 ).SetObject( 0x40 );
         at( 46 ).SetObject( 0x40 );
         at( 47 ).SetObject( 0x40 );
         at( 48 ).SetObject( 0x40 );
         at( 49 ).SetObject( 0x40 );
         at( 50 ).SetObject( 0x40 );
-        at( 51 ).SetObject( 0x40 );
         break;
 
     case ICN::COVR0004:

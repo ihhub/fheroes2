@@ -37,9 +37,7 @@
 #define FORMAT_VERSION_084_RELEASE 9000
 #define FORMAT_VERSION_082_RELEASE 8200
 #define FORMAT_VERSION_080_RELEASE 8000
-#define FORMAT_VERSION_070_RELEASE 3269
-#define FORMAT_VERSION_3255 3255
-#define LAST_FORMAT_VERSION FORMAT_VERSION_3255
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_080_RELEASE
 
 #define CURRENT_FORMAT_VERSION FORMAT_VERSION_091_RELEASE // TODO: update this value for a new release
 
@@ -319,6 +317,8 @@ public:
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetWriteableDir( const char * );
     static std::string GetLangDir( void );
+
+    static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
 
     // deprecated
     const std::string & GetDataParams( void ) const

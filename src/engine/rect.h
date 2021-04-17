@@ -46,7 +46,6 @@ struct Point
     double getAngle( const Point & point ) const;
 
     Point & operator+=( const Point & );
-    Point & operator-=( const Point & );
 
     Point operator+( const Point & ) const;
     Point operator-( const Point & ) const;
@@ -61,12 +60,6 @@ struct Size
 
     bool operator==( const Size & ) const;
     bool operator!=( const Size & ) const;
-
-    Size & operator+=( const Size & );
-    Size & operator-=( const Size & );
-
-    Size operator+( const Size & ) const;
-    Size operator-( const Size & ) const;
 };
 
 struct Rect : Point, Size
@@ -79,7 +72,6 @@ struct Rect : Point, Size
     // TODO: this method must be removed before merging to master
     Rect( const fheroes2::Rect & rect );
 
-    Rect & operator=( const Point & );
     bool operator==( const Rect & ) const;
     bool operator!=( const Rect & ) const;
 
@@ -93,7 +85,6 @@ struct Rect : Point, Size
     // explicit conversion
     const Point & getPosition() const;
 
-    static Rect Get( const Point &, const Point & );
     static Rect Get( const Rect &, const Rect &, bool intersect );
     static std::pair<Rect, Point> Fixed4Blit( const Rect &, const Rect & );
 };

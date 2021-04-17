@@ -764,7 +764,27 @@ std::string Settings::String( void ) const
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
-    os << "scroll speed = " << scroll_speed << std::endl;
+    os << "scroll speed = ";
+
+    switch ( scroll_speed ) {
+    case SCROLL_SLOW:
+        os << 1;
+        break;
+    case SCROLL_NORMAL:
+        os << 2;
+        break;
+    case SCROLL_FAST1:
+        os << 3;
+        break;
+    case SCROLL_FAST2:
+        os << 4;
+        break;
+    default:
+        os << 2;
+        break;
+    }
+
+    os << std::endl;
 
     os << std::endl << "# show battle grid: on off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
@@ -884,9 +904,8 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-ListDirs Settings::GetRootDirs( void )
+ListDirs Settings::GetRootDirs()
 {
-    const Settings & conf = Settings::Get();
     ListDirs dirs;
 
     // from build
@@ -899,7 +918,7 @@ ListDirs Settings::GetRootDirs( void )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
 
     // from dirname
-    dirs.push_back( System::GetDirname( conf.path_program ) );
+    dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
     // from HOME
     const std::string & home = System::GetHomeDirectory( "fheroes2" );
@@ -928,6 +947,24 @@ ListFiles Settings::GetListFiles( const std::string & prefix, const std::string 
     }
 
     res.Append( System::GetListFiles( "fheroes2", prefix, filter ) );
+
+    return res;
+}
+
+ListFiles Settings::FindFiles( const std::string & directory, const std::string & fileName )
+{
+    ListFiles res;
+
+    if ( !directory.empty() && System::IsDirectory( directory ) )
+        res.FindFileInDir( directory, fileName, false );
+
+    const ListDirs dirs = GetRootDirs();
+    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
+        const std::string & path = !directory.empty() ? System::ConcatePath( *it, directory ) : *it;
+
+        if ( System::IsDirectory( path ) )
+            res.FindFileInDir( path, fileName, false );
+    }
 
     return res;
 }

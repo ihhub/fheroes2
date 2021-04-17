@@ -48,7 +48,7 @@ public:
     SwapButton( s32, s32 );
 };
 
-enum building_t
+enum building_t : uint32_t
 {
     BUILD_NOTHING = 0x00000000,
     BUILD_THIEVESGUILD = 0x00000001,
@@ -308,7 +308,6 @@ namespace CastleDialog
     struct CacheBuildings : std::vector<builds_t>
     {
         CacheBuildings( const Castle &, const Point & );
-        const Rect & GetRect( building_t ) const;
     };
 
     void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
@@ -323,22 +322,46 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * Get( const Point & ) const;
     Castle * GetFirstCastle( void ) const;
 
     void ChangeColors( int, int );
     void SortByBuildingValue();
 };
 
-struct AllCastles : public VecCastles
+class AllCastles
 {
+public:
     AllCastles();
     ~AllCastles();
 
     void Init( void );
-    void clear( void );
+    void Clear( void );
+
+    void AddCastle( Castle * castle );
+
+    Castle * Get( const Point & position ) const;
 
     void Scoute( int ) const;
+
+    // begin/end methods so we can iterate through the elements
+    std::vector<Castle *>::const_iterator begin() const
+    {
+        return _castles.begin();
+    }
+
+    std::vector<Castle *>::const_iterator end() const
+    {
+        return _castles.end();
+    }
+
+    size_t Size() const
+    {
+        return _castles.size();
+    }
+
+private:
+    std::vector<Castle *> _castles;
+    std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
 StreamBase & operator<<( StreamBase &, const VecCastles & );

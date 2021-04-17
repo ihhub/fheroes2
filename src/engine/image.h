@@ -19,6 +19,7 @@
  ***************************************************************************/
 #pragma once
 
+#include <memory>
 #include <stdint.h>
 #include <string>
 #include <vector>
@@ -36,7 +37,8 @@ namespace fheroes2
         Image( int32_t width_ = 0, int32_t height_ = 0 );
         Image( const Image & image_ );
         Image( Image && image_ );
-        virtual ~Image();
+
+        virtual ~Image() = default;
 
         Image & operator=( const Image & image_ );
         Image & operator=( Image && image_ );
@@ -62,15 +64,13 @@ namespace fheroes2
 
         bool empty() const
         {
-            return _data.empty();
+            return !_data;
         }
 
         void reset(); // makes image fully transparent (transform layer is set to 1)
         void clear(); // makes the image empty
 
         void fill( uint8_t value ); // fill 'image' layer with given value, setting 'transform' layer set to 0
-
-        void swap( Image & image );
 
         // This is an optional indicator for image processing functions.
         // The whole image still consists of 2 layers but transform layer might be ignored in computations.
@@ -87,9 +87,11 @@ namespace fheroes2
         }
 
     private:
+        void copy( const Image & image );
+
         int32_t _width;
         int32_t _height;
-        std::vector<uint8_t> _data; // holds 2 image layers
+        std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
     };
@@ -99,12 +101,13 @@ namespace fheroes2
     public:
         Sprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
-        Sprite( const Sprite & image );
-        Sprite( Sprite && image );
-        virtual ~Sprite();
+        Sprite( const Sprite & sprite );
+        Sprite( Sprite && sprite );
 
-        Sprite & operator=( const Sprite & image );
-        Sprite & operator=( Sprite && image );
+        virtual ~Sprite() = default;
+
+        Sprite & operator=( const Sprite & sprite );
+        Sprite & operator=( Sprite && sprite );
 
         int32_t x() const
         {
@@ -117,8 +120,6 @@ namespace fheroes2
         }
 
         virtual void setPosition( int32_t x_, int32_t y_ );
-
-        void swap( Sprite & image );
 
     private:
         int32_t _x;
@@ -210,7 +211,7 @@ namespace fheroes2
 
     Image CreateBlurredImage( const Image & in, int32_t blurRadius );
 
-    Image CreateContour( const Image & image, uint8_t value );
+    Sprite CreateContour( const Image & image, uint8_t value );
 
     Sprite Crop( const Image & image, int32_t x, int32_t y, int32_t width, int32_t height );
 

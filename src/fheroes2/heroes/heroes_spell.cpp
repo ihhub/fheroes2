@@ -394,7 +394,9 @@ bool ActionSpellSummonBoat( const Heroes & hero )
         if ( Maps::isValidAbsIndex( *it ) ) {
             const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::StartFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, dst_water, true, true );
+                Game::ObjectFadeAnimation::PerformFadeTask();
+
                 return true;
             }
         }
@@ -423,6 +425,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
+        hero.GetPath().Hide();
         hero.FadeOut();
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
@@ -443,7 +446,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         // No action is being made. Uncomment this code if the logic will be changed
         // hero.ActionNewPosition();
 
-        Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+        I.ResetFocus( GameFocus::HEROES );
 
         return false; /* SpellCasted apply */
     }

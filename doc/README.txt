@@ -22,6 +22,6 @@ This project is under GNU General Public License v2.0. Please refer to file
 LICENSE for more details.
 
 --- Donation ---
-Currently we accept donations via PayPal. All donations will be used only for
-the future project development as we do not consider this project as a source
-of income by any means.
+Currently we accept donations via Patreon at https://www.patreon.com/fheroes2.
+All donations will be used only for the future project development as we do not
+consider this project as a source of income by any means.

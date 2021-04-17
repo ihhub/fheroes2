@@ -469,7 +469,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         if ( widthDiff > 0 ) {
             if ( space > 10 )
                 space = 10;
-            ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
+            ow = dst.x + ( spritesWidth + space * static_cast<int>( spellsInfo.size() - 1 ) ) / 2;
         }
         else {
             ow = dst.x + maxSpritesWidth / 2;
@@ -545,7 +545,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const int buttons = Dialog::YES | Dialog::NO;
     int posy = 0;
 
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, buttons );
+    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
@@ -663,7 +663,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     StringReplace( message, "%{percent}", troop.GetMonster().GetCost().gold * join * 100 / gold );
     text.Set( message, Font::BIG );
 
-    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, buttons );
+    FrameBox box( 10 + textbox.h() + 10 + text.h() + 40 + sprite.height() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
     posy = pos.y + 10;
@@ -773,11 +773,21 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         result = btnGroup.processEvents();
 
+        bool needRedraw = false;
+
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
             Marketplace( kingdom, false );
+
+            needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );
+
+            needRedraw = true;
+        }
+
+        if ( !needRedraw ) {
+            continue;
         }
 
         cursor.Hide();

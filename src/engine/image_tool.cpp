@@ -75,14 +75,14 @@ namespace
                 }
                 else {
                     const uint8_t * value = currentPalette + *in * 3;
-                    *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                    *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                 }
             }
         }
         else {
             for ( ; out != outEnd; ++out, ++in ) {
                 const uint8_t * value = currentPalette + *in * 3;
-                *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
             }
         }
 

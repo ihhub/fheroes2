@@ -180,6 +180,15 @@ public:
         CHAMPION = 0x08000000
     };
 
+    struct RedrawIndex
+    {
+        int32_t topOnBottom = -1;
+        int32_t topOnDirectionBottom = -1;
+        int32_t topOnDirection = -1;
+        int32_t objectsOnBottom = -1;
+        int32_t objectsOnDirectionBottom = -1;
+    };
+
     Heroes();
     Heroes( int heroid, int rc );
 
@@ -306,8 +315,15 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & gamearea ) const;
-    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & gamearea ) const;
+    const RedrawIndex & GetRedrawIndex() const;
+    void SetRedrawIndexes();
+    void UpdateRedrawTop( const Maps::Tiles & tile );
+    void UpdateRedrawBottom( const Maps::Tiles & tile );
+    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+
     virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
@@ -396,6 +412,8 @@ private:
 
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
+
+    RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
 

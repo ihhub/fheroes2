@@ -374,7 +374,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 const s32 dst1 = path.back();
                 const s32 dst2 = 1 < path.size() ? path[path.size() - 2] : head;
 
-                pos2.Set( dst1, b->isWide(), RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) );
+                pos2.Set( dst1, b->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
             }
             else
                 pos2.Set( path.back(), false, b->isReflect() );
@@ -399,15 +399,14 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
     Battle::Unit * battle = GetTroopUID( uid );
     if ( battle && battle->isValid() ) {
         if ( !battle->Modes( TR_MOVED ) ) {
-            if ( hard ) {
+            if ( hard || battle->Modes( TR_SKIPMOVE ) ) {
                 battle->SetModes( TR_HARDSKIP );
-                battle->SetModes( TR_SKIPMOVE );
                 battle->SetModes( TR_MOVED );
                 if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
                     battle->SetModes( TR_DEFENSED );
             }
-            else
-                battle->SetModes( battle->Modes( TR_SKIPMOVE ) ? TR_MOVED : TR_SKIPMOVE );
+
+            battle->SetModes( TR_SKIPMOVE );
 
             if ( interface )
                 interface->RedrawActionSkipStatus( *battle );
@@ -476,7 +475,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
         }
 
         if ( interface )
-            interface->RedrawActionMorale( *b, morale );
+            interface->RedrawActionMorale( *b, morale != 0 );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << b->String() );
     }
