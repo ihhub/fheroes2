@@ -323,7 +323,7 @@ public:
 
 private:
     std::vector<Castle *> _castles;
-    std::vector<int8_t> _castleTiles;
+    std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
 StreamBase & operator<<( StreamBase &, const VecCastles & );
