@@ -697,7 +697,6 @@ namespace fheroes2
                     Resize( in, out, true );
                     out.setPosition( in.x() * 2, in.y() * 2 );
                 }
-
                 return true;
             }
 
@@ -724,6 +723,7 @@ namespace fheroes2
                 ApplyPalette( output, 4 );
 
                 return true;
+            }
             default:
                 break;
             }
