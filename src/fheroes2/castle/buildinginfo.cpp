@@ -724,6 +724,8 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     : castle( cstl )
     , backsf( sz.width, sz.height )
 {
+    backsf.reset();
+
     for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
         content.emplace_back( castle, dw );
 

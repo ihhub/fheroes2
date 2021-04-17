@@ -961,9 +961,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_DRAGONCITY:
-        at( 0 )->Set( Monster::GREEN_DRAGON, 3 );
-        at( 1 )->Set( Monster::RED_DRAGON, 2 );
-        at( 2 )->Set( Monster::BLACK_DRAGON, 1 );
+        at( 0 )->Set( Monster::GREEN_DRAGON, 1 );
+        at( 1 )->Set( Monster::GREEN_DRAGON, 1 );
+        at( 2 )->Set( Monster::GREEN_DRAGON, 1 );
+        at( 3 )->Set( Monster::RED_DRAGON, 1 );
+        at( 4 )->Set( Monster::BLACK_DRAGON, 1 );
         break;
 
     case MP2::OBJ_DAEMONCAVE:

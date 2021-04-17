@@ -161,7 +161,6 @@ namespace Battle
         bool isFinishAnimFrame( void ) const;
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
-        int GetFrameCount( void ) const;
         uint32_t GetCustomAlpha() const;
         void SetCustomAlpha( uint32_t alpha );
 
@@ -174,13 +173,11 @@ namespace Battle
         int M82Expl( void ) const;
 
         int ICNFile( void ) const;
-        int ICNMiss( void ) const;
 
         Point GetBackPoint( void ) const;
         Point GetCenterPoint() const;
         Rect GetRectPosition( void ) const;
 
-        u32 HowManyCanKill( const Unit & ) const;
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );

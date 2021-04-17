@@ -52,12 +52,12 @@ bool Troop::isMonster( int mons ) const
 
 Monster Troop::operator()( void ) const
 {
-    return *this;
+    return Monster( id );
 }
 
 Monster Troop::GetMonster( void ) const
 {
-    return *this;
+    return Monster( id );
 }
 
 void Troop::Set( const Troop & t )

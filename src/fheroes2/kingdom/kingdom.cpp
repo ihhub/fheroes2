@@ -279,6 +279,8 @@ void Kingdom::RemoveHeroes( const Heroes * hero )
             player->GetFocus().Reset();
         }
 
+        assert( hero != nullptr );
+
         AI::Get().HeroesRemove( *hero );
     }
 
@@ -313,6 +315,8 @@ void Kingdom::RemoveCastle( const Castle * castle )
         if ( player && player->GetFocus().GetCastle() == castle ) {
             player->GetFocus().Reset();
         }
+
+        assert( castle != nullptr );
 
         AI::Get().CastleRemove( *castle );
     }
@@ -843,10 +847,11 @@ void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
+    for ( const auto & castle : castles ) {
         // skip gray color
-        if ( ( *it )->GetColor() )
-            GetKingdom( ( *it )->GetColor() ).AddCastle( *it );
+        if ( castle->GetColor() )
+            GetKingdom( castle->GetColor() ).AddCastle( castle );
+    }
 }
 
 void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )

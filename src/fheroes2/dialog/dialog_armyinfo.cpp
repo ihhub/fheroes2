@@ -469,7 +469,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         if ( widthDiff > 0 ) {
             if ( space > 10 )
                 space = 10;
-            ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
+            ow = dst.x + ( spritesWidth + space * static_cast<int>( spellsInfo.size() - 1 ) ) / 2;
         }
         else {
             ow = dst.x + maxSpritesWidth / 2;
@@ -773,11 +773,21 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
         result = btnGroup.processEvents();
 
+        bool needRedraw = false;
+
         if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
             Marketplace( kingdom, false );
+
+            needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
             hero.OpenDialog( false, false );
+
+            needRedraw = true;
+        }
+
+        if ( !needRedraw ) {
+            continue;
         }
 
         cursor.Hide();

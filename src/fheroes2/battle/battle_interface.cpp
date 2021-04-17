@@ -1580,6 +1580,17 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
             }
         }
+        else if ( ( _currentUnit->GetID() == Monster::LICH || _currentUnit->GetID() == Monster::POWER_LICH )
+                  && ( Cursor::Get().Themes() == Cursor::WAR_ARROW || Cursor::Get().Themes() == Cursor::WAR_BROKENARROW ) ) {
+            highlightCells.emplace( cell );
+            const Indexes around = Board::GetAroundIndexes( index_pos );
+            for ( size_t i = 0; i < around.size(); ++i ) {
+                const Cell * aroundCell = Board::GetCell( around[i] );
+                if ( aroundCell != nullptr ) {
+                    highlightCells.emplace( aroundCell );
+                }
+            }
+        }
         else {
             highlightCells.emplace( cell );
         }

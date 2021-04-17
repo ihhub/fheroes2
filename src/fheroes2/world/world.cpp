@@ -281,7 +281,7 @@ void World::Reset( void )
     vec_rumors.clear();
 
     // castles
-    vec_castles.clear();
+    vec_castles.Clear();
 
     // heroes
     vec_heroes.clear();
@@ -572,9 +572,9 @@ void World::NewWeek( void )
                 ( *it ).QuantityUpdate( false );
 
         // update gray towns
-        for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-            if ( ( *it )->GetColor() == Color::NONE )
-                ( *it )->ActionNewWeek();
+        for ( auto & castle : vec_castles )
+            if ( castle->GetColor() == Color::NONE )
+                castle->ActionNewWeek();
     }
 
     // add events
@@ -598,9 +598,9 @@ void World::NewMonth( void )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
-    for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-        if ( ( *it )->GetColor() == Color::NONE )
-            ( *it )->ActionNewMonth();
+    for ( auto & castle : vec_castles )
+        if ( castle->GetColor() == Color::NONE )
+            castle->ActionNewMonth();
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )
@@ -1166,28 +1166,19 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_RESOURCE: {
             MapResource * ptr = new MapResource();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 
         case MP2::OBJ_ARTIFACT: {
             MapArtifact * ptr = new MapArtifact();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 
         case MP2::OBJ_MONSTER: {
             MapMonster * ptr = new MapMonster();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 

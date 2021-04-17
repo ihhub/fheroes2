@@ -30,6 +30,8 @@ struct ListFiles : public std::list<std::string>
     void Append( const ListFiles & files );
     void ReadDir( const std::string & path, const std::string & filter = "", bool sensitive = true );
     static bool IsEmpty( const std::string & path, const std::string & filter = "", bool sensitive = true );
+
+    void FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive );
 };
 
 struct ListDirs : public std::list<std::string>

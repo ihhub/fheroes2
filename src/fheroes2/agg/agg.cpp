@@ -764,7 +764,7 @@ bool AGG::Init( void )
 
 #ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ) );
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
         display.fill( 0 );
         fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );

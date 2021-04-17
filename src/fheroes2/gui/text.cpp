@@ -665,15 +665,15 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
                 if ( space == msg.begin() ) {
                     if ( pos2 - pos1 < 1 ) // this should never happen!
                         return;
-                    messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft ) );
+                    messages.emplace_back( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft );
                 }
                 else {
                     pos2 = space + 1;
-                    messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft ) );
+                    messages.emplace_back( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft );
                 }
             }
             else {
-                messages.push_back( Text( msg.substr( pos1 - msg.begin(), pos2 - pos1 ), ft ) );
+                messages.emplace_back( msg.substr( pos1 - msg.begin(), pos2 - pos1 ), ft );
             }
 
             pos1 = pos2;
@@ -715,15 +715,15 @@ void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width_ )
                 if ( space == msg.begin() ) {
                     if ( pos2 - pos1 < 1 ) // this should never happen!
                         return;
-                    messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft ) );
+                    messages.emplace_back( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft );
                 }
                 else {
                     pos2 = space + 1;
-                    messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft ) );
+                    messages.emplace_back( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft );
                 }
             }
             else {
-                messages.push_back( Text( &msg.at( pos1 - msg.begin() ), pos2 - pos1, ft ) );
+                messages.emplace_back( &msg.at( pos1 - msg.begin() ), pos2 - pos1, ft );
             }
 
             pos1 = pos2;

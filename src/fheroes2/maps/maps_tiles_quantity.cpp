@@ -232,6 +232,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
+        case 3:
         case 4:
             return 2500;
         default:
@@ -413,7 +414,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const

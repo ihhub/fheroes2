@@ -43,8 +43,8 @@ namespace Battle
         Unit * FindMode( u32 );
         Unit * FindUID( u32 );
 
-        void SortSlowest( bool );
-        void SortFastest( bool );
+        void SortSlowest();
+        void SortFastest();
         void SortStrongest( void );
         void SortWeakest( void );
         void SortArchers();
@@ -73,8 +73,8 @@ namespace Battle
         void NewTurn( void );
         void SyncArmyCount( bool checkResurrected );
 
-        static Unit * GetCurrentUnit( const Force &, const Force &, const Unit * last, bool part1 );
-        static void UpdateOrderUnits( const Force &, const Force &, Units & );
+        static Unit * GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor );
+        static void UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders );
 
     private:
         Army & army;

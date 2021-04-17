@@ -1,0 +1,75 @@
+name: Linux
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  sdl1:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: release
+          env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON" }
+        - name: debug
+          env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+    name: sdl1 ${{ matrix.name }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install SDL 1
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext
+    - name: compile
+      run: make -j 2
+      env: ${{ matrix.env }}
+  sdl2:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: release
+          env: { FHEROES2_STRICT_COMPILATION: "ON" }
+        - name: debug
+          env: { FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+    name: sdl2 ${{ matrix.name }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install SDL 2
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+    - name: compile
+      run: make -j 2
+      env: ${{ matrix.env }}
+  psv-sdl2:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: install libs
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgcc1 gettext
+    - name: setup Vita SDK
+      run: |
+        git clone https://github.com/vitasdk/vdpm
+        cd vdpm
+        export PATH=$VITASDK/bin:$PATH
+        ./bootstrap-vitasdk.sh
+        ./install-all.sh
+      env:
+        VITASDK: "/usr/local/vitasdk"
+    - name: compile
+      run: |
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j 2
+      env:
+        FHEROES2_STRICT_COMPILATION: "ON"
+        VITASDK: "/usr/local/vitasdk"

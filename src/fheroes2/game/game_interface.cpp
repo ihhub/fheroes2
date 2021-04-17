@@ -213,7 +213,9 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
 
     const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     const Settings & conf = Settings::Get();
-    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
+    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
     fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
@@ -241,7 +243,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     s32 returnValue = -1;
 
     const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
-    fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( conf.ExtGameEvilInterface() ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+    fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
     buttonExit.draw();
 
     while ( le.HandleEvents() ) {

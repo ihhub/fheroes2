@@ -53,7 +53,7 @@ namespace Battle
     {
     public:
         Cell();
-        Cell( s32 );
+        explicit Cell( int32_t );
 
         void ResetQuality( void );
         void ResetDirection( void );
