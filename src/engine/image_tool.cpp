@@ -303,7 +303,7 @@ namespace fheroes2
         const int32_t widthOut = out.width();
 
         // Shadow has (-x, +y) offset.
-        const uint8_t * transformInY = out.transform() - shadowOffset.x ;
+        const uint8_t * transformInY = out.transform() - shadowOffset.x;
         const uint8_t * transformInYEnd = transformInY + widthOut * height;
         uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
 
