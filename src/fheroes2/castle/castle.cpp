@@ -2612,11 +2612,6 @@ void AllCastles::Clear( void )
 
 void AllCastles::AddCastle( Castle * castle )
 {
-    // allocate one slot per map tile, at the first call to AddCastle() that occured after a reset (eg when there is a map change)
-    if ( _castles.empty() ) {
-        _castleTiles.resize( world.w() * world.h(), -1 );
-    }
-
     _castles.push_back( castle );
 
     /* Register position of all castle elements on the map
@@ -2635,40 +2630,39 @@ void AllCastles::AddCastle( Castle * castle )
 
     static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
 
-    // put the index of the castle for all relevant tiles
-    const int8_t idx = static_cast<int8_t>( _castles.size() - 1 );
-    const int32_t width = world.w();
+    const size_t id = _castles.size() - 1;
+    fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
+    _castleTiles.emplace( temp, id );
 
-    int32_t position = castle->GetCenter().x + castle->GetCenter().y * width;
+    temp.x -= 2;
+    _castleTiles.emplace( temp, id ); // (-2, 0)
 
-    _castleTiles[position] = idx; // (0, 0)
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (-1, 0)
 
-    position -= 2;
-    _castleTiles[position] = idx; // (-2, 0)
+    --temp.y;
+    _castleTiles.emplace( temp, id ); // (-1, -1)
 
-    position += 1;
-    _castleTiles[position] = idx; // (-1, 0)
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (0, -1)
 
-    position -= width;
-    _castleTiles[position] = idx; // (-1, -1)
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+1, -1)
 
-    position += 1;
-    _castleTiles[position] = idx; // (0, -1)
+    ++temp.y;
+    _castleTiles.emplace( temp, id ); // (+1, 0)
 
-    position += 1;
-    _castleTiles[position] = idx; // (+1, -1)
-
-    position += width;
-    _castleTiles[position] = idx; // (+1, 0)
-
-    position += 1;
-    _castleTiles[position] = idx; // (+2, 0)
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+2, 0)
 }
 
 Castle * AllCastles::Get( const Point & position ) const
 {
-    const int8_t idx = _castleTiles[position.y * world.w() + position.x];
-    return ( idx < 0 ) ? NULL : _castles[idx];
+    auto iter = _castleTiles.find( fheroes2::Point( position.x, position.y ) );
+    if ( iter == _castleTiles.end() )
+        return nullptr;
+
+    return _castles[iter->second];
 }
 
 void AllCastles::Scoute( int colors ) const
