@@ -228,7 +228,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllCastles & castles )
     for ( ; xml_town; xml_town = xml_town->NextSiblingElement( "town" ) ) {
         Castle * town = new Castle();
         *xml_town >> *town;
-        castles.push_back( town );
+        castles.AddCastle( town );
     }
 
     return doc;
@@ -1093,37 +1093,37 @@ bool World::LoadMapMP2( const std::string & filename )
         switch ( id ) {
         case 0x00: // tower: knight
         case 0x80: // castle: knight
-            vec_castles.push_back( new Castle( cx, cy, Race::KNGT ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::KNGT ) );
             break;
 
         case 0x01: // tower: barbarian
         case 0x81: // castle: barbarian
-            vec_castles.push_back( new Castle( cx, cy, Race::BARB ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::BARB ) );
             break;
 
         case 0x02: // tower: sorceress
         case 0x82: // castle: sorceress
-            vec_castles.push_back( new Castle( cx, cy, Race::SORC ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::SORC ) );
             break;
 
         case 0x03: // tower: warlock
         case 0x83: // castle: warlock
-            vec_castles.push_back( new Castle( cx, cy, Race::WRLK ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WRLK ) );
             break;
 
         case 0x04: // tower: wizard
         case 0x84: // castle: wizard
-            vec_castles.push_back( new Castle( cx, cy, Race::WZRD ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WZRD ) );
             break;
 
         case 0x05: // tower: necromancer
         case 0x85: // castle: necromancer
-            vec_castles.push_back( new Castle( cx, cy, Race::NECR ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NECR ) );
             break;
 
         case 0x06: // tower: random
         case 0x86: // castle: random
-            vec_castles.push_back( new Castle( cx, cy, Race::NONE ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NONE ) );
             break;
 
         default:

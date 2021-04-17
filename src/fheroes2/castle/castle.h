@@ -322,22 +322,46 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * Get( const Point & ) const;
     Castle * GetFirstCastle( void ) const;
 
     void ChangeColors( int, int );
     void SortByBuildingValue();
 };
 
-struct AllCastles : public VecCastles
+class AllCastles
 {
+public:
     AllCastles();
     ~AllCastles();
 
     void Init( void );
-    void clear( void );
+    void Clear( void );
+
+    void AddCastle( Castle * castle );
+
+    Castle * Get( const Point & position ) const;
 
     void Scoute( int ) const;
+
+    // begin/end methods so we can iterate through the elements
+    std::vector<Castle *>::const_iterator begin() const
+    {
+        return _castles.begin();
+    }
+
+    std::vector<Castle *>::const_iterator end() const
+    {
+        return _castles.end();
+    }
+
+    size_t Size() const
+    {
+        return _castles.size();
+    }
+
+private:
+    std::vector<Castle *> _castles;
+    std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
 StreamBase & operator<<( StreamBase &, const VecCastles & );
