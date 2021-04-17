@@ -63,25 +63,11 @@
 
 #include "tools.h"
 
-int System::MakeDirectory( const std::string & path )
+#if !defined( __LINUX__ )
+namespace
 {
-#if defined( __WIN32__ ) && defined( _MSC_VER )
-    return CreateDirectoryA( path.c_str(), NULL );
-#elif defined( __WIN32__ ) && !defined( _MSC_VER )
-    return mkdir( path.c_str() );
-#elif defined( FHEROES2_VITA )
-    return sceIoMkdir( path.c_str(), 0777 );
-#else
-    return mkdir( path.c_str(), S_IRWXU );
-#endif
-}
 
-std::string System::ConcatePath( const std::string & str1, const std::string & str2 )
-{
-    return std::string( str1 + SEPARATOR + str2 );
-}
-
-std::string System::GetHomeDirectory( const std::string & prog )
+std::string GetHomeDirectory( const std::string & prog )
 {
 #if defined( FHEROES2_VITA )
     return "ux0:data/fheroes2";
@@ -102,6 +88,67 @@ std::string System::GetHomeDirectory( const std::string & prog )
     else if ( System::GetEnvironment( "APPDATA" ) )
         res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
 
+    return res;
+}
+
+}
+#endif
+
+int System::MakeDirectory( const std::string & path )
+{
+#if defined( __WIN32__ ) && defined( _MSC_VER )
+    return CreateDirectoryA( path.c_str(), NULL );
+#elif defined( __WIN32__ ) && !defined( _MSC_VER )
+    return mkdir( path.c_str() );
+#elif defined( FHEROES2_VITA )
+    return sceIoMkdir( path.c_str(), 0777 );
+#else
+    return mkdir( path.c_str(), S_IRWXU );
+#endif
+}
+
+std::string System::ConcatePath( const std::string & str1, const std::string & str2 )
+{
+    return std::string( str1 + SEPARATOR + str2 );
+}
+
+std::string System::GetConfigDirectory( const std::string & prog )
+{
+    std::string res;
+#if defined( __LINUX__ )
+    auto config_env = System::GetEnvironment( "XDG_CONFIG_HOME" );
+    if ( config_env ) {
+        res = System::ConcatePath( config_env, prog );
+    }
+    else {
+        auto home_env = System::GetEnvironment( "HOME" );
+        if ( home_env ) {
+            res = System::ConcatePath( System::ConcatePath( home_env, ".config" ), prog );
+        }
+    }
+#else
+    res = GetHomeDirectory(prog);
+#endif
+    return res;
+}
+
+std::string System::GetDataDirectory( const std::string & prog )
+{
+    std::string res;
+#if defined( __LINUX__ )
+    auto data_env = System::GetEnvironment( "XDG_DATA_HOME" );
+    if ( data_env ) {
+        res = System::ConcatePath( data_env, prog );
+    }
+    else {
+        auto home_env = System::GetEnvironment( "HOME" );
+        if ( home_env ) {
+            res = System::ConcatePath( System::ConcatePath( home_env, ".local/share" ), prog );
+        }
+    }
+#else
+    res = GetHomeDirectory(prog);
+#endif
     return res;
 }
 

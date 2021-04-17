@@ -91,27 +91,37 @@ namespace
             conf.Save( configurationFileName );
     }
 
-    void InitHomeDir()
+    void InitConfigDir()
     {
-        const std::string home = System::GetHomeDirectory( "fheroes2" );
+        const std::string config_dir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !home.empty() ) {
-            const std::string home_maps = System::ConcatePath( home, "maps" );
-            const std::string home_files = System::ConcatePath( home, "files" );
-            const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-            if ( !System::IsDirectory( home ) )
-                System::MakeDirectory( home );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-                System::MakeDirectory( home_maps );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-                System::MakeDirectory( home_files );
-
-            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-                System::MakeDirectory( home_files_save );
+        if ( !config_dir.empty() && !System::IsDirectory( config_dir )) {
+            System::MakeDirectory( config_dir );
         }
+    }
+
+    void InitDataDir()
+    {
+        const std::string data_dir = System::GetDataDirectory( "fheroes2" );
+
+        if ( data_dir.empty() )
+            return;
+
+        const std::string data_maps = System::ConcatePath( data_dir, "maps" );
+        const std::string data_files = System::ConcatePath( data_dir, "files" );
+        const std::string data_files_save = System::ConcatePath( data_files, "save" );
+
+        if ( !System::IsDirectory( data_dir ) )
+            System::MakeDirectory( data_dir );
+
+        if ( System::IsDirectory( data_dir, true ) && !System::IsDirectory( data_maps ) )
+            System::MakeDirectory( data_maps );
+
+        if ( System::IsDirectory( data_dir, true ) && !System::IsDirectory( data_files ) )
+            System::MakeDirectory( data_files );
+
+        if ( System::IsDirectory( data_files, true ) && !System::IsDirectory( data_files_save ) )
+            System::MakeDirectory( data_files_save );
     }
 
     void SetTimidityEnvPath()
@@ -162,7 +172,8 @@ int main( int argc, char ** argv )
     Settings & conf = Settings::Get();
     conf.SetProgramPath( argv[0] );
 
-    InitHomeDir();
+    InitConfigDir();
+    InitDataDir();
     ReadConfigs();
 
     // getopt
