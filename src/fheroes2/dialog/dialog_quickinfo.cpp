@@ -693,12 +693,6 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     dst_pt.x = cur_rt.x + ( cur_rt.width + 60 ) / 2;
     fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
-    // info
-    text.Set( _( "Defenders:" ) );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-    dst_pt.y += sprite.height() + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
-
     const Settings & conf = Settings::Get();
 
     const int currentColor = conf.CurrentColor();
@@ -720,19 +714,25 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
     // show guardian
     if ( guardian && scoutSkillLevel >= Skill::Level::ADVANCED ) {
-        // heroes name
+        // hero name
         text.Set( guardian->GetName(), Font::SMALL );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += 10;
+        dst_pt.y += sprite.height() + 5;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        // mini port heroes
+        // hero avatar
         const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
             dst_pt.y += 15;
             fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
         }
+    }
+    else {
+        text.Set( _( "Defenders:" ) );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        dst_pt.y += sprite.height() + 5;
+        text.Blit( dst_pt.x, dst_pt.y );
     }
 
     const u32 count = castle.GetArmy().GetCount();
