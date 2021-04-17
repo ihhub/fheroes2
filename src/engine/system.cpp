@@ -66,31 +66,29 @@
 #if !defined( __LINUX__ )
 namespace
 {
-
-std::string GetHomeDirectory( const std::string & prog )
-{
+    std::string GetHomeDirectory( const std::string & prog )
+    {
 #if defined( FHEROES2_VITA )
-    return "ux0:data/fheroes2";
+        return "ux0:data/fheroes2";
 #endif
 
-    std::string res;
+        std::string res;
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    char * path = SDL_GetPrefPath( "", prog.c_str() );
-    if ( path ) {
-        res = path;
-        SDL_free( path );
-    }
+        char * path = SDL_GetPrefPath( "", prog.c_str() );
+        if ( path ) {
+            res = path;
+            SDL_free( path );
+        }
 #endif
 
-    if ( System::GetEnvironment( "HOME" ) )
-        res = System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
-    else if ( System::GetEnvironment( "APPDATA" ) )
-        res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+        if ( System::GetEnvironment( "HOME" ) )
+            res = System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
+        else if ( System::GetEnvironment( "APPDATA" ) )
+            res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
 
-    return res;
-}
-
+        return res;
+    }
 }
 #endif
 
@@ -127,7 +125,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
         }
     }
 #else
-    res = GetHomeDirectory(prog);
+    res = GetHomeDirectory( prog );
 #endif
     return res;
 }
@@ -147,7 +145,7 @@ std::string System::GetDataDirectory( const std::string & prog )
         }
     }
 #else
-    res = GetHomeDirectory(prog);
+    res = GetHomeDirectory( prog );
 #endif
     return res;
 }

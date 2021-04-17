@@ -894,7 +894,7 @@ ListDirs Settings::GetRootDirs()
 
     // from user data
     const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() && (std::find(dirs.cbegin(), dirs.cend(), data) == dirs.cend()))
+    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
         dirs.push_back( data );
 
     fheroes2::AddOSSpecificDirectories( dirs );

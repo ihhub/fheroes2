@@ -95,7 +95,7 @@ namespace
     {
         const std::string config_dir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !config_dir.empty() && !System::IsDirectory( config_dir )) {
+        if ( !config_dir.empty() && !System::IsDirectory( config_dir ) ) {
             System::MakeDirectory( config_dir );
         }
     }
