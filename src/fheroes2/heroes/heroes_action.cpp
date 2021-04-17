@@ -779,8 +779,10 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         Game::ObjectFadeAnimation::PerformFadeTask();
 
         if ( ch >= 0 ) {
+            LocalEvent & le = LocalEvent::Get();
+
             // wait for the M82::KILLFADE to finish playing
-            while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( ch ) )
+            while ( le.HandleEvents() && Mixer::isPlaying( ch ) )
                 ;
         }
 
