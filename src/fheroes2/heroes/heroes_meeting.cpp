@@ -36,6 +36,30 @@
 #include "skill_bar.h"
 #include "text.h"
 
+namespace
+{
+    void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
+    {
+        size_t toIdx = 0;
+
+        for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
+            if ( bagFrom[fromIdx]() != Artifact::UNKNOWN && bagFrom[fromIdx]() != Artifact::MAGIC_BOOK ) {
+                while ( toIdx < bagTo.size() ) {
+                    if ( bagTo[toIdx]() == Artifact::UNKNOWN )
+                        break;
+
+                    ++toIdx;
+                }
+
+                if ( toIdx == bagTo.size() )
+                    break;
+
+                std::swap( bagFrom[fromIdx], bagTo[toIdx] );
+            }
+        }
+    }
+}
+
 class MeetingArmyBar : public ArmyBar
 {
 public:
@@ -331,6 +355,18 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     buttonExit.draw();
 
+    fheroes2::Button moveArmyToHero2( cur_pt.x + 297, cur_pt.y + 270, ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0, 1 );
+    moveArmyToHero2.draw();
+
+    fheroes2::Button moveArmyToHero1( cur_pt.x + 295, cur_pt.y + 291, ICN::SWAP_ARROW_RIGHT_TO_LEFT, 0, 1 );
+    moveArmyToHero1.draw();
+
+    fheroes2::Button moveArtifactsToHero2( cur_pt.x + 297, cur_pt.y + 363, ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0, 1 );
+    moveArtifactsToHero2.draw();
+
+    fheroes2::Button moveArtifactsToHero1( cur_pt.x + 295, cur_pt.y + 384, ICN::SWAP_ARROW_RIGHT_TO_LEFT, 0, 1 );
+    moveArtifactsToHero1.draw();
+
     cursor.Show();
     display.render();
 
@@ -346,6 +382,11 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero2.area() ) ? moveArmyToHero2.drawOnPress() : moveArmyToHero2.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero1.area() ) ? moveArmyToHero1.drawOnPress() : moveArmyToHero1.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero2.area() ) ? moveArtifactsToHero2.drawOnPress() : moveArtifactsToHero2.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero1.area() ) ? moveArtifactsToHero1.drawOnPress() : moveArtifactsToHero1.drawOnRelease();
+
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
@@ -455,6 +496,72 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
             moraleIndicator2.Redraw();
+            luckIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
+            heroes2.GetArmy().MoveTroops( GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
+            GetArmy().MoveTroops( heroes2.GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
+            moveArtifacts( GetBagArtifacts(), heroes2.GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
+            moveArtifacts( heroes2.GetBagArtifacts(), GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
             cursor.Show();

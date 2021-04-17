@@ -366,6 +366,34 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
+void Troops::MoveTroops( Troops & from )
+{
+    if ( this == &from )
+        return;
+
+    size_t validTroops = 0;
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            ++validTroops;
+        }
+    }
+
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            if ( validTroops == 1 ) {
+                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
+                    troop->SetCount( 1 );
+                    break;
+                }
+            }
+            else if ( JoinTroop( *troop ) ) {
+                --validTroops;
+                troop->Reset();
+            }
+        }
+    }
+}
+
 u32 Troops::GetUniqueCount( void ) const
 {
     std::set<int> monsters;

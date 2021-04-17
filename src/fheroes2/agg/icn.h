@@ -926,7 +926,8 @@ namespace ICN
         UNIFORM_EVIL_MIN_BUTTON,
 
         WHITE_LARGE_FONT,
-        SWAP_ARROW,
+        SWAP_ARROW_LEFT_TO_RIGHT,
+        SWAP_ARROW_RIGHT_TO_LEFT,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
