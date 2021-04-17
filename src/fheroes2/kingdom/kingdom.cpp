@@ -782,10 +782,11 @@ void Kingdoms::AddCondLossHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( auto & castle : castles )
+    for ( const auto & castle : castles ) {
         // skip gray color
         if ( castle->GetColor() )
             GetKingdom( castle->GetColor() ).AddCastle( castle );
+    }
 }
 
 void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
