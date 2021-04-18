@@ -223,11 +223,11 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     TextBox textbox( header, Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::BUYBUILD : ICN::BUYBUILE ), 3 );
 
-    const uint32_t titleHeight = title.size() ? titlebox.h() + 10 : 0;
+    const uint32_t titleHeight = title.empty() ? 0 : titlebox.h() + 10;
     FrameBox box( 10 + titleHeight + textbox.h() + 10 + sprite.height(), true );
     const fheroes2::Rect & box_rt = box.GetArea();
 
-    if ( title.size() )
+    if ( !title.empty() )
         titlebox.Blit( box_rt.x + ( box_rt.width - textbox.w() ) / 2, box_rt.y + 10 );
 
     // text
