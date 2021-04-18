@@ -102,7 +102,7 @@ namespace Dialog
     int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
-    bool InputString( const std::string &, std::string &, const std::string & title = "" );
+    bool InputString( const std::string &, std::string &, const std::string & title = std::string() );
     Troop RecruitMonster( const Monster &, u32 available, bool );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
