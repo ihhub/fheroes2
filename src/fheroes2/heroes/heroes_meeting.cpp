@@ -64,10 +64,7 @@ namespace
         button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
         button.setSprite( releasedButton, pressedButton );
     }
-}
 
-namespace
-{
     void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
     {
         size_t toIdx = 0;
