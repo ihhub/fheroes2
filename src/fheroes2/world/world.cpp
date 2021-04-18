@@ -257,13 +257,14 @@ void World::Defaults( void )
     // playing kingdom
     vec_kingdoms.Init();
 
+    // Map seed is random and persisted on saves
+    // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
+    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
+
     // initialize all heroes
     vec_heroes.Init();
 
     vec_castles.Init();
-
-    // map seed is random and persisted on saves
-    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 }
 
 void World::Reset( void )
