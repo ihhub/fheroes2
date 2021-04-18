@@ -93,35 +93,35 @@ namespace
 
     void InitConfigDir()
     {
-        const std::string config_dir = System::GetConfigDirectory( "fheroes2" );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !config_dir.empty() && !System::IsDirectory( config_dir ) ) {
-            System::MakeDirectory( config_dir );
+        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+            System::MakeDirectory( configDir );
         }
     }
 
     void InitDataDir()
     {
-        const std::string data_dir = System::GetDataDirectory( "fheroes2" );
+        const std::string dataDir = System::GetDataDirectory( "fheroes2" );
 
-        if ( data_dir.empty() )
+        if ( dataDir.empty() )
             return;
 
-        const std::string data_maps = System::ConcatePath( data_dir, "maps" );
-        const std::string data_files = System::ConcatePath( data_dir, "files" );
-        const std::string data_files_save = System::ConcatePath( data_files, "save" );
+        const std::string dataMaps = System::ConcatePath( dataDir, "maps" );
+        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
+        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
 
-        if ( !System::IsDirectory( data_dir ) )
-            System::MakeDirectory( data_dir );
+        if ( !System::IsDirectory( dataDir ) )
+            System::MakeDirectory( dataDir );
 
-        if ( System::IsDirectory( data_dir, true ) && !System::IsDirectory( data_maps ) )
-            System::MakeDirectory( data_maps );
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataMaps ) )
+            System::MakeDirectory( dataMaps );
 
-        if ( System::IsDirectory( data_dir, true ) && !System::IsDirectory( data_files ) )
-            System::MakeDirectory( data_files );
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
+            System::MakeDirectory( dataFiles );
 
-        if ( System::IsDirectory( data_files, true ) && !System::IsDirectory( data_files_save ) )
-            System::MakeDirectory( data_files_save );
+        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
+            System::MakeDirectory( dataFilesSave );
     }
 
     void SetTimidityEnvPath()

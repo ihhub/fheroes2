@@ -83,9 +83,10 @@ namespace
 #endif
 
         if ( System::GetEnvironment( "HOME" ) )
-            res = System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
-        else if ( System::GetEnvironment( "APPDATA" ) )
-            res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+            return System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
+
+        if ( System::GetEnvironment( "APPDATA" ) )
+            return System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
 
         return res;
     }
@@ -112,42 +113,40 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 
 std::string System::GetConfigDirectory( const std::string & prog )
 {
-    std::string res;
 #if defined( __LINUX__ )
-    auto config_env = System::GetEnvironment( "XDG_CONFIG_HOME" );
-    if ( config_env ) {
-        res = System::ConcatePath( config_env, prog );
+    const char * configEnv = System::GetEnvironment( "XDG_CONFIG_HOME" );
+    if ( configEnv ) {
+        return System::ConcatePath( configEnv, prog );
     }
-    else {
-        auto home_env = System::GetEnvironment( "HOME" );
-        if ( home_env ) {
-            res = System::ConcatePath( System::ConcatePath( home_env, ".config" ), prog );
-        }
+
+    const char * homeEnv = System::GetEnvironment( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
     }
+
+    return {};
 #else
-    res = GetHomeDirectory( prog );
+    return GetHomeDirectory( prog );
 #endif
-    return res;
 }
 
 std::string System::GetDataDirectory( const std::string & prog )
 {
-    std::string res;
 #if defined( __LINUX__ )
-    auto data_env = System::GetEnvironment( "XDG_DATA_HOME" );
-    if ( data_env ) {
-        res = System::ConcatePath( data_env, prog );
+    const char * dataEnv = System::GetEnvironment( "XDG_DATA_HOME" );
+    if ( dataEnv ) {
+        return System::ConcatePath( dataEnv, prog );
     }
-    else {
-        auto home_env = System::GetEnvironment( "HOME" );
-        if ( home_env ) {
-            res = System::ConcatePath( System::ConcatePath( home_env, ".local/share" ), prog );
-        }
+
+    const char * homeEnv = System::GetEnvironment( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
     }
+
+    return {};
 #else
-    res = GetHomeDirectory( prog );
+    return GetHomeDirectory( prog );
 #endif
-    return res;
 }
 
 ListDirs System::GetDataDirectories( const std::string & prog )
