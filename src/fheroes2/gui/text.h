@@ -90,10 +90,8 @@ public:
     int h( int ) const;
 
     virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
-    static int CharWidth( int, int ft );
-    static int CharHeight( int ft );
-    static int CharAscent( int ft );
-    static int CharDescent( int ft );
+    static int CharWidth( const uint8_t character, const int ft );
+    static int FontHeight( const int ft );
 
 private:
     std::string message;

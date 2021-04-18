@@ -896,7 +896,7 @@ namespace ICN
         // system
         ROUTERED,
         YELLOW_FONT,
-        YELLOW_SMALFONT,
+        YELLOW_SMALLFONT,
         BATTLESKIP,
         BATTLEWAIT,
         BUYMAX,

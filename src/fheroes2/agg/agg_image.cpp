@@ -126,7 +126,7 @@ namespace fheroes2
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
-            case ICN::YELLOW_SMALFONT:
+            case ICN::YELLOW_SMALLFONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
@@ -948,7 +948,7 @@ namespace fheroes2
             case Font::YELLOW_BIG:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
             case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALFONT, character - 0x20 );
+                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
             case Font::BIG:
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
@@ -966,6 +966,23 @@ namespace fheroes2
         {
             // TODO: Add Unicode character support
             return GetLetter( character, fontType );
+        }
+
+        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
+        {
+            switch ( fontType ) {
+            case Font::BIG:
+            case Font::GRAY_BIG:
+            case Font::YELLOW_BIG:
+            case Font::WHITE_LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            case Font::SMALL:
+            case Font::GRAY_SMALL:
+            case Font::YELLOW_SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            default:
+                return 0;
+            }
         }
 
         int32_t GetAbsoluteICNHeight( int icnId )
