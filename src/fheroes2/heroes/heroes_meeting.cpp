@@ -38,6 +38,36 @@
 
 namespace
 {
+    void createButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    {
+        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
+        const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
+
+        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t width = std::min( originalReleasedImage.width(), originalPressedImage.width() );
+        const int32_t height = std::min( originalReleasedImage.height(), originalPressedImage.height() );
+
+        fheroes2::Point extraOffset( 2, 1 );
+
+        const int32_t extendedWidth = width + extraOffset.x * 2;
+        const int32_t extendedHeight = height + extraOffset.y * 2;
+
+        fheroes2::Sprite releasedButton( extendedWidth, extendedHeight );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, releasedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, extraOffset.x, extraOffset.y, originalReleasedImage.width(), originalReleasedImage.height() );
+
+        fheroes2::Sprite pressedButton( extendedWidth, height + extraOffset.y * 2 );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, pressedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, extraOffset.x, extraOffset.y + 1, originalPressedImage.width(), originalPressedImage.height() );
+
+        button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
+        button.setSprite( releasedButton, pressedButton );
+    }
+}
+
+namespace
+{
     void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
     {
         size_t toIdx = 0;
@@ -355,16 +385,23 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     buttonExit.draw();
 
-    fheroes2::Button moveArmyToHero2( cur_pt.x + 297, cur_pt.y + 270, ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0, 1 );
+    // The original resources do not have such animated buttons so we have to create those.
+    const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
+    fheroes2::ButtonSprite moveArmyToHero2;
+    createButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArmyToHero1;
+    createButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero2;
+    createButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero1;
+    createButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
+
     moveArmyToHero2.draw();
-
-    fheroes2::Button moveArmyToHero1( cur_pt.x + 295, cur_pt.y + 291, ICN::SWAP_ARROW_RIGHT_TO_LEFT, 0, 1 );
     moveArmyToHero1.draw();
-
-    fheroes2::Button moveArtifactsToHero2( cur_pt.x + 297, cur_pt.y + 363, ICN::SWAP_ARROW_LEFT_TO_RIGHT, 0, 1 );
     moveArtifactsToHero2.draw();
-
-    fheroes2::Button moveArtifactsToHero1( cur_pt.x + 295, cur_pt.y + 384, ICN::SWAP_ARROW_RIGHT_TO_LEFT, 0, 1 );
     moveArtifactsToHero1.draw();
 
     cursor.Show();

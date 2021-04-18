@@ -314,7 +314,7 @@ namespace fheroes2
 
             for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
                 if ( *transformInX == 0 && *transformOutX == 1 ) {
-                    *transformOutX = 4;
+                    *transformOutX = 3;
                 }
             }
         }
