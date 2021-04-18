@@ -223,6 +223,7 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
+    // Every image in the array must be the same size.
     Image ExtractCommonPattern( const std::vector<Image> & input );
 
     // Please use GetColorId function if you want to use an RGB value
