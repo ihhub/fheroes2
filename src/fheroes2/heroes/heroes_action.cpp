@@ -3018,7 +3018,7 @@ void ActionToEyeMagi( const Heroes & hero, u32 obj )
 void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 {
     MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
-    std::string title = MP2::StringObject( obj );
+    const std::string title = MP2::StringObject( obj );
     if ( riddle && riddle->valid ) {
         if (
             Dialog::YES
