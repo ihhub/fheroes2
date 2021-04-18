@@ -32,4 +32,7 @@ namespace fheroes2
     bool Load( const std::string & path, Image & image );
 
     Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
+
+    // Generate a new image with a shadow of the button based on the shape of existing image. Shadow must have only (-x, +y) offset.
+    Sprite addButtonShadow( const Sprite & in, const Point & shadowOffset );
 }
