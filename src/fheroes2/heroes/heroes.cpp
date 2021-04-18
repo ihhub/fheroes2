@@ -142,7 +142,7 @@ Heroes::Heroes()
     , _alphaValue( 255 )
 {}
 
-Heroes::Heroes( int heroID, int race, int initialLevel ) 
+Heroes::Heroes( int heroID, int race, int initialLevel )
     : Heroes( heroID, race )
 {
     // level 1 is technically regarded as 0, so reduce the initial level by 1
