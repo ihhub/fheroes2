@@ -735,7 +735,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         text.Blit( dst_pt.x, dst_pt.y );
     }
 
-    const u32 count = castle.GetArmy().GetCount();
+    const uint32_t count = castle.GetArmy().GetCount();
 
     // draw defenders
     if ( count == 0 ) {
