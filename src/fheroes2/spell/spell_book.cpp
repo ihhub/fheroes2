@@ -445,16 +445,15 @@ void SpellBookRedrawLists( const SpellStorage & spells, Rects & coords, const si
 void SpellBookRedrawSpells( const SpellStorage & spells, Rects & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero, bool isRight )
 {
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
-    SpellStorage tmpSpells = spells;
-    std::sort( tmpSpells.begin(), tmpSpells.end() );
+
     for ( int32_t i = 0; i < spellsPerPage; ++i ) {
-        if ( tmpSpells.size() <= index + i )
+        if ( spells.size() <= index + i )
             return;
 
         const int32_t ox = 84 + 81 * ( i & 1 );
         const int32_t oy = 71 + 78 * ( i >> 1 ) - ( ( i + isRight ) % 2 ) * 5;
 
-        const Spell & spell = tmpSpells[i + index];
+        const Spell & spell = spells[i + index];
         const std::string & spellName = spell.GetName();
         const uint32_t spellCost = spell.SpellPoint( &hero );
         const bool isAvailable = heroSpellPoints >= spellCost;
