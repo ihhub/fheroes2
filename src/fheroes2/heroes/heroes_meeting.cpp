@@ -38,7 +38,7 @@
 
 namespace
 {
-    void createButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
     {
         const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
         const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
@@ -385,16 +385,16 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // The original resources do not have such animated buttons so we have to create those.
     const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
     fheroes2::ButtonSprite moveArmyToHero2;
-    createButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
+    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
 
     fheroes2::ButtonSprite moveArmyToHero1;
-    createButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
+    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
 
     fheroes2::ButtonSprite moveArtifactsToHero2;
-    createButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
+    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
 
     fheroes2::ButtonSprite moveArtifactsToHero1;
-    createButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
+    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
 
     moveArmyToHero2.draw();
     moveArmyToHero1.draw();
