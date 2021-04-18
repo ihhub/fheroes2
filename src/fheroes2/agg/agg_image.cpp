@@ -968,7 +968,7 @@ namespace fheroes2
             return GetLetter( character, fontType );
         }
 
-        const uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
+        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
         {
             switch ( fontType ) {
             case Font::BIG:
