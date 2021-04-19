@@ -198,8 +198,8 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
 
 void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, size_t count )
 {
-    for ( int32_t ii = 0; ii < count; ++ii ) {
-        if ( ii < v.size() ) {
+    for ( int32_t ii = 0; ii < static_cast<int32_t>( count ); ++ii ) {
+        if ( ii < static_cast<int32_t>( v.size() ) ) {
             const Colors colors( v[ii].second );
             const int32_t sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
             int32_t px = pos.x + ii * step - ( colors.size() * sw - ( colors.size() - 1 ) ) / 2 + 3;
@@ -262,7 +262,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     // head 1
     int32_t ii = 0;
-    for ( ii = 0; ii < colors.size(); ++ii ) {
+    for ( ii = 0; ii < static_cast<int32_t>( colors.size() ); ++ii ) {
         switch ( ii + 1 ) {
         case 1:
             text.Set( _( "1st" ) );
