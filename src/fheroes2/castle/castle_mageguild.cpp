@@ -140,7 +140,7 @@ bool RowSpells::QueueEventProcessing( void )
     return 0 <= index;
 }
 
-void Castle::OpenMageGuild( const CastleHeroes & heroes )
+void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Cursor & cursor = Cursor::Get();

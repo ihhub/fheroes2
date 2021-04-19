@@ -102,7 +102,7 @@ void Battle::Bridge::SetDestroy( void )
     Board::GetCell( GATES_CELL )->SetObject( 0 );
 }
 
-void Battle::Bridge::SetPassable( const Unit & b )
+void Battle::Bridge::SetPassable( const Unit & b ) const
 {
     if ( isPassable( b ) ) {
         Board::GetCell( GATES_CELL )->SetObject( 0 );

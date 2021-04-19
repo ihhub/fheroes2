@@ -149,8 +149,6 @@ std::string Army::SizeString( u32 size )
     return str_size[0];
 }
 
-Troops::Troops() {}
-
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {

@@ -652,8 +652,6 @@ double Kingdom::GetArmiesStrength( void ) const
     return res;
 }
 
-Kingdoms::Kingdoms() {}
-
 void Kingdoms::Init( void )
 {
     const Colors colors( Settings::Get().GetPlayers().GetColors() );

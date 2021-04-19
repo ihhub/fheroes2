@@ -836,12 +836,12 @@ void TextSprite::SetPos( s32 ax, s32 ay )
     _restorer.update( ax, ay, gw, gh + 5 );
 }
 
-int TextSprite::w( void )
+int TextSprite::w( void ) const
 {
     return gw;
 }
 
-int TextSprite::h( void )
+int TextSprite::h( void ) const
 {
     return gh + 5;
 }

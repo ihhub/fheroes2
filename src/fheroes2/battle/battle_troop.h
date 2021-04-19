@@ -74,17 +74,21 @@ namespace Battle
     {
     public:
         Unit( const Troop &, s32 pos, bool reflect );
-        ~Unit();
+        Unit( const Unit & ) = default;
 
-        virtual bool isModes( u32 ) const override;
-        virtual bool isBattle() const override;
-        virtual std::string GetShotString() const override;
-        virtual std::string GetSpeedString() const override;
-        virtual u32 GetHitPointsLeft() const override;
+        ~Unit() override;
+
+        Unit & operator=( const Unit & ) = delete;
+
+        bool isModes( u32 ) const override;
+        bool isBattle() const override;
+        std::string GetShotString() const override;
+        std::string GetSpeedString() const override;
+        u32 GetHitPointsLeft() const override;
         virtual uint32_t GetMissingHitPoints() const;
-        virtual u32 GetAffectedDuration( u32 ) const override;
-        virtual u32 GetSpeed() const override;
-        virtual int GetMorale() const override;
+        u32 GetAffectedDuration( u32 ) const override;
+        u32 GetSpeed() const override;
+        int GetMorale() const override;
 
         Unit * GetMirror();
         void SetMirror( Unit * );
@@ -92,7 +96,7 @@ namespace Battle
         void SetRandomLuck( void );
         void NewTurn( void );
 
-        virtual bool isValid() const override;
+        bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
@@ -118,16 +122,16 @@ namespace Battle
         void SetPosition( const Position & );
         void SetReflection( bool );
 
-        virtual u32 GetAttack() const override;
-        virtual u32 GetDefense() const override;
+        u32 GetAttack() const override;
+        u32 GetDefense() const override;
         int GetArmyColor( void ) const;
-        virtual int GetColor() const override;
+        int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
-        virtual int GetControl() const override;
+        int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
         u32 GetDead( void ) const;

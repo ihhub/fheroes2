@@ -121,7 +121,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const Point & pos )
+void Interface::IconsBar::RedrawBackground( const Point & pos ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();

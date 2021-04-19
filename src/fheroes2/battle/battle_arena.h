@@ -104,21 +104,21 @@ namespace Battle
         void FadeArena( bool clearMessageLog ) const;
 
         // returns pair with move cell index and distance
-        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
+        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target ) const;
 
         uint32_t CalculateMoveDistance( int32_t indexTo ) const;
         bool hexIsAccessible( int32_t indexTo ) const;
         bool hexIsPassable( int32_t indexTo ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
-        Indexes GetPath( const Unit &, const Position & );
+        Indexes GetPath( const Unit &, const Position & ) const;
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 );
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & );
+        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
+        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
+        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg );

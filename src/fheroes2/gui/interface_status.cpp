@@ -105,7 +105,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
         _state = status;
 }
 
-void Interface::StatusWindow::Redraw( void )
+void Interface::StatusWindow::Redraw( void ) const
 {
     const Settings & conf = Settings::Get();
     const Rect & pos = GetArea();

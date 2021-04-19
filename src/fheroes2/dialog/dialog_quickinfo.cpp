@@ -326,7 +326,7 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPena
     return str;
 }
 
-fheroes2::Rect MakeRectQuickInfo( LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
 {
     if ( position.x > 0 && position.y > 0 ) {
         return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );

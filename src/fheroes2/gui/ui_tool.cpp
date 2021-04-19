@@ -117,8 +117,6 @@ namespace fheroes2
         , _isHidden( false )
     {}
 
-    MovableSprite::~MovableSprite() {}
-
     MovableSprite & MovableSprite::operator=( const Sprite & sprite )
     {
         Sprite::operator=( sprite );

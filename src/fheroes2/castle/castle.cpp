@@ -900,7 +900,7 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
     return desc_build[13];
 }
 
-bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg )
+bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
     const Kingdom & myKingdom = GetKingdom();
     if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
@@ -2460,7 +2460,7 @@ bool Castle::AllowBuyBoat( void ) const
     return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
-bool Castle::BuyBoat( void )
+bool Castle::BuyBoat( void ) const
 {
     if ( !AllowBuyBoat() )
         return false;

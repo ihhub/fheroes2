@@ -31,7 +31,7 @@
 class SelectEnum : public Interface::ListBox<int>
 {
 public:
-    SelectEnum( const Rect & rt )
+    explicit SelectEnum( const Rect & rt )
         : Interface::ListBox<int>( rt )
         , area( rt )
         , ok( false )
@@ -45,7 +45,7 @@ public:
         SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
     };
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( dst.x, dst.y + 25, rtAreaItems.width + 5, rtAreaItems.height + 10 ) );
 
@@ -59,16 +59,16 @@ public:
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::LISTBOX, 9 ), display, dst.x + area.w - 24, dst.y + area.h - 74 );
     }
 
-    virtual void ActionListDoubleClick( int & /*index*/ ) override
+    void ActionListDoubleClick( int & /*index*/ ) override
     {
         ok = true;
     }
 
-    virtual void RedrawItem( const int &, s32, s32, bool ) override {}
-    virtual void ActionCurrentUp( void ) override {}
-    virtual void ActionCurrentDn( void ) override {}
-    virtual void ActionListSingleClick( int & ) override {}
-    virtual void ActionListPressRight( int & ) override {}
+    void RedrawItem( const int &, s32, s32, bool ) override {}
+    void ActionCurrentUp( void ) override {}
+    void ActionCurrentDn( void ) override {}
+    void ActionListSingleClick( int & ) override {}
+    void ActionListPressRight( int & ) override {}
 
     Rect area;
     bool ok;
@@ -77,10 +77,10 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    SelectEnumMonster( const Rect & rt )
+    explicit SelectEnumMonster( const Rect & rt )
         : SelectEnum( rt ){};
 
-    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -89,7 +89,7 @@ public:
         text.Blit( dstx + 50, dsty + 10 );
     }
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Monster:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
@@ -97,7 +97,7 @@ public:
         SelectEnum::RedrawBackground( dst );
     }
 
-    virtual void ActionListPressRight( int & index ) override
+    void ActionListPressRight( int & index ) override
     {
         Troop troop( Monster( index ), 1 );
         Dialog::ArmyInfo( troop, 0 );
@@ -107,13 +107,13 @@ public:
 class SelectEnumHeroes : public SelectEnum
 {
 public:
-    SelectEnumHeroes( const Rect & rt )
+    explicit SelectEnumHeroes( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 6 );
     }
 
-    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
@@ -124,7 +124,7 @@ public:
         text.Blit( dstx + 50, dsty + 5 );
     };
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Hero:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
@@ -136,11 +136,11 @@ public:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    SelectEnumArtifact( const Rect & rt )
+    explicit SelectEnumArtifact( const Rect & rt )
         : SelectEnum( rt )
     {}
 
-    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         Artifact art( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -149,7 +149,7 @@ public:
         text.Blit( dstx + 50, dsty + 10 );
     }
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Artifact:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
@@ -161,13 +161,13 @@ public:
 class SelectEnumSpell : public SelectEnum
 {
 public:
-    SelectEnumSpell( const Rect & rt )
+    explicit SelectEnumSpell( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 4 );
     }
 
-    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -176,7 +176,7 @@ public:
         text.Blit( dstx + 80, dsty + 10 );
     }
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Spell:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
@@ -188,13 +188,13 @@ public:
 class SelectEnumSecSkill : public SelectEnum
 {
 public:
-    SelectEnumSecSkill( const Rect & rt )
+    explicit SelectEnumSecSkill( const Rect & rt )
         : SelectEnum( rt )
     {
         SetAreaMaxItems( 5 );
     }
 
-    virtual void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -203,7 +203,7 @@ public:
         text.Blit( dstx + 50, dsty + 10 );
     }
 
-    virtual void RedrawBackground( const Point & dst ) override
+    void RedrawBackground( const Point & dst ) override
     {
         Text text( "Select Skill:", Font::YELLOW_BIG );
         text.Blit( dst.x + ( area.w - text.w() ) / 2, dst.y );
