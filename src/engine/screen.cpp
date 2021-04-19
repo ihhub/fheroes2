@@ -143,7 +143,7 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
-        virtual ~RenderCursor()
+        ~RenderCursor() override
         {
             clear();
         }
@@ -270,7 +270,7 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        ~RenderEngine() override
         {
             clear();
         }
@@ -457,7 +457,7 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        ~RenderEngine() override
         {
             clear();
         }

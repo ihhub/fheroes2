@@ -143,7 +143,7 @@ namespace Dialog
     {
     public:
         FrameBox( int height, bool buttons = false );
-        virtual ~FrameBox();
+        ~FrameBox() override;
     };
 
     class FrameBorder

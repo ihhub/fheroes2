@@ -296,7 +296,7 @@ namespace Interface
             ResetSelected();
         }
 
-        virtual ~ItemsActionBar() {}
+        ~ItemsActionBar() override = default;
 
         void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}

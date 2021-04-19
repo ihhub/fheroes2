@@ -158,18 +158,18 @@ public:
     Army( Army && ) = delete;
     Army & operator=( const Army & ) = delete;
     Army & operator=( Army && ) = delete;
-    ~Army();
+    ~Army() override;
 
     void Reset( bool = false ); // reset: soft or hard
     void setFromTile( const Maps::Tiles & tile );
 
     int GetRace( void ) const;
     int GetColor( void ) const;
-    int GetControl( void ) const;
-    u32 GetAttack( void ) const;
-    u32 GetDefense( void ) const;
+    int GetControl( void ) const override;
+    u32 GetAttack( void ) const override;
+    u32 GetDefense( void ) const override;
 
-    double GetStrength() const;
+    double GetStrength() const override;
     double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;

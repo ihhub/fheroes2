@@ -45,8 +45,8 @@ namespace Interface
     public:
         StatusWindow( Basic & basic );
 
-        void SetPos( s32, s32 );
-        void SavePosition();
+        void SetPos( s32, s32 ) override;
+        void SavePosition() override;
         void SetRedraw() const;
 
         void Reset();

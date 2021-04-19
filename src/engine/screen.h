@@ -103,7 +103,7 @@ namespace fheroes2
 
         static Display & instance();
 
-        virtual ~Display() = default;
+        ~Display() override = default;
 
         void render(); // render full image on screen
 

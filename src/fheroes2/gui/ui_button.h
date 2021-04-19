@@ -49,7 +49,7 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
-        virtual ~ButtonBase();
+        ~ButtonBase() override;
 
         bool isEnabled() const;
         bool isDisabled() const;
@@ -94,7 +94,7 @@ namespace fheroes2
     public:
         Button( int32_t offsetX = 0, int32_t offsetY = 0 );
         Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        virtual ~Button();
+        ~Button() override;
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
 
@@ -114,7 +114,7 @@ namespace fheroes2
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed );
-        virtual ~ButtonSprite();
+        ~ButtonSprite() override;
 
         void setSprite( const Sprite & released, const Sprite & pressed );
 

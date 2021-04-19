@@ -115,7 +115,8 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
-    virtual ~Castle() {}
+    ~Castle() override = default;
+
     void LoadFromMP2( StreamBuf );
 
     Captain & GetCaptain( void );
@@ -136,7 +137,7 @@ public:
 
     int GetRace( void ) const;
     const std::string & GetName( void ) const;
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
     const MageGuild & GetMageGuild( void ) const;

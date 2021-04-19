@@ -51,7 +51,7 @@ namespace Interface
             , ptRedraw( pt )
             , useHotkeys( true )
         {}
-        virtual ~ListBox() {}
+        ~ListBox() override = default;
 
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
         virtual void RedrawBackground( const Point & ) = 0;
@@ -156,7 +156,7 @@ namespace Interface
             useHotkeys = !f;
         }
 
-        void Redraw( void )
+        void Redraw( void ) override
         {
             Cursor::Get().Hide();
 
@@ -264,7 +264,7 @@ namespace Interface
                 _currentId = -1;
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing( void ) override
         {
             LocalEvent & le = LocalEvent::Get();
             Cursor & cursor = Cursor::Get();

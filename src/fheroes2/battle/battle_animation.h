@@ -140,7 +140,7 @@ class AnimationState : public AnimationReference
 public:
     AnimationState( int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
-    virtual ~AnimationState();
+    ~AnimationState() override;
 
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );

@@ -67,7 +67,7 @@ public:
     };
 
     Kingdom();
-    virtual ~Kingdom() {}
+    ~Kingdom() override = default;
 
     void Init( int color );
     void clear( void );
@@ -90,7 +90,7 @@ public:
     const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
     int GetColor( void ) const;
     int GetRace( void ) const;
 

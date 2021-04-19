@@ -74,7 +74,7 @@ namespace Battle
     {
     public:
         Unit( const Troop &, s32 pos, bool reflect );
-        ~Unit();
+        ~Unit() override;
 
         bool isModes( u32 ) const override;
         bool isBattle() const override;

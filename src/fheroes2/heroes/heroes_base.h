@@ -71,7 +71,7 @@ public:
 
     virtual const std::string & GetName( void ) const = 0;
     virtual int GetColor( void ) const = 0;
-    virtual int GetControl( void ) const = 0;
+    int GetControl( void ) const override = 0;
     virtual bool isValid( void ) const = 0;
 
     virtual const Army & GetArmy( void ) const = 0;
@@ -90,8 +90,8 @@ public:
 
     virtual int GetType( void ) const = 0;
 
-    bool isCaptain( void ) const;
-    bool isHeroes( void ) const;
+    bool isCaptain( void ) const override;
+    bool isHeroes( void ) const override;
 
     int GetAttackModificator( std::string * = NULL ) const;
     int GetDefenseModificator( std::string * = NULL ) const;

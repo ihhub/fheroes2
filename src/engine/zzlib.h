@@ -51,7 +51,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 class ImageZlib : public fheroes2::Image
 {
     ImageZlib( int32_t width, int32_t height, const uint8_t * data, size_t size );
-    virtual ~ImageZlib() {}
+    ~ImageZlib() override = default;
 };
 
 #endif

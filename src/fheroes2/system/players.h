@@ -109,7 +109,7 @@ class Player : public BitModes, public Control
 {
 public:
     Player( int col = Color::NONE );
-    virtual ~Player() {}
+    ~Player() override = default;
 
     bool isID( u32 ) const;
     bool isColor( int ) const;
@@ -123,7 +123,7 @@ public:
     void SetFriends( int );
     void SetName( const std::string & );
 
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
     int GetColor( void ) const;
     int GetRace( void ) const;
     int GetFriends( void ) const;

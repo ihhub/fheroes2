@@ -37,7 +37,7 @@ namespace Interface
         Radar( Basic & );
         Radar( const Radar & radar );
 
-        void SetPos( s32, s32 );
+        void SetPos( s32, s32 ) override;
         void SetRedraw( void ) const;
         void Build( void );
         void Redraw();
@@ -57,7 +57,7 @@ namespace Interface
             ViewWorld
         };
 
-        void SavePosition( void );
+        void SavePosition( void ) override;
         void Generate( void );
         void RedrawObjects( int color, ViewWorldMode flags ) const;
 
