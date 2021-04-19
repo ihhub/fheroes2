@@ -96,7 +96,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:
-    case Cursor::POINTER2:
+    case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
     case Cursor::FIGHT:
     case Cursor::FIGHT2:
@@ -169,6 +169,20 @@ void Cursor::Hide() const
 bool Cursor::isVisible( void ) const
 {
     return fheroes2::cursor().isVisible();
+}
+
+void Cursor::setVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER_VIDEO );
+    }
+}
+
+void Cursor::resetVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER );
+    }
 }
 
 void Cursor::Refresh()
