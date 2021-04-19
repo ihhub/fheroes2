@@ -199,7 +199,7 @@ private:
 class Kingdoms
 {
 public:
-    Kingdoms();
+    Kingdoms() = default;
 
     void Init( void );
     void clear( void );

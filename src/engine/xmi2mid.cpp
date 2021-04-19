@@ -342,7 +342,7 @@ struct MidiEvents : std::vector<MidiChunk>
         return res;
     }
 
-    MidiEvents() {}
+    MidiEvents() = default;
     MidiEvents( const XMITrack & t )
     {
         const u8 * ptr = &t.evnt[0];
@@ -481,7 +481,7 @@ struct MidTracks : std::list<MidTrack>
         return res;
     }
 
-    MidTracks() {}
+    MidTracks() = default;
     MidTracks( const XMITracks & tracks )
     {
         for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )

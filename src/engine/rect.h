@@ -64,7 +64,7 @@ struct Size
 
 struct Rect : Point, Size
 {
-    Rect();
+    Rect() = default;
     Rect( int16_t, int16_t, u16, u16 );
     Rect( const Point &, u16, u16 );
     Rect( const Point &, const Size & );

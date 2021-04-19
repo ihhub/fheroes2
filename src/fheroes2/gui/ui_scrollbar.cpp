@@ -38,8 +38,6 @@ namespace fheroes2
         , _currentIndex( 0 )
     {}
 
-    Scrollbar::~Scrollbar() {}
-
     void Scrollbar::setImage( const Image & image )
     {
         fheroes2::Copy( image, *this );

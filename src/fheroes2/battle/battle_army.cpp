@@ -105,8 +105,6 @@ Battle::Units::Units( const Units & units1, const Units & units2 )
     insert( end(), units2.begin(), units2.end() );
 }
 
-Battle::Units::~Units() {}
-
 Battle::Units & Battle::Units::operator=( const Units & units )
 {
     reserve( CAPACITY < units.size() ? units.size() : CAPACITY );

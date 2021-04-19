@@ -44,7 +44,7 @@ public:
         : uid( 0 )
         , type( v )
     {}
-    virtual ~ActionSimple() {}
+    virtual ~ActionSimple() = default;
 
     int GetType( void ) const
     {

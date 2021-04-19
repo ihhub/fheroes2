@@ -35,7 +35,7 @@ namespace Route
     class Step
     {
     public:
-        Step() {}
+        Step() = default;
         Step( int index, s32 fromIndex, int dir, u32 cost )
             : currentIndex( index )
             , from( fromIndex )

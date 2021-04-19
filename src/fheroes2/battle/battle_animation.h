@@ -101,7 +101,8 @@ class AnimationReference
 public:
     AnimationReference();
     AnimationReference( int id );
-    virtual ~AnimationReference();
+
+    virtual ~AnimationReference() = default;
 
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
@@ -140,7 +141,7 @@ class AnimationState : public AnimationReference
 public:
     AnimationState( int monsterID );
     AnimationState( const AnimationReference & animMap, int state );
-    ~AnimationState() override;
+    ~AnimationState() override = default;
 
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );

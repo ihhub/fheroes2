@@ -39,7 +39,7 @@ public:
         : uid( 0 )
         , type( v )
     {}
-    virtual ~MapObjectSimple() {}
+    virtual ~MapObjectSimple() = default;
 
     int GetType( void ) const
     {

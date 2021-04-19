@@ -34,7 +34,7 @@ namespace Interface
 {
     struct ListBasic
     {
-        virtual ~ListBasic() {}
+        virtual ~ListBasic() = default;
         virtual void Redraw( void ) = 0;
         virtual bool QueueEventProcessing( void ) = 0;
     };

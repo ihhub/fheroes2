@@ -146,7 +146,8 @@ public:
 
 private:
     Cursor();
-    ~Cursor();
+    ~Cursor() = default;
+
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 

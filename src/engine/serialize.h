@@ -55,7 +55,7 @@ public:
     StreamBase()
         : flags( 0 )
     {}
-    virtual ~StreamBase() {}
+    virtual ~StreamBase() = default;
 
     void setbigendian( bool );
 

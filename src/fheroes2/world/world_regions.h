@@ -39,7 +39,7 @@ struct MapRegionNode
     uint16_t passable = 0;
     bool isWater = false;
 
-    MapRegionNode() {}
+    MapRegionNode() = default;
     MapRegionNode( int index_ )
         : index( index_ )
         , type( REGION_NODE_OPEN )
@@ -61,7 +61,7 @@ public:
     std::vector<MapRegionNode> _nodes;
     size_t _lastProcessedNode = 0;
 
-    MapRegion() {}
+    MapRegion() = default;
 
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
 

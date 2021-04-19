@@ -48,7 +48,8 @@ namespace Interface
             , hspace( 0 )
             , vspace( 0 )
         {}
-        virtual ~ItemsBar() {}
+
+        virtual ~ItemsBar() = default;
 
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;

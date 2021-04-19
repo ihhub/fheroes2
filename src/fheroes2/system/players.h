@@ -98,7 +98,8 @@ struct Focus : std::pair<int, void *>
 struct Control
 {
     virtual int GetControl( void ) const = 0;
-    virtual ~Control() {}
+    virtual ~Control() = default;
+
     bool isControlAI( void ) const;
     bool isControlHuman( void ) const;
     bool isControlRemote( void ) const;

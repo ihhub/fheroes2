@@ -142,7 +142,7 @@ namespace Skill
     {
     public:
         Primary();
-        virtual ~Primary(){};
+        virtual ~Primary() = default;
 
         enum
         {

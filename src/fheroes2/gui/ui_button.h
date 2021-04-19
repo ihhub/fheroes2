@@ -30,7 +30,7 @@ namespace fheroes2
     {
     public:
         ActionObject();
-        virtual ~ActionObject() {}
+        virtual ~ActionObject() = default;
 
         void subscribe( ActionObject * receiver );
         void unsubscribe();
@@ -49,7 +49,7 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ~ButtonBase() override;
+        ~ButtonBase() override = default;
 
         bool isEnabled() const;
         bool isDisabled() const;
@@ -94,7 +94,7 @@ namespace fheroes2
     public:
         Button( int32_t offsetX = 0, int32_t offsetY = 0 );
         Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        ~Button() override;
+        ~Button() override = default;
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
 
@@ -114,7 +114,7 @@ namespace fheroes2
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed );
-        ~ButtonSprite() override;
+        ~ButtonSprite() override = default;
 
         void setSprite( const Sprite & released, const Sprite & pressed );
 

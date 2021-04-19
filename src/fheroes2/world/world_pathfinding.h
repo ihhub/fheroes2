@@ -30,7 +30,7 @@
 class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    WorldPathfinder() {}
+    WorldPathfinder() = default;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
@@ -54,7 +54,8 @@ protected:
 class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
-    PlayerWorldPathfinder() {}
+    PlayerWorldPathfinder() = default;
+
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
@@ -70,6 +71,7 @@ public:
     AIWorldPathfinder( double advantage )
         : _advantage( advantage )
     {}
+
     void reset() override;
 
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );

@@ -46,7 +46,7 @@ namespace Maps
 class Troops : protected std::vector<Troop *>
 {
 public:
-    Troops();
+    Troops() = default;
     Troops( const Troops & troops );
     virtual ~Troops();
     Troops & operator=( const Troops & rhs );

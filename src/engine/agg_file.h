@@ -32,7 +32,7 @@ namespace fheroes2
     class AGGFile
     {
     public:
-        AGGFile();
+        AGGFile() = default;
 
         bool isGood() const;
         bool open( const std::string & fileName );

@@ -56,7 +56,7 @@ class TextInterface
 {
 public:
     TextInterface( int ft = Font::BIG );
-    virtual ~TextInterface(){};
+    virtual ~TextInterface() = default;
 
     virtual void SetText( const std::string & ) = 0;
     virtual void SetFont( int ) = 0;
@@ -75,7 +75,7 @@ protected:
 class TextAscii : public TextInterface
 {
 public:
-    TextAscii(){};
+    TextAscii() = default;
     TextAscii( const std::string &, int = Font::BIG );
 
     void SetText( const std::string & ) override;
