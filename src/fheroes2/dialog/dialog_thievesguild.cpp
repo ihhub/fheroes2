@@ -198,10 +198,10 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
 
 void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, size_t count )
 {
-    for ( uint32_t ii = 0; ii < count; ++ii ) {
+    for ( int32_t ii = 0; ii < count; ++ii ) {
         if ( ii < v.size() ) {
             const Colors colors( v[ii].second );
-            const uint32_t sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
+            const int32_t sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
             int32_t px = pos.x + ii * step - ( colors.size() * sw - ( colors.size() - 1 ) ) / 2 + 3;
 
             for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
@@ -261,7 +261,7 @@ void Dialog::ThievesGuild( bool oracle )
     Text text;
 
     // head 1
-    uint32_t ii = 0;
+    int32_t ii = 0;
     for ( ii = 0; ii < colors.size(); ++ii ) {
         switch ( ii + 1 ) {
         case 1:
@@ -409,9 +409,10 @@ void Dialog::ThievesGuild( bool oracle )
     ii = 0;
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
         text.Set( Color::String( *color ) );
-        dst_pt.x = cur_pt.x + startx + ii++ * stepx - text.w() / 2;
+        dst_pt.x = cur_pt.x + startx + ii * stepx - text.w() / 2;
         dst_pt.y = cur_pt.y + 276;
         text.Blit( dst_pt.x, dst_pt.y );
+        ++ii;
     }
 
     text.Set( _( "Best Hero:" ) );
