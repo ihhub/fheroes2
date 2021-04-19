@@ -71,7 +71,7 @@ public:
         SCROLL_BOTTOMLEFT = 0x1025,
         SCROLL_LEFT = 0x1026,
         SCROLL_TOPLEFT = 0x1027,
-        POINTER2 = 0x1028,
+        POINTER_VIDEO = 0x1028, // this cursor is used only for video playback
         // CMSECO.ICN
         WAR_NONE = 0x2000,
         WAR_MOVE = 0x2001,
@@ -143,6 +143,10 @@ public:
     void Show() const;
     void Hide() const;
     bool isVisible( void ) const;
+
+    // Only for software emulation.
+    void setVideoPlaybackCursor();
+    void resetVideoPlaybackCursor();
 
 private:
     Cursor();
