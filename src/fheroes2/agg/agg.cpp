@@ -608,7 +608,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         return;
     }
 
-    Game::SetCurrentMusic( mus );
     const std::string prefix_music( "music" );
     const MusicSource type = conf.MusicType();
 
@@ -641,6 +640,8 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         if ( filename.size() ) {
             Music::Play( filename, loop );
             isSongFound = true;
+
+            Game::SetCurrentMusic( mus );
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
@@ -648,6 +649,9 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         isSongFound = true;
+
+        Game::SetCurrentMusic( mus );
+
         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
@@ -666,8 +670,11 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() )
+            if ( v.size() ) {
                 Music::Play( v, loop );
+
+                Game::SetCurrentMusic( mus );
+            }
 #else
             std::string mid = XMI::GetString( xmi );
             StringReplace( mid, ".XMI", ".MID" );
@@ -677,6 +684,8 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
                 SaveMemToFile( GetMID( xmi ), file );
 
             Music::Play( file, loop );
+
+            Game::SetCurrentMusic( mus );
 #endif
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
