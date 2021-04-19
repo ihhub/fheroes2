@@ -72,8 +72,13 @@ namespace
         return "ux0:data/fheroes2";
 #endif
 
-        std::string res;
+        if ( System::GetEnvironment( "HOME" ) )
+            return System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
 
+        if ( System::GetEnvironment( "APPDATA" ) )
+            return System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+
+        std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
         char * path = SDL_GetPrefPath( "", prog.c_str() );
         if ( path ) {
@@ -81,13 +86,6 @@ namespace
             SDL_free( path );
         }
 #endif
-
-        if ( System::GetEnvironment( "HOME" ) )
-            return System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
-
-        if ( System::GetEnvironment( "APPDATA" ) )
-            return System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
-
         return res;
     }
 }
