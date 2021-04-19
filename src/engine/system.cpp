@@ -124,7 +124,7 @@ std::string System::GetConfigDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
     }
 
-    return {};
+    return std::string();
 #else
     return GetHomeDirectory( prog );
 #endif
@@ -143,7 +143,7 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
     }
 
-    return {};
+    return std::string();
 #else
     return GetHomeDirectory( prog );
 #endif
