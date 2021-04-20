@@ -51,7 +51,7 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN, 1, 9 );
             break;
         case 8:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
             break;
         }
 
@@ -246,7 +246,7 @@ namespace Campaign
             return Spell( _subType ).GetName();
         case CampaignAwardData::TYPE_HIREABLE_HERO:
             return Heroes( _subType, 0 ).GetName();
-        case CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
+        case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
             return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
         default:
             assert( 0 ); // some new/unhandled award

@@ -84,7 +84,7 @@ namespace Campaign
             TYPE_GET_SPELL, // eg: guardian spell in wizard's isle
             TYPE_CARRY_OVER_FORCES, // eg: the gauntlet
             TYPE_HIREABLE_HERO, // eg: sorceress guild
-            TYPE_REMOVE_ENEMY_HERO, // eg: corlagon defeated
+            TYPE_DEFEAT_ENEMY_HERO, // eg: corlagon defeated
             TYPE_RESOURCE_BONUS, // eg: wood bonus in price of loyalty
         };
 

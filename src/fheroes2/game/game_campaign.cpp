@@ -455,7 +455,7 @@ namespace
             case Campaign::CampaignAwardData::TYPE_GET_SPELL:
                 humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
                 break;
-            case Campaign::CampaignAwardData::TYPE_REMOVE_ENEMY_HERO:
+            case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
                 for ( const Player * player : sortedPlayers ) {
                     Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                     const KingdomHeroes & heroes = kingdom.GetHeroes();

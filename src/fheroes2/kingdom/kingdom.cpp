@@ -485,7 +485,7 @@ Recruits & Kingdom::GetRecruits( void )
 void Kingdom::UpdateRecruits( void )
 {
     bool hasSpecialHireableHero = false;
-    if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN && world.CountWeek() < 2 ) {
+    if ( isControlHuman() && ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) && world.CountWeek() < 2 ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
@@ -495,7 +495,7 @@ void Kingdom::UpdateRecruits( void )
             // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
             const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
 
-            if ( hero->isFreeman() ) {
+            if ( hero && hero->isFreeman() ) {
                 recruits.SetHero1( hero );
                 hasSpecialHireableHero = true;
                 break;
