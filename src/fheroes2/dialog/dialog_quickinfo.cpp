@@ -711,9 +711,10 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     }
 
     const Heroes * guardian = castle.GetHeroes().Guard();
+    const bool isGuardianVisible = guardian && scoutSkillLevel >= Skill::Level::ADVANCED;
 
     // show guardian
-    if ( guardian && scoutSkillLevel >= Skill::Level::ADVANCED ) {
+    if ( isGuardianVisible ) {
         // hero name
         text.Set( guardian->GetName(), Font::SMALL );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
@@ -747,7 +748,10 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     else if ( scoutSkillLevel > Skill::Level::NONE ) {
         const bool isScouteView = isFriend || isVisibleFromCrystalBall;
 
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, scoutSkillLevel, false, isScouteView );
+        dst_pt.x = cur_rt.x - 5;
+        dst_pt.y += 20;
+
+        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
         text.Set( _( "Unknown" ) );
