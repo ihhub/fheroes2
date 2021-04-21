@@ -610,6 +610,12 @@ void Heroes::UpdateRedrawBottom( const Maps::Tiles & tile )
     if ( hero == nullptr ) {
         return;
     }
+    if ( _redrawIndex.objectsOnDirectionBottom == tile.GetIndex() ) {
+        _redrawIndex.objectsOnDirectionBottom = -1;
+    }
+    if ( _redrawIndex.objectsOnBottom == tile.GetIndex() ) {
+        _redrawIndex.objectsOnBottom = -1;
+    }
     const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
     if ( _redrawIndex.objectsOnBottom == redrawIndex.objectsOnDirectionBottom ) {
         _redrawIndex.objectsOnBottom = -1;
