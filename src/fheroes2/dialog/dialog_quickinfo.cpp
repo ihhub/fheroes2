@@ -747,7 +747,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     else if ( scoutSkillLevel > Skill::Level::NONE ) {
         const bool isScouteView = isFriend || isVisibleFromCrystalBall;
 
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, scoutSkillLevel, true, isScouteView );
+        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, scoutSkillLevel, false, isScouteView );
     }
     else {
         text.Set( _( "Unknown" ) );
