@@ -196,6 +196,11 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     }
 }
 
+/*void GetBestHeroStatsInfo(std::vector<ValueColors> & v, const Colors & colors )
+{
+    Text text;
+    Te
+}*/
 void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, size_t count )
 {
     for ( int32_t ii = 0; ii < static_cast<int32_t>( count ); ++ii ) {
@@ -228,10 +233,46 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
                 const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
                 if ( !icon.empty() )
                     fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
+                Text text;
+
+                text.Set("Att.", Font::SMALL);
+                text.Blit(px - 25, pos.y + 32);
+                text.Set(std::to_string(hero->GetAttack()));
+                text.Blit(px + 25 - text.w(), pos.y + 32);
+
+                text.Set("Def.");
+                text.Blit(px - 25, pos.y + 42);
+                text.Set( std::to_string( hero->GetDefense() ) );
+                text.Blit(px + 25 - text.w(), pos.y + 42);
+
+                text.Set("Power", Font::SMALL);
+                text.Blit(px - 25, pos.y + 52);
+                text.Set(std::to_string(hero->GetPower()));
+                text.Blit(px + 25 - text.w(), pos.y + 52);
+
+                text.Set("Knowl", Font::SMALL);
+                text.Blit(px - 25, pos.y + 62);
+                text.Set(std::to_string(hero->GetKnowledge()));
+                text.Blit(px + 25 - text.w(), pos.y + 62);
+
             }
         }
     }
 }
+
+void DrawPersonality(fheroes2::Point & pos, int step, const Colors & colors)
+{
+    int i=0;
+    for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
+        Text text(Players::Get(*color)->GetPersonalityString(), Font::SMALL);
+        text.Blit(pos.x + step * i++, 72);
+    }
+}
+/*void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+{
+    if ( v.size() ) {
+        for(uint32_t i = 0; i < v.size(
+}*/
 
 void Dialog::ThievesGuild( bool oracle )
 {
@@ -361,7 +402,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx;
     GetGemsCrSlfMerInfo( v, colors );
-    if ( 1 < count )
+    if ( 2 < count )
         DrawFlags( v, dst_pt, stepx, colors.size() );
 
     text.Set( _( "Obelisks Found:" ) );
@@ -381,7 +422,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx;
     GetArtifactsInfo( v, colors );
-    if ( count > 2 ) {
+    if ( 3 < count ) {
         DrawFlags( v, dst_pt, stepx, colors.size() );
     }
 
@@ -430,8 +471,8 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
-    // GetBestHeroStatsInfo(v);
-    // if(1 < count) DrawHeroIcons(v, dst_pt, maxw);
+    //GetBestHeroStatsInfo(v);
+    //if(1 < count) DrawHeroIcons(v, dst_pt, maxw);
 
     text.Set( _( "Personality:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
@@ -439,6 +480,9 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
+    dst_pt.x= cur_pt.x + textx + startx;
+    DrawPersonality(dst_pt, stepx, colors);
+
     // GetPersonalityInfo(v);
     // if(2 < count) DrawHeroIcons(v, dst_pt, maxw);
 
