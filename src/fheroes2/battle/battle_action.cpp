@@ -354,7 +354,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
                     bool doMovement = false;
 
-                    if ( bridge && bridge->NeedDown( *b, *pathIt ) )
+                    if ( bridge->NeedDown( *b, *pathIt ) )
                         bridge->Action( *b, *pathIt );
 
                     if ( b->isWide() ) {
@@ -371,7 +371,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                         b->SetPosition( *pathIt );
 
                     // check for possible bridge close action, after unit's end of movement
-                    if ( bridge && bridge->AllowUp() )
+                    if ( bridge->AllowUp() )
                         bridge->Action( *b, *pathIt );
                 }
             }
