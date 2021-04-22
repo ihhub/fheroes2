@@ -2733,7 +2733,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
         if ( !tile.addons_level1.empty() )
             tile.addons_level1.sort( TilesAddon::PredicateSortRules1 );
-
     }
 
     return msg;
