@@ -118,6 +118,18 @@ namespace fheroes2
                 return true;
             case ICN::FONT:
                 LoadOriginalICN( id );
+                {
+                    auto & icn = _icnVsSprite[id];
+                    //CP1251 has interval of non-printable symbols from 0x80 to 0xBF (except 0xA8 and 0xB8)
+                    if ( icn.size() == 162 ) {
+                        icn.insert( icn.begin() + 96, 64, icn[0] );
+                        icn[136] = icn[192];
+                        icn[152] = icn[225];
+                        icn.erase( icn.begin() + 192 );
+                        icn.erase( icn.end() - 1 );
+                    }
+                }
+
                 // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                 for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
