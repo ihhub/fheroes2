@@ -289,6 +289,7 @@
     <ClCompile Include="src\fheroes2\game\game_io.cpp" />
     <ClCompile Include="src\fheroes2\game\game_loadgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_mainmenu.cpp" />
+    <ClCompile Include="src\fheroes2\game\game_mainmenu_ui.cpp" />
     <ClCompile Include="src\fheroes2\game\game_newgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_over.cpp" />
     <ClCompile Include="src\fheroes2\game\game_scenarioinfo.cpp" />
@@ -456,6 +457,7 @@
     <ClInclude Include="src\fheroes2\game\game_delays.h" />
     <ClInclude Include="src\fheroes2\game\game_interface.h" />
     <ClInclude Include="src\fheroes2\game\game_io.h" />
+    <ClInclude Include="src\fheroes2\game\game_mainmenu_ui.h" />
     <ClInclude Include="src\fheroes2\game\game_over.h" />
     <ClInclude Include="src\fheroes2\game\game_static.h" />
     <ClInclude Include="src\fheroes2\game\game_video.h" />
