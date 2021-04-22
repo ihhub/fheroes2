@@ -59,7 +59,7 @@ public:
     ObjectColor()
         : std::pair<int, int>( MP2::OBJ_ZERO, Color::NONE )
     {}
-    
+
     ObjectColor( int object, int color )
         : std::pair<int, int>( object, color )
     {}
