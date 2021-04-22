@@ -1350,8 +1350,8 @@ void Maps::Tiles::AddonsSort( void )
     }
 
     // FIXME: check if sort is still needed
-    // if ( !addons_level1.empty() )
-    //    addons_level1.sort( TilesAddon::PredicateSortRules1 );
+    if ( !addons_level1.empty() )
+        addons_level1.sort( TilesAddon::PredicateSortRules1 );
     // if ( !addons_level2.empty() )
     //    addons_level2.sort( TilesAddon::PredicateSortRules2 );
 }
@@ -2730,9 +2730,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     else {
         msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
             >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
-
-        if ( !tile.addons_level1.empty() )
-            tile.addons_level1.sort( TilesAddon::PredicateSortRules1 );
     }
 
     return msg;
