@@ -1005,9 +1005,14 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
-            if ( interface )
-                interface->RedrawBridgeAnimation( true );
-            bridge->SetDown( true );
+            if ( !bridge->isDown() ) {
+                if ( interface ) {
+                    interface->RedrawBridgeAnimation( true );
+                }
+
+                bridge->SetDown( true );
+            }
+
             bridge->SetDestroy();
         }
         break;
