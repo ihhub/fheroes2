@@ -33,18 +33,20 @@ class IndexObject : public std::pair<s32, int>
 {
 public:
     IndexObject()
-        : std::pair<s32, int>( -1, MP2::OBJ_ZERO ){};
+        : std::pair<s32, int>( -1, MP2::OBJ_ZERO ) {}
+
     IndexObject( s32 index, int object )
-        : std::pair<s32, int>( index, object ){};
+        : std::pair<s32, int>( index, object ) {}
 
     bool isIndex( s32 index ) const
     {
         return index == first;
-    };
+    }
+
     bool isObject( int object ) const
     {
         return object == second;
-    };
+    }
 };
 
 StreamBase & operator>>( StreamBase &, IndexObject & );
@@ -53,18 +55,20 @@ class ObjectColor : public std::pair<int, int>
 {
 public:
     ObjectColor()
-        : std::pair<int, int>( MP2::OBJ_ZERO, Color::NONE ){};
+        : std::pair<int, int>( MP2::OBJ_ZERO, Color::NONE ) {}
     ObjectColor( int object, int color )
-        : std::pair<int, int>( object, color ){};
+
+        : std::pair<int, int>( object, color ) {}
 
     bool isObject( int object ) const
     {
         return object == first;
-    };
+    }
+
     bool isColor( int colors ) const
     {
         return ( colors & second ) != 0;
-    };
+    }
 };
 
 StreamBase & operator>>( StreamBase &, ObjectColor & );
@@ -73,18 +77,20 @@ class ResourceCount : public std::pair<int, u32>
 {
 public:
     ResourceCount()
-        : std::pair<int, u32>( Resource::UNKNOWN, 0 ){};
+        : std::pair<int, u32>( Resource::UNKNOWN, 0 ) {}
+
     ResourceCount( int res, u32 count )
-        : std::pair<int, u32>( res, count ){};
+        : std::pair<int, u32>( res, count ) {}
 
     bool isResource( int res ) const
     {
         return res == first;
-    };
+    }
+
     bool isValid( void ) const
     {
         return ( first & Resource::ALL ) && second;
-    };
+    }
 };
 
 StreamBase & operator>>( StreamBase &, ResourceCount & );

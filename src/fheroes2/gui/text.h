@@ -101,7 +101,7 @@ private:
 class TextUnicode : public TextInterface
 {
 public:
-    TextUnicode(){};
+    TextUnicode() = default;
     TextUnicode( const std::string &, int ft = Font::BIG );
     TextUnicode( const u16 *, size_t, int ft = Font::BIG );
 

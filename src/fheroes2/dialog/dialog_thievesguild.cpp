@@ -38,20 +38,20 @@
 struct ValueColors : std::pair<int, int>
 {
     ValueColors()
-        : std::pair<int, int>( 0, 0 ){};
+        : std::pair<int, int>( 0, 0 ) {}
     ValueColors( int v, int c )
-        : std::pair<int, int>( v, c ){};
+        : std::pair<int, int>( v, c ) {}
 
     bool IsValue( int v ) const
     {
         return v == first;
-    };
+    }
     // bool IsColor(int c) const { return (c & second); };
 
     static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
     {
         return v1.first > v2.first;
-    };
+    }
 };
 
 void UpdateValuesColors( std::vector<ValueColors> & v, int value, int color )

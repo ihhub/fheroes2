@@ -82,11 +82,12 @@ struct settings_t
     bool operator==( const std::string & s ) const
     {
         return str && s == str;
-    };
+    }
+
     bool operator==( u32 i ) const
     {
         return id && id == i;
-    };
+    }
 };
 
 // external settings
