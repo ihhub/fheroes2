@@ -1611,6 +1611,8 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
     case ICN::OBJNDSRT:
     case ICN::OBJNGRA2:
     case ICN::OBJNGRAS:
+        if ( icnIndex == 10 || icnIndex == 14 )
+            return true;
     case ICN::OBJNLAVA:
     case ICN::OBJNSNOW:
     case ICN::OBJNSWMP:
@@ -2728,6 +2730,10 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     else {
         msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
             >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
+
+     if ( !tile.addons_level1.empty() )
+            tile.addons_level1.sort( TilesAddon::PredicateSortRules1 );
+
     }
 
     return msg;
