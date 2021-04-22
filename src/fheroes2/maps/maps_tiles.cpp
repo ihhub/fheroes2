@@ -1610,13 +1610,13 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
     case ICN::OBJNDIRT:
     case ICN::OBJNDSRT:
     case ICN::OBJNGRA2:
-    case ICN::OBJNGRAS:
-        if ( icnIndex == 10 || icnIndex == 14 )
-            return true;
     case ICN::OBJNLAVA:
     case ICN::OBJNSNOW:
     case ICN::OBJNSWMP:
         return ( passable & DIRECTION_TOP_ROW ) != 0;
+
+    case ICN::OBJNGRAS:
+        return ( icnIndex == 10 || icnIndex == 14 || ( passable & DIRECTION_TOP_ROW ) != 0 );
 
     default:
         break;
