@@ -120,7 +120,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 {
                     auto & icn = _icnVsSprite[id];
-                    //CP1251 has interval of non-printable symbols from 0x80 to 0xBF (except 0xA8 and 0xB8)
+                    // CP1251 has interval of non-printable symbols from 0x80 to 0xBF (except 0xA8 and 0xB8)
                     if ( icn.size() == 162 ) {
                         icn.insert( icn.begin() + 96, 64, icn[0] );
                         icn[136] = icn[192];
