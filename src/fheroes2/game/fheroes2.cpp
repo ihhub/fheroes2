@@ -107,15 +107,11 @@ namespace
         if ( dataDir.empty() )
             return;
 
-        const std::string dataMaps = System::ConcatePath( dataDir, "maps" );
         const std::string dataFiles = System::ConcatePath( dataDir, "files" );
         const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
 
         if ( !System::IsDirectory( dataDir ) )
             System::MakeDirectory( dataDir );
-
-        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataMaps ) )
-            System::MakeDirectory( dataMaps );
 
         if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
             System::MakeDirectory( dataFiles );
