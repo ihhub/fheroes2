@@ -31,7 +31,8 @@ class BitModes
 {
 public:
     BitModes()
-        : modes( 0 ) {}
+        : modes( 0 )
+    {}
 
     u32 operator()( void ) const
     {

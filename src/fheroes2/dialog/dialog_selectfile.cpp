@@ -50,7 +50,8 @@ public:
     FileInfoListBox( const Point & pt, bool & edit )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , edit_mode( edit )
-        , _isDoubleClicked( false ) {}
+        , _isDoubleClicked( false )
+    {}
 
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
     void RedrawBackground( const Point & ) override;

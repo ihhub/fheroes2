@@ -38,9 +38,12 @@
 struct ValueColors : std::pair<int, int>
 {
     ValueColors()
-        : std::pair<int, int>( 0, 0 ) {}
+        : std::pair<int, int>( 0, 0 )
+    {}
+
     ValueColors( int v, int c )
-        : std::pair<int, int>( v, c ) {}
+        : std::pair<int, int>( v, c )
+    {}
 
     bool IsValue( int v ) const
     {

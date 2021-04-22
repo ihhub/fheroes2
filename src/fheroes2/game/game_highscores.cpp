@@ -52,7 +52,8 @@ struct hgs_t
 {
     hgs_t()
         : days( 0 )
-        , rating( 0 ) {}
+        , rating( 0 )
+    {}
 
     bool operator==( const hgs_t & ) const;
 

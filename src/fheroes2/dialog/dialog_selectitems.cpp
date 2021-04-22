@@ -78,7 +78,8 @@ class SelectEnumMonster : public SelectEnum
 {
 public:
     explicit SelectEnumMonster( const Rect & rt )
-        : SelectEnum( rt ) {}
+        : SelectEnum( rt )
+    {}
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
