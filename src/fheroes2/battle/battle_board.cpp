@@ -925,9 +925,19 @@ void Battle::Board::SetCovrObjects( int icn )
         break;
 
     case ICN::COVR0003:
-    case ICN::COVR0009:
     case ICN::COVR0015:
     case ICN::COVR0021:
+        at( 35 ).SetObject( 0x40 );
+        at( 41 ).SetObject( 0x40 );
+        at( 46 ).SetObject( 0x40 );
+        at( 47 ).SetObject( 0x40 );
+        at( 48 ).SetObject( 0x40 );
+        at( 49 ).SetObject( 0x40 );
+        at( 50 ).SetObject( 0x40 );
+        at( 51 ).SetObject( 0x40 );
+        break;
+
+    case ICN::COVR0009:
         at( 35 ).SetObject( 0x40 );
         at( 40 ).SetObject( 0x40 );
         at( 46 ).SetObject( 0x40 );
