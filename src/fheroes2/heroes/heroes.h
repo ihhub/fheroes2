@@ -270,7 +270,7 @@ public:
     int GetMobilityIndexSprite( void ) const;
     int GetManaIndexSprite( void ) const;
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
     bool Recruit( int col, const Point & pt );

@@ -43,8 +43,7 @@
 #include "ui_window.h"
 #include "world.h"
 
-/* readonly: false, fade: false */
-int Heroes::OpenDialog( bool readonly, bool fade )
+int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
@@ -205,13 +204,15 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     LocalEvent & le = LocalEvent::GetClean();
 
-    if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
+    if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
-        if ( readonly )
+
+        if ( inCastle() || readonly || disableDismiss ) {
             buttonDismiss.hide();
+        }
     }
 
-    if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
+    if ( readonly || disableSwitch || 2 > GetKingdom().GetHeroes().size() ) {
         buttonNextHero.disable();
         buttonPrevHero.disable();
     }

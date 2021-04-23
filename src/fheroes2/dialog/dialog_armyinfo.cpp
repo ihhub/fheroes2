@@ -597,7 +597,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
@@ -781,7 +781,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;
         }

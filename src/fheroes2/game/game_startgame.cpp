@@ -181,7 +181,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 }
 
 /* open heroes wrapper */
-void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld )
+void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
@@ -196,7 +196,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
         int result = Dialog::ZERO;
 
         while ( Dialog::CANCEL != result ) {
-            result = ( *it )->OpenDialog( false, needFade );
+            result = ( *it )->OpenDialog( false, needFade, disableDismiss );
             if ( needFade )
                 needFade = false;
 
