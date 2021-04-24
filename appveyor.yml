@@ -76,7 +76,4 @@ deploy:
     branch: master
 
 cache:
-  - C:\projects\packages -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\sdl -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\sdl2 -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\zlib -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
+  - C:\projects\fheroes2\VisualStudio\packages\installed -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
