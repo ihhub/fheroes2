@@ -36,6 +36,57 @@
 #include "skill_bar.h"
 #include "text.h"
 
+namespace
+{
+    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    {
+        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
+        const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
+
+        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t width = std::min( originalReleasedImage.width(), originalPressedImage.width() );
+        const int32_t height = std::min( originalReleasedImage.height(), originalPressedImage.height() );
+
+        fheroes2::Point extraOffset( 2, 1 );
+
+        const int32_t extendedWidth = width + extraOffset.x * 2;
+        const int32_t extendedHeight = height + extraOffset.y * 2;
+
+        fheroes2::Sprite releasedButton( extendedWidth, extendedHeight );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, releasedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, extraOffset.x, extraOffset.y, originalReleasedImage.width(), originalReleasedImage.height() );
+
+        fheroes2::Sprite pressedButton( extendedWidth, height + extraOffset.y * 2 );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, pressedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, extraOffset.x, extraOffset.y + 1, originalPressedImage.width(), originalPressedImage.height() );
+
+        button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
+        button.setSprite( releasedButton, pressedButton );
+    }
+
+    void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
+    {
+        size_t toIdx = 0;
+
+        for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
+            if ( bagFrom[fromIdx]() != Artifact::UNKNOWN && bagFrom[fromIdx]() != Artifact::MAGIC_BOOK ) {
+                while ( toIdx < bagTo.size() ) {
+                    if ( bagTo[toIdx]() == Artifact::UNKNOWN )
+                        break;
+
+                    ++toIdx;
+                }
+
+                if ( toIdx == bagTo.size() )
+                    break;
+
+                std::swap( bagFrom[fromIdx], bagTo[toIdx] );
+            }
+        }
+    }
+}
+
 class MeetingArmyBar : public ArmyBar
 {
 public:
@@ -43,7 +94,7 @@ public:
         : ArmyBar( army, true, false, false )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -53,7 +104,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !troop.isValid() )
             return;
@@ -103,7 +154,7 @@ public:
         : ArtifactsBar( hero, true, false, false )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -113,7 +164,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !arifact.isValid() )
             return;
@@ -137,7 +188,7 @@ public:
         : PrimarySkillsBar( hero, true )
     {}
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    void RedrawBackground( const Rect &, fheroes2::Image & ) override
     {
         // Just do nothing
     }
@@ -150,7 +201,7 @@ public:
         : SecondarySkillsBar( hero )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -160,7 +211,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
+    void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
     {
         if ( !skill.isValid() )
             return;
@@ -331,6 +382,25 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     buttonExit.draw();
 
+    // The original resources do not have such animated buttons so we have to create those.
+    const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
+    fheroes2::ButtonSprite moveArmyToHero2;
+    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArmyToHero1;
+    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero2;
+    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero1;
+    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
+
+    moveArmyToHero2.draw();
+    moveArmyToHero1.draw();
+    moveArtifactsToHero2.draw();
+    moveArtifactsToHero1.draw();
+
     cursor.Show();
     display.render();
 
@@ -346,6 +416,11 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero2.area() ) ? moveArmyToHero2.drawOnPress() : moveArmyToHero2.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero1.area() ) ? moveArmyToHero1.drawOnPress() : moveArmyToHero1.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero2.area() ) ? moveArtifactsToHero2.drawOnPress() : moveArtifactsToHero2.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero1.area() ) ? moveArtifactsToHero1.drawOnPress() : moveArtifactsToHero1.drawOnRelease();
+
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
@@ -455,6 +530,72 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
             moraleIndicator2.Redraw();
+            luckIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
+            heroes2.GetArmy().MoveTroops( GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
+            GetArmy().MoveTroops( heroes2.GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
+            moveArtifacts( GetBagArtifacts(), heroes2.GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
+            moveArtifacts( heroes2.GetBagArtifacts(), GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
             cursor.Show();

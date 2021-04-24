@@ -60,8 +60,6 @@ namespace fheroes2
         , _releasedDisabled()
     {}
 
-    ButtonBase::~ButtonBase() {}
-
     bool ButtonBase::isEnabled() const
     {
         return _isEnabled;
@@ -207,8 +205,6 @@ namespace fheroes2
         , _pressedIndex( pressedIndex )
     {}
 
-    Button::~Button() {}
-
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
         _icnId = icnId;
@@ -235,8 +231,6 @@ namespace fheroes2
         , _released( released )
         , _pressed( pressed )
     {}
-
-    ButtonSprite::~ButtonSprite() {}
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed )
     {

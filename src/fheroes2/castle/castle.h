@@ -115,7 +115,8 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
-    virtual ~Castle() {}
+    ~Castle() override = default;
+
     void LoadFromMP2( StreamBuf );
 
     Captain & GetCaptain( void );
@@ -125,7 +126,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL );
+    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
     bool isPosition( const Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -136,7 +137,7 @@ public:
 
     int GetRace( void ) const;
     const std::string & GetName( void ) const;
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
     const MageGuild & GetMageGuild( void ) const;
@@ -184,7 +185,7 @@ public:
     bool isBuild( u32 bd ) const;
     bool BuyBuilding( u32 );
     bool AllowBuyBoat( void ) const;
-    bool BuyBoat( void );
+    bool BuyBoat( void ) const;
     u32 GetBuildingRequirement( u32 ) const;
 
     int CheckBuyBuilding( u32 ) const;
@@ -218,7 +219,7 @@ public:
 
     std::string String( void ) const;
 
-    int DialogBuyHero( const Heroes * );
+    int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
     void SwapCastleHeroes( CastleHeroes & );
@@ -228,9 +229,9 @@ private:
     void EducateHeroes( void );
     Rect RedrawResourcePanel( const Point & ) const;
     u32 OpenTown( void );
-    void OpenTavern( void );
+    void OpenTavern( void ) const;
     void OpenWell( void );
-    void OpenMageGuild( const CastleHeroes & heroes );
+    void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
@@ -308,7 +309,6 @@ namespace CastleDialog
     struct CacheBuildings : std::vector<builds_t>
     {
         CacheBuildings( const Castle &, const Point & );
-        const Rect & GetRect( building_t ) const;
     };
 
     void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
@@ -323,22 +323,50 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * Get( const Point & ) const;
     Castle * GetFirstCastle( void ) const;
 
     void ChangeColors( int, int );
     void SortByBuildingValue();
 };
 
-struct AllCastles : public VecCastles
+class AllCastles
 {
+public:
     AllCastles();
+    AllCastles( AllCastles & ) = delete;
+
     ~AllCastles();
 
+    AllCastles & operator=( const AllCastles & ) = delete;
+
     void Init( void );
-    void clear( void );
+    void Clear( void );
+
+    void AddCastle( Castle * castle );
+
+    Castle * Get( const Point & position ) const;
 
     void Scoute( int ) const;
+
+    // begin/end methods so we can iterate through the elements
+    std::vector<Castle *>::const_iterator begin() const
+    {
+        return _castles.begin();
+    }
+
+    std::vector<Castle *>::const_iterator end() const
+    {
+        return _castles.end();
+    }
+
+    size_t Size() const
+    {
+        return _castles.size();
+    }
+
+private:
+    std::vector<Castle *> _castles;
+    std::map<fheroes2::Point, size_t> _castleTiles;
 };
 
 StreamBase & operator<<( StreamBase &, const VecCastles & );

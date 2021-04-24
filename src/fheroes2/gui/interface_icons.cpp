@@ -121,7 +121,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const Point & pos )
+void Interface::IconsBar::RedrawBackground( const Point & pos ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -331,11 +331,6 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     sfMarker.resize( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT );
     sfMarker.reset();
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
-}
-
-u32 Interface::IconsPanel::CountIcons( void ) const
-{
-    return castleIcons.CountIcons();
 }
 
 void Interface::IconsPanel::SavePosition( void )

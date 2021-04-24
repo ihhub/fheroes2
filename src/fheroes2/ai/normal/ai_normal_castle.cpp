@@ -32,7 +32,7 @@ namespace AI
         building_t building = BUILD_NOTHING;
         int priority = 1;
 
-        BuildOrder() {}
+        BuildOrder() = default;
         BuildOrder( building_t b, int p )
             : building( b )
             , priority( p )

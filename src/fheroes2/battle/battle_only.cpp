@@ -49,7 +49,7 @@ namespace
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
-void Battle::ControlInfo::Redraw( void )
+void Battle::ControlInfo::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
@@ -91,48 +91,6 @@ Battle::Only::Only()
 {
     player1.SetControl( CONTROL_HUMAN );
     player2.SetControl( CONTROL_AI );
-}
-
-StreamBase & operator<<( StreamBase & msg, const Battle::Only & b )
-{
-    return msg << b.hero1->GetID() << *b.hero1 << b.hero2->GetID() << *b.hero2 << b.player1 << b.player2;
-}
-
-StreamBase & operator>>( StreamBase & msg, Battle::Only & b )
-{
-    int id = 0;
-
-    msg >> id;
-    b.hero1 = world.GetHeroes( id );
-    if ( b.hero1 ) {
-        msg >> *b.hero1;
-    }
-    else {
-        DEBUG_LOG( DBG_NETWORK, DBG_WARN, "unknown id" );
-    }
-
-    msg >> id;
-    b.hero2 = world.GetHeroes( id );
-    if ( b.hero2 ) {
-        msg >> *b.hero2;
-    }
-    else {
-        DEBUG_LOG( DBG_NETWORK, DBG_WARN, "unknown id" );
-    }
-
-    msg >> b.player1 >> b.player2;
-
-    return msg;
-}
-
-Recruits Battle::Only::GetHeroesFromStreamBuf( StreamBuf & msg )
-{
-    Recruits heroes;
-    Battle::Only b;
-    msg >> b;
-    heroes.SetHero1( b.hero1 );
-    heroes.SetHero2( b.hero2 );
-    return heroes;
 }
 
 bool Battle::Only::ChangeSettings( void )
@@ -564,7 +522,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
     }
 }
 
-void Battle::Only::RedrawBaseInfo( const Point & top )
+void Battle::Only::RedrawBaseInfo( const Point & top ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

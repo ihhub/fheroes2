@@ -172,8 +172,6 @@ bool PressIntKey( u32 max, u32 & result );
 
 size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
 
-KeySym KeySymFromChar( char );
-
 char CharFromKeySym( KeySym, u16 mod = 0 );
 
 class LocalEvent
@@ -195,27 +193,15 @@ public:
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
     bool MouseMotion( void ) const;
-    bool MouseMotion( const Rect & rt ) const;
 
-    const Point & GetMouseCursor( void )
+    const Point & GetMouseCursor( void ) const
     {
         return mouse_cu;
     }
 
     const Point & GetMousePressLeft( void ) const;
-    const Point & GetMousePressMiddle( void ) const;
-    const Point & GetMousePressRight( void ) const;
-    const Point & GetMouseReleaseLeft( void ) const;
-    const Point & GetMouseReleaseMiddle( void ) const;
-    const Point & GetMouseReleaseRight( void ) const;
 
     void ResetPressLeft( void );
-    void ResetPressRight( void );
-    void ResetPressMiddle( void );
-
-    void ResetReleaseLeft( void );
-    void ResetReleaseRight( void );
-    void ResetReleaseMiddle( void );
 
     bool MouseClickLeft( void );
     bool MouseClickMiddle( void );
@@ -230,7 +216,6 @@ public:
 
     bool MousePressLeft( void ) const;
     bool MousePressLeft( const Rect & rt ) const;
-    bool MousePressLeft( const Point & pt, u32 w, u32 h ) const;
     bool MousePressMiddle( void ) const;
     bool MousePressMiddle( const Rect & rt ) const;
     bool MousePressRight( void ) const;
@@ -262,8 +247,8 @@ public:
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
-    void PauseCycling();
-    void ResumeCycling();
+    void PauseCycling() const;
+    void ResumeCycling() const;
 
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
@@ -338,7 +323,7 @@ private:
 
     Point mouse_cu; // point cursor
 
-    Point mouse_wm; // wheel movement
+    fheroes2::Point mouse_wm; // wheel movement
 
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );

@@ -35,11 +35,11 @@
 class MapObjectSimple : public MapPosition
 {
 public:
-    MapObjectSimple( int v = 0 )
+    explicit MapObjectSimple( int v = 0 )
         : uid( 0 )
         , type( v )
     {}
-    virtual ~MapObjectSimple() {}
+    virtual ~MapObjectSimple() = default;
 
     int GetType( void ) const
     {

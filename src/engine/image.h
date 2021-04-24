@@ -104,7 +104,7 @@ namespace fheroes2
         Sprite( const Sprite & sprite );
         Sprite( Sprite && sprite );
 
-        virtual ~Sprite() = default;
+        ~Sprite() override = default;
 
         Sprite & operator=( const Sprite & sprite );
         Sprite & operator=( Sprite && sprite );
@@ -222,6 +222,9 @@ namespace fheroes2
     void DrawLine( Image & image, const Point & start, const Point & end, uint8_t value, const Rect & roi = Rect() );
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
+
+    // Every image in the array must be the same size.
+    Image ExtractCommonPattern( const std::vector<Image> & input );
 
     // Please use GetColorId function if you want to use an RGB value
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId );

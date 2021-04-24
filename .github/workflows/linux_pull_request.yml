@@ -7,6 +7,14 @@ on:
 jobs:
   sdl1:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: release
+          env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON" }
+        - name: debug
+          env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+    name: sdl1 ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -17,11 +25,17 @@ jobs:
         sudo apt-get install -y libsdl1.2-dev libsdl-ttf2.0-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext
     - name: compile
       run: make -j 2
-      env:
-        FHEROES2_SDL1: "ON"
-        FHEROES2_STRICT_COMPILATION: "ON"
+      env: ${{ matrix.env }}
   sdl2:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: release
+          env: { FHEROES2_STRICT_COMPILATION: "ON" }
+        - name: debug
+          env: { FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+    name: sdl2 ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -32,8 +46,7 @@ jobs:
         sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
     - name: compile
       run: make -j 2
-      env:
-        FHEROES2_STRICT_COMPILATION: "ON"
+      env: ${{ matrix.env }}
   psv-sdl2:
     runs-on: ubuntu-latest
     steps:

@@ -284,8 +284,6 @@ AnimationReference::AnimationReference( int monsterID )
     }
 }
 
-AnimationReference::~AnimationReference() {}
-
 bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 {
     if ( _monsterInfo.hasAnim( animID ) ) {
@@ -446,16 +444,6 @@ AnimationSequence AnimationReference::getAnimationSequence( int animState ) cons
     return AnimationSequence( getAnimationVector( animState ) );
 }
 
-int AnimationReference::getStaticFrame() const
-{
-    return _static.back();
-}
-
-int AnimationReference::getDeathFrame() const
-{
-    return ( _death.empty() ) ? _static.back() : _death.back();
-}
-
 uint32_t AnimationReference::getMoveSpeed() const
 {
     return _monsterInfo.moveSpeed;
@@ -511,8 +499,6 @@ AnimationState::AnimationState( const AnimationReference & ref, int state )
 {
     switchAnimation( state );
 }
-
-AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animState, bool reverse )
 {
@@ -577,7 +563,7 @@ int AnimationState::getFrame() const
     return _currentSequence.getFrame();
 }
 
-int AnimationState::animationLength() const
+size_t AnimationState::animationLength() const
 {
     return _currentSequence.animationLength();
 }

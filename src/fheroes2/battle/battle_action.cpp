@@ -399,15 +399,14 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
     Battle::Unit * battle = GetTroopUID( uid );
     if ( battle && battle->isValid() ) {
         if ( !battle->Modes( TR_MOVED ) ) {
-            if ( hard ) {
+            if ( hard || battle->Modes( TR_SKIPMOVE ) ) {
                 battle->SetModes( TR_HARDSKIP );
-                battle->SetModes( TR_SKIPMOVE );
                 battle->SetModes( TR_MOVED );
                 if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
                     battle->SetModes( TR_DEFENSED );
             }
-            else
-                battle->SetModes( battle->Modes( TR_SKIPMOVE ) ? TR_MOVED : TR_SKIPMOVE );
+
+            battle->SetModes( TR_SKIPMOVE );
 
             if ( interface )
                 interface->RedrawActionSkipStatus( *battle );
@@ -534,7 +533,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender*/, TargetsInfo & targets )
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender*/, TargetsInfo & targets ) const
 {
     for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
         TargetInfo & target = *it;
@@ -543,7 +542,7 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender
     }
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, s32 dst )
+Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, s32 dst ) const
 {
     TargetsInfo targets;
     targets.reserve( 8 );
@@ -613,7 +612,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     return targets;
 }
 
-void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
+void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets ) const
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() );
 

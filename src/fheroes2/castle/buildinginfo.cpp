@@ -395,7 +395,7 @@ bool BuildingInfo::IsDwelling( void ) const
     return false;
 }
 
-void BuildingInfo::RedrawCaptain( void )
+void BuildingInfo::RedrawCaptain( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     if ( bcond == ALREADY_BUILT ) {
@@ -427,7 +427,7 @@ void BuildingInfo::RedrawCaptain( void )
     }
 }
 
-void BuildingInfo::Redraw( void )
+void BuildingInfo::Redraw( void ) const
 {
     if ( BUILD_CAPTAIN == building ) {
         RedrawCaptain();
@@ -493,7 +493,7 @@ const char * BuildingInfo::GetName( void ) const
     return Castle::GetStringBuilding( building, castle.GetRace() );
 }
 
-bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
+bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const
 {
     LocalEvent & le = LocalEvent::Get();
 

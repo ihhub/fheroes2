@@ -53,7 +53,7 @@ u32 crc32b( const char * msg )
         crc ^= static_cast<u32>( msg[index] );
 
         for ( int bit = 0; bit < 8; ++bit ) {
-            size_t mask = ~( crc & 1 );
+            uint32_t mask = ~( crc & 1 );
             crc = ( crc >> 1 ) ^ ( 0xEDB88320 & mask );
         }
 
@@ -100,7 +100,7 @@ struct mofile
         return reinterpret_cast<const char *>( ptr );
     }
 
-    std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep )
+    std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep ) const
     {
         std::string res;
         if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {

@@ -47,24 +47,24 @@ namespace
             , _isDoubleClicked( false )
         {}
 
-        virtual void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
+        void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
         {
             const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
         }
 
-        virtual void RedrawBackground( const Point & dst ) override
+        void RedrawBackground( const Point & dst ) override
         {
             const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
             fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
-        virtual void ActionCurrentUp() override {}
-        virtual void ActionCurrentDn() override {}
-        virtual void ActionListSingleClick( fheroes2::Size & ) override {}
-        virtual void ActionListPressRight( fheroes2::Size & ) override {}
+        void ActionCurrentUp() override {}
+        void ActionCurrentDn() override {}
+        void ActionListSingleClick( fheroes2::Size & ) override {}
+        void ActionListPressRight( fheroes2::Size & ) override {}
 
-        virtual void ActionListDoubleClick( fheroes2::Size & ) override
+        void ActionListDoubleClick( fheroes2::Size & ) override
         {
             _isDoubleClicked = true;
         }
@@ -187,7 +187,7 @@ namespace Dialog
             display.resize( selectedResolution.width, selectedResolution.height );
 
 #ifdef WITH_ZLIB
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
 

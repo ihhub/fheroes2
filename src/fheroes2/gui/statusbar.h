@@ -28,7 +28,7 @@
 class StatusBar : public TextSprite
 {
 public:
-    StatusBar();
+    StatusBar() = default;
 
     void SetCenter( s32 cx, s32 cy );
 

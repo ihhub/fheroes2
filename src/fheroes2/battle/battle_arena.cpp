@@ -352,7 +352,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         if ( !troop->isValid() ) { // looks like the unit died
             end_turn = true;
         }
-        else if ( troop->Modes( MORALE_BAD ) ) { // bad morale
+        else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
+            // bad morale, happens only if the unit wasn't waiting for a turn
             actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), false ) );
             end_turn = true;
         }
@@ -392,10 +393,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 break;
             }
 
+            const bool troopSkipsMove = troopHasAlreadySkippedMove ? troop->Modes( TR_HARDSKIP ) : troop->Modes( TR_SKIPMOVE );
+
             // good morale
-            if ( !end_turn && troop->isValid() && !troop->Modes( TR_SKIPMOVE ) && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable ) {
-                actions.push_back( Command( MSG_BATTLE_MORALE, troop->GetUID(), true ) );
-                end_turn = false;
+            if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
+                actions.emplace_back( MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 
@@ -614,19 +616,23 @@ void Battle::Arena::CatapultAction( void )
 
         Command cmd( MSG_BATTLE_CATAPULT );
 
+        cmd << shots;
+
         while ( shots-- ) {
             int target = catapult->GetTarget( values );
             u32 damage = std::min( catapult->GetDamage(), values[target] );
-            cmd << damage << target;
+            cmd << target << damage;
             values[target] -= damage;
         }
 
-        cmd << catapult->GetShots();
+        // preserve the order of shots - command arguments will be extracted in reverse order
+        std::reverse( cmd.begin(), cmd.end() );
+
         ApplyAction( cmd );
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
+Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
 {
     Indexes result = board.GetAStarPath( b, dst );
 
@@ -645,7 +651,7 @@ Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_
     return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
-std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
+std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
 {
     std::pair<int, uint32_t> result = { -1, MAXU16 };
 
@@ -808,9 +814,9 @@ s32 Battle::Arena::GetFreePositionNearHero( int color ) const
 
 bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
-    const HeroBase * hero1 = GetCommander( color, false ); // enemy
-    const HeroBase * hero2 = GetCommander( color, true );
-    return hero1 && hero1->isHeroes() && hero2 && world.GetKingdom( hero2->GetColor() ).GetCastles().size();
+    const HeroBase * hero1 = GetCommander( color, true ); // enemy
+    const HeroBase * hero2 = GetCommander( color, false );
+    return hero1 && hero1->isHeroes() && hero2 && hero2->isHeroes() && !world.GetKingdom( hero2->GetColor() ).GetCastles().empty();
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
@@ -999,9 +1005,14 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
-            if ( interface )
-                interface->RedrawBridgeAnimation( true );
-            bridge->SetDown( true );
+            if ( !bridge->isDown() ) {
+                if ( interface ) {
+                    interface->RedrawBridgeAnimation( true );
+                }
+
+                bridge->SetDown( true );
+            }
+
             bridge->SetDestroy();
         }
         break;

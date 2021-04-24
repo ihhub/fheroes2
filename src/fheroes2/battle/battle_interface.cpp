@@ -217,13 +217,13 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
+        void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
         {
             const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
-        virtual void RedrawBackground( const Point & pt ) override
+        void RedrawBackground( const Point & pt ) override
         {
             (void)pt;
 
@@ -244,11 +244,11 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        virtual void ActionCurrentUp( void ) override {}
-        virtual void ActionCurrentDn( void ) override {}
-        virtual void ActionListDoubleClick( std::string & ) override {}
-        virtual void ActionListSingleClick( std::string & ) override {}
-        virtual void ActionListPressRight( std::string & ) override {}
+        void ActionCurrentUp( void ) override {}
+        void ActionCurrentDn( void ) override {}
+        void ActionListDoubleClick( std::string & ) override {}
+        void ActionListSingleClick( std::string & ) override {}
+        void ActionListPressRight( std::string & ) override {}
 
         void SetOpenLog( const bool f )
         {
@@ -739,7 +739,7 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw( void )
+void Battle::Status::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( back1, display, x, y );
@@ -1578,6 +1578,17 @@ void Battle::Interface::RedrawCover()
             }
             default:
                 highlightCells.emplace( cell );
+            }
+        }
+        else if ( ( _currentUnit->GetID() == Monster::LICH || _currentUnit->GetID() == Monster::POWER_LICH )
+                  && ( Cursor::Get().Themes() == Cursor::WAR_ARROW || Cursor::Get().Themes() == Cursor::WAR_BROKENARROW ) ) {
+            highlightCells.emplace( cell );
+            const Indexes around = Board::GetAroundIndexes( index_pos );
+            for ( size_t i = 0; i < around.size(); ++i ) {
+                const Cell * aroundCell = Board::GetCell( around[i] );
+                if ( aroundCell != nullptr ) {
+                    highlightCells.emplace( aroundCell );
+                }
             }
         }
         else {
@@ -2537,7 +2548,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
 {
     const Unit * b = cell.GetUnit();
 

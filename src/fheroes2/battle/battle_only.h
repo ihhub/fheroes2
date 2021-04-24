@@ -45,7 +45,7 @@ namespace Battle
             , rtLocal( pt.x, pt.y, 24, 24 )
             , rtAI( pt.x + 75, pt.y, 24, 24 ){};
 
-        void Redraw( void );
+        void Redraw( void ) const;
 
         int result;
 
@@ -59,13 +59,12 @@ namespace Battle
         Only();
 
         bool ChangeSettings( void );
-        void RedrawBaseInfo( const Point & );
+        void RedrawBaseInfo( const Point & ) const;
         void StartBattle( void );
         void UpdateHero1( const Point & );
         void UpdateHero2( const Point & );
 
-        static Recruits GetHeroesFromStreamBuf( StreamBuf & );
-
+    private:
         Heroes * hero1;
         Heroes * hero2;
 
@@ -76,7 +75,6 @@ namespace Battle
         Army * army2;
         Army monsters;
 
-    private:
         std::unique_ptr<MoraleIndicator> moraleIndicator1;
         std::unique_ptr<MoraleIndicator> moraleIndicator2;
 
@@ -101,8 +99,5 @@ namespace Battle
         Rect rtPortrait2;
     };
 }
-
-StreamBase & operator<<( StreamBase &, const Battle::Only & );
-StreamBase & operator>>( StreamBase &, Battle::Only & );
 
 #endif

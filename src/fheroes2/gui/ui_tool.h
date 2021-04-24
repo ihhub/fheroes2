@@ -29,8 +29,8 @@ namespace fheroes2
     public:
         MovableSprite();
         MovableSprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ );
-        MovableSprite( const Sprite & sprite );
-        virtual ~MovableSprite();
+        explicit MovableSprite( const Sprite & sprite );
+        ~MovableSprite() override = default;
 
         MovableSprite & operator=( const Sprite & sprite );
 
@@ -40,7 +40,7 @@ namespace fheroes2
 
         bool isHidden() const;
 
-        virtual void setPosition( int32_t x_, int32_t y_ ) override;
+        void setPosition( int32_t x_, int32_t y_ ) override;
 
     private:
         ImageRestorer _restorer;
@@ -52,7 +52,11 @@ namespace fheroes2
     {
     public:
         ScreenPaletteRestorer();
+        ScreenPaletteRestorer( const ScreenPaletteRestorer & ) = delete;
+
         ~ScreenPaletteRestorer();
+
+        ScreenPaletteRestorer & operator=( const ScreenPaletteRestorer & ) = delete;
 
         void changePalette( const uint8_t * palette ) const;
     };

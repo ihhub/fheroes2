@@ -347,11 +347,11 @@ namespace
                 for ( uint32_t i = 0; i < 256; ++i, ++correctorX ) {
                     const uint8_t * palette = kb_pal + *correctorX * 3;
 
-                    const int32_t offsetRed = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( r );
+                    const int32_t offsetRed = static_cast<int32_t>( *palette ) - static_cast<int32_t>( r );
                     ++palette;
-                    const int32_t offsetGreen = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( g );
+                    const int32_t offsetGreen = static_cast<int32_t>( *palette ) - static_cast<int32_t>( g );
                     ++palette;
-                    const int32_t offsetBlue = static_cast<int32_t>( *( palette ) ) - static_cast<int32_t>( b );
+                    const int32_t offsetBlue = static_cast<int32_t>( *palette ) - static_cast<int32_t>( b );
                     ++palette;
                     const int32_t distance = offsetRed * offsetRed + offsetGreen * offsetGreen + offsetBlue * offsetBlue;
                     if ( minDistance > distance ) {
@@ -1437,6 +1437,63 @@ namespace fheroes2
         DrawLine( image, point4, point1, value );
     }
 
+    Image ExtractCommonPattern( const std::vector<Image> & input )
+    {
+        if ( input.empty() )
+            return Image();
+
+        if ( input.size() == 1 )
+            return input.front();
+
+        if ( input[0].empty() )
+            return Image();
+
+        for ( size_t i = 1; i < input.size(); ++i ) {
+            if ( input[i].width() != input[0].width() || input[i].height() != input[0].height() )
+                return Image();
+        }
+
+        std::vector<const uint8_t *> imageIn( input.size() );
+        std::vector<const uint8_t *> transformIn( input.size() );
+
+        for ( size_t i = 0; i < input.size(); ++i ) {
+            imageIn[i] = input[i].image();
+            transformIn[i] = input[i].transform();
+        }
+
+        Image out( input[0].width(), input[0].height() );
+        out.reset();
+
+        uint8_t * imageOut = out.image();
+        uint8_t * transformOut = out.transform();
+        const uint8_t * imageOutEnd = imageOut + out.width() * out.height();
+
+        bool isEqual = false;
+
+        for ( ; imageOut != imageOutEnd; ++imageOut, ++transformOut ) {
+            isEqual = true;
+
+            for ( size_t i = 1; i < input.size(); ++i ) {
+                if ( *imageIn[0] != *imageIn[i] || *transformIn[0] != *transformIn[i] ) {
+                    isEqual = false;
+                    break;
+                }
+            }
+
+            if ( isEqual ) {
+                *imageOut = *imageIn[0];
+                *transformOut = *transformIn[0];
+            }
+
+            for ( size_t i = 0; i < input.size(); ++i ) {
+                ++imageIn[i];
+                ++transformIn[i];
+            }
+        }
+
+        return out;
+    }
+
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId )
     {
         if ( !Verify( image, x, y, width, height ) )
@@ -1636,11 +1693,11 @@ namespace fheroes2
                         if ( posX < widthRoiIn - 1 && posY < heightRoiIn - 1 ) {
                             const double coeffX = posX - startX;
                             const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                            const double coeff2 = ( coeffX ) * ( 1 - coeffY );
-                            const double coeff3 = ( 1 - coeffX ) * ( coeffY );
-                            const double coeff4 = ( coeffX ) * ( coeffY );
+                            const double coeff2 = coeffX * ( 1 - coeffY );
+                            const double coeff3 = ( 1 - coeffX ) * coeffY;
+                            const double coeff4 = coeffX * coeffY;
 
-                            const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( imageInX ) ) * 3;
+                            const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *imageInX ) * 3;
                             const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
                             const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
                             const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
@@ -1652,7 +1709,7 @@ namespace fheroes2
                             *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                         }
                         else {
-                            *imageOutX = *( imageInX );
+                            *imageOutX = *imageInX;
                         }
                     }
                 }
@@ -1682,11 +1739,11 @@ namespace fheroes2
                                  && *( transformInX + widthRoiIn + 1 ) == 0 ) {
                                 const double coeffX = posX - startX;
                                 const double coeff1 = ( 1 - coeffX ) * ( 1 - coeffY );
-                                const double coeff2 = ( coeffX ) * ( 1 - coeffY );
-                                const double coeff3 = ( 1 - coeffX ) * ( coeffY );
-                                const double coeff4 = ( coeffX ) * ( coeffY );
+                                const double coeff2 = coeffX * ( 1 - coeffY );
+                                const double coeff3 = ( 1 - coeffX ) * coeffY;
+                                const double coeff4 = coeffX * coeffY;
 
-                                const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *( imageInX ) ) * 3;
+                                const uint8_t * id1 = kb_pal + static_cast<uint32_t>( *imageInX ) * 3;
                                 const uint8_t * id2 = kb_pal + static_cast<uint32_t>( *( imageInX + 1 ) ) * 3;
                                 const uint8_t * id3 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn ) ) * 3;
                                 const uint8_t * id4 = kb_pal + static_cast<uint32_t>( *( imageInX + widthIn + 1 ) ) * 3;
@@ -1698,14 +1755,14 @@ namespace fheroes2
                                 *imageOutX = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
                             }
                             else {
-                                *imageOutX = *( imageInX );
+                                *imageOutX = *imageInX;
                             }
                         }
                         else {
-                            *imageOutX = *( imageInX );
+                            *imageOutX = *imageInX;
                         }
 
-                        *transformOutX = *( transformInX );
+                        *transformOutX = *transformInX;
                     }
                 }
             }

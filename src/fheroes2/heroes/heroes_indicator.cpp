@@ -35,6 +35,9 @@ namespace fheroes2
 {
     std::string MoraleString( const int morale )
     {
+        if ( morale == Morale::BLOOD ) {
+            return _( "Blood Morale" );
+        }
         std::string str = _( "%{morale} Morale" );
         StringReplace( str, "%{morale}", Morale::String( morale ) );
         return str;
@@ -193,7 +196,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     }
 }
 
-void ExperienceIndicator::Redraw( void )
+void ExperienceIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -205,7 +208,7 @@ void ExperienceIndicator::Redraw( void )
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
-void ExperienceIndicator::QueueEventProcessing( void )
+void ExperienceIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -231,7 +234,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     }
 }
 
-void SpellPointsIndicator::Redraw( void )
+void SpellPointsIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -243,7 +246,7 @@ void SpellPointsIndicator::Redraw( void )
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
-void SpellPointsIndicator::QueueEventProcessing( void )
+void SpellPointsIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 

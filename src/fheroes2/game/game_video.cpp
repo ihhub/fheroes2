@@ -74,6 +74,9 @@ namespace Video
         if ( hideCursor ) {
             Cursor::Get().Hide();
         }
+        else {
+            Cursor::Get().setVideoPlaybackCursor();
+        }
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
@@ -210,6 +213,9 @@ namespace Video
 
         if ( hideCursor ) {
             Cursor::Get().Show();
+        }
+        else {
+            Cursor::Get().resetVideoPlaybackCursor();
         }
 
         return roiChosenId;

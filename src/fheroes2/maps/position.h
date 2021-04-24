@@ -29,7 +29,7 @@
 class MapPosition
 {
 public:
-    MapPosition( const Point & = Point( -1, -1 ) );
+    explicit MapPosition( const Point & = Point( -1, -1 ) );
 
     bool operator==( s32 ) const;
 

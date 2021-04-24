@@ -43,11 +43,6 @@ namespace
     const fheroes2::Point bookmarkAdvOffset( 266, 269 );
     const fheroes2::Point bookmarkCombatoOffset( 299, 276 );
     const fheroes2::Point bookmarkCloseOffset( 416, 280 );
-
-    bool SpellBookSortingSpell( const Spell & spell1, const Spell & spell2 )
-    {
-        return strcmp( spell1.GetName(), spell2.GetName() ) < 0;
-    }
 }
 
 void SpellBookRedrawLists( const SpellStorage &, Rects &, size_t, const fheroes2::Point &, u32, SpellBook::Filter only, const HeroBase & hero );
@@ -327,8 +322,8 @@ void SpellBook::Edit( const HeroBase & hero )
             }
             else {
                 Spell spell = Dialog::SelectSpell();
-                displayedSpells.Append( spell );
                 Append( spell );
+                displayedSpells = SetFilter( Filter::ALL, &hero );
                 redraw = true;
             }
         }
@@ -386,7 +381,7 @@ SpellStorage SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) 
     }
 
     // sorting results
-    std::sort( res.begin(), res.end(), SpellBookSortingSpell );
+    std::sort( res.begin(), res.end() );
 
     return res;
 }

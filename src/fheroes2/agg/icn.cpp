@@ -910,7 +910,6 @@ namespace ICN
 
                                {ROUTERED, "ROUTERED.ICN"},
                                {YELLOW_FONT, "YELLOWBF.ICN"},
-                               {YELLOW_SMALFONT, "YELLOWSF.ICN"},
                                {BTNCONFIG, "BTNCONFIG.ICN"},
                                {BTNBATTLEONLY, "BTNBONLY.ICN"},
                                {CSLMARKER, "CSLMARKER.ICN"}};
