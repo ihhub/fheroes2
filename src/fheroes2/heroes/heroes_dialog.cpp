@@ -207,7 +207,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
 
-        if ( inCastle() || readonly || disableDismiss ) {
+        if ( readonly ) {
             buttonDismiss.hide();
         }
     }
@@ -356,16 +356,14 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             message = _( "Set army combat formation to 'Grouped'" );
         else if ( le.MouseCursor( buttonExit.area() ) )
             message = _( "Exit Hero Screen" );
-        else if ( le.MouseCursor( buttonDismiss.area() ) ) {
-            if ( buttonDismiss.isVisible() ) {
-                if ( Modes( NOTDISMISS ) ) {
-                    message = "Dismiss disabled, see game info";
-                }
-                else {
-                    message = _( "Dismiss %{name} the %{race}" );
-                    StringReplace( message, "%{name}", name );
-                    StringReplace( message, "%{race}", Race::String( race ) );
-                }
+        else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
+            if ( Modes( NOTDISMISS ) ) {
+                message = _( "Dismissal is disabled, see game info" );
+            }
+            else if ( buttonDismiss.isEnabled() ) {
+                message = _( "Dismiss %{name} the %{race}" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( race ) );
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )
