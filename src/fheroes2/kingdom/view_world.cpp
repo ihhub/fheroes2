@@ -220,10 +220,11 @@ namespace
         const bool revealArtifacts = revealAll || ( mode == ViewWorldMode::ViewArtifacts );
         const bool revealResources = revealAll || ( mode == ViewWorldMode::ViewResources );
 
-        const int tileSize = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )];
-        const int icnBase = icnPerZoomLevel[static_cast<int>( ROI._zoomLevel )];
-        const int icnLetterId = icnLetterPerZoomLevel[static_cast<int>( ROI._zoomLevel )];
-        const int icnFlagsBase = icnPerZoomLevelFlags[static_cast<int>( ROI._zoomLevel )];
+        const int zoomLevelId = static_cast<int>( ROI._zoomLevel );
+        const int tileSize = tileSizePerZoomLevel[zoomLevelId];
+        const int icnBase = icnPerZoomLevel[zoomLevelId];
+        const int icnLetterId = icnLetterPerZoomLevel[zoomLevelId];
+        const int icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
