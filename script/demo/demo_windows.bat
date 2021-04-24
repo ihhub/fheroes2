@@ -1,5 +1,14 @@
 @echo off
 
+set fheroes2Path = ""
+
+if not exist "fheroes2.exe" (
+    Rem this is not fheroes2 related directory. Let's see if it's for developer
+    if exist "..\..\src" (
+        set fheroes2Path="..\..\"
+    )
+)
+
 if not exist "demo" mkdir "demo"
 
 echo [1/4] downloading demo version
@@ -28,10 +37,10 @@ if not "%sevenZipPath%" == "" (
 
     echo [4/4] copying files
     
-    if not exist "..\..\..\data" mkdir "..\..\..\data"
-    if not exist "..\..\..\maps" mkdir "..\..\..\maps"
-    xcopy /Y /s "DATA" "..\..\..\data"
-    xcopy /Y /s "MAPS" "..\..\..\maps"
+    if not exist "%fheroes2Path%..\data" mkdir "%fheroes2Path%..\data"
+    if not exist "%fheroes2Path%..\maps" mkdir "%fheroes2Path%..\maps"
+    xcopy /Y /q "DATA" "%fheroes2Path%..\data"
+    xcopy /Y /q "MAPS" "%fheroes2Path%..\maps"
 
     del demo.zip
     del wing32.zip
@@ -40,7 +49,7 @@ if not "%sevenZipPath%" == "" (
 ) else (
     echo 7z.exe is not found in path.
     echo Please unzip demo.zip file manually and copy DATA and MAPS folders into folder with the game.
-    echo Alternatively, re-run script after installing 7-zip archiver at your local system's folder as- 'C:\Program Files\7-Zip\7z.exe
+    echo Alternatively, re-run script after installing 7-zip archiver at your local system's folder as 'C:\Program Files\7-Zip'.
 )
 
 if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
