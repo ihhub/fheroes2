@@ -27,6 +27,13 @@ jobs:
         wget -P ~/.sonarcloud https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip
         unzip ~/.sonarcloud/build-wrapper-linux-x86.zip -d ~/.sonarcloud
         unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
+    - name: prepare SonarCloud cfamily cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.sonar-cfamily-cache
+        key: sonarcloud-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
+        restore-keys: |
+          sonarcloud-
     - name: compile
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
@@ -36,6 +43,8 @@ jobs:
     - name: analyze
       run: |
         ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output \
+                                                                                     -Dsonar.cfamily.cache.enabled=true \
+                                                                                     -Dsonar.cfamily.cache.path="$HOME"/.sonar-cfamily-cache \
                                                                                      -Dsonar.host.url=https://sonarcloud.io
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
