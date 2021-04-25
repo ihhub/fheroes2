@@ -48,7 +48,8 @@ namespace Interface
             , hspace( 0 )
             , vspace( 0 )
         {}
-        virtual ~ItemsBar() {}
+
+        virtual ~ItemsBar() = default;
 
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
@@ -296,12 +297,12 @@ namespace Interface
             ResetSelected();
         }
 
-        virtual ~ItemsActionBar() {}
+        ~ItemsActionBar() override = default;
 
-        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
+        void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
-        virtual bool ActionBarCursor( Item & ) override
+        bool ActionBarCursor( Item & ) override
         {
             return false;
         }
@@ -316,7 +317,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseSingleClick( Item & ) override
+        bool ActionBarLeftMouseSingleClick( Item & ) override
         {
             return false;
         }
@@ -351,7 +352,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarRightMouseHold( Item & ) override
+        bool ActionBarRightMouseHold( Item & ) override
         {
             return false;
         }
@@ -422,22 +423,22 @@ namespace Interface
         }
 
     protected:
-        virtual ItemsIterator GetTopItemIter( void ) override
+        ItemsIterator GetTopItemIter( void ) override
         {
             return topItem;
         }
 
-        virtual ItemsIterator GetCurItemIter( void ) override
+        ItemsIterator GetCurItemIter( void ) override
         {
             return curItemPos.first;
         }
 
-        virtual void SetContentItems( void ) override
+        void SetContentItems( void ) override
         {
             ResetSelected();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
+        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
@@ -471,7 +472,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
+        bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();

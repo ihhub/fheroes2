@@ -35,7 +35,7 @@ namespace Route
     class Step
     {
     public:
-        Step() {}
+        Step() = default;
         Step( int index, s32 fromIndex, int dir, u32 cost )
             : currentIndex( index )
             , from( fromIndex )
@@ -62,7 +62,7 @@ namespace Route
     class Path : public std::list<Step>
     {
     public:
-        Path( const Heroes & );
+        explicit Path( const Heroes & );
         Path( const Path & );
 
         Path & operator=( const Path & );

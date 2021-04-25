@@ -56,7 +56,7 @@ void Interface::ControlPanel::ResetTheme( void )
                                  fheroes2::AGG::GetICN( icn, 8 ) ) );
 }
 
-const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
+const fheroes2::Rect & Interface::ControlPanel::GetArea( void ) const
 {
     return *this;
 }
@@ -78,7 +78,7 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     rt_quit.y = y;
 }
 
-void Interface::ControlPanel::Redraw( void )
+void Interface::ControlPanel::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

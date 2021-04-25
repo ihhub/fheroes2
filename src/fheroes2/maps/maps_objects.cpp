@@ -169,7 +169,9 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
 
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
-    return answers.end() != std::find( answers.begin(), answers.end(), StringLower( answer ) );
+    const std::string ans = StringLower( answer ).substr( 0, 4 );
+    auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    return answers.end() != std::find_if( answers.begin(), answers.end(), checkAnswer );
 }
 
 void MapSphinx::SetQuiet( void )

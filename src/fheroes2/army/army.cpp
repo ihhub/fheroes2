@@ -150,8 +150,6 @@ std::string Army::SizeString( u32 size )
     return str_size[0];
 }
 
-Troops::Troops() {}
-
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
@@ -365,6 +363,34 @@ void Troops::JoinTroops( Troops & troops2 )
             JoinTroop( **it );
             ( *it )->Reset();
         }
+}
+
+void Troops::MoveTroops( Troops & from )
+{
+    if ( this == &from )
+        return;
+
+    size_t validTroops = 0;
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            ++validTroops;
+        }
+    }
+
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            if ( validTroops == 1 ) {
+                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
+                    troop->SetCount( 1 );
+                    break;
+                }
+            }
+            else if ( JoinTroop( *troop ) ) {
+                --validTroops;
+                troop->Reset();
+            }
+        }
+    }
 }
 
 u32 Troops::GetUniqueCount( void ) const

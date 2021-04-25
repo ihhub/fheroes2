@@ -632,7 +632,7 @@ void Battle::Arena::CatapultAction( void )
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
+Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
 {
     Indexes result = board.GetAStarPath( b, dst );
 
@@ -651,7 +651,7 @@ Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_
     return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
-std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
+std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
 {
     std::pair<int, uint32_t> result = { -1, MAXU16 };
 
@@ -1005,9 +1005,14 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
-            if ( interface )
-                interface->RedrawBridgeAnimation( true );
-            bridge->SetDown( true );
+            if ( !bridge->isDown() ) {
+                if ( interface ) {
+                    interface->RedrawBridgeAnimation( true );
+                }
+
+                bridge->SetDown( true );
+            }
+
             bridge->SetDestroy();
         }
         break;

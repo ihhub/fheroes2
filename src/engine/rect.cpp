@@ -115,8 +115,6 @@ bool Size::operator!=( const Size & sz ) const
     return !( *this == sz );
 }
 
-Rect::Rect() {}
-
 Rect::Rect( int16_t rx, int16_t ry, u16 rw, u16 rh )
     : Point( rx, ry )
     , Size( rw, rh )

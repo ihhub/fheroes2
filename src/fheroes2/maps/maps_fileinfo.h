@@ -35,6 +35,8 @@ namespace Maps
         FileInfo();
         FileInfo( const FileInfo & );
 
+        ~FileInfo() = default;
+
         FileInfo & operator=( const FileInfo & );
 
         bool ReadMAP( const std::string & );

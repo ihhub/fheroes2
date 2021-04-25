@@ -117,7 +117,7 @@ namespace Skill
     {
     public:
         SecSkills();
-        SecSkills( int race );
+        explicit SecSkills( int race );
 
         int GetLevel( int skill ) const;
         u32 GetValues( int skill ) const;
@@ -142,7 +142,7 @@ namespace Skill
     {
     public:
         Primary();
-        virtual ~Primary(){};
+        virtual ~Primary() = default;
 
         enum
         {

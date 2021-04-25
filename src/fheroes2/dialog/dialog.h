@@ -102,7 +102,7 @@ namespace Dialog
     int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
-    bool InputString( const std::string &, std::string & );
+    bool InputString( const std::string &, std::string &, const std::string & title = std::string() );
     Troop RecruitMonster( const Monster &, u32 available, bool );
     void DwellingInfo( const Monster &, u32 available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
@@ -143,14 +143,14 @@ namespace Dialog
     {
     public:
         FrameBox( int height, bool buttons = false );
-        virtual ~FrameBox();
+        ~FrameBox() override = default;
     };
 
     class FrameBorder
     {
     public:
-        FrameBorder( int v = BORDERWIDTH );
-        FrameBorder( const fheroes2::Size & );
+        explicit FrameBorder( int v = BORDERWIDTH );
+        explicit FrameBorder( const fheroes2::Size & );
         FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
         ~FrameBorder();
 

@@ -30,7 +30,7 @@ namespace fheroes2
         Scrollbar();
         Scrollbar( const Image & image, const Rect & area );
 
-        virtual ~Scrollbar();
+        ~Scrollbar() override = default;
 
         void setImage( const Image & image );
         void setArea( const Rect & area );

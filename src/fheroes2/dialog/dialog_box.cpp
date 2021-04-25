@@ -177,5 +177,3 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 Dialog::FrameBox::FrameBox( int height, bool buttons )
     : Dialog::NonFixedFrameBox( height, -1, buttons )
 {}
-
-Dialog::FrameBox::~FrameBox() {}

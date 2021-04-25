@@ -100,7 +100,7 @@ struct mofile
         return reinterpret_cast<const char *>( ptr );
     }
 
-    std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep )
+    std::string get_tag( const std::string & str, const std::string & tag, const std::string & sep ) const
     {
         std::string res;
         if ( str.size() > tag.size() && tag == str.substr( 0, tag.size() ) ) {

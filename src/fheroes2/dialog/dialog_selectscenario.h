@@ -29,18 +29,18 @@
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    ScenarioListBox( const Point & pt )
+    explicit ScenarioListBox( const Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false ){};
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void ){};
-    void ActionCurrentDn( void ){};
-    void ActionListDoubleClick( Maps::FileInfo & );
-    void ActionListSingleClick( Maps::FileInfo & ){};
-    void ActionListPressRight( Maps::FileInfo & ){};
+    void ActionCurrentUp( void ) override{};
+    void ActionCurrentDn( void ) override{};
+    void ActionListDoubleClick( Maps::FileInfo & ) override;
+    void ActionListSingleClick( Maps::FileInfo & ) override{};
+    void ActionListPressRight( Maps::FileInfo & ) override{};
 
     bool selectOk;
 };

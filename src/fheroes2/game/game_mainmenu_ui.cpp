@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,37 +18,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_BORDER_H
-#define H2INTERFACE_BORDER_H
+#include "game_mainmenu_ui.h"
+#include "agg_image.h"
+#include "icn.h"
+#include "screen.h"
 
-#include "dialog.h"
-
-namespace Interface
+namespace fheroes2
 {
-    void GameBorderRedraw( const bool viewWorldMode );
-
-    class BorderWindow
+    void drawSprite( Display & display, const int icnId, const uint32_t index )
     {
-    public:
-        explicit BorderWindow( const Rect & );
-        virtual ~BorderWindow() = default;
+        const Sprite & sprite = AGG::GetICN( icnId, index );
+        Blit( sprite, 0, 0, display, sprite.x(), sprite.y(), sprite.width(), sprite.height() );
+    }
 
-        virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition( void ) = 0;
+    void drawMainMenuScreen()
+    {
+        Display & display = Display::instance();
 
-        void Redraw() const;
-        bool QueueEventProcessing( void );
+        Copy( AGG::GetICN( ICN::HEROES, 0 ), display );
 
-        const Rect & GetArea( void ) const;
-        const Rect & GetRect( void ) const;
-
-    protected:
-        void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
-        void SetPosition( int32_t, int32_t );
-
-        Rect area;
-        Dialog::FrameBorder border;
-    };
+        drawSprite( display, ICN::BTNSHNGL, 1 );
+        drawSprite( display, ICN::BTNSHNGL, 5 );
+        drawSprite( display, ICN::BTNSHNGL, 9 );
+        drawSprite( display, ICN::BTNSHNGL, 13 );
+        drawSprite( display, ICN::BTNSHNGL, 17 );
+    }
 }
-
-#endif

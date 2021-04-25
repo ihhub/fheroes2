@@ -41,7 +41,7 @@ namespace
     class ObjectValidator
     {
     public:
-        ObjectValidator( const Heroes & hero )
+        explicit ObjectValidator( const Heroes & hero )
             : _hero( hero )
         {}
 

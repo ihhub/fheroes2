@@ -55,7 +55,7 @@ namespace Interface
     class GameArea
     {
     public:
-        GameArea( Basic & );
+        explicit GameArea( Basic & );
         void Build( void );
 
         const Rect & GetROI() const // returns visible Game Area ROI in pixels

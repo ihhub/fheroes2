@@ -90,9 +90,6 @@ void Puzzle::ShowMapsDialog( void ) const
     const fheroes2::Display & display = fheroes2::Display::instance();
     int old_cursor = cursor.Themes();
 
-    if ( !Settings::Get().MusicMIDI() )
-        AGG::PlayMusic( MUS::PUZZLE );
-
     const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
 
     if ( !sf.empty() ) {

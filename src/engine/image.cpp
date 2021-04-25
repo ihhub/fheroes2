@@ -1437,6 +1437,63 @@ namespace fheroes2
         DrawLine( image, point4, point1, value );
     }
 
+    Image ExtractCommonPattern( const std::vector<Image> & input )
+    {
+        if ( input.empty() )
+            return Image();
+
+        if ( input.size() == 1 )
+            return input.front();
+
+        if ( input[0].empty() )
+            return Image();
+
+        for ( size_t i = 1; i < input.size(); ++i ) {
+            if ( input[i].width() != input[0].width() || input[i].height() != input[0].height() )
+                return Image();
+        }
+
+        std::vector<const uint8_t *> imageIn( input.size() );
+        std::vector<const uint8_t *> transformIn( input.size() );
+
+        for ( size_t i = 0; i < input.size(); ++i ) {
+            imageIn[i] = input[i].image();
+            transformIn[i] = input[i].transform();
+        }
+
+        Image out( input[0].width(), input[0].height() );
+        out.reset();
+
+        uint8_t * imageOut = out.image();
+        uint8_t * transformOut = out.transform();
+        const uint8_t * imageOutEnd = imageOut + out.width() * out.height();
+
+        bool isEqual = false;
+
+        for ( ; imageOut != imageOutEnd; ++imageOut, ++transformOut ) {
+            isEqual = true;
+
+            for ( size_t i = 1; i < input.size(); ++i ) {
+                if ( *imageIn[0] != *imageIn[i] || *transformIn[0] != *transformIn[i] ) {
+                    isEqual = false;
+                    break;
+                }
+            }
+
+            if ( isEqual ) {
+                *imageOut = *imageIn[0];
+                *transformOut = *transformIn[0];
+            }
+
+            for ( size_t i = 0; i < input.size(); ++i ) {
+                ++imageIn[i];
+                ++transformIn[i];
+            }
+        }
+
+        return out;
+    }
+
     void Fill( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t colorId )
     {
         if ( !Verify( image, x, y, width, height ) )

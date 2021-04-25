@@ -60,8 +60,8 @@ namespace Battle
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
-        void SetEnemyQuality( const Unit & );
-        void SetPositionQuality( const Unit & );
+        void SetEnemyQuality( const Unit & ) const;
+        void SetPositionQuality( const Unit & ) const;
         void SetScanPassability( const Unit & );
 
         void SetCobjObjects( const Maps::Tiles & );

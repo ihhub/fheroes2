@@ -40,7 +40,7 @@ std::vector<u8> zlibDecompress( const u8 *, size_t srcsz, size_t realsz = 0 );
 class ZStreamFile : public StreamBuf
 {
 public:
-    ZStreamFile() {}
+    ZStreamFile() = default;
 
     bool read( const std::string &, size_t offset = 0 );
     bool write( const std::string &, bool append = false ) const;
@@ -51,7 +51,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 class ImageZlib : public fheroes2::Image
 {
     ImageZlib( int32_t width, int32_t height, const uint8_t * data, size_t size );
-    virtual ~ImageZlib() {}
+    ~ImageZlib() override = default;
 };
 
 #endif

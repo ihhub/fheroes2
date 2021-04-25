@@ -284,8 +284,6 @@ AnimationReference::AnimationReference( int monsterID )
     }
 }
 
-AnimationReference::~AnimationReference() {}
-
 bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 {
     if ( _monsterInfo.hasAnim( animID ) ) {
@@ -501,8 +499,6 @@ AnimationState::AnimationState( const AnimationReference & ref, int state )
 {
     switchAnimation( state );
 }
-
-AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animState, bool reverse )
 {

@@ -644,7 +644,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     }
 }
 
-int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
+int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -743,12 +743,32 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
     display.render();
 
+    std::string statusMessage = _( "Hero's Options" );
+
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && !result ) {
         btnCast.isEnabled() && le.MousePressLeft( btnCast.area() ) ? btnCast.drawOnPress() : btnCast.drawOnRelease();
         btnRetreat.isEnabled() && le.MousePressLeft( btnRetreat.area() ) ? btnRetreat.drawOnPress() : btnRetreat.drawOnRelease();
         btnSurrender.isEnabled() && le.MousePressLeft( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
         le.MousePressLeft( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
+
+        if ( buttons ) {
+            if ( le.MouseCursor( btnCast.area() ) ) {
+                statusMessage = _( "Cast Spell" );
+            }
+            else if ( le.MouseCursor( btnRetreat.area() ) ) {
+                statusMessage = _( "Retreat" );
+            }
+            else if ( le.MouseCursor( btnSurrender.area() ) ) {
+                statusMessage = _( "Surrender" );
+            }
+            else if ( le.MouseCursor( btnClose.area() ) ) {
+                statusMessage = _( "Cancel" );
+            }
+            else {
+                statusMessage = _( "Hero's Options" );
+            }
+        }
 
         if ( !buttons && !le.MousePressRight() )
             break;
@@ -782,6 +802,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
             break;
+
+        if ( statusMessage != status.GetMessage() ) {
+            status.SetMessage( statusMessage );
+            status.Redraw();
+        }
     }
 
     return result;

@@ -24,8 +24,6 @@
 
 namespace fheroes2
 {
-    AGGFile::AGGFile() {}
-
     bool AGGFile::isGood() const
     {
         return !_stream.fail() && _files.size();

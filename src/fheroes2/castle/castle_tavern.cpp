@@ -35,7 +35,7 @@
 #include "text.h"
 #include "world.h"
 
-void Castle::OpenTavern( void )
+void Castle::OpenTavern( void ) const
 {
     const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
