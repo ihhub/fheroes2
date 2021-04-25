@@ -253,6 +253,7 @@ namespace Campaign
             return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
         default:
             assert( 0 ); // some new/unhandled award
+            return "";
         }
     }
 }
