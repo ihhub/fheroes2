@@ -193,11 +193,6 @@ namespace
         69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 // No cycle
     };
 
-    bool IsEqual( const fheroes2::Image & one, const fheroes2::Image & two )
-    {
-        return one.width() == two.width() && one.height() == two.height();
-    }
-
     bool Validate( const fheroes2::Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
     {
         if ( image.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?

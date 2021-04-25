@@ -212,11 +212,13 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const bool isNoInterface = conf.ExtGameHideInterface();
 
-    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
+    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
     const Rect & visibleArea = gameArea.GetROI();
@@ -287,8 +289,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             if ( isFadingEnabled ) {
                 InvertedShadow( display, fheroes2::Rect( visibleArea.x, visibleArea.y, visibleArea.w, visibleArea.h ),
                                 fheroes2::Rect( spellROI.x, spellROI.y, spellROI.w, spellROI.h ), 5, 9 );
+
+                if ( isNoInterface ) {
+                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+                    buttonExit.draw();
+                }
             }
 
+            cursor.Show();
             display.render();
         }
     }
