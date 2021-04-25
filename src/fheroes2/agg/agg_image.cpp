@@ -117,12 +117,30 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
+            case ICN::SMALFONT: {
                 LoadOriginalICN( id );
-                // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
+                auto & imageArray = _icnVsSprite[id];
+                if ( id == ICN::FONT ) {
+                    // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
+                    for ( size_t i = 0; i < imageArray.size(); ++i ) {
+                        ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
+                    }
+                }
+
+                // Some checks that we really have CP1251 font
+                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 15;
+                if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
+                    // Engine expects that letter indexes correspond to charcode - 0x20.
+                    // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
+                    // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
+                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
+                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.pop_back();
+                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
                 }
                 return true;
+            }
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
