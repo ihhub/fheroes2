@@ -207,7 +207,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
 
-        if ( readonly ) {
+        if ( readonly || disableDismiss ) {
             buttonDismiss.hide();
         }
     }
@@ -357,8 +357,13 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         else if ( le.MouseCursor( buttonExit.area() ) )
             message = _( "Exit Hero Screen" );
         else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
-            if ( Modes( NOTDISMISS ) ) {
-                message = _( "Dismissal is disabled, see game info" );
+            if ( inCastle() ) {
+                message = _( "You cannot dismiss a hero in a castle" );
+            }
+            else if ( Modes( NOTDISMISS ) ) {
+                message = _( "Dismissal of %{name} the %{race} is prohibited by scenario" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( race ) );
             }
             else if ( buttonDismiss.isEnabled() ) {
                 message = _( "Dismiss %{name} the %{race}" );
