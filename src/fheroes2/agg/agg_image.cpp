@@ -128,8 +128,8 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                if ( imageArray.size() == 162 && ( imageArray[121].width() == 19 || imageArray[121].width() == 15 ) ) {
-                    // Engine expects that letter indexes correspondes to charcode - 0x20.
+                if ( imageArray.size() == 162 && ( imageArray[121].width() == ( id == ICN::FONT ? 19 : 15 ) ) ) {
+                    // Engine expects that letter indexes corresponde to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
                     // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
                     imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
