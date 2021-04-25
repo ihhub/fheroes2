@@ -117,8 +117,7 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
-            case ICN::SMALFONT:
-            {
+            case ICN::SMALFONT: {
                 LoadOriginalICN( id );
                 auto & imageArray = _icnVsSprite[id];
                 if ( id == ICN::FONT ) {
@@ -128,7 +127,7 @@ namespace fheroes2
                     }
                 }
 
-                //Some checks that we really have CP1251 font
+                // Some checks that we really have CP1251 font
                 if ( imageArray.size() == 162 && ( imageArray[121].width() == 19 || imageArray[121].width() == 15 ) ) {
                     // Engine expects that letter indexes correspondes to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
