@@ -195,8 +195,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     fheroes2::Point outPos( cur_pt.x + 100 - area.x - area.width / 2, cur_pt.y + 290 - sprite.height() );
     fheroes2::Size inSize( sprite.width(), sprite.height() );
 
-    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize,
-                             fheroes2::Rect( cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT ) ) ) {
+    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, fheroes2::Rect( cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT ) ) ) {
         fheroes2::Blit( sprite, inPos, display, outPos, inSize );
     }
 
