@@ -118,25 +118,29 @@ namespace fheroes2
                 return true;
             case ICN::FONT:
             case ICN::SMALFONT:
+            {
                 LoadOriginalICN( id );
+                auto & imageArray = _icnVsSprite[id];
                 if ( id == ICN::FONT ) {
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
-                    for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                        ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
+                    for ( size_t i = 0; i < imageArray.size(); ++i ) {
+                        ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
                     }
                 }
-                // CP1251 has interval of non-printable symbols from 0x80 to 0xBF (except 0xA8 and 0xB8)
-                {
-                    auto & icn = _icnVsSprite[id];
-                    if ( icn.size() == 162 ) {
-                        icn.insert( icn.begin() + 96, 64, icn[0] );
-                        std::swap( icn[136], icn[192] );
-                        std::swap( icn[152], icn[225] );
-                        icn.erase( icn.begin() + 192 );
-                        icn.pop_back();
-                    }
+
+                //Some checks that we really have CP1251 font
+                if ( imageArray.size() == 162 && ( imageArray[121].width() == 19 || imageArray[121].width() == 15 ) ) {
+                    // Engine expects that letter indexes correspondes to charcode - 0x20.
+                    // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
+                    // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
+                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
+                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8 and 0xB8 to it's places.
+                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); //
+                    imageArray.pop_back();
+                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
                 }
                 return true;
+            }
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
