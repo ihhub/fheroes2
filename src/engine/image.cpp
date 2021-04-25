@@ -193,11 +193,6 @@ namespace
         69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255 // No cycle
     };
 
-    bool IsEqual( const fheroes2::Image & one, const fheroes2::Image & two )
-    {
-        return one.width() == two.width() && one.height() == two.height();
-    }
-
     bool Validate( const fheroes2::Image & image, int32_t x, int32_t y, int32_t width, int32_t height )
     {
         if ( image.empty() || width <= 0 || height <= 0 ) // what's the reason to work with empty images?
@@ -367,22 +362,31 @@ namespace
         return rgbToId[red + green * 64 + blue * 64 * 64];
     }
 
-    void ApplyRawPalette( const fheroes2::Image & in, fheroes2::Image & out, const uint8_t * palette )
+    void ApplyRawPalette( const fheroes2::Image & in, int32_t inX, int32_t inY, fheroes2::Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                          const uint8_t * palette )
     {
-        if ( !IsEqual( in, out ) ) {
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 
-        const int32_t width = in.width();
-        const int32_t height = in.height();
+        const int32_t widthIn = in.width();
+        const int32_t widthOut = out.width();
 
-        const uint8_t * imageIn = in.image();
-        const uint8_t * transformIn = in.transform();
-        uint8_t * imageOut = out.image();
-        const uint8_t * imageInEnd = imageIn + height * width;
-        for ( ; imageIn != imageInEnd; ++imageIn, ++imageOut, ++transformIn ) {
-            if ( *transformIn == 0 ) { // only modify pixels with data
-                *imageOut = palette[*imageIn];
+        const uint8_t * imageInY = in.image() + inY * widthIn + inX;
+        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+        uint8_t * imageOutY = out.image() + outY * widthOut + outX;
+        const uint8_t * imageInYEnd = imageInY + height * widthIn;
+
+        for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
+            const uint8_t * imageInX = imageInY;
+            const uint8_t * transformInX = transformInY;
+            uint8_t * imageOutX = imageOutY;
+            const uint8_t * imageInXEnd = imageInX + width;
+
+            for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
+                if ( *transformInX == 0 ) { // only modify pixels with data
+                    *imageOutX = palette[*imageInX];
+                }
             }
         }
     }
@@ -824,7 +828,7 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, out, palette.data() );
+        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), palette.data() );
     }
 
     void ApplyPalette( Image & image, uint8_t paletteId )
@@ -838,7 +842,16 @@ namespace fheroes2
             return;
         }
 
-        ApplyRawPalette( in, out, transformTable + paletteId * 256 );
+        ApplyRawPalette( in, 0, 0, out, 0, 0, in.width(), in.height(), transformTable + paletteId * 256 );
+    }
+
+    void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId )
+    {
+        if ( paletteId > 15 ) {
+            return;
+        }
+
+        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * 256 );
     }
 
     void ApplyAlpha( Image & image, uint8_t alpha )
