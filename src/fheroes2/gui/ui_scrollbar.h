@@ -28,7 +28,6 @@ namespace fheroes2
     {
     public:
         Scrollbar();
-        Scrollbar( const Image & image, const Rect & area );
 
         ~Scrollbar() override = default;
 

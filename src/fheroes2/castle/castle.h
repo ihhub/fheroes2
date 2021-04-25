@@ -180,7 +180,6 @@ public:
     int GetMoraleModificator( std::string * ) const;
     int GetLuckModificator( std::string * ) const;
 
-    bool AllowBuild( void ) const;
     bool AllowBuyBuilding( u32 ) const;
     bool isBuild( u32 bd ) const;
     bool BuyBuilding( u32 );

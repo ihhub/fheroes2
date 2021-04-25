@@ -213,7 +213,6 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    int GetLossColors( void ) const;
     int GetNotLossColors( void ) const;
     int FindWins( int ) const;
 

@@ -70,7 +70,7 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        TilesAddon & operator=( const TilesAddon & ta );
+        TilesAddon & operator=( const TilesAddon & ta ) = delete;
 
         bool isUniq( const uint32_t id ) const
         {
@@ -134,7 +134,6 @@ namespace Maps
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
-        void SetObjectSpriteIndex( const uint8_t index );
 
         u32 GetObjectUID() const;
 

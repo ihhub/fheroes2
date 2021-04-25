@@ -90,8 +90,8 @@ public:
 
     virtual int GetType( void ) const = 0;
 
-    bool isCaptain( void ) const override;
-    bool isHeroes( void ) const override;
+    virtual bool isCaptain( void ) const;
+    virtual bool isHeroes( void ) const;
 
     int GetAttackModificator( std::string * = NULL ) const;
     int GetDefenseModificator( std::string * = NULL ) const;
@@ -123,7 +123,6 @@ public:
     BagArtifacts & GetBagArtifacts( void );
     const BagArtifacts & GetBagArtifacts( void ) const;
     u32 HasArtifact( const Artifact & ) const;
-    bool PickupArtifact( const Artifact & );
 
     void LoadDefaults( int type, int race );
 

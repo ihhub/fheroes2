@@ -771,15 +771,6 @@ int Kingdoms::GetNotLossColors( void ) const
     return result;
 }
 
-int Kingdoms::GetLossColors( void ) const
-{
-    int result = 0;
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && kingdoms[ii].isLoss() )
-            result |= kingdoms[ii].GetColor();
-    return result;
-}
-
 int Kingdoms::FindWins( int cond ) const
 {
     for ( u32 ii = 0; ii < size(); ++ii )

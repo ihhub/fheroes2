@@ -31,8 +31,6 @@ class MapPosition
 public:
     explicit MapPosition( const Point & = Point( -1, -1 ) );
 
-    bool operator==( s32 ) const;
-
     const Point & GetCenter() const
     {
         return center;

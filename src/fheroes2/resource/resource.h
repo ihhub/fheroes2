@@ -84,9 +84,6 @@ public:
     s32 Get( int rs ) const;
     s32 * GetPtr( int rs );
 
-    bool operator<( const Funds & ) const;
-    bool operator<=( const Funds & ) const;
-    bool operator>( const Funds & ) const;
     bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;

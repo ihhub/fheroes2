@@ -149,8 +149,6 @@ public:
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
     int FontsSmallSize( void ) const;
-    bool FontSmallRenderBlended( void ) const;
-    bool FontNormalRenderBlended( void ) const;
 
     const Point & PosRadar( void ) const;
     const Point & PosButtons( void ) const;
@@ -163,7 +161,6 @@ public:
     void SetPosStatus( const Point & );
 
     bool FullScreen( void ) const;
-    bool KeepAspectRatio( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -285,8 +282,6 @@ public:
     int PreferablyCountPlayers( void ) const;
     void SetPreferablyCountPlayers( int );
 
-    int GetPort( void ) const;
-
     // from maps info
     bool AllowChangeRace( int ) const;
     const std::string & MapsFile( void ) const;
@@ -299,7 +294,6 @@ public:
     int ConditionWins( void ) const;
     int ConditionLoss( void ) const;
     bool WinsCompAlsoWins( void ) const;
-    bool WinsAllowNormalVictory( void ) const;
     int WinsFindArtifactID( void ) const;
     bool WinsFindUltimateArtifact( void ) const;
     u32 WinsAccumulateGold( void ) const;
@@ -382,8 +376,6 @@ private:
     int preferably_count_players;
 
     std::string video_driver;
-
-    int port;
 
     Point pos_radr;
     Point pos_bttn;

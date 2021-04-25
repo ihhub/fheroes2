@@ -394,17 +394,6 @@ namespace fheroes2
         button->subscribe( this );
     }
 
-    ButtonBase * OptionButtonGroup::currentPressedButton() const
-    {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i]->isPressed() ) {
-                return _button[i];
-            }
-        }
-
-        return nullptr;
-    }
-
     void OptionButtonGroup::draw( Image & area ) const
     {
         for ( size_t i = 0; i < _button.size(); ++i ) {

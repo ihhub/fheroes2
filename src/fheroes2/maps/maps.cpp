@@ -213,11 +213,6 @@ Point Maps::GetPoint( s32 index )
     return Point( index % world.w(), index / world.w() );
 }
 
-bool Maps::isValidAbsPoint( const Point & pt )
-{
-    return isValidAbsPoint( pt.x, pt.y );
-}
-
 bool Maps::isValidAbsIndex( s32 ii )
 {
     return 0 <= ii && ii < world.w() * world.h();
@@ -301,30 +296,6 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
 
     if ( sort )
         std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
-
-    return results;
-}
-
-Maps::Indexes Maps::GetDistanceIndexes( s32 center, int dist )
-{
-    Indexes results;
-    results.reserve( dist * 6 );
-
-    const Point cp = GetPoint( center );
-
-    for ( s32 xx = cp.x - dist; xx <= cp.x + dist; ++xx ) {
-        if ( isValidAbsPoint( xx, cp.y - dist ) )
-            results.push_back( GetIndexFromAbsPoint( xx, cp.y - dist ) );
-        if ( isValidAbsPoint( xx, cp.y + dist ) )
-            results.push_back( GetIndexFromAbsPoint( xx, cp.y + dist ) );
-    }
-
-    for ( s32 yy = cp.y - dist + 1; yy < cp.y + dist; ++yy ) {
-        if ( isValidAbsPoint( cp.x - dist, yy ) )
-            results.push_back( GetIndexFromAbsPoint( cp.x - dist, yy ) );
-        if ( isValidAbsPoint( cp.x + dist, yy ) )
-            results.push_back( GetIndexFromAbsPoint( cp.x + dist, yy ) );
-    }
 
     return results;
 }
@@ -428,11 +399,6 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     }
 
     return false;
-}
-
-bool Maps::IsNearTiles( s32 index1, s32 index2 )
-{
-    return ( DIRECTION_ALL & Maps::GetDirection( index1, index2 ) ) != 0;
 }
 
 bool Maps::TileIsUnderProtection( s32 center )

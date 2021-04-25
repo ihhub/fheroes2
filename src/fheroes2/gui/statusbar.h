@@ -33,7 +33,6 @@ public:
     void SetCenter( s32 cx, s32 cy );
 
     void ShowMessage( const std::string & msg );
-    void Redraw();
 
 private:
     fheroes2::Point center;

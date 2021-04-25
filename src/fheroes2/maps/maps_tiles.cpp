@@ -152,17 +152,6 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , tmp( ta.tmp )
 {}
 
-Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
-{
-    level = ta.level;
-    object = ta.object;
-    index = ta.index;
-    uniq = ta.uniq;
-    tmp = ta.tmp;
-
-    return *this;
-}
-
 bool Maps::TilesAddon::isICN( int icn ) const
 {
     return icn == MP2::GetICNObject( object );
@@ -1927,11 +1916,6 @@ uint8_t Maps::Tiles::GetObjectTileset() const
 uint8_t Maps::Tiles::GetObjectSpriteIndex() const
 {
     return objectIndex;
-}
-
-void Maps::Tiles::SetObjectSpriteIndex( const uint8_t index )
-{
-    objectIndex = index;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )

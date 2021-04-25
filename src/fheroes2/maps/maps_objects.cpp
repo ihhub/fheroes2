@@ -205,13 +205,6 @@ MapSign::MapSign()
     : MapObjectSimple( MP2::OBJ_SIGN )
 {}
 
-MapSign::MapSign( s32 index, const std::string & msg )
-    : MapObjectSimple( MP2::OBJ_SIGN )
-{
-    SetIndex( index );
-    message = msg;
-}
-
 void MapSign::LoadFromMP2( s32 index, StreamBuf st )
 {
     st.skip( 9 );

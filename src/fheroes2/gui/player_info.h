@@ -30,8 +30,6 @@ namespace Interface
             : player( NULL )
         {}
 
-        bool operator==( const Player * ) const;
-
         Player * player;
         Rect rect1; // opponent
         Rect rect2; // class
