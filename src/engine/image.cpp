@@ -1613,6 +1613,86 @@ namespace fheroes2
         return out;
     }
 
+    Rect GetActiveROI( const Image & image )
+    {
+        if ( image.empty() )
+            return Rect();
+
+        const int32_t width = image.width();
+        const int32_t height = image.height();
+
+        Rect area( -1, -1, -1, -1 );
+
+        // Top border
+        const uint8_t * inY = image.transform();
+        for ( int32_t y = 0; y < height; ++y, inY += width ) {
+            const uint8_t * inX = inY;
+
+            for ( int32_t x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 || *inX >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                    area.y = y;
+                    break;
+                }
+            }
+
+            if ( area.y >= 0 )
+                break;
+        }
+
+        if ( area.y < 0 )
+            return Rect(); // image has only empty pixels or shadows
+
+        // Bottom border
+        inY = image.transform() + width * ( height - 1 );
+        for ( int32_t y = height - 1; y > area.y; --y, inY -= width ) {
+            const uint8_t * inX = inY;
+
+            for ( int32_t x = 0; x < width; ++x, ++inX ) {
+                if ( *inX == 0 || *inX >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                    area.height = y - area.y;
+                    break;
+                }
+            }
+
+            if ( area.height >= 0 )
+                break;
+        }
+
+        // Left border
+        const uint8_t * inX = image.transform() + width * area.y;
+        for ( int32_t x = 0; x < width; ++x, ++inX ) {
+            inY = inX;
+
+            for ( int32_t y = 0; y < area.height; ++y, inY += width ) {
+                if ( *inY == 0 || *inY >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                    area.x = x;
+                    break;
+                }
+            }
+
+            if ( area.x >= 0 )
+                break;
+        }
+
+        // Right border
+        inX = image.transform() + width * area.y + width - 1;
+        for ( int32_t x = width - 1; x >= area.x; --x, --inX ) {
+            inY = inX;
+
+            for ( int32_t y = 0; y < area.height; ++y, inY += width ) {
+                if ( *inY == 0 || *inY >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                    area.width = x - area.x;
+                    break;
+                }
+            }
+
+            if ( area.width >= 0 )
+                break;
+        }
+
+        return area;
+    }
+
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
