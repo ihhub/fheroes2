@@ -93,7 +93,6 @@ namespace Skill
         int Level( void ) const;
         int Skill( void ) const;
 
-        bool isLevel( int ) const;
         bool isSkill( int ) const;
         bool isValid( void ) const;
 
@@ -160,9 +159,6 @@ namespace Skill
         virtual int GetMorale( void ) const = 0;
         virtual int GetLuck( void ) const = 0;
         virtual int GetRace( void ) const = 0;
-
-        virtual bool isCaptain( void ) const;
-        virtual bool isHeroes( void ) const;
 
         int LevelUp( int race, int level, uint32_t seed );
 

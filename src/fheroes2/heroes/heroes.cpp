@@ -1697,12 +1697,6 @@ void Heroes::MovePointsScaleFixed( void )
     move_point_scale = move_point * 1000 / GetMaxMovePoints();
 }
 
-void Heroes::RecalculateMovePoints( void )
-{
-    if ( 0 <= move_point_scale )
-        move_point = GetMaxMovePoints() * move_point_scale / 1000;
-}
-
 // Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {

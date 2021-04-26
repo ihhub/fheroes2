@@ -72,7 +72,6 @@ namespace Interface
 
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
-    Army * GetFocusArmy();
     int GetFocusType( void );
     Point GetFocusCenter( void );
 

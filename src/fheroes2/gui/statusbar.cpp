@@ -42,9 +42,3 @@ void StatusBar::ShowMessage( const std::string & msg )
         prev = msg;
     }
 }
-
-void StatusBar::Redraw( void )
-{
-    Hide();
-    Show();
-}

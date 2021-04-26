@@ -53,7 +53,6 @@ namespace Maps
     bool isValidDirection( s32, int direct );
 
     bool isValidAbsIndex( s32 );
-    bool isValidAbsPoint( const Point & pt );
     bool isValidAbsPoint( s32 x, s32 y );
 
     Point GetPoint( s32 );
@@ -63,14 +62,12 @@ namespace Maps
 
     Indexes GetAroundIndexes( s32 );
     Indexes GetAroundIndexes( s32, int dist, bool sort = false ); // sorting distance
-    Indexes GetDistanceIndexes( s32 center, int dist );
 
     Indexes ScanAroundObject( s32, int obj );
     Indexes ScanAroundObject( s32, u32 dist, int obj );
 
     Indexes GetTilesUnderProtection( s32 );
     bool TileIsUnderProtection( s32 );
-    bool IsNearTiles( s32, s32 );
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
     Indexes GetObjectPositions( s32, int obj, bool ignoreHeroes );

@@ -64,11 +64,6 @@ struct Focus : std::pair<int, void *>
         : std::pair<int, void *>( FOCUS_UNSEL, NULL )
     {}
 
-    bool isValid( void ) const
-    {
-        return first != FOCUS_UNSEL && second;
-    }
-
     void Reset( void )
     {
         first = FOCUS_UNSEL;
@@ -112,9 +107,7 @@ public:
     explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
-    bool isID( u32 ) const;
     bool isColor( int ) const;
-    bool isName( const std::string & ) const;
     bool isPlay( void ) const;
 
     void SetColor( int );
@@ -128,7 +121,6 @@ public:
     int GetColor( void ) const;
     int GetRace( void ) const;
     int GetFriends( void ) const;
-    int GetID( void ) const;
 
     std::string GetDefaultName() const;
     const std::string & GetName( void ) const;

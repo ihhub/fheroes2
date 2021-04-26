@@ -77,14 +77,6 @@ namespace Interface
             RescanSize();
         }
 
-        void SetContent( std::list<Item> & content )
-        {
-            items.clear();
-            for ( typename std::list<Item>::iterator it = content.begin(); it != content.end(); ++it )
-                items.push_back( &( *it ) );
-            SetContentItems();
-        }
-
         void SetContent( std::vector<Item> & content )
         {
             items.clear();
@@ -122,18 +114,6 @@ namespace Interface
         {
             ItemsIterator posItem = GetItemIter( pt );
             return posItem != items.end() ? *posItem : NULL;
-        }
-
-        Rect * GetItemPos( const Point & pt )
-        {
-            ItemIterPos posItem = GetItemIterPos( pt );
-            return posItem.first != items.end() ? &posItem.second : NULL;
-        }
-
-        s32 GetIndex( const Point & pt )
-        {
-            ItemsIterator posItem = GetItemIter( pt );
-            return posItem != items.end() ? std::distance( items.end(), posItem ) : -1;
         }
 
         fheroes2::Point GetPos( void ) const

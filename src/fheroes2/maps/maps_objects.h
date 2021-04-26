@@ -109,7 +109,6 @@ StreamBase & operator>>( StreamBase &, MapSphinx & );
 struct MapSign : public MapObjectSimple
 {
     MapSign();
-    MapSign( s32 index, const std::string & );
 
     void LoadFromMP2( s32 index, StreamBuf );
 

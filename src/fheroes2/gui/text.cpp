@@ -426,29 +426,6 @@ Text::Text( const Text & t )
     gh = t.gh;
 }
 
-Text & Text::operator=( const Text & t )
-{
-    if ( &t == this )
-        return *this;
-
-    assert( t.message != nullptr );
-
-    delete message;
-
-#ifdef WITH_TTF
-    const TextUnicode * unicodeText = dynamic_cast<const TextUnicode *>( t.message );
-    if ( unicodeText )
-        message = new TextUnicode( *unicodeText );
-    else
-#endif
-        message = new TextAscii( static_cast<TextAscii &>( *t.message ) );
-
-    gw = t.gw;
-    gh = t.gh;
-
-    return *this;
-}
-
 void Text::Set( const std::string & msg, int ft )
 {
     message->SetText( msg );
@@ -775,19 +752,8 @@ void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
     }
 }
 
-void TextBox::Blit( const fheroes2::Point & pt, fheroes2::Image & sf )
-{
-    Blit( pt.x, pt.y, sf );
-}
-
 TextSprite::TextSprite()
     : _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , hide( true )
-{}
-
-TextSprite::TextSprite( const std::string & msg, int ft, const Point & pt )
-    : Text( msg, ft )
-    , _restorer( fheroes2::Display::instance(), pt.x, pt.y, gw, gh + 5 )
     , hide( true )
 {}
 

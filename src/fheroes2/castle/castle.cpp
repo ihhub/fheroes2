@@ -2511,11 +2511,6 @@ int Castle::GetControl( void ) const
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
-bool Castle::AllowBuild( void ) const
-{
-    return Modes( ALLOWBUILD );
-}
-
 bool Castle::isBuild( u32 bd ) const
 {
     return ( building & bd ) != 0;
