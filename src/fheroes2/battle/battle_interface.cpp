@@ -877,7 +877,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
-    , turn( 0 )
 {
     const Settings & conf = Settings::Get();
 
@@ -2096,13 +2095,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     board.Reset();
     board.SetScanPassability( b );
 
-    if ( listlog && turn != arena.GetCurrentTurn() ) {
-        turn = arena.GetCurrentTurn();
-        std::string msg = _( "Turn %{turn}" );
-        StringReplace( msg, "%{turn}", turn );
-        listlog->AddMessage( msg );
-    }
-
     popup.Reset();
 
     // safe position coord
@@ -2723,6 +2715,16 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
             RedrawPartialFinish();
             ++pnt;
         }
+    }
+}
+
+void Battle::Interface::RedrawActionNewTurn() const
+{
+    if ( listlog ) {
+        std::string msg = _( "Turn %{turn}" );
+        StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+
+        listlog->AddMessage( msg );
     }
 }
 

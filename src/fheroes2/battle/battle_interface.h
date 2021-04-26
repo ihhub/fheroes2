@@ -205,6 +205,7 @@ namespace Battle
         void SetArmiesOrder( const Units * );
         void FadeArena( bool clearMessageLog );
 
+        void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
         void RedrawActionSpellCastPart1( const Spell &, s32, const HeroBase *, const std::string &, const TargetsInfo & );
@@ -342,7 +343,6 @@ namespace Battle
         Rect main_tower;
 
         StatusListBox * listlog;
-        u32 turn;
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
