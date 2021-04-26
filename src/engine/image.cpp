@@ -1613,7 +1613,7 @@ namespace fheroes2
         return out;
     }
 
-    Rect GetActiveROI( const Image & image )
+    Rect GetActiveROI( const Image & image, const uint8_t minTransformValue )
     {
         if ( image.empty() )
             return Rect();
@@ -1629,7 +1629,7 @@ namespace fheroes2
             const uint8_t * inX = inY;
 
             for ( int32_t x = 0; x < width; ++x, ++inX ) {
-                if ( *inX == 0 || *inX >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                if ( *inX == 0 || *inX >= minTransformValue ) {
                     area.y = y;
                     break;
                 }
@@ -1640,7 +1640,7 @@ namespace fheroes2
         }
 
         if ( area.y < 0 )
-            return Rect(); // image has only empty pixels or shadows
+            return Rect();
 
         // Bottom border
         inY = image.transform() + width * ( height - 1 );
@@ -1648,8 +1648,8 @@ namespace fheroes2
             const uint8_t * inX = inY;
 
             for ( int32_t x = 0; x < width; ++x, ++inX ) {
-                if ( *inX == 0 || *inX >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
-                    area.height = y - area.y;
+                if ( *inX == 0 || *inX >= minTransformValue ) {
+                    area.height = y - area.y + 1;
                     break;
                 }
             }
@@ -1664,7 +1664,7 @@ namespace fheroes2
             inY = inX;
 
             for ( int32_t y = 0; y < area.height; ++y, inY += width ) {
-                if ( *inY == 0 || *inY >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
+                if ( *inY == 0 || *inY >= minTransformValue ) {
                     area.x = x;
                     break;
                 }
@@ -1680,8 +1680,8 @@ namespace fheroes2
             inY = inX;
 
             for ( int32_t y = 0; y < area.height; ++y, inY += width ) {
-                if ( *inY == 0 || *inY >= 6 ) { // 1 is to skip, 2 - 5 types of shadows
-                    area.width = x - area.x;
+                if ( *inY == 0 || *inY >= minTransformValue ) {
+                    area.width = x - area.x + 1;
                     break;
                 }
             }
