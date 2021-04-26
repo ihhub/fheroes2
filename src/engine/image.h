@@ -234,8 +234,8 @@ namespace fheroes2
 
     Image Flip( const Image & in, bool horizontally, bool vertically );
 
-    // Return ROI with pixels which are not skipped and not used for shadow creation.
-    Rect GetActiveROI( const Image & image );
+    // Return ROI with pixels which are not skipped and not used for shadow creation. 1 is to skip, 2 - 5 types of shadows
+    Rect GetActiveROI( const Image & image, const uint8_t minTransformValue = 6 );
 
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );

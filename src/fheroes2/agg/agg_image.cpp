@@ -485,17 +485,8 @@ namespace fheroes2
                 return true;
             case ICN::MONS32:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
-                    const Sprite & source = _icnVsSprite[id][1];
-                    Sprite & modified = _icnVsSprite[id][2];
-                    Sprite temp( source.width(), source.height() + 1 );
-                    temp.reset();
-                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
-                    modified.setPosition( 0, 1 );
-                }
-                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman
                     Sprite & modified = _icnVsSprite[id][4];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -504,7 +495,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
                     Sprite & modified = _icnVsSprite[id][6];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -513,7 +504,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion
                     Sprite & modified = _icnVsSprite[id][8];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -522,12 +513,31 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
-                    Sprite & modified = _icnVsSprite[id][44];
-                    Sprite temp = _icnVsSprite[id][43];
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
+                if ( _icnVsSprite[id].size() > 62 ) {
+                    const Point shadowOffset( -1, 2 );
+                    for ( size_t i = 0; i < 62; ++i ) {
+                        Sprite & modified = _icnVsSprite[id][i];
+                        const Point originalOffset( modified.x(), modified.y() );
+                        Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
+                        temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
+
+                        const Rect area = GetActiveROI( temp, 2 );
+                        if ( area.x > 0 || area.height != temp.height() ) {
+                            const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
+                            modified = Crop( temp, area.x, area.y, area.width, area.height );
+                            modified.setPosition( offset.x, offset.y );
+                        }
+                        else {
+                            modified = temp;
+                        }
+                    }
                 }
+                if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
+                    Sprite & modified = _icnVsSprite[id][63];
+                    modified.image()[19 * 9 + 9] = modified.image()[19 * 5 + 11];
+                    modified.transform()[19 * 9 + 9] = modified.transform()[19 * 5 + 11];
+                }
+
                 return true;
             case ICN::MONSTER_SWITCH_LEFT_ARROW:
                 _icnVsSprite[id].resize( 2 );
@@ -757,8 +767,8 @@ namespace fheroes2
                 _icnVsSprite[id][1] = _icnVsSprite[id][0];
                 ApplyPalette( _icnVsSprite[id][1], 4 );
 
-                _icnVsSprite[id][0] = addButtonShadow( _icnVsSprite[id][0], Point( -3, 3 ) );
-                _icnVsSprite[id][1] = addButtonShadow( _icnVsSprite[id][1], Point( -2, 2 ) );
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
                 _icnVsSprite[id][1].setPosition( -2, 1 );
 
@@ -803,8 +813,8 @@ namespace fheroes2
                 _icnVsSprite[id][1] = _icnVsSprite[id][0];
                 ApplyPalette( _icnVsSprite[id][1], 4 );
 
-                _icnVsSprite[id][0] = addButtonShadow( _icnVsSprite[id][0], Point( -3, 3 ) );
-                _icnVsSprite[id][1] = addButtonShadow( _icnVsSprite[id][1], Point( -2, 2 ) );
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
                 _icnVsSprite[id][1].setPosition( -2, 1 );
 
