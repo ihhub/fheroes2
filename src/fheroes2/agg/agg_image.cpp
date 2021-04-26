@@ -528,7 +528,7 @@ namespace fheroes2
                             modified.setPosition( offset.x, offset.y );
                         }
                         else {
-                            modified = temp;
+                            std::swap( modified, temp );
                         }
                     }
                 }
