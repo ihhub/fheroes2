@@ -3187,24 +3187,32 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
     status.SetMessage( "", false );
 }
 
-void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const std::string & name, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, s32 dst, const std::string & name, const TargetsInfo & targets )
 {
+    Unit * target = targets.size() ? targets.front().defender : nullptr;
+
     std::string msg;
-    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     if ( target && target->GetHeadIndex() == dst ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
         StringReplace( msg, "%{troop}", target->GetName() );
     }
-    else if ( spell.isApplyWithoutFocusObject() )
+    else if ( spell.isApplyWithoutFocusObject() ) {
         msg = _( "%{name} casts %{spell}." );
+    }
 
     if ( msg.size() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
+
         status.SetMessage( msg, true );
         status.SetMessage( "", false );
     }
+}
+
+void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
+{
+    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     // set spell cast animation
     if ( caster ) {
