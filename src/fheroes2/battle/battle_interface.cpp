@@ -2720,12 +2720,14 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
 
 void Battle::Interface::RedrawActionNewTurn() const
 {
-    if ( listlog ) {
-        std::string msg = _( "Turn %{turn}" );
-        StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
-
-        listlog->AddMessage( msg );
+    if ( listlog == nullptr ) {
+        return;
     }
+
+    std::string msg = _( "Turn %{turn}" );
+    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+
+    listlog->AddMessage( msg );
 }
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
@@ -3187,7 +3189,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
     status.SetMessage( "", false );
 }
 
-void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, s32 dst, const std::string & name, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
     Unit * target = targets.size() ? targets.front().defender : nullptr;
 

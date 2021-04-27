@@ -208,7 +208,7 @@ namespace Battle
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
-        void RedrawActionSpellCastStatus( const Spell & spell, s32 dst, const std::string & name, const TargetsInfo & targets );
+        void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
         void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
