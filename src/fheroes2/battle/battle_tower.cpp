@@ -33,7 +33,6 @@ Battle::Tower::Tower( const Castle & castle, int twr )
     , valid( true )
 {
     count += castle.CountBuildings();
-    count += castle.GetLevelMageGuild() - 1;
 
     if ( count > 20 )
         count = 20;
