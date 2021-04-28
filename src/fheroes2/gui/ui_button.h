@@ -177,8 +177,6 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        ButtonBase * currentPressedButton() const;
-
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
     protected:

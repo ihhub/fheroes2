@@ -138,7 +138,7 @@ public:
     Text( const Text & );
     ~Text();
 
-    Text & operator=( const Text & );
+    Text & operator=( const Text & ) = delete;
 
     void Set( const std::string &, int );
     void Set( const std::string & );
@@ -176,7 +176,6 @@ class TextSprite : protected Text
 {
 public:
     TextSprite();
-    TextSprite( const std::string &, int ft, const Point & pt );
     TextSprite( const std::string &, int ft, s32, s32 );
 
     void SetPos( s32, s32 );
@@ -236,7 +235,6 @@ public:
     }
 
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() );
-    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
     void Append( const std::string &, int, u32 );

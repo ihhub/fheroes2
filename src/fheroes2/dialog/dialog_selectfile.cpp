@@ -140,7 +140,7 @@ void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & )
 std::string ResizeToShortName( const std::string & str )
 {
     std::string res = System::GetBasename( str );
-    size_t it = res.find( '.' );
+    size_t it = res.rfind( '.' );
     if ( std::string::npos != it )
         res.resize( it );
     return res;

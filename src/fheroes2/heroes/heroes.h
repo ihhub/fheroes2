@@ -253,7 +253,6 @@ public:
     bool MayStillMove( void ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
-    void RecalculateMovePoints( void );
 
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill( void ) const;

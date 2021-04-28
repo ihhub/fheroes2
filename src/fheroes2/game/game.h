@@ -228,7 +228,6 @@ namespace Game
     int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
-    int NewNetwork( void );
     int NewBattleOnly( void );
     int LoadStandard( void );
     int LoadCampain( void );

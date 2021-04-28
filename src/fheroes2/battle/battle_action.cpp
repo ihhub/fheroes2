@@ -300,28 +300,34 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                                << ")" );
 
         if ( b->isFlying() ) {
-            const int32_t dstTail = b->isWide() ? pos1.GetTail()->GetIndex() : -1;
+            b->UpdateDirection( pos1.GetRect() );
+            if ( b->isReflect() != pos1.isReflect() )
+                pos1.Swap();
 
-            // open the bridge if the unit should land on it
-            if ( bridge ) {
-                if ( bridge->NeedDown( *b, dst ) ) {
-                    bridge->Action( *b, dst );
+            if ( interface ) {
+                interface->RedrawActionFly( *b, pos1 );
+            }
+            else if ( bridge ) {
+                const int32_t dstHead = pos1.GetHead()->GetIndex();
+                const int32_t dstTail = b->isWide() ? pos1.GetTail()->GetIndex() : -1;
+
+                // open the bridge if the unit should land on it
+                if ( bridge->NeedDown( *b, dstHead ) ) {
+                    bridge->Action( *b, dstHead );
                 }
                 else if ( b->isWide() && bridge->NeedDown( *b, dstTail ) ) {
                     bridge->Action( *b, dstTail );
                 }
+
+                b->SetPosition( pos1 );
+
+                // check for possible bridge close action, after unit's end of movement
+                if ( bridge->AllowUp() ) {
+                    bridge->Action( *b, dstHead );
+                }
             }
 
-            b->UpdateDirection( pos1.GetRect() );
-            if ( b->isReflect() != pos1.isReflect() )
-                pos1.Swap();
-            if ( interface )
-                interface->RedrawActionFly( *b, pos1 );
             pos2 = pos1;
-
-            // check for possible bridge close action, after unit's end of movement
-            if ( bridge && bridge->AllowUp() )
-                bridge->Action( *b, dst );
         }
         else {
             Indexes path;
@@ -348,7 +354,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                 for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
                     bool doMovement = false;
 
-                    if ( bridge && bridge->NeedDown( *b, *pathIt ) )
+                    if ( bridge->NeedDown( *b, *pathIt ) )
                         bridge->Action( *b, *pathIt );
 
                     if ( b->isWide() ) {
@@ -365,7 +371,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                         b->SetPosition( *pathIt );
 
                     // check for possible bridge close action, after unit's end of movement
-                    if ( bridge && bridge->AllowUp() )
+                    if ( bridge->AllowUp() )
                         bridge->Action( *b, *pathIt );
                 }
             }

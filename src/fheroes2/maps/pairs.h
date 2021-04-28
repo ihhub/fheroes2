@@ -88,11 +88,6 @@ public:
         : std::pair<int, u32>( res, count )
     {}
 
-    bool isResource( int res ) const
-    {
-        return res == first;
-    }
-
     bool isValid( void ) const
     {
         return ( first & Resource::ALL ) && second;

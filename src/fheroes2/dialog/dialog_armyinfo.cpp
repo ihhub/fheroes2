@@ -51,13 +51,6 @@ namespace
 
     struct SpellInfo
     {
-        SpellInfo()
-            : spriteId( 0 )
-            , duration( 0 )
-            , offset( 0 )
-            , space( 0 )
-        {}
-
         SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
             : spriteId( spriteId_ )
             , duration( duration_ )

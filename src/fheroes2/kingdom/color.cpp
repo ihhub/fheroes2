@@ -169,11 +169,6 @@ std::string Colors::String( void ) const
     return os.str();
 }
 
-bool ColorBase::operator==( int col ) const
-{
-    return color == col;
-}
-
 bool ColorBase::isFriends( int col ) const
 {
     return ( col & Color::ALL ) && ( color == col || Players::isFriends( color, col ) );

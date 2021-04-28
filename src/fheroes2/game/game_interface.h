@@ -72,7 +72,6 @@ namespace Interface
 
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
-    Army * GetFocusArmy();
     int GetFocusType( void );
     Point GetFocusCenter( void );
 
@@ -91,7 +90,7 @@ namespace Interface
         const fheroes2::Rect & GetScrollTop( void ) const;
         const fheroes2::Rect & GetScrollBottom( void ) const;
 
-        s32 GetDimensionDoorDestination( s32, u32, bool ) const;
+        int32_t GetDimensionDoorDestination( const int32_t from, const uint32_t distance, const bool water );
 
         GameArea & GetGameArea( void );
         Radar & GetRadar( void );

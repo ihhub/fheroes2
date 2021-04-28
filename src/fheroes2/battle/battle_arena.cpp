@@ -822,7 +822,7 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
     const HeroBase * hero = army1->GetColor() == color ? army1->GetCommander() : army2->GetCommander();
-    return hero && hero->isHeroes() && NULL == hero->inCastle();
+    return hero && hero->isHeroes() && ( castle == nullptr || hero->inCastle() == nullptr );
 }
 
 bool Battle::Arena::isSpellcastDisabled() const
@@ -1005,9 +1005,14 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
-            if ( interface )
-                interface->RedrawBridgeAnimation( true );
-            bridge->SetDown( true );
+            if ( !bridge->isDown() ) {
+                if ( interface ) {
+                    interface->RedrawBridgeAnimation( true );
+                }
+
+                bridge->SetDown( true );
+            }
+
             bridge->SetDestroy();
         }
         break;

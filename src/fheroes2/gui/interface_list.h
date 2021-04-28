@@ -202,7 +202,7 @@ namespace Interface
             if ( _topId + id >= _size() ) // out of items
                 return NULL;
 
-            return &( *content )[id];
+            return &( *content )[_topId + id];
         }
 
         void SetCurrent( size_t posId )

@@ -5,15 +5,15 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\..\sdl2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WITH_TTF;FHEROES2_IMAGE_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)..\..\sdl2\lib/$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl2\lib/$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)..\..\sdl2\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl2\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

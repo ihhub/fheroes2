@@ -70,7 +70,7 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        TilesAddon & operator=( const TilesAddon & ta );
+        TilesAddon & operator=( const TilesAddon & ta ) = delete;
 
         bool isUniq( const uint32_t id ) const
         {
@@ -134,7 +134,6 @@ namespace Maps
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
-        void SetObjectSpriteIndex( const uint8_t index );
 
         u32 GetObjectUID() const;
 
@@ -203,6 +202,7 @@ namespace Maps
         void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;

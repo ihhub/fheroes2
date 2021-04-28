@@ -32,6 +32,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -121,7 +122,6 @@ int Game::ScenarioInfo( void )
 
     const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
 
     rectPanel = Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
     pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
@@ -140,7 +140,7 @@ int Game::ScenarioInfo( void )
     fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
     fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
 
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     bool resetStartingSettings = conf.MapsFile().empty();
     Players & players = conf.GetPlayers();

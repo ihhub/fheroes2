@@ -49,6 +49,7 @@ namespace Battle
     class Command;
     class Tower;
     class Interface;
+    class Status;
 
     class Actions : public std::list<Command>
     {
@@ -98,7 +99,7 @@ namespace Battle
         const SpellStorage & GetUsageSpells( void ) const;
 
         bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
-        int DialogBattleHero( const HeroBase &, bool ) const;
+        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
         void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
 
         void FadeArena( bool clearMessageLog ) const;

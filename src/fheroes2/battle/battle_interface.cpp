@@ -2274,7 +2274,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2283,13 +2283,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                arena.DialogBattleHero( *opponent1->GetHero(), true );
+                arena.DialogBattleHero( *opponent1->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent1Area ) ) {
-            arena.DialogBattleHero( *opponent1->GetHero(), false );
+            arena.DialogBattleHero( *opponent1->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -2300,7 +2300,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2309,13 +2309,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                arena.DialogBattleHero( *opponent2->GetHero(), true );
+                arena.DialogBattleHero( *opponent2->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent2Area ) ) {
-            arena.DialogBattleHero( *opponent2->GetHero(), false );
+            arena.DialogBattleHero( *opponent2->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }

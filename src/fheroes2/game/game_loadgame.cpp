@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game_io.h"
+#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "localevent.h"
@@ -60,7 +61,7 @@ int Game::LoadMulti( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
@@ -144,7 +145,7 @@ int Game::LoadGame( void )
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const int32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
@@ -239,12 +240,10 @@ int Game::DisplayLoadGameDialog()
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( cursor.POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // image background
-    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    fheroes2::drawMainMenuScreen();
 
-    display.render();
+    fheroes2::Display::instance().render();
 
     std::string file = Dialog::SelectFileLoad();
     if ( file.empty() || !Game::Load( file ) )

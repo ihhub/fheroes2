@@ -47,7 +47,6 @@ namespace Route
         u32 GetPenalty( void ) const;
         s32 GetFrom( void ) const;
         int GetDirection( void ) const;
-        bool isBad( void ) const;
 
     protected:
         friend StreamBase & operator<<( StreamBase &, const Step & );
@@ -63,16 +62,15 @@ namespace Route
     {
     public:
         explicit Path( const Heroes & );
-        Path( const Path & );
+        Path( const Path & ) = delete;
 
-        Path & operator=( const Path & );
+        Path & operator=( const Path & ) = delete;
 
         s32 GetDestinationIndex( void ) const;
         s32 GetLastIndex( void ) const;
         s32 GetDestinedIndex( void ) const;
         int GetFrontDirection( void ) const;
         u32 GetFrontPenalty( void ) const;
-        u32 GetTotalPenalty( void ) const;
         uint32_t getLastMovePenalty() const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
@@ -90,7 +88,6 @@ namespace Route
         void RescanObstacle( void );
         void RescanPassable( void );
 
-        bool isComplete( void ) const;
         bool isValid( void ) const;
         bool isShow( void ) const
         {

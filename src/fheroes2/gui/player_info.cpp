@@ -30,11 +30,6 @@
 #include "settings.h"
 #include "text.h"
 
-bool Interface::PlayerInfo::operator==( const Player * p ) const
-{
-    return player == p;
-}
-
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
     , show_race( race )

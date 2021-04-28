@@ -88,7 +88,6 @@ public:
         : color( col )
     {}
 
-    bool operator==( int ) const;
     bool isFriends( int ) const;
     void SetColor( int );
 

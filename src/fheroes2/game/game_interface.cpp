@@ -207,23 +207,22 @@ void Interface::Basic::Redraw( int force )
     redraw = 0;
 }
 
-s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool water ) const
+int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const uint32_t distance, const bool water )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     const Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const bool isNoInterface = conf.ExtGameHideInterface();
 
-    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
+    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
     fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
 
     const Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
-    fheroes2::Image top( visibleArea.w, visibleArea.h );
-    fheroes2::Copy( display, visibleArea.x, visibleArea.y, top, 0, 0, visibleArea.w, visibleArea.h );
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
     const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
@@ -231,16 +230,15 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
     const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        fheroes2::Image middle( spellROI.w, spellROI.h );
-        fheroes2::Copy( display, spellROI.x, spellROI.y, middle, 0, 0, spellROI.w, spellROI.h );
-
-        fheroes2::InvertedFadeWithPalette( top, fheroes2::Point( visibleArea.x, visibleArea.y ), middle, heroPosOffset, 5, 300, 9 );
+        fheroes2::InvertedFadeWithPalette( display, fheroes2::Rect( visibleArea.x, visibleArea.y, visibleArea.w, visibleArea.h ),
+                                           fheroes2::Rect( spellROI.x, spellROI.y, spellROI.w, spellROI.h ), 5, 300, 9 );
     }
 
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    s32 dst = -1;
-    s32 returnValue = -1;
+    int32_t returnValue = -1;
+
+    cursor.Show();
 
     const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
     fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
@@ -257,7 +255,7 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
                 break;
         }
         else if ( visibleArea & mp ) {
-            dst = gameArea.GetValidTileIdFromPoint( mp );
+            const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
 
             bool valid = ( dst >= 0 );
 
@@ -282,20 +280,34 @@ s32 Interface::Basic::GetDimensionDoorDestination( s32 from, u32 distance, bool 
             cursor.SetThemes( Cursor::POINTER );
         }
 
-        // redraw cursor
-        if ( !cursor.isVisible() ) {
+        if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+            uint32_t & frame = Game::MapsAnimationFrame();
+            ++frame;
+            gameArea.SetRedraw();
+            Redraw();
+
+            if ( isFadingEnabled ) {
+                InvertedShadow( display, fheroes2::Rect( visibleArea.x, visibleArea.y, visibleArea.w, visibleArea.h ),
+                                fheroes2::Rect( spellROI.x, spellROI.y, spellROI.w, spellROI.h ), 5, 9 );
+
+                if ( isNoInterface ) {
+                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+                    buttonExit.draw();
+                }
+            }
+
             cursor.Show();
             display.render();
         }
     }
 
-    cursor.Hide();
-
-    if ( isFadingEnabled )
-        fheroes2::Blit( top, display, visibleArea.x, visibleArea.y );
+    if ( isFadingEnabled ) {
+        gameArea.SetRedraw();
+        Redraw();
+        display.render();
+    }
 
     back.restore();
-    cursor.Show();
     display.render();
 
     return returnValue;

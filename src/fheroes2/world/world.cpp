@@ -95,18 +95,6 @@ std::list<MapObjectSimple *> MapObjects::get( const Point & pos )
     return res;
 }
 
-void MapObjects::remove( const Point & pos )
-{
-    std::vector<u32> uids;
-
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            uids.push_back( ( *it ).second->GetUID() );
-
-    for ( std::vector<u32>::const_iterator it = uids.begin(); it != uids.end(); ++it )
-        remove( *it );
-}
-
 void MapObjects::remove( u32 uid )
 {
     iterator it = find( uid );

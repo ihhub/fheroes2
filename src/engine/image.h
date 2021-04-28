@@ -192,6 +192,7 @@ namespace fheroes2
     void ApplyPalette( const Image & in, Image & out, const std::vector<uint8_t> & palette );
     void ApplyPalette( Image & image, uint8_t paletteId );
     void ApplyPalette( const Image & in, Image & out, uint8_t paletteId );
+    void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t paletteId );
 
     void ApplyAlpha( Image & image, uint8_t alpha );
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
@@ -232,6 +233,9 @@ namespace fheroes2
     bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi );
 
     Image Flip( const Image & in, bool horizontally, bool vertically );
+
+    // Return ROI with pixels which are not skipped and not used for shadow creation. 1 is to skip, 2 - 5 types of shadows
+    Rect GetActiveROI( const Image & image, const uint8_t minTransformValue = 6 );
 
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
