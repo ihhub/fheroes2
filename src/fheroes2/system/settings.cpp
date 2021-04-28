@@ -77,7 +77,7 @@ struct settings_t
     bool operator==( u32 i ) const
     {
         return id && id == i;
-    };
+    }
 };
 
 // external settings

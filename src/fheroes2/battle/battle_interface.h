@@ -132,7 +132,8 @@ namespace Battle
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
-        };
+        }
+
         void SetMessage( const std::string & message, bool top = false );
         void Redraw( void ) const;
         const std::string & GetMessage( void ) const;

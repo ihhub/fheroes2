@@ -43,7 +43,7 @@ public:
         SetScrollBar( fheroes2::AGG::GetICN( ICN::LISTBOX, 10 ), fheroes2::Rect( rt.x + rt.w - 20, rt.y + 48, 14, rt.h - 107 ) );
         SetAreaMaxItems( 5 );
         SetAreaItems( fheroes2::Rect( rt.x + 10, rt.y + 30, rt.w - 30, rt.h - 70 ) );
-    };
+    }
 
     void RedrawBackground( const Point & dst ) override
     {
@@ -78,7 +78,8 @@ class SelectEnumMonster : public SelectEnum
 {
 public:
     explicit SelectEnumMonster( const Rect & rt )
-        : SelectEnum( rt ){};
+        : SelectEnum( rt )
+    {}
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
@@ -122,7 +123,7 @@ public:
 
         Text text( Heroes::GetName( index ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 50, dsty + 5 );
-    };
+    }
 
     void RedrawBackground( const Point & dst ) override
     {

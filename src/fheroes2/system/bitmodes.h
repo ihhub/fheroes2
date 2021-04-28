@@ -31,12 +31,14 @@ class BitModes
 {
 public:
     BitModes()
-        : modes( 0 ){};
+        : modes( 0 )
+    {}
 
     void SetModes( u32 f )
     {
         modes |= f;
     }
+
     void ResetModes( u32 f )
     {
         modes &= ~f;

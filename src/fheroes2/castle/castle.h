@@ -294,7 +294,8 @@ namespace CastleDialog
     {
         builds_t( building_t b, const Rect & r )
             : id( b )
-            , coord( r ){};
+            , coord( r )
+        {}
 
         bool operator==( u32 b ) const
         {

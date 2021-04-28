@@ -169,7 +169,7 @@ public:
         }
 
         _singlePlayer = playerCount == 1;
-    };
+    }
 
     void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
     void ShowTradeArea( int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, bool fromTradingPost );
