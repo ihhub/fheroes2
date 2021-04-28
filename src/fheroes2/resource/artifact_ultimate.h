@@ -36,14 +36,12 @@ public:
     void Set( s32, const Artifact & );
     void Reset( void );
 
-    const fheroes2::Image & GetPuzzleMapSurface( void ) const;
+    fheroes2::Image GetPuzzleMapSurface() const;
     const Artifact & GetArtifact( void ) const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const UltimateArtifact & );
     friend StreamBase & operator>>( StreamBase &, UltimateArtifact & );
-
-    void MakeSurface( void );
 
     fheroes2::Image puzzlemap;
     s32 index;
