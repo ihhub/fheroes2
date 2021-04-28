@@ -150,10 +150,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: scouting skill show extended content info" ),
     },
     {
-        Settings::WORLD_ABANDONED_MINE_RANDOM,
-        _( "world: abandoned mine random resource" ),
-    },
-    {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
         _( "world: allow set guardian to objects" ),
     },
@@ -1553,11 +1549,6 @@ bool Settings::ExtWorldScouteExtended( void ) const
 bool Settings::ExtGameRememberLastFocus( void ) const
 {
     return ExtModes( GAME_REMEMBER_LAST_FOCUS );
-}
-
-bool Settings::ExtWorldAbandonedMineRandom( void ) const
-{
-    return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
 }
 
 bool Settings::ExtWorldAllowSetGuardian( void ) const

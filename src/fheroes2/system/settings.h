@@ -77,7 +77,7 @@ public:
 
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
-        WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
+        // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
@@ -199,7 +199,6 @@ public:
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
-    bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
     bool ExtWorldOnlyFirstMonsterAttack( void ) const;
