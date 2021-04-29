@@ -2052,7 +2052,11 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
         // teleport check first
         if ( Board::isValidIndex( teleport_src ) ) {
-            if ( !b_stats && cell->isPassable3( *_currentUnit, false ) ) {
+            const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+
+            assert( unitToTeleport != nullptr );
+
+            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
                 statusMsg = _( "Teleport Here" );
                 return Cursor::SP_TELEPORT;
             }
