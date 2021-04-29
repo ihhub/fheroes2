@@ -426,8 +426,13 @@ void Battle::Arena::Turns( void )
 
     const Settings & conf = Settings::Get();
 
-    if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+    if ( interface ) {
+        interface->RedrawActionNewTurn();
+
+        if ( conf.Music() && !Music::isPlaying() ) {
+            AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+        }
+    }
 
     army1->NewTurn();
     army2->NewTurn();
@@ -519,7 +524,7 @@ void Battle::Arena::Turns( void )
     }
 
     // can skip move ?
-    if ( Settings::Get().ExtBattleSoftWait() ) {
+    if ( conf.ExtBattleSoftWait() ) {
         Unit * troop = nullptr;
 
         while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, false, preferredColor ) ) != nullptr ) {

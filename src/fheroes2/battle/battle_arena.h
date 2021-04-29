@@ -118,7 +118,7 @@ namespace Battle
 
         TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
         void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
-        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages );
+        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
