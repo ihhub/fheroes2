@@ -727,6 +727,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         std::string msg = _( "Not enough gold (%{gold})" );
         StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
         btnMarket.draw();
