@@ -506,7 +506,11 @@ int Game::CompleteCampaignScenario()
 
         if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
-            saveData.setCarryOverTroops( humanKingdom.GetBestHero()->GetArmy() );
+
+            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+
+            if ( lastBattleWinHero )
+                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
         }
     }
 
