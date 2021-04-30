@@ -496,14 +496,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         }
 
         if ( le.MouseClickLeft( hero1Area ) ) {
-            const bool noDismiss = Modes( Heroes::NOTDISMISS );
-
-            SetModes( Heroes::NOTDISMISS );
-            OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts1.ResetSelected();
@@ -516,14 +509,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            const bool noDismiss = heroes2.Modes( Heroes::NOTDISMISS );
-
-            heroes2.SetModes( Heroes::NOTDISMISS );
-            heroes2.OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                heroes2.ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( heroes2, false, false, true );
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts2.ResetSelected();
