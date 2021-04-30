@@ -763,7 +763,7 @@ void Kingdom::SetLastLostHero( const Heroes & hero )
     lost_hero.date = world.CountDay();
 }
 
-void Kingdom::SetLastBattleWinHero( const Heroes & hero ) 
+void Kingdom::SetLastBattleWinHero( const Heroes & hero )
 {
     _lastBattleWinHeroID = hero.GetID();
 }
