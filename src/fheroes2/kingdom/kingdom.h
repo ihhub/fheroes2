@@ -85,7 +85,10 @@ public:
     void AddHeroStartCondLoss( Heroes * );
     std::string GetNamesHeroStartCondLoss( void ) const;
 
+    void SetLastBattleWinHero( const Heroes & hero );
+
     Heroes * GetLastLostHero( void ) const;
+    Heroes * GetLastBattleWinHero() const;
 
     const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
@@ -178,6 +181,7 @@ private:
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
+    int _lastBattleWinHeroID;
     Funds resource;
 
     u32 lost_town_days;
