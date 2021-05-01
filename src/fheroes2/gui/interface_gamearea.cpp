@@ -79,20 +79,20 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
 
     if ( worldSize.width > w ) {
-        _minLeftOffset = -static_cast<int32_t>( w / 2 ) - TILEWIDTH / 2;
+        _minLeftOffset = -( w / 2 ) - TILEWIDTH / 2;
         _maxLeftOffset = worldSize.width - w / 2;
     }
     else {
-        _minLeftOffset = -static_cast<int32_t>( w - worldSize.width ) / 2;
+        _minLeftOffset = -( w - worldSize.width ) / 2;
         _maxLeftOffset = _minLeftOffset;
     }
 
     if ( worldSize.height > h ) {
-        _minTopOffset = -static_cast<int32_t>( h / 2 ) - TILEWIDTH / 2;
+        _minTopOffset = -( h / 2 ) - TILEWIDTH / 2;
         _maxTopOffset = worldSize.height - h / 2;
     }
     else {
-        _minTopOffset = -static_cast<int32_t>( h - worldSize.height ) / 2;
+        _minTopOffset = -( h - worldSize.height ) / 2;
         _maxTopOffset = _minTopOffset;
     }
 

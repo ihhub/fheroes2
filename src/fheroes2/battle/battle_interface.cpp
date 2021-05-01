@@ -858,10 +858,12 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
 void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output )
 {
     if ( orders ) {
-        const u32 ow = ARMYORDERW + 2;
+        const int32_t ow = ARMYORDERW + 2;
 
-        u32 ox = area.x + ( area.width - ow * std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) ) / 2;
-        u32 oy = area.y;
+        const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+
+        int32_t ox = area.x + ( area.width - ow * validUnitCount ) / 2;
+        int32_t oy = area.y;
 
         fheroes2::Rect::x = ox;
         fheroes2::Rect::y = oy;
@@ -871,7 +873,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output
 
         for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
             if ( *it && ( *it )->isValid() ) {
-                rects.push_back( UnitPos( *it, fheroes2::Rect( ox, oy, ow, ow ) ) );
+                rects.emplace_back( *it, fheroes2::Rect( ox, oy, ow, ow ) );
                 RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, output );
                 ox += ow;
                 fheroes2::Rect::width += ow;

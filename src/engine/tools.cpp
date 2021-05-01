@@ -473,7 +473,7 @@ namespace fheroes2
         return angle;
     }
 
-    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step )
     {
         const int dx = pt2.x - pt1.x;
         const int dy = pt2.y - pt1.y;
@@ -493,7 +493,7 @@ namespace fheroes2
         return line;
     }
 
-    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, u16 step )
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step )
     {
         std::vector<Point> res;
         res.reserve( 10 );

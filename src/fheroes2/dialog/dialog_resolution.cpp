@@ -118,9 +118,9 @@ namespace Dialog
         fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
         fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
 
-        ResolutionList resList( fheroes2::Point( roi.x, roi.y ) );
+        ResolutionList resList( roi.getPosition() );
 
-        resList.RedrawBackground( fheroes2::Point( roi.x, roi.y ) );
+        resList.RedrawBackground( roi.getPosition() );
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( roi.x + 327, roi.y + 55 ) );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
         resList.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
@@ -145,7 +145,7 @@ namespace Dialog
         buttonOk.draw();
         buttonCancel.draw();
 
-        RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
+        RedrawInfo( roi.getPosition(), selectedResolution );
 
         cursor.Show();
         display.render();
@@ -174,7 +174,7 @@ namespace Dialog
                 resList.Redraw();
                 buttonOk.draw();
                 buttonCancel.draw();
-                RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
+                RedrawInfo( roi.getPosition(), selectedResolution );
                 cursor.Show();
                 display.render();
             }

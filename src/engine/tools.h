@@ -69,8 +69,8 @@ T clamp( const T & value, const T & min, const T & max )
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target );
-    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step );
-    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, u16 step );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
     std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step );
 
     int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
