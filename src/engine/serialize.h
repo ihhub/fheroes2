@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "math_base.h"
 #include "types.h"
 
 struct Point;
@@ -104,9 +105,13 @@ public:
     StreamBase & operator>>( float & );
     StreamBase & operator>>( std::string & );
 
-    StreamBase & operator>>( Rect & );
-    StreamBase & operator>>( Point & );
-    StreamBase & operator>>( Size & );
+    // StreamBase & operator>>( Rect & );
+    // StreamBase & operator>>( Point & );
+    // StreamBase & operator>>( Size & );
+
+    StreamBase & operator>>( fheroes2::Rect & rect_ );
+    StreamBase & operator>>( fheroes2::Point & point_ );
+    StreamBase & operator>>( fheroes2::Size & size_ );
 
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
@@ -119,9 +124,13 @@ public:
     StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
 
-    StreamBase & operator<<( const Rect & );
-    StreamBase & operator<<( const Point & );
-    StreamBase & operator<<( const Size & );
+    // StreamBase & operator<<( const Rect & );
+    // StreamBase & operator<<( const Point & );
+    // StreamBase & operator<<( const Size & );
+
+    StreamBase & operator<<( const fheroes2::Rect & rect_ );
+    StreamBase & operator<<( const fheroes2::Point & point_ );
+    StreamBase & operator<<( const fheroes2::Size & size_ );
 
     template <class Type1, class Type2>
     StreamBase & operator>>( std::pair<Type1, Type2> & p )

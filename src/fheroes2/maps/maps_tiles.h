@@ -129,7 +129,7 @@ namespace Maps
             return maps_index;
         }
 
-        Point GetCenter( void ) const;
+        fheroes2::Point GetCenter( void ) const;
         int GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
@@ -197,21 +197,21 @@ namespace Maps
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
-        void RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, const Rect & visibleTileROI );
-        void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI );
+        void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
-        void RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
+        void RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
         void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawBoatShadow( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
         void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & area ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const Rect & visibleTileROI ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );

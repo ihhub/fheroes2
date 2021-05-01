@@ -40,7 +40,7 @@ namespace Battle
 {
     struct ControlInfo
     {
-        ControlInfo( const Point & pt, int ctrl )
+        ControlInfo( const fheroes2::Point & pt, int ctrl )
             : result( ctrl )
             , rtLocal( pt.x, pt.y, 24, 24 )
             , rtAI( pt.x + 75, pt.y, 24, 24 )
@@ -50,8 +50,8 @@ namespace Battle
 
         int result;
 
-        const Rect rtLocal;
-        const Rect rtAI;
+        const fheroes2::Rect rtLocal;
+        const fheroes2::Rect rtAI;
     };
 
     class Only
@@ -60,10 +60,10 @@ namespace Battle
         Only();
 
         bool ChangeSettings( void );
-        void RedrawBaseInfo( const Point & ) const;
+        void RedrawBaseInfo( const fheroes2::Point & ) const;
         void StartBattle( void );
-        void UpdateHero1( const Point & );
-        void UpdateHero2( const Point & );
+        void UpdateHero1( const fheroes2::Point & );
+        void UpdateHero2( const fheroes2::Point & );
 
     private:
         Heroes * hero1;
@@ -96,8 +96,8 @@ namespace Battle
 
         std::unique_ptr<ControlInfo> cinfo2;
 
-        Rect rtPortrait1;
-        Rect rtPortrait2;
+        fheroes2::Rect rtPortrait1;
+        fheroes2::Rect rtPortrait2;
     };
 }
 

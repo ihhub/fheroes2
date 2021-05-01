@@ -69,44 +69,33 @@ u32 Battle::Catapult::GetDamage() const
     return 1;
 }
 
-Point Battle::Catapult::GetTargetPosition( int target )
+fheroes2::Point Battle::Catapult::GetTargetPosition( int target )
 {
-    Point res;
-
     switch ( target ) {
     case CAT_WALL1:
-        res = Point( 475, 45 );
-        break;
+        return fheroes2::Point( 475, 45 );
     case CAT_WALL2:
-        res = Point( 420, 115 );
-        break;
+        return fheroes2::Point( 420, 115 );
     case CAT_WALL3:
-        res = Point( 415, 280 );
-        break;
+        return fheroes2::Point( 415, 280 );
     case CAT_WALL4:
-        res = Point( 490, 390 );
-        break;
+        return fheroes2::Point( 490, 390 );
     case CAT_TOWER1:
-        res = Point( 430, 40 );
-        break;
+        return fheroes2::Point( 430, 40 );
     case CAT_TOWER2:
-        res = Point( 430, 300 );
-        break;
+        return fheroes2::Point( 430, 300 );
     case CAT_CENTRAL_TOWER:
-        res = Point( 580, 160 );
-        break;
+        return fheroes2::Point( 580, 160 );
     case CAT_BRIDGE:
-        res = Point( 400, 195 );
-        break;
+        return fheroes2::Point( 400, 195 );
     case CAT_MISS:
-        res = Point( 610, 320 );
-        break;
+        return fheroes2::Point( 610, 320 );
 
     default:
         break;
     }
 
-    return res;
+    return fheroes2::Point();
 }
 
 int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const

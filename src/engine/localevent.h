@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include "rect.h"
+#include "math_base.h"
 #include "timing.h"
 #include "types.h"
 
@@ -183,8 +183,8 @@ public:
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
     void SetGlobalFilter( bool );
-    void SetMouseOffsetX( int16_t );
-    void SetMouseOffsetY( int16_t );
+    void SetMouseOffsetX( int32_t );
+    void SetMouseOffsetY( int32_t );
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );
@@ -194,46 +194,46 @@ public:
 
     bool MouseMotion( void ) const;
 
-    const Point & GetMouseCursor( void ) const
+    const fheroes2::Point & GetMouseCursor( void ) const
     {
         return mouse_cu;
     }
 
-    const Point & GetMousePressLeft( void ) const;
+    const fheroes2::Point & GetMousePressLeft( void ) const;
 
-    void ResetPressLeft( void );
+    void ResetPressLeft();
 
-    bool MouseClickLeft( void );
-    bool MouseClickMiddle( void );
-    bool MouseClickRight( void );
+    bool MouseClickLeft();
+    bool MouseClickMiddle();
+    bool MouseClickRight();
 
-    bool MouseClickLeft( const Rect & rt );
-    bool MouseClickMiddle( const Rect & rt );
-    bool MouseClickRight( const Rect & rt );
+    bool MouseClickLeft( const fheroes2::Rect & rt );
+    bool MouseClickMiddle( const fheroes2::Rect & rt );
+    bool MouseClickRight( const fheroes2::Rect & rt );
 
-    bool MouseWheelUp( void ) const;
-    bool MouseWheelDn( void ) const;
+    bool MouseWheelUp() const;
+    bool MouseWheelDn() const;
 
-    bool MousePressLeft( void ) const;
-    bool MousePressLeft( const Rect & rt ) const;
-    bool MousePressMiddle( void ) const;
-    bool MousePressMiddle( const Rect & rt ) const;
-    bool MousePressRight( void ) const;
-    bool MousePressRight( const Rect & rt ) const;
+    bool MousePressLeft() const;
+    bool MousePressLeft( const fheroes2::Rect & rt ) const;
+    bool MousePressMiddle() const;
+    bool MousePressMiddle( const fheroes2::Rect & rt ) const;
+    bool MousePressRight() const;
+    bool MousePressRight( const fheroes2::Rect & rt ) const;
 
-    bool MouseReleaseLeft( void ) const;
-    bool MouseReleaseLeft( const Rect & rt ) const;
-    bool MouseReleaseMiddle( void ) const;
-    bool MouseReleaseMiddle( const Rect & rt ) const;
-    bool MouseReleaseRight( void ) const;
-    bool MouseReleaseRight( const Rect & rt ) const;
+    bool MouseReleaseLeft() const;
+    bool MouseReleaseLeft( const fheroes2::Rect & rt ) const;
+    bool MouseReleaseMiddle() const;
+    bool MouseReleaseMiddle( const fheroes2::Rect & rt ) const;
+    bool MouseReleaseRight() const;
+    bool MouseReleaseRight( const fheroes2::Rect & rt ) const;
 
-    bool MouseWheelUp( const Rect & rt ) const;
-    bool MouseWheelDn( const Rect & rt ) const;
+    bool MouseWheelUp( const fheroes2::Rect & rt ) const;
+    bool MouseWheelDn( const fheroes2::Rect & rt ) const;
 
-    bool MouseCursor( const Rect & rt ) const;
+    bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool KeyPress( void ) const;
+    bool KeyPress() const;
     bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
@@ -241,8 +241,8 @@ public:
         return ( modes & KEY_HOLD ) != 0;
     }
 
-    KeySym KeyValue( void ) const;
-    int KeyMod( void ) const;
+    KeySym KeyValue() const;
+    int KeyMod() const;
 
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
@@ -311,17 +311,17 @@ private:
     int mouse_state;
     int mouse_button;
 
-    Point mouse_st; // mouse offset for pocketpc
+    fheroes2::Point mouse_st; // mouse offset for pocketpc
 
-    Point mouse_pl; // press left
-    Point mouse_pm; // press middle
-    Point mouse_pr; // press right
+    fheroes2::Point mouse_pl; // press left
+    fheroes2::Point mouse_pm; // press middle
+    fheroes2::Point mouse_pr; // press right
 
-    Point mouse_rl; // release left
-    Point mouse_rm; // release middle
-    Point mouse_rr; // release right
+    fheroes2::Point mouse_rl; // release left
+    fheroes2::Point mouse_rm; // release middle
+    fheroes2::Point mouse_rr; // release right
 
-    Point mouse_cu; // point cursor
+    fheroes2::Point mouse_cu; // point cursor
 
     fheroes2::Point mouse_wm; // wheel movement
 

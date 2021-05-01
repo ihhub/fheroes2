@@ -67,7 +67,7 @@ bool Cursor::SetThemes( int name, bool force )
         fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
-        const Point currentPos = LocalEvent::Get().GetMouseCursor();
+        const fheroes2::Point currentPos = LocalEvent::Get().GetMouseCursor();
         Move( currentPos.x, currentPos.y );
         return true;
     }

@@ -46,7 +46,7 @@ namespace Interface
         void Build( void );
         void Redraw();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
-        void RedrawCursor( const Rect * roiRectangle = nullptr );
+        void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
         void SetHide( bool );
         void ResetAreaSize( void );
         void QueueEventProcessing( void );
@@ -65,7 +65,7 @@ namespace Interface
         void Generate( void );
         void RedrawObjects( int color, ViewWorldMode flags ) const;
 
-        void ChangeAreaSize( const Size & );
+        void ChangeAreaSize( const fheroes2::Size & );
 
         RadarType radarType;
         Basic & interface;

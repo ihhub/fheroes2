@@ -168,7 +168,7 @@ namespace AI
         return Skill::Primary::UNKNOWN;
     }
 
-    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE, const Point * centerOn = nullptr )
+    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE, const fheroes2::Point * centerOn = nullptr )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
@@ -1454,11 +1454,11 @@ namespace AI
         hero.setLastGroundRegion( world.GetTiles( from_index ).GetRegion() );
 
         const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors() );
-        const Point & destPos = Maps::GetPoint( dst_index );
-        const Point offset( destPos - hero.GetCenter() );
+        const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+        const fheroes2::Point offset( destPos - hero.GetCenter() );
 
         if ( showAnimation ) {
-            hero.FadeOut( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeOut( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
 
         hero.setDirection( world.GetTiles( dst_index ).getBoatDirection() );
@@ -1487,8 +1487,8 @@ namespace AI
 
         const bool showAnimation = AIHeroesShowAnimation( hero, AIGetAllianceColors() );
 
-        const Point & destPos = Maps::GetPoint( dst_index );
-        const Point offset( destPos - hero.GetCenter() );
+        const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+        const fheroes2::Point offset( destPos - hero.GetCenter() );
 
         hero.ResetMovePoints();
         hero.Move2Dest( dst_index );
@@ -1497,7 +1497,7 @@ namespace AI
         hero.GetPath().Reset();
 
         if ( showAnimation ) {
-            hero.FadeIn( Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
         }
         hero.ActionNewPosition();
@@ -1940,7 +1940,7 @@ namespace AI
             bool recenterNeeded = true;
 
             int heroAnimationFrameCount = 0;
-            Point heroAnimationOffset;
+            fheroes2::Point heroAnimationOffset;
             int heroAnimationSpriteId = 0;
 
             while ( LocalEvent::Get().HandleEvents() ) {
@@ -1962,7 +1962,7 @@ namespace AI
 
                     bool resetHeroSprite = false;
                     if ( heroAnimationFrameCount > 0 ) {
-                        gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                        gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
                         gameArea.SetRedraw();
                         heroAnimationFrameCount -= Game::AIHeroAnimSkip();
                         if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -1986,8 +1986,8 @@ namespace AI
                             gameArea.SetCenter( hero.GetCenter() );
                         }
                         else {
-                            Point movement( hero.MovementDirection() );
-                            if ( movement != Point() ) { // don't waste resources for no movement
+                            fheroes2::Point movement( hero.MovementDirection() );
+                            if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
                                 heroAnimationFrameCount = 32 - Game::AIHeroAnimSkip();

@@ -32,13 +32,14 @@
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
-    : BorderWindow( Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
     , interface( basic )
 {}
 
 void Interface::ButtonsArea::SavePosition( void )
 {
-    Settings::Get().SetPosButtons( GetRect() );
+    const fheroes2::Rect & currectRect = GetRect();
+    Settings::Get().SetPosButtons( fheroes2::Point( currectRect.x, currectRect.y ) );
 }
 
 void Interface::ButtonsArea::SetRedraw( void ) const

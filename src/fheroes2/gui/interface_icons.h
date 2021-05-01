@@ -57,7 +57,7 @@ namespace Interface
             return show;
         }
 
-        void RedrawBackground( const Point & ) const;
+        void RedrawBackground( const fheroes2::Point & ) const;
 
         void SetIconsCount( u32 c )
         {
@@ -94,10 +94,10 @@ namespace Interface
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
         void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current ) override;
-        void RedrawBackground( const Point & ) override;
+        void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
-        Point _topLeftCorner;
+        fheroes2::Point _topLeftCorner;
     };
 
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
@@ -117,10 +117,10 @@ namespace Interface
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
         void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current ) override;
-        void RedrawBackground( const Point & ) override;
+        void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
-        Point _topLeftCorner;
+        fheroes2::Point _topLeftCorner;
     };
 
     class Basic;

@@ -521,7 +521,7 @@ namespace fheroes2
                         Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
 
-                        const Rect area = GetActiveROI( temp, 2 );
+                        const fheroes2::Rect area = GetActiveROI( temp, 2 );
                         if ( area.x > 0 || area.height != temp.height() ) {
                             const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
                             modified = Crop( temp, area.x, area.y, area.width, area.height );

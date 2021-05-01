@@ -24,10 +24,9 @@
 
 #include "direction.h"
 #include "gamedefs.h"
+#include "math_base.h"
 
 #define TILEWIDTH 32
-
-struct Point;
 
 class MapsIndexes : public std::vector<s32>
 {};
@@ -55,9 +54,9 @@ namespace Maps
     bool isValidAbsIndex( s32 );
     bool isValidAbsPoint( s32 x, s32 y );
 
-    Point GetPoint( s32 );
+    fheroes2::Point GetPoint( s32 );
 
-    s32 GetIndexFromAbsPoint( const Point & mp );
+    s32 GetIndexFromAbsPoint( const fheroes2::Point & mp );
     s32 GetIndexFromAbsPoint( s32 px, s32 py );
 
     Indexes GetAroundIndexes( s32 );
@@ -78,8 +77,8 @@ namespace Maps
     void ClearFog( s32, int scoute, int color );
     u32 GetApproximateDistance( s32, s32 );
 
-    void UpdateCastleSprite( const Point & center, int race, bool isCastle = false, bool isRandom = false );
-    void MinimizeAreaForCastle( const Point & );
+    void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
+    void MinimizeAreaForCastle( const fheroes2::Point & );
 }
 
 #endif

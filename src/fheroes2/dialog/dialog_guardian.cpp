@@ -34,20 +34,20 @@
 #include "ui_window.h"
 #include "world.h"
 
-class ArmyCell : public Rect
+class ArmyCell : public fheroes2::Rect
 {
 public:
-    ArmyCell( const Troop & t, const Point & pt, const bool ro )
-        : Rect( pt.x, pt.y, 43, 53 )
+    ArmyCell( const Troop & t, const fheroes2::Point & pt, const bool ro )
+        : fheroes2::Rect( pt.x, pt.y, 43, 53 )
         , troop( t )
         , select( false )
         , readonly( ro )
     {
         const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-        back.resize( w, h );
-        fheroes2::Copy( backSprite, 36, 267, back, 0, 0, w, h );
+        back.resize( width, height );
+        fheroes2::Copy( backSprite, 36, 267, back, 0, 0, width, height );
 
-        curs.resize( w, h - 10 );
+        curs.resize( width, height - 10 );
         curs.reset();
         fheroes2::DrawBorder( curs, fheroes2::GetColorId( 0xc0, 0x2c, 0 ) );
     }
@@ -81,7 +81,7 @@ public:
 class ArmySplit
 {
 public:
-    ArmySplit( const Point & pt, CapturedObject & co )
+    ArmySplit( const fheroes2::Point & pt, CapturedObject & co )
         : cobj( co )
         , rt1( pt.x + 140, pt.y + 19, 20, 10 )
         , rt2( pt.x + 140, pt.y + 33, 20, 10 )
@@ -143,9 +143,9 @@ public:
 
     CapturedObject & cobj;
 
-    const Rect rt1;
-    const Rect rt2;
-    const Rect rt3;
+    const fheroes2::Rect rt1;
+    const fheroes2::Rect rt2;
+    const fheroes2::Rect rt3;
 };
 
 bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, bool readonly )
@@ -159,12 +159,12 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::StandardWindow frameborder( 230, 160 );
-    const Rect area( frameborder.activeArea() );
+    const fheroes2::Rect area( frameborder.activeArea() );
 
     // portrait
     const fheroes2::Sprite & window = fheroes2::AGG::GetICN( ICN::BRCREST, 6 );
 
-    Point dst_pt( area.x + 3, area.y + 5 );
+    fheroes2::Point dst_pt( area.x + 3, area.y + 5 );
     fheroes2::Blit( window, display, dst_pt.x, dst_pt.y );
 
     const fheroes2::Sprite & port = hero.GetPortrait( PORT_MEDIUM );
@@ -203,12 +203,12 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
 
     // label
     Text text( _( "Set Guardian" ), Font::SMALL );
-    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 3 );
+    text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 3 );
 
-    ArmySplit armySplit( area, co );
+    ArmySplit armySplit( fheroes2::Point( area.x, area.y ), co );
     armySplit.Redraw( troop );
 
-    fheroes2::ButtonGroup btnGroups( fheroes2::Rect( area.x, area.y, area.w, area.h ), Dialog::OK );
+    fheroes2::ButtonGroup btnGroups( area, Dialog::OK );
     btnGroups.draw();
 
     const Troop shadow( troop );

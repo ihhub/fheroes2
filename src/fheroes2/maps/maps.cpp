@@ -208,9 +208,9 @@ bool Maps::isValidDirection( s32 from, int vector )
     return false;
 }
 
-Point Maps::GetPoint( s32 index )
+fheroes2::Point Maps::GetPoint( int32_t index )
 {
-    return Point( index % world.w(), index / world.w() );
+    return fheroes2::Point( index % world.w(), index / world.w() );
 }
 
 bool Maps::isValidAbsIndex( s32 ii )
@@ -224,7 +224,7 @@ bool Maps::isValidAbsPoint( s32 x, s32 y )
 }
 
 /* convert maps point to index maps */
-s32 Maps::GetIndexFromAbsPoint( const Point & mp )
+s32 Maps::GetIndexFromAbsPoint( const fheroes2::Point & mp )
 {
     return GetIndexFromAbsPoint( mp.x, mp.y );
 }
@@ -286,7 +286,7 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
     Indexes results;
     results.reserve( dist * 12 );
 
-    const Point cp = GetPoint( center );
+    const fheroes2::Point cp = GetPoint( center );
 
     for ( s32 xx = cp.x - dist; xx <= cp.x + dist; ++xx )
         for ( s32 yy = cp.y - dist; yy <= cp.y + dist; ++yy ) {
@@ -303,7 +303,7 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
 void Maps::ClearFog( s32 index, int scoute, int color )
 {
     if ( 0 != scoute && isValidAbsIndex( index ) ) {
-        const Point center = GetPoint( index );
+        const fheroes2::Point center = GetPoint( index );
 
         // AI advantage
         const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
@@ -454,12 +454,15 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
 
 u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
 {
-    const Size sz( GetPoint( index1 ) - GetPoint( index2 ) );
+    const fheroes2::Point point1( GetPoint( index1 ) );
+    const fheroes2::Point point2( GetPoint( index2 ) );
+
+    const fheroes2::Size sz( point1.x - point2.x, point1.y - point2.y );
     // diagonal move costs 1.5 as much
-    return std::max( sz.w, sz.h ) + std::min( sz.w, sz.h ) / 2;
+    return std::max( sz.width, sz.height ) + std::min( sz.width, sz.height ) / 2;
 }
 
-void Maps::MinimizeAreaForCastle( const Point & center )
+void Maps::MinimizeAreaForCastle( const fheroes2::Point & center )
 {
     // reset castle ID
     for ( s32 yy = -3; yy < 2; ++yy )
@@ -486,7 +489,7 @@ void Maps::MinimizeAreaForCastle( const Point & center )
     world.GetTiles( center.x, center.y ).SetObject( MP2::OBJ_CASTLE );
 }
 
-void Maps::UpdateCastleSprite( const Point & center, int race, bool isCastle, bool isRandom )
+void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle, bool isRandom )
 {
     /*
     Castle/Town object image consists of 42 tile sprites:

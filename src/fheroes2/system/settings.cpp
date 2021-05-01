@@ -1307,9 +1307,9 @@ int Settings::MapsDifficulty( void ) const
     return current_maps_file.difficulty;
 }
 
-Size Settings::MapsSize( void ) const
+fheroes2::Size Settings::MapsSize( void ) const
 {
-    return Size( current_maps_file.size_w, current_maps_file.size_h );
+    return fheroes2::Size( current_maps_file.size_w, current_maps_file.size_h );
 }
 
 bool Settings::AllowChangeRace( int f ) const
@@ -1352,12 +1352,12 @@ u32 Settings::WinsAccumulateGold( void ) const
     return current_maps_file.WinsAccumulateGold();
 }
 
-Point Settings::WinsMapsPositionObject( void ) const
+fheroes2::Point Settings::WinsMapsPositionObject( void ) const
 {
     return current_maps_file.WinsMapsPositionObject();
 }
 
-Point Settings::LossMapsPositionObject( void ) const
+fheroes2::Point Settings::LossMapsPositionObject( void ) const
 {
     return current_maps_file.LossMapsPositionObject();
 }
@@ -1746,36 +1746,42 @@ bool Settings::ExtGameContinueAfterVictory( void ) const
     return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
 }
 
-const Point & Settings::PosRadar( void ) const
+const fheroes2::Point & Settings::PosRadar( void ) const
 {
     return pos_radr;
 }
-const Point & Settings::PosButtons( void ) const
+
+const fheroes2::Point & Settings::PosButtons( void ) const
 {
     return pos_bttn;
 }
-const Point & Settings::PosIcons( void ) const
+
+const fheroes2::Point & Settings::PosIcons( void ) const
 {
     return pos_icon;
 }
-const Point & Settings::PosStatus( void ) const
+
+const fheroes2::Point & Settings::PosStatus( void ) const
 {
     return pos_stat;
 }
 
-void Settings::SetPosRadar( const Point & pt )
+void Settings::SetPosRadar( const fheroes2::Point & pt )
 {
     pos_radr = pt;
 }
-void Settings::SetPosButtons( const Point & pt )
+
+void Settings::SetPosButtons( const fheroes2::Point & pt )
 {
     pos_bttn = pt;
 }
-void Settings::SetPosIcons( const Point & pt )
+
+void Settings::SetPosIcons( const fheroes2::Point & pt )
 {
     pos_icon = pt;
 }
-void Settings::SetPosStatus( const Point & pt )
+
+void Settings::SetPosStatus( const fheroes2::Point & pt )
 {
     pos_stat = pt;
 }

@@ -357,7 +357,7 @@ void Game::EnvironmentSoundMixer( void )
         return;
     }
 
-    const Point abs_pt( Interface::GetFocusCenter() );
+    const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
     std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
 
     // scan 4x4 square from focus
@@ -435,7 +435,7 @@ u32 Game::GetGameOverScores( void )
 
     uint32_t mapSizeFactor = 0;
 
-    switch ( conf.MapsSize().w ) {
+    switch ( conf.MapsSize().width ) {
     case Maps::SMALL:
         mapSizeFactor = 140;
         break;

@@ -47,7 +47,7 @@ namespace Battle
     public:
         explicit Catapult( const HeroBase & hero );
 
-        static Point GetTargetPosition( int );
+        static fheroes2::Point GetTargetPosition( int );
 
         u32 GetShots( void ) const
         {

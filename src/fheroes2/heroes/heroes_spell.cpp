@@ -68,7 +68,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
-    CastleIndexListBox( const Point & pt, int & res, const bool isEvilInterface )
+    CastleIndexListBox( const fheroes2::Point & pt, int & res, const bool isEvilInterface )
         : Interface::ListBox<s32>( pt )
         , result( res )
         , _townFrameIcnId( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD )
@@ -76,7 +76,7 @@ public:
     {}
 
     void RedrawItem( const s32 &, s32, s32, bool ) override;
-    void RedrawBackground( const Point & ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp( void ) override {}
 
@@ -125,7 +125,7 @@ void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool
     }
 }
 
-void CastleIndexListBox::RedrawBackground( const Point & dst )
+void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -361,14 +361,14 @@ bool ActionSpellSummonBoat( const Heroes & hero )
     }
 
     const int32_t center = hero.GetIndex();
-    const Point & centerPoint = Maps::GetPoint( center );
+    const fheroes2::Point & centerPoint = Maps::GetPoint( center );
 
     // find water
     int32_t dst_water = -1;
     MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
-        const Point & leftPoint = Maps::GetPoint( left );
-        const Point & rightPoint = Maps::GetPoint( right );
+        const fheroes2::Point & leftPoint = Maps::GetPoint( left );
+        const fheroes2::Point & rightPoint = Maps::GetPoint( right );
         const int32_t leftDiffX = leftPoint.x - centerPoint.x;
         const int32_t leftDiffY = leftPoint.y - centerPoint.y;
         const int32_t rightDiffX = rightPoint.x - centerPoint.x;
@@ -519,10 +519,10 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 280, 250 ) );
 
-    const Rect area( frameborder->activeArea() );
+    const fheroes2::Rect area( frameborder->activeArea() );
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( area, result, isEvilInterface );
+    CastleIndexListBox listbox( fheroes2::Point( area.x, area.y ), result, isEvilInterface );
 
     const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
     listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
@@ -531,7 +531,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
-    listbox.RedrawBackground( area );
+    listbox.RedrawBackground( fheroes2::Point( area.x, area.y ) );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;

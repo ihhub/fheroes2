@@ -197,7 +197,7 @@ void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor 
     }
 }
 
-void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
+void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
         fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
@@ -205,7 +205,7 @@ void ArmyBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 2 ), dstsf, pos.x, pos.y );
 }
 
-void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fheroes2::Image & dstsf )
+void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
     if ( troop.isValid() ) {
         Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
@@ -214,17 +214,17 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
             const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
             fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-            if ( mons32.width() > pos.w ) {
-                srcrt.x = ( mons32.width() - pos.w ) / 2;
-                srcrt.width = pos.w;
+            if ( mons32.width() > pos.width ) {
+                srcrt.x = ( mons32.width() - pos.width ) / 2;
+                srcrt.width = pos.width;
             }
 
-            if ( mons32.height() > pos.h ) {
-                srcrt.y = ( mons32.height() - pos.h ) / 2;
-                srcrt.height = pos.h;
+            if ( mons32.height() > pos.height ) {
+                srcrt.y = ( mons32.height() - pos.height ) / 2;
+                srcrt.height = pos.height;
             }
 
-            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + pos.h - mons32.height() - 1, srcrt.width, srcrt.height );
+            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width, srcrt.height );
         }
         else {
             switch ( troop.GetRace() ) {
@@ -256,10 +256,10 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const Rect & pos, bool selected, fh
         }
 
         if ( use_mini_sprite ) {
-            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h(), dstsf );
+            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
         }
         else {
-            text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1, dstsf );
+            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
         }
 
         if ( selected ) {

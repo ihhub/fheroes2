@@ -122,12 +122,12 @@ namespace Resource
     u32 GetIndexSprite2( int resource );
     int FromIndexSprite2( u32 index );
 
-    class BoxSprite : protected Rect
+    class BoxSprite : protected fheroes2::Rect
     {
     public:
         BoxSprite( const Funds &, u32 );
 
-        const Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea( void ) const;
         void SetPos( s32, s32 );
         void Redraw( void ) const;
 

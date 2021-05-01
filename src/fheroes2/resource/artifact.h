@@ -238,8 +238,8 @@ class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 public:
     ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );

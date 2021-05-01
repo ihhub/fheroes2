@@ -241,8 +241,8 @@ public:
     int GetMapsObject( void ) const;
     void SetMapsObject( int );
 
-    const Point & GetCenterPatrol( void ) const;
-    void SetCenterPatrol( const Point & );
+    const fheroes2::Point & GetCenterPatrol( void ) const;
+    void SetCenterPatrol( const fheroes2::Point & );
     int GetSquarePatrol( void ) const;
 
     u32 GetMaxSpellPoints() const override;
@@ -272,7 +272,7 @@ public:
     int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( int col, const Point & pt );
+    bool Recruit( int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay( void );
@@ -283,14 +283,14 @@ public:
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
-    const Route::Path & GetPath( void ) const;
-    Route::Path & GetPath( void );
+    const Route::Path & GetPath() const;
+    Route::Path & GetPath();
     int GetRangeRouteDays( s32 ) const;
     void ShowPath( bool );
-    void RescanPath( void );
-    void RescanPathPassable( void );
+    void RescanPath();
+    void RescanPathPassable();
 
-    int GetDirection( void ) const;
+    int GetDirection() const;
     void setDirection( int directionToSet );
 
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
@@ -318,10 +318,10 @@ public:
     void SetRedrawIndexes();
     void UpdateRedrawTop( const Maps::Tiles & tile );
     void UpdateRedrawBottom( const Maps::Tiles & tile );
-    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
     void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
@@ -330,8 +330,8 @@ public:
     void SetSpriteIndex( int index );
     void SetOffset( const fheroes2::Point & offset );
 
-    void FadeOut( const Point & offset = Point() ) const;
-    void FadeIn( const Point & offset = Point() ) const;
+    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void Scoute( void ) const;
     int GetScoute( void ) const;
     u32 GetVisionsDistance( void ) const;
@@ -354,7 +354,7 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
-    Point MovementDirection() const;
+    fheroes2::Point MovementDirection() const;
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
@@ -406,7 +406,7 @@ private:
     int sprite_index;
     fheroes2::Point _offset; // used only during hero's movement
 
-    Point patrol_center;
+    fheroes2::Point patrol_center;
     int patrol_square;
 
     std::list<IndexObject> visit_object;
@@ -425,7 +425,7 @@ private:
 struct VecHeroes : public std::vector<Heroes *>
 {
     Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const Point & ) const;
+    Heroes * Get( const fheroes2::Point & ) const;
 };
 
 struct AllHeroes : public VecHeroes

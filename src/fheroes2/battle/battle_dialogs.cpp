@@ -151,7 +151,7 @@ namespace Battle
 {
     void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
     void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas );
-    void RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet );
+    void RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
 
 void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
@@ -180,19 +180,19 @@ void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
     display.render();
 }
 
-void Battle::RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet )
+void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, isSet ? index + 1 : index );
     const int textOffset = 2;
 
-    TextBox upperText( name, Font::SMALL, area.w );
-    upperText.Blit( area.x + ( area.w - upperText.w() ) / 2, area.y - upperText.h() - textOffset );
+    TextBox upperText( name, Font::SMALL, area.width );
+    upperText.Blit( area.x + ( area.width - upperText.w() ) / 2, area.y - upperText.h() - textOffset );
 
     fheroes2::Blit( sprite, display, area.x, area.y );
 
     const Text lowerText( isSet ? _( "On" ) : _( "Off" ), Font::SMALL );
-    lowerText.Blit( area.x + ( area.w - lowerText.w() ) / 2, area.y + area.h + textOffset );
+    lowerText.Blit( area.x + ( area.width - lowerText.w() ) / 2, area.y + area.height + textOffset );
 }
 
 void Battle::DialogBattleSettings( void )

@@ -102,7 +102,7 @@ void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
     selectOk = true;
 }
 
-void ScenarioListBox::RedrawBackground( const Point & dst )
+void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQSBKG, 0 ), display, dst.x, dst.y );
@@ -204,25 +204,25 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     }
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
-    Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
-    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.w + SHADOWWIDTH, rt.h + SHADOWWIDTH );
+    fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
     fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
 
-    const Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
-    const Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
-    const Rect victoryConds( rt.x + 267, rt.y + 55, 20, 175 );
-    const Rect lossConds( rt.x + 287, rt.y + 55, 20, 175 );
+    const fheroes2::Rect countPlayers( rt.x + 45, rt.y + 55, 20, 175 );
+    const fheroes2::Rect sizeMaps( rt.x + 62, rt.y + 55, 20, 175 );
+    const fheroes2::Rect victoryConds( rt.x + 267, rt.y + 55, 20, 175 );
+    const fheroes2::Rect lossConds( rt.x + 287, rt.y + 55, 20, 175 );
 
-    const Rect curCountPlayer( rt.x + 66, rt.y + 264, 18, 18 );
-    const Rect curMapSize( rt.x + 85, rt.y + 264, 18, 18 );
-    const Rect curMapName( rt.x + 107, rt.y + 264, 166, 18 );
-    const Rect curVictoryCond( rt.x + 277, rt.y + 264, 18, 18 );
-    const Rect curLossCond( rt.x + 295, rt.y + 264, 18, 18 );
-    const Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
-    const Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
+    const fheroes2::Rect curCountPlayer( rt.x + 66, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curMapSize( rt.x + 85, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curMapName( rt.x + 107, rt.y + 264, 166, 18 );
+    const fheroes2::Rect curVictoryCond( rt.x + 277, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curLossCond( rt.x + 295, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
+    const fheroes2::Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
 
     fheroes2::Button buttonOk( rt.x + 140, rt.y + 410, ICN::REQUESTS, 1, 2 );
 
@@ -242,9 +242,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     buttonGroup.addButton( &buttonSelectXLarge );
     buttonGroup.addButton( &buttonSelectAll );
 
-    ScenarioListBox listbox( rt );
+    ScenarioListBox listbox( fheroes2::Point( rt.x, rt.y ) );
 
-    listbox.RedrawBackground( rt );
+    listbox.RedrawBackground( fheroes2::Point( rt.x, rt.y ) );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 217 ) );
 

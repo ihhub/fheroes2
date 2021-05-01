@@ -168,7 +168,7 @@ namespace Battle
         uint32_t GetCustomAlpha() const;
         void SetCustomAlpha( uint32_t alpha );
 
-        Point GetStartMissileOffset( size_t ) const;
+        fheroes2::Point GetStartMissileOffset( size_t ) const;
 
         int M82Attk( void ) const;
         int M82Kill( void ) const;
@@ -178,15 +178,15 @@ namespace Battle
 
         int ICNFile( void ) const;
 
-        Point GetBackPoint( void ) const;
-        Point GetCenterPoint() const;
-        Rect GetRectPosition( void ) const;
+        fheroes2::Point GetBackPoint( void ) const;
+        fheroes2::Point GetCenterPoint() const;
+        fheroes2::Rect GetRectPosition( void ) const;
 
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );
         void UpdateDirection( void );
-        bool UpdateDirection( const Rect & );
+        bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction( void );
 
         u32 GetMagicResist( const Spell &, u32 ) const;

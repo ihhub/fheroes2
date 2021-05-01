@@ -26,7 +26,6 @@
 #include <string>
 
 #include "gamedefs.h"
-#include "rect.h"
 #include "types.h"
 
 class Players;

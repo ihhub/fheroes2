@@ -56,7 +56,7 @@ Castle::Castle()
 }
 
 Castle::Castle( s32 cx, s32 cy, int rc )
-    : MapPosition( Point( cx, cy ) )
+    : MapPosition( fheroes2::Point( cx, cy ) )
     , race( rc )
     , building( 0 )
     , captain( *this )
@@ -366,9 +366,9 @@ u32 Castle::CountBuildings( void ) const
                           | DWELLING_MONSTER4 | DWELLING_MONSTER5 | DWELLING_MONSTER6 ) );
 }
 
-bool Castle::isPosition( const Point & pt ) const
+bool Castle::isPosition( const fheroes2::Point & pt ) const
 {
-    const Point & mp = GetCenter();
+    const fheroes2::Point & mp = GetCenter();
 
     /*
               -
@@ -1594,7 +1594,7 @@ bool Castle::BuyBuilding( u32 build )
 }
 
 /* draw image castle to position */
-void Castle::DrawImageCastle( const Point & pt ) const
+void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
@@ -2691,7 +2691,7 @@ void AllCastles::AddCastle( Castle * castle )
     _castleTiles.emplace( temp, id ); // (+2, 0)
 }
 
-Castle * AllCastles::Get( const Point & position ) const
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
     auto iter = _castleTiles.find( fheroes2::Point( position.x, position.y ) );
     if ( iter == _castleTiles.end() )
@@ -2801,7 +2801,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
 
         world.GetTiles( center.x, center.y ).SetHeroes( NULL );
 
-        Point position( heroes.Guard()->GetCenter() );
+        fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
         heroes.Guard()->SetCenter( position );
         heroes.Guard()->GetPath().Reset();
@@ -2821,7 +2821,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
 
         world.GetTiles( center.x, center.y ).SetHeroes( NULL );
 
-        Point position( heroes.Guard()->GetCenter() );
+        fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
         heroes.Guard()->SetCenter( position );
         heroes.Guard()->GetPath().Reset();
@@ -2830,7 +2830,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Guard()->ResetModes( Heroes::GUARDIAN );
         heroes.Swap();
 
-        Point position( heroes.Guest()->GetCenter() );
+        fheroes2::Point position( heroes.Guest()->GetCenter() );
         position.y += 1;
         heroes.Guest()->SetCenter( position );
         heroes.Guest()->GetPath().Reset();

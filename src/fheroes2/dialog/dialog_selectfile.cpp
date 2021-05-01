@@ -47,14 +47,14 @@ bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::s
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    FileInfoListBox( const Point & pt, bool & edit )
+    FileInfoListBox( const fheroes2::Point & pt, bool & edit )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , edit_mode( edit )
         , _isDoubleClicked( false )
     {}
 
     void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
-    void RedrawBackground( const Point & ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp( void ) override;
     void ActionCurrentDn( void ) override;
@@ -111,7 +111,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     }
 }
 
-void FileInfoListBox::RedrawBackground( const Point & dst )
+void FileInfoListBox::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQBKG, 0 ), fheroes2::Display::instance(), dst.x, dst.y );
 }
@@ -230,9 +230,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     bool edit_mode = false;
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
-    FileInfoListBox listbox( Point( rt.x, rt.y ), edit_mode );
+    FileInfoListBox listbox( fheroes2::Point( rt.x, rt.y ), edit_mode );
 
-    listbox.RedrawBackground( Point( rt.x, rt.y ) );
+    listbox.RedrawBackground( fheroes2::Point( rt.x, rt.y ) );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
     listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );

@@ -333,21 +333,21 @@ fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite 
     }
 
     // place box next to mouse cursor
-    const Point & mp = le.GetMouseCursor();
+    const fheroes2::Point & mp = le.GetMouseCursor();
 
     const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
     const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect & ar = gamearea.GetROI();
+    const fheroes2::Rect & ar = gamearea.GetROI();
 
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+    if ( mx <= ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top left
         return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
     }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+    else if ( mx > ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top right
         return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
     }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+    else if ( mx <= ar.x + ar.width / 2 && my > ar.y + ar.height / 2 ) { // bottom left
         return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
     }
     else { // bottom right

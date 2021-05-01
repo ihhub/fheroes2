@@ -121,7 +121,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const Point & pos ) const
+void Interface::IconsBar::RedrawBackground( const fheroes2::Point & pos ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -163,7 +163,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
     }
 }
 
-void Interface::CastleIcons::RedrawBackground( const Point & pos )
+void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 {
     IconsBar::RedrawBackground( pos );
 }
@@ -220,7 +220,7 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
-    _topLeftCorner = Point( px, py );
+    _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
     SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
@@ -244,7 +244,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
     }
 }
 
-void Interface::HeroesIcons::RedrawBackground( const Point & pos )
+void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 {
     IconsBar::RedrawBackground( pos );
 }
@@ -308,7 +308,7 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
-    _topLeftCorner = Point( px, py );
+    _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
     SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
@@ -323,7 +323,7 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
 
 /* Interface::IconsPanel */
 Interface::IconsPanel::IconsPanel( Basic & basic )
-    : BorderWindow( Rect( 0, 0, 144, 128 ) )
+    : BorderWindow( fheroes2::Rect( 0, 0, 144, 128 ) )
     , interface( basic )
     , castleIcons( 4, sfMarker )
     , heroesIcons( 4, sfMarker )
@@ -335,7 +335,8 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
 
 void Interface::IconsPanel::SavePosition( void )
 {
-    Settings::Get().SetPosIcons( GetRect() );
+    const fheroes2::Rect & currectRect = GetRect();
+    Settings::Get().SetPosIcons( fheroes2::Point( currectRect.x, currectRect.y ) );
 }
 
 void Interface::IconsPanel::SetRedraw( icons_t type ) const
@@ -376,7 +377,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
 
     BorderWindow::SetPosition( ox, oy, 144, iconsCount * ICONS_CURSOR_HEIGHT );
 
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
 
     heroesIcons.SetIconsCount( iconsCount );
     castleIcons.SetIconsCount( iconsCount );

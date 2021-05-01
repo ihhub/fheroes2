@@ -47,7 +47,7 @@ namespace
     const uint32_t primaryMaxValue = 20;
 }
 
-void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
+void RedrawPrimarySkillInfo( const fheroes2::Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
 void Battle::ControlInfo::Redraw( void ) const
 {
@@ -105,22 +105,22 @@ bool Battle::Only::ChangeSettings( void )
 
     const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    const Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
+    const fheroes2::Point cur_pt( frameborder.activeArea().x, frameborder.activeArea().y );
 
-    rtPortrait1 = Rect( cur_pt.x + 93, cur_pt.y + 72, 101, 93 );
-    rtPortrait2 = Rect( cur_pt.x + 445, cur_pt.y + 72, 101, 93 );
+    rtPortrait1 = fheroes2::Rect( cur_pt.x + 93, cur_pt.y + 72, 101, 93 );
+    rtPortrait2 = fheroes2::Rect( cur_pt.x + 445, cur_pt.y + 72, 101, 93 );
 
-    const Rect rtAttack1 = Rect( cur_pt.x + 215, cur_pt.y + 50, 33, 33 );
-    const Rect rtAttack2 = Rect( cur_pt.x + 390, cur_pt.y + 50, 33, 33 );
+    const fheroes2::Rect rtAttack1( cur_pt.x + 215, cur_pt.y + 50, 33, 33 );
+    const fheroes2::Rect rtAttack2( cur_pt.x + 390, cur_pt.y + 50, 33, 33 );
 
-    const Rect rtDefense1 = Rect( cur_pt.x + 215, cur_pt.y + 83, 33, 33 );
-    const Rect rtDefense2 = Rect( cur_pt.x + 390, cur_pt.y + 83, 33, 33 );
+    const fheroes2::Rect rtDefense1( cur_pt.x + 215, cur_pt.y + 83, 33, 33 );
+    const fheroes2::Rect rtDefense2( cur_pt.x + 390, cur_pt.y + 83, 33, 33 );
 
-    const Rect rtPower1 = Rect( cur_pt.x + 215, cur_pt.y + 116, 33, 33 );
-    const Rect rtPower2 = Rect( cur_pt.x + 390, cur_pt.y + 116, 33, 33 );
+    const fheroes2::Rect rtPower1( cur_pt.x + 215, cur_pt.y + 116, 33, 33 );
+    const fheroes2::Rect rtPower2( cur_pt.x + 390, cur_pt.y + 116, 33, 33 );
 
-    const Rect rtKnowledge1 = Rect( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
-    const Rect rtKnowledge2 = Rect( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
+    const fheroes2::Rect rtKnowledge1( cur_pt.x + 215, cur_pt.y + 149, 33, 33 );
+    const fheroes2::Rect rtKnowledge2( cur_pt.x + 390, cur_pt.y + 149, 33, 33 );
 
     if ( conf.IsGameType( Game::TYPE_NETWORK ) ) {
         player2.SetColor( Color::RED );
@@ -218,7 +218,7 @@ bool Battle::Only::ChangeSettings( void )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
                 if ( player2.isControlLocal() && NULL == cinfo2 ) {
-                    cinfo2.reset( new ControlInfo( Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
+                    cinfo2.reset( new ControlInfo( fheroes2::Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
                 }
                 redraw = true;
             }
@@ -412,7 +412,7 @@ bool Battle::Only::ChangeSettings( void )
     return result;
 }
 
-void Battle::Only::UpdateHero1( const Point & cur_pt )
+void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
 {
     primskill_bar1.reset();
     secskill_bar1.reset();
@@ -425,7 +425,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 
         if ( moraleIndicator1 == NULL ) {
             moraleIndicator1.reset( new MoraleIndicator( hero1 ) );
-            moraleIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 75 ) );
+            moraleIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 75 ) );
         }
         else {
             moraleIndicator1->SetHero( hero1 );
@@ -433,7 +433,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
 
         if ( luckIndicator1 == NULL ) {
             luckIndicator1.reset( new LuckIndicator( hero1 ) );
-            luckIndicator1->SetPos( Point( cur_pt.x + 34, cur_pt.y + 115 ) );
+            luckIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 115 ) );
         }
         else {
             luckIndicator1->SetHero( hero1 );
@@ -467,7 +467,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
     }
 }
 
-void Battle::Only::UpdateHero2( const Point & cur_pt )
+void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
 {
     primskill_bar2.reset();
     secskill_bar2.reset();
@@ -480,7 +480,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
 
         if ( moraleIndicator2 == NULL ) {
             moraleIndicator2.reset( new MoraleIndicator( hero2 ) );
-            moraleIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 75 ) );
+            moraleIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 75 ) );
         }
         else {
             moraleIndicator2->SetHero( hero2 );
@@ -488,7 +488,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
 
         if ( luckIndicator2 == NULL ) {
             luckIndicator2.reset( new LuckIndicator( hero2 ) );
-            luckIndicator2->SetPos( Point( cur_pt.x + 566, cur_pt.y + 115 ) );
+            luckIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 115 ) );
         }
         else {
             luckIndicator2->SetHero( hero2 );
@@ -522,7 +522,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
     }
 }
 
-void Battle::Only::RedrawBaseInfo( const Point & top ) const
+void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -544,9 +544,9 @@ void Battle::Only::RedrawBaseInfo( const Point & top ) const
             fheroes2::Blit( port1, display, rtPortrait1.x, rtPortrait1.y );
     }
     else {
-        fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.w, rtPortrait1.h, 0 );
+        fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.width, rtPortrait1.height, 0 );
         text.Set( "N/A", Font::BIG );
-        text.Blit( rtPortrait1.x + ( rtPortrait1.w - text.w() ) / 2, rtPortrait1.y + rtPortrait1.h / 2 - 8 );
+        text.Blit( rtPortrait1.x + ( rtPortrait1.width - text.w() ) / 2, rtPortrait1.y + rtPortrait1.height / 2 - 8 );
     }
 
     if ( hero2 ) {
@@ -555,9 +555,9 @@ void Battle::Only::RedrawBaseInfo( const Point & top ) const
             fheroes2::Blit( port2, display, rtPortrait2.x, rtPortrait2.y );
     }
     else {
-        fheroes2::Fill( display, rtPortrait2.x, rtPortrait2.y, rtPortrait2.w, rtPortrait2.h, 0 );
+        fheroes2::Fill( display, rtPortrait2.x, rtPortrait2.y, rtPortrait2.width, rtPortrait2.height, 0 );
         text.Set( "N/A", Font::BIG );
-        text.Blit( rtPortrait2.x + ( rtPortrait2.w - text.w() ) / 2, rtPortrait2.y + rtPortrait2.h / 2 - 8 );
+        text.Blit( rtPortrait2.x + ( rtPortrait2.width - text.w() ) / 2, rtPortrait2.y + rtPortrait2.height / 2 - 8 );
     }
 
     // primary skill
@@ -581,11 +581,11 @@ void Battle::Only::StartBattle( void )
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
-        hero1->Recruit( player1.GetColor(), Point( 5, 5 ) );
+        hero1->Recruit( player1.GetColor(), fheroes2::Point( 5, 5 ) );
 
         if ( hero2 ) {
             hero2->SetSpellPoints( hero2->GetMaxSpellPoints() );
-            hero2->Recruit( player2.GetColor(), Point( 5, 6 ) );
+            hero2->Recruit( player2.GetColor(), fheroes2::Point( 5, 6 ) );
         }
 
         Players::SetPlayerControl( player1.GetColor(), player1.GetControl() );

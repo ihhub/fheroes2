@@ -1256,9 +1256,9 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
         return false;
 
     // check castle walls defensed
-    const Points points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
-    for ( Points::const_iterator it = points.begin(); it != points.end(); ++it ) {
+    for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
             return false;
         else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )

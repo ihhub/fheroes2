@@ -46,11 +46,11 @@ namespace
     // based on given zoom level and initial center
     fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ViewWorld::ZoomLevel zoomLevel )
     {
-        const Size & sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
 
         // how many pixels from "world map" we can see in "view world" window, given current zoom
-        const int pixelsW = sizeInPixels.w * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
-        const int pixelsH = sizeInPixels.h * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
+        const int pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
+        const int pixelsH = sizeInPixels.height * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
 
         const int x = centerInPixel.x - pixelsW / 2;
         const int y = centerInPixel.y - pixelsH / 2;
@@ -165,7 +165,7 @@ namespace
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
                 for ( int y = 0; y < worldHeightPixels; y += blockSizeY ) {
-                    gamearea.SetCenterInPixels( Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
+                    gamearea.SetCenterInPixels( fheroes2::Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
                     for ( size_t i = 0; i < cachedImages.size(); ++i ) {
@@ -184,14 +184,14 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<int>( ROI._zoomLevel )];
 
-        const Rect & roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
 
         const int offsetPixelsX = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int offsetPixelsY = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
 
         const fheroes2::Point inPos( offsetPixelsX < 0 ? 0 : offsetPixelsX, offsetPixelsY < 0 ? 0 : offsetPixelsY );
         const fheroes2::Point outPos( BORDERWIDTH + ( offsetPixelsX < 0 ? -offsetPixelsX : 0 ), BORDERWIDTH + ( offsetPixelsY < 0 ? -offsetPixelsY : 0 ) );
-        const fheroes2::Size outSize( roiScreen.w + 2 * BORDERWIDTH + RADARWIDTH, roiScreen.h );
+        const fheroes2::Size outSize( roiScreen.width + 2 * BORDERWIDTH + RADARWIDTH, roiScreen.height );
 
         fheroes2::Blit( image, inPos, display, outPos, outSize );
 
@@ -231,21 +231,21 @@ namespace
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
-        const Rect roiPixels = ROI.GetROIinPixels();
+        const fheroes2::Rect roiPixels = ROI.GetROIinPixels();
 
         const int offsetX = roiPixels.x * tileSize / TILEWIDTH;
         const int offsetY = roiPixels.y * tileSize / TILEWIDTH;
 
-        const Rect roiTiles = ROI.GetROIinTiles();
+        const fheroes2::Rect roiTiles = ROI.GetROIinTiles();
 
         // add margin because we also draw under the radar zone
         const int32_t marginForRightSide = ( 2 * BORDERWIDTH + RADARWIDTH ) / tileSize + 1;
 
         // add a margin of 2 tiles because icons outside of view can still show on the view
         const int32_t minTileX = clamp( roiTiles.x - 2, 0, worldWidth );
-        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.w + marginForRightSide + 2, 0, worldWidth );
+        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.width + marginForRightSide + 2, 0, worldWidth );
         const int32_t minTileY = clamp( roiTiles.y - 2, 0, worldHeight );
-        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.h + 2, 0, worldHeight );
+        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.height + 2, 0, worldHeight );
 
         for ( int32_t posY = minTileY; posY < maxTileY; ++posY ) {
             const int dsty = posY * tileSize - offsetY + BORDERWIDTH;
@@ -456,15 +456,15 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // Creates fixed radar on top-right, even if hidden interface
     Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
 
-    const Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
+    const fheroes2::Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
+    const fheroes2::Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
 
     // Initial view is centered on where the player is centered
-    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.w / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.h / 2 );
+    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
 
     // Special case: full map picture can be contained within the window -> center view on center of the map
-    if ( world.w() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.w
-         && world.h() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.h ) {
+    if ( world.w() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.width
+         && world.h() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.height ) {
         viewCenterInPixels.x = world.w() * TILEWIDTH / 2;
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
@@ -501,7 +501,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     // Use for dragging the map from main window
     bool isDrag = false;
-    Point initMousePos;
+    fheroes2::Point initMousePos;
     fheroes2::Point initRoiCenter;
 
     // message loop
@@ -525,7 +525,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
         }
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
-                const Point newMousePos = le.GetMouseCursor();
+                const fheroes2::Point newMousePos = le.GetMouseCursor();
                 const fheroes2::Point
                     newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )],
                                   initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )] );

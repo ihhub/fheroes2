@@ -462,7 +462,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // click to
         for ( u32 ii = 0; ii < rectsTo.size(); ++ii ) {
-            const Rect & rect_to = rectsTo[ii];
+            const fheroes2::Rect & rect_to = rectsTo[ii];
 
             if ( le.MouseClickLeft( rect_to ) ) {
                 resourceTo = Resource::FromIndexSprite2( ii );
@@ -491,7 +491,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // Scrollbar
         if ( buttonLeft.isEnabled() && buttonRight.isEnabled() && max_buy && le.MousePressLeft( scrollbar.getArea() ) ) {
-            const Point & mousePos = le.GetMouseCursor();
+            const fheroes2::Point & mousePos = le.GetMouseCursor();
             scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
             const int32_t seek = scrollbar.currentIndex();
 
