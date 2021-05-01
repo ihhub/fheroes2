@@ -998,9 +998,9 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
         const int scenarioId = campaignData.getCurrentScenarioID();
-        assert( scenarioId >= 0 && scenarioId < scenarios.size() );
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
 
-        if ( scenarioId >= 0 && scenarioId < scenarios.size() ) {
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
             const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
             if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
                 const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
