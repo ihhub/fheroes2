@@ -95,7 +95,7 @@ namespace
         _( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
         _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
         _( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
-        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" )};
+        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
 
     const std::string archibaldCampaignDescription[11] = {
         _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
@@ -109,22 +109,21 @@ namespace
         _( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
         _( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
         _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" )};
-
+        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
 
     Campaign::CampaignData GetRolandCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 10 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{1}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{3}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignDescription[2] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{4}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{5}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignDescription[4] );
-        scenarioDatas.emplace_back( 5, std::vector<int>{6, 7}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignDescription[5] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{8}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignDescription[6] );
-        scenarioDatas.emplace_back( 7, std::vector<int>{8}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignDescription[7] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{9}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignDescription[2] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignDescription[4] );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignDescription[5] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignDescription[6] );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignDescription[7] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignDescription[9] );
 
         Campaign::CampaignData campaignData;
@@ -140,17 +139,22 @@ namespace
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 11 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{1}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C", archibaldCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{4}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignDescription[2] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{4}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{5}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignDescription[4] );
-        scenarioDatas.emplace_back( 5, std::vector<int>{6, 7}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C", archibaldCampaignDescription[5] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{7}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignDescription[6],
-                                    Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY);
-        scenarioDatas.emplace_back( 7, std::vector<int>{8, 9}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C", archibaldCampaignDescription[7] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{10}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C", archibaldCampaignDescription[8] );
-        scenarioDatas.emplace_back( 9, std::vector<int>{10}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C", archibaldCampaignDescription[9] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C",
+                                    archibaldCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignDescription[2] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignDescription[4] );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C",
+                                    archibaldCampaignDescription[5] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignDescription[6],
+                                    Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C",
+                                    archibaldCampaignDescription[7] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C",
+                                    archibaldCampaignDescription[8] );
+        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C",
+                                    archibaldCampaignDescription[9] );
         scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignDescription[10] );
 
         Campaign::CampaignData campaignData;

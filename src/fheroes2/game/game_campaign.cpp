@@ -171,8 +171,6 @@ namespace
         }
     }
 
-    
-
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
@@ -259,7 +257,7 @@ namespace
 bool Game::IsOriginalCampaignPresent()
 {
     return Campaign::CampaignData::getCampaignData( Campaign::ROLAND_CAMPAIGN ).isAllCampaignMapsPresent()
-        && Campaign::CampaignData::getCampaignData( Campaign::ARCHIBALD_CAMPAIGN ).isAllCampaignMapsPresent();
+           && Campaign::CampaignData::getCampaignData( Campaign::ARCHIBALD_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
 int Game::CompleteCampaignScenario()
