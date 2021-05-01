@@ -191,7 +191,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
-    Heroes( int heroID, int rc, int initialLevel );
+    Heroes( int heroID, int race, int initialLevel );
 
     bool isValid() const override;
     bool isFreeman( void ) const;

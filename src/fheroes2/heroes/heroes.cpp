@@ -142,8 +142,8 @@ Heroes::Heroes()
     , _alphaValue( 255 )
 {}
 
-Heroes::Heroes( int heroID, int rc, int initialLevel )
-    : Heroes( heroID, rc )
+Heroes::Heroes( int heroID, int race, int initialLevel )
+    : Heroes( heroID, race )
 {
     // level 1 is technically regarded as 0, so reduce the initial level by 1
     experience = GetExperienceFromLevel( initialLevel - 1 );
@@ -1586,12 +1586,6 @@ int Heroes::GetSquarePatrol( void ) const
 void Heroes::MovePointsScaleFixed( void )
 {
     move_point_scale = move_point * 1000 / GetMaxMovePoints();
-}
-
-void Heroes::RecalculateMovePoints( void )
-{
-    if ( 0 <= move_point_scale )
-        move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
 // Move hero to a new position. This function applies no action and no penalty
