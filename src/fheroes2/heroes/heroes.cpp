@@ -514,17 +514,9 @@ int Heroes::GetMobilityIndexSprite( void ) const
 // Returned value will be in range [0; 25].
 int Heroes::GetManaIndexSprite( void ) const
 {
-    const u32 spellPoints = GetSpellPoints();
-    int result = 0;
-    if ( spellPoints <= 2 ) {
-        result = 0;
-    }
-    else {
-        result = spellPoints / 5;
-        result = ( result >= 25 ) ? 25 : result;
-    }
-    assert( ( result >= 0 ) && ( result <= 25 ) );
-    return result;
+    // plus 2 because we need the height to be 0 for 0,1,2 mana points
+    const int value = ( GetSpellPoints() + 2 ) / 5;
+    return value >= 25 ? 25 : value;
 }
 
 int Heroes::getStatsValue() const
