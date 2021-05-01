@@ -83,6 +83,88 @@ namespace
 
         return obtainableAwards;
     }
+
+    const std::string rolandCampaignDescription[10] = {
+        _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
+           " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+        _( "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
+        _( "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
+        _( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+        _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+        _( "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
+        _( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
+        _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+        _( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
+        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
+
+    const std::string archibaldCampaignDescription[11] = {
+        _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
+           " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+        _( "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+        _( "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
+        _( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
+        _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+        _( "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
+        _( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win" ),
+        _( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
+        _( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
+        _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
+
+    Campaign::CampaignData GetRolandCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 10 );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignDescription[2] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignDescription[4] );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignDescription[5] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignDescription[6] );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignDescription[7] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8] );
+        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignDescription[9] );
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
+        campaignData.setCampaignDescription( "Roland Campaign" );
+        campaignData.setCampaignAlignment( true );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    Campaign::CampaignData GetArchibaldCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 11 );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C",
+                                    archibaldCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignDescription[2] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignDescription[4] );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C",
+                                    archibaldCampaignDescription[5] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignDescription[6],
+                                    Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C",
+                                    archibaldCampaignDescription[7] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C",
+                                    archibaldCampaignDescription[8] );
+        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C",
+                                    archibaldCampaignDescription[9] );
+        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignDescription[10] );
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
+        campaignData.setCampaignDescription( "Archibald Campaign" );
+        campaignData.setCampaignAlignment( false );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
 }
 
 namespace Campaign
@@ -99,9 +181,9 @@ namespace Campaign
         assert( campaignID >= 0 && scenarioID >= 0 );
 
         switch ( campaignID ) {
-        case 0:
+        case ROLAND_CAMPAIGN:
             return getRolandCampaignAwardData( scenarioID );
-        case 1:
+        case ARCHIBALD_CAMPAIGN:
             return getArchibaldCampaignAwardData( scenarioID );
         }
 
@@ -196,6 +278,24 @@ namespace Campaign
     void CampaignData::setCampaignDescription( const std::string & campaignDescription )
     {
         _campaignDescription = campaignDescription;
+    }
+
+    const CampaignData & CampaignData::getCampaignData( const int campaignID )
+    {
+        switch ( campaignID ) {
+        case ROLAND_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( GetRolandCampaignData() );
+            return campaign;
+        }
+        case ARCHIBALD_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( GetArchibaldCampaignData() );
+            return campaign;
+        }
+        default: {
+            static const Campaign::CampaignData noCampaign;
+            return noCampaign;
+        }
+        }
     }
 
     CampaignAwardData::CampaignAwardData()
