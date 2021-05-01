@@ -130,13 +130,10 @@ bool Game::SaveCompletedCampaignScenario()
 {
     const std::string & name = Settings::Get().CurrentFileInfo().name;
 
-    std::string base = name.size() ? name : "newgame";
-    base.resize( std::distance( base.begin(), std::find_if( base.begin(), base.end(), ::ispunct ) ) );
+    std::string base = name.size() ? name : _( "newgame" );
     std::replace_if( base.begin(), base.end(), ::isspace, '_' );
-    std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), base ) << "_Complete" << Game::GetSaveFileExtension();
-    return Game::Save( os.str() );
+    return Save( System::ConcatePath( Game::GetSaveDir(), base ) + _( "_Complete" ) + Game::GetSaveFileExtension() );
 }
 
 bool Game::Save( const std::string & fn )

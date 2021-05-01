@@ -32,7 +32,6 @@
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
-#include "system.h"
 #include "text.h"
 #include "world.h"
 
