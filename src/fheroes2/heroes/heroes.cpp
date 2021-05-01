@@ -1742,8 +1742,6 @@ void AllHeroes::Init( void )
     if ( size() )
         AllHeroes::clear();
 
-    const bool loyalty = Settings::Get().PriceLoyaltyVersion();
-
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
     for ( u32 hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
         push_back( new Heroes( hid, Race::KNGT ) );
@@ -1777,7 +1775,7 @@ void AllHeroes::Init( void )
     push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
 
     // loyalty version
-    if ( loyalty ) {
+    if ( Settings::Get().PriceLoyaltyVersion() ) {
         push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
