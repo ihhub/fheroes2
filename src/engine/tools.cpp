@@ -459,7 +459,6 @@ int CheckSum( const std::string & str )
     return CheckSum( std::vector<u8>( str.begin(), str.end() ) );
 }
 
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target )

@@ -849,7 +849,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     if ( !xml_tiles )
         return doc;
 
-    Size & sw = w;
+    fheroes2::Size & sw = w;
 
     xml_tiles->Attribute( "width", &value );
     sw.w = value;
