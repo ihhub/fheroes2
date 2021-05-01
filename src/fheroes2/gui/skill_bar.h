@@ -29,12 +29,12 @@ public:
     PrimarySkillsBar( const Heroes * hero, bool mini );
 
     void SetTextOff( s32, s32 );
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    virtual void RedrawItem( int &, const Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    void RedrawItem( int &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarLeftMouseSingleClick( int & skill ) override;
-    virtual bool ActionBarRightMouseHold( int & skill ) override;
-    virtual bool ActionBarCursor( int & skill ) override;
+    bool ActionBarLeftMouseSingleClick( int & skill ) override;
+    bool ActionBarRightMouseHold( int & skill ) override;
+    bool ActionBarCursor( int & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 
@@ -52,12 +52,12 @@ class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 public:
     SecondarySkillsBar( const Heroes & hero, bool mini = true, bool change = false );
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    virtual void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
+    void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & ) override;
 
-    virtual bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
-    virtual bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
-    virtual bool ActionBarCursor( Skill::Secondary & skill ) override;
+    bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
+    bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;
+    bool ActionBarCursor( Skill::Secondary & skill ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
 

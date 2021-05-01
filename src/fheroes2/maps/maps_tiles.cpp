@@ -152,17 +152,6 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , tmp( ta.tmp )
 {}
 
-Maps::TilesAddon & Maps::TilesAddon::operator=( const Maps::TilesAddon & ta )
-{
-    level = ta.level;
-    object = ta.object;
-    index = ta.index;
-    uniq = ta.uniq;
-    tmp = ta.tmp;
-
-    return *this;
-}
-
 bool Maps::TilesAddon::isICN( int icn ) const
 {
     return icn == MP2::GetICNObject( object );
@@ -1671,6 +1660,21 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI,
     RedrawAddon( dst, addons_level2, visibleTileROI, false, area );
 }
 
+void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
+{
+    if ( !Maps::isValidDirection( maps_index, Direction::BOTTOM ) ) {
+        return;
+    }
+    const Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( maps_index, Direction::BOTTOM ) );
+    const Point mp = Maps::GetPoint( tile.GetIndex() );
+    for ( const Maps::TilesAddon & addon : tile.addons_level2 ) {
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( icn == ICN::FLAG32 ) {
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, addon.index ), mp );
+        }
+    }
+}
+
 void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const
 {
     const Point mp = Maps::GetPoint( GetIndex() );
@@ -1927,11 +1931,6 @@ uint8_t Maps::Tiles::GetObjectTileset() const
 uint8_t Maps::Tiles::GetObjectSpriteIndex() const
 {
     return objectIndex;
-}
-
-void Maps::Tiles::SetObjectSpriteIndex( const uint8_t index )
-{
-    objectIndex = index;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindFlags( void )

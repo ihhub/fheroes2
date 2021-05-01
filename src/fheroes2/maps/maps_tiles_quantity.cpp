@@ -792,29 +792,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_ABANDONEDMINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
 
-        // I checked in Heroes II: min 3 x 13, and max 3 x 15
+        // Min is 3 x 13, and max is 3 x 15
         troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
 
-        if ( !Settings::Get().ExtWorldAbandonedMineRandom() )
-            QuantitySetResource( Resource::GOLD, 1000 );
-        else
-            switch ( Rand::Get( 1, 5 ) ) {
-            case 1:
-                QuantitySetResource( Resource::ORE, 2 );
-                break;
-            case 2:
-                QuantitySetResource( Resource::SULFUR, 1 );
-                break;
-            case 3:
-                QuantitySetResource( Resource::CRYSTAL, 1 );
-                break;
-            case 4:
-                QuantitySetResource( Resource::GEMS, 1 );
-                break;
-            default:
-                QuantitySetResource( Resource::GOLD, 1000 );
-                break;
-            }
+        QuantitySetResource( Resource::GOLD, 1000 );
     } break;
 
     case MP2::OBJ_BOAT:

@@ -51,13 +51,6 @@ namespace
 
     struct SpellInfo
     {
-        SpellInfo()
-            : spriteId( 0 )
-            , duration( 0 )
-            , offset( 0 )
-            , space( 0 )
-        {}
-
         SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
             : spriteId( spriteId_ )
             , duration( duration_ )
@@ -597,7 +590,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
@@ -734,6 +727,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         std::string msg = _( "Not enough gold (%{gold})" );
         StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
         btnMarket.draw();
@@ -781,7 +775,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;
         }

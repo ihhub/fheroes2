@@ -164,11 +164,10 @@ public:
     };
 
     Monster( int = UNKNOWN );
-    Monster( const Spell & );
+    explicit Monster( const Spell & );
     Monster( int race, u32 dw );
-    virtual ~Monster() {}
+    virtual ~Monster() = default;
 
-    bool operator<( const Monster & ) const;
     bool operator==( const Monster & ) const;
     bool operator!=( const Monster & ) const;
 
@@ -217,7 +216,6 @@ public:
     bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
-    bool isAlive( void ) const;
     bool hasMeleePenalty() const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;

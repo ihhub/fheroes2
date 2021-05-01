@@ -64,11 +64,6 @@ struct Focus : std::pair<int, void *>
         : std::pair<int, void *>( FOCUS_UNSEL, NULL )
     {}
 
-    bool isValid( void ) const
-    {
-        return first != FOCUS_UNSEL && second;
-    }
-
     void Reset( void )
     {
         first = FOCUS_UNSEL;
@@ -98,7 +93,8 @@ struct Focus : std::pair<int, void *>
 struct Control
 {
     virtual int GetControl( void ) const = 0;
-    virtual ~Control() {}
+    virtual ~Control() = default;
+
     bool isControlAI( void ) const;
     bool isControlHuman( void ) const;
     bool isControlRemote( void ) const;
@@ -108,12 +104,10 @@ struct Control
 class Player : public BitModes, public Control
 {
 public:
-    Player( int col = Color::NONE );
-    virtual ~Player() {}
+    explicit Player( int col = Color::NONE );
+    ~Player() override = default;
 
-    bool isID( u32 ) const;
     bool isColor( int ) const;
-    bool isName( const std::string & ) const;
     bool isPlay( void ) const;
 
     void SetColor( int );
@@ -123,11 +117,10 @@ public:
     void SetFriends( int );
     void SetName( const std::string & );
 
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
     int GetColor( void ) const;
     int GetRace( void ) const;
     int GetFriends( void ) const;
-    int GetID( void ) const;
 
     std::string GetDefaultName() const;
     const std::string & GetName( void ) const;
@@ -158,7 +151,11 @@ class Players : public std::vector<Player *>
 {
 public:
     Players();
+    Players( const Players & ) = delete;
+
     ~Players();
+
+    Players & operator=( const Players & ) = delete;
 
     void Init( int colors );
     void Init( const Maps::FileInfo & );

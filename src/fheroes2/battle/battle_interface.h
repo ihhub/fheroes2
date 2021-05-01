@@ -132,9 +132,10 @@ namespace Battle
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
-        };
+        }
+
         void SetMessage( const std::string & message, bool top = false );
-        void Redraw( void );
+        void Redraw( void ) const;
         const std::string & GetMessage( void ) const;
 
         void clear();
@@ -205,9 +206,11 @@ namespace Battle
         void SetArmiesOrder( const Units * );
         void FadeArena( bool clearMessageLog );
 
+        void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit &, TargetsInfo & );
-        void RedrawActionSpellCastPart1( const Spell &, s32, const HeroBase *, const std::string &, const TargetsInfo & );
+        void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
+        void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
@@ -292,7 +295,7 @@ namespace Battle
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell & );
+        void MousePressRightBoardAction( u32, const Cell & ) const;
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
@@ -342,7 +345,6 @@ namespace Battle
         Rect main_tower;
 
         StatusListBox * listlog;
-        u32 turn;
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;

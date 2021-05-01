@@ -94,7 +94,7 @@ namespace Battle
 
     struct TargetsInfo : public std::vector<TargetInfo>
     {
-        TargetsInfo() {}
+        TargetsInfo() = default;
     };
 
     StreamBase & operator<<( StreamBase &, const TargetsInfo & );

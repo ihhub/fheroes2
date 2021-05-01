@@ -94,7 +94,7 @@ public:
         : ArmyBar( army, true, false, false )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -104,7 +104,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !troop.isValid() )
             return;
@@ -154,7 +154,7 @@ public:
         : ArtifactsBar( hero, true, false, false )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -164,7 +164,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !arifact.isValid() )
             return;
@@ -188,7 +188,7 @@ public:
         : PrimarySkillsBar( hero, true )
     {}
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    void RedrawBackground( const Rect &, fheroes2::Image & ) override
     {
         // Just do nothing
     }
@@ -201,7 +201,7 @@ public:
         : SecondarySkillsBar( hero )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
             _cachedBackground.resize( roi.w, roi.h );
@@ -211,7 +211,7 @@ public:
         fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
     }
 
-    virtual void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
+    void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
     {
         if ( !skill.isValid() )
             return;
@@ -496,14 +496,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         }
 
         if ( le.MouseClickLeft( hero1Area ) ) {
-            const bool noDismiss = Modes( Heroes::NOTDISMISS );
-
-            SetModes( Heroes::NOTDISMISS );
-            OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts1.ResetSelected();
@@ -516,14 +509,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            const bool noDismiss = heroes2.Modes( Heroes::NOTDISMISS );
-
-            heroes2.SetModes( Heroes::NOTDISMISS );
-            heroes2.OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                heroes2.ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( heroes2, false, false, true );
 
             armyCountBackgroundRestorer.restore();
             selectArtifacts2.ResetSelected();

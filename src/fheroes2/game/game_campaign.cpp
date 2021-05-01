@@ -318,6 +318,26 @@ namespace
         }
     }
 
+    void drawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
+    {
+        const int textAwardWidth = 180;
+
+        // if there are more than 3 awards, we need to reduce the offset between text so that it doesn't overflow out of the text box
+        const size_t awardCount = obtainedAwards.size();
+        const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
+        const int yOffset = awardCount > 3 ? 16 : 22;
+
+        Text award;
+        for ( size_t i = 0; i < indexEnd; ++i ) {
+            if ( i < 3 )
+                award.Set( obtainedAwards[i].ToString(), Font::BIG );
+            else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
+                award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
+
+            award.Blit( top.x + 425, top.y + 100 + yOffset * i - award.h() / 2, textAwardWidth );
+        }
+    }
+
     Campaign::CampaignData GetRolandCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
@@ -416,6 +436,50 @@ namespace
             }
         }
     }
+
+    // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
+    // the rest will be applied based on the situation required
+    void applyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
+    {
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
+
+        for ( size_t i = 0; i < awards.size(); ++i ) {
+            if ( currentScenarioID < awards[i]._startScenarioID )
+                continue;
+
+            switch ( awards[i]._type ) {
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
+                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+                break;
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
+                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+                break;
+            case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
+                for ( const Player * player : sortedPlayers ) {
+                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+                    const KingdomHeroes & heroes = kingdom.GetHeroes();
+
+                    for ( size_t j = 0; j < heroes.size(); ++j ) {
+                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
+                            kingdom.RemoveHeroes( heroes[j] );
+                            break;
+                        }
+                    }
+                }
+                break;
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
+                const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+                Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
+                bestHeroArmy.Clean();
+
+                for ( uint32_t troopID = 0; troopID < carryOverTroops.size(); ++troopID )
+                    bestHeroArmy.GetTroop( troopID )->Set( carryOverTroops[troopID] );
+
+                break;
+            }
+        }
+    }
 }
 
 bool Game::IsOriginalCampaignPresent()
@@ -432,6 +496,23 @@ int Game::CompleteCampaignScenario()
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
+
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards
+        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
+
+    // TODO: Check for awards that have to be obtained with 'freak' conditions
+    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
+        saveData.addCampaignAward( obtainableAwards[i]._id );
+
+        if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
+            Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
+
+            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+
+            if ( lastBattleWinHero )
+                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+        }
+    }
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
@@ -513,6 +594,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
+    drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
@@ -582,6 +664,8 @@ int Game::SelectCampaignScenario()
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
+
+            applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );

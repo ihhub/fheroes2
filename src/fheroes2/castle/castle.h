@@ -115,7 +115,8 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
-    virtual ~Castle() {}
+    ~Castle() override = default;
+
     void LoadFromMP2( StreamBuf );
 
     Captain & GetCaptain( void );
@@ -125,7 +126,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL );
+    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
     bool isPosition( const Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -136,7 +137,7 @@ public:
 
     int GetRace( void ) const;
     const std::string & GetName( void ) const;
-    int GetControl( void ) const;
+    int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
     const MageGuild & GetMageGuild( void ) const;
@@ -179,12 +180,11 @@ public:
     int GetMoraleModificator( std::string * ) const;
     int GetLuckModificator( std::string * ) const;
 
-    bool AllowBuild( void ) const;
     bool AllowBuyBuilding( u32 ) const;
     bool isBuild( u32 bd ) const;
     bool BuyBuilding( u32 );
     bool AllowBuyBoat( void ) const;
-    bool BuyBoat( void );
+    bool BuyBoat( void ) const;
     u32 GetBuildingRequirement( u32 ) const;
 
     int CheckBuyBuilding( u32 ) const;
@@ -218,7 +218,7 @@ public:
 
     std::string String( void ) const;
 
-    int DialogBuyHero( const Heroes * );
+    int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
 
     void SwapCastleHeroes( CastleHeroes & );
@@ -228,9 +228,9 @@ private:
     void EducateHeroes( void );
     Rect RedrawResourcePanel( const Point & ) const;
     u32 OpenTown( void );
-    void OpenTavern( void );
+    void OpenTavern( void ) const;
     void OpenWell( void );
-    void OpenMageGuild( const CastleHeroes & heroes );
+    void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
@@ -294,7 +294,8 @@ namespace CastleDialog
     {
         builds_t( building_t b, const Rect & r )
             : id( b )
-            , coord( r ){};
+            , coord( r )
+        {}
 
         bool operator==( u32 b ) const
         {
@@ -332,7 +333,11 @@ class AllCastles
 {
 public:
     AllCastles();
+    AllCastles( AllCastles & ) = delete;
+
     ~AllCastles();
+
+    AllCastles & operator=( const AllCastles & ) = delete;
 
     void Init( void );
     void Clear( void );

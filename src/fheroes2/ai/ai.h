@@ -101,12 +101,12 @@ namespace AI
         virtual void Reset();
         virtual void resetPathfinder() = 0;
 
-        virtual ~Base() {}
+        virtual ~Base() = default;
 
     protected:
         int _personality = NONE;
 
-        Base() {}
+        Base() = default;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const AI::Base & );

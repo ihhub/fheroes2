@@ -40,7 +40,7 @@
 #include "ui_button.h"
 #include "world.h"
 
-int Castle::DialogBuyHero( const Heroes * hero )
+int Castle::DialogBuyHero( const Heroes * hero ) const
 {
     if ( !hero )
         return Dialog::CANCEL;

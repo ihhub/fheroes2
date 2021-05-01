@@ -24,6 +24,7 @@
 
 #include "ai.h"
 #include "battle.h"
+#include "campaign_savedata.h"
 #include "color.h"
 #include "difficulty.h"
 #include "game.h"
@@ -158,12 +159,23 @@ void Kingdom::ActionNewDay( void )
 
     // skip incomes for first day, and heroes New Day too because it would do nothing
     if ( 1 < world.CountDay() ) {
-
         // heroes New Day
         std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->ActionNewDay(); } );
 
         // income
         AddFundsResource( GetIncome() );
+
+        // handle resource bonus campaign awards
+        if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
+            const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+
+            for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
+                if ( campaignAwards[i]._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS )
+                    continue;
+
+                AddFundsResource( Funds( campaignAwards[i]._subType, campaignAwards[i]._amount ) );
+            }
+        }
     }
 
     // check event day AI
@@ -472,9 +484,30 @@ Recruits & Kingdom::GetRecruits( void )
 
 void Kingdom::UpdateRecruits( void )
 {
-    const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    bool hasSpecialHireableHero = false;
+    if ( isControlHuman() && ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) && world.CountWeek() < 2 ) {
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-    recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
+        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
+            if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
+                continue;
+
+            // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
+            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+
+            if ( hero && hero->isFreeman() ) {
+                recruits.SetHero1( hero );
+                hasSpecialHireableHero = true;
+                break;
+            }
+        }
+    }
+
+    if ( !hasSpecialHireableHero ) {
+        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
+    }
+
     recruits.SetHero2( world.GetFreemanHeroes() );
 
     if ( recruits.GetID1() == recruits.GetID2() )
@@ -652,8 +685,6 @@ double Kingdom::GetArmiesStrength( void ) const
     return res;
 }
 
-Kingdoms::Kingdoms() {}
-
 void Kingdoms::Init( void )
 {
     const Colors colors( Settings::Get().GetPlayers().GetColors() );
@@ -732,6 +763,11 @@ void Kingdom::SetLastLostHero( const Heroes & hero )
     lost_hero.date = world.CountDay();
 }
 
+void Kingdom::SetLastBattleWinHero( const Heroes & hero )
+{
+    _lastBattleWinHeroID = hero.GetID();
+}
+
 void Kingdom::ResetLastLostHero( void )
 {
     lost_hero.id = Heroes::UNKNOWN;
@@ -741,6 +777,11 @@ void Kingdom::ResetLastLostHero( void )
 Heroes * Kingdom::GetLastLostHero( void ) const
 {
     return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : NULL;
+}
+
+Heroes * Kingdom::GetLastBattleWinHero() const
+{
+    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : NULL;
 }
 
 void Kingdoms::NewDay( void )
@@ -769,15 +810,6 @@ int Kingdoms::GetNotLossColors( void ) const
     int result = 0;
     for ( u32 ii = 0; ii < size(); ++ii )
         if ( kingdoms[ii].GetColor() && !kingdoms[ii].isLoss() )
-            result |= kingdoms[ii].GetColor();
-    return result;
-}
-
-int Kingdoms::GetLossColors( void ) const
-{
-    int result = 0;
-    for ( u32 ii = 0; ii < size(); ++ii )
-        if ( kingdoms[ii].GetColor() && kingdoms[ii].isLoss() )
             result |= kingdoms[ii].GetColor();
     return result;
 }
@@ -893,13 +925,19 @@ cost_t Kingdom::GetKingdomStartingResources( int difficulty, bool isAIKingdom )
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss;
+               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
+               << kingdom._lastBattleWinHeroID;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
-           >> kingdom.lost_hero >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss;
+
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_093_RELEASE )
+        msg >> kingdom._lastBattleWinHeroID;
+
+    return msg;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )

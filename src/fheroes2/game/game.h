@@ -33,6 +33,12 @@ class Players;
 class Heroes;
 class Castle;
 
+namespace Campaign
+{
+    struct CampaignAwardData;
+    class CampaignSaveData;
+}
+
 namespace Game
 {
     enum
@@ -176,6 +182,7 @@ namespace Game
     enum
     {
         SCROLL_DELAY,
+        SCROLL_START_DELAY,
         MAIN_MENU_DELAY,
         MAPS_DELAY,
         CASTLE_TAVERN_DELAY,
@@ -227,7 +234,6 @@ namespace Game
     int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
-    int NewNetwork( void );
     int NewBattleOnly( void );
     int LoadStandard( void );
     int LoadCampain( void );
@@ -262,7 +268,7 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.

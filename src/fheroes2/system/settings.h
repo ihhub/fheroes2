@@ -32,6 +32,7 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#define FORMAT_VERSION_093_RELEASE 9300
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
 #define FORMAT_VERSION_084_RELEASE 9000
@@ -39,7 +40,7 @@
 #define FORMAT_VERSION_080_RELEASE 8000
 #define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_080_RELEASE
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_091_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_093_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -77,7 +78,7 @@ public:
 
         /* influence on game balance: save to savefile */
         WORLD_SHOW_VISITED_CONTENT = 0x20000001,
-        WORLD_ABANDONED_MINE_RANDOM = 0x20000002,
+        // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
@@ -119,6 +120,10 @@ public:
         SETTINGS_LAST
     };
 
+    Settings( const Settings & ) = delete;
+
+    Settings & operator=( const Settings & ) = delete;
+
     static Settings & Get( void );
 
     bool Read( const std::string & );
@@ -145,8 +150,6 @@ public:
     const std::string & FontsSmall( void ) const;
     int FontsNormalSize( void ) const;
     int FontsSmallSize( void ) const;
-    bool FontSmallRenderBlended( void ) const;
-    bool FontNormalRenderBlended( void ) const;
 
     const Point & PosRadar( void ) const;
     const Point & PosButtons( void ) const;
@@ -159,7 +162,6 @@ public:
     void SetPosStatus( const Point & );
 
     bool FullScreen( void ) const;
-    bool KeepAspectRatio( void ) const;
     bool Sound( void ) const;
     bool Music( void ) const;
     bool ShowControlPanel( void ) const;
@@ -198,7 +200,6 @@ public:
     bool ExtWorldShowVisitedContent( void ) const;
     bool ExtWorldShowTerrainPenalty() const;
     bool ExtWorldScouteExtended( void ) const;
-    bool ExtWorldAbandonedMineRandom( void ) const;
     bool ExtWorldAllowSetGuardian( void ) const;
     bool ExtWorldArtifactCrystalBall( void ) const;
     bool ExtWorldOnlyFirstMonsterAttack( void ) const;
@@ -281,8 +282,6 @@ public:
     int PreferablyCountPlayers( void ) const;
     void SetPreferablyCountPlayers( int );
 
-    int GetPort( void ) const;
-
     // from maps info
     bool AllowChangeRace( int ) const;
     const std::string & MapsFile( void ) const;
@@ -295,7 +294,6 @@ public:
     int ConditionWins( void ) const;
     int ConditionLoss( void ) const;
     bool WinsCompAlsoWins( void ) const;
-    bool WinsAllowNormalVictory( void ) const;
     int WinsFindArtifactID( void ) const;
     bool WinsFindUltimateArtifact( void ) const;
     u32 WinsAccumulateGold( void ) const;
@@ -378,8 +376,6 @@ private:
     int preferably_count_players;
 
     std::string video_driver;
-
-    int port;
 
     Point pos_radr;
     Point pos_bttn;

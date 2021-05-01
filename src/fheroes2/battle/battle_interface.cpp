@@ -217,13 +217,13 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
+        void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
         {
             const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
-        virtual void RedrawBackground( const Point & pt ) override
+        void RedrawBackground( const Point & pt ) override
         {
             (void)pt;
 
@@ -244,11 +244,11 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        virtual void ActionCurrentUp( void ) override {}
-        virtual void ActionCurrentDn( void ) override {}
-        virtual void ActionListDoubleClick( std::string & ) override {}
-        virtual void ActionListSingleClick( std::string & ) override {}
-        virtual void ActionListPressRight( std::string & ) override {}
+        void ActionCurrentUp( void ) override {}
+        void ActionCurrentDn( void ) override {}
+        void ActionListDoubleClick( std::string & ) override {}
+        void ActionListSingleClick( std::string & ) override {}
+        void ActionListPressRight( std::string & ) override {}
 
         void SetOpenLog( const bool f )
         {
@@ -739,7 +739,7 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw( void )
+void Battle::Status::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( back1, display, x, y );
@@ -877,7 +877,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
-    , turn( 0 )
 {
     const Settings & conf = Settings::Get();
 
@@ -2052,7 +2051,11 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
         // teleport check first
         if ( Board::isValidIndex( teleport_src ) ) {
-            if ( !b_stats && cell->isPassable3( *_currentUnit, false ) ) {
+            const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+
+            assert( unitToTeleport != nullptr );
+
+            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
                 statusMsg = _( "Teleport Here" );
                 return Cursor::SP_TELEPORT;
             }
@@ -2095,13 +2098,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     Board & board = *Arena::GetBoard();
     board.Reset();
     board.SetScanPassability( b );
-
-    if ( listlog && turn != arena.GetCurrentTurn() ) {
-        turn = arena.GetCurrentTurn();
-        std::string msg = _( "Turn %{turn}" );
-        StringReplace( msg, "%{turn}", turn );
-        listlog->AddMessage( msg );
-    }
 
     popup.Reset();
 
@@ -2274,7 +2270,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2283,13 +2279,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                arena.DialogBattleHero( *opponent1->GetHero(), true );
+                arena.DialogBattleHero( *opponent1->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent1Area ) ) {
-            arena.DialogBattleHero( *opponent1->GetHero(), false );
+            arena.DialogBattleHero( *opponent1->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -2300,7 +2296,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2309,13 +2305,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                arena.DialogBattleHero( *opponent2->GetHero(), true );
+                arena.DialogBattleHero( *opponent2->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent2Area ) ) {
-            arena.DialogBattleHero( *opponent2->GetHero(), false );
+            arena.DialogBattleHero( *opponent2->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -2548,7 +2544,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
 {
     const Unit * b = cell.GetUnit();
 
@@ -2724,6 +2720,18 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
             ++pnt;
         }
     }
+}
+
+void Battle::Interface::RedrawActionNewTurn() const
+{
+    if ( listlog == nullptr ) {
+        return;
+    }
+
+    std::string msg = _( "Turn %{turn}" );
+    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+
+    listlog->AddMessage( msg );
 }
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
@@ -3185,24 +3193,32 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
     status.SetMessage( "", false );
 }
 
-void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const std::string & name, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
+    Unit * target = targets.size() ? targets.front().defender : nullptr;
+
     std::string msg;
-    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     if ( target && target->GetHeadIndex() == dst ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
         StringReplace( msg, "%{troop}", target->GetName() );
     }
-    else if ( spell.isApplyWithoutFocusObject() )
+    else if ( spell.isApplyWithoutFocusObject() ) {
         msg = _( "%{name} casts %{spell}." );
+    }
 
     if ( msg.size() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
+
         status.SetMessage( msg, true );
         status.SetMessage( "", false );
     }
+}
+
+void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
+{
+    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     // set spell cast animation
     if ( caster ) {

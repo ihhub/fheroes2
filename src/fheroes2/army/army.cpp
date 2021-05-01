@@ -27,6 +27,7 @@
 
 #include "agg_image.h"
 #include "army.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "color.h"
 #include "game.h"
@@ -148,8 +149,6 @@ std::string Army::SizeString( u32 size )
 
     return str_size[0];
 }
-
-Troops::Troops() {}
 
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
@@ -1515,6 +1514,46 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+
+    // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
+    // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
+    // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
+    if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
+        const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+        int forceJoinType = JOIN_NONE;
+
+        for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
+            const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
+            const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
+
+            if ( !isAlliance && !isCurse )
+                continue;
+
+            Monster monster( campaignAwards[i]._subType );
+            bool found = false;
+
+            while ( !found ) {
+                if ( troop.GetID() == monster.GetID() ) {
+                    forceJoinType = isAlliance ? JOIN_FREE : JOIN_FLEE;
+                    found = true;
+                    break;
+                }
+
+                // try to cycle through the creature's upgrades
+                if ( !monster.isAllowUpgrade() )
+                    break;
+
+                monster = monster.GetUpgrade();
+            }
+
+            if ( found )
+                break;
+        }
+
+        if ( forceJoinType != JOIN_NONE ) {
+            return JoinCount( forceJoinType, troop.GetCount() );
+        }
+    }
 
     if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
         if ( join_free || join_force )

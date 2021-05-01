@@ -610,6 +610,12 @@ void Heroes::UpdateRedrawBottom( const Maps::Tiles & tile )
     if ( hero == nullptr ) {
         return;
     }
+    if ( _redrawIndex.objectsOnDirectionBottom == tile.GetIndex() ) {
+        _redrawIndex.objectsOnDirectionBottom = -1;
+    }
+    if ( _redrawIndex.objectsOnBottom == tile.GetIndex() ) {
+        _redrawIndex.objectsOnBottom = -1;
+    }
     const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
     if ( _redrawIndex.objectsOnBottom == redrawIndex.objectsOnDirectionBottom ) {
         _redrawIndex.objectsOnBottom = -1;
@@ -667,13 +673,19 @@ void Heroes::RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, cons
     }
 
     if ( _redrawIndex.topOnBottom != -1 ) {
-        world.GetTiles( _redrawIndex.topOnBottom ).RedrawTop( dst, visibleTileROI, area );
+        const Maps::Tiles & tileBottom = world.GetTiles( _redrawIndex.topOnBottom );
+        tileBottom.RedrawTop( dst, visibleTileROI, area );
+        tileBottom.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirection != -1 ) {
-        world.GetTiles( _redrawIndex.topOnDirection ).RedrawTop( dst, visibleTileROI, area );
+        const Maps::Tiles & tileDirection = world.GetTiles( _redrawIndex.topOnDirection );
+        tileDirection.RedrawTop( dst, visibleTileROI, area );
+        tileDirection.RedrawTopFromBottom( dst, area );
     }
     if ( _redrawIndex.topOnDirectionBottom != -1 ) {
-        world.GetTiles( _redrawIndex.topOnDirectionBottom ).RedrawTop( dst, visibleTileROI, area );
+        const Maps::Tiles & tileDirectionBottom = world.GetTiles( _redrawIndex.topOnDirectionBottom );
+        tileDirectionBottom.RedrawTop( dst, visibleTileROI, area );
+        tileDirectionBottom.RedrawTopFromBottom( dst, area );
     }
 }
 

@@ -56,7 +56,7 @@ struct Size
     u16 w, h;
 
     Size( u16 width = 0, u16 height = 0 );
-    Size( const Point & );
+    explicit Size( const Point & );
 
     bool operator==( const Size & ) const;
     bool operator!=( const Size & ) const;
@@ -64,7 +64,7 @@ struct Size
 
 struct Rect : Point, Size
 {
-    Rect();
+    Rect() = default;
     Rect( int16_t, int16_t, u16, u16 );
     Rect( const Point &, u16, u16 );
     Rect( const Point &, const Size & );

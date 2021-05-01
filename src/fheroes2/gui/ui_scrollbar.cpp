@@ -30,16 +30,6 @@ namespace fheroes2
         , _currentIndex( 0 )
     {}
 
-    Scrollbar::Scrollbar( const Image & image, const Rect & area )
-        : fheroes2::MovableSprite( image )
-        , _area( area )
-        , _minIndex( 0 )
-        , _maxIndex( 0 )
-        , _currentIndex( 0 )
-    {}
-
-    Scrollbar::~Scrollbar() {}
-
     void Scrollbar::setImage( const Image & image )
     {
         fheroes2::Copy( image, *this );

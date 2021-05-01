@@ -38,7 +38,7 @@ namespace Battle
 
         void SetDestroy( void );
         void SetDown( bool );
-        void SetPassable( const Unit & );
+        void SetPassable( const Unit & ) const;
 
         bool AllowUp( void ) const;
         bool NeedDown( const Unit &, s32 ) const;

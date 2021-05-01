@@ -85,10 +85,10 @@ namespace AI
 
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
-        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
                                            bool retreating ) const;
@@ -118,19 +118,19 @@ namespace AI
     {
     public:
         Normal();
-        virtual void KingdomTurn( Kingdom & kingdom ) override;
-        virtual void CastleTurn( Castle & castle, bool defensive = false ) override;
-        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        virtual void HeroesTurn( VecHeroes & heroes ) override;
+        void KingdomTurn( Kingdom & kingdom ) override;
+        void CastleTurn( Castle & castle, bool defensive = false ) override;
+        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
+        void HeroesTurn( VecHeroes & heroes ) override;
 
-        virtual void revealFog( const Maps::Tiles & tile ) override;
+        void revealFog( const Maps::Tiles & tile ) override;
 
-        virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        virtual void HeroesActionComplete( Heroes & hero ) override;
+        void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
+        void HeroesActionComplete( Heroes & hero ) override;
 
         double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
-        virtual void resetPathfinder() override;
+        void resetPathfinder() override;
 
     private:
         // following data won't be saved/serialized

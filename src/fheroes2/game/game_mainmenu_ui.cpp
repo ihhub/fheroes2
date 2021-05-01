@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,21 +18,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
-
-#include "image.h"
+#include "game_mainmenu_ui.h"
+#include "agg_image.h"
+#include "icn.h"
+#include "screen.h"
 
 namespace fheroes2
 {
-    bool Save( const Image & image, const std::string & path );
+    void drawSprite( Display & display, const int icnId, const uint32_t index )
+    {
+        const Sprite & sprite = AGG::GetICN( icnId, index );
+        Blit( sprite, 0, 0, display, sprite.x(), sprite.y(), sprite.width(), sprite.height() );
+    }
 
-    // Save an image into file. 'background' represents palette index from the original palette. Default value is 23.
-    bool Save( const Image & image, const std::string & path, uint8_t background );
+    void drawMainMenuScreen()
+    {
+        Display & display = Display::instance();
 
-    bool Load( const std::string & path, Image & image );
+        Copy( AGG::GetICN( ICN::HEROES, 0 ), display );
 
-    Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
-
-    // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
-    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t shadowType );
+        drawSprite( display, ICN::BTNSHNGL, 1 );
+        drawSprite( display, ICN::BTNSHNGL, 5 );
+        drawSprite( display, ICN::BTNSHNGL, 9 );
+        drawSprite( display, ICN::BTNSHNGL, 13 );
+        drawSprite( display, ICN::BTNSHNGL, 17 );
+    }
 }

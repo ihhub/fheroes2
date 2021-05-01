@@ -49,7 +49,7 @@ namespace
 
 void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
 
-void Battle::ControlInfo::Redraw( void )
+void Battle::ControlInfo::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
@@ -522,7 +522,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
     }
 }
 
-void Battle::Only::RedrawBaseInfo( const Point & top )
+void Battle::Only::RedrawBaseInfo( const Point & top ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

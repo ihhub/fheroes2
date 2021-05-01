@@ -426,8 +426,13 @@ void Battle::Arena::Turns( void )
 
     const Settings & conf = Settings::Get();
 
-    if ( interface && conf.Music() && !Music::isPlaying() )
-        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+    if ( interface ) {
+        interface->RedrawActionNewTurn();
+
+        if ( conf.Music() && !Music::isPlaying() ) {
+            AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+        }
+    }
 
     army1->NewTurn();
     army2->NewTurn();
@@ -519,7 +524,7 @@ void Battle::Arena::Turns( void )
     }
 
     // can skip move ?
-    if ( Settings::Get().ExtBattleSoftWait() ) {
+    if ( conf.ExtBattleSoftWait() ) {
         Unit * troop = nullptr;
 
         while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, false, preferredColor ) ) != nullptr ) {
@@ -632,7 +637,7 @@ void Battle::Arena::CatapultAction( void )
     }
 }
 
-Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst )
+Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) const
 {
     Indexes result = board.GetAStarPath( b, dst );
 
@@ -651,7 +656,7 @@ Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_
     return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
-std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target )
+std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
 {
     std::pair<int, uint32_t> result = { -1, MAXU16 };
 
@@ -821,8 +826,8 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
-    const HeroBase * hero = army1->GetColor() == color ? army1->GetCommander() : army2->GetCommander();
-    return hero && hero->isHeroes() && NULL == hero->inCastle();
+    const HeroBase * hero = GetCommander( color );
+    return hero && hero->isHeroes() && ( color == army1->GetColor() || hero->inCastle() == nullptr );
 }
 
 bool Battle::Arena::isSpellcastDisabled() const
@@ -1005,9 +1010,14 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
 
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
-            if ( interface )
-                interface->RedrawBridgeAnimation( true );
-            bridge->SetDown( true );
+            if ( !bridge->isDown() ) {
+                if ( interface ) {
+                    interface->RedrawBridgeAnimation( true );
+                }
+
+                bridge->SetDown( true );
+            }
+
             bridge->SetDestroy();
         }
         break;

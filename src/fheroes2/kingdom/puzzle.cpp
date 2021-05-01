@@ -86,27 +86,24 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
 
 void Puzzle::ShowMapsDialog( void ) const
 {
+    const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
+    if ( sf.empty() )
+        return;
+
     Cursor & cursor = Cursor::Get();
     const fheroes2::Display & display = fheroes2::Display::instance();
     int old_cursor = cursor.Themes();
 
-    if ( !Settings::Get().MusicMIDI() )
-        AGG::PlayMusic( MUS::PUZZLE );
+    cursor.Hide();
 
-    const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
+    AGG::PlayMusic( MUS::PUZZLE, false );
 
-    if ( !sf.empty() ) {
-        cursor.Hide();
+    if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
+        ShowStandardDialog( *this, sf );
+    else
+        ShowExtendedDialog( *this, sf );
 
-        AGG::PlayMusic( MUS::PUZZLE, false );
-
-        if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
-            ShowStandardDialog( *this, sf );
-        else
-            ShowExtendedDialog( *this, sf );
-
-        cursor.SetThemes( old_cursor );
-    }
+    cursor.SetThemes( old_cursor );
 }
 
 bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )

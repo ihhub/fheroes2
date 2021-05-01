@@ -287,7 +287,7 @@ namespace fheroes2
         return sprite;
     }
 
-    Sprite addButtonShadow( const Sprite & in, const Point & shadowOffset )
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t shadowType )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
             return in;
@@ -314,7 +314,7 @@ namespace fheroes2
 
             for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
                 if ( *transformInX == 0 && *transformOutX == 1 ) {
-                    *transformOutX = 3;
+                    *transformOutX = shadowType;
                 }
             }
         }

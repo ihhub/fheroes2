@@ -67,7 +67,6 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const Point & );
     MapObjectSimple * get( u32 uid );
-    void remove( const Point & );
     void remove( u32 uid );
 };
 
@@ -86,10 +85,6 @@ struct CapturedObject
     int GetSplit( void ) const
     {
         return split;
-    }
-    int GetObject( void ) const
-    {
-        return objcol.first;
     }
     int GetColor( void ) const
     {
@@ -111,11 +106,6 @@ struct CapturedObject
     void SetSplit( int spl )
     {
         split = spl;
-    }
-
-    bool GuardiansProtected( void ) const
-    {
-        return guardians.isValid();
     }
 };
 
@@ -213,6 +203,7 @@ public:
 
     Heroes * FromJailHeroes( s32 );
     Heroes * GetFreemanHeroes( int race = 0 ) const;
+    Heroes * GetFreemanHeroesSpecial( int heroID ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;

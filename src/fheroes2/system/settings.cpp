@@ -33,8 +33,6 @@
 #include "tinyconfig.h"
 #include "version.h"
 
-#define DEFAULT_PORT 5154
-
 enum
 {
     // ??? = 0x00000001,
@@ -51,9 +49,6 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000200,
     GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
-    GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
     GLOBAL_FULLSCREEN = 0x00008000,
     GLOBAL_USESWSURFACE = 0x00010000,
 
@@ -79,14 +74,10 @@ struct settings_t
     u32 id;
     const char * str;
 
-    bool operator==( const std::string & s ) const
-    {
-        return str && s == str;
-    };
     bool operator==( u32 i ) const
     {
         return id && id == i;
-    };
+    }
 };
 
 // external settings
@@ -114,10 +105,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_USESWSURFACE,
         "use swsurface only",
-    },
-    {
-        GLOBAL_KEEP_ASPECT_RATIO,
-        "keep aspect ratio",
     },
     {
         0,
@@ -161,10 +148,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
-    },
-    {
-        Settings::WORLD_ABANDONED_MINE_RANDOM,
-        _( "world: abandoned mine random resource" ),
     },
     {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
@@ -350,7 +333,6 @@ Settings::Settings()
     , battle_speed( DEFAULT_SPEED_DELAY )
     , game_type( 0 )
     , preferably_count_players( 0 )
-    , port( DEFAULT_PORT )
 {
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
@@ -487,11 +469,6 @@ bool Settings::Read( const std::string & filename )
         ival = config.IntParams( "fonts small size" );
         if ( 0 < ival )
             size_small = ival;
-
-        if ( config.StrParams( "fonts small render" ) == "blended" )
-            opt_global.SetModes( GLOBAL_FONTRENDERBLENDED1 );
-        if ( config.StrParams( "fonts normal render" ) == "blended" )
-            opt_global.SetModes( GLOBAL_FONTRENDERBLENDED2 );
     }
 
     // music source
@@ -605,9 +582,6 @@ bool Settings::Read( const std::string & filename )
     if ( config.Exists( "auto spell casting" ) ) {
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
-
-    // network port
-    port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
 
     // playmus command
     _externalMusicCommand = config.StrParams( "playmus command" );
@@ -741,9 +715,6 @@ std::string Settings::String( void ) const
 
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
-
-    os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
@@ -888,14 +859,6 @@ int Settings::FontsNormalSize( void ) const
 int Settings::FontsSmallSize( void ) const
 {
     return size_small;
-}
-bool Settings::FontSmallRenderBlended( void ) const
-{
-    return opt_global.Modes( GLOBAL_FONTRENDERBLENDED1 );
-}
-bool Settings::FontNormalRenderBlended( void ) const
-{
-    return opt_global.Modes( GLOBAL_FONTRENDERBLENDED2 );
 }
 
 void Settings::SetProgramPath( const char * argv0 )
@@ -1319,11 +1282,6 @@ int Settings::PreferablyCountPlayers( void ) const
     return preferably_count_players;
 }
 
-int Settings::GetPort( void ) const
-{
-    return port;
-}
-
 const std::string & Settings::MapsFile( void ) const
 {
     return current_maps_file.file;
@@ -1377,11 +1335,6 @@ int Settings::ConditionLoss( void ) const
 bool Settings::WinsCompAlsoWins( void ) const
 {
     return current_maps_file.WinsCompAlsoWins();
-}
-
-bool Settings::WinsAllowNormalVictory( void ) const
-{
-    return current_maps_file.WinsAllowNormalVictory();
 }
 
 int Settings::WinsFindArtifactID( void ) const
@@ -1596,11 +1549,6 @@ bool Settings::ExtWorldScouteExtended( void ) const
 bool Settings::ExtGameRememberLastFocus( void ) const
 {
     return ExtModes( GAME_REMEMBER_LAST_FOCUS );
-}
-
-bool Settings::ExtWorldAbandonedMineRandom( void ) const
-{
-    return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
 }
 
 bool Settings::ExtWorldAllowSetGuardian( void ) const
@@ -1864,11 +1812,6 @@ void Settings::BinaryLoad( void )
 bool Settings::FullScreen( void ) const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
-}
-
-bool Settings::KeepAspectRatio( void ) const
-{
-    return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

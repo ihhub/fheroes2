@@ -2055,7 +2055,13 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
         break;
 
+    case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MINES: {
+        if ( obj == MP2::OBJ_ABANDONEDMINE && tile.GetQuantity3() != Spell::HAUNT ) {
+            body = _( "You beat the Ghosts and are able to restore the mine to production." );
+            break;
+        }
+
         resource = tile.QuantityResourceCount().first;
         header = Maps::GetMinesName( resource );
 
@@ -2079,10 +2085,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             break;
         }
     } break;
-
-    case MP2::OBJ_ABANDONEDMINE:
-        body = _( "You beat the Ghosts and are able to restore the mine to production." );
-        break;
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( obj );
@@ -2834,6 +2836,8 @@ void ActionToAlchemistsTower( Heroes & hero )
     BagArtifacts & bag = hero.GetBagArtifacts();
     const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
 
+    const char * title = MP2::StringObject( MP2::OBJ_ALCHEMYTOWER );
+
     if ( cursed ) {
         payment_t payment = PaymentConditions::ForAlchemist();
 
@@ -2847,7 +2851,7 @@ void ActionToAlchemistsTower( Heroes & hero )
             msg.append( _( "For %{gold} gold, the alchemist will remove it for you. Do you pay?" ) );
             StringReplace( msg, "%{gold}", payment.gold );
 
-            if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
 
@@ -2859,10 +2863,10 @@ void ActionToAlchemistsTower( Heroes & hero )
             }
         }
         else
-            Dialog::Message( "", _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
+            Dialog::Message( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
     }
     else {
-        Dialog::Message( "", _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
+        Dialog::Message( title, _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2897,7 +2901,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
     if ( cavalry )
         hero.GetArmy().UpgradeMonsters( Monster::CAVALRY );
 
-    Dialog::Message( "", body, Font::BIG, Dialog::OK );
+    Dialog::Message( MP2::StringObject( obj ), body, Font::BIG, Dialog::OK );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

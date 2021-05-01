@@ -117,16 +117,34 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
+            case ICN::SMALFONT: {
                 LoadOriginalICN( id );
-                // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
+                auto & imageArray = _icnVsSprite[id];
+                if ( id == ICN::FONT ) {
+                    // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
+                    for ( size_t i = 0; i < imageArray.size(); ++i ) {
+                        ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
+                    }
+                }
+
+                // Some checks that we really have CP1251 font
+                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 15;
+                if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
+                    // Engine expects that letter indexes correspond to charcode - 0x20.
+                    // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
+                    // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
+                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
+                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.pop_back();
+                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
                 }
                 return true;
+            }
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
-            case ICN::YELLOW_SMALFONT:
+            case ICN::YELLOW_SMALLFONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
@@ -467,17 +485,8 @@ namespace fheroes2
                 return true;
             case ICN::MONS32:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
-                    const Sprite & source = _icnVsSprite[id][1];
-                    Sprite & modified = _icnVsSprite[id][2];
-                    Sprite temp( source.width(), source.height() + 1 );
-                    temp.reset();
-                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
-                    modified.setPosition( 0, 1 );
-                }
-                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman
                     Sprite & modified = _icnVsSprite[id][4];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -486,7 +495,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
                     Sprite & modified = _icnVsSprite[id][6];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -495,7 +504,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion
                     Sprite & modified = _icnVsSprite[id][8];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -504,12 +513,31 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
-                    Sprite & modified = _icnVsSprite[id][44];
-                    Sprite temp = _icnVsSprite[id][43];
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
+                if ( _icnVsSprite[id].size() > 62 ) {
+                    const Point shadowOffset( -1, 2 );
+                    for ( size_t i = 0; i < 62; ++i ) {
+                        Sprite & modified = _icnVsSprite[id][i];
+                        const Point originalOffset( modified.x(), modified.y() );
+                        Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
+                        temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
+
+                        const Rect area = GetActiveROI( temp, 2 );
+                        if ( area.x > 0 || area.height != temp.height() ) {
+                            const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
+                            modified = Crop( temp, area.x, area.y, area.width, area.height );
+                            modified.setPosition( offset.x, offset.y );
+                        }
+                        else {
+                            std::swap( modified, temp );
+                        }
+                    }
                 }
+                if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
+                    Sprite & modified = _icnVsSprite[id][63];
+                    modified.image()[19 * 9 + 9] = modified.image()[19 * 5 + 11];
+                    modified.transform()[19 * 9 + 9] = modified.transform()[19 * 5 + 11];
+                }
+
                 return true;
             case ICN::MONSTER_SWITCH_LEFT_ARROW:
                 _icnVsSprite[id].resize( 2 );
@@ -739,8 +767,8 @@ namespace fheroes2
                 _icnVsSprite[id][1] = _icnVsSprite[id][0];
                 ApplyPalette( _icnVsSprite[id][1], 4 );
 
-                _icnVsSprite[id][0] = addButtonShadow( _icnVsSprite[id][0], Point( -3, 3 ) );
-                _icnVsSprite[id][1] = addButtonShadow( _icnVsSprite[id][1], Point( -2, 2 ) );
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
                 _icnVsSprite[id][1].setPosition( -2, 1 );
 
@@ -785,8 +813,8 @@ namespace fheroes2
                 _icnVsSprite[id][1] = _icnVsSprite[id][0];
                 ApplyPalette( _icnVsSprite[id][1], 4 );
 
-                _icnVsSprite[id][0] = addButtonShadow( _icnVsSprite[id][0], Point( -3, 3 ) );
-                _icnVsSprite[id][1] = addButtonShadow( _icnVsSprite[id][1], Point( -2, 2 ) );
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
                 _icnVsSprite[id][1].setPosition( -2, 1 );
 
@@ -948,7 +976,7 @@ namespace fheroes2
             case Font::YELLOW_BIG:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
             case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALFONT, character - 0x20 );
+                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
             case Font::BIG:
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
@@ -966,6 +994,23 @@ namespace fheroes2
         {
             // TODO: Add Unicode character support
             return GetLetter( character, fontType );
+        }
+
+        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
+        {
+            switch ( fontType ) {
+            case Font::BIG:
+            case Font::GRAY_BIG:
+            case Font::YELLOW_BIG:
+            case Font::WHITE_LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            case Font::SMALL:
+            case Font::GRAY_SMALL:
+            case Font::YELLOW_SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            default:
+                return 0;
+            }
         }
 
         int32_t GetAbsoluteICNHeight( int icnId )
