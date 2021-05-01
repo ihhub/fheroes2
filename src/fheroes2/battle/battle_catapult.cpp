@@ -69,7 +69,7 @@ u32 Battle::Catapult::GetDamage() const
     return 1;
 }
 
-Point Battle::Catapult::GetTargetPosition( int target )
+Point Battle::Catapult::GetTargetPosition( int target, bool hit )
 {
     Point res;
 
@@ -92,16 +92,12 @@ Point Battle::Catapult::GetTargetPosition( int target )
     case CAT_TOWER2:
         res = Point( 430, 300 );
         break;
-    case CAT_CENTRAL_TOWER:
-        res = Point( 580, 160 );
-        break;
     case CAT_BRIDGE:
         res = Point( 400, 195 );
         break;
-    case CAT_MISS:
-        res = Point( 610, 320 );
+    case CAT_CENTRAL_TOWER:
+        res = hit ? Point( 580, 160 ) : Point( 610, 320 );
         break;
-
     default:
         break;
     }
@@ -145,16 +141,16 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
     }
 
     if ( !targets.empty() ) {
-        // Miss chance is 25%
-        if ( canMiss && 6 > Rand::Get( 1, 20 ) ) {
-            return static_cast<int>( CAT_MISS );
-        }
-        else {
-            return Rand::Get( targets );
-        }
+        return Rand::Get( targets );
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." );
 
     return 0;
+}
+
+bool Battle::Catapult::GetHitOrMiss() const
+{
+    // Miss chance is 25%
+    return !( canMiss && Rand::Get( 1, 20 ) < 6 );
 }
