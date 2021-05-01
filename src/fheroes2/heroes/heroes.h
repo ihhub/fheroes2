@@ -446,6 +446,7 @@ struct AllHeroes : public VecHeroes
     Heroes * GetGuard( const Castle & ) const;
     Heroes * GetFreeman( int race ) const;
     Heroes * FromJail( s32 ) const;
+    Heroes * GetFreemanSpecial( int heroID ) const;
 
     bool HaveTwoFreemans( void ) const;
 };

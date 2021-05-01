@@ -32,6 +32,12 @@ class Players;
 class Heroes;
 class Castle;
 
+namespace Campaign
+{
+    struct CampaignAwardData;
+    class CampaignSaveData;
+}
+
 namespace Game
 {
     enum
