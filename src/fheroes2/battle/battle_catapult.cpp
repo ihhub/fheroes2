@@ -75,25 +75,25 @@ Point Battle::Catapult::GetTargetPosition( int target, bool hit )
 
     switch ( target ) {
     case CAT_WALL1:
-        res = Point( 475, 45 );
+        res = hit ? Point( 475, 45 ) : Point( 495, 105 );
         break;
     case CAT_WALL2:
-        res = Point( 420, 115 );
+        res = hit ? Point( 420, 115 ) : Point( 460, 175 );
         break;
     case CAT_WALL3:
-        res = Point( 415, 280 );
+        res = hit ? Point( 415, 280 ) : Point( 455, 280 );
         break;
     case CAT_WALL4:
-        res = Point( 490, 390 );
+        res = hit ? Point( 490, 390 ) : Point( 530, 390 );
         break;
     case CAT_TOWER1:
-        res = Point( 430, 40 );
+        res = hit ? Point( 430, 40 ) : Point( 490, 120 );
         break;
     case CAT_TOWER2:
-        res = Point( 430, 300 );
+        res = hit ? Point( 430, 300 ) : Point( 490, 340 );
         break;
     case CAT_BRIDGE:
-        res = Point( 400, 195 );
+        res = hit ? Point( 400, 195 ) : Point( 450, 235 );
         break;
     case CAT_CENTRAL_TOWER:
         res = hit ? Point( 580, 160 ) : Point( 610, 320 );
