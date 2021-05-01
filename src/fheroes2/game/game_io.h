@@ -30,6 +30,7 @@ namespace Maps
 
 namespace Game
 {
+    bool SaveCompletedCampaignScenario();
     bool AutoSave();
     bool Save( const std::string & );
     bool Load( const std::string & );

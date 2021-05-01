@@ -126,6 +126,19 @@ bool Game::AutoSave()
     return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
 }
 
+bool Game::SaveCompletedCampaignScenario()
+{
+    const std::string & name = Settings::Get().CurrentFileInfo().name;
+
+    std::string base = name.size() ? name : "newgame";
+    base.resize( std::distance( base.begin(), std::find_if( base.begin(), base.end(), ::ispunct ) ) );
+    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
+    std::ostringstream os;
+
+    os << System::ConcatePath( Game::GetSaveDir(), base ) << "_Complete" << Game::GetSaveFileExtension();
+    return Game::Save( os.str() );
+}
+
 bool Game::Save( const std::string & fn )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, fn );

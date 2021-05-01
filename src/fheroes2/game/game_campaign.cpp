@@ -28,9 +28,11 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_io.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "world.h"
 
@@ -432,6 +434,8 @@ int Game::CompleteCampaignScenario()
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
+
+    Game::SaveCompletedCampaignScenario();
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
