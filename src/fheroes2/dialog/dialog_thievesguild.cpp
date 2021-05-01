@@ -196,11 +196,6 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
     }
 }
 
-/*void GetBestHeroStatsInfo(std::vector<ValueColors> & v, const Colors & colors )
-{
-    Text text;
-    Te
-}*/
 void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, size_t count )
 {
     for ( int32_t ii = 0; ii < static_cast<int32_t>( count ); ++ii ) {
@@ -233,46 +228,50 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
                 const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
                 if ( !icon.empty() )
                     fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
-                Text text;
-
-                text.Set("Att.", Font::SMALL);
-                text.Blit(px - 25, pos.y + 32);
-                text.Set(std::to_string(hero->GetAttack()));
-                text.Blit(px + 25 - text.w(), pos.y + 32);
-
-                text.Set("Def.");
-                text.Blit(px - 25, pos.y + 42);
-                text.Set( std::to_string( hero->GetDefense() ) );
-                text.Blit(px + 25 - text.w(), pos.y + 42);
-
-                text.Set("Power", Font::SMALL);
-                text.Blit(px - 25, pos.y + 52);
-                text.Set(std::to_string(hero->GetPower()));
-                text.Blit(px + 25 - text.w(), pos.y + 52);
-
-                text.Set("Knowl", Font::SMALL);
-                text.Blit(px - 25, pos.y + 62);
-                text.Set(std::to_string(hero->GetKnowledge()));
-                text.Blit(px + 25 - text.w(), pos.y + 62);
-
             }
         }
     }
 }
 
-void DrawPersonality(fheroes2::Point & pos, int step, const Colors & colors)
-{
-    int i=0;
-    for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        Text text(Players::Get(*color)->GetPersonalityString(), Font::SMALL);
-        text.Blit(pos.x + step * i++, 72);
-    }
-}
-/*void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
+void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
     if ( v.size() ) {
-        for(uint32_t i = 0; i < v.size(
-}*/
+        for( uint32_t i = 0; i < v.size(); ++i ) {
+            const Heroes * hero = world.GetHeroes( v[i].first );
+            int32_t px = pos.x - 25 + i * step;
+            if ( hero ) {
+                Text text( _( "Att." ), Font::SMALL );
+                text.Blit( px, pos.y );
+                text.Set( std::to_string( hero->GetAttack() ) );
+                text.Blit( px + 50 - text.w(), pos.y );
+
+                text.Set( _( "Def." ) );
+                text.Blit( px, pos.y + 10 );
+                text.Set( std::to_string( hero->GetDefense() ) );
+                text.Blit( px + 50 - text.w(), pos.y + 10 );
+
+                text.Set( _( "Power" ), Font::SMALL );
+                text.Blit( px, pos.y + 20 );
+                text.Set( std::to_string( hero->GetPower() ) );
+                text.Blit( px + 50 - text.w(), pos.y + 20 );
+
+                text.Set( _( "Knowl" ), Font::SMALL );
+                text.Blit( px, pos.y + 30 );
+                text.Set( std::to_string( hero->GetKnowledge() ) );
+                text.Blit( px + 50 - text.w(), pos.y + 30 );
+            }
+        }
+    }
+}
+
+void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
+{
+    for ( size_t i = 0; i < colors.size(); ++i ) {
+        const Player * player = Players::Get( colors[i] );
+        Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
+        text.Blit(pos.x - text.w() / 2 + step * i, pos.y );
+    }
+}
 
 void Dialog::ThievesGuild( bool oracle )
 {
@@ -467,12 +466,12 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 353;
+    dst_pt.y = cur_pt.y + 344;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
-    //GetBestHeroStatsInfo(v);
-    //if(1 < count) DrawHeroIcons(v, dst_pt, maxw);
+    if( 1 < count )
+        DrawHeroStats( v, dst_pt, stepx );
 
     text.Set( _( "Personality:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
@@ -480,11 +479,9 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
-    dst_pt.x= cur_pt.x + textx + startx;
-    DrawPersonality(dst_pt, stepx, colors);
-
-    // GetPersonalityInfo(v);
-    // if(2 < count) DrawHeroIcons(v, dst_pt, maxw);
+    dst_pt.y += 3;
+    if( 2 < count)
+        DrawPersonality( colors, dst_pt, stepx );
 
     text.Set( _( "Best Monster:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
