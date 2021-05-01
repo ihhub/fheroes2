@@ -26,6 +26,7 @@
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -990,9 +991,31 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
     const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int mapWinCondition = conf.ConditionWins();
+
+    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && scenarioId < scenarios.size() );
+
+        if ( scenarioId >= 0 && scenarioId < scenarios.size() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+                if ( visited ) {
+                    return GameOver::WINS_SIDE;
+                }
+                else {
+                    return GameOver::COND_NONE;
+                }
+            }
+        }
+    }
 
     for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( conf.ConditionWins() & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
+        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
             return wins[ii];
 
     return GameOver::COND_NONE;
