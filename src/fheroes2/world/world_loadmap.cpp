@@ -852,12 +852,12 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     fheroes2::Size & sw = w;
 
     xml_tiles->Attribute( "width", &value );
-    sw.w = value;
+    sw.width = value;
 
     xml_tiles->Attribute( "height", &value );
-    sw.h = value;
+    sw.height = value;
 
-    w.vec_tiles.resize( sw.w * sw.h );
+    w.vec_tiles.resize( sw.width * sw.height );
 
     *xml_tiles >> w.vec_tiles;
 
