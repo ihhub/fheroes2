@@ -125,7 +125,7 @@ namespace Resource
     class BoxSprite : protected fheroes2::Rect
     {
     public:
-        BoxSprite( const Funds &, u32 );
+        BoxSprite( const Funds &, int32_t );
 
         const fheroes2::Rect & GetArea( void ) const;
         void SetPos( s32, s32 );

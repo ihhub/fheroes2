@@ -46,7 +46,8 @@ namespace
 }
 
 void SpellBookRedrawLists( const SpellStorage &, std::vector<fheroes2::Rect> &, size_t, const fheroes2::Point &, u32, SpellBook::Filter only, const HeroBase & hero );
-void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero, bool isRight = false );
+void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero,
+                            bool isRight = false );
 void SpellBookRedrawMP( const fheroes2::Point &, u32 );
 
 Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bool canCastSpell,
@@ -405,8 +406,8 @@ void SpellBookRedrawMP( const fheroes2::Point & dst, u32 mp )
     text.Blit( tp.x - text.w() / 2, tp.y );
 }
 
-void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt, u32 sp, const SpellBook::Filter displayableSpells,
-                           const HeroBase & hero )
+void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const fheroes2::Point & pt, u32 sp,
+                           const SpellBook::Filter displayableSpells, const HeroBase & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -437,7 +438,8 @@ void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Re
     SpellBookRedrawSpells( spells, coords, index + spellsPerPage, pt.x + 220, pt.y, hero, true );
 }
 
-void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero, bool isRight )
+void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, int32_t px, int32_t py, const HeroBase & hero,
+                            bool isRight )
 {
     const uint32_t heroSpellPoints = hero.GetSpellPoints();
 

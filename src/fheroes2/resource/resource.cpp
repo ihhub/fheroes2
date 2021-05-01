@@ -519,8 +519,8 @@ void Funds::Reset( void )
     gold = 0;
 }
 
-Resource::BoxSprite::BoxSprite( const Funds & f, u32 width )
-    : fheroes2::Rect( 0, 0, width, 0 )
+Resource::BoxSprite::BoxSprite( const Funds & f, int32_t width_ )
+    : fheroes2::Rect( 0, 0, width_, 0 )
     , rs( f )
 {
     const u32 count = rs.GetValidItemsCount();

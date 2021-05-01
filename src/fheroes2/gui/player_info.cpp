@@ -62,7 +62,8 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
             const fheroes2::Rect & rect2 = ( *( it + 1 ) ).rect2;
             const fheroes2::Sprite & iconSprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
 
-            ( *it ).rect3 = fheroes2::Rect( rect1.x + rect1.width + ( rect2.x - ( rect1.x + rect1.width ) ) / 2 - 5, rect1.y + rect1.height + 20, iconSprite.width(), iconSprite.height() );
+            ( *it ).rect3 = fheroes2::Rect( rect1.x + rect1.width + ( rect2.x - ( rect1.x + rect1.width ) ) / 2 - 5, rect1.y + rect1.height + 20, iconSprite.width(),
+                                            iconSprite.height() );
         }
     }
 }

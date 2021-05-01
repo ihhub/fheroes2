@@ -149,24 +149,6 @@ StreamBase & StreamBase::operator>>( std::string & v )
     return *this;
 }
 
-// StreamBase & StreamBase::operator>>( Rect & v )
-// {
-//     Point & p = v;
-//     Size & s = v;
-// 
-//     return *this >> p >> s;
-// }
-// 
-// StreamBase & StreamBase::operator>>( Point & v )
-// {
-//     return *this >> v.x >> v.y;
-// }
-// 
-// StreamBase & StreamBase::operator>>( Size & v )
-// {
-//     return *this >> v.w >> v.h;
-// }
-
 StreamBase & StreamBase::operator>>( fheroes2::Rect & rect_ )
 {
     return *this >> rect_.x >> rect_.y >> rect_.width >> rect_.height;
@@ -256,24 +238,6 @@ StreamBase & StreamBase::operator<<( const std::string & v )
 
     return *this;
 }
-
-//StreamBase & StreamBase::operator<<( const Point & v )
-//{
-//    return *this << v.x << v.y;
-//}
-//
-//StreamBase & StreamBase::operator<<( const Rect & v )
-//{
-//    const Point & p = v;
-//    const Size & s = v;
-//
-//    return *this << p << s;
-//}
-//
-//StreamBase & StreamBase::operator<<( const Size & v )
-//{
-//    return *this << v.w << v.h;
-//}
 
 StreamBase & StreamBase::operator<<( const fheroes2::Rect & rect_ )
 {

@@ -32,11 +32,11 @@ class SelectEnum : public Interface::ListBox<int>
 {
 public:
     explicit SelectEnum( const fheroes2::Rect & rt )
-        : Interface::ListBox<int>( fheroes2::Point( rt.x, rt. y ) )
+        : Interface::ListBox<int>( fheroes2::Point( rt.x, rt.y ) )
         , area( rt )
         , ok( false )
     {
-        RedrawBackground( fheroes2::Point( rt.x, rt. y) );
+        RedrawBackground( fheroes2::Point( rt.x, rt.y) );
         SetScrollButtonUp( ICN::LISTBOX, 3, 4, fheroes2::Point( rt.x + rt.width - 24, rt.y + 25 ) );
         SetScrollButtonDn( ICN::LISTBOX, 5, 6, fheroes2::Point( rt.x + rt.width - 24, rt.y + rt.height - 55 ) );
 

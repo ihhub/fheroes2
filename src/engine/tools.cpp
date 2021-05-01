@@ -577,7 +577,8 @@ namespace fheroes2
         Rect & srcrtfix = res.first;
         Point & dstptfix = res.second;
 
-        if ( srcrt.width && srcrt.height && srcrt.x + srcrt.width > dstrt.x && srcrt.y + srcrt.height > dstrt.y && srcrt.x < dstrt.x + dstrt.width && srcrt.y < dstrt.y + dstrt.height ) {
+        if ( srcrt.width && srcrt.height && srcrt.x + srcrt.width > dstrt.x && srcrt.y + srcrt.height > dstrt.y && srcrt.x < dstrt.x + dstrt.width
+             && srcrt.y < dstrt.y + dstrt.height ) {
             srcrtfix.width = srcrt.width;
             srcrtfix.height = srcrt.height;
             dstptfix.x = srcrt.x;

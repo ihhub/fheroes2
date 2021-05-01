@@ -107,7 +107,8 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Spr
     BlitOnTile( dst, src, src.x(), src.y(), mp );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip,
+                                      uint8_t alpha ) const
 {
     fheroes2::Point dstpt = GetRelativeTilePosition( mp ) + fheroes2::Point( ox, oy );
 
@@ -115,7 +116,8 @@ void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Ima
     const int32_t height = src.height();
 
     // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
+         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
         fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip );
     }
     else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
@@ -132,7 +134,8 @@ void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image
     const int32_t height = src.height();
 
     // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
+         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
         fheroes2::Copy( src, 0, 0, dst, dstpt.x, dstpt.y, width, height );
     }
     else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
@@ -549,7 +552,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
     const fheroes2::Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - fheroes2::Point( gamearea._windowROI.x, gamearea._windowROI.y )
-                           + fheroes2::Point( result.width() / 2, result.height() / 2 ) );
+                                     + fheroes2::Point( result.width() / 2, result.height() / 2 ) );
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
@@ -643,7 +646,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
     const fheroes2::Point tileOffset = _topLeftTileOffset + mp - fheroes2::Point( _windowROI.x, _windowROI.y );
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                         ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
+                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
     const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 

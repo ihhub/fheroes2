@@ -1409,7 +1409,8 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
+                               const Interface::GameArea & area ) const
 {
     if ( addon.empty() ) {
         return;

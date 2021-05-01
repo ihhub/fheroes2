@@ -839,7 +839,8 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
     // background
     fheroes2::Fill( output, pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
     // mons32 sprite
-    fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ), revert );
+    fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
+                    revert );
 
     // window
     if ( current )
@@ -907,7 +908,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     _interfacePosition = fheroes2::Rect( ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
-                               _surfaceInnerArea.width, _surfaceInnerArea.height );
+                                         _surfaceInnerArea.width, _surfaceInnerArea.height );
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // cover
@@ -4989,7 +4990,8 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
         }
 
         const fheroes2::Rect & currectArea = GetRect();
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), fheroes2::Rect( currectArea.x, currectArea.y, currectArea.width, currectArea.height ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ),
+                                          fheroes2::Rect( currectArea.x, currectArea.y, currectArea.width, currectArea.height ) );
 
         text1.Blit( borderArea.x, borderArea.y );
         text2.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );

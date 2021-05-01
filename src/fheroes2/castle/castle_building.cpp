@@ -82,7 +82,8 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
     }
 }
 
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding )
+void CastleDialog::RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
+                                      const CastleDialog::FadeBuilding & alphaBuilding )
 {
     CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding );
     CastleRedrawTownName( castle, dst_pt );

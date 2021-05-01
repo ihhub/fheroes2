@@ -105,10 +105,6 @@ public:
     StreamBase & operator>>( float & );
     StreamBase & operator>>( std::string & );
 
-    // StreamBase & operator>>( Rect & );
-    // StreamBase & operator>>( Point & );
-    // StreamBase & operator>>( Size & );
-
     StreamBase & operator>>( fheroes2::Rect & rect_ );
     StreamBase & operator>>( fheroes2::Point & point_ );
     StreamBase & operator>>( fheroes2::Size & size_ );
@@ -123,10 +119,6 @@ public:
     StreamBase & operator<<( const s32 );
     StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
-
-    // StreamBase & operator<<( const Rect & );
-    // StreamBase & operator<<( const Point & );
-    // StreamBase & operator<<( const Size & );
 
     StreamBase & operator<<( const fheroes2::Rect & rect_ );
     StreamBase & operator<<( const fheroes2::Point & point_ );

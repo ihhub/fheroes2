@@ -513,7 +513,7 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
 
     fheroes2::Point dst_pt1( dx + ( reflect ? TILEWIDTH - sprite1.x() - sprite1.width() : sprite1.x() ), dy + sprite1.y() + TILEWIDTH );
     fheroes2::Point dst_pt2( dx + ( reflect ? TILEWIDTH - sprite2.x() - flagOffset.x - sprite2.width() : sprite2.x() + flagOffset.x ),
-                   dy + sprite2.y() + flagOffset.y + TILEWIDTH );
+                             dy + sprite2.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {

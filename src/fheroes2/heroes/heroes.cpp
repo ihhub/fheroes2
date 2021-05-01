@@ -2095,10 +2095,11 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     const HeroBase & base = hero;
     const ColorBase & col = hero;
 
-    msg << base <<
-           // heroes
-           hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-               << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    msg << base;
+
+    // heroes
+    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
+        << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
