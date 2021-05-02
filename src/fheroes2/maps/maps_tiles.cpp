@@ -64,57 +64,100 @@ namespace
     {
         return ( base & value ) == value;
     }
-}
 
 #ifdef WITH_DEBUG
-fheroes2::Image PassableViewSurface( int passable )
-{
-    const u32 w = 31;
-    const u32 h = 31;
-    uint8_t colr = 0xBA;
-    uint8_t colg = 0x5A;
-    fheroes2::Image sf( w, h );
-    sf.reset();
+    const fheroes2::Image & PassableViewSurface( const int passable )
+    {
+        static std::map<int, fheroes2::Image> imageMap;
 
-    if ( 0 == passable || Direction::CENTER == passable )
-        fheroes2::DrawBorder( sf, colr );
-    else if ( DIRECTION_ALL == passable )
-        fheroes2::DrawBorder( sf, colg );
-    else {
-        for ( u32 i = 0; i < w; ++i ) {
-            if ( i < 10 ) {
-                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP_LEFT ? colg : colr ) );
-                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
+        auto iter = imageMap.find( passable );
+        if ( iter != imageMap.end() ) {
+            return iter->second;
+        }
+
+        const int32_t size = 31;
+        const uint8_t red = 0xBA;
+        const uint8_t green = 0x5A;
+
+        fheroes2::Image sf( size, size );
+        sf.reset();
+
+        if ( 0 == passable || Direction::CENTER == passable ) {
+            fheroes2::DrawBorder( sf, red );
+        }
+        else if ( DIRECTION_ALL == passable ) {
+            fheroes2::DrawBorder( sf, green );
+        }
+        else {
+            const uint8_t topLeftColor = ( ( passable & Direction::TOP_LEFT ) != 0 ) ? green : red;
+            const uint8_t bottomRightColor = ( ( passable & Direction::BOTTOM_RIGHT ) != 0 ) ? green : red;
+            const uint8_t topRightColor = ( ( passable & Direction::TOP_RIGHT ) != 0 ) ? green : red;
+            const uint8_t bottomLeftColor = ( ( passable & Direction::BOTTOM_LEFT ) != 0 ) ? green : red;
+            const uint8_t topColor = ( ( passable & Direction::TOP ) != 0 ) ? green : red;
+            const uint8_t bottomColor = ( ( passable & Direction::BOTTOM ) != 0 ) ? green : red;
+            const uint8_t leftColor = ( ( passable & Direction::LEFT ) != 0 ) ? green : red;
+            const uint8_t rightColor = ( ( passable & Direction::RIGHT ) != 0 ) ? green : red;
+
+            uint8_t * image = sf.image();
+            uint8_t * transform = sf.transform();
+
+            // Horizontal
+            for ( int32_t i = 0; i < 10; ++i ) {
+                *( image + i ) = topLeftColor;
+                *( transform + i ) = 0;
+
+                *( image + i + ( size - 1 ) * size ) = bottomLeftColor;
+                *( transform + i + ( size - 1 ) * size ) = 0;
             }
-            else if ( i < 21 ) {
-                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP ? colg : colr ) );
-                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM ? colg : colr ) );
+
+            for ( int32_t i = 10; i < 21; ++i ) {
+                *( image + i ) = topColor;
+                *( transform + i ) = 0;
+
+                *( image + i + ( size - 1 ) * size ) = bottomColor;
+                *( transform + i + ( size - 1 ) * size ) = 0;
             }
-            else {
-                fheroes2::SetPixel( sf, i, 0, ( passable & Direction::TOP_RIGHT ? colg : colr ) );
-                fheroes2::SetPixel( sf, i, h - 1, ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
+
+            for ( int32_t i = 21; i < size; ++i ) {
+                *( image + i ) = topRightColor;
+                *( transform + i ) = 0;
+
+                *( image + i + ( size - 1 ) * size ) = bottomRightColor;
+                *( transform + i + ( size - 1 ) * size ) = 0;
+            }
+
+            // Vertical
+            for ( int32_t i = 0; i < 10; ++i ) {
+                *( image + i * size ) = topLeftColor;
+                *( transform + i * size ) = 0;
+
+                *( image + size - 1 + i * size ) = topRightColor;
+                *( transform + size - 1 + i * size ) = 0;
+            }
+
+            for ( int32_t i = 10; i < 21; ++i ) {
+                *( image + i * size ) = leftColor;
+                *( transform + i * size ) = 0;
+
+                *( image + size - 1 + i * size ) = rightColor;
+                *( transform + size - 1 + i * size ) = 0;
+            }
+
+            for ( int32_t i = 21; i < size; ++i ) {
+                *( image + i * size ) = bottomLeftColor;
+                *( transform + i * size ) = 0;
+
+                *( image + size - 1 + i * size ) = bottomRightColor;
+                *( transform + size - 1 + i * size ) = 0;
             }
         }
 
-        for ( u32 i = 0; i < h; ++i ) {
-            if ( i < 10 ) {
-                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::TOP_LEFT ? colg : colr ) );
-                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::TOP_RIGHT ? colg : colr ) );
-            }
-            else if ( i < 21 ) {
-                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::LEFT ? colg : colr ) );
-                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::RIGHT ? colg : colr ) );
-            }
-            else {
-                fheroes2::SetPixel( sf, 0, i, ( passable & Direction::BOTTOM_LEFT ? colg : colr ) );
-                fheroes2::SetPixel( sf, w - 1, i, ( passable & Direction::BOTTOM_RIGHT ? colg : colr ) );
-            }
-        }
+        return imageMap.emplace( passable, std::move( sf ) ).first->second;
     }
-
-    return sf;
-}
 #endif
+}
+
+
 
 Maps::TilesAddon::TilesAddon()
     : uniq( 0 )
@@ -1447,18 +1490,15 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Rect & visibleTil
 #ifdef WITH_DEBUG
     const Point mp = Maps::GetPoint( GetIndex() );
 
-    if ( visibleTileROI & mp ) {
-        if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
-            fheroes2::Image sf = PassableViewSurface( tilePassable );
+    if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
+        fheroes2::Image sf = PassableViewSurface( tilePassable );
 
-            if ( impassableTileRule ) {
-                const Text text( std::to_string( impassableTileRule ), Font::SMALL );
-                text.Blit( 13, 13, sf );
-            }
-
-            const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
-            area.BlitOnTile( dst, sf, 0, 0, mp );
+        if ( impassableTileRule ) {
+            const Text text( std::to_string( impassableTileRule ), Font::SMALL );
+            text.Blit( 13, 13, sf );
         }
+
+        Interface::Basic::Get().GetGameArea().BlitOnTile( dst, sf, 0, 0, mp );
     }
 #else
     (void)dst;
