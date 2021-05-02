@@ -197,12 +197,6 @@ ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     , army( a )
 {}
 
-ArmyTroop & ArmyTroop::operator=( const Troop & t )
-{
-    Set( t );
-    return *this;
-}
-
 u32 ArmyTroop::GetAttack( void ) const
 {
     return Troop::GetAttack() + ( army && army->GetCommander() ? army->GetCommander()->GetAttack() : 0 );

@@ -97,22 +97,6 @@ Battle::Units::Units( const Units & units, bool filter )
         resize( std::distance( begin(), std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ) ) );
 }
 
-Battle::Units::Units( const Units & units1, const Units & units2 )
-{
-    const size_t capacity = units1.size() + units2.size();
-    reserve( CAPACITY < capacity ? capacity : CAPACITY );
-    insert( end(), units1.begin(), units1.end() );
-    insert( end(), units2.begin(), units2.end() );
-}
-
-Battle::Units & Battle::Units::operator=( const Units & units )
-{
-    reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
-    assign( units.begin(), units.end() );
-
-    return *this;
-}
-
 void Battle::Units::SortSlowest()
 {
     std::stable_sort( begin(), end(), Army::SlowestTroop );

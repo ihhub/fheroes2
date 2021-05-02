@@ -1142,11 +1142,6 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
     return GetCommander( current_color );
 }
 
-bool Battle::Arena::NetworkTurn( void )
-{
-    return interface && interface->NetworkTurn( result_game );
-}
-
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
     const HeroBase * hero = GetCurrentCommander();

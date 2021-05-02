@@ -4970,8 +4970,3 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
         text2.Blit( borderArea.x, borderArea.y + borderArea.h / 2 );
     }
 }
-
-bool Battle::Interface::NetworkTurn( const Result & /*result*/ )
-{
-    return false;
-}

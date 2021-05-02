@@ -487,34 +487,6 @@ Battle::Indexes Battle::Board::GetAStarPath( const Unit & unit, const Position &
     return result;
 }
 
-Battle::Indexes Battle::Board::GetPassableQualityPositions( const Unit & b )
-{
-    Indexes result;
-    result.reserve( 30 );
-
-    // make sure we check current position first to avoid unnecessary move
-    const int headIndex = b.GetHeadIndex();
-    if ( GetCell( headIndex )->GetQuality() ) {
-        result.push_back( headIndex );
-    }
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).isPassable3( b, false ) && ( *it ).GetQuality() )
-            result.push_back( ( *it ).GetIndex() );
-
-    if ( IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
-        std::stringstream ss;
-        if ( result.empty() )
-            ss << "empty";
-        else
-            for ( Indexes::const_iterator it = result.begin(); it != result.end(); ++it )
-                ss << *it << ", ";
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
-    }
-
-    return result;
-}
-
 std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startUnit, const std::vector<Battle::Unit *> & blackList )
 {
     std::vector<std::pair<Battle::Unit *, uint32_t> > foundUnits;

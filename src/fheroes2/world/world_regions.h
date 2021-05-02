@@ -44,12 +44,6 @@ struct MapRegionNode
         : index( index_ )
         , type( REGION_NODE_OPEN )
     {}
-    MapRegionNode( int index_, uint16_t pass, bool water )
-        : index( index_ )
-        , type( REGION_NODE_OPEN )
-        , passable( pass )
-        , isWater( water )
-    {}
 };
 
 struct MapRegion
