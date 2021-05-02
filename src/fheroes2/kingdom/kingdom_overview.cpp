@@ -72,7 +72,7 @@ struct HeroRow
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
-        artifactsBar.reset( new ArtifactsBar( hero, true, false ) );
+        artifactsBar.reset( new ArtifactsBar( hero, true, false, false, true, nullptr ) );
         artifactsBar->SetColRows( 7, 2 );
         artifactsBar->SetHSpace( 1 );
         artifactsBar->SetVSpace( 8 );

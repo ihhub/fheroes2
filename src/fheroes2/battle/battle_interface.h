@@ -220,7 +220,7 @@ namespace Battle
         void RedrawActionLuck( const Unit & );
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
-        void RedrawActionCatapult( int );
+        void RedrawActionCatapult( int target, bool hit );
         void RedrawActionTeleportSpell( Unit &, s32 );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );

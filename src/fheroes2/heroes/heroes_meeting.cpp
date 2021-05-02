@@ -151,7 +151,7 @@ class MeetingArtifactBar : public ArtifactsBar
 {
 public:
     explicit MeetingArtifactBar( const Heroes * hero )
-        : ArtifactsBar( hero, true, false, false )
+        : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
     void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override

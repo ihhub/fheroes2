@@ -915,7 +915,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // cover
     const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
-    bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -963,11 +962,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         break;
     default:
         break;
-    }
-
-    if ( grave ) {
-        icn_cbkg = ICN::CBKGGRAV;
-        icn_frng = ICN::FRNG0001;
     }
 
     // hexagon
@@ -3676,7 +3670,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     _movingUnit = NULL;
 }
 
-void Battle::Interface::RedrawActionCatapult( int target )
+void Battle::Interface::RedrawActionCatapult( int target, bool hit )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3697,7 +3691,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
     // boulder animation
     fheroes2::Point pt1( 90, 220 );
-    fheroes2::Point pt2 = Catapult::GetTargetPosition( target );
+    fheroes2::Point pt2 = Catapult::GetTargetPosition( target, hit );
     fheroes2::Point max( 300, 20 );
 
     pt1.x += area.x;
@@ -3724,9 +3718,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
         }
     }
 
-    // clod
+    // draw cloud
+    const int icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
-    int icn = target == CAT_MISS ? ICN::SMALCLOD : ICN::LICHCLOD;
+
     AGG::PlaySound( M82::CATSND02 );
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
@@ -4486,8 +4481,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     }
 
     // draw cloud
+    const int icn = ICN::LICHCLOD;
     frame = 0;
-    int icn = ICN::LICHCLOD;
+
     AGG::PlaySound( M82::CATSND02 );
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
@@ -4497,7 +4493,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             RedrawPartialStart();
 
             for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                fheroes2::Point pt2 = Catapult::GetTargetPosition( *it );
+                fheroes2::Point pt2 = Catapult::GetTargetPosition( *it, true );
 
                 pt2.x += area.x;
                 pt2.y += area.y;

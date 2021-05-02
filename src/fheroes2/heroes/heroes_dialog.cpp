@@ -173,7 +173,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     dst_pt.x = cur_pt.x + 51;
     dst_pt.y = cur_pt.y + 308;
 
-    ArtifactsBar selectArtifacts( this, false, readonly, false, &statusBar );
+    ArtifactsBar selectArtifacts( this, false, readonly, false, true, &statusBar );
 
     selectArtifacts.SetColRows( 7, 2 );
     selectArtifacts.SetHSpace( 15 );

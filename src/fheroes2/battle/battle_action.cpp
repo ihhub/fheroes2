@@ -865,14 +865,20 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         u32 shots = cmd.GetValue();
 
         while ( shots-- ) {
-            u32 target = cmd.GetValue();
-            u32 damage = cmd.GetValue();
+            const int target = cmd.GetValue();
+            const uint32_t damage = cmd.GetValue();
+            const bool hit = cmd.GetValue() != 0;
 
             if ( target ) {
-                if ( interface )
-                    interface->RedrawActionCatapult( target );
-                SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target );
+                if ( interface ) {
+                    interface->RedrawActionCatapult( target, hit );
+                }
+
+                if ( hit ) {
+                    SetCastleTargetValue( target, GetCastleTargetValue( target ) - damage );
+                }
+
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target: " << target << ", damage: " << damage << ", hit: " << hit );
             }
         }
     }
