@@ -907,11 +907,12 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-ArtifactsBar::ArtifactsBar( const Heroes * ptr, bool mini, bool ro, bool change /* false */, StatusBar * bar /* = nullptr */ )
-    : _hero( ptr )
+ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
+    : _hero( hero )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
+    , _allowOpeningMagicBook( allowOpeningMagicBook )
     , _statusBar( bar )
 {
     if ( use_mini_sprite ) {
@@ -983,24 +984,30 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
 bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 {
     if ( isMagicBook( art ) ) {
-        const bool isMbSelected = isMagicBookSelected();
-
-        if ( _statusBar != nullptr && isMbSelected ) {
-            std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
-            _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
-        }
-        // If the _statusBar is empty and we are in
-        // this branch, then the opening took place
-        // from the hero's inventory.
-        else if ( isMbSelected ) {
-            messageMagicBookAbortTrading();
+        const bool isMbSelected = ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
+        if ( isMbSelected ) {
+            if ( can_change ) {
+                const_cast<Heroes *>( _hero )->EditSpellBook();
+            }
+            else if ( _allowOpeningMagicBook ) {
+                if ( _statusBar != nullptr ) {
+                    std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+                }
+                else {
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+                }
+            }
+            else {
+                messageMagicBookAbortTrading();
+            }
         }
 
         return false;
     }
 
     if ( isSelected() ) {
-        if ( !read_only && !isMagicBook( art ) && !isMagicBookSelected() ) {
+        if ( !read_only ) {
             std::swap( art, *GetSelectedItem() );
         }
         return false;
@@ -1120,7 +1127,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
     }
     else if ( art.isValid() ) {
         if ( isMagicBook( art ) ) {
-            msg = _( "Open %{name}" );
+            msg = _( "View Spells" );
         }
         else {
             msg = _( "Select %{name}" );
@@ -1166,14 +1173,9 @@ bool ArtifactsBar::QueueEventProcessing( ArtifactsBar & bar, std::string * str )
     return res;
 }
 
-bool ArtifactsBar::isMagicBook( const Artifact & artifact ) const
+bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 {
     return artifact() == Artifact::MAGIC_BOOK;
-}
-
-bool ArtifactsBar::isMagicBookSelected()
-{
-    return ( !isSelected() || isMagicBook( *GetSelectedItem() ) );
 }
 
 void ArtifactsBar::messageMagicBookAbortTrading() const
