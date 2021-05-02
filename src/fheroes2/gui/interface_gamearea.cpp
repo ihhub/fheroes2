@@ -538,8 +538,9 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
     fheroes2::Image result( 448, 448 );
     result.reset();
 
-    GameArea & gamearea = Basic::Get().GetGameArea();
-    const Rect origPosition( gamearea._windowROI );
+    // Make a temporary copy
+    GameArea gamearea = Basic::Get().GetGameArea();
+
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
     Point pt = Maps::GetPoint( index );
@@ -553,8 +554,6 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
-
-    gamearea.SetAreaPosition( origPosition.x, origPosition.y, origPosition.w, origPosition.h );
 
     return result;
 }
