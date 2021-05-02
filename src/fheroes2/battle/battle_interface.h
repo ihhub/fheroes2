@@ -197,7 +197,6 @@ namespace Battle
         void RedrawPartialStart();
         void RedrawPartialFinish();
         void HumanTurn( const Unit &, Actions & );
-        bool NetworkTurn( const Result & );
 
         const Rect & GetArea( void ) const;
         Point GetMouseCursor() const;

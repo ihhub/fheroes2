@@ -140,7 +140,6 @@ class AnimationState : public AnimationReference
 {
 public:
     explicit AnimationState( int monsterID );
-    AnimationState( const AnimationReference & animMap, int state );
     ~AnimationState() override = default;
 
     bool switchAnimation( int animstate, bool reverse = false );
