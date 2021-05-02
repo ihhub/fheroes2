@@ -515,9 +515,9 @@ int Heroes::GetMobilityIndexSprite( void ) const
 
 int Heroes::GetManaIndexSprite( void ) const
 {
-    // valid range (0 - 25)
-    int r = GetSpellPoints() / 5;
-    return 25 >= r ? r : 25;
+    // Add 2 to round values.
+    const int value = ( GetSpellPoints() + 2 ) / 5;
+    return value >= 25 ? 25 : value;
 }
 
 int Heroes::getStatsValue() const
