@@ -892,7 +892,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     // cover
     const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
-    bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
 
     const int groundType = tile.GetGround();
     _brightLandType
@@ -940,11 +939,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
         break;
     default:
         break;
-    }
-
-    if ( grave ) {
-        icn_cbkg = ICN::CBKGGRAV;
-        icn_frng = ICN::FRNG0001;
     }
 
     // hexagon
