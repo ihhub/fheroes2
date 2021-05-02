@@ -157,8 +157,6 @@ namespace
 #endif
 }
 
-
-
 Maps::TilesAddon::TilesAddon()
     : uniq( 0 )
     , level( 0 )

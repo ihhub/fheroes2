@@ -187,9 +187,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     std::vector<const Maps::Tiles *> drawList;
-    std::vector<const Maps::Tiles * > monsterList;
-    std::vector<const Maps::Tiles * > topList;
-    std::vector<const Maps::Tiles * > objectList;
+    std::vector<const Maps::Tiles *> monsterList;
+    std::vector<const Maps::Tiles *> topList;
+    std::vector<const Maps::Tiles *> objectList;
 
     topList.reserve( ( maxY - minY ) * ( maxX - minX ) );
     objectList.reserve( ( maxY - minY ) * ( maxX - minX ) );
