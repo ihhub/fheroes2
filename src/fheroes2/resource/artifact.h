@@ -236,7 +236,7 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
+    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
     virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
@@ -261,14 +261,14 @@ protected:
 private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    bool use_mini_sprite;
-    bool read_only;
-    bool can_change;
+    const bool use_mini_sprite;
+    const bool read_only;
+    const bool can_change;
+    const bool _allowOpeningMagicBook;
     StatusBar * _statusBar;
     std::string msg;
 
-    bool isMagicBook( const Artifact & artifact ) const;
-    bool isMagicBookSelected();
+    static bool isMagicBook( const Artifact & artifact );
 
     void messageMagicBookAbortTrading() const;
 };
