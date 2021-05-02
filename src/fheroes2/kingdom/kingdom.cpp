@@ -639,6 +639,22 @@ Heroes * Kingdom::GetBestHero()
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
 }
 
+Monster Kingdom::GetBestMonster()
+{
+    Monster monster(Monster::UNKNOWN);
+    for ( KingdomHeroes::const_iterator ci = heroes.cbegin(); ci != heroes.cend(); ci++ ) {
+        auto cur_mon = ( *ci )->GetArmy().GetBestMonster();
+        if ( cur_mon.GetMonsterStrength() > monster.GetMonsterStrength() )
+            monster = cur_mon;
+    }
+    for ( KingdomCastles::const_iterator ci = castles.cbegin(); ci != castles.cend(); ci++ ) {
+        auto cur_mon = ( *ci )->GetArmy().GetBestMonster();
+        if ( cur_mon.GetMonsterStrength() > monster.GetMonsterStrength() )
+            monster = cur_mon;
+    }
+    return monster;
+}
+
 double Kingdom::GetArmiesStrength( void ) const
 {
     double res = 0;

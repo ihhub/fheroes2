@@ -227,7 +227,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
 
                 const fheroes2::Sprite & icon = hero->GetPortrait( PORT_SMALL );
                 if ( !icon.empty() )
-                    fheroes2::Blit( icon, fheroes2::Display::instance(), px - icon.width() / 2, pos.y );
+                    fheroes2::Blit( icon, display, px - icon.width() / 2, pos.y );
             }
         }
     }
@@ -236,7 +236,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
 void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
     if ( v.size() ) {
-        for( uint32_t i = 0; i < v.size(); ++i ) {
+        for( size_t i = 0; i < v.size(); ++i ) {
             const Heroes * hero = world.GetHeroes( v[i].first );
             int32_t px = pos.x - 25 + i * step;
             if ( hero ) {
@@ -270,6 +270,18 @@ void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
         const Player * player = Players::Get( colors[i] );
         Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
         text.Blit(pos.x - text.w() / 2 + step * i, pos.y );
+    }
+}
+
+void DrawBestMonsterIcons( const Colors & colors, fheroes2::Point & pos, int step )
+{
+    for ( size_t i = 0; i < colors.size(); ++i ) {
+        const Monster monster = world.GetKingdom( colors[i] ).GetBestMonster();
+        if ( monster.isValid() ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
+            if( !sprite.empty() )
+                fheroes2::Blit( sprite, fheroes2::Display::instance(), pos.x + i * step - sprite.width() / 2, pos.y );
+        }
     }
 }
 
@@ -489,8 +501,8 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
-    // GetBestMonsterInfo(v);
-    // if(3 < count) DrawHeroIcons(v, dst_pt, maxw);
+    dst_pt.y -= 13;
+    if( 3 < count ) DrawBestMonsterIcons( colors, dst_pt, stepx );
 
     buttonExit.draw();
 

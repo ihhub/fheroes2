@@ -90,6 +90,8 @@ public:
     const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
+    Monster GetBestMonster();
+
     int GetControl( void ) const override;
     int GetColor( void ) const;
     int GetRace( void ) const;
