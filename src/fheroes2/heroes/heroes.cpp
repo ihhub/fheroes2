@@ -133,7 +133,7 @@ Heroes::Heroes()
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
-    , race( UNKNOWN )
+    , _race( UNKNOWN )
     , save_maps_object( 0 )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -162,7 +162,7 @@ Heroes::Heroes( int heroid, int rc )
     , army( this )
     , hid( heroid )
     , portrait( heroid )
-    , race( rc )
+    , _race( rc )
     , save_maps_object( MP2::OBJ_ZERO )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -254,8 +254,8 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         }
 
         // fixed race for custom portrait (after level up)
-        if ( race != rc )
-            race = rc;
+        if ( _race != rc )
+            _race = rc;
     }
     else
         st.skip( 1 );
@@ -340,8 +340,8 @@ void Heroes::PostLoad( void )
         LevelUp( Modes( CUSTOMSKILLS ), true );
     }
 
-    if ( ( race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
-        Spell spell = Skill::Primary::GetInitialSpell( race );
+    if ( ( _race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
+        Spell spell = Skill::Primary::GetInitialSpell( _race );
         if ( spell.isValid() ) {
             SpellBookActivate();
             AppendSpellToBook( spell, true );
@@ -356,7 +356,7 @@ void Heroes::PostLoad( void )
         AI::Get().HeroesPostLoad( *this );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) );
 }
 
 int Heroes::GetID( void ) const
@@ -366,7 +366,7 @@ int Heroes::GetID( void ) const
 
 int Heroes::GetRace( void ) const
 {
-    return race;
+    return _race;
 }
 
 const std::string & Heroes::GetName( void ) const
@@ -1341,7 +1341,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     const HeroSeedsForLevelUp seeds = GetSeedsForLevelUp();
 
     // level up primary skill
-    const int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
+    const int primarySkill = Skill::Primary::LevelUp( _race, GetLevel(), seeds.seedPrimarySkill );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
 
@@ -1356,7 +1356,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     Skill::Secondary sec1;
     Skill::Secondary sec2;
 
-    secondary_skills.FindSkillsForLevelUp( race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
+    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
     DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
 
     Skill::Secondary selected;
@@ -1688,7 +1688,7 @@ std::string Heroes::String( void ) const
     std::ostringstream os;
 
     os << "name            : " << name << std::endl
-       << "race            : " << Race::String( race ) << std::endl
+       << "race            : " << Race::String( _race ) << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
@@ -1941,7 +1941,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
     size_t hash = world.GetMapSeed();
     hashCombine( hash, hid );
-    hashCombine( hash, race );
+    hashCombine( hash, _race );
     hashCombine( hash, attack );
     hashCombine( hash, defense );
     hashCombine( hash, power );
@@ -1992,7 +1992,7 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     return msg << base <<
            // heroes
            hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-               << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index << hero.patrol_center << hero.patrol_square << hero.visit_object
+               << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index << hero.patrol_center << hero.patrol_square << hero.visit_object
                << hero._lastGroundRegion;
 }
 
@@ -2002,7 +2002,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     ColorBase & col = hero;
 
     msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
-        >> hero.race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index >> hero.patrol_center >> hero.patrol_square >> hero.visit_object;
+        >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index >> hero.patrol_center >> hero.patrol_square >> hero.visit_object;
 
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
         msg >> hero._lastGroundRegion;

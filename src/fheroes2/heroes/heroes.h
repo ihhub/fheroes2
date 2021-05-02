@@ -398,7 +398,7 @@ private:
 
     int hid; /* hero id */
     int portrait; /* hero id */
-    int race;
+    int _race;
     int save_maps_object;
 
     Route::Path path;
