@@ -267,6 +267,8 @@ public:
     bool IsFullBagArtifacts( void ) const;
 
     int GetMobilityIndexSprite( void ) const;
+
+    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite( void ) const;
 
     int OpenDialog( bool readonly = false, bool fade = false );
