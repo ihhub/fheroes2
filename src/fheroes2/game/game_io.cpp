@@ -126,16 +126,6 @@ bool Game::AutoSave()
     return Game::Save( System::ConcatePath( GetSaveDir(), "AUTOSAVE" + GetSaveFileExtension() ) );
 }
 
-bool Game::SaveCompletedCampaignScenario()
-{
-    const std::string & name = Settings::Get().CurrentFileInfo().name;
-
-    std::string base = name.empty() ? _( "newgame" ) : name;
-    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
-
-    return Save( System::ConcatePath( Game::GetSaveDir(), base ) + _( "_Complete" ) + Game::GetSaveFileExtension() );
-}
-
 bool Game::Save( const std::string & fn )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
@@ -382,4 +372,14 @@ std::string Game::GetSaveFileExtension( const int gameType )
         return ".savh";
 
     return ".savm";
+}
+
+bool Game::SaveCompletedCampaignScenario()
+{
+    const std::string & name = Settings::Get().CurrentFileInfo().name;
+
+    std::string base = name.empty() ? _( "newgame" ) : name;
+    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
+
+    return Save( System::ConcatePath( Game::GetSaveDir(), base ) + _( "_Complete" ) + Game::GetSaveFileExtension() );
 }
