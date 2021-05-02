@@ -64,7 +64,6 @@ namespace Battle
         ~Arena();
 
         void Turns( void );
-        bool NetworkTurn( void );
         bool BattleValid( void ) const;
 
         bool CanBreakAutoBattle( void ) const;
