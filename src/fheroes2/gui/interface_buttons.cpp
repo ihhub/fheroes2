@@ -38,8 +38,7 @@ Interface::ButtonsArea::ButtonsArea( Basic & basic )
 
 void Interface::ButtonsArea::SavePosition( void )
 {
-    const fheroes2::Rect & currectRect = GetRect();
-    Settings::Get().SetPosButtons( fheroes2::Point( currectRect.x, currectRect.y ) );
+    Settings::Get().SetPosButtons( GetRect().getPosition() );
 }
 
 void Interface::ButtonsArea::SetRedraw( void ) const

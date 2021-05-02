@@ -492,7 +492,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         // Scrollbar
         if ( buttonLeft.isEnabled() && buttonRight.isEnabled() && max_buy && le.MousePressLeft( scrollbar.getArea() ) ) {
             const fheroes2::Point & mousePos = le.GetMouseCursor();
-            scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
+            scrollbar.moveToPos( mousePos );
             const int32_t seek = scrollbar.currentIndex();
 
             count_buy = seek * ( Resource::GOLD == resourceTo ? GetTradeCosts( resourceFrom, resourceTo, fromTradingPost ) : 1 );

@@ -211,13 +211,13 @@ void Dialog::ExtSettings( bool readonly )
     std::sort( states.begin(), states.end(),
                [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
-    SettingsListBox listbox( fheroes2::Point( area.x, area.y ), readonly );
+    SettingsListBox listbox( area.getPosition(), readonly );
 
     listbox._restorer.update( area.x + 15, area.y + 25, 280, 336 );
 
     const int ah = 340;
 
-    listbox.RedrawBackground( fheroes2::Point( area.x, area.y ) );
+    listbox.RedrawBackground( area.getPosition() );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
     listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 47 ) );

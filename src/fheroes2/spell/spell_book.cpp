@@ -100,7 +100,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
     std::vector<fheroes2::Rect> coords;
     coords.reserve( spellsPerPage * 2 );
 
-    SpellBookRedrawLists( displayedSpells, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), displayableSpells, hero );
+    SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
     bool redraw = false;
 
     cursor.Show();
@@ -247,7 +247,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
 
         if ( redraw ) {
             cursor.Hide();
-            SpellBookRedrawLists( displayedSpells, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), displayableSpells, hero );
+            SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
             cursor.Show();
             display.render();
             redraw = false;
@@ -290,7 +290,7 @@ void SpellBook::Edit( const HeroBase & hero )
     std::vector<fheroes2::Rect> coords;
     coords.reserve( spellsPerPage * 2 );
 
-    SpellBookRedrawLists( displayedSpells, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), Filter::ALL, hero );
+    SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
     bool redraw = false;
 
     cursor.Show();
@@ -344,7 +344,7 @@ void SpellBook::Edit( const HeroBase & hero )
 
         if ( redraw ) {
             cursor.Hide();
-            SpellBookRedrawLists( displayedSpells, coords, current_index, fheroes2::Point( pos.x, pos.y ), hero.GetSpellPoints(), Filter::ALL, hero );
+            SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
             cursor.Show();
             display.render();
             redraw = false;
@@ -433,7 +433,7 @@ void SpellBookRedrawLists( const SpellStorage & spells, std::vector<fheroes2::Re
 
     coords.clear();
 
-    SpellBookRedrawMP( fheroes2::Point( info_rt.x, info_rt.y ), sp );
+    SpellBookRedrawMP( info_rt.getPosition(), sp );
     SpellBookRedrawSpells( spells, coords, index, pt.x, pt.y, hero );
     SpellBookRedrawSpells( spells, coords, index + spellsPerPage, pt.x + 220, pt.y, hero, true );
 }

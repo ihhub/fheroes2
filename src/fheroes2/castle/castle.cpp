@@ -2693,7 +2693,7 @@ void AllCastles::AddCastle( Castle * castle )
 
 Castle * AllCastles::Get( const fheroes2::Point & position ) const
 {
-    auto iter = _castleTiles.find( fheroes2::Point( position.x, position.y ) );
+    auto iter = _castleTiles.find( position );
     if ( iter == _castleTiles.end() )
         return nullptr;
 

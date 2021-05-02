@@ -644,7 +644,7 @@ void Interface::GameArea::QueueEventProcessing( void )
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
-    const fheroes2::Point tileOffset = _topLeftTileOffset + mp - fheroes2::Point( _windowROI.x, _windowROI.y );
+    const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
     const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
                                    ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
@@ -693,7 +693,7 @@ void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 
 int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const fheroes2::Point offset = _topLeftTileOffset + point - fheroes2::Point( _windowROI.x, _windowROI.y );
+    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 

@@ -335,8 +335,7 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
 
 void Interface::IconsPanel::SavePosition( void )
 {
-    const fheroes2::Rect & currectRect = GetRect();
-    Settings::Get().SetPosIcons( fheroes2::Point( currectRect.x, currectRect.y ) );
+    Settings::Get().SetPosIcons( GetRect().getPosition() );
 }
 
 void Interface::IconsPanel::SetRedraw( icons_t type ) const

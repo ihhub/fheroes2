@@ -522,7 +522,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     const fheroes2::Rect area( frameborder->activeArea() );
     int result = Dialog::ZERO;
 
-    CastleIndexListBox listbox( fheroes2::Point( area.x, area.y ), result, isEvilInterface );
+    CastleIndexListBox listbox( area.getPosition(), result, isEvilInterface );
 
     const int listId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
     listbox.SetScrollButtonUp( listId, 3, 4, fheroes2::Point( area.x + 256, area.y + 45 ) );
@@ -531,7 +531,7 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.SetAreaMaxItems( 5 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 6, area.y + 49, 250, 160 ) );
     listbox.SetListContent( castles );
-    listbox.RedrawBackground( fheroes2::Point( area.x, area.y ) );
+    listbox.RedrawBackground( area.getPosition() );
     listbox.Redraw();
 
     fheroes2::ButtonGroup btnGroups;

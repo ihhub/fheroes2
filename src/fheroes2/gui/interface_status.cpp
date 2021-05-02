@@ -79,7 +79,7 @@ u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
 
 void Interface::StatusWindow::SavePosition( void )
 {
-    Settings::Get().SetPosStatus( fheroes2::Point( GetRect().x, GetRect().y ) );
+    Settings::Get().SetPosStatus( GetRect().getPosition() );
 }
 
 void Interface::StatusWindow::SetRedraw( void ) const

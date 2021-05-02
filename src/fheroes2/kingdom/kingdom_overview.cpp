@@ -165,15 +165,13 @@ void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Poin
 
 void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero
-         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Game::OpenHeroesDialog( *row.hero, false, false );
 }
 
 void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero
-         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Dialog::QuickInfo( *row.hero );
 }
 
@@ -372,13 +370,13 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
 {
     if ( row.castle ) {
         // click castle icon
-        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
+        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Game::OpenCastleDialog( *row.castle, false );
             row.Init( row.castle );
         }
         else
             // click hero icon
-            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
+            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false, false );
@@ -391,7 +389,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
 void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
     if ( row.castle ) {
-        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) )
+        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor )
             Dialog::QuickInfo( *row.castle );
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHeroes().GuardFirst();

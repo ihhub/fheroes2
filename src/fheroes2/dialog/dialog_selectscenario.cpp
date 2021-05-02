@@ -242,9 +242,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     buttonGroup.addButton( &buttonSelectXLarge );
     buttonGroup.addButton( &buttonSelectAll );
 
-    ScenarioListBox listbox( fheroes2::Point( rt.x, rt.y ) );
+    ScenarioListBox listbox( rt.getPosition() );
 
-    listbox.RedrawBackground( fheroes2::Point( rt.x, rt.y ) );
+    listbox.RedrawBackground( rt.getPosition() );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 217 ) );
 

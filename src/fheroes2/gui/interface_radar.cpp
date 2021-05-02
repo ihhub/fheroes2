@@ -141,7 +141,7 @@ Interface::Radar::Radar( const Radar & radar )
 
 void Interface::Radar::SavePosition( void )
 {
-    Settings::Get().SetPosRadar( fheroes2::Point( GetRect().x, GetRect().y ) );
+    Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
 void Interface::Radar::SetPos( s32 ox, s32 oy )

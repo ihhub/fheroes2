@@ -328,13 +328,12 @@ namespace Interface
                 UpdateScrollbarRange();
 
                 const fheroes2::Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
+                _scrollbar.moveToPos( mousePos.x );
                 _topId = _scrollbar.currentIndex();
                 return true;
             }
 
-            const fheroes2::Point & position = le.GetMouseCursor();
-            const fheroes2::Point mousePos( position.x, position.y );
+            const fheroes2::Point & mousePos = le.GetMouseCursor();
             if ( rtAreaItems & mousePos ) { // within our rectangle
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
                 cursor.Hide();
@@ -343,21 +342,21 @@ namespace Interface
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, position ) )
+                    if ( ActionListCursor( item, mousePos ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                        ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }
                 }

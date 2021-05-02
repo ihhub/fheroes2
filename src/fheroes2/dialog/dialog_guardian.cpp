@@ -205,7 +205,7 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     Text text( _( "Set Guardian" ), Font::SMALL );
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 3 );
 
-    ArmySplit armySplit( fheroes2::Point( area.x, area.y ), co );
+    ArmySplit armySplit( area.getPosition(), co );
     armySplit.Redraw( troop );
 
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK );

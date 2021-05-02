@@ -155,7 +155,7 @@ namespace
             const int xOffset = isHorizontal ? 0 : 1;
             const int yOffset = isHorizontal ? 1 : 0;
 
-            fheroes2::DrawLine( surface, fheroes2::Point( first.x, first.y ), fheroes2::Point( second.x, second.y ), color, roi );
+            fheroes2::DrawLine( surface, first, second, color, roi );
 
             for ( uint32_t thickness = 1; thickness < lightning[i].second.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
@@ -170,8 +170,7 @@ namespace
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), fheroes2::Point( second.x, second.y ), color,
-                                    roi );
+                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
             }
         }
     }
@@ -210,7 +209,7 @@ namespace Battle
             const fheroes2::Rect & area = border.GetArea();
             const int32_t ax = area.x + area.width - 20;
 
-            SetTopLeft( fheroes2::Point( area.x, area.y ) );
+            SetTopLeft( area.getPosition() );
             SetAreaMaxItems( mx );
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
@@ -1038,7 +1037,7 @@ const fheroes2::Rect & Battle::Interface::GetArea( void ) const
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const
 {
-    return LocalEvent::Get().GetMouseCursor() - fheroes2::Point( _interfacePosition.x, _interfacePosition.y );
+    return LocalEvent::Get().GetMouseCursor() - _interfacePosition.getPosition();
 }
 
 void Battle::Interface::SetStatus( const std::string & msg, bool top )
@@ -2354,7 +2353,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy, fheroes2::Point( _interfacePosition.x, _interfacePosition.y ) );
+                popup.SetInfo( cell, _currentUnit, b_enemy, _interfacePosition.getPosition() );
             }
             else
                 popup.Reset();
@@ -2460,7 +2459,7 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
-    fheroes2::FadeDisplayWithPalette( top, fheroes2::Point( srt.x, srt.y ), 5, 300, 5 );
+    fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
     display.render();
 }
 
@@ -2733,7 +2732,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
             if ( isMage ) {
                 fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 2 ), fheroes2::Point( pnt->x, pnt->y - 2 ), 0x77 );
                 fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 1 ), fheroes2::Point( pnt->x, pnt->y - 1 ), 0xB5 );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y ), fheroes2::Point( pnt->x, pnt->y ), 0xBC );
+                fheroes2::DrawLine( _mainSurface, startPos, *pnt, 0xBC );
                 fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 1 ), fheroes2::Point( pnt->x, pnt->y + 1 ), 0xB5 );
                 fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 2 ), fheroes2::Point( pnt->x, pnt->y + 2 ), 0x77 );
             }
@@ -2764,7 +2763,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     _currentUnit = NULL;
     _movingUnit = &attacker;
-    _movingPos = fheroes2::Point( attacker.GetRectPosition().x, attacker.GetRectPosition().y );
+    _movingPos = attacker.GetRectPosition().getPosition();
 
     // Unit 'Position' is position of the tile he's standing at
     const fheroes2::Rect & pos1 = attacker.GetRectPosition();
@@ -3047,7 +3046,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     while ( dst != path.end() ) {
         const Cell * cell = Board::GetCell( *dst );
-        _movingPos = fheroes2::Point( cell->GetPos().x, cell->GetPos().y );
+        _movingPos = cell->GetPos().getPosition();
         bool show_anim = false;
 
         if ( bridge && bridge->NeedDown( unit, *dst ) ) {
@@ -3840,7 +3839,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     const fheroes2::Rect & rt1 = target.GetRectPosition();
     const fheroes2::Rect & rt2 = pos.GetRect();
 
-    const std::vector<fheroes2::Point> points = GetLinePoints( fheroes2::Point( rt1.x, rt1.y ), fheroes2::Point( rt2.x, rt2.y ), 5 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( rt1.getPosition(), rt2.getPosition(), 5 );
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -4992,8 +4991,7 @@ void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
         }
 
         const fheroes2::Rect & currectArea = GetRect();
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ),
-                                          fheroes2::Rect( currectArea.x, currectArea.y, currectArea.width, currectArea.height ) );
+        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), currectArea );
 
         text1.Blit( borderArea.x, borderArea.y );
         text2.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );
