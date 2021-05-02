@@ -236,7 +236,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
 void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
     if ( v.size() ) {
-        for( size_t i = 0; i < v.size(); ++i ) {
+        for ( size_t i = 0; i < v.size(); ++i ) {
             const Heroes * hero = world.GetHeroes( v[i].first );
             int32_t px = pos.x - 25 + i * step;
             if ( hero ) {
@@ -269,7 +269,7 @@ void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Player * player = Players::Get( colors[i] );
         Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
-        text.Blit(pos.x - text.w() / 2 + step * i, pos.y );
+        text.Blit( pos.x - text.w() / 2 + step * i, pos.y );
     }
 }
 
@@ -279,7 +279,7 @@ void DrawBestMonsterIcons( const Colors & colors, fheroes2::Point & pos, int ste
         const Monster monster = world.GetKingdom( colors[i] ).GetBestMonster();
         if ( monster.isValid() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
-            if( !sprite.empty() )
+            if ( !sprite.empty() )
                 fheroes2::Blit( sprite, fheroes2::Display::instance(), pos.x + i * step - sprite.width() / 2, pos.y );
         }
     }
@@ -482,7 +482,7 @@ void Dialog::ThievesGuild( bool oracle )
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
-    if( 1 < count )
+    if ( 1 < count )
         DrawHeroStats( v, dst_pt, stepx );
 
     text.Set( _( "Personality:" ) );
@@ -492,7 +492,7 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y += 3;
-    if( 2 < count)
+    if ( 2 < count )
         DrawPersonality( colors, dst_pt, stepx );
 
     text.Set( _( "Best Monster:" ) );
@@ -502,7 +502,8 @@ void Dialog::ThievesGuild( bool oracle )
 
     dst_pt.x = cur_pt.x + startx;
     dst_pt.y -= 13;
-    if( 3 < count ) DrawBestMonsterIcons( colors, dst_pt, stepx );
+    if ( 3 < count )
+        DrawBestMonsterIcons( colors, dst_pt, stepx );
 
     buttonExit.draw();
 

@@ -1568,7 +1568,7 @@ Monster Army::GetBestMonster()
 {
     Monster monster( Monster::UNKNOWN );
     for ( Army::const_iterator ci = begin(); ci != end(); ++ci )
-        if ( ( *ci )->isValid() && ( *ci )->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength())
+        if ( ( *ci )->isValid() && ( *ci )->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() )
             monster = **ci;
     return monster;
 }
