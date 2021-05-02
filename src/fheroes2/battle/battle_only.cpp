@@ -451,7 +451,7 @@ void Battle::Only::UpdateHero1( const Point & cur_pt )
         secskill_bar1->SetContent( hero1->GetSecondarySkills().ToVector() );
         secskill_bar1->SetPos( cur_pt.x + 22, cur_pt.y + 199 );
 
-        selectArtifacts1.reset( new ArtifactsBar( hero1, true, false, true ) );
+        selectArtifacts1.reset( new ArtifactsBar( hero1, true, false, true, true, nullptr ) );
         selectArtifacts1->SetColRows( 7, 2 );
         selectArtifacts1->SetHSpace( 2 );
         selectArtifacts1->SetVSpace( 2 );
@@ -506,7 +506,7 @@ void Battle::Only::UpdateHero2( const Point & cur_pt )
         secskill_bar2->SetContent( hero2->GetSecondarySkills().ToVector() );
         secskill_bar2->SetPos( cur_pt.x + 353, cur_pt.y + 199 );
 
-        selectArtifacts2.reset( new ArtifactsBar( hero2, true, false, true ) );
+        selectArtifacts2.reset( new ArtifactsBar( hero2, true, false, true, true, nullptr ) );
         selectArtifacts2->SetColRows( 7, 2 );
         selectArtifacts2->SetHSpace( 2 );
         selectArtifacts2->SetVSpace( 2 );
