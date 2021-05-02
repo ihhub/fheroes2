@@ -998,13 +998,15 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
         return false;
     }
-    else if ( isSelected() ) {
+
+    if ( isSelected() ) {
         if ( !read_only && !isMagicBook( art ) && !isMagicBookSelected() ) {
             std::swap( art, *GetSelectedItem() );
         }
         return false;
     }
-    else if ( art.isValid() ) {
+
+    if ( art.isValid() ) {
         if ( !read_only ) {
             Cursor::Get().Hide();
             spcursor.hide();
@@ -1117,7 +1119,12 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
     }
     else if ( art.isValid() ) {
-        msg = _( "Select %{name}" );
+        if ( isMagicBook( art ) ) {
+            msg = _( "Open %{name}" );
+        }
+        else {
+            msg = _( "Select %{name}" );
+        }
         StringReplace( msg, "%{name}", art.GetName() );
     }
 
