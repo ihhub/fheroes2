@@ -149,7 +149,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
     return 0;
 }
 
-bool Battle::Catapult::GetHitOrMiss() const
+bool Battle::Catapult::IsNextShotHit() const
 {
     // Miss chance is 25%
     return !( canMiss && Rand::Get( 1, 20 ) < 6 );

@@ -624,9 +624,9 @@ void Battle::Arena::CatapultAction( void )
         cmd << shots;
 
         while ( shots-- ) {
-            int target = catapult->GetTarget( values );
-            u32 damage = std::min( catapult->GetDamage(), values[target] );
-            bool hit = catapult->GetHitOrMiss();
+            const int target = catapult->GetTarget( values );
+            const uint32_t damage = std::min( catapult->GetDamage(), values[target] );
+            const bool hit = catapult->IsNextShotHit();
 
             cmd << target << damage << ( hit ? 1 : 0 );
 

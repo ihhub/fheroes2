@@ -865,9 +865,9 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
         u32 shots = cmd.GetValue();
 
         while ( shots-- ) {
-            int target = cmd.GetValue();
-            u32 damage = cmd.GetValue();
-            bool hit = cmd.GetValue() != 0;
+            const int target = cmd.GetValue();
+            const uint32_t damage = cmd.GetValue();
+            const bool hit = cmd.GetValue() != 0;
 
             if ( target ) {
                 if ( interface ) {

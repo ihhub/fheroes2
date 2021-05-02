@@ -55,7 +55,7 @@ namespace Battle
 
         int GetTarget( const std::vector<u32> & ) const;
         u32 GetDamage() const;
-        bool GetHitOrMiss() const;
+        bool IsNextShotHit() const;
 
     private:
         u32 catShots;
