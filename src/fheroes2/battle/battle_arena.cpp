@@ -608,7 +608,7 @@ void Battle::Arena::CatapultAction( void )
 {
     if ( catapult ) {
         u32 shots = catapult->GetShots();
-        std::vector<u32> values( CAT_MISS + 1, 0 );
+        std::vector<u32> values( CAT_CENTRAL_TOWER + 1, 0 );
 
         values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
         values[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
@@ -616,18 +616,23 @@ void Battle::Arena::CatapultAction( void )
         values[CAT_WALL4] = GetCastleTargetValue( CAT_WALL4 );
         values[CAT_TOWER1] = GetCastleTargetValue( CAT_TOWER1 );
         values[CAT_TOWER2] = GetCastleTargetValue( CAT_TOWER2 );
-        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
         values[CAT_BRIDGE] = GetCastleTargetValue( CAT_BRIDGE );
+        values[CAT_CENTRAL_TOWER] = GetCastleTargetValue( CAT_CENTRAL_TOWER );
 
         Command cmd( MSG_BATTLE_CATAPULT );
 
         cmd << shots;
 
         while ( shots-- ) {
-            int target = catapult->GetTarget( values );
-            u32 damage = std::min( catapult->GetDamage(), values[target] );
-            cmd << target << damage;
-            values[target] -= damage;
+            const int target = catapult->GetTarget( values );
+            const uint32_t damage = std::min( catapult->GetDamage(), values[target] );
+            const bool hit = catapult->IsNextShotHit();
+
+            cmd << target << damage << ( hit ? 1 : 0 );
+
+            if ( hit ) {
+                values[target] -= damage;
+            }
         }
 
         // preserve the order of shots - command arguments will be extracted in reverse order

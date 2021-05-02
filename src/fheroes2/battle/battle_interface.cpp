@@ -3653,7 +3653,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
     _movingUnit = NULL;
 }
 
-void Battle::Interface::RedrawActionCatapult( int target )
+void Battle::Interface::RedrawActionCatapult( int target, bool hit )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -3674,7 +3674,7 @@ void Battle::Interface::RedrawActionCatapult( int target )
 
     // boulder animation
     Point pt1( 90, 220 );
-    Point pt2 = Catapult::GetTargetPosition( target );
+    Point pt2 = Catapult::GetTargetPosition( target, hit );
     Point max( 300, 20 );
 
     pt1.x += area.x;
@@ -3701,9 +3701,10 @@ void Battle::Interface::RedrawActionCatapult( int target )
         }
     }
 
-    // clod
+    // draw cloud
+    const int icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
-    int icn = target == CAT_MISS ? ICN::SMALCLOD : ICN::LICHCLOD;
+
     AGG::PlaySound( M82::CATSND02 );
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
@@ -4463,8 +4464,9 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     }
 
     // draw cloud
+    const int icn = ICN::LICHCLOD;
     frame = 0;
-    int icn = ICN::LICHCLOD;
+
     AGG::PlaySound( M82::CATSND02 );
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
@@ -4474,7 +4476,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
             RedrawPartialStart();
 
             for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
-                Point pt2 = Catapult::GetTargetPosition( *it );
+                Point pt2 = Catapult::GetTargetPosition( *it, true );
 
                 pt2.x += area.x;
                 pt2.y += area.y;
