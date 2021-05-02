@@ -34,6 +34,18 @@ namespace Campaign
         SCENARIOICON_EVIL_SELECTED = 17,
     };
 
+    enum CampaignID
+    {
+        ROLAND_CAMPAIGN = 0,
+        ARCHIBALD_CAMPAIGN = 1
+    };
+
+    enum class ScenarioVictoryCondition : int
+    {
+        STANDARD = 0, // standard map's defined victory condition
+        CAPTURE_DRAGON_CITY = 1
+    };
+
     struct ScenarioBonusData
     {
     public:
@@ -58,6 +70,8 @@ namespace Campaign
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
         std::string ToString() const;
+
+        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID );
     };
 
     class ScenarioData
@@ -65,7 +79,7 @@ namespace Campaign
     public:
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description );
+                      const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD );
 
         const std::vector<int> & getNextMaps() const
         {
@@ -92,6 +106,11 @@ namespace Campaign
             return _description;
         }
 
+        ScenarioVictoryCondition getVictoryCondition() const
+        {
+            return _victoryCondition;
+        }
+
         bool isMapFilePresent() const;
         Maps::FileInfo loadMap() const;
 
@@ -101,6 +120,7 @@ namespace Campaign
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
         std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
+        ScenarioVictoryCondition _victoryCondition;
     };
 }
 
