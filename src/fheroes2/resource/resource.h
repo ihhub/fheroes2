@@ -70,8 +70,8 @@ public:
     Funds();
     Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 _gems, s32 _gold );
     Funds( int rs, u32 count );
-    Funds( const cost_t & );
-    Funds( const ResourceCount & );
+    explicit Funds( const cost_t & );
+    explicit Funds( const ResourceCount & );
 
     Funds operator+( const Funds & ) const;
     Funds operator*( u32 mul ) const;
@@ -84,9 +84,6 @@ public:
     s32 Get( int rs ) const;
     s32 * GetPtr( int rs );
 
-    bool operator<( const Funds & ) const;
-    bool operator<=( const Funds & ) const;
-    bool operator>( const Funds & ) const;
     bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;

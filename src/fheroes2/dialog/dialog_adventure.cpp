@@ -20,10 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
@@ -31,11 +32,10 @@
 
 int Dialog::AdventureOptions( bool enabledig )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // preload
-    const int apanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::APANBKGE : ICN::APANBKG;
-    const int apanel = Settings::Get().ExtGameEvilInterface() ? ICN::APANELE : ICN::APANEL;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
+    const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -48,6 +48,7 @@ int Dialog::AdventureOptions( bool enabledig )
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
 
     // The sprite contains shadow area at left and bottom side so to center it we have to subtract it
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() + BORDERWIDTH ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );

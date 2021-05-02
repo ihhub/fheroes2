@@ -36,15 +36,15 @@ namespace Battle
         Units();
         Units( const Units &, bool filter = false );
         Units( const Units &, const Units & );
-        virtual ~Units();
+        virtual ~Units() = default;
 
         Units & operator=( const Units & );
 
         Unit * FindMode( u32 );
         Unit * FindUID( u32 );
 
-        void SortSlowest( bool );
-        void SortFastest( bool );
+        void SortSlowest();
+        void SortFastest();
         void SortStrongest( void );
         void SortWeakest( void );
         void SortArchers();
@@ -54,7 +54,11 @@ namespace Battle
     {
     public:
         Force( Army &, bool );
-        ~Force();
+        Force( const Force & ) = delete;
+
+        ~Force() override;
+
+        Force & operator=( const Force & ) = delete;
 
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
@@ -73,9 +77,8 @@ namespace Battle
         void NewTurn( void );
         void SyncArmyCount( bool checkResurrected );
 
-        static Unit * GetCurrentUnit( const Force &, const Force &, Unit * last, Units * all, bool part1 );
-        static Unit * GetCurrentUnit( const Force &, const Force &, const Unit * last, bool part1 );
-        static void UpdateOrderUnits( const Force &, const Force &, Units & );
+        static Unit * GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor );
+        static void UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders );
 
     private:
         Army & army;

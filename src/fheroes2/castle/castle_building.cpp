@@ -22,10 +22,11 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "icn.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -54,12 +55,6 @@ CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point
     for ( auto it = ordersBuildings.cbegin(); it != ordersBuildings.cend(); ++it ) {
         push_back( builds_t( *it, CastleGetCoordBuilding( castle.GetRace(), *it, top ) ) );
     }
-}
-
-const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
-{
-    const_iterator it = std::find( begin(), end(), b );
-    return it != end() ? ( *it ).coord : back().coord;
 }
 
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )

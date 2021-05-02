@@ -23,12 +23,13 @@
 #include <algorithm>
 #include <cassert>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_status.h"
 #include "kingdom.h"
 #include "resource.h"
@@ -104,7 +105,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
         _state = status;
 }
 
-void Interface::StatusWindow::Redraw( void )
+void Interface::StatusWindow::Redraw( void ) const
 {
     const Settings & conf = Settings::Get();
     const Rect & pos = GetArea();
@@ -322,7 +323,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 {
-    const Army * armies = NULL;
+    const Army * armies = nullptr;
 
     if ( GetFocusHeroes() )
         armies = &GetFocusHeroes()->GetArmy();
@@ -331,7 +332,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
     if ( armies ) {
         const Rect & pos = GetArea();
-        Army::DrawMonsterLines( *armies, pos.x, pos.y + 3 + oh, 138, Skill::Level::EXPERT );
+        Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
     }
 }
 

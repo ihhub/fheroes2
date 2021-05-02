@@ -33,6 +33,12 @@ class Players;
 class Heroes;
 class Castle;
 
+namespace Campaign
+{
+    struct CampaignAwardData;
+    class CampaignSaveData;
+}
+
 namespace Game
 {
     enum
@@ -176,6 +182,7 @@ namespace Game
     enum
     {
         SCROLL_DELAY,
+        SCROLL_START_DELAY,
         MAIN_MENU_DELAY,
         MAPS_DELAY,
         CASTLE_TAVERN_DELAY,
@@ -227,7 +234,6 @@ namespace Game
     int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
-    int NewNetwork( void );
     int NewBattleOnly( void );
     int LoadStandard( void );
     int LoadCampain( void );
@@ -262,7 +268,7 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.
@@ -281,25 +287,24 @@ namespace Game
         {
             FadeTask();
 
-            FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
-                      bool fadeIn_, uint8_t objectTileset_ );
+            FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_, bool fadeIn_,
+                      uint8_t objectTileset_ );
 
-            uint8_t object;
+            int object;
             uint32_t objectIndex;
             uint32_t animationIndex;
-            uint32_t fromIndex;
-            uint32_t toIndex;
-            uint32_t alpha;
+            int32_t fromIndex;
+            int32_t toIndex;
+            uint8_t alpha;
             bool fadeOut;
             bool fadeIn;
             uint8_t objectTileset;
         };
 
-        FadeTask & GetFadeTask();
+        const FadeTask & GetFadeTask();
 
-        void StartFadeTask( uint8_t object, uint32_t fromTile, uint32_t toTile, bool fadeOut, bool fadeIn );
-
-        void FinishFadeTask();
+        void PrepareFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PerformFadeTask();
     }
 
     u32 GetStep4Player( u32, u32, u32 );

@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "battle_arena.h"
 #include "battle_bridge.h"
@@ -36,6 +37,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "kingdom.h"
 #include "logging.h"
@@ -193,7 +195,7 @@ namespace Battle
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.h - 11 ) );
             SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 6 ) );
+                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7 ) );
             _scrollbar.hide();
             SetAreaItems( fheroes2::Rect( area.x, area.y, area.w - 10, area.h ) );
             SetListContent( messages );
@@ -215,13 +217,13 @@ namespace Battle
             }
         }
 
-        virtual void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
+        void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
         {
             const Text text( str, Font::BIG );
             text.Blit( px, py );
         }
 
-        virtual void RedrawBackground( const Point & pt ) override
+        void RedrawBackground( const Point & pt ) override
         {
             (void)pt;
 
@@ -242,11 +244,11 @@ namespace Battle
             fheroes2::Blit( sp2, display, ax, buttonPgDn.area().y - sp2.height() );
         }
 
-        virtual void ActionCurrentUp( void ) override {}
-        virtual void ActionCurrentDn( void ) override {}
-        virtual void ActionListDoubleClick( std::string & ) override {}
-        virtual void ActionListSingleClick( std::string & ) override {}
-        virtual void ActionListPressRight( std::string & ) override {}
+        void ActionCurrentUp( void ) override {}
+        void ActionCurrentDn( void ) override {}
+        void ActionListDoubleClick( std::string & ) override {}
+        void ActionListSingleClick( std::string & ) override {}
+        void ActionListPressRight( std::string & ) override {}
 
         void SetOpenLog( const bool f )
         {
@@ -737,7 +739,7 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw( void )
+void Battle::Status::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( back1, display, x, y );
@@ -875,7 +877,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
-    , turn( 0 )
 {
     const Settings & conf = Settings::Get();
 
@@ -1578,6 +1579,17 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
             }
         }
+        else if ( ( _currentUnit->GetID() == Monster::LICH || _currentUnit->GetID() == Monster::POWER_LICH )
+                  && ( Cursor::Get().Themes() == Cursor::WAR_ARROW || Cursor::Get().Themes() == Cursor::WAR_BROKENARROW ) ) {
+            highlightCells.emplace( cell );
+            const Indexes around = Board::GetAroundIndexes( index_pos );
+            for ( size_t i = 0; i < around.size(); ++i ) {
+                const Cell * aroundCell = Board::GetCell( around[i] );
+                if ( aroundCell != nullptr ) {
+                    highlightCells.emplace( aroundCell );
+                }
+            }
+        }
         else {
             highlightCells.emplace( cell );
         }
@@ -2039,7 +2051,11 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
         // teleport check first
         if ( Board::isValidIndex( teleport_src ) ) {
-            if ( !b_stats && cell->isPassable3( *_currentUnit, false ) ) {
+            const Unit * unitToTeleport = arena.GetTroopBoard( teleport_src );
+
+            assert( unitToTeleport != nullptr );
+
+            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
                 statusMsg = _( "Teleport Here" );
                 return Cursor::SP_TELEPORT;
             }
@@ -2047,7 +2063,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
             statusMsg = _( "Invalid Teleport Destination" );
             return Cursor::WAR_NONE;
         }
-        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCommander() ) ) {
+        else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
             StringReplace( statusMsg, "%{monster}", b_stats->GetName() );
@@ -2082,13 +2098,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     Board & board = *Arena::GetBoard();
     board.Reset();
     board.SetScanPassability( b );
-
-    if ( listlog && turn != arena.GetCurrentTurn() ) {
-        turn = arena.GetCurrentTurn();
-        std::string msg = _( "Turn %{turn}" );
-        StringReplace( msg, "%{turn}", turn );
-        listlog->AddMessage( msg );
-    }
 
     popup.Reset();
 
@@ -2214,16 +2223,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     // Add offsets to inner objects
     const Rect mainTowerRect = main_tower + _interfacePosition.getPosition();
     const Rect armiesOrderRect = armies_order + _interfacePosition.getPosition();
-    if ( pocket_book.w && le.MouseCursor( pocket_book ) ) {
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        msg = _( "Spell cast" );
-
-        if ( le.MouseClickLeft( pocket_book ) ) {
-            ProcessingHeroDialogResult( 1, a );
-            humanturn_redraw = true;
-        }
-    }
-    else if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
+    if ( Arena::GetTower( TWR_CENTER ) && le.MouseCursor( mainTowerRect ) ) {
         cursor.SetThemes( Cursor::WAR_INFO );
         msg = _( "View Ballista Info" );
 
@@ -2270,7 +2270,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent1->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2279,13 +2279,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
-                arena.DialogBattleHero( *opponent1->GetHero(), true );
+                arena.DialogBattleHero( *opponent1->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent1Area ) ) {
-            arena.DialogBattleHero( *opponent1->GetHero(), false );
+            arena.DialogBattleHero( *opponent1->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -2296,7 +2296,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true ), a );
+                ProcessingHeroDialogResult( arena.DialogBattleHero( *opponent2->GetHero(), true, status ), a );
                 humanturn_redraw = true;
             }
         }
@@ -2305,13 +2305,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
-                arena.DialogBattleHero( *opponent2->GetHero(), true );
+                arena.DialogBattleHero( *opponent2->GetHero(), true, status );
                 humanturn_redraw = true;
             }
         }
 
         if ( le.MousePressRight( opponent2Area ) ) {
-            arena.DialogBattleHero( *opponent2->GetHero(), false );
+            arena.DialogBattleHero( *opponent2->GetHero(), false, status );
             humanturn_redraw = true;
         }
     }
@@ -2544,7 +2544,7 @@ int Battle::Interface::GetAllowSwordDirection( u32 index )
     return res;
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell )
+void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
 {
     const Unit * b = cell.GetUnit();
 
@@ -2722,6 +2722,18 @@ void Battle::Interface::RedrawMissileAnimation( const Point & startPos, const Po
     }
 }
 
+void Battle::Interface::RedrawActionNewTurn() const
+{
+    if ( listlog == nullptr ) {
+        return;
+    }
+
+    std::string msg = _( "Turn %{turn}" );
+    StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
+
+    listlog->AddMessage( msg );
+}
+
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
 {
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -2758,7 +2770,11 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
         const Point targetPos = defender.GetCenterPoint();
 
-        const double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        double angle = GetAngle( Point( shooterPos.x + offset.x, shooterPos.y + offset.y ), targetPos );
+        // This check is made only for situations when a target stands on the same row as shooter.
+        if ( attacker.GetHeadIndex() / ARENAW == defender.GetHeadIndex() / ARENAW ) {
+            angle = 0;
+        }
 
         // Angles are used in Heroes2 as 90 (TOP) -> 0 (FRONT) -> -90 (BOT) degrees
         const int direction = angle >= 25.0 ? Monster_Info::TOP : ( angle <= -25.0 ) ? Monster_Info::BOTTOM : Monster_Info::FRONT;
@@ -3061,6 +3077,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 {
     const int32_t destIndex = pos.GetHead()->GetIndex();
+    const int32_t destTailIndex = unit.isWide() ? pos.GetTail()->GetIndex() : -1;
+
     // check if we're already there
     if ( unit.GetPosition().contains( destIndex ) )
         return;
@@ -3080,6 +3098,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
+
     const uint32_t step = unit.animation.getFlightSpeed();
     uint32_t frameDelay = Game::ApplyBattleSpeed( unit.animation.getMoveSpeed() );
     if ( unit.Modes( SP_HASTE ) ) {
@@ -3092,12 +3111,27 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     const Points points = GetEuclideanLine( destPos, targetPos, step );
     Points::const_iterator currentPoint = points.begin();
 
-    // jump up
+    // cleanup
     _currentUnit = NULL;
     _movingUnit = NULL;
-    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
+    _flyingUnit = NULL;
+
+    Bridge * bridge = Arena::GetBridge();
+
+    // open the bridge if the unit should land on it
+    if ( bridge ) {
+        if ( bridge->NeedDown( unit, destIndex ) ) {
+            bridge->Action( unit, destIndex );
+        }
+        else if ( unit.isWide() && bridge->NeedDown( unit, destTailIndex ) ) {
+            bridge->Action( unit, destTailIndex );
+        }
+    }
+
+    // jump up
     _flyingUnit = NULL;
     _movingUnit = &unit;
+    _movingPos = currentPoint != points.end() ? *currentPoint : destPos;
     _flyingPos = destPos;
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
@@ -3139,6 +3173,11 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     // restore
     _movingUnit = NULL;
 
+    // check for possible bridge close action, after unit's end of movement
+    if ( bridge && bridge->AllowUp() ) {
+        bridge->Action( unit, destIndex );
+    }
+
     StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
     status.SetMessage( msg, true );
 }
@@ -3154,24 +3193,32 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
     status.SetMessage( "", false );
 }
 
-void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const std::string & name, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets )
 {
+    Unit * target = targets.size() ? targets.front().defender : nullptr;
+
     std::string msg;
-    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     if ( target && target->GetHeadIndex() == dst ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
         StringReplace( msg, "%{troop}", target->GetName() );
     }
-    else if ( spell.isApplyWithoutFocusObject() )
+    else if ( spell.isApplyWithoutFocusObject() ) {
         msg = _( "%{name} casts %{spell}." );
+    }
 
     if ( msg.size() ) {
         StringReplace( msg, "%{name}", name );
         StringReplace( msg, "%{spell}", spell.GetName() );
+
         status.SetMessage( msg, true );
         status.SetMessage( "", false );
     }
+}
+
+void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
+{
+    Unit * target = targets.size() ? targets.front().defender : NULL;
 
     // set spell cast animation
     if ( caster ) {
@@ -4755,7 +4802,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     switch ( res ) {
     // cast
     case 1: {
-        const HeroBase * hero = _currentUnit ? _currentUnit->GetCommander() : NULL;
+        const HeroBase * hero = _currentUnit->GetCurrentOrArmyCommander();
+
         if ( hero ) {
             if ( hero->HaveSpellBook() ) {
                 std::string msg;
@@ -4793,8 +4841,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     } break;
 
     // retreat
-    case 2:
-        if ( _currentUnit->GetCommander() && arena.CanRetreatOpponent( _currentUnit->GetColor() ) ) {
+    case 2: {
+        if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to retreat?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 a.push_back( Command( MSG_BATTLE_RETREAT ) );
                 a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
@@ -4803,20 +4851,18 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         }
         else
             Dialog::Message( "", _( "Retreat disabled" ), Font::BIG, Dialog::OK );
-        break;
+    } break;
 
     // surrender
-    case 3:
-        if ( arena.CanSurrenderOpponent( _currentUnit->GetColor() ) ) {
+    case 3: {
+        if ( arena.CanSurrenderOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             const HeroBase * enemy = arena.GetCommander( arena.GetCurrentColor(), true );
 
             if ( enemy ) {
                 const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
-                const Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
+                Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
-                if ( !kingdom.AllowPayment( Funds( Resource::GOLD, cost ) ) )
-                    Dialog::Message( "", _( "You don't have enough gold!" ), Font::BIG, Dialog::OK );
-                else if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
+                if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
                     a.push_back( Command( MSG_BATTLE_SURRENDER ) );
                     a.push_back( Command( MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
                     humanturn_exit = true;
@@ -4825,7 +4871,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         }
         else
             Dialog::Message( "", _( "Surrender disabled" ), Font::BIG, Dialog::OK );
-        break;
+    } break;
 
     default:
         break;

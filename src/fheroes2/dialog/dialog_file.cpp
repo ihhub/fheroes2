@@ -20,21 +20,22 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
 
 int Dialog::FileOptions( void )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     // preload
-    const int cpanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::CPANBKGE : ICN::CPANBKG;
-    const int cpanel = Settings::Get().ExtGameEvilInterface() ? ICN::CPANELE : ICN::CPANEL;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
+    const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
     // cursor
     Cursor & cursor = Cursor::Get();
@@ -45,6 +46,7 @@ int Dialog::FileOptions( void )
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );

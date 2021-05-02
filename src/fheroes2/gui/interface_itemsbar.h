@@ -36,9 +36,9 @@ namespace Interface
     class ItemsBar
     {
     protected:
-        typedef std::list<Item *> Items;
+        using Items = std::list<Item *>;
         typedef typename std::list<Item *>::iterator ItemsIterator;
-        typedef std::pair<ItemsIterator, Rect> ItemIterPos;
+        using ItemIterPos = std::pair<ItemsIterator, Rect>;
 
         Items items;
 
@@ -48,7 +48,8 @@ namespace Interface
             , hspace( 0 )
             , vspace( 0 )
         {}
-        virtual ~ItemsBar() {}
+
+        virtual ~ItemsBar() = default;
 
         virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
@@ -74,14 +75,6 @@ namespace Interface
             colrows.width = col;
             colrows.height = row;
             RescanSize();
-        }
-
-        void SetContent( std::list<Item> & content )
-        {
-            items.clear();
-            for ( typename std::list<Item>::iterator it = content.begin(); it != content.end(); ++it )
-                items.push_back( &( *it ) );
-            SetContentItems();
         }
 
         void SetContent( std::vector<Item> & content )
@@ -121,18 +114,6 @@ namespace Interface
         {
             ItemsIterator posItem = GetItemIter( pt );
             return posItem != items.end() ? *posItem : NULL;
-        }
-
-        Rect * GetItemPos( const Point & pt )
-        {
-            ItemIterPos posItem = GetItemIterPos( pt );
-            return posItem.first != items.end() ? &posItem.second : NULL;
-        }
-
-        s32 GetIndex( const Point & pt )
-        {
-            ItemsIterator posItem = GetItemIter( pt );
-            return posItem != items.end() ? std::distance( items.end(), posItem ) : -1;
         }
 
         fheroes2::Point GetPos( void ) const
@@ -296,12 +277,12 @@ namespace Interface
             ResetSelected();
         }
 
-        virtual ~ItemsActionBar() {}
+        ~ItemsActionBar() override = default;
 
-        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
+        void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
         virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
 
-        virtual bool ActionBarCursor( Item & ) override
+        bool ActionBarCursor( Item & ) override
         {
             return false;
         }
@@ -316,7 +297,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarLeftMouseSingleClick( Item & ) override
+        bool ActionBarLeftMouseSingleClick( Item & ) override
         {
             return false;
         }
@@ -351,7 +332,7 @@ namespace Interface
             return false;
         }
 
-        virtual bool ActionBarRightMouseHold( Item & ) override
+        bool ActionBarRightMouseHold( Item & ) override
         {
             return false;
         }
@@ -410,36 +391,68 @@ namespace Interface
 
         bool QueueEventProcessing( ItemsActionBar<Item> & other )
         {
-            const Point & cursor = LocalEvent::Get().GetMouseCursor();
+            LocalEvent & le = LocalEvent::Get();
+            const Point & cursor = le.GetMouseCursor();
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
                 return false;
+            else if ( other.GetItem( le.GetMousePressLeft() ) && ActionCrossItemBarDrag( cursor, other ) )
+                return true;
 
             return other.isSelected() ? ActionCursorItemIter( cursor, other ) : ActionCursorItemIter( cursor, ItemsBar<Item>::GetItemIterPos( cursor ) );
         }
 
     protected:
-        virtual ItemsIterator GetTopItemIter( void ) override
+        ItemsIterator GetTopItemIter( void ) override
         {
             return topItem;
         }
 
-        virtual ItemsIterator GetCurItemIter( void ) override
+        ItemsIterator GetCurItemIter( void ) override
         {
             return curItemPos.first;
         }
 
-        virtual void SetContentItems( void ) override
+        void SetContentItems( void ) override
         {
             ResetSelected();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
+        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
 
-        virtual bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
+        bool ActionCrossItemBarDrag( const Point & cursor, ItemsActionBar<Item> & other )
+        {
+            LocalEvent & le = LocalEvent::Get();
+            Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
+
+            // already did check for this before we go here, maybe not necessary?
+            if ( !otherItemPress )
+                return false;
+
+            ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
+
+            if ( iterPos1.first == ItemsBar<Item>::GetEndItemIter() )
+                return false;
+
+            if ( le.MousePressLeft( iterPos1.second ) ) {
+                return ActionBarLeftMouseHold( **iterPos1.first, *otherItemPress );
+            }
+            else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
+                if ( ActionBarLeftMouseRelease( **iterPos1.first, *otherItemPress ) ) {
+                    le.ResetPressLeft();
+                    other.ResetSelected();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
@@ -503,12 +516,13 @@ namespace Interface
                 else if ( le.MousePressLeft( iterPos1.second ) ) {
                     return ActionBarLeftMouseHold( **iterPos1.first, **iterPos2.first );
                 }
-                else if ( le.MouseReleaseLeft( iterPos1.second ) ) {
-                    return ActionBarLeftMouseRelease( **iterPos1.first, **iterPos2.first );
-                }
+                // let ActionCrossItemBarDrag handle MousePressRelease instead
                 else if ( le.MouseClickRight( iterPos1.second ) ) {
+                    ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
                     other.ResetSelected();
-                    return ActionBarRightMouseSingleClick( **iterPos1.first, **iterPos2.first );
+
+                    // has to return true to display selection reset
+                    return true;
                 }
                 else if ( le.MousePressRight( iterPos1.second ) ) {
                     return ActionBarRightMouseHold( **iterPos1.first, **iterPos2.first );

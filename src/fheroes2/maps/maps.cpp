@@ -37,7 +37,7 @@
 
 struct ComparsionDistance
 {
-    ComparsionDistance( const int32_t index )
+    explicit ComparsionDistance( const int32_t index )
         : center( index )
     {}
 
@@ -53,7 +53,7 @@ Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const in
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
             result.push_back( indexes[idx] );
         }
     }
@@ -65,7 +65,7 @@ Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
     Maps::Indexes result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
             result.push_back( idx );
         }
     }
@@ -187,7 +187,7 @@ bool Maps::isValidDirection( s32 from, int vector )
     case Direction::BOTTOM:
         return ( from < width * ( world.h() - 1 ) );
     case Direction::LEFT:
-        return ( from % width );
+        return ( from % width ) != 0;
 
     case Direction::TOP_RIGHT:
         return ( from >= width ) && ( ( from % width ) < ( width - 1 ) );
@@ -211,11 +211,6 @@ bool Maps::isValidDirection( s32 from, int vector )
 Point Maps::GetPoint( s32 index )
 {
     return Point( index % world.w(), index / world.w() );
-}
-
-bool Maps::isValidAbsPoint( const Point & pt )
-{
-    return isValidAbsPoint( pt.x, pt.y );
 }
 
 bool Maps::isValidAbsIndex( s32 ii )
@@ -305,30 +300,6 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
     return results;
 }
 
-Maps::Indexes Maps::GetDistanceIndexes( s32 center, int dist )
-{
-    Indexes results;
-    results.reserve( dist * 6 );
-
-    const Point cp = GetPoint( center );
-
-    for ( s32 xx = cp.x - dist; xx <= cp.x + dist; ++xx ) {
-        if ( isValidAbsPoint( xx, cp.y - dist ) )
-            results.push_back( GetIndexFromAbsPoint( xx, cp.y - dist ) );
-        if ( isValidAbsPoint( xx, cp.y + dist ) )
-            results.push_back( GetIndexFromAbsPoint( xx, cp.y + dist ) );
-    }
-
-    for ( s32 yy = cp.y - dist + 1; yy < cp.y + dist; ++yy ) {
-        if ( isValidAbsPoint( cp.x - dist, yy ) )
-            results.push_back( GetIndexFromAbsPoint( cp.x - dist, yy ) );
-        if ( isValidAbsPoint( cp.x + dist, yy ) )
-            results.push_back( GetIndexFromAbsPoint( cp.x + dist, yy ) );
-    }
-
-    return results;
-}
-
 void Maps::ClearFog( s32 index, int scoute, int color )
 {
     if ( 0 != scoute && isValidAbsIndex( index ) ) {
@@ -409,37 +380,30 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
 
 bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: monster */
 {
-    bool result = false;
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
 
     if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
         const int monsterDirection = Maps::GetDirection( index, from );
-        /* if monster can attack to */
-        result = ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) );
+        // if monster can attack to
+        if ( ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) ) )
+            return true;
 
-        if ( !result ) {
-            /* h2 specific monster attack: BOTTOM_LEFT impassable! */
-            if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-                result = true;
-            else
-                /* h2 specific monster attack: BOTTOM_RIGHT impassable! */
-                if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-                result = true;
-        }
+        // h2 specific monster attack: BOTTOM_LEFT impassable!
+        if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            return true;
+
+        // h2 specific monster attack: BOTTOM_RIGHT impassable!
+        if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
+            return true;
     }
 
-    return result;
-}
-
-bool Maps::IsNearTiles( s32 index1, s32 index2 )
-{
-    return DIRECTION_ALL & Maps::GetDirection( index1, index2 );
+    return false;
 }
 
 bool Maps::TileIsUnderProtection( s32 center )
 {
-    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : GetTilesUnderProtection( center ).size();
+    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : !GetTilesUnderProtection( center ).empty();
 }
 
 Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
@@ -619,11 +583,6 @@ int Maps::TileIsCoast( s32 center, int filter )
 }
 
 StreamBase & operator>>( StreamBase & sb, IndexObject & st )
-{
-    return sb >> st.first >> st.second;
-}
-
-StreamBase & operator>>( StreamBase & sb, IndexDistance & st )
 {
     return sb >> st.first >> st.second;
 }

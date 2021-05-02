@@ -49,6 +49,7 @@ namespace MP2
 namespace Interface
 {
     class GameArea;
+    bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable );
 }
 
 namespace Maps
@@ -66,7 +67,10 @@ namespace Maps
         TilesAddon();
         TilesAddon( int lv, u32 gid, int obj, u32 ii );
         TilesAddon( const TilesAddon & ta );
-        TilesAddon & operator=( const TilesAddon & ta );
+
+        ~TilesAddon() = default;
+
+        TilesAddon & operator=( const TilesAddon & ta ) = delete;
 
         bool isUniq( const uint32_t id ) const
         {
@@ -130,7 +134,6 @@ namespace Maps
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
-        void SetObjectSpriteIndex( const uint8_t index );
 
         u32 GetObjectUID() const;
 
@@ -194,17 +197,20 @@ namespace Maps
         void UpdatePassable( void );
         void CaptureFlags32( int obj, int col );
 
-        void RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const;
+        void RedrawTile( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const Point & mp, const Rect & visibleTileROI );
-        void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & gameArea ) const;
-        void RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const;
-        void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const;
-        void RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & gameArea ) const;
-        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & gameArea ) const;
-        void RedrawMonstersAndBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gameArea ) const;
+        void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void RedrawBottom4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
+        void RedrawTop4Hero( fheroes2::Image & dst, const Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
+        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawBoatShadow( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
-        void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & gameArea ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & gameArea ) const;
+        void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & area ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const Rect & visibleTileROI ) const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
@@ -291,9 +297,6 @@ namespace Maps
         void RemoveJailSprite( void );
         bool isLongObject( int direction );
 
-        void RedrawBoat( fheroes2::Image & dst, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gameArea ) const;
-        void RedrawMonster( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & gameArea ) const;
-
         void QuantitySetVariant( int );
         void QuantitySetExt( int );
         void QuantitySetSkill( int );
@@ -312,6 +315,10 @@ namespace Maps
 #ifdef WITH_XML
         friend TiXmlElement & operator>>( TiXmlElement &, Tiles & );
 #endif
+        friend bool operator<( const Tiles & l, const Tiles & r )
+        {
+            return l.GetIndex() < r.GetIndex();
+        }
 
         Addons addons_level1;
         Addons addons_level2; // 16

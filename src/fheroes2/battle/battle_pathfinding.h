@@ -50,21 +50,24 @@ namespace Battle
             , _isLeftDirection( isLeftDirection )
         {}
         // Override the base version of the call to use proper values
-        virtual void resetNode() override;
+        void resetNode() override;
     };
 
     class ArenaPathfinder : public Pathfinder<ArenaNode>
     {
     public:
         ArenaPathfinder();
-        virtual void reset() override;
+        void reset() override;
         void calculate( const Unit & unit );
-        std::list<Route::Step> buildPath( int targetCell ) const;
+        Indexes buildPath( int targetCell ) const;
+        Indexes findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const;
         bool hexIsAccessible( int targetCell ) const;
         bool hexIsPassable( int targetCell ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
 
     private:
-        bool nodeIsAccessible( const ArenaNode & node ) const;
+        bool nodeIsPassable( const ArenaNode & node ) const;
+
+        Position _start;
     };
 }

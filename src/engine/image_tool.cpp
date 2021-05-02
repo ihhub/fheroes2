@@ -75,14 +75,14 @@ namespace
                 }
                 else {
                     const uint8_t * value = currentPalette + *in * 3;
-                    *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                    *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                 }
             }
         }
         else {
             for ( ; out != outEnd; ++out, ++in ) {
                 const uint8_t * value = currentPalette + *in * 3;
-                *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
             }
         }
 
@@ -285,5 +285,40 @@ namespace fheroes2
         }
 
         return sprite;
+    }
+
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t shadowType )
+    {
+        if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
+            return in;
+
+        const int32_t width = in.width();
+        const int32_t height = in.height();
+
+        Sprite out( width - shadowOffset.x, height + shadowOffset.y );
+        out.reset();
+
+        Copy( in, 0, 0, out, -shadowOffset.x, 0, width, height );
+
+        const int32_t widthOut = out.width();
+
+        // Shadow has (-x, +y) offset.
+        const uint8_t * transformInY = out.transform() - shadowOffset.x;
+        const uint8_t * transformInYEnd = transformInY + widthOut * height;
+        uint8_t * transformOutY = out.transform() + shadowOffset.y * widthOut;
+
+        for ( ; transformInY != transformInYEnd; transformInY += widthOut, transformOutY += widthOut ) {
+            const uint8_t * transformInX = transformInY;
+            uint8_t * transformOutX = transformOutY;
+            const uint8_t * transformInXEnd = transformInX + width;
+
+            for ( ; transformInX != transformInXEnd; ++transformInX, ++transformOutX ) {
+                if ( *transformInX == 0 && *transformOutX == 1 ) {
+                    *transformOutX = shadowType;
+                }
+            }
+        }
+
+        return out;
     }
 }

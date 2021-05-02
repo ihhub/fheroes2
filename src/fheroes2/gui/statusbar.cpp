@@ -24,8 +24,6 @@
 #include "cursor.h"
 #include "screen.h"
 
-StatusBar::StatusBar() {}
-
 void StatusBar::SetCenter( s32 cx, s32 cy )
 {
     center.x = cx;
@@ -43,15 +41,4 @@ void StatusBar::ShowMessage( const std::string & msg )
         fheroes2::Display::instance().render();
         prev = msg;
     }
-}
-
-void StatusBar::Redraw( void )
-{
-    Hide();
-    Show();
-}
-
-const std::string & StatusBar::GetMessage( void ) const
-{
-    return prev;
 }

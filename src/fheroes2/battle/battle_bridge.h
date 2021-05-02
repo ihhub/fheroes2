@@ -38,16 +38,15 @@ namespace Battle
 
         void SetDestroy( void );
         void SetDown( bool );
-        void SetPassable( const Unit & );
+        void SetPassable( const Unit & ) const;
 
         bool AllowUp( void ) const;
         bool NeedDown( const Unit &, s32 ) const;
-        bool isPassable( int ) const;
+        bool isPassable( const Unit & ) const;
         bool isValid( void ) const;
         bool isDestroy( void ) const;
         bool isDown( void ) const;
-        bool isDeadBodyOnABridge( void ) const;
-        bool isMoatCell( int cellId ) const;
+        bool isBridgeOccupied( void ) const;
 
     private:
         bool destroy;

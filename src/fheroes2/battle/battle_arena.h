@@ -49,6 +49,7 @@ namespace Battle
     class Command;
     class Tower;
     class Interface;
+    class Status;
 
     class Actions : public std::list<Command>
     {
@@ -97,26 +98,28 @@ namespace Battle
 
         const SpellStorage & GetUsageSpells( void ) const;
 
-        void DialogBattleSummary( const Result & res, const bool transferArtifacts ) const;
-        int DialogBattleHero( const HeroBase &, bool ) const;
+        bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
+        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
+        void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
 
         void FadeArena( bool clearMessageLog ) const;
 
         // returns pair with move cell index and distance
-        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
+        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target ) const;
 
-        uint32_t CalculateMoveDistance( int32_t indexTo );
-        bool hexIsAccessible( int32_t indexTo );
-        bool hexIsPassable( int32_t indexTo );
+        uint32_t CalculateMoveDistance( int32_t indexTo ) const;
+        bool hexIsAccessible( int32_t indexTo ) const;
+        bool hexIsPassable( int32_t indexTo ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
-        Indexes GetPath( const Unit &, const Position & );
+        Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
+        Indexes GetPath( const Unit &, const Position & ) const;
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 );
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & );
-        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
+        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
+        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
+        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
+        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg );
@@ -160,7 +163,7 @@ namespace Battle
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
-        void TurnTroop( Unit * );
+        void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
         void SetCastleTargetValue( int, u32 );
@@ -192,8 +195,10 @@ namespace Battle
         Force * army2;
         Units * armies_order;
 
-        const Castle * castle;
         int current_color;
+        int preferredColor; // preferred color for the next unit in the battle queue
+
+        const Castle * castle;
 
         Tower * towers[3];
         Catapult * catapult;

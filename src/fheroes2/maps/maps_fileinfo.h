@@ -35,6 +35,8 @@ namespace Maps
         FileInfo();
         FileInfo( const FileInfo & );
 
+        ~FileInfo() = default;
+
         FileInfo & operator=( const FileInfo & );
 
         bool ReadMAP( const std::string & );
@@ -107,7 +109,7 @@ namespace Maps
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
 
-typedef std::vector<Maps::FileInfo> MapsFileInfoList;
+using MapsFileInfoList = std::vector<Maps::FileInfo>;
 
 bool PrepareMapsFileInfoList( MapsFileInfoList &, bool multi );
 

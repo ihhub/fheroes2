@@ -72,16 +72,6 @@ Skill::Primary::Primary()
     , knowledge( 0 )
 {}
 
-bool Skill::Primary::isCaptain( void ) const
-{
-    return false;
-}
-
-bool Skill::Primary::isHeroes( void ) const
-{
-    return false;
-}
-
 void Skill::Primary::LoadDefaults( int type, int race )
 {
     const stats_t * ptr = GameStatic::GetSkillStats( race );
@@ -304,11 +294,6 @@ int Skill::Secondary::Skill( void ) const
 int Skill::Secondary::Level( void ) const
 {
     return second;
-}
-
-bool Skill::Secondary::isLevel( int level ) const
-{
-    return level == second;
 }
 
 bool Skill::Secondary::isSkill( int skill ) const
@@ -565,7 +550,7 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         }
         break;
     case NECROMANCY: {
-        const uint32_t necroCount = Skill::GetNecromancyPercent( hero );
+        const uint32_t necroCount = Skill::GetNecromancyPercent( hero ) - hero.GetSecondaryValues( Skill::Secondary::NECROMANCY ) + count;
         const std::string tmpDescription(
             std::string( GetNameWithBonus( hero ) )
             + std::string( " allows %{necrocount} percent of the creatures killed in combat to be brought back from the dead as Skeletons." ) );

@@ -21,7 +21,8 @@
  ***************************************************************************/
 
 #include "cursor.h"
-#include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "localevent.h"
 
 // This is new Graphics engine. To change the code slowly we have to do some hacks here for now
@@ -32,10 +33,6 @@ Cursor::Cursor()
     , offset_x( 0 )
     , offset_y( 0 )
 {}
-
-Cursor::~Cursor()
-{
-}
 
 Cursor & Cursor::Get( void )
 {
@@ -99,7 +96,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:
-    case Cursor::POINTER2:
+    case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
     case Cursor::FIGHT:
     case Cursor::FIGHT2:
@@ -172,6 +169,20 @@ void Cursor::Hide() const
 bool Cursor::isVisible( void ) const
 {
     return fheroes2::cursor().isVisible();
+}
+
+void Cursor::setVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER_VIDEO );
+    }
+}
+
+void Cursor::resetVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER );
+    }
 }
 
 void Cursor::Refresh()

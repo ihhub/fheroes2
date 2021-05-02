@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <climits>
 #include <cmath>
 #include <iterator>
 #include <sstream>
@@ -52,14 +51,6 @@ Point & Point::operator+=( const Point & pt )
 {
     x += pt.x;
     y += pt.y;
-
-    return *this;
-}
-
-Point & Point::operator-=( const Point & pt )
-{
-    x -= pt.x;
-    y -= pt.y;
 
     return *this;
 }
@@ -124,34 +115,6 @@ bool Size::operator!=( const Size & sz ) const
     return !( *this == sz );
 }
 
-Size & Size::operator+=( const Size & sz )
-{
-    w += sz.w;
-    h += sz.h;
-
-    return *this;
-}
-
-Size & Size::operator-=( const Size & sz )
-{
-    w -= sz.w;
-    h -= sz.h;
-
-    return *this;
-}
-
-Size Size::operator+( const Size & sz ) const
-{
-    return Size( w + sz.w, h + sz.h );
-}
-
-Size Size::operator-( const Size & sz ) const
-{
-    return Size( w - sz.w, h - sz.h );
-}
-
-Rect::Rect() {}
-
 Rect::Rect( int16_t rx, int16_t ry, u16 rw, u16 rh )
     : Point( rx, ry )
     , Size( rw, rh )
@@ -171,18 +134,6 @@ Rect::Rect( const fheroes2::Rect & rect )
     : Point( rect.x, rect.y )
     , Size( rect.width, rect.height )
 {}
-
-Rect Rect::Get( const Point & pt1, const Point & pt2 )
-{
-    Rect res;
-
-    res.x = pt1.x < pt2.x ? pt1.x : pt2.x;
-    res.y = pt1.y < pt2.y ? pt1.y : pt2.y;
-    res.w = ( pt1.x < pt2.x ? pt2.x - pt1.x : pt1.x - pt2.x ) + 1;
-    res.h = ( pt1.y < pt2.y ? pt2.y - pt1.y : pt1.y - pt2.y ) + 1;
-
-    return res;
-}
 
 Rect Rect::Get( const Rect & rt1, const Rect & rt2, bool intersect )
 {
@@ -206,14 +157,6 @@ Rect Rect::Get( const Rect & rt1, const Rect & rt2, bool intersect )
     }
 
     return rt3;
-}
-
-Rect & Rect::operator=( const Point & pt )
-{
-    x = pt.x;
-    y = pt.y;
-
-    return *this;
 }
 
 bool Rect::operator==( const Rect & rt ) const
@@ -244,29 +187,6 @@ bool Rect::operator&( const Rect & rt ) const
 const Point & Rect::getPosition() const
 {
     return *this;
-}
-
-Rect Points::GetRect( void ) const
-{
-    Rect res;
-
-    if ( 1 < size() ) {
-        res = Rect::Get( at( 0 ), at( 1 ) );
-
-        for ( const_iterator it = begin() + 2; it != end(); ++it ) {
-            if ( ( *it ).x < res.x )
-                res.x = ( *it ).x;
-            else if ( ( *it ).x > res.x + res.w )
-                res.w = ( *it ).x - res.x + 1;
-
-            if ( ( *it ).y < res.y )
-                res.y = ( *it ).y;
-            else if ( ( *it ).y > res.y + res.h )
-                res.h = ( *it ).y - res.y + 1;
-        }
-    }
-
-    return res;
 }
 
 Rect Rects::GetRect( void ) const

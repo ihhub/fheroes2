@@ -21,13 +21,16 @@
  ***************************************************************************/
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "image.h"
 #include "localevent.h"
 #include "mus.h"
@@ -35,12 +38,6 @@
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
-
-#define NEWGAME_DEFAULT 1
-#define LOADGAME_DEFAULT 5
-#define HIGHSCORES_DEFAULT 9
-#define CREDITS_DEFAULT 13
-#define QUIT_DEFAULT 17
 
 namespace
 {
@@ -50,6 +47,15 @@ namespace
         fheroes2::Button & button;
         bool isOver;
         bool wasOver;
+    };
+
+    enum
+    {
+        NEWGAME_DEFAULT = 1,
+        LOADGAME_DEFAULT = 5,
+        HIGHSCORES_DEFAULT = 9,
+        CREDITS_DEFAULT = 13,
+        QUIT_DEFAULT = 17
     };
 }
 
@@ -70,12 +76,12 @@ int Game::MainMenu( bool isFirstGameRun )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
         bool isResolutionChanged = Dialog::SelectResolution();
         conf.Save( "fheroes2.cfg" );
         if ( isResolutionChanged ) {
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+            fheroes2::drawMainMenuScreen();
         }
 
         Dialog::Message( "Please remember",

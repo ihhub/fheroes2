@@ -30,8 +30,6 @@ namespace Interface
             : player( NULL )
         {}
 
-        bool operator==( const Player * ) const;
-
         Player * player;
         Rect rect1; // opponent
         Rect rect2; // class
@@ -43,6 +41,7 @@ namespace Interface
         PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
 
         void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+        bool SwapPlayers( Player & player1, Player & player2 ) const;
 
         Player * GetFromOpponentClick( const Point & pt );
         Player * GetFromOpponentNameClick( const Point & pt );

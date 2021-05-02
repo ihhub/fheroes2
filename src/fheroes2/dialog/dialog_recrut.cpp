@@ -20,10 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
 #include "payment.h"
@@ -39,7 +40,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
     Text text;
 
     text.Set( std::to_string( result ), Font::BIG );
-    text.Blit( pos.x + 167 - text.w() / 2, pos.y + 160 );
+    text.Blit( pos.x + 167 - text.w() / 2, pos.y + 161 );
     const std::string sgold = std::to_string( paymentCosts.gold ) + " " + "(" + std::to_string( funds.gold - paymentCosts.gold ) + ")";
     int rsext = paymentMonster.GetValidItems() & ~Resource::GOLD;
 
@@ -56,7 +57,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
     }
 
     text.Set( label, Font::SMALL );
-    text.Blit( pos.x + 165 - text.w() / 2, pos.y + 180 );
+    text.Blit( pos.x + 167 - text.w() / 2, pos.y + 180 );
 }
 
 void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
@@ -264,8 +265,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     dst_pt.y = pos.y + 249;
     fheroes2::Button buttonCancel( dst_pt.x, dst_pt.y, ICN::RECRUIT, 6, 7 );
 
-    dst_pt.x = pos.x + 230;
-    dst_pt.y = pos.y + 155;
+    dst_pt.x = pos.x + 229;
+    dst_pt.y = pos.y + 156;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 

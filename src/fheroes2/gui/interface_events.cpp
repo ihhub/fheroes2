@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "castle.h"
 #include "cursor.h"
@@ -33,6 +34,7 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"
@@ -40,7 +42,7 @@
 #include "text.h"
 #include "world.h"
 
-void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx )
+void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
 {
     if ( ( hero == NULL ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
@@ -79,14 +81,11 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
-    else if ( path.isValid() ) {
+    else if ( path.isValid() && hero->MayStillMove() ) {
         SetFocus( hero );
         RedrawFocus();
 
         hero->SetMove( true );
-        if ( hero->MayStillMove() ) {
-            Cursor::Get().SetThemes( Cursor::WAIT );
-        }
     }
 }
 
@@ -142,6 +141,7 @@ void Interface::Basic::EventNextHero( void )
                 it = myHeroes.begin();
             if ( ( *it )->MayStillMove() ) {
                 SetFocus( *it );
+                CalculateHeroPath( *it, -1 );
                 break;
             }
         } while ( it != currentHero );
@@ -151,6 +151,7 @@ void Interface::Basic::EventNextHero( void )
         for ( size_t i = 0; i < heroesCount; ++i ) {
             if ( myHeroes[i]->MayStillMove() ) {
                 SetFocus( myHeroes[i] );
+                CalculateHeroPath( myHeroes[i], -1 );
                 break;
             }
         }
@@ -158,7 +159,7 @@ void Interface::Basic::EventNextHero( void )
     RedrawFocus();
 }
 
-void Interface::Basic::EventContinueMovement( void )
+void Interface::Basic::EventContinueMovement( void ) const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -166,7 +167,7 @@ void Interface::Basic::EventContinueMovement( void )
         hero->SetMove( !hero->isMoveEnabled() );
 }
 
-void Interface::Basic::EventKingdomInfo( void )
+void Interface::Basic::EventKingdomInfo( void ) const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.OverviewDialog();
@@ -192,7 +193,7 @@ void Interface::Basic::EventCastSpell( void )
     }
 }
 
-int Interface::Basic::EventEndTurn( void )
+int Interface::Basic::EventEndTurn( void ) const
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
@@ -233,7 +234,7 @@ int Interface::Basic::EventAdventureDialog( void )
     return Game::CANCEL;
 }
 
-int Interface::Basic::EventFileDialog( void )
+int Interface::Basic::EventFileDialog( void ) const
 {
     return Dialog::FileOptions();
 }
@@ -291,14 +292,14 @@ void Interface::Basic::EventNextTown( void )
     }
 }
 
-int Interface::Basic::EventNewGame( void )
+int Interface::Basic::EventNewGame( void ) const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
                ? Game::NEWGAME
                : Game::CANCEL;
 }
 
-int Interface::Basic::EventSaveGame( void )
+int Interface::Basic::EventSaveGame( void ) const
 {
     while ( true ) {
         const std::string filename = Dialog::SelectFileSave();
@@ -323,19 +324,19 @@ int Interface::Basic::EventSaveGame( void )
     }
 }
 
-int Interface::Basic::EventLoadGame( void )
+int Interface::Basic::EventLoadGame( void ) const
 {
-    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost)" ), Font::BIG, Dialog::YES | Dialog::NO )
+    return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
                ? Game::LOADGAME
                : Game::CANCEL;
 }
 
-void Interface::Basic::EventPuzzleMaps( void )
+void Interface::Basic::EventPuzzleMaps( void ) const
 {
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-void Interface::Basic::EventGameInfo( void )
+void Interface::Basic::EventGameInfo( void ) const
 {
     Dialog::GameInfo();
 }
@@ -438,7 +439,7 @@ void Interface::Basic::EventDefaultAction( void )
     }
 }
 
-void Interface::Basic::EventOpenFocus( void )
+void Interface::Basic::EventOpenFocus( void ) const
 {
     if ( GetFocusHeroes() )
         Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
@@ -446,7 +447,7 @@ void Interface::Basic::EventOpenFocus( void )
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar( void )
+void Interface::Basic::EventSwitchShowRadar( void ) const
 {
     Settings & conf = Settings::Get();
 
@@ -462,7 +463,7 @@ void Interface::Basic::EventSwitchShowRadar( void )
     }
 }
 
-void Interface::Basic::EventSwitchShowButtons( void )
+void Interface::Basic::EventSwitchShowButtons( void ) const
 {
     Settings & conf = Settings::Get();
 
@@ -478,7 +479,7 @@ void Interface::Basic::EventSwitchShowButtons( void )
     }
 }
 
-void Interface::Basic::EventSwitchShowStatus( void )
+void Interface::Basic::EventSwitchShowStatus( void ) const
 {
     Settings & conf = Settings::Get();
 
@@ -511,7 +512,7 @@ void Interface::Basic::EventSwitchShowIcons( void )
     }
 }
 
-void Interface::Basic::EventSwitchShowControlPanel( void )
+void Interface::Basic::EventSwitchShowControlPanel( void ) const
 {
     Settings & conf = Settings::Get();
 

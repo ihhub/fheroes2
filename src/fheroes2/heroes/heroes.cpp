@@ -25,6 +25,7 @@
 #include <functional>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "artifact.h"
 #include "battle.h"
@@ -37,6 +38,7 @@
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -196,6 +198,9 @@ Heroes::Heroes( int heroid, int rc )
         power = 2;
         knowledge = 6;
 
+        // start from lv5
+        experience = GetExperienceFromLevel( 4 );
+
         secondary_skills = Skill::SecSkills();
         secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NAVIGATION, Skill::Level::ADVANCED ) );
         secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::EXPERT ) );
@@ -347,7 +352,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         st.skip( 15 );
 
     // custom portrate
-    bool custom_portrait = st.get();
+    bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
         SetModes( NOTDEFAULTS );
@@ -381,7 +386,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     if ( experience == 0 )
         experience = GetStartingXp();
 
-    bool custom_secskill = st.get();
+    bool custom_secskill = ( st.get() != 0 );
 
     // custom skill
     if ( custom_secskill ) {
@@ -510,9 +515,9 @@ int Heroes::GetMobilityIndexSprite( void ) const
 
 int Heroes::GetManaIndexSprite( void ) const
 {
-    // valid range (0 - 25)
-    int r = GetSpellPoints() / 5;
-    return 25 >= r ? r : 25;
+    // Add 2 to round values.
+    const int value = ( GetSpellPoints() + 2 ) / 5;
+    return value >= 25 ? 25 : value;
 }
 
 int Heroes::getStatsValue() const
@@ -1059,7 +1064,8 @@ bool Heroes::PickupArtifact( const Artifact & art )
                 GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK )
-                                          : Dialog::Message( art.GetName(), _( "You have no room to carry another artifact!" ), Font::BIG, Dialog::OK );
+                                          : Dialog::Message( art.GetName(), _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG,
+                                                             Dialog::OK );
         }
         return false;
     }
@@ -1522,6 +1528,11 @@ bool Heroes::MayStillMove( void ) const
     return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
 }
 
+bool Heroes::MayCastAdventureSpells() const
+{
+    return !Modes( GUARDIAN ) && !isFreeman();
+}
+
 bool Heroes::isValid( void ) const
 {
     return hid != UNKNOWN;
@@ -1687,12 +1698,6 @@ int Heroes::GetSquarePatrol( void ) const
 void Heroes::MovePointsScaleFixed( void )
 {
     move_point_scale = move_point * 1000 / GetMaxMovePoints();
-}
-
-void Heroes::RecalculateMovePoints( void )
-{
-    if ( 0 <= move_point_scale )
-        move_point = GetMaxMovePoints() * move_point_scale / 1000;
 }
 
 // Move hero to a new position. This function applies no action and no penalty
@@ -2009,6 +2014,12 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     }
 
     return at( Rand::Get( freeman_heroes ) );
+}
+
+Heroes * AllHeroes::GetFreemanSpecial( int heroID ) const
+{
+    assert( at( heroID ) && at( heroID )->isFreeman() );
+    return at( heroID );
 }
 
 void AllHeroes::Scoute( int colors ) const

@@ -19,9 +19,10 @@
  ***************************************************************************/
 
 #include "skill_bar.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
+#include "icn.h"
 #include "text.h"
 
 fheroes2::Image GetBarBackgroundSprite( void )

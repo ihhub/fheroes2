@@ -20,9 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "screen.h"
 #include "settings.h"
 
@@ -47,14 +48,6 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
-    RenderRegular( GetRect() );
-}
-
-Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , border( BORDERWIDTH )
-{
-    SetPosition( posx, posy, encw, ench );
     RenderRegular( GetRect() );
 }
 

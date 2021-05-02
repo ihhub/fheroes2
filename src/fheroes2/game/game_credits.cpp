@@ -20,6 +20,8 @@
 
 #include "game_credits.h"
 #include "agg.h"
+#include "agg_image.h"
+#include "icn.h"
 #include "localevent.h"
 #include "mus.h"
 #include "screen.h"
@@ -78,7 +80,19 @@ void Game::ShowCredits()
     fheroes2::Blit( crusader, display, screenOffset.x + ( columnStep - crusader.width() ) / 2, offsetY );
     offsetY += crusader.height();
 
-    offsetY += 10;
+    const int32_t bottomOffset = offsetY;
+
+    const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
+    offsetY -= crusader.height();
+    fheroes2::Blit( mage, display, screenOffset.x + columnStep + ( columnStep - mage.width() ) / 2, offsetY );
+
+    name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
+    offsetY -= 10 + name.h();
+    name.Blit( screenOffset.x + columnStep + ( columnStep - name.w() ) / 2, offsetY );
+    offsetY -= title.h();
+    title.Blit( screenOffset.x + columnStep + ( columnStep - title.w() ) / 2, offsetY );
+
+    offsetY = bottomOffset + 10;
 
     const Text websiteInto( "Visit us at ", Font::BIG );
     const Text website( "https://github.com/ihhub/fheroes2", Font::YELLOW_BIG );

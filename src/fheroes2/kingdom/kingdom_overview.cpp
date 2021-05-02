@@ -22,7 +22,7 @@
 
 #include <sstream>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
@@ -31,6 +31,7 @@
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
@@ -51,7 +52,7 @@ struct HeroRow
     std::unique_ptr<SecondarySkillsBar> secskillsBar;
     std::unique_ptr<PrimarySkillsBar> primskillsBar;
 
-    HeroRow( Heroes * ptr = nullptr )
+    explicit HeroRow( Heroes * ptr = nullptr )
     {
         assert( ptr != nullptr );
         Init( ptr );
@@ -97,24 +98,24 @@ public:
 
     bool Refresh( KingdomHeroes & heroes );
 
-    virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    virtual void ActionCurrentUp() override {}
-    virtual void ActionCurrentDn() override {}
-    virtual void ActionListSingleClick( HeroRow & ) override {}
-    virtual void ActionListDoubleClick( HeroRow & ) override {}
-    virtual void ActionListPressRight( HeroRow & ) override {}
+    void ActionCurrentUp() override {}
+    void ActionCurrentDn() override {}
+    void ActionListSingleClick( HeroRow & ) override {}
+    void ActionListDoubleClick( HeroRow & ) override {}
+    void ActionListPressRight( HeroRow & ) override {}
 
-    virtual void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( HeroRow &, const Point & ) override;
+    void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
+    void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
+    void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
+    bool ActionListCursor( HeroRow &, const Point & ) override;
 
 private:
     std::vector<HeroRow> content;
 
-    void SetContent( KingdomHeroes & heroes );
+    void SetContent( const KingdomHeroes & heroes );
 };
 
 StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
@@ -131,7 +132,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     SetContent( heroes );
 }
 
-void StatsHeroesList::SetContent( KingdomHeroes & heroes )
+void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
@@ -279,7 +280,7 @@ struct CstlRow
     std::unique_ptr<ArmyBar> armyBarGuest;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
-    CstlRow( Castle * ptr = nullptr )
+    explicit CstlRow( Castle * ptr = nullptr )
     {
         assert( ptr != nullptr );
         Init( ptr );
@@ -322,27 +323,27 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const Point & pt, KingdomCastles & );
+    StatsCastlesList( const Point & pt, const KingdomCastles & );
 
-    virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    virtual void ActionCurrentUp( void ) override {}
-    virtual void ActionCurrentDn( void ) override {}
-    virtual void ActionListDoubleClick( CstlRow & ) override {}
-    virtual void ActionListSingleClick( CstlRow & ) override {}
-    virtual void ActionListPressRight( CstlRow & ) override {}
+    void ActionCurrentUp( void ) override {}
+    void ActionCurrentDn( void ) override {}
+    void ActionListDoubleClick( CstlRow & ) override {}
+    void ActionListSingleClick( CstlRow & ) override {}
+    void ActionListPressRight( CstlRow & ) override {}
 
-    virtual void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( CstlRow &, const Point & ) override;
+    void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
+    void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
+    void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
+    bool ActionListCursor( CstlRow &, const Point & ) override;
 
 private:
     std::vector<CstlRow> content;
 };
 
-StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
+StatsCastlesList::StatsCastlesList( const Point & pt, const KingdomCastles & castles )
     : Interface::ListBox<CstlRow>( pt )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
@@ -496,11 +497,15 @@ void StatsCastlesList::RedrawBackground( const Point & dst )
 
     // items background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 8 );
-    for ( int ii = 0; ii < VisibleItemCount(); ++ii ) {
-        fheroes2::Blit( back, display, dst.x + 30, dst.y + 17 + ii * ( back.height() + 4 ) );
+    const fheroes2::Sprite & overback = fheroes2::AGG::GetICN( ICN::OVERBACK, 0 );
+    for ( int i = 0; i < VisibleItemCount(); ++i ) {
+        fheroes2::Copy( back, 0, 0, display, dst.x + 30, dst.y + 17 + i * ( back.height() + 4 ), back.width(), back.height() );
         // fix bar
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), 28, 12, display, dst.x + 28, dst.y + 12 + ii * ( back.height() + 4 ), 599, 6 );
+        fheroes2::Copy( overback, 30, 12, display, dst.x + 29, dst.y + 12 + i * ( back.height() + 4 ), 595, 6 );
     }
+
+    // Copy one vertical line in case of previous army selection
+    fheroes2::Copy( overback, 29, 12, display, dst.x + 29, dst.y + 12, 1, 357 );
 }
 
 std::string CapturedExtInfoString( int res, int color, const Funds & funds )
@@ -582,6 +587,14 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
     StringReplace( msg, "%{day}", world.GetDay() );
     text.Set( msg );
     text.Blit( pt.x + 360, pt.y + 462 );
+
+    // Show Lighthouse count
+    const uint32_t lighthouseCount = world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, myKingdom.GetColor() );
+    text.Set( std::to_string( lighthouseCount ) );
+    text.Blit( pt.x + 105, pt.y + 462 );
+
+    const fheroes2::Sprite & lighthouse = fheroes2::AGG::GetICN( ICN::OVERVIEW, 14 );
+    fheroes2::Blit( lighthouse, 0, 0, fheroes2::Display::instance(), pt.x + 100 - lighthouse.width(), pt.y + 459, lighthouse.width(), lighthouse.height() );
 }
 
 void Kingdom::OverviewDialog( void )

@@ -28,8 +28,6 @@
 #include "rand.h"
 #include "settings.h"
 
-Spell GetUniqueCombatSpellCompatibility( const SpellStorage &, int race, int level );
-Spell GetCombatSpellCompatibility( int race, int level );
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();
 Spell GetGuaranteedNonDamageSpellForMageGuild();
@@ -109,14 +107,6 @@ void MageGuild::educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) 
     }
 }
 
-Spell GetUniqueCombatSpellCompatibility( const SpellStorage & spells, int race, int lvl )
-{
-    Spell spell = GetCombatSpellCompatibility( race, lvl );
-    while ( spells.isPresentSpell( spell ) )
-        spell = GetCombatSpellCompatibility( race, lvl );
-    return spell;
-}
-
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int lvl )
 {
     const bool hasAdventureSpell = spells.hasAdventureSpell( lvl );
@@ -142,14 +132,6 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     }
 
     return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
-}
-
-Spell GetCombatSpellCompatibility( int race, int lvl )
-{
-    Spell spell = Spell::RandCombat( lvl );
-    while ( !spell.isRaceCompatible( race ) )
-        spell = Spell::RandCombat( lvl );
-    return spell;
 }
 
 Spell GetGuaranteedDamageSpellForMageGuild()

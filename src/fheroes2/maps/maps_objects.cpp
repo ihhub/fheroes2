@@ -68,10 +68,10 @@ void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
         artifact = st.getLE16();
 
         // allow computer
-        computer = st.get();
+        computer = ( st.get() != 0 );
 
         // cancel event after first visit
-        cancel = st.get();
+        cancel = ( st.get() != 0 );
 
         st.skip( 10 );
 
@@ -169,7 +169,9 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
 
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
-    return answers.end() != std::find( answers.begin(), answers.end(), StringLower( answer ) );
+    const std::string ans = StringLower( answer ).substr( 0, 4 );
+    auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    return answers.end() != std::find_if( answers.begin(), answers.end(), checkAnswer );
 }
 
 void MapSphinx::SetQuiet( void )
@@ -202,13 +204,6 @@ StreamBase & operator>>( StreamBase & msg, MapSphinx & obj )
 MapSign::MapSign()
     : MapObjectSimple( MP2::OBJ_SIGN )
 {}
-
-MapSign::MapSign( s32 index, const std::string & msg )
-    : MapObjectSimple( MP2::OBJ_SIGN )
-{
-    SetIndex( index );
-    message = msg;
-}
 
 void MapSign::LoadFromMP2( s32 index, StreamBuf st )
 {

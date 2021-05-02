@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "ai.h"
 #include "battle_board.h"
 #include "battle_tower.h"
@@ -32,6 +33,7 @@
 #include "game.h"
 #include "game_static.h"
 #include "ground.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -182,7 +184,7 @@ void Castle::LoadFromMP2( StreamBuf st )
     }
 
     // custom troops
-    bool custom_troops = st.get();
+    bool custom_troops = ( st.get() != 0 );
     if ( custom_troops ) {
         Troop troops[5];
 
@@ -898,7 +900,7 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
     return desc_build[13];
 }
 
-bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg )
+bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
     const Kingdom & myKingdom = GetKingdom();
     if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
@@ -2413,7 +2415,7 @@ Army & Castle::GetActualArmy( void )
     return hero ? hero->GetArmy() : army;
 }
 
-double Castle::GetGarrisonStrength() const
+double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
 {
     double totalStrength = 0;
 
@@ -2427,6 +2429,28 @@ double Castle::GetGarrisonStrength() const
     else {
         totalStrength += army.GetStrength();
     }
+
+    // Add castle bonus if there are any troops defending it
+    if ( isCastle() && totalStrength > 1 ) {
+        const Battle::Tower tower( *this, Battle::TWR_CENTER );
+        const double towerStr = tower.GetStrengthWithBonus( tower.GetBonus(), 0 );
+
+        totalStrength += towerStr;
+        if ( isBuild( BUILD_LEFTTURRET ) ) {
+            totalStrength += towerStr / 2;
+        }
+        if ( isBuild( BUILD_RIGHTTURRET ) ) {
+            totalStrength += towerStr / 2;
+        }
+
+        if ( attackingHero && ( !attackingHero->GetArmy().isMeleeDominantArmy() || attackingHero->HasSecondarySkill( Skill::Secondary::BALLISTICS ) ) ) {
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.2 : 1.15;
+        }
+        else {
+            // heavy penalty if no ballistics skill and army is melee infantry based
+            totalStrength *= isBuild( BUILD_MOAT ) ? 1.45 : 1.25;
+        }
+    }
     return totalStrength;
 }
 
@@ -2436,7 +2460,7 @@ bool Castle::AllowBuyBoat( void ) const
     return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
-bool Castle::BuyBoat( void )
+bool Castle::BuyBoat( void ) const
 {
     if ( !AllowBuyBoat() )
         return false;
@@ -2485,11 +2509,6 @@ int Castle::GetControl( void ) const
 {
     /* gray towns: ai control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
-}
-
-bool Castle::AllowBuild( void ) const
-{
-    return Modes( ALLOWBUILD );
 }
 
 bool Castle::isBuild( u32 bd ) const
@@ -2580,12 +2599,6 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-Castle * VecCastles::Get( const Point & position ) const
-{
-    const_iterator it = std::find_if( begin(), end(), [&position]( const Castle * castle ) { return castle->isPosition( position ); } );
-    return end() != it ? *it : NULL;
-}
-
 Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
@@ -2611,30 +2624,85 @@ void VecCastles::ChangeColors( int col1, int col2 )
 AllCastles::AllCastles()
 {
     // reserve memory
-    reserve( MAXCASTLES );
+    _castles.reserve( MAXCASTLES );
 }
 
 AllCastles::~AllCastles()
 {
-    AllCastles::clear();
+    Clear();
 }
 
 void AllCastles::Init( void )
 {
-    if ( size() )
-        AllCastles::clear();
+    Clear();
 }
 
-void AllCastles::clear( void )
+void AllCastles::Clear( void )
 {
-    for ( iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         delete *it;
-    std::vector<Castle *>::clear();
+    _castles.clear();
+    _castleTiles.clear();
+}
+
+void AllCastles::AddCastle( Castle * castle )
+{
+    _castles.push_back( castle );
+
+    /* Register position of all castle elements on the map
+    Castle element positions are:
+                -
+               ---
+              -+++-
+              ++X++
+
+     where
+     X is the main castle position
+     + are tiles that are considered part of the castle for the Get() method
+     - are tiles where there is a castle sprite, but not used in the Get() method
+
+    */
+
+    static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
+
+    const size_t id = _castles.size() - 1;
+    fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
+    _castleTiles.emplace( temp, id );
+
+    temp.x -= 2;
+    _castleTiles.emplace( temp, id ); // (-2, 0)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (-1, 0)
+
+    --temp.y;
+    _castleTiles.emplace( temp, id ); // (-1, -1)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (0, -1)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+1, -1)
+
+    ++temp.y;
+    _castleTiles.emplace( temp, id ); // (+1, 0)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+2, 0)
+}
+
+Castle * AllCastles::Get( const Point & position ) const
+{
+    auto iter = _castleTiles.find( fheroes2::Point( position.x, position.y ) );
+    if ( iter == _castleTiles.end() )
+        return nullptr;
+
+    return _castles[iter->second];
 }
 
 void AllCastles::Scoute( int colors ) const
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
             ( *it )->Scoute();
 }
@@ -2675,7 +2743,7 @@ StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
 {
     msg << static_cast<u32>( castles.size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
+    for ( auto it = castles.begin(); it != castles.end(); ++it )
         msg << ( *it ? ( *it )->GetIndex() : static_cast<s32>( -1 ) );
 
     return msg;
@@ -2689,7 +2757,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     castles.resize( size, NULL );
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
         *it = ( index < 0 ? NULL : world.GetCastle( Maps::GetPoint( index ) ) );
     }
@@ -2699,25 +2767,25 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
 StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
-    msg << static_cast<u32>( castles.size() );
+    msg << static_cast<u32>( castles.Size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
-        msg << **it;
+    for ( const auto & castle : castles )
+        msg << *castle;
 
     return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
-    castles.clear();
-    castles.resize( size, NULL );
+    castles.Clear();
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
-        *it = new Castle();
-        msg >> **it;
+    for ( uint32_t i = 0; i < size; ++i ) {
+        Castle * castle = new Castle();
+        msg >> *castle;
+        castles.AddCastle( castle );
     }
 
     return msg;

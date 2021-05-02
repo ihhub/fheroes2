@@ -180,30 +180,39 @@ public:
         CHAMPION = 0x08000000
     };
 
+    struct RedrawIndex
+    {
+        int32_t topOnBottom = -1;
+        int32_t topOnDirectionBottom = -1;
+        int32_t topOnDirection = -1;
+        int32_t objectsOnBottom = -1;
+        int32_t objectsOnDirectionBottom = -1;
+    };
+
     Heroes();
     Heroes( int heroid, int rc );
 
-    virtual bool isValid() const override;
+    bool isValid() const override;
     bool isFreeman( void ) const;
     void SetFreeman( int reason );
 
-    virtual const Castle * inCastle() const override;
+    const Castle * inCastle() const override;
     Castle * inCastle();
 
     void LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf );
     void PostLoad( void );
 
-    virtual int GetRace() const override;
-    virtual const std::string & GetName() const override;
-    virtual int GetColor() const override;
-    virtual int GetType() const override;
-    virtual int GetControl() const override;
+    int GetRace() const override;
+    const std::string & GetName() const override;
+    int GetColor() const override;
+    int GetType() const override;
+    int GetControl() const override;
 
     int GetKillerColor( void ) const;
     void SetKillerColor( int );
 
-    virtual const Army & GetArmy() const override;
-    virtual Army & GetArmy() override;
+    const Army & GetArmy() const override;
+    Army & GetArmy() override;
 
     int GetID( void ) const;
 
@@ -211,10 +220,10 @@ public:
     double getRecruitValue() const;
     int getStatsValue() const;
 
-    virtual int GetAttack() const override;
-    virtual int GetDefense() const override;
-    virtual int GetPower() const override;
-    virtual int GetKnowledge() const override;
+    int GetAttack() const override;
+    int GetDefense() const override;
+    int GetPower() const override;
+    int GetKnowledge() const override;
 
     int GetAttack( std::string * ) const;
     int GetDefense( std::string * ) const;
@@ -223,8 +232,8 @@ public:
 
     void IncreasePrimarySkill( int skill );
 
-    virtual int GetMorale() const override;
-    virtual int GetLuck() const override;
+    int GetMorale() const override;
+    int GetLuck() const override;
     int GetMoraleWithModificators( std::string * str = NULL ) const;
     int GetLuckWithModificators( std::string * str = NULL ) const;
     int GetLevel( void ) const;
@@ -236,7 +245,7 @@ public:
     void SetCenterPatrol( const Point & );
     int GetSquarePatrol( void ) const;
 
-    virtual u32 GetMaxSpellPoints() const override;
+    u32 GetMaxSpellPoints() const override;
     u32 GetMaxMovePoints() const;
 
     u32 GetMovePoints( void ) const;
@@ -244,12 +253,11 @@ public:
     bool MayStillMove( void ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
-    void RecalculateMovePoints( void );
 
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill( void ) const;
-    virtual int GetLevelSkill( int ) const override;
-    virtual u32 GetSecondaryValues( int ) const override;
+    int GetLevelSkill( int ) const override;
+    u32 GetSecondaryValues( int ) const override;
     void LearnSkill( const Skill::Secondary & );
     Skill::SecSkills & GetSecondarySkills( void );
 
@@ -259,9 +267,11 @@ public:
     bool IsFullBagArtifacts( void ) const;
 
     int GetMobilityIndexSprite( void ) const;
+
+    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite( void ) const;
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
     bool Recruit( int col, const Point & pt );
@@ -270,8 +280,8 @@ public:
     void ActionNewDay( void );
     void ActionNewWeek( void );
     void ActionNewMonth( void );
-    virtual void ActionAfterBattle() override;
-    virtual void ActionPreBattle() override;
+    void ActionAfterBattle() override;
+    void ActionPreBattle() override;
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
@@ -304,8 +314,18 @@ public:
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, bool withShadow, const Interface::GameArea & gamearea ) const;
-    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    bool MayCastAdventureSpells() const;
+
+    const RedrawIndex & GetRedrawIndex() const;
+    void SetRedrawIndexes();
+    void UpdateRedrawTop( const Maps::Tiles & tile );
+    void UpdateRedrawBottom( const Maps::Tiles & tile );
+    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+
+    void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
@@ -394,6 +414,8 @@ private:
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
 
+    RedrawIndex _redrawIndex;
+
     mutable int _alphaValue;
 
     enum
@@ -411,7 +433,11 @@ struct VecHeroes : public std::vector<Heroes *>
 struct AllHeroes : public VecHeroes
 {
     AllHeroes();
+    AllHeroes( const AllHeroes & ) = delete;
+
     ~AllHeroes();
+
+    AllHeroes & operator=( const AllHeroes & ) = delete;
 
     void Init( void );
     void clear( void );
@@ -422,6 +448,7 @@ struct AllHeroes : public VecHeroes
     Heroes * GetGuard( const Castle & ) const;
     Heroes * GetFreeman( int race ) const;
     Heroes * FromJail( s32 ) const;
+    Heroes * GetFreemanSpecial( int heroID ) const;
 
     bool HaveTwoFreemans( void ) const;
 };

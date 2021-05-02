@@ -19,9 +19,10 @@
  ***************************************************************************/
 
 #include "ui_button.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "pal.h"
 #include "settings.h"
@@ -58,8 +59,6 @@ namespace fheroes2
         , _releasedSprite( nullptr )
         , _releasedDisabled()
     {}
-
-    ButtonBase::~ButtonBase() {}
 
     bool ButtonBase::isEnabled() const
     {
@@ -206,8 +205,6 @@ namespace fheroes2
         , _pressedIndex( pressedIndex )
     {}
 
-    Button::~Button() {}
-
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
         _icnId = icnId;
@@ -234,8 +231,6 @@ namespace fheroes2
         , _released( released )
         , _pressed( pressed )
     {}
-
-    ButtonSprite::~ButtonSprite() {}
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed )
     {
@@ -397,17 +392,6 @@ namespace fheroes2
 
         _button.push_back( button );
         button->subscribe( this );
-    }
-
-    ButtonBase * OptionButtonGroup::currentPressedButton() const
-    {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i]->isPressed() ) {
-                return _button[i];
-            }
-        }
-
-        return nullptr;
     }
 
     void OptionButtonGroup::draw( Image & area ) const

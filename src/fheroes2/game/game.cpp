@@ -36,6 +36,7 @@
 #include "game_credits.h"
 #include "game_interface.h"
 #include "game_static.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_tiles.h"
@@ -77,7 +78,7 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask::FadeTask( uint8_t object_, uint32_t objectIndex_, uint32_t animationIndex_, uint32_t fromIndex_, uint32_t toIndex_, uint32_t alpha_, bool fadeOut_,
+        FadeTask::FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
                             bool fadeIn_, uint8_t objectTileset_ )
             : object( object_ )
             , objectIndex( objectIndex_ )
@@ -133,6 +134,7 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
         player->SetRace( p.GetRace() );
         player->SetControl( p.GetControl() );
         player->SetFriends( p.GetFriends() );
+        player->SetName( p.GetName() );
         players.push_back( player );
         Players::Set( Color::GetIndex( p.GetColor() ), player );
     }
@@ -152,6 +154,7 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
         player.SetRace( p->GetRace() );
         player.SetControl( p->GetControl() );
         player.SetFriends( p->GetFriends() );
+        player.SetName( p->GetName() );
         savedPlayers.push_back( player );
     }
 }
@@ -228,51 +231,111 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::FinishFadeTask()
+void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
-    if ( fadeTask.object == MP2::OBJ_ZERO ) {
-        return;
-    }
-
-    if ( fadeTask.fadeOut ) {
-        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
-        if ( tile.GetObject() == fadeTask.object ) {
-            tile.RemoveObjectSprite();
-            tile.SetObject( MP2::OBJ_ZERO );
-        }
-    }
-
-    if ( fadeTask.fadeIn ) {
-        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
-        if ( MP2::OBJ_BOAT == fadeTask.object ) {
-            tile.setBoat( Direction::RIGHT );
-        }
-    }
-
-    fadeTask.object = MP2::OBJ_ZERO;
-}
-
-void Game::ObjectFadeAnimation::StartFadeTask( uint8_t object, uint32_t fromIndex, uint32_t toIndex, bool fadeOut, bool fadeIn )
-{
-    FinishFadeTask();
-
+    const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
-    const uint32_t alpha = fadeOut ? 255u : 0;
-    if ( MP2::OBJ_MONSTER == object ) {
+
+    if ( object == MP2::OBJ_ZERO ) {
+        fadeTask = FadeTask();
+    }
+    else if ( object == MP2::OBJ_MONSTER ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
+
         fadeTask = FadeTask( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
-    else if ( MP2::OBJ_BOAT == object ) {
+    else if ( object == MP2::OBJ_BOAT ) {
         fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
         const int icn = MP2::GetICNObject( object );
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() );
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
+
         fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
     }
 }
 
-Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTask()
+void Game::ObjectFadeAnimation::PerformFadeTask()
+{
+    auto removeObject = []() {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
+
+        if ( tile.GetObject() == fadeTask.object ) {
+            tile.RemoveObjectSprite();
+            tile.SetObject( MP2::OBJ_ZERO );
+        }
+    };
+    auto addObject = []() {
+        Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
+
+        if ( tile.GetObject() != fadeTask.object && fadeTask.object == MP2::OBJ_BOAT ) {
+            tile.setBoat( Direction::RIGHT );
+        }
+    };
+    auto redrawGameArea = []() {
+        Cursor::Get().Hide();
+
+        fheroes2::Display & display = fheroes2::Display::instance();
+        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+
+        gameArea.Redraw( display, Interface::LEVEL_ALL );
+
+        Cursor::Get().Show();
+
+        display.render();
+    };
+
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() && ( fadeTask.fadeOut || fadeTask.fadeIn ) ) {
+        if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
+            if ( fadeTask.fadeOut ) {
+                if ( fadeTask.alpha > 20 ) {
+                    fadeTask.alpha -= 20;
+                }
+                else {
+                    removeObject();
+
+                    if ( fadeTask.fadeIn ) {
+                        fadeTask.fadeOut = false;
+                        fadeTask.alpha = 0;
+                    }
+                    else {
+                        fadeTask = FadeTask();
+                    }
+                }
+            }
+            else if ( fadeTask.fadeIn ) {
+                if ( fadeTask.alpha == 0 ) {
+                    addObject();
+                }
+
+                if ( fadeTask.alpha < 235 ) {
+                    fadeTask.alpha += 20;
+                }
+                else {
+                    fadeTask = FadeTask();
+                }
+            }
+
+            redrawGameArea();
+        }
+    }
+
+    if ( fadeTask.fadeOut ) {
+        removeObject();
+    }
+
+    if ( fadeTask.fadeIn ) {
+        addObject();
+    }
+
+    fadeTask = FadeTask();
+
+    redrawGameArea();
+}
+
+const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTask()
 {
     return fadeTask;
 }
@@ -370,43 +433,44 @@ u32 Game::GetGameOverScores( void )
 {
     const Settings & conf = Settings::Get();
 
-    u32 k_size = 0;
+    uint32_t mapSizeFactor = 0;
 
     switch ( conf.MapsSize().w ) {
     case Maps::SMALL:
-        k_size = 140;
+        mapSizeFactor = 140;
         break;
     case Maps::MEDIUM:
-        k_size = 100;
+        mapSizeFactor = 100;
         break;
     case Maps::LARGE:
-        k_size = 80;
+        mapSizeFactor = 80;
         break;
     case Maps::XLARGE:
-        k_size = 60;
-        break;
-    default:
+        mapSizeFactor = 60;
         break;
     }
 
-    u32 flag = 0;
-    u32 nk = 0;
-    u32 end_days = world.CountDay();
+    const uint32_t daysFactor = world.CountDay() * mapSizeFactor / 100;
 
-    for ( u32 ii = 1; ii <= end_days; ++ii ) {
-        nk = ii * k_size / 100;
+    uint32_t daysScore = 0;
 
-        if ( 0 == flag && nk > 60 ) {
-            end_days = ii + ( world.CountDay() - ii ) / 2;
-            flag = 1;
-        }
-        else if ( 1 == flag && nk > 120 )
-            end_days = ii + ( world.CountDay() - ii ) / 2;
-        else if ( nk > 180 )
-            break;
+    if ( daysFactor <= 60 ) {
+        daysScore = daysFactor;
+    }
+    else if ( daysFactor <= 120 ) {
+        daysScore = daysFactor / 2 + 30;
+    }
+    else if ( daysFactor <= 360 ) {
+        daysScore = daysFactor / 4 + 60;
+    }
+    else if ( daysFactor <= 600 ) {
+        daysScore = daysFactor / 8 + 105;
+    }
+    else {
+        daysScore = 180;
     }
 
-    return GetRating() * ( 200 - nk ) / 100;
+    return GetRating() * ( 200 - daysScore ) / 100;
 }
 
 void Game::ShowMapLoadingText( void )

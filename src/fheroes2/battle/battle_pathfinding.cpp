@@ -43,6 +43,7 @@ namespace Battle
 
     void ArenaPathfinder::reset()
     {
+        _start.Set( -1, false, false );
         for ( size_t i = 0; i < _cache.size(); ++i ) {
             _cache[i].resetNode();
         }
@@ -56,10 +57,10 @@ namespace Battle
     bool ArenaPathfinder::hexIsPassable( int targetCell ) const
     {
         const size_t index = static_cast<size_t>( targetCell );
-        return index < _cache.size() && nodeIsAccessible( _cache[index] );
+        return index < _cache.size() && nodeIsPassable( _cache[index] );
     }
 
-    bool ArenaPathfinder::nodeIsAccessible( const ArenaNode & node ) const
+    bool ArenaPathfinder::nodeIsPassable( const ArenaNode & node ) const
     {
         return node._cost == 0 || ( node._isOpen && node._from != -1 );
     }
@@ -71,23 +72,58 @@ namespace Battle
 
         for ( size_t index = 0; index < _cache.size(); ++index ) {
             const ArenaNode & node = _cache[index];
-            if ( nodeIsAccessible( node ) && node._cost <= moveRange ) {
+            if ( nodeIsPassable( node ) && node._cost <= moveRange ) {
                 result.push_back( index );
             }
         }
         return result;
     }
 
-    std::list<Route::Step> ArenaPathfinder::buildPath( int targetCell ) const
+    Indexes ArenaPathfinder::buildPath( int targetCell ) const
     {
-        std::list<Route::Step> path;
+        Indexes path;
+
+        if ( static_cast<size_t>( targetCell ) >= _cache.size() )
+            return path;
 
         int currentNode = targetCell;
-        while ( currentNode != targetCell && _cache[currentNode]._cost != 0 ) {
+        while ( _cache[currentNode]._cost != 0 && !_start.contains( currentNode ) ) {
             const ArenaNode & node = _cache[currentNode];
-            path.emplace_front( currentNode, node._from, Board::GetDirection( node._from, currentNode ), 1 );
+            path.push_back( currentNode );
             currentNode = node._from;
         }
+        std::reverse( path.begin(), path.end() );
+
+        return path;
+    }
+
+    Indexes ArenaPathfinder::findTwoMovesOverlap( int targetCell, uint32_t movementRange ) const
+    {
+        Indexes path;
+        if ( static_cast<size_t>( targetCell ) >= _cache.size() )
+            return path;
+
+        const uint32_t pathCost = _cache[targetCell]._cost;
+        if ( pathCost >= movementRange * 2 )
+            return path;
+
+        int currentNode = targetCell;
+        uint32_t nodeCost = pathCost;
+
+        while ( nodeCost != 0 && !_start.contains( currentNode ) ) {
+            const ArenaNode & node = _cache[currentNode];
+            // Upper limit
+            if ( movementRange == 0 || node._cost <= movementRange ) {
+                path.push_back( currentNode );
+            }
+            currentNode = node._from;
+            nodeCost = _cache[currentNode]._cost;
+
+            // Lower limit
+            if ( movementRange > 0 && !path.empty() && pathCost - nodeCost >= movementRange )
+                break;
+        }
+        std::reverse( path.begin(), path.end() );
 
         return path;
     }
@@ -98,9 +134,9 @@ namespace Battle
 
         const bool unitIsWide = unit.isWide();
 
-        const Position & startPosition = unit.GetPosition();
-        const Cell * unitHead = startPosition.GetHead();
-        const Cell * unitTail = startPosition.GetTail();
+        _start = unit.GetPosition();
+        const Cell * unitHead = _start.GetHead();
+        const Cell * unitTail = _start.GetTail();
         if ( !unitHead || ( unitIsWide && !unitTail ) ) {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
             return;
@@ -109,7 +145,7 @@ namespace Battle
         const Bridge * bridge = Arena::GetBridge();
         const Castle * castle = Arena::GetCastle();
 
-        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit.GetColor() );
+        const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
         const bool isMoatBuilt = castle && castle->isBuild( BUILD_MOAT );
         const uint32_t moatPenalty = unit.GetSpeed();
 
@@ -136,7 +172,7 @@ namespace Battle
                 ArenaNode & node = _cache[idx];
 
                 // isPassable3 checks if there's space for unit tail (for wide units)
-                if ( it->isPassable3( unit, false ) ) {
+                if ( it->isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( it - board.begin(), unit ) ) ) {
                     node._isOpen = true;
                     node._from = pathStart;
                     node._cost = Battle::Board::GetDistance( pathStart, idx );
@@ -173,7 +209,7 @@ namespace Battle
 
             for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
                 const int32_t fromNode = nodesToExplore[lastProcessedNode];
-                ArenaNode & previousNode = _cache[fromNode];
+                const ArenaNode & previousNode = _cache[fromNode];
 
                 Indexes availableMoves;
                 if ( !unitIsWide )
@@ -181,17 +217,18 @@ namespace Battle
                 else if ( previousNode._from < 0 )
                     availableMoves = Board::GetMoveWideIndexes( fromNode, unit.isReflect() );
                 else
-                    availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) );
+                    availableMoves = Board::GetMoveWideIndexes( fromNode, ( RIGHT_SIDE & Board::GetDirection( fromNode, previousNode._from ) ) != 0 );
 
                 for ( const int32_t newNode : availableMoves ) {
                     const Cell * headCell = Board::GetCell( newNode );
                     const bool isLeftDirection = unitIsWide && Board::IsLeftDirection( fromNode, newNode, previousNode._isLeftDirection );
 
                     const int32_t newTailIndex = isLeftDirection ? newNode + 1 : newNode - 1;
-                    const Cell * tailCell = ( unitIsWide && !startPosition.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
+                    const Cell * tailCell = ( unitIsWide && !_start.contains( newTailIndex ) ) ? Board::GetCell( newTailIndex ) : nullptr;
 
                     // Special case: headCell is *allowed* to have another unit in it, that's why we check isPassable1( false ) instead of isPassable4
-                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) ) && ( isPassableBridge || !Board::isBridgeIndex( newNode ) ) ) {
+                    if ( headCell->isPassable1( false ) && ( !tailCell || tailCell->isPassable1( true ) )
+                         && ( isPassableBridge || !Board::isBridgeIndex( newNode, unit ) ) ) {
                         const uint32_t cost = previousNode._cost;
                         ArenaNode & node = _cache[newNode];
 
@@ -201,7 +238,8 @@ namespace Battle
                             additionalCost = 0;
                         }
                         // Moat penalty consumes all remaining movement. Be careful when dealing with unsigned values.
-                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode ) || Board::isMoatIndex( newTailIndex ) ) && moatPenalty > previousNode._cost ) {
+                        else if ( isMoatBuilt && ( Board::isMoatIndex( newNode, unit ) || Board::isMoatIndex( newTailIndex, unit ) )
+                                  && moatPenalty > previousNode._cost ) {
                             additionalCost = moatPenalty - cost;
                         }
 

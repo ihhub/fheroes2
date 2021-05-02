@@ -46,22 +46,31 @@ class ActionSimple;
 
 struct ListActions : public std::list<ActionSimple *>
 {
+    ListActions() = default;
+    ListActions( const ListActions & other ) = default;
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions( const ListActions && other ) = delete;
+    ListActions & operator=( const ListActions && other ) = delete;
     ~ListActions();
     void clear( void );
 };
 
 struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
+    MapObjects() = default;
+    MapObjects( const MapObjects & other ) = delete;
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects( const MapObjects && other ) = delete;
+    MapObjects & operator=( const MapObjects && other ) = delete;
     ~MapObjects();
     void clear( void );
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const Point & );
     MapObjectSimple * get( u32 uid );
-    void remove( const Point & );
     void remove( u32 uid );
 };
 
-typedef std::map<s32, ListActions> MapActions;
+using MapActions = std::map<s32, ListActions>;
 
 struct CapturedObject
 {
@@ -76,10 +85,6 @@ struct CapturedObject
     int GetSplit( void ) const
     {
         return split;
-    }
-    int GetObject( void ) const
-    {
-        return objcol.first;
     }
     int GetColor( void ) const
     {
@@ -101,11 +106,6 @@ struct CapturedObject
     void SetSplit( int spl )
     {
         split = spl;
-    }
-
-    bool GuardiansProtected( void ) const
-    {
-        return guardians.isValid();
     }
 };
 
@@ -149,13 +149,17 @@ struct EventDate
 StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
-typedef std::list<std::string> Rumors;
-typedef std::list<EventDate> EventsDate;
-typedef std::vector<Maps::Tiles> MapsTiles;
+using Rumors = std::list<std::string>;
+using EventsDate = std::list<EventDate>;
+using MapsTiles = std::vector<Maps::Tiles>;
 
 class World : protected Size
 {
 public:
+    World( const World & other ) = delete;
+    World & operator=( const World & other ) = delete;
+    World( const World && other ) = delete;
+    World & operator=( const World && other ) = delete;
     ~World()
     {
         Reset();
@@ -199,11 +203,14 @@ public:
 
     Heroes * FromJailHeroes( s32 );
     Heroes * GetFreemanHeroes( int race = 0 ) const;
+    Heroes * GetFreemanHeroesSpecial( int heroID ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;
 
     CastleHeroes GetHeroes( const Castle & ) const;
+
+    void RescanAllHeroesPathPassable() const;
 
     const UltimateArtifact & GetUltimateArtifact( void ) const;
     bool DiggingForUltimateArtifact( const Point & );
@@ -262,7 +269,7 @@ public:
     size_t getRegionCount() const;
 
     bool isTileBlocked( int toTile, bool fromWater ) const;
-    bool isValidPath( int index, int direction, const int heroColor ) const;
+    bool isValidPath( const int index, const int direction, const int heroColor ) const;
     uint32_t getDistance( const Heroes & hero, int targetIndex );
     std::list<Route::Step> getPath( const Heroes & hero, int targetIndex );
     void resetPathfinder();

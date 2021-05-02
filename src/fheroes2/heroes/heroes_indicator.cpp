@@ -22,58 +22,32 @@
 
 #include <cmath>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "dialog.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "text.h"
 
 namespace fheroes2
 {
-    const char * MoraleString( const int morale )
+    std::string MoraleString( const int morale )
     {
-        switch ( morale ) {
-        case Morale::TREASON:
-        case Morale::AWFUL:
-        case Morale::POOR:
-            return _( "Bad Morale" );
-
-        case Morale::NORMAL:
-            return _( "Neutral Morale" );
-
-        case Morale::GOOD:
-        case Morale::GREAT:
-        case Morale::BLOOD:
-            return _( "Good Morale" );
-
-        default:
-            break;
+        if ( morale == Morale::BLOOD ) {
+            return _( "Blood Morale" );
         }
-        return NULL;
+        std::string str = _( "%{morale} Morale" );
+        StringReplace( str, "%{morale}", Morale::String( morale ) );
+        return str;
     }
 
-    const char * LuckString( const int luck )
+    std::string LuckString( const int luck )
     {
-        switch ( luck ) {
-        case Luck::CURSED:
-        case Luck::AWFUL:
-        case Luck::BAD:
-            return _( "Bad Luck" );
-
-        case Luck::NORMAL:
-            return _( "Neutral Luck" );
-
-        case Luck::GOOD:
-        case Luck::GREAT:
-        case Luck::IRISH:
-            return _( "Good Luck" );
-
-        default:
-            break;
-        }
-        return NULL;
+        std::string str = _( "%{luck} Luck" );
+        StringReplace( str, "%{luck}", Luck::String( luck ) );
+        return str;
     }
 }
 
@@ -87,11 +61,6 @@ HeroesIndicator::HeroesIndicator( const Heroes * h )
 const Rect & HeroesIndicator::GetArea( void ) const
 {
     return area;
-}
-
-const std::string & HeroesIndicator::GetDescriptions( void ) const
-{
-    return descriptions;
 }
 
 void HeroesIndicator::SetHero( const Heroes * h )
@@ -227,7 +196,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     }
 }
 
-void ExperienceIndicator::Redraw( void )
+void ExperienceIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -239,7 +208,7 @@ void ExperienceIndicator::Redraw( void )
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
-void ExperienceIndicator::QueueEventProcessing( void )
+void ExperienceIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -265,7 +234,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     }
 }
 
-void SpellPointsIndicator::Redraw( void )
+void SpellPointsIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -277,7 +246,7 @@ void SpellPointsIndicator::Redraw( void )
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
-void SpellPointsIndicator::QueueEventProcessing( void )
+void SpellPointsIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 

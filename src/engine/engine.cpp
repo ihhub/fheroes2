@@ -26,6 +26,14 @@
 #include "logging.h"
 #include "sdlnet.h"
 
+#if defined( FHEROES2_VITA )
+#include <psp2/kernel/processmgr.h>
+#include <psp2/power.h>
+
+// allocating memory for application on Vita
+int _newlib_heap_size_user = 192 * 1024 * 1024;
+#endif
+
 namespace Mixer
 {
     void Init();
@@ -99,5 +107,22 @@ void SDL::Quit()
 
 bool SDL::SubSystem( const uint32_t system )
 {
-    return system & SDL_WasInit( system );
+    return ( system & SDL_WasInit( system ) ) != 0;
+}
+
+void InitHardware()
+{
+#if defined( FHEROES2_VITA )
+    scePowerSetArmClockFrequency( 444 );
+    scePowerSetBusClockFrequency( 222 );
+    scePowerSetGpuClockFrequency( 222 );
+    scePowerSetGpuXbarClockFrequency( 166 );
+#endif
+}
+
+void CloseHardware()
+{
+#if defined( FHEROES2_VITA )
+    sceKernelExitProcess( 0 );
+#endif
 }

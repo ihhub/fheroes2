@@ -21,6 +21,8 @@
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
 #include <windows.h>
+#elif defined( FHEROES2_VITA )
+#include <psp2/io/dirent.h>
 #else
 #include <dirent.h>
 #endif
@@ -33,6 +35,113 @@
 #include <strings.h> // for strcasecmp
 #endif
 
+namespace
+{
+    void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
+    {
+#if defined( _MSC_VER ) || defined( __MINGW32__ )
+        (void)sensitive;
+
+        const std::string pattern( nameAsFilter ? path + "\\*" + name : path + "\\" + name );
+        WIN32_FIND_DATA data;
+        HANDLE hFind = FindFirstFile( pattern.c_str(), &data );
+        if ( hFind == INVALID_HANDLE_VALUE ) {
+            return;
+        }
+
+        do {
+            files.emplace_back( path + "\\" + data.cFileName );
+        } while ( FindNextFile( hFind, &data ) != 0 );
+
+        FindClose( hFind );
+#elif defined( FHEROES2_VITA )
+        // open the directory
+        const int uid = sceIoDopen( path.c_str() );
+        if ( uid <= 0 )
+            return;
+
+        // iterate over the directory for files, print name and size of array (always 256)
+        // this means you use strlen() to get length of file name
+        SceIoDirent dir;
+
+        while ( sceIoDread( uid, &dir ) > 0 ) {
+            std::string fullname = System::ConcatePath( path, dir.d_name );
+
+            // if not regular file
+            if ( !SCE_S_ISREG( dir.d_stat.st_mode ) )
+                continue;
+
+            if ( !nameAsFilter || !name.empty() ) {
+                const std::string filename( dir.d_name );
+                if ( filename.size() < name.size() ) {
+                    continue;
+                }
+
+                if ( !nameAsFilter && filename.size() != name.size() ) {
+                    continue;
+                }
+
+                if ( sensitive ) {
+                    if ( std::string::npos == filename.find( name ) )
+                        continue;
+                }
+                else if ( std::string::npos == StringLower( filename ).find( StringLower( name ) ) ) {
+                    continue;
+                }
+            }
+
+            files.emplace_back( std::move( fullname ) );
+        }
+
+        // clean up
+        sceIoDclose( uid );
+#else
+        std::string correctedPath;
+        if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
+            return;
+
+        // read directory
+        DIR * dp = opendir( correctedPath.c_str() );
+        if ( !dp ) {
+            return;
+        }
+
+        struct dirent * ep;
+        while ( NULL != ( ep = readdir( dp ) ) ) {
+            std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
+
+            // if not regular file
+            if ( !System::IsFile( fullname ) )
+                continue;
+
+            if ( !nameAsFilter || !name.empty() ) {
+                const size_t filenameLength = strlen( ep->d_name );
+                if ( filenameLength < name.length() )
+                    continue;
+
+                if ( !nameAsFilter && filenameLength != name.length() ) {
+                    continue;
+                }
+
+                const char * filenamePtr = ep->d_name + filenameLength - name.length();
+
+                if ( sensitive ) {
+                    if ( strcmp( filenamePtr, name.c_str() ) != 0 )
+                        continue;
+                }
+                else {
+                    if ( strcasecmp( filenamePtr, name.c_str() ) != 0 )
+                        continue;
+                }
+            }
+
+            files.emplace_back( std::move( fullname ) );
+        }
+        closedir( dp );
+#endif
+    }
+}
+
 void ListFiles::Append( const ListFiles & files )
 {
     insert( end(), files.begin(), files.end() );
@@ -40,57 +149,12 @@ void ListFiles::Append( const ListFiles & files )
 
 void ListFiles::ReadDir( const std::string & path, const std::string & filter, bool sensitive )
 {
-#if defined( _MSC_VER ) || defined( __MINGW32__ )
-    (void)sensitive;
+    getFilesFromDirectory( path, filter, sensitive, true, *this );
+}
 
-    std::string pattern( path + "\\*" + filter );
-    WIN32_FIND_DATA data;
-    HANDLE hFind;
-    if ( ( hFind = FindFirstFile( pattern.c_str(), &data ) ) != INVALID_HANDLE_VALUE ) {
-        do {
-            push_back( path + "\\" + data.cFileName );
-        } while ( FindNextFile( hFind, &data ) != 0 );
-        FindClose( hFind );
-    }
-#else
-    std::string correctedPath;
-    if ( !System::GetCaseInsensitivePath( path, correctedPath ) )
-        return;
-
-    // read directory
-    DIR * dp = opendir( correctedPath.c_str() );
-
-    if ( dp ) {
-        struct dirent * ep;
-        while ( NULL != ( ep = readdir( dp ) ) ) {
-            const std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
-
-            // if not regular file
-            if ( !System::IsFile( fullname ) )
-                continue;
-
-            if ( filter.size() ) {
-                const size_t filenameLength = strlen( ep->d_name );
-                if ( filenameLength < filter.length() )
-                    continue;
-
-                const char * filenamePtr = ep->d_name + filenameLength - filter.length();
-
-                if ( sensitive ) {
-                    if ( strcmp( filenamePtr, filter.c_str() ) != 0 )
-                        continue;
-                }
-                else {
-                    if ( strcasecmp( filenamePtr, filter.c_str() ) != 0 )
-                        continue;
-                }
-            }
-
-            push_back( fullname );
-        }
-        closedir( dp );
-    }
-#endif
+void ListFiles::FindFileInDir( const std::string & path, const std::string & fileName, bool sensitive )
+{
+    getFilesFromDirectory( path, fileName, sensitive, false, *this );
 }
 
 bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, bool sensitive )
@@ -103,4 +167,17 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
 void ListDirs::Append( const std::list<std::string> & dirs )
 {
     insert( end(), dirs.begin(), dirs.end() );
+}
+
+namespace fheroes2
+{
+    void AddOSSpecificDirectories( ListDirs & dirs )
+    {
+#if defined( FHEROES2_VITA )
+        dirs.emplace_back( "ux0:app/FHOMM0002" );
+        dirs.emplace_back( "ux0:data/fheroes2" );
+#else
+        (void)dirs;
+#endif
+    }
 }

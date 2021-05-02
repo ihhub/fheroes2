@@ -30,7 +30,7 @@
 class WorldPathfinder : public Pathfinder<PathfindingNode>
 {
 public:
-    WorldPathfinder() {}
+    WorldPathfinder() = default;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
@@ -54,8 +54,9 @@ protected:
 class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
-    PlayerWorldPathfinder() {}
-    virtual void reset() override;
+    PlayerWorldPathfinder() = default;
+
+    void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
     std::list<Route::Step> buildPath( int targetIndex ) const;
@@ -67,10 +68,11 @@ private:
 class AIWorldPathfinder : public WorldPathfinder
 {
 public:
-    AIWorldPathfinder( double advantage )
+    explicit AIWorldPathfinder( double advantage )
         : _advantage( advantage )
     {}
-    virtual void reset() override;
+
+    void reset() override;
 
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );

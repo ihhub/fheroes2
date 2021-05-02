@@ -26,6 +26,7 @@
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -93,18 +94,6 @@ std::list<MapObjectSimple *> MapObjects::get( const Point & pos )
         if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
             res.push_back( ( *it ).second );
     return res;
-}
-
-void MapObjects::remove( const Point & pos )
-{
-    std::vector<u32> uids;
-
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            uids.push_back( ( *it ).second->GetUID() );
-
-    for ( std::vector<u32>::const_iterator it = uids.begin(); it != uids.end(); ++it )
-        remove( *it );
 }
 
 void MapObjects::remove( u32 uid )
@@ -281,7 +270,7 @@ void World::Reset( void )
     vec_rumors.clear();
 
     // castles
-    vec_castles.clear();
+    vec_castles.Clear();
 
     // heroes
     vec_heroes.clear();
@@ -431,6 +420,11 @@ Heroes * World::GetFreemanHeroes( int race ) const
     return vec_heroes.GetFreeman( race );
 }
 
+Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
+{
+    return vec_heroes.GetFreemanSpecial( heroID );
+}
+
 Heroes * World::FromJailHeroes( s32 index )
 {
     return vec_heroes.FromJail( index );
@@ -439,6 +433,11 @@ Heroes * World::FromJailHeroes( s32 index )
 CastleHeroes World::GetHeroes( const Castle & castle ) const
 {
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
+}
+
+void World::RescanAllHeroesPathPassable() const
+{
+    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
 }
 
 int World::GetDay( void ) const
@@ -562,9 +561,9 @@ void World::NewWeek( void )
                 ( *it ).QuantityUpdate( false );
 
         // update gray towns
-        for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-            if ( ( *it )->GetColor() == Color::NONE )
-                ( *it )->ActionNewWeek();
+        for ( auto & castle : vec_castles )
+            if ( castle->GetColor() == Color::NONE )
+                castle->ActionNewWeek();
     }
 
     // add events
@@ -588,52 +587,54 @@ void World::NewMonth( void )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
-    for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-        if ( ( *it )->GetColor() == Color::NONE )
-            ( *it )->ActionNewMonth();
+    for ( auto & castle : vec_castles )
+        if ( castle->GetColor() == Color::NONE )
+            castle->ActionNewMonth();
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )
 {
-    if ( mons.isValid() ) {
-        MapsIndexes tiles, excld;
-        tiles.reserve( vec_tiles.size() / 2 );
-        excld.reserve( vec_tiles.size() / 2 );
-
-        const u32 dist = 2;
-        const std::vector<uint8_t> objs = {MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE};
-
-        // create exclude list
-        {
-            const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
-
-            for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
-                const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
-                excld.insert( excld.end(), obja.begin(), obja.end() );
-            }
-        }
-
-        // create valid points
-        for ( MapsTiles::const_iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
-            const Maps::Tiles & tile = *it;
-
-            if ( !tile.isWater() && MP2::OBJ_ZERO == tile.GetObject() && tile.isPassable( Direction::CENTER, false, true, 0 )
-                 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
-                tiles.push_back( tile.GetIndex() );
-                const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
-                excld.insert( excld.end(), obja.begin(), obja.end() );
-            }
-        }
-
-        const u32 area = 12;
-        const u32 maxc = ( w() / area ) * ( h() / area );
-        std::random_shuffle( tiles.begin(), tiles.end() );
-        if ( tiles.size() > maxc )
-            tiles.resize( maxc );
-
-        for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
-            Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
+    if ( !mons.isValid() ) {
+        return;
     }
+
+    MapsIndexes tiles, excld;
+    tiles.reserve( vec_tiles.size() / 2 );
+    excld.reserve( vec_tiles.size() / 2 );
+
+    const int32_t dist = 2;
+    const std::vector<uint8_t> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+
+    // create exclude list
+    const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
+
+    for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
+        const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
+        excld.insert( excld.end(), obja.begin(), obja.end() );
+    }
+
+    // create valid points
+    for ( const Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() || MP2::OBJ_ZERO != tile.GetObject() || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+            continue;
+        }
+
+        // Cell should have at least 2 empty neighbor cells
+        if ( Maps::ScanAroundObject( tile.GetIndex(), MP2::OBJ_ZERO ).size() > 2 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
+            tiles.push_back( tile.GetIndex() );
+            const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
+            excld.insert( excld.end(), obja.begin(), obja.end() );
+        }
+    }
+
+    const int32_t area = 12;
+    const int32_t maxc = ( w() / area ) * ( h() / area );
+    Rand::Shuffle( tiles );
+    if ( tiles.size() > static_cast<size_t>( maxc ) )
+        tiles.resize( maxc );
+
+    for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
 }
 
 const std::string & World::GetRumors( void )
@@ -990,9 +991,31 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
     const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int mapWinCondition = conf.ConditionWins();
+
+    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+                if ( visited ) {
+                    return GameOver::WINS_SIDE;
+                }
+                else {
+                    return GameOver::COND_NONE;
+                }
+            }
+        }
+    }
 
     for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( conf.ConditionWins() & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
+        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
             return wins[ii];
 
     return GameOver::COND_NONE;
@@ -1154,28 +1177,19 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
         case MP2::OBJ_RESOURCE: {
             MapResource * ptr = new MapResource();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 
         case MP2::OBJ_ARTIFACT: {
             MapArtifact * ptr = new MapArtifact();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 
         case MP2::OBJ_MONSTER: {
             MapMonster * ptr = new MapMonster();
-            if ( FORMAT_VERSION_070_RELEASE > Game::GetLoadVersion() )
-                msg >> *static_cast<MapObjectSimple *>( ptr );
-            else
-                msg >> *ptr;
+            msg >> *ptr;
             objs[index] = ptr;
         } break;
 
@@ -1215,9 +1229,6 @@ StreamBase & operator>>( StreamBase & msg, World & w )
 
     w.PostLoad();
 
-    // heroes postfix
-    std::for_each( w.vec_heroes.begin(), w.vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
-
     return msg;
 }
 
@@ -1237,7 +1248,7 @@ void EventDate::LoadFromMP2( StreamBuf st )
         st.skip( 2 );
 
         // allow computer
-        computer = st.getLE16();
+        computer = ( st.getLE16() != 0 );
 
         // day of first occurent
         first = st.getLE16();

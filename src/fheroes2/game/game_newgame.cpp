@@ -24,14 +24,17 @@
 #include <sstream>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "gamedefs.h"
+#include "icn.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
@@ -99,7 +102,11 @@ int Game::NewCampaign()
     campaignRoi.emplace_back( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 );
     campaignRoi.emplace_back( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 );
 
+    // Reset all sound and music before playing videos
+    AGG::ResetMixer();
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+
+    AGG::ResetMixer();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
     const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
@@ -128,7 +135,7 @@ int Game::NewNetwork( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Blit( back, display );
+    fheroes2::drawMainMenuScreen();
     const uint32_t backgroundWidth = back.width();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
@@ -192,7 +199,7 @@ int Game::NewGame( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
@@ -287,7 +294,7 @@ int Game::NewMulti( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
@@ -357,7 +364,7 @@ u32 Game::SelectCountPlayers( void )
 
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
     const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();

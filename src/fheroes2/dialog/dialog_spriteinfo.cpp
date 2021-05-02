@@ -20,11 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "text.h"
 #include "ui_button.h"
 
@@ -59,7 +60,7 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height(), buttons );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + sprite.height(), buttons != 0 );
     fheroes2::Rect pos = box.GetArea();
 
     if ( header.size() )

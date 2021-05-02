@@ -22,31 +22,18 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "battle_cell.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
 #include "speed.h"
 #include "text.h"
 #include "world.h"
-
-struct dwelling_t : public std::pair<u32, u32>
-{
-    dwelling_t( u32 type, u32 count )
-        : std::pair<u32, u32>( type, count ){};
-};
-
-struct dwellings_t : public std::vector<dwelling_t>
-{
-    dwellings_t()
-    {
-        reserve( 6 );
-    };
-};
 
 u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Funds & res )
 {

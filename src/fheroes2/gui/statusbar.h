@@ -28,14 +28,11 @@
 class StatusBar : public TextSprite
 {
 public:
-    StatusBar();
+    StatusBar() = default;
 
     void SetCenter( s32 cx, s32 cy );
 
     void ShowMessage( const std::string & msg );
-    void Redraw( void );
-
-    const std::string & GetMessage( void ) const;
 
 private:
     fheroes2::Point center;

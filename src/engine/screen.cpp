@@ -37,6 +37,10 @@
 #include <cmath>
 #include <set>
 
+#if defined( FHEROES2_VITA )
+#include <vita2d.h>
+#endif
+
 namespace
 {
     // Returns nearest screen supported resolution
@@ -139,12 +143,12 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
-        virtual ~RenderCursor()
+        ~RenderCursor() override
         {
             clear();
         }
 
-        virtual bool isVisible() const override
+        bool isVisible() const override
         {
             if ( _emulation )
                 return fheroes2::Cursor::isVisible();
@@ -152,7 +156,7 @@ namespace
                 return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
         }
 
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
                 SDL_ShowCursor( 0 );
@@ -176,7 +180,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                     else if ( *transform > 1 ) {
                         // SDL2 uses RGBA image on OS level separately from frame rendering.
@@ -189,7 +193,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -206,7 +210,7 @@ namespace
             std::swap( _cursor, tempCursor );
         }
 
-        virtual void enableSoftwareEmulation( const bool enable ) override
+        void enableSoftwareEmulation( const bool enable ) override
         {
             if ( enable == _emulation )
                 return;
@@ -262,16 +266,211 @@ namespace
 
 namespace
 {
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_VITA )
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        static RenderEngine * create()
+        {
+            return new RenderEngine;
+        }
+
+        fheroes2::Rect getActiveWindowROI() const override
+        {
+            return _destRect;
+        }
+
+        fheroes2::Size getCurrentScreenResolution() const override
+        {
+            return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+        }
+
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
+        {
+            static std::vector<fheroes2::Size> filteredResolutions;
+
+            if ( filteredResolutions.empty() ) {
+                std::set<fheroes2::Size> resolutionSet;
+                resolutionSet.emplace( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_ASPECT_CORRECTED_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+                resolutionSet.emplace( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+                filteredResolutions = FilterResolutions( resolutionSet );
+            }
+
+            return filteredResolutions;
+        }
+
+    protected:
+        RenderEngine()
+            : _window( nullptr )
+            , _surface( nullptr )
+            , _texBuffer( nullptr )
+            , _palettedTexturePointer( nullptr )
+        {}
+
+        enum
+        {
+            VITA_FULLSCREEN_WIDTH = 960,
+            VITA_FULLSCREEN_HEIGHT = 544,
+            VITA_ASPECT_CORRECTED_WIDTH = 848
+        };
+
+        void clear() override
+        {
+            if ( _window != nullptr ) {
+                SDL_DestroyWindow( _window );
+                _window = nullptr;
+            }
+
+            if ( _surface != nullptr ) {
+                SDL_FreeSurface( _surface );
+                _surface = nullptr;
+            }
+
+            vita2d_fini();
+
+            if ( _texBuffer != nullptr ) {
+                vita2d_free_texture( _texBuffer );
+                _texBuffer = nullptr;
+            }
+        }
+
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        {
+            clear();
+
+            const std::vector<fheroes2::Size> resolutions = getAvailableResolutions();
+            if ( !resolutions.empty() ) {
+                const fheroes2::Size correctResolution = GetNearestResolution( width_, height_, resolutions );
+                width_ = correctResolution.width;
+                height_ = correctResolution.height;
+            }
+
+            vita2d_init();
+
+            _window = SDL_CreateWindow( "", 0, 0, width_, height_, 0 );
+            if ( _window == nullptr ) {
+                clear();
+                return false;
+            }
+
+            _surface = SDL_CreateRGBSurface( 0, 1, 1, 32, 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+
+            if ( _surface == nullptr || _surface->w <= 0 || _surface->h <= 0 ) {
+                clear();
+                return false;
+            }
+
+            vita2d_texture_set_alloc_memblock_type( SCE_KERNEL_MEMBLOCK_TYPE_USER_CDRAM_RW );
+            _texBuffer = vita2d_create_empty_texture_format( width_, height_, SCE_GXM_TEXTURE_FORMAT_P8_ABGR );
+            _palettedTexturePointer = static_cast<uint8_t *>( vita2d_texture_get_datap( _texBuffer ) );
+            memset( _palettedTexturePointer, 0, width_ * height_ * sizeof( uint8_t ) );
+            _createPalette();
+
+            // screen scaling calculation
+            _destRect.x = 0;
+            _destRect.y = 0;
+            _destRect.width = width_;
+            _destRect.height = height_;
+
+            if ( width_ != VITA_FULLSCREEN_WIDTH || height_ != VITA_FULLSCREEN_HEIGHT ) {
+                if ( isFullScreen ) {
+                    vita2d_texture_set_filters( _texBuffer, SCE_GXM_TEXTURE_FILTER_LINEAR, SCE_GXM_TEXTURE_FILTER_LINEAR );
+                    if ( ( static_cast<float>( VITA_FULLSCREEN_WIDTH ) / VITA_FULLSCREEN_HEIGHT ) >= ( static_cast<float>( width_ ) / height_ ) ) {
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_HEIGHT ) / height_;
+                        _destRect.width = static_cast<int32_t>( static_cast<float>( width_ ) * scale );
+                        _destRect.height = VITA_FULLSCREEN_HEIGHT;
+                        _destRect.x = ( VITA_FULLSCREEN_WIDTH - _destRect.width ) / 2;
+                    }
+                    else {
+                        const float scale = static_cast<float>( VITA_FULLSCREEN_WIDTH ) / width_;
+                        _destRect.width = VITA_FULLSCREEN_WIDTH;
+                        _destRect.height = static_cast<int32_t>( static_cast<float>( height_ ) * scale );
+                        _destRect.y = ( VITA_FULLSCREEN_HEIGHT - _destRect.height ) / 2;
+                    }
+                }
+                else {
+                    // center game area
+                    _destRect.x = ( VITA_FULLSCREEN_WIDTH - width_ ) / 2;
+                    _destRect.y = ( VITA_FULLSCREEN_HEIGHT - height_ ) / 2;
+                }
+            }
+
+            return true;
+        }
+
+        void render( const fheroes2::Display & display ) override
+        {
+            if ( _texBuffer == nullptr )
+                return;
+
+            const int32_t width = display.width();
+            const int32_t height = display.height();
+
+            SDL_memcpy( _palettedTexturePointer, display.image(), width * height * sizeof( uint8_t ) );
+
+            vita2d_start_drawing();
+            vita2d_draw_texture_scale( _texBuffer, _destRect.x, _destRect.y, static_cast<float>( _destRect.width ) / width,
+                                       static_cast<float>( _destRect.height ) / height );
+            vita2d_end_drawing();
+            vita2d_swap_buffers();
+        }
+
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        {
+            if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
+                return;
+
+            uint32_t _palette32Bit[256u];
+
+            for ( size_t i = 0; i < 256u; ++i ) {
+                const uint8_t * value = currentPalette + colorIds[i] * 3;
+                _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+            }
+
+            memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
+        }
+
+        bool isMouseCursorActive() const override
+        {
+            return true;
+        }
+
+    private:
+        SDL_Window * _window;
+        SDL_Surface * _surface;
+        vita2d_texture * _texBuffer;
+        uint8_t * _palettedTexturePointer;
+        fheroes2::Rect _destRect;
+
+        void _createPalette()
+        {
+            updatePalette( StandardPaletteIndexes() );
+        }
+    };
+#elif SDL_VERSION_ATLEAST( 2, 0, 0 )
+    class RenderEngine : public fheroes2::BaseRenderEngine
+    {
+    public:
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
+        {
+            clear();
+        }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
         {
             if ( _window == NULL ) {
                 BaseRenderEngine::toggleFullScreen();
@@ -281,6 +480,10 @@ namespace
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
                 flags = 0;
+
+                if ( _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+                    SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
+                }
             }
             else {
 #if defined( __WIN32__ )
@@ -288,13 +491,19 @@ namespace
 #else
                 flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
+                SDL_GetWindowSize( _window, &_windowedSize.width, &_windowedSize.height );
+
+                fheroes2::Display & display = fheroes2::Display::instance();
+                if ( display.width() != 0 && display.height() != 0 ) {
+                    SDL_SetWindowSize( _window, display.width(), display.height() );
+                }
             }
 
             SDL_SetWindowFullscreen( _window, flags );
             _retrieveWindowInfo();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _window == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -303,7 +512,7 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -327,13 +536,13 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             if ( _window != NULL )
                 SDL_SetWindowTitle( _window, title.c_str() );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
             if ( _window == NULL )
                 return;
@@ -354,7 +563,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
@@ -362,7 +571,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -375,12 +584,12 @@ namespace
             SDL_FreeSurface( surface );
         }
 
-        virtual fheroes2::Rect getActiveWindowROI() const override
+        fheroes2::Rect getActiveWindowROI() const override
         {
             return _activeWindowROI;
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const override
+        fheroes2::Size getCurrentScreenResolution() const override
         {
             return _currentScreenResolution;
         }
@@ -399,7 +608,7 @@ namespace
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
         {}
 
-        virtual void clear() override
+        void clear() override
         {
             if ( _texture != NULL ) {
                 SDL_DestroyTexture( _texture );
@@ -426,9 +635,11 @@ namespace
                 SDL_FreeSurface( _surface );
                 _surface = NULL;
             }
+
+            _windowedSize = fheroes2::Size();
         }
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display ) override
         {
             if ( _surface == NULL )
                 return;
@@ -482,7 +693,7 @@ namespace
             }
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -558,7 +769,7 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
@@ -569,13 +780,13 @@ namespace
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
@@ -585,7 +796,7 @@ namespace
                     const uint8_t * value = currentPalette + colorIds[i] * 3;
                     SDL_Color & col = _palette8Bit[i];
 
-                    col.r = *( value );
+                    col.r = *value;
                     col.g = *( value + 1 );
                     col.b = *( value + 2 );
                 }
@@ -598,7 +809,7 @@ namespace
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
@@ -616,6 +827,8 @@ namespace
         fheroes2::Point _prevWindowPos;
         fheroes2::Size _currentScreenResolution;
         fheroes2::Rect _activeWindowROI;
+
+        fheroes2::Size _windowedSize;
 
         int renderFlags() const
         {
@@ -661,12 +874,16 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
         {
             if ( _surface == NULL ) { // nothing to render
                 BaseRenderEngine::toggleFullScreen();
@@ -692,7 +909,7 @@ namespace
             _createPalette();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _surface == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -700,7 +917,7 @@ namespace
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -719,12 +936,12 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             SDL_WM_SetCaption( title.c_str(), NULL );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
             if ( surface == NULL )
@@ -742,7 +959,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
             }
@@ -750,7 +967,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -774,7 +991,7 @@ namespace
             , _bitDepth( 8 )
         {}
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display ) override
         {
             if ( _surface == NULL ) // nothing to render on
                 return;
@@ -815,7 +1032,7 @@ namespace
             SDL_Flip( _surface );
         }
 
-        virtual void clear() override
+        void clear() override
         {
             linkRenderSurface( NULL );
 
@@ -828,7 +1045,7 @@ namespace
             _palette8Bit.clear();
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -858,7 +1075,7 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
@@ -869,13 +1086,13 @@ namespace
                 if ( _surface->format->Amask > 0 ) {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                 }
                 else {
                     for ( size_t i = 0; i < 256u; ++i ) {
                         const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                 }
             }
@@ -898,7 +1115,7 @@ namespace
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
         }
@@ -961,12 +1178,6 @@ namespace fheroes2
         _disableTransformLayer();
     }
 
-    Display::~Display()
-    {
-        delete _cursor;
-        delete _engine;
-    }
-
     void Display::resize( int32_t width_, int32_t height_ )
     {
         if ( width() > 0 && height() > 0 && width_ == width() && height_ == height() ) // nothing to resize
@@ -1020,7 +1231,7 @@ namespace fheroes2
         }
     }
 
-    void Display::_renderFrame()
+    void Display::_renderFrame() const
     {
         bool updateImage = true;
         if ( _preprocessing != NULL ) {
@@ -1064,7 +1275,7 @@ namespace fheroes2
         clear();
     }
 
-    void Display::changePalette( const uint8_t * palette )
+    void Display::changePalette( const uint8_t * palette ) const
     {
         if ( currentPalette == palette || ( palette == NULL && currentPalette == PALPAlette() ) )
             return;
@@ -1072,6 +1283,24 @@ namespace fheroes2
         currentPalette = ( palette == NULL ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
+    }
+
+    void Display::setEngine( std::unique_ptr<BaseRenderEngine> & engine )
+    {
+        assert( engine.get() != nullptr );
+        if ( engine.get() == nullptr ) {
+            return;
+        }
+        std::swap( engine, _engine );
+    }
+
+    void Display::setCursor( std::unique_ptr<Cursor> & cursor )
+    {
+        assert( cursor.get() != nullptr );
+        if ( cursor.get() == nullptr ) {
+            return;
+        }
+        std::swap( cursor, _cursor );
     }
 
     bool Cursor::isFocusActive() const

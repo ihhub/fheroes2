@@ -30,50 +30,51 @@ class Castle;
 class Captain : public HeroBase
 {
 public:
-    Captain( Castle & );
+    explicit Captain( Castle & );
 
-    virtual bool isValid() const override;
-    virtual int GetAttack() const override;
-    virtual int GetDefense() const override;
-    virtual int GetPower() const override;
-    virtual int GetKnowledge() const override;
-    virtual int GetMorale() const override;
-    virtual int GetLuck() const override;
-    virtual int GetRace() const override;
-    virtual int GetColor() const override;
-    virtual int GetType() const override;
-    virtual int GetControl() const override;
-    s32 GetIndex() const;
+    bool isValid() const override;
+    int GetAttack() const override;
+    int GetDefense() const override;
+    int GetPower() const override;
+    int GetKnowledge() const override;
+    int GetMorale() const override;
+    int GetLuck() const override;
+    int GetRace() const override;
+    int GetColor() const override;
+    int GetType() const override;
+    int GetControl() const override;
 
-    virtual const std::string & GetName() const override;
+    const std::string & GetName() const override;
 
-    virtual const Castle * inCastle() const override;
+    const Castle * inCastle() const override;
 
-    virtual int GetLevelSkill( int ) const override
+    int GetLevelSkill( int ) const override
     {
         return 0;
     }
 
-    virtual uint32_t GetSecondaryValues( int ) const override
+    uint32_t GetSecondaryValues( int ) const override
     {
         return 0;
     }
 
-    virtual const Army & GetArmy() const override;
-    virtual Army & GetArmy() override;
+    const Army & GetArmy() const override;
+    Army & GetArmy() override;
 
-    virtual uint32_t GetMaxSpellPoints() const override
+    uint32_t GetMaxSpellPoints() const override
     {
         return knowledge * 10;
     }
 
-    virtual void ActionPreBattle() override;
-    virtual void ActionAfterBattle() override;
+    void ActionPreBattle() override;
+    void ActionAfterBattle() override;
 
-    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     fheroes2::Sprite GetPortrait( const PortraitType type ) const;
 
 private:
+    int GetManaIndexSprite() const;
+
     Castle & home;
 };
 

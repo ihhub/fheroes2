@@ -32,7 +32,10 @@ namespace fheroes2
     class AGGFile
     {
     public:
-        AGGFile();
+        AGGFile()
+        {
+            // Avoid C4592 warning in Visual Studio.
+        }
 
         bool isGood() const;
         bool open( const std::string & fileName );

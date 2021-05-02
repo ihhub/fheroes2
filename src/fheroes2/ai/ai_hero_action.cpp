@@ -192,8 +192,7 @@ namespace AI
                 return castle->GetHeroes().Guest() == NULL;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                const double safetyRatio = castle->isCastle() ? ARMY_STRENGTH_ADVANTAGE_LARGE : ARMY_STRENGTH_ADVANTAGE_MEDUIM;
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength() * safetyRatio;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * ARMY_STRENGTH_ADVANTAGE_MEDUIM;
             }
         }
         return false;
@@ -789,6 +788,7 @@ namespace AI
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
+                    tile.SetQuantity3( 0 );
                 }
                 else {
                     capture = false;
@@ -1850,7 +1850,7 @@ namespace AI
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();
             if ( hero2 ) {
-                const bool otherHeroInCastle = hero2->inCastle();
+                const bool otherHeroInCastle = ( hero2->inCastle() != nullptr );
 
                 if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
                     return !otherHeroInCastle;
@@ -1930,7 +1930,7 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            Cursor & cursor = Cursor::Get();
+            const Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 

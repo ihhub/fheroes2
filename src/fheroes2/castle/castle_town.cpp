@@ -23,13 +23,14 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "buildinginfo.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "payment.h"
 #include "race.h"
@@ -39,7 +40,7 @@
 #include "ui_button.h"
 #include "world.h"
 
-int Castle::DialogBuyHero( const Heroes * hero )
+int Castle::DialogBuyHero( const Heroes * hero ) const
 {
     if ( !hero )
         return Dialog::CANCEL;
@@ -373,9 +374,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero1 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // second hero
@@ -391,9 +391,8 @@ u32 Castle::OpenTown( void )
 
     // indicator
     if ( !allow_buy_hero2 ) {
-        dst_pt.x += 83;
-        dst_pt.y += 75;
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 ), display, dst_pt.x, dst_pt.y );
+        const fheroes2::Sprite & spriteDeny = fheroes2::AGG::GetICN( ICN::TOWNWIND, 12 );
+        fheroes2::Blit( spriteDeny, display, dst_pt.x + 102 - 4 + 1 - spriteDeny.width(), dst_pt.y + 93 - 2 - spriteDeny.height() );
     }
 
     // bottom bar

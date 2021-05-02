@@ -1,3 +1,91 @@
+version 0.9.2 (04 April 2021)
+- fix full artifact bag message
+- add missing dot to sentences in few windows
+- display Lighthouse count in Kingdom Overview
+- add proper large obstacle generation for battlefields
+- fast AI units should try to get the first strike
+- fix Sphinx missing rewards
+- reset paralyze state when receiving spell damage
+- randomize attack position of AI monsters
+- fix missing hero paths after loading a save
+- fix incorrect window resolution in fullscreen mode for SDL 2
+- fix Choose Your Lord video sound
+- improve castle garrison estimation for AI
+- remove the mobility index sprite info from the hero Quick Info dialog
+- prohibit the guardian hero from casting adventure spells
+- fix merging of the castle guardian army
+- fix AI defensive unit behavior
+- add AI estimation of hero spell strength
+- force units into empty slots first during merge
+- do not always offer recruitment of heroes from the player's initial class, make recruitment more random
+- allow player to control the hero during the turn of a hypnotized enemy unit
+- archers should not lose shots when attacking in melee
+- check that the hero is able to move before focusing him and starting his movement
+- respect initial order of units (from top to bottom) when determining the order of unit moves in battle
+- add PlayStation Vita support
+- fix creature recruit window UI
+- fix rendering of Arm of the Martyr
+- fix blind spell logic
+- do not give additional 500 experience to the hero who won the battle if the opposing hero surrenders or flees
+- fix hypnotize spell behavior and the spell description
+- update positions of monster sprites and numbers on army status panel
+- fix possibly incorrect arrow direction from shooters
+- fix scrollbar position in multiple places
+- standartize icon position in town's dialog
+- fix Max/Min button position in monster recruit dialog
+- show the surrender dialog even if there is not enough gold to surrender
+- do not apply morale penalty to a hero if he wins a battle in a Graveyard, Shipwreck or Derelict Ship
+- add cross army drag split
+- reset player focus if focused hero or castle was removed
+- allow to switch players for multiplayer map selection
+- allow to use mouse wheel anywhere for split troop dialog
+- fix logic of placing monsters for a New Month
+- fix Kingdom Overview selection drawings
+- dix boat drawing issues
+- do not hide mouse cursor if the Skill Info dialog called from the Level Up dialog contains OK button
+- fix incorrect drawings for battle OKAY button
+- fix rendering of the Castle Captain's spell points bar
+- fix missing sounds within System dialog
+- fix interaction with the castle bridge for flying units
+- use rule of 9 for Ultimate Artifact placement
+- fix last focus option
+- fix incorrect cursor icon over ally's castle
+- add initial implementation of View spells
+- show normal monster names in Visions spell
+- show full 1-pixel black border for Show Interface option
+- show more detailed morale and luck description
+- AI predicts double cell attacks in combat
+- reset blind spell upon taking any damage
+- allow to place units in moat in front of the bridge
+- align spells in the magic book
+- add manual replay of battle if instant battle outcome is negative
+- sounds off when minimizing game window
+- fix playing background music during video playback on SDL1
+- change damage description log message for some mass spells
+- add executable file description and icon on Windows
+- fix pathfinding backwards move and penalty in battle
+- fix City of the dead incorrect monster info
+- update no data error message
+- do not allow to manage monsters in unhired hero dialog
+- AI supports additional harmful combat spells
+- do not open the hero screen in readonly mode if it was opened from the meeting screen, just disable the DISMISS button instead
+- do not show external music option with an absent folder
+- wait for user input at the end of winning video
+- fix double exit dialog appearence
+- fix missing cursor in Army Bar for SDL 1
+- ranged AI troops should move when blocked by a strong unit
+- if the unit attacks twice, apply the second attack to the same cell as the first attack
+- fix double hex attack target for AI troops
+- show the build window with the OKAY button disabled if there is not enough resources to build this building
+- AI uses mass damage spells in combat
+- improvements for AI wide unit pathfinding
+- fix the pathfinding near monsters: do not allow the hero to pass through the monster
+- fix MIN and MAX button drawings
+- do not give an extra day of life to a player without castles
+- preserve unit direction in battle if it moves strictly vertically
+- do not allow the visiting hero to learn Library spells if the Library hasn't been built yet
+- fix inability to reorganize troops in Kingdom View dialog
+
 version 0.9.1 (04 March 2021)
 - add "Artifacts" category in Oracle Screen
 - add barrier fading animation

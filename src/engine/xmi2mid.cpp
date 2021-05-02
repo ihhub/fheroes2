@@ -31,16 +31,22 @@
 #include "logging.h"
 #include "serialize.h"
 
-#define TAG_FORM 0x464F524D
-#define TAG_XDIR 0x58444952
-#define TAG_INFO 0x494E464F
-#define TAG_CAT0 0x43415420
-#define TAG_XMID 0x584D4944
-#define TAG_TIMB 0x54494D42
-#define TAG_EVNT 0x45564E54
-#define TAG_RBRN 0x5242524E
-#define TAG_MTHD 0x4D546864
-#define TAG_MTRK 0x4D54726B
+namespace
+{
+    enum
+    {
+        TAG_FORM = 0x464F524D,
+        TAG_XDIR = 0x58444952,
+        TAG_INFO = 0x494E464F,
+        TAG_CAT0 = 0x43415420,
+        TAG_XMID = 0x584D4944,
+        TAG_TIMB = 0x54494D42,
+        TAG_EVNT = 0x45564E54,
+        TAG_RBRN = 0x5242524E,
+        TAG_MTHD = 0x4D546864,
+        TAG_MTRK = 0x4D54726B
+    };
+}
 
 // Pair: time and length
 struct XMI_Time : public std::pair<u32, u32>
@@ -179,7 +185,7 @@ struct XMIData
 {
     XMITracks tracks;
 
-    XMIData( const std::vector<u8> & buf )
+    explicit XMIData( const std::vector<u8> & buf )
     {
         StreamBuf sb( buf );
 
@@ -336,8 +342,8 @@ struct MidiEvents : std::vector<MidiChunk>
         return res;
     }
 
-    MidiEvents() {}
-    MidiEvents( const XMITrack & t )
+    MidiEvents() = default;
+    explicit MidiEvents( const XMITrack & t )
     {
         const u8 * ptr = &t.evnt[0];
         const u8 * end = ptr + t.evnt.size();
@@ -440,7 +446,7 @@ struct MidTrack
     MidTrack()
         : mtrk( TAG_MTRK, 0 )
     {}
-    MidTrack( const XMITrack & t )
+    explicit MidTrack( const XMITrack & t )
         : mtrk( TAG_MTRK, 0 )
         , events( t )
     {
@@ -475,8 +481,8 @@ struct MidTracks : std::list<MidTrack>
         return res;
     }
 
-    MidTracks() {}
-    MidTracks( const XMITracks & tracks )
+    MidTracks() = default;
+    explicit MidTracks( const XMITracks & tracks )
     {
         for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
             emplace_back( *it );
@@ -502,7 +508,7 @@ struct MidData
         , format( 0 )
         , ppqn( 0 )
     {}
-    MidData( const XMITracks & t )
+    explicit MidData( const XMITracks & t )
         : mthd( TAG_MTHD, 6 )
         , format( 0 )
         , ppqn( 60 )

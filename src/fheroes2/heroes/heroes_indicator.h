@@ -26,11 +26,12 @@
 #include <string>
 
 #include "gamedefs.h"
+#include "image.h"
 
 namespace fheroes2
 {
-    const char * LuckString( const int luck );
-    const char * MoraleString( const int morale );
+    std::string LuckString( const int luck );
+    std::string MoraleString( const int morale );
 }
 
 class Heroes;
@@ -38,10 +39,9 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    HeroesIndicator( const Heroes * h = nullptr );
+    explicit HeroesIndicator( const Heroes * h = nullptr );
 
     const Rect & GetArea( void ) const;
-    const std::string & GetDescriptions( void ) const;
     void SetPos( const Point & );
     void SetHero( const Heroes * hero );
 
@@ -55,7 +55,7 @@ protected:
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    LuckIndicator( const Heroes * h = nullptr );
+    explicit LuckIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( const LuckIndicator & );
@@ -67,7 +67,7 @@ private:
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    MoraleIndicator( const Heroes * h = nullptr );
+    explicit MoraleIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( const MoraleIndicator & );
@@ -79,19 +79,19 @@ private:
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    ExperienceIndicator( const Heroes * h = nullptr );
+    explicit ExperienceIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    SpellPointsIndicator( const Heroes * h = nullptr );
+    explicit SpellPointsIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 #endif

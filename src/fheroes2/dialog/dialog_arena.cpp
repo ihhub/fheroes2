@@ -20,10 +20,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 #include "skill.h"
@@ -47,16 +48,21 @@ int Dialog::SelectSkillFromArena( void )
     cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
+    TextBox title( _( "Arena" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
+
     TextBox textbox(
         _( "You enter the arena and face a pack of vicious lions. You handily defeat them, to the wild cheers of the crowd.  Impressed by your skill, the aged trainer of gladiators agrees to train you in a skill of your choice." ),
         Font::BIG, BOXAREA_WIDTH );
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( textbox.h() + spacer + sprite.height() + 15, true );
+    Dialog::FrameBox box( title.h() + textbox.h() + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
+
+    title.Blit( dst_pt.x, dst_pt.y );
+    dst_pt.y += title.h() + spacer;
 
     textbox.Blit( dst_pt.x, dst_pt.y );
     dst_pt.y += textbox.h() + spacer;

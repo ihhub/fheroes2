@@ -25,6 +25,8 @@
 
 #include "image.h"
 
+#include <memory>
+
 namespace Interface
 {
     class Basic;
@@ -32,23 +34,38 @@ namespace Interface
     class ControlPanel : protected fheroes2::Rect
     {
     public:
-        ControlPanel( Basic & );
+        explicit ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
-        void Redraw( void );
+        void Redraw( void ) const;
         void ResetTheme( void );
         int QueueEventProcessing( void );
 
-        const fheroes2::Rect & GetArea( void );
+        const fheroes2::Rect & GetArea( void ) const;
 
     private:
         Basic & interface;
 
-        fheroes2::Sprite btn_radr;
-        fheroes2::Sprite btn_icon;
-        fheroes2::Sprite btn_bttn;
-        fheroes2::Sprite btn_stat;
-        fheroes2::Sprite btn_quit;
+        // We do not want to make a copy of images but to store just references to them.
+        struct Buttons
+        {
+            Buttons( const fheroes2::Sprite & radar_, const fheroes2::Sprite & icon_, const fheroes2::Sprite & button_, const fheroes2::Sprite & stats_,
+                     const fheroes2::Sprite & quit_ )
+                : radar( radar_ )
+                , icon( icon_ )
+                , button( button_ )
+                , stats( stats_ )
+                , quit( quit_ )
+            {}
+
+            const fheroes2::Sprite & radar;
+            const fheroes2::Sprite & icon;
+            const fheroes2::Sprite & button;
+            const fheroes2::Sprite & stats;
+            const fheroes2::Sprite & quit;
+        };
+
+        std::unique_ptr<Buttons> _buttons;
 
         fheroes2::Rect rt_radr;
         fheroes2::Rect rt_icon;

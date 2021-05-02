@@ -22,12 +22,13 @@
 
 #include <cmath>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
+#include "icn.h"
 #include "interface_radar.h"
 #include "logging.h"
 #include "text.h"
@@ -47,49 +48,52 @@ namespace
 
         return 1;
     }
+
+    enum
+    {
+        RADARCOLOR = 0xB5, // index palette
+        COLOR_DESERT = 0x76,
+        COLOR_SNOW = 0x0D,
+        COLOR_SWAMP = 0x68,
+        COLOR_WASTELAND = 0xCD,
+        COLOR_BEACH = 0x29,
+        COLOR_LAVA = 0x20,
+        COLOR_DIRT = 0x36,
+        COLOR_GRASS = 0x63,
+        COLOR_WATER = 0x4D,
+        COLOR_ROAD = 0x7A,
+
+        COLOR_BLUE = 0x47,
+        COLOR_GREEN = 0x67,
+        COLOR_RED = 0xbd,
+        COLOR_YELLOW = 0x70,
+        COLOR_ORANGE = 0xcd,
+        COLOR_PURPLE = 0x87,
+        COLOR_GRAY = 0x10
+    };
 }
-
-#define RADARCOLOR 0xB5 // index palette
-#define COLOR_DESERT 0x76
-#define COLOR_SNOW 0x0D
-#define COLOR_SWAMP 0x68
-#define COLOR_WASTELAND 0xCD
-#define COLOR_BEACH 0x29
-#define COLOR_LAVA 0x20
-#define COLOR_DIRT 0x36
-#define COLOR_GRASS 0x63
-#define COLOR_WATER 0x4D
-#define COLOR_ROAD 0x7A
-
-#define COLOR_BLUE 0x47
-#define COLOR_GREEN 0x67
-#define COLOR_RED 0xbd
-#define COLOR_YELLOW 0x70
-#define COLOR_ORANGE 0xcd
-#define COLOR_PURPLE 0x87
-#define COLOR_GRAY 0x10
 
 uint8_t GetPaletteIndexFromGround( int ground )
 {
     switch ( ground ) {
     case Maps::Ground::DESERT:
-        return ( COLOR_DESERT );
+        return COLOR_DESERT;
     case Maps::Ground::SNOW:
-        return ( COLOR_SNOW );
+        return COLOR_SNOW;
     case Maps::Ground::SWAMP:
-        return ( COLOR_SWAMP );
+        return COLOR_SWAMP;
     case Maps::Ground::WASTELAND:
-        return ( COLOR_WASTELAND );
+        return COLOR_WASTELAND;
     case Maps::Ground::BEACH:
-        return ( COLOR_BEACH );
+        return COLOR_BEACH;
     case Maps::Ground::LAVA:
-        return ( COLOR_LAVA );
+        return COLOR_LAVA;
     case Maps::Ground::DIRT:
-        return ( COLOR_DIRT );
+        return COLOR_DIRT;
     case Maps::Ground::GRASS:
-        return ( COLOR_GRASS );
+        return COLOR_GRASS;
     case Maps::Ground::WATER:
-        return ( COLOR_WATER );
+        return COLOR_WATER;
     default:
         break;
     }
@@ -450,7 +454,7 @@ void Interface::Radar::QueueEventProcessing( void )
     }
 }
 
-bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi )
+bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const
 {
     LocalEvent & le = LocalEvent::Get();
     const Rect & rect = GetArea();

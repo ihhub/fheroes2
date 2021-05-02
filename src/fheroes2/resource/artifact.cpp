@@ -24,13 +24,14 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "logging.h"
 #include "rand.h"
 #include "spell.h"
@@ -593,7 +594,7 @@ int Artifact::GetSpell( void ) const
 
 void Artifact::SetSpell( int v )
 {
-    bool adv = Rand::Get( 1 );
+    const bool adv = Rand::Get( 1 ) != 0;
 
     switch ( v ) {
     case Spell::RANDOM:
@@ -965,10 +966,16 @@ void ArtifactsBar::RedrawItem( Artifact & art, const Rect & pos, bool selected, 
     if ( art.isValid() ) {
         Cursor::Get().Hide();
 
-        if ( use_mini_sprite )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), dstsf, pos.x + 1, pos.y + 1 );
-        else
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() ), dstsf, pos.x, pos.y );
+        if ( use_mini_sprite ) {
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+            fheroes2::Fill( dstsf, pos.x + 1, pos.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
+            fheroes2::Blit( artifactSprite, dstsf, pos.x + 1, pos.y + 1 );
+        }
+        else {
+            const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+            fheroes2::Fill( dstsf, pos.x, pos.y, artifactSprite.width(), artifactSprite.height(), 0 );
+            fheroes2::Blit( artifactSprite, dstsf, pos.x, pos.y );
+        }
 
         if ( selected ) {
             if ( use_mini_sprite )

@@ -40,7 +40,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
 
-    FrameBox box( 10 + ( header.size() ? textbox1.h() + 10 : 0 ) + textbox2.h(), buttons );
+    FrameBox box( 10 + ( header.size() ? textbox1.h() + 10 : 0 ) + textbox2.h(), buttons != 0 );
     const fheroes2::Rect & pos = box.GetArea();
 
     if ( header.size() )

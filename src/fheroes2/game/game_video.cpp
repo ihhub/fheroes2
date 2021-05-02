@@ -40,10 +40,12 @@ namespace
         std::string temp;
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            temp = Settings::GetLastFile( videoDir[i], fileName );
-            if ( System::IsFile( temp ) ) { // file doesn't exist, so no need to even try to load it
-                path.swap( temp );
-                return true;
+            ListFiles files = Settings::FindFiles( videoDir[i], fileName );
+            for ( std::string & name : files ) {
+                if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
+                    path.swap( name );
+                    return true;
+                }
             }
         }
 
@@ -72,6 +74,9 @@ namespace Video
         if ( hideCursor ) {
             Cursor::Get().Hide();
         }
+        else {
+            Cursor::Get().setVideoPlaybackCursor();
+        }
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
@@ -85,11 +90,18 @@ namespace Video
         const bool hasSound = Settings::Get().Sound();
         const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
         if ( hasSound ) {
-            AGG::ResetMixer();
             for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
                 if ( it->size() )
                     Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
             }
+        }
+
+        // Detect some non-existing video such such using 1 FPS or the size of 20 x 20 pixels.
+        if ( std::fabs( video.fps() - 1.0 ) < 0.001 || ( video.width() == 20 && video.height() == 20 ) ) {
+            if ( hideCursor ) {
+                Cursor::Get().Show();
+            }
+            return 0;
         }
 
         const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -201,6 +213,9 @@ namespace Video
 
         if ( hideCursor ) {
             Cursor::Get().Show();
+        }
+        else {
+            Cursor::Get().resetVideoPlaybackCursor();
         }
 
         return roiChosenId;

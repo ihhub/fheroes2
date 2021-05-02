@@ -40,8 +40,40 @@
 #include "logging.h"
 #include "screen.h"
 #include "system.h"
+#include "text.h"
 #include "translations.h"
 #include "zzlib.h"
+
+namespace
+{
+    void showTeamInfo()
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        fheroes2::Image image( display.width(), display.height() );
+        image.fill( 0 );
+
+        TextBox text( "fheroes2 Resurrection Team presents", Font::WHITE_LARGE, 500 );
+        text.Blit( ( image.width() - text.w() ) / 2, ( image.height() - text.h() ) / 2, image );
+
+        LocalEvent & le = LocalEvent::Get();
+
+        uint8_t alpha = 250;
+
+        while ( le.HandleEvents() && alpha > 20 ) {
+            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+                break;
+
+            if ( Game::AnimateCustomDelay( 40 ) ) {
+                fheroes2::Copy( image, display );
+                fheroes2::ApplyAlpha( display, alpha );
+                display.render();
+
+                alpha -= 5;
+            }
+        }
+    }
+}
 
 void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath();
@@ -71,6 +103,7 @@ std::string GetCaption( void )
 
 int main( int argc, char ** argv )
 {
+    InitHardware();
     Logging::InitLog();
 
     Settings & conf = Settings::Get();
@@ -147,6 +180,8 @@ int main( int argc, char ** argv )
                 fheroes2::engine().toggleFullScreen();
 
             display.resize( conf.VideoMode().width, conf.VideoMode().height );
+            display.fill( 0 ); // start from a black screen
+
             fheroes2::engine().setTitle( GetCaption() );
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
@@ -159,7 +194,7 @@ int main( int argc, char ** argv )
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
 #ifdef WITH_ZLIB
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
 
@@ -182,6 +217,8 @@ int main( int argc, char ** argv )
 
             // init game data
             Game::Init();
+
+            showTeamInfo();
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
@@ -264,6 +301,7 @@ int main( int argc, char ** argv )
         }
 
     fheroes2::Display::instance().release();
+    CloseHardware();
 
     return EXIT_SUCCESS;
 }
@@ -275,16 +313,14 @@ bool ReadConfigs( void )
 
     bool isValidConfigurationFile = false;
     for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        if ( System::IsFile( *it ) ) {
-            if ( conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        if ( System::IsFile( *it ) && conf.Read( *it ) ) {
+            isValidConfigurationFile = true;
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
+            break;
         }
     }
 

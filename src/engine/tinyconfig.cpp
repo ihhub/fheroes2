@@ -88,7 +88,7 @@ bool TinyConfig::Save( const std::string & cfile ) const
         return false;
 
     for ( const_iterator it = begin(); it != end(); ++it )
-        sf << it->first << " " << separator << " " << it->second << '\n';
+        sf << it->first << ' ' << separator << ' ' << it->second << '\n';
 
     return true;
 }

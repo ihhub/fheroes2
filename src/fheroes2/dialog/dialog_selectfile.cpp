@@ -27,11 +27,12 @@
 #include <sstream>
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dir.h"
 #include "game.h"
+#include "icn.h"
 #include "interface_list.h"
 #include "maps_fileinfo.h"
 #include "settings.h"
@@ -49,16 +50,17 @@ public:
     FileInfoListBox( const Point & pt, bool & edit )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , edit_mode( edit )
-        , _isDoubleClicked( false ){};
+        , _isDoubleClicked( false )
+    {}
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawBackground( const Point & ) override;
 
-    void ActionCurrentUp( void );
-    void ActionCurrentDn( void );
-    void ActionListDoubleClick( Maps::FileInfo & );
-    void ActionListSingleClick( Maps::FileInfo & );
-    void ActionListPressRight( Maps::FileInfo & ){};
+    void ActionCurrentUp( void ) override;
+    void ActionCurrentDn( void ) override;
+    void ActionListDoubleClick( Maps::FileInfo & ) override;
+    void ActionListSingleClick( Maps::FileInfo & ) override;
+    void ActionListPressRight( Maps::FileInfo & ) override {}
 
     bool & edit_mode;
 
@@ -138,7 +140,7 @@ void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & )
 std::string ResizeToShortName( const std::string & str )
 {
     std::string res = System::GetBasename( str );
-    size_t it = res.find( '.' );
+    size_t it = res.rfind( '.' );
     if ( std::string::npos != it )
         res.resize( it );
     return res;
@@ -278,6 +280,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     cursor.Show();
     display.render();
+    le.OpenVirtualKeyboard();
 
     std::string result;
     bool is_limit = false;
@@ -347,6 +350,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     cursor.Hide();
+    le.CloseVirtualKeyboard();
 
     return result;
 }

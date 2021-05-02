@@ -89,7 +89,12 @@ Player::Player( int col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
 {
-    name = Color::String( color );
+    name = GetDefaultName();
+}
+
+std::string Player::GetDefaultName() const
+{
+    return Color::String( color );
 }
 
 const std::string & Player::GetName( void ) const
@@ -127,29 +132,14 @@ int Player::GetFriends( void ) const
     return friends;
 }
 
-int Player::GetID( void ) const
-{
-    return id;
-}
-
 std::string Player::GetPersonalityString() const
 {
     return _ai->GetPersonalityString();
 }
 
-bool Player::isID( u32 id2 ) const
-{
-    return id2 == id;
-}
-
 bool Player::isColor( int col ) const
 {
     return col == color;
-}
-
-bool Player::isName( const std::string & str ) const
-{
-    return str == name;
 }
 
 bool Player::isPlay( void ) const

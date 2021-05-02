@@ -33,8 +33,6 @@
 #include "tinyconfig.h"
 #include "version.h"
 
-#define DEFAULT_PORT 5154
-
 enum
 {
     // ??? = 0x00000001,
@@ -51,9 +49,6 @@ enum
     GLOBAL_SHOWBUTTONS = 0x00000200,
     GLOBAL_SHOWSTATUS = 0x00000400,
 
-    GLOBAL_KEEP_ASPECT_RATIO = 0x00001000,
-    GLOBAL_FONTRENDERBLENDED1 = 0x00002000,
-    GLOBAL_FONTRENDERBLENDED2 = 0x00004000,
     GLOBAL_FULLSCREEN = 0x00008000,
     GLOBAL_USESWSURFACE = 0x00010000,
 
@@ -79,14 +74,10 @@ struct settings_t
     u32 id;
     const char * str;
 
-    bool operator==( const std::string & s ) const
-    {
-        return str && s == str;
-    };
     bool operator==( u32 i ) const
     {
         return id && id == i;
-    };
+    }
 };
 
 // external settings
@@ -114,10 +105,6 @@ const settings_t settingsGeneral[] = {
     {
         GLOBAL_USESWSURFACE,
         "use swsurface only",
-    },
-    {
-        GLOBAL_KEEP_ASPECT_RATIO,
-        "keep aspect ratio",
     },
     {
         0,
@@ -161,10 +148,6 @@ const settings_t settingsFHeroes2[] = {
     {
         Settings::WORLD_SCOUTING_EXTENDED,
         _( "world: scouting skill show extended content info" ),
-    },
-    {
-        Settings::WORLD_ABANDONED_MINE_RANDOM,
-        _( "world: abandoned mine random resource" ),
     },
     {
         Settings::WORLD_ALLOW_SET_GUARDIAN,
@@ -350,7 +333,6 @@ Settings::Settings()
     , battle_speed( DEFAULT_SPEED_DELAY )
     , game_type( 0 )
     , preferably_count_players( 0 )
-    , port( DEFAULT_PORT )
 {
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
@@ -487,11 +469,6 @@ bool Settings::Read( const std::string & filename )
         ival = config.IntParams( "fonts small size" );
         if ( 0 < ival )
             size_small = ival;
-
-        if ( config.StrParams( "fonts small render" ) == "blended" )
-            opt_global.SetModes( GLOBAL_FONTRENDERBLENDED1 );
-        if ( config.StrParams( "fonts normal render" ) == "blended" )
-            opt_global.SetModes( GLOBAL_FONTRENDERBLENDED2 );
     }
 
     // music source
@@ -606,9 +583,6 @@ bool Settings::Read( const std::string & filename )
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
     }
 
-    // network port
-    port = config.Exists( "port" ) ? config.IntParams( "port" ) : DEFAULT_PORT;
-
     // playmus command
     _externalMusicCommand = config.StrParams( "playmus command" );
 
@@ -686,7 +660,12 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
+#if defined( FHEROES2_VITA )
+    const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
+    file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
+#else
     file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+#endif
     if ( !file )
         return false;
 
@@ -737,9 +716,6 @@ std::string Settings::String( void ) const
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# keep aspect ratio in fullscreen mode (experimental)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_KEEP_ASPECT_RATIO ) << " = " << ( opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO ) ? "on" : "off" ) << std::endl;
-
     os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
@@ -759,7 +735,27 @@ std::string Settings::String( void ) const
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
-    os << "scroll speed = " << scroll_speed << std::endl;
+    os << "scroll speed = ";
+
+    switch ( scroll_speed ) {
+    case SCROLL_SLOW:
+        os << 1;
+        break;
+    case SCROLL_NORMAL:
+        os << 2;
+        break;
+    case SCROLL_FAST1:
+        os << 3;
+        break;
+    case SCROLL_FAST2:
+        os << 4;
+        break;
+    default:
+        os << 2;
+        break;
+    }
+
+    os << std::endl;
 
     os << std::endl << "# show battle grid: on off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
@@ -864,14 +860,6 @@ int Settings::FontsSmallSize( void ) const
 {
     return size_small;
 }
-bool Settings::FontSmallRenderBlended( void ) const
-{
-    return opt_global.Modes( GLOBAL_FONTRENDERBLENDED1 );
-}
-bool Settings::FontNormalRenderBlended( void ) const
-{
-    return opt_global.Modes( GLOBAL_FONTRENDERBLENDED2 );
-}
 
 void Settings::SetProgramPath( const char * argv0 )
 {
@@ -879,9 +867,8 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-ListDirs Settings::GetRootDirs( void )
+ListDirs Settings::GetRootDirs()
 {
-    const Settings & conf = Settings::Get();
     ListDirs dirs;
 
     // from build
@@ -894,12 +881,14 @@ ListDirs Settings::GetRootDirs( void )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
 
     // from dirname
-    dirs.push_back( System::GetDirname( conf.path_program ) );
+    dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
     // from HOME
     const std::string & home = System::GetHomeDirectory( "fheroes2" );
     if ( !home.empty() )
         dirs.push_back( home );
+
+    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }
@@ -921,6 +910,24 @@ ListFiles Settings::GetListFiles( const std::string & prefix, const std::string 
     }
 
     res.Append( System::GetListFiles( "fheroes2", prefix, filter ) );
+
+    return res;
+}
+
+ListFiles Settings::FindFiles( const std::string & directory, const std::string & fileName )
+{
+    ListFiles res;
+
+    if ( !directory.empty() && System::IsDirectory( directory ) )
+        res.FindFileInDir( directory, fileName, false );
+
+    const ListDirs dirs = GetRootDirs();
+    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
+        const std::string & path = !directory.empty() ? System::ConcatePath( *it, directory ) : *it;
+
+        if ( System::IsDirectory( path ) )
+            res.FindFileInDir( path, fileName, false );
+    }
 
     return res;
 }
@@ -1275,11 +1282,6 @@ int Settings::PreferablyCountPlayers( void ) const
     return preferably_count_players;
 }
 
-int Settings::GetPort( void ) const
-{
-    return port;
-}
-
 const std::string & Settings::MapsFile( void ) const
 {
     return current_maps_file.file;
@@ -1333,11 +1335,6 @@ int Settings::ConditionLoss( void ) const
 bool Settings::WinsCompAlsoWins( void ) const
 {
     return current_maps_file.WinsCompAlsoWins();
-}
-
-bool Settings::WinsAllowNormalVictory( void ) const
-{
-    return current_maps_file.WinsAllowNormalVictory();
 }
 
 int Settings::WinsFindArtifactID( void ) const
@@ -1552,11 +1549,6 @@ bool Settings::ExtWorldScouteExtended( void ) const
 bool Settings::ExtGameRememberLastFocus( void ) const
 {
     return ExtModes( GAME_REMEMBER_LAST_FOCUS );
-}
-
-bool Settings::ExtWorldAbandonedMineRandom( void ) const
-{
-    return ExtModes( WORLD_ABANDONED_MINE_RANDOM );
 }
 
 bool Settings::ExtWorldAllowSetGuardian( void ) const
@@ -1820,11 +1812,6 @@ void Settings::BinaryLoad( void )
 bool Settings::FullScreen( void ) const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
-}
-
-bool Settings::KeepAspectRatio( void ) const
-{
-    return opt_global.Modes( GLOBAL_KEEP_ASPECT_RATIO );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

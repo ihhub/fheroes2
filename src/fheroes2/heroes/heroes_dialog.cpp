@@ -22,7 +22,7 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "castle.h"
 #include "cursor.h"
@@ -30,6 +30,7 @@
 #include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "payment.h"
 #include "race.h"
@@ -42,8 +43,7 @@
 #include "ui_window.h"
 #include "world.h"
 
-/* readonly: false, fade: false */
-int Heroes::OpenDialog( bool readonly, bool fade )
+int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
@@ -204,13 +204,15 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     LocalEvent & le = LocalEvent::GetClean();
 
-    if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
+    if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
-        if ( readonly )
+
+        if ( readonly || disableDismiss ) {
             buttonDismiss.hide();
+        }
     }
 
-    if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
+    if ( readonly || disableSwitch || 2 > GetKingdom().GetHeroes().size() ) {
         buttonNextHero.disable();
         buttonPrevHero.disable();
     }
@@ -339,12 +341,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
         if ( le.MouseCursor( portPos ) )
             message = _( "View Stats" );
         else if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
-            message = _( "View %{morale} Info" );
-            StringReplace( message, "%{morale}", fheroes2::MoraleString( army.GetMorale() ) );
+            message = fheroes2::MoraleString( army.GetMorale() );
         }
         else if ( le.MouseCursor( luckIndicator.GetArea() ) ) {
-            message = _( "View %{luck} Info" );
-            StringReplace( message, "%{luck}", fheroes2::LuckString( army.GetLuck() ) );
+            message = fheroes2::LuckString( army.GetLuck() );
         }
         else if ( le.MouseCursor( experienceInfo.GetArea() ) )
             message = _( "View Experience Info" );
@@ -356,16 +356,19 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             message = _( "Set army combat formation to 'Grouped'" );
         else if ( le.MouseCursor( buttonExit.area() ) )
             message = _( "Exit Hero Screen" );
-        else if ( le.MouseCursor( buttonDismiss.area() ) ) {
-            if ( buttonDismiss.isVisible() ) {
-                if ( Modes( NOTDISMISS ) ) {
-                    message = "Dismiss disabled, see game info";
-                }
-                else {
-                    message = _( "Dismiss %{name} the %{race}" );
-                    StringReplace( message, "%{name}", name );
-                    StringReplace( message, "%{race}", Race::String( race ) );
-                }
+        else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
+            if ( inCastle() ) {
+                message = _( "You cannot dismiss a hero in a castle" );
+            }
+            else if ( Modes( NOTDISMISS ) ) {
+                message = _( "Dismissal of %{name} the %{race} is prohibited by scenario" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( race ) );
+            }
+            else if ( buttonDismiss.isEnabled() ) {
+                message = _( "Dismiss %{name} the %{race}" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( race ) );
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )

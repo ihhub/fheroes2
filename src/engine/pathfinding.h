@@ -29,7 +29,7 @@ struct PathfindingNode
     uint32_t _cost = 0;
     uint16_t _objectID = 0;
 
-    PathfindingNode() {}
+    PathfindingNode() = default;
     PathfindingNode( int node, uint32_t cost, uint16_t object )
         : _from( node )
         , _cost( cost )

@@ -47,7 +47,7 @@ namespace Battle
 
 namespace AI
 {
-    enum AI_TYPE
+    enum class AI_TYPE : int
     {
         NORMAL
     };
@@ -101,19 +101,19 @@ namespace AI
         virtual void Reset();
         virtual void resetPathfinder() = 0;
 
-        virtual ~Base() {}
+        virtual ~Base() = default;
 
     protected:
         int _personality = NONE;
 
-        Base() {}
+        Base() = default;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const AI::Base & );
         friend StreamBase & operator>>( StreamBase &, AI::Base & );
     };
 
-    Base & Get( AI_TYPE type = NORMAL );
+    Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );

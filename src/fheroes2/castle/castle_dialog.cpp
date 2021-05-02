@@ -25,12 +25,14 @@
 #include <utility>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "army_bar.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "m82.h"
 #include "mus.h"
@@ -47,76 +49,6 @@
 #include "world.h"
 
 void CastleRedrawTownName( const Castle & castle, const Point & dst );
-
-bool AllowFlashBuilding( u32 build )
-{
-    switch ( build ) {
-    case BUILD_TAVERN:
-    case BUILD_SHRINE:
-    case BUILD_SHIPYARD:
-    case BUILD_WELL:
-    case BUILD_STATUE:
-    case BUILD_LEFTTURRET:
-    case BUILD_RIGHTTURRET:
-    case BUILD_MARKETPLACE:
-    case BUILD_WEL2:
-    case BUILD_MOAT:
-    case BUILD_SPEC:
-    case BUILD_CASTLE:
-    case BUILD_CAPTAIN:
-    case BUILD_MAGEGUILD1:
-    case BUILD_MAGEGUILD2:
-    case BUILD_MAGEGUILD3:
-    case BUILD_MAGEGUILD4:
-    case BUILD_MAGEGUILD5:
-    case BUILD_TENT:
-    case DWELLING_UPGRADE2:
-    case DWELLING_UPGRADE3:
-    case DWELLING_UPGRADE4:
-    case DWELLING_UPGRADE5:
-    case DWELLING_UPGRADE6:
-    case DWELLING_UPGRADE7:
-    case DWELLING_MONSTER1:
-    case DWELLING_MONSTER2:
-    case DWELLING_MONSTER3:
-    case DWELLING_MONSTER4:
-    case DWELLING_MONSTER5:
-    case DWELLING_MONSTER6:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-fheroes2::Sprite GetActualSpriteBuilding( const Castle & castle, u32 build )
-{
-    u32 index = 0;
-    // correct index (mage guild)
-    switch ( build ) {
-    case BUILD_MAGEGUILD1:
-        index = 0;
-        break;
-    case BUILD_MAGEGUILD2:
-        index = Race::NECR == castle.GetRace() ? 6 : 1;
-        break;
-    case BUILD_MAGEGUILD3:
-        index = Race::NECR == castle.GetRace() ? 12 : 2;
-        break;
-    case BUILD_MAGEGUILD4:
-        index = Race::NECR == castle.GetRace() ? 18 : 3;
-        break;
-    case BUILD_MAGEGUILD5:
-        index = Race::NECR == castle.GetRace() ? 24 : 4;
-        break;
-    default:
-        break;
-    }
-
-    return fheroes2::AGG::GetICN( Castle::GetICNBuilding( build, castle.GetRace() ), index );
-}
 
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Point & pt )
 {
@@ -151,11 +83,11 @@ void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const Poin
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 11 ), display, pt.x + 112, pt.y + 361 );
 }
 
-fheroes2::Image GetMeetingSprite( void )
+fheroes2::Sprite GetMeetingSprite()
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
 
-    fheroes2::Image result( sprite.width() + 4, sprite.height() + 4 );
+    fheroes2::Sprite result( sprite.width() + 4, sprite.height() + 4 );
     result.fill( 0 );
 
     fheroes2::DrawBorder( result, fheroes2::GetColorId( 0xe0, 0xb4, 0 ) );
@@ -166,14 +98,14 @@ fheroes2::Image GetMeetingSprite( void )
 
 MeetingButton::MeetingButton( s32 px, s32 py )
 {
-    const fheroes2::Image & sprite = GetMeetingSprite();
+    const fheroes2::Sprite & sprite = GetMeetingSprite();
     setSprite( sprite, sprite );
     setPosition( px, py );
 }
 
 SwapButton::SwapButton( s32 px, s32 py )
 {
-    const fheroes2::Image & sprite = GetMeetingSprite();
+    const fheroes2::Sprite & sprite = GetMeetingSprite();
     // Custom graphics: rotate existing sprtie
     // sf = GetMeetingSprite().RenderRotate( 1 );
     setSprite( sprite, sprite );
@@ -558,7 +490,7 @@ int Castle::OpenDialog( bool readonly )
 
                             case BUILD_MARKETPLACE: {
                                 fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                                Dialog::Marketplace();
+                                Dialog::Marketplace( world.GetKingdom( GetColor() ), false );
                                 need_redraw = true;
                                 break;
                             }

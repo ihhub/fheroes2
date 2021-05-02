@@ -51,12 +51,24 @@ namespace AI
     {
         int spellID = -1;
         int32_t cell = -1;
+        double value = 0.0;
     };
 
     struct SpellcastOutcome
     {
         int32_t cell = -1;
         double value = 0.0;
+
+        void updateOutcome( const double potentialValue, const int32_t targetCell, const bool isMassEffect = false )
+        {
+            if ( isMassEffect ) {
+                value += potentialValue;
+            }
+            else if ( potentialValue > value ) {
+                value = potentialValue;
+                cell = targetCell;
+            }
+        }
     };
 
     class BattlePlanner
@@ -73,14 +85,18 @@ namespace AI
 
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
-        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        Battle::Actions berserkTurn( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         SpellSeletion selectBestSpell( Battle::Arena & arena, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Units & friendly, const Battle::Units & enemies,
                                            bool retreating ) const;
-        SpellcastOutcome spellDebuffValue( const Spell & spell, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
+        SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
+        SpellcastOutcome spellSummonValue( const Spell & spell ) const;
+        SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
+        double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;
@@ -89,29 +105,32 @@ namespace AI
         double _enemyArmyStrength = 0;
         double _myShooterStr = 0;
         double _enemyShooterStr = 0;
+        double _enemyAverageSpeed = 0;
+        double _enemySpellStrength = 0;
         int _highestDamageExpected = 0;
         bool _attackingCastle = false;
         bool _defendingCastle = false;
         bool _considerRetreat = false;
+        bool _defensiveTactics = false;
     };
 
     class Normal : public Base
     {
     public:
         Normal();
-        virtual void KingdomTurn( Kingdom & kingdom ) override;
-        virtual void CastleTurn( Castle & castle, bool defensive = false ) override;
-        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        virtual void HeroesTurn( VecHeroes & heroes ) override;
+        void KingdomTurn( Kingdom & kingdom ) override;
+        void CastleTurn( Castle & castle, bool defensive = false ) override;
+        void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
+        void HeroesTurn( VecHeroes & heroes ) override;
 
-        virtual void revealFog( const Maps::Tiles & tile ) override;
+        void revealFog( const Maps::Tiles & tile ) override;
 
-        virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        virtual void HeroesActionComplete( Heroes & hero ) override;
+        void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
+        void HeroesActionComplete( Heroes & hero ) override;
 
         double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
-        virtual void resetPathfinder() override;
+        void resetPathfinder() override;
 
     private:
         // following data won't be saved/serialized

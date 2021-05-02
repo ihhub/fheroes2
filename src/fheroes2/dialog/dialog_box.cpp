@@ -20,9 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "icn.h"
 #include "settings.h"
 #include "text.h"
 
@@ -176,5 +177,3 @@ Dialog::NonFixedFrameBox::~NonFixedFrameBox()
 Dialog::FrameBox::FrameBox( int height, bool buttons )
     : Dialog::NonFixedFrameBox( height, -1, buttons )
 {}
-
-Dialog::FrameBox::~FrameBox() {}

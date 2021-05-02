@@ -40,7 +40,8 @@ namespace Font
         YELLOW_BIG = 0x04,
         YELLOW_SMALL = 0x08,
         GRAY_BIG = 0x10,
-        GRAY_SMALL = 0x20
+        GRAY_SMALL = 0x20,
+        WHITE_LARGE = 0x40
     };
 }
 enum
@@ -54,8 +55,8 @@ enum
 class TextInterface
 {
 public:
-    TextInterface( int ft = Font::BIG );
-    virtual ~TextInterface(){};
+    explicit TextInterface( int ft = Font::BIG );
+    virtual ~TextInterface() = default;
 
     virtual void SetText( const std::string & ) = 0;
     virtual void SetFont( int ) = 0;
@@ -74,25 +75,23 @@ protected:
 class TextAscii : public TextInterface
 {
 public:
-    TextAscii(){};
+    TextAscii() = default;
     TextAscii( const std::string &, int = Font::BIG );
 
-    virtual void SetText( const std::string & ) override;
-    virtual void SetFont( int ) override;
-    virtual void Clear( void ) override;
+    void SetText( const std::string & ) override;
+    void SetFont( int ) override;
+    void Clear( void ) override;
 
-    virtual int w( void ) const override;
-    virtual int h( void ) const override;
-    virtual size_t Size( void ) const override;
+    int w( void ) const override;
+    int h( void ) const override;
+    size_t Size( void ) const override;
 
     int w( u32, u32 ) const;
     int h( int ) const;
 
-    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
-    static int CharWidth( int, int ft );
-    static int CharHeight( int ft );
-    static int CharAscent( int ft );
-    static int CharDescent( int ft );
+    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
+    static int CharWidth( const uint8_t character, const int ft );
+    static int FontHeight( const int ft );
 
 private:
     std::string message;
@@ -102,22 +101,22 @@ private:
 class TextUnicode : public TextInterface
 {
 public:
-    TextUnicode(){};
+    TextUnicode() = default;
     TextUnicode( const std::string &, int ft = Font::BIG );
     TextUnicode( const u16 *, size_t, int ft = Font::BIG );
 
-    virtual void SetText( const std::string & ) override;
-    virtual void SetFont( int ) override;
-    virtual void Clear( void ) override;
+    void SetText( const std::string & ) override;
+    void SetFont( int ) override;
+    void Clear( void ) override;
 
-    virtual int w( void ) const override;
-    virtual int h( void ) const override;
-    virtual size_t Size( void ) const override;
+    int w( void ) const override;
+    int h( void ) const override;
+    size_t Size( void ) const override;
 
     int w( u32, u32 ) const;
     int h( int ) const;
 
-    virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
+    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
 
     static bool isspace( int );
     static int CharWidth( int, int ft );
@@ -139,7 +138,7 @@ public:
     Text( const Text & );
     ~Text();
 
-    Text & operator=( const Text & );
+    Text & operator=( const Text & ) = delete;
 
     void Set( const std::string &, int );
     void Set( const std::string & );
@@ -177,7 +176,6 @@ class TextSprite : protected Text
 {
 public:
     TextSprite();
-    TextSprite( const std::string &, int ft, const Point & pt );
     TextSprite( const std::string &, int ft, s32, s32 );
 
     void SetPos( s32, s32 );
@@ -191,8 +189,8 @@ public:
     bool isHide( void ) const;
     bool isShow( void ) const;
 
-    int w( void );
-    int h( void );
+    int w( void ) const;
+    int h( void ) const;
 
     fheroes2::Rect GetRect( void ) const;
 
@@ -237,7 +235,6 @@ public:
     }
 
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() );
-    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
     void Append( const std::string &, int, u32 );

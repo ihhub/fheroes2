@@ -21,9 +21,10 @@
  ***************************************************************************/
 
 #include "interface_cpanel.h"
-#include "agg.h"
+#include "agg_image.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 
@@ -51,15 +52,11 @@ void Interface::ControlPanel::ResetTheme( void )
 {
     const int icn = Settings::Get().ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS;
 
-    // Make a copy of Surface
-    btn_radr = fheroes2::AGG::GetICN( icn, 4 );
-    btn_icon = fheroes2::AGG::GetICN( icn, 0 );
-    btn_bttn = fheroes2::AGG::GetICN( icn, 12 );
-    btn_stat = fheroes2::AGG::GetICN( icn, 10 );
-    btn_quit = fheroes2::AGG::GetICN( icn, 8 );
+    _buttons.reset( new Buttons( fheroes2::AGG::GetICN( icn, 4 ), fheroes2::AGG::GetICN( icn, 0 ), fheroes2::AGG::GetICN( icn, 12 ), fheroes2::AGG::GetICN( icn, 10 ),
+                                 fheroes2::AGG::GetICN( icn, 8 ) ) );
 }
 
-const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
+const fheroes2::Rect & Interface::ControlPanel::GetArea( void ) const
 {
     return *this;
 }
@@ -81,17 +78,19 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     rt_quit.y = y;
 }
 
-void Interface::ControlPanel::Redraw( void )
+void Interface::ControlPanel::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const uint8_t alpha = 128;
 
-    fheroes2::AlphaBlit( btn_radr, display, x, y, alpha );
-    fheroes2::AlphaBlit( btn_icon, display, x + 36, y, alpha );
-    fheroes2::AlphaBlit( btn_bttn, display, x + 72, y, alpha );
-    fheroes2::AlphaBlit( btn_stat, display, x + 108, y, alpha );
-    fheroes2::AlphaBlit( btn_quit, display, x + 144, y, alpha );
+    if ( _buttons.get() != nullptr ) {
+        fheroes2::AlphaBlit( _buttons->radar, display, x, y, alpha );
+        fheroes2::AlphaBlit( _buttons->icon, display, x + 36, y, alpha );
+        fheroes2::AlphaBlit( _buttons->button, display, x + 72, y, alpha );
+        fheroes2::AlphaBlit( _buttons->stats, display, x + 108, y, alpha );
+        fheroes2::AlphaBlit( _buttons->quit, display, x + 144, y, alpha );
+    }
 }
 
 int Interface::ControlPanel::QueueEventProcessing( void )

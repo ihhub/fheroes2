@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "artifact.h"
 #include "castle.h"
 #include "difficulty.h"
@@ -31,6 +31,7 @@
 #include "game_over.h"
 #include "game_static.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "maps_actions.h"
@@ -42,6 +43,11 @@
 #include "resource.h"
 #include "text.h"
 #include "world.h"
+
+namespace
+{
+    const int32_t ultimateArtifactOffset = 9;
+}
 
 namespace GameStatic
 {
@@ -222,7 +228,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllCastles & castles )
     for ( ; xml_town; xml_town = xml_town->NextSiblingElement( "town" ) ) {
         Castle * town = new Castle();
         *xml_town >> *town;
-        castles.push_back( town );
+        castles.AddCastle( town );
     }
 
     return doc;
@@ -1087,37 +1093,37 @@ bool World::LoadMapMP2( const std::string & filename )
         switch ( id ) {
         case 0x00: // tower: knight
         case 0x80: // castle: knight
-            vec_castles.push_back( new Castle( cx, cy, Race::KNGT ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::KNGT ) );
             break;
 
         case 0x01: // tower: barbarian
         case 0x81: // castle: barbarian
-            vec_castles.push_back( new Castle( cx, cy, Race::BARB ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::BARB ) );
             break;
 
         case 0x02: // tower: sorceress
         case 0x82: // castle: sorceress
-            vec_castles.push_back( new Castle( cx, cy, Race::SORC ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::SORC ) );
             break;
 
         case 0x03: // tower: warlock
         case 0x83: // castle: warlock
-            vec_castles.push_back( new Castle( cx, cy, Race::WRLK ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WRLK ) );
             break;
 
         case 0x04: // tower: wizard
         case 0x84: // castle: wizard
-            vec_castles.push_back( new Castle( cx, cy, Race::WZRD ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WZRD ) );
             break;
 
         case 0x05: // tower: necromancer
         case 0x85: // castle: necromancer
-            vec_castles.push_back( new Castle( cx, cy, Race::NECR ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NECR ) );
             break;
 
         case 0x06: // tower: random
         case 0x86: // castle: random
-            vec_castles.push_back( new Castle( cx, cy, Race::NONE ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NONE ) );
             break;
 
         default:
@@ -1403,8 +1409,8 @@ bool World::LoadMapMP2( const std::string & filename )
 void World::ProcessNewMap()
 {
     // modify other objects
-    for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-        Maps::Tiles & tile = vec_tiles[ii];
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        Maps::Tiles & tile = vec_tiles[i];
 
         Maps::Tiles::FixedPreload( tile );
 
@@ -1489,7 +1495,7 @@ void World::ProcessNewMap()
             if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
-            tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
+            tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
         } break;
 
         default:
@@ -1551,16 +1557,22 @@ void World::ProcessNewMap()
         MapsIndexes pools;
         pools.reserve( vec_tiles.size() / 2 );
 
-        for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-            const Maps::Tiles & tile = vec_tiles[ii];
-            const s32 x = tile.GetIndex() % w();
-            const s32 y = tile.GetIndex() / w();
-            if ( tile.GoodForUltimateArtifact() && x > 5 && x < w() - 5 && y > 5 && y < h() - 5 )
-                pools.push_back( tile.GetIndex() );
+        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+            const Maps::Tiles & tile = vec_tiles[i];
+            const int32_t x = tile.GetIndex() % w();
+            if ( x < ultimateArtifactOffset || x >= w() - ultimateArtifactOffset )
+                continue;
+
+            const int32_t y = tile.GetIndex() / w();
+            if ( y < ultimateArtifactOffset || y >= h() - ultimateArtifactOffset )
+                continue;
+
+            if ( tile.GoodForUltimateArtifact() )
+                pools.emplace_back( tile.GetIndex() );
         }
 
-        if ( pools.size() ) {
-            const s32 pos = Rand::Get( pools );
+        if ( !pools.empty() ) {
+            const int32_t pos = Rand::Get( pools );
             ultimate_artifact.Set( pos, Artifact::Rand( Artifact::ART_ULTIMATE ) );
             ultimate_pos = Maps::GetPoint( pos );
         }

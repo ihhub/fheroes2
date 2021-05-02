@@ -145,7 +145,7 @@ bool Game::Save( const std::string & fn )
         Game::SetLastSavename( fn );
 
     // raw info content
-    fs << static_cast<char>( SAV2ID3 >> 8 ) << static_cast<char>( SAV2ID3 ) << std::to_string( loadver ) << loadver
+    fs << static_cast<uint8_t>( SAV2ID3 >> 8 ) << static_cast<uint8_t>( SAV2ID3 & 0xFF ) << std::to_string( loadver ) << loadver
        << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion(), conf.GameType() );
     fs.close();
 
@@ -195,7 +195,7 @@ bool Game::Load( const std::string & fn )
     fs >> strver >> binver;
 
     // hide: unsupported version
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
@@ -242,11 +242,11 @@ bool Game::Load( const std::string & fn )
     fz >> binver;
 
     // check version: false
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION ) {
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION ) {
         std::ostringstream os;
         os << "usupported save format: " << binver << std::endl
            << "game version: " << CURRENT_FORMAT_VERSION << std::endl
-           << "last supported version: " << LAST_FORMAT_VERSION;
+           << "last supported version: " << LAST_SUPPORTED_FORMAT_VERSION;
         Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
         return false;
     }
@@ -284,6 +284,9 @@ bool Game::Load( const std::string & fn )
     Game::SetLastSavename( fn );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
+    // rescan path passability for all heroes, for this we need actual info about players from Settings
+    World::Get().RescanAllHeroesPathPassable();
+
     return true;
 }
 
@@ -314,7 +317,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     fs >> strver >> binver;
 
     // hide: unsupported version
-    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_FORMAT_VERSION )
+    if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;

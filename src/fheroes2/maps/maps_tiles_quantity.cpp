@@ -46,16 +46,16 @@ bool Maps::Tiles::QuantityIsValid( void ) const
     case MP2::OBJ_WINDMILL:
     case MP2::OBJ_LEANTO:
     case MP2::OBJ_MAGICGARDEN:
-        return quantity2;
+        return quantity2 != 0;
 
     case MP2::OBJ_SKELETON:
         return QuantityArtifact() != Artifact::UNKNOWN;
 
     case MP2::OBJ_WAGON:
-        return QuantityArtifact() != Artifact::UNKNOWN || quantity2;
+        return QuantityArtifact() != Artifact::UNKNOWN || quantity2 != 0;
 
     case MP2::OBJ_DAEMONCAVE:
-        return QuantityVariant();
+        return QuantityVariant() != 0;
 
     default:
         break;
@@ -232,6 +232,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
+        case 3:
         case 4:
             return 2500;
         default:
@@ -413,7 +414,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const
@@ -791,29 +792,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_ABANDONEDMINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
 
-        // I checked in Heroes II: min 3 x 13, and max 3 x 15
+        // Min is 3 x 13, and max is 3 x 15
         troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
 
-        if ( !Settings::Get().ExtWorldAbandonedMineRandom() )
-            QuantitySetResource( Resource::GOLD, 1000 );
-        else
-            switch ( Rand::Get( 1, 5 ) ) {
-            case 1:
-                QuantitySetResource( Resource::ORE, 2 );
-                break;
-            case 2:
-                QuantitySetResource( Resource::SULFUR, 1 );
-                break;
-            case 3:
-                QuantitySetResource( Resource::CRYSTAL, 1 );
-                break;
-            case 4:
-                QuantitySetResource( Resource::GEMS, 1 );
-                break;
-            default:
-                QuantitySetResource( Resource::GOLD, 1000 );
-                break;
-            }
+        QuantitySetResource( Resource::GOLD, 1000 );
     } break;
 
     case MP2::OBJ_BOAT:
@@ -915,7 +897,7 @@ void Maps::Tiles::MonsterSetFixedCount( void )
 
 bool Maps::Tiles::MonsterFixedCount( void ) const
 {
-    return mp2_object == MP2::OBJ_MONSTER ? quantity3 & 0x80 : 0;
+    return mp2_object == MP2::OBJ_MONSTER ? ( quantity3 & 0x80 ) != 0 : false;
 }
 
 bool Maps::Tiles::MonsterJoinConditionSkip( void ) const

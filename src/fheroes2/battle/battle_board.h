@@ -43,7 +43,7 @@ namespace Battle
         return d = ( TOP_LEFT == d ? CENTER : direction_t( d >> 1 ) );
     }
 
-    typedef std::vector<s32> Indexes;
+    using Indexes = std::vector<int32_t>;
 
     class Board : public std::vector<Cell>
     {
@@ -60,8 +60,8 @@ namespace Battle
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
-        void SetEnemyQuality( const Unit & );
-        void SetPositionQuality( const Unit & );
+        void SetEnemyQuality( const Unit & ) const;
+        void SetPositionQuality( const Unit & ) const;
         void SetScanPassability( const Unit & );
 
         void SetCobjObjects( const Maps::Tiles & );
@@ -73,15 +73,19 @@ namespace Battle
         static bool isNearIndexes( s32, s32 );
         static bool isValidIndex( s32 );
         static bool isCastleIndex( s32 );
-        static bool isMoatIndex( s32 );
-        static bool isBridgeIndex( s32 );
+        static bool isMoatIndex( s32 index, const Unit & b );
+        static bool isBridgeIndex( s32 index, const Unit & b );
         static bool isImpassableIndex( s32 );
         static bool isOutOfWallsIndex( s32 );
         static bool isReflectDirection( int );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
         static bool isNegativeDistance( s32 index1, s32 index2 );
+        static int DistanceFromOriginX( int32_t index, bool reflect );
         static int GetReflectDirection( int );
         static int GetDirection( s32, s32 );
+        static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
+        static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
+        static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
         static uint32_t GetDistance( s32, s32 );
         static bool isValidDirection( s32, int );
         static s32 GetIndexDirection( s32, int );

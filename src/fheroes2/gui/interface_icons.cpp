@@ -22,22 +22,29 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
+#include "icn.h"
 #include "interface_icons.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "race.h"
 #include "world.h"
 
-#define ICONS_WIDTH 46
-#define ICONS_HEIGHT 22
-#define ICONS_CURSOR_WIDTH 56
-#define ICONS_CURSOR_HEIGHT 32
+namespace
+{
+    enum
+    {
+        ICONS_WIDTH = 46,
+        ICONS_HEIGHT = 22,
+        ICONS_CURSOR_WIDTH = 56,
+        ICONS_CURSOR_HEIGHT = 32
+    };
+}
 
 bool Interface::IconsBar::IsVisible( void )
 {
@@ -114,7 +121,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const Point & pos )
+void Interface::IconsBar::RedrawBackground( const Point & pos ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -324,11 +331,6 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     sfMarker.resize( ICONS_CURSOR_WIDTH, ICONS_CURSOR_HEIGHT );
     sfMarker.reset();
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
-}
-
-u32 Interface::IconsPanel::CountIcons( void ) const
-{
-    return castleIcons.CountIcons();
 }
 
 void Interface::IconsPanel::SavePosition( void )

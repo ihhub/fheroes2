@@ -408,7 +408,7 @@ const char * MP2::StringObject( int object )
     case OBJ_TARPIT:
         return _( "Tar Pit" );
     case OBJ_COAST:
-        return _( "Coast" );
+        return _( "Beach" );
     case OBJ_MOUND:
         return _( "Mound" );
     case OBJ_DUNE:

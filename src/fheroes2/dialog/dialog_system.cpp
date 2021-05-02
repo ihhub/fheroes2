@@ -20,13 +20,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
+#include "agg_image.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "icn.h"
 #include "localevent.h"
 #include "settings.h"
 #include "system.h"
@@ -339,15 +340,17 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
 
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+
     // interface themes
-    const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( conf.ExtGameEvilInterface() ? 17 : 16 ) );
+    const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( isEvilInterface ? 17 : 16 ) );
     const Rect & rect7 = rects[6];
     fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
     str = _( "Interface" );
     text.Set( str );
     text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() - textOffset );
 
-    if ( conf.ExtGameEvilInterface() )
+    if ( isEvilInterface )
         str = _( "Evil" );
     else
         str = _( "Good" );
@@ -368,7 +371,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else {
         fheroes2::Blit( sprite8, display, rect8.x, rect8.y );
-        fheroes2::Blit( sprite81, 13, 13, display, rect8.x + 13, rect8.y + 13, 38, 38 );
+        fheroes2::Blit( sprite81, 14, 14, display, rect8.x + 14, rect8.y + 14, 37, 37 );
         str = _( "Show" );
     }
     text.Set( str );

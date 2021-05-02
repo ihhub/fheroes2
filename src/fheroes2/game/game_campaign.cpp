@@ -21,12 +21,14 @@
 #include <cassert>
 
 #include "agg.h"
+#include "agg_image.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "icn.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
@@ -34,173 +36,6 @@
 
 namespace
 {
-    // TODO: Implement bonus data for each scenario
-    std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int scenarioID )
-    {
-        std::vector<Campaign::ScenarioBonusData> bonus;
-
-        switch ( scenarioID ) {
-        case 0:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::THUNDER_MACE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
-            break;
-        case 1:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
-        case 2:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
-        case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
-        case 4:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
-        case 5:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::MIRRORIMAGE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::SUMMONEELEMENT, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::RESURRECT, 1 );
-            break;
-        case 6:
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::BLACK_PEARL, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DRAGON_SWORD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DIVINE_BREASTPLATE, 1 );
-            break;
-        case 7:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WZRD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::SORC, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::KNGT, 1 );
-            break;
-        case 8:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::CRYSTAL, 20 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GEMS, 20 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::MERCURY, 20 );
-            break;
-        case 9:
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::TAX_LIEN, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::HIDEOUS_MASK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::FIZBIN_MISFORTUNE, 1 );
-            break;
-        }
-
-        return bonus;
-    }
-
-    std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
-    {
-        std::vector<Campaign::ScenarioBonusData> bonus;
-
-        switch ( scenarioID ) {
-        case 0:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MINOR_SCROLL, 1 );
-            break;
-        case 1:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 2:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::MASSCURSE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DEFENDER_HELM, 1 );
-            break;
-        case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 4:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 5:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 6:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 7:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL, Skill::Secondary::LOGISTICS, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::POWER_AXE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::WHITE_PEARL, 1 );
-            break;
-        case 8:
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::NECR, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::WRLK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
-            break;
-        case 9:
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::BLACK_PEARL, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DRAGON_SWORD, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::DIVINE_BREASTPLATE, 1 );
-            break;
-        case 10:
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::TAX_LIEN, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::HIDEOUS_MASK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::FIZBIN_MISFORTUNE, 1 );
-            break;
-        }
-
-        return bonus;
-    }
-
-    std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID )
-    {
-        assert( scenarioID >= 0 );
-        switch ( campaignID ) {
-        case 0:
-            return getRolandCampaignBonusData( scenarioID );
-        case 1:
-            return getArchibaldCampaignBonusData( scenarioID );
-        }
-
-        // shouldn't be here unless we get an unsupported campaign
-        return std::vector<Campaign::ScenarioBonusData>();
-    }
-
-    const std::string rolandCampaignDescription[10] = {
-        _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-           " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
-        _( "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
-        _( "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-        _( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
-        _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-        _( "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
-        _( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
-        _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-        _( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
-        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" )};
-
-    const std::string archibaldCampaignDescription[11] = {
-        _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-           " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-        _( "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-        _( "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
-        _( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
-        _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-        _( "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
-        _( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win" ),
-        _( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
-        _( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
-        _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-        _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" )};
-
     void DrawCampaignScenarioIcon( const int icnId, const int iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
         fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconIdx ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
@@ -215,12 +50,12 @@ namespace
 
         int campaignTrack = ICN::CTRACK00;
         switch ( campaignData.getCampaignID() ) {
-        case 0:
+        case Campaign::ROLAND_CAMPAIGN:
             campaignTrack = ICN::CTRACK00;
-            break; // roland
-        case 1:
+            break;
+        case Campaign::ARCHIBALD_CAMPAIGN:
             campaignTrack = ICN::CTRACK03;
-            break; // archibald
+            break;
         }
 
         fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
@@ -316,64 +151,23 @@ namespace
         }
     }
 
-    Campaign::CampaignData GetRolandCampaignData()
+    void drawObtainedCampaignAwards( const std::vector<Campaign::CampaignAwardData> & obtainedAwards, const fheroes2::Point & top )
     {
-        std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 10 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 0, 0 ), std::string( "CAMPG01.H2C" ), rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 0, 1 ), std::string( "CAMPG02.H2C" ), rolandCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{3}, getCampaignBonusData( 0, 2 ), std::string( "CAMPG03.H2C" ), rolandCampaignDescription[2] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{4}, getCampaignBonusData( 0, 3 ), std::string( "CAMPG04.H2C" ), rolandCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{5}, getCampaignBonusData( 0, 4 ), std::string( "CAMPG05.H2C" ), rolandCampaignDescription[4] );
-        scenarioDatas.emplace_back( 5, std::vector<int>{6, 7}, getCampaignBonusData( 0, 5 ), std::string( "CAMPG06.H2C" ), rolandCampaignDescription[5] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{8}, getCampaignBonusData( 0, 6 ), std::string( "CAMPG07.H2C" ), rolandCampaignDescription[6] );
-        scenarioDatas.emplace_back( 7, std::vector<int>{8}, getCampaignBonusData( 0, 7 ), std::string( "CAMPG08.H2C" ), rolandCampaignDescription[7] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{9}, getCampaignBonusData( 0, 8 ), std::string( "CAMPG09.H2C" ), rolandCampaignDescription[8] );
-        scenarioDatas.emplace_back( 9, std::vector<int>{}, getCampaignBonusData( 0, 9 ), std::string( "CAMPG10.H2C" ), rolandCampaignDescription[9] );
+        const int textAwardWidth = 180;
 
-        Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( 0 );
-        campaignData.setCampaignDescription( "Roland Campaign" );
-        campaignData.setCampaignAlignment( true );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        // if there are more than 3 awards, we need to reduce the offset between text so that it doesn't overflow out of the text box
+        const size_t awardCount = obtainedAwards.size();
+        const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
+        const int yOffset = awardCount > 3 ? 16 : 22;
 
-        return campaignData;
-    }
+        Text award;
+        for ( size_t i = 0; i < indexEnd; ++i ) {
+            if ( i < 3 )
+                award.Set( obtainedAwards[i].ToString(), Font::BIG );
+            else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
+                award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
 
-    Campaign::CampaignData GetArchibaldCampaignData()
-    {
-        std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 11 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{1}, getCampaignBonusData( 1, 0 ), std::string( "CAMPE01.H2C" ), archibaldCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{2, 3}, getCampaignBonusData( 1, 1 ), std::string( "CAMPE02.H2C" ), archibaldCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{4}, getCampaignBonusData( 1, 2 ), std::string( "CAMPE03.H2C" ), archibaldCampaignDescription[2] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{4}, getCampaignBonusData( 1, 3 ), std::string( "CAMPE04.H2C" ), archibaldCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{5}, getCampaignBonusData( 1, 4 ), std::string( "CAMPE05.H2C" ), archibaldCampaignDescription[4] );
-        scenarioDatas.emplace_back( 5, std::vector<int>{6, 7}, getCampaignBonusData( 1, 5 ), std::string( "CAMPE06.H2C" ), archibaldCampaignDescription[5] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{7}, getCampaignBonusData( 1, 6 ), std::string( "CAMPE07.H2C" ), archibaldCampaignDescription[6] );
-        scenarioDatas.emplace_back( 7, std::vector<int>{8, 9}, getCampaignBonusData( 1, 7 ), std::string( "CAMPE08.H2C" ), archibaldCampaignDescription[7] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{10}, getCampaignBonusData( 1, 8 ), std::string( "CAMPE09.H2C" ), archibaldCampaignDescription[8] );
-        scenarioDatas.emplace_back( 9, std::vector<int>{10}, getCampaignBonusData( 1, 9 ), std::string( "CAMPE10.H2C" ), archibaldCampaignDescription[9] );
-        scenarioDatas.emplace_back( 10, std::vector<int>{}, getCampaignBonusData( 1, 10 ), std::string( "CAMPE11.H2C" ), archibaldCampaignDescription[10] );
-
-        Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( 1 );
-        campaignData.setCampaignDescription( "Archibald Campaign" );
-        campaignData.setCampaignAlignment( false );
-        campaignData.setCampaignScenarios( scenarioDatas );
-
-        return campaignData;
-    }
-
-    Campaign::CampaignData GetCampaignData( int campaignID )
-    {
-        switch ( campaignID ) {
-        case 0:
-            return GetRolandCampaignData();
-        case 1:
-            return GetArchibaldCampaignData();
-        default:
-            return Campaign::CampaignData();
+            award.Blit( top.x + 425, top.y + 100 + yOffset * i - award.h() / 2, textAwardWidth );
         }
     }
 
@@ -414,11 +208,56 @@ namespace
             }
         }
     }
+
+    // apply only the ones that are applied at the start (artifact, spell, carry-over troops)
+    // the rest will be applied based on the situation required
+    void applyObtainedCampaignAwards( const uint32_t currentScenarioID, const std::vector<Campaign::CampaignAwardData> & awards )
+    {
+        const Players & sortedPlayers = Settings::Get().GetPlayers();
+        Kingdom & humanKingdom = world.GetKingdom( sortedPlayers.HumanColors() );
+
+        for ( size_t i = 0; i < awards.size(); ++i ) {
+            if ( currentScenarioID < awards[i]._startScenarioID )
+                continue;
+
+            switch ( awards[i]._type ) {
+            case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT:
+                humanKingdom.GetBestHero()->PickupArtifact( Artifact( awards[i]._subType ) );
+                break;
+            case Campaign::CampaignAwardData::TYPE_GET_SPELL:
+                humanKingdom.GetBestHero()->AppendSpellToBook( awards[i]._subType, true );
+                break;
+            case Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
+                for ( const Player * player : sortedPlayers ) {
+                    Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+                    const KingdomHeroes & heroes = kingdom.GetHeroes();
+
+                    for ( size_t j = 0; j < heroes.size(); ++j ) {
+                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
+                            kingdom.RemoveHeroes( heroes[j] );
+                            break;
+                        }
+                    }
+                }
+                break;
+            case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
+                const std::vector<Troop> & carryOverTroops = Campaign::CampaignSaveData::Get().getCarryOverTroops();
+                Army & bestHeroArmy = humanKingdom.GetBestHero()->GetArmy();
+                bestHeroArmy.Clean();
+
+                for ( uint32_t troopID = 0; troopID < carryOverTroops.size(); ++troopID )
+                    bestHeroArmy.GetTroop( troopID )->Set( carryOverTroops[troopID] );
+
+                break;
+            }
+        }
+    }
 }
 
 bool Game::IsOriginalCampaignPresent()
 {
-    return GetRolandCampaignData().isAllCampaignMapsPresent() && GetArchibaldCampaignData().isAllCampaignMapsPresent();
+    return Campaign::CampaignData::getCampaignData( Campaign::ROLAND_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::ARCHIBALD_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
 int Game::CompleteCampaignScenario()
@@ -429,7 +268,24 @@ int Game::CompleteCampaignScenario()
     saveData.addDaysPassed( world.CountDay() );
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
-    const Campaign::CampaignData & campaignData = GetCampaignData( saveData.getCampaignID() );
+    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
+
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards
+        = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
+
+    // TODO: Check for awards that have to be obtained with 'freak' conditions
+    for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
+        saveData.addCampaignAward( obtainableAwards[i]._id );
+
+        if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
+            Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
+
+            const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
+
+            if ( lastBattleWinHero )
+                saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+        }
+    }
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
@@ -454,7 +310,7 @@ int Game::SelectCampaignScenario()
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     const size_t chosenCampaignID = campaignSaveData.getCampaignID();
 
-    const Campaign::CampaignData & campaignData = GetCampaignData( chosenCampaignID );
+    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
     const bool goodCampaign = campaignData.isGoodCampaign();
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
@@ -511,6 +367,7 @@ int Game::SelectCampaignScenario()
     textDaysSpent.Blit( top.x + 574 + textDaysSpent.w() / 2, top.y + 31 );
 
     DrawCampaignScenarioDescription( scenario, top );
+    drawObtainedCampaignAwards( campaignSaveData.getObtainedCampaignAwards(), top );
 
     const std::vector<int> & selectableScenarios
         = campaignSaveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( campaignSaveData.getLastCompletedScenarioID() );
@@ -572,7 +429,7 @@ int Game::SelectCampaignScenario()
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
-                Dialog::Message( "Campaign Game loading failure", "Please make sure that campaign files are correct and present", Font::SMALL, Dialog::OK );
+                Dialog::Message( _( "Campaign Game loading failure" ), _( "Please make sure that campaign files are correct and present" ), Font::SMALL, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
@@ -580,6 +437,8 @@ int Game::SelectCampaignScenario()
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )
                 SetScenarioBonus( scenarioBonus );
+
+            applyObtainedCampaignAwards( chosenScenarioID, campaignSaveData.getObtainedCampaignAwards() );
 
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );

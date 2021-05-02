@@ -896,7 +896,7 @@ namespace ICN
         // system
         ROUTERED,
         YELLOW_FONT,
-        YELLOW_SMALFONT,
+        YELLOW_SMALLFONT,
         BATTLESKIP,
         BATTLEWAIT,
         BUYMAX,
@@ -925,12 +925,15 @@ namespace ICN
         UNIFORM_EVIL_MAX_BUTTON,
         UNIFORM_EVIL_MIN_BUTTON,
 
+        WHITE_LARGE_FONT,
+        SWAP_ARROW_LEFT_TO_RIGHT,
+        SWAP_ARROW_RIGHT_TO_LEFT,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
     const char * GetString( int );
-    int FromString( const char * );
     u32 AnimationFrame( int icn, u32, u32, bool = false );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );

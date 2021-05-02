@@ -74,16 +74,21 @@ namespace Battle
     {
     public:
         Unit( const Troop &, s32 pos, bool reflect );
-        ~Unit();
+        Unit( const Unit & ) = default;
 
-        virtual bool isModes( u32 ) const override;
-        virtual bool isBattle() const override;
-        virtual std::string GetShotString() const override;
-        virtual std::string GetSpeedString() const override;
-        virtual u32 GetHitPointsLeft() const override;
-        virtual u32 GetAffectedDuration( u32 ) const override;
-        virtual u32 GetSpeed() const override;
-        virtual int GetMorale() const override;
+        ~Unit() override;
+
+        Unit & operator=( const Unit & ) = delete;
+
+        bool isModes( u32 ) const override;
+        bool isBattle() const override;
+        std::string GetShotString() const override;
+        std::string GetSpeedString() const override;
+        u32 GetHitPointsLeft() const override;
+        virtual uint32_t GetMissingHitPoints() const;
+        u32 GetAffectedDuration( u32 ) const override;
+        u32 GetSpeed() const override;
+        int GetMorale() const override;
 
         Unit * GetMirror();
         void SetMirror( Unit * );
@@ -91,7 +96,7 @@ namespace Battle
         void SetRandomLuck( void );
         void NewTurn( void );
 
-        virtual bool isValid() const override;
+        bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
         bool isTwiceAttack( void ) const;
@@ -117,15 +122,16 @@ namespace Battle
         void SetPosition( const Position & );
         void SetReflection( bool );
 
-        virtual u32 GetAttack() const override;
-        virtual u32 GetDefense() const override;
+        u32 GetAttack() const override;
+        u32 GetDefense() const override;
         int GetArmyColor( void ) const;
-        virtual int GetColor() const override;
+        int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
+        int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
         u32 GetSpeed( bool skip_standing_check ) const;
-        virtual int GetControl() const override;
+        int GetControl() const override;
         u32 GetDamage( const Unit & ) const;
         s32 GetScoreQuality( const Unit & ) const;
         u32 GetDead( void ) const;
@@ -140,8 +146,10 @@ namespace Battle
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
-        void PostAttackAction( Unit & );
+        std::vector<Spell> getCurrentSpellEffects() const;
+        void PostAttackAction();
         void ResetBlind( void );
+        void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, u32, const HeroBase * );
         void SpellApplyDamage( const Spell &, u32, const HeroBase *, TargetInfo & );
         void SpellRestoreAction( const Spell &, u32, const HeroBase * );
@@ -157,7 +165,6 @@ namespace Battle
         bool isFinishAnimFrame( void ) const;
         int GetFrame( void ) const;
         int GetFrameStart( void ) const;
-        int GetFrameCount( void ) const;
         uint32_t GetCustomAlpha() const;
         void SetCustomAlpha( uint32_t alpha );
 
@@ -170,13 +177,11 @@ namespace Battle
         int M82Expl( void ) const;
 
         int ICNFile( void ) const;
-        int ICNMiss( void ) const;
 
         Point GetBackPoint( void ) const;
         Point GetCenterPoint() const;
         Rect GetRectPosition( void ) const;
 
-        u32 HowManyCanKill( const Unit & ) const;
         u32 HowManyWillKilled( u32 ) const;
 
         void SetResponse( void );
@@ -188,6 +193,7 @@ namespace Battle
         int GetSpellMagic( bool force = false ) const;
 
         const HeroBase * GetCommander( void ) const;
+        const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
         static bool isHandFighting( const Unit &, const Unit & );
 

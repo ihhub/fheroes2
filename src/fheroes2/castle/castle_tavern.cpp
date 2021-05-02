@@ -22,19 +22,20 @@
 
 #include <string>
 
-#include "agg.h"
+#include "agg_image.h"
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
 
-void Castle::OpenTavern( void )
+void Castle::OpenTavern( void ) const
 {
     const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
@@ -43,7 +44,7 @@ void Castle::OpenTavern( void )
     const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+    const Cursor & cursor = Cursor::Get();
     cursor.Hide();
 
     Text text( tavern, Font::YELLOW_BIG );
