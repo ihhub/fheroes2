@@ -510,11 +510,9 @@ int Heroes::GetMobilityIndexSprite( void ) const
     return 25 >= index ? index : 25;
 }
 
-// Returns the relative height of mana column near hero's portrait in heroes panel.
-// Returned value will be in range [0; 25].
 int Heroes::GetManaIndexSprite( void ) const
 {
-    // plus 2 because we need the height to be 0 for 0,1,2 mana points
+    // Add 2 to round values.
     const int value = ( GetSpellPoints() + 2 ) / 5;
     return value >= 25 ? 25 : value;
 }
