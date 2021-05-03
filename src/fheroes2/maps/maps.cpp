@@ -208,7 +208,7 @@ bool Maps::isValidDirection( s32 from, int vector )
     return false;
 }
 
-fheroes2::Point Maps::GetPoint( int32_t index )
+fheroes2::Point Maps::GetPoint( const int32_t index )
 {
     return fheroes2::Point( index % world.w(), index / world.w() );
 }

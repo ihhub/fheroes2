@@ -182,8 +182,8 @@ public:
         return height;
     }
 
-    const Maps::Tiles & GetTiles( u32, u32 ) const;
-    Maps::Tiles & GetTiles( u32, u32 );
+    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const;
+    Maps::Tiles & GetTiles( const int32_t x, const int32_t y );
     const Maps::Tiles & GetTiles( const int32_t tileId ) const;
     Maps::Tiles & GetTiles( const int32_t tileId );
 

@@ -146,7 +146,7 @@ void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image
 
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
-    const fheroes2::Rect tileROI = GetVisibleTileROI();
+    const fheroes2::Rect & tileROI = GetVisibleTileROI();
 
     int32_t minX = tileROI.x;
     int32_t minY = tileROI.y;
@@ -194,8 +194,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<const Maps::Tiles *> topList;
     std::vector<const Maps::Tiles *> objectList;
 
-    topList.reserve( ( maxY - minY ) * ( maxX - minX ) );
-    objectList.reserve( ( maxY - minY ) * ( maxX - minX ) );
+    const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
+    topList.reserve( areaSize );
+    objectList.reserve( areaSize );
 
     // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;

@@ -54,7 +54,7 @@ namespace Maps
     bool isValidAbsIndex( s32 );
     bool isValidAbsPoint( s32 x, s32 y );
 
-    fheroes2::Point GetPoint( s32 );
+    fheroes2::Point GetPoint( const int32_t index );
 
     s32 GetIndexFromAbsPoint( const fheroes2::Point & mp );
     s32 GetIndexFromAbsPoint( s32 px, s32 py );

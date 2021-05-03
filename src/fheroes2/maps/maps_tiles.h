@@ -126,7 +126,7 @@ namespace Maps
 
         int32_t GetIndex() const
         {
-            return maps_index;
+            return _index;
         }
 
         fheroes2::Point GetCenter( void ) const;
@@ -183,7 +183,7 @@ namespace Maps
 
         void SetIndex( const uint32_t index )
         {
-            maps_index = index;
+            _index = index;
         }
 
         void setBoat( int direction );
@@ -323,7 +323,7 @@ namespace Maps
         Addons addons_level1;
         Addons addons_level2; // 16
 
-        uint32_t maps_index = 0;
+        int32_t _index = 0;
         uint16_t pack_sprite_index = 0;
 
         uint32_t uniq = 0;

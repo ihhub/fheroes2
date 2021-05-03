@@ -339,14 +339,22 @@ void World::InitKingdoms( void )
     vec_kingdoms.Init();
 }
 
-const Maps::Tiles & World::GetTiles( u32 ax, u32 ay ) const
+const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
-Maps::Tiles & World::GetTiles( u32 ax, u32 ay )
+Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
 const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
