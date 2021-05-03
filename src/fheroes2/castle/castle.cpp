@@ -537,7 +537,7 @@ void Castle::ActionNewWeek( void )
                 if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
                     if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                        *dw += GetGrownWeekOf( mons );
+                        *dw += GetGrownWeekOf();
                         break;
                     }
                 }
@@ -2531,9 +2531,9 @@ u32 Castle::GetGrownWel2( void )
     return GameStatic::GetCastleGrownWel2();
 }
 
-u32 Castle::GetGrownWeekOf( const Monster & mons )
+u32 Castle::GetGrownWeekOf()
 {
-    return Settings::Get().ExtWorldNewVersionWeekOf() ? mons.GetGrown() : GameStatic::GetCastleGrownWeekOf();
+    return GameStatic::GetCastleGrownWeekOf();
 }
 
 u32 Castle::GetGrownMonthOf( void )
