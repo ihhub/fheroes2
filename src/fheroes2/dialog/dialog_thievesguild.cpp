@@ -235,32 +235,29 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
 
 void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step )
 {
-    if ( v.size() ) {
-        for ( size_t i = 0; i < v.size(); ++i ) {
-            const Heroes * hero = world.GetHeroes( v[i].first );
-            int32_t px = pos.x - 25 + i * step;
-            if ( hero ) {
-                Text text( _( "Att." ), Font::SMALL );
-                text.Blit( px, pos.y );
-                text.Set( std::to_string( hero->GetAttack() ) );
-                text.Blit( px + 50 - text.w(), pos.y );
-
-                text.Set( _( "Def." ) );
-                text.Blit( px, pos.y + 10 );
-                text.Set( std::to_string( hero->GetDefense() ) );
-                text.Blit( px + 50 - text.w(), pos.y + 10 );
-
-                text.Set( _( "Power" ), Font::SMALL );
-                text.Blit( px, pos.y + 20 );
-                text.Set( std::to_string( hero->GetPower() ) );
-                text.Blit( px + 50 - text.w(), pos.y + 20 );
-
-                text.Set( _( "Knowl" ), Font::SMALL );
-                text.Blit( px, pos.y + 30 );
-                text.Set( std::to_string( hero->GetKnowledge() ) );
-                text.Blit( px + 50 - text.w(), pos.y + 30 );
-            }
+    for ( size_t i = 0; i < v.size(); ++i ) {
+        const Heroes * hero = world.GetHeroes( v[i].first );
+        if ( hero == nullptr ) {
+            continue;
         }
+        const int32_t px = pos.x - 25 + i * step;
+
+        Text text( _( "Att." ), Font::SMALL );
+        text.Blit( px, pos.y );
+        text.Set( std::to_string( hero->GetAttack() ) );
+        text.Blit( px + 50 - text.w(), pos.y );
+        text.Set( _( "Def." ) );
+        text.Blit( px, pos.y + 10 );
+        text.Set( std::to_string( hero->GetDefense() ) );
+        text.Blit( px + 50 - text.w(), pos.y + 10 );
+        text.Set( _( "Power" ), Font::SMALL );
+        text.Blit( px, pos.y + 20 );
+        text.Set( std::to_string( hero->GetPower() ) );
+        text.Blit( px + 50 - text.w(), pos.y + 20 );
+        text.Set( _( "Knowl" ), Font::SMALL );
+        text.Blit( px, pos.y + 30 );
+        text.Set( std::to_string( hero->GetKnowledge() ) );
+        text.Blit( px + 50 - text.w(), pos.y + 30 );
     }
 }
 
@@ -268,7 +265,7 @@ void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
 {
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Player * player = Players::Get( colors[i] );
-        Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
+        const Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
         text.Blit( pos.x - text.w() / 2 + step * i, pos.y );
     }
 }
@@ -276,7 +273,7 @@ void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
 void DrawBestMonsterIcons( const Colors & colors, fheroes2::Point & pos, int step )
 {
     for ( size_t i = 0; i < colors.size(); ++i ) {
-        const Monster monster = world.GetKingdom( colors[i] ).GetBestMonster();
+        const Monster monster = world.GetKingdom( colors[i] ).GetStrongestMonster();
         if ( monster.isValid() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
             if ( !sprite.empty() )

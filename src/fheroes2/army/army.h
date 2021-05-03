@@ -199,7 +199,7 @@ public:
     bool isFullHouse( void ) const;
     bool SaveLastTroop( void ) const;
 
-    Monster GetBestMonster();
+    Monster GetStrongestMonster() const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );

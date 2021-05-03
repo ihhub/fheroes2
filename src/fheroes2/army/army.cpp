@@ -1564,12 +1564,14 @@ bool Army::SaveLastTroop( void ) const
     return commander && commander->isHeroes() && 1 == GetCount();
 }
 
-Monster Army::GetBestMonster()
+Monster Army::GetStrongestMonster() const
 {
     Monster monster( Monster::UNKNOWN );
-    for ( Army::const_iterator ci = begin(); ci != end(); ++ci )
-        if ( ( *ci )->isValid() && ( *ci )->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() )
-            monster = **ci;
+    for ( const Troop * troop : *this ) {
+        if ( troop->isValid() && troop->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() ) {
+            monster = *troop;
+        }
+    }
     return monster;
 }
 
