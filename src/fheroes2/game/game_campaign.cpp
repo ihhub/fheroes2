@@ -78,6 +78,8 @@ namespace
         const std::vector<int> & availableMaps
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
+        int drawnBranchMapCount = 0;
+
         for ( size_t i = 0; i < scenarios.size(); ++i ) {
             const std::vector<int> & nextMaps = scenarios[i].getNextMaps();
             const int scenarioID = scenarios[i].getScenarioID();
@@ -102,11 +104,13 @@ namespace
             bool isBranching = false;
             bool isFinalBranch = false;
 
-            if ( !isSubScenario && prevScenarioNextMaps.size() > 1 ) {
+            const size_t branchCount = prevScenarioNextMaps.size();
+            if ( !isSubScenario && branchCount > 1 ) {
                 isBranching = true;
-                isFinalBranch = prevScenarioNextMaps.back() == scenarioID;
+                isFinalBranch = drawnBranchMapCount == branchCount - 1;
 
                 y += isFinalBranch ? deltaY : -deltaY;
+                ++drawnBranchMapCount;
             }
 
             // available scenario (one of which should be selected)
@@ -122,8 +126,10 @@ namespace
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_UNAVAILABLE, trackOffset, x, y );
             }
 
-            if ( !isBranching || isFinalBranch )
+            if ( !isBranching || isFinalBranch ) {
                 prevScenarioNextMaps = nextMaps;
+                drawnBranchMapCount = 0;
+            }
 
             if ( !isSubScenario && ( !isBranching || isFinalBranch ) )
                 currentX += deltaX;
