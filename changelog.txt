@@ -1,3 +1,65 @@
+version 0.9.3 (04 May 2021)
+- remove incorrect battle background for Graveyard
+- fix catapult miss animation: show this animation near the actual target object
+- fix magic book behavior in inventory
+- fix spell indicator for hero's icon
+- add special Victory conditions for campaign scenarios
+- add initial support for Campaign Awards
+- allow switching heroes in hero dialog if it was opened from meeting dialog
+- fix issues with battles logs and sounds while Dwarves resist spell
+- fix inability ot Teleport monster in battle for certain cases
+- add missing "Not enough gold (xxxx)" text in joining window with Diplomacy
+- do not generate Puzzle image on map loading
+- do not take Mage Guild level into account when calculating count of archers in castle towers
+- fix shadows for all monster mini sprites
+- allow the hero to retreat if, while in the castle, he attacks the hero outside the castle
+- show Mage Guild building always in center
+- add titles to Arena, Alchemist Tower and Stables dialogs
+- add World animation during Dimension door spell
+- show correct message for hero's option dialog buttons
+- fix bridge operation for flying units in instant battle
+- add letters for World View and View spells
+- properly handle filenames with dots
+- fix Main Menu UI redraw
+- do not run animation of lowering the bridge on bridge destruction if bridge is already lowered
+- fix the display of the army in the castle quick info window
+- display correct message when capturing abandoned mine
+- align columns and flags at oracle dialog
+- fix cursor during video playback
+- do not allow the player to scroll world map while hero is moving
+- add initial support of other languages: German, Polish, French and Russian
+- fix information displayed in castle quick info window
+- fix sphinx riddle dialogs
+- add swap buttons in hero meeting dialog
+- correct spells order in Magic Book
+- enable triggering of positive morale event after soft wait
+- fix saving scroll speed in the game config file
+- fix Artesian Springs logic
+- fix inability to use Stone Liths
+- fix incorrect heroes for surrender conditions
+- fix gold and experience dialog for the demon cave
+- remove exclamation mark in Hero info window for "Blood" morale
+- fix double shadow from heroes
+- preserve the order of catapult shots
+- highlight Lich's shot area
+- implement correct post-battle necromancy window
+- rename Coast to Beach
+- fix large object coverage in battles
+- add message when visiting Oracle
+- update hero's path while selecting next hero by an option button
+- fix Dragon City guardians
+- load correct video files to be played
+- implement the "faster monster of opposite army goes first" logic in the battle mode
+- fix excessive FPS issue in dialog of joining the army
+- fix game score calculation
+- reset the spell on tile when AI-controlled hero has successfully captured an object
+- immediately hide hero's path before executing the animation of the Dimension Door spell
+- fix Necromancy incorrect percentage output
+- fix ultimate artifact digging logic
+- speed up images loading from resource files
+- fix fading animation synchronization
+- fix a case of inability to confirm end turn while cursor is over options buttons
+
 version 0.9.2 (04 April 2021)
 - fix full artifact bag message
 - add missing dot to sentences in few windows
