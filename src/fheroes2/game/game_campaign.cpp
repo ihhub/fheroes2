@@ -104,7 +104,7 @@ namespace
             bool isBranching = false;
             bool isFinalBranch = false;
 
-            const size_t branchCount = prevScenarioNextMaps.size();
+            const int branchCount = prevScenarioNextMaps.size();
             if ( !isSubScenario && branchCount > 1 ) {
                 isBranching = true;
                 isFinalBranch = drawnBranchMapCount == branchCount - 1;
