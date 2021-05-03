@@ -28,6 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_io.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
@@ -269,6 +270,8 @@ int Game::CompleteCampaignScenario()
 
     const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
+
+    Game::SaveCompletedCampaignScenario();
 
     const std::vector<Campaign::CampaignAwardData> obtainableAwards
         = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getCampaignID(), lastCompletedScenarioID );
