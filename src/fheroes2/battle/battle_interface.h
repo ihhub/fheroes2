@@ -197,7 +197,6 @@ namespace Battle
         void RedrawPartialStart();
         void RedrawPartialFinish();
         void HumanTurn( const Unit &, Actions & );
-        bool NetworkTurn( const Result & );
 
         const fheroes2::Rect & GetArea( void ) const;
         fheroes2::Point GetMouseCursor() const;

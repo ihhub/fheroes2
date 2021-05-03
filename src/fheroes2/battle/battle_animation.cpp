@@ -493,13 +493,6 @@ AnimationState::AnimationState( int monsterID )
     , _currentSequence( _static )
 {}
 
-AnimationState::AnimationState( const AnimationReference & ref, int state )
-    : AnimationReference( ref )
-    , _currentSequence( _static )
-{
-    switchAnimation( state );
-}
-
 bool AnimationState::switchAnimation( int animState, bool reverse )
 {
     std::vector<int> seq = getAnimationVector( animState );

@@ -721,44 +721,6 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
     }
 }
 
-void Troops::KeepOnlyWeakest( Troops & troops2, bool save_last )
-{
-    if ( this == &troops2 )
-        return;
-
-    Troops priority = GetOptimized();
-    priority.reserve( ARMYMAXTROOPS * 2 );
-
-    const Troops & priority2 = troops2.GetOptimized();
-    priority.Insert( priority2 );
-
-    Clean();
-    troops2.Clean();
-
-    // sort: strongest
-    std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
-
-    // weakest to army
-    while ( size() < priority.size() ) {
-        JoinTroop( *priority.back() );
-        priority.PopBack();
-    }
-
-    // save half weak of strongest to army
-    if ( save_last && !isValid() ) {
-        Troop & last = *priority.back();
-        u32 count = last.GetCount() / 2;
-        JoinTroop( last, last.GetCount() - count );
-        last.SetCount( count );
-    }
-
-    // strongest to army2
-    while ( priority.size() ) {
-        troops2.JoinTroop( *priority.back() );
-        priority.PopBack();
-    }
-}
-
 void Troops::DrawMons32Line( int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact, bool isScouteView ) const
 {
     if ( isValid() ) {
@@ -1417,12 +1379,6 @@ void Army::JoinStrongestFromArmy( Army & army2 )
     JoinStrongest( army2, save_last );
 }
 
-void Army::KeepOnlyWeakestTroops( Army & army2 )
-{
-    bool save_last = commander && commander->isHeroes();
-    KeepOnlyWeakest( army2, save_last );
-}
-
 u32 Army::ActionToSirens( void )
 {
     u32 res = 0;
@@ -1469,11 +1425,6 @@ bool Army::isMeleeDominantArmy() const
         }
     }
     return meleeInfantry > other;
-}
-
-bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
-{
-    return army1.isStrongerThan( army2 );
 }
 
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */

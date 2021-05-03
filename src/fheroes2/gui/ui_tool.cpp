@@ -314,27 +314,6 @@ namespace fheroes2
         Copy( temp, display ); // restore the original image
     }
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delayMs )
-    {
-        Display & display = Display::instance();
-        Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int stepDelay = ( delayMs * step ) / ( alpha - min );
-
-        while ( alpha > min + endAlpha ) {
-            ApplyAlpha( top, shadow, alpha );
-            Copy( shadow, 0, 0, display, offset.x, offset.y, shadow.width(), shadow.height() );
-            Copy( middle, 0, 0, display, middleOffset.x, middleOffset.y, middle.width(), middle.height() );
-
-            display.render();
-
-            alpha -= step;
-            delayforMs( stepDelay );
-        }
-    }
-
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount )
     {
         Display & display = Display::instance();

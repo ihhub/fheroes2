@@ -56,7 +56,6 @@ namespace Battle
         void SetArea( const fheroes2::Rect & );
 
         s32 GetIndexAbsPosition( const fheroes2::Point & ) const;
-        Indexes GetPassableQualityPositions( const Unit & b );
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 

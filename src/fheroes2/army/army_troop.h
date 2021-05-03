@@ -86,7 +86,7 @@ public:
     explicit ArmyTroop( const Army * );
     ArmyTroop( const Army *, const Troop & );
 
-    ArmyTroop & operator=( const Troop & );
+    ArmyTroop & operator=( const Troop & ) = delete;
 
     u32 GetAttack( void ) const override;
     u32 GetDefense( void ) const override;
