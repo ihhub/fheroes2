@@ -124,13 +124,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
             }
             break;
 
-        case Settings::WORLD_NEW_VERSION_WEEKOF:
-            if ( conf.ExtModes( Settings::WORLD_NEW_VERSION_WEEKOF ) )
-                conf.ExtSetModes( Settings::WORLD_BAN_WEEKOF );
-            else
-                conf.ExtResetModes( Settings::WORLD_BAN_WEEKOF );
-            break;
-
         default:
             break;
         }
@@ -179,7 +172,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
     states.push_back( Settings::WORLD_BAN_WEEKOF );
-    states.push_back( Settings::WORLD_NEW_VERSION_WEEKOF );
     states.push_back( Settings::WORLD_BAN_PLAGUES );
     states.push_back( Settings::WORLD_BAN_MONTHOF_MONSTERS );
     states.push_back( Settings::WORLD_STARTHERO_LOSSCOND4HUMANS );

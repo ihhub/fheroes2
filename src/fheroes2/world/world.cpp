@@ -554,6 +554,8 @@ void World::NewWeek( void )
     else
         week_next = Week( type );
 
+    week_current = week_next;
+
     if ( 1 < week ) {
         // update week object
         for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
