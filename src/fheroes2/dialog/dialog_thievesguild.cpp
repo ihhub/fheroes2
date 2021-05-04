@@ -475,10 +475,11 @@ void Dialog::ThievesGuild( bool oracle )
 
     text.Set( _( "Best Hero Stats:" ) );
     dst_pt.x = cur_pt.x + textx - text.w();
-    dst_pt.y = cur_pt.y + 344;
+    dst_pt.y = cur_pt.y + 353;
     text.Blit( dst_pt.x, dst_pt.y );
 
     dst_pt.x = cur_pt.x + startx;
+    dst_pt.y -= 9;
     if ( 1 < count )
         DrawHeroStats( v, dst_pt, stepx );
 
