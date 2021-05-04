@@ -259,7 +259,7 @@ void ShowNewWeekDialog( void )
 
     if ( week.GetType() == Week::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf( monster );
+        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )

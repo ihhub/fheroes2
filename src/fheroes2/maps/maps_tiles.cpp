@@ -2696,32 +2696,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
-    if ( FORMAT_VERSION_080_RELEASE > Game::GetLoadVersion() ) {
-        switch ( ta.object ) {
-        case 0x11:
-            ta.object = 0xA4;
-            ta.index = 116;
-            break;
-        case 0x12:
-            ta.object = 0xA4;
-            ta.index = 119;
-            break;
-        case 0x13:
-            ta.object = 0xA4;
-            ta.index = 122;
-            break;
-        case 0x14:
-            ta.object = 0xA4;
-            ta.index = 15;
-            break;
-        case 0x15:
-            ta.object = 0xB8;
-            ta.index = 19;
-            break;
-        default:
-            break;
-        }
-    }
     return msg;
 }
 
@@ -2733,39 +2707,6 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable;
-
-    // Backwards compatibility with saves pre-0.8.2 release
-    if ( FORMAT_VERSION_082_RELEASE > Game::GetLoadVersion() ) {
-        tile.uniq = 0;
-        tile.objectTileset = 0;
-        tile.objectIndex = 255;
-        tile.tileIsRoad = 0;
-        msg >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
-
-        tile.heroID = 0;
-        tile.quantity3 = 0;
-        if ( tile.mp2_object == MP2::OBJ_HEROES ) {
-            msg >> tile.heroID;
-        }
-        else {
-            msg >> tile.quantity3;
-        }
-
-        msg >> tile.addons_level1 >> tile.addons_level2;
-        for ( const Maps::TilesAddon & addon : tile.addons_level1 ) {
-            if ( addon.isRoad() ) {
-                tile.tileIsRoad = true;
-                break;
-            }
-        }
-
-        tile.AddonsSort();
-    }
-    else {
-        msg >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3
-            >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
-    }
-
-    return msg;
+    return msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object
+               >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
 }

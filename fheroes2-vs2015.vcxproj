@@ -362,7 +362,6 @@
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
-    <ClCompile Include="src\fheroes2\resource\maps_text.cpp" />
     <ClCompile Include="src\fheroes2\resource\resource.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />

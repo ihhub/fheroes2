@@ -213,7 +213,7 @@ public:
 
     static u32 GetGrownWell( void );
     static u32 GetGrownWel2( void );
-    static u32 GetGrownWeekOf( const Monster & );
+    static u32 GetGrownWeekOf();
     static u32 GetGrownMonthOf( void );
 
     std::string String( void ) const;

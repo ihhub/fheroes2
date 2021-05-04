@@ -36,9 +36,7 @@
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
 #define FORMAT_VERSION_084_RELEASE 9000
-#define FORMAT_VERSION_082_RELEASE 8200
-#define FORMAT_VERSION_080_RELEASE 8000
-#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_080_RELEASE
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_084_RELEASE
 
 #define CURRENT_FORMAT_VERSION FORMAT_VERSION_093_RELEASE // TODO: update this value for a new release
 
@@ -93,7 +91,7 @@ public:
         // UNUSED = 0x20008000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
-        WORLD_NEW_VERSION_WEEKOF = 0x20040000,
+        // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
@@ -206,7 +204,6 @@ public:
     bool ExtWorldEyeEagleAsScholar( void ) const;
     bool ExtWorldBanMonthOfMonsters( void ) const;
     bool ExtWorldBanWeekOf( void ) const;
-    bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;

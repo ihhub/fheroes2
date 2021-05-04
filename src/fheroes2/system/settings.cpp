@@ -166,10 +166,6 @@ const settings_t settingsFHeroes2[] = {
         _( "world: ban for WeekOf/MonthOf Monsters" ),
     },
     {
-        Settings::WORLD_NEW_VERSION_WEEKOF,
-        _( "world: new version WeekOf (+growth)" ),
-    },
-    {
         Settings::WORLD_BAN_PLAGUES,
         _( "world: ban plagues months" ),
     },
@@ -1659,11 +1655,6 @@ bool Settings::ExtGameDynamicInterface( void ) const
 bool Settings::ExtGameHideInterface( void ) const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtWorldNewVersionWeekOf( void ) const
-{
-    return ExtModes( WORLD_NEW_VERSION_WEEKOF );
 }
 
 bool Settings::ExtWorldBanWeekOf( void ) const
