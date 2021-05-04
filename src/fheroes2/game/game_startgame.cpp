@@ -699,7 +699,7 @@ int Interface::Basic::HumanTurn( bool isload )
     bool stopHero = false;
 
     int heroAnimationFrameCount = 0;
-    Point heroAnimationOffset;
+    fheroes2::Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
@@ -923,7 +923,7 @@ int Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                    gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
                     gameArea.SetRedraw();
                     heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -955,8 +955,8 @@ int Interface::Basic::HumanTurn( bool isload )
                             }
                         }
                         else {
-                            Point movement( hero->MovementDirection() );
-                            if ( movement != Point() ) { // don't waste resources for no movement
+                            fheroes2::Point movement( hero->MovementDirection() );
+                            if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
                                 ResetFocus( GameFocus::HEROES );

@@ -925,8 +925,8 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-    const Point & destPos = Maps::GetPoint( dst_index );
-    const Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+    const fheroes2::Point offset( destPos - hero.GetCenter() );
 
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
     const Maps::Tiles & from = world.GetTiles( dst_index );
@@ -934,7 +934,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+    hero.FadeOut( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -955,8 +955,8 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     const int fromIndex = hero.GetIndex();
     Maps::Tiles & from = world.GetTiles( fromIndex );
 
-    const Point & destPos = Maps::GetPoint( dst_index );
-    const Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+    const fheroes2::Point offset( destPos - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
@@ -964,7 +964,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeIn( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+    hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 

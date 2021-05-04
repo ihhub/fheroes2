@@ -51,7 +51,7 @@ namespace
     }
 }
 
-class SelectValue : public Rect
+class SelectValue : public fheroes2::Rect
 {
 public:
     SelectValue( u32 min, u32 max, u32 cur, u32 st )
@@ -388,7 +388,7 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     fheroes2::Button buttonMax( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MAX_BUTTON : ICN::UNIFORM_GOOD_MAX_BUTTON, 0, 1 );
     fheroes2::Button buttonMin( minMaxButtonOffset.x, minMaxButtonOffset.y, isEvilInterface ? ICN::UNIFORM_EVIL_MIN_BUTTON : ICN::UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
-    const Rect buttonArea( 5, 0, 61, 25 );
+    const fheroes2::Rect buttonArea( 5, 0, 61, 25 );
     SwitchMaxMinButtons( buttonMin, buttonMax, redistributeCount, maximumAcceptedValue );
 
     LocalEvent & le = LocalEvent::Get();

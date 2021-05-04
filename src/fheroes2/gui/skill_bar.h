@@ -29,8 +29,8 @@ public:
     PrimarySkillsBar( const Heroes * hero, bool mini );
 
     void SetTextOff( s32, s32 );
-    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    void RedrawItem( int &, const Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawItem( int &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
     bool ActionBarLeftMouseSingleClick( int & skill ) override;
     bool ActionBarRightMouseHold( int & skill ) override;
@@ -52,8 +52,8 @@ class SecondarySkillsBar : public Interface::ItemsBar<Skill::Secondary>
 public:
     SecondarySkillsBar( const Heroes & hero, bool mini = true, bool change = false );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    void RedrawItem( Skill::Secondary &, const Rect &, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawItem( Skill::Secondary &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
     bool ActionBarLeftMouseSingleClick( Skill::Secondary & skill ) override;
     bool ActionBarRightMouseHold( Skill::Secondary & skill ) override;

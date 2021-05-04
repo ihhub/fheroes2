@@ -44,7 +44,7 @@ namespace
         bool QueueEventProcessing( void );
 
     private:
-        Rects coords;
+        std::vector<fheroes2::Rect> coords;
         SpellStorage spells;
     };
 }
@@ -94,12 +94,12 @@ void RowSpells::Redraw( void )
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
 
-    for ( Rects::iterator it = coords.begin(); it != coords.end(); ++it ) {
-        const Rect & dst = ( *it );
+    for ( std::vector<fheroes2::Rect>::iterator it = coords.begin(); it != coords.end(); ++it ) {
+        const fheroes2::Rect & dst = ( *it );
         const Spell & spell = spells[std::distance( coords.begin(), it )];
 
         // roll hide
-        if ( dst.w < roll_show.width() || spell == Spell::NONE ) {
+        if ( dst.width < roll_show.width() || spell == Spell::NONE ) {
             const fheroes2::Sprite & roll_hide = fheroes2::AGG::GetICN( ICN::TOWNWIND, 1 );
             fheroes2::Blit( roll_hide, display, dst.x, dst.y );
         }
@@ -108,7 +108,7 @@ void RowSpells::Redraw( void )
             fheroes2::Blit( roll_show, display, dst.x, dst.y );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
-            fheroes2::Blit( icon, display, dst.x + 3 + ( dst.w - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
+            fheroes2::Blit( icon, display, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
             TextBox text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
@@ -120,7 +120,7 @@ bool RowSpells::QueueEventProcessing( void )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const s32 index = coords.GetIndex( le.GetMouseCursor() );
+    const s32 index = GetRectIndex( coords, le.GetMouseCursor() );
 
     if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
         const Spell & spell = spells[index];

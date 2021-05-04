@@ -65,7 +65,7 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
     ~MapObjects();
     void clear( void );
     void add( MapObjectSimple * );
-    std::list<MapObjectSimple *> get( const Point & );
+    std::list<MapObjectSimple *> get( const fheroes2::Point & );
     MapObjectSimple * get( u32 uid );
     void remove( u32 uid );
 };
@@ -153,7 +153,7 @@ using Rumors = std::list<std::string>;
 using EventsDate = std::list<EventDate>;
 using MapsTiles = std::vector<Maps::Tiles>;
 
-class World : protected Size
+class World : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
@@ -168,22 +168,22 @@ public:
     bool LoadMapMP2( const std::string & );
     bool LoadMapMAP( const std::string & );
 
-    void NewMaps( u32, u32 );
+    void NewMaps( int32_t, int32_t );
 
     static World & Get( void );
 
-    s32 w( void ) const
+    int32_t w() const
     {
-        return Size::w;
+        return width;
     }
 
-    s32 h( void ) const
+    int32_t h() const
     {
-        return Size::h;
+        return height;
     }
 
-    const Maps::Tiles & GetTiles( u32, u32 ) const;
-    Maps::Tiles & GetTiles( u32, u32 );
+    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const;
+    Maps::Tiles & GetTiles( const int32_t x, const int32_t y );
     const Maps::Tiles & GetTiles( const int32_t tileId ) const;
     Maps::Tiles & GetTiles( const int32_t tileId );
 
@@ -192,14 +192,14 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    const Castle * GetCastle( const Point & ) const;
-    Castle * GetCastle( const Point & );
+    const Castle * GetCastle( const fheroes2::Point & ) const;
+    Castle * GetCastle( const fheroes2::Point & );
 
     const Heroes * GetHeroes( int /* hero id */ ) const;
     Heroes * GetHeroes( int /* hero id */ );
 
-    const Heroes * GetHeroes( const Point & ) const;
-    Heroes * GetHeroes( const Point & );
+    const Heroes * GetHeroes( const fheroes2::Point & ) const;
+    Heroes * GetHeroes( const fheroes2::Point & );
 
     Heroes * FromJailHeroes( s32 );
     Heroes * GetFreemanHeroes( int race = 0 ) const;
@@ -213,7 +213,7 @@ public:
     void RescanAllHeroesPathPassable() const;
 
     const UltimateArtifact & GetUltimateArtifact( void ) const;
-    bool DiggingForUltimateArtifact( const Point & );
+    bool DiggingForUltimateArtifact( const fheroes2::Point & );
 
     // overall number of cells of the world map: width * height
     size_t getSize() const;
@@ -262,7 +262,7 @@ public:
     void AddEventDate( const EventDate & );
     EventsDate GetEventsDate( int color ) const;
 
-    MapEvent * GetMapEvent( const Point & );
+    MapEvent * GetMapEvent( const fheroes2::Point & );
     MapObjectSimple * GetMapObject( u32 uid );
     void RemoveMapObject( const MapObjectSimple * );
     const MapRegion & getRegion( size_t id ) const;
@@ -281,7 +281,7 @@ public:
 
 private:
     World()
-        : Size( 0, 0 )
+        : fheroes2::Size( 0, 0 )
         , _rumor( nullptr )
     {}
 

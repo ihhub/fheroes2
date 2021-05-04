@@ -31,8 +31,8 @@
 #include "text.h"
 #include "ui_button.h"
 
-void InfoSkillClear( const Rect &, const Rect &, const Rect &, const Rect & );
-void InfoSkillSelect( int, const Rect &, const Rect &, const Rect &, const Rect & );
+void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
+void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
 int InfoSkillNext( int );
 int InfoSkillPrev( int );
 
@@ -163,7 +163,7 @@ int Dialog::SelectSkillFromArena( void )
     return res;
 }
 
-void InfoSkillClear( const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
+void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -175,7 +175,7 @@ void InfoSkillClear( const Rect & rect1, const Rect & rect2, const Rect & rect3,
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 ), display, rect4.x, rect4.y );
 }
 
-void InfoSkillSelect( int skill, const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
+void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

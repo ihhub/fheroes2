@@ -158,7 +158,7 @@ public:
 
     void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
     void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-    void Blit( const Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
+    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
 
     static u32 width( const std::string &, int ft, u32 start = 0, u32 count = 0 );
     static u32 height( const std::string &, int ft, u32 width = 0 );

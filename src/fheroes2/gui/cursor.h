@@ -23,6 +23,7 @@
 #define H2CURSOR_H
 
 #include "gamedefs.h"
+#include "math_base.h"
 
 class Cursor
 {

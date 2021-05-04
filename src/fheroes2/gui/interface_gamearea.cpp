@@ -46,19 +46,19 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
 {}
 
-Rect Interface::GameArea::GetVisibleTileROI( void ) const
+fheroes2::Rect Interface::GameArea::GetVisibleTileROI( void ) const
 {
-    return Rect( _getStartTileId(), _visibleTileCount );
+    return fheroes2::Rect( _getStartTileId(), _visibleTileCount );
 }
 
-void Interface::GameArea::ShiftCenter( const Point & offset )
+void Interface::GameArea::ShiftCenter( const fheroes2::Point & offset )
 {
     SetCenterInPixels( _topLeftTileOffset + _middlePoint() + offset );
 }
 
-Rect Interface::GameArea::RectFixed( Point & dst, int rw, int rh ) const
+fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, int rh ) const
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst.x, dst.y, rw, rh ), GetROI() );
+    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( fheroes2::Rect( dst.x, dst.y, rw, rh ), GetROI() );
     dst = res.second;
     return res.first;
 }
@@ -73,86 +73,89 @@ void Interface::GameArea::Build( void )
         SetAreaPosition( BORDERWIDTH, BORDERWIDTH, display.width() - RADARWIDTH - 3 * BORDERWIDTH, display.height() - 2 * BORDERWIDTH );
 }
 
-void Interface::GameArea::SetAreaPosition( s32 x, s32 y, u32 w, u32 h )
+void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
 {
-    _windowROI = Rect( x, y, w, h );
-    const Size worldSize = Size( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
+    _windowROI = fheroes2::Rect( x, y, w, h );
+    const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
 
-    if ( worldSize.w > w ) {
-        _minLeftOffset = -static_cast<int16_t>( w / 2 ) - TILEWIDTH / 2;
-        _maxLeftOffset = worldSize.w - w / 2;
+    if ( worldSize.width > w ) {
+        _minLeftOffset = -( w / 2 ) - TILEWIDTH / 2;
+        _maxLeftOffset = worldSize.width - w / 2;
     }
     else {
-        _minLeftOffset = -static_cast<int16_t>( w - worldSize.w ) / 2;
+        _minLeftOffset = -( w - worldSize.width ) / 2;
         _maxLeftOffset = _minLeftOffset;
     }
 
-    if ( worldSize.h > h ) {
-        _minTopOffset = -static_cast<int16_t>( h / 2 ) - TILEWIDTH / 2;
-        _maxTopOffset = worldSize.h - h / 2;
+    if ( worldSize.height > h ) {
+        _minTopOffset = -( h / 2 ) - TILEWIDTH / 2;
+        _maxTopOffset = worldSize.height - h / 2;
     }
     else {
-        _minTopOffset = -static_cast<int16_t>( h - worldSize.h ) / 2;
+        _minTopOffset = -( h - worldSize.height ) / 2;
         _maxTopOffset = _minTopOffset;
     }
 
     // adding 1 extra tile for both axes in case of drawing tiles partially near sides
-    _visibleTileCount = Size( ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 );
+    _visibleTileCount = fheroes2::Size( ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 );
 
-    _setCenterToTile( Point( world.w() / 2, world.h() / 2 ) );
+    _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const fheroes2::Point & mp ) const
 {
     BlitOnTile( dst, src, src.x(), src.y(), mp );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip, uint8_t alpha ) const
+void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip,
+                                      uint8_t alpha ) const
 {
-    Point dstpt = GetRelativeTilePosition( mp ) + Point( ox, oy );
+    fheroes2::Point dstpt = GetRelativeTilePosition( mp ) + fheroes2::Point( ox, oy );
 
     const int32_t width = src.width();
     const int32_t height = src.height();
 
     // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.w && dstpt.y + height <= _windowROI.y + _windowROI.h ) {
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
+         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
         fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip );
     }
-    else if ( _windowROI & Rect( dstpt, width, height ) ) {
-        const Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h, alpha, flip );
+    else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
+        const fheroes2::Rect & fixedRect = RectFixed( dstpt, width, height );
+        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.width, fixedRect.height, alpha, flip );
     }
 }
 
-void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const Point & mp ) const
+void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Point & mp ) const
 {
-    Point dstpt = GetRelativeTilePosition( mp );
+    fheroes2::Point dstpt = GetRelativeTilePosition( mp );
 
     const int32_t width = src.width();
     const int32_t height = src.height();
 
     // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.w && dstpt.y + height <= _windowROI.y + _windowROI.h ) {
+    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
+         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
         fheroes2::Copy( src, 0, 0, dst, dstpt.x, dstpt.y, width, height );
     }
-    else if ( _windowROI & Rect( dstpt, width, height ) ) {
-        const Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::Copy( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.w, fixedRect.h );
+    else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
+        const fheroes2::Rect & fixedRect = RectFixed( dstpt, width, height );
+        fheroes2::Copy( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.width, fixedRect.height );
     }
 }
 
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
 {
-    const Rect tileROI = GetVisibleTileROI();
+    const fheroes2::Rect & tileROI = GetVisibleTileROI();
 
     int32_t minX = tileROI.x;
     int32_t minY = tileROI.y;
-    int32_t maxX = tileROI.x + tileROI.w;
-    int32_t maxY = tileROI.y + tileROI.h;
+    int32_t maxX = tileROI.x + tileROI.width;
+    int32_t maxY = tileROI.y + tileROI.height;
 
     // Ground level. Also find range of X and Y tile positions.
-    for ( int32_t y = 0; y < tileROI.h; ++y ) {
-        Point offset( tileROI.x, tileROI.y + y );
+    for ( int32_t y = 0; y < tileROI.height; ++y ) {
+        fheroes2::Point offset( tileROI.x, tileROI.y + y );
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
@@ -191,8 +194,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<const Maps::Tiles *> topList;
     std::vector<const Maps::Tiles *> objectList;
 
-    topList.reserve( ( maxY - minY ) * ( maxX - minX ) );
-    objectList.reserve( ( maxY - minY ) * ( maxX - minX ) );
+    const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
+    topList.reserve( areaSize );
+    objectList.reserve( areaSize );
 
     // Bottom layer and objects.
     const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
@@ -282,7 +286,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( drawTop ) {
             // looking for heroes nearby current hero
             // check and reset index for matching tiles for which we need to be redraw top layer
-            const Point center = tile->GetCenter();
+            const fheroes2::Point center = tile->GetCenter();
             if ( center.x + 1 < world.w() ) {
                 hero->UpdateRedrawTop( world.GetTiles( center.x + 1, center.y ) );
             }
@@ -311,7 +315,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
         if ( drawBottom ) {
-            const Point center = tile->GetCenter();
+            const fheroes2::Point center = tile->GetCenter();
             if ( center.x + 1 < world.w() ) {
                 hero->UpdateRedrawBottom( world.GetTiles( center.x + 1, center.y ) );
             }
@@ -346,7 +350,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( drawHeroes && MP2::OBJ_HEROES == object ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
-                const Point & pos = GetRelativeTilePosition( tile->GetCenter() );
+                const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
                 hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
             }
         }
@@ -360,7 +364,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // fade out animation for objects only
     if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
         const int icn = MP2::GetICNObject( fadeTask.objectTileset );
-        const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+        const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeTask.objectIndex );
         BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeTask.alpha );
@@ -380,7 +384,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         // fade out animation for monsters only
         if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
-            const Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+            const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
             BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
 
@@ -403,7 +407,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( drawHeroes && MP2::OBJ_HEROES == object ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {
-                    const Point & pos = GetRelativeTilePosition( tile->GetCenter() );
+                    const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
                     hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
                     if ( drawBottom ) {
                         hero->RedrawBottom( dst, tileROI, *this, isPuzzleDraw );
@@ -440,7 +444,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
             const int32_t from = ( *currentStep ).GetIndex();
-            const Point & mp = Maps::GetPoint( from );
+            const fheroes2::Point & mp = Maps::GetPoint( from );
 
             ++nextStep;
             --green;
@@ -494,8 +498,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
 void Interface::GameArea::Scroll( void )
 {
-    const int16_t speed = Settings::Get().ScrollSpeed();
-    Point offset;
+    const int32_t speed = Settings::Get().ScrollSpeed();
+    fheroes2::Point offset;
 
     if ( scrollDirection & SCROLL_LEFT ) {
         offset.x = -speed;
@@ -522,7 +526,7 @@ void Interface::GameArea::SetRedraw( void ) const
 }
 
 /* scroll area to center point maps */
-void Interface::GameArea::SetCenter( const Point & pt )
+void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
 {
     _setCenterToTile( pt );
 
@@ -544,14 +548,14 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     gamearea.SetAreaPosition( 0, 0, result.width(), result.height() );
 
-    Point pt = Maps::GetPoint( index );
+    fheroes2::Point pt = Maps::GetPoint( index );
     gamearea.SetCenter( pt );
 
     gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
 
     const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
-    const Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - Point( gamearea._windowROI.x, gamearea._windowROI.y )
-                           + Point( result.width() / 2, result.height() / 2 ) );
+    const fheroes2::Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - fheroes2::Point( gamearea._windowROI.x, gamearea._windowROI.y )
+                                     + fheroes2::Point( result.width() / 2, result.height() / 2 ) );
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
@@ -620,7 +624,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 {
     Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Point & mp = le.GetMouseCursor();
+    const fheroes2::Point & mp = le.GetMouseCursor();
 
     int32_t index = GetValidTileIdFromPoint( mp );
 
@@ -641,11 +645,11 @@ void Interface::GameArea::QueueEventProcessing( void )
     if ( conf.ExtGameHideInterface() && conf.ShowControlPanel() && le.MouseCursor( interface.GetControlPanel().GetArea() ) )
         return;
 
-    const Point tileOffset = _topLeftTileOffset + mp - Point( _windowROI.x, _windowROI.y );
-    const Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
-                         ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
+    const fheroes2::Point tileOffset = _topLeftTileOffset + mp - _windowROI.getPosition();
+    const fheroes2::Point tilePos( ( tileOffset.x / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x,
+                                   ( tileOffset.y / TILEWIDTH ) * TILEWIDTH - _topLeftTileOffset.y + _windowROI.x );
 
-    const Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
+    const fheroes2::Rect tileROI( tilePos.x, tilePos.y, TILEWIDTH, TILEWIDTH );
 
     if ( le.MouseClickLeft( tileROI ) )
         interface.MouseCursorAreaClickLeft( index );
@@ -653,28 +657,28 @@ void Interface::GameArea::QueueEventProcessing( void )
         interface.MouseCursorAreaPressRight( index );
 }
 
-Point Interface::GameArea::_middlePoint() const
+fheroes2::Point Interface::GameArea::_middlePoint() const
 {
-    return Point( _windowROI.w / 2, _windowROI.h / 2 );
+    return fheroes2::Point( _windowROI.width / 2, _windowROI.height / 2 );
 }
 
-Point Interface::GameArea::_getStartTileId() const
+fheroes2::Point Interface::GameArea::_getStartTileId() const
 {
-    const int16_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
-    const int16_t y = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.y / TILEWIDTH );
+    const int32_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
+    const int32_t y = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.y / TILEWIDTH );
 
-    return Point( x, y );
+    return fheroes2::Point( x, y );
 }
 
-void Interface::GameArea::_setCenterToTile( const Point & tile )
+void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 {
-    SetCenterInPixels( Point( tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 ) );
+    SetCenterInPixels( fheroes2::Point( tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 ) );
 }
 
-void Interface::GameArea::SetCenterInPixels( const Point & point )
+void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )
 {
-    int16_t offsetX = point.x - _middlePoint().x;
-    int16_t offsetY = point.y - _middlePoint().y;
+    int32_t offsetX = point.x - _middlePoint().x;
+    int32_t offsetY = point.y - _middlePoint().y;
     if ( offsetX < _minLeftOffset )
         offsetX = _minLeftOffset;
     else if ( offsetX > _maxLeftOffset )
@@ -685,17 +689,17 @@ void Interface::GameArea::SetCenterInPixels( const Point & point )
     else if ( offsetY > _maxTopOffset )
         offsetY = _maxTopOffset;
 
-    _topLeftTileOffset = Point( offsetX, offsetY );
+    _topLeftTileOffset = fheroes2::Point( offsetX, offsetY );
 }
 
-int32_t Interface::GameArea::GetValidTileIdFromPoint( const Point & point ) const
+int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & point ) const
 {
-    const Point offset = _topLeftTileOffset + point - Point( _windowROI.x, _windowROI.y );
+    const fheroes2::Point offset = _topLeftTileOffset + point - _windowROI.getPosition();
     if ( offset.x < 0 || offset.y < 0 )
         return -1;
 
-    const int16_t x = offset.x / TILEWIDTH;
-    const int16_t y = offset.y / TILEWIDTH;
+    const int32_t x = offset.x / TILEWIDTH;
+    const int32_t y = offset.y / TILEWIDTH;
 
     if ( x >= world.w() || y >= world.h() )
         return -1;
@@ -703,7 +707,7 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const Point & point ) cons
     return y * world.w() + x;
 }
 
-Point Interface::GameArea::GetRelativeTilePosition( const Point & tileId ) const
+fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
-    return Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
+    return fheroes2::Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
 }

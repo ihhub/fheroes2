@@ -187,7 +187,7 @@ void Battle::Unit::UpdateDirection( void )
     SetReflection( GetArena()->GetArmyColor1() != GetArmyColor() );
 }
 
-bool Battle::Unit::UpdateDirection( const Rect & pos )
+bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
 {
     bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
 
@@ -1896,28 +1896,28 @@ int Battle::Unit::ICNFile( void ) const
     return GetMonsterSprite().icn_file;
 }
 
-Rect Battle::Unit::GetRectPosition( void ) const
+fheroes2::Rect Battle::Unit::GetRectPosition() const
 {
     return position.GetRect();
 }
 
-Point Battle::Unit::GetBackPoint( void ) const
+fheroes2::Point Battle::Unit::GetBackPoint() const
 {
-    const Rect & rt = position.GetRect();
-    return reflect ? Point( rt.x + rt.w, rt.y + rt.h / 2 ) : Point( rt.x, rt.y + rt.h / 2 );
+    const fheroes2::Rect & rt = position.GetRect();
+    return reflect ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
 }
 
-Point Battle::Unit::GetCenterPoint() const
+fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
 
-    const Rect & pos = position.GetRect();
-    const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;
+    const fheroes2::Rect & pos = position.GetRect();
+    const s32 centerY = pos.y + pos.height + sprite.y() / 2 - 10;
 
-    return Point( pos.x + pos.w / 2, centerY );
+    return fheroes2::Point( pos.x + pos.width / 2, centerY );
 }
 
-Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
+fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
 }

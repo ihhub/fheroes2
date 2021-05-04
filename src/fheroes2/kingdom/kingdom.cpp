@@ -554,7 +554,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             continue;
 
         // check manual set hero (castle position + point(0, 1))?
-        const Point & cp = castle->GetCenter();
+        const fheroes2::Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
 
         // and move manual set hero to castle

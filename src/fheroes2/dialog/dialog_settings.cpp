@@ -36,14 +36,14 @@
 class SettingsListBox : public Interface::ListBox<u32>
 {
 public:
-    SettingsListBox( const Point & pt, bool f )
+    SettingsListBox( const fheroes2::Point & pt, bool f )
         : Interface::ListBox<u32>( pt )
         , readonly( f )
         , _restorer( fheroes2::Display::instance() )
     {}
 
     void RedrawItem( const u32 &, s32, s32, bool ) override;
-    void RedrawBackground( const Point & ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp( void ) override {}
     void ActionCurrentDn( void ) override {}
@@ -78,7 +78,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
         msg.Blit( ox + cell.width() + 5, oy + 4 );
 }
 
-void SettingsListBox::RedrawBackground( const Point & origin )
+void SettingsListBox::RedrawBackground( const fheroes2::Point & origin )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -141,10 +141,10 @@ void Dialog::ExtSettings( bool readonly )
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 400 );
-    const Rect area( frameborder.activeArea() );
+    const fheroes2::Rect area( frameborder.activeArea() );
 
     Text text( "Experimental Game Settings", Font::YELLOW_BIG );
-    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
+    text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
     states.reserve( 64 );
@@ -203,13 +203,13 @@ void Dialog::ExtSettings( bool readonly )
     std::sort( states.begin(), states.end(),
                [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
-    SettingsListBox listbox( area, readonly );
+    SettingsListBox listbox( area.getPosition(), readonly );
 
     listbox._restorer.update( area.x + 15, area.y + 25, 280, 336 );
 
     const int ah = 340;
 
-    listbox.RedrawBackground( area );
+    listbox.RedrawBackground( area.getPosition() );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
     listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 47 ) );
@@ -220,7 +220,7 @@ void Dialog::ExtSettings( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
+    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.width - 10, area.height - 5 );
 
     const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );

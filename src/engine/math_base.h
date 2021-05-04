@@ -249,6 +249,11 @@ namespace fheroes2
             return output;
         }
 
+        PointBase2D<_TypePoint> getPosition() const
+        {
+            return PointBase2D<_TypePoint>( x, y );
+        }
+
         _TypePoint x;
         _TypePoint y;
         _TypeSize width;

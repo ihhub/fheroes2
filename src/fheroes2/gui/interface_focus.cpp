@@ -173,7 +173,7 @@ Heroes * Interface::GetFocusHeroes( void )
     return player ? player->GetFocus().GetHeroes() : NULL;
 }
 
-Point Interface::GetFocusCenter( void )
+fheroes2::Point Interface::GetFocusCenter( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -186,7 +186,7 @@ Point Interface::GetFocusCenter( void )
             return focus.GetCastle()->GetCenter();
     }
 
-    return Point( world.w() / 2, world.h() / 2 );
+    return fheroes2::Point( world.w() / 2, world.h() / 2 );
 }
 
 void Interface::Basic::RedrawFocus( void )
