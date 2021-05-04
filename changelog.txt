@@ -1,4 +1,8 @@
 version 0.9.3 (04 May 2021)
+- add additional info to oracle dialog
+- check that unit is (im)movable after each unit action
+- save completed Campaign scenario to file
+- drop support of saves older than 0.9 version
 - remove incorrect battle background for Graveyard
 - fix catapult miss animation: show this animation near the actual target object
 - fix magic book behavior in inventory
