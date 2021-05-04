@@ -1556,6 +1556,17 @@ bool Army::SaveLastTroop( void ) const
     return commander && commander->isHeroes() && 1 == GetCount();
 }
 
+Monster Army::GetStrongestMonster() const
+{
+    Monster monster( Monster::UNKNOWN );
+    for ( const Troop * troop : *this ) {
+        if ( troop->isValid() && troop->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() ) {
+            monster = *troop;
+        }
+    }
+    return monster;
+}
+
 StreamBase & operator<<( StreamBase & msg, const Army & army )
 {
     msg << static_cast<u32>( army.size() );
