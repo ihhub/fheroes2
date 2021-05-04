@@ -2706,5 +2706,5 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
     return msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-               >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
+           >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
 }
