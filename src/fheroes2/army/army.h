@@ -86,13 +86,9 @@ public:
     void MergeTroops();
     Troops GetOptimized( void ) const;
 
-    virtual u32 GetAttack( void ) const;
-    virtual u32 GetDefense( void ) const;
     virtual double GetStrength() const;
 
     u32 GetHitPoints( void ) const;
-    u32 GetDamageMin( void ) const;
-    u32 GetDamageMax( void ) const;
 
     void Clean( void );
     void UpgradeTroops( const Castle & );
@@ -158,11 +154,8 @@ public:
     void Reset( bool = false ); // reset: soft or hard
     void setFromTile( const Maps::Tiles & tile );
 
-    int GetRace( void ) const;
     int GetColor( void ) const;
     int GetControl( void ) const override;
-    u32 GetAttack( void ) const override;
-    u32 GetDefense( void ) const override;
 
     double GetStrength() const override;
     double getReinforcementValue( const Troops & reinforcement ) const;

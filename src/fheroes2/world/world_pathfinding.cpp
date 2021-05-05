@@ -131,18 +131,6 @@ void WorldPathfinder::checkWorldSize()
     }
 }
 
-bool WorldPathfinder::isBlockedByObject( int target, bool fromWater ) const
-{
-    int currentNode = target;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
-        if ( world.isTileBlocked( currentNode, fromWater ) ) {
-            return true;
-        }
-        currentNode = _cache[currentNode]._from;
-    }
-    return false;
-}
-
 uint32_t WorldPathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
 {
     const Maps::Tiles & tileTo = world.GetTiles( target );
@@ -503,12 +491,6 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
     }
 
     return path;
-}
-
-uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex )
-{
-    reEvaluateIfNeeded( hero );
-    return _cache[targetIndex]._cost;
 }
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )

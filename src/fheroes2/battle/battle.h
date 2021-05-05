@@ -66,9 +66,6 @@ namespace Battle
         u32 GetExperienceDefender( void ) const;
     };
 
-    StreamBase & operator<<( StreamBase &, const Result & );
-    StreamBase & operator>>( StreamBase &, Result & );
-
     Result Loader( Army &, Army &, s32 );
 
     struct TargetInfo
@@ -89,16 +86,10 @@ namespace Battle
         static bool isFinishAnimFrame( const TargetInfo & info );
     };
 
-    StreamBase & operator<<( StreamBase &, const TargetInfo & );
-    StreamBase & operator>>( StreamBase &, TargetInfo & );
-
     struct TargetsInfo : public std::vector<TargetInfo>
     {
         TargetsInfo() = default;
     };
-
-    StreamBase & operator<<( StreamBase &, const TargetsInfo & );
-    StreamBase & operator>>( StreamBase &, TargetsInfo & );
 
     enum MonsterState : uint32_t
     {

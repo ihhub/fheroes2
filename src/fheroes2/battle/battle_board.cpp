@@ -84,17 +84,6 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
         ( *it ).SetArea( area );
 }
 
-fheroes2::Rect Battle::Board::GetArea( void ) const
-{
-    std::vector<fheroes2::Rect> rects;
-    rects.reserve( size() );
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        rects.push_back( ( *it ).GetPos() );
-
-    return GetBoundaryRect( rects );
-}
-
 void Battle::Board::Reset( void )
 {
     for ( iterator it = begin(); it != end(); ++it ) {

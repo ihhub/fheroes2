@@ -59,41 +59,17 @@ public:
 
     int playAnimation( bool loop = false );
     virtual int restartAnimation();
-    void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
     size_t animationLength() const;
     virtual double movementProgress() const;
-    bool isFirstFrame() const;
     bool isLastFrame() const;
     virtual bool isValid() const;
 
 protected:
     std::vector<int> _seq;
     size_t _currentFrame;
-};
-
-class TimedSequence : public AnimationSequence
-{
-public:
-    TimedSequence( const std::vector<int> & seq, uint32_t duration );
-
-    int playAnimation( uint32_t delta, bool loop = false );
-    virtual int restartAnimation();
-
-    int getFrameAt( uint32_t time ) const;
-    uint32_t getCurrentTime() const;
-    uint32_t getDuration() const;
-    virtual double movementProgress() const;
-    virtual bool isValid() const;
-
-private:
-    uint32_t _currentTime;
-    uint32_t _duration;
-
-    // Private function: make sure object is valid before calling this
-    size_t getFrameID( uint32_t time ) const;
 };
 
 class AnimationReference
@@ -106,11 +82,9 @@ public:
 
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
-    AnimationSequence getAnimationSequence( int animState ) const;
     uint32_t getMoveSpeed() const;
     uint32_t getFlightSpeed() const;
     uint32_t getShootingSpeed() const;
-    size_t getProjectileID( const double angle ) const;
     fheroes2::Point getBlindOffset() const;
     fheroes2::Point getProjectileOffset( size_t direction ) const;
     int getTroopCountOffset( bool isReflect ) const;
@@ -149,13 +123,11 @@ public:
     // pass-down methods
     int playAnimation( bool loop = false );
     int restartAnimation();
-    void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
     size_t animationLength() const;
     double movementProgress() const;
-    bool isFirstFrame() const;
     bool isLastFrame() const;
     bool isValid() const;
 

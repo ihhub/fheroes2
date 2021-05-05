@@ -53,8 +53,6 @@ namespace Battle
 
     class Actions : public std::list<Command>
     {
-    public:
-        bool HaveCommand( u32 ) const;
     };
 
     class Arena
@@ -107,7 +105,6 @@ namespace Battle
         std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target ) const;
 
         uint32_t CalculateMoveDistance( int32_t indexTo ) const;
-        bool hexIsAccessible( int32_t indexTo ) const;
         bool hexIsPassable( int32_t indexTo ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
@@ -155,9 +152,6 @@ namespace Battle
 
         Arena( const Arena && ) = delete;
         Arena & operator=( const Arena && ) = delete;
-
-        friend StreamBase & operator<<( StreamBase &, const Arena & );
-        friend StreamBase & operator>>( StreamBase &, Arena & );
 
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
@@ -233,8 +227,6 @@ namespace Battle
     };
 
     Arena * GetArena( void );
-    StreamBase & operator<<( StreamBase &, const Arena & );
-    StreamBase & operator>>( StreamBase &, Arena & );
 }
 
 #endif

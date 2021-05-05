@@ -60,6 +60,4 @@ public:
     MapRegion( int regionIndex, int mapIndex, bool water, size_t expectedSize );
 
     size_t getNeighboursCount() const;
-
-    std::vector<IndexObject> getObjectList() const;
 };
