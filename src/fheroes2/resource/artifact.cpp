@@ -1127,9 +1127,14 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
             }
         }
         else if ( !read_only ) {
-            msg = _( "Exchange %{name2} with %{name}" );
-            StringReplace( msg, "%{name}", art.GetName() );
-            StringReplace( msg, "%{name2}", art2->GetName() );
+            if ( isMagicBook( art ) ) {
+                msg = _( "Cannot move artifact" );
+            }
+            else {
+                msg = _( "Exchange %{name2} with %{name}" );
+                StringReplace( msg, "%{name}", art.GetName() );
+                StringReplace( msg, "%{name2}", art2->GetName() );
+            }
         }
     }
     else if ( art.isValid() ) {
