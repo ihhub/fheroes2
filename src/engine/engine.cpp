@@ -57,11 +57,14 @@ bool SDL::Init( const uint32_t system )
 
     if ( SDL_INIT_AUDIO & system )
         Mixer::Init();
+
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SDL_INIT_GAMECONTROLLER & system ) {
         LocalEvent::Get().OpenController();
     }
     LocalEvent::Get().OpenTouchpad();
+#endif
 #endif
 #ifdef WITH_AUDIOCD
     if ( SDL_INIT_CDROM & system )

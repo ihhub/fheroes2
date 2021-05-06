@@ -234,6 +234,7 @@ LocalEvent::LocalEvent()
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OpenController()
 {
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     for ( int i = 0; i < SDL_NumJoysticks(); ++i ) {
         if ( SDL_IsGameController( i ) ) {
             _gameController = SDL_GameControllerOpen( i );
@@ -243,14 +244,17 @@ void LocalEvent::OpenController()
             }
         }
     }
+#endif
 }
 
 void LocalEvent::CloseController()
 {
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     if ( SDL_GameControllerGetAttached( _gameController ) ) {
         SDL_GameControllerClose( _gameController );
         _gameController = nullptr;
     }
+#endif
 }
 
 void LocalEvent::OpenTouchpad()
