@@ -255,6 +255,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -263,6 +264,7 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
+#endif
 }
 #endif
 
@@ -1153,8 +1155,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
             break;
-
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
                 const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
@@ -1182,8 +1182,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
             break;
-#endif
-
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
@@ -1843,6 +1841,18 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );
     SetState( SDL_SYSWMEVENT, false );
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+    SetState( SDL_FINGERDOWN, true );
+    SetState( SDL_FINGERUP, true );
+    SetState( SDL_FINGERMOTION, true );
+#else
+    SetState( SDL_FINGERDOWN, false );
+    SetState( SDL_FINGERUP, false );
+    SetState( SDL_FINGERMOTION, false );
+#endif
+#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );
