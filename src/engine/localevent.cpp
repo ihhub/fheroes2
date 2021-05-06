@@ -255,6 +255,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -263,6 +264,7 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
+#endif
 }
 #endif
 
