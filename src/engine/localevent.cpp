@@ -1153,8 +1153,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_MOUSEWHEEL:
             HandleMouseWheelEvent( event.wheel );
             break;
-
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
         case SDL_CONTROLLERDEVICEREMOVED:
             if ( _gameController != nullptr ) {
                 const SDL_GameController * removedController = SDL_GameControllerFromInstanceID( event.jdevice.which );
@@ -1182,8 +1180,6 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
         case SDL_CONTROLLERBUTTONUP:
             HandleControllerButtonEvent( event.cbutton );
             break;
-#endif
-
         case SDL_FINGERDOWN:
         case SDL_FINGERUP:
         case SDL_FINGERMOTION:
