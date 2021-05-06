@@ -85,9 +85,9 @@ int PrintHelp( const char * basename )
 {
     COUT( "Usage: " << basename << " [OPTIONS]" );
 #ifndef BUILD_RELEASE
-    COUT( "  -d\tdebug mode" );
+    COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
 #endif
-    COUT( "  -h\tprint this help and exit" );
+    COUT( "  -h\t\tprint this help message and exit" );
 
     return EXIT_SUCCESS;
 }
