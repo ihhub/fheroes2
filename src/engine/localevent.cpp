@@ -255,6 +255,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
+#if defined( FHEROES2_VITA ) || defined ( __SWITCH__ )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -263,6 +264,7 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
+#endif
 }
 #endif
 
@@ -1839,6 +1841,16 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );
     SetState( SDL_SYSWMEVENT, false );
+
+#if defined( FHEROES2_VITA ) || defined ( __SWITCH__ )
+    SetState( SDL_FINGERDOWN, true );
+    SetState( SDL_FINGERUP, true );
+    SetState( SDL_FINGERMOTION, true );
+#else
+    SetState( SDL_FINGERDOWN, false );
+    SetState( SDL_FINGERUP, false );
+    SetState( SDL_FINGERMOTION, false );
+#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );

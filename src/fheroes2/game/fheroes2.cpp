@@ -143,7 +143,7 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO;
 
-#if defined( FHEROES2_VITA ) || defined (__SWITCH__)
+#if defined( FHEROES2_VITA ) || defined ( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
