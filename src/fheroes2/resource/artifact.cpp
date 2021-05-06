@@ -1143,8 +1143,8 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
         else {
             msg = _( "Select %{name}" );
+            StringReplace( msg, "%{name}", art.GetName() );
         }
-        StringReplace( msg, "%{name}", art.GetName() );
     }
 
     return false;
