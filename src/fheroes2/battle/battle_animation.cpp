@@ -464,7 +464,7 @@ size_t AnimationReference::getProjectileID( const double angle ) const
     return _monsterInfo.getProjectileID( angle );
 }
 
-Point AnimationReference::getBlindOffset() const
+fheroes2::Point AnimationReference::getBlindOffset() const
 {
     return _monsterInfo.eyePosition;
 }
@@ -474,12 +474,12 @@ int AnimationReference::getTroopCountOffset( bool isReflect ) const
     return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
 }
 
-Point AnimationReference::getProjectileOffset( size_t direction ) const
+fheroes2::Point AnimationReference::getProjectileOffset( size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {
         return _monsterInfo.projectileOffset[direction];
     }
-    return Point();
+    return fheroes2::Point();
 }
 
 uint32_t AnimationReference::getIdleDelay() const

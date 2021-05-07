@@ -116,7 +116,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
 
-    const Rect & boxArea = box.GetArea();
+    const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
 
     if ( header.size() )

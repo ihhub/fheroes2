@@ -309,7 +309,7 @@ namespace fheroes2
         Display & display = Display::instance();
         const Image temp = display;
 
-        FadeDisplay( temp, Point( 0, 0 ), 5, delayMs );
+        FadeDisplay( temp, fheroes2::Point( 0, 0 ), 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }

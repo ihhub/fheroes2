@@ -632,7 +632,7 @@ u32 Skill::SecSkills::GetValues( int skill ) const
 
 int Skill::SecSkills::Count( void ) const
 {
-    return std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } );
+    return static_cast<int>( std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } ) ); // it's safe to cast as number is small
 }
 
 int Skill::SecSkills::GetTotalLevel() const

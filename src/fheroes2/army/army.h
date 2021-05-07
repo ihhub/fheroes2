@@ -193,6 +193,8 @@ public:
     bool isFullHouse( void ) const;
     bool SaveLastTroop( void ) const;
 
+    Monster GetStrongestMonster() const;
+
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );

@@ -38,7 +38,7 @@ namespace Interface
     protected:
         using Items = std::list<Item *>;
         typedef typename std::list<Item *>::iterator ItemsIterator;
-        using ItemIterPos = std::pair<ItemsIterator, Rect>;
+        using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
         Items items;
 
@@ -51,8 +51,8 @@ namespace Interface
 
         virtual ~ItemsBar() = default;
 
-        virtual void RedrawBackground( const Rect &, fheroes2::Image & ) = 0;
-        virtual void RedrawItem( Item &, const Rect &, fheroes2::Image & ) = 0;
+        virtual void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) = 0;
+        virtual void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) = 0;
 
         virtual bool ActionBarLeftMouseSingleClick( Item & )
         {
@@ -110,18 +110,18 @@ namespace Interface
             RescanSize();
         }
 
-        Item * GetItem( const Point & pt )
+        Item * GetItem( const fheroes2::Point & pt )
         {
             ItemsIterator posItem = GetItemIter( pt );
             return posItem != items.end() ? *posItem : NULL;
         }
 
-        fheroes2::Point GetPos( void ) const
+        fheroes2::Point GetPos() const
         {
             return fheroes2::Point( barsz.x, barsz.y );
         }
 
-        const fheroes2::Rect & GetArea( void ) const
+        const fheroes2::Rect & GetArea() const
         {
             return barsz;
         }
@@ -164,40 +164,40 @@ namespace Interface
 
         bool QueueEventProcessing( void )
         {
-            const Point & cursor = LocalEvent::Get().GetMouseCursor();
+            const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
 
             return isItemsEmpty() ? false : ActionCursorItemIter( cursor, GetItemIterPos( cursor ) );
         }
 
     protected:
-        virtual void SetContentItems( void ) {}
+        virtual void SetContentItems() {}
 
-        ItemsIterator GetBeginItemIter( void )
+        ItemsIterator GetBeginItemIter()
         {
             return items.begin();
         }
 
-        ItemsIterator GetEndItemIter( void )
+        ItemsIterator GetEndItemIter()
         {
             return items.end();
         }
 
-        virtual ItemsIterator GetTopItemIter( void )
+        virtual ItemsIterator GetTopItemIter()
         {
             return items.begin();
         }
 
-        virtual ItemsIterator GetCurItemIter( void )
+        virtual ItemsIterator GetCurItemIter()
         {
             return items.end();
         }
 
-        virtual void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf )
+        virtual void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
         {
             RedrawItem( **it, pos, dstsf );
         }
 
-        virtual bool ActionCursorItemIter( const Point &, ItemIterPos iterPos )
+        virtual bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos )
         {
             if ( iterPos.first != GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
@@ -213,17 +213,17 @@ namespace Interface
             return false;
         }
 
-        bool isItemsEmpty( void )
+        bool isItemsEmpty()
         {
             return items.empty();
         }
 
-        ItemsIterator GetItemIter( const Point & pt )
+        ItemsIterator GetItemIter( const fheroes2::Point & pt )
         {
             return GetItemIterPos( pt ).first;
         }
 
-        ItemIterPos GetItemIterPos( const Point & pt )
+        ItemIterPos GetItemIterPos( const fheroes2::Point & pt )
         {
             const fheroes2::Point position( pt.x, pt.y );
             fheroes2::Rect dstrt( barsz.x, barsz.y, itemsz.width, itemsz.height );
@@ -244,7 +244,7 @@ namespace Interface
                 dstrt.y += vspace + itemsz.height;
             }
 
-            return std::pair<ItemsIterator, Rect>( items.end(), Rect() );
+            return std::pair<ItemsIterator, fheroes2::Rect>( items.end(), fheroes2::Rect() );
         }
 
     private:
@@ -279,8 +279,8 @@ namespace Interface
 
         ~ItemsActionBar() override = default;
 
-        void RedrawItem( Item &, const Rect &, fheroes2::Image & ) override {}
-        virtual void RedrawItem( Item &, const Rect &, bool, fheroes2::Image & ) {}
+        void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) override {}
+        virtual void RedrawItem( Item &, const fheroes2::Rect &, bool, fheroes2::Image & ) {}
 
         bool ActionBarCursor( Item & ) override
         {
@@ -358,33 +358,33 @@ namespace Interface
         }
 
         // body
-        Item * GetSelectedItem( void )
+        Item * GetSelectedItem()
         {
             return *GetCurItemIter();
         }
 
-        Rect * GetSelectedPos( void )
+        fheroes2::Rect * GetSelectedPos()
         {
             return &curItemPos.second;
         }
 
-        s32 GetSelectedIndex( void )
+        s32 GetSelectedIndex()
         {
             return std::distance( ItemsBar<Item>::GetBeginItemIter(), GetCurItemIter() );
         }
 
-        bool isSelected( void )
+        bool isSelected()
         {
             return GetCurItemIter() != ItemsBar<Item>::GetEndItemIter();
         }
 
-        void ResetSelected( void )
+        void ResetSelected()
         {
             topItem = ItemsBar<Item>::GetBeginItemIter();
-            curItemPos = ItemIterPos( ItemsBar<Item>::items.end(), Rect() );
+            curItemPos = ItemIterPos( ItemsBar<Item>::items.end(), fheroes2::Rect() );
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing()
         {
             return ItemsBar<Item>::QueueEventProcessing();
         }
@@ -392,7 +392,7 @@ namespace Interface
         bool QueueEventProcessing( ItemsActionBar<Item> & other )
         {
             LocalEvent & le = LocalEvent::Get();
-            const Point & cursor = le.GetMouseCursor();
+            const fheroes2::Point & cursor = le.GetMouseCursor();
 
             if ( ItemsBar<Item>::isItemsEmpty() && other.isItemsEmpty() )
                 return false;
@@ -403,27 +403,27 @@ namespace Interface
         }
 
     protected:
-        ItemsIterator GetTopItemIter( void ) override
+        ItemsIterator GetTopItemIter() override
         {
             return topItem;
         }
 
-        ItemsIterator GetCurItemIter( void ) override
+        ItemsIterator GetCurItemIter() override
         {
             return curItemPos.first;
         }
 
-        void SetContentItems( void ) override
+        void SetContentItems() override
         {
             ResetSelected();
         }
 
-        void RedrawItemIter( ItemsIterator it, const Rect & pos, fheroes2::Image & dstsf ) override
+        void RedrawItemIter( ItemsIterator it, const fheroes2::Rect & pos, fheroes2::Image & dstsf ) override
         {
             RedrawItem( **it, pos, GetCurItemIter() == it, dstsf );
         }
 
-        bool ActionCrossItemBarDrag( const Point & cursor, ItemsActionBar<Item> & other )
+        bool ActionCrossItemBarDrag( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
             LocalEvent & le = LocalEvent::Get();
             Item * otherItemPress = other.GetItem( le.GetMousePressLeft() );
@@ -452,7 +452,7 @@ namespace Interface
             return false;
         }
 
-        bool ActionCursorItemIter( const Point &, ItemIterPos iterPos ) override
+        bool ActionCursorItemIter( const fheroes2::Point &, ItemIterPos iterPos ) override
         {
             if ( iterPos.first != ItemsBar<Item>::GetEndItemIter() ) {
                 LocalEvent & le = LocalEvent::Get();
@@ -493,7 +493,7 @@ namespace Interface
             return false;
         }
 
-        bool ActionCursorItemIter( const Point & cursor, ItemsActionBar<Item> & other )
+        bool ActionCursorItemIter( const fheroes2::Point & cursor, ItemsActionBar<Item> & other )
         {
             ItemIterPos iterPos1 = ItemsBar<Item>::GetItemIterPos( cursor );
             ItemIterPos iterPos2 = other.curItemPos;

@@ -70,10 +70,10 @@ namespace Bin_Info
         uint32_t moveSpeed;
         uint32_t shootSpeed;
         uint32_t flightSpeed;
-        Point eyePosition;
+        fheroes2::Point eyePosition;
         int32_t troopCountOffsetLeft;
         int32_t troopCountOffsetRight;
-        std::vector<Point> projectileOffset;
+        std::vector<fheroes2::Point> projectileOffset;
         std::vector<float> projectileAngles;
         std::vector<float> idlePriority;
         std::vector<uint32_t> unusedIdleDelays;

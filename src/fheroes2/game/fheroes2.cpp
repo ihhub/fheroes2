@@ -143,7 +143,7 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 

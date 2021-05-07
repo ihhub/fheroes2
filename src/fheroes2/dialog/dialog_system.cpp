@@ -241,42 +241,42 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     // music
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
-    const Rect & rect1 = rects[0];
+    const fheroes2::Rect & rect1 = rects[0];
     fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y - text.h() - textOffset );
+    text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
     if ( conf.Music() && conf.MusicVolume() )
         str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );
     text.Set( str );
-    text.Blit( rect1.x + ( rect1.w - text.w() ) / 2, rect1.y + rect1.h + textOffset );
+    text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y + rect1.height + textOffset );
 
     // sound
     const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Sound() ? 3 : 2 );
-    const Rect & rect2 = rects[1];
+    const fheroes2::Rect & rect2 = rects[1];
     fheroes2::Blit( sprite2, display, rect2.x, rect2.y );
     str = _( "Effects" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y - text.h() - textOffset );
+    text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.y - text.h() - textOffset );
 
     if ( conf.Sound() && conf.SoundVolume() )
         str = std::to_string( conf.SoundVolume() );
     else
         str = _( "off" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.h + rect2.y + textOffset );
+    text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.height + rect2.y + textOffset );
 
     // Music Type
     const MusicSource musicType = conf.MusicType();
     const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, ( musicType == MUSIC_CDROM || musicType == MUSIC_EXTERNAL ) ? 11 : 10 );
-    const Rect & rect3 = rects[2];
+    const fheroes2::Rect & rect3 = rects[2];
     fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
     text.Set( str, Font::SMALL );
-    text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y - text.h() - textOffset );
+    text.Blit( rect3.x + ( rect3.width - text.w() ) / 2, rect3.y - text.h() - textOffset );
 
     if ( musicType == MUSIC_MIDI_ORIGINAL ) {
         str = _( "MIDI" );
@@ -291,79 +291,79 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
         str = _( "External" );
     }
     text.Set( str );
-    text.Blit( rect3.x + ( rect3.w - text.w() ) / 2, rect3.y + rect3.h + textOffset );
+    text.Blit( rect3.x + ( rect3.width - text.w() ) / 2, rect3.y + rect3.height + textOffset );
 
     // hero move speed
     const int heroSpeed = conf.HeroesMoveSpeed();
     const u32 is4 = heroSpeed ? ( heroSpeed < 4 ? 4 : 3 + heroSpeed / 2 ) : 9;
     const fheroes2::Sprite & sprite4 = fheroes2::AGG::GetICN( ICN::SPANEL, is4 );
-    const Rect & rect4 = rects[3];
+    const fheroes2::Rect & rect4 = rects[3];
     fheroes2::Blit( sprite4, display, rect4.x, rect4.y );
     str = _( "Hero Speed" );
     text.Set( str );
-    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y - text.h() - textOffset );
+    text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
     if ( heroSpeed )
         str = std::to_string( heroSpeed );
     else
         str = _( "off" );
     text.Set( str );
-    text.Blit( rect4.x + ( rect4.w - text.w() ) / 2, rect4.y + rect4.h + textOffset );
+    text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y + rect4.height + textOffset );
 
     // ai move speed
     const int aiSpeed = conf.AIMoveSpeed();
     const u32 is5 = aiSpeed ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
     const fheroes2::Sprite & sprite5 = fheroes2::AGG::GetICN( ICN::SPANEL, is5 );
-    const Rect & rect5 = rects[4];
+    const fheroes2::Rect & rect5 = rects[4];
     fheroes2::Blit( sprite5, display, rect5.x, rect5.y );
     str = _( "Enemy Speed" );
     text.Set( str );
-    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
+    text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     if ( aiSpeed )
         str = std::to_string( aiSpeed );
     else
         str = _( "off" );
     text.Set( str );
-    text.Blit( rect5.x + ( rect5.w - text.w() ) / 2, rect5.y + rect5.h + textOffset );
+    text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y + rect5.height + textOffset );
 
     // scroll speed
     const u32 is6 = ( conf.ScrollSpeed() < SCROLL_FAST2 ? ( conf.ScrollSpeed() < SCROLL_FAST1 ? ( conf.ScrollSpeed() < SCROLL_NORMAL ? 4 : 5 ) : 6 ) : 7 );
     const fheroes2::Sprite & sprite6 = fheroes2::AGG::GetICN( ICN::SPANEL, is6 );
-    const Rect & rect6 = rects[5];
+    const fheroes2::Rect & rect6 = rects[5];
     fheroes2::Blit( sprite6, display, rect6.x, rect6.y );
     str = _( "Scroll Speed" );
     text.Set( str );
-    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect5.y - text.h() - textOffset );
+    text.Blit( rect6.x + ( rect6.width - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
     str = std::to_string( conf.ScrollSpeed() );
     text.Set( str );
-    text.Blit( rect6.x + ( rect6.w - text.w() ) / 2, rect6.y + rect6.h + textOffset );
+    text.Blit( rect6.x + ( rect6.width - text.w() ) / 2, rect6.y + rect6.height + textOffset );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
     // interface themes
     const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( isEvilInterface ? 17 : 16 ) );
-    const Rect & rect7 = rects[6];
+    const fheroes2::Rect & rect7 = rects[6];
     fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
     str = _( "Interface" );
     text.Set( str );
-    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y - text.h() - textOffset );
+    text.Blit( rect7.x + ( rect7.width - text.w() ) / 2, rect7.y - text.h() - textOffset );
 
     if ( isEvilInterface )
         str = _( "Evil" );
     else
         str = _( "Good" );
     text.Set( str );
-    text.Blit( rect7.x + ( rect7.w - text.w() ) / 2, rect7.y + rect7.h + textOffset );
+    text.Blit( rect7.x + ( rect7.width - text.w() ) / 2, rect7.y + rect7.height + textOffset );
 
     // interface show/hide
     const fheroes2::Sprite & sprite8 = fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
     const fheroes2::Sprite & sprite81 = fheroes2::AGG::GetICN( ICN::ESPANEL, 4 );
-    const Rect & rect8 = rects[7];
+    const fheroes2::Rect & rect8 = rects[7];
     str = _( "Interface" );
     text.Set( str );
-    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y - text.h() - textOffset );
+    text.Blit( rect8.x + ( rect8.width - text.w() ) / 2, rect8.y - text.h() - textOffset );
 
     if ( conf.ExtGameHideInterface() ) {
         fheroes2::Blit( sprite81, display, rect8.x, rect8.y );
@@ -375,13 +375,13 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
         str = _( "Show" );
     }
     text.Set( str );
-    text.Blit( rect8.x + ( rect8.w - text.w() ) / 2, rect8.y + rect8.h + textOffset );
+    text.Blit( rect8.x + ( rect8.width - text.w() ) / 2, rect8.y + rect8.height + textOffset );
 
     // auto-battles
-    const Rect & rect9 = rects[8];
+    const fheroes2::Rect & rect9 = rects[8];
     str = _( "Battles" );
     text.Set( str );
-    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y - text.h() - textOffset );
+    text.Blit( rect9.x + ( rect9.width - text.w() ) / 2, rect9.y - text.h() - textOffset );
 
     if ( conf.BattleAutoResolve() ) {
         const bool spellcast = conf.BattleAutoSpellcast();
@@ -395,5 +395,5 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPANEL, 18 ), display, rect9.x, rect9.y );
     }
     text.Set( str );
-    text.Blit( rect9.x + ( rect9.w - text.w() ) / 2, rect9.y + rect9.h + textOffset );
+    text.Blit( rect9.x + ( rect9.width - text.w() ) / 2, rect9.y + rect9.height + textOffset );
 }

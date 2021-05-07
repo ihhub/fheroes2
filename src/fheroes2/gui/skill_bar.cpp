@@ -61,20 +61,20 @@ void PrimarySkillsBar::SetTextOff( s32 ox, s32 oy )
     toff = fheroes2::Point( ox, oy );
 }
 
-void PrimarySkillsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
+void PrimarySkillsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
         fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
 }
 
-void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Image & dstsf )
+void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     if ( Skill::Primary::UNKNOWN != skill ) {
         if ( use_mini_sprite ) {
             const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
             const int ww = 32;
             Text text( "", Font::SMALL );
-            const Point dstpt( pos.x + ( pos.w - ww ) / 2, pos.y + ( pos.h - ww ) / 2 );
+            const fheroes2::Point dstpt( pos.x + ( pos.width - ww ) / 2, pos.y + ( pos.height - ww ) / 2 );
 
             switch ( skill ) {
             case Skill::Primary::ATTACK:
@@ -106,14 +106,14 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
             }
 
             if ( _hero )
-                text.Blit( pos.x + ( pos.w + toff.x - text.w() ) / 2, pos.y + pos.h + toff.y, dstsf );
+                text.Blit( pos.x + ( pos.width + toff.x - text.w() ) / 2, pos.y + pos.height + toff.y, dstsf );
         }
         else {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
-            fheroes2::Blit( sprite, dstsf, pos.x + ( pos.w - sprite.width() ) / 2, pos.y + ( pos.h - sprite.height() ) / 2 );
+            fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
 
             Text text( Skill::Primary::String( skill ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 4, dstsf );
+            text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 4, dstsf );
 
             if ( _hero ) {
                 switch ( skill ) {
@@ -137,7 +137,7 @@ void PrimarySkillsBar::RedrawItem( int & skill, const Rect & pos, fheroes2::Imag
                     break;
                 }
 
-                text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + pos.h - text.h() - 2, dstsf );
+                text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + pos.height - text.h() - 2, dstsf );
             }
         }
     }
@@ -197,7 +197,7 @@ SecondarySkillsBar::SecondarySkillsBar( const Heroes & hero, bool mini /* true *
     }
 }
 
-void SecondarySkillsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
+void SecondarySkillsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     if ( use_mini_sprite )
         fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
@@ -205,23 +205,23 @@ void SecondarySkillsBar::RedrawBackground( const Rect & pos, fheroes2::Image & d
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SECSKILL, 0 ), dstsf, pos.x, pos.y );
 }
 
-void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const Rect & pos, fheroes2::Image & dstsf )
+void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     if ( skill.isValid() ) {
         const fheroes2::Sprite & sprite
             = use_mini_sprite ? fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ) : fheroes2::AGG::GetICN( ICN::SECSKILL, skill.GetIndexSprite1() );
-        fheroes2::Blit( sprite, dstsf, pos.x + ( pos.w - sprite.width() ) / 2, pos.y + ( pos.h - sprite.height() ) / 2 );
+        fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
 
         if ( use_mini_sprite ) {
             Text text( std::to_string( skill.Level() ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) - 3, pos.y + pos.h - 12, dstsf );
+            text.Blit( pos.x + ( pos.width - text.w() ) - 3, pos.y + pos.height - 12, dstsf );
         }
         else {
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 3, dstsf );
+            text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 3, dstsf );
 
             text.Set( Skill::Level::StringWithBonus( _hero, skill.Skill(), skill.Level() ) );
-            text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 51, dstsf );
+            text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
 }

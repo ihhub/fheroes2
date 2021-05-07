@@ -52,10 +52,10 @@ namespace Battle
 
         void Reset( void );
 
-        Rect GetArea( void ) const;
-        void SetArea( const Rect & );
+        fheroes2::Rect GetArea( void ) const;
+        void SetArea( const fheroes2::Rect & );
 
-        s32 GetIndexAbsPosition( const Point & ) const;
+        s32 GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetAStarPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 

@@ -62,19 +62,19 @@ namespace Battle
         void SetDirection( int );
         void SetQuality( u32 );
 
-        void SetArea( const Rect & );
+        void SetArea( const fheroes2::Rect & );
 
         bool isPassable4( const Unit &, const Cell & ) const;
         bool isPassable3( const Unit &, bool check_reflect ) const;
         bool isPassable1( bool check_troop ) const;
-        bool isPositionIncludePoint( const Point & ) const;
+        bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
         s32 GetIndex( void ) const;
-        const Rect & GetPos( void ) const;
+        const fheroes2::Rect & GetPos( void ) const;
         int GetObject( void ) const;
         int GetDirection( void ) const;
         s32 GetQuality( void ) const;
-        direction_t GetTriangleDirection( const Point & ) const;
+        direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
         const Unit * GetUnit( void ) const;
         Unit * GetUnit( void );
@@ -85,12 +85,12 @@ namespace Battle
         friend StreamBase & operator>>( StreamBase &, Cell & );
 
         s32 index;
-        Rect pos;
+        fheroes2::Rect pos;
         int object;
         int direction;
         s32 quality;
         Unit * troop;
-        Point coord[7];
+        fheroes2::Point coord[7];
     };
 
     StreamBase & operator<<( StreamBase &, const Cell & );
@@ -111,7 +111,7 @@ namespace Battle
 
         static Position GetCorrect( const Unit &, s32 );
 
-        Rect GetRect( void ) const;
+        fheroes2::Rect GetRect( void ) const;
         Cell * GetHead( void );
         const Cell * GetHead( void ) const;
         Cell * GetTail( void );

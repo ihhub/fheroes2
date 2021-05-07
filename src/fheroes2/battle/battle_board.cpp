@@ -78,21 +78,21 @@ Battle::Board::Board()
         push_back( Cell( ii ) );
 }
 
-void Battle::Board::SetArea( const Rect & area )
+void Battle::Board::SetArea( const fheroes2::Rect & area )
 {
     for ( iterator it = begin(); it != end(); ++it )
         ( *it ).SetArea( area );
 }
 
-Rect Battle::Board::GetArea( void ) const
+fheroes2::Rect Battle::Board::GetArea( void ) const
 {
-    Rects rects;
+    std::vector<fheroes2::Rect> rects;
     rects.reserve( size() );
 
     for ( const_iterator it = begin(); it != end(); ++it )
         rects.push_back( ( *it ).GetPos() );
 
-    return rects.GetRect();
+    return GetBoundaryRect( rects );
 }
 
 void Battle::Board::Reset( void )
@@ -686,7 +686,7 @@ s32 Battle::Board::GetIndexDirection( s32 index, int dir )
     return -1;
 }
 
-s32 Battle::Board::GetIndexAbsPosition( const Point & pt ) const
+s32 Battle::Board::GetIndexAbsPosition( const fheroes2::Point & pt ) const
 {
     const_iterator it = begin();
 

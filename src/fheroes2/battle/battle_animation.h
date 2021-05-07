@@ -111,8 +111,8 @@ public:
     uint32_t getFlightSpeed() const;
     uint32_t getShootingSpeed() const;
     size_t getProjectileID( const double angle ) const;
-    Point getBlindOffset() const;
-    Point getProjectileOffset( size_t direction ) const;
+    fheroes2::Point getBlindOffset() const;
+    fheroes2::Point getProjectileOffset( size_t direction ) const;
     int getTroopCountOffset( bool isReflect ) const;
     uint32_t getIdleDelay() const;
 

@@ -39,23 +39,23 @@
 
 namespace
 {
-    Point GetFlagOffset( int race )
+    fheroes2::Point GetFlagOffset( int race )
     {
         switch ( race ) {
         case Race::KNGT:
-            return Point( 36, 10 );
+            return fheroes2::Point( 36, 10 );
         case Race::BARB:
-            return Point( 35, 9 );
+            return fheroes2::Point( 35, 9 );
         case Race::SORC:
-            return Point( 36, 10 );
+            return fheroes2::Point( 36, 10 );
         case Race::WRLK:
-            return Point( 34, 10 );
+            return fheroes2::Point( 34, 10 );
         case Race::WZRD:
-            return Point( 35, 9 );
+            return fheroes2::Point( 35, 9 );
         case Race::NECR:
-            return Point( 35, 10 );
+            return fheroes2::Point( 35, 10 );
         default:
-            return Point();
+            return fheroes2::Point();
         }
     }
 }
@@ -403,7 +403,7 @@ void BuildingInfo::RedrawCaptain( void ) const
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0 );
 
         fheroes2::Blit( captainSprite, display, area.x, area.y );
-        const Point flagOffset = GetFlagOffset( castle.GetRace() );
+        const fheroes2::Point flagOffset = GetFlagOffset( castle.GetRace() );
         fheroes2::Blit( flag, display, area.x + flagOffset.x, area.y + flagOffset.y );
     }
     else {
@@ -553,7 +553,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const fheroes2::Sprite & window_icons = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     const int space = 10;
-    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h,
+    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().height,
                           buttons );
     const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
@@ -735,20 +735,20 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     SetItemSize( sz.width, sz.height );
 }
 
-void DwellingsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
+void DwellingsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
 }
 
-void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::Image & dstsf )
+void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, dwl.mons.GetSpriteIndex() );
-    fheroes2::Blit( mons32, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + ( pos.h - 3 - mons32.height() ) );
+    fheroes2::Blit( mons32, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + ( pos.height - 3 - mons32.height() ) );
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
         Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
-        text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
         if ( castle.isBuild( BUILD_WELL ) )
@@ -758,10 +758,10 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 
         // grown
         text.Set( "+" + std::to_string( grown ), Font::YELLOW_SMALL );
-        text.Blit( pos.x + pos.w - text.w() - 3, pos.y + 2 );
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + 2 );
     }
     else
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.w - 10, pos.y + 4 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
 }
 
 bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )

@@ -100,19 +100,19 @@ void Interface::Basic::SetHideInterface( bool f )
     if ( f ) {
         conf.SetShowPanel( true );
 
-        Point pos_radr = conf.PosRadar();
-        Point pos_bttn = conf.PosButtons();
-        Point pos_icon = conf.PosIcons();
-        Point pos_stat = conf.PosStatus();
+        fheroes2::Point pos_radr = conf.PosRadar();
+        fheroes2::Point pos_bttn = conf.PosButtons();
+        fheroes2::Point pos_icon = conf.PosIcons();
+        fheroes2::Point pos_stat = conf.PosStatus();
 
         if ( 0 == pos_radr.x && 0 == pos_radr.y )
-            pos_radr = Point( BORDERWIDTH, BORDERWIDTH );
+            pos_radr = fheroes2::Point( BORDERWIDTH, BORDERWIDTH );
         if ( 0 == pos_icon.x && 0 == pos_icon.y )
-            pos_icon = Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().h );
+            pos_icon = fheroes2::Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().height );
         if ( 0 == pos_bttn.x && 0 == pos_bttn.y )
-            pos_bttn = Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().h );
+            pos_bttn = fheroes2::Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().height );
         if ( 0 == pos_stat.x && 0 == pos_stat.y )
-            pos_stat = Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().h );
+            pos_stat = fheroes2::Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );
@@ -122,10 +122,10 @@ void Interface::Basic::SetHideInterface( bool f )
     }
     else {
         radar.SetPos( px, BORDERWIDTH );
-        iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().h + BORDERWIDTH );
+        iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
 
-        buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().h + BORDERWIDTH );
-        statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().h );
+        buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
+        statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
     gameArea.Build();
@@ -207,31 +207,30 @@ void Interface::Basic::Redraw( int force )
     redraw = 0;
 }
 
-int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const uint32_t distance, const bool water )
+int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
+    const fheroes2::Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     const Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.ExtGameEvilInterface();
     const bool isNoInterface = conf.ExtGameHideInterface();
 
-    fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+    fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
     const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
-    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
 
-    const Rect & visibleArea = gameArea.GetROI();
-    const bool isFadingEnabled = ( gameArea.GetROI().w > TILEWIDTH * distance ) || ( gameArea.GetROI().h > TILEWIDTH * distance );
+    const fheroes2::Rect & visibleArea = gameArea.GetROI();
+    const bool isFadingEnabled = ( gameArea.GetROI().width > TILEWIDTH * distance ) || ( gameArea.GetROI().height > TILEWIDTH * distance );
 
     // We need to add an extra one cell as a hero stands exactly in the middle of a cell
-    const Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
+    const fheroes2::Point heroPos( gameArea.GetRelativeTilePosition( Maps::GetPoint( from ) ) );
     const fheroes2::Point heroPosOffset( heroPos.x - TILEWIDTH * ( distance / 2 ), heroPos.y - TILEWIDTH * ( distance / 2 ) );
-    const Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
+    const fheroes2::Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        fheroes2::InvertedFadeWithPalette( display, fheroes2::Rect( visibleArea.x, visibleArea.y, visibleArea.w, visibleArea.h ),
-                                           fheroes2::Rect( spellROI.x, spellROI.y, spellROI.w, spellROI.h ), 5, 300, 9 );
+        fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
     }
 
     Cursor & cursor = Cursor::Get();
@@ -240,12 +239,12 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 
     cursor.Show();
 
-    const Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.h - 37 );
+    const fheroes2::Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.height - 37 );
     fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
     buttonExit.draw();
 
     while ( le.HandleEvents() ) {
-        const Point & mp = le.GetMouseCursor();
+        const fheroes2::Point & mp = le.GetMouseCursor();
 
         if ( radarArea & mp ) {
             cursor.SetThemes( Cursor::POINTER );
@@ -287,11 +286,10 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             Redraw();
 
             if ( isFadingEnabled ) {
-                InvertedShadow( display, fheroes2::Rect( visibleArea.x, visibleArea.y, visibleArea.w, visibleArea.h ),
-                                fheroes2::Rect( spellROI.x, spellROI.y, spellROI.w, spellROI.h ), 5, 9 );
+                InvertedShadow( display, visibleArea, spellROI, 5, 9 );
 
                 if ( isNoInterface ) {
-                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.w, radarArea.h );
+                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
                     buttonExit.draw();
                 }
             }

@@ -68,8 +68,8 @@ namespace Maps
         int WinsFindArtifactID( void ) const;
         bool WinsFindUltimateArtifact( void ) const;
         u32 WinsAccumulateGold( void ) const;
-        Point WinsMapsPositionObject( void ) const;
-        Point LossMapsPositionObject( void ) const;
+        fheroes2::Point WinsMapsPositionObject( void ) const;
+        fheroes2::Point LossMapsPositionObject( void ) const;
         u32 LossCountDays( void ) const;
 
         std::string String( void ) const;

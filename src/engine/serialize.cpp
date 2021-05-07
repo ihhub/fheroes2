@@ -28,7 +28,6 @@
 
 #include "endian_h2.h"
 #include "logging.h"
-#include "rect.h"
 #include "serialize.h"
 
 #define MINCAPACITY 1024
@@ -150,22 +149,9 @@ StreamBase & StreamBase::operator>>( std::string & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( Rect & v )
+StreamBase & StreamBase::operator>>( fheroes2::Point & point_ )
 {
-    Point & p = v;
-    Size & s = v;
-
-    return *this >> p >> s;
-}
-
-StreamBase & StreamBase::operator>>( Point & v )
-{
-    return *this >> v.x >> v.y;
-}
-
-StreamBase & StreamBase::operator>>( Size & v )
-{
-    return *this >> v.w >> v.h;
+    return *this >> point_.x >> point_.y;
 }
 
 void StreamBase::put16( u16 v )
@@ -243,22 +229,9 @@ StreamBase & StreamBase::operator<<( const std::string & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const Point & v )
+StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
 {
-    return *this << v.x << v.y;
-}
-
-StreamBase & StreamBase::operator<<( const Rect & v )
-{
-    const Point & p = v;
-    const Size & s = v;
-
-    return *this << p << s;
-}
-
-StreamBase & StreamBase::operator<<( const Size & v )
-{
-    return *this << v.w << v.h;
+    return *this << point_.x << point_.y;
 }
 
 StreamBuf::StreamBuf( size_t sz )

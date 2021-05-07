@@ -68,7 +68,7 @@ void Castle::OpenWell( void )
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
                                             fheroes2::Display::DEFAULT_HEIGHT );
 
-    const Point cur_pt( restorer.x(), restorer.y() );
+    const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
     // button exit
@@ -192,7 +192,7 @@ void Castle::OpenWell( void )
     }
 }
 
-void Castle::WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const
+void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
