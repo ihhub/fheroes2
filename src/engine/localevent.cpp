@@ -1621,6 +1621,7 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 bool LocalEvent::MouseClickLeft( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
@@ -1632,6 +1633,7 @@ bool LocalEvent::MouseClickLeft( void )
 bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button && ( rt & mouse_pl ) && ( rt & mouse_rl ) ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
@@ -1643,6 +1645,7 @@ bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
 bool LocalEvent::MouseClickMiddle( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
@@ -1654,6 +1657,7 @@ bool LocalEvent::MouseClickMiddle( void )
 bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
@@ -1665,6 +1669,7 @@ bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
 bool LocalEvent::MouseClickRight( void )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
@@ -1676,6 +1681,7 @@ bool LocalEvent::MouseClickRight( void )
 bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button && ( rt & mouse_pr ) && ( rt & mouse_rr ) ) {
+        ResetModes( MOUSE_RELEASED );
         ResetModes( MOUSE_CLICKED );
 
         return true;
