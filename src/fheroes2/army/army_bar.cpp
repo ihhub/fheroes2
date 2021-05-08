@@ -613,8 +613,6 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop &
     if ( !destTroop.isValid() || destTroop.GetID() == selectedTroop.GetID() ) {
         RedistributeArmy( selectedTroop, destTroop, _army );
         ResetSelected();
-
-        return true;
     }
 
     return true;
