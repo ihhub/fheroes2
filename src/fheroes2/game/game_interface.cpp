@@ -26,6 +26,7 @@
 #include "dialog.h"
 #include "direction.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "maps.h"
@@ -279,7 +280,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             cursor.SetThemes( Cursor::POINTER );
         }
 
-        if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();

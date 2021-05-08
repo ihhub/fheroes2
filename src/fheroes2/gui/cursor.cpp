@@ -81,7 +81,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
-            fheroes2::Display::instance().render();
+            fheroes2::Display::instance().render( fheroes2::Rect( x, y, 1, 1 ) );
         }
     }
 }

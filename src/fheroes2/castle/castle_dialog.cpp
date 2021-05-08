@@ -31,6 +31,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -579,7 +580,7 @@ int Castle::OpenDialog( bool readonly )
         }
 
         if ( alphaHero < 255 ) {
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::CASTLE_BUYHERO_DELAY ) ) {
                 alphaHero += 10;
                 if ( alphaHero >= 255 )
                     fheroes2::Blit( surfaceHero, display, cur_pt.x, cur_pt.y + 356 );
@@ -651,7 +652,7 @@ int Castle::OpenDialog( bool readonly )
             fadeBuilding.StopFadeBuilding();
         }
         // animation sprite
-        if ( firstDraw || Game::AnimateInfrequentDelay( Game::CASTLE_AROUND_DELAY ) ) {
+        if ( firstDraw || Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
             cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );

@@ -37,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
@@ -704,9 +705,11 @@ int Interface::Basic::HumanTurn( bool isload )
 
     bool isCursorOverButtons = false;
 
+    const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
+
     // startgame loop
     while ( Game::CANCEL == res ) {
-        if ( !le.HandleEvents( true, true ) ) {
+        if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
@@ -833,7 +836,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 scrollPosition |= SCROLL_BOTTOM;
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if ( Game::AnimateInfrequentDelay( Game::SCROLL_START_DELAY ) ) {
+                if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
                     }
@@ -917,7 +920,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         // heroes move animation
-        if ( Game::AnimateInfrequentDelay( Game::CURRENT_HERO_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
@@ -1002,7 +1005,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
-            if ( Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
                      || le.MouseCursor( GetScrollBottom() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
@@ -1016,7 +1019,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         // slow maps objects animation
-        if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();

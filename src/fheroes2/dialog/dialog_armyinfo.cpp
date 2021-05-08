@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_static.h"
 #include "icn.h"
 #include "luck.h"
@@ -214,7 +215,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 cursor.Hide();
 
                 fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );

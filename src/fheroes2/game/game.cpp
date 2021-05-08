@@ -34,6 +34,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_credits.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
@@ -288,7 +289,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && ( fadeTask.fadeOut || fadeTask.fadeIn ) ) {
-        if ( Game::AnimateInfrequentDelay( Game::HEROES_PICKUP_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
             if ( fadeTask.fadeOut ) {
                 if ( fadeTask.alpha > 20 ) {
                     fadeTask.alpha -= 20;

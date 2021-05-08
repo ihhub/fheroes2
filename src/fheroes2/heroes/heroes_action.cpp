@@ -30,6 +30,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -3000,7 +3001,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
                 while ( le.HandleEvents() && delay < 7 ) {
-                    if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
                     }
                 }
