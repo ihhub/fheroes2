@@ -854,7 +854,8 @@ namespace fheroes2
         ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * 256 );
     }
 
-    void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const std::vector<uint8_t> & palette )
+    void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
+                       const std::vector<uint8_t> & palette )
     {
         if ( palette.size() != 256 ) {
             return;

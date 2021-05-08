@@ -1012,7 +1012,7 @@ namespace
 
         bool isRedrawRequired() const
         {
-            return !_isPaused &&  _prevDraw.getMs() >= 220;
+            return !_isPaused && _prevDraw.getMs() >= 220;
         }
 
         void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )

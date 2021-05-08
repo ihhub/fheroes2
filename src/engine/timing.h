@@ -55,6 +55,7 @@ namespace fheroes2
 
         // Explicitly set delay to passed state. Can be used in cases when first call of isPassed() must return true.
         void pass();
+
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> _prevTime;
         uint64_t _delayMs;
