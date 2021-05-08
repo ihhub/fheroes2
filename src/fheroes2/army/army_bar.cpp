@@ -32,6 +32,8 @@
 #include "text.h"
 #include "world.h"
 
+#include <cassert>
+
 void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget )
 {
     const Army * armyFrom = troopFrom.GetArmy();
@@ -291,6 +293,8 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
     if ( isSelected() ) {
         const ArmyTroop * troop2 = GetSelectedItem();
 
+        assert( troop2 != nullptr );
+
         if ( &troop == troop2 ) {
             msg = _( "View %{name}" );
             StringReplace( msg, "%{name}", troop.GetName() );
@@ -357,8 +361,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 
         ArmyTroop * selectedTroop = GetSelectedItem();
 
-        if ( !selectedTroop )
-            return false;
+        assert( selectedTroop != nullptr );
 
         const bool isSameTroopType = troop.GetID() == selectedTroop->GetID();
 
@@ -507,6 +510,8 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
 
     const ArmyTroop * troop2 = GetSelectedItem();
 
+    assert( troop2 != nullptr );
+
     if ( &troop == troop2 ) {
         int flags = ( read_only || _army->SaveLastTroop() ? Dialog::READONLY | Dialog::BUTTONS : Dialog::BUTTONS );
         const Castle * castle = _army->inCastle();
@@ -597,9 +602,11 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 {
     if ( AbleToRedistributeArmyOnRightMouseSingleClick( troop ) ) {
-        ArmyTroop & selectedTroop = *GetSelectedItem();
+        ArmyTroop * selectedTroop = GetSelectedItem();
 
-        RedistributeArmy( selectedTroop, troop, _army );
+        assert( selectedTroop != nullptr );
+
+        RedistributeArmy( *selectedTroop, troop, _army );
         ResetSelected();
 
         return true;
@@ -647,15 +654,17 @@ bool ArmyBar::AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & t
         return false;
     }
 
-    const ArmyTroop & selectedTroop = *GetSelectedItem();
+    const ArmyTroop * selectedTroop = GetSelectedItem();
+
+    assert( selectedTroop != nullptr );
 
     // prevent troop from splitting into its own stack by checking against their pointers
-    if ( &troop == &selectedTroop ) {
+    if ( &troop == selectedTroop ) {
         return false;
     }
 
     // we can redistribute troops either to an empty slot or to a slot containing the same creatures
-    if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
+    if ( !troop.isValid() || selectedTroop->GetID() == troop.GetID() ) {
         return true;
     }
 
