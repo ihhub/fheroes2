@@ -32,7 +32,7 @@
 #include "text.h"
 #include "world.h"
 
-void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget, bool & isTroopInfoVisible )
+void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget )
 {
     const Army * armyFrom = troopFrom.GetArmy();
     const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
@@ -50,7 +50,6 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
         // or else just move the source troop around
         else if ( !troopTarget.isValid() ) {
             Army::SwapTroops( troopFrom, troopTarget );
-            isTroopInfoVisible = false;
         }
     }
     else {
@@ -149,7 +148,6 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , use_mini_sprite( mini )
     , read_only( ro )
     , can_change( change )
-    , _isTroopInfoVisible( true )
 {
     if ( use_mini_sprite )
         SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
@@ -273,7 +271,6 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
 void ArmyBar::ResetSelected( void )
 {
     spcursor.hide();
-    _isTroopInfoVisible = true;
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
 }
 
@@ -367,7 +364,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 
         // prioritize standard split via shift hotkey
         if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
-            RedistributeArmy( *selectedTroop, troop, _army, _isTroopInfoVisible );
+            RedistributeArmy( *selectedTroop, troop, _army );
             ResetSelected();
         }
         else if ( selectedTroop && isSameTroopType ) {
@@ -455,7 +452,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
     // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
     if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
         if ( destTroop.isEmpty() || isSameTroopType ) {
-            RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+            RedistributeArmy( selectedTroop, destTroop, _army );
             ResetSelected();
         }
         return false;
@@ -553,7 +550,7 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         const bool isTroopPressValid = troopPress && troopPress->isValid();
 
         if ( isTroopPressValid && ( !troop.isValid() || troop.GetID() == troopPress->GetID() ) ) {
-            RedistributeArmy( *troopPress, troop, _army, _isTroopInfoVisible );
+            RedistributeArmy( *troopPress, troop, _army );
             le.ResetPressLeft();
 
             if ( isSelected() )
@@ -561,7 +558,6 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & troop )
         }
     }
 
-    _isTroopInfoVisible = true;
     return true;
 }
 
@@ -572,11 +568,10 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & sele
 
     // cross-army drag split
     if ( selectedTroop.isValid() && ( !destTroop.isValid() || selectedTroop.GetID() == destTroop.GetID() ) ) {
-        RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+        RedistributeArmy( selectedTroop, destTroop, _army );
         return true;
     }
 
-    _isTroopInfoVisible = true;
     return false;
 }
 
@@ -586,7 +581,7 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
     if ( ActionBarRightMouseSingleClick( troop ) )
         return true;
 
-    if ( troop.isValid() && _isTroopInfoVisible ) {
+    if ( troop.isValid() ) {
         ResetSelected();
 
         if ( can_change && !_army->SaveLastTroop() )
@@ -615,7 +610,7 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
         return false;
 
     if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
-        RedistributeArmy( selectedTroop, troop, _army, _isTroopInfoVisible );
+        RedistributeArmy( selectedTroop, troop, _army );
         ResetSelected();
 
         return true;
@@ -627,24 +622,12 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
     if ( !destTroop.isValid() || destTroop.GetID() == selectedTroop.GetID() ) {
-        RedistributeArmy( selectedTroop, destTroop, _army, _isTroopInfoVisible );
+        RedistributeArmy( selectedTroop, destTroop, _army );
         ResetSelected();
 
         return true;
     }
 
-    return true;
-}
-
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*troop*/ )
-{
-    _isTroopInfoVisible = true;
-    return true;
-}
-
-bool ArmyBar::ActionBarRightMouseRelease( ArmyTroop & /*destTroop*/, ArmyTroop & /*selectedTroop*/ )
-{
-    _isTroopInfoVisible = true;
     return true;
 }
 

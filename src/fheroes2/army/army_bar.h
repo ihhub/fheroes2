@@ -54,8 +54,6 @@ public:
     bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
-    bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
-    bool ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
     bool ActionBarCursor( ArmyTroop & ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
@@ -72,7 +70,6 @@ private:
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
-    bool _isTroopInfoVisible;
     std::string msg;
 };
 
