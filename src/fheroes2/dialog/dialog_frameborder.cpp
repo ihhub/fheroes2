@@ -39,7 +39,7 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz, const fheroes2::Ima
     const fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
     const fheroes2::Rect & currentArea = GetRect();
-    RenderOther( sf, currentArea.x );
+    RenderOther( sf, currentArea );
 }
 
 Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
