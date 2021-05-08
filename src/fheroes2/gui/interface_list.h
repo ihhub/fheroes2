@@ -328,7 +328,7 @@ namespace Interface
                 UpdateScrollbarRange();
 
                 const fheroes2::Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( mousePos.x );
+                _scrollbar.moveToPos( mousePos );
                 _topId = _scrollbar.currentIndex();
                 return true;
             }
