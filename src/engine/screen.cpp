@@ -265,7 +265,7 @@ namespace
                 SDL_UnlockSurface( surface );
         }
 
-        void generatePalette( const std::vector<uint8_t> & colorIds, SDL_Surface * surface )
+        void generatePalette( const std::vector<uint8_t> & colorIds, const SDL_Surface * surface )
         {
             assert( surface != nullptr );
 
@@ -849,10 +849,8 @@ namespace
                     area.h = roi.height;
 
                     SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
-                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                        if ( SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
-                            SDL_RenderPresent( _renderer );
-                        }
+                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                        SDL_RenderPresent( _renderer );
                     }
                 }
             }

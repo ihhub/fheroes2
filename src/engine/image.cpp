@@ -864,11 +864,6 @@ namespace fheroes2
         ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, palette.data() );
     }
 
-    void ApplyAlpha( Image & image, uint8_t alpha )
-    {
-        ApplyAlpha( image, 0, 0, image, 0, 0, image.width(), image.height(), alpha );
-    }
-
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha )
     {
         ApplyAlpha( in, 0, 0, out, 0, 0, in.width(), in.height(), alpha );

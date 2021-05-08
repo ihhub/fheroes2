@@ -196,7 +196,6 @@ namespace fheroes2
     void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height,
                        const std::vector<uint8_t> & palette );
 
-    void ApplyAlpha( Image & image, uint8_t alpha );
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha );
     void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alpha );
 
