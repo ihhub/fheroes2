@@ -33,6 +33,7 @@
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "interface_gamearea.h"
@@ -1952,7 +1953,7 @@ namespace AI
                     hero.Move( true );
                     recenterNeeded = true;
                 }
-                else if ( Game::AnimateInfrequentDelay( Game::CURRENT_AI_DELAY ) ) {
+                else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
                     cursor.Hide();
                     // re-center in case hero appears from the fog
                     if ( recenterNeeded ) {
@@ -2008,7 +2009,7 @@ namespace AI
                     fheroes2::Display::instance().render();
                 }
 
-                if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                     // will be animated in hero loop
                     u32 & frame = Game::MapsAnimationFrame();
                     ++frame;

@@ -22,15 +22,15 @@
 #define H2BATTLE_ANIMATION_H
 
 #include "bin_info.h"
-#include "game_delays.h"
+#include "timing.h"
 #include "gamedefs.h"
 #include "monster_info.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
-class RandomizedDelay : protected TimeDelay
+class RandomizedDelay : protected fheroes2::TimeDelay
 {
 public:
-    explicit RandomizedDelay( uint32_t delay );
+    explicit RandomizedDelay( const uint32_t delay );
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();

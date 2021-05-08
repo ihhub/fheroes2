@@ -18,47 +18,46 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "game_logo.h"
+#include "game_delays.h"
+#include "localevent.h"
+#include "screen.h"
+#include "text.h"
 
-#include <chrono>
-#include <stdint.h>
-
-namespace fheroes2
+void fheroes2::showTeamInfo()
 {
-    class Time
-    {
-    public:
-        Time();
+    LocalEvent & le = LocalEvent::Get();
+    le.PauseCycling();
 
-        void reset();
-        double get() const; // returns time in seconds
-        uint64_t getMs() const; // returns rounded time in milliseconds
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
-    };
+    TextBox text( "fheroes2 Resurrection Team presents", Font::WHITE_LARGE, 500 );
+    const Rect roi( ( display.width() - text.w() ) / 2, ( display.height() - text.h() ) / 2, text.w(), text.h() );
 
-    class TimeDelay
-    {
-    public:
-        TimeDelay() = delete;
+    Image textImage( roi.width, roi.height );
+    textImage.fill( 0 );
+    text.Blit( 0, 0, textImage );
 
-        TimeDelay( const uint64_t delayMs );
+    // First frame must be fully rendered.
+    display.fill( 0 );
+    Copy( textImage, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+    display.render();
 
-        void setDelay( const uint64_t delayMs );
+    uint8_t alpha = 250;
 
-        bool isPassed() const;
-        bool isPassed( const uint64_t delayMs ) const;
+    while ( le.HandleEvents() && alpha > 20 ) {
+        if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
+            break;
 
-        // Reset delay by starting the count from the current time.
-        void reset();
+        // Subsequent frames must update only the area within the text.
+        if ( Game::validateCustomAnimationDelay( 40 ) ) {
+            Copy( textImage, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
+            fheroes2::ApplyAlpha( display, roi.x, roi.y, display, roi.x, roi.y, roi.width, roi.height, alpha );
+            display.render( roi );
 
-        // Explicitly set delay to passed state. Can be used in cases when first call of isPassed() must return true.
-        void pass();
-    private:
-        std::chrono::time_point<std::chrono::high_resolution_clock> _prevTime;
-        uint64_t _delayMs;
-    };
+            alpha -= 5;
+        }
+    }
 
-    void delayforMs( const uint32_t delayMs );
+    le.ResumeCycling();
 }

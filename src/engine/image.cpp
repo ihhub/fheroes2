@@ -854,12 +854,26 @@ namespace fheroes2
         ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, transformTable + paletteId * 256 );
     }
 
+    void ApplyPalette( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, const std::vector<uint8_t> & palette )
+    {
+        if ( palette.size() != 256 ) {
+            return;
+        }
+
+        ApplyRawPalette( in, inX, inY, out, outX, outY, width, height, palette.data() );
+    }
+
     void ApplyAlpha( Image & image, uint8_t alpha )
     {
-        ApplyAlpha( image, image, alpha );
+        ApplyAlpha( image, 0, 0, image, 0, 0, image.width(), image.height(), alpha );
     }
 
     void ApplyAlpha( const Image & in, Image & out, uint8_t alpha )
+    {
+        ApplyAlpha( in, 0, 0, out, 0, 0, in.width(), in.height(), alpha );
+    }
+
+    void ApplyAlpha( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, uint8_t alpha )
     {
         std::vector<uint8_t> palette( 256 );
 
@@ -875,7 +889,7 @@ namespace fheroes2
             palette[i] = GetPALColorId( static_cast<uint8_t>( red ), static_cast<uint8_t>( green ), static_cast<uint8_t>( blue ) );
         }
 
-        ApplyPalette( in, out, palette );
+        ApplyPalette( in, inX, inY, out, outX, outY, width, height, palette );
     }
 
     void ApplyTransform( Image & image, int32_t x, int32_t y, int32_t width, int32_t height, uint8_t transformId )

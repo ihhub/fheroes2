@@ -22,7 +22,7 @@
 #include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_delays.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -83,7 +83,6 @@ namespace Video
 
         unsigned int currentFrame = 0;
         const fheroes2::Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
-        bool isFirstFrame = true;
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
@@ -116,6 +115,8 @@ namespace Video
 
         const uint8_t selectionColor = 51;
 
+        Game::passAnimationDelay( Game::CUSTOM_DELAY );
+
         LocalEvent & le = LocalEvent::Get();
         while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
             if ( roi.empty() ) {
@@ -140,9 +141,7 @@ namespace Video
                 }
             }
 
-            if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
-                isFirstFrame = false;
-
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
                 if ( !isFrameReady ) {
                     if ( currentFrame == 0 )
                         video.resetFrame();
@@ -165,7 +164,7 @@ namespace Video
                     std::swap( prevPalette, palette );
                 }
 
-                display.render();
+                display.render( fheroes2::Rect( offset.x, offset.y, frame.width(), frame.height() ) );
 
                 ++currentFrame;
 

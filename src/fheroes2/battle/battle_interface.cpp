@@ -286,11 +286,6 @@ namespace Battle
         bool openlog;
     };
 
-    bool AnimateInfrequentDelay( int dl )
-    {
-        return Game::AnimateInfrequentDelay( dl );
-    }
-
     int matchHeroType( const HeroBase * base )
     {
         if ( base->isCaptain() )
@@ -2641,7 +2636,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
-        if ( Game::AnimateCustomDelay( frameDelay ) ) {
+        if ( Game::validateCustomAnimationDelay( frameDelay ) ) {
             Redraw();
             if ( unit.isFinishAnimFrame() )
                 break;
@@ -2657,7 +2652,7 @@ void Battle::Interface::AnimateOpponents( OpponentSprite * target )
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && !target->isFinishFrame() ) {
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
             target->IncreaseAnimFrame();
             Redraw();
         }
@@ -2674,7 +2669,7 @@ void Battle::Interface::RedrawTroopDefaultDelay( Unit & unit )
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             Redraw();
             if ( unit.isFinishAnimFrame() )
                 break;
@@ -2721,7 +2716,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
             RedrawPartialStart();
             if ( isMage ) {
                 fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 2 ), fheroes2::Point( pnt->x, pnt->y - 2 ), 0x77 );
@@ -2964,7 +2959,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     while ( le.HandleEvents() && !finishedAnimation ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             bool redrawBattleField = false;
 
             if ( attacker != nullptr ) {
@@ -3567,7 +3562,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
-            if ( width < luckSprite.width() && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( width < luckSprite.width() && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
                 fheroes2::Blit( luckSprite, src.x, src.y, _mainSurface, pos.x + ( pos.width - src.width ) / 2, y, src.width, src.height );
@@ -3595,7 +3590,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
 
-            if ( frameId < 8 && Battle::AnimateInfrequentDelay( Game::BATTLE_MISSILE_DELAY ) ) {
+            if ( frameId < 8 && Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
                 RedrawPartialStart();
 
                 const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::CLOUDLUK, frameId );
@@ -3683,7 +3678,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_DELAY ) ) {
             Redraw();
             ++catapult_frame;
         }
@@ -3707,7 +3702,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents( false ) && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT2_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_BOULDER_DELAY ) ) {
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
@@ -3727,7 +3722,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_CATAPULT3_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_CATAPULT_CLOUD_DELAY ) ) {
             if ( catapult_frame < 9 )
                 ++catapult_frame;
 
@@ -3771,10 +3766,12 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
 
     AGG::PlaySound( M82::TELPTOUT );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha > 0 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha > 0 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha -= 15;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
@@ -3790,7 +3787,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha <= 240 && Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( currentAlpha <= 240 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha += 15;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
@@ -3810,10 +3807,12 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 
     AGG::PlaySound( M82::SUMNELM );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && currentAlpha < 220 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             currentAlpha += 20;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
@@ -3840,10 +3839,12 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     AGG::PlaySound( M82::MIRRORIM );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && pnt != points.end() ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             const fheroes2::Point & sp = GetTroopPosition( target, sprite );
 
             RedrawPartialStart();
@@ -3904,7 +3905,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
         }
 
         while ( le.HandleEvents() && ( ( isHorizontalBolt && roi.width < drawRoi.width ) || ( !isHorizontalBolt && roi.height < drawRoi.height ) ) ) {
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
                 if ( isHorizontalBolt ) {
                     if ( isForwardDirection ) {
                         roi.width += animationStep;
@@ -3952,7 +3953,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( ICN::SPARKS ) ) {
         CheckGlobalEvents( le );
 
-        if ( ( frame == 0 ) || Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+        if ( ( frame == 0 ) || Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             RedrawPartialStart();
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::SPARKS, frame );
@@ -4043,7 +4044,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( frame < 20 && Game::AnimateCustomDelay( bloodlustDelay ) ) {
+        if ( frame < 20 && Game::validateCustomAnimationDelay( bloodlustDelay ) ) {
             mixSprite = unitSprite;
             fheroes2::AlphaBlit( bloodlustEffect, mixSprite, static_cast<uint8_t>( alpha ) );
             Redraw();
@@ -4081,7 +4082,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( frame < 25 && Game::AnimateCustomDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( frame < 25 && Game::validateCustomAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             mixSprite = fheroes2::Sprite( unitSprite );
             fheroes2::AlphaBlit( stoneEffect, mixSprite, static_cast<uint8_t>( alpha ) );
             Redraw();
@@ -4100,10 +4101,12 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
     LocalEvent & le = LocalEvent::Get();
 
     if ( !target.isValid() ) {
+        Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
         while ( le.HandleEvents() && !target.isFinishAnimFrame() ) {
             CheckGlobalEvents( le );
 
-            if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
                 Redraw();
                 target.IncreaseAnimFrame();
             }
@@ -4140,7 +4143,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     while ( le.HandleEvents() && i < path.size() ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
@@ -4169,7 +4172,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             rippleSprite = fheroes2::CreateRippleEffect( unitSprite, frame );
             rippleSprite.setPosition( unitSprite.x(), unitSprite.y() );
 
@@ -4203,7 +4206,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     while ( le.HandleEvents() && position < area.width + waveLength ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
             cursor.Show();
@@ -4236,10 +4239,12 @@ void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & 
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, frame );
@@ -4282,7 +4287,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     while ( le.HandleEvents() && frame < 20 ) {
         CheckGlobalEvents( le );
 
-        if ( Game::AnimateCustomDelay( spellcastDelay ) ) {
+        if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
                 cursor.Hide();
@@ -4325,11 +4330,13 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < 60 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             if ( icnCount > 0 ) {
@@ -4378,10 +4385,12 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     AGG::PlaySound( M82::ARMGEDN );
     u32 alpha = 10;
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && alpha < 100 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             fheroes2::ApplyPalette( spriteWhitening, 9 );
             fheroes2::Blit( spriteWhitening, _mainSurface, area.x, area.y );
             RedrawPartialFinish();
@@ -4398,7 +4407,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
@@ -4445,11 +4454,13 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     _currentUnit = NULL;
     AGG::PlaySound( M82::ERTHQUAK );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     // draw earth quake
     while ( le.HandleEvents() && frame < 18 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             cursor.Hide();
 
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
@@ -4486,10 +4497,12 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
 
     AGG::PlaySound( M82::CATSND02 );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             for ( std::vector<int>::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
@@ -4520,7 +4533,7 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
     while ( le.HandleEvents() && frame > 0 ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FRAME_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
             const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
             for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
                 if ( *it )
@@ -4554,10 +4567,12 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
 
     uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && frame < frameCount ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, frame );
@@ -4646,10 +4661,12 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it )
@@ -4698,10 +4715,12 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
     if ( M82::UNKNOWN != m82 )
         AGG::PlaySound( m82 );
 
+    Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
+
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_SPELL_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
             RedrawPartialStart();
 
             const fheroes2::Sprite & spellSprite = fheroes2::AGG::GetICN( icn, frame );
@@ -4750,7 +4769,7 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
         CheckGlobalEvents( le );
 
-        if ( Battle::AnimateInfrequentDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_BRIDGE_DELAY ) ) {
             RedrawPartialStart();
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::Get4Castle( Arena::GetCastle()->GetRace() ), frame );
             fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
@@ -4769,7 +4788,7 @@ void Battle::Interface::RedrawBridgeAnimation( bool down )
 
 bool Battle::Interface::IdleTroopsAnimation( void )
 {
-    if ( Battle::AnimateInfrequentDelay( Game::BATTLE_IDLE_DELAY ) ) {
+    if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
         const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
         return arena.GetForce2().animateIdleUnits() || redrawNeeded;
     }
@@ -4785,11 +4804,11 @@ void Battle::Interface::ResetIdleTroopAnimation( void )
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    if ( Game::AnimateInfrequentDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) )
+    if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) )
         UpdateContourColor();
 
     // animate heroes
-    if ( Battle::AnimateInfrequentDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
+    if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
         if ( opponent1 )
             opponent1->Update();
 
@@ -4800,7 +4819,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     }
 
     // flags animation
-    if ( Battle::AnimateInfrequentDelay( Game::BATTLE_FLAGS_DELAY ) ) {
+    if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         ++animation_flags_frame;
         humanturn_redraw = true;
     }
@@ -4911,7 +4930,7 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
         return;
     }
 
-    if ( !Settings::Get().ExtBattleShowDamage() || !Battle::AnimateInfrequentDelay( Game::BATTLE_POPUP_DELAY ) ) {
+    if ( !Settings::Get().ExtBattleShowDamage() || !Game::validateAnimationDelay( Game::BATTLE_POPUP_DELAY ) ) {
         return;
     }
 

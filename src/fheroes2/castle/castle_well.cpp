@@ -28,6 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
@@ -178,7 +179,7 @@ void Castle::OpenWell( void )
         else if ( ( building & DWELLING_MONSTER6 ) && le.MouseClickLeft( rectMonster6 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
             cursor.Hide();
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 

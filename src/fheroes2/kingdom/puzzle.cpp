@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "logging.h"
@@ -228,7 +229,7 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && 0 <= alpha ) {
-        if ( Game::AnimateInfrequentDelay( Game::PUZZLE_FADE_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t i = 0; i < pzl.size(); ++i ) {

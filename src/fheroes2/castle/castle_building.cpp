@@ -26,6 +26,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
@@ -66,7 +67,7 @@ void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
     if ( _alpha < 255 ) {
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
             _alpha += 15;
             return true;
         }
