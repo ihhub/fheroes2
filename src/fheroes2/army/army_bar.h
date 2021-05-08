@@ -65,6 +65,8 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
+    bool AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & troop );
+
     Army * _army;
     fheroes2::Image backsf;
     bool use_mini_sprite;

@@ -577,9 +577,10 @@ bool ArmyBar::ActionBarLeftMouseRelease( ArmyTroop & destTroop, ArmyTroop & sele
 
 bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 {
-    // Prioritize the click before press - aka prioritize split before showing troop info
-    if ( ActionBarRightMouseSingleClick( troop ) )
-        return true;
+    // don't handle this event if we are going to call RedistributeArmy() on right mouse button click
+    if ( AbleToRedistributeArmyOnRightMouseSingleClick( troop ) ) {
+        return false;
+    }
 
     if ( troop.isValid() ) {
         ResetSelected();
@@ -595,21 +596,9 @@ bool ArmyBar::ActionBarRightMouseHold( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 {
-    if ( read_only ) {
-        return false;
-    }
+    if ( AbleToRedistributeArmyOnRightMouseSingleClick( troop ) ) {
+        ArmyTroop & selectedTroop = *GetSelectedItem();
 
-    // try to redistribute troops if we have a selected troop
-    if ( !isSelected() )
-        return false;
-
-    ArmyTroop & selectedTroop = *GetSelectedItem();
-
-    // prevent troop from splitting into its own stack by checking against their pointers
-    if ( &troop == &selectedTroop )
-        return false;
-
-    if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
         RedistributeArmy( selectedTroop, troop, _army );
         ResetSelected();
 
@@ -647,4 +636,30 @@ bool ArmyBar::QueueEventProcessing( ArmyBar & bar, std::string * str )
     if ( str )
         *str = msg;
     return res;
+}
+
+bool ArmyBar::AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & troop )
+{
+    if ( read_only ) {
+        return false;
+    }
+
+    // try to redistribute troops if we have a selected troop
+    if ( !isSelected() ) {
+        return false;
+    }
+
+    const ArmyTroop & selectedTroop = *GetSelectedItem();
+
+    // prevent troop from splitting into its own stack by checking against their pointers
+    if ( &troop == &selectedTroop ) {
+        return false;
+    }
+
+    // we can redistribute troops either to an empty slot or to a slot containing the same creatures
+    if ( !troop.isValid() || selectedTroop.GetID() == troop.GetID() ) {
+        return true;
+    }
+
+    return false;
 }
