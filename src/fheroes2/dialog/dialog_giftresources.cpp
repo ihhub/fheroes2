@@ -66,7 +66,8 @@ struct SelectRecipientsColors
         for ( size_t i = 0; i < colors.size(); ++i ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.emplace_back( pos.x + Game::GetStep4Player( static_cast<uint32_t>( i ), sprite.width() + 15, colors.size() ), pos.y, sprite.width(), sprite.height() );
+            positions.emplace_back( pos.x + Game::GetStep4Player( static_cast<uint32_t>( i ), sprite.width() + 15, colors.size() ), pos.y, sprite.width(),
+                                    sprite.height() );
         }
     }
 
