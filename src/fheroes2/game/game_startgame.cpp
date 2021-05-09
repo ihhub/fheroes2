@@ -642,6 +642,9 @@ int Interface::Basic::HumanTurn( bool isload )
 
     GameOver::Result & gameResult = GameOver::Result::Get();
 
+    // current music will be set along with the focus, reset music from the previous turn
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
         if ( GetFocusHeroes() != nullptr )
