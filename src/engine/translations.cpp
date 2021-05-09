@@ -118,7 +118,7 @@ struct mofile
         if ( !sf.open( file, "rb" ) )
             return false;
         else {
-            u32 size = sf.size();
+            size_t size = sf.size();
             u32 id = 0;
             sf >> id;
 

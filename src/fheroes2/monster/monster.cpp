@@ -457,22 +457,22 @@ void Monster::UpdateStats( const std::string & spec )
 #endif
 }
 
-Monster::Monster( int m )
+Monster::Monster( const int m )
     : id( UNKNOWN )
 {
     if ( m <= WATER_ELEMENT ) {
         id = m;
     }
     else if ( MONSTER_RND1 == m )
-        id = Rand( LEVEL1 ).GetID();
+        id = Rand( LevelType::LEVEL_1 ).GetID();
     else if ( MONSTER_RND2 == m )
-        id = Rand( LEVEL2 ).GetID();
+        id = Rand( LevelType::LEVEL_2 ).GetID();
     else if ( MONSTER_RND3 == m )
-        id = Rand( LEVEL3 ).GetID();
+        id = Rand( LevelType::LEVEL_3 ).GetID();
     else if ( MONSTER_RND4 == m )
-        id = Rand( LEVEL4 ).GetID();
+        id = Rand( LevelType::LEVEL_4 ).GetID();
     else if ( MONSTER_RND == m )
-        id = Rand( LEVEL0 ).GetID();
+        id = Rand( LevelType::LEVEL_ANY ).GetID();
 }
 
 Monster::Monster( const Spell & sp )
@@ -1318,21 +1318,19 @@ Monster Monster::FromDwelling( int race, u32 dwelling )
     return Monster( UNKNOWN );
 }
 
-Monster Monster::Rand( level_t level )
+Monster Monster::Rand( const LevelType type )
 {
-    if ( level < LEVEL0 || level > LEVEL4 )
-        return Monster( UNKNOWN );
-    if ( level == LEVEL0 )
+    if ( type == LevelType::LEVEL_ANY )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
-    static std::vector<Monster> monstersVec[LEVEL4 - LEVEL0];
+    static std::vector<Monster> monstersVec[static_cast<int>( LevelType::LEVEL_4 )];
     if ( monstersVec[0].empty() ) {
-        for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
+        for ( uint32_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
-            if ( monster.GetRandomUnitLevel() > LEVEL0 )
-                monstersVec[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
+            if ( monster.GetRandomUnitLevel() > LevelType::LEVEL_ANY )
+                monstersVec[static_cast<int>( monster.GetRandomUnitLevel() ) - 1].push_back( monster );
         }
     }
-    return Rand::Get( monstersVec[level - LEVEL0 - 1] );
+    return Rand::Get( monstersVec[static_cast<int>( type ) - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )
@@ -1595,7 +1593,7 @@ int Monster::GetMonsterLevel() const
     return 0;
 }
 
-int Monster::GetRandomUnitLevel( void ) const
+Monster::LevelType Monster::GetRandomUnitLevel() const
 {
     switch ( id ) {
     case PEASANT:
@@ -1609,7 +1607,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case ZOMBIE:
     case ROGUE:
     case MONSTER_RND1:
-        return LEVEL1;
+        return LevelType::LEVEL_1;
 
     case RANGER:
     case PIKEMAN:
@@ -1627,7 +1625,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case MUMMY:
     case NOMAD:
     case MONSTER_RND2:
-        return LEVEL2;
+        return LevelType::LEVEL_2;
 
     case SWORDSMAN:
     case MASTER_SWORDSMAN:
@@ -1657,7 +1655,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case FIRE_ELEMENT:
     case WATER_ELEMENT:
     case MONSTER_RND3:
-        return LEVEL3;
+        return LevelType::LEVEL_3;
 
     case PALADIN:
     case CRUSADER:
@@ -1674,18 +1672,18 @@ int Monster::GetRandomUnitLevel( void ) const
     case BONE_DRAGON:
     case GENIE:
     case MONSTER_RND4:
-        return LEVEL4;
+        return LevelType::LEVEL_4;
 
     case MONSTER_RND:
         switch ( Rand::Get( 0, 3 ) ) {
         default:
-            return LEVEL1;
+            return LevelType::LEVEL_1;
         case 1:
-            return LEVEL2;
+            return LevelType::LEVEL_2;
         case 2:
-            return LEVEL3;
+            return LevelType::LEVEL_3;
         case 3:
-            return LEVEL4;
+            return LevelType::LEVEL_4;
         }
         break;
 
@@ -1693,7 +1691,7 @@ int Monster::GetRandomUnitLevel( void ) const
         break;
     }
 
-    return LEVEL0;
+    return LevelType::LEVEL_ANY;
 }
 
 u32 Monster::GetDwelling( void ) const

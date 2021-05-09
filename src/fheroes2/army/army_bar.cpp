@@ -107,7 +107,7 @@ void RedistributeTroopToFirstFreeSlot( ArmyTroop & troopFrom, Army * armyTarget,
     if ( troopFrom.GetCount() <= 1 || count == 0 )
         return;
 
-    const uint32_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
+    const size_t freeSlots = armyTarget->Size() - armyTarget->GetCount();
     if ( freeSlots == 0 )
         return;
 

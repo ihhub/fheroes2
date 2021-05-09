@@ -408,7 +408,7 @@ std::vector<u8> decodeBase64( const std::string & src )
     std::vector<u8> res;
 
     if ( src.size() % 4 == 0 ) {
-        u32 size = 3 * src.size() / 4;
+        size_t size = 3 * src.size() / 4;
 
         if ( src[src.size() - 1] == '=' )
             --size;
