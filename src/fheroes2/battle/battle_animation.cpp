@@ -38,8 +38,10 @@ bool RandomizedDelay::checkDelay()
         timerIsSet = true;
     }
     const bool res = isPassed();
-    if ( res )
+    if ( res ) {
+        reset();
         timerIsSet = false;
+    }
     return res;
 }
 
