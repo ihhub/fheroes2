@@ -54,8 +54,6 @@ public:
     bool ActionBarRightMouseHold( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarRightMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
-    bool ActionBarRightMouseRelease( ArmyTroop & troop ) override;
-    bool ActionBarRightMouseRelease( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
 
     bool ActionBarCursor( ArmyTroop & ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
@@ -67,12 +65,13 @@ protected:
     fheroes2::MovableSprite spcursor;
 
 private:
+    bool AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & troop );
+
     Army * _army;
     fheroes2::Image backsf;
     bool use_mini_sprite;
     bool read_only;
     bool can_change;
-    bool _isTroopInfoVisible;
     std::string msg;
 };
 
