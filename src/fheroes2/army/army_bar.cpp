@@ -292,7 +292,6 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
     if ( isSelected() ) {
         const ArmyTroop * troop2 = GetSelectedItem();
-
         assert( troop2 != nullptr );
 
         if ( &troop == troop2 ) {
@@ -360,7 +359,6 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         }
 
         ArmyTroop * selectedTroop = GetSelectedItem();
-
         assert( selectedTroop != nullptr );
 
         const bool isSameTroopType = troop.GetID() == selectedTroop->GetID();
@@ -509,7 +507,6 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
     }
 
     const ArmyTroop * troop2 = GetSelectedItem();
-
     assert( troop2 != nullptr );
 
     if ( &troop == troop2 ) {
@@ -603,7 +600,6 @@ bool ArmyBar::ActionBarRightMouseSingleClick( ArmyTroop & troop )
 {
     if ( AbleToRedistributeArmyOnRightMouseSingleClick( troop ) ) {
         ArmyTroop * selectedTroop = GetSelectedItem();
-
         assert( selectedTroop != nullptr );
 
         RedistributeArmy( *selectedTroop, troop, _army );
@@ -655,7 +651,6 @@ bool ArmyBar::AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & t
     }
 
     const ArmyTroop * selectedTroop = GetSelectedItem();
-
     assert( selectedTroop != nullptr );
 
     // prevent troop from splitting into its own stack by checking against their pointers
@@ -664,9 +659,5 @@ bool ArmyBar::AbleToRedistributeArmyOnRightMouseSingleClick( const ArmyTroop & t
     }
 
     // we can redistribute troops either to an empty slot or to a slot containing the same creatures
-    if ( !troop.isValid() || selectedTroop->GetID() == troop.GetID() ) {
-        return true;
-    }
-
-    return false;
+    return !troop.isValid() || selectedTroop->GetID() == troop.GetID();
 }
