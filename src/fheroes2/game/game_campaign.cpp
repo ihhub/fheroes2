@@ -78,7 +78,7 @@ namespace
         const std::vector<int> & availableMaps
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
-        int drawnBranchMapCount = 0;
+        size_t drawnBranchMapCount = 0;
 
         for ( size_t i = 0; i < scenarios.size(); ++i ) {
             const std::vector<int> & nextMaps = scenarios[i].getNextMaps();
@@ -104,7 +104,7 @@ namespace
             bool isBranching = false;
             bool isFinalBranch = false;
 
-            const int branchCount = prevScenarioNextMaps.size();
+            const size_t branchCount = prevScenarioNextMaps.size();
             if ( !isSubScenario && branchCount > 1 ) {
                 isBranching = true;
                 isFinalBranch = drawnBranchMapCount == branchCount - 1;
