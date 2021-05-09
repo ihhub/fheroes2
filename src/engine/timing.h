@@ -43,7 +43,7 @@ namespace fheroes2
     public:
         TimeDelay() = delete;
 
-        TimeDelay( const uint64_t delayMs );
+        explicit TimeDelay( const uint64_t delayMs );
 
         void setDelay( const uint64_t delayMs );
 

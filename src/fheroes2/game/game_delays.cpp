@@ -28,7 +28,7 @@
 
 namespace
 {
-    std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY + 1, 0 );
+    std::vector<fheroes2::TimeDelay> delays( Game::LAST_DELAY + 1, fheroes2::TimeDelay( 0 ) );
 
     const double battleSpeedAdjustment = 1.0 / static_cast<double>( 10 - DEFAULT_BATTLE_SPEED );
 
@@ -39,43 +39,43 @@ namespace
     {
         switch ( speed ) {
         case 1:
-            delay = 18;
+            delay.setDelay( 18 );
             multiplier = 1;
             break;
         case 2:
-            delay = 16;
+            delay.setDelay( 16 );
             multiplier = 1;
             break;
         case 3:
-            delay = 14;
+            delay.setDelay( 14 );
             multiplier = 1;
             break;
         case 4:
-            delay = 12;
+            delay.setDelay( 12 );
             multiplier = 1;
             break;
         case 5:
-            delay = 10;
+            delay.setDelay( 10 );
             multiplier = 1;
             break;
         case 6:
-            delay = 16;
+            delay.setDelay( 16 );
             multiplier = 2;
             break;
         case 7:
-            delay = 12;
+            delay.setDelay( 12 );
             multiplier = 2;
             break;
         case 8:
-            delay = 16;
+            delay.setDelay( 16 );
             multiplier = 4;
             break;
         case 9:
-            delay = 8;
+            delay.setDelay( 8 );
             multiplier = 4;
             break;
         default:
-            delay = 0;
+            delay.setDelay( 0 );
             multiplier = 4;
         }
     }
@@ -88,35 +88,35 @@ namespace Game
 
 void Game::AnimateDelaysInitialize()
 {
-    delays[SCROLL_DELAY] = 20;
-    delays[SCROLL_START_DELAY] = 20;
-    delays[MAIN_MENU_DELAY] = 250;
-    delays[MAPS_DELAY] = 250;
-    delays[CASTLE_TAVERN_DELAY] = 200;
-    delays[CASTLE_AROUND_DELAY] = 200;
-    delays[CASTLE_BUYHERO_DELAY] = 130;
-    delays[CASTLE_BUILD_DELAY] = 130;
-    delays[CASTLE_UNIT_DELAY] = 150;
-    delays[HEROES_FADE_DELAY] = 32;
-    delays[HEROES_PICKUP_DELAY] = 40;
-    delays[PUZZLE_FADE_DELAY] = 50;
-    delays[BATTLE_DIALOG_DELAY] = 75;
-    delays[BATTLE_FRAME_DELAY] = 120;
-    delays[BATTLE_MISSILE_DELAY] = 40;
-    delays[BATTLE_SPELL_DELAY] = 90;
-    delays[BATTLE_DISRUPTING_DELAY] = 20;
-    delays[BATTLE_CATAPULT_DELAY] = 90;
-    delays[BATTLE_CATAPULT_BOULDER_DELAY] = 40;
-    delays[BATTLE_CATAPULT_CLOUD_DELAY] = 40;
-    delays[BATTLE_BRIDGE_DELAY] = 90;
-    delays[BATTLE_IDLE_DELAY] = 150;
-    delays[BATTLE_OPPONENTS_DELAY] = 350;
-    delays[BATTLE_FLAGS_DELAY] = 250;
-    delays[BATTLE_POPUP_DELAY] = 800;
-    delays[BATTLE_COLOR_CYCLE_DELAY] = 220;
-    delays[BATTLE_SELECTED_UNIT_DELAY] = 160;
-    delays[CURRENT_HERO_DELAY] = 10;
-    delays[CURRENT_AI_DELAY] = 10;
+    delays[SCROLL_DELAY].setDelay( 20 );
+    delays[SCROLL_START_DELAY].setDelay( 20 );
+    delays[MAIN_MENU_DELAY].setDelay( 250 );
+    delays[MAPS_DELAY].setDelay( 250 );
+    delays[CASTLE_TAVERN_DELAY].setDelay( 200 );
+    delays[CASTLE_AROUND_DELAY].setDelay( 200 );
+    delays[CASTLE_BUYHERO_DELAY].setDelay( 130 );
+    delays[CASTLE_BUILD_DELAY].setDelay( 130 );
+    delays[CASTLE_UNIT_DELAY].setDelay( 150 );
+    delays[HEROES_FADE_DELAY].setDelay( 32 );
+    delays[HEROES_PICKUP_DELAY].setDelay( 40 );
+    delays[PUZZLE_FADE_DELAY].setDelay( 50 );
+    delays[BATTLE_DIALOG_DELAY].setDelay( 75 );
+    delays[BATTLE_FRAME_DELAY].setDelay( 120 );
+    delays[BATTLE_MISSILE_DELAY].setDelay( 40 );
+    delays[BATTLE_SPELL_DELAY].setDelay( 90 );
+    delays[BATTLE_DISRUPTING_DELAY].setDelay( 20 );
+    delays[BATTLE_CATAPULT_DELAY].setDelay( 90 );
+    delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( 40 );
+    delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( 40 );
+    delays[BATTLE_BRIDGE_DELAY].setDelay( 90 );
+    delays[BATTLE_IDLE_DELAY].setDelay( 150 );
+    delays[BATTLE_OPPONENTS_DELAY].setDelay( 350 );
+    delays[BATTLE_FLAGS_DELAY].setDelay( 250 );
+    delays[BATTLE_POPUP_DELAY].setDelay( 800 );
+    delays[BATTLE_COLOR_CYCLE_DELAY].setDelay( 220 );
+    delays[BATTLE_SELECTED_UNIT_DELAY].setDelay( 160 );
+    delays[CURRENT_HERO_DELAY].setDelay( 10 );
+    delays[CURRENT_AI_DELAY].setDelay( 10 );
 
     for ( fheroes2::TimeDelay & delay : delays ) {
         delay.reset();
@@ -163,18 +163,18 @@ void Game::UpdateGameSpeed()
     SetupHeroMovement( conf.AIMoveSpeed(), delays[CURRENT_AI_DELAY], aiHeroMultiplier );
 
     const double adjustedBattleSpeed = ( 10 - conf.BattleSpeed() ) * battleSpeedAdjustment;
-    delays[BATTLE_FRAME_DELAY] = static_cast<uint64_t>( 120 * adjustedBattleSpeed );
-    delays[BATTLE_MISSILE_DELAY] = static_cast<uint64_t>( 40 * adjustedBattleSpeed );
-    delays[BATTLE_SPELL_DELAY] = static_cast<uint64_t>( 75 * adjustedBattleSpeed );
-    delays[BATTLE_IDLE_DELAY] = static_cast<uint64_t>( 150 * adjustedBattleSpeed );
-    delays[BATTLE_DISRUPTING_DELAY] = static_cast<uint64_t>( 25 * adjustedBattleSpeed );
-    delays[BATTLE_CATAPULT_DELAY] = static_cast<uint64_t>( 90 * adjustedBattleSpeed );
-    delays[BATTLE_CATAPULT_BOULDER_DELAY] = static_cast<uint64_t>( 40 * adjustedBattleSpeed );
-    delays[BATTLE_CATAPULT_CLOUD_DELAY] = static_cast<uint64_t>( 40 * adjustedBattleSpeed );
-    delays[BATTLE_BRIDGE_DELAY] = static_cast<uint64_t>( 90 * adjustedBattleSpeed );
-    delays[BATTLE_OPPONENTS_DELAY] = static_cast<uint64_t>( 350 * adjustedBattleSpeed );
+    delays[BATTLE_FRAME_DELAY].setDelay( static_cast<uint64_t>( 120 * adjustedBattleSpeed ) );
+    delays[BATTLE_MISSILE_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    delays[BATTLE_SPELL_DELAY].setDelay( static_cast<uint64_t>( 75 * adjustedBattleSpeed ) );
+    delays[BATTLE_IDLE_DELAY].setDelay( static_cast<uint64_t>( 150 * adjustedBattleSpeed ) );
+    delays[BATTLE_DISRUPTING_DELAY].setDelay( static_cast<uint64_t>( 25 * adjustedBattleSpeed ) );
+    delays[BATTLE_CATAPULT_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
+    delays[BATTLE_CATAPULT_BOULDER_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    delays[BATTLE_CATAPULT_CLOUD_DELAY].setDelay( static_cast<uint64_t>( 40 * adjustedBattleSpeed ) );
+    delays[BATTLE_BRIDGE_DELAY].setDelay( static_cast<uint64_t>( 90 * adjustedBattleSpeed ) );
+    delays[BATTLE_OPPONENTS_DELAY].setDelay( static_cast<uint64_t>( 350 * adjustedBattleSpeed ) );
 
-    delays[BATTLE_FLAGS_DELAY] = static_cast<uint64_t>( ( adjustedBattleSpeed < 0.1 ) ? 25 : 250 * adjustedBattleSpeed );
+    delays[BATTLE_FLAGS_DELAY].setDelay( static_cast<uint64_t>( ( adjustedBattleSpeed < 0.1 ) ? 25 : 250 * adjustedBattleSpeed ) );
 }
 
 int Game::HumanHeroAnimSkip()

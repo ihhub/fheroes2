@@ -497,9 +497,9 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     // set volume loop sounds
-    for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
-        int vol = *itv;
-        int m82 = M82::GetLOOP00XX( std::distance( vols.begin(), itv ) );
+    for ( size_t i = 0; i < vols.size(); ++i ) {
+        int vol = vols[i];
+        int m82 = M82::GetLOOP00XX( i );
         if ( M82::UNKNOWN == m82 )
             continue;
 

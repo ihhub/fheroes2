@@ -307,7 +307,7 @@ void World::NewMaps( int32_t sw, int32_t sh )
     vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
 
     // init all tiles
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
         mp2tile.tileIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
@@ -323,7 +323,7 @@ void World::NewMaps( int32_t sw, int32_t sh )
         mp2tile.editorObjectLink = 0;
         mp2tile.editorObjectOverlay = 0;
 
-        ( *it ).Init( std::distance( vec_tiles.begin(), it ), mp2tile );
+        vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
 
     // reset current maps info

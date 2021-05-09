@@ -980,19 +980,19 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     else {
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RNDMONSTER:
-            mons = Monster::Rand().GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER1:
-            mons = Monster::Rand( Monster::LEVEL1 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER2:
-            mons = Monster::Rand( Monster::LEVEL2 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER3:
-            mons = Monster::Rand( Monster::LEVEL3 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER4:
-            mons = Monster::Rand( Monster::LEVEL4 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
             break;
         default:
             break;

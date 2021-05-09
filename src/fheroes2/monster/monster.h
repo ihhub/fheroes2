@@ -44,13 +44,13 @@ public:
         JOIN_CONDITION_FORCE = 3
     };
 
-    enum level_t
+    enum class LevelType : int
     {
-        LEVEL0,
-        LEVEL1,
-        LEVEL2,
-        LEVEL3,
-        LEVEL4
+        LEVEL_ANY = 0,
+        LEVEL_1,
+        LEVEL_2,
+        LEVEL_3,
+        LEVEL_4
     };
 
     enum monster_t
@@ -163,7 +163,7 @@ public:
         int m82_wnce;
     };
 
-    Monster( int = UNKNOWN );
+    Monster( const int m = UNKNOWN );
     explicit Monster( const Spell & );
     Monster( int race, u32 dw );
     virtual ~Monster() = default;
@@ -194,7 +194,7 @@ public:
     u32 GetSpeed( void ) const;
     u32 GetGrown( void ) const;
     int GetMonsterLevel() const;
-    int GetRandomUnitLevel( void ) const;
+    LevelType GetRandomUnitLevel() const;
     u32 GetRNDSize( bool skip ) const;
 
     const char * GetName( void ) const;
@@ -228,7 +228,7 @@ public:
 
     const monstersprite_t & GetMonsterSprite() const;
 
-    static Monster Rand( level_t = LEVEL0 );
+    static Monster Rand( const LevelType type );
     static u32 Rand4WeekOf( void );
     static u32 Rand4MonthOf( void );
 
