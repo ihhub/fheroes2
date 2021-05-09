@@ -305,7 +305,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
 
     doc.Attribute( "race", &race );
     if ( race & Race::ALL )
-        hero.race = race;
+        hero._race = race;
 
     doc.Attribute( "experience", &exp );
     hero.experience = exp;

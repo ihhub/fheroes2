@@ -72,7 +72,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // name
     message = _( "%{name} the %{race} (Level %{level})" );
     StringReplace( message, "%{name}", name );
-    StringReplace( message, "%{race}", Race::String( race ) );
+    StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
@@ -363,12 +363,12 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             else if ( Modes( NOTDISMISS ) ) {
                 message = _( "Dismissal of %{name} the %{race} is prohibited by scenario" );
                 StringReplace( message, "%{name}", name );
-                StringReplace( message, "%{race}", Race::String( race ) );
+                StringReplace( message, "%{race}", Race::String( _race ) );
             }
             else if ( buttonDismiss.isEnabled() ) {
                 message = _( "Dismiss %{name} the %{race}" );
                 StringReplace( message, "%{name}", name );
-                StringReplace( message, "%{race}", Race::String( race ) );
+                StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )

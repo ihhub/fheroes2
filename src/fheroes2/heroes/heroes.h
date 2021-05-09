@@ -191,6 +191,7 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
+    Heroes( int heroID, int race, int initialLevel );
 
     bool isValid() const override;
     bool isFreeman( void ) const;
@@ -399,7 +400,7 @@ private:
 
     int hid; /* hero id */
     int portrait; /* hero id */
-    int race;
+    int _race;
     int save_maps_object;
 
     Route::Path path;

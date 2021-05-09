@@ -133,7 +133,7 @@ Heroes::Heroes()
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
-    , race( UNKNOWN )
+    , _race( UNKNOWN )
     , save_maps_object( 0 )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -141,6 +141,17 @@ Heroes::Heroes()
     , patrol_square( 0 )
     , _alphaValue( 255 )
 {}
+
+Heroes::Heroes( int heroID, int race, int initialLevel )
+    : Heroes( heroID, race )
+{
+    // level 1 is technically regarded as 0, so reduce the initial level by 1
+    experience = GetExperienceFromLevel( initialLevel - 1 );
+
+    for ( int i = 1; i < initialLevel; ++i ) {
+        LevelUp( false, true );
+    }
+}
 
 Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
@@ -151,7 +162,7 @@ Heroes::Heroes( int heroid, int rc )
     , army( this )
     , hid( heroid )
     , portrait( heroid )
-    , race( rc )
+    , _race( rc )
     , save_maps_object( MP2::OBJ_ZERO )
     , path( *this )
     , direction( Direction::RIGHT )
@@ -166,129 +177,6 @@ Heroes::Heroes( int heroid, int rc )
 
     // extra hero
     switch ( hid ) {
-    case ROLAND:
-        attack = 0;
-        defense = 1;
-        power = 4;
-        knowledge = 5;
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::ARCHERY, Skill::Level::BASIC ) );
-        break;
-
-    case CORLAGON:
-        attack = 5;
-        defense = 3;
-        power = 1;
-        knowledge = 1;
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NECROMANCY, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::BALLISTICS, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::BASIC ) );
-        break;
-
-    case ELIZA:
-        attack = 0;
-        defense = 1;
-        power = 2;
-        knowledge = 6;
-
-        // start from lv5
-        experience = GetExperienceFromLevel( 4 );
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NAVIGATION, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::ARCHERY, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LUCK, Skill::Level::BASIC ) );
-        break;
-
-    case ARCHIBALD:
-        attack = 1;
-        defense = 1;
-        power = 4;
-        knowledge = 4;
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::SCOUTING, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::ADVANCED ) );
-        break;
-
-    case HALTON:
-        attack = 3;
-        defense = 3;
-        power = 3;
-        knowledge = 2;
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::BALLISTICS, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::DIPLOMACY, Skill::Level::BASIC ) );
-        break;
-
-    case BAX:
-        attack = 1;
-        defense = 1;
-        power = 4;
-        knowledge = 3;
-
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::EXPERT ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NECROMANCY, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NAVIGATION, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::BASIC ) );
-        break;
-
-    case SOLMYR:
-    case DRAKONIA:
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC ) );
-        break;
-
-    case DAINWIN:
-    case ELDERIAN:
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::SCOUTING, Skill::Level::BASIC ) );
-        break;
-
-    case MOG:
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::WISDOM, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::NECROMANCY, Skill::Level::ADVANCED ) );
-        break;
-
-    case UNCLEIVAN:
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::PATHFINDING, Skill::Level::ADVANCED ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC ) );
-        break;
-
-    case JOSEPH:
-        secondary_skills = Skill::SecSkills();
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::LEADERSHIP, Skill::Level::BASIC ) );
-        secondary_skills.AddSkill( Skill::Secondary( Skill::Secondary::SCOUTING, Skill::Level::BASIC ) );
-        break;
-
-    case GALLAVANT:
-        break;
-
-    case CEALLACH:
-        break;
-
-    case MARTINE:
-        break;
-
-    case JARKONAS:
-        break;
-
     case DEBUG_HERO:
         army.Clean();
         army.JoinTroop( Monster::BLACK_DRAGON, 2 );
@@ -366,8 +254,8 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         }
 
         // fixed race for custom portrait (after level up)
-        if ( race != rc )
-            race = rc;
+        if ( _race != rc )
+            _race = rc;
     }
     else
         st.skip( 1 );
@@ -452,8 +340,8 @@ void Heroes::PostLoad( void )
         LevelUp( Modes( CUSTOMSKILLS ), true );
     }
 
-    if ( ( race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
-        Spell spell = Skill::Primary::GetInitialSpell( race );
+    if ( ( _race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
+        Spell spell = Skill::Primary::GetInitialSpell( _race );
         if ( spell.isValid() ) {
             SpellBookActivate();
             AppendSpellToBook( spell, true );
@@ -468,7 +356,7 @@ void Heroes::PostLoad( void )
         AI::Get().HeroesPostLoad( *this );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) );
 }
 
 int Heroes::GetID( void ) const
@@ -478,7 +366,7 @@ int Heroes::GetID( void ) const
 
 int Heroes::GetRace( void ) const
 {
-    return race;
+    return _race;
 }
 
 const std::string & Heroes::GetName( void ) const
@@ -1453,7 +1341,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     const HeroSeedsForLevelUp seeds = GetSeedsForLevelUp();
 
     // level up primary skill
-    const int primarySkill = Skill::Primary::LevelUp( race, GetLevel(), seeds.seedPrimarySkill );
+    const int primarySkill = Skill::Primary::LevelUp( _race, GetLevel(), seeds.seedPrimarySkill );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
 
@@ -1468,7 +1356,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     Skill::Secondary sec1;
     Skill::Secondary sec2;
 
-    secondary_skills.FindSkillsForLevelUp( race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
+    secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
     DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
 
     Skill::Secondary selected;
@@ -1800,7 +1688,7 @@ std::string Heroes::String( void ) const
     std::ostringstream os;
 
     os << "name            : " << name << std::endl
-       << "race            : " << Race::String( race ) << std::endl
+       << "race            : " << Race::String( _race ) << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
@@ -1854,8 +1742,6 @@ void AllHeroes::Init( void )
     if ( size() )
         AllHeroes::clear();
 
-    const bool loyalty = Settings::Get().PriceLoyaltyVersion();
-
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
     for ( u32 hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
         push_back( new Heroes( hid, Race::KNGT ) );
@@ -1881,28 +1767,33 @@ void AllHeroes::Init( void )
         push_back( new Heroes( hid, Race::NECR ) );
 
     // from campain
-    push_back( new Heroes( Heroes::ROLAND, Race::WZRD ) );
-    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT ) );
-    push_back( new Heroes( Heroes::ELIZA, Race::SORC ) );
-    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK ) );
-    push_back( new Heroes( Heroes::HALTON, Race::KNGT ) );
-    push_back( new Heroes( Heroes::BAX, Race::NECR ) );
+    push_back( new Heroes( Heroes::ROLAND, Race::WZRD, 5 ) );
+    push_back( new Heroes( Heroes::CORLAGON, Race::KNGT, 5 ) );
+    push_back( new Heroes( Heroes::ELIZA, Race::SORC, 5 ) );
+    push_back( new Heroes( Heroes::ARCHIBALD, Race::WRLK, 5 ) );
+    push_back( new Heroes( Heroes::HALTON, Race::KNGT, 5 ) );
+    push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
 
     // loyalty version
-    push_back( new Heroes( loyalty ? Heroes::SOLMYR : Heroes::UNKNOWN, Race::WZRD ) );
-    push_back( new Heroes( loyalty ? Heroes::DAINWIN : Heroes::UNKNOWN, Race::WRLK ) );
-    push_back( new Heroes( loyalty ? Heroes::MOG : Heroes::UNKNOWN, Race::NECR ) );
-    push_back( new Heroes( loyalty ? Heroes::UNCLEIVAN : Heroes::UNKNOWN, Race::BARB ) );
-    push_back( new Heroes( loyalty ? Heroes::JOSEPH : Heroes::UNKNOWN, Race::KNGT ) );
-    push_back( new Heroes( loyalty ? Heroes::GALLAVANT : Heroes::UNKNOWN, Race::KNGT ) );
-    push_back( new Heroes( loyalty ? Heroes::ELDERIAN : Heroes::UNKNOWN, Race::WRLK ) );
-    push_back( new Heroes( loyalty ? Heroes::CEALLACH : Heroes::UNKNOWN, Race::KNGT ) );
-    push_back( new Heroes( loyalty ? Heroes::DRAKONIA : Heroes::UNKNOWN, Race::WZRD ) );
-    push_back( new Heroes( loyalty ? Heroes::MARTINE : Heroes::UNKNOWN, Race::SORC ) );
-    push_back( new Heroes( loyalty ? Heroes::JARKONAS : Heroes::UNKNOWN, Race::BARB ) );
+    if ( Settings::Get().PriceLoyaltyVersion() ) {
+        push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
+        push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
+        push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
+        push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::KNGT, 5 ) );
+        push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
+        push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
+        push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
+        push_back( new Heroes( Heroes::DRAKONIA, Race::WZRD, 5 ) );
+        push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
+        push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
+    }
 
     // devel
-    push_back( new Heroes( IS_DEVEL() ? Heroes::DEBUG_HERO : Heroes::UNKNOWN, Race::WRLK ) );
+    if ( IS_DEVEL() ) {
+        push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
+    }
+
     push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
 }
 
@@ -2056,7 +1947,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
     size_t hash = world.GetMapSeed();
     hashCombine( hash, hid );
-    hashCombine( hash, race );
+    hashCombine( hash, _race );
     hashCombine( hash, attack );
     hashCombine( hash, defense );
     hashCombine( hash, power );
@@ -2108,7 +1999,7 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
 
     // heroes
     msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-        << hero.race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+        << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
@@ -2125,7 +2016,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     ColorBase & col = hero;
 
     msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
-        >> hero.race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
+        >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;
