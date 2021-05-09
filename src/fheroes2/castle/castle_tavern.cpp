@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -96,7 +97,7 @@ void Castle::OpenTavern( void ) const
             break;
 
         // animation
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_TAVERN_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CASTLE_TAVERN_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 

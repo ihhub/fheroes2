@@ -637,14 +637,14 @@ u32 Maps::FileInfo::WinsAccumulateGold( void ) const
     return wins1 * 1000;
 }
 
-Point Maps::FileInfo::WinsMapsPositionObject( void ) const
+fheroes2::Point Maps::FileInfo::WinsMapsPositionObject( void ) const
 {
-    return Point( wins1, wins2 );
+    return fheroes2::Point( wins1, wins2 );
 }
 
-Point Maps::FileInfo::LossMapsPositionObject( void ) const
+fheroes2::Point Maps::FileInfo::LossMapsPositionObject( void ) const
 {
-    return Point( loss1, loss2 );
+    return fheroes2::Point( loss1, loss2 );
 }
 
 u32 Maps::FileInfo::LossCountDays( void ) const

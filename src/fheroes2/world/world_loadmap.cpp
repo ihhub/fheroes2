@@ -163,7 +163,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
     doc.Attribute( "isCastle", &iscastle );
     doc.Attribute( "captainPresent", &captain );
 
-    town.SetCenter( Point( posx, posy ) );
+    town.SetCenter( fheroes2::Point( posx, posy ) );
     town.SetColor( color );
 
     town.building = 0;
@@ -282,7 +282,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
 
     doc.Attribute( "posx", &posx );
     doc.Attribute( "posy", &posy );
-    hero.SetCenter( Point( posx, posy ) );
+    hero.SetCenter( fheroes2::Point( posx, posy ) );
 
     doc.Attribute( "color", &color );
     hero.SetColor( color );
@@ -314,7 +314,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     if ( patrol ) {
         hero.SetModes( Heroes::PATROL );
         doc.Attribute( "patrolSquare", &square );
-        hero.patrol_center = Point( posx, posy );
+        hero.patrol_center = fheroes2::Point( posx, posy );
         hero.patrol_square = square;
     }
 
@@ -462,7 +462,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     doc.Attribute( "uid", &uid );
     doc.Attribute( "artifact", &artifact );
 
-    riddle.SetCenter( Point( posx, posy ) );
+    riddle.SetCenter( fheroes2::Point( posx, posy ) );
     riddle.SetUID( uid );
     riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
     riddle.valid = true;
@@ -498,7 +498,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
     doc.Attribute( "allowComputer", &allow );
     doc.Attribute( "artifact", &artifact );
 
-    event.SetCenter( Point( posx, posy ) );
+    event.SetCenter( fheroes2::Point( posx, posy ) );
     event.SetUID( uid );
     event.computer = allow;
     event.colors = colors;
@@ -569,7 +569,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSign & obj )
     doc.Attribute( "posy", &posy );
     doc.Attribute( "uid", &uid );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     if ( doc.GetText() )
         obj.message = doc.GetText();
@@ -586,7 +586,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapResource & obj )
     doc.Attribute( "type", &type );
     doc.Attribute( "count", &count );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.resource = ResourceCount( type, count );
 
@@ -603,7 +603,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
     doc.Attribute( "condition", &cond );
     doc.Attribute( "count", &count );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.monster = Monster( type );
 
@@ -662,7 +662,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
     doc.Attribute( "type", &type );
     doc.Attribute( "condition", &cond );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.artifact = Artifact( type );
 
@@ -849,15 +849,15 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     if ( !xml_tiles )
         return doc;
 
-    Size & sw = w;
+    fheroes2::Size & sw = w;
 
     xml_tiles->Attribute( "width", &value );
-    sw.w = value;
+    sw.width = value;
 
     xml_tiles->Attribute( "height", &value );
-    sw.h = value;
+    sw.height = value;
 
-    w.vec_tiles.resize( sw.w * sw.h );
+    w.vec_tiles.resize( sw.width * sw.height );
 
     *xml_tiles >> w.vec_tiles;
 
@@ -952,42 +952,42 @@ bool World::LoadMapMP2( const std::string & filename )
     // width
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::w = Maps::SMALL;
+        width = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::w = Maps::MEDIUM;
+        width = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::w = Maps::LARGE;
+        width = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::w = Maps::XLARGE;
+        width = Maps::XLARGE;
         break;
     default:
-        Size::w = 0;
+        width = 0;
         break;
     }
 
     // height
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::h = Maps::SMALL;
+        height = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::h = Maps::MEDIUM;
+        height = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::h = Maps::LARGE;
+        height = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::h = Maps::XLARGE;
+        height = Maps::XLARGE;
         break;
     default:
-        Size::h = 0;
+        height = 0;
         break;
     }
 
-    if ( Size::w == 0 || Size::h == 0 || Size::w != Size::h ) {
+    if ( width == 0 || height == 0 || width != height ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" );
         return false;
     }
@@ -1537,11 +1537,11 @@ void World::ProcessNewMap()
 
         if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
-            const Point & cp = castle->GetCenter();
+            const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
+                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
             }
         }
     }
@@ -1549,7 +1549,7 @@ void World::ProcessNewMap()
     // set ultimate
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
                                            []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
-    Point ultimate_pos;
+    fheroes2::Point ultimate_pos;
 
     // not found
     if ( vec_tiles.end() == it ) {

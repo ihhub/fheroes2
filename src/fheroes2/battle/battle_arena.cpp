@@ -336,12 +336,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
 
-    const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
-
-    // morale check right before the turn
-    if ( !isImmovable ) {
-        if ( troop->isAffectedByMorale() )
-            troop->SetRandomMorale();
+    if ( troop->isAffectedByMorale() ) {
+        troop->SetRandomMorale();
     }
 
     end_turn = false;
@@ -361,7 +357,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // re-calculate possible paths in case unit moved or it's a new turn
             _pathfinder.calculate( *troop );
 
-            // turn opponents
+            // get task from player
             if ( troop->isControlRemote() )
                 RemoteTurn( *troop, actions );
             else {
@@ -393,6 +389,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
                 break;
             }
 
+            const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
             const bool troopSkipsMove = troopHasAlreadySkippedMove ? troop->Modes( TR_HARDSKIP ) : troop->Modes( TR_SKIPMOVE );
 
             // good morale
@@ -1256,9 +1253,9 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
         return false;
 
     // check castle walls defensed
-    const Points points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
+    const std::vector<fheroes2::Point> points = GetLinePoints( attacker.GetBackPoint(), defender.GetBackPoint(), CELLW / 3 );
 
-    for ( Points::const_iterator it = points.begin(); it != points.end(); ++it ) {
+    for ( std::vector<fheroes2::Point>::const_iterator it = points.begin(); it != points.end(); ++it ) {
         if ( 0 == board[8].GetObject() && ( board[8].GetPos() & *it ) )
             return false;
         else if ( 0 == board[29].GetObject() && ( board[29].GetPos() & *it ) )

@@ -45,7 +45,7 @@ void Dialog::GameInfo( void )
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
-    Point pt( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
+    fheroes2::Point pt( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 );
     fheroes2::ImageRestorer back( display, pt.x, pt.y, box.width(), box.height() );
     fheroes2::Blit( box, display, pt.x, pt.y );
 
@@ -75,7 +75,7 @@ void Dialog::GameInfo( void )
     text.Set( std::to_string( Game::GetRating() ) + " %", Font::SMALL, 80 );
     text.Blit( pt.x + 230, pt.y + 80 );
 
-    text.Set( Maps::SizeString( conf.MapsSize().w ), Font::SMALL, 80 );
+    text.Set( Maps::SizeString( conf.MapsSize().width ), Font::SMALL, 80 );
     text.Blit( pt.x + 322, pt.y + 80 );
 
     text.Set( conf.MapsDescription(), Font::SMALL, 350 );
@@ -89,7 +89,7 @@ void Dialog::GameInfo( void )
 
     Interface::PlayersInfo playersInfo( true, true, false );
 
-    playersInfo.UpdateInfo( conf.GetPlayers(), Point( pt.x + 40, pt.y + 165 ), Point( pt.x + 40, pt.y + 240 ) );
+    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 165 ), fheroes2::Point( pt.x + 40, pt.y + 240 ) );
     playersInfo.RedrawInfo( true );
 
     text.Set( _( "Victory\nConditions" ), Font::SMALL, 80 );

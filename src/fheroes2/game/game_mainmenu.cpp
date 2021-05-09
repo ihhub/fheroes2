@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "dialog_resolution.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
@@ -98,7 +99,7 @@ int Game::MainMenu( bool isFirstGameRun )
     fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
 
-    const Point lt_pt( 0, 0 );
+    const fheroes2::Point lt_pt( 0, 0 );
 
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
@@ -220,7 +221,7 @@ int Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( resolutionArea ) )
             Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
 
-        if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
+        if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             cursor.Hide();
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;

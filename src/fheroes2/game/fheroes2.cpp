@@ -34,6 +34,7 @@
 #include "engine.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_logo.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "localevent.h"
@@ -43,37 +44,6 @@
 #include "text.h"
 #include "translations.h"
 #include "zzlib.h"
-
-namespace
-{
-    void showTeamInfo()
-    {
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        fheroes2::Image image( display.width(), display.height() );
-        image.fill( 0 );
-
-        TextBox text( "fheroes2 Resurrection Team presents", Font::WHITE_LARGE, 500 );
-        text.Blit( ( image.width() - text.w() ) / 2, ( image.height() - text.h() ) / 2, image );
-
-        LocalEvent & le = LocalEvent::Get();
-
-        uint8_t alpha = 250;
-
-        while ( le.HandleEvents() && alpha > 20 ) {
-            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
-                break;
-
-            if ( Game::AnimateCustomDelay( 40 ) ) {
-                fheroes2::Copy( image, display );
-                fheroes2::ApplyAlpha( display, alpha );
-                display.render();
-
-                alpha -= 5;
-            }
-        }
-    }
-}
 
 void SetVideoDriver( const std::string & );
 void SetTimidityEnvPath();
@@ -85,9 +55,9 @@ int PrintHelp( const char * basename )
 {
     COUT( "Usage: " << basename << " [OPTIONS]" );
 #ifndef BUILD_RELEASE
-    COUT( "  -d\tdebug mode" );
+    COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
 #endif
-    COUT( "  -h\tprint this help and exit" );
+    COUT( "  -h\t\tprint this help message and exit" );
 
     return EXIT_SUCCESS;
 }
@@ -143,7 +113,7 @@ int main( int argc, char ** argv )
 
     u32 subsystem = INIT_VIDEO;
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
@@ -218,7 +188,7 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            showTeamInfo();
+            fheroes2::showTeamInfo();
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 

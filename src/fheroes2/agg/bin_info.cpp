@@ -150,7 +150,7 @@ namespace Bin_Info
 
         const uint8_t * data = bytes.data();
 
-        eyePosition = Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
+        eyePosition = fheroes2::Point( *( reinterpret_cast<const int16_t *>( data + 1 ) ), *( reinterpret_cast<const int16_t *>( data + 3 ) ) );
 
         // Frame X offsets for the future use
         for ( size_t moveID = 0; moveID < 7; ++moveID ) {
@@ -181,7 +181,7 @@ namespace Bin_Info
         // Projectile data
         for ( size_t i = 0; i < 3; ++i ) {
             projectileOffset.push_back(
-                Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
+                fheroes2::Point( *( reinterpret_cast<const int16_t *>( data + 174 + ( i * 4 ) ) ), *( reinterpret_cast<const int16_t *>( data + 176 + ( i * 4 ) ) ) ) );
         }
 
         // Elves and Grand Elves have incorrect start Y position for lower shooting attack

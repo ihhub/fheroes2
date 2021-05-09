@@ -87,7 +87,7 @@ MapObjectSimple * MapObjects::get( u32 uid )
     return it != end() ? ( *it ).second : NULL;
 }
 
-std::list<MapObjectSimple *> MapObjects::get( const Point & pos )
+std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res;
     for ( iterator it = begin(); it != end(); ++it )
@@ -297,28 +297,28 @@ void World::Reset( void )
 }
 
 /* new maps */
-void World::NewMaps( u32 sw, u32 sh )
+void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
     Defaults();
 
-    Size::w = sw;
-    Size::h = sh;
+    fheroes2::Size::width = sw;
+    fheroes2::Size::height = sh;
 
-    vec_tiles.resize( static_cast<size_t>( Size::w ) * Size::h );
+    vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
 
     // init all tiles
     for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.tileIndex = Rand::Get( 16, 19 ); // index sprite ground, see ground32.til
+        mp2tile.tileIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
         mp2tile.indexName1 = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.indexName2 = 0xff; // index sprite level 2
-        mp2tile.flags = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
         mp2tile.indexAddon = 0;
         mp2tile.editorObjectLink = 0;
@@ -329,8 +329,8 @@ void World::NewMaps( u32 sw, u32 sh )
 
     // reset current maps info
     Maps::FileInfo fi;
-    fi.size_w = w();
-    fi.size_h = h();
+    fi.size_w = static_cast<uint16_t>( width );
+    fi.size_h = static_cast<uint16_t>( height );
 
     Settings::Get().SetCurrentFileInfo( fi );
 }
@@ -340,14 +340,22 @@ void World::InitKingdoms( void )
     vec_kingdoms.Init();
 }
 
-const Maps::Tiles & World::GetTiles( u32 ax, u32 ay ) const
+const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
-Maps::Tiles & World::GetTiles( u32 ax, u32 ay )
+Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
 const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
@@ -385,12 +393,12 @@ const Kingdom & World::GetKingdom( int color ) const
 }
 
 /* get castle from index maps */
-Castle * World::GetCastle( const Point & center )
+Castle * World::GetCastle( const fheroes2::Point & center )
 {
     return vec_castles.Get( center );
 }
 
-const Castle * World::GetCastle( const Point & center ) const
+const Castle * World::GetCastle( const fheroes2::Point & center ) const
 {
     return vec_castles.Get( center );
 }
@@ -406,12 +414,12 @@ const Heroes * World::GetHeroes( int id ) const
 }
 
 /* get heroes from index maps */
-Heroes * World::GetHeroes( const Point & center )
+Heroes * World::GetHeroes( const fheroes2::Point & center )
 {
     return vec_heroes.Get( center );
 }
 
-const Heroes * World::GetHeroes( const Point & center ) const
+const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
 {
     return vec_heroes.Get( center );
 }
@@ -554,6 +562,8 @@ void World::NewWeek( void )
         week_next = Week( type, LastWeek() ? Monster::Rand4MonthOf() : Monster::Rand4WeekOf() );
     else
         week_next = Week( type );
+
+    week_current = week_next;
 
     if ( 1 < week ) {
         // update week object
@@ -798,7 +808,7 @@ const UltimateArtifact & World::GetUltimateArtifact( void ) const
     return ultimate_artifact;
 }
 
-bool World::DiggingForUltimateArtifact( const Point & center )
+bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
@@ -878,7 +888,7 @@ void World::ActionForMagellanMaps( int color )
             ( *it ).ClearFog( color );
 }
 
-MapEvent * World::GetMapEvent( const Point & pos )
+MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
     return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
@@ -1207,18 +1217,27 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    const Size & sz = w;
+    // TODO: before 0.9.4 Size was uint16_t type
+    const uint16_t width = static_cast<uint16_t>( w.width );
+    const uint16_t height = static_cast<uint16_t>( w.height );
 
-    return msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj << w.ultimate_artifact
-               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
+               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
+               << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
 {
-    Size & sz = w;
+    // TODO: before 0.9.4 Size was uint16_t type
+    uint16_t width = 0;
+    uint16_t height = 0;
 
-    msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
-        >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+    msg >> width >> height;
+    w.width = width;
+    w.height = height;
+
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
         msg >> w._seed;

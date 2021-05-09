@@ -255,6 +255,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -263,6 +264,7 @@ void LocalEvent::OpenTouchpad()
         SDL_SetHint( SDL_HINT_TOUCH_MOUSE_EVENTS, "0" );
 #endif
     }
+#endif
 }
 #endif
 
@@ -280,18 +282,18 @@ void LocalEvent::CloseVirtualKeyboard()
 #endif
 }
 
-const Point & LocalEvent::GetMousePressLeft( void ) const
+const fheroes2::Point & LocalEvent::GetMousePressLeft( void ) const
 {
     return mouse_pl;
 }
 
-void LocalEvent::SetMouseOffsetX( int16_t x )
+void LocalEvent::SetMouseOffsetX( int32_t x )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.x = x;
 }
 
-void LocalEvent::SetMouseOffsetY( int16_t y )
+void LocalEvent::SetMouseOffsetY( int32_t y )
 {
     SetModes( MOUSE_OFFSET );
     mouse_st.y = y;
@@ -983,6 +985,7 @@ namespace
     public:
         ColorCycling()
             : _counter( 0 )
+            , _isPaused( false )
             , _preRenderDrawing( nullptr )
             , _posRenderDrawing( nullptr )
         {}
@@ -1011,7 +1014,7 @@ namespace
 
         bool isRedrawRequired() const
         {
-            return _prevDraw.getMs() >= 220;
+            return !_isPaused && _prevDraw.getMs() >= 220;
         }
 
         void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
@@ -1023,10 +1026,23 @@ namespace
                 _posRenderDrawing = postRenderDrawing;
         }
 
+        void pause()
+        {
+            _isPaused = true;
+        }
+
+        void resume()
+        {
+            _isPaused = false;
+            _prevDraw.reset();
+            _timer.reset();
+        }
+
     private:
         fheroes2::Time _timer;
         fheroes2::Time _prevDraw;
         uint32_t _counter;
+        bool _isPaused;
 
         void ( *_preRenderDrawing )();
         void ( *_posRenderDrawing )();
@@ -1055,12 +1071,14 @@ LocalEvent & LocalEvent::Get( void )
 void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
+    colorCycling.resume();
 
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
 void LocalEvent::PauseCycling() const
 {
+    colorCycling.pause();
     fheroes2::Display::instance().subscribe( NULL, NULL );
 }
 
@@ -1229,7 +1247,6 @@ void LocalEvent::StopSounds()
     Mixer::Pause();
     Music::Pause();
     _musicVolume = Music::Volume( 0 );
-    loop_delay = 100;
 }
 
 void LocalEvent::ResumeSounds()
@@ -1243,7 +1260,6 @@ void LocalEvent::ResumeSounds()
             Mixer::Resume();
         _isHiddenWindow = false;
     }
-    loop_delay = 1;
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1288,8 +1304,8 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         _emulatedPointerPosY
             = static_cast<double>( screenResolution.height * event.y - windowRect.y ) * ( static_cast<double>( gameSurfaceRes.height ) / windowRect.height );
 
-        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
-        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
+        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -1422,8 +1438,8 @@ void LocalEvent::ProcessControllerAxisMotion()
     if ( _controllerLeftXAxis != 0 || _controllerLeftYAxis != 0 ) {
         SetModes( MOUSE_MOTION );
 
-        const int16_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
-        const int16_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
+        const int32_t xSign = ( _controllerLeftXAxis > 0 ) - ( _controllerLeftXAxis < 0 );
+        const int32_t ySign = ( _controllerLeftYAxis > 0 ) - ( _controllerLeftYAxis < 0 );
 
         _emulatedPointerPosX += pow( std::abs( _controllerLeftXAxis ), CONTROLLER_AXIS_SPEEDUP ) * xSign * deltaTime * _controllerPointerSpeed;
         _emulatedPointerPosY += pow( std::abs( _controllerLeftYAxis ), CONTROLLER_AXIS_SPEEDUP ) * ySign * deltaTime * _controllerPointerSpeed;
@@ -1440,8 +1456,8 @@ void LocalEvent::ProcessControllerAxisMotion()
         else if ( _emulatedPointerPosY >= display.height() )
             _emulatedPointerPosY = display.height() - 1;
 
-        mouse_cu.x = static_cast<int16_t>( _emulatedPointerPosX );
-        mouse_cu.y = static_cast<int16_t>( _emulatedPointerPosY );
+        mouse_cu.x = static_cast<int32_t>( _emulatedPointerPosX );
+        mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
             if ( modes & MOUSE_OFFSET )
@@ -1627,7 +1643,7 @@ bool LocalEvent::MouseClickLeft( void )
     return false;
 }
 
-bool LocalEvent::MouseClickLeft( const Rect & rt )
+bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button && ( rt & mouse_pl ) && ( rt & mouse_rl ) ) {
         ResetModes( MOUSE_CLICKED );
@@ -1649,7 +1665,7 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( const Rect & rt )
+bool LocalEvent::MouseClickMiddle( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button && ( rt & mouse_pm ) && ( rt & mouse_rm ) ) {
         ResetModes( MOUSE_CLICKED );
@@ -1671,7 +1687,7 @@ bool LocalEvent::MouseClickRight( void )
     return false;
 }
 
-bool LocalEvent::MouseClickRight( const Rect & rt )
+bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button && ( rt & mouse_pr ) && ( rt & mouse_rr ) ) {
         ResetModes( MOUSE_CLICKED );
@@ -1700,32 +1716,32 @@ bool LocalEvent::MouseWheelDn( void ) const
 #endif
 }
 
-bool LocalEvent::MousePressLeft( const Rect & rt ) const
+bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
 {
     return MousePressLeft() && ( rt & mouse_pl );
 }
 
-bool LocalEvent::MousePressMiddle( const Rect & rt ) const
+bool LocalEvent::MousePressMiddle( const fheroes2::Rect & rt ) const
 {
     return MousePressMiddle() && ( rt & mouse_pm );
 }
 
-bool LocalEvent::MousePressRight( const Rect & rt ) const
+bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
 {
     return MousePressRight() && ( rt & mouse_pr );
 }
 
-bool LocalEvent::MouseReleaseLeft( const Rect & rt ) const
+bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseLeft() && ( rt & mouse_rl );
 }
 
-bool LocalEvent::MouseReleaseMiddle( const Rect & rt ) const
+bool LocalEvent::MouseReleaseMiddle( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseMiddle() && ( rt & mouse_rm );
 }
 
-bool LocalEvent::MouseReleaseRight( const Rect & rt ) const
+bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
 {
     return MouseReleaseRight() && ( rt & mouse_rr );
 }
@@ -1736,17 +1752,17 @@ void LocalEvent::ResetPressLeft( void )
     mouse_pl.y = -1;
 }
 
-bool LocalEvent::MouseWheelUp( const Rect & rt ) const
+bool LocalEvent::MouseWheelUp( const fheroes2::Rect & rt ) const
 {
     return MouseWheelUp() && ( rt & mouse_cu );
 }
 
-bool LocalEvent::MouseWheelDn( const Rect & rt ) const
+bool LocalEvent::MouseWheelDn( const fheroes2::Rect & rt ) const
 {
     return MouseWheelDn() && ( rt & mouse_cu );
 }
 
-bool LocalEvent::MouseCursor( const Rect & rt ) const
+bool LocalEvent::MouseCursor( const fheroes2::Rect & rt ) const
 {
     return rt & mouse_cu;
 }
@@ -1839,6 +1855,18 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_JOYBALLMOTION, false );
     SetState( SDL_JOYHATMOTION, false );
     SetState( SDL_SYSWMEVENT, false );
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+    SetState( SDL_FINGERDOWN, true );
+    SetState( SDL_FINGERUP, true );
+    SetState( SDL_FINGERMOTION, true );
+#else
+    SetState( SDL_FINGERDOWN, false );
+    SetState( SDL_FINGERUP, false );
+    SetState( SDL_FINGERMOTION, false );
+#endif
+#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );

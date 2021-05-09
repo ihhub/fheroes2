@@ -70,7 +70,7 @@ namespace fheroes2
         {}
 
         virtual void clear() {}
-        virtual void render( const Display & ) {}
+        virtual void render( const Display &, const Rect & ) {}
         virtual bool allocate( int32_t &, int32_t &, bool )
         {
             return false;
@@ -106,6 +106,7 @@ namespace fheroes2
         ~Display() override = default;
 
         void render(); // render full image on screen
+        void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
 
         void resize( int32_t width_, int32_t height_ ) override;
         bool isDefaultSize() const;
@@ -137,13 +138,16 @@ namespace fheroes2
         PreRenderProcessing _preprocessing;
         PostRenderProcessing _postprocessing;
 
-        void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
-
         uint8_t * _renderSurface;
+
+        // Previous area drawn on the screen.
+        Rect _prevRoi;
+
+        void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
 
         Display();
 
-        void _renderFrame() const; // prepare and render a frame
+        void _renderFrame( const Rect & roi ) const; // prepare and render a frame
     };
 
     class Cursor

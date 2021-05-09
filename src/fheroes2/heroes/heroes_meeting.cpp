@@ -94,17 +94,17 @@ public:
         : ArmyBar( army, true, false, false )
     {}
 
-    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( ArmyTroop & troop, const fheroes2::Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !troop.isValid() )
             return;
@@ -114,18 +114,18 @@ public:
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-        if ( mons32.width() > roi.w ) {
-            srcrt.x = ( mons32.width() - roi.w ) / 2;
-            srcrt.width = roi.w;
+        if ( mons32.width() > roi.width ) {
+            srcrt.x = ( mons32.width() - roi.width ) / 2;
+            srcrt.width = roi.width;
         }
 
-        if ( mons32.height() > roi.h ) {
-            srcrt.y = ( mons32.height() - roi.h ) / 2;
-            srcrt.height = roi.h;
+        if ( mons32.height() > roi.height ) {
+            srcrt.y = ( mons32.height() - roi.height ) / 2;
+            srcrt.height = roi.height;
         }
 
-        int32_t offsetX = ( roi.w - mons32.width() ) / 2;
-        int32_t offsetY = roi.h - mons32.height() - 3;
+        int32_t offsetX = ( roi.width - mons32.width() ) / 2;
+        int32_t offsetY = roi.height - mons32.height() - 3;
 
         if ( offsetX < 1 )
             offsetX = 1;
@@ -135,7 +135,7 @@ public:
 
         fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
 
-        text.Blit( roi.x + ( roi.w - text.w() ) / 2, roi.y + roi.h - 1, image );
+        text.Blit( roi.x + ( roi.width - text.w() ) / 2, roi.y + roi.height - 1, image );
 
         if ( isSelected ) {
             spcursor.setPosition( roi.x, roi.y );
@@ -154,17 +154,17 @@ public:
         : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
-    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( Artifact & arifact, const fheroes2::Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !arifact.isValid() )
             return;
@@ -188,7 +188,7 @@ public:
         : PrimarySkillsBar( hero, true )
     {}
 
-    void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override
     {
         // Just do nothing
     }
@@ -201,33 +201,33 @@ public:
         : SecondarySkillsBar( hero )
     {}
 
-    void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
+    void RedrawItem( Skill::Secondary & skill, const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( !skill.isValid() )
             return;
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
-        fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
+        fheroes2::Blit( sprite, image, roi.x + ( roi.width - sprite.width() ) / 2, roi.y + ( roi.height - sprite.height() ) / 2 );
 
         Text text( std::to_string( skill.Level() ), Font::SMALL );
-        text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
+        text.Blit( roi.x + ( roi.width - text.w() ) - 3, roi.y + roi.height - text.h(), image );
     }
 
 private:
     fheroes2::Image _cachedBackground;
 };
 
-void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );
+void RedrawPrimarySkillInfo( const fheroes2::Point &, PrimarySkillsBar *, PrimarySkillsBar * );
 
 void Heroes::MeetingDialog( Heroes & heroes2 )
 {
@@ -239,17 +239,17 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     cursor.SetThemes( cursor.POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    const Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
+    const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt );
     std::string message;
 
-    Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y;
-    fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.w, src_rt.h );
+    fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
     // header
     message = _( "%{name1} meets %{name2}" );
@@ -277,25 +277,25 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     MoraleIndicator moraleIndicator1( this );
     dst_pt.x = cur_pt.x + iconsH1XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().h / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().height / 3;
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
     LuckIndicator luckIndicator1( this );
     dst_pt.x = cur_pt.x + iconsH1XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().h * 4 / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().height * 4 / 3;
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
     MoraleIndicator moraleIndicator2( &heroes2 );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().h / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().height / 3;
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
     LuckIndicator luckIndicator2( &heroes2 );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().h * 4 / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().height * 4 / 3;
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 
@@ -595,7 +595,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     display.render();
 }
 
-void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
+void RedrawPrimarySkillInfo( const fheroes2::Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
 {
     // attack skill
     Text text( _( "Attack Skill" ), Font::SMALL );

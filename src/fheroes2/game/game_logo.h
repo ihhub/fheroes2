@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,41 +20,7 @@
 
 #pragma once
 
-#include "players.h"
-
-namespace Interface
+namespace fheroes2
 {
-    struct PlayerInfo
-    {
-        PlayerInfo()
-            : player( NULL )
-        {}
-
-        Player * player;
-        fheroes2::Rect rect1; // opponent
-        fheroes2::Rect rect2; // class
-        fheroes2::Rect rect3; // change
-    };
-
-    struct PlayersInfo : std::vector<PlayerInfo>
-    {
-        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
-
-        void UpdateInfo( Players &, const fheroes2::Point & opponents, const fheroes2::Point & classes );
-        bool SwapPlayers( Player & player1, Player & player2 ) const;
-
-        Player * GetFromOpponentClick( const fheroes2::Point & pt );
-        Player * GetFromOpponentNameClick( const fheroes2::Point & pt );
-        Player * GetFromOpponentChangeClick( const fheroes2::Point & pt );
-        Player * GetFromClassClick( const fheroes2::Point & pt );
-
-        void RedrawInfo( bool show_play_info = false ) const;
-        void resetSelection();
-        bool QueueEventProcessing( void );
-
-        bool show_name;
-        bool show_race;
-        bool show_swap;
-        Player * currentSelectedPlayer;
-    };
+    void showTeamInfo();
 }

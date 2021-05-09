@@ -127,7 +127,7 @@ public:
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
     bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
-    bool isPosition( const Point & ) const;
+    bool isPosition( const fheroes2::Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
     u32 CountBuildings( void ) const;
@@ -169,7 +169,7 @@ public:
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );
 
-    void DrawImageCastle( const Point & pt ) const;
+    void DrawImageCastle( const fheroes2::Point & pt ) const;
 
     int OpenDialog( bool readonly = false );
 
@@ -213,7 +213,7 @@ public:
 
     static u32 GetGrownWell( void );
     static u32 GetGrownWel2( void );
-    static u32 GetGrownWeekOf( const Monster & );
+    static u32 GetGrownWeekOf();
     static u32 GetGrownMonthOf( void );
 
     std::string String( void ) const;
@@ -226,12 +226,12 @@ public:
 private:
     u32 * GetDwelling( u32 dw );
     void EducateHeroes( void );
-    Rect RedrawResourcePanel( const Point & ) const;
+    fheroes2::Rect RedrawResourcePanel( const fheroes2::Point & ) const;
     u32 OpenTown( void );
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
-    void WellRedrawInfoArea( const Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
+    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
@@ -292,7 +292,7 @@ namespace CastleDialog
 
     struct builds_t
     {
-        builds_t( building_t b, const Rect & r )
+        builds_t( building_t b, const fheroes2::Rect & r )
             : id( b )
             , coord( r )
         {}
@@ -303,22 +303,22 @@ namespace CastleDialog
         }
 
         building_t id;
-        Rect coord;
+        fheroes2::Rect coord;
     };
 
     struct CacheBuildings : std::vector<builds_t>
     {
-        CacheBuildings( const Castle &, const Point & );
+        CacheBuildings( const Castle &, const fheroes2::Point & );
     };
 
-    void RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
-    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const Rect &, uint8_t alpha = 255 );
+    void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding );
+    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const fheroes2::Rect &, uint8_t alpha = 255 );
 
-    void CastleRedrawBuilding( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
-    void CastleRedrawBuildingExtended( const Castle &, const Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+    void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+    void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
 
     bool RoadConnectionNeeded( const Castle & castle, const uint32_t buildId, const bool constructionInProgress );
-    void RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha = 255 );
+    void RedrawRoadConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>
@@ -344,7 +344,7 @@ public:
 
     void AddCastle( Castle * castle );
 
-    Castle * Get( const Point & position ) const;
+    Castle * Get( const fheroes2::Point & position ) const;
 
     void Scoute( int ) const;
 

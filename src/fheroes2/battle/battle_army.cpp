@@ -44,10 +44,9 @@ namespace Battle
 
     Unit * ForceGetCurrentUnitPart( Units & units1, Units & units2, bool part1, bool units1_first, bool orders_mode )
     {
-        Units::iterator it1 = part1 ? std::find_if( units1.begin(), units1.end(), []( const Unit * v ) { return AllowPart1( v ); } )
-                                    : std::find_if( units1.begin(), units1.end(), []( const Unit * v ) { return AllowPart2( v ); } );
-        Units::iterator it2 = part1 ? std::find_if( units2.begin(), units2.end(), []( const Unit * v ) { return AllowPart1( v ); } )
-                                    : std::find_if( units2.begin(), units2.end(), []( const Unit * v ) { return AllowPart2( v ); } );
+        auto allowPartFunc = part1 ? AllowPart1 : AllowPart2;
+        Units::iterator it1 = std::find_if( units1.begin(), units1.end(), allowPartFunc );
+        Units::iterator it2 = std::find_if( units2.begin(), units2.end(), allowPartFunc );
         Unit * result = NULL;
 
         if ( it1 != units1.end() && it2 != units2.end() ) {

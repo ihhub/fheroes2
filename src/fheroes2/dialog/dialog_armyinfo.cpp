@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_static.h"
 #include "icn.h"
 #include "luck.h"
@@ -117,7 +118,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
-    DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+    DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
@@ -214,7 +215,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 cursor.Hide();
 
                 fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
@@ -224,7 +225,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( troop.isBattle() )
                     DrawBattleStats( battleStatOffset, troop );
 
-                DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+                DrawMonsterInfo( pos_rt.getPosition(), troop );
                 DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
 
                 if ( buttonUpgrade.isEnabled() )
@@ -672,7 +673,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
                         Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
+    fheroes2::ButtonGroup btnGroup( pos, buttons );
 
     fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
     fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
@@ -708,8 +709,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     Kingdom & kingdom = hero.GetKingdom();
 
-    Rect btnMarketArea = btnMarket.area();
-    Rect btnHeroesArea = btnHeroes.area();
+    fheroes2::Rect btnMarketArea = btnMarket.area();
+    fheroes2::Rect btnHeroesArea = btnHeroes.area();
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
         btnGroup.button( 0 ).disable();

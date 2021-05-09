@@ -35,8 +35,8 @@ class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 public:
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
-    void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    void RedrawItem( ArmyTroop &, const Rect &, bool, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawItem( ArmyTroop &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );

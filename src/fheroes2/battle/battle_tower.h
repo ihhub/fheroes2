@@ -51,7 +51,7 @@ namespace Battle
         const char * GetName( void ) const;
 
         void SetDestroy( void );
-        Point GetPortPosition( void ) const;
+        fheroes2::Point GetPortPosition( void ) const;
 
         static std::string GetInfo( const Castle & );
 

@@ -460,7 +460,7 @@ size_t Text::Size( void ) const
     return message->Size();
 }
 
-void Text::Blit( const Point & dst_pt, fheroes2::Image & dst ) const
+void Text::Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst ) const
 {
     return message->Blit( dst_pt.x, dst_pt.y, 0, dst );
 }

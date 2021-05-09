@@ -55,8 +55,8 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-    const Point cur_pt( background.activeArea().x, background.activeArea().y );
-    Point dst_pt( cur_pt );
+    const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
+    fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
     fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -66,7 +66,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // portrait
     dst_pt.x = cur_pt.x + 49;
     dst_pt.y = cur_pt.y + 31;
-    const Rect portPos( dst_pt.x, dst_pt.y, 101, 93 );
+    const fheroes2::Rect portPos( dst_pt.x, dst_pt.y, 101, 93 );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     // name
@@ -105,10 +105,10 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
     fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectSpreadArmyFormat( dst_pt, sprite1.width(), sprite1.height() );
+    const fheroes2::Rect rectSpreadArmyFormat( dst_pt.x, dst_pt.y, sprite1.width(), sprite1.height() );
     const std::string descriptionSpreadArmyFormat
         = _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." );
-    const Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
+    const fheroes2::Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // army format grouped
     dst_pt.x = cur_pt.x + 552;
@@ -116,23 +116,23 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
     fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectGroupedArmyFormat( dst_pt, sprite2.width(), sprite2.height() );
+    const fheroes2::Rect rectGroupedArmyFormat( dst_pt.x, dst_pt.y, sprite2.width(), sprite2.height() );
     const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." );
-    const Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
+    const fheroes2::Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // cursor format
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
-    const Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
+    const fheroes2::Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
     cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
     ExperienceIndicator experienceInfo( this );
-    experienceInfo.SetPos( Point( cur_pt.x + 512, cur_pt.y + 86 ) );
+    experienceInfo.SetPos( fheroes2::Point( cur_pt.x + 512, cur_pt.y + 86 ) );
     experienceInfo.Redraw();
 
     // spell points
     SpellPointsIndicator spellPointsInfo( this );
-    spellPointsInfo.SetPos( Point( cur_pt.x + 550, cur_pt.y + 88 ) );
+    spellPointsInfo.SetPos( fheroes2::Point( cur_pt.x + 550, cur_pt.y + 88 ) );
     spellPointsInfo.Redraw();
 
     // crest

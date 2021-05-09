@@ -36,9 +36,7 @@
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
 #define FORMAT_VERSION_084_RELEASE 9000
-#define FORMAT_VERSION_082_RELEASE 8200
-#define FORMAT_VERSION_080_RELEASE 8000
-#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_080_RELEASE
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_084_RELEASE
 
 #define CURRENT_FORMAT_VERSION FORMAT_VERSION_093_RELEASE // TODO: update this value for a new release
 
@@ -93,7 +91,7 @@ public:
         // UNUSED = 0x20008000,
         WORLD_BAN_MONTHOF_MONSTERS = 0x20010000,
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
-        WORLD_NEW_VERSION_WEEKOF = 0x20040000,
+        // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
@@ -151,15 +149,15 @@ public:
     int FontsNormalSize( void ) const;
     int FontsSmallSize( void ) const;
 
-    const Point & PosRadar( void ) const;
-    const Point & PosButtons( void ) const;
-    const Point & PosIcons( void ) const;
-    const Point & PosStatus( void ) const;
+    const fheroes2::Point & PosRadar() const;
+    const fheroes2::Point & PosButtons() const;
+    const fheroes2::Point & PosIcons() const;
+    const fheroes2::Point & PosStatus() const;
 
-    void SetPosRadar( const Point & );
-    void SetPosButtons( const Point & );
-    void SetPosIcons( const Point & );
-    void SetPosStatus( const Point & );
+    void SetPosRadar( const fheroes2::Point & );
+    void SetPosButtons( const fheroes2::Point & );
+    void SetPosIcons( const fheroes2::Point & );
+    void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen( void ) const;
     bool Sound( void ) const;
@@ -206,7 +204,6 @@ public:
     bool ExtWorldEyeEagleAsScholar( void ) const;
     bool ExtWorldBanMonthOfMonsters( void ) const;
     bool ExtWorldBanWeekOf( void ) const;
-    bool ExtWorldNewVersionWeekOf( void ) const;
     bool ExtWorldBanPlagues( void ) const;
     bool ExtWorldStartHeroLossCond4Humans( void ) const;
     bool ExtWorldOneHeroHiredEveryWeek( void ) const;
@@ -289,7 +286,7 @@ public:
     const std::string & MapsDescription( void ) const;
     const std::string & externalMusicCommand() const;
     int MapsDifficulty( void ) const;
-    Size MapsSize( void ) const;
+    fheroes2::Size MapsSize( void ) const;
     bool GameStartWithHeroes( void ) const;
     int ConditionWins( void ) const;
     int ConditionLoss( void ) const;
@@ -297,8 +294,8 @@ public:
     int WinsFindArtifactID( void ) const;
     bool WinsFindUltimateArtifact( void ) const;
     u32 WinsAccumulateGold( void ) const;
-    Point WinsMapsPositionObject( void ) const;
-    Point LossMapsPositionObject( void ) const;
+    fheroes2::Point WinsMapsPositionObject( void ) const;
+    fheroes2::Point LossMapsPositionObject( void ) const;
     u32 LossCountDays( void ) const;
     int controllerPointerSpeed() const;
 
@@ -377,10 +374,10 @@ private:
 
     std::string video_driver;
 
-    Point pos_radr;
-    Point pos_bttn;
-    Point pos_icon;
-    Point pos_stat;
+    fheroes2::Point pos_radr;
+    fheroes2::Point pos_bttn;
+    fheroes2::Point pos_icon;
+    fheroes2::Point pos_stat;
 
     Players players;
 };

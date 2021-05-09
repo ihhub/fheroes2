@@ -24,8 +24,8 @@
 #include "rand.h"
 #include <algorithm>
 
-RandomizedDelay::RandomizedDelay( uint32_t delay )
-    : TimeDelay( delay )
+RandomizedDelay::RandomizedDelay( const uint32_t delay )
+    : fheroes2::TimeDelay( delay )
     , halfDelay( delay / 2 )
     , timerIsSet( false )
 {}
@@ -34,12 +34,14 @@ bool RandomizedDelay::checkDelay()
 {
     if ( !timerIsSet ) {
         // Randomize delay as 0.75 to 1.25 original value
-        second = Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2;
+        setDelay( Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2 );
         timerIsSet = true;
     }
-    const bool res = Trigger();
-    if ( res )
+    const bool res = isPassed();
+    if ( res ) {
+        reset();
         timerIsSet = false;
+    }
     return res;
 }
 
@@ -464,7 +466,7 @@ size_t AnimationReference::getProjectileID( const double angle ) const
     return _monsterInfo.getProjectileID( angle );
 }
 
-Point AnimationReference::getBlindOffset() const
+fheroes2::Point AnimationReference::getBlindOffset() const
 {
     return _monsterInfo.eyePosition;
 }
@@ -474,12 +476,12 @@ int AnimationReference::getTroopCountOffset( bool isReflect ) const
     return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
 }
 
-Point AnimationReference::getProjectileOffset( size_t direction ) const
+fheroes2::Point AnimationReference::getProjectileOffset( size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {
         return _monsterInfo.projectileOffset[direction];
     }
-    return Point();
+    return fheroes2::Point();
 }
 
 uint32_t AnimationReference::getIdleDelay() const

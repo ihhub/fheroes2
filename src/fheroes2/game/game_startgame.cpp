@@ -37,6 +37,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"
@@ -259,7 +260,7 @@ void ShowNewWeekDialog( void )
 
     if ( week.GetType() == Week::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf( monster );
+        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
@@ -641,6 +642,9 @@ int Interface::Basic::HumanTurn( bool isload )
 
     GameOver::Result & gameResult = GameOver::Result::Get();
 
+    // current music will be set along with the focus, reset music from the previous turn
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
         if ( GetFocusHeroes() != nullptr )
@@ -699,14 +703,16 @@ int Interface::Basic::HumanTurn( bool isload )
     bool stopHero = false;
 
     int heroAnimationFrameCount = 0;
-    Point heroAnimationOffset;
+    fheroes2::Point heroAnimationOffset;
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
 
+    const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
+
     // startgame loop
     while ( Game::CANCEL == res ) {
-        if ( !le.HandleEvents( true, true ) ) {
+        if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
             if ( EventExit() == Game::QUITGAME ) {
                 res = Game::QUITGAME;
                 break;
@@ -833,7 +839,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 scrollPosition |= SCROLL_BOTTOM;
 
             if ( scrollPosition != SCROLL_NONE ) {
-                if ( Game::AnimateInfrequentDelay( Game::SCROLL_START_DELAY ) ) {
+                if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {
                     if ( fastScrollRepeatCount < fastScrollStartThreshold ) {
                         ++fastScrollRepeatCount;
                     }
@@ -917,13 +923,13 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         // heroes move animation
-        if ( Game::AnimateInfrequentDelay( Game::CURRENT_HERO_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                    gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
                     gameArea.SetRedraw();
                     heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -955,8 +961,8 @@ int Interface::Basic::HumanTurn( bool isload )
                             }
                         }
                         else {
-                            Point movement( hero->MovementDirection() );
-                            if ( movement != Point() ) { // don't waste resources for no movement
+                            fheroes2::Point movement( hero->MovementDirection() );
+                            if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
                                 ResetFocus( GameFocus::HEROES );
@@ -1002,7 +1008,7 @@ int Interface::Basic::HumanTurn( bool isload )
 
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
-            if ( Game::AnimateInfrequentDelay( Game::SCROLL_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
                      || le.MouseCursor( GetScrollBottom() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
@@ -1016,7 +1022,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         // slow maps objects animation
-        if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             u32 & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();

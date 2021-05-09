@@ -373,3 +373,13 @@ std::string Game::GetSaveFileExtension( const int gameType )
 
     return ".savm";
 }
+
+bool Game::SaveCompletedCampaignScenario()
+{
+    const std::string & name = Settings::Get().CurrentFileInfo().name;
+
+    std::string base = name.empty() ? "newgame" : name;
+    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
+
+    return Save( System::ConcatePath( Game::GetSaveDir(), base ) + "_Complete" + Game::GetSaveFileExtension() );
+}

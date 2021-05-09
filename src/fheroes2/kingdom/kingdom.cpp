@@ -554,7 +554,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             continue;
 
         // check manual set hero (castle position + point(0, 1))?
-        const Point & cp = castle->GetCenter();
+        const fheroes2::Point & cp = castle->GetCenter();
         Heroes * hero = world.GetTiles( cp.x, cp.y + 1 ).GetHeroes();
 
         // and move manual set hero to castle
@@ -670,6 +670,24 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 Heroes * Kingdom::GetBestHero()
 {
     return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
+}
+
+Monster Kingdom::GetStrongestMonster() const
+{
+    Monster monster( Monster::UNKNOWN );
+    for ( const Heroes * hero : heroes ) {
+        const Monster currentMonster = hero->GetArmy().GetStrongestMonster();
+        if ( currentMonster.GetMonsterStrength() > monster.GetMonsterStrength() ) {
+            monster = currentMonster;
+        }
+    }
+    for ( const Castle * castle : castles ) {
+        const Monster currentMonster = castle->GetArmy().GetStrongestMonster();
+        if ( currentMonster.GetMonsterStrength() > monster.GetMonsterStrength() ) {
+            monster = currentMonster;
+        }
+    }
+    return monster;
 }
 
 double Kingdom::GetArmiesStrength( void ) const

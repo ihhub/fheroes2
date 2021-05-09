@@ -26,6 +26,7 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "logging.h"
@@ -137,7 +138,7 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     Cursor & cursor = Cursor::Get();
 
     const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const Rect & radarPos = radar.GetArea();
+    const fheroes2::Rect & radarPos = radar.GetArea();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
@@ -145,7 +146,7 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
     fheroes2::Blit( sf, display, BORDERWIDTH, BORDERWIDTH );
 
-    Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.h - 37 );
+    fheroes2::Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.height - 37 );
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
     buttonExit.draw();
@@ -172,14 +173,14 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
 
-    const Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
+    const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
-    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.w - sf.width() - BORDERWIDTH * 2 ) / 2,
-                                           gameArea.y + ( gameArea.h - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
+    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() - BORDERWIDTH * 2 ) / 2,
+                                           gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
 
-    Rect blitArea = border.activeArea();
+    fheroes2::Rect blitArea = border.activeArea();
 
-    fheroes2::Image background( blitArea.w, blitArea.h );
+    fheroes2::Image background( blitArea.width, blitArea.height );
 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     if ( isEvilInterface )
@@ -191,11 +192,11 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
 
     const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const Rect & radarPos = radar.GetArea();
+    const fheroes2::Rect & radarPos = radar.GetArea();
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
 
-    Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.h - 37 );
+    fheroes2::Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.height - 37 );
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
     buttonExit.draw();
@@ -228,7 +229,7 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && 0 <= alpha ) {
-        if ( Game::AnimateInfrequentDelay( Game::PUZZLE_FADE_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t i = 0; i < pzl.size(); ++i ) {
