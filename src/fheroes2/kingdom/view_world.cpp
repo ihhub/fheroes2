@@ -499,6 +499,9 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 2, 3 );
     buttonExit.draw();
 
+    cursor.Show();
+    display.render();
+
     // Use for dragging the map from main window
     bool isDrag = false;
     fheroes2::Point initMousePos;
