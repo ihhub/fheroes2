@@ -40,9 +40,9 @@
 
 namespace
 {
-    int GetRandomObstaclePosition()
+    int GetRandomObstaclePosition( std::mt19937 & gen )
     {
-        return Rand::Get( 3, 6 ) + ( 11 * Rand::Get( 1, 7 ) );
+        return Rand::GetWithGen( 3, 6, gen ) + ( 11 * Rand::GetWithGen( 1, 7, gen ) );
     }
 
     bool isTwoHexObject( const int icnId )
@@ -752,7 +752,7 @@ bool Battle::Board::isMoatIndex( s32 index, const Unit & b )
     return false;
 }
 
-void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
+void Battle::Board::SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen )
 {
     //    bool trees = Maps::ScanAroundObject(center, MP2::OBJ_TREES).size();
     bool grave = MP2::OBJ_GRAVEYARD == tile.GetObject( false );
@@ -845,15 +845,16 @@ void Battle::Board::SetCobjObjects( const Maps::Tiles & tile )
             break;
         }
 
-    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::Get( 0, 4 ) ) );
-    Rand::Shuffle( objs );
+    Rand::ShuffleWithGen( objs, gen );
+
+    const size_t objectsToPlace = std::min( objs.size(), static_cast<size_t>( Rand::GetWithGen( 0, 4, gen ) ) );
 
     for ( size_t i = 0; i < objectsToPlace; ++i ) {
         const bool checkRightCell = isTwoHexObject( objs[i] );
 
-        int32_t dest = GetRandomObstaclePosition();
+        int32_t dest = GetRandomObstaclePosition( gen );
         while ( at( dest ).GetObject() != 0 || ( checkRightCell && at( dest + 1 ).GetObject() != 0 ) ) {
-            dest = GetRandomObstaclePosition();
+            dest = GetRandomObstaclePosition( gen );
         }
 
         SetCobjObject( objs[i], dest );
