@@ -559,6 +559,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( int32_
 
     fheroes2::Blit( marker, result, markerPos.x, markerPos.y + 8 );
     fheroes2::ApplyPalette( result, PAL::GetPalette( PAL::PaletteType::TAN ) );
+    result._disableTransformLayer();
 
     return result;
 }

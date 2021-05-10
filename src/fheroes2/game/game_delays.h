@@ -64,10 +64,10 @@ namespace Game
         LAST_DELAY
     };
 
-    // If delay is passed reset it and return true. Otherwise return false.
+    // If delay is passed reset it and return true. Otherwise return false. DelayType::CUSTOM_DELAY must not be passed!
     bool validateAnimationDelay( const DelayType delayType );
 
-    // If custom delay is passed reset it and return true. Otherwise return false.
+    // If custom delay (DelayType::CUSTOM_DELAY) is passed reset it and return true. Otherwise return false.
     bool validateCustomAnimationDelay( const uint64_t delayMs );
 
     // Explicitly pass delay. Useful for loops when first iterator must pass.
@@ -81,7 +81,10 @@ namespace Game
     int HumanHeroAnimSkip();
     int AIHeroAnimSkip();
 
+    // Returns true if every of delay type is not passed yet. DelayType::CUSTOM_DELAY must not be added in this function!
     bool isDelayNeeded( const std::vector<Game::DelayType> & delayTypes );
+
+    bool isCustomDelayNeeded( const uint64_t delayMs );
 }
 
 #endif

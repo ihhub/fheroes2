@@ -321,10 +321,11 @@ namespace
 
     uint8_t GetPALColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
-        static std::vector<uint8_t> rgbToId;
-        if ( rgbToId.empty() ) {
+        static uint8_t rgbToId[64 * 64 * 64];
+        static bool isInitialized = false;
+        if ( !isInitialized ) {
+            isInitialized = true;
             const uint32_t size = 64 * 64 * 64;
-            rgbToId.resize( size );
 
             uint32_t r = 0;
             uint32_t g = 0;
@@ -416,9 +417,7 @@ namespace fheroes2
         , _data( std::move( image_._data ) )
         , _singleLayer( false )
     {
-        // We shouldn't copy or move different types of images.
-        assert( _singleLayer == image_._singleLayer );
-
+        std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
     }

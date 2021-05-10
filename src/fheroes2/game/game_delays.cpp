@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "game_delays.h"
 #include "settings.h"
@@ -142,6 +143,8 @@ bool Game::validateCustomAnimationDelay( const uint64_t delayMs )
 
 bool Game::validateAnimationDelay( const DelayType delayType )
 {
+    assert( delayType != Game::DelayType::CUSTOM_DELAY );
+
     if ( delays[delayType].isPassed() ) {
         delays[delayType].reset();
         return true;
@@ -198,10 +201,17 @@ bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
         return true;
 
     for ( const Game::DelayType type : delayTypes ) {
+        assert ( type != Game::DelayType::CUSTOM_DELAY );
+
         if ( delays[type].isPassed() ) {
             return false;
         }
     }
 
     return true;
+}
+
+bool Game::isCustomDelayNeeded( const uint64_t delayMs )
+{
+    return !delays[Game::DelayType::CUSTOM_DELAY].isPassed( delayMs );
 }

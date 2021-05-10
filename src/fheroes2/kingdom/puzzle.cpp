@@ -228,7 +228,10 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
     int alpha = 250;
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() && 0 <= alpha ) {
+    const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
+    Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
+
+    while ( alpha > 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
@@ -242,7 +245,7 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
                 fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, static_cast<uint8_t>( pieceAlpha ) );
             }
             cursor.Show();
-            display.render();
+            display.render( fheroes2::Rect( dstx, dsty, sf.width(), sf.height() ) );
             alpha -= 10;
         }
     }
