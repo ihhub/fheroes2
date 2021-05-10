@@ -83,9 +83,9 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
     if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
         str.append( "\n \n" );
         str.append( _( "guarded by %{count} %{monster}" ) );
-
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) ) );
+        std::string count = StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+        StringReplace( str, "%{count}", count );
+        StringReplace( str, "%{monster}", StringLower( ( count == "1" ? troop.GetName() : troop.GetMultiName() ) ) );
     }
 
     return str;
@@ -97,8 +97,10 @@ std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystal
 
     if ( isVisibleFromCrystalBall || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
         std::string str = "%{count} %{monster}";
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        std::string count = Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel );
+        StringReplace( str, "%{count}", count );
+        StringReplace( str, "%{monster}", StringLower( ( count == "1" ? troop.GetName() : troop.GetMultiName() ) ) );
+
         return str;
     }
     else {
