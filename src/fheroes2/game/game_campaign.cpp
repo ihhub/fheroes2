@@ -119,7 +119,7 @@ namespace
                                           fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
             }
             // cleared scenario
-            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), i ) != clearedMaps.end() ) {
+            else if ( std::find( clearedMaps.begin(), clearedMaps.end(), static_cast<int>( i ) ) != clearedMaps.end() ) {
                 DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_CLEARED, trackOffset, x, y );
             }
             else {
