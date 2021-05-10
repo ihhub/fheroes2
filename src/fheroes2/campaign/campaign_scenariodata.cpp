@@ -193,7 +193,7 @@ namespace Campaign
 
     std::string ScenarioBonusData::ToString() const
     {
-        const std::vector<uint32_t> useAmountTypes = {ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP};
+        const std::vector<uint32_t> useAmountTypes = { ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP };
 
         std::string objectName;
 

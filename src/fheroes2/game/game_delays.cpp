@@ -201,7 +201,7 @@ bool Game::isDelayNeeded( const std::vector<Game::DelayType> & delayTypes )
         return true;
 
     for ( const Game::DelayType type : delayTypes ) {
-        assert ( type != Game::DelayType::CUSTOM_DELAY );
+        assert( type != Game::DelayType::CUSTOM_DELAY );
 
         if ( delays[type].isPassed() ) {
             return false;
