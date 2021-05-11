@@ -200,7 +200,7 @@ namespace AI
         if ( acount )
             spellPower += acount * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
 
-        if ( spellPower <= 2 )
+        if ( spellPower < 2 )
             return 0.0;
 
         return static_cast<double>( spellPower );
