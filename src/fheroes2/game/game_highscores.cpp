@@ -192,8 +192,12 @@ int Game::HighScores()
     }
 #endif
 
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     HGSData hgs;
 
@@ -206,8 +210,6 @@ int Game::HighScores()
     hgs.Load( stream.str().c_str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
-
-    cursor.Hide();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
@@ -223,7 +225,6 @@ int Game::HighScores()
     buttonCampain.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     const u32 rating = GetGameOverScores();
@@ -233,7 +234,6 @@ int Game::HighScores()
     if ( rating && ( gameResult.GetResult() & GameOver::WINS ) ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player );
-        cursor.Hide();
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
@@ -241,7 +241,6 @@ int Game::HighScores()
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();
-        cursor.Show();
         display.render();
         gameResult.Reset();
     }

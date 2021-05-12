@@ -69,10 +69,12 @@ int Game::MainMenu( bool isFirstGameRun )
 
     conf.SetGameType( TYPE_MENU );
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -113,7 +115,6 @@ int Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    cursor.Show();
     display.render();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
@@ -130,10 +131,8 @@ int Game::MainMenu( bool isFirstGameRun )
                             {QUIT_DEFAULT, buttonQuit, false, false}};
 
     for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
-        cursor.Hide();
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
-        cursor.Show();
     }
 
     // mainmenu loop
@@ -170,7 +169,6 @@ int Game::MainMenu( bool isFirstGameRun )
                     ++frame;
 
                 if ( !redrawScreen ) {
-                    cursor.Hide();
                     redrawScreen = true;
                 }
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
@@ -179,7 +177,6 @@ int Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( redrawScreen ) {
-            cursor.Show();
             display.render();
         }
 
@@ -222,11 +219,9 @@ int Game::MainMenu( bool isFirstGameRun )
             Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
-            cursor.Hide();
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            cursor.Show();
             display.render();
         }
     }

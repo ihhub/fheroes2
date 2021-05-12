@@ -311,10 +311,12 @@ int Game::SelectCampaignScenario()
     display.fill( 0 );
     Settings & conf = Settings::Get();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     const size_t chosenCampaignID = campaignSaveData.getCampaignID();
@@ -394,7 +396,6 @@ int Game::SelectCampaignScenario()
 
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {

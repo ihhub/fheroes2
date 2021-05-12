@@ -126,10 +126,12 @@ int Game::NewNetwork( void )
     Settings & conf = Settings::Get();
     conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -151,7 +153,6 @@ int Game::NewNetwork( void )
     buttonGuest.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
     display.render();
 
     // newgame loop
@@ -187,10 +188,12 @@ int Game::NewGame( void )
     // reset last save name
     Game::SetLastSavename( "" );
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -230,7 +233,6 @@ int Game::NewGame( void )
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -254,7 +256,6 @@ int Game::NewGame( void )
             return NEWMULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
             Dialog::ExtSettings( false );
-            cursor.Show();
             display.render();
         }
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
@@ -285,10 +286,12 @@ int Game::NewMulti( void )
     if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -317,7 +320,6 @@ int Game::NewMulti( void )
     buttonCancelGame.draw();
     buttonNetwork.disable();
 
-    cursor.Show();
     display.render();
 
     // newgame loop
@@ -355,10 +357,12 @@ int Game::NewMulti( void )
 
 u32 Game::SelectCountPlayers( void )
 {
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -393,7 +397,6 @@ u32 Game::SelectCountPlayers( void )
     button6Players.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     // newgame loop

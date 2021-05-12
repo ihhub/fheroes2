@@ -593,10 +593,8 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        cursor.Hide();
                         cursor.SetThemes( Cursor::WAIT );
                         Redraw();
-                        cursor.Show();
                         display.render();
 
                         AI::Get().KingdomTurn( kingdom );
@@ -634,7 +632,6 @@ int Interface::Basic::HumanTurn( bool isload )
     int res = Game::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
-    cursor.Hide();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -665,7 +662,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
     Game::EnvironmentSoundMixer();
 
-    cursor.Show();
     display.render();
 
     if ( !isload ) {
@@ -1029,9 +1025,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( NeedRedraw() ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
             display.render();
         }
         else if ( !cursor.isVisible() ) {

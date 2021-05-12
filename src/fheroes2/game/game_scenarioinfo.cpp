@@ -106,10 +106,12 @@ int Game::ScenarioInfo( void )
     int result = QUITGAME;
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -209,7 +211,6 @@ int Game::ScenarioInfo( void )
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     while ( 1 ) {
@@ -232,6 +233,7 @@ int Game::ScenarioInfo( void )
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+
             if ( fi ) {
                 SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
@@ -240,7 +242,6 @@ int Game::ScenarioInfo( void )
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-                cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.resetSelection();
@@ -250,7 +251,7 @@ int Game::ScenarioInfo( void )
                 buttonOk.draw();
                 buttonCancel.draw();
             }
-            cursor.Show();
+
             display.render();
         }
         else
@@ -271,18 +272,14 @@ int Game::ScenarioInfo( void )
 
             // select difficulty
             if ( 0 <= index ) {
-                cursor.Hide();
                 levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                 levelCursor.redraw();
                 Game::saveDifficulty( index );
                 RedrawRatingInfo( rating );
-                cursor.Show();
                 display.render();
             }
-            else
-                // playersInfo
-                if ( playersInfo.QueueEventProcessing() ) {
-                cursor.Hide();
+            // playersInfo
+            else if ( playersInfo.QueueEventProcessing() ) {
                 RedrawScenarioStaticInfo( rectPanel );
                 levelCursor.redraw();
                 RedrawDifficultyInfo( pointDifficultyInfo );
@@ -291,7 +288,6 @@ int Game::ScenarioInfo( void )
                 RedrawRatingInfo( rating );
                 buttonOk.draw();
                 buttonCancel.draw();
-                cursor.Show();
                 display.render();
             }
         }
@@ -318,8 +314,6 @@ int Game::ScenarioInfo( void )
     }
 
     SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
-
-    cursor.Hide();
 
     if ( result == STARTGAME ) {
         players.SetStartGame();
