@@ -91,11 +91,14 @@ void Puzzle::ShowMapsDialog( void ) const
     if ( sf.empty() )
         return;
 
-    Cursor & cursor = Cursor::Get();
     const fheroes2::Display & display = fheroes2::Display::instance();
-    int old_cursor = cursor.Themes();
 
-    cursor.Hide();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     AGG::PlayMusic( MUS::PUZZLE, false );
 
@@ -103,8 +106,6 @@ void Puzzle::ShowMapsDialog( void ) const
         ShowStandardDialog( *this, sf );
     else
         ShowExtendedDialog( *this, sf );
-
-    cursor.SetThemes( old_cursor );
 }
 
 bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
@@ -135,7 +136,6 @@ void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t
 void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
     const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
     const fheroes2::Rect & radarPos = radar.GetArea();
@@ -152,9 +152,8 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     buttonExit.draw();
     PuzzlesDraw( pzl, sf, BORDERWIDTH, BORDERWIDTH );
 
-    cursor.SetThemes( Cursor::POINTER );
-    cursor.Show();
     display.render();
+
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
@@ -164,14 +163,11 @@ void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     }
 
     radar.SetRedraw();
-
-    cursor.Hide();
 }
 
 void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
 
@@ -202,9 +198,8 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     buttonExit.draw();
     PuzzlesDraw( pzl, sf, blitArea.x, blitArea.y );
 
-    cursor.SetThemes( Cursor::POINTER );
-    cursor.Show();
     display.render();
+
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() ) {
@@ -219,7 +214,6 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
 void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 dsty )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
     // show all for debug
     if ( IS_DEVEL() )
@@ -233,7 +227,6 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
 
     while ( alpha > 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
-            cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t i = 0; i < pzl.size(); ++i ) {
                 const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
@@ -244,12 +237,10 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
 
                 fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, static_cast<uint8_t>( pieceAlpha ) );
             }
-            cursor.Show();
             display.render( fheroes2::Rect( dstx, dsty, sf.width(), sf.height() ) );
             alpha -= 10;
         }
     }
-    cursor.Hide();
 }
 
 StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
