@@ -62,8 +62,13 @@ u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Fun
 void Castle::OpenWell( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
@@ -111,7 +116,6 @@ void Castle::OpenWell( void )
     alldwellings.push_back( DWELLING_MONSTER2 );
     alldwellings.push_back( DWELLING_MONSTER1 );
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -180,14 +184,12 @@ void Castle::OpenWell( void )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
-            cursor.Hide();
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
 
             buttonMax.draw();
-            cursor.Show();
             display.render();
         }
     }

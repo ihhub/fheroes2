@@ -124,11 +124,12 @@ int Castle::OpenDialog( bool readonly )
 
     CastleHeroes heroes = world.GetHeroes( *this );
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     // fade
     if ( conf.ExtGameUseFade() )
@@ -241,7 +242,6 @@ int Castle::OpenDialog( bool readonly )
     AGG::PlayMusic( MUS::FromRace( race ), true, true );
 
     LocalEvent & le = LocalEvent::Get();
-    cursor.Show();
 
     bool firstDraw = true;
 

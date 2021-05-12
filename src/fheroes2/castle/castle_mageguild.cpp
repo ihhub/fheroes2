@@ -126,10 +126,7 @@ bool RowSpells::QueueEventProcessing( void )
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            const Cursor & cursor = Cursor::Get();
-            cursor.Hide();
             Dialog::SpellInfo( spell, !le.MousePressRight() );
-            cursor.Show();
             fheroes2::Display::instance().render();
         }
     }
@@ -140,8 +137,13 @@ bool RowSpells::QueueEventProcessing( void )
 void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
@@ -215,7 +217,6 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     fheroes2::Button buttonExit( cur_pt.x + 578, cur_pt.y + 461, ICN::WELLXTRA, 0, 1 );
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();

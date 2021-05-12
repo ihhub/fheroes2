@@ -45,8 +45,13 @@ void Castle::OpenTavern( void ) const
     const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     Text text( tavern, Font::YELLOW_BIG );
     const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
@@ -84,7 +89,6 @@ void Castle::OpenTavern( void ) const
 
     buttonYes.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -98,7 +102,6 @@ void Castle::OpenTavern( void ) const
 
         // animation
         if ( Game::validateAnimationDelay( Game::CASTLE_TAVERN_DELAY ) ) {
-            cursor.Hide();
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
             if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame ) ) {
@@ -107,7 +110,6 @@ void Castle::OpenTavern( void ) const
             }
             ++frame;
 
-            cursor.Show();
             display.render();
         }
     }
