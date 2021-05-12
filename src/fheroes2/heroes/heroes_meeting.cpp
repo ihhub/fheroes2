@@ -233,10 +233,12 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
@@ -375,6 +377,9 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
+    // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+    cursor.Show();
+
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
@@ -401,7 +406,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
 
-    cursor.Show();
     display.render();
 
     MovePointsScaleFixed();
@@ -427,8 +431,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         // selector troops event
         if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
              || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -439,19 +441,20 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
         // selector artifacts event
         if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
              || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
@@ -464,13 +467,16 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             backPrimary.restore();
             RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
@@ -478,7 +484,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
              || ( le.MouseCursor( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
-            cursor.Show();
             display.render();
         }
 
@@ -499,26 +504,34 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts1.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
             Game::OpenHeroesDialog( heroes2, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
@@ -530,10 +543,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
@@ -545,10 +561,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
@@ -559,6 +578,9 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             backPrimary.restore();
             RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
@@ -566,7 +588,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
@@ -577,6 +598,9 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
 
+            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
+            cursor.Show();
+
             backPrimary.restore();
             RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
@@ -584,7 +608,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
     }
