@@ -67,16 +67,17 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
     }
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
-    const int oldcursor = cursor.Themes();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::Sprite & bookPage = fheroes2::AGG::GetICN( ICN::BOOK, 0 );
 
     size_t current_index = 0;
-
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & bookmark_info = fheroes2::AGG::GetICN( ICN::BOOK, 6 );
     const fheroes2::Sprite & bookmark_advn = fheroes2::AGG::GetICN( ICN::BOOK, 3 );
@@ -103,7 +104,6 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
     SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
     bool redraw = false;
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -171,18 +171,14 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
                             break;
                         }
                         else {
-                            cursor.Hide();
                             StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( "", str, Font::BIG, Dialog::OK );
-                            cursor.Show();
                             display.render();
                         }
                     }
                     else {
-                        cursor.Hide();
                         Dialog::SpellInfo( *spell, true );
-                        cursor.Show();
                         display.render();
                     }
                 }
@@ -237,27 +233,20 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
             if ( 0 <= index ) {
                 SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
                 if ( spell < displayedSpells.end() ) {
-                    cursor.Hide();
                     Dialog::SpellInfo( *spell, false );
-                    cursor.Show();
                     display.render();
                 }
             }
         }
 
         if ( redraw ) {
-            cursor.Hide();
             SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), displayableSpells, hero );
-            cursor.Show();
             display.render();
             redraw = false;
         }
     }
 
-    cursor.Hide();
     restorer.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return curspell;
@@ -266,15 +255,16 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
 void SpellBook::Edit( const HeroBase & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
 
-    const int oldcursor = cursor.Themes();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     size_t current_index = 0;
     SpellStorage displayedSpells = SetFilter( Filter::ALL, &hero );
-
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
 
     const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
@@ -293,7 +283,6 @@ void SpellBook::Edit( const HeroBase & hero )
     SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
     bool redraw = false;
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -343,18 +332,13 @@ void SpellBook::Edit( const HeroBase & hero )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             SpellBookRedrawLists( displayedSpells, coords, current_index, pos.getPosition(), hero.GetSpellPoints(), Filter::ALL, hero );
-            cursor.Show();
             display.render();
             redraw = false;
         }
     }
 
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 }
 
