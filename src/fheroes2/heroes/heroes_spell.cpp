@@ -501,12 +501,16 @@ bool ActionSpellTownPortal( Heroes & hero )
     std::vector<s32> castles;
 
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     LocalEvent & le = LocalEvent::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
 
     for ( KingdomCastles::const_iterator it = kingdom.GetCastles().begin(); it != kingdom.GetCastles().end(); ++it )
         if ( *it && !( *it )->GetHeroes().Guest() )
@@ -540,7 +544,6 @@ bool ActionSpellTownPortal( Heroes & hero )
                             Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
