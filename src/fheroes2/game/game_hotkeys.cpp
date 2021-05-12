@@ -304,9 +304,7 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 {
     // system hotkeys
     if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
-        Cursor::Get().Hide();
         fheroes2::engine().toggleFullScreen();
-        Cursor::Get().Show();
         fheroes2::Display::instance().render();
 
         Settings & conf = Settings::Get();

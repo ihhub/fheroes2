@@ -1514,11 +1514,9 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
     // redraw gamearea for monster action sprite
     if ( hero.isControlHuman() ) {
         Interface::Basic & I = Interface::Basic::Get();
-        Cursor::Get().Hide();
         I.GetGameArea().SetCenter( hero.GetCenter() );
         I.RedrawFocus();
         I.Redraw();
-        Cursor::Get().Show();
         // force flip, for monster attack show sprite
         fheroes2::Display::instance().render();
     }

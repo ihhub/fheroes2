@@ -462,8 +462,6 @@ void Interface::StatusWindow::RedrawTurnProgress( u32 v )
     turn_progress = v;
     SetRedraw();
 
-    Cursor::Get().Hide();
     interface.Redraw();
-    Cursor::Get().Show();
     fheroes2::Display::instance().render();
 }
