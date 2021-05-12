@@ -597,9 +597,13 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 void Kingdom::OverviewDialog( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
@@ -651,7 +655,6 @@ void Kingdom::OverviewDialog( void )
     buttonCastle.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
