@@ -437,11 +437,8 @@ void Interface::StatusWindow::QueueEventProcessing( void )
     const fheroes2::Rect & drawnArea = GetArea();
 
     if ( le.MouseClickLeft( drawnArea ) ) {
-        Cursor & cursor = Cursor::Get();
-        cursor.Hide();
         NextState();
         Redraw();
-        cursor.Show();
         fheroes2::Display::instance().render();
     }
     if ( le.MousePressRight( GetRect() ) ) {
