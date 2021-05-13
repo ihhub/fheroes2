@@ -471,10 +471,14 @@ void StreamBuf::putLE32( u32 v )
 
 std::vector<u8> StreamBuf::getRaw( size_t sz )
 {
-    std::vector<u8> v( sz ? sz : sizeg(), 0 );
+    const size_t remainSize = sizeg();
+    const size_t dataSize = sz > 0 ? sz : remainSize;
 
-    for ( std::vector<u8>::iterator it = v.begin(); it != v.end(); ++it )
-        *this >> *it;
+    std::vector<uint8_t> v( dataSize, 0 );
+    const size_t copySize = dataSize < remainSize ? dataSize : remainSize;
+    memcpy( v.data(), itget, copySize );
+
+    itget += copySize;
 
     return v;
 }
