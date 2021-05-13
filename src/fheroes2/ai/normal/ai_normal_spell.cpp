@@ -192,7 +192,7 @@ namespace AI
 
     uint32_t BattlePlanner::spellEffectValueMultiplier() const
     {
-        int spellPower = _commander->GetPower();
+        uint32_t spellPower = static_cast<uint32_t>( _commander->GetPower() );
         spellPower += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
                       + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
 
