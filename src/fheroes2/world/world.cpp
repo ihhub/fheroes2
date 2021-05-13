@@ -1050,7 +1050,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
 
-    if ( conf.isCampaignGameType() ) {
+    if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
@@ -1071,7 +1071,8 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
                     break;
                 }
 
-                return hasVillage ? GameOver::COND_NONE : GameOver::LOSS_ALL;
+                if ( !hasVillage )
+                    return GameOver::LOSS_ALL;
             }
         }
     }
