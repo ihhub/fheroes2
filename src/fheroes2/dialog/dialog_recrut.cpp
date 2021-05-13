@@ -226,8 +226,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -497,8 +497,8 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

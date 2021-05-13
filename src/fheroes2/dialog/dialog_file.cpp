@@ -38,8 +38,8 @@ int Dialog::FileOptions( void )
     const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

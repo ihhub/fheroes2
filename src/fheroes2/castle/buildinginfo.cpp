@@ -516,8 +516,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Hide();

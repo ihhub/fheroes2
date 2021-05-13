@@ -60,8 +60,8 @@ int Game::LoadMulti( void )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -148,8 +148,8 @@ int Game::LoadGame( void )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -247,8 +247,8 @@ int Game::DisplayLoadGameDialog()
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

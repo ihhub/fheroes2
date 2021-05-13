@@ -170,8 +170,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

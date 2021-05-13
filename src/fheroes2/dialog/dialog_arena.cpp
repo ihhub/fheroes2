@@ -43,8 +43,8 @@ int Dialog::SelectSkillFromArena( void )
     const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

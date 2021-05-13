@@ -127,8 +127,8 @@ int Game::NewNetwork( void )
     conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -189,8 +189,8 @@ int Game::NewGame( void )
     Game::SetLastSavename( "" );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -287,8 +287,8 @@ int Game::NewMulti( void )
         conf.SetGameType( Game::TYPE_STANDARD );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -358,8 +358,8 @@ int Game::NewMulti( void )
 u32 Game::SelectCountPlayers( void )
 {
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

@@ -69,8 +69,8 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -257,8 +257,8 @@ void SpellBook::Edit( const HeroBase & hero )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

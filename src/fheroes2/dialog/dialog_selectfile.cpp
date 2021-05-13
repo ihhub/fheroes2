@@ -208,8 +208,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

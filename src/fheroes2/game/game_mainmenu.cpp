@@ -70,8 +70,8 @@ int Game::MainMenu( bool isFirstGameRun )
     conf.SetGameType( TYPE_MENU );
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

@@ -202,8 +202,8 @@ void Battle::DialogBattleSettings( void )
     Settings & conf = Settings::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -339,8 +339,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     const Troops killed2 = army2->GetKilledTroops();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -828,8 +828,8 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
     const Settings & conf = Settings::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

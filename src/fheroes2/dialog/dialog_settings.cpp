@@ -136,8 +136,8 @@ void Dialog::ExtSettings( bool readonly )
     const Settings & conf = Settings::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

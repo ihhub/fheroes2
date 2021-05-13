@@ -219,8 +219,8 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -272,8 +272,8 @@ Spell Dialog::SelectSpell( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -319,8 +319,8 @@ Artifact Dialog::SelectArtifact( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -366,8 +366,8 @@ Monster Dialog::SelectMonster( int id )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -413,8 +413,8 @@ int Dialog::SelectHeroes( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

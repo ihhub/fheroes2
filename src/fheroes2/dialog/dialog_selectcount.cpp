@@ -142,8 +142,8 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -210,8 +210,8 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
@@ -315,8 +315,8 @@ int Dialog::ArmySplitTroop( const uint32_t freeSlots, const uint32_t redistribut
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();

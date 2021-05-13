@@ -48,8 +48,8 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const CursorRestorer cursorRestorer( cursor );
 
     cursor.SetThemes( cursor.POINTER );
     cursor.Show();
