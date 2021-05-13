@@ -1063,7 +1063,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
                 const KingdomCastles & castles = kingdom.GetCastles();
                 bool hasVillage = false;
 
-                for ( int i = 0; i < castles.size(); ++i ) {
+                for ( size_t i = 0; i < castles.size(); ++i ) {
                     if ( castles[0]->isCastle() )
                         continue;
 
