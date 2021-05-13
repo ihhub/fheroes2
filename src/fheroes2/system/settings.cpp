@@ -293,7 +293,7 @@ namespace
             _( "game: offer to continue the game afer victory condition" ),
         },
 
-        {0, NULL},
+        { 0, NULL },
     };
 
     const char * GetGeneralSettingDescription( int settingId )

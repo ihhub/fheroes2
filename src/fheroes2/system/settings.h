@@ -32,10 +32,12 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-#define FORMAT_VERSION_094_RELEASE 9400 // TODO: once this version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
+#define FORMAT_VERSION_094_RELEASE 9400
 #define FORMAT_VERSION_093_RELEASE 9300
 #define FORMAT_VERSION_091_RELEASE 9100
 #define FORMAT_VERSION_090_RELEASE 9001
+
+// TODO: once FORMAT_VERSION_094_RELEASE version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
 #define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_090_RELEASE
 
 #define CURRENT_FORMAT_VERSION FORMAT_VERSION_094_RELEASE // TODO: update this value for a new release
