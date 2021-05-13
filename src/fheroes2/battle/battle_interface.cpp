@@ -1072,7 +1072,6 @@ void Battle::Interface::Redraw( void )
 
 void Battle::Interface::RedrawPartialStart()
 {
-    Cursor::Get().Hide();
     RedrawCover();
     RedrawArmies();
 }
@@ -4144,7 +4143,6 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            cursor.Hide();
             const uint32_t frame = static_cast<uint32_t>( i * spriteCount / path.size() ); // it's safe to do such as i <= path.size()
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( spellICN, frame );
             fheroes2::Blit( sprite, _mainSurface, path[i].x - sprite.width() / 2, path[i].y - sprite.height() / 2 );
@@ -4207,9 +4205,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_DISRUPTING_DELAY ) ) {
-            cursor.Hide();
             fheroes2::Blit( fheroes2::CreateDeathWaveEffect( copy, position, waveLength, strength ), _mainSurface );
-            cursor.Show();
             RedrawPartialFinish();
 
             position += 3;
@@ -4290,10 +4286,8 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
         if ( Game::validateCustomAnimationDelay( spellcastDelay ) ) {
             // stay at maximum blur for 2 frames
             if ( frame < 9 || frame > 10 ) {
-                cursor.Hide();
                 fheroes2::Copy( original, _mainSurface );
                 fheroes2::AlphaBlit( blurred, _mainSurface, alpha );
-                cursor.Show();
                 RedrawPartialFinish();
 
                 alpha += ( frame < 10 ) ? 25 : -25;
@@ -4402,14 +4396,10 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     fheroes2::ApplyPalette( spriteReddish, PAL::GetPalette( PAL::PaletteType::RED ) );
     fheroes2::Copy( spriteReddish, 0, 0, _mainSurface, area.x, area.y, area.width, area.height );
 
-    cursor.Hide();
-
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
             const fheroes2::Rect initialArea( area );
@@ -4461,8 +4451,6 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            cursor.Hide();
-
             const int32_t offsetX = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
             const int32_t offsetY = static_cast<int32_t>( Rand::Get( 0, 14 ) ) - 7;
             const fheroes2::Rect initialArea( area );
@@ -4946,7 +4934,6 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
 void Battle::PopupDamageInfo::Reset( void )
 {
     if ( _redraw ) {
-        Cursor::Get().Hide();
         restorer.restore();
         _redraw = false;
         _cell = nullptr;
@@ -4959,8 +4946,6 @@ void Battle::PopupDamageInfo::Reset( void )
 void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
 {
     if ( _redraw ) {
-        Cursor::Get().Hide();
-
         uint32_t tmp1 = _attacker->CalculateMinDamage( *_defender );
         uint32_t tmp2 = _attacker->CalculateMaxDamage( *_defender );
 

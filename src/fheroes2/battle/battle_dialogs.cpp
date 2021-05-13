@@ -198,11 +198,15 @@ void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string 
 void Battle::DialogBattleSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -237,7 +241,6 @@ void Battle::DialogBattleSettings( void )
 
     RedrawBattleSettings( optionAreas );
 
-    cursor.Show();
     display.render();
 
     bool saveConfiguration = false;
@@ -329,14 +332,18 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
     const Troops killed1 = army1->GetKilledTroops();
     const Troops killed2 = army2->GetKilledTroops();
 
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     std::string msg;
     std::string title;
@@ -456,7 +463,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
     btn_ok.draw();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {
@@ -818,12 +824,15 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         return false;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -906,7 +915,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         drawGoldMsg();
     }
 
-    cursor.Show();
     display.render();
 
     bool result = false;
