@@ -62,7 +62,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
 {
     std::string str;
     const Troop & troop = tile.QuantityTroop();
-    const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel;
+    const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
 
     if ( MP2::OBJ_MINES == tile.GetObject() ) {
         str = Maps::GetMinesName( tile.QuantityResourceCount().first );
