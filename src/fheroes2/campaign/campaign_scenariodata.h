@@ -120,7 +120,7 @@ namespace Campaign
             return _victoryCondition;
         }
 
-        ScenarioLossCondition getLossCondition() const 
+        ScenarioLossCondition getLossCondition() const
         {
             return _lossCondition;
         }
