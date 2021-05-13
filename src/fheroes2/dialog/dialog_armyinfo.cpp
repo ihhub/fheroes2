@@ -89,9 +89,12 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
     const fheroes2::Sprite & spriteDialogShadow = fheroes2::AGG::GetICN( viewarmy, 7 );
 
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
     if ( isEvilInterface ) {
@@ -165,7 +168,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    cursor.Show();
     display.render();
 
     // dialog menu loop
@@ -216,8 +218,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             }
 
             if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
-                cursor.Hide();
-
                 fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
                 DrawMonsterStats( monsterStatOffset, troop );
@@ -237,7 +237,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                cursor.Show();
                 display.render();
             }
         }
@@ -246,8 +245,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
         }
     }
-
-    cursor.Hide();
 
     return result;
 }
@@ -524,11 +521,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
@@ -576,7 +574,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     }
 
     btnGroup.draw();
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -602,17 +599,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
             btnGroup.draw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( btnHeroes.area() ) ) {
             Dialog::Message( "", _( "View Hero" ), Font::BIG );
         }
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }
@@ -622,11 +614,12 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     std::string message;
 
@@ -751,7 +744,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     }
 
     btnGroup.draw();
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -785,7 +777,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             continue;
         }
 
-        cursor.Hide();
         tsTotal.Hide();
         tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
         tsTotal.Show();
@@ -828,13 +819,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             noRoom2.Show();
         }
 
-        cursor.Show();
         display.render();
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }

@@ -50,11 +50,12 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -80,7 +81,6 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     fheroes2::ButtonGroup btnGroups( box.GetArea(), buttons );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -92,6 +92,5 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
         result = btnGroups.processEvents();
     }
 
-    cursor.Hide();
     return result;
 }

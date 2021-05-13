@@ -205,11 +205,14 @@ std::string Dialog::SelectFileLoad( void )
 std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool editor )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
     const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -278,7 +281,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
     le.OpenVirtualKeyboard();
 
@@ -349,7 +351,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         }
     }
 
-    cursor.Hide();
     le.CloseVirtualKeyboard();
 
     return result;

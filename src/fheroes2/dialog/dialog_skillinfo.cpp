@@ -42,14 +42,12 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    const bool savedCursorVisibility = cursor.isVisible();
-    const int savedCursorTheme = cursor.Themes();
-
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Hide();
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -126,13 +124,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
             break;
         }
     }
-
-    cursor.Hide();
-    cursor.SetThemes( savedCursorTheme );
-
-    if ( savedCursorVisibility ) {
-        cursor.Show();
-    }
 }
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )
@@ -140,11 +131,12 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     int index = 0;
     std::string skill_name;
@@ -215,7 +207,6 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     button.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -230,6 +221,4 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
             break;
         }
     }
-
-    cursor.Hide();
 }

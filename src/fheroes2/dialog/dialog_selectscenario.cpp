@@ -167,11 +167,14 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         selectedId = 0;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const Maps::FileInfo * result = NULL;
     MapsFileInfoList small;
@@ -262,7 +265,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     buttonSelectXLarge.draw();
     buttonSelectAll.draw();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {
@@ -397,8 +399,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
             display.render();
         }
     }
-
-    cursor.Hide();
 
     return result;
 }

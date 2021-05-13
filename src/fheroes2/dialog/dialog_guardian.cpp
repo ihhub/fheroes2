@@ -153,10 +153,12 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::StandardWindow frameborder( 230, 160 );
     const fheroes2::Rect area( frameborder.activeArea() );
@@ -213,7 +215,6 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
 
     const Troop shadow( troop );
 
-    cursor.Show();
     display.render();
 
     // message loop

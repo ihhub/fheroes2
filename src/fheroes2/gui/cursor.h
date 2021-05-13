@@ -161,4 +161,32 @@ private:
     int32_t offset_y;
 };
 
+class CursorRestorer
+{
+public:
+    explicit CursorRestorer( Cursor & cursor )
+        : _cursor( cursor )
+        , _visible( cursor.isVisible() )
+        , _theme( cursor.Themes() )
+    {}
+
+    ~CursorRestorer()
+    {
+        _cursor.SetThemes( _theme );
+
+        if ( _visible ) {
+            _cursor.Show();
+        }
+        else {
+            _cursor.Hide();
+        }
+    }
+
+private:
+    Cursor & _cursor;
+
+    bool _visible;
+    int _theme;
+};
+
 #endif

@@ -82,11 +82,12 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
     const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );
@@ -183,7 +184,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     button_learn2.draw();
     button_hero.draw();
 
-    cursor.Show();
     display.render();
     LocalEvent & le = LocalEvent::Get();
 
@@ -199,8 +199,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
             hero.OpenDialog( false, true, true, true );
-
-            cursor.Show();
             display.render();
         }
 
@@ -212,15 +210,11 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1, hero, false );
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2, hero, false );
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {
@@ -228,7 +222,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
     }
 
-    cursor.Hide();
     return Skill::Secondary::UNKNOWN;
 }
 

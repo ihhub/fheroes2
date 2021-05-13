@@ -216,13 +216,16 @@ public:
 Skill::Secondary Dialog::SelectSecondarySkill( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> skills( MAXSECONDARYSKILL * 3, 0 );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
+    std::vector<int> skills( MAXSECONDARYSKILL * 3, 0 );
 
     for ( int i = 0; i < MAXSECONDARYSKILL * 3; ++i )
         skills[i] = i;
@@ -238,7 +241,6 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -267,13 +269,16 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
 Spell Dialog::SelectSpell( int cur )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
+    std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
 
     for ( size_t i = 0; i < spells.size(); ++i )
         spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion
@@ -291,7 +296,6 @@ Spell Dialog::SelectSpell( int cur )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -312,13 +316,16 @@ Spell Dialog::SelectSpell( int cur )
 Artifact Dialog::SelectArtifact( int cur )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> artifacts( static_cast<int>( Artifact::UNKNOWN ), Artifact::UNKNOWN );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
+    std::vector<int> artifacts( static_cast<int>( Artifact::UNKNOWN ), Artifact::UNKNOWN );
 
     for ( size_t i = 0; i < artifacts.size(); ++i )
         artifacts[i] = static_cast<int>( i ); // safe to do this as the number of artifacts can't be more than 2 billion
@@ -336,7 +343,6 @@ Artifact Dialog::SelectArtifact( int cur )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -357,13 +363,16 @@ Artifact Dialog::SelectArtifact( int cur )
 Monster Dialog::SelectMonster( int id )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
+    std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
     for ( size_t i = 0; i < monsters.size(); ++i )
         monsters[i] = static_cast<int>( i + 1 ); // skip Monser::UNKNOWN, safe to do this as the monsters of spells can't be more than 2 billion
@@ -381,7 +390,6 @@ Monster Dialog::SelectMonster( int id )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -402,13 +410,16 @@ Monster Dialog::SelectMonster( int id )
 int Dialog::SelectHeroes( int cur )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
+    std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 
     for ( size_t i = 0; i < heroes.size(); ++i )
         heroes[i] = static_cast<int>( i ); // safe to do this as the heroes of spells can't be more than 2 billion
@@ -426,7 +437,6 @@ int Dialog::SelectHeroes( int cur )
     fheroes2::ButtonGroup btnGroups( area, Dialog::OK | Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;

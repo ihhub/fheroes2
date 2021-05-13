@@ -34,11 +34,12 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
+    const CursorRestorer cursorRestorer( cursor );
 
-    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const fheroes2::Sprite & sprite_gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
     const fheroes2::Sprite & sprite_expr = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
@@ -90,7 +91,6 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
     button_yes.draw();
     button_no.draw();
 
-    cursor.Show();
     display.render();
     LocalEvent & le = LocalEvent::Get();
     bool result = false;
@@ -109,8 +109,6 @@ bool Dialog::SelectGoldOrExp( const std::string & header, const std::string & me
             break;
         }
     }
-
-    cursor.Hide();
 
     return result;
 }

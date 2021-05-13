@@ -42,11 +42,12 @@ int Dialog::SelectSkillFromArena( void )
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
     const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     TextBox title( _( "Arena" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
@@ -108,14 +109,14 @@ int Dialog::SelectSkillFromArena( void )
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     LocalEvent & le = LocalEvent::Get();
-    bool redraw = false;
 
     buttonOk.draw();
-    cursor.Show();
     display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
+        bool redraw = false;
+
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
@@ -144,21 +145,14 @@ int Dialog::SelectSkillFromArena( void )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             InfoSkillClear( rect1, rect2, rect3, rect4 );
             InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
-            cursor.Show();
             display.render();
-            redraw = false;
         }
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) )
             break;
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return res;
 }

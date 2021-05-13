@@ -99,10 +99,13 @@ namespace Dialog
             return false;
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        Cursor & cursor = Cursor::Get();
 
-        cursor.Hide();
+        // setup cursor
+        Cursor & cursor = Cursor::Get();
+        const CursorRestorer cursorRestorer( cursor );
+
         cursor.SetThemes( cursor.POINTER );
+        cursor.Show();
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -147,7 +150,6 @@ namespace Dialog
 
         RedrawInfo( roi.getPosition(), selectedResolution );
 
-        cursor.Show();
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
@@ -179,8 +181,6 @@ namespace Dialog
                 display.render();
             }
         }
-
-        cursor.Hide();
 
         if ( selectedResolution.width > 0 && selectedResolution.height > 0
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {

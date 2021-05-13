@@ -37,11 +37,12 @@ int Dialog::FileOptions( void )
     const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
     const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
-    // cursor
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    const CursorRestorer cursorRestorer( cursor );
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
@@ -65,7 +66,6 @@ int Dialog::FileOptions( void )
     buttonQuit.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Game::QUITGAME;
@@ -125,10 +125,7 @@ int Dialog::FileOptions( void )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

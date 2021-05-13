@@ -23,7 +23,6 @@
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
@@ -419,8 +418,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
     const Settings & settings = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
 
     // preload
     const int qwikinfo = ICN::QWIKINFO;
@@ -588,7 +585,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     TextBox text( name_object, Font::SMALL, 118 );
     text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
-    cursor.Show();
     display.render();
 
     // quick info loop
@@ -776,9 +772,6 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-
     const int qwikhero = ICN::QWIKHERO;
 
     // image box
@@ -956,7 +949,6 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
     }
 
-    cursor.Show();
     display.render();
 
     // quick info loop

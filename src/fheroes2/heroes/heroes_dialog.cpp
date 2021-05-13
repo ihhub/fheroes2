@@ -46,9 +46,13 @@
 int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
+
+    // setup cursor
     Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    const CursorRestorer cursorRestorer( cursor );
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     // fade
     if ( fade && Settings::Get().ExtGameUseFade() )
@@ -174,7 +178,6 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     dst_pt.y = cur_pt.y + 308;
 
     ArtifactsBar selectArtifacts( this, false, readonly, false, true, &statusBar );
-
     selectArtifacts.SetColRows( 7, 2 );
     selectArtifacts.SetHSpace( 15 );
     selectArtifacts.SetVSpace( 15 );
@@ -222,7 +225,9 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     buttonDismiss.draw();
     buttonExit.draw();
 
+    // ArmyBar and ArtifactsBar hide cursor on redraw
     cursor.Show();
+
     display.render();
 
     bool redrawMorale = false;
@@ -232,17 +237,13 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // dialog menu loop
     while ( le.HandleEvents() ) {
         if ( redrawMorale ) {
-            cursor.Hide();
             moraleIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawMorale = false;
         }
 
         if ( redrawLuck ) {
-            cursor.Hide();
             luckIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawLuck = false;
         }
@@ -253,20 +254,27 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
         // heroes troops
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
-            cursor.Hide();
             if ( selectArtifacts.isSelected() )
                 selectArtifacts.ResetSelected();
             selectArmy.Redraw();
+
+            // ArmyBar and ArtifactsBar hide cursor on redraw
+            cursor.Show();
+
             redrawMorale = true;
             redrawLuck = true;
         }
 
         if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
-            cursor.Hide();
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
+
+            // ArmyBar and ArtifactsBar hide cursor on redraw
+            cursor.Show();
+
             spellPointsInfo.Redraw();
+
             redrawMorale = true;
             redrawLuck = true;
         }
@@ -307,16 +315,12 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( false );
         }
