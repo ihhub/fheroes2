@@ -87,7 +87,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
 
         StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
         if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-             StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
         }
         else {
             StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
@@ -107,7 +107,7 @@ std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystal
 
         StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
         if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
-             StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
         }
         else {
             StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
