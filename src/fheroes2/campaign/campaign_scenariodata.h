@@ -43,7 +43,8 @@ namespace Campaign
     enum class ScenarioVictoryCondition : int
     {
         STANDARD = 0, // standard map's defined victory condition
-        CAPTURE_DRAGON_CITY = 1
+        CAPTURE_DRAGON_CITY = 1,
+        PROTECT_VILLAGES = 2
     };
 
     struct ScenarioBonusData

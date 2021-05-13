@@ -1050,6 +1050,32 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
 
+    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::PROTECT_VILLAGES ) {
+                const KingdomCastles & castles = kingdom.GetCastles();
+                bool hasVillage = false;
+
+                for ( int i = 0; i < castles.size(); ++i ) {
+                    if ( castles[0]->isCastle() )
+                        continue;
+
+                    hasVillage = true;
+                    break;
+                }
+
+                return hasVillage ? GameOver::COND_NONE : GameOver::LOSS_ALL;
+            }
+        }
+    }
+
     for ( u32 ii = 0; loss[ii]; ++ii )
         if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
             return loss[ii];
