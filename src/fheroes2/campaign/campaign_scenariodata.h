@@ -43,8 +43,13 @@ namespace Campaign
     enum class ScenarioVictoryCondition : int
     {
         STANDARD = 0, // standard map's defined victory condition
-        CAPTURE_DRAGON_CITY = 1,
-        PROTECT_VILLAGES = 2
+        CAPTURE_DRAGON_CITY = 1
+    };
+
+    enum class ScenarioLossCondition : int
+    {
+        STANDARD = 0,
+        LOSE_ALL_VILLAGES = 1
     };
 
     struct ScenarioBonusData
@@ -80,7 +85,10 @@ namespace Campaign
     public:
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD );
+                      const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+                      const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
+        ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
+                      const std::string & description, const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
         const std::vector<int> & getNextMaps() const
         {
@@ -112,6 +120,11 @@ namespace Campaign
             return _victoryCondition;
         }
 
+        ScenarioLossCondition getLossCondition() const 
+        {
+            return _lossCondition;
+        }
+
         bool isMapFilePresent() const;
         Maps::FileInfo loadMap() const;
 
@@ -122,6 +135,7 @@ namespace Campaign
         std::string _fileName;
         std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
         ScenarioVictoryCondition _victoryCondition;
+        ScenarioLossCondition _lossCondition;
     };
 }
 

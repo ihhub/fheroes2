@@ -1258,6 +1258,11 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
+bool Settings::isCampaignGameType() const
+{
+    return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
+}
+
 const Players & Settings::GetPlayers( void ) const
 {
     return players;

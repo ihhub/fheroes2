@@ -249,13 +249,25 @@ namespace Campaign
     }
 
     ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
-                                const std::string & description, const ScenarioVictoryCondition victoryCondition )
+                                const std::string & description, const ScenarioVictoryCondition victoryCondition, const ScenarioLossCondition lossCondition )
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
         , _fileName( fileName )
         , _description( description )
         , _victoryCondition( victoryCondition )
+        , _lossCondition( lossCondition )
+    {}
+
+    ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
+                                const std::string & description, const ScenarioLossCondition lossCondition )
+        : _scenarioID( scenarioID )
+        , _nextMaps( nextMaps )
+        , _bonuses( bonuses )
+        , _fileName( fileName )
+        , _description( description )
+        , _victoryCondition( ScenarioVictoryCondition::STANDARD )
+        , _lossCondition( lossCondition )
     {}
 
     bool Campaign::ScenarioData::isMapFilePresent() const

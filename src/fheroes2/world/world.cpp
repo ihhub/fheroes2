@@ -1004,7 +1004,7 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
     const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
     const int mapWinCondition = conf.ConditionWins();
 
-    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+    if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
@@ -1050,7 +1050,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
 
-    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+    if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
@@ -1058,8 +1058,8 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
         assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
 
         if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
-            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
-            if ( victoryCondition == Campaign::ScenarioVictoryCondition::PROTECT_VILLAGES ) {
+            const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
+            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_VILLAGES ) {
                 const KingdomCastles & castles = kingdom.GetCastles();
                 bool hasVillage = false;
 
