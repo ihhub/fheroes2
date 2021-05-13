@@ -286,7 +286,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     else
     // set obstacles
     {
-        std::mt19937 seededGen( static_cast<uint32_t>( index ) );
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( index ) );
 
         icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( index ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
