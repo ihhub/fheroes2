@@ -647,11 +647,11 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
         for ( u32 index = 0; artifacts[index] != Artifact::UNKNOWN; ++index )
             for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).GetBagArtifacts().Count( Artifact( artifacts[index] ) );
+                totalIncome += ProfitConditions::FromArtifact( artifacts[index] ) * ( **ith ).HasArtifact( Artifact( artifacts[index] ) );
 
         // TAX_LIEN
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).GetBagArtifacts().Count( Artifact( Artifact::TAX_LIEN ) );
+            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * ( **ith ).HasArtifact( Artifact( Artifact::TAX_LIEN ) );
     }
 
     if ( INCOME_HEROSKILLS & type ) {
