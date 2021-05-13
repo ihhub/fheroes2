@@ -27,11 +27,16 @@
 #include "gamedefs.h"
 #include "serialize.h"
 
+enum class GameVersion : int
+{
+    SUCCESSION_WARS = 0,
+    PRICE_OF_LOYALTY = 1
+};
+
 namespace Maps
 {
-    class FileInfo
+    struct FileInfo
     {
-    public:
         FileInfo();
         FileInfo( const FileInfo & );
 
@@ -103,11 +108,15 @@ namespace Maps
         u32 localtime;
 
         bool with_heroes;
+
+        GameVersion _version;
     };
 
     StreamBase & operator<<( StreamBase &, const FileInfo & );
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version );
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 

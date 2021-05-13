@@ -313,7 +313,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
 
     if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() )
-        building = Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_TAVERN;
+        building = ( Settings::Get().isCurrentMapPriceOfLoyalty() ) ? BUILD_SHRINE : BUILD_NOTHING;
 
     bcond = castle.CheckBuyBuilding( building );
 
@@ -447,7 +447,7 @@ void BuildingInfo::Redraw( void ) const
         }
 
         // build image
-        if ( BUILD_DISABLE == bcond && BUILD_TAVERN == building ) { // skip necromancer's tavern
+        if ( BUILD_NOTHING == building ) { // skip necromancer's tavern
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -511,6 +511,10 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) con
 
 bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 {
+    if ( building == BUILD_NOTHING ) {
+        return false;
+    }
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
@@ -653,16 +657,16 @@ std::string BuildingInfo::GetConditionDescription( void ) const
     switch ( bcond ) {
     case NOT_TODAY:
     case NEED_CASTLE:
-        res = GetBuildConditionDescription( bcond );
-        break;
+        return GetBuildConditionDescription( bcond );
 
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
             res = _( "Cannot build %{name} because castle is too far from water." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
-        else
+        else {
             res = "disable build.";
+        }
         break;
 
     case LACK_RESOURCES:
@@ -694,6 +698,10 @@ std::string BuildingInfo::GetConditionDescription( void ) const
 
 void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
 {
+    if ( building == BUILD_NOTHING ) {
+        return;
+    }
+
     std::string str;
 
     switch ( bcond ) {
