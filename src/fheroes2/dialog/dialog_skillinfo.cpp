@@ -47,7 +47,13 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Hide();
+
+    if ( ok_button ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -98,8 +104,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
     if ( button ) {
         button->draw();
-
-        cursor.Show();
     }
 
     display.render();

@@ -94,7 +94,13 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+
+    if ( flags & BUTTONS ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
     if ( isEvilInterface ) {

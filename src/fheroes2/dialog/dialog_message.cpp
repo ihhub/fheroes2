@@ -36,7 +36,13 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Hide();
+
+    if ( buttons ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
@@ -53,10 +59,6 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 
     fheroes2::ButtonGroup group( pos, buttons );
     group.draw();
-
-    if ( buttons ) {
-        cursor.Show();
-    }
 
     display.render();
 

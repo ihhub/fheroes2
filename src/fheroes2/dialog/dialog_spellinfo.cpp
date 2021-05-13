@@ -66,7 +66,13 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Hide();
+
+    if ( ok_button ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -109,8 +115,6 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
 
     if ( button.isEnabled() ) {
         button.draw();
-
-        cursor.Show();
     }
 
     display.render();

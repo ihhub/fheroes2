@@ -55,7 +55,13 @@ int Dialog::SpriteInfo( const std::string & header, const std::string & message,
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+
+    if ( buttons ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
