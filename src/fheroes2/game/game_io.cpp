@@ -83,9 +83,9 @@ namespace Game
 #endif
         }
 
-        int gameType;
         uint16_t status;
         Maps::FileInfo info;
+        int gameType;
         const int _saveFileVersion;
     };
 
