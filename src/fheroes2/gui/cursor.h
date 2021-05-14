@@ -164,27 +164,8 @@ private:
 class CursorRestorer
 {
 public:
-    CursorRestorer()
-    {
-        const Cursor & cursor = Cursor::Get();
-
-        _visible = cursor.isVisible();
-        _theme = cursor.Themes();
-    }
-
-    ~CursorRestorer()
-    {
-        Cursor & cursor = Cursor::Get();
-
-        cursor.SetThemes( _theme );
-
-        if ( _visible ) {
-            cursor.Show();
-        }
-        else {
-            cursor.Hide();
-        }
-    }
+    CursorRestorer();
+    ~CursorRestorer();
 
 private:
     bool _visible;
