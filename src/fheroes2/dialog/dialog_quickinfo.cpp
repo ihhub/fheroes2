@@ -101,7 +101,7 @@ std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystal
 {
     const Troop & troop = tile.QuantityTroop();
     const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
-    
+
     if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
         std::string str = "%{count} %{monster}";
 
