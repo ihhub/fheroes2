@@ -520,7 +520,13 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
     Cursor & cursor = Cursor::Get();
 
     cursor.SetThemes( cursor.POINTER );
-    cursor.Hide();
+
+    if ( buttons ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
 
     std::string box1str = description;
 
@@ -611,8 +617,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
         button1.draw();
         button2.draw();
-
-        cursor.Show();
     }
 
     display.render();
