@@ -898,8 +898,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
 {
     const Settings & conf = Settings::Get();
 
-    Cursor::Get().Hide();
-
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -1099,7 +1097,6 @@ void Battle::Interface::RedrawPartialFinish()
     fheroes2::Blit( _mainSurface, display, _interfacePosition.x, _interfacePosition.y );
     RedrawInterface();
 
-    Cursor::Get().Show();
     display.render();
 }
 
@@ -1118,8 +1115,12 @@ void Battle::Interface::RedrawInterface( void )
 
     popup.Redraw( _interfacePosition.x + _interfacePosition.width + 60, _interfacePosition.y + _interfacePosition.height );
 
-    if ( listlog && listlog->isOpenLog() )
+    if ( listlog && listlog->isOpenLog() ) {
+        // StatusListBox hides cursor on redraw
+        const CursorRestorer cursorRestorer( false );
+
         listlog->Redraw();
+    }
 }
 
 void Battle::Interface::RedrawArmies()
@@ -2157,10 +2158,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
         if ( humanturn_redraw ) {
             Redraw();
             humanturn_redraw = false;
-        }
-
-        if ( !cursor.isVisible() ) {
-            cursor.Show();
         }
     }
 
