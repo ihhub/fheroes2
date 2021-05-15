@@ -1102,7 +1102,19 @@ LocalEvent & LocalEvent::GetClean()
 bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 {
     if ( colorCycling.isRedrawRequired() ) {
-        fheroes2::Display::instance().render();
+        // Looks like there is no explicit rendering so the code for color cycling was executed here.
+        if ( delay ) {
+            fheroes2::Time timeCheck;
+            fheroes2::Display::instance().render();
+
+            if ( timeCheck.getMs() > loop_delay ) {
+                // Since rendering took more than waiting time so we should not wait.
+                delay = false;
+            }
+        }
+        else {
+            fheroes2::Display::instance().render();
+        }
     }
 
     SDL_Event event;

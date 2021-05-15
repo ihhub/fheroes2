@@ -936,12 +936,12 @@ namespace fheroes2
 
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip )
     {
-        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+        if ( in.singleLayer() && out.singleLayer() && !flip ) {
+            Copy( in, inX, inY, out, outX, outY, width, height );
             return;
         }
 
-        if ( in.singleLayer() && out.singleLayer() && !flip ) {
-            Copy( in, inX, inY, out, outX, outY, width, height );
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 

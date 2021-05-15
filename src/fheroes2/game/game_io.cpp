@@ -59,7 +59,9 @@ namespace Game
             IS_LOYALTY = 0x4000
         };
 
-        HeaderSAV( const int saveFileVersion )
+        HeaderSAV() = delete;
+
+        explicit HeaderSAV( const int saveFileVersion )
             : status( 0 )
             , gameType( 0 )
             , _saveFileVersion( saveFileVersion )

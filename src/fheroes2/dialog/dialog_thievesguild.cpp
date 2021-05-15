@@ -260,7 +260,7 @@ void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & 
     }
 }
 
-void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
+void DrawPersonality( const Colors & colors, const fheroes2::Point & pos, int step )
 {
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Player * player = Players::Get( colors[i] );
@@ -269,7 +269,7 @@ void DrawPersonality( const Colors & colors, fheroes2::Point & pos, int step )
     }
 }
 
-void DrawBestMonsterIcons( const Colors & colors, fheroes2::Point & pos, int step )
+void DrawBestMonsterIcons( const Colors & colors, const fheroes2::Point & pos, int step )
 {
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Monster monster = world.GetKingdom( colors[i] ).GetStrongestMonster();

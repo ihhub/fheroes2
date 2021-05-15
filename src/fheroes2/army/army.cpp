@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 #include <functional>
-#include <math.h>
 #include <set>
 
 #include "agg_image.h"

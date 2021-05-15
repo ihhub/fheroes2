@@ -24,10 +24,6 @@
 #include <cassert>
 #include <vector>
 
-#ifdef AI
-#undef AI
-#endif
-
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"

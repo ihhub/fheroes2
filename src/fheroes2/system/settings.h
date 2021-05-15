@@ -115,9 +115,7 @@ public:
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
         BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000,
-
-        SETTINGS_LAST
+        BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000
     };
 
     Settings( const Settings & ) = delete;
