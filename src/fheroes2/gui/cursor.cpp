@@ -255,7 +255,8 @@ int Cursor::WithoutDistanceThemes( int theme )
     return theme;
 }
 
-CursorRestorer::CursorRestorer()
+CursorRestorer::CursorRestorer( bool renderOnRestore /* = true */ )
+    : _renderOnRestore( renderOnRestore )
 {
     const Cursor & cursor = Cursor::Get();
 
@@ -278,7 +279,7 @@ CursorRestorer::~CursorRestorer()
         }
 
         // immediately render cursor area in case of software emulated cursor
-        if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        if ( _renderOnRestore && fheroes2::cursor().isSoftwareEmulation() ) {
             const fheroes2::Point pos = LocalEvent::Get().GetMouseCursor();
 
             fheroes2::Display::instance().render( fheroes2::Rect( pos.x, pos.y, 1, 1 ) );

@@ -164,10 +164,11 @@ private:
 class CursorRestorer
 {
 public:
-    CursorRestorer();
+    explicit CursorRestorer( bool renderOnRestore = true );
     ~CursorRestorer();
 
 private:
+    bool _renderOnRestore;
     bool _visible;
     int _theme;
 };

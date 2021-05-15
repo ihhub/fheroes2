@@ -78,6 +78,13 @@ int Game::StartGame( void )
 
     const Settings & conf = Settings::Get();
 
+    // setup cursor
+    const CursorRestorer cursorRestorer;
+    Cursor & cursor = Cursor::Get();
+
+    cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
+
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
@@ -1021,10 +1028,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
         if ( NeedRedraw() ) {
             Redraw();
-            display.render();
-        }
-        else if ( !cursor.isVisible() ) {
-            cursor.Show();
             display.render();
         }
     }
