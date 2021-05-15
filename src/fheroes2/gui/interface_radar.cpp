@@ -429,7 +429,6 @@ void Interface::Radar::QueueEventProcessing( void )
                 gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    Cursor::Get().Hide();
                     RedrawCursor();
                     gamearea.SetRedraw();
                 }
@@ -471,7 +470,6 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    Cursor::Get().Hide();
                     return roi.ChangeCenter( fheroes2::Point( newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH ) );
                 }
             }
@@ -497,7 +495,6 @@ void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
 {
     if ( newSize.width != area.width || newSize.height != area.height ) {
         const fheroes2::Rect & rect = GetRect();
-        Cursor::Get().Hide();
         SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
         Generate();
         RedrawCursor();
