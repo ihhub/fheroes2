@@ -76,14 +76,11 @@ int Game::StartGame( void )
 {
     AI::Get().Reset();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    cursor.Hide();
     AGG::ResetMixer();
 
     Interface::Basic::Get().Reset();
@@ -516,7 +513,6 @@ int Interface::Basic::GetCursorTileIndex( s32 dst_index )
 
 int Interface::Basic::StartGame( void )
 {
-    Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -569,7 +565,6 @@ int Interface::Basic::StartGame( void )
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        cursor.Hide();
                         iconsPanel.HideIcons();
                         statusWindow.Reset();
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
@@ -593,7 +588,7 @@ int Interface::Basic::StartGame( void )
                         statusWindow.Reset();
                         statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        cursor.SetThemes( Cursor::WAIT );
+                        Cursor::Get().SetThemes( Cursor::WAIT );
                         Redraw();
                         display.render();
 
