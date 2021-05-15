@@ -273,7 +273,6 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Cursor::Get().Hide();
         hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
@@ -411,10 +410,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
     const u32 distance = Spell::CalculateDimensionDoorDistance( hero.GetPower(), hero.GetArmy().GetHitPoints() );
 
     Interface::Basic & I = Interface::Basic::Get();
-    Cursor & cursor = Cursor::Get();
 
     // center hero
-    cursor.Hide();
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.RedrawFocus();
     I.Redraw();
@@ -430,7 +427,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
-        cursor.Hide();
         hero.ApplyPenaltyMovement( dimensionDoorPenalty );
         hero.Move2Dest( dst );
 
@@ -475,10 +471,8 @@ bool ActionSpellTownGate( Heroes & hero )
         }
 
     Interface::Basic & I = Interface::Basic::Get();
-    Cursor & cursor = Cursor::Get();
 
     // center hero
-    cursor.Hide();
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.RedrawFocus();
     I.Redraw();
