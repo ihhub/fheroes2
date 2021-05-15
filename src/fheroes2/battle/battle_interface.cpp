@@ -34,7 +34,6 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game.h"
 #include "ground.h"
 #include "icn.h"
@@ -897,6 +896,12 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , listlog( NULL )
 {
     const Settings & conf = Settings::Get();
+
+    // setup cursor
+    Cursor & cursor = Cursor::Get();
+
+    cursor.SetThemes( Cursor::WAR_POINTER );
+    cursor.Show();
 
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();

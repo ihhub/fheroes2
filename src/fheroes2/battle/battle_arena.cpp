@@ -39,7 +39,6 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
-#include "cursor.h"
 #include "ground.h"
 #include "logging.h"
 #include "mus.h"
@@ -294,13 +293,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
             board.SetCobjObjects( world.GetTiles( index ) );
     }
 
-
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-
-        Cursor & cursor = Cursor::Get();
-        cursor.SetThemes( Cursor::WAR_POINTER );
-        cursor.Show();
 
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
