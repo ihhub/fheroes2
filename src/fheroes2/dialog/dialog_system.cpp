@@ -46,10 +46,12 @@ int Dialog::SystemOptions( void )
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
-    // cursor
+    // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
+
     cursor.SetThemes( cursor.POINTER );
+    cursor.Show();
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -218,10 +220,6 @@ int Dialog::SystemOptions( void )
             redraw = false;
         }
     }
-
-    // restore background
-    cursor.SetThemes( oldcursor );
-    display.render();
 
     if ( saveConfig ) {
         conf.Save( "fheroes2.cfg" );
