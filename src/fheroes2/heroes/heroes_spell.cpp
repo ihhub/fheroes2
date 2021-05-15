@@ -92,8 +92,8 @@ public:
     void ActionListPressRight( int32_t & index ) override
     {
         const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+
         if ( castle != nullptr ) {
-            Cursor::Get().Hide();
             Dialog::QuickInfo( *castle );
         }
     }
