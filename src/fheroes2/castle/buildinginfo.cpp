@@ -447,7 +447,7 @@ void BuildingInfo::Redraw( void ) const
         }
 
         // build image
-        if ( BUILD_NOTHING == building ) { // skip necromancer's tavern
+        if ( BUILD_NOTHING == building ) {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -702,8 +702,6 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
         return;
     }
 
-    std::string str;
-
     switch ( bcond ) {
     case NOT_TODAY:
     case ALREADY_BUILT:
@@ -712,14 +710,12 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     case LACK_RESOURCES:
     case REQUIRES_BUILD:
     case ALLOW_BUILD:
-        str = GetConditionDescription();
+        bar.ShowMessage( GetConditionDescription() );
         break;
 
     default:
         break;
     }
-
-    bar.ShowMessage( str );
 }
 
 DwellingItem::DwellingItem( const Castle & castle, u32 dw )
