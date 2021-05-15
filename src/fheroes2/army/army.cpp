@@ -1561,7 +1561,7 @@ Monster Army::GetStrongestMonster() const
     Monster monster( Monster::UNKNOWN );
     for ( const Troop * troop : *this ) {
         if ( troop->isValid() && troop->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() ) {
-            monster = *troop;
+            monster = troop->GetID();
         }
     }
     return monster;
