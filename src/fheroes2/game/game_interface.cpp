@@ -239,11 +239,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
     }
 
+    // setup cursor
+    const CursorRestorer cursorRestorer;
     Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
-    int32_t returnValue = -1;
 
     cursor.Show();
+
+    LocalEvent & le = LocalEvent::Get();
+    int32_t returnValue = -1;
 
     const fheroes2::Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.height - 37 );
     fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
@@ -300,7 +303,6 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                 }
             }
 
-            cursor.Show();
             display.render();
         }
     }
