@@ -122,7 +122,7 @@ namespace Campaign
     {
         const int loadVersion = Game::GetLoadVersion();
 
-        if ( loadVersion >= FORMAT_VERSION_090_RELEASE && loadVersion < FORMAT_VERSION_093_RELEASE ) {
+        if ( loadVersion < FORMAT_VERSION_093_RELEASE ) {
             std::vector<std::string> tempOldObtainedCampaignAwards;
             msg >> tempOldObtainedCampaignAwards;
         }

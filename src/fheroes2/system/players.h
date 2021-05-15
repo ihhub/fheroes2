@@ -32,7 +32,7 @@
 
 namespace Maps
 {
-    class FileInfo;
+    struct FileInfo;
 }
 
 namespace AI

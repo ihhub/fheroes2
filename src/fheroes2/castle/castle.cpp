@@ -325,7 +325,7 @@ void Castle::PostLoad( void )
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
         building &= ~BUILD_TAVERN;
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
             building |= BUILD_SHRINE;
     }
 
@@ -358,7 +358,7 @@ bool Castle::isCapital( void ) const
 
 u32 Castle::CountBuildings( void ) const
 {
-    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
+    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -1428,7 +1428,7 @@ int Castle::CheckBuyBuilding( u32 build ) const
             return BUILD_DISABLE;
         break;
     case BUILD_SHRINE:
-        if ( Race::NECR != GetRace() || !Settings::Get().PriceLoyaltyVersion() )
+        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() )
             return BUILD_DISABLE;
         break;
     case BUILD_TAVERN:

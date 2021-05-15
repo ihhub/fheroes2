@@ -33,284 +33,286 @@
 #include "tinyconfig.h"
 #include "version.h"
 
-enum
+namespace
 {
-    // ??? = 0x00000001,
-    // ??? = 0x00000002,
-    GLOBAL_PRICELOYALTY = 0x00000004,
-
-    // GLOBAL_POCKETPC = 0x00000008,
-    GLOBAL_DEDICATEDSERVER = 0x00000010,
-    GLOBAL_LOCALCLIENT = 0x00000020,
-
-    GLOBAL_SHOWCPANEL = 0x00000040,
-    GLOBAL_SHOWRADAR = 0x00000080,
-    GLOBAL_SHOWICONS = 0x00000100,
-    GLOBAL_SHOWBUTTONS = 0x00000200,
-    GLOBAL_SHOWSTATUS = 0x00000400,
-
-    GLOBAL_FULLSCREEN = 0x00008000,
-    GLOBAL_USESWSURFACE = 0x00010000,
-
-    GLOBAL_SOUND = 0x00020000,
-    GLOBAL_MUSIC_EXT = 0x00040000,
-    GLOBAL_MUSIC_CD = 0x00080000,
-    GLOBAL_MUSIC_MIDI = 0x00100000,
-
-    GLOBAL_USEUNICODE = 0x00200000,
-    GLOBAL_ALTRESOURCE = 0x00400000,
-
-    GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
-    GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
-    GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
-    GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-    GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
-
-    GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
-};
-
-struct settings_t
-{
-    u32 id;
-    const char * str;
-
-    bool operator==( u32 i ) const
+    enum
     {
-        return id && id == i;
+        // UNUSED = 0x00000001,
+        // UNUSED = 0x00000002,
+        GLOBAL_PRICELOYALTY = 0x00000004,
+
+        // UNUSED = 0x00000008,
+        GLOBAL_DEDICATEDSERVER = 0x00000010,
+        GLOBAL_LOCALCLIENT = 0x00000020,
+
+        GLOBAL_SHOWCPANEL = 0x00000040,
+        GLOBAL_SHOWRADAR = 0x00000080,
+        GLOBAL_SHOWICONS = 0x00000100,
+        GLOBAL_SHOWBUTTONS = 0x00000200,
+        GLOBAL_SHOWSTATUS = 0x00000400,
+
+        GLOBAL_FULLSCREEN = 0x00008000,
+        GLOBAL_USESWSURFACE = 0x00010000,
+
+        GLOBAL_SOUND = 0x00020000,
+        GLOBAL_MUSIC_EXT = 0x00040000,
+        GLOBAL_MUSIC_CD = 0x00080000,
+        GLOBAL_MUSIC_MIDI = 0x00100000,
+
+        GLOBAL_USEUNICODE = 0x00200000,
+        GLOBAL_ALTRESOURCE = 0x00400000,
+
+        GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
+        GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
+        GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
+        GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
+        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
+
+        GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
+    };
+
+    struct settings_t
+    {
+        u32 id;
+        const char * str;
+
+        bool operator==( u32 i ) const
+        {
+            return id && id == i;
+        }
+    };
+
+    // external settings
+    const settings_t settingsGeneral[] = {
+        {
+            GLOBAL_SOUND,
+            "sound",
+        },
+        {
+            GLOBAL_MUSIC_MIDI,
+            "music",
+        },
+        {
+            GLOBAL_FULLSCREEN,
+            "fullscreen",
+        },
+        {
+            GLOBAL_USEUNICODE,
+            "unicode",
+        },
+        {
+            GLOBAL_ALTRESOURCE,
+            "alt resource",
+        },
+        {
+            GLOBAL_USESWSURFACE,
+            "use swsurface only",
+        },
+        {
+            0,
+            NULL,
+        },
+    };
+
+    // internal settings
+    const settings_t settingsFHeroes2[] = {
+        {
+            Settings::GAME_SAVE_REWRITE_CONFIRM,
+            _( "game: always confirm for rewrite savefile" ),
+        },
+        {
+            Settings::GAME_REMEMBER_LAST_FOCUS,
+            _( "game: remember last focus" ),
+        },
+        {
+            Settings::GAME_BATTLE_SHOW_DAMAGE,
+            _( "battle: show damage info" ),
+        },
+        {
+            Settings::WORLD_SHOW_VISITED_CONTENT,
+            _( "world: show visited content from objects" ),
+        },
+        {
+            Settings::WORLD_SHOW_TERRAIN_PENALTY,
+            _( "world: show terrain penalty" ),
+        },
+        {
+            Settings::WORLD_SCOUTING_EXTENDED,
+            _( "world: scouting skill show extended content info" ),
+        },
+        {
+            Settings::WORLD_ALLOW_SET_GUARDIAN,
+            _( "world: allow set guardian to objects" ),
+        },
+        {
+            Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
+            _( "world: only the first monster will attack (H2 bug)." ),
+        },
+        {
+            Settings::WORLD_EYE_EAGLE_AS_SCHOLAR,
+            _( "world: Eagle Eye also works like Scholar in H3." ),
+        },
+        {
+            Settings::WORLD_BAN_WEEKOF,
+            _( "world: ban for WeekOf/MonthOf Monsters" ),
+        },
+        {
+            Settings::WORLD_BAN_PLAGUES,
+            _( "world: ban plagues months" ),
+        },
+        {
+            Settings::WORLD_BAN_MONTHOF_MONSTERS,
+            _( "world: Months Of Monsters do not place creatures on map" ),
+        },
+        {
+            Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
+            _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
+        },
+        {
+            Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
+            _( "world: Starting heroes as Loss Conditions for Human Players" ),
+        },
+        {
+            Settings::WORLD_1HERO_HIRED_EVERY_WEEK,
+            _( "world: Only 1 hero can be hired by the one player every week" ),
+        },
+        {
+            Settings::CASTLE_1HERO_HIRED_EVERY_WEEK,
+            _( "world: Each castle allows one hero to be recruited every week" ),
+        },
+        {
+            Settings::WORLD_SCALE_NEUTRAL_ARMIES,
+            _( "world: Neutral armies scale with game difficulty" ),
+        },
+        {
+            Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML,
+            _( "world: use unique artifacts for morale/luck" ),
+        },
+        {
+            Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
+            _( "world: use unique artifacts for resource affecting" ),
+        },
+        {
+            Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS,
+            _( "world: use unique artifacts for primary skills" ),
+        },
+        {
+            Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS,
+            _( "world: use unique artifacts for secondary skills" ),
+        },
+        {
+            Settings::WORLD_EXT_OBJECTS_CAPTURED,
+            _( "world: Wind/Water Mills and Magic Garden can be captured" ),
+        },
+        {
+            Settings::WORLD_DISABLE_BARROW_MOUNDS,
+            _( "world: disable Barrow Mounds" ),
+        },
+        {
+            Settings::CASTLE_ALLOW_GUARDIANS,
+            _( "castle: allow guardians" ),
+        },
+        {
+            Settings::CASTLE_MAGEGUILD_POINTS_TURN,
+            _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" ),
+        },
+        {
+            Settings::HEROES_BUY_BOOK_FROM_SHRINES,
+            _( "heroes: allow buy a spellbook from Shrines" ),
+        },
+        {
+            Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
+            _( "heroes: recruit cost to be dependent on hero level" ),
+        },
+        {
+            Settings::HEROES_REMEMBER_POINTS_RETREAT,
+            _( "heroes: remember move points for retreat/surrender result" ),
+        },
+        {
+            Settings::HEROES_TRANSCRIBING_SCROLLS,
+            _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
+        },
+        {
+            Settings::HEROES_ARENA_ANY_SKILLS,
+            _( "heroes: in Arena can choose any of primary skills" ),
+        },
+        {
+            Settings::UNIONS_ALLOW_HERO_MEETINGS,
+            _( "unions: allow meeting heroes" ),
+        },
+        {
+            Settings::UNIONS_ALLOW_CASTLE_VISITING,
+            _( "unions: allow castle visiting" ),
+        },
+        {
+            Settings::BATTLE_SHOW_ARMY_ORDER,
+            _( "battle: show army order" ),
+        },
+        {
+            Settings::BATTLE_SOFT_WAITING,
+            _( "battle: soft wait troop" ),
+        },
+        {
+            Settings::BATTLE_SKIP_INCREASE_DEFENSE,
+            _( "battle: skip increase +2 defense" ),
+        },
+        {
+            Settings::BATTLE_REVERSE_WAIT_ORDER,
+            _( "battle: reverse wait order (fast, average, slow)" ),
+        },
+        {
+            Settings::GAME_SHOW_SYSTEM_INFO,
+            _( "game: show system info" ),
+        },
+        {
+            Settings::GAME_AUTOSAVE_ON,
+            _( "game: autosave on" ),
+        },
+        {
+            Settings::GAME_AUTOSAVE_BEGIN_DAY,
+            _( "game: autosave will be made at the beginning of the day" ),
+        },
+        {
+            Settings::GAME_USE_FADE,
+            _( "game: use fade" ),
+        },
+        {
+            Settings::GAME_EVIL_INTERFACE,
+            _( "game: use evil interface" ),
+        },
+        {
+            Settings::GAME_DYNAMIC_INTERFACE,
+            _( "game: also use dynamic interface for castles" ),
+        },
+        {
+            Settings::GAME_HIDE_INTERFACE,
+            _( "game: hide interface" ),
+        },
+        {
+            Settings::GAME_CONTINUE_AFTER_VICTORY,
+            _( "game: offer to continue the game afer victory condition" ),
+        },
+
+        { 0, NULL },
+    };
+
+    const char * GetGeneralSettingDescription( int settingId )
+    {
+        const settings_t * ptr = settingsGeneral;
+        while ( ptr->id != 0 ) {
+            if ( ptr->id == static_cast<uint32_t>( settingId ) )
+                return ptr->str;
+            ++ptr;
+        }
+        return NULL;
     }
-};
-
-// external settings
-const settings_t settingsGeneral[] = {
-    {
-        GLOBAL_SOUND,
-        "sound",
-    },
-    {
-        GLOBAL_MUSIC_MIDI,
-        "music",
-    },
-    {
-        GLOBAL_FULLSCREEN,
-        "fullscreen",
-    },
-    {
-        GLOBAL_USEUNICODE,
-        "unicode",
-    },
-    {
-        GLOBAL_ALTRESOURCE,
-        "alt resource",
-    },
-    {
-        GLOBAL_USESWSURFACE,
-        "use swsurface only",
-    },
-    {
-        0,
-        NULL,
-    },
-};
-
-const char * GetGeneralSettingDescription( int settingId )
-{
-    const settings_t * ptr = settingsGeneral;
-    while ( ptr->id != 0 ) {
-        if ( ptr->id == static_cast<uint32_t>( settingId ) )
-            return ptr->str;
-        ++ptr;
-    }
-    return NULL;
 }
 
-// internal settings
-const settings_t settingsFHeroes2[] = {
-    {
-        Settings::GAME_SAVE_REWRITE_CONFIRM,
-        _( "game: always confirm for rewrite savefile" ),
-    },
-    {
-        Settings::GAME_REMEMBER_LAST_FOCUS,
-        _( "game: remember last focus" ),
-    },
-    {
-        Settings::GAME_BATTLE_SHOW_DAMAGE,
-        _( "battle: show damage info" ),
-    },
-    {
-        Settings::WORLD_SHOW_VISITED_CONTENT,
-        _( "world: show visited content from objects" ),
-    },
-    {
-        Settings::WORLD_SHOW_TERRAIN_PENALTY,
-        _( "world: show terrain penalty" ),
-    },
-    {
-        Settings::WORLD_SCOUTING_EXTENDED,
-        _( "world: scouting skill show extended content info" ),
-    },
-    {
-        Settings::WORLD_ALLOW_SET_GUARDIAN,
-        _( "world: allow set guardian to objects" ),
-    },
-    {
-        Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
-        _( "world: only the first monster will attack (H2 bug)." ),
-    },
-    {
-        Settings::WORLD_EYE_EAGLE_AS_SCHOLAR,
-        _( "world: Eagle Eye also works like Scholar in H3." ),
-    },
-    {
-        Settings::WORLD_BAN_WEEKOF,
-        _( "world: ban for WeekOf/MonthOf Monsters" ),
-    },
-    {
-        Settings::WORLD_BAN_PLAGUES,
-        _( "world: ban plagues months" ),
-    },
-    {
-        Settings::WORLD_BAN_MONTHOF_MONSTERS,
-        _( "world: Months Of Monsters do not place creatures on map" ),
-    },
-    {
-        Settings::WORLD_ARTIFACT_CRYSTAL_BALL,
-        _( "world: Crystal Ball also added Identify Hero and Visions spells" ),
-    },
-    {
-        Settings::WORLD_STARTHERO_LOSSCOND4HUMANS,
-        _( "world: Starting heroes as Loss Conditions for Human Players" ),
-    },
-    {
-        Settings::WORLD_1HERO_HIRED_EVERY_WEEK,
-        _( "world: Only 1 hero can be hired by the one player every week" ),
-    },
-    {
-        Settings::CASTLE_1HERO_HIRED_EVERY_WEEK,
-        _( "world: Each castle allows one hero to be recruited every week" ),
-    },
-    {
-        Settings::WORLD_SCALE_NEUTRAL_ARMIES,
-        _( "world: Neutral armies scale with game difficulty" ),
-    },
-    {
-        Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML,
-        _( "world: use unique artifacts for morale/luck" ),
-    },
-    {
-        Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
-        _( "world: use unique artifacts for resource affecting" ),
-    },
-    {
-        Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS,
-        _( "world: use unique artifacts for primary skills" ),
-    },
-    {
-        Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS,
-        _( "world: use unique artifacts for secondary skills" ),
-    },
-    {
-        Settings::WORLD_EXT_OBJECTS_CAPTURED,
-        _( "world: Wind/Water Mills and Magic Garden can be captured" ),
-    },
-    {
-        Settings::WORLD_DISABLE_BARROW_MOUNDS,
-        _( "world: disable Barrow Mounds" ),
-    },
-    {
-        Settings::CASTLE_ALLOW_GUARDIANS,
-        _( "castle: allow guardians" ),
-    },
-    {
-        Settings::CASTLE_MAGEGUILD_POINTS_TURN,
-        _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" ),
-    },
-    {
-        Settings::HEROES_BUY_BOOK_FROM_SHRINES,
-        _( "heroes: allow buy a spellbook from Shrines" ),
-    },
-    {
-        Settings::HEROES_COST_DEPENDED_FROM_LEVEL,
-        _( "heroes: recruit cost to be dependent on hero level" ),
-    },
-    {
-        Settings::HEROES_REMEMBER_POINTS_RETREAT,
-        _( "heroes: remember move points for retreat/surrender result" ),
-    },
-    {
-        Settings::HEROES_TRANSCRIBING_SCROLLS,
-        _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" ),
-    },
-    {
-        Settings::HEROES_ARENA_ANY_SKILLS,
-        _( "heroes: in Arena can choose any of primary skills" ),
-    },
-    {
-        Settings::UNIONS_ALLOW_HERO_MEETINGS,
-        _( "unions: allow meeting heroes" ),
-    },
-    {
-        Settings::UNIONS_ALLOW_CASTLE_VISITING,
-        _( "unions: allow castle visiting" ),
-    },
-    {
-        Settings::BATTLE_SHOW_ARMY_ORDER,
-        _( "battle: show army order" ),
-    },
-    {
-        Settings::BATTLE_SOFT_WAITING,
-        _( "battle: soft wait troop" ),
-    },
-    {
-        Settings::BATTLE_SKIP_INCREASE_DEFENSE,
-        _( "battle: skip increase +2 defense" ),
-    },
-    {
-        Settings::BATTLE_REVERSE_WAIT_ORDER,
-        _( "battle: reverse wait order (fast, average, slow)" ),
-    },
-    {
-        Settings::GAME_SHOW_SYSTEM_INFO,
-        _( "game: show system info" ),
-    },
-    {
-        Settings::GAME_AUTOSAVE_ON,
-        _( "game: autosave on" ),
-    },
-    {
-        Settings::GAME_AUTOSAVE_BEGIN_DAY,
-        _( "game: autosave will be made at the beginning of the day" ),
-    },
-    {
-        Settings::GAME_USE_FADE,
-        _( "game: use fade" ),
-    },
-    {
-        Settings::GAME_EVIL_INTERFACE,
-        _( "game: use evil interface" ),
-    },
-    {
-        Settings::GAME_DYNAMIC_INTERFACE,
-        _( "game: also use dynamic interface for castles" ),
-    },
-    {
-        Settings::GAME_HIDE_INTERFACE,
-        _( "game: hide interface" ),
-    },
-    {
-        Settings::GAME_CONTINUE_AFTER_VICTORY,
-        _( "game: offer to continue the game afer victory condition" ),
-    },
-
-    {0, NULL},
-};
-
-std::string Settings::GetVersion( void )
+std::string Settings::GetVersion()
 {
     return std::to_string( MAJOR_VERSION ) + '.' + std::to_string( MINOR_VERSION ) + '.' + std::to_string( INTERMEDIATE_VERSION );
 }
 
-/* constructor */
 Settings::Settings()
     : debug( 0 )
     , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
@@ -340,13 +342,14 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_EXT );
     opt_global.SetModes( GLOBAL_SOUND );
-    // Set expansion version by default - turn off if heroes2x.agg not found
-    opt_global.SetModes( GLOBAL_PRICELOYALTY );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
     opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+
+    // The Price of Loyalty is not supported by default.
+    EnablePriceOfLoyaltySupport( false );
 }
 
 Settings::~Settings()
@@ -355,7 +358,7 @@ Settings::~Settings()
         BinarySave();
 }
 
-Settings & Settings::Get( void )
+Settings & Settings::Get()
 {
     static Settings conf;
 
@@ -480,7 +483,7 @@ bool Settings::Read( const std::string & filename )
         else if ( sval == "expansion" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_MIDI );
-            if ( PriceLoyaltyVersion() )
+            if ( isPriceOfLoyaltySupported() )
                 _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "cd" ) {
@@ -639,7 +642,7 @@ bool Settings::Read( const std::string & filename )
     return true;
 }
 
-void Settings::PostLoad( void )
+void Settings::PostLoad()
 {
     if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
         opt_global.SetModes( GLOBAL_SHOWCPANEL );
@@ -671,7 +674,7 @@ bool Settings::Save( const std::string & filename ) const
     return true;
 }
 
-std::string Settings::String( void ) const
+std::string Settings::String() const
 {
     std::ostringstream os;
     std::string musicType;
@@ -800,43 +803,48 @@ void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
     preferably_count_players = 0;
 }
 
-const Maps::FileInfo & Settings::CurrentFileInfo( void ) const
+const Maps::FileInfo & Settings::CurrentFileInfo() const
 {
     return current_maps_file;
 }
 
+bool Settings::isCurrentMapPriceOfLoyalty() const
+{
+    return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
+}
+
 /* return debug */
-int Settings::Debug( void ) const
+int Settings::Debug() const
 {
     return debug;
 }
 
 /* return game difficulty */
-int Settings::GameDifficulty( void ) const
+int Settings::GameDifficulty() const
 {
     return game_difficulty;
 }
 
-int Settings::CurrentColor( void ) const
+int Settings::CurrentColor() const
 {
     return players.current_color;
 }
 
-const std::string & Settings::SelectVideoDriver( void ) const
+const std::string & Settings::SelectVideoDriver() const
 {
     return video_driver;
 }
 
 /* return fontname */
-const std::string & Settings::FontsNormal( void ) const
+const std::string & Settings::FontsNormal() const
 {
     return font_normal;
 }
-const std::string & Settings::FontsSmall( void ) const
+const std::string & Settings::FontsSmall() const
 {
     return font_small;
 }
-const std::string & Settings::ForceLang( void ) const
+const std::string & Settings::ForceLang() const
 {
     return force_lang;
 }
@@ -844,15 +852,15 @@ const std::string & Settings::loadedFileLanguage() const
 {
     return _loadedFileLanguage;
 }
-const std::string & Settings::MapsCharset( void ) const
+const std::string & Settings::MapsCharset() const
 {
     return maps_charset;
 }
-int Settings::FontsNormalSize( void ) const
+int Settings::FontsNormalSize() const
 {
     return size_normal;
 }
-int Settings::FontsSmallSize( void ) const
+int Settings::FontsSmallSize() const
 {
     return size_small;
 }
@@ -934,7 +942,7 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
     return files.empty() ? name : files.back();
 }
 
-std::string Settings::GetLangDir( void )
+std::string Settings::GetLangDir()
 {
 #ifdef CONFIGURE_FHEROES2_LOCALEDIR
     return std::string( CONFIGURE_FHEROES2_LOCALEDIR );
@@ -981,47 +989,47 @@ std::string Settings::GetWriteableDir( const char * subdir )
     return "";
 }
 
-bool Settings::MusicExt( void ) const
+bool Settings::MusicExt() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_EXT );
 }
-bool Settings::MusicMIDI( void ) const
+bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );
 }
-bool Settings::MusicCD( void ) const
+bool Settings::MusicCD() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_CD );
 }
 
 /* return sound */
-bool Settings::Sound( void ) const
+bool Settings::Sound() const
 {
     return opt_global.Modes( GLOBAL_SOUND );
 }
 
 /* return music */
-bool Settings::Music( void ) const
+bool Settings::Music() const
 {
     return opt_global.Modes( GLOBAL_MUSIC );
 }
 
 /* return move speed */
-int Settings::HeroesMoveSpeed( void ) const
+int Settings::HeroesMoveSpeed() const
 {
     return heroes_speed;
 }
-int Settings::AIMoveSpeed( void ) const
+int Settings::AIMoveSpeed() const
 {
     return ai_speed;
 }
-int Settings::BattleSpeed( void ) const
+int Settings::BattleSpeed() const
 {
     return battle_speed;
 }
 
 /* return scroll speed */
-int Settings::ScrollSpeed( void ) const
+int Settings::ScrollSpeed() const
 {
     return scroll_speed;
 }
@@ -1114,75 +1122,75 @@ void Settings::SetScrollSpeed( int speed )
     }
 }
 
-bool Settings::UseAltResource( void ) const
+bool Settings::UseAltResource() const
 {
     return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
 
-bool Settings::PriceLoyaltyVersion( void ) const
+bool Settings::isPriceOfLoyaltySupported() const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
 }
 
-bool Settings::LoadedGameVersion( void ) const
+bool Settings::LoadedGameVersion() const
 {
     // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value
     // This constant not used here, to not drag dependency on the game.h and game.cpp in compilation target.
     return ( game_type & 0x80 ) != 0;
 }
 
-bool Settings::ShowControlPanel( void ) const
+bool Settings::ShowControlPanel() const
 {
     return opt_global.Modes( GLOBAL_SHOWCPANEL );
 }
 
-bool Settings::ShowRadar( void ) const
+bool Settings::ShowRadar() const
 {
     return opt_global.Modes( GLOBAL_SHOWRADAR );
 }
 
-bool Settings::ShowIcons( void ) const
+bool Settings::ShowIcons() const
 {
     return opt_global.Modes( GLOBAL_SHOWICONS );
 }
 
-bool Settings::ShowButtons( void ) const
+bool Settings::ShowButtons() const
 {
     return opt_global.Modes( GLOBAL_SHOWBUTTONS );
 }
 
-bool Settings::ShowStatus( void ) const
+bool Settings::ShowStatus() const
 {
     return opt_global.Modes( GLOBAL_SHOWSTATUS );
 }
 
 /* unicode support */
-bool Settings::Unicode( void ) const
+bool Settings::Unicode() const
 {
     return opt_global.Modes( GLOBAL_USEUNICODE );
 }
 
-bool Settings::BattleShowGrid( void ) const
+bool Settings::BattleShowGrid() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
 }
 
-bool Settings::BattleShowMouseShadow( void ) const
+bool Settings::BattleShowMouseShadow() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-bool Settings::BattleShowMoveShadow( void ) const
+bool Settings::BattleShowMoveShadow() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
-bool Settings::BattleAutoResolve( void ) const
+bool Settings::BattleAutoResolve() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
 }
 
-bool Settings::BattleAutoSpellcast( void ) const
+bool Settings::BattleAutoSpellcast() const
 {
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
@@ -1210,11 +1218,11 @@ void Settings::SetCurrentColor( int color )
     players.current_color = color;
 }
 
-int Settings::SoundVolume( void ) const
+int Settings::SoundVolume() const
 {
     return sound_volume;
 }
-int Settings::MusicVolume( void ) const
+int Settings::MusicVolume() const
 {
     return music_volume;
 }
@@ -1247,7 +1255,7 @@ bool Settings::IsGameType( int f ) const
     return ( game_type & f ) != 0;
 }
 
-int Settings::GameType( void ) const
+int Settings::GameType() const
 {
     return game_type;
 }
@@ -1258,12 +1266,12 @@ void Settings::SetGameType( int type )
     game_type = type;
 }
 
-const Players & Settings::GetPlayers( void ) const
+const Players & Settings::GetPlayers() const
 {
     return players;
 }
 
-Players & Settings::GetPlayers( void )
+Players & Settings::GetPlayers()
 {
     return players;
 }
@@ -1273,22 +1281,22 @@ void Settings::SetPreferablyCountPlayers( int c )
     preferably_count_players = 6 < c ? 6 : c;
 }
 
-int Settings::PreferablyCountPlayers( void ) const
+int Settings::PreferablyCountPlayers() const
 {
     return preferably_count_players;
 }
 
-const std::string & Settings::MapsFile( void ) const
+const std::string & Settings::MapsFile() const
 {
     return current_maps_file.file;
 }
 
-const std::string & Settings::MapsName( void ) const
+const std::string & Settings::MapsName() const
 {
     return current_maps_file.name;
 }
 
-const std::string & Settings::MapsDescription( void ) const
+const std::string & Settings::MapsDescription() const
 {
     return current_maps_file.description;
 }
@@ -1298,12 +1306,12 @@ const std::string & Settings::externalMusicCommand() const
     return _externalMusicCommand;
 }
 
-int Settings::MapsDifficulty( void ) const
+int Settings::MapsDifficulty() const
 {
     return current_maps_file.difficulty;
 }
 
-fheroes2::Size Settings::MapsSize( void ) const
+fheroes2::Size Settings::MapsSize() const
 {
     return fheroes2::Size( current_maps_file.size_w, current_maps_file.size_h );
 }
@@ -1313,52 +1321,52 @@ bool Settings::AllowChangeRace( int f ) const
     return ( current_maps_file.rnd_races & f ) != 0;
 }
 
-bool Settings::GameStartWithHeroes( void ) const
+bool Settings::GameStartWithHeroes() const
 {
     return current_maps_file.with_heroes;
 }
 
-int Settings::ConditionWins( void ) const
+int Settings::ConditionWins() const
 {
     return current_maps_file.ConditionWins();
 }
 
-int Settings::ConditionLoss( void ) const
+int Settings::ConditionLoss() const
 {
     return current_maps_file.ConditionLoss();
 }
 
-bool Settings::WinsCompAlsoWins( void ) const
+bool Settings::WinsCompAlsoWins() const
 {
     return current_maps_file.WinsCompAlsoWins();
 }
 
-int Settings::WinsFindArtifactID( void ) const
+int Settings::WinsFindArtifactID() const
 {
     return current_maps_file.WinsFindArtifactID();
 }
 
-bool Settings::WinsFindUltimateArtifact( void ) const
+bool Settings::WinsFindUltimateArtifact() const
 {
     return current_maps_file.WinsFindUltimateArtifact();
 }
 
-u32 Settings::WinsAccumulateGold( void ) const
+u32 Settings::WinsAccumulateGold() const
 {
     return current_maps_file.WinsAccumulateGold();
 }
 
-fheroes2::Point Settings::WinsMapsPositionObject( void ) const
+fheroes2::Point Settings::WinsMapsPositionObject() const
 {
     return current_maps_file.WinsMapsPositionObject();
 }
 
-fheroes2::Point Settings::LossMapsPositionObject( void ) const
+fheroes2::Point Settings::LossMapsPositionObject() const
 {
     return current_maps_file.LossMapsPositionObject();
 }
 
-u32 Settings::LossCountDays( void ) const
+u32 Settings::LossCountDays() const
 {
     return current_maps_file.LossCountDays();
 }
@@ -1373,7 +1381,7 @@ void Settings::SetUnicode( bool f )
     f ? opt_global.SetModes( GLOBAL_USEUNICODE ) : opt_global.ResetModes( GLOBAL_USEUNICODE );
 }
 
-void Settings::SetPriceLoyaltyVersion( bool set )
+void Settings::EnablePriceOfLoyaltySupport( const bool set )
 {
     if ( set ) {
         opt_global.SetModes( GLOBAL_PRICELOYALTY );
@@ -1410,12 +1418,12 @@ void Settings::SetBattleMouseShaded( bool f )
     f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
-void Settings::ResetSound( void )
+void Settings::ResetSound()
 {
     opt_global.ResetModes( GLOBAL_SOUND );
 }
 
-void Settings::ResetMusic( void )
+void Settings::ResetMusic()
 {
     opt_global.ResetModes( GLOBAL_MUSIC );
 }
@@ -1517,17 +1525,17 @@ void Settings::ExtResetModes( u32 f )
     }
 }
 
-bool Settings::ExtCastleGuildRestorePointsTurn( void ) const
+bool Settings::ExtCastleGuildRestorePointsTurn() const
 {
     return ExtModes( CASTLE_MAGEGUILD_POINTS_TURN );
 }
 
-bool Settings::ExtCastleAllowGuardians( void ) const
+bool Settings::ExtCastleAllowGuardians() const
 {
     return ExtModes( CASTLE_ALLOW_GUARDIANS );
 }
 
-bool Settings::ExtWorldShowVisitedContent( void ) const
+bool Settings::ExtWorldShowVisitedContent() const
 {
     return ExtModes( WORLD_SHOW_VISITED_CONTENT );
 }
@@ -1537,222 +1545,222 @@ bool Settings::ExtWorldShowTerrainPenalty() const
     return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
 }
 
-bool Settings::ExtWorldScouteExtended( void ) const
+bool Settings::ExtWorldScouteExtended() const
 {
     return ExtModes( WORLD_SCOUTING_EXTENDED );
 }
 
-bool Settings::ExtGameRememberLastFocus( void ) const
+bool Settings::ExtGameRememberLastFocus() const
 {
     return ExtModes( GAME_REMEMBER_LAST_FOCUS );
 }
 
-bool Settings::ExtWorldAllowSetGuardian( void ) const
+bool Settings::ExtWorldAllowSetGuardian() const
 {
     return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
 }
 
-bool Settings::ExtWorldArtifactCrystalBall( void ) const
+bool Settings::ExtWorldArtifactCrystalBall() const
 {
     return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
 }
 
-bool Settings::ExtWorldOnlyFirstMonsterAttack( void ) const
+bool Settings::ExtWorldOnlyFirstMonsterAttack() const
 {
     return ExtModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 }
 
-bool Settings::ExtWorldEyeEagleAsScholar( void ) const
+bool Settings::ExtWorldEyeEagleAsScholar() const
 {
     return ExtModes( WORLD_EYE_EAGLE_AS_SCHOLAR );
 }
 
-bool Settings::ExtHeroBuySpellBookFromShrine( void ) const
+bool Settings::ExtHeroBuySpellBookFromShrine() const
 {
     return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
 }
 
-bool Settings::ExtHeroRecruitCostDependedFromLevel( void ) const
+bool Settings::ExtHeroRecruitCostDependedFromLevel() const
 {
     return ExtModes( HEROES_COST_DEPENDED_FROM_LEVEL );
 }
 
-bool Settings::ExtHeroRememberPointsForRetreating( void ) const
+bool Settings::ExtHeroRememberPointsForRetreating() const
 {
     return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
 }
 
-bool Settings::ExtUnionsAllowCastleVisiting( void ) const
+bool Settings::ExtUnionsAllowCastleVisiting() const
 {
     return ExtModes( UNIONS_ALLOW_CASTLE_VISITING );
 }
 
-bool Settings::ExtUnionsAllowHeroesMeetings( void ) const
+bool Settings::ExtUnionsAllowHeroesMeetings() const
 {
     return ExtModes( UNIONS_ALLOW_HERO_MEETINGS );
 }
 
-bool Settings::ExtBattleShowDamage( void ) const
+bool Settings::ExtBattleShowDamage() const
 {
     return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
 }
 
-bool Settings::ExtBattleSkipIncreaseDefense( void ) const
+bool Settings::ExtBattleSkipIncreaseDefense() const
 {
     return ExtModes( BATTLE_SKIP_INCREASE_DEFENSE );
 }
 
-bool Settings::ExtHeroAllowTranscribingScroll( void ) const
+bool Settings::ExtHeroAllowTranscribingScroll() const
 {
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
 }
 
-bool Settings::ExtBattleShowBattleOrder( void ) const
+bool Settings::ExtBattleShowBattleOrder() const
 {
     return ExtModes( BATTLE_SHOW_ARMY_ORDER );
 }
 
-bool Settings::ExtBattleSoftWait( void ) const
+bool Settings::ExtBattleSoftWait() const
 {
     return ExtModes( BATTLE_SOFT_WAITING );
 }
 
-bool Settings::ExtGameRewriteConfirm( void ) const
+bool Settings::ExtGameRewriteConfirm() const
 {
     return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
 }
 
-bool Settings::ExtGameShowSystemInfo( void ) const
+bool Settings::ExtGameShowSystemInfo() const
 {
     return ExtModes( GAME_SHOW_SYSTEM_INFO );
 }
 
-bool Settings::ExtGameAutosaveBeginOfDay( void ) const
+bool Settings::ExtGameAutosaveBeginOfDay() const
 {
     return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
 }
 
-bool Settings::ExtGameAutosaveOn( void ) const
+bool Settings::ExtGameAutosaveOn() const
 {
     return ExtModes( GAME_AUTOSAVE_ON );
 }
 
-bool Settings::ExtGameUseFade( void ) const
+bool Settings::ExtGameUseFade() const
 {
     return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
 }
 
-bool Settings::ExtGameEvilInterface( void ) const
+bool Settings::ExtGameEvilInterface() const
 {
     return ExtModes( GAME_EVIL_INTERFACE );
 }
 
-bool Settings::ExtGameDynamicInterface( void ) const
+bool Settings::ExtGameDynamicInterface() const
 {
     return ExtModes( GAME_DYNAMIC_INTERFACE );
 }
 
-bool Settings::ExtGameHideInterface( void ) const
+bool Settings::ExtGameHideInterface() const
 {
     return ExtModes( GAME_HIDE_INTERFACE );
 }
 
-bool Settings::ExtWorldBanWeekOf( void ) const
+bool Settings::ExtWorldBanWeekOf() const
 {
     return ExtModes( WORLD_BAN_WEEKOF );
 }
 
-bool Settings::ExtWorldBanMonthOfMonsters( void ) const
+bool Settings::ExtWorldBanMonthOfMonsters() const
 {
     return ExtModes( WORLD_BAN_MONTHOF_MONSTERS );
 }
 
-bool Settings::ExtWorldBanPlagues( void ) const
+bool Settings::ExtWorldBanPlagues() const
 {
     return ExtModes( WORLD_BAN_PLAGUES );
 }
 
-bool Settings::ExtBattleReverseWaitOrder( void ) const
+bool Settings::ExtBattleReverseWaitOrder() const
 {
     return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
 }
 
-bool Settings::ExtWorldStartHeroLossCond4Humans( void ) const
+bool Settings::ExtWorldStartHeroLossCond4Humans() const
 {
     return ExtModes( WORLD_STARTHERO_LOSSCOND4HUMANS );
 }
 
-bool Settings::ExtWorldOneHeroHiredEveryWeek( void ) const
+bool Settings::ExtWorldOneHeroHiredEveryWeek() const
 {
     return ExtModes( WORLD_1HERO_HIRED_EVERY_WEEK );
 }
 
-bool Settings::ExtCastleOneHeroHiredEveryWeek( void ) const
+bool Settings::ExtCastleOneHeroHiredEveryWeek() const
 {
     return ExtModes( CASTLE_1HERO_HIRED_EVERY_WEEK );
 }
 
-bool Settings::ExtWorldNeutralArmyDifficultyScaling( void ) const
+bool Settings::ExtWorldNeutralArmyDifficultyScaling() const
 {
     return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
 }
 
-bool Settings::ExtWorldUseUniqueArtifactsML( void ) const
+bool Settings::ExtWorldUseUniqueArtifactsML() const
 {
     return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_ML );
 }
 
-bool Settings::ExtWorldUseUniqueArtifactsRS( void ) const
+bool Settings::ExtWorldUseUniqueArtifactsRS() const
 {
     return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_RS );
 }
 
-bool Settings::ExtWorldUseUniqueArtifactsPS( void ) const
+bool Settings::ExtWorldUseUniqueArtifactsPS() const
 {
     return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_PS );
 }
 
-bool Settings::ExtWorldUseUniqueArtifactsSS( void ) const
+bool Settings::ExtWorldUseUniqueArtifactsSS() const
 {
     return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_SS );
 }
 
-bool Settings::ExtHeroArenaCanChoiseAnySkills( void ) const
+bool Settings::ExtHeroArenaCanChoiseAnySkills() const
 {
     return ExtModes( HEROES_ARENA_ANY_SKILLS );
 }
 
-bool Settings::ExtWorldExtObjectsCaptured( void ) const
+bool Settings::ExtWorldExtObjectsCaptured() const
 {
     return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
 }
 
-bool Settings::ExtWorldDisableBarrowMounds( void ) const
+bool Settings::ExtWorldDisableBarrowMounds() const
 {
     return ExtModes( WORLD_DISABLE_BARROW_MOUNDS );
 }
 
-bool Settings::ExtGameContinueAfterVictory( void ) const
+bool Settings::ExtGameContinueAfterVictory() const
 {
     return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
 }
 
-const fheroes2::Point & Settings::PosRadar( void ) const
+const fheroes2::Point & Settings::PosRadar() const
 {
     return pos_radr;
 }
 
-const fheroes2::Point & Settings::PosButtons( void ) const
+const fheroes2::Point & Settings::PosButtons() const
 {
     return pos_bttn;
 }
 
-const fheroes2::Point & Settings::PosIcons( void ) const
+const fheroes2::Point & Settings::PosIcons() const
 {
     return pos_icon;
 }
 
-const fheroes2::Point & Settings::PosStatus( void ) const
+const fheroes2::Point & Settings::PosStatus() const
 {
     return pos_stat;
 }
@@ -1777,7 +1785,7 @@ void Settings::SetPosStatus( const fheroes2::Point & pt )
     pos_stat = pt;
 }
 
-void Settings::BinarySave( void ) const
+void Settings::BinarySave() const
 {
     const std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
@@ -1789,7 +1797,7 @@ void Settings::BinarySave( void ) const
     }
 }
 
-void Settings::BinaryLoad( void )
+void Settings::BinaryLoad()
 {
     std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
 
@@ -1806,7 +1814,7 @@ void Settings::BinaryLoad( void )
     }
 }
 
-bool Settings::FullScreen( void ) const
+bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
 }

@@ -639,7 +639,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     const int32_t area = 12;
-    const int32_t maxc = ( w() / area ) * ( h() / area );
+    const int32_t maxc = ( width / area ) * ( height / area );
     Rand::Shuffle( tiles );
     if ( tiles.size() > static_cast<size_t>( maxc ) )
         tiles.resize( maxc );

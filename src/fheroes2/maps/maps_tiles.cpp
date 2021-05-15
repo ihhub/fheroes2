@@ -2093,7 +2093,7 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
     }
 
     // fix price loyalty objects.
-    if ( Settings::Get().PriceLoyaltyVersion() )
+    if ( Settings::Get().isPriceOfLoyaltySupported() )
         switch ( tile.GetObject() ) {
         case MP2::OBJ_UNKNW_79:
         case MP2::OBJ_UNKNW_7A:
