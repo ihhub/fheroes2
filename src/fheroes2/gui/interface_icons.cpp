@@ -181,6 +181,9 @@ void Interface::CastleIcons::ActionCurrentDn( void )
 void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
 {
     if ( item ) {
+        // Interface::ListBox hides cursor here
+        Cursor::Get().Show();
+
         Game::OpenCastleDialog( *item );
     }
 }
@@ -198,7 +201,6 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }
@@ -262,6 +264,9 @@ void Interface::HeroesIcons::ActionCurrentDn( void )
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
+        // Interface::ListBox hides cursor here
+        Cursor::Get().Show();
+
         if ( item->Modes( Heroes::GUARDIAN ) ) {
             Castle * castle = world.GetCastle( item->GetCenter() );
             if ( castle )
@@ -286,7 +291,6 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }
