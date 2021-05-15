@@ -328,7 +328,7 @@ private:
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    int loop_delay;
+    uint32_t loop_delay;
 
     // These members are used for restoring music and sounds when an user reopens the window
     bool _isHiddenWindow;

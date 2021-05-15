@@ -67,7 +67,7 @@ namespace AI
     {
     public:
         virtual void KingdomTurn( Kingdom & kingdom );
-        virtual void CastleTurn( Castle & castle, bool defensive = false );
+        virtual void CastleTurn( Castle & castle, bool defensive );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
         virtual void HeroesTurn( VecHeroes & ) {}

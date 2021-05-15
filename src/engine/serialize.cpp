@@ -401,7 +401,7 @@ void StreamBuf::put8( char v )
 u8 StreamBuf::get8()
 {
     if ( sizeg() )
-        return static_cast<u8>( 255u ) & *itget++;
+        return *itget++;
     else
         return 0u;
 }

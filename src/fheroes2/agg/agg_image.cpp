@@ -820,6 +820,13 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::HEROES:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is main menu image which doesn't shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                }
+                return true;
             default:
                 break;
             }

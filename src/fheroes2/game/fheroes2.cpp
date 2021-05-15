@@ -156,9 +156,8 @@ int main( int argc, char ** argv )
 
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
-            // Ensure the mouse position is updated to prevent bad initial values.
+            // Initialize local event processing.
             LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
-            LocalEvent::Get().GetMouseCursor();
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
