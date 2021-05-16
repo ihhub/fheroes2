@@ -83,11 +83,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
     const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );

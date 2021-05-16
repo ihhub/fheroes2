@@ -43,11 +43,7 @@ int Dialog::SelectSkillFromArena( void )
     const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     TextBox title( _( "Arena" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 

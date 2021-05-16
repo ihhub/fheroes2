@@ -50,11 +50,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
@@ -152,11 +148,7 @@ u32 Castle::OpenTown( void )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,

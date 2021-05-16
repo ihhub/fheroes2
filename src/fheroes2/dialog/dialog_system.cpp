@@ -47,11 +47,7 @@ int Dialog::SystemOptions( void )
     Settings & conf = Settings::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 

@@ -219,11 +219,8 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     std::vector<int> skills( MAXSECONDARYSKILL * 3, 0 );
 
@@ -272,11 +269,8 @@ Spell Dialog::SelectSpell( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
 
@@ -319,11 +313,8 @@ Artifact Dialog::SelectArtifact( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     std::vector<int> artifacts( static_cast<int>( Artifact::UNKNOWN ), Artifact::UNKNOWN );
 
@@ -366,11 +357,8 @@ Monster Dialog::SelectMonster( int id )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
@@ -413,11 +401,8 @@ int Dialog::SelectHeroes( int cur )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 

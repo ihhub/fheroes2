@@ -154,11 +154,8 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     const fheroes2::StandardWindow frameborder( 230, 160 );
     const fheroes2::Rect area( frameborder.activeArea() );

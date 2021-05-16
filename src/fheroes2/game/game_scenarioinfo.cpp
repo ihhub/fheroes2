@@ -107,11 +107,7 @@ int Game::ScenarioInfo( void )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 

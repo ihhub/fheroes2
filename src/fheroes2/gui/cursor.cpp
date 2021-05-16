@@ -264,6 +264,21 @@ CursorRestorer::CursorRestorer( bool renderOnRestore /* = true */ )
     _theme = cursor.Themes();
 }
 
+CursorRestorer::CursorRestorer( bool visible, int theme )
+    : CursorRestorer()
+{
+    Cursor & cursor = Cursor::Get();
+
+    cursor.SetThemes( theme );
+
+    if ( visible ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
+}
+
 CursorRestorer::~CursorRestorer()
 {
     Cursor & cursor = Cursor::Get();

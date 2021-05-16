@@ -202,11 +202,7 @@ void Battle::DialogBattleSettings( void )
     Settings & conf = Settings::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -339,11 +335,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     const Troops killed2 = army2->GetKilledTroops();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     std::string msg;
     std::string title;
@@ -828,11 +820,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
     const Settings & conf = Settings::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 

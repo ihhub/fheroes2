@@ -101,11 +101,8 @@ namespace Dialog
         fheroes2::Display & display = fheroes2::Display::instance();
 
         // setup cursor
-        const CursorRestorer cursorRestorer;
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
         Cursor & cursor = Cursor::Get();
-
-        cursor.SetThemes( cursor.POINTER );
-        cursor.Show();
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );

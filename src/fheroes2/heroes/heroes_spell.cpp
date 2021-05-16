@@ -497,11 +497,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     LocalEvent & le = LocalEvent::Get();

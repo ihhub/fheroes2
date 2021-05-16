@@ -43,17 +43,7 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-
-    if ( ok_button ) {
-        cursor.Show();
-    }
-    else {
-        cursor.Hide();
-    }
+    const CursorRestorer cursorRestorer( ok_button, Cursor::POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -136,11 +126,7 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     int index = 0;
     std::string skill_name;

@@ -136,11 +136,8 @@ void Dialog::ExtSettings( bool readonly )
     const Settings & conf = Settings::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     const fheroes2::StandardWindow frameborder( 320, 400 );
     const fheroes2::Rect area( frameborder.activeArea() );

@@ -32,17 +32,7 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-
-    if ( buttons ) {
-        cursor.Show();
-    }
-    else {
-        cursor.Hide();
-    }
+    const CursorRestorer cursorRestorer( buttons != 0, Cursor::POINTER );
 
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox2( message, ft, BOXAREA_WIDTH );

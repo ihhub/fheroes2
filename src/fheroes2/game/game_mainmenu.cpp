@@ -70,11 +70,7 @@ int Game::MainMenu( bool isFirstGameRun )
     conf.SetGameType( TYPE_MENU );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 

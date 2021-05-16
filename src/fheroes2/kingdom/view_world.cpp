@@ -451,11 +451,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::ImageRestorer restorer( display );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();

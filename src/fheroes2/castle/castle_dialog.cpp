@@ -125,11 +125,8 @@ int Castle::OpenDialog( bool readonly )
     CastleHeroes heroes = world.GetHeroes( *this );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
 
     // fade
     if ( conf.ExtGameUseFade() )

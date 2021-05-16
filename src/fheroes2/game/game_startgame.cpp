@@ -79,11 +79,7 @@ int Game::StartGame( void )
     const Settings & conf = Settings::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();

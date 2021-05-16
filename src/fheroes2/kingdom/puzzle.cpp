@@ -94,11 +94,7 @@ void Puzzle::ShowMapsDialog( void ) const
     const fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     AGG::PlayMusic( MUS::PUZZLE, false );
 

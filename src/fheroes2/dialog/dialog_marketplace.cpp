@@ -309,11 +309,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     const std::string & header = fromTradingPost ? _( "Trading Post" ) : _( "Marketplace" );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Dialog::FrameBox box( 297, true );
 

@@ -127,11 +127,7 @@ int Game::NewNetwork( void )
     conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -189,11 +185,7 @@ int Game::NewGame( void )
     Game::SetLastSavename( "" );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -287,11 +279,7 @@ int Game::NewMulti( void )
         conf.SetGameType( Game::TYPE_STANDARD );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -358,11 +346,7 @@ int Game::NewMulti( void )
 u32 Game::SelectCountPlayers( void )
 {
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 

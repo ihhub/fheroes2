@@ -205,11 +205,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 224 );
     const fheroes2::Rect box( frameborder.activeArea() );

@@ -32,11 +32,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );

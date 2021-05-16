@@ -240,10 +240,8 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     }
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
     Cursor & cursor = Cursor::Get();
-
-    cursor.Show();
 
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;

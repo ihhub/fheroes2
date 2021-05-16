@@ -226,11 +226,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     LocalEvent & le = LocalEvent::Get();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // calculate max count
     Monster monster = monster0;
@@ -497,11 +493,7 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );

@@ -38,11 +38,7 @@ int Dialog::AdventureOptions( bool enabledig )
     const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );

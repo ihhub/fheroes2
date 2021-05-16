@@ -193,18 +193,13 @@ int Game::HighScores()
 #endif
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     HGSData hgs;
 
     std::ostringstream stream;
     stream << System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
-    cursor.SetThemes( cursor.POINTER );
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
     hgs.Load( stream.str().c_str() );

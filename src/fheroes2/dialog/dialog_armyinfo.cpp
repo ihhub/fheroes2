@@ -90,17 +90,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Sprite & spriteDialogShadow = fheroes2::AGG::GetICN( viewarmy, 7 );
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-
-    if ( flags & BUTTONS ) {
-        cursor.Show();
-    }
-    else {
-        cursor.Hide();
-    }
+    const CursorRestorer cursorRestorer( ( flags & BUTTONS ) != 0, Cursor::POINTER );
 
     fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
     if ( isEvilInterface ) {
@@ -528,11 +518,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
@@ -621,11 +607,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     std::string message;
 

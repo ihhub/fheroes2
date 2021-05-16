@@ -47,11 +47,7 @@ void Castle::OpenTavern( void ) const
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
-    const CursorRestorer cursorRestorer;
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( cursor.POINTER );
-    cursor.Show();
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Text text( tavern, Font::YELLOW_BIG );
     const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
