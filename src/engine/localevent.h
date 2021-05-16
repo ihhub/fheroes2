@@ -24,6 +24,7 @@
 #define H2LOCALEVENT_H
 
 #include <string>
+#include <vector>
 
 #include "math_base.h"
 #include "timing.h"
@@ -332,9 +333,8 @@ private:
 
     // These members are used for restoring music and sounds when an user reopens the window
     bool _isHiddenWindow;
-    bool _isMusicPaused;
-    bool _isSoundPaused;
     uint16_t _musicVolume;
+    std::vector<uint16_t> _soundVolumes;
 
     enum
     {

@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
@@ -226,8 +228,6 @@ LocalEvent::LocalEvent()
     , keyboard_filter_func( NULL )
     , loop_delay( 1 )
     , _isHiddenWindow( false )
-    , _isMusicPaused( false )
-    , _isSoundPaused( false )
     , _musicVolume( 0 )
 {}
 
@@ -1242,23 +1242,31 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 void LocalEvent::StopSounds()
 {
     _isHiddenWindow = true;
-    _isMusicPaused = Music::isPaused();
-    _isSoundPaused = ( Mixer::isPaused( -1 ) != 0 );
-    Mixer::Pause();
-    Music::Pause();
     _musicVolume = Music::Volume( 0 );
+
+    const size_t channelsCount = static_cast<size_t>( Mixer::GetChannels() );
+
+    _soundVolumes.resize( channelsCount );
+
+    for ( size_t channel = 0; channel < channelsCount; channel++ ) {
+        _soundVolumes[channel] = Mixer::Volume( channel, -1 );
+
+        Mixer::Volume( channel, 0 );
+    }
 }
 
 void LocalEvent::ResumeSounds()
 {
     if ( _isHiddenWindow ) {
-        Music::Volume( _musicVolume );
-        if ( !_isMusicPaused ) {
-            Music::Resume();
-        }
-        if ( !_isSoundPaused )
-            Mixer::Resume();
         _isHiddenWindow = false;
+
+        Music::Volume( _musicVolume );
+
+        const size_t channelsCount = std::min( static_cast<size_t>( Mixer::GetChannels() ), _soundVolumes.size() );
+
+        for ( size_t channel = 0; channel < channelsCount; channel++ ) {
+            Mixer::Volume( channel, _soundVolumes[channel] );
+        }
     }
 }
 

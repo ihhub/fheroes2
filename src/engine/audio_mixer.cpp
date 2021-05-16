@@ -93,6 +93,11 @@ void Mixer::Quit( void )
     }
 }
 
+uint8_t Mixer::GetChannels()
+{
+    return Mix_AllocateChannels( -1 );
+}
+
 void Mixer::SetChannels( u8 num )
 {
     Mix_AllocateChannels( num );
@@ -317,6 +322,11 @@ void Mixer::Quit( void )
         paused.clear();
         valid = false;
     }
+}
+
+uint8_t Mixer::GetChannels()
+{
+    return chunks.size();
 }
 
 void Mixer::SetChannels( u8 num )
