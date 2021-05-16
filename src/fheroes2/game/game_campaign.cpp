@@ -116,7 +116,7 @@ namespace
             // available scenario (one of which should be selected)
             if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() ) {
                 buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
-                                          fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), i );
+                                          fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), static_cast<int>( i ) );
             }
             // cleared scenario
             else if ( std::find( clearedMaps.begin(), clearedMaps.end(), static_cast<int>( i ) ) != clearedMaps.end() ) {
@@ -154,7 +154,7 @@ namespace
         const int textChoiceWidth = 150;
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
             Text choice( bonuses[i].ToString(), Font::BIG );
-            choice.Blit( top.x + 425, top.y + 209 + 22 * i - choice.h() / 2, textChoiceWidth );
+            choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
         }
     }
 
@@ -174,7 +174,7 @@ namespace
             else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
                 award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
 
-            award.Blit( top.x + 425, top.y + 100 + yOffset * i - award.h() / 2, textAwardWidth );
+            award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
         }
     }
 

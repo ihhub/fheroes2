@@ -17,7 +17,7 @@ struct smk_bit_t;
 
 /* BITSTREAM Functions */
 /** Initialize a bitstream */
-struct smk_bit_t* smk_bs_init(const unsigned char* b, unsigned long size);
+struct smk_bit_t* smk_bs_init(const unsigned char* b, const unsigned long size);
 
 /** This macro checks return code from _smk_bs_read_1 and
 	jumps to error label if problems occur. */

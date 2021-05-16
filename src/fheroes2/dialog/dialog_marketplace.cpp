@@ -157,12 +157,11 @@ public:
         textSell.SetFont( Font::SMALL );
         textBuy.SetFont( Font::SMALL );
 
-        const std::vector<Player *> players = conf.GetPlayers();
+        const Players & players = conf.GetPlayers();
         int playerCount = 0;
-        for ( Players::const_iterator it = players.begin(); it != players.end(); ++it ) {
-            if ( *it ) {
-                const Player & player = ( **it );
-                const Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+        for ( const Player * player : players ) {
+            if ( player != nullptr ) {
+                const Kingdom & kingdom = world.GetKingdom( player->GetColor() );
                 if ( kingdom.isPlay() )
                     ++playerCount;
             }

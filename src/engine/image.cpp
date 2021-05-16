@@ -411,7 +411,7 @@ namespace fheroes2
         copy( image_ );
     }
 
-    Image::Image( Image && image_ )
+    Image::Image( Image && image_ ) noexcept
         : _width( 0 )
         , _height( 0 )
         , _data( std::move( image_._data ) )
@@ -431,7 +431,7 @@ namespace fheroes2
         return *this;
     }
 
-    Image & Image::operator=( Image && image_ )
+    Image & Image::operator=( Image && image_ ) noexcept
     {
         if ( this != &image_ ) {
             // We shouldn't copy or move different types of images.
@@ -552,7 +552,7 @@ namespace fheroes2
         , _y( sprite._y )
     {}
 
-    Sprite::Sprite( Sprite && sprite )
+    Sprite::Sprite( Sprite && sprite ) noexcept
         : Image( std::move( sprite ) )
         , _x( 0 )
         , _y( 0 )
@@ -573,7 +573,7 @@ namespace fheroes2
         return *this;
     }
 
-    Sprite & Sprite::operator=( Sprite && sprite )
+    Sprite & Sprite::operator=( Sprite && sprite ) noexcept
     {
         if ( this != &sprite ) {
             Image::operator=( std::move( sprite ) );

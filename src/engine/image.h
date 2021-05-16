@@ -36,12 +36,12 @@ namespace fheroes2
     public:
         Image( int32_t width_ = 0, int32_t height_ = 0 );
         Image( const Image & image_ );
-        Image( Image && image_ );
+        Image( Image && image_ ) noexcept;
 
         virtual ~Image() = default;
 
         Image & operator=( const Image & image_ );
-        Image & operator=( Image && image_ );
+        Image & operator=( Image && image_ ) noexcept;
 
         virtual void resize( int32_t width_, int32_t height_ );
 
@@ -102,12 +102,12 @@ namespace fheroes2
         Sprite( int32_t width_ = 0, int32_t height_ = 0, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Image & image, int32_t x_ = 0, int32_t y_ = 0 );
         Sprite( const Sprite & sprite );
-        Sprite( Sprite && sprite );
+        Sprite( Sprite && sprite ) noexcept;
 
         ~Sprite() override = default;
 
         Sprite & operator=( const Sprite & sprite );
-        Sprite & operator=( Sprite && sprite );
+        Sprite & operator=( Sprite && sprite ) noexcept;
 
         int32_t x() const
         {
