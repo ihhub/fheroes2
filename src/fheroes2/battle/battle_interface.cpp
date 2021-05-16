@@ -2330,6 +2330,10 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
+
+        // StatusListBox hides cursor on redraw
+        const CursorRestorer cursorRestorer( false );
+
         listlog->QueueEventProcessing();
     }
     else if ( le.MouseCursor( fheroes2::Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height ) ) ) {
