@@ -107,7 +107,7 @@ namespace
 
 namespace fheroes2
 {
-    bool Save( const Image & image, const std::string & path, uint8_t background )
+    bool Save( const Image & image, const std::string & path, const uint8_t background )
     {
         if ( image.empty() || path.empty() )
             return false;
