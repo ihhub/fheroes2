@@ -577,6 +577,10 @@ KeySym GetKeySym( int key )
         return KEY_RETURN; // repath to the normal Enter
     case SDLK_KP_EQUALS:
         return KEY_KP_EQUALS;
+    case SDLK_HOME:
+        return KEY_HOME;
+    case SDLK_END:
+        return KEY_END;
     }
 
     return KEY_NONE;
@@ -962,6 +966,12 @@ size_t InsertKeySym( std::string & res, size_t pos, KeySym sym, u16 mod )
     case KEY_RIGHT:
         if ( pos < res.size() )
             ++pos;
+        break;
+    case KEY_HOME:
+        pos = 0;
+        break;
+    case KEY_END:
+        pos = res.size();
         break;
 
     default: {

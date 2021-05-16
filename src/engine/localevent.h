@@ -161,6 +161,9 @@ enum KeySym
     KEY_KP_ENTER = SDLK_KP_ENTER,
     KEY_KP_EQUALS = SDLK_KP_EQUALS,
 
+    KEY_HOME = SDLK_HOME,
+    KEY_END = SDLK_END,
+
     KEY_LAST
 };
 
