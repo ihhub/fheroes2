@@ -265,7 +265,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                 valid = ( ( spellROI & mp ) && MP2::isClearGroundObject( tile.GetObject() ) && water == world.GetTiles( dst ).isWater() );
             }
 
-            cursor.SetThemes( valid ? ( water ? Cursor::BOAT : Cursor::MOVE ) : Cursor::WAR_NONE );
+            cursor.SetThemes( valid ? ( water ? Cursor::CURSOR_HERO_BOAT : Cursor::CURSOR_HERO_MOVE ) : Cursor::WAR_NONE );
 
             if ( dst >= 0 && le.MousePressRight() ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
