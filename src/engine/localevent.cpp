@@ -1159,9 +1159,8 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
 #else
         case SDL_ACTIVEEVENT:
-            if ( event.active.state & SDL_APPACTIVE ) {
+            if ( event.active.state & SDL_APPINPUTFOCUS ) {
                 if ( Mixer::isValid() ) {
-                    // iconify
                     if ( 0 == event.active.gain ) {
                         StopSounds();
                     }
