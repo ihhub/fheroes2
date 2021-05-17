@@ -266,7 +266,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )
-                              : static_cast<int>( Cursor::WAR_NONE ) );
+                                    : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.MousePressRight() ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
