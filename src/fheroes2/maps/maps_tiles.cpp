@@ -1425,13 +1425,12 @@ void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visi
     area.DrawTile( dst, GetTileSurface(), mp );
 }
 
-void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI )
+void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area )
 {
     if ( !( visibleTileROI & mp ) ) {
         return;
     }
 
-    const Interface::GameArea & area = Interface::Basic::Get().GetGameArea();
     if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
         area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
     }

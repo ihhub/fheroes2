@@ -159,13 +159,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
-                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
+                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
+                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
                 }
                 else {
                     world.GetTiles( offset.x, offset.y ).RedrawTile( dst, tileROI, *this );
