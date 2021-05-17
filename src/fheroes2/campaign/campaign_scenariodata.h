@@ -48,7 +48,7 @@ namespace Campaign
 
     enum class ScenarioLossCondition : int
     {
-        STANDARD = 0,
+        STANDARD = 0, // standard map's defined loss condition
         LOSE_ALL_SORCERESS_VILLAGES = 1
     };
 
