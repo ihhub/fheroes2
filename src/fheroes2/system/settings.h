@@ -272,6 +272,7 @@ public:
     bool IsGameType( int type ) const;
     int GameType() const;
     void SetGameType( int );
+    bool isCampaignGameType() const;
 
     Players & GetPlayers();
     const Players & GetPlayers() const;

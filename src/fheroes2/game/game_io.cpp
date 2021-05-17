@@ -145,7 +145,7 @@ bool Game::Save( const std::string & fn )
     // zip game data content
     fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
 
-    if ( conf.GameType() & Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() )
         fz << Campaign::CampaignSaveData::Get();
 
     fz << SAV2ID3; // eof marker
@@ -237,7 +237,8 @@ bool Game::Load( const std::string & fn )
     u16 end_check = 0;
 
     fz >> World::Get() >> conf;
-    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+
+    if ( conf.isCampaignGameType() ) {
         fz >> Campaign::CampaignSaveData::Get();
     }
 

@@ -1004,7 +1004,7 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
     const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
     const int mapWinCondition = conf.ConditionWins();
 
-    if ( ( conf.GameType() & Game::TYPE_CAMPAIGN ) != 0 ) {
+    if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
@@ -1049,6 +1049,33 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+
+    if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
+            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+                const KingdomCastles & castles = kingdom.GetCastles();
+                bool hasSorceressVillage = false;
+
+                for ( size_t i = 0; i < castles.size(); ++i ) {
+                    if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
+                        continue;
+
+                    hasSorceressVillage = true;
+                    break;
+                }
+
+                if ( !hasSorceressVillage )
+                    return GameOver::LOSS_ALL;
+            }
+        }
+    }
 
     for ( u32 ii = 0; loss[ii]; ++ii )
         if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
