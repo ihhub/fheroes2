@@ -49,7 +49,7 @@ namespace Campaign
     enum class ScenarioLossCondition : int
     {
         STANDARD = 0,
-        LOSE_ALL_VILLAGES = 1
+        LOSE_ALL_SORCERESS_VILLAGES = 1
     };
 
     struct ScenarioBonusData

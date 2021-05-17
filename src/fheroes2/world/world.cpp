@@ -1059,19 +1059,21 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
         if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
             const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
-            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_VILLAGES ) {
+            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
                 const KingdomCastles & castles = kingdom.GetCastles();
-                bool hasVillage = false;
+                bool hasSorceressVillage = false;
 
                 for ( size_t i = 0; i < castles.size(); ++i ) {
-                    if ( castles[0]->isCastle() )
+                    if ( castles[i]->isCastle() )
+                        continue;
+                    else if ( castles[i]->GetRace() != Race::SORC )
                         continue;
 
-                    hasVillage = true;
+                    hasSorceressVillage = true;
                     break;
                 }
 
-                if ( !hasVillage )
+                if ( !hasSorceressVillage )
                     return GameOver::LOSS_ALL;
             }
         }
