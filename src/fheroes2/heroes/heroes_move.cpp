@@ -457,12 +457,12 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
     }
 
     if ( isShipMaster() && isMoveEnabled() && isDeepOcean() ) {
-        const Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
-        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.h, _alphaValue, reflect );
+        const fheroes2::Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
+        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.height, _alphaValue, reflect );
     }
 
-    const Rect blitArea = area.RectFixed( dstShad, spriteShad.width(), spriteShad.height() );
-    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.w, blitArea.height, _alphaValue );
+    const fheroes2::Rect blitArea = area.RectFixed( dstShad, spriteShad.width(), spriteShad.height() );
+    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.width, blitArea.height, _alphaValue );
 }
 
 void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
