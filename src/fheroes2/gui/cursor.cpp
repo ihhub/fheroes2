@@ -43,7 +43,7 @@ Cursor & Cursor::Get( void )
 int Cursor::Themes() const
 {
     assert( theme <= CURSOR_HERO_BOAT_ACTION_8 );
-    return  theme;
+    return theme;
 }
 
 bool Cursor::SetThemes( int name, bool force )
