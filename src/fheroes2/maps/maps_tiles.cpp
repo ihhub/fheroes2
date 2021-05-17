@@ -2410,7 +2410,7 @@ void Maps::Tiles::ClearFog( int colors )
 bool Maps::Tiles::isFogAllAround( int color ) const
 {
     const uint32_t center = GetIndex();
-    const Point mp = Maps::GetPoint( center );
+    const fheroes2::Point mp = Maps::GetPoint( center );
     const int width = world.w();
 
     if ( mp.y > 0 ) {

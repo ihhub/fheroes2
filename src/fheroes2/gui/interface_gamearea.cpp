@@ -193,8 +193,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<const Maps::Tiles *> monsterList;
     std::vector<const Maps::Tiles *> topList;
     std::vector<const Maps::Tiles *> objectList;
-    std::vector<std::reference_wrapper<const Maps::Tiles> > fogList;
-  
+    std::vector<const Maps::Tiles *> fogList;
+
     const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
     topList.reserve( areaSize );
     objectList.reserve( areaSize );
@@ -211,11 +211,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            const Point mp( x, y );
+            const fheroes2::Point mp( x, y );
 
             if ( drawFog && tile.isFog( colors ) ) {
                 // don't redraw tile if fog all around
-                fogList.emplace_back( tile );
+                fogList.emplace_back( &tile );
                 if ( tile.isFogAllAround( colors ) ) {
                     continue;
                 }
@@ -497,8 +497,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( drawFog ) {
-        for ( const Maps::Tiles & tile : fogList ) {
-            tile.RedrawFogs( dst, colors, *this );
+        for ( const Maps::Tiles * tile : fogList ) {
+            tile->RedrawFogs( dst, colors, *this );
         }
     }
 }
