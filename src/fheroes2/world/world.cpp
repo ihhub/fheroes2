@@ -1064,9 +1064,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
                 bool hasSorceressVillage = false;
 
                 for ( size_t i = 0; i < castles.size(); ++i ) {
-                    if ( castles[i]->isCastle() )
-                        continue;
-                    else if ( castles[i]->GetRace() != Race::SORC )
+                    if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
                         continue;
 
                     hasSorceressVillage = true;

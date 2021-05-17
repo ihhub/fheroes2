@@ -118,7 +118,7 @@ namespace
         scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignDescription[1] );
         scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignDescription[2],
-                                    Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
+                                    Campaign::ScenarioVictoryCondition::STANDARD, Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
         scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignDescription[3] );
         scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignDescription[4] );
         scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignDescription[5] );

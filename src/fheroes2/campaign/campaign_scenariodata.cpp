@@ -259,17 +259,6 @@ namespace Campaign
         , _lossCondition( lossCondition )
     {}
 
-    ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
-                                const std::string & description, const ScenarioLossCondition lossCondition )
-        : _scenarioID( scenarioID )
-        , _nextMaps( nextMaps )
-        , _bonuses( bonuses )
-        , _fileName( fileName )
-        , _description( description )
-        , _victoryCondition( ScenarioVictoryCondition::STANDARD )
-        , _lossCondition( lossCondition )
-    {}
-
     bool Campaign::ScenarioData::isMapFilePresent() const
     {
         std::string matchingFilePath;

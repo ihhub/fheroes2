@@ -87,8 +87,6 @@ namespace Campaign
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
                       const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
-        ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description, const ScenarioLossCondition lossCondition );
 
         const std::vector<int> & getNextMaps() const
         {
