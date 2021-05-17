@@ -134,7 +134,212 @@ namespace
         return palette.data();
     }
 
+    bool getActiveArea( fheroes2::Rect & roi, const int32_t width, const int32_t height )
+    {
+        if ( roi.width <= 0 || roi.height <= 0 || roi.x >= width || roi.y >= height )
+            return false;
+
+        if ( roi.x < 0 ) {
+            const int32_t offsetX = -roi.x;
+            if ( offsetX >= roi.width )
+                return false;
+
+            roi.x = 0;
+            roi.width -= offsetX;
+        }
+
+        if ( roi.y < 0 ) {
+            const int32_t offsetY = -roi.y;
+            if ( offsetY >= roi.height )
+                return false;
+
+            roi.y = 0;
+            roi.height -= offsetY;
+        }
+
+        if ( roi.x + roi.width > width ) {
+            const int32_t offsetX = roi.x + roi.width - width;
+            if ( offsetX >= roi.width )
+                return false;
+            roi.width -= offsetX;
+        }
+
+        if ( roi.y + roi.height > height ) {
+            const int32_t offsetY = roi.y + roi.height - height;
+            if ( offsetY >= roi.height )
+                return false;
+            roi.height -= offsetY;
+        }
+
+        return true;
+    }
+
+    fheroes2::Rect getCommonRoi( const fheroes2::Rect & roi1, const fheroes2::Rect & roi2 )
+    {
+        fheroes2::Rect common;
+        common.x = roi1.x < roi2.x ? roi1.x : roi2.x;
+        common.y = roi1.y < roi2.y ? roi1.y : roi2.y;
+        common.width = roi1.x + roi1.width > roi2.x + roi2.width ? roi1.x + roi1.width - common.x : roi2.x + roi2.width - common.x;
+        common.height = roi1.y + roi1.height > roi2.y + roi2.height ? roi1.y + roi1.height - common.y : roi2.y + roi2.height - common.y;
+
+        return common;
+    }
+
     const uint8_t * currentPalette = PALPAlette();
+
+// If SDL library is used
+#if !defined( FHEROES2_VITA )
+    class BaseSDLRenderer
+    {
+    protected:
+        std::vector<uint32_t> _palette32Bit;
+        std::vector<SDL_Color> _palette8Bit;
+
+        void copyImageToSurface( const fheroes2::Image & image, SDL_Surface * surface, const fheroes2::Rect & roi )
+        {
+            assert( surface != nullptr && !image.empty() );
+
+            if ( SDL_MUSTLOCK( surface ) )
+                SDL_LockSurface( surface );
+
+            const int32_t imageWidth = image.width();
+            const int32_t imageHeight = image.height();
+
+            const bool fullFrame = ( roi.width == imageWidth ) && ( roi.height == imageHeight );
+
+            if ( fullFrame ) {
+                if ( surface->format->BitsPerPixel == 32 ) {
+                    uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+                    const uint32_t * outEnd = out + imageWidth * imageHeight;
+                    const uint8_t * in = image.image();
+                    const uint32_t * transform = _palette32Bit.data();
+
+                    for ( ; out != outEnd; ++out, ++in )
+                        *out = *( transform + *in );
+                }
+                else if ( surface->format->BitsPerPixel == 8 ) {
+                    if ( surface->pixels != image.image() ) {
+                        if ( imageWidth % 4 != 0 ) {
+                            const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                            for ( int32_t i = 0; i < imageHeight; ++i ) {
+                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, image.image() + imageWidth * i,
+                                        static_cast<size_t>( imageWidth ) );
+                            }
+                        }
+                        else {
+                            memcpy( surface->pixels, image.image(), static_cast<size_t>( imageWidth * imageHeight ) );
+                        }
+                    }
+                }
+            }
+            else {
+                if ( surface->format->BitsPerPixel == 32 ) {
+                    uint32_t * outY = static_cast<uint32_t *>( surface->pixels );
+                    const uint32_t * outYEnd = outY + imageWidth * roi.height;
+                    const uint8_t * inY = image.image() + roi.x + roi.y * imageWidth;
+                    const uint32_t * transform = _palette32Bit.data();
+
+                    for ( ; outY != outYEnd; outY += imageWidth, inY += imageWidth ) {
+                        uint32_t * outX = outY;
+                        const uint32_t * outXEnd = outX + roi.width;
+                        const uint8_t * inX = inY;
+
+                        for ( ; outX != outXEnd; ++outX, ++inX )
+                            *outX = *( transform + *inX );
+                    }
+                }
+                else if ( surface->format->BitsPerPixel == 8 ) {
+                    if ( surface->pixels != image.image() ) {
+                        const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
+                        const int32_t screenOffset = roi.x + roi.y * screenWidth;
+                        const int32_t imageOffset = roi.x + roi.y * imageWidth;
+                        for ( int32_t i = 0; i < roi.height; ++i ) {
+                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, image.image() + imageOffset + imageWidth * i,
+                                    static_cast<size_t>( roi.width ) );
+                        }
+                    }
+                }
+            }
+
+            if ( SDL_MUSTLOCK( surface ) )
+                SDL_UnlockSurface( surface );
+        }
+
+        void generatePalette( const std::vector<uint8_t> & colorIds, const SDL_Surface * surface )
+        {
+            assert( surface != nullptr );
+
+            if ( surface->format->BitsPerPixel == 32 ) {
+                _palette32Bit.resize( 256u );
+
+                if ( surface->format->Amask > 0 ) {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                    }
+                }
+                else {
+                    for ( size_t i = 0; i < 256u; ++i ) {
+                        const uint8_t * value = currentPalette + colorIds[i] * 3;
+                        _palette32Bit[i] = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                    }
+                }
+            }
+            else if ( surface->format->BitsPerPixel == 8 ) {
+                _palette8Bit.resize( 256 );
+                for ( uint32_t i = 0; i < 256; ++i ) {
+                    const uint8_t * value = currentPalette + colorIds[i] * 3;
+                    SDL_Color & col = _palette8Bit[i];
+
+                    col.r = *value;
+                    col.g = *( value + 1 );
+                    col.b = *( value + 2 );
+                }
+            }
+            else {
+                // This is unsupported format. Please implement it.
+                assert( 0 );
+            }
+        }
+
+        SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
+        {
+            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            if ( surface == NULL )
+                return NULL;
+
+            const uint32_t width = icon.width();
+            const uint32_t height = icon.height();
+
+            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
+            const uint32_t * outEnd = out + width * height;
+            const uint8_t * in = icon.image();
+            const uint8_t * transform = icon.transform();
+
+            if ( surface->format->Amask > 0 ) {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
+                    }
+                }
+            }
+            else {
+                for ( ; out != outEnd; ++out, ++in, ++transform ) {
+                    if ( *transform == 0 ) {
+                        const uint8_t * value = currentPalette + *in * 3;
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
+                    }
+                    else {
+                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
+                    }
+                }
+            }
+
+            return surface;
+        }
+    };
+#endif
 }
 
 namespace
@@ -143,12 +348,12 @@ namespace
     class RenderCursor : public fheroes2::Cursor
     {
     public:
-        virtual ~RenderCursor()
+        ~RenderCursor() override
         {
             clear();
         }
 
-        virtual bool isVisible() const override
+        bool isVisible() const override
         {
             if ( _emulation )
                 return fheroes2::Cursor::isVisible();
@@ -156,7 +361,7 @@ namespace
                 return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
         }
 
-        virtual void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
+        void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
                 SDL_ShowCursor( 0 );
@@ -180,7 +385,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                        *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
                     }
                     else if ( *transform > 1 ) {
                         // SDL2 uses RGBA image on OS level separately from frame rendering.
@@ -193,7 +398,7 @@ namespace
                 for ( ; out != outEnd; ++out, ++in, ++transform ) {
                     if ( *transform == 0 ) {
                         const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
+                        *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
                     }
                     else {
                         *out = SDL_MapRGB( surface->format, 0, 0, 0 );
@@ -210,7 +415,7 @@ namespace
             std::swap( _cursor, tempCursor );
         }
 
-        virtual void enableSoftwareEmulation( const bool enable ) override
+        void enableSoftwareEmulation( const bool enable ) override
         {
             if ( enable == _emulation )
                 return;
@@ -270,10 +475,14 @@ namespace
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
-        virtual ~RenderEngine()
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
         }
+
+        RenderEngine & operator=( const RenderEngine & ) = delete;
 
         static RenderEngine * create()
         {
@@ -285,12 +494,12 @@ namespace
             return _destRect;
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const override
+        fheroes2::Size getCurrentScreenResolution() const override
         {
             return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -320,7 +529,7 @@ namespace
             VITA_ASPECT_CORRECTED_WIDTH = 848
         };
 
-        virtual void clear() override
+        void clear() override
         {
             if ( _window != nullptr ) {
                 SDL_DestroyWindow( _window );
@@ -340,7 +549,7 @@ namespace
             }
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -404,8 +613,10 @@ namespace
             return true;
         }
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
+            (void)roi;
+
             if ( _texBuffer == nullptr )
                 return;
 
@@ -421,22 +632,22 @@ namespace
             vita2d_swap_buffers();
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == nullptr || colorIds.size() != 256 || _texBuffer == nullptr )
                 return;
 
-            uint32_t _palette32Bit[256u];
+            uint32_t palette32Bit[256u];
 
             for ( size_t i = 0; i < 256u; ++i ) {
                 const uint8_t * value = currentPalette + colorIds[i] * 3;
-                _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
+                palette32Bit[i] = SDL_MapRGBA( _surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
             }
 
-            memcpy( vita2d_texture_get_palette( _texBuffer ), _palette32Bit, sizeof( uint32_t ) * 256 );
+            memcpy( vita2d_texture_get_palette( _texBuffer ), palette32Bit, sizeof( uint32_t ) * 256 );
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return true;
         }
@@ -454,15 +665,19 @@ namespace
         }
     };
 #elif SDL_VERSION_ATLEAST( 2, 0, 0 )
-    class RenderEngine : public fheroes2::BaseRenderEngine
+    class RenderEngine : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
-        virtual ~RenderEngine()
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
         {
             if ( _window == NULL ) {
                 BaseRenderEngine::toggleFullScreen();
@@ -495,7 +710,7 @@ namespace
             _retrieveWindowInfo();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _window == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -504,7 +719,7 @@ namespace
             return ( flags & SDL_WINDOW_FULLSCREEN ) != 0 || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) != 0;
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -528,60 +743,32 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             if ( _window != NULL )
                 SDL_SetWindowTitle( _window, title.c_str() );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
             if ( _window == NULL )
                 return;
 
-            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            SDL_Surface * surface = generateIconSurface( icon );
             if ( surface == NULL )
                 return;
-
-            const uint32_t width = icon.width();
-            const uint32_t height = icon.height();
-
-            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
-            const uint32_t * outEnd = out + width * height;
-            const uint8_t * in = icon.image();
-            const uint8_t * transform = icon.transform();
-
-            if ( surface->format->Amask > 0 ) {
-                for ( ; out != outEnd; ++out, ++in, ++transform ) {
-                    if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
-                    }
-                }
-            }
-            else {
-                for ( ; out != outEnd; ++out, ++in, ++transform ) {
-                    if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
-                    }
-                    else {
-                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
-                    }
-                }
-            }
 
             SDL_SetWindowIcon( _window, surface );
 
             SDL_FreeSurface( surface );
         }
 
-        virtual fheroes2::Rect getActiveWindowROI() const override
+        fheroes2::Rect getActiveWindowROI() const override
         {
             return _activeWindowROI;
         }
 
-        virtual fheroes2::Size getCurrentScreenResolution() const override
+        fheroes2::Size getCurrentScreenResolution() const override
         {
             return _currentScreenResolution;
         }
@@ -600,7 +787,7 @@ namespace
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
         {}
 
-        virtual void clear() override
+        void clear() override
         {
             if ( _texture != NULL ) {
                 SDL_DestroyTexture( _texture );
@@ -631,43 +818,12 @@ namespace
             _windowedSize = fheroes2::Size();
         }
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
             if ( _surface == NULL )
                 return;
 
-            const int32_t width = display.width();
-            const int32_t height = display.height();
-
-            if ( SDL_MUSTLOCK( _surface ) )
-                SDL_LockSurface( _surface );
-
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
-                const uint32_t * outEnd = out + width * height;
-                const uint8_t * in = display.image();
-                const uint32_t * transform = _palette32Bit.data();
-
-                for ( ; out != outEnd; ++out, ++in )
-                    *out = *( transform + *in );
-            }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                if ( _surface->pixels != display.image() ) {
-                    if ( display.width() % 4 != 0 ) {
-                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
-                        for ( int32_t i = 0; i < display.height(); ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
-                                    static_cast<size_t>( width ) );
-                        }
-                    }
-                    else {
-                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
-                    }
-                }
-            }
-
-            if ( SDL_MUSTLOCK( _surface ) )
-                SDL_UnlockSurface( _surface );
+            copyImageToSurface( display, _surface, roi );
 
             if ( _texture == NULL ) {
                 if ( _renderer != NULL )
@@ -676,16 +832,31 @@ namespace
                 _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             }
             else {
-                SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
-                if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                    if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
+                if ( fullFrame ) {
+                    SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
+                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
+                        if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                            SDL_RenderPresent( _renderer );
+                        }
+                    }
+                }
+                else {
+                    SDL_Rect area;
+                    area.x = roi.x;
+                    area.y = roi.y;
+                    area.w = roi.width;
+                    area.h = roi.height;
+
+                    SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
+                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
                 }
             }
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -761,47 +932,18 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
 
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
-
-                if ( _surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
-                    }
-                }
-                else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
-                    }
-                }
-            }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
-                    SDL_Color & col = _palette8Bit[i];
-
-                    col.r = *( value );
-                    col.g = *( value + 1 );
-                    col.b = *( value + 2 );
-                }
-
+            generatePalette( colorIds, _surface );
+            if ( _surface->format->BitsPerPixel == 8 ) {
                 SDL_SetPaletteColors( _surface->format->palette, _palette8Bit.data(), 0, 256 );
-            }
-            else {
-                // This is unsupported format. Please implement it.
-                assert( 0 );
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
@@ -811,9 +953,6 @@ namespace
         SDL_Surface * _surface;
         SDL_Renderer * _renderer;
         SDL_Texture * _texture;
-
-        std::vector<uint32_t> _palette32Bit;
-        std::vector<SDL_Color> _palette8Bit;
 
         std::string _previousWindowTitle;
         fheroes2::Point _prevWindowPos;
@@ -863,15 +1002,19 @@ namespace
         }
     };
 #else
-    class RenderEngine : public fheroes2::BaseRenderEngine
+    class RenderEngine : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
-        virtual ~RenderEngine()
+        RenderEngine( const RenderEngine & ) = delete;
+
+        ~RenderEngine() override
         {
             clear();
         }
 
-        virtual void toggleFullScreen() override
+        RenderEngine & operator=( const RenderEngine & ) = delete;
+
+        void toggleFullScreen() override
         {
             if ( _surface == NULL ) { // nothing to render
                 BaseRenderEngine::toggleFullScreen();
@@ -897,7 +1040,7 @@ namespace
             _createPalette();
         }
 
-        virtual bool isFullScreen() const override
+        bool isFullScreen() const override
         {
             if ( _surface == NULL )
                 return BaseRenderEngine::isFullScreen();
@@ -905,7 +1048,7 @@ namespace
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
         }
 
-        virtual std::vector<fheroes2::Size> getAvailableResolutions() const override
+        std::vector<fheroes2::Size> getAvailableResolutions() const override
         {
             static std::vector<fheroes2::Size> filteredResolutions;
 
@@ -924,44 +1067,16 @@ namespace
             return filteredResolutions;
         }
 
-        virtual void setTitle( const std::string & title ) override
+        void setTitle( const std::string & title ) override
         {
             SDL_WM_SetCaption( title.c_str(), NULL );
         }
 
-        virtual void setIcon( const fheroes2::Image & icon ) override
+        void setIcon( const fheroes2::Image & icon ) override
         {
-            SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+            SDL_Surface * surface = generateIconSurface( icon );
             if ( surface == NULL )
                 return;
-
-            const uint32_t width = icon.width();
-            const uint32_t height = icon.height();
-
-            uint32_t * out = static_cast<uint32_t *>( surface->pixels );
-            const uint32_t * outEnd = out + width * height;
-            const uint8_t * in = icon.image();
-            const uint8_t * transform = icon.transform();
-
-            if ( surface->format->Amask > 0 ) {
-                for ( ; out != outEnd; ++out, ++in, ++transform ) {
-                    if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGBA( surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
-                    }
-                }
-            }
-            else {
-                for ( ; out != outEnd; ++out, ++in, ++transform ) {
-                    if ( *transform == 0 ) {
-                        const uint8_t * value = currentPalette + *in * 3;
-                        *out = SDL_MapRGB( surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
-                    }
-                    else {
-                        *out = SDL_MapRGB( surface->format, 0, 0, 0 );
-                    }
-                }
-            }
 
             SDL_WM_SetIcon( surface, NULL );
 
@@ -979,48 +1094,17 @@ namespace
             , _bitDepth( 8 )
         {}
 
-        virtual void render( const fheroes2::Display & display ) override
+        void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
             if ( _surface == NULL ) // nothing to render on
                 return;
 
-            const int32_t width = display.width();
-            const int32_t height = display.height();
+            copyImageToSurface( display, _surface, roi );
 
-            if ( SDL_MUSTLOCK( _surface ) )
-                SDL_LockSurface( _surface );
-
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                uint32_t * out = static_cast<uint32_t *>( _surface->pixels );
-                const uint32_t * outEnd = out + width * height;
-                const uint8_t * in = display.image();
-                const uint32_t * transform = _palette32Bit.data();
-
-                for ( ; out != outEnd; ++out, ++in )
-                    *out = *( transform + *in );
-            }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                if ( _surface->pixels != display.image() ) {
-                    if ( display.width() % 4 != 0 ) {
-                        const int32_t screenWidth = ( display.width() / 4 ) * 4 + 4;
-                        for ( int32_t i = 0; i < display.height(); ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( _surface->pixels ) + screenWidth * i, display.image() + display.width() * i,
-                                    static_cast<size_t>( width ) );
-                        }
-                    }
-                    else {
-                        memcpy( _surface->pixels, display.image(), static_cast<size_t>( width * height ) );
-                    }
-                }
-            }
-
-            if ( SDL_MUSTLOCK( _surface ) )
-                SDL_UnlockSurface( _surface );
-
-            SDL_Flip( _surface );
+            SDL_UpdateRect( _surface, roi.x, roi.y, roi.width, roi.height );
         }
 
-        virtual void clear() override
+        void clear() override
         {
             linkRenderSurface( NULL );
 
@@ -1033,7 +1117,7 @@ namespace
             _palette8Bit.clear();
         }
 
-        virtual bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
+        bool allocate( int32_t & width_, int32_t & height_, bool isFullScreen ) override
         {
             clear();
 
@@ -1063,55 +1147,24 @@ namespace
             return true;
         }
 
-        virtual void updatePalette( const std::vector<uint8_t> & colorIds ) override
+        void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
             if ( _surface == NULL || colorIds.size() != 256 )
                 return;
 
-            if ( _surface->format->BitsPerPixel == 32 ) {
-                _palette32Bit.resize( 256u );
-
-                if ( _surface->format->Amask > 0 ) {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGBA( _surface->format, *( value ), *( value + 1 ), *( value + 2 ), 255 );
-                    }
-                }
-                else {
-                    for ( size_t i = 0; i < 256u; ++i ) {
-                        const uint8_t * value = currentPalette + colorIds[i] * 3;
-                        _palette32Bit[i] = SDL_MapRGB( _surface->format, *( value ), *( value + 1 ), *( value + 2 ) );
-                    }
-                }
-            }
-            else if ( _surface->format->BitsPerPixel == 8 ) {
-                _palette8Bit.resize( 256 );
-                for ( uint32_t i = 0; i < 256; ++i ) {
-                    const uint8_t * value = currentPalette + colorIds[i] * 3;
-                    SDL_Color & col = _palette8Bit[i];
-
-                    col.r = *( value );
-                    col.g = *( value + 1 );
-                    col.b = *( value + 2 );
-                }
-
+            generatePalette( colorIds, _surface );
+            if ( _surface->format->BitsPerPixel == 8 ) {
                 SDL_SetPalette( _surface, SDL_LOGPAL | SDL_PHYSPAL, _palette8Bit.data(), 0, 256 );
-            }
-            else {
-                // This is unsupported format. Please implement it.
-                assert( 0 );
             }
         }
 
-        virtual bool isMouseCursorActive() const override
+        bool isMouseCursorActive() const override
         {
             return ( SDL_GetAppState() & SDL_APPMOUSEFOCUS ) == SDL_APPMOUSEFOCUS;
         }
 
     private:
         SDL_Surface * _surface;
-        std::vector<uint32_t> _palette32Bit;
-        std::vector<SDL_Color> _palette8Bit;
         int _bitDepth;
 
         int renderFlags() const
@@ -1197,12 +1250,32 @@ namespace fheroes2
 
     void Display::render()
     {
+        render( Rect( 0, 0, width(), height() ) );
+    }
+
+    void Display::render( const Rect & roi )
+    {
+        Rect temp( roi );
+        if ( !getActiveArea( temp, width(), height() ) )
+            return;
+
+        getActiveArea( _prevRoi, width(), height() );
+
         if ( _cursor->isVisible() && _cursor->isSoftwareEmulation() && !_cursor->_image.empty() ) {
             const Sprite & cursorImage = _cursor->_image;
             const Sprite backup = Crop( *this, cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
             Blit( cursorImage, *this, cursorImage.x(), cursorImage.y() );
 
-            _renderFrame();
+            if ( !backup.empty() ) {
+                // ROI must include cursor's area as well, otherwise cursor won't be rendered.
+                Rect cursorROI( cursorImage.x(), cursorImage.y(), cursorImage.width(), cursorImage.height() );
+                if ( getActiveArea( cursorROI, width(), height() ) ) {
+                    temp = getCommonRoi( temp, cursorROI );
+                }
+            }
+
+            // Previous position of cursor must be updated as well to avoid ghost effect.
+            _renderFrame( getCommonRoi( temp, _prevRoi ) );
 
             if ( _postprocessing != nullptr ) {
                 _postprocessing();
@@ -1211,15 +1284,17 @@ namespace fheroes2
             Copy( backup, 0, 0, *this, backup.x(), backup.y(), backup.width(), backup.height() );
         }
         else {
-            _renderFrame();
+            _renderFrame( getCommonRoi( temp, _prevRoi ) );
 
             if ( _postprocessing != nullptr ) {
                 _postprocessing();
             }
         }
+
+        _prevRoi = temp;
     }
 
-    void Display::_renderFrame()
+    void Display::_renderFrame( const Rect & roi ) const
     {
         bool updateImage = true;
         if ( _preprocessing != NULL ) {
@@ -1228,11 +1303,16 @@ namespace fheroes2
                 _engine->updatePalette( palette );
                 // when we change a palette for 8-bit image we unwillingly call render so we don't need to re-render the same frame again
                 updateImage = ( _renderSurface == NULL );
+                if ( updateImage ) {
+                    // Pre-processing step is applied to the whole image so we forcefully render the full frame.
+                    _engine->render( *this, Rect( 0, 0, width(), height() ) );
+                    return;
+                }
             }
         }
 
         if ( updateImage ) {
-            _engine->render( *this );
+            _engine->render( *this, roi );
         }
     }
 
@@ -1263,7 +1343,7 @@ namespace fheroes2
         clear();
     }
 
-    void Display::changePalette( const uint8_t * palette )
+    void Display::changePalette( const uint8_t * palette ) const
     {
         if ( currentPalette == palette || ( palette == NULL && currentPalette == PALPAlette() ) )
             return;

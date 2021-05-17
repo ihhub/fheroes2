@@ -20,7 +20,7 @@
 #ifndef H2PAL_H
 #define H2PAL_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 namespace PAL

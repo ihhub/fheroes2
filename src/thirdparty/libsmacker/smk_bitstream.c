@@ -56,7 +56,7 @@ error:
 	Returns -1 if error encountered */
 char _smk_bs_read_1(struct smk_bit_t* bs)
 {
-	unsigned char ret = -1;
+	unsigned char ret = (unsigned char)-1;
 
 	/* sanity check */
 	smk_assert(bs);
@@ -90,7 +90,7 @@ error:
 	Returns -1 if error. */
 short _smk_bs_read_8(struct smk_bit_t* bs)
 {
-	unsigned char ret = -1;
+	unsigned char ret = (unsigned char)-1;
 
 	/* sanity check */
 	smk_assert(bs);

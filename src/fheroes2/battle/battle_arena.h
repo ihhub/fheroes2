@@ -49,6 +49,7 @@ namespace Battle
     class Command;
     class Tower;
     class Interface;
+    class Status;
 
     class Actions : public std::list<Command>
     {
@@ -63,7 +64,6 @@ namespace Battle
         ~Arena();
 
         void Turns( void );
-        bool NetworkTurn( void );
         bool BattleValid( void ) const;
 
         bool CanBreakAutoBattle( void ) const;
@@ -98,27 +98,27 @@ namespace Battle
         const SpellStorage & GetUsageSpells( void ) const;
 
         bool DialogBattleSummary( const Result & res, bool transferArtifacts, bool allowToCancel ) const;
-        int DialogBattleHero( const HeroBase &, bool ) const;
+        int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
         void DialogBattleNecromancy( const uint32_t raiseCount, const uint32_t raisedMonsterType ) const;
 
         void FadeArena( bool clearMessageLog ) const;
 
         // returns pair with move cell index and distance
-        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target );
+        std::pair<int, uint32_t> CalculateMoveToUnit( const Unit & target ) const;
 
         uint32_t CalculateMoveDistance( int32_t indexTo ) const;
         bool hexIsAccessible( int32_t indexTo ) const;
         bool hexIsPassable( int32_t indexTo ) const;
         Indexes getAllAvailableMoves( uint32_t moveRange ) const;
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
-        Indexes GetPath( const Unit &, const Position & );
+        Indexes GetPath( const Unit &, const Position & ) const;
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 );
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & );
-        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool showMessages );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & );
+        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
+        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
+        TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
+        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg );

@@ -34,10 +34,6 @@ Cursor::Cursor()
     , offset_y( 0 )
 {}
 
-Cursor::~Cursor()
-{
-}
-
 Cursor & Cursor::Get( void )
 {
     static Cursor _cursor;
@@ -71,7 +67,7 @@ bool Cursor::SetThemes( int name, bool force )
         fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
-        const Point currentPos = LocalEvent::Get().GetMouseCursor();
+        const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
         Move( currentPos.x, currentPos.y );
         return true;
     }
@@ -85,7 +81,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
-            fheroes2::Display::instance().render();
+            fheroes2::Display::instance().render( fheroes2::Rect( x, y, 1, 1 ) );
         }
     }
 }
@@ -100,7 +96,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:
-    case Cursor::POINTER2:
+    case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
     case Cursor::FIGHT:
     case Cursor::FIGHT2:
@@ -173,6 +169,20 @@ void Cursor::Hide() const
 bool Cursor::isVisible( void ) const
 {
     return fheroes2::cursor().isVisible();
+}
+
+void Cursor::setVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER_VIDEO );
+    }
+}
+
+void Cursor::resetVideoPlaybackCursor()
+{
+    if ( fheroes2::cursor().isSoftwareEmulation() ) {
+        SetThemes( Cursor::POINTER );
+    }
 }
 
 void Cursor::Refresh()

@@ -25,7 +25,7 @@
 
 namespace Maps
 {
-    class FileInfo;
+    struct FileInfo;
 }
 
 namespace Game
@@ -34,6 +34,8 @@ namespace Game
     bool Save( const std::string & );
     bool Load( const std::string & );
     bool LoadSAV2FileInfo( const std::string &, Maps::FileInfo & );
+
+    bool SaveCompletedCampaignScenario();
 }
 
 #endif

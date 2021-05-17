@@ -26,25 +26,26 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
 
-void CastleRedrawTownName( const Castle &, const Point & );
-void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+void CastleRedrawTownName( const Castle &, const fheroes2::Point & );
+void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
                                   const CastleDialog::FadeBuilding & alphaBuilding );
-fheroes2::Rect CastleGetCoordBuilding( int, building_t, const Point & );
+fheroes2::Rect CastleGetCoordBuilding( int, building_t, const fheroes2::Point & );
 void CastlePackOrdersBuildings( const Castle &, std::vector<building_t> & );
-Rect CastleGetMaxArea( const Castle &, const Point & );
+fheroes2::Rect CastleGetMaxArea( const Castle &, const fheroes2::Point & );
 
-void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const Rect & max, uint8_t alpha )
+void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const fheroes2::Rect & max, uint8_t alpha )
 {
-    std::pair<Rect, Point> res = Rect::Fixed4Blit( Rect( dst_x, dst_y, sprite.width(), sprite.height() ), max );
-    fheroes2::AlphaBlit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.w, res.first.h, alpha );
+    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( fheroes2::Rect( dst_x, dst_y, sprite.width(), sprite.height() ), max );
+    fheroes2::AlphaBlit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.width, res.first.height, alpha );
 }
 
-CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point & top )
+CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
 {
     std::vector<building_t> ordersBuildings;
 
@@ -57,12 +58,6 @@ CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const Point
     }
 }
 
-const Rect & CastleDialog::CacheBuildings::GetRect( building_t b ) const
-{
-    const_iterator it = std::find( begin(), end(), b );
-    return it != end() ? ( *it ).coord : back().coord;
-}
-
 void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 {
     _alpha = 0;
@@ -72,7 +67,7 @@ void CastleDialog::FadeBuilding::StartFadeBuilding( const uint32_t build )
 bool CastleDialog::FadeBuilding::UpdateFadeBuilding()
 {
     if ( _alpha < 255 ) {
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_BUILD_DELAY ) ) {
+        if ( Game::validateAnimationDelay( Game::CASTLE_BUILD_DELAY ) ) {
             _alpha += 15;
             return true;
         }
@@ -88,16 +83,17 @@ void CastleDialog::FadeBuilding::StopFadeBuilding()
     }
 }
 
-void CastleDialog::RedrawAllBuilding( const Castle & castle, const Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding )
+void CastleDialog::RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders,
+                                      const CastleDialog::FadeBuilding & alphaBuilding )
 {
     CastleRedrawCurrentBuilding( castle, dst_pt, orders, alphaBuilding );
     CastleRedrawTownName( castle, dst_pt );
 }
 
-void CastleRedrawTownName( const Castle & castle, const Point & dst )
+void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst )
 {
     const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    Point dst_pt( dst.x + 320 - background.width() / 2, dst.y + 248 );
+    fheroes2::Point dst_pt( dst.x + 320 - background.width() / 2, dst.y + 248 );
     fheroes2::Blit( background, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
 
     Text text( castle.GetName(), Font::SMALL );
@@ -106,7 +102,7 @@ void CastleRedrawTownName( const Castle & castle, const Point & dst )
     text.Blit( dst_pt );
 }
 
-void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, const CastleDialog::CacheBuildings & orders,
+void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
                                   const CastleDialog::FadeBuilding & fadeBuilding )
 {
     const uint32_t frame = Game::CastleAnimationFrame();
@@ -138,7 +134,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
         break;
     }
 
-    const Rect max = CastleGetMaxArea( castle, dst_pt );
+    const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     if ( townIcnId != -1 ) {
         const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
@@ -233,12 +229,12 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const Point & dst_pt, c
     }
 }
 
-void CastleDialog::CastleRedrawBuilding( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
+void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
 
-    const Rect max = CastleGetMaxArea( castle, dst_pt );
+    const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
 
     // correct build
     switch ( build ) {
@@ -320,12 +316,12 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const Point & ds
     }
 }
 
-void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
+void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
 
-    const Rect max = CastleGetMaxArea( castle, dst_pt );
+    const fheroes2::Rect max = CastleGetMaxArea( castle, dst_pt );
     int icn = Castle::GetICNBuilding( build, castle.GetRace() );
 
     // shipyard
@@ -382,9 +378,9 @@ bool CastleDialog::RoadConnectionNeeded( const Castle & castle, const uint32_t b
     return false;
 }
 
-void CastleDialog::RedrawRoadConnection( const Castle & castle, const Point & position, const uint32_t buildId, const uint8_t alpha )
+void CastleDialog::RedrawRoadConnection( const Castle & castle, const fheroes2::Point & position, const uint32_t buildId, const uint8_t alpha )
 {
-    const Rect & roi = CastleGetMaxArea( castle, position );
+    const fheroes2::Rect & roi = CastleGetMaxArea( castle, position );
     const bool constructionInProgress = alpha < 255;
 
     if ( Race::BARB == castle.GetRace() ) {
@@ -418,7 +414,7 @@ void CastleDialog::RedrawRoadConnection( const Castle & castle, const Point & po
     }
 }
 
-fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const Point & pt )
+fheroes2::Rect CastleGetCoordBuilding( int race, building_t building, const fheroes2::Point & pt )
 {
     switch ( building ) {
     case BUILD_THIEVESGUILD:
@@ -1037,7 +1033,7 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
         break;
     case Race::NECR:
         ordersBuildings.push_back( BUILD_SPEC );
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
             ordersBuildings.push_back( BUILD_SHRINE );
         ordersBuildings.push_back( BUILD_TENT );
         ordersBuildings.push_back( BUILD_CASTLE );
@@ -1074,9 +1070,9 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
     ordersBuildings.push_back( BUILD_NOTHING );
 }
 
-Rect CastleGetMaxArea( const Castle & castle, const Point & top )
+fheroes2::Rect CastleGetMaxArea( const Castle & castle, const fheroes2::Point & top )
 {
-    Rect res( top, 0, 0 );
+    fheroes2::Rect res( top.x, top.y, 0, 0 );
 
     int townIcnId = -1;
 
@@ -1104,8 +1100,8 @@ Rect CastleGetMaxArea( const Castle & castle, const Point & top )
     }
 
     const fheroes2::Sprite & townbkg = fheroes2::AGG::GetICN( townIcnId, 0 );
-    res.w = townbkg.width();
-    res.h = townbkg.height();
+    res.width = townbkg.width();
+    res.height = townbkg.height();
 
     return res;
 }

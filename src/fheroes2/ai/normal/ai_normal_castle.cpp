@@ -32,7 +32,7 @@ namespace AI
         building_t building = BUILD_NOTHING;
         int priority = 1;
 
-        BuildOrder() {}
+        BuildOrder() = default;
         BuildOrder( building_t b, int p )
             : building( b )
             , priority( p )
@@ -131,7 +131,7 @@ namespace AI
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // force building a shipyard, +1 to cost check since we can have 0 neighbours
-        if ( islandOrPeninsula && BuildIfEnoughResources( castle, BUILD_SHIPYARD, neighbourRegions + 1 ) ) {
+        if ( islandOrPeninsula && BuildIfEnoughResources( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }
 

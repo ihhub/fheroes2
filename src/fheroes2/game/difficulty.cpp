@@ -95,23 +95,6 @@ double Difficulty::GetUnitGrowthBonus( int difficulty )
     return 1.0;
 }
 
-double Difficulty::GetBattleExperienceBonus( int difficulty )
-{
-    switch ( difficulty ) {
-    case Difficulty::NORMAL:
-        return 1.12;
-    case Difficulty::HARD:
-        return 1.24;
-    case Difficulty::EXPERT:
-        return 1.36;
-    case Difficulty::IMPOSSIBLE:
-        return 1.48;
-    default:
-        break;
-    }
-    return 1.0;
-}
-
 int Difficulty::GetHeroMovementBonus( int difficulty )
 {
     switch ( difficulty ) {

@@ -173,27 +173,7 @@ Heroes * Interface::GetFocusHeroes( void )
     return player ? player->GetFocus().GetHeroes() : NULL;
 }
 
-Army * Interface::GetFocusArmy()
-{
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
-
-    if ( player == nullptr )
-        return nullptr;
-
-    Heroes * focusedHero = player->GetFocus().GetHeroes();
-    if ( focusedHero != nullptr ) {
-        return &focusedHero->GetArmy();
-    }
-
-    Castle * focusedCastle = player->GetFocus().GetCastle();
-    if ( focusedCastle != nullptr ) {
-        return &focusedCastle->GetArmy();
-    }
-
-    return nullptr;
-}
-
-Point Interface::GetFocusCenter( void )
+fheroes2::Point Interface::GetFocusCenter( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -206,7 +186,7 @@ Point Interface::GetFocusCenter( void )
             return focus.GetCastle()->GetCenter();
     }
 
-    return Point( world.w() / 2, world.h() / 2 );
+    return fheroes2::Point( world.w() / 2, world.h() / 2 );
 }
 
 void Interface::Basic::RedrawFocus( void )

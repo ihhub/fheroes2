@@ -70,7 +70,7 @@ namespace fheroes2
         {}
 
         virtual void clear() {}
-        virtual void render( const Display & ) {}
+        virtual void render( const Display &, const Rect & ) {}
         virtual bool allocate( int32_t &, int32_t &, bool )
         {
             return false;
@@ -103,11 +103,12 @@ namespace fheroes2
 
         static Display & instance();
 
-        virtual ~Display() = default;
+        ~Display() override = default;
 
         void render(); // render full image on screen
+        void render( const Rect & roi ); // render a part of image on screen. Prefer this method over full image if you don't draw full screen.
 
-        virtual void resize( int32_t width_, int32_t height_ ) override;
+        void resize( int32_t width_, int32_t height_ ) override;
         bool isDefaultSize() const;
 
         // this function must return true if new palette has been generated
@@ -116,14 +117,14 @@ namespace fheroes2
         void subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing );
 
         // For 8-bit mode we return a pointer to direct surface which we draw on screen
-        virtual uint8_t * image() override;
-        virtual const uint8_t * image() const override;
+        uint8_t * image() override;
+        const uint8_t * image() const override;
 
         void release(); // to release all allocated resources. Should be used at the end of the application
 
         // Change whole color representation on the screen. Make sure that palette exists all the time!!!
         // NULL input parameters means to set to default value
-        void changePalette( const uint8_t * palette = nullptr );
+        void changePalette( const uint8_t * palette = nullptr ) const;
 
         friend BaseRenderEngine & engine();
         friend Cursor & cursor();
@@ -137,13 +138,16 @@ namespace fheroes2
         PreRenderProcessing _preprocessing;
         PostRenderProcessing _postprocessing;
 
-        void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
-
         uint8_t * _renderSurface;
+
+        // Previous area drawn on the screen.
+        Rect _prevRoi;
+
+        void linkRenderSurface( uint8_t * surface ); // only for cases of direct drawing on rendered 8-bit image
 
         Display();
 
-        void _renderFrame(); // prepare and render a frame
+        void _renderFrame( const Rect & roi ) const; // prepare and render a frame
     };
 
     class Cursor

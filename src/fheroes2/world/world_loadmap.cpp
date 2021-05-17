@@ -163,7 +163,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
     doc.Attribute( "isCastle", &iscastle );
     doc.Attribute( "captainPresent", &captain );
 
-    town.SetCenter( Point( posx, posy ) );
+    town.SetCenter( fheroes2::Point( posx, posy ) );
     town.SetColor( color );
 
     town.building = 0;
@@ -228,7 +228,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, AllCastles & castles )
     for ( ; xml_town; xml_town = xml_town->NextSiblingElement( "town" ) ) {
         Castle * town = new Castle();
         *xml_town >> *town;
-        castles.push_back( town );
+        castles.AddCastle( town );
     }
 
     return doc;
@@ -282,7 +282,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
 
     doc.Attribute( "posx", &posx );
     doc.Attribute( "posy", &posy );
-    hero.SetCenter( Point( posx, posy ) );
+    hero.SetCenter( fheroes2::Point( posx, posy ) );
 
     doc.Attribute( "color", &color );
     hero.SetColor( color );
@@ -305,7 +305,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
 
     doc.Attribute( "race", &race );
     if ( race & Race::ALL )
-        hero.race = race;
+        hero._race = race;
 
     doc.Attribute( "experience", &exp );
     hero.experience = exp;
@@ -314,7 +314,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
     if ( patrol ) {
         hero.SetModes( Heroes::PATROL );
         doc.Attribute( "patrolSquare", &square );
-        hero.patrol_center = Point( posx, posy );
+        hero.patrol_center = fheroes2::Point( posx, posy );
         hero.patrol_square = square;
     }
 
@@ -462,7 +462,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
     doc.Attribute( "uid", &uid );
     doc.Attribute( "artifact", &artifact );
 
-    riddle.SetCenter( Point( posx, posy ) );
+    riddle.SetCenter( fheroes2::Point( posx, posy ) );
     riddle.SetUID( uid );
     riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
     riddle.valid = true;
@@ -498,7 +498,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
     doc.Attribute( "allowComputer", &allow );
     doc.Attribute( "artifact", &artifact );
 
-    event.SetCenter( Point( posx, posy ) );
+    event.SetCenter( fheroes2::Point( posx, posy ) );
     event.SetUID( uid );
     event.computer = allow;
     event.colors = colors;
@@ -569,7 +569,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapSign & obj )
     doc.Attribute( "posy", &posy );
     doc.Attribute( "uid", &uid );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     if ( doc.GetText() )
         obj.message = doc.GetText();
@@ -586,7 +586,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapResource & obj )
     doc.Attribute( "type", &type );
     doc.Attribute( "count", &count );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.resource = ResourceCount( type, count );
 
@@ -603,7 +603,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
     doc.Attribute( "condition", &cond );
     doc.Attribute( "count", &count );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.monster = Monster( type );
 
@@ -662,7 +662,7 @@ TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
     doc.Attribute( "type", &type );
     doc.Attribute( "condition", &cond );
 
-    obj.SetCenter( Point( posx, posy ) );
+    obj.SetCenter( fheroes2::Point( posx, posy ) );
     obj.SetUID( uid );
     obj.artifact = Artifact( type );
 
@@ -849,15 +849,15 @@ TiXmlElement & operator>>( TiXmlElement & doc, World & w )
     if ( !xml_tiles )
         return doc;
 
-    Size & sw = w;
+    fheroes2::Size & sw = w;
 
     xml_tiles->Attribute( "width", &value );
-    sw.w = value;
+    sw.width = value;
 
     xml_tiles->Attribute( "height", &value );
-    sw.h = value;
+    sw.height = value;
 
-    w.vec_tiles.resize( sw.w * sw.h );
+    w.vec_tiles.resize( sw.width * sw.height );
 
     *xml_tiles >> w.vec_tiles;
 
@@ -932,9 +932,6 @@ bool World::LoadMapMP2( const std::string & filename )
         return false;
     }
 
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
-    vec_object.reserve( 100 );
-
     // check (mp2, mx2) ID
     if ( fs.getBE32() != 0x5C000000 )
         return false;
@@ -952,47 +949,47 @@ bool World::LoadMapMP2( const std::string & filename )
     // width
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::w = Maps::SMALL;
+        width = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::w = Maps::MEDIUM;
+        width = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::w = Maps::LARGE;
+        width = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::w = Maps::XLARGE;
+        width = Maps::XLARGE;
         break;
     default:
-        Size::w = 0;
+        width = 0;
         break;
     }
 
     // height
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::h = Maps::SMALL;
+        height = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::h = Maps::MEDIUM;
+        height = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::h = Maps::LARGE;
+        height = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::h = Maps::XLARGE;
+        height = Maps::XLARGE;
         break;
     default:
-        Size::h = 0;
+        height = 0;
         break;
     }
 
-    if ( Size::w == 0 || Size::h == 0 || Size::w != Size::h ) {
+    if ( width == 0 || height == 0 || width != height ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" );
         return false;
     }
 
-    const int32_t worldSize = w() * h();
+    const int32_t worldSize = width * height;
 
     // seek to ADDONS block
     fs.skip( worldSize * SIZEOFMP2TILE );
@@ -1019,6 +1016,14 @@ bool World::LoadMapMP2( const std::string & filename )
     fs.seek( MP2OFFSETDATA );
 
     vec_tiles.resize( worldSize );
+
+    // In the future we need to check 3 things which could point that this map is The Price of Loyalty version:
+    // - new object types
+    // - new artifact types on map
+    // - new artifact types in hero's bag
+
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    vec_object.reserve( 100 );
 
     // read all tiles
     for ( int32_t i = 0; i < worldSize; ++i ) {
@@ -1081,10 +1086,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood castles
     // 72 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 72; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 72; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1093,43 +1098,43 @@ bool World::LoadMapMP2( const std::string & filename )
         switch ( id ) {
         case 0x00: // tower: knight
         case 0x80: // castle: knight
-            vec_castles.push_back( new Castle( cx, cy, Race::KNGT ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::KNGT ) );
             break;
 
         case 0x01: // tower: barbarian
         case 0x81: // castle: barbarian
-            vec_castles.push_back( new Castle( cx, cy, Race::BARB ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::BARB ) );
             break;
 
         case 0x02: // tower: sorceress
         case 0x82: // castle: sorceress
-            vec_castles.push_back( new Castle( cx, cy, Race::SORC ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::SORC ) );
             break;
 
         case 0x03: // tower: warlock
         case 0x83: // castle: warlock
-            vec_castles.push_back( new Castle( cx, cy, Race::WRLK ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WRLK ) );
             break;
 
         case 0x04: // tower: wizard
         case 0x84: // castle: wizard
-            vec_castles.push_back( new Castle( cx, cy, Race::WZRD ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WZRD ) );
             break;
 
         case 0x05: // tower: necromancer
         case 0x85: // castle: necromancer
-            vec_castles.push_back( new Castle( cx, cy, Race::NECR ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NECR ) );
             break;
 
         case 0x06: // tower: random
         case 0x86: // castle: random
-            vec_castles.push_back( new Castle( cx, cy, Race::NONE ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NONE ) );
             break;
 
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "castle block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
         // preload in to capture objects cache
@@ -1141,10 +1146,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood resource kingdoms
     // 144 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 144; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 144; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1186,7 +1191,7 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "kingdom block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
     }
@@ -1200,11 +1205,8 @@ bool World::LoadMapMP2( const std::string & filename )
     // count final mp2 blocks
     u32 countblock = 0;
     while ( 1 ) {
-        u32 l = fs.get();
-        u32 h = fs.get();
-
-        // VERBOSE_LOG("dump block: 0x" << std::setw(2) << std::setfill('0') << std::hex << l <<
-        //	std::setw(2) << std::setfill('0') << std::hex << h);
+        const u32 l = fs.get();
+        const u32 h = fs.get();
 
         if ( 0 == h && 0 == l )
             break;
@@ -1409,12 +1411,10 @@ bool World::LoadMapMP2( const std::string & filename )
 void World::ProcessNewMap()
 {
     // modify other objects
-    for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-        Maps::Tiles & tile = vec_tiles[ii];
-
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        Maps::Tiles & tile = vec_tiles[i];
         Maps::Tiles::FixedPreload( tile );
 
-        //
         switch ( tile.GetObject() ) {
         case MP2::OBJ_WITCHSHUT:
         case MP2::OBJ_SHRINE1:
@@ -1495,7 +1495,7 @@ void World::ProcessNewMap()
             if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
-            tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
+            tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
         } break;
 
         default:
@@ -1537,11 +1537,11 @@ void World::ProcessNewMap()
 
         if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
-            const Point & cp = castle->GetCenter();
+            const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
+                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
             }
         }
     }
@@ -1549,7 +1549,7 @@ void World::ProcessNewMap()
     // set ultimate
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
                                            []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
-    Point ultimate_pos;
+    fheroes2::Point ultimate_pos;
 
     // not found
     if ( vec_tiles.end() == it ) {
@@ -1559,12 +1559,12 @@ void World::ProcessNewMap()
 
         for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
             const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % w();
-            if ( x < ultimateArtifactOffset || x >= w() - ultimateArtifactOffset )
+            const int32_t x = tile.GetIndex() % width;
+            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
                 continue;
 
-            const int32_t y = tile.GetIndex() / w();
-            if ( y < ultimateArtifactOffset || y >= h() - ultimateArtifactOffset )
+            const int32_t y = tile.GetIndex() / width;
+            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
                 continue;
 
             if ( tile.GoodForUltimateArtifact() )
@@ -1591,26 +1591,26 @@ void World::ProcessNewMap()
 
     vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
-    if ( world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    if ( height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
     }
-    else if ( 2 * world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    else if ( 2 * height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
     }
     else {
-        if ( world.w() / 3 > ultimate_pos.x )
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );

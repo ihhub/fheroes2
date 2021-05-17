@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_static.h"
 #include "icn.h"
 #include "luck.h"
@@ -51,13 +52,6 @@ namespace
 
     struct SpellInfo
     {
-        SpellInfo()
-            : spriteId( 0 )
-            , duration( 0 )
-            , offset( 0 )
-            , space( 0 )
-        {}
-
         SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
             : spriteId( spriteId_ )
             , duration( duration_ )
@@ -124,7 +118,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
-    DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+    DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
@@ -221,7 +215,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
+            if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 cursor.Hide();
 
                 fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
@@ -231,7 +225,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( troop.isBattle() )
                     DrawBattleStats( battleStatOffset, troop );
 
-                DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+                DrawMonsterInfo( pos_rt.getPosition(), troop );
                 DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
 
                 if ( buttonUpgrade.isEnabled() )
@@ -469,7 +463,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         if ( widthDiff > 0 ) {
             if ( space > 10 )
                 space = 10;
-            ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
+            ow = dst.x + ( spritesWidth + space * static_cast<int>( spellsInfo.size() - 1 ) ) / 2;
         }
         else {
             ow = dst.x + maxSpritesWidth / 2;
@@ -597,7 +591,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
@@ -679,7 +673,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
                         Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
+    fheroes2::ButtonGroup btnGroup( pos, buttons );
 
     fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
     fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
@@ -715,8 +709,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     Kingdom & kingdom = hero.GetKingdom();
 
-    Rect btnMarketArea = btnMarket.area();
-    Rect btnHeroesArea = btnHeroes.area();
+    fheroes2::Rect btnMarketArea = btnMarket.area();
+    fheroes2::Rect btnHeroesArea = btnHeroes.area();
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
         btnGroup.button( 0 ).disable();
@@ -734,6 +728,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         std::string msg = _( "Not enough gold (%{gold})" );
         StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
         btnMarket.draw();
@@ -781,7 +776,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;
         }

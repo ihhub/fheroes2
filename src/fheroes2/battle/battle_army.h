@@ -35,10 +35,9 @@ namespace Battle
     public:
         Units();
         Units( const Units &, bool filter = false );
-        Units( const Units &, const Units & );
-        virtual ~Units();
+        virtual ~Units() = default;
 
-        Units & operator=( const Units & );
+        Units & operator=( const Units & ) = delete;
 
         Unit * FindMode( u32 );
         Unit * FindUID( u32 );
@@ -54,7 +53,11 @@ namespace Battle
     {
     public:
         Force( Army &, bool );
-        ~Force();
+        Force( const Force & ) = delete;
+
+        ~Force() override;
+
+        Force & operator=( const Force & ) = delete;
 
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;

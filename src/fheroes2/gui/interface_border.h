@@ -32,7 +32,7 @@ namespace Interface
     class BorderWindow
     {
     public:
-        BorderWindow( const Rect & );
+        explicit BorderWindow( const fheroes2::Rect & );
         virtual ~BorderWindow() = default;
 
         virtual void SetPos( int32_t, int32_t ) = 0;
@@ -41,14 +41,14 @@ namespace Interface
         void Redraw() const;
         bool QueueEventProcessing( void );
 
-        const Rect & GetArea( void ) const;
-        const Rect & GetRect( void ) const;
+        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetRect( void ) const;
 
     protected:
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
         void SetPosition( int32_t, int32_t );
 
-        Rect area;
+        fheroes2::Rect area;
         Dialog::FrameBorder border;
     };
 }

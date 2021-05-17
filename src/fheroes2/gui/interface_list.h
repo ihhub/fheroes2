@@ -34,7 +34,7 @@ namespace Interface
 {
     struct ListBasic
     {
-        virtual ~ListBasic() {}
+        virtual ~ListBasic() = default;
         virtual void Redraw( void ) = 0;
         virtual bool QueueEventProcessing( void ) = 0;
     };
@@ -43,7 +43,7 @@ namespace Interface
     class ListBox : public ListBasic
     {
     public:
-        ListBox( const Point & pt = Point() )
+        explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
             : content( NULL )
             , _currentId( -1 )
             , _topId( -1 )
@@ -51,10 +51,10 @@ namespace Interface
             , ptRedraw( pt )
             , useHotkeys( true )
         {}
-        virtual ~ListBox() {}
+        ~ListBox() override = default;
 
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
-        virtual void RedrawBackground( const Point & ) = 0;
+        virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
         virtual void ActionCurrentUp( void ) = 0;
         virtual void ActionCurrentDn( void ) = 0;
@@ -63,27 +63,27 @@ namespace Interface
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
 
-        virtual void ActionListDoubleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListDoubleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListDoubleClick( item );
         }
 
-        virtual void ActionListSingleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListSingleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListSingleClick( item );
         }
 
-        virtual void ActionListPressRight( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListPressRight( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListPressRight( item );
         }
 
-        virtual bool ActionListCursor( Item &, const Point & )
+        virtual bool ActionListCursor( Item &, const fheroes2::Point & )
         {
             return false;
         }
 
-        void SetTopLeft( const Point & tl )
+        void SetTopLeft( const fheroes2::Point & tl )
         {
             ptRedraw = tl;
         }
@@ -156,7 +156,7 @@ namespace Interface
             useHotkeys = !f;
         }
 
-        void Redraw( void )
+        void Redraw( void ) override
         {
             Cursor::Get().Hide();
 
@@ -186,7 +186,7 @@ namespace Interface
             return ( *content )[_currentId];
         }
 
-        Item * GetFromPosition( const Point & mp )
+        Item * GetFromPosition( const fheroes2::Point & mp )
         {
             Verify();
             if ( !IsValid() )
@@ -202,7 +202,7 @@ namespace Interface
             if ( _topId + id >= _size() ) // out of items
                 return NULL;
 
-            return &( *content )[id];
+            return &( *content )[_topId + id];
         }
 
         void SetCurrent( size_t posId )
@@ -264,7 +264,7 @@ namespace Interface
                 _currentId = -1;
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing( void ) override
         {
             LocalEvent & le = LocalEvent::Get();
             Cursor & cursor = Cursor::Get();
@@ -327,14 +327,13 @@ namespace Interface
                 cursor.Hide();
                 UpdateScrollbarRange();
 
-                const Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
+                const fheroes2::Point & mousePos = le.GetMouseCursor();
+                _scrollbar.moveToPos( mousePos );
                 _topId = _scrollbar.currentIndex();
                 return true;
             }
 
-            const Point & position = le.GetMouseCursor();
-            const fheroes2::Point mousePos( position.x, position.y );
+            const fheroes2::Point & mousePos = le.GetMouseCursor();
             if ( rtAreaItems & mousePos ) { // within our rectangle
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
                 cursor.Hide();
@@ -343,21 +342,21 @@ namespace Interface
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, position ) )
+                    if ( ActionListCursor( item, mousePos ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                        ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }
                 }
@@ -387,7 +386,7 @@ namespace Interface
         int _topId;
         int maxItems;
 
-        Point ptRedraw;
+        fheroes2::Point ptRedraw;
 
         bool useHotkeys;
 

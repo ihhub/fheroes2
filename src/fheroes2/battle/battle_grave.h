@@ -43,7 +43,7 @@ namespace Battle
     class Graveyard : public std::map<s32, TroopUIDs>
     {
     public:
-        Graveyard() {}
+        Graveyard() = default;
 
         Indexes GetClosedCells( void ) const;
         void AddTroop( const Unit & );

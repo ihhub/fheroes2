@@ -43,7 +43,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
 
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, buttons != 0 );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().height, buttons != 0 );
     fheroes2::Point pos( box.GetArea().x, box.GetArea().y );
 
     if ( header.size() )
