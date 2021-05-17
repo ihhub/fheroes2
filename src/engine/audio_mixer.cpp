@@ -96,11 +96,6 @@ void Mixer::Quit( void )
     }
 }
 
-uint8_t Mixer::GetChannels()
-{
-    return Mix_AllocateChannels( -1 );
-}
-
 void Mixer::SetChannels( u8 num )
 {
     if ( !valid ) {
