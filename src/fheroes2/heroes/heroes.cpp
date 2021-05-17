@@ -1410,12 +1410,17 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( void ) const
+bool Heroes::MayStillMove( bool isConsiderMovePoints ) const
 {
-    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() )
+    if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
         return false;
+    }
 
-    return path.isValid() ? ( move_point >= path.getLastMovePenalty() ) : CanMove();
+    if ( path.isValid() ) {
+        const uint32_t threshold = isConsiderMovePoints ? path.getLastMovePenalty() : 0;
+        return move_point > threshold;
+    }
+    return CanMove();
 }
 
 bool Heroes::MayCastAdventureSpells() const
