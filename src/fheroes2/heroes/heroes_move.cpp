@@ -482,12 +482,12 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
         dy -= 10;
 
     fheroes2::Point flagOffset;
-    const fheroes2::Sprite& spriteHero = SpriteHero(*this, sprite_index, false);
-    const fheroes2::Sprite& spriteFlag = SpriteFlag(*this, flagFrameID, false, flagOffset);
+    const fheroes2::Sprite & spriteHero = SpriteHero( *this, sprite_index, false );
+    const fheroes2::Sprite & spriteFlag = SpriteFlag( *this, flagFrameID, false, flagOffset );
 
-    fheroes2::Point dstHero(dx + (reflect ? TILEWIDTH - spriteHero.x() - spriteHero.width() : spriteHero.x()), dy + spriteHero.y() + TILEWIDTH);
-    fheroes2::Point dstFlag(dx + (reflect ? TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() : spriteFlag.x() + flagOffset.x),
-        dy + spriteFlag.y() + flagOffset.y + TILEWIDTH);
+    fheroes2::Point dstHero( dx + ( reflect ? TILEWIDTH - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
+    fheroes2::Point dstFlag( dx + ( reflect ? TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() : spriteFlag.x() + flagOffset.x ),
+                             dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
