@@ -200,13 +200,13 @@ void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos,
     for ( int32_t ii = 0; ii < static_cast<int32_t>( count ); ++ii ) {
         if ( ii < static_cast<int32_t>( v.size() ) ) {
             const Colors colors( v[ii].second );
-            const int32_t sw = fheroes2::AGG::GetICN( ICN::FLAG32, 1 ).width();
-            int32_t px = pos.x + ii * step - ( colors.size() * sw - ( colors.size() - 1 ) ) / 2 + 3;
+            const int32_t sw = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 ).width();
+            int32_t px = pos.x + ii * step - ( colors.size() * sw ) / 2 + 3;
 
             for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-                const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::FLAG32, Color::GetIndex( *color ) * 2 + 1 );
+                const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( *color ) );
                 fheroes2::Blit( flag, fheroes2::Display::instance(), px, pos.y - 2 );
-                px = px + sw - 1;
+                px = px + sw;
             }
         }
     }
