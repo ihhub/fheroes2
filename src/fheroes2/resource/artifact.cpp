@@ -541,7 +541,7 @@ int Artifact::Level( void ) const
     case SPADE_NECROMANCY:
     case HEART_FIRE:
     case HEART_ICE:
-        return Settings::Get().PriceLoyaltyVersion() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
+        return Settings::Get().isCurrentMapPriceOfLoyalty() ? ART_LOYALTY | LoyaltyLevel() : ART_LOYALTY;
 
     default:
         break;
@@ -638,7 +638,6 @@ int Artifact::Rand( level_t lvl )
         if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_DISABLED ) && !( artifacts[art].bits & ART_RNDUSED ) )
             v.push_back( art );
 
-    //
     if ( v.empty() ) {
         for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
             if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_DISABLED ) )
@@ -655,7 +654,7 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
 {
     if ( 0xA2 > index )
         return Artifact( ( index - 1 ) / 2 );
-    else if ( Settings::Get().PriceLoyaltyVersion() && 0xAB < index && 0xCE > index )
+    else if ( Settings::Get().isPriceOfLoyaltySupported() && 0xAB < index && 0xCE > index )
         return Artifact( ( index - 1 ) / 2 );
     else if ( 0xA3 == index )
         return Artifact( Rand( ART_LEVEL123 ) );

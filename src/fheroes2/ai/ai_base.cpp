@@ -174,7 +174,7 @@ namespace AI
         // castles AI turn
         for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
             if ( *it )
-                CastleTurn( **it );
+                CastleTurn( **it, false );
 
         status.RedrawTurnProgress( 3 );
 

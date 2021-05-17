@@ -411,7 +411,7 @@ namespace fheroes2
         copy( image_ );
     }
 
-    Image::Image( Image && image_ )
+    Image::Image( Image && image_ ) noexcept
         : _width( 0 )
         , _height( 0 )
         , _data( std::move( image_._data ) )
@@ -431,7 +431,7 @@ namespace fheroes2
         return *this;
     }
 
-    Image & Image::operator=( Image && image_ )
+    Image & Image::operator=( Image && image_ ) noexcept
     {
         if ( this != &image_ ) {
             // We shouldn't copy or move different types of images.
@@ -552,7 +552,7 @@ namespace fheroes2
         , _y( sprite._y )
     {}
 
-    Sprite::Sprite( Sprite && sprite )
+    Sprite::Sprite( Sprite && sprite ) noexcept
         : Image( std::move( sprite ) )
         , _x( 0 )
         , _y( 0 )
@@ -573,7 +573,7 @@ namespace fheroes2
         return *this;
     }
 
-    Sprite & Sprite::operator=( Sprite && sprite )
+    Sprite & Sprite::operator=( Sprite && sprite ) noexcept
     {
         if ( this != &sprite ) {
             Image::operator=( std::move( sprite ) );
@@ -936,12 +936,12 @@ namespace fheroes2
 
     void Blit( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool flip )
     {
-        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
+        if ( in.singleLayer() && out.singleLayer() && !flip ) {
+            Copy( in, inX, inY, out, outX, outY, width, height );
             return;
         }
 
-        if ( in.singleLayer() && out.singleLayer() && !flip ) {
-            Copy( in, inX, inY, out, outX, outY, width, height );
+        if ( !Verify( in, inX, inY, out, outX, outY, width, height ) ) {
             return;
         }
 

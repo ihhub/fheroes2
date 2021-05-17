@@ -55,9 +55,9 @@ int main( int argc, char ** argv )
         for ( size_t frameId = 0; frameId < 16; ++frameId ) {
             const int frameValue = static_cast<int>( data[5 + setId * 16 + frameId] );
             if ( frameValue < 10 )
-                file << " " << static_cast<int>( frameValue ) << " ";
+                file << " " << frameValue << " ";
             else
-                file << static_cast<int>( frameValue ) << " ";
+                file << frameValue << " ";
         }
         file << "\n";
     }

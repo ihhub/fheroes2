@@ -121,6 +121,7 @@ int ByteToRace( int byte )
 }
 
 Maps::FileInfo::FileInfo()
+    : _version( GameVersion::SUCCESSION_WARS )
 {
     Reset();
 }
@@ -158,6 +159,7 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     loss2 = f.loss2;
     localtime = f.localtime;
     with_heroes = f.with_heroes;
+    _version = f._version;
 
     return *this;
 }
@@ -184,6 +186,8 @@ void Maps::FileInfo::Reset( void )
     loss2 = 0;
     localtime = 0;
     with_heroes = false;
+
+    _version = GameVersion::SUCCESSION_WARS;
 
     for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
         races[ii] = Race::NONE;
@@ -507,6 +511,12 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     if ( 4 == conditions_wins )
         FillUnions();
 
+    const size_t pos = filename.rfind( '.' );
+    if ( pos != std::string::npos ) {
+        const std::string fileExtension = StringLower( filename.substr( pos + 1 ) );
+        _version = ( fileExtension == "mx2" || fileExtension == "hxc" ) ? GameVersion::PRICE_OF_LOYALTY : GameVersion::SUCCESSION_WARS;
+    }
+
     return true;
 }
 
@@ -731,7 +741,7 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     const Settings & conf = Settings::Get();
 
     ListFiles maps_old = GetMapsFiles( ".mp2" );
-    if ( conf.PriceLoyaltyVersion() )
+    if ( conf.isPriceOfLoyaltySupported() )
         maps_old.Append( GetMapsFiles( ".mx2" ) );
 
     for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
@@ -784,6 +794,9 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
         << fi.wins1 << fi.wins2 << fi.conditions_loss << fi.loss1 << fi.loss2 << fi.localtime << fi.with_heroes;
 
+    // Please take a note that game version is written to save files starting from FORMAT_VERSION_094_RELEASE.
+    msg << static_cast<int>( fi._version );
+
     return msg;
 }
 
@@ -799,5 +812,16 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory
         >> fi.wins1 >> fi.wins2 >> fi.conditions_loss >> fi.loss1 >> fi.loss2 >> fi.localtime >> fi.with_heroes;
 
+    // Versions of FileInfo before FORMAT_VERSION_094_RELEASE do not contain GameVersion flag and in this case the only to properly support it is to load separately.
+    // Please take a look at HeaderSAV class in game_io.cpp file.
+    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
     return msg;
+}
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version )
+{
+    int temp = 0;
+    stream >> temp;
+    version = static_cast<GameVersion>( temp );
+    return stream;
 }

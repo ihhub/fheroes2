@@ -21,7 +21,7 @@
 #ifndef H2GAME_DELAYS_H
 #define H2GAME_DELAYS_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 namespace Game

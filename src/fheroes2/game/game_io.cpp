@@ -51,9 +51,7 @@ namespace
 
 namespace Game
 {
-    // This was default structure prior 0.9 version so all save files were under the same category. We added a game type format which is stored
-    // in HeaderSAV structure. By default all old saves are under single-player save type.
-    struct HeaderSAVBase
+    struct HeaderSAV
     {
         enum
         {
@@ -61,19 +59,25 @@ namespace Game
             IS_LOYALTY = 0x4000
         };
 
-        HeaderSAVBase()
+        HeaderSAV() = delete;
+
+        explicit HeaderSAV( const int saveFileVersion )
             : status( 0 )
+            , gameType( 0 )
+            , _saveFileVersion( saveFileVersion )
         {}
 
-        HeaderSAVBase( const Maps::FileInfo & fi, const bool loyalty )
+        HeaderSAV( const Maps::FileInfo & fi, const int gameType_, const int saveFileVersion )
             : status( 0 )
             , info( fi )
+            , gameType( gameType_ )
+            , _saveFileVersion( saveFileVersion )
         {
             time_t rawtime;
             std::time( &rawtime );
             info.localtime = rawtime;
 
-            if ( loyalty )
+            if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
                 status |= IS_LOYALTY;
 
 #ifdef WITH_ZLIB
@@ -83,31 +87,8 @@ namespace Game
 
         uint16_t status;
         Maps::FileInfo info;
-
-        friend StreamBase & operator<<( StreamBase & msg, const HeaderSAVBase & hdr )
-        {
-            return msg << hdr.status << hdr.info;
-        }
-
-        friend StreamBase & operator>>( StreamBase & msg, HeaderSAVBase & hdr )
-        {
-            return msg >> hdr.status >> hdr.info;
-        }
-    };
-
-    struct HeaderSAV : HeaderSAVBase
-    {
-        HeaderSAV()
-            : HeaderSAVBase()
-            , gameType( 0 )
-        {}
-
-        HeaderSAV( const Maps::FileInfo & fi, const bool loyalty, const int gameType_ )
-            : HeaderSAVBase( fi, loyalty )
-            , gameType( gameType_ )
-        {}
-
         int gameType;
+        const int _saveFileVersion;
     };
 
     StreamBase & operator<<( StreamBase & msg, const HeaderSAV & hdr )
@@ -117,7 +98,16 @@ namespace Game
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
-        return msg >> hdr.status >> hdr.info >> hdr.gameType;
+        if ( hdr._saveFileVersion < FORMAT_VERSION_094_RELEASE ) {
+            msg >> hdr.status >> hdr.info >> hdr.gameType;
+        }
+        else {
+            msg >> hdr.status >> hdr.info;
+            msg >> hdr.info._version;
+            msg >> hdr.gameType;
+        }
+
+        return msg;
     }
 }
 
@@ -146,7 +136,7 @@ bool Game::Save( const std::string & fn )
 
     // raw info content
     fs << static_cast<uint8_t>( SAV2ID3 >> 8 ) << static_cast<uint8_t>( SAV2ID3 & 0xFF ) << std::to_string( loadver ) << loadver
-       << HeaderSAV( conf.CurrentFileInfo(), conf.PriceLoyaltyVersion(), conf.GameType() );
+       << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), CURRENT_FORMAT_VERSION );
     fs.close();
 
     ZStreamFile fz;
@@ -199,18 +189,9 @@ bool Game::Load( const std::string & fn )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
-    HeaderSAVBase header;
-    // starting from 0.8.4, headers also include gameType
-    if ( binver >= FORMAT_VERSION_084_RELEASE ) {
-        HeaderSAV currentFormatHeader;
-        fs >> currentFormatHeader;
-
-        header = currentFormatHeader;
-        fileGameType = currentFormatHeader.gameType;
-    }
-    else {
-        fs >> header;
-    }
+    HeaderSAV header( binver );
+    fs >> header;
+    fileGameType = header.gameType;
 
     size_t offset = fs.tell();
     fs.close();
@@ -235,7 +216,7 @@ bool Game::Load( const std::string & fn )
         return false;
     }
 
-    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.PriceLoyaltyVersion() )
+    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() )
         Dialog::Message( "Warning", _( "This file is saved in the \"Price Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
 
     // SaveMemToFile(std::vector<u8>(fz.data(), fz.data() + fz.size()), "gdata.bin");
@@ -256,7 +237,8 @@ bool Game::Load( const std::string & fn )
     u16 end_check = 0;
 
     fz >> World::Get() >> conf;
-    if ( ( conf.isCampaignGameType() ) != 0 && Game::GetLoadVersion() == FORMAT_VERSION_084_RELEASE ) {
+
+    if ( conf.isCampaignGameType() ) {
         fz >> Campaign::CampaignSaveData::Get();
     }
 
@@ -269,7 +251,7 @@ bool Game::Load( const std::string & fn )
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 
-    if ( fileGameType & Game::TYPE_CAMPAIGN && binver >= FORMAT_VERSION_090_RELEASE )
+    if ( fileGameType & Game::TYPE_CAMPAIGN )
         fz >> Campaign::CampaignSaveData::Get();
 
     fz >> end_check;
@@ -321,18 +303,9 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
         return false;
 
     int fileGameType = Game::TYPE_STANDARD;
-    HeaderSAVBase header;
-    // starting from 0.9.0, headers also include gameType
-    if ( binver >= FORMAT_VERSION_084_RELEASE ) {
-        HeaderSAV currentFormatHeader;
-        fs >> currentFormatHeader;
-
-        header = currentFormatHeader;
-        fileGameType = currentFormatHeader.gameType;
-    }
-    else {
-        fs >> header;
-    }
+    HeaderSAV header( binver );
+    fs >> header;
+    fileGameType = header.gameType;
 
     if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;

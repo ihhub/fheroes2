@@ -254,11 +254,11 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         }
 
         // fixed race for custom portrait (after level up)
-        if ( _race != rc )
-            _race = rc;
+        _race = rc;
     }
-    else
+    else {
         st.skip( 1 );
+    }
 
     // 3 artifacts
     PickupArtifact( Artifact( st.get() ) );
@@ -274,7 +274,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     if ( experience == 0 )
         experience = GetStartingXp();
 
-    bool custom_secskill = ( st.get() != 0 );
+    const bool custom_secskill = ( st.get() != 0 );
 
     // custom skill
     if ( custom_secskill ) {
@@ -294,8 +294,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
             if ( ( *it ).isValid() )
                 secondary_skills.AddSkill( *it );
     }
-    else
+    else {
         st.skip( 16 );
+    }
 
     // unknown
     st.skip( 1 );
@@ -305,8 +306,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         SetModes( NOTDEFAULTS );
         name = Game::GetEncodeString( st.toString( 13 ) );
     }
-    else
+    else {
         st.skip( 13 );
+    }
 
     // patrol
     if ( st.get() ) {
@@ -1775,7 +1777,7 @@ void AllHeroes::Init( void )
     push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
 
     // loyalty version
-    if ( Settings::Get().PriceLoyaltyVersion() ) {
+    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
         push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );

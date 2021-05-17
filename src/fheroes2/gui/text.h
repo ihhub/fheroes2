@@ -62,9 +62,9 @@ public:
     virtual void SetFont( int ) = 0;
     virtual void Clear( void ) = 0;
 
-    virtual int w( void ) const = 0;
-    virtual int h( void ) const = 0;
-    virtual size_t Size( void ) const = 0;
+    virtual int w() const = 0;
+    virtual int h() const = 0;
+    virtual size_t Size() const = 0;
 
     virtual void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) = 0;
 
@@ -82,11 +82,11 @@ public:
     void SetFont( int ) override;
     void Clear( void ) override;
 
-    int w( void ) const override;
-    int h( void ) const override;
+    int w() const override;
+    int h() const override;
     size_t Size( void ) const override;
 
-    int w( u32, u32 ) const;
+    int w( size_t s, size_t c ) const;
     int h( int ) const;
 
     void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
@@ -109,11 +109,11 @@ public:
     void SetFont( int ) override;
     void Clear( void ) override;
 
-    int w( void ) const override;
-    int h( void ) const override;
+    int w() const override;
+    int h() const override;
     size_t Size( void ) const override;
 
-    int w( u32, u32 ) const;
+    int w( size_t s, size_t c ) const;
     int h( int ) const;
 
     void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) override;
@@ -189,8 +189,8 @@ public:
     bool isHide( void ) const;
     bool isShow( void ) const;
 
-    int w( void ) const;
-    int h( void ) const;
+    int w() const;
+    int h() const;
 
     fheroes2::Rect GetRect( void ) const;
 
