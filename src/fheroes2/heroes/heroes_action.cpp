@@ -30,6 +30,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -925,8 +926,8 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     hero.setLastGroundRegion( world.GetTiles( hero.GetIndex() ).GetRegion() );
 
-    const Point & destPos = Maps::GetPoint( dst_index );
-    const Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+    const fheroes2::Point offset( destPos - hero.GetCenter() );
 
     // Get the direction of the boat so that the direction of the hero can be set to it after boarding
     const Maps::Tiles & from = world.GetTiles( dst_index );
@@ -934,7 +935,7 @@ void ActionToBoat( Heroes & hero, s32 dst_index )
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeOut( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+    hero.FadeOut( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
     // Set the direction of the hero to the one of the boat as the boat does not move when boarding it
@@ -955,8 +956,8 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     const int fromIndex = hero.GetIndex();
     Maps::Tiles & from = world.GetTiles( fromIndex );
 
-    const Point & destPos = Maps::GetPoint( dst_index );
-    const Point offset( destPos - hero.GetCenter() );
+    const fheroes2::Point & destPos = Maps::GetPoint( dst_index );
+    const fheroes2::Point offset( destPos - hero.GetCenter() );
 
     hero.ResetMovePoints();
     hero.Move2Dest( dst_index );
@@ -964,7 +965,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.SetShipMaster( false );
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
-    hero.FadeIn( Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
+    hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
     hero.ActionNewPosition();
 
@@ -2055,7 +2056,13 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
         body = _( "You gain control of a sawmill. It will provide you with %{count} units of wood per day." );
         break;
 
+    case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MINES: {
+        if ( obj == MP2::OBJ_ABANDONEDMINE && tile.GetQuantity3() != Spell::HAUNT ) {
+            body = _( "You beat the Ghosts and are able to restore the mine to production." );
+            break;
+        }
+
         resource = tile.QuantityResourceCount().first;
         header = Maps::GetMinesName( resource );
 
@@ -2079,10 +2086,6 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
             break;
         }
     } break;
-
-    case MP2::OBJ_ABANDONEDMINE:
-        body = _( "You beat the Ghosts and are able to restore the mine to production." );
-        break;
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( obj );
@@ -2353,12 +2356,13 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) ) {
+    if ( hero.GetKingdom().isVisited( dst_index, obj ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
         Dialog::Message( name, _( "A drink at the spring is supposed to give you twice your normal spell points, but you are already at that level." ), Font::BIG,
                          Dialog::OK );
+        hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
     }
     else {
         if ( Settings::Get().MusicMIDI() ) {
@@ -2833,6 +2837,8 @@ void ActionToAlchemistsTower( Heroes & hero )
     BagArtifacts & bag = hero.GetBagArtifacts();
     const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
 
+    const char * title = MP2::StringObject( MP2::OBJ_ALCHEMYTOWER );
+
     if ( cursed ) {
         payment_t payment = PaymentConditions::ForAlchemist();
 
@@ -2846,7 +2852,7 @@ void ActionToAlchemistsTower( Heroes & hero )
             msg.append( _( "For %{gold} gold, the alchemist will remove it for you. Do you pay?" ) );
             StringReplace( msg, "%{gold}", payment.gold );
 
-            if ( Dialog::YES == Dialog::Message( "", msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
+            if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 AGG::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
 
@@ -2858,10 +2864,10 @@ void ActionToAlchemistsTower( Heroes & hero )
             }
         }
         else
-            Dialog::Message( "", _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
+            Dialog::Message( title, _( "You hear a voice from behind the locked door, \"You don't have enough gold to pay for my services.\"" ), Font::BIG, Dialog::OK );
     }
     else {
-        Dialog::Message( "", _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
+        Dialog::Message( title, _( "You hear a voice from high above in the tower, \"Go away! I can't help you!\"" ), Font::BIG, Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -2896,7 +2902,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
     if ( cavalry )
         hero.GetArmy().UpgradeMonsters( Monster::CAVALRY );
 
-    Dialog::Message( "", body, Font::BIG, Dialog::OK );
+    Dialog::Message( MP2::StringObject( obj ), body, Font::BIG, Dialog::OK );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2995,7 +3001,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
                 LocalEvent & le = LocalEvent::Get();
                 int delay = 0;
                 while ( le.HandleEvents() && delay < 7 ) {
-                    if ( Game::AnimateInfrequentDelay( Game::MAPS_DELAY ) ) {
+                    if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
                         ++delay;
                     }
                 }
@@ -3018,17 +3024,18 @@ void ActionToEyeMagi( const Heroes & hero, u32 obj )
 void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 {
     MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
+    const std::string title = MP2::StringObject( obj );
     if ( riddle && riddle->valid ) {
         if (
             Dialog::YES
             == Dialog::Message(
-                "",
+                title,
                 _( "\"I have a riddle for you,\" the Sphinx says. \"Answer correctly, and you shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept the challenge?\"" ),
                 Font::BIG, Dialog::YES | Dialog::NO ) ) {
             std::string header( _( "The Sphinx asks you the following riddle:\n \n'%{riddle}'\n \nYour answer?" ) );
             StringReplace( header, "%{riddle}", riddle->message );
             std::string answer;
-            Dialog::InputString( header, answer );
+            Dialog::InputString( header, answer, title );
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;
@@ -3037,15 +3044,15 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
 
                 if ( count ) {
                     if ( 1 == count && res.gold && art.isValid() )
-                        DialogWithArtifactAndGold( "", say, art, res.gold );
+                        DialogWithArtifactAndGold( title, say, art, res.gold );
                     else {
-                        Dialog::ResourceInfo( "", say, res );
+                        Dialog::ResourceInfo( title, say, res );
                         if ( art.isValid() )
-                            Dialog::ArtifactInfo( "", say, art );
+                            Dialog::ArtifactInfo( title, say, art );
                     }
                 }
                 else if ( art.isValid() )
-                    Dialog::ArtifactInfo( "", say, art );
+                    Dialog::ArtifactInfo( title, say, art );
 
                 if ( art.isValid() )
                     hero.PickupArtifact( art );
@@ -3058,7 +3065,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
             }
             else {
                 Dialog::Message(
-                    "",
+                    title,
                     _( "\"You guessed incorrectly,\" the Sphinx says, smiling. The Sphinx swipes at you with a paw, knocking you to the ground. Another blow makes the world go black, and you know no more." ),
                     Font::BIG, Dialog::OK );
                 Battle::Result res;
@@ -3068,7 +3075,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
         }
     }
     else {
-        Dialog::Message( MP2::StringObject( obj ), _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
+        Dialog::Message( title, _( "You come across a giant Sphinx. The Sphinx remains strangely quiet." ), Font::BIG, Dialog::OK );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );

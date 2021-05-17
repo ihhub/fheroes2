@@ -1,0 +1,51 @@
+name: sonarcloud analyzer
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) }}
+    env:
+      SONAR_SCANNER_VERSION: 4.5.0.2216
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: install SDL 2
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+    - name: initialize SonarCloud
+      run: |
+        mkdir -p ~/.sonarcloud
+        wget -P ~/.sonarcloud https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+        wget -P ~/.sonarcloud https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip
+        unzip ~/.sonarcloud/build-wrapper-linux-x86.zip -d ~/.sonarcloud
+        unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
+    - name: prepare SonarCloud cfamily cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.sonar-cfamily-cache
+        key: sonarcloud-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
+        restore-keys: |
+          sonarcloud-
+    - name: compile
+      run: |
+        ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
+      env:
+        FHEROES2_STRICT_COMPILATION: "ON"
+        WITH_TOOLS: "ON"
+    - name: analyze
+      run: |
+        ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output \
+                                                                                     -Dsonar.cfamily.cache.enabled=true \
+                                                                                     -Dsonar.cfamily.cache.path="$HOME"/.sonar-cfamily-cache \
+                                                                                     -Dsonar.host.url=https://sonarcloud.io
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

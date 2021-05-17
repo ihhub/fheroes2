@@ -79,7 +79,7 @@ void Battle::ModesAffected::AddMode( u32 mode, u32 duration )
 {
     iterator it = std::find_if( begin(), end(), [mode]( const Battle::ModeDuration & v ) { return v.isMode( mode ); } );
     if ( it == end() )
-        push_back( ModeDuration( mode, duration ) );
+        emplace_back( mode, duration );
     else
         ( *it ).second = duration;
 }
@@ -125,6 +125,9 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
         if ( t.isWide() )
             pos += ( reflect ? -1 : 1 );
         SetPosition( pos );
+    }
+    else {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" );
     }
 }
 
@@ -184,7 +187,7 @@ void Battle::Unit::UpdateDirection( void )
     SetReflection( GetArena()->GetArmyColor1() != GetArmyColor() );
 }
 
-bool Battle::Unit::UpdateDirection( const Rect & pos )
+bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
 {
     bool need = position.GetRect().x == pos.x ? reflect : position.GetRect().x > pos.x;
 
@@ -423,13 +426,13 @@ void Battle::Unit::NewTurn( void )
 
     ResetModes( TR_RESPONSED );
     ResetModes( TR_MOVED );
-    ResetModes( TR_SKIPMOVE );
     ResetModes( TR_HARDSKIP );
+    ResetModes( TR_SKIPMOVE );
     ResetModes( TR_DEFENSED );
-    ResetModes( MORALE_BAD );
-    ResetModes( MORALE_GOOD );
-    ResetModes( LUCK_BAD );
     ResetModes( LUCK_GOOD );
+    ResetModes( LUCK_BAD );
+    ResetModes( MORALE_GOOD );
+    ResetModes( MORALE_BAD );
 
     // decrease spell duration
     affected.DecreaseDuration();
@@ -594,11 +597,6 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
     return res;
 }
 
-u32 Battle::Unit::HowManyCanKill( const Unit & b ) const
-{
-    return b.HowManyWillKilled( ( CalculateMinDamage( b ) + CalculateMaxDamage( b ) ) / 2 );
-}
-
 u32 Battle::Unit::HowManyWillKilled( u32 dmg ) const
 {
     return dmg >= hp ? GetCount() : GetCount() - Monster::GetCountFromHitPoints( *this, hp - dmg );
@@ -663,13 +661,15 @@ void Battle::Unit::PostKilledAction( void )
         mirror = NULL;
     }
 
-    ResetModes( IS_MAGIC );
     ResetModes( TR_RESPONSED );
+    ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
+    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
     ResetModes( MORALE_BAD );
+    ResetModes( IS_MAGIC );
 
     SetModes( TR_MOVED );
 
@@ -1780,11 +1780,6 @@ uint32_t Battle::Unit::GetCustomAlpha() const
     return customAlphaMask;
 }
 
-int Battle::Unit::GetFrameCount( void ) const
-{
-    return animation.animationLength();
-}
-
 void Battle::Unit::IncreaseAnimFrame( bool loop )
 {
     animation.playAnimation( loop );
@@ -1901,33 +1896,28 @@ int Battle::Unit::ICNFile( void ) const
     return GetMonsterSprite().icn_file;
 }
 
-int Battle::Unit::ICNMiss( void ) const
-{
-    return Monster::GetMissileICN( GetID() );
-}
-
-Rect Battle::Unit::GetRectPosition( void ) const
+fheroes2::Rect Battle::Unit::GetRectPosition() const
 {
     return position.GetRect();
 }
 
-Point Battle::Unit::GetBackPoint( void ) const
+fheroes2::Point Battle::Unit::GetBackPoint() const
 {
-    const Rect & rt = position.GetRect();
-    return reflect ? Point( rt.x + rt.w, rt.y + rt.h / 2 ) : Point( rt.x, rt.y + rt.h / 2 );
+    const fheroes2::Rect & rt = position.GetRect();
+    return reflect ? fheroes2::Point( rt.x + rt.width, rt.y + rt.height / 2 ) : fheroes2::Point( rt.x, rt.y + rt.height / 2 );
 }
 
-Point Battle::Unit::GetCenterPoint() const
+fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
 
-    const Rect & pos = position.GetRect();
-    const s32 centerY = pos.y + pos.h + sprite.y() / 2 - 10;
+    const fheroes2::Rect & pos = position.GetRect();
+    const s32 centerY = pos.y + pos.height + sprite.y() / 2 - 10;
 
-    return Point( pos.x + pos.w / 2, centerY );
+    return fheroes2::Point( pos.x + pos.width / 2, centerY );
 }
 
-Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
+fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
 }

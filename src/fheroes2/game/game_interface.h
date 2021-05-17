@@ -72,9 +72,8 @@ namespace Interface
 
     Castle * GetFocusCastle( void );
     Heroes * GetFocusHeroes( void );
-    Army * GetFocusArmy();
     int GetFocusType( void );
-    Point GetFocusCenter( void );
+    fheroes2::Point GetFocusCenter( void );
 
     class Basic
     {
@@ -91,7 +90,7 @@ namespace Interface
         const fheroes2::Rect & GetScrollTop( void ) const;
         const fheroes2::Rect & GetScrollBottom( void ) const;
 
-        s32 GetDimensionDoorDestination( s32, u32, bool ) const;
+        int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
 
         GameArea & GetGameArea( void );
         Radar & GetRadar( void );
@@ -109,27 +108,27 @@ namespace Interface
 
         void EventSwitchHeroSleeping( void );
         void EventDefaultAction( void );
-        void EventOpenFocus( void );
-        int EventSaveGame( void );
-        void EventPuzzleMaps( void );
-        void EventGameInfo( void );
+        void EventOpenFocus( void ) const;
+        int EventSaveGame( void ) const;
+        void EventPuzzleMaps( void ) const;
+        void EventGameInfo( void ) const;
         void EventSystemDialog( void );
         void EventNextHero( void );
         void EventNextTown( void );
-        void EventContinueMovement( void );
-        void EventKingdomInfo( void );
+        void EventContinueMovement( void ) const;
+        void EventKingdomInfo( void ) const;
         void EventCastSpell( void );
-        void EventSwitchShowRadar( void );
-        void EventSwitchShowStatus( void );
-        void EventSwitchShowButtons( void );
+        void EventSwitchShowRadar( void ) const;
+        void EventSwitchShowStatus( void ) const;
+        void EventSwitchShowButtons( void ) const;
         void EventSwitchShowIcons( void );
-        void EventSwitchShowControlPanel( void );
+        void EventSwitchShowControlPanel( void ) const;
 
-        int EventNewGame( void );
-        int EventLoadGame( void );
+        int EventNewGame( void ) const;
+        int EventLoadGame( void ) const;
         int EventAdventureDialog( void );
-        int EventFileDialog( void );
-        int EventEndTurn( void );
+        int EventFileDialog( void ) const;
+        int EventEndTurn( void ) const;
         static int EventExit( void );
         int EventDigArtifact( void );
         void EventKeyArrowPress( int direct );
@@ -137,13 +136,13 @@ namespace Interface
         int StartGame( void );
 
         void MouseCursorAreaClickLeft( const int32_t index_maps );
-        void MouseCursorAreaPressRight( s32 );
+        void MouseCursorAreaPressRight( s32 ) const;
 
         static int GetCursorTileIndex( s32 );
         static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
-        void CalculateHeroPath( Heroes * hero, s32 destinationIdx );
+        void CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const;
 
         void Reset(); // call this function only when changing the resolution
 

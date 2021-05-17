@@ -305,24 +305,6 @@ Funds & Funds::operator*=( u32 mul )
     return *this;
 }
 
-// operator Funds <
-bool Funds::operator<( const Funds & pm ) const
-{
-    return wood < pm.wood && mercury < pm.mercury && ore < pm.ore && sulfur < pm.sulfur && crystal < pm.crystal && gems < pm.gems && gold < pm.gold;
-}
-
-// operator Funds <=
-bool Funds::operator<=( const Funds & pm ) const
-{
-    return wood <= pm.wood && mercury <= pm.mercury && ore <= pm.ore && sulfur <= pm.sulfur && crystal <= pm.crystal && gems <= pm.gems && gold <= pm.gold;
-}
-
-// operator Funds >
-bool Funds::operator>( const Funds & pm ) const
-{
-    return wood > pm.wood && mercury > pm.mercury && ore > pm.ore && sulfur > pm.sulfur && crystal > pm.crystal && gems > pm.gems && gold > pm.gold;
-}
-
 // operator Funds >=
 bool Funds::operator>=( const Funds & pm ) const
 {
@@ -537,15 +519,15 @@ void Funds::Reset( void )
     gold = 0;
 }
 
-Resource::BoxSprite::BoxSprite( const Funds & f, u32 width )
-    : Rect( 0, 0, width, 0 )
+Resource::BoxSprite::BoxSprite( const Funds & f, int32_t width_ )
+    : fheroes2::Rect( 0, 0, width_, 0 )
     , rs( f )
 {
     const u32 count = rs.GetValidItemsCount();
-    h = 4 > count ? 45 : ( 7 > count ? 90 : 135 );
+    height = 4 > count ? 45 : ( 7 > count ? 90 : 135 );
 }
 
-const Rect & Resource::BoxSprite::GetArea( void ) const
+const fheroes2::Rect & Resource::BoxSprite::GetArea( void ) const
 {
     return *this;
 }
@@ -556,7 +538,7 @@ void Resource::BoxSprite::SetPos( s32 px, s32 py )
     y = py;
 }
 
-void RedrawResourceSprite( const fheroes2::Image & sf, const Point & pos, u32 count, u32 width, u32 offset, s32 value )
+void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & pos, int32_t count, int32_t width, int32_t offset, int32_t value )
 {
     const fheroes2::Point dst_pt( pos.x + width / 2 + count * width, pos.y + offset );
     fheroes2::Blit( sf, fheroes2::Display::instance(), dst_pt.x - sf.width() / 2, dst_pt.y - sf.height() );
@@ -594,14 +576,14 @@ void Resource::BoxSprite::Redraw( void ) const
     size_t id = 0;
 
     while ( valueVsSprite.size() - id > 2 ) {
-        const uint32_t width = w / 3;
+        const uint32_t width_ = width / 3;
         const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
         const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
         const fheroes2::Sprite & res3 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 2].second );
 
-        RedrawResourceSprite( res1, Point( x, y ), 0, width, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, Point( x, y ), 1, width, offsetY, valueVsSprite[id + 1].first );
-        RedrawResourceSprite( res3, Point( x, y ), 2, width, offsetY, valueVsSprite[id + 2].first );
+        RedrawResourceSprite( res1, fheroes2::Point( x, y ), 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, fheroes2::Point( x, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res3, fheroes2::Point( x, y ), 2, width_, offsetY, valueVsSprite[id + 2].first );
 
         id += 3;
         offsetY += 45;
@@ -613,18 +595,18 @@ void Resource::BoxSprite::Redraw( void ) const
         const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
         const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
 
-        const uint32_t width = isManyResources ? w / 3 : w / 2;
-        const int32_t offsetX = isManyResources ? width / 2 : 0;
+        const uint32_t width_ = isManyResources ? width / 3 : width / 2;
+        const int32_t offsetX = isManyResources ? width_ / 2 : 0;
 
-        RedrawResourceSprite( res1, Point( x + offsetX, y ), 0, width, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, Point( x + offsetX, y ), 1, width, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res1, fheroes2::Point( x + offsetX, y ), 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, fheroes2::Point( x + offsetX, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
     }
     else if ( valueVsSprite.size() - id == 1 ) {
         const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
 
-        const uint32_t width = isManyResources ? w / 3 : w;
+        const int32_t width_ = isManyResources ? width / 3 : width;
 
-        RedrawResourceSprite( res1, Point( x, y ), isManyResources ? 1 : 0, width, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res1, fheroes2::Point( x, y ), isManyResources ? 1 : 0, width_, offsetY, valueVsSprite[id].first );
     }
 }
 

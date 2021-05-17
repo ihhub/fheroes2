@@ -69,44 +69,30 @@ u32 Battle::Catapult::GetDamage() const
     return 1;
 }
 
-Point Battle::Catapult::GetTargetPosition( int target )
+fheroes2::Point Battle::Catapult::GetTargetPosition( int target, bool hit )
 {
-    Point res;
-
     switch ( target ) {
     case CAT_WALL1:
-        res = Point( 475, 45 );
-        break;
+        return hit ? fheroes2::Point( 475, 45 ) : fheroes2::Point( 495, 105 );
     case CAT_WALL2:
-        res = Point( 420, 115 );
-        break;
+        return hit ? fheroes2::Point( 420, 115 ) : fheroes2::Point( 460, 175 );
     case CAT_WALL3:
-        res = Point( 415, 280 );
-        break;
+        return hit ? fheroes2::Point( 415, 280 ) : fheroes2::Point( 455, 280 );
     case CAT_WALL4:
-        res = Point( 490, 390 );
-        break;
+        return hit ? fheroes2::Point( 490, 390 ) : fheroes2::Point( 530, 390 );
     case CAT_TOWER1:
-        res = Point( 430, 40 );
-        break;
+        return hit ? fheroes2::Point( 430, 40 ) : fheroes2::Point( 490, 120 );
     case CAT_TOWER2:
-        res = Point( 430, 300 );
-        break;
-    case CAT_CENTRAL_TOWER:
-        res = Point( 580, 160 );
-        break;
+        return hit ? fheroes2::Point( 430, 300 ) : fheroes2::Point( 490, 340 );
     case CAT_BRIDGE:
-        res = Point( 400, 195 );
-        break;
-    case CAT_MISS:
-        res = Point( 610, 320 );
-        break;
-
+        return hit ? fheroes2::Point( 400, 195 ) : fheroes2::Point( 450, 235 );
+    case CAT_CENTRAL_TOWER:
+        return hit ? fheroes2::Point( 580, 160 ) : fheroes2::Point( 610, 320 );
     default:
         break;
     }
 
-    return res;
+    return fheroes2::Point();
 }
 
 int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
@@ -145,16 +131,16 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
     }
 
     if ( !targets.empty() ) {
-        // Miss chance is 25%
-        if ( canMiss && 6 > Rand::Get( 1, 20 ) ) {
-            return static_cast<int>( CAT_MISS );
-        }
-        else {
-            return Rand::Get( targets );
-        }
+        return Rand::Get( targets );
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." );
 
     return 0;
+}
+
+bool Battle::Catapult::IsNextShotHit() const
+{
+    // Miss chance is 25%
+    return !( canMiss && Rand::Get( 1, 20 ) < 6 );
 }

@@ -58,7 +58,7 @@ std::string GetMinesIncomeString( int type )
     return res;
 }
 
-std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
 {
     std::string str;
     const Troop & troop = tile.QuantityTroop();
@@ -80,25 +80,39 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
         str = MP2::StringObject( tile.GetObject() );
     }
 
-    if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
+    if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) ) {
         str.append( "\n \n" );
         str.append( _( "guarded by %{count} %{monster}" ) );
 
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) ) );
+        const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+        }
+        else {
+            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        }
     }
 
     return str;
 }
 
-std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t basicScoutingLevel )
 {
     const Troop & troop = tile.QuantityTroop();
 
-    if ( isVisibleFromCrystalBall || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
+    if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
         std::string str = "%{count} %{monster}";
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+
+        const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
+        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+        }
+        else {
+            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        }
+
         return str;
     }
     else {
@@ -326,28 +340,28 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPena
     return str;
 }
 
-fheroes2::Rect MakeRectQuickInfo( LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
 {
     if ( position.x > 0 && position.y > 0 ) {
         return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
     }
 
     // place box next to mouse cursor
-    const Point & mp = le.GetMouseCursor();
+    const fheroes2::Point & mp = le.GetMouseCursor();
 
     const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
     const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect & ar = gamearea.GetROI();
+    const fheroes2::Rect & ar = gamearea.GetROI();
 
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
+    if ( mx <= ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top left
         return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
     }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
+    else if ( mx > ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top right
         return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
     }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
+    else if ( mx <= ar.x + ar.width / 2 && my > ar.y + ar.height / 2 ) { // bottom left
         return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
     }
     else { // bottom right
@@ -693,44 +707,35 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     dst_pt.x = cur_rt.x + ( cur_rt.width + 60 ) / 2;
     fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
 
-    // info
-    text.Set( _( "Defenders:" ) );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-    dst_pt.y += sprite.height() + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
-
-    //
-    u32 count = castle.GetArmy().GetCount();
     const Settings & conf = Settings::Get();
-
-    const Heroes * from_hero = Interface::GetFocusHeroes();
-    const Heroes * guardian = castle.GetHeroes().Guard();
 
     const int currentColor = conf.CurrentColor();
     const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-    const uint32_t thievesGuildCount = kingdom.GetCountThievesGuild();
-    const bool isVisibleCrystalBall = kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
     const bool isFriend = castle.isFriends( currentColor );
+    const bool isVisibleFromCrystalBall = kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
 
-    uint32_t scoutSkillLevel = thievesGuildCount > Skill::Level::EXPERT ? static_cast<int>( Skill::Level::EXPERT ) : thievesGuildCount;
-    if ( isFriend || isVisibleCrystalBall ) {
+    uint32_t scoutSkillLevel = Skill::Level::NONE;
+
+    if ( isFriend || isVisibleFromCrystalBall ) {
         scoutSkillLevel = Skill::Level::EXPERT;
     }
+    else {
+        scoutSkillLevel = std::min( kingdom.GetCountThievesGuild(), static_cast<uint32_t>( Skill::Level::EXPERT ) );
+    }
 
-    // draw guardian portrait
-    if ( guardian &&
-         // my  colors
-         ( castle.GetColor() == currentColor || isVisibleCrystalBall ||
-           // show guardians (scouting: advanced)
-           ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
-        // heroes name
+    const Heroes * guardian = castle.GetHeroes().Guard();
+    const bool isGuardianVisible = guardian && scoutSkillLevel >= Skill::Level::ADVANCED;
+
+    // show guardian
+    if ( isGuardianVisible ) {
+        // hero name
         text.Set( guardian->GetName(), Font::SMALL );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += 10;
+        dst_pt.y += sprite.height() + 5;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        // mini port heroes
+        // hero avatar
         const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
@@ -738,6 +743,14 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
             fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
         }
     }
+    else {
+        text.Set( _( "Defenders:" ) );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        dst_pt.y += sprite.height() + 5;
+        text.Blit( dst_pt.x, dst_pt.y );
+    }
+
+    const uint32_t count = castle.GetArmy().GetCount();
 
     // draw defenders
     if ( count == 0 ) {
@@ -747,7 +760,12 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         text.Blit( dst_pt.x, dst_pt.y );
     }
     else if ( scoutSkillLevel > Skill::Level::NONE ) {
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, scoutSkillLevel, true, true );
+        const bool isScouteView = isFriend || isVisibleFromCrystalBall;
+
+        dst_pt.x = cur_rt.x - 5;
+        dst_pt.y += 20;
+
+        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
         text.Set( _( "Unknown" ) );

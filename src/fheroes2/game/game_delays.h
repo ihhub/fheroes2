@@ -21,14 +21,70 @@
 #ifndef H2GAME_DELAYS_H
 #define H2GAME_DELAYS_H
 
-#include "timing.h"
+#include <cstdint>
+#include <vector>
 
-struct TimeDelay : std::pair<fheroes2::Time, uint32_t>
+namespace Game
 {
-    TimeDelay( uint32_t dl );
-    uint32_t operator()( void ) const;
-    TimeDelay & operator=( uint32_t dl );
-    void Reset( void );
-    bool Trigger( uint32_t customDelay = 0 );
-};
+    enum DelayType : int
+    {
+        SCROLL_DELAY = 0,
+        SCROLL_START_DELAY,
+        MAIN_MENU_DELAY,
+        MAPS_DELAY,
+        CASTLE_TAVERN_DELAY,
+        CASTLE_AROUND_DELAY,
+        CASTLE_BUYHERO_DELAY,
+        CASTLE_BUILD_DELAY,
+        CASTLE_UNIT_DELAY,
+        HEROES_FADE_DELAY,
+        HEROES_PICKUP_DELAY,
+        PUZZLE_FADE_DELAY,
+        BATTLE_DIALOG_DELAY,
+        BATTLE_FRAME_DELAY,
+        BATTLE_MISSILE_DELAY,
+        BATTLE_SPELL_DELAY,
+        BATTLE_DISRUPTING_DELAY,
+        BATTLE_CATAPULT_DELAY,
+        BATTLE_CATAPULT_BOULDER_DELAY,
+        BATTLE_CATAPULT_CLOUD_DELAY,
+        BATTLE_BRIDGE_DELAY,
+        BATTLE_IDLE_DELAY,
+        BATTLE_OPPONENTS_DELAY,
+        BATTLE_FLAGS_DELAY,
+        BATTLE_POPUP_DELAY,
+        BATTLE_COLOR_CYCLE_DELAY,
+        BATTLE_SELECTED_UNIT_DELAY,
+
+        CURRENT_HERO_DELAY,
+        CURRENT_AI_DELAY,
+        CUSTOM_DELAY,
+
+        // IMPORTANT!!! All new entries must be put before this entry!
+        LAST_DELAY
+    };
+
+    // If delay is passed reset it and return true. Otherwise return false. DelayType::CUSTOM_DELAY must not be passed!
+    bool validateAnimationDelay( const DelayType delayType );
+
+    // If custom delay (DelayType::CUSTOM_DELAY) is passed reset it and return true. Otherwise return false.
+    bool validateCustomAnimationDelay( const uint64_t delayMs );
+
+    // Explicitly pass delay. Useful for loops when first iterator must pass.
+    void passAnimationDelay( const DelayType delayType );
+
+    void AnimateResetDelay( const DelayType delayType );
+    void UpdateGameSpeed();
+
+    uint32_t ApplyBattleSpeed( uint32_t delay );
+
+    int HumanHeroAnimSkip();
+    int AIHeroAnimSkip();
+
+    // Returns true if every of delay type is not passed yet. DelayType::CUSTOM_DELAY must not be added in this function!
+    bool isDelayNeeded( const std::vector<Game::DelayType> & delayTypes );
+
+    bool isCustomDelayNeeded( const uint64_t delayMs );
+}
+
 #endif

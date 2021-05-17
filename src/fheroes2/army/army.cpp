@@ -21,12 +21,13 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 #include <functional>
-#include <math.h>
 #include <set>
 
 #include "agg_image.h"
 #include "army.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "color.h"
 #include "game.h"
@@ -148,8 +149,6 @@ std::string Army::SizeString( u32 size )
 
     return str_size[0];
 }
-
-Troops::Troops() {}
 
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
@@ -364,6 +363,34 @@ void Troops::JoinTroops( Troops & troops2 )
             JoinTroop( **it );
             ( *it )->Reset();
         }
+}
+
+void Troops::MoveTroops( Troops & from )
+{
+    if ( this == &from )
+        return;
+
+    size_t validTroops = 0;
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            ++validTroops;
+        }
+    }
+
+    for ( Troop * troop : from ) {
+        if ( troop && troop->isValid() ) {
+            if ( validTroops == 1 ) {
+                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
+                    troop->SetCount( 1 );
+                    break;
+                }
+            }
+            else if ( JoinTroop( *troop ) ) {
+                --validTroops;
+                troop->Reset();
+            }
+        }
+    }
 }
 
 u32 Troops::GetUniqueCount( void ) const
@@ -691,44 +718,6 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
             troops2.JoinTroop( *weakest, 1 );
             weakest->SetCount( weakest->GetCount() - 1 );
         }
-    }
-}
-
-void Troops::KeepOnlyWeakest( Troops & troops2, bool save_last )
-{
-    if ( this == &troops2 )
-        return;
-
-    Troops priority = GetOptimized();
-    priority.reserve( ARMYMAXTROOPS * 2 );
-
-    const Troops & priority2 = troops2.GetOptimized();
-    priority.Insert( priority2 );
-
-    Clean();
-    troops2.Clean();
-
-    // sort: strongest
-    std::sort( priority.begin(), priority.end(), Army::StrongestTroop );
-
-    // weakest to army
-    while ( size() < priority.size() ) {
-        JoinTroop( *priority.back() );
-        priority.PopBack();
-    }
-
-    // save half weak of strongest to army
-    if ( save_last && !isValid() ) {
-        Troop & last = *priority.back();
-        u32 count = last.GetCount() / 2;
-        JoinTroop( last, last.GetCount() - count );
-        last.SetCount( count );
-    }
-
-    // strongest to army2
-    while ( priority.size() ) {
-        troops2.JoinTroop( *priority.back() );
-        priority.PopBack();
     }
 }
 
@@ -1390,12 +1379,6 @@ void Army::JoinStrongestFromArmy( Army & army2 )
     JoinStrongest( army2, save_last );
 }
 
-void Army::KeepOnlyWeakestTroops( Army & army2 )
-{
-    bool save_last = commander && commander->isHeroes();
-    KeepOnlyWeakest( army2, save_last );
-}
-
 u32 Army::ActionToSirens( void )
 {
     u32 res = 0;
@@ -1444,11 +1427,6 @@ bool Army::isMeleeDominantArmy() const
     return meleeInfantry > other;
 }
 
-bool Army::ArmyStrongerThanEnemy( const Army & army1, const Army & army2 )
-{
-    return army1.isStrongerThan( army2 );
-}
-
 /* draw MONS32 sprite in line, first valid = 0, count = 0 */
 void Army::DrawMons32Line( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
 {
@@ -1487,6 +1465,46 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
     // force join for campain and others...
     const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+
+    // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
+    // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
+    // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
+    if ( Settings::Get().isCampaignGameType() ) {
+        const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+        int forceJoinType = JOIN_NONE;
+
+        for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
+            const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
+            const bool isCurse = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_CURSE;
+
+            if ( !isAlliance && !isCurse )
+                continue;
+
+            Monster monster( campaignAwards[i]._subType );
+            bool found = false;
+
+            while ( !found ) {
+                if ( troop.GetID() == monster.GetID() ) {
+                    forceJoinType = isAlliance ? JOIN_FREE : JOIN_FLEE;
+                    found = true;
+                    break;
+                }
+
+                // try to cycle through the creature's upgrades
+                if ( !monster.isAllowUpgrade() )
+                    break;
+
+                monster = monster.GetUpgrade();
+            }
+
+            if ( found )
+                break;
+        }
+
+        if ( forceJoinType != JOIN_NONE ) {
+            return JoinCount( forceJoinType, troop.GetCount() );
+        }
+    }
 
     if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
         if ( join_free || join_force )
@@ -1536,6 +1554,17 @@ void Army::SwapTroops( Troop & t1, Troop & t2 )
 bool Army::SaveLastTroop( void ) const
 {
     return commander && commander->isHeroes() && 1 == GetCount();
+}
+
+Monster Army::GetStrongestMonster() const
+{
+    Monster monster( Monster::UNKNOWN );
+    for ( const Troop * troop : *this ) {
+        if ( troop->isValid() && troop->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() ) {
+            monster = troop->GetID();
+        }
+    }
+    return monster;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Army & army )

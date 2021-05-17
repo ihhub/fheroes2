@@ -49,18 +49,15 @@ endif
 endif
 
 SOURCEROOT := ../fheroes2
-SOURCEDIR  := $(shell ls $(SOURCEROOT))
+SOURCEDIR  := $(filter %/, $(wildcard $(SOURCEROOT)/*/)) $(filter %/, $(wildcard $(SOURCEROOT)/*/*/))
 POT        := $(TARGET).pot
-SRCDIRLIST := $(addprefix $(SOURCEROOT)/, $(SOURCEDIR))
 
-SRCDIRLIST := $(SRCDIRLIST) $(SOURCEROOT)/ai/normal
-
-SEARCH     := $(addsuffix /*.cpp, $(SRCDIRLIST))
+SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
 
 all: $(TARGET)
 
-$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(wildcard $(SEARCH)))) $(LIBENGINE) $(RES)
+$(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
 	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
 
@@ -72,11 +69,10 @@ $(RES): $(RC)
 	@echo "gen: $@"
 	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
-VPATH := $(SRCDIRLIST)
+VPATH := $(SOURCEDIR)
 
 %.o: %.cpp
-	@echo "$(CXX): $@"
-	@$(CXX) -c -MD $(addprefix -I, $(SRCDIRLIST)) $< $(CFLAGS)
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
 
 include $(wildcard *.d)
 

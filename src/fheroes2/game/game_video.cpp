@@ -22,7 +22,7 @@
 #include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_delays.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -74,13 +74,15 @@ namespace Video
         if ( hideCursor ) {
             Cursor::Get().Hide();
         }
+        else {
+            Cursor::Get().setVideoPlaybackCursor();
+        }
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
 
         unsigned int currentFrame = 0;
-        const fheroes2::Point offset( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2 );
-        bool isFirstFrame = true;
+        fheroes2::Rect frameRoi( ( display.width() - video.width() ) / 2, ( display.height() - video.height() ) / 2, 0, 0 );
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
@@ -103,7 +105,6 @@ namespace Video
 
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
-        fheroes2::Image frame;
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;
 
@@ -113,8 +114,10 @@ namespace Video
 
         const uint8_t selectionColor = 51;
 
+        Game::passAnimationDelay( Game::CUSTOM_DELAY );
+
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents() ) {
+        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     Mixer::Reset();
@@ -137,16 +140,12 @@ namespace Video
                 }
             }
 
-            if ( isFirstFrame || Game::AnimateCustomDelay( delay ) ) {
-                isFirstFrame = false;
-
+            if ( Game::validateCustomAnimationDelay( delay ) ) {
                 if ( !isFrameReady ) {
                     if ( currentFrame == 0 )
                         video.resetFrame();
 
-                    video.getNextFrame( frame, palette );
-
-                    fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
+                    video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {
@@ -162,7 +161,7 @@ namespace Video
                     std::swap( prevPalette, palette );
                 }
 
-                display.render();
+                display.render( frameRoi );
 
                 ++currentFrame;
 
@@ -183,8 +182,7 @@ namespace Video
                     if ( currentFrame == 0 )
                         video.resetFrame();
 
-                    video.getNextFrame( frame, palette );
-                    fheroes2::Copy( frame, 0, 0, display, offset.x, offset.y, frame.width(), frame.height() );
+                    video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {
@@ -210,6 +208,9 @@ namespace Video
 
         if ( hideCursor ) {
             Cursor::Get().Show();
+        }
+        else {
+            Cursor::Get().resetVideoPlaybackCursor();
         }
 
         return roiChosenId;

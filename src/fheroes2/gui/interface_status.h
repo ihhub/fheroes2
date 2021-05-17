@@ -43,15 +43,15 @@ namespace Interface
     class StatusWindow : public BorderWindow
     {
     public:
-        StatusWindow( Basic & basic );
+        explicit StatusWindow( Basic & basic );
 
-        void SetPos( s32, s32 );
-        void SavePosition();
+        void SetPos( s32, s32 ) override;
+        void SavePosition() override;
         void SetRedraw() const;
 
         void Reset();
 
-        void Redraw();
+        void Redraw() const;
         void NextState();
 
         void SetState( const StatusType status );

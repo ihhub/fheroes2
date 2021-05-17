@@ -70,5 +70,8 @@ fheroes2.pot
 # demo directory
 script/demo/demo
 
+# Installed packages for Visual Studio
+VisualStudio/packages/installed
+
 # Mac magic folders
 .DS_Store

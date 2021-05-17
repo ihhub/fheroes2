@@ -58,7 +58,7 @@ HeroesIndicator::HeroesIndicator( const Heroes * h )
     descriptions.reserve( 256 );
 }
 
-const Rect & HeroesIndicator::GetArea( void ) const
+const fheroes2::Rect & HeroesIndicator::GetArea( void ) const
 {
     return area;
 }
@@ -68,19 +68,19 @@ void HeroesIndicator::SetHero( const Heroes * h )
     hero = h;
 }
 
-void HeroesIndicator::SetPos( const Point & pt )
+void HeroesIndicator::SetPos( const fheroes2::Point & pt )
 {
     area.x = pt.x;
     area.y = pt.y;
-    back.update( area.x, area.y, area.w, area.h );
+    back.update( area.x, area.y, area.width, area.height );
 }
 
 LuckIndicator::LuckIndicator( const Heroes * h )
     : HeroesIndicator( h )
     , luck( Luck::NORMAL )
 {
-    area.w = 35;
-    area.h = 26;
+    area.width = 35;
+    area.height = 26;
 }
 
 void LuckIndicator::Redraw( void )
@@ -101,8 +101,8 @@ void LuckIndicator::Redraw( void )
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int inter = 6;
     int count = ( 0 == luck ? 1 : std::abs( luck ) );
-    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
+    s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.height - sprite.height() ) / 2;
 
     if ( modificators.size() )
         descriptions.append( modificators );
@@ -130,8 +130,8 @@ MoraleIndicator::MoraleIndicator( const Heroes * h )
     : HeroesIndicator( h )
     , morale( Morale::NORMAL )
 {
-    area.w = 35;
-    area.h = 26;
+    area.width = 35;
+    area.height = 26;
 }
 
 void MoraleIndicator::Redraw( void )
@@ -162,8 +162,8 @@ void MoraleIndicator::Redraw( void )
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
     int count = ( 0 == morale ? 1 : std::abs( morale ) );
-    s32 cx = area.x + ( area.w - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.h - sprite.height() ) / 2;
+    s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    s32 cy = area.y + ( area.height - sprite.height() ) / 2;
 
     back.restore();
     while ( count-- ) {
@@ -185,8 +185,8 @@ void MoraleIndicator::QueueEventProcessing( const MoraleIndicator & indicator )
 ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 35;
-    area.h = 36;
+    area.width = 35;
+    area.height = 36;
 
     descriptions = _( "Current experience %{exp1}.\n Next level %{exp2}." );
     if ( hero ) {
@@ -196,7 +196,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     }
 }
 
-void ExperienceIndicator::Redraw( void )
+void ExperienceIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -208,7 +208,7 @@ void ExperienceIndicator::Redraw( void )
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
-void ExperienceIndicator::QueueEventProcessing( void )
+void ExperienceIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -222,8 +222,8 @@ void ExperienceIndicator::QueueEventProcessing( void )
 SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     : HeroesIndicator( h )
 {
-    area.w = 35;
-    area.h = 36;
+    area.width = 35;
+    area.height = 36;
 
     descriptions = _(
         "%{name} currently has %{point} spell points out of a maximum of %{max}. The maximum number of spell points is 10 times your knowledge. It is occasionally possible to have more than your maximum spell points via special events." );
@@ -234,7 +234,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     }
 }
 
-void SpellPointsIndicator::Redraw( void )
+void SpellPointsIndicator::Redraw( void ) const
 {
     if ( !hero )
         return;
@@ -246,7 +246,7 @@ void SpellPointsIndicator::Redraw( void )
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
-void SpellPointsIndicator::QueueEventProcessing( void )
+void SpellPointsIndicator::QueueEventProcessing( void ) const
 {
     LocalEvent & le = LocalEvent::Get();
 

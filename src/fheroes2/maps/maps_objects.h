@@ -35,11 +35,11 @@
 class MapObjectSimple : public MapPosition
 {
 public:
-    MapObjectSimple( int v = 0 )
+    explicit MapObjectSimple( int v = 0 )
         : uid( 0 )
         , type( v )
     {}
-    virtual ~MapObjectSimple() {}
+    virtual ~MapObjectSimple() = default;
 
     int GetType( void ) const
     {
@@ -109,7 +109,6 @@ StreamBase & operator>>( StreamBase &, MapSphinx & );
 struct MapSign : public MapObjectSimple
 {
     MapSign();
-    MapSign( s32 index, const std::string & );
 
     void LoadFromMP2( s32 index, StreamBuf );
 

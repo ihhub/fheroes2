@@ -57,12 +57,8 @@ namespace Interface
             return show;
         }
 
-        void RedrawBackground( const Point & );
+        void RedrawBackground( const fheroes2::Point & ) const;
 
-        u32 CountIcons( void ) const
-        {
-            return iconsCount;
-        }
         void SetIconsCount( u32 c )
         {
             iconsCount = c;
@@ -92,16 +88,16 @@ namespace Interface
         void SetShow( bool );
 
     protected:
-        void ActionCurrentUp( void );
-        void ActionCurrentDn( void );
-        void ActionListDoubleClick( HEROES & );
-        void ActionListSingleClick( HEROES & );
-        void ActionListPressRight( HEROES & );
-        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current );
-        void RedrawBackground( const Point & );
+        void ActionCurrentUp( void ) override;
+        void ActionCurrentDn( void ) override;
+        void ActionListDoubleClick( HEROES & ) override;
+        void ActionListSingleClick( HEROES & ) override;
+        void ActionListPressRight( HEROES & ) override;
+        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current ) override;
+        void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
-        Point _topLeftCorner;
+        fheroes2::Point _topLeftCorner;
     };
 
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
@@ -115,16 +111,16 @@ namespace Interface
         void SetShow( bool );
 
     protected:
-        void ActionCurrentUp( void );
-        void ActionCurrentDn( void );
-        void ActionListDoubleClick( CASTLE & );
-        void ActionListSingleClick( CASTLE & );
-        void ActionListPressRight( CASTLE & );
-        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current );
-        void RedrawBackground( const Point & );
+        void ActionCurrentUp( void ) override;
+        void ActionCurrentDn( void ) override;
+        void ActionListDoubleClick( CASTLE & ) override;
+        void ActionListSingleClick( CASTLE & ) override;
+        void ActionListPressRight( CASTLE & ) override;
+        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current ) override;
+        void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
-        Point _topLeftCorner;
+        fheroes2::Point _topLeftCorner;
     };
 
     class Basic;
@@ -132,17 +128,15 @@ namespace Interface
     class IconsPanel : public BorderWindow
     {
     public:
-        IconsPanel( Basic & );
+        explicit IconsPanel( Basic & );
 
-        void SetPos( s32, s32 );
-        void SavePosition( void );
+        void SetPos( s32, s32 ) override;
+        void SavePosition( void ) override;
         void SetRedraw( void ) const;
         void SetRedraw( icons_t ) const;
 
         void Redraw( void );
         void QueueEventProcessing( void );
-
-        u32 CountIcons( void ) const;
 
         void Select( Heroes * const );
         void Select( Castle * const );

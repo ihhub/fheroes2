@@ -35,13 +35,11 @@ void UltimateArtifact::Set( s32 pos, const Artifact & a )
     art = a.isValid() ? a : Artifact::Rand( Artifact::ART_ULTIMATE );
     index = pos;
     isfound = false;
-
-    MakeSurface();
 }
 
-const fheroes2::Image & UltimateArtifact::GetPuzzleMapSurface( void ) const
+fheroes2::Image UltimateArtifact::GetPuzzleMapSurface() const
 {
-    return puzzlemap;
+    return Interface::GameArea::GenerateUltimateArtifactAreaSurface( index );
 }
 
 const Artifact & UltimateArtifact::GetArtifact( void ) const
@@ -72,14 +70,6 @@ void UltimateArtifact::Reset( void )
     isfound = false;
 }
 
-void UltimateArtifact::MakeSurface( void )
-{
-    if ( Maps::isValidAbsIndex( index ) )
-        puzzlemap = Interface::GameArea::GenerateUltimateArtifactAreaSurface( index );
-    else
-        puzzlemap.reset();
-}
-
 StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
 {
     return msg << static_cast<Artifact>( ultimate ) << ultimate.index << ultimate.isfound;
@@ -89,8 +79,6 @@ StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
     msg >> artifact >> ultimate.index >> ultimate.isfound;
-
-    ultimate.MakeSurface();
 
     return msg;
 }

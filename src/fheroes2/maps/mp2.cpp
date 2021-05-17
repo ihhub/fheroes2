@@ -205,19 +205,19 @@ int MP2::GetICNObject( int tileset )
 
     // extra objects for loyalty version
     case 61:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC1;
         break;
 
     // extra objects for loyalty version
     case 62:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC2;
         break;
 
     // extra objects for loyalty version
     case 63:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC3;
         break;
 
@@ -835,7 +835,7 @@ bool MP2::isWaterObject( int obj )
     }
 
     // price loyalty: editor allow place other objects
-    return Settings::Get().PriceLoyaltyVersion() ? isGroundObject( obj ) : false;
+    return Settings::Get().isPriceOfLoyaltySupported() ? isGroundObject( obj ) : false;
 }
 
 bool MP2::isGroundObject( int obj )

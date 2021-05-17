@@ -23,6 +23,7 @@
 #define H2CURSOR_H
 
 #include "gamedefs.h"
+#include "math_base.h"
 
 class Cursor
 {
@@ -71,7 +72,7 @@ public:
         SCROLL_BOTTOMLEFT = 0x1025,
         SCROLL_LEFT = 0x1026,
         SCROLL_TOPLEFT = 0x1027,
-        POINTER2 = 0x1028,
+        POINTER_VIDEO = 0x1028, // this cursor is used only for video playback
         // CMSECO.ICN
         WAR_NONE = 0x2000,
         WAR_MOVE = 0x2001,
@@ -144,9 +145,14 @@ public:
     void Hide() const;
     bool isVisible( void ) const;
 
+    // Only for software emulation.
+    void setVideoPlaybackCursor();
+    void resetVideoPlaybackCursor();
+
 private:
     Cursor();
-    ~Cursor();
+    ~Cursor() = default;
+
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 
