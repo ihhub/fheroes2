@@ -480,7 +480,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
         if ( itl != loop_sounds.end() ) {
             // unused and free
             if ( 0 == vol || conf.SoundVolume() == 0 ) {
-                if ( Mixer::isPlaying( ( *itl ).channel ) ) {
+                if ( Mixer::isPlaying( ( *itl ).channel, true ) ) {
                     Mixer::Pause( ( *itl ).channel );
                     Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
                     Mixer::Stop( ( *itl ).channel );
@@ -488,7 +488,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
                 ( *itl ).sound = M82::UNKNOWN;
             }
             // used and set vols
-            else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
+            else if ( Mixer::isPlaying( ( *itl ).channel, true ) ) {
                 Mixer::Pause( ( *itl ).channel );
                 Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
                 Mixer::Resume( ( *itl ).channel );

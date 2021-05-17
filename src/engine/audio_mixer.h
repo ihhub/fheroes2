@@ -51,7 +51,7 @@ namespace Mixer
     void Stop( int ch = -1 );
     void Reset( void );
 
-    u8 isPlaying( int );
+    u8 isPlaying( int channel, bool checkVolume = false );
     u8 isPaused( int );
     bool isValid( void );
 

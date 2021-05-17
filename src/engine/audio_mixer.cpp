@@ -248,9 +248,9 @@ void Mixer::Reset( void )
     Mix_HaltChannel( -1 );
 }
 
-u8 Mixer::isPlaying( int channel )
+u8 Mixer::isPlaying( int channel, bool checkVolume /* = false */ )
 {
-    return ( Mix_Volume( channel, -1 ) > 0 ) ? Mix_Playing( channel ) : 0;
+    return ( checkVolume ? Mix_Volume( channel, -1 ) > 0 : true ) ? Mix_Playing( channel ) : 0;
 }
 
 u8 Mixer::isPaused( int channel )
