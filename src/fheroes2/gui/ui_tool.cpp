@@ -117,8 +117,6 @@ namespace fheroes2
         , _isHidden( false )
     {}
 
-    MovableSprite::~MovableSprite() {}
-
     MovableSprite & MovableSprite::operator=( const Sprite & sprite )
     {
         Sprite::operator=( sprite );
@@ -311,47 +309,38 @@ namespace fheroes2
         Display & display = Display::instance();
         const Image temp = display;
 
-        FadeDisplay( temp, Point( 0, 0 ), 5, delayMs );
+        FadeDisplay( temp, fheroes2::Point( 0, 0 ), 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }
 
-    void InvertedFade( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t endAlpha, int delayMs )
+    void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount )
     {
         Display & display = Display::instance();
-        Image shadow = top;
-        uint8_t alpha = 255;
-        const uint8_t step = 10;
-        const uint8_t min = step + 5;
-        const int stepDelay = ( delayMs * step ) / ( alpha - min );
+        const int stepDelay = delayMs / frameCount;
 
-        while ( alpha > min + endAlpha ) {
-            ApplyAlpha( top, shadow, alpha );
-            Copy( shadow, 0, 0, display, offset.x, offset.y, shadow.width(), shadow.height() );
-            Copy( middle, 0, 0, display, middleOffset.x, middleOffset.y, middle.width(), middle.height() );
+        for ( int i = 0; i < frameCount; ++i ) {
+            InvertedShadow( image, roi, excludedRoi, paletteId, 1 );
 
             display.render();
 
-            alpha -= step;
             delayforMs( stepDelay );
         }
     }
 
-    void InvertedFadeWithPalette( const Image & top, const Point & offset, const Image & middle, const Point & middleOffset, uint8_t paletteId, int delayMs,
-                                  int frameCount )
+    void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int paletteCount )
     {
-        Display & display = Display::instance();
-        Image shadow = top;
-        const int stepDelay = delayMs / frameCount;
+        // Identify 4 areas around excluded ROI to be used for palette application.
+        const Rect topRoi( roi.x, roi.y, roi.width, excludedRoi.y - roi.y );
+        const Rect bottomRoi( roi.x, excludedRoi.y + excludedRoi.height, roi.width, roi.y + roi.height - excludedRoi.y - excludedRoi.height );
+        const Rect leftRoi( roi.x, excludedRoi.y, excludedRoi.x - roi.x, excludedRoi.height );
+        const Rect rightRoi( excludedRoi.x + excludedRoi.width, excludedRoi.y, roi.x + roi.width - excludedRoi.x - excludedRoi.width, excludedRoi.height );
 
-        for ( int i = 0; i < frameCount; ++i ) {
-            ApplyPalette( shadow, paletteId );
-            Copy( shadow, 0, 0, display, offset.x, offset.y, shadow.width(), shadow.height() );
-            Copy( middle, 0, 0, display, middleOffset.x, middleOffset.y, middle.width(), middle.height() );
-
-            display.render();
-
-            delayforMs( stepDelay );
+        for ( int i = 0; i < paletteCount; ++i ) {
+            ApplyPalette( image, topRoi.x, topRoi.y, image, topRoi.x, topRoi.y, topRoi.width, topRoi.height, paletteId );
+            ApplyPalette( image, bottomRoi.x, bottomRoi.y, image, bottomRoi.x, bottomRoi.y, bottomRoi.width, bottomRoi.height, paletteId );
+            ApplyPalette( image, leftRoi.x, leftRoi.y, image, leftRoi.x, leftRoi.y, leftRoi.width, leftRoi.height, paletteId );
+            ApplyPalette( image, rightRoi.x, rightRoi.y, image, rightRoi.x, rightRoi.y, rightRoi.width, rightRoi.height, paletteId );
         }
     }
 

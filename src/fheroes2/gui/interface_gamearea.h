@@ -55,18 +55,18 @@ namespace Interface
     class GameArea
     {
     public:
-        GameArea( Basic & );
+        explicit GameArea( Basic & );
         void Build( void );
 
-        const Rect & GetROI() const // returns visible Game Area ROI in pixels
+        const fheroes2::Rect & GetROI() const // returns visible Game Area ROI in pixels
         {
             return _windowROI;
         }
 
         // Do NOT use this method directly in heavy computation loops
-        Rect GetVisibleTileROI( void ) const;
+        fheroes2::Rect GetVisibleTileROI( void ) const;
 
-        void ShiftCenter( const Point & offset ); // in pixels
+        void ShiftCenter( const fheroes2::Point & offset ); // in pixels
 
         int GetScrollCursor( void ) const;
 
@@ -78,20 +78,21 @@ namespace Interface
         void Scroll( void );
         void SetScroll( int );
 
-        void SetCenter( const Point & point );
+        void SetCenter( const fheroes2::Point & point );
 
         // Do not call this method unless it's needed for manual setup of the position
-        void SetCenterInPixels( const Point & point );
+        void SetCenterInPixels( const fheroes2::Point & point );
 
         void SetRedraw( void ) const;
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const Point & mp, bool flip = false, uint8_t alpha = 255 ) const;
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const Point & mp ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip = false,
+                         uint8_t alpha = 255 ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const fheroes2::Point & mp ) const;
 
         // Use this method to draw TIL images
-        void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const Point & mp ) const;
+        void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const fheroes2::Point & mp ) const;
 
         void SetUpdateCursor( void )
         {
@@ -100,33 +101,33 @@ namespace Interface
 
         void QueueEventProcessing( void );
 
-        Rect RectFixed( Point & dst, int rw, int rh ) const;
+        fheroes2::Rect RectFixed( fheroes2::Point & dst, int rw, int rh ) const;
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( int32_t index );
 
-        int32_t GetValidTileIdFromPoint( const Point & point ) const; // returns -1 in case of invalid index (out of World Map)
-        Point GetRelativeTilePosition( const Point & tileId ) const; // in relation to screen
+        int32_t GetValidTileIdFromPoint( const fheroes2::Point & point ) const; // returns -1 in case of invalid index (out of World Map)
+        fheroes2::Point GetRelativeTilePosition( const fheroes2::Point & tileId ) const; // in relation to screen
 
         void ResetCursorPosition()
         {
             _prevIndexPos = -1;
         }
 
-        void SetAreaPosition( s32, s32, u32, u32 );
+        void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
 
     private:
         Basic & interface;
 
-        Rect _windowROI; // visible to draw area of World Map in pixels
-        Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)
+        fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
+        fheroes2::Point _topLeftTileOffset; // offset of tiles to be drawn (from here we can find any tile ID)
 
         // boundaries for World Map
-        int16_t _minLeftOffset;
-        int16_t _maxLeftOffset;
-        int16_t _minTopOffset;
-        int16_t _maxTopOffset;
+        int32_t _minLeftOffset;
+        int32_t _maxLeftOffset;
+        int32_t _minTopOffset;
+        int32_t _maxTopOffset;
 
-        Size _visibleTileCount; // number of tiles to be drawn on screen
+        fheroes2::Size _visibleTileCount; // number of tiles to be drawn on screen
 
         int32_t _prevIndexPos;
         int scrollDirection;
@@ -134,9 +135,9 @@ namespace Interface
 
         fheroes2::Time scrollTime;
 
-        Point _middlePoint() const; // returns middle point of window ROI
-        Point _getStartTileId() const;
-        void _setCenterToTile( const Point & tile ); // set center to the middle of tile (input is tile ID)
+        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
+        fheroes2::Point _getStartTileId() const;
+        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
     };
 }
 

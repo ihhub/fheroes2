@@ -46,7 +46,8 @@ struct smk_huff16_t
 /** safe build with built-in error jump */
 #define smk_huff8_build_rec(bs,p) \
 { \
-	if (!(p = _smk_huff8_build_rec(bs))) \
+    p = _smk_huff8_build_rec(bs); \
+	if (!p) \
 	{ \
 		fprintf(stderr, "libsmacker::smk_huff8_build_rec(" #bs ", " #p ") - ERROR (file: %s, line: %lu)\n", __FILE__, (unsigned long)__LINE__); \
 		goto error; \
@@ -193,7 +194,8 @@ error: ;
 /* safe bigtree build with built-in error jump */
 #define smk_huff16_build_rec(bs,cache,low8,hi8,p) \
 { \
-	if (!(p = _smk_huff16_build_rec(bs, cache, low8, hi8))) \
+    p = _smk_huff16_build_rec(bs, cache, low8, hi8); \
+	if (!p) \
 	{ \
 		fprintf(stderr, "libsmacker::smk_huff16_build_rec(" #bs ", " #cache ", " #low8 ", " #hi8 ", " #p ") - ERROR (file: %s, line: %lu)\n", __FILE__, (unsigned long)__LINE__); \
 		goto error; \

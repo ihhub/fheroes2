@@ -38,23 +38,24 @@ namespace Battle
         CAT_TOWER1 = 5,
         CAT_TOWER2 = 6,
         CAT_BRIDGE = 7,
-        CAT_CENTRAL_TOWER = 8,
-        CAT_MISS = 9
+        CAT_CENTRAL_TOWER = 8
     };
 
     class Catapult
     {
     public:
-        Catapult( const HeroBase & );
+        explicit Catapult( const HeroBase & hero );
 
-        static Point GetTargetPosition( int );
+        static fheroes2::Point GetTargetPosition( int target, bool hit );
 
         u32 GetShots( void ) const
         {
             return catShots;
         }
+
         int GetTarget( const std::vector<u32> & ) const;
         u32 GetDamage() const;
+        bool IsNextShotHit() const;
 
     private:
         u32 catShots;

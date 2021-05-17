@@ -24,10 +24,9 @@
 
 #include "direction.h"
 #include "gamedefs.h"
+#include "math_base.h"
 
 #define TILEWIDTH 32
-
-struct Point;
 
 class MapsIndexes : public std::vector<s32>
 {};
@@ -53,24 +52,21 @@ namespace Maps
     bool isValidDirection( s32, int direct );
 
     bool isValidAbsIndex( s32 );
-    bool isValidAbsPoint( const Point & pt );
     bool isValidAbsPoint( s32 x, s32 y );
 
-    Point GetPoint( s32 );
+    fheroes2::Point GetPoint( const int32_t index );
 
-    s32 GetIndexFromAbsPoint( const Point & mp );
+    s32 GetIndexFromAbsPoint( const fheroes2::Point & mp );
     s32 GetIndexFromAbsPoint( s32 px, s32 py );
 
     Indexes GetAroundIndexes( s32 );
     Indexes GetAroundIndexes( s32, int dist, bool sort = false ); // sorting distance
-    Indexes GetDistanceIndexes( s32 center, int dist );
 
     Indexes ScanAroundObject( s32, int obj );
     Indexes ScanAroundObject( s32, u32 dist, int obj );
 
     Indexes GetTilesUnderProtection( s32 );
     bool TileIsUnderProtection( s32 );
-    bool IsNearTiles( s32, s32 );
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
     Indexes GetObjectPositions( s32, int obj, bool ignoreHeroes );
@@ -81,8 +77,8 @@ namespace Maps
     void ClearFog( s32, int scoute, int color );
     u32 GetApproximateDistance( s32, s32 );
 
-    void UpdateCastleSprite( const Point & center, int race, bool isCastle = false, bool isRandom = false );
-    void MinimizeAreaForCastle( const Point & );
+    void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
+    void MinimizeAreaForCastle( const fheroes2::Point & );
 }
 
 #endif

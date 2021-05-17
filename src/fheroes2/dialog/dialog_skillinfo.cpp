@@ -45,6 +45,10 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     // cursor
     Cursor & cursor = Cursor::Get();
 
+    const bool savedCursorVisibility = cursor.isVisible();
+    const int savedCursorTheme = cursor.Themes();
+
+    cursor.Hide();
     cursor.SetThemes( cursor.POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
@@ -94,8 +98,11 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
         button.reset( new fheroes2::Button( pt.x, pt.y, system, 1, 2 ) );
     }
 
-    if ( button )
+    if ( button ) {
         button->draw();
+
+        cursor.Show();
+    }
 
     display.render();
 
@@ -118,6 +125,13 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
         if ( HotKeyCloseWindow ) {
             break;
         }
+    }
+
+    cursor.Hide();
+    cursor.SetThemes( savedCursorTheme );
+
+    if ( savedCursorVisibility ) {
+        cursor.Show();
     }
 }
 

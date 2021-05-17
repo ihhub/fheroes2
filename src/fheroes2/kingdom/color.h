@@ -69,7 +69,7 @@ namespace Color
 class Colors : public std::vector<int>
 {
 public:
-    Colors( int = Color::ALL );
+    explicit Colors( int = Color::ALL );
 
     std::string String( void ) const;
 };
@@ -84,11 +84,10 @@ class ColorBase
     friend StreamBase & operator>>( StreamBase &, ColorBase & );
 
 public:
-    ColorBase( int col = Color::NONE )
+    explicit ColorBase( int col = Color::NONE )
         : color( col )
     {}
 
-    bool operator==( int ) const;
     bool isFriends( int ) const;
     void SetColor( int );
 

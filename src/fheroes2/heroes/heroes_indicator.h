@@ -39,15 +39,15 @@ class Heroes;
 class HeroesIndicator
 {
 public:
-    HeroesIndicator( const Heroes * h = nullptr );
+    explicit HeroesIndicator( const Heroes * h = nullptr );
 
-    const Rect & GetArea( void ) const;
-    void SetPos( const Point & );
+    const fheroes2::Rect & GetArea( void ) const;
+    void SetPos( const fheroes2::Point & );
     void SetHero( const Heroes * hero );
 
 protected:
     const Heroes * hero;
-    Rect area;
+    fheroes2::Rect area;
     fheroes2::ImageRestorer back;
     std::string descriptions;
 };
@@ -55,7 +55,7 @@ protected:
 class LuckIndicator : public HeroesIndicator
 {
 public:
-    LuckIndicator( const Heroes * h = nullptr );
+    explicit LuckIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( const LuckIndicator & );
@@ -67,7 +67,7 @@ private:
 class MoraleIndicator : public HeroesIndicator
 {
 public:
-    MoraleIndicator( const Heroes * h = nullptr );
+    explicit MoraleIndicator( const Heroes * h = nullptr );
 
     void Redraw( void );
     static void QueueEventProcessing( const MoraleIndicator & );
@@ -79,19 +79,19 @@ private:
 class ExperienceIndicator : public HeroesIndicator
 {
 public:
-    ExperienceIndicator( const Heroes * h = nullptr );
+    explicit ExperienceIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 class SpellPointsIndicator : public HeroesIndicator
 {
 public:
-    SpellPointsIndicator( const Heroes * h = nullptr );
+    explicit SpellPointsIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
-    void QueueEventProcessing( void );
+    void Redraw( void ) const;
+    void QueueEventProcessing( void ) const;
 };
 
 #endif

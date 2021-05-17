@@ -52,12 +52,12 @@ bool Troop::isMonster( int mons ) const
 
 Monster Troop::operator()( void ) const
 {
-    return *this;
+    return Monster( id );
 }
 
 Monster Troop::GetMonster( void ) const
 {
-    return *this;
+    return Monster( id );
 }
 
 void Troop::Set( const Troop & t )
@@ -196,12 +196,6 @@ ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     : Troop( t )
     , army( a )
 {}
-
-ArmyTroop & ArmyTroop::operator=( const Troop & t )
-{
-    Set( t );
-    return *this;
-}
 
 u32 ArmyTroop::GetAttack( void ) const
 {

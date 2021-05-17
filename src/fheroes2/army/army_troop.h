@@ -83,22 +83,22 @@ StreamBase & operator>>( StreamBase &, Troop & );
 class ArmyTroop : public Troop
 {
 public:
-    ArmyTroop( const Army * );
+    explicit ArmyTroop( const Army * );
     ArmyTroop( const Army *, const Troop & );
 
-    ArmyTroop & operator=( const Troop & );
+    ArmyTroop & operator=( const Troop & ) = delete;
 
-    u32 GetAttack( void ) const;
-    u32 GetDefense( void ) const;
-    int GetColor( void ) const;
-    int GetMorale( void ) const;
-    int GetLuck( void ) const;
+    u32 GetAttack( void ) const override;
+    u32 GetDefense( void ) const override;
+    int GetColor( void ) const override;
+    int GetMorale( void ) const override;
+    int GetLuck( void ) const override;
 
     void SetArmy( const Army & );
     const Army * GetArmy( void ) const;
 
-    std::string GetAttackString( void ) const;
-    std::string GetDefenseString( void ) const;
+    std::string GetAttackString( void ) const override;
+    std::string GetDefenseString( void ) const override;
 
 protected:
     const Army * army;

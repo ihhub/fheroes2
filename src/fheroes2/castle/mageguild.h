@@ -32,7 +32,7 @@ class HeroBase;
 class MageGuild
 {
 public:
-    MageGuild(){};
+    MageGuild() = default;
 
     void initialize( int race, bool libraryCap );
     void educateHero( HeroBase & hero, int guildLevel, bool hasLibrary ) const;

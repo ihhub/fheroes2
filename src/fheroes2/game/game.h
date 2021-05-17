@@ -26,12 +26,17 @@
 #include <string>
 
 #include "gamedefs.h"
-#include "rect.h"
 #include "types.h"
 
 class Players;
 class Heroes;
 class Castle;
+
+namespace Campaign
+{
+    struct CampaignAwardData;
+    class CampaignSaveData;
+}
 
 namespace Game
 {
@@ -173,51 +178,6 @@ namespace Game
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
 
-    enum
-    {
-        SCROLL_DELAY,
-        MAIN_MENU_DELAY,
-        MAPS_DELAY,
-        CASTLE_TAVERN_DELAY,
-        CASTLE_AROUND_DELAY,
-        CASTLE_BUYHERO_DELAY,
-        CASTLE_BUILD_DELAY,
-        CASTLE_UNIT_DELAY,
-        HEROES_FADE_DELAY,
-        HEROES_PICKUP_DELAY,
-        PUZZLE_FADE_DELAY,
-        BATTLE_DIALOG_DELAY,
-        BATTLE_FRAME_DELAY,
-        BATTLE_MISSILE_DELAY,
-        BATTLE_SPELL_DELAY,
-        BATTLE_DISRUPTING_DELAY,
-        BATTLE_CATAPULT_DELAY,
-        BATTLE_CATAPULT2_DELAY,
-        BATTLE_CATAPULT3_DELAY,
-        BATTLE_BRIDGE_DELAY,
-        BATTLE_IDLE_DELAY,
-        BATTLE_OPPONENTS_DELAY,
-        BATTLE_FLAGS_DELAY,
-        BATTLE_POPUP_DELAY,
-        BATTLE_COLOR_CYCLE_DELAY,
-        BATTLE_SELECTED_UNIT_DELAY,
-        //
-        CURRENT_HERO_DELAY,
-        CURRENT_AI_DELAY,
-        CUSTOM_DELAY,
-        //
-        LAST_DELAY
-    };
-
-    bool AnimateCustomDelay( uint32_t delay );
-    bool AnimateInfrequentDelay( int );
-    void AnimateResetDelay( int );
-    void UpdateGameSpeed( void );
-
-    int HumanHeroAnimSkip();
-    int AIHeroAnimSkip();
-
-    uint32_t ApplyBattleSpeed( uint32_t delay );
     int MainMenu( bool isFirstGameRun );
     int NewGame( void );
     int LoadGame( void );
@@ -227,7 +187,6 @@ namespace Game
     int NewCampaign();
     int NewMulti( void );
     int NewHotSeat( void );
-    int NewNetwork( void );
     int NewBattleOnly( void );
     int LoadStandard( void );
     int LoadCampain( void );
@@ -262,7 +221,7 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.

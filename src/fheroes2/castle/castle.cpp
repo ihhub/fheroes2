@@ -56,7 +56,7 @@ Castle::Castle()
 }
 
 Castle::Castle( s32 cx, s32 cy, int rc )
-    : MapPosition( Point( cx, cy ) )
+    : MapPosition( fheroes2::Point( cx, cy ) )
     , race( rc )
     , building( 0 )
     , captain( *this )
@@ -325,7 +325,7 @@ void Castle::PostLoad( void )
     // remove tavern from necromancer castle
     if ( Race::NECR == race && ( building & BUILD_TAVERN ) ) {
         building &= ~BUILD_TAVERN;
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
             building |= BUILD_SHRINE;
     }
 
@@ -358,7 +358,7 @@ bool Castle::isCapital( void ) const
 
 u32 Castle::CountBuildings( void ) const
 {
-    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
+    const u32 tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
 
     return CountBits( building
                       & ( BUILD_THIEVESGUILD | tavern | BUILD_SHIPYARD | BUILD_WELL | BUILD_STATUE | BUILD_LEFTTURRET | BUILD_RIGHTTURRET | BUILD_MARKETPLACE | BUILD_WEL2
@@ -366,9 +366,9 @@ u32 Castle::CountBuildings( void ) const
                           | DWELLING_MONSTER4 | DWELLING_MONSTER5 | DWELLING_MONSTER6 ) );
 }
 
-bool Castle::isPosition( const Point & pt ) const
+bool Castle::isPosition( const fheroes2::Point & pt ) const
 {
-    const Point & mp = GetCenter();
+    const fheroes2::Point & mp = GetCenter();
 
     /*
               -
@@ -537,7 +537,7 @@ void Castle::ActionNewWeek( void )
                 if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
                     if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                        *dw += GetGrownWeekOf( mons );
+                        *dw += GetGrownWeekOf();
                         break;
                     }
                 }
@@ -900,7 +900,7 @@ const char * Castle::GetDescriptionBuilding( u32 build, int race )
     return desc_build[13];
 }
 
-bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg )
+bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 {
     const Kingdom & myKingdom = GetKingdom();
     if ( Modes( DISABLEHIRES ) || myKingdom.Modes( Kingdom::DISABLEHIRES ) ) {
@@ -1428,7 +1428,7 @@ int Castle::CheckBuyBuilding( u32 build ) const
             return BUILD_DISABLE;
         break;
     case BUILD_SHRINE:
-        if ( Race::NECR != GetRace() || !Settings::Get().PriceLoyaltyVersion() )
+        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() )
             return BUILD_DISABLE;
         break;
     case BUILD_TAVERN:
@@ -1594,7 +1594,7 @@ bool Castle::BuyBuilding( u32 build )
 }
 
 /* draw image castle to position */
-void Castle::DrawImageCastle( const Point & pt ) const
+void Castle::DrawImageCastle( const fheroes2::Point & pt ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::Tiles & tile = world.GetTiles( GetIndex() );
@@ -2460,7 +2460,7 @@ bool Castle::AllowBuyBoat( void ) const
     return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
-bool Castle::BuyBoat( void )
+bool Castle::BuyBoat( void ) const
 {
     if ( !AllowBuyBoat() )
         return false;
@@ -2511,11 +2511,6 @@ int Castle::GetControl( void ) const
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
-bool Castle::AllowBuild( void ) const
-{
-    return Modes( ALLOWBUILD );
-}
-
 bool Castle::isBuild( u32 bd ) const
 {
     return ( building & bd ) != 0;
@@ -2536,9 +2531,9 @@ u32 Castle::GetGrownWel2( void )
     return GameStatic::GetCastleGrownWel2();
 }
 
-u32 Castle::GetGrownWeekOf( const Monster & mons )
+u32 Castle::GetGrownWeekOf()
 {
-    return Settings::Get().ExtWorldNewVersionWeekOf() ? mons.GetGrown() : GameStatic::GetCastleGrownWeekOf();
+    return GameStatic::GetCastleGrownWeekOf();
 }
 
 u32 Castle::GetGrownMonthOf( void )
@@ -2604,12 +2599,6 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-Castle * VecCastles::Get( const Point & position ) const
-{
-    const_iterator it = std::find_if( begin(), end(), [&position]( const Castle * castle ) { return castle->isPosition( position ); } );
-    return end() != it ? *it : NULL;
-}
-
 Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
@@ -2635,30 +2624,85 @@ void VecCastles::ChangeColors( int col1, int col2 )
 AllCastles::AllCastles()
 {
     // reserve memory
-    reserve( MAXCASTLES );
+    _castles.reserve( MAXCASTLES );
 }
 
 AllCastles::~AllCastles()
 {
-    AllCastles::clear();
+    Clear();
 }
 
 void AllCastles::Init( void )
 {
-    if ( size() )
-        AllCastles::clear();
+    Clear();
 }
 
-void AllCastles::clear( void )
+void AllCastles::Clear( void )
 {
-    for ( iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         delete *it;
-    std::vector<Castle *>::clear();
+    _castles.clear();
+    _castleTiles.clear();
+}
+
+void AllCastles::AddCastle( Castle * castle )
+{
+    _castles.push_back( castle );
+
+    /* Register position of all castle elements on the map
+    Castle element positions are:
+                -
+               ---
+              -+++-
+              ++X++
+
+     where
+     X is the main castle position
+     + are tiles that are considered part of the castle for the Get() method
+     - are tiles where there is a castle sprite, but not used in the Get() method
+
+    */
+
+    static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
+
+    const size_t id = _castles.size() - 1;
+    fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
+    _castleTiles.emplace( temp, id );
+
+    temp.x -= 2;
+    _castleTiles.emplace( temp, id ); // (-2, 0)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (-1, 0)
+
+    --temp.y;
+    _castleTiles.emplace( temp, id ); // (-1, -1)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (0, -1)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+1, -1)
+
+    ++temp.y;
+    _castleTiles.emplace( temp, id ); // (+1, 0)
+
+    ++temp.x;
+    _castleTiles.emplace( temp, id ); // (+2, 0)
+}
+
+Castle * AllCastles::Get( const fheroes2::Point & position ) const
+{
+    auto iter = _castleTiles.find( position );
+    if ( iter == _castleTiles.end() )
+        return nullptr;
+
+    return _castles[iter->second];
 }
 
 void AllCastles::Scoute( int colors ) const
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
+    for ( auto it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
             ( *it )->Scoute();
 }
@@ -2699,7 +2743,7 @@ StreamBase & operator<<( StreamBase & msg, const VecCastles & castles )
 {
     msg << static_cast<u32>( castles.size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
+    for ( auto it = castles.begin(); it != castles.end(); ++it )
         msg << ( *it ? ( *it )->GetIndex() : static_cast<s32>( -1 ) );
 
     return msg;
@@ -2713,7 +2757,7 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
     castles.resize( size, NULL );
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
+    for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
         *it = ( index < 0 ? NULL : world.GetCastle( Maps::GetPoint( index ) ) );
     }
@@ -2723,25 +2767,25 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
 
 StreamBase & operator<<( StreamBase & msg, const AllCastles & castles )
 {
-    msg << static_cast<u32>( castles.size() );
+    msg << static_cast<u32>( castles.Size() );
 
-    for ( AllCastles::const_iterator it = castles.begin(); it != castles.end(); ++it )
-        msg << **it;
+    for ( const auto & castle : castles )
+        msg << *castle;
 
     return msg;
 }
 
 StreamBase & operator>>( StreamBase & msg, AllCastles & castles )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
-    castles.clear();
-    castles.resize( size, NULL );
+    castles.Clear();
 
-    for ( AllCastles::iterator it = castles.begin(); it != castles.end(); ++it ) {
-        *it = new Castle();
-        msg >> **it;
+    for ( uint32_t i = 0; i < size; ++i ) {
+        Castle * castle = new Castle();
+        msg >> *castle;
+        castles.AddCastle( castle );
     }
 
     return msg;
@@ -2757,7 +2801,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
 
         world.GetTiles( center.x, center.y ).SetHeroes( NULL );
 
-        Point position( heroes.Guard()->GetCenter() );
+        fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
         heroes.Guard()->SetCenter( position );
         heroes.Guard()->GetPath().Reset();
@@ -2777,7 +2821,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
 
         world.GetTiles( center.x, center.y ).SetHeroes( NULL );
 
-        Point position( heroes.Guard()->GetCenter() );
+        fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
         heroes.Guard()->SetCenter( position );
         heroes.Guard()->GetPath().Reset();
@@ -2786,7 +2830,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Guard()->ResetModes( Heroes::GUARDIAN );
         heroes.Swap();
 
-        Point position( heroes.Guest()->GetCenter() );
+        fheroes2::Point position( heroes.Guest()->GetCenter() );
         position.y += 1;
         heroes.Guest()->SetCenter( position );
         heroes.Guest()->GetPath().Reset();

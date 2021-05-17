@@ -21,7 +21,7 @@
 #pragma once
 
 #include <cmath>
-#include <stdint.h>
+#include <cstdint>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -40,7 +40,12 @@ namespace fheroes2
     template <typename _Type>
     struct PointBase2D
     {
-        PointBase2D( _Type _x = 0, _Type _y = 0 )
+        PointBase2D()
+            : x( 0 )
+            , y( 0 )
+        {}
+
+        PointBase2D( _Type _x, _Type _y )
             : x( _x )
             , y( _y )
         {}
@@ -84,6 +89,11 @@ namespace fheroes2
             return PointBase2D( value * x, value * y );
         }
 
+        bool operator<( const PointBase2D & point ) const
+        {
+            return x == point.x ? y < point.y : x < point.x;
+        }
+
         _Type x;
         _Type y;
     };
@@ -97,7 +107,12 @@ namespace fheroes2
     template <typename _Type>
     struct SizeBase2D
     {
-        SizeBase2D( _Type _width = 0, _Type _height = 0 )
+        SizeBase2D()
+            : width( 0 )
+            , height( 0 )
+        {}
+
+        SizeBase2D( _Type _width, _Type _height )
             : width( _width )
             , height( _height )
         {}
@@ -153,7 +168,14 @@ namespace fheroes2
     template <typename _TypePoint, typename _TypeSize>
     struct RectBase2D
     {
-        RectBase2D( _TypePoint _x = 0, _TypePoint _y = 0, _TypeSize _width = 0, _TypeSize _height = 0 )
+        RectBase2D()
+            : x( 0 )
+            , y( 0 )
+            , width( 0 )
+            , height( 0 )
+        {}
+
+        RectBase2D( _TypePoint _x, _TypePoint _y, _TypeSize _width, _TypeSize _height )
             : x( _x )
             , y( _y )
             , width( _width )
@@ -242,6 +264,11 @@ namespace fheroes2
             }
 
             return output;
+        }
+
+        PointBase2D<_TypePoint> getPosition() const
+        {
+            return PointBase2D<_TypePoint>( x, y );
         }
 
         _TypePoint x;

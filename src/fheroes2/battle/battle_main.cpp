@@ -213,6 +213,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     if ( hero_wins && hero_wins->GetLevelSkill( Skill::Secondary::NECROMANCY ) )
         NecromancySkillAction( *hero_wins, result.killed, hero_wins->isControlHuman(), *arena );
 
+    if ( hero_wins ) {
+        Heroes * kingdomHero = dynamic_cast<Heroes *>( hero_wins );
+
+        if ( kingdomHero ) {
+            Kingdom & kingdom = kingdomHero->GetKingdom();
+            kingdom.SetLastBattleWinHero( *kingdomHero );
+        }
+    }
+
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
 

@@ -102,7 +102,7 @@ void Battle::Bridge::SetDestroy( void )
     Board::GetCell( GATES_CELL )->SetObject( 0 );
 }
 
-void Battle::Bridge::SetPassable( const Unit & b )
+void Battle::Bridge::SetPassable( const Unit & b ) const
 {
     if ( isPassable( b ) ) {
         Board::GetCell( GATES_CELL )->SetObject( 0 );
@@ -123,9 +123,4 @@ void Battle::Bridge::Action( const Unit & b, s32 dst )
         Arena::GetInterface()->RedrawBridgeAnimation( action_down );
 
     SetDown( action_down );
-}
-
-bool Battle::Bridge::isMoatCell( int cellId ) const
-{
-    return cellId == MOAT_CELL;
 }

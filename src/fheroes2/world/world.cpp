@@ -26,6 +26,7 @@
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
@@ -86,25 +87,13 @@ MapObjectSimple * MapObjects::get( u32 uid )
     return it != end() ? ( *it ).second : NULL;
 }
 
-std::list<MapObjectSimple *> MapObjects::get( const Point & pos )
+std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res;
     for ( iterator it = begin(); it != end(); ++it )
         if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
             res.push_back( ( *it ).second );
     return res;
-}
-
-void MapObjects::remove( const Point & pos )
-{
-    std::vector<u32> uids;
-
-    for ( iterator it = begin(); it != end(); ++it )
-        if ( ( *it ).second && ( *it ).second->isPosition( pos ) )
-            uids.push_back( ( *it ).second->GetUID() );
-
-    for ( std::vector<u32>::const_iterator it = uids.begin(); it != uids.end(); ++it )
-        remove( *it );
 }
 
 void MapObjects::remove( u32 uid )
@@ -257,13 +246,14 @@ void World::Defaults( void )
     // playing kingdom
     vec_kingdoms.Init();
 
+    // Map seed is random and persisted on saves
+    // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
+    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
+
     // initialize all heroes
     vec_heroes.Init();
 
     vec_castles.Init();
-
-    // map seed is random and persisted on saves
-    _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 }
 
 void World::Reset( void )
@@ -281,7 +271,7 @@ void World::Reset( void )
     vec_rumors.clear();
 
     // castles
-    vec_castles.clear();
+    vec_castles.Clear();
 
     // heroes
     vec_heroes.clear();
@@ -307,40 +297,40 @@ void World::Reset( void )
 }
 
 /* new maps */
-void World::NewMaps( u32 sw, u32 sh )
+void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
     Defaults();
 
-    Size::w = sw;
-    Size::h = sh;
+    fheroes2::Size::width = sw;
+    fheroes2::Size::height = sh;
 
-    vec_tiles.resize( static_cast<size_t>( Size::w ) * Size::h );
+    vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
 
     // init all tiles
-    for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it ) {
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         MP2::mp2tile_t mp2tile;
 
-        mp2tile.tileIndex = Rand::Get( 16, 19 ); // index sprite ground, see ground32.til
+        mp2tile.tileIndex = static_cast<uint16_t>( Rand::Get( 16, 19 ) ); // index sprite ground, see ground32.til
         mp2tile.objectName1 = 0; // object sprite level 1
         mp2tile.indexName1 = 0xff; // index sprite level 1
         mp2tile.quantity1 = 0;
         mp2tile.quantity2 = 0;
         mp2tile.objectName2 = 0; // object sprite level 2
         mp2tile.indexName2 = 0xff; // index sprite level 2
-        mp2tile.flags = Rand::Get( 0, 3 ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
+        mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
         mp2tile.indexAddon = 0;
         mp2tile.editorObjectLink = 0;
         mp2tile.editorObjectOverlay = 0;
 
-        ( *it ).Init( std::distance( vec_tiles.begin(), it ), mp2tile );
+        vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
 
     // reset current maps info
     Maps::FileInfo fi;
-    fi.size_w = w();
-    fi.size_h = h();
+    fi.size_w = static_cast<uint16_t>( width );
+    fi.size_h = static_cast<uint16_t>( height );
 
     Settings::Get().SetCurrentFileInfo( fi );
 }
@@ -350,14 +340,22 @@ void World::InitKingdoms( void )
     vec_kingdoms.Init();
 }
 
-const Maps::Tiles & World::GetTiles( u32 ax, u32 ay ) const
+const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
-Maps::Tiles & World::GetTiles( u32 ax, u32 ay )
+Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
 {
-    return GetTiles( ay * w() + ax );
+#ifdef WITH_DEBUG
+    return vec_tiles.at( y * width + x );
+#else
+    return vec_tiles[y * width + x];
+#endif
 }
 
 const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
@@ -395,12 +393,12 @@ const Kingdom & World::GetKingdom( int color ) const
 }
 
 /* get castle from index maps */
-Castle * World::GetCastle( const Point & center )
+Castle * World::GetCastle( const fheroes2::Point & center )
 {
     return vec_castles.Get( center );
 }
 
-const Castle * World::GetCastle( const Point & center ) const
+const Castle * World::GetCastle( const fheroes2::Point & center ) const
 {
     return vec_castles.Get( center );
 }
@@ -416,12 +414,12 @@ const Heroes * World::GetHeroes( int id ) const
 }
 
 /* get heroes from index maps */
-Heroes * World::GetHeroes( const Point & center )
+Heroes * World::GetHeroes( const fheroes2::Point & center )
 {
     return vec_heroes.Get( center );
 }
 
-const Heroes * World::GetHeroes( const Point & center ) const
+const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
 {
     return vec_heroes.Get( center );
 }
@@ -429,6 +427,11 @@ const Heroes * World::GetHeroes( const Point & center ) const
 Heroes * World::GetFreemanHeroes( int race ) const
 {
     return vec_heroes.GetFreeman( race );
+}
+
+Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
+{
+    return vec_heroes.GetFreemanSpecial( heroID );
 }
 
 Heroes * World::FromJailHeroes( s32 index )
@@ -560,6 +563,8 @@ void World::NewWeek( void )
     else
         week_next = Week( type );
 
+    week_current = week_next;
+
     if ( 1 < week ) {
         // update week object
         for ( MapsTiles::iterator it = vec_tiles.begin(); it != vec_tiles.end(); ++it )
@@ -567,9 +572,9 @@ void World::NewWeek( void )
                 ( *it ).QuantityUpdate( false );
 
         // update gray towns
-        for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-            if ( ( *it )->GetColor() == Color::NONE )
-                ( *it )->ActionNewWeek();
+        for ( auto & castle : vec_castles )
+            if ( castle->GetColor() == Color::NONE )
+                castle->ActionNewWeek();
     }
 
     // add events
@@ -593,9 +598,9 @@ void World::NewMonth( void )
         MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
 
     // update gray towns
-    for ( AllCastles::iterator it = vec_castles.begin(); it != vec_castles.end(); ++it )
-        if ( ( *it )->GetColor() == Color::NONE )
-            ( *it )->ActionNewMonth();
+    for ( auto & castle : vec_castles )
+        if ( castle->GetColor() == Color::NONE )
+            castle->ActionNewMonth();
 }
 
 void World::MonthOfMonstersAction( const Monster & mons )
@@ -634,7 +639,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 
     const int32_t area = 12;
-    const int32_t maxc = ( w() / area ) * ( h() / area );
+    const int32_t maxc = ( width / area ) * ( height / area );
     Rand::Shuffle( tiles );
     if ( tiles.size() > static_cast<size_t>( maxc ) )
         tiles.resize( maxc );
@@ -803,7 +808,7 @@ const UltimateArtifact & World::GetUltimateArtifact( void ) const
     return ultimate_artifact;
 }
 
-bool World::DiggingForUltimateArtifact( const Point & center )
+bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
@@ -883,7 +888,7 @@ void World::ActionForMagellanMaps( int color )
             ( *it ).ClearFog( color );
 }
 
-MapEvent * World::GetMapEvent( const Point & pos )
+MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
     return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
@@ -997,9 +1002,31 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
     const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int mapWinCondition = conf.ConditionWins();
+
+    if ( conf.isCampaignGameType() ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+            if ( victoryCondition == Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY ) {
+                const bool visited = kingdom.isVisited( MP2::OBJ_DRAGONCITY ) || kingdom.isVisited( MP2::OBJN_DRAGONCITY );
+                if ( visited ) {
+                    return GameOver::WINS_SIDE;
+                }
+                else {
+                    return GameOver::COND_NONE;
+                }
+            }
+        }
+    }
 
     for ( u32 ii = 0; wins[ii]; ++ii )
-        if ( ( conf.ConditionWins() & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
+        if ( ( mapWinCondition & wins[ii] ) && KingdomIsWins( kingdom, wins[ii] ) )
             return wins[ii];
 
     return GameOver::COND_NONE;
@@ -1022,6 +1049,33 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
     }
 
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+
+    if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
+        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+        const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+        const int scenarioId = campaignData.getCurrentScenarioID();
+        assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+        if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+            const Campaign::ScenarioLossCondition lossCondition = scenarios[scenarioId].getLossCondition();
+            if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
+                const KingdomCastles & castles = kingdom.GetCastles();
+                bool hasSorceressVillage = false;
+
+                for ( size_t i = 0; i < castles.size(); ++i ) {
+                    if ( castles[i]->isCastle() || castles[i]->GetRace() != Race::SORC )
+                        continue;
+
+                    hasSorceressVillage = true;
+                    break;
+                }
+
+                if ( !hasSorceressVillage )
+                    return GameOver::LOSS_ALL;
+            }
+        }
+    }
 
     for ( u32 ii = 0; loss[ii]; ++ii )
         if ( ( conf.ConditionLoss() & loss[ii] ) && KingdomIsLoss( kingdom, loss[ii] ) )
@@ -1190,18 +1244,27 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 
 StreamBase & operator<<( StreamBase & msg, const World & w )
 {
-    const Size & sz = w;
+    // TODO: before 0.9.4 Size was uint16_t type
+    const uint16_t width = static_cast<uint16_t>( w.width );
+    const uint16_t height = static_cast<uint16_t>( w.height );
 
-    return msg << sz << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj << w.ultimate_artifact
-               << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
+    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
+               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
+               << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
 {
-    Size & sz = w;
+    // TODO: before 0.9.4 Size was uint16_t type
+    uint16_t width = 0;
+    uint16_t height = 0;
 
-    msg >> sz >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day
-        >> w.week >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
+    msg >> width >> height;
+    w.width = width;
+    w.height = height;
+
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
 
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
         msg >> w._seed;

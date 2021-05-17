@@ -52,7 +52,8 @@ struct hgs_t
 {
     hgs_t()
         : days( 0 )
-        , rating( 0 ){};
+        , rating( 0 )
+    {}
 
     bool operator==( const hgs_t & ) const;
 
@@ -86,7 +87,7 @@ bool RatingSort( const hgs_t & h1, const hgs_t & h2 )
 class HGSData
 {
 public:
-    HGSData() {}
+    HGSData() = default;
 
     bool Load( const std::string & );
     bool Save( const std::string & ) const;

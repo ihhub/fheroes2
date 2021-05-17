@@ -10,7 +10,7 @@ skip_commits:
 skip_tags: true
 
 # version format
-version: 0.9.2.{build}
+version: 0.9.3.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2015
@@ -42,8 +42,11 @@ clone_folder: C:\projects\fheroes2
 
 install:
   - cd C:\projects\fheroes2\script\windows
-  - if not exist C:\projects\packages call install_packages.bat
+  - if not exist C:\projects\fheroes2\VisualStudio\packages\installed call install_packages.bat
   - cd C:\projects\fheroes2
+
+init:
+  - git config --global core.autocrlf true
 
 build:
   project: fheroes2-vs2015.vcxproj
@@ -55,7 +58,8 @@ after_build:
   - cmd: 7z a fheroes2_windows_%platform%_%deploy_conf_name%.zip fheroes2.exe SDL*.dll lib*.dll zlib*.dll msvcp*.dll vcruntime*.dll
   - cmd: cd C:\projects\fheroes2
   - cmd: xcopy /Y /s /Q "doc\README.txt" "."
-  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip script\demo\demo_windows.bat LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: xcopy /Y /s /Q "script\demo\demo_windows.bat" "."
+  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat LICENSE fheroes2.key changelog.txt README.txt
 
 artifacts:
   - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).zip
@@ -76,7 +80,4 @@ deploy:
     branch: master
 
 cache:
-  - C:\projects\packages -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\sdl -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\sdl2 -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
-  - C:\projects\zlib -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
+  - C:\projects\fheroes2\VisualStudio\packages\installed -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat

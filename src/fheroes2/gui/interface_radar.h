@@ -34,19 +34,23 @@ namespace Interface
     class Radar : public BorderWindow
     {
     public:
-        Radar( Basic & );
+        explicit Radar( Basic & );
         Radar( const Radar & radar );
 
-        void SetPos( s32, s32 );
+        ~Radar() override = default;
+
+        Radar & operator=( const Radar & ) = delete;
+
+        void SetPos( s32, s32 ) override;
         void SetRedraw( void ) const;
         void Build( void );
         void Redraw();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
-        void RedrawCursor( const Rect * roiRectangle = nullptr );
+        void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
         void SetHide( bool );
         void ResetAreaSize( void );
         void QueueEventProcessing( void );
-        bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi );
+        bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
         static Radar MakeRadarViewWorld( const Radar & radar );
 
@@ -57,11 +61,11 @@ namespace Interface
             ViewWorld
         };
 
-        void SavePosition( void );
+        void SavePosition( void ) override;
         void Generate( void );
         void RedrawObjects( int color, ViewWorldMode flags ) const;
 
-        void ChangeAreaSize( const Size & );
+        void ChangeAreaSize( const fheroes2::Size & );
 
         RadarType radarType;
         Basic & interface;

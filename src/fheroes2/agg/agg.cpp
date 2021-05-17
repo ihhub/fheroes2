@@ -333,7 +333,7 @@ bool AGG::ReadDataDir( void )
         }
     }
 
-    conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
+    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
 
     return heroes2_agg.isGood();
 }
@@ -497,9 +497,9 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     // set volume loop sounds
-    for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
-        int vol = *itv;
-        int m82 = M82::GetLOOP00XX( std::distance( vols.begin(), itv ) );
+    for ( size_t i = 0; i < vols.size(); ++i ) {
+        int vol = vols[i];
+        int m82 = M82::GetLOOP00XX( i );
         if ( M82::UNKNOWN == m82 )
             continue;
 
@@ -608,7 +608,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         return;
     }
 
-    Game::SetCurrentMusic( mus );
     const std::string prefix_music( "music" );
     const MusicSource type = conf.MusicType();
 
@@ -641,6 +640,8 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         if ( filename.size() ) {
             Music::Play( filename, loop );
             isSongFound = true;
+
+            Game::SetCurrentMusic( mus );
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
@@ -648,6 +649,9 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         isSongFound = true;
+
+        Game::SetCurrentMusic( mus );
+
         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
@@ -666,8 +670,11 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         if ( XMI::UNKNOWN != xmi ) {
 #ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() )
+            if ( v.size() ) {
                 Music::Play( v, loop );
+
+                Game::SetCurrentMusic( mus );
+            }
 #else
             std::string mid = XMI::GetString( xmi );
             StringReplace( mid, ".XMI", ".MID" );
@@ -677,6 +684,8 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
                 SaveMemToFile( GetMID( xmi ), file );
 
             Music::Play( file, loop );
+
+            Game::SetCurrentMusic( mus );
 #endif
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
@@ -764,7 +773,7 @@ bool AGG::Init( void )
 
 #ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ) );
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
         display.fill( 0 );
         fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );

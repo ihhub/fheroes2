@@ -27,13 +27,20 @@
 #include "gamedefs.h"
 #include "serialize.h"
 
+enum class GameVersion : int
+{
+    SUCCESSION_WARS = 0,
+    PRICE_OF_LOYALTY = 1
+};
+
 namespace Maps
 {
-    class FileInfo
+    struct FileInfo
     {
-    public:
         FileInfo();
         FileInfo( const FileInfo & );
+
+        ~FileInfo() = default;
 
         FileInfo & operator=( const FileInfo & );
 
@@ -66,8 +73,8 @@ namespace Maps
         int WinsFindArtifactID( void ) const;
         bool WinsFindUltimateArtifact( void ) const;
         u32 WinsAccumulateGold( void ) const;
-        Point WinsMapsPositionObject( void ) const;
-        Point LossMapsPositionObject( void ) const;
+        fheroes2::Point WinsMapsPositionObject( void ) const;
+        fheroes2::Point LossMapsPositionObject( void ) const;
         u32 LossCountDays( void ) const;
 
         std::string String( void ) const;
@@ -101,11 +108,15 @@ namespace Maps
         u32 localtime;
 
         bool with_heroes;
+
+        GameVersion _version;
     };
 
     StreamBase & operator<<( StreamBase &, const FileInfo & );
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version );
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 

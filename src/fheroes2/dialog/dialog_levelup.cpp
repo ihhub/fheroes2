@@ -116,7 +116,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
 
-    const Rect & boxArea = box.GetArea();
+    const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
 
     if ( header.size() )
@@ -159,9 +159,10 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().height - 36;
 
     const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
 
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
+    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
+    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
@@ -197,13 +198,8 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         else if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
-            const bool noDismiss = hero.Modes( Heroes::NOTDISMISS );
-            hero.SetModes( Heroes::NOTDISMISS );
-            hero.OpenDialog( false, true );
+            hero.OpenDialog( false, true, true, true );
 
-            if ( !noDismiss ) {
-                hero.ResetModes( Heroes::NOTDISMISS );
-            }
             cursor.Show();
             display.render();
         }
