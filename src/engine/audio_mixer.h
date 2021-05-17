@@ -57,6 +57,9 @@ namespace Mixer
 
     void Reduce( void );
     void Enhance( void );
+
+    void Mute();
+    void Unmute();
 }
 
 #endif

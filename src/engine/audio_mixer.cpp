@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <numeric>
 
 #include "audio.h"
 #include "audio_cdrom.h"
@@ -33,7 +34,11 @@ namespace Mixer
 {
     void Init( void );
     void Quit( void );
+
     bool valid = false;
+
+    bool muted = false;
+    std::vector<int> savedVolumes;
 }
 
 bool Mixer::isValid( void )
@@ -98,8 +103,21 @@ uint8_t Mixer::GetChannels()
 
 void Mixer::SetChannels( u8 num )
 {
-    Mix_AllocateChannels( num );
-    Mix_ReserveChannels( 1 );
+    if ( !valid ) {
+        return;
+    }
+
+    const size_t channelsCount = static_cast<size_t>( Mix_AllocateChannels( num ) );
+
+    if ( channelsCount > 0 ) {
+        Mix_ReserveChannels( 1 );
+    }
+
+    if ( muted ) {
+        savedVolumes.resize( channelsCount, MIX_MAX_VOLUME );
+
+        Mix_Volume( -1, 0 );
+    }
 }
 
 void Mixer::FreeChunk( chunk_t * sample )
@@ -163,9 +181,46 @@ u16 Mixer::MaxVolume( void )
 
 u16 Mixer::Volume( int channel, int16_t vol )
 {
-    if ( !valid )
+    if ( !valid ) {
         return 0;
-    return Mix_Volume( channel, vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol );
+    }
+
+    if ( vol > MIX_MAX_VOLUME ) {
+        vol = MIX_MAX_VOLUME;
+    }
+
+    if ( muted ) {
+        if ( channel < 0 ) {
+            if ( savedVolumes.empty() ) {
+                return 0;
+            }
+
+            // return the average volume
+            const int prevVolume = std::accumulate( savedVolumes.begin(), savedVolumes.end(), 0 ) / savedVolumes.size();
+
+            if ( vol >= 0 ) {
+                std::fill( savedVolumes.begin(), savedVolumes.end(), vol );
+            }
+
+            return prevVolume;
+        }
+
+        const size_t channelNum = static_cast<size_t>( channel );
+
+        if ( channelNum >= savedVolumes.size() ) {
+            return 0;
+        }
+
+        const int prevVolume = savedVolumes[channelNum];
+
+        if ( vol >= 0 ) {
+            savedVolumes[channelNum] = vol;
+        }
+
+        return prevVolume;
+    }
+
+    return Mix_Volume( channel, vol );
 }
 
 void Mixer::Pause( int channel )
@@ -206,3 +261,35 @@ u8 Mixer::isPaused( int channel )
 void Mixer::Reduce( void ) {}
 
 void Mixer::Enhance( void ) {}
+
+void Mixer::Mute()
+{
+    if ( muted || !valid ) {
+        return;
+    }
+
+    muted = true;
+
+    const size_t channelsCount = static_cast<size_t>( Mix_AllocateChannels( -1 ) );
+
+    savedVolumes.resize( channelsCount );
+
+    for ( size_t channel = 0; channel < channelsCount; ++channel ) {
+        savedVolumes[channel] = Mix_Volume( channel, 0 );
+    }
+}
+
+void Mixer::Unmute()
+{
+    if ( !muted || !valid ) {
+        return;
+    }
+
+    muted = false;
+
+    const size_t channelsCount = std::min( static_cast<size_t>( Mix_AllocateChannels( -1 ) ), savedVolumes.size() );
+
+    for ( size_t channel = 0; channel < channelsCount; ++channel ) {
+        Mix_Volume( channel, savedVolumes[channel] );
+    }
+}

@@ -331,11 +331,6 @@ private:
 
     int loop_delay;
 
-    // These members are used for restoring music and sounds when an user reopens the window
-    bool _isHiddenWindow;
-    uint16_t _musicVolume;
-    std::vector<uint16_t> _soundVolumes;
-
     enum
     {
         CONTROLLER_L_DEADZONE = 3000,

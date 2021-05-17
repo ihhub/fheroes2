@@ -227,8 +227,6 @@ LocalEvent::LocalEvent()
     , redraw_cursor_func( NULL )
     , keyboard_filter_func( NULL )
     , loop_delay( 1 )
-    , _isHiddenWindow( false )
-    , _musicVolume( 0 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1241,33 +1239,14 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
 void LocalEvent::StopSounds()
 {
-    _isHiddenWindow = true;
-    _musicVolume = Music::Volume( 0 );
-
-    const size_t channelsCount = static_cast<size_t>( Mixer::GetChannels() );
-
-    _soundVolumes.resize( channelsCount );
-
-    for ( size_t channel = 0; channel < channelsCount; channel++ ) {
-        _soundVolumes[channel] = Mixer::Volume( channel, -1 );
-
-        Mixer::Volume( channel, 0 );
-    }
+    Music::Mute();
+    Mixer::Mute();
 }
 
 void LocalEvent::ResumeSounds()
 {
-    if ( _isHiddenWindow ) {
-        _isHiddenWindow = false;
-
-        Music::Volume( _musicVolume );
-
-        const size_t channelsCount = std::min( static_cast<size_t>( Mixer::GetChannels() ), _soundVolumes.size() );
-
-        for ( size_t channel = 0; channel < channelsCount; channel++ ) {
-            Mixer::Volume( channel, _soundVolumes[channel] );
-        }
-    }
+    Music::Unmute();
+    Mixer::Unmute();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

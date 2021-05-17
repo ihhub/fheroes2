@@ -37,8 +37,12 @@ namespace Music
     void Play( Mix_Music * mix, /*u32 id,*/ bool loop );
 
     Mix_Music * music = NULL;
+
     int fadein = 0;
     int fadeout = 0;
+
+    bool muted = false;
+    int savedVolume = 0;
 }
 
 void Music::Play( Mix_Music * mix, /*u32 id,*/ bool loop )
@@ -95,7 +99,25 @@ void Music::SetFadeOut( int f )
 
 u16 Music::Volume( int16_t vol )
 {
-    return Mixer::isValid() ? ( Mix_VolumeMusic( vol > MIX_MAX_VOLUME ? MIX_MAX_VOLUME : vol ) ) : 0;
+    if ( !Mixer::isValid() ) {
+        return 0;
+    }
+
+    if ( vol > MIX_MAX_VOLUME ) {
+        vol = MIX_MAX_VOLUME;
+    }
+
+    if ( muted ) {
+        const int prevVolume = savedVolume;
+
+        if ( vol >= 0 ) {
+            savedVolume = vol;
+        }
+
+        return prevVolume;
+    }
+
+    return Mix_VolumeMusic( vol );
 }
 
 void Music::Pause( void )
@@ -135,3 +157,25 @@ bool Music::isPaused( void )
 }
 
 void Music::SetExtCommand( const std::string & ) {}
+
+void Music::Mute()
+{
+    if ( muted || !Mixer::isValid() ) {
+        return;
+    }
+
+    muted = true;
+
+    savedVolume = Mix_VolumeMusic( 0 );
+}
+
+void Music::Unmute()
+{
+    if ( !muted || !Mixer::isValid() ) {
+        return;
+    }
+
+    muted = false;
+
+    Mix_VolumeMusic( savedVolume );
+}
