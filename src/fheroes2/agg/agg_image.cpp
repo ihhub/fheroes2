@@ -48,9 +48,9 @@ namespace
         return digit;
     }
 
-    fheroes2::Sprite addDigit( const fheroes2::Sprite & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
+    fheroes2::Image addDigit( const fheroes2::Sprite & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
     {
-        fheroes2::Sprite combined( original.width() + digit.width() + offset.x, original.height() + ( offset.y < 0 ? 0 : offset.y ) );
+        fheroes2::Image combined( original.width() + digit.width() + offset.x, original.height() + ( offset.y < 0 ? 0 : offset.y ) );
         combined.reset();
 
         fheroes2::Copy( original, 0, 0, combined, 0, 0, original.width(), original.height() );
