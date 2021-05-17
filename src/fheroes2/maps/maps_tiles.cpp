@@ -723,7 +723,7 @@ bool Maps::Tiles::isShadowSprite( const int icn, const uint8_t icnIndex )
 
 bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex )
 {
-    return Tiles::isShadowSprite( MP2::GetICNObject( tileset ), icnIndex );
+    return isShadowSprite( MP2::GetICNObject( tileset ), icnIndex );
 }
 
 void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
@@ -1117,7 +1117,7 @@ bool isImpassableIfOverlayed( uint8_t objectTileset, uint8_t icnIndex )
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
     const int icn = MP2::GetICNObject( ta.object );
-    return Maps::Tiles::isShadowSprite( ta.object, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
+    return Maps::Tiles::isShadowSprite( icn, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
