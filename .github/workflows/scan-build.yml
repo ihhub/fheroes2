@@ -22,3 +22,4 @@ jobs:
       env:
         WITHOUT_XML: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
+        WITH_TOOLS: "ON"

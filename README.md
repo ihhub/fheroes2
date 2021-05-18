@@ -69,6 +69,10 @@ MacOS and Linux
 - open `script/demo` directory and run **download_demo.sh**. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 
+Compilation with CMake
+-------------------
+If you would like to build the project using CMake please follow the instructions on [this page](https://github.com/ihhub/fheroes2/blob/master/doc/README_cmake.md). 
+
 Contribution
 ---------------------------
 We welcome and appreciate any help, even if it is a tiny text or code change. Please read [contribution](https://github.com/ihhub/fheroes2/blob/master/CONTRIBUTING.md) page before starting work on a pull request. 
