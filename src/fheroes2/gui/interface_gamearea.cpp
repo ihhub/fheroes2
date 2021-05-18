@@ -204,19 +204,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
     const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
+#ifdef WITH_DEBUG
+    const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
+#else
     const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
+#endif
 
-    const int colors = Players::FriendColors();
+    const int friendColors = Players::FriendColors();
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-            const fheroes2::Point mp( x, y );
 
-            if ( drawFog && tile.isFog( colors ) ) {
+            if ( drawFog && tile.isFog( friendColors ) ) {
                 // don't redraw tile if fog all around
                 fogList.emplace_back( &tile );
-                if ( tile.isFogAllAround( colors ) ) {
+                if ( tile.isFogAllAround( friendColors ) ) {
                     continue;
                 }
             }
@@ -498,7 +501,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         // redraw fog
         if ( drawFog ) {
         for ( const Maps::Tiles * tile : fogList ) {
-            tile->RedrawFogs( dst, colors, *this );
+            tile->RedrawFogs( dst, friendColors, *this );
         }
     }
 }
