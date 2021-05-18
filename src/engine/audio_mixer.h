@@ -50,8 +50,8 @@ namespace Mixer
     void Stop( int ch = -1 );
     void Reset( void );
 
-    u8 isPlaying( int channel );
-    u8 isPaused( int );
+    bool isPlaying( int channel );
+    bool isPaused( int channel );
     bool isValid( void );
 
     void Reduce( void );

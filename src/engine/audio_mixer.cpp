@@ -243,14 +243,14 @@ void Mixer::Reset( void )
     Mix_HaltChannel( -1 );
 }
 
-u8 Mixer::isPlaying( int channel )
+bool Mixer::isPlaying( int channel )
 {
-    return Mix_Playing( channel );
+    return Mix_Playing( channel ) > 0;
 }
 
-u8 Mixer::isPaused( int channel )
+bool Mixer::isPaused( int channel )
 {
-    return Mix_Paused( channel );
+    return Mix_Paused( channel ) > 0;
 }
 
 void Mixer::Reduce( void ) {}
