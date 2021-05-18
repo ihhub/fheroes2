@@ -41,9 +41,9 @@ namespace Mixer
     int Play( const char *, int = -1, bool = false );
     int Play( const u8 *, u32, int = -1, bool = false );
 
-    void SetChannels( u8 );
-    u16 MaxVolume( void );
-    u16 Volume( int channel, int16_t vol = -1 );
+    void SetChannels( int num );
+    int MaxVolume();
+    int Volume( int channel, int vol = -1 );
 
     void Pause( int channel = -1 );
     void Resume( int channel = -1 );

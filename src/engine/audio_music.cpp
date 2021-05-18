@@ -97,7 +97,7 @@ void Music::SetFadeOut( int f )
     fadeout = f;
 }
 
-u16 Music::Volume( int16_t vol )
+int Music::Volume( int vol )
 {
     if ( !Mixer::isValid() ) {
         return 0;

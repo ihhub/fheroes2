@@ -33,7 +33,7 @@ namespace Music
     void Play( const std::vector<u8> &, bool loop );
     void Play( const std::string &, bool loop );
 
-    u16 Volume( int16_t vol );
+    int Volume( int vol );
 
     void SetFadeIn( int );
     void SetFadeOut( int );
