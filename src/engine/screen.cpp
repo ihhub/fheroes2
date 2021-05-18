@@ -353,6 +353,15 @@ namespace
             clear();
         }
 
+        void show( const bool enable ) override
+        {
+            fheroes2::Cursor::show( enable );
+
+            if ( !_emulation ) {
+                SDL_ShowCursor( _show ? 1 : 0 );
+            }
+        }
+
         bool isVisible() const override
         {
             if ( _emulation )
@@ -364,7 +373,6 @@ namespace
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
-                SDL_ShowCursor( 0 );
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
@@ -408,7 +416,7 @@ namespace
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
-            SDL_ShowCursor( 1 );
+            SDL_ShowCursor( _show ? 1 : 0 );
             SDL_FreeSurface( surface );
 
             clear();
@@ -422,9 +430,14 @@ namespace
 
             if ( enable ) {
                 clear();
+
+                SDL_ShowCursor( 0 );
+
                 _emulation = true;
             }
             else {
+                SDL_ShowCursor( _show ? 1 : 0 );
+
                 _emulation = false;
             }
 
@@ -443,6 +456,8 @@ namespace
         {
             // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
+
+            SDL_ShowCursor( _show ? 1 : 0 );
         }
 
     private:
