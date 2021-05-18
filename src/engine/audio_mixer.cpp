@@ -174,7 +174,7 @@ u16 Mixer::MaxVolume( void )
     return MIX_MAX_VOLUME;
 }
 
-u16 Mixer::Volume( int channel, int16_t vol )
+u16 Mixer::Volume( int channel, int16_t vol /* = -1 */ )
 {
     if ( !valid ) {
         return 0;
@@ -218,17 +218,17 @@ u16 Mixer::Volume( int channel, int16_t vol )
     return Mix_Volume( channel, vol );
 }
 
-void Mixer::Pause( int channel )
+void Mixer::Pause( int channel /* = -1 */ )
 {
     Mix_Pause( channel );
 }
 
-void Mixer::Resume( int channel )
+void Mixer::Resume( int channel /* = -1 */ )
 {
     Mix_Resume( channel );
 }
 
-void Mixer::Stop( int channel )
+void Mixer::Stop( int channel /* = -1 */ )
 {
     Mix_HaltChannel( channel );
 }
