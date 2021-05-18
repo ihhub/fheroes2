@@ -5,17 +5,16 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\sdl2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <!-- <PreprocessorDefinitions>WITH_TTF;FHEROES2_IMAGE_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions> -->
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\sdl2\lib/$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl2\lib/$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <!-- <AdditionalDependencies>SDL2.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies> -->
       <AdditionalDependencies>SDL2.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl2\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl2\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
 	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl2\lib\$(PlatformTarget)\*.txt" "$(OutDir)"
 	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl2\README-SDL.txt" "$(OutDir)"
 %(Command)</Command>

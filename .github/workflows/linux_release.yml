@@ -22,8 +22,7 @@ jobs:
         FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
-        cp doc/README.txt .
-        zip fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt README.txt
+        zip -j fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/download_demo.sh changelog.txt doc/README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_ubuntu_sdl1.zip
@@ -50,8 +49,7 @@ jobs:
         FHEROES2_STRICT_COMPILATION: "ON"
     - name: create package
       run: |
-        cp doc/README.txt .
-        zip fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
+        zip -j fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/download_demo.sh changelog.txt doc/README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_ubuntu_sdl2.zip
@@ -90,9 +88,7 @@ jobs:
         VITASDK: "/usr/local/vitasdk"
     - name: create package
       run: |
-        cp doc/README.txt .
-        cp doc/README_PSV.md .
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+        zip -j fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt doc/README.txt doc/README_PSV.md
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_psv_sdl2.zip

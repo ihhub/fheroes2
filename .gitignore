@@ -47,8 +47,6 @@
 # visual studio directory
 .vs
 .vscode
-VisualStudio/packages/*
-!zlib*.zip
 
 # Ignore Heroes of Might & Magic II game files
 *.agg
@@ -73,8 +71,9 @@ fheroes2.pot
 # demo directory
 script/demo/demo
 
-# Installed packages for Visual Studio
-VisualStudio/packages/installed
+# Packages for Visual Studio
+VisualStudio/packages/*
+!zlib*.zip
 
 # Mac magic folders
 .DS_Store
