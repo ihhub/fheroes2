@@ -38,7 +38,7 @@
 
 namespace
 {
-    const uint32_t spellsPerPage = 6;
+    const int32_t spellsPerPage = 6;
 
     const fheroes2::Point bookmarkInfoOffset( 123, 273 );
     const fheroes2::Point bookmarkAdvOffset( 266, 269 );
