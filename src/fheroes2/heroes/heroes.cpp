@@ -1790,10 +1790,18 @@ void AllHeroes::Init( void )
         push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
         push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
     }
+    else {
+        // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
+        for ( int i = Heroes::SOLMYR; i < Heroes::JARKONAS; ++i )
+            push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+    }
 
     // devel
     if ( IS_DEVEL() ) {
         push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
+    }
+    else {
+        push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
     push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
