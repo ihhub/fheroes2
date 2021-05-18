@@ -47,8 +47,6 @@ namespace
     const uint32_t primaryMaxValue = 20;
 }
 
-void RedrawPrimarySkillInfo( const fheroes2::Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
-
 void Battle::ControlInfo::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -561,7 +559,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
 
     // primary skill
-    RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
+    fheroes2::RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
 void Battle::Only::StartBattle( void )
