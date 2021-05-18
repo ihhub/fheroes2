@@ -426,4 +426,4 @@ void smk_huff16_free(struct smk_huff16_t* big)
 	smk_free(big);
 
 error: ;
-};
+}
