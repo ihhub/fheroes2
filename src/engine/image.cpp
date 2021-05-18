@@ -1926,6 +1926,26 @@ namespace fheroes2
         *( image.transform() + offset ) = 0;
     }
 
+    void SetPixel( Image & image, const std::vector<Point> & points, uint8_t value )
+    {
+        if ( image.empty() ) {
+            return;
+        }
+
+        const int32_t width = image.width();
+        const int32_t height = image.height();
+
+        for ( const Point & point : points ) {
+            if ( point.x >= width || point.y >= height || point.x < 0 || point.y < 0 ) {
+                continue;
+            }
+
+            const int32_t offset = point.y * width + point.x;
+            *( image.image() + offset ) = value;
+            *( image.transform() + offset ) = 0;
+        }
+    }
+
     void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value )
     {
         if ( image.empty() || x >= image.width() || y >= image.height() || x < 0 || y < 0 ) {

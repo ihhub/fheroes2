@@ -346,7 +346,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
-        return water ? Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) ) : Cursor::POINTER;
+        return water ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) ) : Cursor::POINTER;
 
     case MP2::OBJ_BOAT:
         return Cursor::POINTER;
@@ -368,23 +368,23 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
                 return Cursor::HEROES;
             else if ( from_hero.GetColor() == to_hero->GetColor() )
-                return Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( from_hero.isFriends( to_hero->GetColor() ) )
-                return conf.ExtUnionsAllowHeroesMeetings() ? Cursor::CHANGE : Cursor::POINTER;
+                return conf.ExtUnionsAllowHeroesMeetings() ? static_cast<int>( Cursor::CURSOR_HERO_MEET ) : static_cast<int>( Cursor::POINTER );
             else if ( to_hero->AllowBattle( false ) )
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
     } break;
 
     case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     default:
         if ( water ) {
             if ( MP2::isWaterObject( tile.GetObject() ) )
-                return Cursor::DistanceThemes( Cursor::REDBOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
-                return Cursor::DistanceThemes( Cursor::BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         break;
     }
@@ -406,7 +406,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
         else
-            return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -423,17 +423,17 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
             else if ( from_hero.GetColor() == castle->GetColor() ) {
-                return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else if ( from_hero.isFriends( castle->GetColor() ) ) {
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
                                                            : Cursor::POINTER;
             }
             else if ( castle->GetActualArmy().isValid() ) {
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else {
-                return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
         }
     } break;
@@ -447,20 +447,20 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
                 return Cursor::HEROES;
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 return conf.ExtUnionsAllowHeroesMeetings() ? newcur : Cursor::POINTER;
             }
             else
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
     } break;
 
     case MP2::OBJ_BOAT:
-        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
@@ -474,12 +474,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 protection = Maps::TileIsUnderProtection( tile.GetIndex() );
             }
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
             bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         break;
     }
@@ -1096,13 +1096,13 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
     } break;
-    case Cursor::FIGHT:
-    case Cursor::MOVE:
-    case Cursor::BOAT:
-    case Cursor::ANCHOR:
-    case Cursor::CHANGE:
-    case Cursor::ACTION:
-    case Cursor::REDBOAT:
+    case Cursor::CURSOR_HERO_FIGHT:
+    case Cursor::CURSOR_HERO_MOVE:
+    case Cursor::CURSOR_HERO_BOAT:
+    case Cursor::CURSOR_HERO_ANCHOR:
+    case Cursor::CURSOR_HERO_MEET:
+    case Cursor::CURSOR_HERO_ACTION:
+    case Cursor::CURSOR_HERO_BOAT_ACTION:
         if ( from_hero == NULL )
             break;
 

@@ -1322,14 +1322,17 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
             return 1;
 
         total -= move_point;
-        if ( maxMovePoints >= total )
-            return 2;
 
-        total -= maxMovePoints;
-        if ( maxMovePoints >= total )
-            return 3;
+        int moveDays = 2;
+        while ( moveDays < 8 ) {
+            if ( maxMovePoints >= total )
+                return moveDays;
 
-        return 4;
+            total -= maxMovePoints;
+            ++moveDays;
+        }
+
+        return 8;
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
