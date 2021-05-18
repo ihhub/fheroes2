@@ -896,9 +896,6 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , teleport_src( -1 )
     , listlog( NULL )
 {
-    // Since this surface is going to be copied directly on screen it shouldn't have any transform layer.
-    _mainSurface._disableTransformLayer();
-
     const Settings & conf = Settings::Get();
 
     Cursor::Get().Hide();
