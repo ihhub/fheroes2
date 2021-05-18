@@ -478,7 +478,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
         std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), m82 );
 
         if ( itl != loop_sounds.end() ) {
-            // unused and free
+            // unused, stop
             if ( 0 == vol || conf.SoundVolume() == 0 ) {
                 if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                     Mixer::Pause( ( *itl ).channel );
@@ -487,7 +487,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
                 }
                 ( *itl ).sound = M82::UNKNOWN;
             }
-            // used
+            // used, update volume
             else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                 Mixer::Pause( ( *itl ).channel );
                 Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
