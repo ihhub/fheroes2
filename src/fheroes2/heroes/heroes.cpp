@@ -1253,9 +1253,9 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
         secondary_skills.AddSkill( skill );
 }
 
-void Heroes::Scoute( void ) const
+void Heroes::Scoute( const int tileIndex ) const
 {
-    Maps::ClearFog( GetIndex(), GetScoute(), GetColor() );
+    Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
 }
 
 int Heroes::GetScoute( void ) const
@@ -1394,7 +1394,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
         // post action
         if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
-            Scoute();
+            Scoute( GetIndex() );
         }
     }
 }
@@ -1599,7 +1599,6 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
-        Scoute();
         world.GetTiles( dstIndex ).SetHeroes( this );
     }
 }
@@ -1930,7 +1929,7 @@ void AllHeroes::Scoute( int colors ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scoute( ( *it )->GetIndex() );
 }
 
 Heroes * AllHeroes::FromJail( s32 index ) const
