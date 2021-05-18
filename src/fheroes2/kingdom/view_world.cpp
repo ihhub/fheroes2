@@ -523,7 +523,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
         }
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
-                const fheroes2::Point newMousePos = le.GetMouseCursor();
+                const fheroes2::Point & newMousePos = le.GetMouseCursor();
                 const fheroes2::Point
                     newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )],
                                   initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )] );

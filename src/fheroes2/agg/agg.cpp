@@ -333,7 +333,7 @@ bool AGG::ReadDataDir( void )
         }
     }
 
-    conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
+    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
 
     return heroes2_agg.isGood();
 }

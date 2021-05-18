@@ -94,7 +94,7 @@ struct HeroRow
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
 public:
-    StatsHeroesList( const fheroes2::Point & pt, KingdomHeroes & );
+    StatsHeroesList( const fheroes2::Point & pt, const KingdomHeroes & );
 
     bool Refresh( KingdomHeroes & heroes );
 
@@ -118,7 +118,7 @@ private:
     void SetContent( const KingdomHeroes & heroes );
 };
 
-StatsHeroesList::StatsHeroesList( const fheroes2::Point & pt, KingdomHeroes & heroes )
+StatsHeroesList::StatsHeroesList( const fheroes2::Point & pt, const KingdomHeroes & heroes )
     : Interface::ListBox<HeroRow>( pt )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );

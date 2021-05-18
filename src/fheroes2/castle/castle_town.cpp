@@ -228,7 +228,7 @@ u32 Castle::OpenTown( void )
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().PriceLoyaltyVersion();
+    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().isCurrentMapPriceOfLoyalty();
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, cur_pt.y + 157 );
     buildingTavern.Redraw();

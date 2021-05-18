@@ -24,7 +24,7 @@
 #if defined( __linux__ )
 #include <endian.h>
 
-#elif defined( __FreeBSD__ )
+#elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
 #include <sys/endian.h>
 
 #elif defined( _WIN32 ) || defined( _WIN64 )

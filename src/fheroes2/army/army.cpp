@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cmath>
 #include <functional>
-#include <math.h>
 #include <set>
 
 #include "agg_image.h"
@@ -1469,7 +1469,7 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
-    if ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
+    if ( Settings::Get().isCampaignGameType() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
         int forceJoinType = JOIN_NONE;
 
@@ -1561,7 +1561,7 @@ Monster Army::GetStrongestMonster() const
     Monster monster( Monster::UNKNOWN );
     for ( const Troop * troop : *this ) {
         if ( troop->isValid() && troop->GetMonster().GetMonsterStrength() > monster.GetMonsterStrength() ) {
-            monster = *troop;
+            monster = troop->GetID();
         }
     }
     return monster;

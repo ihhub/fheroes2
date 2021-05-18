@@ -52,7 +52,7 @@ namespace Battle
     Arena * arena = NULL;
 }
 
-int GetCovr( int ground )
+int GetCovr( int ground, std::mt19937 & gen )
 {
     std::vector<int> covrs;
 
@@ -97,7 +97,7 @@ int GetCovr( int ground )
         break;
     }
 
-    return covrs.empty() ? ICN::UNKNOWN : Rand::Get( covrs );
+    return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
 }
 
 StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )
@@ -285,12 +285,14 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
     else
     // set obstacles
     {
-        icn_covr = Rand::Get( 0, 99 ) < 40 ? GetCovr( world.GetTiles( index ).GetGround() ) : ICN::UNKNOWN;
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( index ) );
+
+        icn_covr = Rand::GetWithGen( 0, 99, seededGen ) < 40 ? GetCovr( world.GetTiles( index ).GetGround(), seededGen ) : ICN::UNKNOWN;
 
         if ( icn_covr != ICN::UNKNOWN )
             board.SetCovrObjects( icn_covr );
         else
-            board.SetCobjObjects( world.GetTiles( index ) );
+            board.SetCobjObjects( world.GetTiles( index ), seededGen );
     }
 
     if ( interface ) {

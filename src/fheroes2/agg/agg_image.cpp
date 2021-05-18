@@ -35,6 +35,42 @@
 
 #include "image_tool.h"
 
+namespace
+{
+    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points )
+    {
+        fheroes2::Image digit( width, height );
+        digit.reset();
+
+        fheroes2::SetPixel( digit, points, 115 );
+        fheroes2::Blit( fheroes2::CreateContour( digit, 35 ), digit );
+
+        return digit;
+    }
+
+    fheroes2::Image addDigit( const fheroes2::Sprite & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
+    {
+        fheroes2::Image combined( original.width() + digit.width() + offset.x, original.height() + ( offset.y < 0 ? 0 : offset.y ) );
+        combined.reset();
+
+        fheroes2::Copy( original, 0, 0, combined, 0, 0, original.width(), original.height() );
+        fheroes2::Blit( digit, 0, 0, combined, original.width() + offset.x, combined.height() - digit.height() + ( offset.y >= 0 ? 0 : offset.y ), digit.width(),
+                        digit.height() );
+
+        return combined;
+    }
+
+    void populateCursorIcons( std::vector<fheroes2::Sprite> & output, const fheroes2::Sprite & origin, const std::vector<fheroes2::Image> & digits,
+                              const fheroes2::Point & offset )
+    {
+        output.emplace_back( origin );
+        for ( size_t i = 0; i < digits.size(); ++i ) {
+            output.emplace_back( addDigit( origin, digits[i], offset ) );
+            output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
+        }
+    }
+}
+
 namespace fheroes2
 {
     namespace AGG
@@ -817,6 +853,45 @@ namespace fheroes2
                 _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
                 _icnVsSprite[id][0].setPosition( -3, 0 );
                 _icnVsSprite[id][1].setPosition( -2, 1 );
+
+                return true;
+            }
+            case ICN::HEROES:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is main menu image which doesn't shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                }
+                return true;
+            case ICN::CURSOR_ADVENTURE_MAP: {
+                // Create needed numbers
+                const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
+                const std::vector<Point> threePoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
+                const std::vector<Point> fivePoints
+                    = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> sixPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 1, 4 }, { 4, 4 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
+                const std::vector<Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
+
+                std::vector<Image> digits( 7 );
+                digits[0] = createDigit( 6, 7, twoPoints );
+                digits[1] = createDigit( 6, 7, threePoints );
+                digits[2] = createDigit( 6, 7, fourPoints );
+                digits[3] = createDigit( 6, 7, fivePoints );
+                digits[4] = createDigit( 6, 7, sixPoints );
+                digits[5] = createDigit( 6, 7, sevenPoints );
+                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), Point( -1, -1 ) );
+
+                _icnVsSprite[id].reserve( 7 * 8 );
+
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, Point( -2, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, Point( 1, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, Point( 0, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, Point( -2, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, Point( 1, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
 
                 return true;
             }

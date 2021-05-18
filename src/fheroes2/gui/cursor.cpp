@@ -20,12 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "cursor.h"
 #include "agg_image.h"
 #include "icn.h"
 #include "localevent.h"
-
-// This is new Graphics engine. To change the code slowly we have to do some hacks here for now
 #include "screen.h"
 
 Cursor::Cursor()
@@ -42,10 +42,10 @@ Cursor & Cursor::Get( void )
 
 int Cursor::Themes() const
 {
-    return SP_ARROW >= theme ? theme : NONE;
+    assert( theme <= CURSOR_HERO_BOAT_ACTION_8 );
+    return theme;
 }
 
-/* set cursor theme */
 bool Cursor::SetThemes( int name, bool force )
 {
     if ( force || theme != name ) {
@@ -59,15 +59,18 @@ bool Cursor::SetThemes( int name, bool force )
         case 0x2000:
             icnID = ICN::CMSECO;
             break;
+        case 0x4000:
+            icnID = ICN::CURSOR_ADVENTURE_MAP;
+            break;
         default:
             break;
         }
         const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
-        SetOffset( name, fheroes2::Point( spr.width() / 2, spr.height() / 2 ) );
+        SetOffset( name, fheroes2::Point( ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 ) );
         fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
-        const fheroes2::Point currentPos = LocalEvent::Get().GetMouseCursor();
+        const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
         Move( currentPos.x, currentPos.y );
         return true;
     }
@@ -75,7 +78,6 @@ bool Cursor::SetThemes( int name, bool force )
     return false;
 }
 
-/* redraw cursor wrapper for local event */
 void Cursor::Redraw( int32_t x, int32_t y )
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -91,17 +93,20 @@ void Cursor::Move( int32_t x, int32_t y ) const
     fheroes2::cursor().setPosition( x + offset_x, y + offset_y );
 }
 
-/* set offset big cursor */
 void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
 {
     switch ( name ) {
     case Cursor::POINTER:
     case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
-    case Cursor::FIGHT:
-    case Cursor::FIGHT2:
-    case Cursor::FIGHT3:
-    case Cursor::FIGHT4:
+    case Cursor::CURSOR_HERO_FIGHT:
+    case Cursor::CURSOR_HERO_FIGHT_2:
+    case Cursor::CURSOR_HERO_FIGHT_3:
+    case Cursor::CURSOR_HERO_FIGHT_4:
+    case Cursor::CURSOR_HERO_FIGHT_5:
+    case Cursor::CURSOR_HERO_FIGHT_6:
+    case Cursor::CURSOR_HERO_FIGHT_7:
+    case Cursor::CURSOR_HERO_FIGHT_8:
         offset_x = 0;
         offset_y = 0;
         break;
@@ -190,25 +195,22 @@ void Cursor::Refresh()
     Get().SetThemes( Get().Themes(), true );
 }
 
-int Cursor::DistanceThemes( int theme, u32 dist )
+int Cursor::DistanceThemes( const int theme, uint32_t distance )
 {
-    if ( 0 == dist )
+    if ( 0 == distance )
         return POINTER;
-    else if ( dist > 4 )
-        dist = 4;
+    else if ( distance > 8 )
+        distance = 8;
 
     switch ( theme ) {
-    case MOVE:
-    case FIGHT:
-    case BOAT:
-    case ANCHOR:
-    case CHANGE:
-    case ACTION:
-        return theme + 6 * ( dist - 1 );
-
-    case REDBOAT:
-        return REDBOAT + dist - 1;
-
+    case CURSOR_HERO_MOVE:
+    case CURSOR_HERO_FIGHT:
+    case CURSOR_HERO_BOAT:
+    case CURSOR_HERO_ANCHOR:
+    case CURSOR_HERO_MEET:
+    case CURSOR_HERO_ACTION:
+    case CURSOR_HERO_BOAT_ACTION:
+        return theme + distance - 1;
     default:
         break;
     }
@@ -216,40 +218,28 @@ int Cursor::DistanceThemes( int theme, u32 dist )
     return theme;
 }
 
-int Cursor::WithoutDistanceThemes( int theme )
+int Cursor::WithoutDistanceThemes( const int theme )
 {
-    switch ( theme ) {
-    case MOVE2:
-    case MOVE3:
-    case MOVE4:
-        return MOVE;
-    case FIGHT2:
-    case FIGHT3:
-    case FIGHT4:
-        return FIGHT;
-    case BOAT2:
-    case BOAT3:
-    case BOAT4:
-        return BOAT;
-    case ANCHOR2:
-    case ANCHOR3:
-    case ANCHOR4:
-        return ANCHOR;
-    case CHANGE2:
-    case CHANGE3:
-    case CHANGE4:
-        return CHANGE;
-    case ACTION2:
-    case ACTION3:
-    case ACTION4:
-        return ACTION;
-    case REDBOAT2:
-    case REDBOAT3:
-    case REDBOAT4:
-        return REDBOAT;
-
-    default:
-        break;
+    if ( theme > CURSOR_HERO_MOVE && theme <= CURSOR_HERO_MOVE_8 ) {
+        return CURSOR_HERO_MOVE;
+    }
+    if ( theme > CURSOR_HERO_FIGHT && theme <= CURSOR_HERO_FIGHT_8 ) {
+        return CURSOR_HERO_FIGHT;
+    }
+    if ( theme > CURSOR_HERO_BOAT && theme <= CURSOR_HERO_BOAT_8 ) {
+        return CURSOR_HERO_BOAT;
+    }
+    if ( theme > CURSOR_HERO_ANCHOR && theme <= CURSOR_HERO_ANCHOR_8 ) {
+        return CURSOR_HERO_ANCHOR;
+    }
+    if ( theme > CURSOR_HERO_MEET && theme <= CURSOR_HERO_MEET_8 ) {
+        return CURSOR_HERO_MEET;
+    }
+    if ( theme > CURSOR_HERO_ACTION && theme <= CURSOR_HERO_ACTION_8 ) {
+        return CURSOR_HERO_ACTION;
+    }
+    if ( theme > CURSOR_HERO_BOAT_ACTION && theme <= CURSOR_HERO_BOAT_ACTION_8 ) {
+        return CURSOR_HERO_BOAT_ACTION;
     }
 
     return theme;

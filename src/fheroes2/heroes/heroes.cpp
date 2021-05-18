@@ -254,11 +254,11 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         }
 
         // fixed race for custom portrait (after level up)
-        if ( _race != rc )
-            _race = rc;
+        _race = rc;
     }
-    else
+    else {
         st.skip( 1 );
+    }
 
     // 3 artifacts
     PickupArtifact( Artifact( st.get() ) );
@@ -274,7 +274,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     if ( experience == 0 )
         experience = GetStartingXp();
 
-    bool custom_secskill = ( st.get() != 0 );
+    const bool custom_secskill = ( st.get() != 0 );
 
     // custom skill
     if ( custom_secskill ) {
@@ -294,8 +294,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
             if ( ( *it ).isValid() )
                 secondary_skills.AddSkill( *it );
     }
-    else
+    else {
         st.skip( 16 );
+    }
 
     // unknown
     st.skip( 1 );
@@ -305,8 +306,9 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         SetModes( NOTDEFAULTS );
         name = Game::GetEncodeString( st.toString( 13 ) );
     }
-    else
+    else {
         st.skip( 13 );
+    }
 
     // patrol
     if ( st.get() ) {
@@ -1251,9 +1253,9 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
         secondary_skills.AddSkill( skill );
 }
 
-void Heroes::Scoute( void ) const
+void Heroes::Scoute( const int tileIndex ) const
 {
-    Maps::ClearFog( GetIndex(), GetScoute(), GetColor() );
+    Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
 }
 
 int Heroes::GetScoute( void ) const
@@ -1320,14 +1322,17 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
             return 1;
 
         total -= move_point;
-        if ( maxMovePoints >= total )
-            return 2;
 
-        total -= maxMovePoints;
-        if ( maxMovePoints >= total )
-            return 3;
+        int moveDays = 2;
+        while ( moveDays < 8 ) {
+            if ( maxMovePoints >= total )
+                return moveDays;
 
-        return 4;
+            total -= maxMovePoints;
+            ++moveDays;
+        }
+
+        return 8;
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
@@ -1389,7 +1394,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
         // post action
         if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
-            Scoute();
+            Scoute( GetIndex() );
         }
     }
 }
@@ -1592,7 +1597,6 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
-        Scoute();
         world.GetTiles( dstIndex ).SetHeroes( this );
     }
 }
@@ -1773,7 +1777,7 @@ void AllHeroes::Init( void )
     push_back( new Heroes( Heroes::BAX, Race::NECR, 5 ) );
 
     // loyalty version
-    if ( Settings::Get().PriceLoyaltyVersion() ) {
+    if ( Settings::Get().isCurrentMapPriceOfLoyalty() ) {
         push_back( new Heroes( Heroes::SOLMYR, Race::WZRD, 5 ) );
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
@@ -1786,10 +1790,18 @@ void AllHeroes::Init( void )
         push_back( new Heroes( Heroes::MARTINE, Race::SORC, 5 ) );
         push_back( new Heroes( Heroes::JARKONAS, Race::BARB, 5 ) );
     }
+    else {
+        // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
+        for ( int i = Heroes::SOLMYR; i < Heroes::JARKONAS; ++i )
+            push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
+    }
 
     // devel
     if ( IS_DEVEL() ) {
         push_back( new Heroes( Heroes::DEBUG_HERO, Race::WRLK ) );
+    }
+    else {
+        push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
     push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
@@ -1915,7 +1927,7 @@ void AllHeroes::Scoute( int colors ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scoute( ( *it )->GetIndex() );
 }
 
 Heroes * AllHeroes::FromJail( s32 index ) const

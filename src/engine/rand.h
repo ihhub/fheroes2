@@ -35,14 +35,22 @@
 
 namespace Rand
 {
+    std::mt19937 & CurrentThreadRandomDevice();
+
     uint32_t Get( uint32_t from, uint32_t to = 0 );
     uint32_t GetWithSeed( uint32_t from, uint32_t to, uint32_t seed );
-    std::mt19937 & CurrentThreadRandomDevice();
+    uint32_t GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen );
 
     template <typename T>
     void Shuffle( std::vector<T> & vec )
     {
         std::shuffle( vec.begin(), vec.end(), CurrentThreadRandomDevice() );
+    }
+
+    template <typename T>
+    void ShuffleWithGen( std::vector<T> & vec, std::mt19937 & gen )
+    {
+        std::shuffle( vec.begin(), vec.end(), gen );
     }
 
     template <typename T>
@@ -55,12 +63,31 @@ namespace Rand
     }
 
     template <typename T>
+    const T & GetWithGen( const std::vector<T> & vec, std::mt19937 & gen )
+    {
+        assert( !vec.empty() );
+
+        const uint32_t id = Rand::GetWithGen( 0, static_cast<uint32_t>( vec.size() - 1 ), gen );
+        return vec[id];
+    }
+
+    template <typename T>
     const T & Get( const std::list<T> & list )
     {
         assert( !list.empty() );
 
         typename std::list<T>::const_iterator it = list.begin();
         std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
+        return *it;
+    }
+
+    template <typename T>
+    const T & GetWithGen( const std::list<T> & list, std::mt19937 & gen )
+    {
+        assert( !list.empty() );
+
+        typename std::list<T>::const_iterator it = list.begin();
+        std::advance( it, Rand::GetWithGen( 0, static_cast<uint32_t>( list.size() - 1 ), gen ) );
         return *it;
     }
 

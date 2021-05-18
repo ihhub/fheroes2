@@ -45,7 +45,7 @@
 int Game::NewStandard( void )
 {
     Settings & conf = Settings::Get();
-    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
     conf.SetGameType( Game::TYPE_STANDARD );
     conf.SetPreferablyCountPlayers( 0 );
@@ -63,7 +63,7 @@ int Game::NewBattleOnly( void )
 int Game::NewHotSeat( void )
 {
     Settings & conf = Settings::Get();
-    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {

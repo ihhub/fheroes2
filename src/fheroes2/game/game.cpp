@@ -113,7 +113,7 @@ namespace Game
 // Returns the difficulty level based on the type of game.
 int Game::getDifficulty()
 {
-    return ( ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) != 0 ) ? Difficulty::NORMAL : Settings::Get().GameDifficulty();
+    return ( Settings::Get().isCampaignGameType() ? Difficulty::NORMAL : Settings::Get().GameDifficulty() );
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )

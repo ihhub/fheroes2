@@ -166,7 +166,7 @@ void Kingdom::ActionNewDay( void )
         AddFundsResource( GetIncome() );
 
         // handle resource bonus campaign awards
-        if ( isControlHuman() && Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) {
+        if ( isControlHuman() && Settings::Get().isCampaignGameType() ) {
             const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
             for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
@@ -485,7 +485,7 @@ Recruits & Kingdom::GetRecruits( void )
 void Kingdom::UpdateRecruits( void )
 {
     bool hasSpecialHireableHero = false;
-    if ( isControlHuman() && ( Settings::Get().GameType() & Game::TYPE_CAMPAIGN ) && world.CountWeek() < 2 ) {
+    if ( isControlHuman() && ( Settings::Get().isCampaignGameType() ) && world.CountWeek() < 2 ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
         for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {

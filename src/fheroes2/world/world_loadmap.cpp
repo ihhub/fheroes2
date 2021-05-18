@@ -932,9 +932,6 @@ bool World::LoadMapMP2( const std::string & filename )
         return false;
     }
 
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
-    vec_object.reserve( 100 );
-
     // check (mp2, mx2) ID
     if ( fs.getBE32() != 0x5C000000 )
         return false;
@@ -992,7 +989,7 @@ bool World::LoadMapMP2( const std::string & filename )
         return false;
     }
 
-    const int32_t worldSize = w() * h();
+    const int32_t worldSize = width * height;
 
     // seek to ADDONS block
     fs.skip( worldSize * SIZEOFMP2TILE );
@@ -1019,6 +1016,14 @@ bool World::LoadMapMP2( const std::string & filename )
     fs.seek( MP2OFFSETDATA );
 
     vec_tiles.resize( worldSize );
+
+    // In the future we need to check 3 things which could point that this map is The Price of Loyalty version:
+    // - new object types
+    // - new artifact types on map
+    // - new artifact types in hero's bag
+
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    vec_object.reserve( 100 );
 
     // read all tiles
     for ( int32_t i = 0; i < worldSize; ++i ) {
@@ -1081,10 +1086,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood castles
     // 72 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 72; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 72; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1129,7 +1134,7 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "castle block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
         // preload in to capture objects cache
@@ -1141,10 +1146,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood resource kingdoms
     // 144 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 144; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 144; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1186,7 +1191,7 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "kingdom block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
     }
@@ -1200,11 +1205,8 @@ bool World::LoadMapMP2( const std::string & filename )
     // count final mp2 blocks
     u32 countblock = 0;
     while ( 1 ) {
-        u32 l = fs.get();
-        u32 h = fs.get();
-
-        // VERBOSE_LOG("dump block: 0x" << std::setw(2) << std::setfill('0') << std::hex << l <<
-        //	std::setw(2) << std::setfill('0') << std::hex << h);
+        const u32 l = fs.get();
+        const u32 h = fs.get();
 
         if ( 0 == h && 0 == l )
             break;
@@ -1411,10 +1413,8 @@ void World::ProcessNewMap()
     // modify other objects
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
         Maps::Tiles & tile = vec_tiles[i];
-
         Maps::Tiles::FixedPreload( tile );
 
-        //
         switch ( tile.GetObject() ) {
         case MP2::OBJ_WITCHSHUT:
         case MP2::OBJ_SHRINE1:
@@ -1559,12 +1559,12 @@ void World::ProcessNewMap()
 
         for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
             const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % w();
-            if ( x < ultimateArtifactOffset || x >= w() - ultimateArtifactOffset )
+            const int32_t x = tile.GetIndex() % width;
+            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
                 continue;
 
-            const int32_t y = tile.GetIndex() / w();
-            if ( y < ultimateArtifactOffset || y >= h() - ultimateArtifactOffset )
+            const int32_t y = tile.GetIndex() / width;
+            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
                 continue;
 
             if ( tile.GoodForUltimateArtifact() )
@@ -1591,26 +1591,26 @@ void World::ProcessNewMap()
 
     vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
-    if ( world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    if ( height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
     }
-    else if ( 2 * world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    else if ( 2 * height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
     }
     else {
-        if ( world.w() / 3 > ultimate_pos.x )
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );

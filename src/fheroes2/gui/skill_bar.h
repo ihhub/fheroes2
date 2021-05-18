@@ -68,3 +68,8 @@ private:
     std::string msg;
     const Heroes & _hero;
 };
+
+namespace fheroes2
+{
+    void RedrawPrimarySkillInfo( const fheroes2::Point & pos, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 );
+}
