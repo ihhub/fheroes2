@@ -34,28 +34,12 @@
 int main( int argc, char ** argv )
 {
     if ( argc < 3 ) {
-        // std::cout << argv[0] << " [-s (skip shadow)] [-d (debug on)] infile.icn extract_to_dir" << std::endl;
         std::cout << argv[0] << " infile.icn extract_to_dir" << std::endl;
         return EXIT_SUCCESS;
     }
 
-    // bool debug = false;
-    // bool shadow = true;
-
     char ** ptr = argv;
     ++ptr;
-
-    // while ( ptr && *ptr ) {
-    //     if ( 0 == strcmp( "-d", *ptr ) )
-    //        debug = true;
-    //     else
-    //     if(0 == strcmp("-s", *ptr))
-    //        shadow = false;
-    //     else
-    //        break;
-
-    //     ++ptr;
-    // }
 
     std::string shortname( *ptr );
     ++ptr;
