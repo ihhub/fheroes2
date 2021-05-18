@@ -56,7 +56,7 @@ namespace
         const fheroes2::Sprite & bookmark_clos = fheroes2::AGG::GetICN( ICN::BOOK, 5 );
 
         const bool isAdventureTabPresent = displayableSpells != SpellBook::Filter::CMBT;
-        const bool isCombatTabPresent =  displayableSpells != SpellBook::Filter::ADVN;
+        const bool isCombatTabPresent = displayableSpells != SpellBook::Filter::ADVN;
 
         int32_t maximumHeight = bookmarkInfoOffset.y + bookmark_info.height();
         if ( isAdventureTabPresent && maximumHeight < bookmarkAdvOffset.y + bookmark_advn.height() ) {
@@ -198,7 +198,8 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, bo
 
     const fheroes2::Size spellBookSize = getSpellBookSize( displayableSpells );
 
-    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width, spellBookSize.height );
+    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width,
+                              spellBookSize.height );
     const fheroes2::Rect restorerRoi( pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
     fheroes2::ImageRestorer restorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
@@ -399,7 +400,8 @@ void SpellBook::Edit( const HeroBase & hero )
 
     const fheroes2::Size spellBookSize = getSpellBookSize( Filter::ALL );
 
-    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width, spellBookSize.height );
+    const fheroes2::Rect pos( ( display.width() - ( bookPage.width() * 2 ) ) / 2, ( display.height() - bookPage.height() ) / 2, spellBookSize.width,
+                              spellBookSize.height );
     const fheroes2::Rect restorerRoi( pos.x + spellBookShadow.x, pos.y, pos.width - spellBookShadow.x, pos.height + spellBookShadow.y );
     fheroes2::ImageRestorer restorer( display, restorerRoi.x, restorerRoi.y, restorerRoi.width, restorerRoi.height );
 
