@@ -208,7 +208,7 @@ bool Maps::TilesAddon::PredicateSortRules2( const Maps::TilesAddon & ta1, const 
     return ( ( ta1.level % 4 ) < ( ta2.level % 4 ) );
 }
 
-int Maps::Tiles::GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex )
+int Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
 {
     switch ( MP2::GetICNObject( tileset ) ) {
     case ICN::X_LOC1:
@@ -281,7 +281,7 @@ int Maps::Tiles::GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex )
     return MP2::OBJ_ZERO;
 }
 
-int Maps::Tiles::GetPassable( uint32_t tileset, uint32_t index )
+int Maps::Tiles::GetPassable( const uint32_t tileset, const uint32_t index )
 {
     const int icn = MP2::GetICNObject( tileset );
 
@@ -483,13 +483,13 @@ bool Maps::TilesAddon::isArtifact( const TilesAddon & ta )
     return ( ICN::OBJNARTI == MP2::GetICNObject( ta.object ) && ( ta.index > 0x10 ) && ( ta.index % 2 ) );
 }
 
-int Maps::Tiles::ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex )
+int Maps::Tiles::ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex )
 {
     // 60, 66, 72, 78, 84, 90, 96, 102
     return ICN::X_LOC3 == MP2::GetICNObject( tileset ) && 60 <= icnIndex && 102 >= icnIndex ? ( ( icnIndex - 60 ) / 6 ) + 1 : 0;
 }
 
-int Maps::Tiles::ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex )
+int Maps::Tiles::ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex )
 {
     // 110, 114, 118, 122, 126, 130, 134, 138
     return ICN::X_LOC3 == MP2::GetICNObject( tileset ) && 110 <= icnIndex && 138 >= icnIndex ? ( ( icnIndex - 110 ) / 4 ) + 1 : 0;
@@ -689,10 +689,8 @@ bool Maps::TilesAddon::isTrees( const TilesAddon & ta )
     return false;
 }
 
-bool Maps::Tiles::isShadowSprite( uint8_t tileset, uint8_t icnIndex )
+bool Maps::Tiles::isShadowSprite( const int icn, const uint8_t icnIndex )
 {
-    const int icn = MP2::GetICNObject( tileset );
-
     switch ( icn ) {
     case ICN::MTNDSRT:
     case ICN::MTNGRAS:
@@ -753,7 +751,12 @@ bool Maps::Tiles::isShadowSprite( uint8_t tileset, uint8_t icnIndex )
     return false;
 }
 
-void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource )
+bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex )
+{
+    return isShadowSprite( MP2::GetICNObject( tileset ), icnIndex );
+}
+
+void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
 {
     if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && 6 == index ) {
         tileset = 128; // MTNGRAS
@@ -798,7 +801,7 @@ void Maps::Tiles::UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & in
     }
 }
 
-std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( uint32_t heroSpriteIndex )
+std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex )
 {
     std::pair<int, int> res;
 
@@ -1143,7 +1146,7 @@ bool isImpassableIfOverlayed( uint8_t objectTileset, uint8_t icnIndex )
 bool Exclude4LongObject( const Maps::TilesAddon & ta )
 {
     const int icn = MP2::GetICNObject( ta.object );
-    return Maps::Tiles::isShadowSprite( ta.object, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
+    return Maps::Tiles::isShadowSprite( icn, ta.index ) || icn == ICN::ROAD || icn == ICN::STREAM || ( icn == ICN::OBJNMUL2 && ta.index < 14 );
 }
 
 bool HaveLongObjectUniq( const Maps::Addons & level, u32 uid )
@@ -1588,27 +1591,8 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visi
 
 bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
 {
-    switch ( MP2::GetICNObject( tileset ) ) {
-    case ICN::MTNDSRT:
-    case ICN::MTNGRAS:
-    case ICN::MTNLAVA:
-    case ICN::MTNMULT:
-    case ICN::MTNSNOW:
-    case ICN::MTNSWMP:
-        return ObjMnts1::isShadow( icnIndex );
-
-    case ICN::MTNCRCK:
-    case ICN::MTNDIRT:
-        return ObjMnts2::isShadow( icnIndex );
-
-    case ICN::TREDECI:
-    case ICN::TREEVIL:
-    case ICN::TREFALL:
-    case ICN::TREFIR:
-    case ICN::TREJNGL:
-    case ICN::TRESNOW:
-        return ObjTree::isShadow( icnIndex );
-
+    const int icn = MP2::GetICNObject( tileset );
+    switch ( icn ) {
     case ICN::UNKNOWN:
     case ICN::MINIHERO:
     case ICN::MONS32:
@@ -1644,7 +1628,7 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
         break;
     }
 
-    return false;
+    return Maps::Tiles::isShadowSprite( icn, icnIndex );
 }
 
 void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
