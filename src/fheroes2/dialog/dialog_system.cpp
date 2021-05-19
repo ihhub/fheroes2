@@ -159,7 +159,8 @@ int Dialog::SystemOptions( void )
 
         // set ai speed
         if ( le.MouseClickLeft( rect5 ) ) {
-            conf.SetAIMoveSpeed( conf.AIMoveSpeed() % 10 + 1 );
+            const int prevAISpeed = conf.AIMoveSpeed();
+            conf.SetAIMoveSpeed( prevAISpeed >= 10 ? 0 : prevAISpeed + 1 );
             result |= 0x01;
             redraw = true;
             Game::UpdateGameSpeed();
@@ -313,7 +314,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     // ai move speed
     const int aiSpeed = conf.AIMoveSpeed();
-    const u32 is5 = aiSpeed ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
+    const u32 is5 = ( aiSpeed > 0 ) ? ( aiSpeed < 4 ? 4 : 3 + aiSpeed / 2 ) : 9;
     const fheroes2::Sprite & sprite5 = fheroes2::AGG::GetICN( ICN::SPANEL, is5 );
     const fheroes2::Rect & rect5 = rects[4];
     fheroes2::Blit( sprite5, display, rect5.x, rect5.y );
@@ -324,7 +325,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     if ( aiSpeed )
         str = std::to_string( aiSpeed );
     else
-        str = _( "off" );
+        str = _( "Don't Show" );
     text.Set( str );
     text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y + rect5.height + textOffset );
 
