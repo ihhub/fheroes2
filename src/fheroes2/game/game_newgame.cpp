@@ -133,7 +133,7 @@ fheroes2::GameMode Game::CampaignSelection()
 
         if ( le.MouseClickLeft( buttonSuccessionWars.area() ) )
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-         if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) )
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) )
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
@@ -268,7 +268,7 @@ fheroes2::GameMode Game::NewGame()
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
-    
+
     fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
     fheroes2::Button buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
