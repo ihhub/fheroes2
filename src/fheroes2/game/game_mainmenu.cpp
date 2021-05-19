@@ -40,8 +40,6 @@
 #include "text.h"
 #include "ui_button.h"
 
-#include <cassert>
-
 namespace
 {
     struct ButtonInfo
@@ -142,7 +140,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
 
         default:
-            assert( 0 ); // did you forget to cover a newly added case?
             break;
         }
     }
