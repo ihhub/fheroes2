@@ -172,6 +172,8 @@ namespace Game
         EVENT_STACKSPLIT_SHIFT,
         EVENT_STACKSPLIT_CTRL,
         EVENT_JOINSTACKS,
+        EVENT_UPGRADE_TROOP,
+        EVENT_DISMISS_TROOP,
         EVENT_LAST,
     };
 
