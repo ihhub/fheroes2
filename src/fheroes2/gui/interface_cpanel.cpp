@@ -93,7 +93,7 @@ void Interface::ControlPanel::Redraw( void ) const
     }
 }
 
-int Interface::ControlPanel::QueueEventProcessing( void )
+fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -108,5 +108,5 @@ int Interface::ControlPanel::QueueEventProcessing( void )
     else if ( le.MouseClickLeft( rt_quit ) )
         return interface.EventEndTurn();
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }

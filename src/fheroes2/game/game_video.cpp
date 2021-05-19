@@ -55,7 +55,7 @@ namespace
 
 namespace Video
 {
-    size_t ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
+    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
         std::string videoPath;
         if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
@@ -110,7 +110,7 @@ namespace Video
 
         bool isFrameReady = false;
 
-        size_t roiChosenId = 0;
+        int roiChosenId = 0;
 
         const uint8_t selectionColor = 51;
 
@@ -128,7 +128,7 @@ namespace Video
                 bool roiChosen = false;
                 for ( size_t i = 0; i < roi.size(); ++i ) {
                     if ( le.MouseClickLeft( roi[i] ) ) {
-                        roiChosenId = i;
+                        roiChosenId = static_cast<int>( i );
                         roiChosen = true;
                         break;
                     }

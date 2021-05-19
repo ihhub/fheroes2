@@ -37,7 +37,11 @@ namespace Campaign
     enum CampaignID
     {
         ROLAND_CAMPAIGN = 0,
-        ARCHIBALD_CAMPAIGN = 1
+        ARCHIBALD_CAMPAIGN = 1,
+        PRICE_OF_LOYALTY_CAMPAIGN = 2,
+        VOYAGE_HOME_CAMPAIGN = 3,
+        WIZARDS_TALE_CAMPAIGN = 4,
+        DESCENDANTS_CAMPAIGN = 5
     };
 
     enum class ScenarioVictoryCondition : int

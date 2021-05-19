@@ -898,6 +898,8 @@ namespace ICN
                                {WOLF, "WOLF.ICN"},
                                {WRLK32, "WRLK32.ICN"},
                                {WZRD32, "WZRD32.ICN"},
+                               {X_IVY, "X_IVY.ICN"},
+                               {X_LOADCM, "X_LOADCM.ICN"},
                                {X_LOC1, "X_LOC1.ICN"},
                                {X_LOC2, "X_LOC2.ICN"},
                                {X_LOC3, "X_LOC3.ICN"},
