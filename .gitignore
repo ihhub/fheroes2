@@ -43,6 +43,7 @@
 *.obj
 *.pch
 *.tmp
+*.res
 # visual studio directory
 .vs
 .vscode
@@ -70,8 +71,9 @@ fheroes2.pot
 # demo directory
 script/demo/demo
 
-# Installed packages for Visual Studio
-VisualStudio/packages/installed
+# Packages for Visual Studio
+VisualStudio/packages/*
+!zlib*.zip
 
 # Mac magic folders
 .DS_Store
