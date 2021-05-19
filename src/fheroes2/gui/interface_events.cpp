@@ -193,7 +193,7 @@ void Interface::Basic::EventCastSpell( void )
     }
 }
 
-int Interface::Basic::EventEndTurn( void ) const
+fheroes2::GameMode Interface::Basic::EventEndTurn() const
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
@@ -202,12 +202,12 @@ int Interface::Basic::EventEndTurn( void ) const
 
     if ( !myKingdom.HeroesMayStillMove()
          || Dialog::YES == Dialog::Message( "", _( "One or more heroes may still move, are you sure you want to end your turn?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
-        return Game::ENDTURN;
+        return fheroes2::GameMode::END_TURN;
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
-int Interface::Basic::EventAdventureDialog( void )
+fheroes2::GameMode Interface::Basic::EventAdventureDialog()
 {
     Mixer::Reduce();
     switch ( Dialog::AdventureOptions( GameFocus::HEROES == GetFocusType() ) ) {
@@ -231,10 +231,10 @@ int Interface::Basic::EventAdventureDialog( void )
     }
     Mixer::Enhance();
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
-int Interface::Basic::EventFileDialog( void ) const
+fheroes2::GameMode Interface::Basic::EventFileDialog() const
 {
     return Dialog::FileOptions();
 }
@@ -264,12 +264,12 @@ void Interface::Basic::EventSystemDialog( void )
     }
 }
 
-int Interface::Basic::EventExit( void )
+fheroes2::GameMode Interface::Basic::EventExit()
 {
     if ( Dialog::YES & Dialog::Message( "", _( "Are you sure you want to quit?" ), Font::BIG, Dialog::YES | Dialog::NO ) )
-        return Game::QUITGAME;
+        return fheroes2::GameMode::QUIT_GAME;
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::Basic::EventNextTown( void )
@@ -292,19 +292,19 @@ void Interface::Basic::EventNextTown( void )
     }
 }
 
-int Interface::Basic::EventNewGame( void ) const
+fheroes2::GameMode Interface::Basic::EventNewGame() const
 {
     return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to restart? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
-               ? Game::NEWGAME
-               : Game::CANCEL;
+               ? fheroes2::GameMode::NEW_GAME
+               : fheroes2::GameMode::CANCEL;
 }
 
-int Interface::Basic::EventSaveGame( void ) const
+fheroes2::GameMode Interface::Basic::EventSaveGame() const
 {
     while ( true ) {
         const std::string filename = Dialog::SelectFileSave();
         if ( filename.empty() ) {
-            return Game::CANCEL;
+            return fheroes2::GameMode::CANCEL;
         }
 
         // ask overwrite?
@@ -320,15 +320,15 @@ int Interface::Basic::EventSaveGame( void ) const
         else {
             Dialog::Message( "", _( "There was an issue during saving." ), Font::BIG, Dialog::OK );
         }
-        return Game::CANCEL;
+        return fheroes2::GameMode::CANCEL;
     }
 }
 
-int Interface::Basic::EventLoadGame( void ) const
+fheroes2::GameMode Interface::Basic::EventLoadGame() const
 {
     return Dialog::YES == Dialog::Message( "", _( "Are you sure you want to load a new game? (Your current game will be lost.)" ), Font::BIG, Dialog::YES | Dialog::NO )
-               ? Game::LOADGAME
-               : Game::CANCEL;
+               ? fheroes2::GameMode::LOAD_GAME
+               : fheroes2::GameMode::CANCEL;
 }
 
 void Interface::Basic::EventPuzzleMaps( void ) const
@@ -357,7 +357,7 @@ void Interface::Basic::EventSwitchHeroSleeping( void )
     }
 }
 
-int Interface::Basic::EventDigArtifact( void )
+fheroes2::GameMode Interface::Basic::EventDigArtifact()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -405,7 +405,7 @@ int Interface::Basic::EventDigArtifact( void )
         }
     }
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
 void Interface::Basic::EventDefaultAction( void )

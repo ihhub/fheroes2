@@ -40,6 +40,8 @@
 #include "text.h"
 #include "ui_button.h"
 
+#include <cassert>
+
 namespace
 {
     struct ButtonInfo
@@ -60,7 +62,93 @@ namespace
     };
 }
 
-int Game::MainMenu( bool isFirstGameRun )
+void Game::mainGameLoop( bool isFirstGameRun )
+{
+    fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
+
+    while ( result != fheroes2::GameMode::QUIT_GAME ) {
+        switch ( result ) {
+        case fheroes2::GameMode::MAIN_MENU:
+            result = Game::MainMenu( isFirstGameRun );
+            isFirstGameRun = false;
+            break;
+        case fheroes2::GameMode::NEW_GAME:
+            result = Game::NewGame();
+            break;
+        case fheroes2::GameMode::LOAD_GAME:
+            result = Game::LoadGame();
+            break;
+        case fheroes2::GameMode::HIGHSCORES:
+            result = Game::HighScores();
+            break;
+        case fheroes2::GameMode::CREDITS:
+            result = Game::Credits();
+            break;
+        case fheroes2::GameMode::NEW_STANDARD:
+            result = Game::NewStandard();
+            break;
+        case fheroes2::GameMode::NEW_CAMPAIGN_SELECTION:
+            result = Game::CampaignSelection();
+            break;
+        case fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN:
+            result = Game::NewSuccessionWarsCampaign();
+            break;
+        case fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN:
+            result = Game::NewPriceOfLoyaltyCampaign();
+            break;
+        case fheroes2::GameMode::NEW_MULTI:
+            result = Game::NewMulti();
+            break;
+        case fheroes2::GameMode::NEW_HOT_SEAT:
+            result = Game::NewHotSeat();
+            break;
+#ifdef NETWORK_ENABLE
+        case fheroes2::GameMode::NEW_NETWORK:
+            result = Game::NewNetwork();
+            break;
+#endif
+        case fheroes2::GameMode::NEW_BATTLE_ONLY:
+            result = Game::NewBattleOnly();
+            break;
+        case fheroes2::GameMode::LOAD_STANDARD:
+            result = Game::LoadStandard();
+            break;
+        case fheroes2::GameMode::LOAD_CAMPAIN:
+            result = Game::LoadCampaign();
+            break;
+        case fheroes2::GameMode::LOAD_MULTI:
+            result = Game::LoadMulti();
+            break;
+        case fheroes2::GameMode::LOAD_HOT_SEAT:
+            result = Game::LoadHotseat();
+            break;
+        case fheroes2::GameMode::LOAD_NETWORK:
+            result = Game::LoadNetwork();
+            break;
+        case fheroes2::GameMode::SCENARIO_INFO:
+            result = Game::ScenarioInfo();
+            break;
+        case fheroes2::GameMode::SELECT_SCENARIO:
+            result = Game::SelectScenario();
+            break;
+        case fheroes2::GameMode::START_GAME:
+            result = Game::StartGame();
+            break;
+        case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
+            result = Game::SelectCampaignScenario();
+            break;
+        case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
+            result = Game::CompleteCampaignScenario();
+            break;
+
+        default:
+            assert( 0 ); // did you forget to cover a newly added case?
+            break;
+        }
+    }
+}
+
+fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
@@ -134,7 +222,7 @@ int Game::MainMenu( bool isFirstGameRun )
     // mainmenu loop
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME ) {
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
                 //    display.Fade();
                 break;
@@ -177,18 +265,18 @@ int Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
-            return NEWGAME;
+            return fheroes2::GameMode::NEW_GAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame.area() ) )
-            return LOADGAME;
+            return fheroes2::GameMode::LOAD_GAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
-            return HIGHSCORES;
+            return fheroes2::GameMode::HIGHSCORES;
         else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
-            return CREDITS;
+            return fheroes2::GameMode::CREDITS;
         else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME ) {
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
                 //     display.Fade();
-                return QUITGAME;
+                return fheroes2::GameMode::QUIT_GAME;
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
@@ -196,7 +284,7 @@ int Game::MainMenu( bool isFirstGameRun )
                 conf.Save( "fheroes2.cfg" );
                 // force interface to reset area and positions
                 Interface::Basic::Get().Reset();
-                return MAINMENU;
+                return fheroes2::GameMode::MAIN_MENU;
             }
         }
 
@@ -222,5 +310,5 @@ int Game::MainMenu( bool isFirstGameRun )
         }
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }

@@ -182,13 +182,13 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
     }
 }
 
-int Game::HighScores()
+fheroes2::GameMode Game::HighScores()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
         std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
-        return MAINMENU;
+        return fheroes2::GameMode::MAIN_MENU;
     }
 #endif
 
@@ -253,8 +253,8 @@ int Game::HighScores()
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }

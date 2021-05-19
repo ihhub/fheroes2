@@ -33,7 +33,6 @@
 #include "embedded_image.h"
 #include "engine.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_logo.h"
 #include "game_video.h"
 #include "gamedefs.h"
@@ -168,7 +167,6 @@ int main( int argc, char ** argv )
 #endif
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
-            // DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_INFO, display.GetInfo() );
 
             // read data dir
             if ( !AGG::Init() ) {
@@ -191,79 +189,7 @@ int main( int argc, char ** argv )
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
 
-            for ( int rs = Game::MAINMENU; rs != Game::QUITGAME; ) {
-                switch ( rs ) {
-                case Game::MAINMENU:
-                    rs = Game::MainMenu( isFirstGameRun );
-                    isFirstGameRun = false;
-                    break;
-                case Game::NEWGAME:
-                    rs = Game::NewGame();
-                    break;
-                case Game::LOADGAME:
-                    rs = Game::LoadGame();
-                    break;
-                case Game::HIGHSCORES:
-                    rs = Game::HighScores();
-                    break;
-                case Game::CREDITS:
-                    rs = Game::Credits();
-                    break;
-                case Game::NEWSTANDARD:
-                    rs = Game::NewStandard();
-                    break;
-                case Game::NEWCAMPAIGN:
-                    rs = Game::NewCampaign();
-                    break;
-                case Game::NEWMULTI:
-                    rs = Game::NewMulti();
-                    break;
-                case Game::NEWHOTSEAT:
-                    rs = Game::NewHotSeat();
-                    break;
-#ifdef NETWORK_ENABLE
-                case Game::NEWNETWORK:
-                    rs = Game::NewNetwork();
-                    break;
-#endif
-                case Game::NEWBATTLEONLY:
-                    rs = Game::NewBattleOnly();
-                    break;
-                case Game::LOADSTANDARD:
-                    rs = Game::LoadStandard();
-                    break;
-                case Game::LOADCAMPAIN:
-                    rs = Game::LoadCampain();
-                    break;
-                case Game::LOADMULTI:
-                    rs = Game::LoadMulti();
-                    break;
-                case Game::LOADHOTSEAT:
-                    rs = Game::LoadHotseat();
-                    break;
-                case Game::LOADNETWORK:
-                    rs = Game::LoadNetwork();
-                    break;
-                case Game::SCENARIOINFO:
-                    rs = Game::ScenarioInfo();
-                    break;
-                case Game::SELECTSCENARIO:
-                    rs = Game::SelectScenario();
-                    break;
-                case Game::STARTGAME:
-                    rs = Game::StartGame();
-                    break;
-                case Game::SELECT_CAMPAIGN_SCENARIO:
-                    rs = Game::SelectCampaignScenario();
-                    break;
-                case Game::COMPLETE_CAMPAIGN_SCENARIO:
-                    rs = Game::CompleteCampaignScenario();
-                    break;
-
-                default:
-                    break;
-                }
-            }
+            Game::mainGameLoop( isFirstGameRun );
         }
         catch ( const std::exception & ex ) {
             ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );

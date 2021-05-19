@@ -883,6 +883,8 @@ namespace ICN
         WOLF,
         WRLK32,
         WZRD32,
+        X_IVY,
+        X_LOADCM,
         X_LOC1,
         X_LOC2,
         X_LOC3,

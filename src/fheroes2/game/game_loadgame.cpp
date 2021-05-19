@@ -37,25 +37,25 @@
 #include "text.h"
 #include "ui_button.h"
 
-int Game::LoadCampain( void )
+fheroes2::GameMode Game::LoadCampaign()
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
     return DisplayLoadGameDialog();
 }
 
-int Game::LoadHotseat()
+fheroes2::GameMode Game::LoadHotseat()
 {
     Settings::Get().SetGameType( Game::TYPE_HOTSEAT );
     return DisplayLoadGameDialog();
 }
 
-int Game::LoadNetwork()
+fheroes2::GameMode Game::LoadNetwork()
 {
     Settings::Get().SetGameType( Game::TYPE_NETWORK );
     return DisplayLoadGameDialog();
 }
 
-int Game::LoadMulti( void )
+fheroes2::GameMode Game::LoadMulti()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -98,11 +98,11 @@ int Game::LoadMulti( void )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
-                return LOADHOTSEAT;
+                return fheroes2::GameMode::LOAD_HOT_SEAT;
             }
         }
         else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
-            return LOADGAME;
+            return fheroes2::GameMode::LOAD_GAME;
         }
 
         // right info
@@ -123,10 +123,10 @@ int Game::LoadMulti( void )
                     Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
                 }
                 else {
-                    return LOADNETWORK;
+                    return fheroes2::GameMode::LOAD_NETWORK;
                 }
             }
-            return LOADNETWORK;
+            return fheroes2::GameMode::LOAD_NETWORK;
             else if ( le.MousePressRight( buttonNetwork.area() ) )
                 Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
                                  Font::BIG );
@@ -134,10 +134,10 @@ int Game::LoadMulti( void )
 #endif
     }
 
-    return LOADGAME;
+    return fheroes2::GameMode::LOAD_GAME;
 }
 
-int Game::LoadGame( void )
+fheroes2::GameMode Game::LoadGame()
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
@@ -193,7 +193,7 @@ int Game::LoadGame( void )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
-                return LOADSTANDARD;
+                return fheroes2::GameMode::LOAD_STANDARD;
             }
         }
         else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) ) {
@@ -201,14 +201,14 @@ int Game::LoadGame( void )
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
             else {
-                return LOADCAMPAIN;
+                return fheroes2::GameMode::LOAD_CAMPAIN;
             }
         }
         else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( EVENT_BUTTON_MULTI ) ) {
-            return LOADMULTI;
+            return fheroes2::GameMode::LOAD_MULTI;
         }
         else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( le.MousePressRight( buttons[0].area() ) ) {
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
@@ -224,16 +224,16 @@ int Game::LoadGame( void )
         }
     }
 
-    return MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 
-int Game::LoadStandard( void )
+fheroes2::GameMode Game::LoadStandard()
 {
     Settings::Get().SetGameType( Game::TYPE_STANDARD );
     return DisplayLoadGameDialog();
 }
 
-int Game::DisplayLoadGameDialog()
+fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
@@ -248,7 +248,7 @@ int Game::DisplayLoadGameDialog()
 
     std::string file = Dialog::SelectFileLoad();
     if ( file.empty() || !Game::Load( file ) )
-        return LOADGAME;
+        return fheroes2::GameMode::LOAD_GAME;
 
-    return STARTGAME;
+    return fheroes2::GameMode::START_GAME;
 }

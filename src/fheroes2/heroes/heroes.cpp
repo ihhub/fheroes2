@@ -1597,6 +1597,7 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
+        Scoute( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
     }
 }

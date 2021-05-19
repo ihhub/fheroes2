@@ -122,8 +122,8 @@ void Game::LoadPlayers( const std::string & mapFileName, Players & players )
         return;
     }
 
-    const int newHumanCount = std::count_if( players.begin(), players.end(), []( const Player * player ) { return player->GetControl() == CONTROL_HUMAN; } );
-    const int savedHumanCount = std::count_if( savedPlayers.begin(), savedPlayers.end(), []( const Player & player ) { return player.GetControl() == CONTROL_HUMAN; } );
+    const auto newHumanCount = std::count_if( players.begin(), players.end(), []( const Player * player ) { return player->GetControl() == CONTROL_HUMAN; } );
+    const auto savedHumanCount = std::count_if( savedPlayers.begin(), savedPlayers.end(), []( const Player & player ) { return player.GetControl() == CONTROL_HUMAN; } );
 
     if ( newHumanCount != savedHumanCount ) {
         return;
@@ -180,11 +180,11 @@ void Game::SetLastSavename( const std::string & name )
     last_name = name;
 }
 
-int Game::Credits( void )
+fheroes2::GameMode Game::Credits()
 {
     ShowCredits();
 
-    return Game::MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 
 bool Game::ChangeMusicDisabled( void )
