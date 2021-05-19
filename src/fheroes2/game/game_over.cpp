@@ -349,7 +349,7 @@ int GameOver::Result::LocalCheckGameOver( void )
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
 
-                if ( conf.GameType() & Game::TYPE_CAMPAIGN ) {
+                if ( conf.isCampaignGameType() ) {
                     res = Game::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {

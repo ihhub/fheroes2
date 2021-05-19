@@ -275,3 +275,30 @@ bool SecondarySkillsBar::QueueEventProcessing( std::string * str )
         *str = msg;
     return res;
 }
+
+namespace fheroes2
+{
+    void RedrawPrimarySkillInfo( const fheroes2::Point & pos, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
+    {
+        // attack skill
+        Text text( _( "Attack Skill" ), Font::SMALL );
+        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 64 );
+
+        // defense skill
+        text.Set( _( "Defense Skill" ) );
+        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 96 );
+
+        // spell power
+        text.Set( _( "Spell Power" ) );
+        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 128 );
+
+        // knowledge
+        text.Set( _( "Knowledge" ) );
+        text.Blit( pos.x + 320 - text.w() / 2, pos.y + 160 );
+
+        if ( bar1 )
+            bar1->Redraw();
+        if ( bar2 )
+            bar2->Redraw();
+    }
+}

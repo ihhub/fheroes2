@@ -1410,7 +1410,7 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     // extra objects for loyalty version
     case X_LOC1:
 
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // alchemist tower
             case 0x04:
@@ -1435,7 +1435,7 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     // extra objects for loyalty version
     case X_LOC2:
 
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // mermaid
             case 0x0A:
@@ -1460,7 +1460,7 @@ u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
     // extra objects for loyalty version
     case X_LOC3:
 
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             switch ( start ) {
             // hut magi
             case 0x00:

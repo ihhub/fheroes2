@@ -169,7 +169,7 @@ int Game::LoadGame( void )
     const int32_t buttonYStep = 66;
 
     for ( size_t i = 0; i < buttonCount - 1; ++i ) {
-        buttons[i].setPosition( buttonXPos, buttonYPos + buttonYStep * i );
+        buttons[i].setPosition( buttonXPos, buttonYPos + buttonYStep * static_cast<int32_t>( i ) );
         buttons[i].draw();
     }
 

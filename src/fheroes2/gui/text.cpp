@@ -96,20 +96,21 @@ int TextAscii::FontHeight( const int f )
         return 13 + 3 + 1;
 }
 
-int TextAscii::w( u32 s, u32 c ) const
+int TextAscii::w( size_t s, size_t c ) const
 {
-    uint32_t res = 0;
-    uint32_t size = message.size();
+    const size_t size = message.size();
+    if ( size == 0 )
+        return 0;
 
-    if ( size ) {
-        if ( s > size - 1 )
-            s = size - 1;
-        if ( !c || c > size )
-            c = size - s;
+    int res = 0;
 
-        for ( uint32_t i = s; i < s + c; ++i )
-            res += CharWidth( static_cast<uint8_t>( message[i] ), font );
-    }
+    if ( s > size - 1 )
+        s = size - 1;
+    if ( !c || c > size )
+        c = size - s;
+
+    for ( size_t i = s; i < s + c; ++i )
+        res += CharWidth( static_cast<uint8_t>( message[i] ), font );
 
     return res;
 }
@@ -271,20 +272,21 @@ int TextUnicode::CharHeight( int f )
     return isSmallFont( f ) ? ( AGG::GetFontHeight( true ) + 2 ) : ( AGG::GetFontHeight( false ) + 8 );
 }
 
-int TextUnicode::w( u32 s, u32 c ) const
+int TextUnicode::w( size_t s, size_t c ) const
 {
-    u32 res = 0;
-    u32 size = message.size();
+    const size_t size = message.size();
+    if ( size == 0 )
+        return 0;
 
-    if ( size ) {
-        if ( s > size - 1 )
-            s = size - 1;
-        if ( !c || c > size )
-            c = size - s;
+    int res = 0;
 
-        for ( u32 ii = s; ii < s + c; ++ii )
-            res += CharWidth( message[ii], font );
-    }
+    if ( s > size - 1 )
+        s = size - 1;
+    if ( !c || c > size )
+        c = size - s;
+
+    for ( size_t ii = s; ii < s + c; ++ii )
+        res += CharWidth( message[ii], font );
 
     return res;
 }

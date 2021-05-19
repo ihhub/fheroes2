@@ -1033,7 +1033,7 @@ void CastlePackOrdersBuildings( const Castle & castle, std::vector<building_t> &
         break;
     case Race::NECR:
         ordersBuildings.push_back( BUILD_SPEC );
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isCurrentMapPriceOfLoyalty() )
             ordersBuildings.push_back( BUILD_SHRINE );
         ordersBuildings.push_back( BUILD_TENT );
         ordersBuildings.push_back( BUILD_CASTLE );

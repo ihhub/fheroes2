@@ -428,7 +428,8 @@ smk smk_open_memory(const unsigned char* buffer, const unsigned long size)
 	/* set up the read union for Memory mode */
 	fp.ram = (unsigned char*)buffer;
 
-	if (!(s = smk_open_generic(0,fp,size,SMK_MODE_MEMORY)))
+    s = smk_open_generic(0,fp,size,SMK_MODE_MEMORY);
+	if (!s)
 	{
 		fprintf(stderr,"libsmacker::smk_open_memory(buffer,%lu) - ERROR: Fatal error in smk_open_generic, returning NULL.\n",size);
 	}
@@ -449,7 +450,8 @@ smk smk_open_filepointer(FILE* file, const unsigned char mode)
 	/* Copy file ptr to internal union */
 	fp.file = file;
 
-	if (!(s = smk_open_generic(1,fp,0,mode)))
+    s = smk_open_generic(1,fp,0,mode);
+	if (!s)
 	{
 		fprintf(stderr,"libsmacker::smk_open_filepointer(file,%u) - ERROR: Fatal error in smk_open_generic, returning NULL.\n",mode);
 		fclose(fp.file);
@@ -477,7 +479,8 @@ smk smk_open_file(const char* filename, const unsigned char mode)
 
 	smk_assert(filename);
 
-	if (!(fp = fopen(filename,"rb")))
+    fp = fopen(filename,"rb");
+	if (!fp)
 	{
 		fprintf(stderr,"libsmacker::smk_open_file(%s,%u) - ERROR: could not open file (errno: %d)\n",filename,mode,errno);
 		perror ("\tError reported was");
@@ -1222,7 +1225,8 @@ static char smk_render(smk s)
 	smk_assert(s);
 
 	/* Retrieve current chunk_size for this frame. */
-	if (!(i = s->chunk_size[s->cur_frame]))
+    i = s->chunk_size[s->cur_frame];
+	if (!i)
 	{
 		fprintf(stderr,"libsmacker::smk_render(s) - Warning: frame %lu: chunk_size is 0.\n",s->cur_frame);
 		goto error;

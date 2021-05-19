@@ -929,6 +929,8 @@ namespace ICN
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
 
+        CURSOR_ADVENTURE_MAP,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
