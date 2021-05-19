@@ -36,7 +36,7 @@
 #include "settings.h"
 #include "spell.h"
 
-namespace
+namespace ICN
 {
     struct icnmap_t
     {
