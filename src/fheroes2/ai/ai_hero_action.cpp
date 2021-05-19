@@ -1947,7 +1947,9 @@ namespace AI
             const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
             const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
 
-            while ( LocalEvent::Get().HandleEvents() ) {
+            const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
+
+            while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
