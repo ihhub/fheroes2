@@ -34,23 +34,26 @@ namespace Mixer
 {
     void Init( void );
     void Quit( void );
+}
 
+namespace
+{
     bool valid = false;
 
     bool muted = false;
     std::vector<int> savedVolumes;
+
+    void FreeChannel( int channel )
+    {
+        Mixer::chunk_t * sample = Mix_GetChunk( channel );
+        if ( sample )
+            Mix_FreeChunk( sample );
+    }
 }
 
 bool Mixer::isValid( void )
 {
     return valid;
-}
-
-void FreeChannel( int channel )
-{
-    Mixer::chunk_t * sample = Mix_GetChunk( channel );
-    if ( sample )
-        Mix_FreeChunk( sample );
 }
 
 void Mixer::Init( void )
