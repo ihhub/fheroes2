@@ -2407,11 +2407,11 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
-bool Maps::Tiles::isFogAllAround( int color ) const
+bool Maps::Tiles::isFogAllAround( const int color ) const
 {
-    const uint32_t center = GetIndex();
+    const int32_t center = GetIndex();
     const fheroes2::Point mp = Maps::GetPoint( center );
-    const int width = world.w();
+    const int32_t width = world.w();
 
     if ( mp.y > 0 ) {
         if ( mp.x > 0 && !world.GetTiles( center - width - 1 ).isFog( color ) ) {
