@@ -1944,12 +1944,15 @@ namespace AI
             fheroes2::Point heroAnimationOffset;
             int heroAnimationSpriteId = 0;
 
+            const bool hideAIMovements = ( conf.AIMoveSpeed() == 0 );
+            const bool noMovementAnimation = ( conf.AIMoveSpeed() == 10 );
+
             while ( LocalEvent::Get().HandleEvents() ) {
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
                 }
 
-                if ( !AIHeroesShowAnimation( hero, colors ) ) {
+                if ( hideAIMovements || !AIHeroesShowAnimation( hero, colors ) ) {
                     hero.Move( true );
                     recenterNeeded = true;
                 }
@@ -1983,7 +1986,7 @@ namespace AI
                             hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
                         }
 
-                        if ( hero.Move( 10 == conf.AIMoveSpeed() ) ) {
+                        if ( hero.Move( noMovementAnimation ) ) {
                             gameArea.SetCenter( hero.GetCenter() );
                         }
                         else {

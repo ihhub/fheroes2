@@ -518,8 +518,8 @@ bool Settings::Read( const std::string & filename )
         if ( ai_speed > 10 ) {
             ai_speed = 10;
         }
-        if ( ai_speed < 1 ) {
-            ai_speed = 1;
+        if ( ai_speed < 0 ) {
+            ai_speed = 0;
         }
     }
 
@@ -724,13 +724,13 @@ std::string Settings::String() const
     os << std::endl << "# run in debug mode (0 - 11) [only for development]" << std::endl;
     os << "debug = " << debug << std::endl;
 
-    os << std::endl << "# heroes move speed: 0 - 10" << std::endl;
+    os << std::endl << "# heroes move speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
 
     os << std::endl << "# AI move speed: 0 - 10" << std::endl;
     os << "ai speed = " << ai_speed << std::endl;
 
-    os << std::endl << "# battle speed: 0 - 10" << std::endl;
+    os << std::endl << "# battle speed: 1 - 10" << std::endl;
     os << "battle speed = " << battle_speed << std::endl;
 
     os << std::endl << "# scroll speed: 1 - 4" << std::endl;
@@ -1037,8 +1037,8 @@ int Settings::ScrollSpeed() const
 /* set ai speed: 1 - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
-    if ( speed < 1 ) {
-        speed = 1;
+    if ( speed < 0 ) {
+        speed = 0;
     }
     if ( speed > 10 ) {
         speed = 10;
