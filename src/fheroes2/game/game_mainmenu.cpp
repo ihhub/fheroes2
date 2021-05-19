@@ -172,7 +172,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         Dialog::Message( _( "Please remember" ),
                          _( "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
-                         "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
+                            "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
                          Font::BIG, Dialog::OK );
     }
 

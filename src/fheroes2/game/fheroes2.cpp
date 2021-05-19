@@ -20,8 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 
@@ -61,9 +61,9 @@ namespace
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
-    #ifndef BUILD_RELEASE
+#ifndef BUILD_RELEASE
         COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
-    #endif
+#endif
         COUT( "  -h\t\tprint this help message and exit" );
 
         return EXIT_SUCCESS;
@@ -127,7 +127,7 @@ namespace
 
     void SetLangEnvPath( const Settings & conf )
     {
-    #ifdef WITH_TTF
+#ifdef WITH_TTF
         if ( conf.Unicode() ) {
             System::SetLocale( LC_ALL, "" );
             System::SetLocale( LC_NUMERIC, "C" );
@@ -143,9 +143,9 @@ namespace
             else
                 ERROR_LOG( "translation not found: " << mofile );
         }
-    #else
+#else
         (void)conf;
-    #endif
+#endif
         Translation::setStripContext( '|' );
     }
 }
