@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "game_mode.h"
 #include "serialize.h"
 
 namespace GameOver
@@ -62,7 +63,7 @@ namespace GameOver
         void Reset( void );
         void SetResult( int );
         int GetResult( void ) const;
-        int LocalCheckGameOver( void );
+        fheroes2::GameMode LocalCheckGameOver();
 
     private:
         friend StreamBase & operator<<( StreamBase &, const Result & );

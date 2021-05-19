@@ -58,17 +58,17 @@ namespace
     }
 }
 
-int Game::StartBattleOnly( void )
+fheroes2::GameMode Game::StartBattleOnly( void )
 {
     Battle::Only main;
 
     if ( main.ChangeSettings() )
         main.StartBattle();
 
-    return Game::MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 
-int Game::StartGame( void )
+fheroes2::GameMode Game::StartGame()
 {
     AI::Get().Reset();
 
@@ -292,14 +292,14 @@ void ShowEventDayDialog( void )
     }
 }
 
-int ShowWarningLostTownsDialog( void )
+fheroes2::GameMode ShowWarningLostTownsDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( 0 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
         GameOver::Result::Get().SetResult( GameOver::LOSS_ALL );
-        return Game::MAINMENU;
+        return fheroes2::GameMode::MAIN_MENU;
     }
     else if ( 1 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
@@ -310,7 +310,7 @@ int ShowWarningLostTownsDialog( void )
         Game::DialogPlayers( myKingdom.GetColor(), str );
     }
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
 /* return changee cursor */
@@ -510,7 +510,7 @@ int Interface::Basic::GetCursorTileIndex( s32 dst_index )
     return Cursor::POINTER;
 }
 
-int Interface::Basic::StartGame( void )
+fheroes2::GameMode Interface::Basic::StartGame()
 {
     Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
@@ -529,12 +529,12 @@ int Interface::Basic::StartGame( void )
 
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
-    int res = Game::ENDTURN;
+    fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
-    while ( res == Game::ENDTURN ) {
+    while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !skip_turns )
             world.NewDay();
 
@@ -585,7 +585,7 @@ int Interface::Basic::StartGame( void )
 
                 // CONTROL_AI turn
                 default:
-                    if ( res == Game::ENDTURN ) {
+                    if ( res == fheroes2::GameMode::END_TURN ) {
                         statusWindow.Reset();
                         statusWindow.SetState( StatusType::STATUS_AITURN );
 
@@ -600,34 +600,34 @@ int Interface::Basic::StartGame( void )
                     break;
                 }
 
-                if ( res != Game::ENDTURN )
+                if ( res != fheroes2::GameMode::END_TURN )
                     break;
 
                 res = gameResult.LocalCheckGameOver();
 
-                if ( Game::CANCEL != res )
+                if ( fheroes2::GameMode::CANCEL != res )
                     break;
                 else
-                    res = Game::ENDTURN;
+                    res = fheroes2::GameMode::END_TURN;
             }
 
         fheroes2::delayforMs( 10 );
     }
 
-    if ( res == Game::ENDTURN )
+    if ( res == fheroes2::GameMode::END_TURN )
         display.fill( 0 );
     else if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    return res == Game::ENDTURN ? Game::QUITGAME : res;
+    return res == fheroes2::GameMode::END_TURN ? fheroes2::GameMode::QUIT_GAME : res;
 }
 
-int Interface::Basic::HumanTurn( bool isload )
+fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
-    int res = Game::CANCEL;
+    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
     cursor.Hide();
@@ -684,7 +684,7 @@ int Interface::Basic::HumanTurn( bool isload )
     res = gameResult.LocalCheckGameOver();
 
     // warning lost all town
-    if ( res == Game::CANCEL && myCastles.empty() ) {
+    if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         res = ShowWarningLostTownsDialog();
     }
 
@@ -707,10 +707,10 @@ int Interface::Basic::HumanTurn( bool isload )
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
     // startgame loop
-    while ( Game::CANCEL == res ) {
+    while ( fheroes2::GameMode::CANCEL == res ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-            if ( EventExit() == Game::QUITGAME ) {
-                res = Game::QUITGAME;
+            if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                res = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
             else {
@@ -818,7 +818,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
-        if ( res != Game::CANCEL ) {
+        if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
 
@@ -914,7 +914,7 @@ int Interface::Basic::HumanTurn( bool isload )
             buttonsArea.ResetButtons();
         }
 
-        if ( res != Game::CANCEL ) {
+        if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
 
@@ -1036,7 +1036,7 @@ int Interface::Basic::HumanTurn( bool isload )
         }
     }
 
-    if ( Game::ENDTURN == res ) {
+    if ( fheroes2::GameMode::END_TURN == res ) {
         // warning lost all town
         if ( myHeroes.size() && myCastles.empty() && Game::GetLostTownDays() < myKingdom.GetLostTownDays() ) {
             Game::DialogPlayers( conf.CurrentColor(),

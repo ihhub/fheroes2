@@ -40,7 +40,7 @@ namespace Interface
         void SetRedraw( void ) const;
 
         void Redraw( void );
-        int QueueEventProcessing( void );
+        fheroes2::GameMode QueueEventProcessing();
         void ResetButtons();
 
     private:

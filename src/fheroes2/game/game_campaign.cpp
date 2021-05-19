@@ -261,13 +261,26 @@ namespace
     }
 }
 
-bool Game::IsOriginalCampaignPresent()
+bool Game::isSuccessionWarsCampaignPresent()
 {
     return Campaign::CampaignData::getCampaignData( Campaign::ROLAND_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::ARCHIBALD_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
-int Game::CompleteCampaignScenario()
+bool Game::isPriceOfLoyaltyCampaignPresent()
+{
+    // We need to check game resources as well.
+    if ( fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 ).empty() || fheroes2::AGG::GetICN( ICN::X_IVY, 0 ).empty() ) {
+        return false;
+    }
+
+    return Campaign::CampaignData::getCampaignData( Campaign::PRICE_OF_LOYALTY_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::VOYAGE_HOME_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_TALE_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
+}
+
+fheroes2::GameMode Game::CompleteCampaignScenario()
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
@@ -298,14 +311,14 @@ int Game::CompleteCampaignScenario()
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
-        return Game::HIGHSCORES;
+        return fheroes2::GameMode::HIGHSCORES;
 
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
     saveData.setCurrentScenarioID( firstNextMap );
-    return Game::SELECT_CAMPAIGN_SCENARIO;
+    return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
-int Game::SelectCampaignScenario()
+fheroes2::GameMode Game::SelectCampaignScenario()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
@@ -416,12 +429,12 @@ int Game::SelectCampaignScenario()
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
             if ( le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
-                return Game::SELECT_CAMPAIGN_SCENARIO;
+                return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
-            return Game::NEWGAME;
+            return fheroes2::GameMode::NEW_GAME;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
@@ -452,9 +465,9 @@ int Game::SelectCampaignScenario()
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
 
-            return Game::STARTGAME;
+            return fheroes2::GameMode::START_GAME;
         }
     }
 
-    return Game::NEWGAME;
+    return fheroes2::GameMode::NEW_GAME;
 }

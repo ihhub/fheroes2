@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "types.h"
 
@@ -40,40 +41,6 @@ namespace Campaign
 
 namespace Game
 {
-    enum
-    {
-        CANCEL = 0,
-        QUITGAME,
-        MAINMENU,
-        NEWGAME,
-        LOADGAME,
-        HIGHSCORES,
-        CREDITS,
-        NEWSTANDARD,
-        NEWCAMPAIGN,
-        NEWMULTI,
-        NEWHOTSEAT,
-        NEWNETWORK,
-        NEWBATTLEONLY,
-        LOADSTANDARD,
-        LOADCAMPAIN,
-        LOADMULTI,
-        LOADHOTSEAT,
-        LOADNETWORK,
-        SCENARIOINFO,
-        SELECTSCENARIO,
-        STARTGAME,
-        SAVEGAME,
-        EDITMAINMENU,
-        EDITNEWMAP,
-        EDITLOADMAP,
-        EDITSAVEMAP,
-        EDITSTART,
-        ENDTURN,
-        SELECT_CAMPAIGN_SCENARIO,
-        COMPLETE_CAMPAIGN_SCENARIO
-    };
-
     void Init( void );
 
     const std::string & GetLastSavename( void );
@@ -180,30 +147,35 @@ namespace Game
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
 
-    int MainMenu( bool isFirstGameRun );
-    int NewGame( void );
-    int LoadGame( void );
-    int HighScores();
-    int Credits( void );
-    int NewStandard( void );
-    int NewCampaign();
-    int NewMulti( void );
-    int NewHotSeat( void );
-    int NewBattleOnly( void );
-    int LoadStandard( void );
-    int LoadCampain( void );
-    int LoadMulti( void );
-    int LoadHotseat();
-    int LoadNetwork();
-    int ScenarioInfo( void );
-    int SelectCampaignScenario();
-    int SelectScenario( void );
-    int StartGame( void );
-    int StartBattleOnly( void );
-    int DisplayLoadGameDialog();
-    int CompleteCampaignScenario();
+    void mainGameLoop( bool isFirstGameRun );
 
-    bool IsOriginalCampaignPresent();
+    fheroes2::GameMode MainMenu( bool isFirstGameRun );
+    fheroes2::GameMode NewGame();
+    fheroes2::GameMode LoadGame();
+    fheroes2::GameMode HighScores();
+    fheroes2::GameMode Credits();
+    fheroes2::GameMode NewStandard();
+    fheroes2::GameMode CampaignSelection();
+    fheroes2::GameMode NewSuccessionWarsCampaign();
+    fheroes2::GameMode NewPriceOfLoyaltyCampaign();
+    fheroes2::GameMode NewMulti();
+    fheroes2::GameMode NewHotSeat();
+    fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode LoadStandard();
+    fheroes2::GameMode LoadCampaign();
+    fheroes2::GameMode LoadMulti();
+    fheroes2::GameMode LoadHotseat();
+    fheroes2::GameMode LoadNetwork();
+    fheroes2::GameMode ScenarioInfo();
+    fheroes2::GameMode SelectCampaignScenario();
+    fheroes2::GameMode SelectScenario();
+    fheroes2::GameMode StartGame();
+    fheroes2::GameMode StartBattleOnly();
+    fheroes2::GameMode DisplayLoadGameDialog();
+    fheroes2::GameMode CompleteCampaignScenario();
+
+    bool isSuccessionWarsCampaignPresent();
+    bool isPriceOfLoyaltyCampaignPresent();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );

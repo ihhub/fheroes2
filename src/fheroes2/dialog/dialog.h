@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
 
@@ -80,7 +81,7 @@ namespace Dialog
     };
 
     int AdventureOptions( bool enabledig );
-    int FileOptions( void );
+    fheroes2::GameMode FileOptions();
     int SystemOptions( void );
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
