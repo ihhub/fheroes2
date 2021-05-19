@@ -444,6 +444,18 @@ fheroes2::GameMode Game::SelectCampaignScenario()
                 SetScenarioBonus( scenarioBonus );
 
             Players & players = conf.GetPlayers();
+
+            for ( Players::const_iterator it = players.begin(); it != players.end(); ++it ) {
+                if ( !*it )
+                    continue;
+
+                Player & player = ( **it );
+                if ( player.isControlHuman() ) {
+                    player.SetFriends( scenario.getAllyColors() | player.GetColor() );
+                    break;
+                }
+            }
+            
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();

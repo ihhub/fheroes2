@@ -125,7 +125,8 @@ namespace
         // NOTE: In Roland's Campaign, scenario 8 is drawn above scenario 7, so we emplace_back scenario 8 first
         scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignDescription[7] );
         scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignDescription[6] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8],
+                                    Campaign::ScenarioVictoryCondition::WINS_SIDE, Campaign::ScenarioLossCondition::STANDARD, Color::YELLOW );
         scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignDescription[9] );
 
         Campaign::CampaignData campaignData;

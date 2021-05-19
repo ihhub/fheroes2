@@ -21,6 +21,7 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
+#include "color.h"
 #include "maps_fileinfo.h"
 
 namespace Campaign
@@ -47,7 +48,8 @@ namespace Campaign
     enum class ScenarioVictoryCondition : int
     {
         STANDARD = 0, // standard map's defined victory condition
-        CAPTURE_DRAGON_CITY = 1
+        CAPTURE_DRAGON_CITY = 1,
+        WINS_SIDE = 2 // necessary to override roland ch9's win condition where it was WINS_ALL
     };
 
     enum class ScenarioLossCondition : int
@@ -90,7 +92,7 @@ namespace Campaign
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
                       const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
-                      const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
+                      const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD, const int allyColors = Color::NONE );
 
         const std::vector<int> & getNextMaps() const
         {
@@ -127,6 +129,11 @@ namespace Campaign
             return _lossCondition;
         }
 
+        int getAllyColors() const
+        {
+            return _allyColors;
+        }
+
         bool isMapFilePresent() const;
         Maps::FileInfo loadMap() const;
 
@@ -138,6 +145,7 @@ namespace Campaign
         std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
         ScenarioVictoryCondition _victoryCondition;
         ScenarioLossCondition _lossCondition;
+        int _allyColors;
     };
 }
 

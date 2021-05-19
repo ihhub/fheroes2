@@ -1022,6 +1022,9 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
                     return GameOver::COND_NONE;
                 }
             }
+            else if ( victoryCondition == Campaign::ScenarioVictoryCondition::WINS_SIDE && KingdomIsWins( kingdom, GameOver::WINS_SIDE ) ) {
+                return GameOver::WINS_SIDE;
+            }
         }
     }
 
