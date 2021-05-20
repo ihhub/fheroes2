@@ -59,7 +59,8 @@ after_build:
   - cmd: cd C:\projects\fheroes2
   - cmd: xcopy /Y /s /Q "doc\README.txt" "."
   - cmd: xcopy /Y /s /Q "script\demo\demo_windows.bat" "."
-  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: xcopy /Y /s /Q "script\demo\demo_windows.ps1" "."
+  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat demo_windows.ps1 LICENSE fheroes2.key changelog.txt README.txt
 
 artifacts:
   - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).zip
