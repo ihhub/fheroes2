@@ -49,8 +49,8 @@ namespace AI
 
     const std::vector<BuildOrder> & GetDefensiveStructures()
     {
-        static const std::vector<BuildOrder> defensive
-            = {{BUILD_LEFTTURRET, 1}, {BUILD_RIGHTTURRET, 1}, {BUILD_MOAT, 1}, {BUILD_CAPTAIN, 1}, {BUILD_MAGEGUILD1, 1}, {BUILD_SPEC, 2}, {BUILD_TAVERN, 1}};
+        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 },  { BUILD_CAPTAIN, 1 },
+                                                           { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 },        { BUILD_TAVERN, 1 } };
 
         return defensive;
     }
