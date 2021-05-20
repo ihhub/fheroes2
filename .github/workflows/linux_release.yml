@@ -23,7 +23,7 @@ jobs:
     - name: create package
       run: |
         cp doc/README.txt .
-        zip fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_linux.sh changelog.txt README.txt
+        zip fheroes2_ubuntu_sdl1.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh script/demo/demo_unix.sh changelog.txt README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_ubuntu_sdl1.zip
@@ -51,7 +51,7 @@ jobs:
     - name: create package
       run: |
         cp doc/README.txt .
-        zip fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_linux.sh changelog.txt README.txt
+        zip fheroes2_ubuntu_sdl2.zip fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh script/demo/demo_unix.sh changelog.txt README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_ubuntu_sdl2.zip
