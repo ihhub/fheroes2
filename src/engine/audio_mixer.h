@@ -27,13 +27,10 @@
 
 #include "types.h"
 
-#ifdef WITH_MIXER
 #include <SDL_mixer.h>
-#endif
 
 namespace Mixer
 {
-#ifdef WITH_MIXER
     typedef Mix_Chunk chunk_t;
 
     void FreeChunk( chunk_t * );
@@ -42,24 +39,26 @@ namespace Mixer
 
     int Play( chunk_t *, int, bool );
     int Play( const char *, int = -1, bool = false );
-#endif
     int Play( const u8 *, u32, int = -1, bool = false );
 
-    void SetChannels( u8 );
-    u16 MaxVolume( void );
-    u16 Volume( int ch, int16_t = -1 );
+    void SetChannels( int num );
+    int MaxVolume();
+    int Volume( int channel, int vol = -1 );
 
-    void Pause( int ch = -1 );
-    void Resume( int ch = -1 );
-    void Stop( int ch = -1 );
+    void Pause( int channel = -1 );
+    void Resume( int channel = -1 );
+    void Stop( int channel = -1 );
     void Reset( void );
 
-    u8 isPlaying( int );
-    u8 isPaused( int );
+    bool isPlaying( int channel );
+    bool isPaused( int channel );
     bool isValid( void );
 
     void Reduce( void );
     void Enhance( void );
+
+    void Mute();
+    void Unmute();
 }
 
 #endif

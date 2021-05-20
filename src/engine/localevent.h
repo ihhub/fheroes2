@@ -24,6 +24,7 @@
 #define H2LOCALEVENT_H
 
 #include <string>
+#include <vector>
 
 #include "math_base.h"
 #include "timing.h"
@@ -332,12 +333,6 @@ private:
     void ( *keyboard_filter_func )( int, int );
 
     uint32_t loop_delay;
-
-    // These members are used for restoring music and sounds when an user reopens the window
-    bool _isHiddenWindow;
-    bool _isMusicPaused;
-    bool _isSoundPaused;
-    uint16_t _musicVolume;
 
     enum
     {
