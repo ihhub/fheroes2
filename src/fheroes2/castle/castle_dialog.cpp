@@ -124,15 +124,15 @@ int Castle::OpenDialog( bool readonly )
 
     CastleHeroes heroes = world.GetHeroes( *this );
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
-
     // fade
     if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    Cursor & cursor = Cursor::Get();
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
