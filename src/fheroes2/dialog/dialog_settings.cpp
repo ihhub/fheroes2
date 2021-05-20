@@ -154,8 +154,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
 
-    states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
-
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
 

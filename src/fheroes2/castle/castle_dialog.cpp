@@ -118,10 +118,6 @@ int Castle::OpenDialog( bool readonly )
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
-    const bool interface = conf.ExtGameEvilInterface();
-    if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( ( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) ) != 0 );
-
     CastleHeroes heroes = world.GetHeroes( *this );
 
     // cursor
@@ -674,9 +670,6 @@ int Castle::OpenDialog( bool readonly )
     if ( build != BUILD_NOTHING ) {
         BuyBuilding( build );
     }
-
-    if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( interface );
 
     Game::DisableChangeMusic( false );
 

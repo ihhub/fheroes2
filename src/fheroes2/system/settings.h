@@ -72,7 +72,7 @@ public:
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
-        GAME_DYNAMIC_INTERFACE = 0x10010000,
+        // UNUSED = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
 
@@ -232,7 +232,6 @@ public:
     bool ExtGameAutosaveOn() const;
     bool ExtGameUseFade() const;
     bool ExtGameEvilInterface() const;
-    bool ExtGameDynamicInterface() const;
     bool ExtGameHideInterface() const;
 
     const fheroes2::Size & VideoMode() const;

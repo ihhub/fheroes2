@@ -281,10 +281,6 @@ namespace
             _( "game: use evil interface" ),
         },
         {
-            Settings::GAME_DYNAMIC_INTERFACE,
-            _( "game: also use dynamic interface for castles" ),
-        },
-        {
             Settings::GAME_HIDE_INTERFACE,
             _( "game: hide interface" ),
         },
@@ -1658,11 +1654,6 @@ bool Settings::ExtGameUseFade() const
 bool Settings::ExtGameEvilInterface() const
 {
     return ExtModes( GAME_EVIL_INTERFACE );
-}
-
-bool Settings::ExtGameDynamicInterface() const
-{
-    return ExtModes( GAME_DYNAMIC_INTERFACE );
 }
 
 bool Settings::ExtGameHideInterface() const
