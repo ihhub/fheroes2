@@ -2331,7 +2331,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
 
-        // StatusListBox hides cursor on redraw
+        // StatusListBox hides cursor on event processing
         const CursorRestorer cursorRestorer( false );
 
         listlog->QueueEventProcessing();

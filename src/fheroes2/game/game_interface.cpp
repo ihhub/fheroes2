@@ -186,17 +186,12 @@ void Interface::Basic::Redraw( int force )
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) )
         radar.Redraw();
 
-    {
-        // IconsPanel hides cursor on redraw
-        const CursorRestorer cursorRestorer( false );
-
-        if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) )
-            iconsPanel.Redraw();
-        else if ( combinedRedraw & REDRAW_HEROES )
-            iconsPanel.RedrawIcons( ICON_HEROES );
-        else if ( combinedRedraw & REDRAW_CASTLES )
-            iconsPanel.RedrawIcons( ICON_CASTLES );
-    }
+    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) )
+        iconsPanel.Redraw();
+    else if ( combinedRedraw & REDRAW_HEROES )
+        iconsPanel.RedrawIcons( ICON_HEROES );
+    else if ( combinedRedraw & REDRAW_CASTLES )
+        iconsPanel.RedrawIcons( ICON_CASTLES );
 
     if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) )
         buttonsArea.Redraw();

@@ -181,9 +181,6 @@ void Interface::CastleIcons::ActionCurrentDn( void )
 void Interface::CastleIcons::ActionListDoubleClick( CASTLE & item )
 {
     if ( item ) {
-        // Interface::ListBox hides cursor here
-        Cursor::Get().Show();
-
         Game::OpenCastleDialog( *item );
     }
 }
@@ -264,9 +261,6 @@ void Interface::HeroesIcons::ActionCurrentDn( void )
 void Interface::HeroesIcons::ActionListDoubleClick( HEROES & item )
 {
     if ( item ) {
-        // Interface::ListBox hides cursor here
-        Cursor::Get().Show();
-
         if ( item->Modes( Heroes::GUARDIAN ) ) {
             Castle * castle = world.GetCastle( item->GetCenter() );
             if ( castle )
@@ -397,6 +391,9 @@ void Interface::IconsPanel::Redraw( void )
         if ( Settings::Get().ExtGameHideInterface() )
             BorderWindow::Redraw();
 
+        // HeroesIcons and CastleIcons hide cursor on redraw
+        const CursorRestorer cursorRestorer( false );
+
         heroesIcons.Redraw();
         castleIcons.Redraw();
     }
@@ -404,6 +401,9 @@ void Interface::IconsPanel::Redraw( void )
 
 void Interface::IconsPanel::QueueEventProcessing( void )
 {
+    // HeroesIcons and CastleIcons hide cursor on event processing
+    const CursorRestorer cursorRestorer( false );
+
     if ( Settings::Get().ShowIcons() &&
          // move border window
          BorderWindow::QueueEventProcessing() ) {
@@ -471,6 +471,9 @@ void Interface::IconsPanel::ShowIcons( icons_t type )
 
 void Interface::IconsPanel::SetCurrentVisible( void )
 {
+    // HeroesIcons and CastleIcons hide cursor on redraw
+    const CursorRestorer cursorRestorer( false );
+
     if ( heroesIcons.isSelected() ) {
         heroesIcons.SetCurrentVisible();
         heroesIcons.Redraw();
@@ -483,6 +486,9 @@ void Interface::IconsPanel::SetCurrentVisible( void )
 
 void Interface::IconsPanel::RedrawIcons( icons_t type )
 {
+    // HeroesIcons and CastleIcons hide cursor on redraw
+    const CursorRestorer cursorRestorer( false );
+
     if ( type & ICON_HEROES )
         heroesIcons.Redraw();
     if ( type & ICON_CASTLES )
