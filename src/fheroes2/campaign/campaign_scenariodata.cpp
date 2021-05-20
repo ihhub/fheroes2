@@ -249,7 +249,8 @@ namespace Campaign
     }
 
     ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
-                                const std::string & description, const ScenarioVictoryCondition victoryCondition, const ScenarioLossCondition lossCondition, const int allyColors )
+                                const std::string & description, const ScenarioVictoryCondition victoryCondition, const ScenarioLossCondition lossCondition,
+                                const int allyColors )
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )

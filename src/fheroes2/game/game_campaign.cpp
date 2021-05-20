@@ -455,7 +455,7 @@ fheroes2::GameMode Game::SelectCampaignScenario()
                     break;
                 }
             }
-            
+
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
