@@ -24,49 +24,36 @@ echo [7/7] Downloading packages
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
 
 xcopy /Y /s /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
+
 cd "%tempPath%"
 
-set sevenZipPath=
+echo [1/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'zlib\zlib1.2.11.zip' -DestinationPath 'zlib' -Force"
 
-where 7z.exe >nul 2>nul
-if %errorlevel% == 0 (
-    set sevenZipPath=7z.exe
-) else (
-    if exist "%ProgramFiles%\7-Zip\7z.exe" (
-        set sevenZipPath=%ProgramFiles%\7-Zip\7z.exe
-    )
-)
+echo [2/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl\sdl.zip' -DestinationPath 'sdl' -Force"
 
-if not "%sevenZipPath%" == "" (
-    echo [1/7] Unpacking packages
-    "%sevenZipPath%" x zlib\zlib1.2.11.zip -aoa -ozlib > nul
+echo [3/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl\sdl2.zip' -DestinationPath 'sdl' -Force"
 
-    echo [2/7] Unpacking packages
-    "%sevenZipPath%" x sdl\sdl.zip -aoa -osdl > nul
+echo [4/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl_mixer\sdl_mixer.zip' -DestinationPath 'sdl_mixer' -Force"
 
-    echo [3/7] Unpacking packages
-    "%sevenZipPath%" x sdl\sdl2.zip -aoa -osdl > nul
+echo [5/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl_mixer\sdl_mixer2.zip' -DestinationPath 'sdl_mixer' -Force"
 
-    echo [4/7] Unpacking packages
-    "%sevenZipPath%" x sdl_mixer\sdl_mixer.zip -aoa -osdl_mixer > nul
+echo [6/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl_ttf\sdl_ttf2.zip' -DestinationPath 'sdl_ttf' -Force"
 
-    echo [5/7] Unpacking packages
-    "%sevenZipPath%" x sdl_mixer\sdl_mixer2.zip -aoa -osdl_mixer > nul
+echo [7/7] Unpacking packages
+powershell -Command "Expand-Archive -LiteralPath 'sdl_image\sdl_image2.zip' -DestinationPath 'sdl_image' -Force"
 
-    echo [6/7] Unpacking packages
-    "%sevenZipPath%" x sdl_ttf\sdl_ttf2.zip -aoa -osdl_ttf > nul
+cd ..
 
-    echo [7/7] Unpacking packages
-    "%sevenZipPath%" x sdl_image\sdl_image2.zip -aoa -osdl_image > nul
+call "setup_packages.bat"
+del "setup_packages.bat"
 
-    cd ..
-    call "setup_packages.bat"
-    del "setup_packages.bat"
-
-    echo "SUCCESS! Installation is completed"
-) else (
-    echo "Failed to unzip archives because 7-zip is not installed in system. Please unpack all archives in packages internal folders and manually run setup_packages.bat file after."
-)
+echo "SUCCESS! Installation is completed"
 
 if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
     echo Press any key to exit...
