@@ -1,12 +1,14 @@
+$ErrorActionPreference = "Stop"
+
+$h2DemoURL = "https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
+$h2DemoSHA256 = "12048C8B03875C81E69534A3813AAF6340975E77B762DC1B79A4FF5514240E3C"
+
+$wing32URL = "https://wikidll.com/download/25503/wing32.zip"
+$wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
+
 try {
-    $h2DemoURL = "https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
-    $h2DemoSHA256 = "12048C8B03875C81E69534A3813AAF6340975E77B762DC1B79A4FF5514240E3C"
-
-    $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
-    $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
-
-    $shell = New-Object -com "shell.application" -ErrorAction Stop
-    $webClient = New-Object Net.WebClient -ErrorAction Stop
+    $shell = New-Object -com "shell.application"
+    $webClient = New-Object Net.WebClient
 
     $fheroes2Path = ""
 
@@ -15,7 +17,7 @@ try {
     }
 
     if (-Not (Test-Path -Path "demo" -PathType Container)) {
-        [void](New-Item -Path "demo" -ItemType "directory" -ErrorAction Stop)
+        [void](New-Item -Path "demo" -ItemType "directory")
     }
 
     Write-Host "[1/4] downloading demo version"
@@ -84,10 +86,10 @@ try {
     $mapsPath = (-Join($fheroes2Path, "maps"))
 
     if (-Not (Test-Path -Path $dataPath -PathType Container)) {
-        [void](New-Item -Path $dataPath -ItemType "directory" -ErrorAction Stop)
+        [void](New-Item -Path $dataPath -ItemType "directory")
     }
     if (-Not (Test-Path -Path $mapsPath -PathType Container)) {
-        [void](New-Item -Path $mapsPath -ItemType "directory" -ErrorAction Stop)
+        [void](New-Item -Path $mapsPath -ItemType "directory")
     }
 
     $data = $shell.NameSpace((Resolve-Path "demo\DATA").Path)

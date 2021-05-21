@@ -1,3 +1,3 @@
 @echo off
 
-powershell -ExecutionPolicy Unrestricted .\demo_windows.ps1
+powershell -ExecutionPolicy Unrestricted -File demo_windows.ps1
