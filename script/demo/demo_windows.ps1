@@ -22,30 +22,46 @@ try {
 
     $webClient.DownloadFile($h2DemoURL, "demo\demo.zip")
 
-    $hash = (Get-FileHash -Path "demo\demo.zip" -Algorithm SHA256).Hash
+    try {
+        $hash = (Get-FileHash -Path "demo\demo.zip" -Algorithm SHA256).Hash
 
-    if ($hash -Ne $h2DemoSHA256) {
-        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
-                                               "Expected:`t$h2DemoSHA256`r`n", `
-                                               "Got:`t`t$hash`r`n", `
-                                               "Installation aborted"))
+        if ($hash -Ne $h2DemoSHA256) {
+            Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
+                                                   "Expected:`t$h2DemoSHA256`r`n", `
+                                                   "Got:`t`t$hash`r`n", `
+                                                   "Installation aborted"))
 
-        return
+            return
+        }
+    } catch [System.Management.Automation.CommandNotFoundException] {
+        if ($_.Exception.CommandName -Eq "Get-FileHash") {
+            Write-Host -ForegroundColor Yellow "WARNING: Get-FileHash cmdlet is not supported on this system, hash of HoMM2 demo archive cannot be verified"
+        } else {
+            throw
+        }
     }
 
     Write-Host "[2/4] downloading wing32.dll library"
 
     $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
 
-    $hash = (Get-FileHash -Path "demo\wing32.zip" -Algorithm SHA256).Hash
+    try {
+        $hash = (Get-FileHash -Path "demo\wing32.zip" -Algorithm SHA256).Hash
 
-    if ($hash -Ne $wing32SHA256) {
-        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
-                                               "Expected:`t$wing32SHA256`r`n", `
-                                               "Got:`t`t$hash`r`n", `
-                                               "Installation aborted"))
+        if ($hash -Ne $wing32SHA256) {
+            Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
+                                                   "Expected:`t$wing32SHA256`r`n", `
+                                                   "Got:`t`t$hash`r`n", `
+                                                   "Installation aborted"))
 
-        return
+            return
+        }
+    } catch [System.Management.Automation.CommandNotFoundException] {
+        if ($_.Exception.CommandName -Eq "Get-FileHash") {
+            Write-Host -ForegroundColor Yellow "WARNING: Get-FileHash cmdlet is not supported on this system, hash of wing32.dll archive cannot be verified"
+        } else {
+            throw
+        }
     }
 
     Write-Host "[3/4] unpacking archives"
