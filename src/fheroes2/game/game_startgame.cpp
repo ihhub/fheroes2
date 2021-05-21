@@ -124,6 +124,9 @@ void Game::DialogPlayers( int color, std::string str )
 /* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     Mixer::Pause();
 
     const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
@@ -180,6 +183,9 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 /* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
