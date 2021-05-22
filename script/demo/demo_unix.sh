@@ -13,7 +13,7 @@ if [[ "$(which wget 2> /dev/null)" != "" ]]; then
 elif [[ "$(which curl 2> /dev/null)" != "" ]]; then
     curl -O -L "$H2DEMO_URL" > h2demo.zip
 else
-    echo "wget or curl not found, aborting"
+    echo "wget or curl not found in your system. Unable to download demo version. Installation aborted."
     exit 1
 fi
 
@@ -24,7 +24,7 @@ if [[ "$(which shasum 2> /dev/null)" != "" ]]; then
 elif [[ "$(which sha256sum 2> /dev/null)" != "" ]]; then
     sha256sum --check --strict checksums
 else
-    echo "shasum or sha256sum not found, aborting"
+    echo "shasum or sha256sum not found in your system. Unable to verify downloaded file. Installation aborted."
     exit 1
 fi
 
