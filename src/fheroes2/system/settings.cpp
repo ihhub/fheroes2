@@ -1328,7 +1328,7 @@ bool Settings::AllowChangeRace( int f ) const
 
 bool Settings::GameStartWithHeroes() const
 {
-    return current_maps_file.with_heroes;
+    return current_maps_file.startWithHeroInEachCastle;
 }
 
 int Settings::ConditionWins() const
