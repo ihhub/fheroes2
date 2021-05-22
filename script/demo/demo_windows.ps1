@@ -104,9 +104,7 @@ try {
 } catch {
     Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", $_))
 } finally {
-    if ($Env:APPVEYOR_REPO_PROVIDER -Ne "gitHub") {
-        Write-Host "Press any key to exit..."
+    Write-Host "Press any key to exit..."
 
-        [void][System.Console]::ReadKey($true);
-    }
+    [void][System.Console]::ReadKey($true);
 }
