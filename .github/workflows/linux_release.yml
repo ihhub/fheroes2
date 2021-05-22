@@ -72,15 +72,30 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libgcc1 gettext
+    - name: prepare Vita SDK cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.vitasdk-cache
+        key: psv-sdl2-${{ github.sha }}
+        restore-keys: |
+          psv-sdl2-
     - name: setup Vita SDK
+      continue-on-error: true
       run: |
         git clone https://github.com/vitasdk/vdpm
         cd vdpm
         export PATH=$VITASDK/bin:$PATH
         ./bootstrap-vitasdk.sh
         ./install-all.sh
+        rm -rf ~/.vitasdk-cache
       env:
         VITASDK: "/usr/local/vitasdk"
+    - name: restore Vita SDK from cache
+      run: |
+        if [[ -d ~/.vitasdk-cache ]]; then
+            sudo rm -rf /usr/local/vitasdk
+            sudo mv ~/.vitasdk-cache /usr/local/vitasdk
+        fi
     - name: compile
       run: |
         export PATH=$VITASDK/bin:$PATH
@@ -88,6 +103,12 @@ jobs:
       env:
         FHEROES2_STRICT_COMPILATION: "ON"
         VITASDK: "/usr/local/vitasdk"
+    - name: update Vita SDK cache
+      run: |
+        if [[ -d /usr/local/vitasdk ]]; then
+            rm -rf ~/.vitasdk-cache
+            sudo mv /usr/local/vitasdk ~/.vitasdk-cache
+        fi
     - name: create package
       run: |
         cp doc/README.txt .
