@@ -15,9 +15,9 @@ if [[ ( ! -f ../fheroes2 ) && ( -d ../../../src ) ]]; then
     FHEROES2_PATH="../../.."
 fi
 
-if [[ "$(which wget 2> /dev/null)" != "" ]]; then
+if [[ "$(command -v wget)" != "" ]]; then
     wget "$H2DEMO_URL"
-elif [[ "$(which curl 2> /dev/null)" != "" ]]; then
+elif [[ "$(command -v curl)" != "" ]]; then
     curl -O -L "$H2DEMO_URL" > h2demo.zip
 else
     echo "wget or curl not found in your system. Unable to download demo version. Installation aborted."
@@ -26,9 +26,9 @@ fi
 
 echo "$H2DEMO_SHA256 *h2demo.zip" > checksums
 
-if [[ "$(which shasum 2> /dev/null)" != "" ]]; then
+if [[ "$(command -v shasum)" != "" ]]; then
     shasum --check --algorithm 256 checksums
-elif [[ "$(which sha256sum 2> /dev/null)" != "" ]]; then
+elif [[ "$(command -v sha256sum)" != "" ]]; then
     sha256sum --check --strict checksums
 else
     echo "shasum or sha256sum not found in your system. Unable to verify downloaded file. Installation aborted."
