@@ -6,7 +6,14 @@ H2DEMO_URL="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWar
 H2DEMO_SHA256="12048c8b03875c81e69534a3813aaf6340975e77b762dc1b79a4ff5514240e3c"
 
 [[ ! -d demo ]] && mkdir demo
+
 cd demo
+
+FHEROES2_PATH=".."
+
+if [[ ( ! -f ../fheroes2 ) && ( -d ../../../src ) ]]; then
+    FHEROES2_PATH="../../.."
+fi
 
 if [[ "$(which wget 2> /dev/null)" != "" ]]; then
     wget "$H2DEMO_URL"
@@ -30,8 +37,8 @@ fi
 
 unzip -o h2demo.zip
 
-[[ ! -d ../../../data ]] && mkdir ../../../data
-[[ ! -d ../../../maps ]] && mkdir ../../../maps
+[[ ! -d "$FHEROES2_PATH/data" ]] && mkdir "$FHEROES2_PATH/data"
+[[ ! -d "$FHEROES2_PATH/maps" ]] && mkdir "$FHEROES2_PATH/maps"
 
-cp -r DATA/* ../../../data
-cp -r MAPS/* ../../../maps
+cp -r DATA/* "$FHEROES2_PATH/data"
+cp -r MAPS/* "$FHEROES2_PATH/maps"
