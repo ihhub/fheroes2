@@ -7,6 +7,22 @@ $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
 $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
+    function Calculate-SHA256 {
+        param (
+            [string]$Path
+        )
+
+        try {
+            return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
+        } catch [System.Management.Automation.CommandNotFoundException] {
+            if ($_.Exception.CommandName -Eq "Get-FileHash") {
+                return (certutil.exe -hashfile $Path sha256 | Select-String -Pattern "^[0-9A-Fa-f]{64}$").Line.ToUpper()
+            } else {
+                throw
+            }
+        }
+    }
+
     $shell = New-Object -ComObject "Shell.Application"
     $webClient = New-Object Net.WebClient
 
@@ -24,46 +40,30 @@ try {
 
     $webClient.DownloadFile($h2DemoURL, "demo\demo.zip")
 
-    try {
-        $hash = (Get-FileHash -Path "demo\demo.zip" -Algorithm SHA256).Hash
+    $hash = Calculate-SHA256 -Path "demo\demo.zip"
 
-        if ($hash -Ne $h2DemoSHA256) {
-            Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
-                                                   "Expected:`t$h2DemoSHA256`r`n", `
-                                                   "Got:`t`t$hash`r`n", `
-                                                   "Installation aborted"))
+    if ($hash -Ne $h2DemoSHA256) {
+        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
+                                               "Expected:`t$h2DemoSHA256`r`n", `
+                                               "Got:`t`t$hash`r`n", `
+                                               "Installation aborted"))
 
-            return
-        }
-    } catch [System.Management.Automation.CommandNotFoundException] {
-        if ($_.Exception.CommandName -Eq "Get-FileHash") {
-            Write-Host -ForegroundColor Yellow "WARNING: Get-FileHash cmdlet is not supported on this system, hash of HoMM2 demo archive cannot be verified"
-        } else {
-            throw
-        }
+        return
     }
 
     Write-Host "[2/4] downloading wing32.dll library"
 
     $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
 
-    try {
-        $hash = (Get-FileHash -Path "demo\wing32.zip" -Algorithm SHA256).Hash
+    $hash = Calculate-SHA256 -Path "demo\wing32.zip"
 
-        if ($hash -Ne $wing32SHA256) {
-            Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
-                                                   "Expected:`t$wing32SHA256`r`n", `
-                                                   "Got:`t`t$hash`r`n", `
-                                                   "Installation aborted"))
+    if ($hash -Ne $wing32SHA256) {
+        Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
+                                               "Expected:`t$wing32SHA256`r`n", `
+                                               "Got:`t`t$hash`r`n", `
+                                               "Installation aborted"))
 
-            return
-        }
-    } catch [System.Management.Automation.CommandNotFoundException] {
-        if ($_.Exception.CommandName -Eq "Get-FileHash") {
-            Write-Host -ForegroundColor Yellow "WARNING: Get-FileHash cmdlet is not supported on this system, hash of wing32.dll archive cannot be verified"
-        } else {
-            throw
-        }
+        return
     }
 
     Write-Host "[3/4] unpacking archives"
