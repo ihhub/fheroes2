@@ -38,9 +38,9 @@ try {
 
     Write-Host "[1/4] downloading demo version"
 
-    $webClient.DownloadFile($h2DemoURL, "demo\demo.zip")
+    $webClient.DownloadFile($h2DemoURL, "demo\h2demo.zip")
 
-    $hash = Calculate-SHA256 -Path "demo\demo.zip"
+    $hash = Calculate-SHA256 -Path "demo\h2demo.zip"
 
     if ($hash -Ne $h2DemoSHA256) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
@@ -68,7 +68,7 @@ try {
 
     Write-Host "[3/4] unpacking archives"
 
-    $zip = $shell.NameSpace((Resolve-Path "demo\demo.zip").Path)
+    $zip = $shell.NameSpace((Resolve-Path "demo\h2demo.zip").Path)
 
     foreach ($item in $zip.items()) {
         $shell.Namespace((Resolve-Path "demo").Path).CopyHere($item, 0x14)
