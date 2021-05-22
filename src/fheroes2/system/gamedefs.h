@@ -29,7 +29,6 @@
 #define KINGDOMMAX 6
 
 // hardcore defines: world
-#define MAXCASTLES 72
 #define DAYOFWEEK 7
 #define WEEKOFMONTH 4
 

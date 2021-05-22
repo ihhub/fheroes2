@@ -85,10 +85,11 @@ public:
     void put16( u16 );
     void put32( u32 );
 
-    int get( void )
+    uint8_t get()
     {
         return get8();
-    } // get char
+    }
+
     void put( char ch )
     {
         put8( ch );
