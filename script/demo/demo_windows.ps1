@@ -7,7 +7,7 @@ $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
 $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
-    $shell = New-Object -com "shell.application"
+    $shell = New-Object -ComObject "Shell.Application"
     $webClient = New-Object Net.WebClient
 
     $fheroes2Path = ""
