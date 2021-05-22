@@ -28,25 +28,25 @@ xcopy /Y /s /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
 cd "%tempPath%"
 
 echo [1/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'zlib\zlib1.2.11.zip' -DestinationPath 'zlib' -Force"
+call :unpack_archive "zlib\zlib1.2.11.zip" "zlib"
 
 echo [2/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl\sdl.zip' -DestinationPath 'sdl' -Force"
+call :unpack_archive "sdl\sdl.zip" "sdl"
 
 echo [3/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl\sdl2.zip' -DestinationPath 'sdl' -Force"
+call :unpack_archive "sdl\sdl2.zip" "sdl"
 
 echo [4/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl_mixer\sdl_mixer.zip' -DestinationPath 'sdl_mixer' -Force"
+call :unpack_archive "sdl_mixer\sdl_mixer.zip" "sdl_mixer"
 
 echo [5/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl_mixer\sdl_mixer2.zip' -DestinationPath 'sdl_mixer' -Force"
+call :unpack_archive "sdl_mixer\sdl_mixer2.zip" "sdl_mixer"
 
 echo [6/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl_ttf\sdl_ttf2.zip' -DestinationPath 'sdl_ttf' -Force"
+call :unpack_archive "sdl_ttf\sdl_ttf2.zip" "sdl_ttf"
 
 echo [7/7] Unpacking packages
-powershell -Command "Expand-Archive -LiteralPath 'sdl_image\sdl_image2.zip' -DestinationPath 'sdl_image' -Force"
+call :unpack_archive "sdl_image\sdl_image2.zip" "sdl_image"
 
 cd ..
 
@@ -59,3 +59,15 @@ if not "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
     echo Press any key to exit...
     pause >nul
 )
+
+exit /b
+
+:unpack_archive
+
+if "%APPVEYOR_REPO_PROVIDER%" == "gitHub" (
+    powershell -Command "Expand-Archive -LiteralPath '%~1' -DestinationPath '%~2' -Force"
+) else (
+    powershell -Command "$shell = New-Object -ComObject 'Shell.Application'; $zip = $shell.NameSpace((Resolve-Path '%~1').Path); foreach ($item in $zip.items()) { $shell.Namespace((Resolve-Path '%~2').Path).CopyHere($item, 0x14) }"
+)
+
+exit /b
