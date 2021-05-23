@@ -295,6 +295,32 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    if ( drawList.size() > 0 ) {
+        for ( auto it = drawList.begin(); it != drawList.end() - 1; ) {
+            Heroes * hero1 = ( *it )->GetHeroes();
+            if ( hero1 == nullptr ) {
+                ++it;
+                continue;
+            }
+            if ( hero1->GetDirection() != Direction::BOTTOM_RIGHT || !hero1->isMoveEnabled() ) {
+                ++it;
+                continue;
+            }
+            const int object = ( *it )->GetObject();
+            Heroes * hero2 = ( *( it + 1 ) )->GetHeroes();
+            if ( ( hero2 == nullptr && MP2::OBJ_BOAT != object ) || !Maps::isValidDirection( ( *it )->GetIndex(), Direction::RIGHT ) ) {
+                ++it;
+                continue;
+            }
+            const Maps::Tiles & tileRight = world.GetTiles( Maps::GetDirectionIndex( ( *it )->GetIndex(), Direction::RIGHT ) );
+            if ( tileRight.GetIndex() != ( *( it + 1 ) )->GetIndex() ) {
+                ++it;
+                continue;
+            }
+            std::swap( *it, *( it + 1 ) );
+        }
+    }
+
     for ( const Maps::Tiles * tile : drawList ) {
         Heroes * hero = tile->GetHeroes();
         if ( hero == nullptr ) {
