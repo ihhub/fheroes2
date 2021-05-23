@@ -533,9 +533,11 @@ void World::NewDay( void )
             ++month;
     }
 
-    // new day - reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
     std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
+        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
         hero->ResetModes( Heroes::SAVE_MP_POINTS );
+        // replenish spell points of all heroes
+        hero->ReplenishSpellPoints();
     } );
 
     // action new day
