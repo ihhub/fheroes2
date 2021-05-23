@@ -249,7 +249,8 @@ namespace Campaign
     }
 
     ScenarioData::ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<ScenarioBonusData> & bonuses, const std::string & fileName,
-                                const std::string & description, const ScenarioVictoryCondition victoryCondition, const ScenarioLossCondition lossCondition )
+                                const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
+                                const ScenarioVictoryCondition victoryCondition, const ScenarioLossCondition lossCondition )
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
@@ -257,6 +258,8 @@ namespace Campaign
         , _description( description )
         , _victoryCondition( victoryCondition )
         , _lossCondition( lossCondition )
+        , _startScenarioVideoPlayback( startScenarioVideoPlayback )
+        , _endScenarioVideoPlayback( endScenarioVideoPlayback )
     {}
 
     bool Campaign::ScenarioData::isMapFilePresent() const
