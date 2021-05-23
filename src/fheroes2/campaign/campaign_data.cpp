@@ -84,6 +84,69 @@ namespace
         return obtainableAwards;
     }
 
+    std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 1:
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
+            break;
+        case 2:
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::WOOD, 2 );
+            break;
+        case 5:
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::HELMET_ANDURAN );
+            break;
+        case 6:
+            // will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+
+    std::vector<Campaign::CampaignAwardData> getWizardsIsleCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 1:
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_SPELL, Spell::SETEGUARDIAN );
+            break;
+        case 2:
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SPHERE_NEGATION );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+
+    std::vector<Campaign::CampaignAwardData> getDescendantsCampaignAwardData( const int scenarioID )
+    {
+        std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
+        switch ( scenarioID ) {
+        case 2:
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, _( "Wayward Son" ) );
+            break;
+        case 3:
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, _( "Uncle Ivan" ) );
+            break;
+        case 5:
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::LEGENDARY_SCEPTER );
+            break;
+        case 6:
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            break;
+        }
+
+        return obtainableAwards;
+    }
+    
     const std::string rolandCampaignDescription[10] = {
         _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
            " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
@@ -187,6 +250,13 @@ namespace Campaign
             return getRolandCampaignAwardData( scenarioID );
         case ARCHIBALD_CAMPAIGN:
             return getArchibaldCampaignAwardData( scenarioID );
+        case PRICE_OF_LOYALTY_CAMPAIGN:
+            return getPriceOfLoyaltyCampaignAwardData( scenarioID );
+        case DESCENDANTS_CAMPAIGN:
+            return getDescendantsCampaignAwardData( scenarioID );
+        case WIZARDS_TALE_CAMPAIGN:
+            return getWizardsIsleCampaignAwardData( scenarioID );
+            // no campaign award for voyage home!
         }
 
         return std::vector<Campaign::CampaignAwardData>();
