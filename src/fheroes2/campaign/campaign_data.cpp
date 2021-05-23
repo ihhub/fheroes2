@@ -146,7 +146,25 @@ namespace
 
         return obtainableAwards;
     }
-    
+
+    const std::string rolandCampaignScenarioNames[10]
+        = { _( "Force of Arms" ), _( "Annexation" ),   _( "Save the Dwarves" ), _( "Carator Mines" ),      _( "Turning Point" ),
+            _( "Defender" ),      _( "The Gauntlet" ), _( "The Crown" ),        _( "Corlagon's Defense" ), _( "Final Justice" ) };
+
+    const std::string archibaldCampaignScenarioNames[11]
+        = { _( "First Blood" ),   _( "Barbarian Wars" ), _( "Necromancers" ), _( "Slay the Dwarves" ), _( "Turning Point" ), _( "Rebellion" ),
+            _( "Dragon Master" ), _( "Country Lords" ),  _( "The Crown" ),    _( "Greater Glory" ),    _( "Apocalypse" ) };
+
+    const std::string priceOfLoyaltyCampaignScenarioNames[8] = { _( "Uprising" ),         _( "Island of Chaos" ), _( "Arrow's Flight" ), _( "The Abyss" ),
+                                                                 _( "The Giant's Pass" ), _( "Aurora Borealis" ), _( "Betrayal's End" ), _( "Corruption's Heart" ) };
+
+    const std::string descendantsCampaignScenarioNames[8] = { _( "Conquer and Unify" ), _( "Border Towns" ), _( "The Wayward Son" ), _( "Crazy Uncle Ivan" ),
+                                                              _( "The Southern War" ),  _( "Ivory Gates" ),  _( "The Elven Lands" ), _( "The Epic Battle" ) };
+
+    const std::string wizardsIsleCampaignScenarioNames[4] = { _( "The Shrouded Isles" ), _( "The Eternal Scrolls" ), _( "Power's End" ), _( "Fount of Wizardry" ) };
+
+    const std::string voyageHomeCampaignScenarioNames[4] = { _( "Stranded" ), _( "Pirate Isles" ), _( "King and Country" ), _( "Blood is Thicker" ) };
+
     const std::string rolandCampaignDescription[10] = {
         _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
            " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
@@ -174,22 +192,32 @@ namespace
         _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
         _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
 
-    Campaign::CampaignData GetRolandCampaignData()
+    Campaign::CampaignData getRolandCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 10 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignDescription[0] );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignDescription[2],
-                                    Campaign::ScenarioVictoryCondition::STANDARD, Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignDescription[4] );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignDescription[5] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignScenarioNames[0],
+                                    rolandCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignScenarioNames[1],
+                                    rolandCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignScenarioNames[2],
+                                    rolandCampaignDescription[2], Campaign::ScenarioVictoryCondition::STANDARD,
+                                    Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignScenarioNames[3],
+                                    rolandCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignScenarioNames[4],
+                                    rolandCampaignDescription[4] );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignScenarioNames[5],
+                                    rolandCampaignDescription[5] );
         // NOTE: In Roland's Campaign, scenario 8 is drawn above scenario 7, so we emplace_back scenario 8 first
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignDescription[7] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignDescription[6] );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignDescription[8] );
-        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignDescription[9] );
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
+                                    rolandCampaignDescription[7] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignScenarioNames[6],
+                                    rolandCampaignDescription[6] );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignScenarioNames[8],
+                                    rolandCampaignDescription[8] );
+        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignScenarioNames[9],
+                                    rolandCampaignDescription[9] );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
@@ -200,32 +228,106 @@ namespace
         return campaignData;
     }
 
-    Campaign::CampaignData GetArchibaldCampaignData()
+    Campaign::CampaignData getArchibaldCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 11 );
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignScenarioNames[0],
+                                    archibaldCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C",
-                                    archibaldCampaignDescription[1] );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignDescription[2] );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignDescription[3] );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignDescription[4] );
+                                    archibaldCampaignScenarioNames[1], archibaldCampaignDescription[1] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignScenarioNames[2],
+                                    archibaldCampaignDescription[2] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignScenarioNames[3],
+                                    archibaldCampaignDescription[3] );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignScenarioNames[4],
+                                    archibaldCampaignDescription[4] );
         scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C",
-                                    archibaldCampaignDescription[5] );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignDescription[6],
-                                    Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
+                                    archibaldCampaignScenarioNames[5], archibaldCampaignDescription[5] );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignScenarioNames[6],
+                                    archibaldCampaignDescription[6], Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
         scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C",
-                                    archibaldCampaignDescription[7] );
+                                    archibaldCampaignScenarioNames[7], archibaldCampaignDescription[7] );
         scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C",
-                                    archibaldCampaignDescription[8] );
+                                    archibaldCampaignScenarioNames[8], archibaldCampaignDescription[8] );
         scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C",
-                                    archibaldCampaignDescription[9] );
-        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignDescription[10] );
+                                    archibaldCampaignScenarioNames[9], archibaldCampaignDescription[9] );
+        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignScenarioNames[10],
+                                    archibaldCampaignDescription[10] );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
         campaignData.setCampaignDescription( "Archibald Campaign" );
         campaignData.setCampaignAlignment( false );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    Campaign::CampaignData getPriceOfLoyaltyCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 8 );
+
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    Campaign::CampaignData getDescendantsCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 8 );
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    Campaign::CampaignData getWizardsIsleCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 4 );
+
+        const int campaignID = Campaign::WIZARDS_ISLE_CAMPAIGN;
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP3_01.HXC",
+                                    wizardsIsleCampaignScenarioNames[0], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP3_02.HXC",
+                                    wizardsIsleCampaignScenarioNames[1], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP3_03.HXC",
+                                    wizardsIsleCampaignScenarioNames[2], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP3_04.HXC",
+                                    wizardsIsleCampaignScenarioNames[3], archibaldCampaignDescription[0] );
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( campaignID );
+        campaignData.setCampaignScenarios( scenarioDatas );
+
+        return campaignData;
+    }
+
+    Campaign::CampaignData getVoyageHomeCampaignData()
+    {
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( 4 );
+
+        const int campaignID = Campaign::VOYAGE_HOME_CAMPAIGN;
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP4_01.HXC",
+                                    voyageHomeCampaignScenarioNames[0], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP4_02.HXC",
+                                    voyageHomeCampaignScenarioNames[1], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP4_03.HXC",
+                                    voyageHomeCampaignScenarioNames[2], archibaldCampaignDescription[0] );
+        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP4_04.HXC",
+                                    voyageHomeCampaignScenarioNames[3], archibaldCampaignDescription[0] );
+
+        Campaign::CampaignData campaignData;
+        campaignData.setCampaignID( campaignID );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -254,7 +356,7 @@ namespace Campaign
             return getPriceOfLoyaltyCampaignAwardData( scenarioID );
         case DESCENDANTS_CAMPAIGN:
             return getDescendantsCampaignAwardData( scenarioID );
-        case WIZARDS_TALE_CAMPAIGN:
+        case WIZARDS_ISLE_CAMPAIGN:
             return getWizardsIsleCampaignAwardData( scenarioID );
             // no campaign award for voyage home!
         }
@@ -356,11 +458,27 @@ namespace Campaign
     {
         switch ( campaignID ) {
         case ROLAND_CAMPAIGN: {
-            static const Campaign::CampaignData campaign( GetRolandCampaignData() );
+            static const Campaign::CampaignData campaign( getRolandCampaignData() );
             return campaign;
         }
         case ARCHIBALD_CAMPAIGN: {
-            static const Campaign::CampaignData campaign( GetArchibaldCampaignData() );
+            static const Campaign::CampaignData campaign( getArchibaldCampaignData() );
+            return campaign;
+        }
+        case PRICE_OF_LOYALTY_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( getPriceOfLoyaltyCampaignData() );
+            return campaign;
+        }
+        case DESCENDANTS_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( getDescendantsCampaignData() );
+            return campaign;
+        }
+        case VOYAGE_HOME_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( getVoyageHomeCampaignData() );
+            return campaign;
+        }
+        case WIZARDS_ISLE_CAMPAIGN: {
+            static const Campaign::CampaignData campaign( getWizardsIsleCampaignData() );
             return campaign;
         }
         default: {

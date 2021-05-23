@@ -57,6 +57,18 @@ namespace
         case Campaign::ARCHIBALD_CAMPAIGN:
             campaignTrack = ICN::CTRACK03;
             break;
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK1;
+            break;
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK2;
+            break;
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK3;
+            break;
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK4;
+            break;
         }
 
         fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
@@ -138,11 +150,8 @@ namespace
 
     void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
     {
-        const Maps::FileInfo & mapInfo = scenario.loadMap();
         const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
-
-        const std::string & mapNameStr = mapInfo.description;
-        TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
+        TextBox mapName( scenario.getScenarioName(), Font::BIG, 200 );
         mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( std::to_string( scenario.getScenarioID() + 1 ), Font::BIG );
@@ -190,6 +199,7 @@ namespace
                 continue;
 
             Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+            Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
@@ -208,12 +218,11 @@ namespace
                 Players::SetPlayerRace( player.GetColor(), scenarioBonus._subType );
                 break;
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
-                Heroes * bestHero = kingdom.GetBestHero();
-                for ( int i = 0; i < scenarioBonus._amount; ++i )
+                for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
                     bestHero->IncreasePrimarySkill( scenarioBonus._subType );
                 break;
             case Campaign::ScenarioBonusData::SKILL_SECONDARY:
-                kingdom.GetBestHero()->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 break;
             default:
                 assert( 0 );
@@ -281,7 +290,7 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
 
     return Campaign::CampaignData::getCampaignData( Campaign::PRICE_OF_LOYALTY_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::VOYAGE_HOME_CAMPAIGN ).isAllCampaignMapsPresent()
-           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_TALE_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_ISLE_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
