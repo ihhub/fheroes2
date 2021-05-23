@@ -15,8 +15,6 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl2\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl2\lib\$(PlatformTarget)\*.txt" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl2\README-SDL.txt" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

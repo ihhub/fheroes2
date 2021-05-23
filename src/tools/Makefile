@@ -29,12 +29,12 @@ endif
 # endif
 
 SDL_LIBS   := $(shell $(SDL)-config --libs)
-SDL_CFLAGS := $(shell $(SDL)-config --cflags)
+SDL_FLAGS := $(shell $(SDL)-config --cflags)
 
 ifeq ($(OS),Windows_NT)
 LIBS       := -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lwinpthread
 SDL_LIBS   := $(subst -mwindows,-mconsole,$(SDL_LIBS))
-SDL_CFLAGS := $(filter-out -Dmain=SDL_main,$(SDL_CFLAGS))
+SDL_FLAGS := $(filter-out -Dmain=SDL_main,$(SDL_FLAGS))
 ifdef FHEROES2_SDL1
 SDL_LIBS   += -liconv -lwinmm -lgdi32 -ldxguid
 else
@@ -70,7 +70,7 @@ $(TARGETS):
 	@g++ $@.cpp $(CFLAGS) $^ $(LIBS) $(SDL_LIBS) -o $@
 
 $(PREREQS):
-	@g++ -c $(@:%.o=../engine/%.cpp) $(SDL_CFLAGS) -o $@
+	@g++ -c $(@:%.o=../engine/%.cpp) $(SDL_FLAGS) -o $@
 
 .PHONY: clean
 

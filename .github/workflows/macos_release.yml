@@ -23,7 +23,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE: 1
     - name: create package
       run: |
-        zip -j fheroes2_macos10_15_sdl1.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh script/demo/download_demo.sh changelog.txt doc/README.txt
+        zip -j fheroes2_macos10_15_sdl1.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh script/demo/demo_unix.sh changelog.txt doc/README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_macos10_15_sdl1.zip
@@ -51,7 +51,7 @@ jobs:
         HOMEBREW_NO_AUTO_UPDATE: 1
     - name: create package
       run: |
-        zip -j fheroes2_macos10_15_sdl2.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh script/demo/download_demo.sh changelog.txt doc/README.txt
+        zip -j fheroes2_macos10_15_sdl2.zip fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh script/demo/demo_unix.sh changelog.txt doc/README.txt
     - uses: ncipollo/release-action@v1
       with:
         artifacts: fheroes2_macos10_15_sdl2.zip

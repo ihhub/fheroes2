@@ -31,6 +31,10 @@
 
 #define FATSIZENAME 15
 
+#if defined( _MSC_VER )
+#undef main
+#endif
+
 struct aggfat_t
 {
     u32 crc;

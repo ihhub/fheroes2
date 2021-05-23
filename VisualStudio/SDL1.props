@@ -12,9 +12,7 @@
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*.txt" "$(OutDir)"
-	  xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\README-SDL.txt" "$(OutDir)"
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

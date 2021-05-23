@@ -71,9 +71,8 @@ fheroes2.pot
 # demo directory
 script/demo/demo
 
-# Packages for Visual Studio
-VisualStudio/packages/*
-!zlib*.zip
+# Installed packages for Visual Studio
+VisualStudio/packages/installed
 
 # Mac magic folders
 .DS_Store

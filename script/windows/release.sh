@@ -36,7 +36,7 @@ if   [ $fh2arch = x86 ]; then
         sdl="https://www.libsdl.org/release/SDL-1.2.15-win32.zip"
         mix="https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12-win32.zip"
         # ttf="https://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32.zip"
-		# img="https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32.zip"
+        # img="https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32.zip"
     else
         sdl="https://www.libsdl.org/release/SDL2-2.0.14-win32-x86.zip"
         mix="https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4-win32-x86.zip"
@@ -48,12 +48,12 @@ elif [ $fh2arch = x64 ]; then
         sdl="https://www.libsdl.org/release/SDL-1.2.15-win32-x64.zip"
         mix="https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12-win32-x64.zip"
         # ttf="https://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32-x64.zip"
-		# img="https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32-x64.zip"
+        # img="https://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32-x64.zip"
     else
         sdl="https://www.libsdl.org/release/SDL2-2.0.14-win32-x64.zip"
         mix="https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4-win32-x64.zip"
         # ttf="https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15-win32-x64.zip"
-		# img="https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.5-win32-x64.zip"
+        # img="https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.5-win32-x64.zip"
     fi
 else
     echo "Error! You're doing something wrong!"
