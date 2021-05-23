@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-
-#include "game_video_type.h"
-#include "math_base.h"
-
 namespace Video
 {
-    // Returns 0 by default if roi is empty
-    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    enum class VideoAction : int
+    {
+        PLAY_TILL_VIDEO_END,
+        LOOP_VIDEO,
+        WAIT_FOR_USER_INPUT,
+        PLAY_TILL_AUDIO_END,
+        IGNORE_VIDEO
+    };
 }

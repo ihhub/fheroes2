@@ -273,7 +273,7 @@ int main( int argc, char ** argv )
 
             fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
             Game::mainGameLoop( isFirstGameRun );
         }
