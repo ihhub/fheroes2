@@ -733,7 +733,7 @@ void Heroes::ActionNewDay( void )
         u32 maxp = GetMaxSpellPoints();
         const Castle * castle = inCastle();
 
-        // possible visit arteian spring 2 * max
+        // possible visit artesian spring 2 * max
         if ( curr < maxp ) {
             // in castle?
             if ( castle && castle->GetLevelMageGuild() ) {
@@ -770,10 +770,6 @@ void Heroes::ActionNewWeek( void )
 {
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
-
-    // fix artesian spring effect
-    if ( GetSpellPoints() > GetMaxSpellPoints() )
-        SetSpellPoints( GetMaxSpellPoints() );
 }
 
 void Heroes::ActionNewMonth( void )
@@ -1793,7 +1789,7 @@ void AllHeroes::Init( void )
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
-        for ( int i = Heroes::SOLMYR; i < Heroes::JARKONAS; ++i )
+        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i )
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 

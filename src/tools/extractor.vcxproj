@@ -183,7 +183,6 @@
     <ClCompile Include="..\engine\logging.cpp" />
     <ClCompile Include="..\engine\pal.cpp" />
     <ClCompile Include="..\engine\rand.cpp" />
-    <ClCompile Include="..\engine\rect.cpp" />
     <ClCompile Include="..\engine\screen.cpp" />
     <ClCompile Include="..\engine\sdlnet.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
@@ -219,7 +218,6 @@
     <ClInclude Include="..\engine\palette_h2.h" />
     <ClInclude Include="..\engine\pathfinding.h" />
     <ClInclude Include="..\engine\rand.h" />
-    <ClInclude Include="..\engine\rect.h" />
     <ClInclude Include="..\engine\screen.h" />
     <ClInclude Include="..\engine\sdlnet.h" />
     <ClInclude Include="..\engine\serialize.h" />

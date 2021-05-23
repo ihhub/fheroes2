@@ -1,6 +1,4 @@
-ifndef WITHOUT_MIXER
 LIBS := $(LIBS) -lSDL -lmad -lvorbisfile -lvorbis -logg
-endif
 
 ifndef WITHOUT_IMAGE
 LIBS := $(LIBS) -lSDL -lpng -ljpeg

@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "localevent.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
@@ -225,10 +227,6 @@ LocalEvent::LocalEvent()
     , redraw_cursor_func( NULL )
     , keyboard_filter_func( NULL )
     , loop_delay( 1 )
-    , _isHiddenWindow( false )
-    , _isMusicPaused( false )
-    , _isSoundPaused( false )
-    , _musicVolume( 0 )
 {}
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1262,25 +1260,14 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
 
 void LocalEvent::StopSounds()
 {
-    _isHiddenWindow = true;
-    _isMusicPaused = Music::isPaused();
-    _isSoundPaused = ( Mixer::isPaused( -1 ) != 0 );
-    Mixer::Pause();
-    Music::Pause();
-    _musicVolume = Music::Volume( 0 );
+    Music::Mute();
+    Mixer::Mute();
 }
 
 void LocalEvent::ResumeSounds()
 {
-    if ( _isHiddenWindow ) {
-        Music::Volume( _musicVolume );
-        if ( !_isMusicPaused ) {
-            Music::Resume();
-        }
-        if ( !_isSoundPaused )
-            Mixer::Resume();
-        _isHiddenWindow = false;
-    }
+    Music::Unmute();
+    Mixer::Unmute();
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )

@@ -13,7 +13,6 @@ set(USE_SDL_VERSION SDL2 CACHE STRING "SDL version")
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE    "Enable SDL/SDL2 Image support (requires libpng)" ON)
-option(ENABLE_MIXER    "Enable SDL/SDL2 Mixer support" ON)
 option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
 option(ENABLE_XML      "Enable XML support (requires libtinyxml)" ON)
 option(ENABLE_ZLIB     "Enable Zlib support (for compressed savefiles)" ON)
@@ -31,6 +30,7 @@ set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACH
 
 # Find libraries and enable/disable features
 find_package(${USE_SDL_VERSION} REQUIRED)
+find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(Threads)
 
 if(ENABLE_IMAGE)
@@ -38,9 +38,6 @@ if(ENABLE_IMAGE)
 	find_package(PNG REQUIRED)
 	find_package(ZLIB REQUIRED)
 endif(ENABLE_IMAGE)
-if(ENABLE_MIXER)
-	find_package(${USE_SDL_VERSION}_mixer REQUIRED)
-endif(ENABLE_MIXER)
 if(ENABLE_UNICODE)
 	find_package(${USE_SDL_VERSION}_ttf REQUIRED)
 	find_package(Iconv REQUIRED)

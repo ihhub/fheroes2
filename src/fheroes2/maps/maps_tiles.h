@@ -209,7 +209,7 @@ namespace Maps
         void RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
-        void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & area ) const;
+        void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
 
@@ -234,6 +234,7 @@ namespace Maps
             return ( fog_colors & colors ) == colors;
         }
 
+        bool isFogAllAround( const int color ) const;
         void ClearFog( int color );
 
         /* monster operation */

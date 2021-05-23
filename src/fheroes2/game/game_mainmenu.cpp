@@ -40,8 +40,6 @@
 #include "text.h"
 #include "ui_button.h"
 
-#include <cassert>
-
 namespace
 {
     struct ButtonInfo
@@ -142,7 +140,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
 
         default:
-            assert( 0 ); // did you forget to cover a newly added case?
             break;
         }
     }
@@ -171,9 +168,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::drawMainMenuScreen();
         }
 
-        Dialog::Message( "Please remember",
-                         "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
-                         "and full screen modes press 'F4' key on the keyboard. Enjoy the game!",
+        Dialog::Message( _( "Please remember" ),
+                         _( "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
+                            "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
                          Font::BIG, Dialog::OK );
     }
 
@@ -184,8 +181,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     fheroes2::Button buttonHighScores( 0, 0, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
     fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
-
-    const fheroes2::Point lt_pt( 0, 0 );
 
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );

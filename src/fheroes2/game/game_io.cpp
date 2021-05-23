@@ -236,13 +236,7 @@ bool Game::Load( const std::string & fn )
     SetLoadVersion( binver );
     u16 end_check = 0;
 
-    fz >> World::Get() >> conf;
-
-    if ( conf.isCampaignGameType() ) {
-        fz >> Campaign::CampaignSaveData::Get();
-    }
-
-    fz >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
     if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
         std::string warningMessage( "This is an saved game is localized for lang = " );
         warningMessage.append( conf.loadedFileLanguage() );
@@ -251,8 +245,9 @@ bool Game::Load( const std::string & fn )
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 
-    if ( fileGameType & Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() ) {
         fz >> Campaign::CampaignSaveData::Get();
+    }
 
     fz >> end_check;
 

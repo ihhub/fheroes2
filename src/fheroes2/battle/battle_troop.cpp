@@ -1122,12 +1122,12 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const Unit & attacker = *this;
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defender.Modes( CAP_TOWER ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
     const bool attackerIsArchers = isArchers();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    if ( !canReach( defender ) && !( defender.Modes( CAP_TOWER ) && attackerIsArchers ) ) {
+    if ( !canReach( defender ) && !defender.Modes( CAP_TOWER ) && !attackerIsArchers ) {
         // Can't reach, so unit is not dangerous to defender at the moment
         attackerThreat /= 2;
     }

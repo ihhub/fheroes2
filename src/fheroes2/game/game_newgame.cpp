@@ -174,10 +174,10 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     // Reset all sound and music before playing videos
     AGG::ResetMixer();
-    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
     AGG::ResetMixer();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
     const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();

@@ -2390,6 +2390,51 @@ void Maps::Tiles::ClearFog( int colors )
     fog_colors &= ~colors;
 }
 
+bool Maps::Tiles::isFogAllAround( const int color ) const
+{
+    const int32_t center = GetIndex();
+    const fheroes2::Point mp = Maps::GetPoint( center );
+    const int32_t width = world.w();
+
+    if ( mp.y > 0 ) {
+        if ( mp.x > 0 && !world.GetTiles( center - width - 1 ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( !world.GetTiles( center - width ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( mp.x < width - 1 && !world.GetTiles( center - width + 1 ).isFog( color ) ) {
+            return false;
+        }
+    }
+
+    if ( mp.x > 0 && !world.GetTiles( center - 1 ).isFog( color ) ) {
+        return false;
+    }
+
+    if ( mp.x < width - 1 && !world.GetTiles( center + 1 ).isFog( color ) ) {
+        return false;
+    }
+
+    if ( mp.y < world.h() - 1 ) {
+        if ( mp.x > 0 && !world.GetTiles( center + width - 1 ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( !world.GetTiles( center + width ).isFog( color ) ) {
+            return false;
+        }
+
+        if ( mp.x < width - 1 && !world.GetTiles( center + width + 1 ).isFog( color ) ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 int Maps::Tiles::GetFogDirections( int color ) const
 {
     int around = 0;

@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -35,35 +36,118 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
-#include "gamedefs.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "system.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_tool.h"
 #include "zzlib.h"
 
-void SetVideoDriver( const std::string & );
-void SetTimidityEnvPath();
-void SetLangEnvPath( const Settings & );
-void InitHomeDir( void );
-bool ReadConfigs( void );
-
-int PrintHelp( const char * basename )
+namespace
 {
-    COUT( "Usage: " << basename << " [OPTIONS]" );
+    const char * configurationFileName = "fheroes2.cfg";
+
+    std::string GetCaption()
+    {
+        return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
+    }
+
+    void SetVideoDriver( const std::string & driver )
+    {
+        System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
+    }
+
+    int PrintHelp( const char * basename )
+    {
+        COUT( "Usage: " << basename << " [OPTIONS]" );
 #ifndef BUILD_RELEASE
-    COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
+        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
 #endif
-    COUT( "  -h\t\tprint this help message and exit" );
+        COUT( "  -h\t\tprint this help message and exit" );
 
-    return EXIT_SUCCESS;
-}
+        return EXIT_SUCCESS;
+    }
 
-std::string GetCaption( void )
-{
-    return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
+    bool ReadConfigs()
+    {
+        Settings & conf = Settings::Get();
+        const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
+
+        bool isValidConfigurationFile = false;
+        for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
+            if ( System::IsFile( *it ) && conf.Read( *it ) ) {
+                isValidConfigurationFile = true;
+                const std::string & externalCommand = conf.externalMusicCommand();
+                if ( !externalCommand.empty() )
+                    Music::SetExtCommand( externalCommand );
+
+                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
+                break;
+            }
+        }
+
+        if ( !isValidConfigurationFile )
+            conf.Save( configurationFileName );
+
+        return !isValidConfigurationFile;
+    }
+
+    void InitHomeDir()
+    {
+        const std::string home = System::GetHomeDirectory( "fheroes2" );
+
+        if ( !home.empty() ) {
+            const std::string home_maps = System::ConcatePath( home, "maps" );
+            const std::string home_files = System::ConcatePath( home, "files" );
+            const std::string home_files_save = System::ConcatePath( home_files, "save" );
+
+            if ( !System::IsDirectory( home ) )
+                System::MakeDirectory( home );
+
+            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
+                System::MakeDirectory( home_maps );
+
+            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
+                System::MakeDirectory( home_files );
+
+            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
+                System::MakeDirectory( home_files_save );
+        }
+    }
+
+    void SetTimidityEnvPath()
+    {
+        const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
+        const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
+
+        if ( System::IsFile( result ) )
+            System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
+    }
+
+    void SetLangEnvPath( const Settings & conf )
+    {
+#ifdef WITH_TTF
+        if ( conf.Unicode() ) {
+            System::SetLocale( LC_ALL, "" );
+            System::SetLocale( LC_NUMERIC, "C" );
+
+            std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
+
+            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+
+            if ( translations.size() ) {
+                if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
+                    Translation::setDomain( "fheroes2" );
+            }
+            else
+                ERROR_LOG( "translation not found: " << mofile );
+        }
+#else
+        (void)conf;
+#endif
+        Translation::setStripContext( '|' );
+    }
 }
 
 #if defined( _MSC_VER )
@@ -75,14 +159,13 @@ int main( int argc, char ** argv )
     InitHardware();
     Logging::InitLog();
 
+    DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
+
     Settings & conf = Settings::Get();
-
-    DEBUG_LOG( DBG_ALL, DBG_INFO, "Free Heroes of Might and Magic II, " + conf.GetVersion() );
-
     conf.SetProgramPath( argv[0] );
 
     InitHomeDir();
-    bool isFirstGameRun = ReadConfigs();
+    const bool isFirstGameRun = ReadConfigs();
 
     // getopt
     {
@@ -122,10 +205,8 @@ int main( int argc, char ** argv )
     if ( conf.MusicCD() )
         subsystem |= INIT_CDROM | INIT_AUDIO;
 #endif
-    if ( SDL::Init( subsystem ) )
-#ifndef ANDROID
+    if ( SDL::Init( subsystem ) ) {
         try
-#endif
         {
             std::atexit( SDL::Quit );
 
@@ -170,6 +251,11 @@ int main( int argc, char ** argv )
 
             // read data dir
             if ( !AGG::Init() ) {
+                // Since it is a fresh start we should delete newly created configuration file.
+                if ( isFirstGameRun ) {
+                    remove( configurationFileName );
+                }
+
                 fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
             }
@@ -187,101 +273,17 @@ int main( int argc, char ** argv )
 
             fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::DO_NOTHING );
+            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
             Game::mainGameLoop( isFirstGameRun );
         }
         catch ( const std::exception & ex ) {
             ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
         }
+    }
 
     fheroes2::Display::instance().release();
     CloseHardware();
 
     return EXIT_SUCCESS;
-}
-
-bool ReadConfigs( void )
-{
-    Settings & conf = Settings::Get();
-    const ListFiles & files = Settings::GetListFiles( "", "fheroes2.cfg" );
-
-    bool isValidConfigurationFile = false;
-    for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        if ( System::IsFile( *it ) && conf.Read( *it ) ) {
-            isValidConfigurationFile = true;
-            const std::string & externalCommand = conf.externalMusicCommand();
-            if ( !externalCommand.empty() )
-                Music::SetExtCommand( externalCommand );
-
-            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-            break;
-        }
-    }
-
-    if ( !isValidConfigurationFile )
-        conf.Save( "fheroes2.cfg" );
-
-    return !isValidConfigurationFile;
-}
-
-void InitHomeDir( void )
-{
-    const std::string home = System::GetHomeDirectory( "fheroes2" );
-
-    if ( !home.empty() ) {
-        const std::string home_maps = System::ConcatePath( home, "maps" );
-        const std::string home_files = System::ConcatePath( home, "files" );
-        const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-        if ( !System::IsDirectory( home ) )
-            System::MakeDirectory( home );
-
-        if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-            System::MakeDirectory( home_maps );
-
-        if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-            System::MakeDirectory( home_files );
-
-        if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-            System::MakeDirectory( home_files_save );
-    }
-}
-
-void SetVideoDriver( const std::string & driver )
-{
-    System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
-}
-
-void SetTimidityEnvPath()
-{
-    const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
-    const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
-
-    if ( System::IsFile( result ) )
-        System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
-}
-
-void SetLangEnvPath( const Settings & conf )
-{
-#ifdef WITH_TTF
-    if ( conf.Unicode() ) {
-        System::SetLocale( LC_ALL, "" );
-        System::SetLocale( LC_NUMERIC, "C" );
-
-        std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
-
-        ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
-
-        if ( translations.size() ) {
-            if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
-                Translation::setDomain( "fheroes2" );
-        }
-        else
-            ERROR_LOG( "translation not found: " << mofile );
-    }
-#else
-    (void)conf;
-#endif
-    Translation::setStripContext( '|' );
 }

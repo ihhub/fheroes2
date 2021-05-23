@@ -49,13 +49,10 @@ SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
-ifndef WITHOUT_MIXER
-CFLAGS := $(CFLAGS) -DWITH_MIXER
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
-endif
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT

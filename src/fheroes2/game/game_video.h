@@ -23,17 +23,11 @@
 #include <string>
 #include <vector>
 
+#include "game_video_type.h"
 #include "math_base.h"
 
 namespace Video
 {
-    enum class VideoAction : int
-    {
-        DO_NOTHING,
-        LOOP_VIDEO,
-        WAIT_FOR_USER_INPUT
-    };
-
     // Returns 0 by default if roi is empty
     int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
 }

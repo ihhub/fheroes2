@@ -45,6 +45,11 @@
 #include "text.h"
 #include "world.h"
 
+namespace
+{
+    const size_t maximumCastles = 72;
+}
+
 Castle::Castle()
     : race( Race::NONE )
     , building( 0 )
@@ -2624,7 +2629,7 @@ void VecCastles::ChangeColors( int col1, int col2 )
 AllCastles::AllCastles()
 {
     // reserve memory
-    _castles.reserve( MAXCASTLES );
+    _castles.reserve( maximumCastles );
 }
 
 AllCastles::~AllCastles()
@@ -2662,8 +2667,6 @@ void AllCastles::AddCastle( Castle * castle )
      - are tiles where there is a castle sprite, but not used in the Get() method
 
     */
-
-    static_assert( MAXCASTLES < 128, "Need to change the type of castleTiles to fit in more than 128 castles" );
 
     const size_t id = _castles.size() - 1;
     fheroes2::Point temp( castle->GetCenter().x, castle->GetCenter().y );
