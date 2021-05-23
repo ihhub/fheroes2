@@ -196,7 +196,7 @@ namespace AI
         duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
                     + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
 
-        if ( duration < 2 || target.Modes( TR_MOVED ) )
+        if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;
 
         return 1;
