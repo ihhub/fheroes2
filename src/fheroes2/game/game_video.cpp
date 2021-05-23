@@ -55,7 +55,7 @@ namespace
 
 namespace Video
 {
-    size_t ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
+    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
         std::string videoPath;
         if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
@@ -67,7 +67,7 @@ namespace Video
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
 
-        const bool isLooped = ( action == VideoAction::LOOP_VIDEO );
+        const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         const bool hideCursor = roi.empty();
 
@@ -95,8 +95,7 @@ namespace Video
             }
         }
 
-        // Detect some non-existing video such such using 1 FPS or the size of 20 x 20 pixels.
-        if ( std::fabs( video.fps() - 1.0 ) < 0.001 || ( video.width() == 20 && video.height() == 20 ) ) {
+        if ( action == VideoAction::IGNORE_VIDEO ) {
             if ( hideCursor ) {
                 Cursor::Get().Show();
             }
@@ -110,16 +109,30 @@ namespace Video
 
         bool isFrameReady = false;
 
-        size_t roiChosenId = 0;
+        int roiChosenId = 0;
 
         const uint8_t selectionColor = 51;
 
         Game::passAnimationDelay( Game::CUSTOM_DELAY );
 
+        bool userMadeAction = false;
+
         LocalEvent & le = LocalEvent::Get();
-        while ( ( isLooped || currentFrame < video.frameCount() ) && le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+        while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
+            if ( action == VideoAction::PLAY_TILL_AUDIO_END ) {
+                if ( !Mixer::isPlaying( -1 ) ) {
+                    break;
+                }
+            }
+            else if ( action != VideoAction::LOOP_VIDEO ) {
+                if ( currentFrame >= video.frameCount() ) {
+                    break;
+                }
+            }
+
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                    userMadeAction = true;
                     Mixer::Reset();
                     break;
                 }
@@ -128,7 +141,7 @@ namespace Video
                 bool roiChosen = false;
                 for ( size_t i = 0; i < roi.size(); ++i ) {
                     if ( le.MouseClickLeft( roi[i] ) ) {
-                        roiChosenId = i;
+                        roiChosenId = static_cast<int>( i );
                         roiChosen = true;
                         break;
                     }
@@ -196,7 +209,7 @@ namespace Video
             }
         }
 
-        if ( action == VideoAction::WAIT_FOR_USER_INPUT ) {
+        if ( action == VideoAction::WAIT_FOR_USER_INPUT && !userMadeAction ) {
             while ( le.HandleEvents() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     break;

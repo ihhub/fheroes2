@@ -109,7 +109,7 @@ namespace Interface
         void EventSwitchHeroSleeping( void );
         void EventDefaultAction( void );
         void EventOpenFocus( void ) const;
-        int EventSaveGame( void ) const;
+        fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
         void EventGameInfo( void ) const;
         void EventSystemDialog( void );
@@ -124,16 +124,16 @@ namespace Interface
         void EventSwitchShowIcons( void );
         void EventSwitchShowControlPanel( void ) const;
 
-        int EventNewGame( void ) const;
-        int EventLoadGame( void ) const;
-        int EventAdventureDialog( void );
-        int EventFileDialog( void ) const;
-        int EventEndTurn( void ) const;
-        static int EventExit( void );
-        int EventDigArtifact( void );
+        fheroes2::GameMode EventNewGame() const;
+        fheroes2::GameMode EventLoadGame() const;
+        fheroes2::GameMode EventAdventureDialog();
+        fheroes2::GameMode EventFileDialog( void ) const;
+        fheroes2::GameMode EventEndTurn() const;
+        static fheroes2::GameMode EventExit();
+        fheroes2::GameMode EventDigArtifact();
         void EventKeyArrowPress( int direct );
 
-        int StartGame( void );
+        fheroes2::GameMode StartGame();
 
         void MouseCursorAreaClickLeft( const int32_t index_maps );
         void MouseCursorAreaPressRight( s32 ) const;
@@ -150,7 +150,7 @@ namespace Interface
         Basic();
         void ShowPathOrStartMoveHero( Heroes *, s32 );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
-        int HumanTurn( bool );
+        fheroes2::GameMode HumanTurn( bool );
 
         GameArea gameArea;
         Radar radar;

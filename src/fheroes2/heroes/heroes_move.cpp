@@ -743,6 +743,8 @@ bool Heroes::MoveStep( bool fast )
     const fheroes2::Point & mp = GetCenter();
 
     if ( fast ) {
+        // Unveil fog before moving the hero.
+        Scoute( indexTo );
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
             MoveStep( *this, indexTo, false );
         else
@@ -761,6 +763,10 @@ bool Heroes::MoveStep( bool fast )
             if ( GetKingdom().isControlHuman() )
                 PlayWalkSound( world.GetTiles( mp.x, mp.y ).GetGround() );
         }
+    }
+    else if ( sprite_index % 9 == 1 ) {
+        // This is a start of hero's movement. We should clear fog around him.
+        Scoute( indexTo );
     }
     else if ( 8 == sprite_index % 9 ) {
         sprite_index -= 8;

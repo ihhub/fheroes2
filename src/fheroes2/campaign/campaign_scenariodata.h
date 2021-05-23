@@ -21,6 +21,7 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
+#include "game_video_type.h"
 #include "maps_fileinfo.h"
 
 namespace Campaign
@@ -37,7 +38,11 @@ namespace Campaign
     enum CampaignID
     {
         ROLAND_CAMPAIGN = 0,
-        ARCHIBALD_CAMPAIGN = 1
+        ARCHIBALD_CAMPAIGN = 1,
+        PRICE_OF_LOYALTY_CAMPAIGN = 2,
+        VOYAGE_HOME_CAMPAIGN = 3,
+        WIZARDS_TALE_CAMPAIGN = 4,
+        DESCENDANTS_CAMPAIGN = 5
     };
 
     enum class ScenarioVictoryCondition : int
@@ -80,12 +85,21 @@ namespace Campaign
         static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID );
     };
 
+    struct ScenarioIntroVideoInfo
+    {
+        std::string fileName;
+        Video::VideoAction action;
+    };
+
+    using VideoSequence = std::vector<ScenarioIntroVideoInfo>;
+
     class ScenarioData
     {
     public:
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+                      const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
+                      const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
         const std::vector<int> & getNextMaps() const
@@ -123,6 +137,16 @@ namespace Campaign
             return _lossCondition;
         }
 
+        const std::vector<ScenarioIntroVideoInfo> & getStartScenarioVideoPlayback() const
+        {
+            return _startScenarioVideoPlayback;
+        }
+
+        const std::vector<ScenarioIntroVideoInfo> & getEndScenarioVideoPlayback() const
+        {
+            return _endScenarioVideoPlayback;
+        }
+
         bool isMapFilePresent() const;
         Maps::FileInfo loadMap() const;
 
@@ -134,6 +158,9 @@ namespace Campaign
         std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
         ScenarioVictoryCondition _victoryCondition;
         ScenarioLossCondition _lossCondition;
+
+        VideoSequence _startScenarioVideoPlayback;
+        VideoSequence _endScenarioVideoPlayback;
     };
 }
 

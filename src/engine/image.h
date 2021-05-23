@@ -257,6 +257,8 @@ namespace fheroes2
     // Please use value from the main palette only
     void SetPixel( Image & image, int32_t x, int32_t y, uint8_t value );
 
+    void SetPixel( Image & image, const std::vector<Point> & points, uint8_t value );
+
     // Please set value not bigger than 13!
     void SetTransformPixel( Image & image, int32_t x, int32_t y, uint8_t value );
 

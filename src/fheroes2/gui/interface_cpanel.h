@@ -23,6 +23,7 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
+#include "game_mode.h"
 #include "image.h"
 
 #include <memory>
@@ -39,7 +40,7 @@ namespace Interface
         void SetPos( int32_t, int32_t );
         void Redraw( void ) const;
         void ResetTheme( void );
-        int QueueEventProcessing( void );
+        fheroes2::GameMode QueueEventProcessing();
 
         const fheroes2::Rect & GetArea( void ) const;
 

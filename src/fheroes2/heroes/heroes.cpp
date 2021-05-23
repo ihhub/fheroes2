@@ -733,7 +733,7 @@ void Heroes::ActionNewDay( void )
         u32 maxp = GetMaxSpellPoints();
         const Castle * castle = inCastle();
 
-        // possible visit arteian spring 2 * max
+        // possible visit artesian spring 2 * max
         if ( curr < maxp ) {
             // in castle?
             if ( castle && castle->GetLevelMageGuild() ) {
@@ -770,10 +770,6 @@ void Heroes::ActionNewWeek( void )
 {
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
-
-    // fix artesian spring effect
-    if ( GetSpellPoints() > GetMaxSpellPoints() )
-        SetSpellPoints( GetMaxSpellPoints() );
 }
 
 void Heroes::ActionNewMonth( void )
@@ -1253,9 +1249,9 @@ void Heroes::LearnSkill( const Skill::Secondary & skill )
         secondary_skills.AddSkill( skill );
 }
 
-void Heroes::Scoute( void ) const
+void Heroes::Scoute( const int tileIndex ) const
 {
-    Maps::ClearFog( GetIndex(), GetScoute(), GetColor() );
+    Maps::ClearFog( tileIndex, GetScoute(), GetColor() );
 }
 
 int Heroes::GetScoute( void ) const
@@ -1322,14 +1318,17 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
             return 1;
 
         total -= move_point;
-        if ( maxMovePoints >= total )
-            return 2;
 
-        total -= maxMovePoints;
-        if ( maxMovePoints >= total )
-            return 3;
+        int moveDays = 2;
+        while ( moveDays < 8 ) {
+            if ( maxMovePoints >= total )
+                return moveDays;
 
-        return 4;
+            total -= maxMovePoints;
+            ++moveDays;
+        }
+
+        return 8;
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
@@ -1391,7 +1390,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
         // post action
         if ( selected.Skill() == Skill::Secondary::SCOUTING ) {
-            Scoute();
+            Scoute( GetIndex() );
         }
     }
 }
@@ -1596,7 +1595,7 @@ void Heroes::Move2Dest( const int32_t dstIndex )
     if ( dstIndex != GetIndex() ) {
         world.GetTiles( GetIndex() ).SetHeroes( NULL );
         SetIndex( dstIndex );
-        Scoute();
+        Scoute( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
     }
 }
@@ -1792,7 +1791,7 @@ void AllHeroes::Init( void )
     }
     else {
         // for non-PoL maps, just add unknown heroes instead in place of the PoL-specific ones
-        for ( int i = Heroes::SOLMYR; i < Heroes::JARKONAS; ++i )
+        for ( int i = Heroes::SOLMYR; i <= Heroes::JARKONAS; ++i )
             push_back( new Heroes( Heroes::UNKNOWN, Race::KNGT ) );
     }
 
@@ -1927,7 +1926,7 @@ void AllHeroes::Scoute( int colors ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( colors & ( *it )->GetColor() )
-            ( *it )->Scoute();
+            ( *it )->Scoute( ( *it )->GetIndex() );
 }
 
 Heroes * AllHeroes::FromJail( s32 index ) const

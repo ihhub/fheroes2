@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,45 +18,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2AUDIO_MIXER_H
-#define H2AUDIO_MIXER_H
+#pragma once
 
-#include <vector>
-
-#include "types.h"
-
-#include <SDL_mixer.h>
-
-namespace Mixer
+namespace fheroes2
 {
-    typedef Mix_Chunk chunk_t;
-
-    void FreeChunk( chunk_t * );
-    chunk_t * LoadWAV( const char * );
-    chunk_t * LoadWAV( const u8 *, u32 );
-
-    int Play( chunk_t *, int, bool );
-    int Play( const char *, int = -1, bool = false );
-    int Play( const u8 *, u32, int = -1, bool = false );
-
-    void SetChannels( int num );
-    int MaxVolume();
-    int Volume( int channel, int vol = -1 );
-
-    void Pause( int channel = -1 );
-    void Resume( int channel = -1 );
-    void Stop( int channel = -1 );
-    void Reset( void );
-
-    bool isPlaying( int channel );
-    bool isPaused( int channel );
-    bool isValid( void );
-
-    void Reduce( void );
-    void Enhance( void );
-
-    void Mute();
-    void Unmute();
+    enum class GameMode : int
+    {
+        CANCEL = 0,
+        QUIT_GAME,
+        MAIN_MENU,
+        NEW_GAME,
+        LOAD_GAME,
+        HIGHSCORES,
+        CREDITS,
+        NEW_STANDARD,
+        NEW_CAMPAIGN_SELECTION,
+        NEW_SUCCESSION_WARS_CAMPAIGN,
+        NEW_PRICE_OF_LOYALTY_CAMPAIGN,
+        NEW_MULTI,
+        NEW_HOT_SEAT,
+        NEW_NETWORK,
+        NEW_BATTLE_ONLY,
+        LOAD_STANDARD,
+        LOAD_CAMPAIN,
+        LOAD_MULTI,
+        LOAD_HOT_SEAT,
+        LOAD_NETWORK,
+        SCENARIO_INFO,
+        SELECT_SCENARIO,
+        START_GAME,
+        SAVE_GAME,
+        END_TURN,
+        SELECT_CAMPAIGN_SCENARIO,
+        COMPLETE_CAMPAIGN_SCENARIO
+    };
 }
-
-#endif

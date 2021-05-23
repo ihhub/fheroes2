@@ -209,7 +209,7 @@ namespace Maps
         void RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
-        void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & area ) const;
+        void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
 
@@ -234,6 +234,7 @@ namespace Maps
             return ( fog_colors & colors ) == colors;
         }
 
+        bool isFogAllAround( const int color ) const;
         void ClearFog( int color );
 
         /* monster operation */
@@ -278,18 +279,19 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
-        static int ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex );
-        static int ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex );
-        static int GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex );
-        static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
-        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
+        static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
+        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
-        static int GetPassable( uint32_t tileset, uint32_t index );
-        static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
-        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
-        static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
-        static void UpdateAbandoneMineSprite( Tiles & );
-        static void FixedPreload( Tiles & );
+        static int GetPassable( const uint32_t tileset, const uint32_t index );
+        static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
+        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
+        static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
+        static void UpdateAbandoneMineSprite( Tiles & tile );
+        static void FixedPreload( Tiles & tile );
 
     private:
         TilesAddon * FindFlags( void );

@@ -22,7 +22,6 @@
 # DEBUG: build in debug mode
 #
 # WITHOUT_ZLIB: build without zlib (disable compressed save files)
-# WITHOUT_MIXER: build without SDL_mixer library
 # WITHOUT_AUDIOCD: disable audio CD support
 # WITHOUT_UNICODE: build without unicode (disable translation and ttf font)
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support

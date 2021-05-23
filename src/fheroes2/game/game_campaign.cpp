@@ -29,6 +29,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
+#include "game_video.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
@@ -261,13 +262,26 @@ namespace
     }
 }
 
-bool Game::IsOriginalCampaignPresent()
+bool Game::isSuccessionWarsCampaignPresent()
 {
     return Campaign::CampaignData::getCampaignData( Campaign::ROLAND_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::ARCHIBALD_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
-int Game::CompleteCampaignScenario()
+bool Game::isPriceOfLoyaltyCampaignPresent()
+{
+    // We need to check game resources as well.
+    if ( fheroes2::AGG::GetICN( ICN::X_LOADCM, 0 ).empty() || fheroes2::AGG::GetICN( ICN::X_IVY, 0 ).empty() ) {
+        return false;
+    }
+
+    return Campaign::CampaignData::getCampaignData( Campaign::PRICE_OF_LOYALTY_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::VOYAGE_HOME_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_TALE_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
+}
+
+fheroes2::GameMode Game::CompleteCampaignScenario()
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
@@ -296,16 +310,33 @@ int Game::CompleteCampaignScenario()
         }
     }
 
+    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+    assert( lastCompletedScenarioID >= 0 && static_cast<size_t>( lastCompletedScenarioID ) < scenarios.size() );
+    const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioID];
+
+    if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
+        AGG::ResetMixer();
+
+        for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
+            Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+        }
+
+        AGG::ResetMixer();
+    }
+
     // TODO: do proper calc based on all scenarios cleared?
-    if ( campaignData.isLastScenario( lastCompletedScenarioID ) )
-        return Game::HIGHSCORES;
+    if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
+        AGG::ResetMixer();
+        Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+        return fheroes2::GameMode::HIGHSCORES;
+    }
 
     const int firstNextMap = campaignData.getScenariosAfter( lastCompletedScenarioID ).front();
     saveData.setCurrentScenarioID( firstNextMap );
-    return Game::SELECT_CAMPAIGN_SCENARIO;
+    return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
-int Game::SelectCampaignScenario()
+fheroes2::GameMode Game::SelectCampaignScenario()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
@@ -322,6 +353,20 @@ int Game::SelectCampaignScenario()
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
     const bool goodCampaign = campaignData.isGoodCampaign();
 
+    const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
+    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+    const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
+
+    if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
+        AGG::ResetMixer();
+
+        for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
+            Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+        }
+
+        AGG::ResetMixer();
+    }
+
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
@@ -331,10 +376,6 @@ int Game::SelectCampaignScenario()
     fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
-
-    const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
-    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-    const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
@@ -416,12 +457,12 @@ int Game::SelectCampaignScenario()
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
             if ( le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioID( selectableScenarios[i] );
-                return Game::SELECT_CAMPAIGN_SCENARIO;
+                return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
-            return Game::NEWGAME;
+            return fheroes2::GameMode::NEW_GAME;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
@@ -452,9 +493,9 @@ int Game::SelectCampaignScenario()
             campaignSaveData.setCurrentScenarioBonus( scenarioBonus );
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
 
-            return Game::STARTGAME;
+            return fheroes2::GameMode::START_GAME;
         }
     }
 
-    return Game::NEWGAME;
+    return fheroes2::GameMode::NEW_GAME;
 }

@@ -883,6 +883,8 @@ namespace ICN
         WOLF,
         WRLK32,
         WZRD32,
+        X_IVY,
+        X_LOADCM,
         X_LOC1,
         X_LOC2,
         X_LOC3,
@@ -928,6 +930,8 @@ namespace ICN
         WHITE_LARGE_FONT,
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
+
+        CURSOR_ADVENTURE_MAP,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
