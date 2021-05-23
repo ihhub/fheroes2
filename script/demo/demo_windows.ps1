@@ -16,7 +16,19 @@ try {
             return (Get-FileHash -Path $Path -Algorithm SHA256).Hash
         } catch [System.Management.Automation.CommandNotFoundException] {
             if ($_.Exception.CommandName -Eq "Get-FileHash") {
-                return (certutil.exe -hashfile $Path sha256 | Select-String -Pattern "^[0-9A-Fa-f]{64}$").Line.ToUpper()
+                try {
+                    $output = certutil.exe -hashfile $Path sha256 2>&1
+
+                    return ($output | Select-String -Pattern "^[0-9A-Fa-f]{64}$").Line.ToUpper()
+                } catch {
+                    Write-Host -ForegroundColor Yellow "WARNING: Neither Get-FileHash cmdlet nor certutil.exe are supported on this system, hash of downloaded file cannot be verified"
+
+                    if ($output -Ne $null) {
+                        Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
+                    }
+
+                    return $false
+                }
             } else {
                 throw
             }
@@ -40,12 +52,12 @@ try {
 
     $webClient.DownloadFile($h2DemoURL, "demo\h2demo.zip")
 
-    $hash = Calculate-SHA256 -Path "demo\h2demo.zip"
+    $result = Calculate-SHA256 -Path "demo\h2demo.zip"
 
-    if ($hash -Ne $h2DemoSHA256) {
+    if (-Not ($result -Is [Boolean]) -And ($result -Ne $h2DemoSHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
                                                "Expected:`t$h2DemoSHA256`r`n", `
-                                               "Got:`t`t$hash`r`n", `
+                                               "Got:`t`t$result`r`n", `
                                                "Installation aborted"))
 
         return
@@ -55,12 +67,12 @@ try {
 
     $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
 
-    $hash = Calculate-SHA256 -Path "demo\wing32.zip"
+    $result = Calculate-SHA256 -Path "demo\wing32.zip"
 
-    if ($hash -Ne $wing32SHA256) {
+    if (-Not ($result -Is [Boolean]) -And ($result -Ne $wing32SHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
                                                "Expected:`t$wing32SHA256`r`n", `
-                                               "Got:`t`t$hash`r`n", `
+                                               "Got:`t`t$result`r`n", `
                                                "Installation aborted"))
 
         return
