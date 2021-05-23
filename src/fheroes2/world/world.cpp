@@ -533,6 +533,11 @@ void World::NewDay( void )
             ++month;
     }
 
+    // new day - reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
+    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
+        hero->ResetModes( Heroes::SAVE_MP_POINTS );
+    } );
+
     // action new day
     vec_kingdoms.NewDay();
 
@@ -583,12 +588,6 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
-
-    // new day - reset option: "heroes: remember move points for retreat/surrender result"
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        hero->ResetModes( Heroes::SAVE_SP_POINTS );
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-    } );
 }
 
 void World::NewMonth( void )
