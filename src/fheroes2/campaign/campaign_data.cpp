@@ -192,6 +192,24 @@ namespace
         _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
         _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
 
+    const std::string priceOfLoyaltyCampaignDescription[8] = { _( "Uprising" ),         _( "Island of Chaos" ), _( "Arrow's Flight" ), _( "The Abyss" ),
+                                                                 _( "The Giant's Pass" ), _( "Aurora Borealis" ), _( "Betrayal's End" ), _( "Corruption's Heart" ) };
+
+    const std::string descendantsCampaignDescription[8] = { _( "Conquer and Unify" ), _( "Border Towns" ), _( "The Wayward Son" ), _( "Crazy Uncle Ivan" ),
+                                                              _( "The Southern War" ),  _( "Ivory Gates" ),  _( "The Elven Lands" ), _( "The Epic Battle" ) };
+
+    const std::string wizardsIsleCampaignDescription[4] = { 
+        _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ), 
+        _( "The location of the great library has been dicovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ), 
+        _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ), 
+        _( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
+
+    const std::string voyageHomeCampaignDescription[4] = { 
+        _( "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ), 
+        _( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ), 
+        _( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ), 
+        _( "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in your name. Gallavant must not die." ) };
+
     Campaign::CampaignData getRolandCampaignData()
     {
         std::vector<Campaign::ScenarioData> scenarioDatas;
@@ -296,13 +314,13 @@ namespace
 
         const int campaignID = Campaign::WIZARDS_ISLE_CAMPAIGN;
         scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP3_01.HXC",
-                                    wizardsIsleCampaignScenarioNames[0], archibaldCampaignDescription[0] );
+                                    wizardsIsleCampaignScenarioNames[0], wizardsIsleCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP3_02.HXC",
-                                    wizardsIsleCampaignScenarioNames[1], archibaldCampaignDescription[0] );
+                                    wizardsIsleCampaignScenarioNames[1], wizardsIsleCampaignDescription[1] );
         scenarioDatas.emplace_back( 2, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP3_03.HXC",
-                                    wizardsIsleCampaignScenarioNames[2], archibaldCampaignDescription[0] );
+                                    wizardsIsleCampaignScenarioNames[2], wizardsIsleCampaignDescription[2] );
         scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP3_04.HXC",
-                                    wizardsIsleCampaignScenarioNames[3], archibaldCampaignDescription[0] );
+                                    wizardsIsleCampaignScenarioNames[3], wizardsIsleCampaignDescription[3] );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
@@ -318,13 +336,13 @@ namespace
 
         const int campaignID = Campaign::VOYAGE_HOME_CAMPAIGN;
         scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP4_01.HXC",
-                                    voyageHomeCampaignScenarioNames[0], archibaldCampaignDescription[0] );
+                                    voyageHomeCampaignScenarioNames[0], voyageHomeCampaignDescription[0] );
         scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP4_02.HXC",
-                                    voyageHomeCampaignScenarioNames[1], archibaldCampaignDescription[0] );
+                                    voyageHomeCampaignScenarioNames[1], voyageHomeCampaignDescription[1] );
         scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP4_03.HXC",
-                                    voyageHomeCampaignScenarioNames[2], archibaldCampaignDescription[0] );
+                                    voyageHomeCampaignScenarioNames[2], voyageHomeCampaignDescription[2] );
         scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP4_04.HXC",
-                                    voyageHomeCampaignScenarioNames[3], archibaldCampaignDescription[0] );
+                                    voyageHomeCampaignScenarioNames[3], voyageHomeCampaignDescription[3] );
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( campaignID );
