@@ -207,7 +207,12 @@ namespace
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player.GetColor(), scenarioBonus._subType );
                 break;
-            case Campaign::ScenarioBonusData::SKILL:
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
+                Heroes * bestHero = kingdom.GetBestHero();
+                for ( int i = 0; i < scenarioBonus._amount; ++i )
+                    bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+                break;
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
                 kingdom.GetBestHero()->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 break;
             default:

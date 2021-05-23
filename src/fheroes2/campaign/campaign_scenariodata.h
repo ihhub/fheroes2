@@ -66,7 +66,8 @@ namespace Campaign
             TROOP,
             SPELL,
             STARTING_RACE,
-            SKILL
+            SKILL_PRIMARY,
+            SKILL_SECONDARY
         };
 
         uint32_t _type;
