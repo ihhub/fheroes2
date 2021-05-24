@@ -25,6 +25,7 @@
 
 #include "agg_image.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
@@ -1572,8 +1573,24 @@ void World::ProcessNewMap()
         }
 
         if ( !pools.empty() ) {
+            Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
+            if ( Settings::Get().isCampaignGameType() ) {
+                Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+                const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+                const int scenarioId = campaignData.getCurrentScenarioID();
+                assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+                if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+                    const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+                    if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                        ultimate = Artifact::ULTIMATE_CROWN;
+                    }
+                }
+            }
+
             const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, Artifact::Rand( Artifact::ART_ULTIMATE ) );
+            ultimate_artifact.Set( pos, ultimate );
             ultimate_pos = Maps::GetPoint( pos );
         }
     }
