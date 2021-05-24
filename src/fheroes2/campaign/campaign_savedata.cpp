@@ -96,6 +96,12 @@ namespace Campaign
         }
     }
 
+    int CampaignSaveData::getLastCompletedScenarioID() const
+    {
+        assert( !_finishedMaps.empty() );
+        return _finishedMaps.back();
+    }
+
     const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
     {
         std::vector<Campaign::CampaignAwardData> obtainedAwards;

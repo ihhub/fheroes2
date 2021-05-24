@@ -52,10 +52,8 @@ namespace Campaign
             return _currentScenarioID;
         }
 
-        int getLastCompletedScenarioID() const
-        {
-            return _finishedMaps.back();
-        }
+        // Make sure that this is not the first scenario in the campaign. Please call isStarting to verify this.
+        int getLastCompletedScenarioID() const;
 
         bool isStarting() const
         {
