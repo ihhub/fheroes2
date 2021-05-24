@@ -48,7 +48,8 @@ namespace Campaign
     enum class ScenarioVictoryCondition : int
     {
         STANDARD = 0, // standard map's defined victory condition
-        CAPTURE_DRAGON_CITY = 1
+        CAPTURE_DRAGON_CITY = 1,
+        OBTAIN_ULTIMATE_CROWN = 2
     };
 
     enum class ScenarioLossCondition : int
