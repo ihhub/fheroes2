@@ -201,6 +201,7 @@ namespace
                 assert( hero != nullptr );
                 if ( hero != nullptr ) {
                     hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                }
             } break;
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
