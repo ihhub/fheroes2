@@ -192,10 +192,13 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
 fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 {
-    fheroes2::drawMainMenuScreen();
-    Dialog::Message( _( "Expansion Campaign" ), _( "Expansion campaigns are still under development." ), Font::BIG, Dialog::OK );
+    // TODO: Properly choose the campaign instead of this hackish way
+    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+    campaignSaveData.reset();
+    campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+    campaignSaveData.setCurrentScenarioID( 0 );
 
-    return fheroes2::GameMode::MAIN_MENU;
+    return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
 #ifdef NETWORK_ENABLE

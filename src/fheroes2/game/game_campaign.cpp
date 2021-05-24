@@ -59,16 +59,16 @@ namespace
             campaignTrack = ICN::CTRACK03;
             break;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK1;
+            campaignTrack = ICN::X_TRACK0;
             break;
         case Campaign::DESCENDANTS_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK2;
+            campaignTrack = ICN::X_TRACK1;
             break;
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK3;
+            campaignTrack = ICN::X_TRACK2;
             break;
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK4;
+            campaignTrack = ICN::X_TRACK3;
             break;
         }
 
@@ -381,7 +381,28 @@ fheroes2::GameMode Game::SelectCampaignScenario()
         AGG::ResetMixer();
     }
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
+    int backgroundIconID = 0;
+
+    switch ( chosenCampaignID ) {
+    case Campaign::ROLAND_CAMPAIGN:
+        backgroundIconID = ICN::CAMPBKGG;
+        break;
+    case Campaign::ARCHIBALD_CAMPAIGN:
+        backgroundIconID = ICN::CAMPBKGE;
+        break;
+        // PoL campaigns use the same background, but different headers
+    /*case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+    case Campaign::DESCENDANTS_CAMPAIGN:
+    case Campaign::WIZARDS_ISLE_CAMPAIGN:
+    case Campaign::VOYAGE_HOME_CAMPAIGN:
+        backgroundIconID = ICN::X_CMPBKG;
+        break;*/
+    default:
+        backgroundIconID = ICN::CAMPBKGG;
+        break;
+    }
+
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( backgroundIconID, 0 );
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
