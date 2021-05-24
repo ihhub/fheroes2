@@ -149,12 +149,12 @@ public:
     enum flags_t
     {
         SHIPMASTER = 0x00000001,
-        // UNUSED	= 0x00000002,
+        // UNUSED = 0x00000002,
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
-        SAVE_SP_POINTS = 0x00000010,
-        // UNUSED	= 0x00000020,
-        // UNUSED	= 0x00000040,
+        // UNUSED = 0x00000010,
+        // UNUSED = 0x00000020,
+        // UNUSED = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
         SAVE_MP_POINTS = 0x00000200,
@@ -283,6 +283,9 @@ public:
     void ActionNewMonth( void );
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
+
+    // Called from World::NewDay() for all heroes, hired or not
+    void ReplenishSpellPoints();
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
