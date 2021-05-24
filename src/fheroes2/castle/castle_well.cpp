@@ -136,7 +136,8 @@ void Castle::OpenWell( void )
             Funds total;
             std::string str;
 
-            Troops tempArmy( GetArmy() );
+            const Troops & currentArmy = GetArmy();
+            Troops tempArmy( currentArmy );
 
             for ( const uint32_t dwellingType : alldwellings ) {
                 const uint32_t canRecruit = HowManyRecruitMonster( *this, tempArmy, dwellingType, total, cur );
