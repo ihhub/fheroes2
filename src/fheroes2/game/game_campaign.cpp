@@ -349,7 +349,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
-fheroes2::GameMode Game::SelectCampaignScenario()
+fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMode )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
@@ -475,7 +475,7 @@ fheroes2::GameMode Game::SelectCampaignScenario()
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
-            return fheroes2::GameMode::NEW_GAME;
+            return prevMode;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
@@ -510,5 +510,5 @@ fheroes2::GameMode Game::SelectCampaignScenario()
         }
     }
 
-    return fheroes2::GameMode::NEW_GAME;
+    return prevMode;
 }
