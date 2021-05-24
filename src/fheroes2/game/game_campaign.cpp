@@ -361,7 +361,7 @@ fheroes2::GameMode Game::SelectCampaignScenario()
     cursor.SetThemes( cursor.POINTER );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-    const size_t chosenCampaignID = campaignSaveData.getCampaignID();
+    const int chosenCampaignID = campaignSaveData.getCampaignID();
 
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
     const bool goodCampaign = campaignData.isGoodCampaign();
