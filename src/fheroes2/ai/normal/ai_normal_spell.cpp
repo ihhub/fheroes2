@@ -190,6 +190,18 @@ namespace AI
         return bestOutcome;
     }
 
+    uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
+    {
+        uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
+        duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
+                    + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+
+        if ( duration < 2 && target.Modes( TR_MOVED ) )
+            return 0;
+
+        return 1;
+    }
+
     double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
     {
         const int spellID = spell.GetID();
@@ -332,7 +344,7 @@ namespace AI
             ratio /= ReduceEffectivenessByDistance( target );
         }
 
-        return target.GetStrength() * ratio;
+        return target.GetStrength() * ratio * spellDurationMultiplier( target );
     }
 
     SpellcastOutcome BattlePlanner::spellEffectValue( const Spell & spell, const Units & targets ) const
