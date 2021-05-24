@@ -245,9 +245,15 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
 
     fheroes2::Display::instance().render();
 
-    std::string file = Dialog::SelectFileLoad();
-    if ( file.empty() || !Game::Load( file ) )
+    const std::string file = Dialog::SelectFileLoad();
+    if ( file.empty() ) {
         return fheroes2::GameMode::LOAD_GAME;
+    }
 
-    return fheroes2::GameMode::START_GAME;
+    const fheroes2::GameMode returnValue = Game::Load( file );
+    if ( returnValue == fheroes2::GameMode::CANCEL ) {
+        return fheroes2::GameMode::LOAD_GAME;
+    }
+
+    return returnValue;
 }

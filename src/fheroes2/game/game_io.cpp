@@ -47,10 +47,7 @@ namespace
 {
     const uint16_t SAV2ID2 = 0xFF02;
     const uint16_t SAV2ID3 = 0xFF03;
-}
 
-namespace Game
-{
     struct HeaderSAV
     {
         enum
@@ -153,29 +150,29 @@ bool Game::Save( const std::string & fn )
     return !fz.fail() && fz.write( fn, true );
 }
 
-bool Game::Load( const std::string & fn )
+fheroes2::GameMode Game::Load( const std::string & fn )
 {
     DEBUG_LOG( DBG_GAME, DBG_INFO, fn );
-    Settings & conf = Settings::Get();
-    // loading info
-    Game::ShowMapLoadingText();
 
     StreamFile fs;
     fs.setbigendian( true );
 
     if ( !fs.open( fn, "rb" ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", error open" );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
-    char major, minor;
+    Game::ShowMapLoadingText();
+
+    char major;
+    char minor;
     fs >> major >> minor;
     const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", incorrect SAV2ID" );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
     std::string strver;
@@ -186,7 +183,7 @@ bool Game::Load( const std::string & fn )
 
     // hide: unsupported version
     if ( binver > CURRENT_FORMAT_VERSION || binver < LAST_SUPPORTED_FORMAT_VERSION )
-        return false;
+        return fheroes2::GameMode::CANCEL;
 
     int fileGameType = Game::TYPE_STANDARD;
     HeaderSAV header( binver );
@@ -196,15 +193,16 @@ bool Game::Load( const std::string & fn )
     size_t offset = fs.tell();
     fs.close();
 
+    Settings & conf = Settings::Get();
     if ( ( conf.GameType() & fileGameType ) == 0 ) {
         Dialog::Message( "Warning", _( "Invalid file game type. Please ensure that you are running the latest type of save files." ), Font::BIG, Dialog::OK );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
 #ifndef WITH_ZLIB
     if ( header.status & HeaderSAV::IS_COMPRESS ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 #endif
 
@@ -213,13 +211,13 @@ bool Game::Load( const std::string & fn )
 
     if ( !fz.read( fn, offset ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, ", uncompress: error" );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
-    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() )
-        Dialog::Message( "Warning", _( "This file is saved in the \"Price Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
+    if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
+        Dialog::Message( "Warning", _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ), Font::BIG, Dialog::OK );
+    }
 
-    // SaveMemToFile(std::vector<u8>(fz.data(), fz.data() + fz.size()), "gdata.bin");
     fz >> binver;
 
     // check version: false
@@ -229,12 +227,11 @@ bool Game::Load( const std::string & fn )
            << "game version: " << CURRENT_FORMAT_VERSION << std::endl
            << "last supported version: " << LAST_SUPPORTED_FORMAT_VERSION;
         Dialog::Message( "Error", os.str(), Font::BIG, Dialog::OK );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
-    u16 end_check = 0;
 
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
     if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
@@ -245,15 +242,24 @@ bool Game::Load( const std::string & fn )
         Dialog::Message( "Warning!", warningMessage, Font::BIG, Dialog::OK );
     }
 
+    fheroes2::GameMode returnValue = fheroes2::GameMode::START_GAME;
+
     if ( conf.isCampaignGameType() ) {
-        fz >> Campaign::CampaignSaveData::Get();
+        Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+        fz >> saveData;
+
+        if ( !saveData.isStarting() && saveData.getCurrentScenarioID() == saveData.getLastCompletedScenarioID() ) {
+            // This is the end of the current scenario. We should show next scenario selection.
+            returnValue = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
+        }
     }
 
+    uint16_t end_check = 0;
     fz >> end_check;
 
     if ( fz.fail() || ( end_check != SAV2ID2 && end_check != SAV2ID3 ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid load file: " << fn );
-        return false;
+        return fheroes2::GameMode::CANCEL;
     }
 
     SetLoadVersion( CURRENT_FORMAT_VERSION );
@@ -261,10 +267,14 @@ bool Game::Load( const std::string & fn )
     Game::SetLastSavename( fn );
     conf.SetGameType( conf.GameType() | Game::TYPE_LOADFILE );
 
+    if ( returnValue != fheroes2::GameMode::START_GAME ) {
+        return returnValue;
+    }
+
     // rescan path passability for all heroes, for this we need actual info about players from Settings
     World::Get().RescanAllHeroesPathPassable();
 
-    return true;
+    return returnValue;
 }
 
 bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )

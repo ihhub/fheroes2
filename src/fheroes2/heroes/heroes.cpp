@@ -703,10 +703,7 @@ bool Heroes::Recruit( const Castle & castle )
 {
     if ( Recruit( castle.GetColor(), castle.GetCenter() ) ) {
         if ( castle.GetLevelMageGuild() ) {
-            // magic point
-            if ( !Modes( SAVE_SP_POINTS ) )
-                SetSpellPoints( GetMaxSpellPoints() );
-            // learn spell
+            // learn spells
             castle.MageGuildEducateHero( *this );
         }
         SetVisited( GetIndex() );
@@ -725,39 +722,6 @@ void Heroes::ActionNewDay( void )
     // stables visited?
     if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
         move_point += 400;
-
-    // recovery spell points
-    // if(HaveSpellBook())
-    {
-        u32 curr = GetSpellPoints();
-        u32 maxp = GetMaxSpellPoints();
-        const Castle * castle = inCastle();
-
-        // possible visit artesian spring 2 * max
-        if ( curr < maxp ) {
-            // in castle?
-            if ( castle && castle->GetLevelMageGuild() ) {
-                // restore from mage guild
-                if ( Settings::Get().ExtCastleGuildRestorePointsTurn() )
-                    curr += maxp * GameStatic::GetMageGuildRestoreSpellPointsPercentDay( castle->GetLevelMageGuild() ) / 100;
-                else
-                    curr = maxp;
-            }
-
-            // everyday
-            curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
-
-            // power ring action
-            int acount = HasArtifact( Artifact::POWER_RING );
-            if ( acount )
-                curr += acount * Artifact( Artifact::POWER_RING ).ExtraValue();
-
-            // secondary skill
-            curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
-
-            SetSpellPoints( curr > maxp ? maxp : curr );
-        }
-    }
 
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
@@ -784,6 +748,44 @@ void Heroes::ActionAfterBattle( void )
     visit_object.remove_if( Visit::isBattleLife );
     //
     SetModes( ACTION );
+}
+
+void Heroes::ReplenishSpellPoints()
+{
+    const uint32_t maxp = GetMaxSpellPoints();
+    uint32_t curr = GetSpellPoints();
+
+    // spell points may be doubled in artesian spring, leave as is
+    if ( curr >= maxp ) {
+        return;
+    }
+
+    const Castle * castle = inCastle();
+
+    // in castle?
+    if ( castle && castle->GetLevelMageGuild() ) {
+        // restore from mage guild
+        if ( Settings::Get().ExtCastleGuildRestorePointsTurn() ) {
+            curr += maxp * GameStatic::GetMageGuildRestoreSpellPointsPercentDay( castle->GetLevelMageGuild() ) / 100;
+        }
+        else {
+            curr = maxp;
+        }
+    }
+
+    // everyday
+    curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
+
+    // power ring action
+    const int acount = HasArtifact( Artifact::POWER_RING );
+    if ( acount ) {
+        curr += acount * Artifact( Artifact::POWER_RING ).ExtraValue();
+    }
+
+    // secondary skill
+    curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
+
+    SetSpellPoints( std::min( curr, maxp ) );
 }
 
 void Heroes::RescanPathPassable( void )
@@ -1461,7 +1463,6 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
         if ( savepoints )
             SetModes( SAVE_MP_POINTS );
-        SetModes( SAVE_SP_POINTS );
     }
 }
 
