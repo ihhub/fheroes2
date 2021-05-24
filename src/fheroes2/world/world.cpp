@@ -1006,7 +1006,7 @@ int World::CheckKingdomWins( const Kingdom & kingdom ) const
     const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
-        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
         const int scenarioId = campaignData.getCurrentScenarioID();
@@ -1052,7 +1052,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
     const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
-        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
         const int scenarioId = campaignData.getCurrentScenarioID();

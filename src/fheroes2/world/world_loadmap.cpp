@@ -1575,7 +1575,7 @@ void World::ProcessNewMap()
         if ( !pools.empty() ) {
             Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
             if ( Settings::Get().isCampaignGameType() ) {
-                Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+                const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
                 const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
                 const int scenarioId = campaignData.getCurrentScenarioID();
