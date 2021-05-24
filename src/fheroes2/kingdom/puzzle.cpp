@@ -231,22 +231,28 @@ void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 
     const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
     Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
 
-    while ( alpha > 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
+    while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
         if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
             cursor.Hide();
             fheroes2::Blit( sf, display, dstx, dsty );
             for ( size_t i = 0; i < pzl.size(); ++i ) {
                 const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
 
-                int pieceAlpha = 255;
+                uint8_t pieceAlpha = 255;
                 if ( pzl.test( i ) )
-                    pieceAlpha = alpha;
+                    pieceAlpha = static_cast<uint8_t>( alpha );
 
-                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, static_cast<uint8_t>( pieceAlpha ) );
+                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
             }
             cursor.Show();
             display.render( fheroes2::Rect( dstx, dsty, sf.width(), sf.height() ) );
+
+            if ( alpha <= 0 ) {
+                break;
+            }
+
             alpha -= 10;
+            assert( alpha >= 0 );
         }
     }
     cursor.Hide();
