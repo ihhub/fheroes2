@@ -885,6 +885,7 @@ namespace ICN
         WZRD32,
         X_IVY,
         X_LOADCM,
+        X_CMPBKG,
         X_CMPEXT,
         X_TRACK0,
         X_TRACK1,

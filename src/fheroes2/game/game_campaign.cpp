@@ -390,13 +390,13 @@ fheroes2::GameMode Game::SelectCampaignScenario()
     case Campaign::ARCHIBALD_CAMPAIGN:
         backgroundIconID = ICN::CAMPBKGE;
         break;
-        // PoL campaigns use the same background, but different headers
-    /*case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+        // PoL campaigns use the same background, but different headers. TODO: Implement the headers
+    case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
     case Campaign::DESCENDANTS_CAMPAIGN:
     case Campaign::WIZARDS_ISLE_CAMPAIGN:
     case Campaign::VOYAGE_HOME_CAMPAIGN:
         backgroundIconID = ICN::X_CMPBKG;
-        break;*/
+        break;
     default:
         backgroundIconID = ICN::CAMPBKGG;
         break;
