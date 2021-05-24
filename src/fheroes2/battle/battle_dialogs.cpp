@@ -668,6 +668,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     pos_rt.x += 15;
     pos_rt.width -= 15;
 
+    const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
+    const Heroes * actionHero = ( current_color == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
+
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
@@ -765,6 +768,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             else if ( le.MouseCursor( btnClose.area() ) ) {
                 statusMessage = _( "Cancel" );
             }
+            else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr ) {
+                statusMessage = _( "Hero Screen" );
+            }
             else {
                 statusMessage = _( "Hero's Options" );
             }
@@ -781,6 +787,11 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
             result = 3;
+
+        if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
+            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
+        }
 
         if ( le.MousePressRight( btnCast.area() ) )
             Dialog::Message( _( "Cast Spell" ),
