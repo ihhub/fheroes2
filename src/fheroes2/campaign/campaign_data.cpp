@@ -194,11 +194,25 @@ namespace
         _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
         _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
 
-    const std::string priceOfLoyaltyCampaignDescription[8] = { _( "Uprising" ),         _( "Island of Chaos" ), _( "Arrow's Flight" ), _( "The Abyss" ),
-                                                                 _( "The Giant's Pass" ), _( "Aurora Borealis" ), _( "Betrayal's End" ), _( "Corruption's Heart" ) };
+    const std::string priceOfLoyaltyCampaignDescription[8] = {
+        _( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
+        _( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
+        _( "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
+        _( "Having prepared for your arrival, Kraeger has arranged for a force of necromancers to thwart your quest. You must capture the castle of Scabsdale before the first day of the third week, or the Necromancers will be too strong for you." ),
+        _( "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
+        _( "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
+        _( "For the good of the Empire, eliminate Kraeger." ),
+        _( "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
 
-    const std::string descendantsCampaignDescription[8] = { _( "Conquer and Unify" ), _( "Border Towns" ), _( "The Wayward Son" ), _( "Crazy Uncle Ivan" ),
-                                                              _( "The Southern War" ),  _( "Ivory Gates" ),  _( "The Elven Lands" ), _( "The Epic Battle" ) };
+    const std::string descendantsCampaignDescription[8] = {
+        _( "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the forefather of all descendants." ),
+        _( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
+        _( "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
+        _( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+        _( "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
+        _( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
+        _( "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
+        _( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
 
     const std::string wizardsIsleCampaignDescription[4] = { 
         _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ), 
@@ -334,9 +348,26 @@ namespace
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
 
+        const int campaignID = Campaign::PRICE_OF_LOYALTY_CAMPAIGN;
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP1_01.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[0], priceOfLoyaltyCampaignDescription[0], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP1_02.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[1], priceOfLoyaltyCampaignDescription[1], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP1_03.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[2], priceOfLoyaltyCampaignDescription[2], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP1_04.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[3], priceOfLoyaltyCampaignDescription[3], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP1_05.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[4], priceOfLoyaltyCampaignDescription[4], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP1_06.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[5], priceOfLoyaltyCampaignDescription[5], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP1_07.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[6], priceOfLoyaltyCampaignDescription[6], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP1_08.HXC",
+                                    priceOfLoyaltyCampaignScenarioNames[7], priceOfLoyaltyCampaignDescription[7], emptyPlayback, emptyPlayback );
 
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+        campaignData.setCampaignID( campaignID );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -347,8 +378,26 @@ namespace
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
 
+        const int campaignID = Campaign::DESCENDANTS_CAMPAIGN;
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP2_01.HXC",
+                                    descendantsCampaignScenarioNames[0], descendantsCampaignDescription[0], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP2_02.HXC",
+                                    descendantsCampaignScenarioNames[1], descendantsCampaignDescription[1], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP2_03.HXC",
+                                    descendantsCampaignScenarioNames[2], descendantsCampaignDescription[2], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP2_04.HXC",
+                                    descendantsCampaignScenarioNames[3], descendantsCampaignDescription[3], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5, 6 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP2_05.HXC",
+                                    descendantsCampaignScenarioNames[4], descendantsCampaignDescription[4], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP2_06.HXC",
+                                    descendantsCampaignScenarioNames[5], descendantsCampaignDescription[5], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP2_07.HXC",
+                                    descendantsCampaignScenarioNames[6], descendantsCampaignDescription[6], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP2_08.HXC",
+                                    descendantsCampaignScenarioNames[7], descendantsCampaignDescription[7], emptyPlayback, emptyPlayback );
+
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+        campaignData.setCampaignID( campaignID );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
