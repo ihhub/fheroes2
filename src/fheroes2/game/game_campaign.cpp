@@ -197,36 +197,32 @@ namespace
                 kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
                 break;
             case Campaign::ScenarioBonusData::ARTIFACT: {
-                    Heroes * hero = kingdom.GetBestHero();
-                    assert( hero != nullptr );
-                    if ( hero != nullptr ) {
-                        hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
-                    }
-                }
-                break;
+                Heroes * hero = kingdom.GetBestHero();
+                assert( hero != nullptr );
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+            } break;
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 break;
             case Campaign::ScenarioBonusData::SPELL: {
-                    KingdomHeroes & heroes = kingdom.GetHeroes();
-                    assert( !heroes.empty() );
-                    if ( !heroes.empty() ) {
-                        // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
-                        heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
-                    }
+                KingdomHeroes & heroes = kingdom.GetHeroes();
+                assert( !heroes.empty() );
+                if ( !heroes.empty() ) {
+                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
+                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
                 }
-                break;
+            } break;
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
                 break;
             case Campaign::ScenarioBonusData::SKILL: {
-                    Heroes * hero = kingdom.GetBestHero();
-                    assert( hero != nullptr );
-                    if ( hero != nullptr ) {
-                        hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
-                    }
+                Heroes * hero = kingdom.GetBestHero();
+                assert( hero != nullptr );
+                if ( hero != nullptr ) {
+                    hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 }
-                break;
+            } break;
             default:
                 assert( 0 );
             }
