@@ -161,7 +161,7 @@ namespace Campaign
         std::vector<int> _nextMaps;
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
-        // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else instead
+        // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else
         std::string _scenarioName;
         std::string _description;
         ScenarioVictoryCondition _victoryCondition;

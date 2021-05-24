@@ -214,16 +214,16 @@ namespace
         _( "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
         _( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
 
-    const std::string wizardsIsleCampaignDescription[4] = { 
-        _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ), 
-        _( "The location of the great library has been dicovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ), 
-        _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ), 
+    const std::string wizardsIsleCampaignDescription[4] = {
+        _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
+        _( "The location of the great library has been dicovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
+        _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
         _( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
 
-    const std::string voyageHomeCampaignDescription[4] = { 
-        _( "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ), 
-        _( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ), 
-        _( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ), 
+    const std::string voyageHomeCampaignDescription[4] = {
+        _( "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
+        _( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ),
+        _( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ),
         _( "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in your name. Gallavant must not die." ) };
 
     Campaign::CampaignData getRolandCampaignData()
