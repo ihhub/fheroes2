@@ -9,7 +9,7 @@
 # endif
 
 ifdef DEBUG
-LIBS := $(filter-out -mwindows,$(LIBS))
+SDL_LIBS := $(filter-out -mwindows,$(SDL_LIBS))
 endif
 
 AR := ar
