@@ -99,7 +99,6 @@ bool Battle::Only::ChangeSettings( void )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
@@ -366,27 +365,34 @@ bool Battle::Only::ChangeSettings( void )
             }
         }
 
-        if ( redraw || !cursor.isVisible() ) {
-            RedrawBaseInfo( cur_pt );
-            moraleIndicator1->Redraw();
-            luckIndicator1->Redraw();
-            secskill_bar1->Redraw();
-            selectArtifacts1->Redraw();
-            selectArmy1->Redraw();
-            if ( hero2 ) {
-                moraleIndicator2->Redraw();
-                luckIndicator2->Redraw();
-                secskill_bar2->Redraw();
-                selectArtifacts2->Redraw();
-            }
-            selectArmy2->Redraw();
-            if ( cinfo2 )
-                cinfo2->Redraw();
-            buttonStart.draw();
-            cursor.Show();
-            display.render();
-            redraw = false;
+        if ( !redraw ) {
+            continue;
         }
+
+        RedrawBaseInfo( cur_pt );
+        moraleIndicator1->Redraw();
+        luckIndicator1->Redraw();
+        secskill_bar1->Redraw();
+        selectArtifacts1->Redraw();
+        selectArmy1->Redraw();
+
+        if ( hero2 ) {
+            moraleIndicator2->Redraw();
+            luckIndicator2->Redraw();
+            secskill_bar2->Redraw();
+            selectArtifacts2->Redraw();
+        }
+
+        selectArmy2->Redraw();
+
+        if ( cinfo2 ) {
+            cinfo2->Redraw();
+        }
+
+        buttonStart.draw();
+        display.render();
+
+        redraw = false;
     }
 
     moraleIndicator1.reset();
