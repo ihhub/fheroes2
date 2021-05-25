@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "direction.h"
 #include "game.h"

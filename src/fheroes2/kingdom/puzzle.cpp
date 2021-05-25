@@ -25,6 +25,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"

@@ -20,6 +20,7 @@
 
 #include "dialog_resolution.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "icn.h"
@@ -102,7 +103,6 @@ namespace Dialog
 
         // setup cursor
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-        Cursor & cursor = Cursor::Get();
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -169,14 +169,15 @@ namespace Dialog
                 selectedResolution = resList.GetCurrent();
             }
 
-            if ( !cursor.isVisible() ) {
-                resList.Redraw();
-                buttonOk.draw();
-                buttonCancel.draw();
-                RedrawInfo( roi.getPosition(), selectedResolution );
-                cursor.Show();
-                display.render();
+            if ( !resList.IsNeedRedraw() ) {
+                continue;
             }
+
+            resList.Redraw();
+            buttonOk.draw();
+            buttonCancel.draw();
+            RedrawInfo( roi.getPosition(), selectedResolution );
+            display.render();
         }
 
         if ( selectedResolution.width > 0 && selectedResolution.height > 0
