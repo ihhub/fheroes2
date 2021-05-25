@@ -1121,9 +1121,6 @@ void Battle::Interface::RedrawInterface( void )
     popup.Redraw( _interfacePosition.x + _interfacePosition.width + 60, _interfacePosition.y + _interfacePosition.height );
 
     if ( listlog && listlog->isOpenLog() ) {
-        // StatusListBox hides cursor on redraw
-        const CursorRestorer cursorRestorer( false );
-
         listlog->Redraw();
     }
 }
@@ -2330,9 +2327,6 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( listlog && listlog->isOpenLog() && le.MouseCursor( listlog->GetArea() ) ) {
         cursor.SetThemes( Cursor::WAR_POINTER );
-
-        // StatusListBox hides cursor on event processing
-        const CursorRestorer cursorRestorer( false );
 
         listlog->QueueEventProcessing();
     }
