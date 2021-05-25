@@ -84,6 +84,7 @@ namespace AI
     void AIToDwellingJoinMonster( Heroes & hero, s32 dst_index );
     void AIToHeroes( Heroes & hero, s32 dst_index );
     void AIToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index );
+    void AIToDwellingBattleMonster( Heroes & hero, const uint32_t object, const int32_t tileIndex );
     void AIToStables( Heroes & hero, u32 obj, s32 dst_index );
     void AIToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index );
     void AIToBarrier( const Heroes & hero, s32 dst_index );
@@ -413,7 +414,7 @@ namespace AI
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
-            AIToDwellingRecruitMonster( hero, object, dst_index );
+            AIToDwellingBattleMonster( hero, object, dst_index );
             break;
 
         // recruit genie
@@ -1324,6 +1325,37 @@ namespace AI
         }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
+    }
+
+    void AIToDwellingBattleMonster( Heroes & hero, const uint32_t object, const int32_t tileIndex )
+    {
+        Maps::Tiles & tile = world.GetTiles( tileIndex );
+        const Troop & troop = tile.QuantityTroop();
+
+        bool allowToRecruit = true;
+        if ( Color::NONE == tile.QuantityColor() ) {
+            // Not captured / defeated yet.
+            Army army( tile );
+            Battle::Result res = Battle::Loader( hero.GetArmy(), army, tileIndex );
+            if ( res.AttackerWins() ) {
+                hero.IncreaseExperience( res.GetExperienceAttacker() );
+                tile.QuantitySetColor( hero.GetColor() );
+                tile.SetObjectPassable( true );
+            }
+            else {
+                AIBattleLose( hero, res, true, Color::NONE );
+                allowToRecruit = false;
+            }
+        }
+
+        // recruit monster
+        if ( allowToRecruit && troop.isValid() ) {
+            AIToDwellingRecruitMonster( hero, object, tileIndex );
+        }
+
+        hero.SetVisited( tileIndex, Visit::GLOBAL );
+
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( object ) );
     }
 
     void AIToStables( Heroes & hero, u32 obj, s32 dst_index )
