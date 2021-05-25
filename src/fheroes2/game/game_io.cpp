@@ -250,7 +250,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioID() == saveData.getLastCompletedScenarioID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
-            returnValue = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
+            returnValue = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE;
         }
     }
 

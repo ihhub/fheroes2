@@ -191,38 +191,49 @@ namespace
     void SetScenarioBonus( const Campaign::ScenarioBonusData & scenarioBonus )
     {
         const Players & sortedPlayers = Settings::Get().GetPlayers();
-        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
-            if ( !*it )
+        for ( const Player * player : sortedPlayers ) {
+            if ( player == nullptr ) {
+                continue;
+            }
+
+            if ( !player->isControlHuman() )
                 continue;
 
-            const Player & player = ( **it );
-            if ( !player.isControlHuman() )
-                continue;
-
-            Kingdom & kingdom = world.GetKingdom( player.GetColor() );
+            Kingdom & kingdom = world.GetKingdom( player->GetColor() );
             Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
                 kingdom.AddFundsResource( Funds( scenarioBonus._subType, scenarioBonus._amount ) );
                 break;
-            case Campaign::ScenarioBonusData::ARTIFACT:
-                kingdom.GetBestHero()->PickupArtifact( Artifact( scenarioBonus._subType ) );
-                break;
+            case Campaign::ScenarioBonusData::ARTIFACT: {
+                Heroes * hero = kingdom.GetBestHero();
+                assert( hero != nullptr );
+                if ( hero != nullptr ) {
+                    hero->PickupArtifact( Artifact( scenarioBonus._subType ) );
+                }
+            } break;
             case Campaign::ScenarioBonusData::TROOP:
                 kingdom.GetBestHero()->GetArmy().JoinTroop( Troop( Monster( scenarioBonus._subType ), scenarioBonus._amount ) );
                 break;
-            case Campaign::ScenarioBonusData::SPELL:
-                kingdom.GetBestHero()->AppendSpellToBook( scenarioBonus._subType, true );
-                break;
+            case Campaign::ScenarioBonusData::SPELL: {
+                KingdomHeroes & heroes = kingdom.GetHeroes();
+                assert( !heroes.empty() );
+                if ( !heroes.empty() ) {
+                    // TODO: make sure that the correct hero receives the spell. Right now it's a semi-hacky way to do this.
+                    heroes.back()->AppendSpellToBook( scenarioBonus._subType, true );
+                }
+            } break;
             case Campaign::ScenarioBonusData::STARTING_RACE:
-                Players::SetPlayerRace( player.GetColor(), scenarioBonus._subType );
+                Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
                 break;
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
+                assert( bestHero != nullptr );
                 for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
                     bestHero->IncreasePrimarySkill( scenarioBonus._subType );
                 break;
             case Campaign::ScenarioBonusData::SKILL_SECONDARY:
+                assert( bestHero != nullptr );
                 bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
                 break;
             default:
@@ -350,7 +361,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
-fheroes2::GameMode Game::SelectCampaignScenario()
+fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMode )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     display.fill( 0 );
@@ -362,7 +373,7 @@ fheroes2::GameMode Game::SelectCampaignScenario()
     cursor.SetThemes( cursor.POINTER );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-    const size_t chosenCampaignID = campaignSaveData.getCampaignID();
+    const int chosenCampaignID = campaignSaveData.getCampaignID();
 
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
     const bool goodCampaign = campaignData.isGoodCampaign();
@@ -497,7 +508,7 @@ fheroes2::GameMode Game::SelectCampaignScenario()
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) )
-            return fheroes2::GameMode::NEW_GAME;
+            return prevMode;
         else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
@@ -532,5 +543,5 @@ fheroes2::GameMode Game::SelectCampaignScenario()
         }
     }
 
-    return fheroes2::GameMode::NEW_GAME;
+    return prevMode;
 }

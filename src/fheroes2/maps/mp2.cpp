@@ -841,7 +841,7 @@ bool MP2::isWaterObject( int obj )
 bool MP2::isGroundObject( int obj )
 {
     // check if first bit is set
-    return obj > 127 && obj != OBJ_EVENT;
+    return obj > 127 && obj != OBJ_EVENT && obj != OBJN_STABLES && obj != OBJN_ALCHEMYTOWER;
 }
 
 bool MP2::isQuantityObject( int obj )
@@ -1172,7 +1172,7 @@ int MP2::GetObjectDirect( int obj )
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 
     case OBJ_WATERWHEEL:
-        return Direction::CENTER | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
+        return Direction::CENTER | Direction::LEFT | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
 
     case OBJ_MAGELLANMAPS:
         return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
