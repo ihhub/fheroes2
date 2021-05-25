@@ -209,7 +209,6 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
     const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -290,6 +289,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
         listbox.QueueEventProcessing();
 
+        bool needRedraw = false;
+
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
@@ -304,7 +305,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
             if ( filename.empty() )
                 buttonOk.disable();
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
@@ -312,7 +314,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 buttonOk.disable();
             else
                 buttonOk.enable();
-            cursor.Hide();
+
+            needRedraw = true;
         }
         if ( !edit_mode && le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
@@ -325,27 +328,29 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                     buttonOk.disable();
                 listbox.SetListContent( lists );
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-
-            if ( edit_mode && editor )
-                is_limit = RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field );
-            else if ( listbox.isSelected() ) {
-                filename = ResizeToShortName( listbox.GetCurrent().file );
-                charInsertPos = filename.size();
-                is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
-            }
-            else
-                is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
-
-            buttonOk.draw();
-            buttonCancel.draw();
-            cursor.Show();
-            display.render();
+        if ( !needRedraw && !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+
+        if ( edit_mode && editor )
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field );
+        else if ( listbox.isSelected() ) {
+            filename = ResizeToShortName( listbox.GetCurrent().file );
+            charInsertPos = filename.size();
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+        }
+        else
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+
+        buttonOk.draw();
+        buttonCancel.draw();
+        display.render();
     }
 
     le.CloseVirtualKeyboard();
