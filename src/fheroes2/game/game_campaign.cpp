@@ -273,6 +273,53 @@ namespace
             }
         }
     }
+
+    void playPreviosScenarioVideo()
+    {
+        const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+        if ( saveData.isStarting() ) {
+            return;
+        }
+
+        const int lastCompletedScenarioID = saveData.getLastCompletedScenarioID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
+
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        assert( lastCompletedScenarioID >= 0 && static_cast<size_t>( lastCompletedScenarioID ) < scenarios.size() );
+        const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioID];
+
+        if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
+            AGG::ResetMixer();
+
+            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
+                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            }
+
+            AGG::ResetMixer();
+        }
+    }
+
+    void playCurrentScenarioVideo()
+    {
+        const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+
+        const int chosenScenarioID = saveData.getCurrentScenarioID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
+
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        assert( chosenScenarioID >= 0 && static_cast<size_t>( chosenScenarioID ) < scenarios.size() );
+        const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
+
+        if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
+            AGG::ResetMixer();
+
+            for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
+                Video::ShowVideo( videoInfo.fileName, videoInfo.action );
+            }
+
+            AGG::ResetMixer();
+        }
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -323,19 +370,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
         }
     }
 
-    const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
-    assert( lastCompletedScenarioID >= 0 && static_cast<size_t>( lastCompletedScenarioID ) < scenarios.size() );
-    const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioID];
-
-    if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
-        AGG::ResetMixer();
-
-        for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
-            Video::ShowVideo( videoInfo.fileName, videoInfo.action );
-        }
-
-        AGG::ResetMixer();
-    }
+    playPreviosScenarioVideo();
 
     // TODO: do proper calc based on all scenarios cleared?
     if ( campaignData.isLastScenario( lastCompletedScenarioID ) ) {
@@ -370,15 +405,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[chosenScenarioID];
 
-    if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
-        AGG::ResetMixer();
-
-        for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
-            Video::ShowVideo( videoInfo.fileName, videoInfo.action );
-        }
-
-        AGG::ResetMixer();
-    }
+    playCurrentScenarioVideo();
 
     const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
@@ -417,7 +444,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         buttonChoices.button( 0 ).press();
     }
 
-    buttonViewIntro.disable();
     buttonViewIntro.draw();
 
     buttonOk.draw();
@@ -452,10 +478,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     display.render();
 
     while ( le.HandleEvents() ) {
-        if ( !buttonCancel.isDisabled() )
-            le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
-        if ( !buttonOk.isDisabled() )
-            le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
+        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
+        le.MousePressLeft( buttonViewIntro.area() ) ? buttonViewIntro.drawOnPress() : buttonViewIntro.drawOnRelease();
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
             if ( le.MousePressLeft( buttonChoices.button( i ).area() ) ) {
@@ -474,9 +499,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             }
         }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) )
+        if ( le.MouseClickLeft( buttonCancel.area() ) ) {
             return prevMode;
-        else if ( !buttonOk.isDisabled() && le.MouseClickLeft( buttonOk.area() ) ) {
+        }
+        else if ( le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
 
@@ -507,6 +533,11 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             campaignSaveData.setCurrentScenarioID( chosenScenarioID );
 
             return fheroes2::GameMode::START_GAME;
+        }
+        else if ( le.MouseClickLeft( buttonViewIntro.area() ) ) {
+            fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
+            playPreviosScenarioVideo();
+            playCurrentScenarioVideo();
         }
     }
 
