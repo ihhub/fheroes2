@@ -155,7 +155,6 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::StandardWindow frameborder( 230, 160 );
     const fheroes2::Rect area( frameborder.activeArea() );
@@ -219,6 +218,8 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
     while ( buttons == Dialog::ZERO && le.HandleEvents() ) {
         buttons = btnGroups.processEvents();
 
+        bool needRedraw = false;
+
         if ( le.MouseCursor( selectArmy.GetArea() ) ) {
             if ( guardian.select && le.MouseClickLeft( selectArmy.GetArea() ) ) {
                 Troop * troop1 = selectArmy.GetItem( le.GetMouseCursor() );
@@ -238,12 +239,14 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
                 }
 
                 guardian.select = false;
-                cursor.Hide();
+
+                needRedraw = true;
             }
             else if ( selectArmy.QueueEventProcessing() ) {
                 guardian.select = false;
-                cursor.Hide();
                 selectArmy.Redraw();
+
+                needRedraw = true;
             }
         }
         else if ( le.MouseCursor( moraleIndicator.GetArea() ) )
@@ -253,7 +256,8 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
         else if ( le.MouseClickLeft( guardian ) ) {
             if ( guardian.select ) {
                 Dialog::ArmyInfo( troop, Dialog::READONLY | Dialog::BUTTONS );
-                cursor.Hide();
+
+                needRedraw = true;
             }
             else if ( selectArmy.isSelected() && !readonly && !hero.GetArmy().SaveLastTroop() ) {
                 Troop * troop1 = selectArmy.GetSelectedItem();
@@ -279,33 +283,37 @@ bool Dialog::SetGuardian( Heroes & hero, Troop & troop, CapturedObject & co, boo
                 }
 
                 selectArmy.ResetSelected();
-                cursor.Hide();
+
+                needRedraw = true;
             }
             else
                 // select
                 if ( troop.isValid() && !readonly ) {
                 selectArmy.ResetSelected();
                 guardian.select = true;
-                cursor.Hide();
+
+                needRedraw = true;
             }
         }
         else if ( le.MousePressRight( guardian ) && troop.isValid() ) {
             selectArmy.ResetSelected();
             Dialog::ArmyInfo( troop, 0 );
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( armySplit.QueueProcessing( le, troop ) )
-            cursor.Hide();
+            needRedraw = true;
 
-        if ( !cursor.isVisible() ) {
-            guardian.Redraw();
-            moraleIndicator.Redraw();
-            luckIndicator.Redraw();
-            selectArmy.Redraw();
-            armySplit.Redraw( troop );
-            cursor.Show();
-            display.render();
+        if ( !needRedraw ) {
+            continue;
         }
+
+        guardian.Redraw();
+        moraleIndicator.Redraw();
+        luckIndicator.Redraw();
+        selectArmy.Redraw();
+        armySplit.Redraw( troop );
+        display.render();
     }
 
     return shadow() != troop() || shadow.GetCount() != troop.GetCount();
