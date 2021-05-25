@@ -197,12 +197,11 @@ private:
 class CursorRestorer
 {
 public:
-    explicit CursorRestorer( bool renderOnRestore = true );
+    CursorRestorer();
     CursorRestorer( bool visible, int theme ); // For convenience, also sets visibility and theme of the cursor
     ~CursorRestorer();
 
 private:
-    bool _renderOnRestore;
     bool _visible;
     int _theme;
 };
