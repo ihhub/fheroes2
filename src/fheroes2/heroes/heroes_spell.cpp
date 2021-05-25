@@ -498,7 +498,6 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     LocalEvent & le = LocalEvent::Get();
@@ -541,11 +540,12 @@ bool ActionSpellTownPortal( Heroes & hero )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
     frameborder.reset();
     // store
