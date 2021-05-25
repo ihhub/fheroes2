@@ -171,7 +171,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const Maps::FileInfo * result = NULL;
     MapsFileInfoList small;
@@ -281,6 +280,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
         listbox.QueueEventProcessing();
 
+        bool needRedraw = false;
+
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             result = it != all.end() ? &( *it ) : NULL;
@@ -299,7 +300,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( small );
                 currentPressedButton = &buttonSelectSmall;
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || le.KeyPress( KEY_m ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
@@ -310,7 +312,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( medium );
                 currentPressedButton = &buttonSelectMedium;
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || le.KeyPress( KEY_l ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
@@ -321,7 +324,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( large );
                 currentPressedButton = &buttonSelectLarge;
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || le.KeyPress( KEY_x ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
@@ -332,12 +336,14 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
                 listbox.SetListContent( xlarge );
                 currentPressedButton = &buttonSelectXLarge;
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             currentPressedButton = &buttonSelectAll;
-            cursor.Hide();
+
+            needRedraw = true;
         }
 
         // right info
@@ -384,17 +390,18 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
         else if ( le.MousePressRight( buttonOk.area() ) )
             Dialog::Message( _( "Okay" ), _( "Accept the choice made." ), Font::BIG );
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            buttonOk.draw();
-            buttonSelectSmall.draw();
-            buttonSelectMedium.draw();
-            buttonSelectLarge.draw();
-            buttonSelectXLarge.draw();
-            buttonSelectAll.draw();
-            cursor.Show();
-            display.render();
+        if ( !needRedraw && !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        buttonOk.draw();
+        buttonSelectSmall.draw();
+        buttonSelectMedium.draw();
+        buttonSelectLarge.draw();
+        buttonSelectXLarge.draw();
+        buttonSelectAll.draw();
+        display.render();
     }
 
     return result;
