@@ -97,8 +97,6 @@ namespace Battle
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
-        bool isStartFrame( void ) const;
-        int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
         fheroes2::Point Offset() const;
 
@@ -298,7 +296,6 @@ namespace Battle
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
-        int GetAllowSwordDirection( u32 );
 
         Arena & arena;
         Dialog::FrameBorder border;

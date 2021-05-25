@@ -101,45 +101,6 @@ int GetCovr( int ground, std::mt19937 & gen )
     return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
 }
 
-StreamBase & Battle::operator<<( StreamBase & msg, const TargetInfo & t )
-{
-    return msg << ( t.defender ? t.defender->GetUID() : static_cast<u32>( 0 ) ) << t.damage << t.killed << t.resist;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, TargetInfo & t )
-{
-    u32 uid = 0;
-
-    msg >> uid >> t.damage >> t.killed >> t.resist;
-
-    t.defender = uid ? GetArena()->GetTroopUID( uid ) : NULL;
-
-    return msg;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const TargetsInfo & ts )
-{
-    msg << static_cast<u32>( ts.size() );
-
-    for ( TargetsInfo::const_iterator it = ts.begin(); it != ts.end(); ++it )
-        msg << *it;
-
-    return msg;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, TargetsInfo & ts )
-{
-    u32 size = 0;
-
-    msg >> size;
-    ts.resize( size );
-
-    for ( TargetsInfo::iterator it = ts.begin(); it != ts.end(); ++it )
-        msg >> *it;
-
-    return msg;
-}
-
 bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
 {
     return defender == ta.defender;
@@ -692,11 +653,6 @@ uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
     return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : MAXU16;
 }
 
-bool Battle::Arena::hexIsAccessible( int32_t indexTo ) const
-{
-    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsAccessible( indexTo );
-}
-
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
     return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
@@ -1081,45 +1037,6 @@ std::vector<int> Battle::Arena::GetCastleTargets( void ) const
         targets.push_back( CAT_TOWER2 );
 
     return targets;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Arena & a )
-{
-    msg << a.current_turn << a.board << *a.army1 << *a.army2;
-
-    const HeroBase * hero1 = a.army1->GetCommander();
-    const HeroBase * hero2 = a.army2->GetCommander();
-
-    if ( hero1 )
-        msg << hero1->GetType() << *hero1;
-    else
-        msg << static_cast<int>( HeroBase::UNDEFINED );
-
-    if ( hero2 )
-        msg << hero2->GetType() << *hero2;
-    else
-        msg << static_cast<int>( HeroBase::UNDEFINED );
-
-    return msg;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Arena & a )
-{
-    msg >> a.current_turn >> a.board >> *a.army1 >> *a.army2;
-
-    int type;
-    HeroBase * hero1 = a.army1->GetCommander();
-    HeroBase * hero2 = a.army2->GetCommander();
-
-    msg >> type;
-    if ( hero1 && type == hero1->GetType() )
-        msg >> *hero1;
-
-    msg >> type;
-    if ( hero2 && type == hero2->GetType() )
-        msg >> *hero2;
-
-    return msg;
 }
 
 const HeroBase * Battle::Arena::GetCommander( int color, bool invert ) const

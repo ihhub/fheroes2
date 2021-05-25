@@ -114,23 +114,10 @@ bool Battle::Position::isReflect( void ) const
     return first && second && first->GetIndex() < second->GetIndex();
 }
 
-bool Battle::Position::isValid( void ) const
-{
-    return first && ( !second || ( ( LEFT | RIGHT ) & Board::GetDirection( first->GetIndex(), second->GetIndex() ) ) );
-}
-
 bool Battle::Position::contains( int cellIndex ) const
 {
     return ( first && first->GetIndex() == cellIndex ) || ( second && second->GetIndex() == cellIndex );
 }
-
-Battle::Cell::Cell()
-    : index( 0 )
-    , object( 0 )
-    , direction( UNKNOWN )
-    , quality( 0 )
-    , troop( NULL )
-{}
 
 Battle::Cell::Cell( int32_t ii )
     : index( ii )
@@ -305,17 +292,4 @@ void Battle::Cell::ResetQuality( void )
 void Battle::Cell::ResetDirection( void )
 {
     direction = UNKNOWN;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Cell & c )
-{
-    return msg << c.index << c.object << c.direction << c.quality << ( c.troop ? c.troop->GetUID() : static_cast<u32>( 0 ) );
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Cell & c )
-{
-    u32 uid = 0;
-    msg >> c.index >> c.object >> c.direction >> c.quality >> uid;
-    c.troop = GetArena()->GetTroopUID( uid );
-    return msg;
 }

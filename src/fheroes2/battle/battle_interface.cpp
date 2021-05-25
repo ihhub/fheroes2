@@ -610,11 +610,6 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     pos.height = sprite.height();
 }
 
-int Battle::OpponentSprite::GetColor( void ) const
-{
-    return base ? base->GetColor() : 0;
-}
-
 const HeroBase * Battle::OpponentSprite::GetHero( void ) const
 {
     return base;
@@ -639,11 +634,6 @@ void Battle::OpponentSprite::SetAnimation( int rule )
 bool Battle::OpponentSprite::isFinishFrame( void ) const
 {
     return _currentAnim.isLastFrame();
-}
-
-bool Battle::OpponentSprite::isStartFrame( void ) const
-{
-    return _currentAnim.isFirstFrame();
 }
 
 const fheroes2::Rect & Battle::OpponentSprite::GetArea( void ) const
@@ -2534,26 +2524,6 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
         a.push_back( Command( MSG_BATTLE_SKIP, _currentUnit->GetUID(), true ) );
         humanturn_exit = true;
     }
-}
-
-int Battle::Interface::GetAllowSwordDirection( u32 index )
-{
-    int res = 0;
-
-    if ( _currentUnit ) {
-        const Indexes around = Board::GetAroundIndexes( index );
-
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            const s32 from = *it;
-
-            if ( UNKNOWN != Board::GetCell( from )->GetDirection() || from == _currentUnit->GetHeadIndex()
-                 || ( _currentUnit->isWide() && from == _currentUnit->GetTailIndex() ) ) {
-                res |= Board::GetDirection( index, from );
-            }
-        }
-    }
-
-    return res;
 }
 
 void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
