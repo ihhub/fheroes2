@@ -34,6 +34,7 @@ namespace Interface
     struct ListBasic
     {
         virtual ~ListBasic() = default;
+        virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw( void ) = 0;
         virtual bool QueueEventProcessing( void ) = 0;
     };
@@ -181,7 +182,7 @@ namespace Interface
             return content != NULL && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
         }
 
-        bool IsNeedRedraw() const
+        bool IsNeedRedraw() const override
         {
             return needRedraw;
         }
