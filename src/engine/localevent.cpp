@@ -1157,16 +1157,7 @@ bool LocalEvent::HandleEvents( bool delay, bool allowExit )
             break;
 #else
         case SDL_ACTIVEEVENT:
-            if ( event.active.state & SDL_APPINPUTFOCUS ) {
-                if ( Mixer::isValid() ) {
-                    if ( 0 == event.active.gain ) {
-                        StopSounds();
-                    }
-                    else {
-                        ResumeSounds();
-                    }
-                }
-            }
+            OnActiveEvent( event );
             break;
 #endif
         // keyboard
@@ -1273,17 +1264,34 @@ void LocalEvent::ResumeSounds()
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::OnSdl2WindowEvent( const SDL_Event & event )
 {
-    if ( !Mixer::isValid() ) {
-        return;
-    }
     if ( event.window.event == SDL_WINDOWEVENT_FOCUS_LOST ) {
         StopSounds();
     }
     else if ( event.window.event == SDL_WINDOWEVENT_FOCUS_GAINED ) {
+        // Force display rendering on app activation
+        fheroes2::Display::instance().render();
+
         ResumeSounds();
     }
 }
+#else
+void LocalEvent::OnActiveEvent( const SDL_Event & event )
+{
+    if ( event.active.state & SDL_APPINPUTFOCUS ) {
+        if ( 0 == event.active.gain ) {
+            StopSounds();
+        }
+        else {
+            // Force display rendering on app activation
+            fheroes2::Display::instance().render();
 
+            ResumeSounds();
+        }
+    }
+}
+#endif
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
 void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
 {
     if ( event.touchId != 0 )
