@@ -1172,7 +1172,7 @@ int MP2::GetObjectDirect( int obj )
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 
     case OBJ_WATERWHEEL:
-        return Direction::CENTER | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
+        return Direction::CENTER | Direction::LEFT | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
 
     case OBJ_MAGELLANMAPS:
         return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
