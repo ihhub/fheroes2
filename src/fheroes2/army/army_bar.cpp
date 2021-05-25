@@ -23,7 +23,6 @@
 #include "army_bar.h"
 #include "agg_image.h"
 #include "army.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
@@ -278,7 +277,6 @@ void ArmyBar::ResetSelected( void )
 
 void ArmyBar::Redraw( fheroes2::Image & dstsf )
 {
-    Cursor::Get().Hide();
     spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::Redraw( dstsf );
 }
@@ -396,7 +394,6 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
 
-            Cursor::Get().Hide();
             spcursor.hide();
         }
     }
