@@ -276,7 +276,7 @@ namespace
 
     void playPreviosScenarioVideo()
     {
-        Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
         if ( saveData.isStarting() ) {
             return;
         }
@@ -301,7 +301,7 @@ namespace
 
     void playCurrentScenarioVideo()
     {
-        Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
         const int chosenScenarioID = saveData.getCurrentScenarioID();
         const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
