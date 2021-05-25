@@ -233,7 +233,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
@@ -372,9 +371,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
-    // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-    cursor.Show();
-
     // button exit
     dst_pt.x = cur_pt.x + 280;
     dst_pt.y = cur_pt.y + 428;
@@ -436,9 +432,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
-
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
@@ -461,9 +454,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
-
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
@@ -504,9 +494,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
-
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
 
@@ -520,9 +507,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArtifacts2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
-
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
 
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
@@ -539,9 +523,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
-
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
@@ -557,9 +538,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
-
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
@@ -572,9 +550,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArtifacts2.ResetSelected();
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
-
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
@@ -592,9 +567,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArtifacts2.ResetSelected();
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
-
-            // MeetingArmyBar and MeetingArtifactBar hide cursor on redraw
-            cursor.Show();
 
             backPrimary.restore();
             fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );

@@ -55,7 +55,6 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
@@ -223,9 +222,6 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     buttonDismiss.draw();
     buttonExit.draw();
 
-    // ArmyBar and ArtifactsBar hide cursor on redraw
-    cursor.Show();
-
     display.render();
 
     bool redrawMorale = false;
@@ -256,9 +252,6 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
                 selectArtifacts.ResetSelected();
             selectArmy.Redraw();
 
-            // ArmyBar and ArtifactsBar hide cursor on redraw
-            cursor.Show();
-
             redrawMorale = true;
             redrawLuck = true;
         }
@@ -267,9 +260,6 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
-
-            // ArmyBar and ArtifactsBar hide cursor on redraw
-            cursor.Show();
 
             spellPointsInfo.Redraw();
 
@@ -323,11 +313,9 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             army.SetSpreadFormat( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
-            cursor.Show();
             display.render();
         }
 
