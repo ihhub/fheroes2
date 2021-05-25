@@ -221,7 +221,6 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     std::vector<int> skills( MAXSECONDARYSKILL * 3, 0 );
 
@@ -247,11 +246,12 @@ Skill::Secondary Dialog::SelectSecondarySkill( void )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     Skill::Secondary skill;
@@ -271,7 +271,6 @@ Spell Dialog::SelectSpell( int cur )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
 
@@ -298,11 +297,12 @@ Spell Dialog::SelectSpell( int cur )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     return result == Dialog::OK || listbox.ok ? Spell( listbox.GetCurrent() ) : Spell( Spell::NONE );
@@ -315,7 +315,6 @@ Artifact Dialog::SelectArtifact( int cur )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     std::vector<int> artifacts( static_cast<int>( Artifact::UNKNOWN ), Artifact::UNKNOWN );
 
@@ -342,11 +341,12 @@ Artifact Dialog::SelectArtifact( int cur )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     return result == Dialog::OK || listbox.ok ? Artifact( listbox.GetCurrent() ) : Artifact( Artifact::UNKNOWN );
@@ -359,7 +359,6 @@ Monster Dialog::SelectMonster( int id )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     std::vector<int> monsters( static_cast<int>( Monster::WATER_ELEMENT ), Monster::UNKNOWN );
 
@@ -386,11 +385,12 @@ Monster Dialog::SelectMonster( int id )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     return result == Dialog::OK || listbox.ok ? Monster( listbox.GetCurrent() ) : Monster( Monster::UNKNOWN );
@@ -403,7 +403,6 @@ int Dialog::SelectHeroes( int cur )
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-    Cursor & cursor = Cursor::Get();
 
     std::vector<int> heroes( static_cast<int>( Heroes::DEBUG_HERO ), Heroes::UNKNOWN );
 
@@ -430,11 +429,12 @@ int Dialog::SelectHeroes( int cur )
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     return result == Dialog::OK || listbox.ok ? listbox.GetCurrent() : Heroes::UNKNOWN;
