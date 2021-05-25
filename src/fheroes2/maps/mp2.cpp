@@ -841,7 +841,7 @@ bool MP2::isWaterObject( int obj )
 bool MP2::isGroundObject( int obj )
 {
     // check if first bit is set
-    return obj > 127 && obj != OBJ_EVENT;
+    return obj > 127 && obj != OBJ_EVENT && obj != OBJN_STABLES;
 }
 
 bool MP2::isQuantityObject( int obj )
