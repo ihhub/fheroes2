@@ -20,7 +20,6 @@
 
 #include "campaign_data.h"
 #include "artifact.h"
-#include "campaign_scenariodata.h"
 #include "heroes.h"
 #include "maps_fileinfo.h"
 #include "monster.h"
@@ -531,6 +530,8 @@ namespace Campaign
         case WIZARDS_ISLE_CAMPAIGN:
             return getWizardsIsleCampaignAwardData( scenarioID );
             // no campaign award for voyage home!
+        case VOYAGE_HOME_CAMPAIGN:
+            break;
         }
 
         return std::vector<Campaign::CampaignAwardData>();
