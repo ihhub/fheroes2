@@ -49,6 +49,30 @@ namespace
         if ( sample )
             Mix_FreeChunk( sample );
     }
+
+    Mixer::chunk_t * LoadWAV( const char * file )
+    {
+        Mix_Chunk * sample = Mix_LoadWAV( file );
+        if ( !sample )
+            ERROR_LOG( SDL_GetError() );
+        return sample;
+    }
+
+    Mixer::chunk_t * LoadWAV( const u8 * ptr, u32 size )
+    {
+        Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
+        if ( !sample )
+            ERROR_LOG( SDL_GetError() );
+        return sample;
+    }
+
+    int PlayChunk( Mixer::chunk_t * sample, int channel, bool loop )
+    {
+        int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
+        if ( res == -1 )
+            ERROR_LOG( SDL_GetError() );
+        return res;
+    }
 }
 
 bool Mixer::isValid( void )
@@ -124,37 +148,13 @@ void Mixer::FreeChunk( chunk_t * sample )
         Mix_FreeChunk( sample );
 }
 
-Mixer::chunk_t * Mixer::LoadWAV( const char * file )
-{
-    Mix_Chunk * sample = Mix_LoadWAV( file );
-    if ( !sample )
-        ERROR_LOG( SDL_GetError() );
-    return sample;
-}
-
-Mixer::chunk_t * Mixer::LoadWAV( const u8 * ptr, u32 size )
-{
-    Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
-    if ( !sample )
-        ERROR_LOG( SDL_GetError() );
-    return sample;
-}
-
-int Mixer::Play( chunk_t * sample, int channel, bool loop )
-{
-    int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
-    if ( res == -1 )
-        ERROR_LOG( SDL_GetError() );
-    return res;
-}
-
 int Mixer::Play( const char * file, int channel, bool loop )
 {
     if ( valid ) {
         chunk_t * sample = LoadWAV( file );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
-            return Play( sample, channel, loop );
+            return PlayChunk( sample, channel, loop );
         }
     }
     return -1;
@@ -166,7 +166,7 @@ int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
         chunk_t * sample = LoadWAV( ptr, size );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
-            return Play( sample, channel, loop );
+            return PlayChunk( sample, channel, loop );
         }
     }
     return -1;
