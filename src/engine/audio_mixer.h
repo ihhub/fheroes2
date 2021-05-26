@@ -31,8 +31,6 @@
 
 namespace Mixer
 {
-    typedef Mix_Chunk chunk_t;
-
     void SetChannels( int num );
 
     int Play( const char *, int = -1, bool = false );

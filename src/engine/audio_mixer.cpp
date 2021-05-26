@@ -45,12 +45,12 @@ namespace
 
     void FreeChannel( int channel )
     {
-        Mixer::chunk_t * sample = Mix_GetChunk( channel );
+        Mix_Chunk * sample = Mix_GetChunk( channel );
         if ( sample )
             Mix_FreeChunk( sample );
     }
 
-    Mixer::chunk_t * LoadWAV( const char * file )
+    Mix_Chunk * LoadWAV( const char * file )
     {
         Mix_Chunk * sample = Mix_LoadWAV( file );
         if ( !sample )
@@ -58,7 +58,7 @@ namespace
         return sample;
     }
 
-    Mixer::chunk_t * LoadWAV( const u8 * ptr, u32 size )
+    Mix_Chunk * LoadWAV( const u8 * ptr, u32 size )
     {
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
         if ( !sample )
@@ -66,7 +66,7 @@ namespace
         return sample;
     }
 
-    int PlayChunk( Mixer::chunk_t * sample, int channel, bool loop )
+    int PlayChunk( Mix_Chunk * sample, int channel, bool loop )
     {
         int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
         if ( res == -1 )
@@ -145,7 +145,7 @@ void Mixer::SetChannels( int num )
 int Mixer::Play( const char * file, int channel, bool loop )
 {
     if ( valid ) {
-        chunk_t * sample = LoadWAV( file );
+        Mix_Chunk * sample = LoadWAV( file );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
             return PlayChunk( sample, channel, loop );
@@ -157,7 +157,7 @@ int Mixer::Play( const char * file, int channel, bool loop )
 int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
 {
     if ( valid && ptr ) {
-        chunk_t * sample = LoadWAV( ptr, size );
+        Mix_Chunk * sample = LoadWAV( ptr, size );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
             return PlayChunk( sample, channel, loop );
