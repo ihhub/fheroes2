@@ -167,6 +167,10 @@ public:
         CURSOR_HERO_BOAT_ACTION_8
     };
 
+    Cursor( const Cursor & ) = delete;
+
+    Cursor & operator=( const Cursor & ) = delete;
+
     static Cursor & Get( void );
 
     static void Redraw( int32_t, int32_t );
@@ -202,7 +206,11 @@ class CursorRestorer
 public:
     CursorRestorer();
     CursorRestorer( bool visible, int theme ); // For convenience, also sets visibility and theme of the cursor
+    CursorRestorer( const CursorRestorer & ) = delete;
+
     ~CursorRestorer();
+
+    CursorRestorer & operator=( const CursorRestorer & ) = delete;
 
 private:
     bool _visible;
