@@ -220,6 +220,9 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
     }
 
+    fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
+    fheroes2::ApplyPalette( highlightDoor, 8 );
+
     // mainmenu loop
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
@@ -308,9 +311,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
             if ( le.MouseCursor( resolutionArea ) ) {
-                const fheroes2::Sprite & brightLantern = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
                 const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
-                fheroes2::Blit( brightLantern, 0, offsetY, display, brightLantern.x(), brightLantern.y() + offsetY, brightLantern.width(), brightLantern.height() );
+                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
             }
 
             display.render();
