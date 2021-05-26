@@ -30,9 +30,9 @@
 
 namespace
 {
-    // TODO: Implement bonus data for each scenario
     std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int scenarioID )
     {
+        assert( scenarioID >= 0 && scenarioID < 10 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -93,6 +93,7 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
     {
+        assert( scenarioID >= 0 && scenarioID < 11 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -132,7 +133,7 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::STARTING_RACE, Race::BARB, 1 );
             break;
         case 7:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::POWER_AXE, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::WHITE_PEARL, 1 );
             break;
@@ -158,6 +159,7 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getPriceOfLoyaltyCampaignBonusData( const int scenarioID )
     {
+        assert( scenarioID >= 0 && scenarioID < 8 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -174,7 +176,7 @@ namespace
         case 2:
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAJOR_SCROLL, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 2 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED );
             break;
         case 3:
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MEDAL_HONOR, 1 );
@@ -199,7 +201,58 @@ namespace
         case 7:
             bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::VIEWHEROES, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::TROOP, Monster::MAGE, 5 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 2 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED );
+            break;
+        }
+
+        return bonus;
+    }
+
+    std::vector<Campaign::ScenarioBonusData> getDescendantsCampaignBonusData( const int scenarioID )
+    {
+        assert( scenarioID >= 0 && scenarioID < 8 );
+        std::vector<Campaign::ScenarioBonusData> bonus;
+
+        switch ( scenarioID ) {
+        case 0:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 50 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::CRYSTAL, 10 );
+            break;
+        case 1:
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::ATTACK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::DEFENSE, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
+            break;
+        case 2:
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::STEELSKIN, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
+            break;
+        case 3:
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::POWER_AXE, 1 );
+            break;
+        case 4:
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LUCK, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LEADERSHIP, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::SPIKED_SHIELD, 1 );
+            break;
+        case 5:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 10 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::MERCURY, 2 );
+            break;
+        case 6:
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 20 );
+            break;
+        case 7:
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LEADERSHIP, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ARCHERY, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::POWER, 1 );
             break;
         }
 
@@ -208,6 +261,7 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getWizardsIsleCampaignBonusData( const int scenarioID )
     {
+        assert( scenarioID >= 0 && scenarioID < 4 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -238,78 +292,29 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getVoyageHomeCampaignBonusData( const int scenarioID )
     {
+        assert( scenarioID >= 0 && scenarioID < 4 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
         case 0:
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::NOMAD_BOOTS_MOBILITY, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 500 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, Skill::Level::BASIC );
             break;
         case 1:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::PATHFINDING, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::NAVIGATION, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::PATHFINDING, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::NAVIGATION, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::SULFUR, 15 );
             break;
         case 2:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ARCHERY, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ARCHERY, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 3000 );
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::ATTACK, 1 );
             break;
         case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::NECROMANCY, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::NECROMANCY, Skill::Level::BASIC );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
-            break;
-        }
-
-        return bonus;
-    }
-
-    std::vector<Campaign::ScenarioBonusData> getDescendantsCampaignBonusData( const int scenarioID )
-    {
-        std::vector<Campaign::ScenarioBonusData> bonus;
-
-        switch ( scenarioID ) {
-        case 0:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 50 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::CRYSTAL, 10 );
-            break;
-        case 1:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::ATTACK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::DEFENSE, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            break;
-        case 2:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::STEELSKIN, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::MAGE_RING, 1 );
-            break;
-        case 3:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::POWER_AXE, 1 );
-            break;
-        case 4:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LUCK, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LEADERSHIP, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::SPIKED_SHIELD, 1 );
-            break;
-        case 5:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 10 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::MERCURY, 2 );
-            break;
-        case 6:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 20 );
-            break;
-        case 7:
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LEADERSHIP, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ARCHERY, 1 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::POWER, 1 );
             break;
         }
 

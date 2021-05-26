@@ -229,12 +229,16 @@ namespace
                 break;
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
                 assert( bestHero != nullptr );
-                for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
-                    bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+                if ( bestHero != nullptr ) {
+                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
+                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
+                }
                 break;
             case Campaign::ScenarioBonusData::SKILL_SECONDARY:
                 assert( bestHero != nullptr );
-                bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                if ( bestHero != nullptr ) {
+                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                }
                 break;
             default:
                 assert( 0 );
