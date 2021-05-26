@@ -295,29 +295,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    if ( drawList.size() > 0 ) {
-        for ( auto it = drawList.begin(); it != drawList.end() - 1; ) {
-            Heroes * hero1 = ( *it )->GetHeroes();
-            if ( hero1 == nullptr ) {
-                ++it;
+    if ( !drawList.empty() ) {
+        for ( int i = 0; i < drawList.size() - 1; ++i ) {
+            const Maps::Tiles * tile1 = drawList[i];
+            const Heroes * hero1 = tile1->GetHeroes();
+            if ( hero1 == nullptr || hero1->GetDirection() != Direction::BOTTOM_RIGHT || !hero1->isMoveEnabled() ) {
                 continue;
             }
-            if ( hero1->GetDirection() != Direction::BOTTOM_RIGHT || !hero1->isMoveEnabled() ) {
-                ++it;
+            const Maps::Tiles * tile2 = drawList[i + 1];
+            const int object = tile2->GetObject();
+            const Heroes * hero2 = tile2->GetHeroes();
+            if ( ( hero2 == nullptr && MP2::OBJ_BOAT != object ) || !Maps::isValidDirection( tile1->GetIndex(), Direction::RIGHT ) ) {
                 continue;
             }
-            const int object = ( *it )->GetObject();
-            Heroes * hero2 = ( *( it + 1 ) )->GetHeroes();
-            if ( ( hero2 == nullptr && MP2::OBJ_BOAT != object ) || !Maps::isValidDirection( ( *it )->GetIndex(), Direction::RIGHT ) ) {
-                ++it;
+            const Maps::Tiles & tileRight = world.GetTiles( Maps::GetDirectionIndex( tile1->GetIndex(), Direction::RIGHT ) );
+            if ( tileRight.GetIndex() != tile2->GetIndex() ) {
                 continue;
             }
-            const Maps::Tiles & tileRight = world.GetTiles( Maps::GetDirectionIndex( ( *it )->GetIndex(), Direction::RIGHT ) );
-            if ( tileRight.GetIndex() != ( *( it + 1 ) )->GetIndex() ) {
-                ++it;
-                continue;
-            }
-            std::swap( *it, *( it + 1 ) );
+            std::swap( drawList[i], drawList[i + 1] );
+            break;
         }
     }
 
