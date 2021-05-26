@@ -42,14 +42,14 @@ namespace Mixer
     void Pause( int channel = -1 );
     void Resume( int channel = -1 );
     void Stop( int channel = -1 );
-    void Reset( void );
+    void Reset();
 
     bool isPlaying( int channel );
     bool isPaused( int channel );
-    bool isValid( void );
+    bool isValid();
 
-    void Reduce( void );
-    void Enhance( void );
+    void Reduce();
+    void Enhance();
 
     void Mute();
     void Unmute();

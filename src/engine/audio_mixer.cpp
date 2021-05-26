@@ -75,11 +75,6 @@ namespace
     }
 }
 
-bool Mixer::isValid( void )
-{
-    return valid;
-}
-
 void Mixer::Init( void )
 {
     if ( SDL::SubSystem( SDL_INIT_AUDIO ) ) {
@@ -230,7 +225,7 @@ void Mixer::Stop( int channel /* = -1 */ )
     Mix_HaltChannel( channel );
 }
 
-void Mixer::Reset( void )
+void Mixer::Reset()
 {
     Music::Reset();
 #ifdef WITH_AUDIOCD
@@ -250,9 +245,14 @@ bool Mixer::isPaused( int channel )
     return Mix_Paused( channel ) > 0;
 }
 
-void Mixer::Reduce( void ) {}
+bool Mixer::isValid()
+{
+    return valid;
+}
 
-void Mixer::Enhance( void ) {}
+void Mixer::Reduce() {}
+
+void Mixer::Enhance() {}
 
 void Mixer::Mute()
 {
