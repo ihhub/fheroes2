@@ -142,12 +142,6 @@ void Mixer::SetChannels( int num )
     }
 }
 
-void Mixer::FreeChunk( chunk_t * sample )
-{
-    if ( sample )
-        Mix_FreeChunk( sample );
-}
-
 int Mixer::Play( const char * file, int channel, bool loop )
 {
     if ( valid ) {

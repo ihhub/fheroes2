@@ -33,12 +33,11 @@ namespace Mixer
 {
     typedef Mix_Chunk chunk_t;
 
-    void FreeChunk( chunk_t * );
+    void SetChannels( int num );
 
     int Play( const char *, int = -1, bool = false );
     int Play( const u8 *, u32, int = -1, bool = false );
 
-    void SetChannels( int num );
     int MaxVolume();
     int Volume( int channel, int vol = -1 );
 
