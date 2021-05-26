@@ -36,7 +36,7 @@ void Game::ShowCredits()
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     // setup cursor
-    const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Point screenOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 
