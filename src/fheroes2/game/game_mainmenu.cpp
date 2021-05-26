@@ -307,6 +307,12 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
+            if ( le.MouseCursor( resolutionArea ) ) {
+                const fheroes2::Sprite & brightLantern = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
+                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
+                fheroes2::Blit( brightLantern, 0, offsetY, display, brightLantern.x(), brightLantern.y() + offsetY, brightLantern.width(), brightLantern.height() );
+            }
+
             display.render();
         }
     }
