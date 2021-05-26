@@ -295,7 +295,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    if ( !drawList.empty() ) {
+    if ( drawList.size() > 1 ) {
         for ( int i = 0; i < drawList.size() - 1; ++i ) {
             const Maps::Tiles * tile1 = drawList[i];
             const Heroes * hero1 = tile1->GetHeroes();
