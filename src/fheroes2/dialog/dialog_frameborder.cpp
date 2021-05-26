@@ -51,13 +51,6 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
     RenderRegular( GetRect() );
 }
 
-Dialog::FrameBorder::~FrameBorder()
-{
-    if ( Cursor::Get().isVisible() ) {
-        Cursor::Get().Hide();
-    }
-}
-
 bool Dialog::FrameBorder::isValid() const
 {
     return rect.width != 0 && rect.height != 0;

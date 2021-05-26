@@ -450,6 +450,9 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     fheroes2::ImageRestorer restorer( display );
 
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();
 
@@ -470,10 +473,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     }
 
     ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
-
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.SetThemes( Cursor::POINTER );
 
     CacheForMapWithResources cache( mode == ViewWorldMode::ViewAll );
 
@@ -499,7 +498,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 2, 3 );
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     // Use for dragging the map from main window
@@ -521,9 +519,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             changed = currentROI.ChangeZoom( false, true );
         }
         else if ( le.MouseCursor( radar.GetRect() ) ) {
-            if ( Cursor::POINTER != cursor.Themes() )
-                cursor.SetThemes( Cursor::POINTER );
-
             changed = radar.QueueEventProcessingForWorldView( currentROI );
         }
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
@@ -551,8 +546,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             isDrag = false;
         }
 
-        cursor.Show();
-
         if ( changed ) {
             DrawWorld( currentROI, cache );
             DrawObjectsIcons( color, mode, currentROI );
@@ -562,8 +555,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             display.render();
         }
     }
-
-    cursor.SetThemes( oldcursor );
 
     le.ResumeCycling();
 }

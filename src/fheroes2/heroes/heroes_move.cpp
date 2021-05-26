@@ -963,15 +963,12 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
 
     while ( le.HandleEvents() && _alphaValue > 0 ) {
         if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            Cursor::Get().Hide();
-
             if ( offsetScreen ) {
                 gamearea.ShiftCenter( offset );
             }
 
             gamearea.Redraw( display, Interface::LEVEL_ALL );
 
-            Cursor::Get().Show();
             display.render();
             _alphaValue -= 8 * multiplier;
         }
@@ -999,15 +996,12 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
 
     while ( le.HandleEvents() && _alphaValue < 250 ) {
         if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            Cursor::Get().Hide();
-
             if ( offsetScreen ) {
                 gamearea.ShiftCenter( offset );
             }
 
             gamearea.Redraw( display, Interface::LEVEL_ALL );
 
-            Cursor::Get().Show();
             display.render();
             _alphaValue += 8 * multiplier;
         }

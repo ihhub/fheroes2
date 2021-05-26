@@ -390,10 +390,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     display.fill( 0 );
     Settings & conf = Settings::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     const int chosenCampaignID = campaignSaveData.getCampaignID();
@@ -474,7 +472,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {

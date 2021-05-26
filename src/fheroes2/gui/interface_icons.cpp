@@ -198,7 +198,6 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }
@@ -286,7 +285,6 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }

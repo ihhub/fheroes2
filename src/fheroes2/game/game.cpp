@@ -276,14 +276,10 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
         }
     };
     auto redrawGameArea = []() {
-        Cursor::Get().Hide();
-
         fheroes2::Display & display = fheroes2::Display::instance();
         Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
 
         gameArea.Redraw( display, Interface::LEVEL_ALL );
-
-        Cursor::Get().Show();
 
         display.render();
     };

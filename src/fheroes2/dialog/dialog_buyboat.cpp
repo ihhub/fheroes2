@@ -41,8 +41,8 @@ int Dialog::BuyBoat( bool enable )
 
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
 
@@ -85,7 +85,6 @@ int Dialog::BuyBoat( bool enable )
     button1.draw();
     button2.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();

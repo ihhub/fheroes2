@@ -285,11 +285,8 @@ void Dialog::ThievesGuild( bool oracle )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Dialog::FrameBorder frameborder( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
@@ -505,7 +502,6 @@ void Dialog::ThievesGuild( bool oracle )
 
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();

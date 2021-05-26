@@ -69,12 +69,15 @@ namespace Video
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
-        const bool hideCursor = roi.empty();
+        // setup cursor
+        std::unique_ptr<const CursorRestorer> cursorRestorer;
 
-        if ( hideCursor ) {
-            Cursor::Get().Hide();
+        if ( roi.empty() ) {
+            cursorRestorer.reset( new CursorRestorer( false, Cursor::Get().Themes() ) );
         }
         else {
+            cursorRestorer.reset( new CursorRestorer );
+
             Cursor::Get().setVideoPlaybackCursor();
         }
 
@@ -96,9 +99,6 @@ namespace Video
         }
 
         if ( action == VideoAction::IGNORE_VIDEO ) {
-            if ( hideCursor ) {
-                Cursor::Get().Show();
-            }
             return 0;
         }
 
@@ -218,13 +218,6 @@ namespace Video
         }
 
         display.fill( 0 );
-
-        if ( hideCursor ) {
-            Cursor::Get().Show();
-        }
-        else {
-            Cursor::Get().resetVideoPlaybackCursor();
-        }
 
         return roiChosenId;
     }

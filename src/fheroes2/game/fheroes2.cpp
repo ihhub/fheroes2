@@ -265,15 +265,15 @@ int main( int argc, char ** argv )
             // load BIN data
             Bin_Info::InitBinInfo();
 
-            // init cursor
-            Cursor::Get().SetThemes( Cursor::POINTER );
-
             // init game data
             Game::Init();
 
             fheroes2::showTeamInfo();
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+
+            // init cursor
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
             Game::mainGameLoop( isFirstGameRun );
         }

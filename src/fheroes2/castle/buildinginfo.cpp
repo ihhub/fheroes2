@@ -519,8 +519,8 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
-    const Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );
 
     std::string box1str = description;
 
@@ -613,7 +613,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         button2.draw();
     }
 
-    cursor.Show();
     display.render();
 
     // message loop

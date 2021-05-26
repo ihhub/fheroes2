@@ -231,10 +231,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
@@ -399,7 +397,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
 
-    cursor.Show();
     display.render();
 
     MovePointsScaleFixed();
@@ -425,8 +422,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         // selector troops event
         if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
              || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -441,15 +436,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
         // selector artifacts event
         if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
              || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
@@ -468,7 +461,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
@@ -476,7 +469,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
              || ( le.MouseCursor( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
-            cursor.Show();
             display.render();
         }
 
@@ -497,26 +489,28 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts1.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
             Game::OpenHeroesDialog( otherHero, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
@@ -528,10 +522,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
@@ -543,10 +537,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
@@ -564,7 +558,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
@@ -582,7 +575,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
     }

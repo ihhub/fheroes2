@@ -1970,7 +1970,6 @@ namespace AI
         if ( path.isValid() ) {
             hero.SetMove( true );
 
-            const Cursor & cursor = Cursor::Get();
             Interface::Basic & I = Interface::Basic::Get();
             Interface::GameArea & gameArea = I.GetGameArea();
 
@@ -1998,7 +1997,6 @@ namespace AI
                     recenterNeeded = true;
                 }
                 else if ( Game::validateAnimationDelay( Game::CURRENT_AI_DELAY ) ) {
-                    cursor.Hide();
                     // re-center in case hero appears from the fog
                     if ( recenterNeeded ) {
                         gameArea.SetCenter( hero.GetCenter() );
@@ -2049,7 +2047,6 @@ namespace AI
                     }
 
                     I.Redraw( Interface::REDRAW_GAMEAREA );
-                    cursor.Show();
                     fheroes2::Display::instance().render();
                 }
 

@@ -48,8 +48,9 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
@@ -119,7 +120,6 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     button1.draw();
     button2.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -146,8 +146,9 @@ int Castle::DialogBuyCastle( bool buttons ) const
 u32 Castle::OpenTown( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
@@ -414,7 +415,6 @@ u32 Castle::OpenTown( void )
     const fheroes2::Rect & rectResource = RedrawResourcePanel( cur_pt );
     const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -491,16 +491,12 @@ u32 Castle::OpenTown( void )
         }
         else if ( isBuild( BUILD_CAPTAIN ) ) {
             if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( true );
             }
             else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( false );
             }
@@ -515,12 +511,10 @@ u32 Castle::OpenTown( void )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             hero1->OpenDialog( true );
-            cursor.Show();
             display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             hero2->OpenDialog( true );
-            cursor.Show();
             display.render();
         }
 

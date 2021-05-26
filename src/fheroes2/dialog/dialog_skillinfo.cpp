@@ -42,14 +42,8 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    const bool savedCursorVisibility = cursor.isVisible();
-    const int savedCursorTheme = cursor.Themes();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( ok_button, Cursor::POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -100,8 +94,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
 
     if ( button ) {
         button->draw();
-
-        cursor.Show();
     }
 
     display.render();
@@ -126,13 +118,6 @@ void Dialog::SecondarySkillInfo( const std::string & header, const std::string &
             break;
         }
     }
-
-    cursor.Hide();
-    cursor.SetThemes( savedCursorTheme );
-
-    if ( savedCursorVisibility ) {
-        cursor.Show();
-    }
 }
 
 void Dialog::PrimarySkillInfo( const std::string & header, const std::string & message, int skill )
@@ -140,11 +125,8 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     int index = 0;
     std::string skill_name;
@@ -215,7 +197,6 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
 
     button.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -230,6 +211,4 @@ void Dialog::PrimarySkillInfo( const std::string & header, const std::string & m
             break;
         }
     }
-
-    cursor.Hide();
 }

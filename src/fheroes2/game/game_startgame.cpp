@@ -72,14 +72,14 @@ fheroes2::GameMode Game::StartGame()
 {
     AI::Get().Reset();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    cursor.Hide();
     AGG::ResetMixer();
 
     Interface::Basic::Get().Reset();
@@ -124,6 +124,9 @@ void Game::DialogPlayers( int color, std::string str )
 /* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     Mixer::Pause();
 
     const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
@@ -180,6 +183,9 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 /* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
@@ -512,7 +518,6 @@ int Interface::Basic::GetCursorTileIndex( s32 dst_index )
 
 fheroes2::GameMode Interface::Basic::StartGame()
 {
-    Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -565,7 +570,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        cursor.Hide();
                         iconsPanel.HideIcons();
                         statusWindow.Reset();
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
@@ -589,10 +593,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         statusWindow.Reset();
                         statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        cursor.Hide();
-                        cursor.SetThemes( Cursor::WAIT );
+                        Cursor::Get().SetThemes( Cursor::WAIT );
                         Redraw();
-                        cursor.Show();
                         display.render();
 
                         AI::Get().KingdomTurn( kingdom );
@@ -630,7 +632,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
-    cursor.Hide();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -661,7 +662,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
     Game::EnvironmentSoundMixer();
 
-    cursor.Show();
     display.render();
 
     if ( !isload ) {
@@ -1025,13 +1025,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( NeedRedraw() ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.render();
-        }
-        else if ( !cursor.isVisible() ) {
-            cursor.Show();
             display.render();
         }
     }

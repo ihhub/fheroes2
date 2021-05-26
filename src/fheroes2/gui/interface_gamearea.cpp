@@ -23,6 +23,7 @@
 #include "interface_gamearea.h"
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"

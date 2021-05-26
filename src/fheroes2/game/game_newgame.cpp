@@ -204,10 +204,8 @@ fheroes2::GameMode Game::NewNetwork()
     Settings & conf = Settings::Get();
     conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
@@ -220,7 +218,6 @@ fheroes2::GameMode Game::NewNetwork()
     buttonGuest.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
     fheroes2::Display::instance().render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -256,10 +253,8 @@ fheroes2::GameMode Game::NewGame()
     // reset last save name
     Game::SetLastSavename( "" );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -287,7 +282,6 @@ fheroes2::GameMode Game::NewGame()
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -311,7 +305,6 @@ fheroes2::GameMode Game::NewGame()
             return fheroes2::GameMode::NEW_MULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
             Dialog::ExtSettings( false );
-            cursor.Show();
             display.render();
         }
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
@@ -342,10 +335,8 @@ fheroes2::GameMode Game::NewMulti()
     if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
@@ -358,7 +349,6 @@ fheroes2::GameMode Game::NewMulti()
     buttonCancelGame.draw();
     buttonNetwork.disable();
 
-    cursor.Show();
     fheroes2::Display::instance().render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -397,10 +387,8 @@ fheroes2::GameMode Game::NewMulti()
 
 u32 Game::SelectCountPlayers( void )
 {
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
@@ -419,7 +407,6 @@ u32 Game::SelectCountPlayers( void )
     button6Players.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     fheroes2::Display::instance().render();
 
     LocalEvent & le = LocalEvent::Get();

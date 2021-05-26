@@ -225,11 +225,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // calculate max count
     Monster monster = monster0;
@@ -323,10 +320,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     monsterSwitchLeft.draw();
     monsterSwitchRight.draw();
 
-    cursor.Show();
     display.render();
-
-    bool redraw = false;
 
     std::vector<Monster> upgrades = {monster0};
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
@@ -335,6 +329,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     // str loop
     while ( le.HandleEvents() ) {
+        bool redraw = false;
+
         if ( buttonOk.isEnabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
@@ -454,7 +450,6 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         }
 
         if ( redraw ) {
-            cursor.Hide();
             RedrawStaticInfo( pos, monster, available );
             RedrawCurrentInfo( pos.getPosition(), result, paymentMonster, paymentCosts, funds, maxmin );
 
@@ -475,9 +470,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             monsterSwitchLeft.draw();
             monsterSwitchRight.draw();
 
-            cursor.Show();
             display.render();
-            redraw = false;
         }
 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
@@ -489,12 +482,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         }
     }
 
-    cursor.Hide();
-
-    cursor.SetThemes( oldcursor );
     back.restore();
-
-    cursor.Show();
     display.render();
 
     return Troop( monster, result );
@@ -504,11 +492,8 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
@@ -526,14 +511,11 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 
     RedrawMonsterInfo( pos, monster, available, false );
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 
-    cursor.SetThemes( oldcursor );
     back.restore();
-
     display.render();
 }

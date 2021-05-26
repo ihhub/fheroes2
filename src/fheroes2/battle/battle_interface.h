@@ -26,6 +26,7 @@
 #include <string>
 
 #include "battle_board.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
 #include "gamedefs.h"
@@ -326,7 +327,7 @@ namespace Battle
         int catapult_frame;
 
         uint8_t _contourColor;
-        bool _brightLandType; // used to determin current monster contour cycling colors
+        bool _brightLandType; // used to determine current monster contour cycling colors
         uint32_t _contourCycle;
 
         const Unit * _currentUnit;
@@ -345,6 +346,7 @@ namespace Battle
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
 
+        CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
     };
 }

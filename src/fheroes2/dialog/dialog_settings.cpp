@@ -135,10 +135,8 @@ void Dialog::ExtSettings( bool readonly )
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 400 );
     const fheroes2::Rect area( frameborder.activeArea() );
@@ -228,7 +226,6 @@ void Dialog::ExtSettings( bool readonly )
 
     buttonOk.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -240,11 +237,12 @@ void Dialog::ExtSettings( bool readonly )
 
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     Settings::Get().BinarySave();

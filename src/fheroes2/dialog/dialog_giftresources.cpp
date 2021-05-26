@@ -201,12 +201,11 @@ struct ResourceBar
 
 void Dialog::MakeGiftResource( Kingdom & kingdom )
 {
-    Cursor & cursor = Cursor::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 224 );
     const fheroes2::Rect box( frameborder.activeArea() );
@@ -237,7 +236,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     btnGroups.button( 0 ).disable();
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     u32 count = Color::Count( selector.recipients );
@@ -247,7 +245,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
-            cursor.Hide();
+
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
                 btnGroups.button( 0 ).disable();
             else
@@ -260,14 +258,12 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
                 info2.Redraw();
                 count = new_count;
             }
+
             btnGroups.draw();
             selector.Redraw();
-            cursor.Show();
             display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
-            cursor.Hide();
-
             if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
                 btnGroups.button( 0 ).disable();
             else
@@ -276,7 +272,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
             info1.Redraw();
             info2.Redraw();
             btnGroups.draw();
-            cursor.Show();
             display.render();
         }
 

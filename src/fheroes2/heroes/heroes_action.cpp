@@ -1971,8 +1971,6 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
-    Cursor::Get().Hide();
-
     hero.Move2Dest( index_to ); // no action and no penalty
 
     Interface::Basic & I = Interface::Basic::Get();
@@ -2004,8 +2002,6 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut();
-
-    Cursor::Get().Hide();
 
     hero.Move2Dest( index_to ); // no action and no penalty
 

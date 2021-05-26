@@ -37,11 +37,8 @@ fheroes2::GameMode Dialog::FileOptions()
     const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
     const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
@@ -65,7 +62,6 @@ fheroes2::GameMode Dialog::FileOptions()
     buttonQuit.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
@@ -125,10 +121,7 @@ fheroes2::GameMode Dialog::FileOptions()
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;
