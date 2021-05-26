@@ -894,14 +894,9 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , index_pos( -1 )
     , teleport_src( -1 )
     , listlog( NULL )
+    , _cursorRestorer( true, Cursor::WAR_POINTER )
 {
     const Settings & conf = Settings::Get();
-
-    // setup cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.SetThemes( Cursor::WAR_POINTER );
-    cursor.Show();
 
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();

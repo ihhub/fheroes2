@@ -27,6 +27,8 @@
 
 class Cursor
 {
+    friend class CursorRestorer;
+
 public:
     enum CursorType : int
     {
@@ -174,9 +176,6 @@ public:
 
     int Themes() const;
     bool SetThemes( int, bool force = false );
-    void Show() const;
-    void Hide() const;
-    bool isVisible( void ) const;
 
     // Only for software emulation.
     void setVideoPlaybackCursor();
@@ -185,6 +184,10 @@ public:
 private:
     Cursor();
     ~Cursor() = default;
+
+    void Show() const;
+    void Hide() const;
+    bool isVisible( void ) const;
 
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;

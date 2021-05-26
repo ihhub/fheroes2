@@ -21,6 +21,7 @@
 #include "game_credits.h"
 #include "agg.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "icn.h"
 #include "localevent.h"
 #include "mus.h"
@@ -33,6 +34,9 @@ void Game::ShowCredits()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
     const fheroes2::Point screenOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
 

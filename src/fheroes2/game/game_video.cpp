@@ -70,12 +70,14 @@ namespace Video
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         // setup cursor
-        const CursorRestorer cursorRestorer;
+        std::unique_ptr<const CursorRestorer> cursorRestorer;
 
         if ( roi.empty() ) {
-            Cursor::Get().Hide();
+            cursorRestorer.reset( new CursorRestorer( false, Cursor::Get().Themes() ) );
         }
         else {
+            cursorRestorer.reset( new CursorRestorer );
+
             Cursor::Get().setVideoPlaybackCursor();
         }
 
