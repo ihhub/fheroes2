@@ -267,7 +267,7 @@ void Mixer::Mute()
     savedVolumes.resize( channelsCount );
 
     for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        savedVolumes[channel] = Mix_Volume( channel, 0 );
+        savedVolumes[channel] = Mix_Volume( static_cast<int>( channel ), 0 );
     }
 }
 
@@ -282,6 +282,6 @@ void Mixer::Unmute()
     const size_t channelsCount = std::min( static_cast<size_t>( Mix_AllocateChannels( -1 ) ), savedVolumes.size() );
 
     for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        Mix_Volume( channel, savedVolumes[channel] );
+        Mix_Volume( static_cast<int>( channel ), savedVolumes[channel] );
     }
 }
