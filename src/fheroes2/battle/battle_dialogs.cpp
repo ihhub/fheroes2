@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"

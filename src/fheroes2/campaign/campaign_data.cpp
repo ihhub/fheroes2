@@ -278,7 +278,6 @@ namespace
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
         campaignData.setCampaignDescription( "Roland Campaign" );
-        campaignData.setCampaignAlignment( true );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -337,7 +336,6 @@ namespace
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
         campaignData.setCampaignDescription( "Archibald Campaign" );
-        campaignData.setCampaignAlignment( false );
         campaignData.setCampaignScenarios( scenarioDatas );
 
         return campaignData;
@@ -509,7 +507,6 @@ namespace Campaign
 {
     CampaignData::CampaignData()
         : _campaignID( 0 )
-        , _isGoodCampaign( false )
         , _campaignDescription()
         , _scenarios()
     {}
@@ -610,11 +607,6 @@ namespace Campaign
     void CampaignData::setCampaignID( const int campaignID )
     {
         _campaignID = campaignID;
-    }
-
-    void CampaignData::setCampaignAlignment( const bool isGoodCampaign )
-    {
-        _isGoodCampaign = isGoodCampaign;
     }
 
     void CampaignData::setCampaignScenarios( const std::vector<ScenarioData> & scenarios )
