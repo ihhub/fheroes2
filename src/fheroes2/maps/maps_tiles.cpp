@@ -2395,40 +2395,27 @@ bool Maps::Tiles::isFogAllAround( const int color ) const
     const int32_t center = GetIndex();
     const fheroes2::Point mp = Maps::GetPoint( center );
     const int32_t width = world.w();
+    const int32_t height = world.h();
 
-    if ( mp.y > 0 ) {
-        if ( mp.x > 0 && !world.GetTiles( center - width - 1 ).isFog( color ) ) {
-            return false;
-        }
+    // Verify all tiles around the current one with radius of 2 to cover moving hero case as well.
+    for ( int32_t y = -2; y < 3; ++y ) {
+        const int32_t offsetY = mp.y + y;
+        if ( offsetY < 0 || offsetY >= height )
+            continue;
 
-        if ( !world.GetTiles( center - width ).isFog( color ) ) {
-            return false;
-        }
+        const int32_t centerY = center + y * width;
 
-        if ( mp.x < width - 1 && !world.GetTiles( center - width + 1 ).isFog( color ) ) {
-            return false;
-        }
-    }
+        for ( int32_t x = -2; x < 3; ++x ) {
+            if ( x == 0 && y == 0 )
+                continue;
 
-    if ( mp.x > 0 && !world.GetTiles( center - 1 ).isFog( color ) ) {
-        return false;
-    }
+            const int32_t offsetX = mp.x + x;
+            if ( offsetX < 0 || offsetX >= width )
+                continue;
 
-    if ( mp.x < width - 1 && !world.GetTiles( center + 1 ).isFog( color ) ) {
-        return false;
-    }
-
-    if ( mp.y < world.h() - 1 ) {
-        if ( mp.x > 0 && !world.GetTiles( center + width - 1 ).isFog( color ) ) {
-            return false;
-        }
-
-        if ( !world.GetTiles( center + width ).isFog( color ) ) {
-            return false;
-        }
-
-        if ( mp.x < width - 1 && !world.GetTiles( center + width + 1 ).isFog( color ) ) {
-            return false;
+            if ( !world.GetTiles( centerY + x ).isFog( color ) ) {
+                return false;
+            }
         }
     }
 
