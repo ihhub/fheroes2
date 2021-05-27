@@ -1410,15 +1410,15 @@ void Heroes::ResetMovePoints( void )
     move_point = 0;
 }
 
-bool Heroes::MayStillMove( bool isConsiderMovePoints ) const
+bool Heroes::MayStillMove( const bool isConsiderMovePoints ) const
 {
     if ( Modes( SLEEPER | GUARDIAN ) || isFreeman() ) {
         return false;
     }
 
     if ( path.isValid() ) {
-        const uint32_t threshold = isConsiderMovePoints ? path.getLastMovePenalty() : 0;
-        return move_point > threshold;
+        const uint32_t threshold = isConsiderMovePoints ? path.getLastMovePenalty() : 1;
+        return move_point >= threshold;
     }
     return CanMove();
 }
