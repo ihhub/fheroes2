@@ -24,6 +24,7 @@
 
 #include "agg_image.h"
 #include "castle.h"
+#include "castle_ui.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
@@ -31,8 +32,6 @@
 #include "icn.h"
 #include "interface_icons.h"
 #include "kingdom.h"
-#include "logging.h"
-#include "race.h"
 #include "world.h"
 
 namespace
@@ -62,58 +61,9 @@ u32 Interface::IconsBar::GetItemHeight( void )
     return ICONS_HEIGHT;
 }
 
-void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
+void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const bool evil = Settings::Get().ExtGameEvilInterface();
-    u32 index_sprite = 1;
-
-    switch ( castle.GetRace() ) {
-    case Race::KNGT:
-        index_sprite = castle.isCastle() ? 9 : 15;
-        break;
-    case Race::BARB:
-        index_sprite = castle.isCastle() ? 10 : 16;
-        break;
-    case Race::SORC:
-        index_sprite = castle.isCastle() ? 11 : 17;
-        break;
-    case Race::WRLK:
-        index_sprite = castle.isCastle() ? 12 : 18;
-        break;
-    case Race::WZRD:
-        index_sprite = castle.isCastle() ? 13 : 19;
-        break;
-    case Race::NECR:
-        index_sprite = castle.isCastle() ? 14 : 20;
-        break;
-    default:
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
-    }
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( evil ? ICN::LOCATORE : ICN::LOCATORS, index_sprite ), display, sx, sy );
-
-    // castle build marker
-    switch ( Castle::GetAllBuildingStatus( castle ) ) {
-    // white marker
-    case UNKNOWN_COND:
-    case NOT_TODAY:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), display, sx + 40, sy );
-        break;
-
-    // green marker
-    // case LACK_RESOURCES:
-    //    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 2 ), display, sx + 40, sy );
-    //    break;
-
-    // red marker
-    case REQUIRES_BUILD:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), display, sx + 40, sy );
-        break;
-
-    default:
-        break;
-    }
+    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), fheroes2::Point( sx, sy ) );
 }
 
 void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
