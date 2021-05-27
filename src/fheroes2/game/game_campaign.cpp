@@ -38,44 +38,74 @@
 
 namespace
 {
+    enum ScenarioIcon : uint32_t
+    {
+        SCENARIO_ICON_CLEARED = 0,
+        SCENARIO_ICON_AVAILABLE = 1,
+        SCENARIO_ICON_UNAVAILABLE = 2,
+    };
+
     void DrawCampaignScenarioIcon( const int icnId, const int iconIdx, const fheroes2::Point & offset, const int posX, const int posY )
     {
-        fheroes2::Blit( fheroes2::AGG::GetICN( icnId, iconIdx ), fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
+        const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, iconIdx );
+        fheroes2::Blit( icon, fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
     void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData & campaignData, const fheroes2::Point & top )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        const bool isGoodCampaign = campaignData.isGoodCampaign();
-        const fheroes2::Point trackOffset( top.x + 39, top.y + 294 );
+        int campaignTrack = ICN::UNKNOWN;
+        int iconsId = ICN::UNKNOWN;
+        uint32_t iconStatusOffset = 0;
+        uint32_t selectedIconIdx = 0;
 
-        int campaignTrack = ICN::CTRACK00;
         switch ( campaignData.getCampaignID() ) {
         case Campaign::ROLAND_CAMPAIGN:
             campaignTrack = ICN::CTRACK00;
+            iconsId = ICN::CAMPXTRG;
+            iconStatusOffset = 10;
+            selectedIconIdx = 14;
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
             campaignTrack = ICN::CTRACK03;
+            iconsId = ICN::CAMPXTRE;
+            iconStatusOffset = 10;
+            selectedIconIdx = 17;
             break;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK0;
+            campaignTrack = ICN::X_TRACK1;
+            iconsId = ICN::X_CMPEXT;
+            iconStatusOffset = 0;
+            selectedIconIdx = 4;
             break;
         case Campaign::DESCENDANTS_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK1;
+            campaignTrack = ICN::X_TRACK2;
+            iconsId = ICN::X_CMPEXT;
+            iconStatusOffset = 0;
+            selectedIconIdx = 7;
             break;
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK2;
+            campaignTrack = ICN::X_TRACK3;
+            iconsId = ICN::X_CMPEXT;
+            iconStatusOffset = 0;
+            selectedIconIdx = 10;
             break;
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            campaignTrack = ICN::X_TRACK3;
+            campaignTrack = ICN::X_TRACK4;
+            iconsId = ICN::X_CMPEXT;
+            iconStatusOffset = 0;
+            selectedIconIdx = 13;
+            break;
+        default:
+            // Implementing a new campaign? Add a new case!
+            assert( 0 );
             break;
         }
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
-
-        const int iconsId = isGoodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
-        const int selectedIconIdx = isGoodCampaign ? Campaign::SCENARIOICON_GOOD_SELECTED : Campaign::SCENARIOICON_EVIL_SELECTED;
+        const fheroes2::Sprite & track = fheroes2::AGG::GetICN( campaignTrack, 0 );
+        const fheroes2::Point trackOffset( top.x + track.x(), top.y + track.y() );
+        fheroes2::Blit( track, display, trackOffset.x, trackOffset.y );
 
         const int middleY = 40;
         const int deltaY = 42;
@@ -128,15 +158,16 @@ namespace
 
             // available scenario (one of which should be selected)
             if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() ) {
-                buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, fheroes2::AGG::GetICN( iconsId, Campaign::SCENARIOICON_AVAILABLE ),
-                                          fheroes2::AGG::GetICN( iconsId, selectedIconIdx ), static_cast<int>( i ) );
+                const fheroes2::Sprite & availableIcon = fheroes2::AGG::GetICN( iconsId, iconStatusOffset + SCENARIO_ICON_AVAILABLE );
+                const fheroes2::Sprite & selectedIcon = fheroes2::AGG::GetICN( iconsId, selectedIconIdx );
+                buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, availableIcon, selectedIcon, static_cast<int>( i ) );
             }
             // cleared scenario
             else if ( std::find( clearedMaps.begin(), clearedMaps.end(), static_cast<int>( i ) ) != clearedMaps.end() ) {
-                DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_CLEARED, trackOffset, x, y );
+                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_CLEARED, trackOffset, x, y );
             }
             else {
-                DrawCampaignScenarioIcon( iconsId, Campaign::SCENARIOICON_UNAVAILABLE, trackOffset, x, y );
+                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_UNAVAILABLE, trackOffset, x, y );
             }
 
             if ( !isBranching || isFinalBranch ) {
@@ -336,6 +367,51 @@ namespace
             AGG::ResetMixer();
         }
     }
+
+    int getCampaignButtonId( const int campaignId )
+    {
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            return ICN::CAMPXTRG;
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            return ICN::CAMPXTRE;
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+        case Campaign::DESCENDANTS_CAMPAIGN:
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            return ICN::X_CMPBTN;
+        default:
+            // Implementing a new campaign? Add a new case!
+            assert( 0 );
+            return ICN::UNKNOWN;
+        }
+    }
+
+    void drawCampaignNameHeader( const int campaignId, fheroes2::Image & output, const fheroes2::Point & offset )
+    {
+        // Add extra image header if supported
+        uint32_t campaignNameHeader = ICN::UNKNOWN;
+
+        switch ( campaignId ) {
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            campaignNameHeader = 15;
+            break;
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            campaignNameHeader = 16;
+            break;
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            campaignNameHeader = 17;
+            break;
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            campaignNameHeader = 18;
+            break;
+        default:
+            return;
+        }
+
+        const fheroes2::Sprite & header = fheroes2::AGG::GetICN( ICN::X_CMPEXT, campaignNameHeader );
+        fheroes2::Blit( header, output, offset.x + 24, offset.y + 25 );
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -413,7 +489,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const int chosenCampaignID = campaignSaveData.getCampaignID();
 
     const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
-    const bool goodCampaign = campaignData.isGoodCampaign();
 
     const int chosenScenarioID = campaignSaveData.getCurrentScenarioID();
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
@@ -421,7 +496,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     playCurrentScenarioVideo();
 
-    int backgroundIconID = 0;
+    int backgroundIconID = ICN::UNKNOWN;
 
     switch ( chosenCampaignID ) {
     case Campaign::ROLAND_CAMPAIGN:
@@ -438,7 +513,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         backgroundIconID = ICN::X_CMPBKG;
         break;
     default:
-        backgroundIconID = ICN::CAMPBKGG;
+        // Implementing a new campaign? Add a new case!
+        assert( 0 );
         break;
     }
 
@@ -446,8 +522,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
+    drawCampaignNameHeader( chosenCampaignID, display, top );
 
-    const int buttonIconID = goodCampaign ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+
+    const int buttonIconID = getCampaignButtonId( chosenCampaignID );
     fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );

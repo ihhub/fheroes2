@@ -30,7 +30,6 @@
 #include "dialog.h"
 #include "game_delays.h"
 #include "gamedefs.h"
-#include "icn.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
@@ -245,7 +244,7 @@ namespace Battle
         void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
-        void RedrawCastle2( const Castle &, s32 );
+        void RedrawCastle2( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );

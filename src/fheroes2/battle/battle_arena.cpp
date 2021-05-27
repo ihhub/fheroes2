@@ -40,6 +40,7 @@
 #include "battle_troop.h"
 #include "castle.h"
 #include "ground.h"
+#include "icn.h"
 #include "logging.h"
 #include "mus.h"
 #include "race.h"

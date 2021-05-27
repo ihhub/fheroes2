@@ -209,10 +209,10 @@ namespace ICN
             { VWFLAG4, "VWFLAG4.ICN" },   { VWFLAG6, "VWFLAG6.ICN" },   { WELEM, "WELEM.ICN" },       { WELLBKG, "WELLBKG.ICN" },   { WELLXTRA, "WELLXTRA.ICN" },
             { WINCMBBE, "WINCMBBE.ICN" }, { WINCMBTB, "WINCMBTB.ICN" }, { WINCMBT, "WINCMBT.ICN" },   { WINLOSEB, "WINLOSEB.ICN" }, { WINLOSEE, "WINLOSEE.ICN" },
             { WINLOSE, "WINLOSE.ICN" },   { WOLF, "WOLF.ICN" },         { WRLK32, "WRLK32.ICN" },     { WZRD32, "WZRD32.ICN" },     { X_IVY, "X_IVY.ICN" },
-            { X_LOADCM, "X_LOADCM.ICN" }, { X_CMPBKG, "X_CMPBKG.ICN" }, { X_CMPEXT, "X_CMPEXT.CIN" }, { X_TRACK0, "X_TRACK0.ICN" }, { X_TRACK1, "X_TRACK1.ICN" },
-            { X_TRACK2, "X_TRACK2.ICN" }, { X_TRACK3, "X_TRACK3.ICN" }, { X_LOC1, "X_LOC1.ICN" },     { X_LOC2, "X_LOC2.ICN" },     { X_LOC3, "X_LOC3.ICN" },
-            { XPRIMARY, "XPRIMARY.ICN" }, { Y_BFLG32, "Y-BFLG32.ICN" }, { Y_FLAG32, "Y-FLAG32.ICN" }, { YINYANG, "YINYANG.ICN" },   { ZOMBIE2, "ZOMBIE2.ICN" },
-            { ZOMBIE, "ZOMBIE.ICN" } };
+            { X_LOADCM, "X_LOADCM.ICN" }, { X_CMPBKG, "X_CMPBKG.ICN" }, { X_CMPBTN, "X_CMPBTN.ICN" }, { X_CMPEXT, "X_CMPEXT.ICN" }, { X_TRACK1, "X_TRACK1.ICN" },
+            { X_TRACK2, "X_TRACK2.ICN" }, { X_TRACK3, "X_TRACK3.ICN" }, { X_TRACK4, "X_TRACK4.ICN" }, { X_LOC1, "X_LOC1.ICN" },     { X_LOC2, "X_LOC2.ICN" },
+            { X_LOC3, "X_LOC3.ICN" },     { XPRIMARY, "XPRIMARY.ICN" }, { Y_BFLG32, "Y-BFLG32.ICN" }, { Y_FLAG32, "Y-FLAG32.ICN" }, { YINYANG, "YINYANG.ICN" },
+            { ZOMBIE2, "ZOMBIE2.ICN" },   { ZOMBIE, "ZOMBIE.ICN" } };
 }
 
 const char * ICN::GetString( int icn )
