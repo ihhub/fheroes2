@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <vector>
 
 #include "audio.h"
 #include "audio_cdrom.h"
@@ -29,6 +30,8 @@
 #include "audio_music.h"
 #include "engine.h"
 #include "logging.h"
+
+#include <SDL_mixer.h>
 
 namespace Mixer
 {
@@ -45,15 +48,34 @@ namespace
 
     void FreeChannel( int channel )
     {
-        Mixer::chunk_t * sample = Mix_GetChunk( channel );
+        Mix_Chunk * sample = Mix_GetChunk( channel );
         if ( sample )
             Mix_FreeChunk( sample );
     }
-}
 
-bool Mixer::isValid( void )
-{
-    return valid;
+    Mix_Chunk * LoadWAV( const char * file )
+    {
+        Mix_Chunk * sample = Mix_LoadWAV( file );
+        if ( !sample )
+            ERROR_LOG( SDL_GetError() );
+        return sample;
+    }
+
+    Mix_Chunk * LoadWAV( const u8 * ptr, u32 size )
+    {
+        Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
+        if ( !sample )
+            ERROR_LOG( SDL_GetError() );
+        return sample;
+    }
+
+    int PlayChunk( Mix_Chunk * sample, int channel, bool loop )
+    {
+        int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
+        if ( res == -1 )
+            ERROR_LOG( SDL_GetError() );
+        return res;
+    }
 }
 
 void Mixer::Init( void )
@@ -118,43 +140,13 @@ void Mixer::SetChannels( int num )
     }
 }
 
-void Mixer::FreeChunk( chunk_t * sample )
-{
-    if ( sample )
-        Mix_FreeChunk( sample );
-}
-
-Mixer::chunk_t * Mixer::LoadWAV( const char * file )
-{
-    Mix_Chunk * sample = Mix_LoadWAV( file );
-    if ( !sample )
-        ERROR_LOG( SDL_GetError() );
-    return sample;
-}
-
-Mixer::chunk_t * Mixer::LoadWAV( const u8 * ptr, u32 size )
-{
-    Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
-    if ( !sample )
-        ERROR_LOG( SDL_GetError() );
-    return sample;
-}
-
-int Mixer::Play( chunk_t * sample, int channel, bool loop )
-{
-    int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
-    if ( res == -1 )
-        ERROR_LOG( SDL_GetError() );
-    return res;
-}
-
 int Mixer::Play( const char * file, int channel, bool loop )
 {
     if ( valid ) {
-        chunk_t * sample = LoadWAV( file );
+        Mix_Chunk * sample = LoadWAV( file );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
-            return Play( sample, channel, loop );
+            return PlayChunk( sample, channel, loop );
         }
     }
     return -1;
@@ -163,10 +155,10 @@ int Mixer::Play( const char * file, int channel, bool loop )
 int Mixer::Play( const u8 * ptr, u32 size, int channel, bool loop )
 {
     if ( valid && ptr ) {
-        chunk_t * sample = LoadWAV( ptr, size );
+        Mix_Chunk * sample = LoadWAV( ptr, size );
         if ( sample ) {
             Mix_ChannelFinished( FreeChannel );
-            return Play( sample, channel, loop );
+            return PlayChunk( sample, channel, loop );
         }
     }
     return -1;
@@ -236,7 +228,7 @@ void Mixer::Stop( int channel /* = -1 */ )
     Mix_HaltChannel( channel );
 }
 
-void Mixer::Reset( void )
+void Mixer::Reset()
 {
     Music::Reset();
 #ifdef WITH_AUDIOCD
@@ -256,9 +248,14 @@ bool Mixer::isPaused( int channel )
     return Mix_Paused( channel ) > 0;
 }
 
-void Mixer::Reduce( void ) {}
+bool Mixer::isValid()
+{
+    return valid;
+}
 
-void Mixer::Enhance( void ) {}
+void Mixer::Reduce() {}
+
+void Mixer::Enhance() {}
 
 void Mixer::Mute()
 {
@@ -273,7 +270,7 @@ void Mixer::Mute()
     savedVolumes.resize( channelsCount );
 
     for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        savedVolumes[channel] = Mix_Volume( channel, 0 );
+        savedVolumes[channel] = Mix_Volume( static_cast<int>( channel ), 0 );
     }
 }
 
@@ -288,6 +285,6 @@ void Mixer::Unmute()
     const size_t channelsCount = std::min( static_cast<size_t>( Mix_AllocateChannels( -1 ) ), savedVolumes.size() );
 
     for ( size_t channel = 0; channel < channelsCount; ++channel ) {
-        Mix_Volume( channel, savedVolumes[channel] );
+        Mix_Volume( static_cast<int>( channel ), savedVolumes[channel] );
     }
 }
