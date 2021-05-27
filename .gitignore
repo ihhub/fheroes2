@@ -43,6 +43,7 @@
 *.obj
 *.pch
 *.tmp
+*.res
 # visual studio directory
 .vs
 .vscode

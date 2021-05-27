@@ -36,7 +36,6 @@ if exist "$(MSBuildThisFileDirectory)..\maps" (
     )
 )
 
-xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.cfg" "$(OutDir)"
 xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.key" "$(OutDir)"
 
 %(Command)</Command>

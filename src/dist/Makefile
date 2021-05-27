@@ -50,7 +50,7 @@ endif
 
 SOURCEROOT := ../fheroes2
 SOURCEDIR  := $(filter %/, $(wildcard $(SOURCEROOT)/*/)) $(filter %/, $(wildcard $(SOURCEROOT)/*/*/))
-POT        := $(TARGET).pot
+POT        := ../../files/lang/$(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
@@ -59,7 +59,12 @@ all: $(TARGET)
 
 $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
-	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
+	@$(CXX) $(LDFLAGS) $^ $(LIBS) -o ../../$@
+ifeq ($(PLATFORM), mingw)
+ifndef DEBUG
+	@strip -p -s ../../$@.exe
+endif
+endif
 
 pot: $(wildcard $(SEARCH))
 	@echo "gen: $(POT)"
@@ -67,16 +72,17 @@ pot: $(wildcard $(SEARCH))
 
 $(RES): $(RC)
 	@echo "gen: $@"
-	$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
+	@$(WINDRES) -I../fheroes2/system $(DEBUGFLAG) $< -O coff -o $@
 
 VPATH := $(SOURCEDIR)
 
 %.o: %.cpp
-	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
+	@echo "$(CXX): $@"
+	@$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
 
 include $(wildcard *.d)
 
 .PHONY: clean
 
 clean:
-	rm -f *.pot *.o *.d *.rc *.res *.exe $(TARGET)
+	@rm -f *.o *.d $(RES) ../../$(TARGET)

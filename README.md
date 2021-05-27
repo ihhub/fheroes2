@@ -30,7 +30,7 @@ Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh**
 Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
 
 ### Arch
-For Arch based Linux distributions use the command `sudo pacman -S sdl sdl_mixer`.
+For Arch based Linux distributions use the command `sudo pacman -S sdl{,2}_mixer`.
 
 ### RedHat-based
 RPM based distributions like Fedora/Red Hat use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
@@ -51,9 +51,17 @@ Please follow below instructions to be able to compile the project:
 
 Windows
 ------------------------
+### MSVC ###
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
+
+### MSYS2 ###
+- If you don't have [MSYS2](https://www.msys2.org/) installed already, go ahead and do so, and follow the update instruction on the website. Make sure to install `git` to clone this repo with `pacman -S git`. Before proceeding, make sure you're in the `MinGW32` or the `MinGW64`, or the `UCRT64` shell, depending on the architecture you'd like to build for.
+- Clone the repo with `git clone https://github.com/ihhub/fheroes2 && cd fheroes2`
+- Now, if you need to quickly generate a playable build, simply run `script/windows/release.sh`.
+- For development, run `script/windows/install_packages.sh dev` to install all the necessary packages.
+- Run `make -j$(nproc)`, or, to build SDL1 version, `make -j$(nproc) FHEROES2_SDL1="1"`.
 
 MacOS and Linux
 -------------------

@@ -23,11 +23,13 @@ CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
 
 all: $(TARGET).a
 
-$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp)) 
-	$(AR) crvs $@ $^
+$(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
+	@echo "lnk: $@"
+	@$(AR) crvs $@ $^
 
 %.o: %.cpp
-	$(CXX) -c -MD $< $(CFLAGS)
+	@echo "$(CXX): $@"
+	@$(CXX) -c -MD $< $(CFLAGS)
 
 include $(wildcard *.d)
 

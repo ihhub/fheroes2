@@ -20,14 +20,13 @@
 
 # Options:
 # DEBUG: build in debug mode
-# RELEASE: build with addons extensions
 #
 # WITHOUT_ZLIB: build without zlib (disable compressed save files)
 # WITHOUT_AUDIOCD: disable audio CD support
 # WITHOUT_UNICODE: build without unicode (disable translation and ttf font)
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITHOUT_XML: skip build tinyxml, used for load alt. resources
-# WITH_TOOLS: build tools
+# FHEROES2_TTF_SUPPORT: build with SDL TTF support
 # WITHOUT_BUNDLED_LIBS: do not build XML third party library
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
 #
@@ -38,8 +37,13 @@ TARGET	:= fheroes2
 
 all:
 	$(MAKE) -C src
-	@cp src/dist/$(TARGET) .
+
+pot:
+	$(MAKE) -C src/dist pot
+
+tools:
+	$(MAKE) -C src/tools
 
 clean:
 	$(MAKE) -C src clean
-	@rm -f ./$(TARGET)
+	$(MAKE) -C src/tools clean

@@ -9,4 +9,4 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 	msgfmt $< -o $@
 
 clean:
-	rm -f *.mo
+	@rm -f *.mo

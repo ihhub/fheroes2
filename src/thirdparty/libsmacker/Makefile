@@ -1,8 +1,6 @@
 # makefile
 # project: libsmacker
 
-CONLYFLAGS:=$(filter-out -std=c++11,$(CFLAGS))
-
 TARGET	:= libsmacker
 
 all: $(TARGET).a
@@ -18,4 +16,4 @@ include $(wildcard *.d)
 .PHONY: clean
 
 clean:
-	rm -f *.a *.so *.d *.o
+	@rm -f *.a *.so *.d *.o

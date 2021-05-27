@@ -10,11 +10,11 @@ $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	$(AR) crvs $@ $^
 
 %.o: %.cpp
-	$(CXX) -c -MD $< $(CFLAGS)
+	$(CXX) -c -MD $< $(CXXFLAGS)
 
 include $(wildcard *.d)
 
 .PHONY: clean
 
 clean:
-	rm -f *.a *.so *.d *.o
+	@rm -f *.a *.so *.d *.o
