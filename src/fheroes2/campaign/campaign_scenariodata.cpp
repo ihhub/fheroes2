@@ -32,7 +32,6 @@ namespace
 {
     std::vector<Campaign::ScenarioBonusData> getRolandCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 10 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -86,6 +85,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::HIDEOUS_MASK, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::FIZBIN_MISFORTUNE, 1 );
             break;
+        default:
+            assert( 0 );
+            break;
         }
 
         return bonus;
@@ -93,7 +95,6 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getArchibaldCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 11 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -152,6 +153,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::HIDEOUS_MASK, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::FIZBIN_MISFORTUNE, 1 );
             break;
+        default:
+            assert( 0 );
+            break;
         }
 
         return bonus;
@@ -159,7 +163,6 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getPriceOfLoyaltyCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 8 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -203,6 +206,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::TROOP, Monster::MAGE, 5 );
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED );
             break;
+        default:
+            assert( 0 );
+            break;
         }
 
         return bonus;
@@ -210,7 +216,6 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getDescendantsCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 8 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -254,6 +259,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ARCHERY, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_PRIMARY, Skill::Primary::POWER, 1 );
             break;
+        default:
+            assert( 0 );
+            break;
         }
 
         return bonus;
@@ -261,7 +269,6 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getWizardsIsleCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 4 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
@@ -284,6 +291,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 5 );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::ORE, 5 );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
+            break;
+        default:
+            assert( 0 );
             break;
         }
 
@@ -315,6 +325,9 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::NECROMANCY, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 2000 );
+            break;
+        default:
+            assert( 0 );
             break;
         }
 
