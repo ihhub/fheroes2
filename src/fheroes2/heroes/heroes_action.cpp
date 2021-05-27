@@ -2342,12 +2342,28 @@ void ActionToObservationTower( const Heroes & hero, u32 obj, s32 dst_index )
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
 }
 
+bool IsAnyKingdomVisited( u32 obj, s32 dst_index )
+{
+    const int maxColor = 1 << KINGDOMMAX;
+    for ( int color = 1; color < maxColor; color = color << 1 ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dst_index, obj ) ) {
+            std::cout << color << " VISITED\n";
+            return true;
+        }
+        else {
+            std::cout << color << " has not visited\n";
+        }
+    }
+    return false;
+}
+
 void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
 {
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.GetKingdom().isVisited( dst_index, obj ) ) {
+    if ( IsAnyKingdomVisited( obj, dst_index ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
