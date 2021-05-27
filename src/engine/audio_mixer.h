@@ -23,11 +23,7 @@
 #ifndef H2AUDIO_MIXER_H
 #define H2AUDIO_MIXER_H
 
-#include <vector>
-
 #include "types.h"
-
-#include <SDL_mixer.h>
 
 namespace Mixer
 {
