@@ -58,6 +58,18 @@ namespace
         case Campaign::ARCHIBALD_CAMPAIGN:
             campaignTrack = ICN::CTRACK03;
             break;
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK0;
+            break;
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK1;
+            break;
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK2;
+            break;
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            campaignTrack = ICN::X_TRACK3;
+            break;
         }
 
         fheroes2::Blit( fheroes2::AGG::GetICN( campaignTrack, 0 ), display, top.x + 39, top.y + 294 );
@@ -139,11 +151,8 @@ namespace
 
     void DrawCampaignScenarioDescription( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
     {
-        const Maps::FileInfo & mapInfo = scenario.loadMap();
         const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
-
-        const std::string & mapNameStr = mapInfo.description;
-        TextBox mapName( mapNameStr.substr( 1, mapNameStr.length() - 2 ), Font::BIG, 200 );
+        TextBox mapName( scenario.getScenarioName(), Font::BIG, 200 );
         mapName.Blit( top.x + 197, top.y + 97 - mapName.h() / 2 );
 
         Text campaignMapId( std::to_string( scenario.getScenarioID() + 1 ), Font::BIG );
@@ -191,6 +200,7 @@ namespace
                 continue;
 
             Kingdom & kingdom = world.GetKingdom( player->GetColor() );
+            Heroes * bestHero = kingdom.GetBestHero();
 
             switch ( scenarioBonus._type ) {
             case Campaign::ScenarioBonusData::RESOURCES:
@@ -217,13 +227,19 @@ namespace
             case Campaign::ScenarioBonusData::STARTING_RACE:
                 Players::SetPlayerRace( player->GetColor(), scenarioBonus._subType );
                 break;
-            case Campaign::ScenarioBonusData::SKILL: {
-                Heroes * hero = kingdom.GetBestHero();
-                assert( hero != nullptr );
-                if ( hero != nullptr ) {
-                    hero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+            case Campaign::ScenarioBonusData::SKILL_PRIMARY:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
+                        bestHero->IncreasePrimarySkill( scenarioBonus._subType );
                 }
-            } break;
+                break;
+            case Campaign::ScenarioBonusData::SKILL_SECONDARY:
+                assert( bestHero != nullptr );
+                if ( bestHero != nullptr ) {
+                    bestHero->LearnSkill( Skill::Secondary( scenarioBonus._subType, scenarioBonus._amount ) );
+                }
+                break;
             default:
                 assert( 0 );
             }
@@ -337,7 +353,7 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
 
     return Campaign::CampaignData::getCampaignData( Campaign::PRICE_OF_LOYALTY_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::VOYAGE_HOME_CAMPAIGN ).isAllCampaignMapsPresent()
-           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_TALE_CAMPAIGN ).isAllCampaignMapsPresent()
+           && Campaign::CampaignData::getCampaignData( Campaign::WIZARDS_ISLE_CAMPAIGN ).isAllCampaignMapsPresent()
            && Campaign::CampaignData::getCampaignData( Campaign::DESCENDANTS_CAMPAIGN ).isAllCampaignMapsPresent();
 }
 
@@ -405,7 +421,28 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     playCurrentScenarioVideo();
 
-    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( goodCampaign ? ICN::CAMPBKGG : ICN::CAMPBKGE, 0 );
+    int backgroundIconID = 0;
+
+    switch ( chosenCampaignID ) {
+    case Campaign::ROLAND_CAMPAIGN:
+        backgroundIconID = ICN::CAMPBKGG;
+        break;
+    case Campaign::ARCHIBALD_CAMPAIGN:
+        backgroundIconID = ICN::CAMPBKGE;
+        break;
+        // PoL campaigns use the same background, but different headers. TODO: Implement the headers
+    case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+    case Campaign::DESCENDANTS_CAMPAIGN:
+    case Campaign::WIZARDS_ISLE_CAMPAIGN:
+    case Campaign::VOYAGE_HOME_CAMPAIGN:
+        backgroundIconID = ICN::X_CMPBKG;
+        break;
+    default:
+        backgroundIconID = ICN::CAMPBKGG;
+        break;
+    }
+
+    const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( backgroundIconID, 0 );
     const fheroes2::Point top( ( display.width() - backgroundImage.width() ) / 2, ( display.height() - backgroundImage.height() ) / 2 );
 
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
