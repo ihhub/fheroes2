@@ -302,7 +302,6 @@ namespace
 
     std::vector<Campaign::ScenarioBonusData> getVoyageHomeCampaignBonusData( const int scenarioID )
     {
-        assert( scenarioID >= 0 && scenarioID < 4 );
         std::vector<Campaign::ScenarioBonusData> bonus;
 
         switch ( scenarioID ) {
