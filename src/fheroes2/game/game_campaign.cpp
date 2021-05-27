@@ -36,8 +36,32 @@
 #include "text.h"
 #include "world.h"
 
+#include <cassert>
+
 namespace
 {
+    std::vector<fheroes2::Point> getCampaignIconOffsets( const int campaignId )
+    {
+        switch ( campaignId ) {
+        case Campaign::ROLAND_CAMPAIGN:
+            return { { 0, 1 }, { 2, 1 }, { 3, 0 }, { 4, 1 }, { 6, 1 }, { 8, 1 }, { 10, 2 }, { 10, 0 }, { 12, 1 }, { 14, 1 } };
+        case Campaign::ARCHIBALD_CAMPAIGN:
+            return { { 0, 1 }, { 2, 1 }, { 4, 0 }, { 4, 2 }, { 6, 1 }, { 8, 1 }, { 9, 0 }, { 10, 1 }, { 12, 0 }, { 12, 2 }, { 14, 1 } };
+        case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
+            return { { 0, 0 }, { 2, 0 }, { 4, 1 }, { 4, 0 }, { 6, 1 }, { 7, 0 }, { 9, 1 }, { 10, 0 } };
+        case Campaign::DESCENDANTS_CAMPAIGN:
+            return { { 0, 1 }, { 2, 1 }, { 4, 0 }, { 4, 2 }, { 6, 1 }, { 8, 2 }, { 8, 0 }, { 10, 1 } };
+        case Campaign::WIZARDS_ISLE_CAMPAIGN:
+            return { { 0, 0 }, { 2, 0 }, { 4, 1 }, { 6, 0 } };
+        case Campaign::VOYAGE_HOME_CAMPAIGN:
+            return { { 0, 0 }, { 2, 0 }, { 4, 0 }, { 4, 1 } };
+        default:
+            // Implementing a new campaign? Add a new case!
+            assert( 0 );
+            return {};
+        }
+    }
+
     enum ScenarioIcon : uint32_t
     {
         SCENARIO_ICON_CLEARED = 0,
@@ -107,76 +131,48 @@ namespace
         const fheroes2::Point trackOffset( top.x + track.x(), top.y + track.y() );
         fheroes2::Blit( track, display, trackOffset.x, trackOffset.y );
 
-        const int middleY = 40;
+        const std::vector<fheroes2::Point> & iconOffsets = getCampaignIconOffsets( campaignData.getCampaignID() );
         const int deltaY = 42;
-        const int startX = -2;
-        const int deltaX = 74;
+        const int deltaX = 37;
 
         const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
         const Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
 
-        int currentX = startX;
         std::vector<int> prevScenarioNextMaps;
         const std::vector<int> & clearedMaps = saveData.getFinishedMaps();
         const std::vector<int> & availableMaps
             = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
 
-        size_t drawnBranchMapCount = 0;
+        assert( iconOffsets.size() == scenarios.size() );
 
         for ( size_t i = 0; i < scenarios.size(); ++i ) {
-            const std::vector<int> & nextMaps = scenarios[i].getNextMaps();
             const int scenarioID = scenarios[i].getScenarioID();
 
-            // sub scenario -> this scenario's next map is one of the prev scenario's next map
-            // an example in original campaign would be Save/Slay the Dwarves
-            bool isSubScenario = false;
-            int x = currentX;
-            int y = middleY;
-
-            for ( size_t j = 0; j < prevScenarioNextMaps.size(); ++j ) {
-                if ( std::find( nextMaps.begin(), nextMaps.end(), prevScenarioNextMaps[j] ) == nextMaps.end() )
-                    continue;
-
-                isSubScenario = true;
-                x -= deltaX / 2;
-                y -= deltaY;
-                break;
+            assert( scenarioID >= 0 && static_cast<size_t>( scenarioID ) < iconOffsets.size() );
+            if ( scenarioID < 0 || static_cast<size_t>( scenarioID ) >= iconOffsets.size() ) {
+                continue;
             }
 
-            // if it's not a sub-scenario, try to check whether it's a branching scenario
-            bool isBranching = false;
-            bool isFinalBranch = false;
+            fheroes2::Point offset = iconOffsets[scenarioID];
+            offset.x *= deltaX;
+            offset.y *= deltaY;
 
-            const size_t branchCount = prevScenarioNextMaps.size();
-            if ( !isSubScenario && branchCount > 1 ) {
-                isBranching = true;
-                isFinalBranch = drawnBranchMapCount == branchCount - 1;
-
-                y += isFinalBranch ? deltaY : -deltaY;
-                ++drawnBranchMapCount;
-            }
+            offset.x -= 2;
+            offset.y -= 2;
 
             // available scenario (one of which should be selected)
             if ( std::find( availableMaps.begin(), availableMaps.end(), scenarioID ) != availableMaps.end() ) {
                 const fheroes2::Sprite & availableIcon = fheroes2::AGG::GetICN( iconsId, iconStatusOffset + SCENARIO_ICON_AVAILABLE );
                 const fheroes2::Sprite & selectedIcon = fheroes2::AGG::GetICN( iconsId, selectedIconIdx );
-                buttonGroup.createButton( trackOffset.x + x, trackOffset.y + y, availableIcon, selectedIcon, static_cast<int>( i ) );
+                buttonGroup.createButton( trackOffset.x + offset.x, trackOffset.y + offset.y, availableIcon, selectedIcon, static_cast<int>( i ) );
             }
             // cleared scenario
             else if ( std::find( clearedMaps.begin(), clearedMaps.end(), static_cast<int>( i ) ) != clearedMaps.end() ) {
-                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_CLEARED, trackOffset, x, y );
+                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_CLEARED, trackOffset, offset.x, offset.y );
             }
             else {
-                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_UNAVAILABLE, trackOffset, x, y );
+                DrawCampaignScenarioIcon( iconsId, iconStatusOffset + SCENARIO_ICON_UNAVAILABLE, trackOffset, offset.x, offset.y );
             }
-
-            if ( !isBranching || isFinalBranch ) {
-                prevScenarioNextMaps = nextMaps;
-                drawnBranchMapCount = 0;
-            }
-
-            if ( !isSubScenario && ( !isBranching || isFinalBranch ) )
-                currentX += deltaX;
         }
     }
 
