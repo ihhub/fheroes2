@@ -901,6 +901,8 @@ namespace ICN
         ZOMBIE2,
         ZOMBIE,
 
+        LAST_VALID_FILE_ICN, // Real ICNs need a special reference to ICN files. Put namically created ICNs at the end of this enumeration.
+
         // system
         ROUTERED,
         YELLOW_FONT,
