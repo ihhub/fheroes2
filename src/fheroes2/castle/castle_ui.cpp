@@ -70,7 +70,6 @@ namespace fheroes2
         case REQUIRES_BUILD:
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), output, offset.x + 40, offset.y );
             break;
-        case LACK_RESOURCES:
         default:
             break;
         }

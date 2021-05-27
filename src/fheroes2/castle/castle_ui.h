@@ -19,9 +19,9 @@
  ***************************************************************************/
 #pragma once
 
-class Castle;
-
 #include "math_base.h"
+
+class Castle;
 
 namespace fheroes2
 {
