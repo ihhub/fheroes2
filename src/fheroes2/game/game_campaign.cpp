@@ -524,7 +524,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Blit( backgroundImage, display, top.x, top.y );
     drawCampaignNameHeader( chosenCampaignID, display, top );
 
-
     const int buttonIconID = getCampaignButtonId( chosenCampaignID );
     fheroes2::Button buttonViewIntro( top.x + 22, top.y + 431, buttonIconID, 0, 1 );
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
