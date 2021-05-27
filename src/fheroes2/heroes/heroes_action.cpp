@@ -2342,22 +2342,6 @@ void ActionToObservationTower( const Heroes & hero, u32 obj, s32 dst_index )
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
 }
 
-bool IsAnyKingdomVisited( u32 obj, s32 dst_index )
-{
-    const int maxColor = 1 << KINGDOMMAX;
-    for ( int color = 1; color < maxColor; color = color << 1 ) {
-        const Kingdom & kingdom = world.GetKingdom( color );
-        if ( kingdom.isVisited( dst_index, obj ) ) {
-            std::cout << color << " VISITED\n";
-            return true;
-        }
-        else {
-            std::cout << color << " has not visited\n";
-        }
-    }
-    return false;
-}
-
 void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
 {
     const u32 max = hero.GetMaxSpellPoints();

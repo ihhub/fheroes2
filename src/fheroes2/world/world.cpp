@@ -971,6 +971,22 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     return false;
 }
 
+bool IsAnyKingdomVisited( const u32 obj, const s32 dstIndex )
+{
+    const int maxColor = 1 << KINGDOMMAX;
+    for ( int color = 1; color < maxColor; color = color << 1 ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, obj ) ) {
+            std::cout << color << " VISITED\n";
+            return true;
+        }
+        else {
+            std::cout << color << " has not visited\n";
+        }
+    }
+    return false;
+}
+
 bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 {
     const Settings & conf = Settings::Get();

@@ -348,4 +348,6 @@ StreamBase & operator>>( StreamBase &, MapObjects & );
 
 extern World & world;
 
+bool IsAnyKingdomVisited( const u32 obj, const s32 dstIndex );
+
 #endif
