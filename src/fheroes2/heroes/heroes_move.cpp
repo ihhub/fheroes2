@@ -488,7 +488,6 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
 
         if ( ocean ) {
             const fheroes2::Rect blitArea = area.RectFixed( dst_pt4, sprite4.width(), sprite4.height() );
-            
             fheroes2::AlphaBlit( sprite4, blitArea.x, blitArea.y, dst, dst_pt4.x, dst_pt4.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ),
                                  reflect );
         }
@@ -562,7 +561,6 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
         default:
             break;
         }
-
 
         offset += _offset;
 
