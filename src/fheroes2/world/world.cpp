@@ -977,11 +977,7 @@ bool IsAnyKingdomVisited( const u32 obj, const s32 dstIndex )
     for ( int color = 1; color < maxColor; color = color << 1 ) {
         const Kingdom & kingdom = world.GetKingdom( color );
         if ( kingdom.isVisited( dstIndex, obj ) ) {
-            std::cout << color << " VISITED\n";
             return true;
-        }
-        else {
-            std::cout << color << " has not visited\n";
         }
     }
     return false;
