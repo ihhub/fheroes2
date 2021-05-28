@@ -174,6 +174,9 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     // Reset all sound and music before playing videos
     AGG::ResetMixer();
+
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
     AGG::ResetMixer();
