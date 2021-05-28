@@ -210,6 +210,23 @@ StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
 u32 GoldInsteadArtifact( int );
 
+class ArtifactSetData
+{
+public:
+    ArtifactSetData() = default;
+    ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs );
+    bool isPartOfSet( const uint32_t artifactID ) const;
+    bool isCombinationResult( const uint32_t artifactID ) const;
+    size_t getNumberOfParts() const;
+
+    static const ArtifactSetData * tryGetArtifactSetData( const uint32_t artifactID );
+    static const uint32_t tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs );
+
+private:
+    uint32_t _artifactID;
+    std::vector<uint32_t> _artifactPartIDs;
+};
+
 class BagArtifacts : public std::vector<Artifact>
 {
 public:

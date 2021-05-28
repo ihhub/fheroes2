@@ -61,6 +61,8 @@ struct artifactstats_t
     const char * description;
 };
 
+std::vector<ArtifactSetData> artifactSets = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+
 artifactstats_t artifacts[] = {
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
     {0, 12, TYPE3, _( "Ultimate Sword of Dominion" ), _( "The %{name} increases your attack skill by %{count}." )},
@@ -1186,4 +1188,73 @@ bool ArtifactsBar::isMagicBook( const Artifact & artifact )
 void ArtifactsBar::messageMagicBookAbortTrading() const
 {
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
+}
+
+ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs )
+    : _artifactID( artifactID )
+    , _artifactPartIDs( artifactPartIDs )
+{}
+
+bool ArtifactSetData::isPartOfSet( const uint32_t artifactID ) const 
+{
+    for ( size_t i = 0; i < _artifactPartIDs.size(); ++i ) {
+        if ( _artifactPartIDs[i] == artifactID )
+            return true;
+    }
+
+    return false;
+}
+
+bool ArtifactSetData::isCombinationResult( const uint32_t artifactID ) const 
+{
+    return artifactID == _artifactID;
+}
+
+size_t ArtifactSetData::getNumberOfParts() const 
+{
+    return _artifactPartIDs.size();
+}
+
+const ArtifactSetData * ArtifactSetData::tryGetArtifactSetData( const uint32_t artifactID )
+{
+    for ( size_t i = 0; i < artifactSets.size(); ++i ) {
+        if ( artifactSets[i].isPartOfSet( artifactID ) || artifactSets[i].isCombinationResult( artifactID ) )
+            return &artifactSets[i];
+    }
+
+    return nullptr;
+}
+
+const uint32_t ArtifactSetData::tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs )
+{
+    ArtifactSetData * artifactSetDataToForm = nullptr;
+    int artifactSetObtainedParts = 0;
+    int artifactSetPartCount = 0;
+
+    for ( size_t i = 0; i < artifactPartIDs.size(); ++i ) {
+        // try to find an artifact to form
+        if ( artifactSetDataToForm == nullptr ) {
+            for ( size_t j = 0; i < artifactSets.size(); ++j ) {
+                if ( !artifactSets[i].isPartOfSet( artifactPartIDs[i] ) )
+                    continue;
+
+                artifactSetDataToForm = &artifactSets[i];
+
+                // we already get the first set part from this for loop :)
+                artifactSetObtainedParts = 1;
+                artifactSetPartCount = artifactSets[i]._artifactPartIDs.size();
+                break;
+            }
+        }
+        // already found an artifact to form, so next artifacts should try to form the artifact set obtained above
+        else {
+            if ( artifactSetDataToForm->isPartOfSet( artifactPartIDs[i] ) )
+                ++artifactSetObtainedParts;
+
+            if ( artifactSetObtainedParts == artifactSetPartCount ) 
+                return artifactSetDataToForm->_artifactID;
+        }
+    }
+
+    return Artifact::ART_NONE;
 }
