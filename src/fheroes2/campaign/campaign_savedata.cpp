@@ -50,7 +50,7 @@ namespace Campaign
         _obtainedCampaignAwards.emplace_back( awardID );
     }
 
-    void CampaignSaveData::removeCampaignAward( const int awardID ) 
+    void CampaignSaveData::removeCampaignAward( const int awardID )
     {
         _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
     }

@@ -61,7 +61,8 @@ struct artifactstats_t
     const char * description;
 };
 
-std::vector<ArtifactSetData> artifactSets = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+std::vector<ArtifactSetData> artifactSets
+    = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
 artifactstats_t artifacts[] = {
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
@@ -1195,7 +1196,7 @@ ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::vector<u
     , _artifactPartIDs( artifactPartIDs )
 {}
 
-bool ArtifactSetData::isPartOfSet( const uint32_t artifactID ) const 
+bool ArtifactSetData::isPartOfSet( const uint32_t artifactID ) const
 {
     for ( size_t i = 0; i < _artifactPartIDs.size(); ++i ) {
         if ( _artifactPartIDs[i] == artifactID )
@@ -1205,12 +1206,12 @@ bool ArtifactSetData::isPartOfSet( const uint32_t artifactID ) const
     return false;
 }
 
-bool ArtifactSetData::isCombinationResult( const uint32_t artifactID ) const 
+bool ArtifactSetData::isCombinationResult( const uint32_t artifactID ) const
 {
     return artifactID == _artifactID;
 }
 
-size_t ArtifactSetData::getNumberOfParts() const 
+size_t ArtifactSetData::getNumberOfParts() const
 {
     return _artifactPartIDs.size();
 }
@@ -1251,7 +1252,7 @@ const uint32_t ArtifactSetData::tryFormArtifactSet( const std::vector<uint32_t> 
             if ( artifactSetDataToForm->isPartOfSet( artifactPartIDs[i] ) )
                 ++artifactSetObtainedParts;
 
-            if ( artifactSetObtainedParts == artifactSetPartCount ) 
+            if ( artifactSetObtainedParts == artifactSetPartCount )
                 return artifactSetDataToForm->_artifactID;
         }
     }
