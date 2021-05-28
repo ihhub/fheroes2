@@ -1226,7 +1226,7 @@ const ArtifactSetData * ArtifactSetData::tryGetArtifactSetData( const uint32_t a
     return nullptr;
 }
 
-const uint32_t ArtifactSetData::tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs )
+uint32_t ArtifactSetData::tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs )
 {
     ArtifactSetData * artifactSetDataToForm = nullptr;
     int artifactSetObtainedParts = 0;

@@ -220,7 +220,7 @@ public:
     size_t getNumberOfParts() const;
 
     static const ArtifactSetData * tryGetArtifactSetData( const uint32_t artifactID );
-    static const uint32_t tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs );
+    static uint32_t tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs );
 
 private:
     uint32_t _artifactID;
