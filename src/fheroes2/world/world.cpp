@@ -300,12 +300,26 @@ void World::Reset( void )
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
+
+    width = sw;
+    height = sh;
+
+    Maps::FileInfo fi;
+
+    fi.size_w = static_cast<uint16_t>( width );
+    fi.size_h = static_cast<uint16_t>( height );
+
+    Settings & conf = Settings::Get();
+
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi._version = GameVersion::PRICE_OF_LOYALTY;
+    }
+
+    conf.SetCurrentFileInfo( fi );
+
     Defaults();
 
-    fheroes2::Size::width = sw;
-    fheroes2::Size::height = sh;
-
-    vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
@@ -326,13 +340,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
         vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
-
-    // reset current maps info
-    Maps::FileInfo fi;
-    fi.size_w = static_cast<uint16_t>( width );
-    fi.size_h = static_cast<uint16_t>( height );
-
-    Settings::Get().SetCurrentFileInfo( fi );
 }
 
 void World::InitKingdoms( void )
