@@ -21,10 +21,10 @@
 #include "screen.h"
 #include "palette_h2.h"
 
-#include <SDL_events.h>
 #include <SDL_version.h>
 #include <SDL_video.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
