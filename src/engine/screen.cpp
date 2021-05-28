@@ -22,14 +22,14 @@
 #include "palette_h2.h"
 
 #include <SDL_version.h>
+#include <SDL_video.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
-#include <SDL_video.h>
 #else
 #include <SDL_active.h>
-#include <SDL_video.h>
 #endif
 
 #include <algorithm>
@@ -354,18 +354,26 @@ namespace
             clear();
         }
 
+        void show( const bool enable ) override
+        {
+            fheroes2::Cursor::show( enable );
+
+            if ( !_emulation ) {
+                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+            }
+        }
+
         bool isVisible() const override
         {
             if ( _emulation )
                 return fheroes2::Cursor::isVisible();
             else
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
+                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
-                SDL_ShowCursor( 0 );
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
@@ -409,7 +417,7 @@ namespace
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
-            SDL_ShowCursor( 1 );
+            SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
             SDL_FreeSurface( surface );
 
             clear();
@@ -423,9 +431,14 @@ namespace
 
             if ( enable ) {
                 clear();
+
+                SDL_ShowCursor( SDL_DISABLE );
+
                 _emulation = true;
             }
             else {
+                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+
                 _emulation = false;
             }
 
@@ -444,6 +457,8 @@ namespace
         {
             // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
+
+            SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
         }
 
     private:
