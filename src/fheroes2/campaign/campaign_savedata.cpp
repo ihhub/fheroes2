@@ -50,6 +50,11 @@ namespace Campaign
         _obtainedCampaignAwards.emplace_back( awardID );
     }
 
+    void CampaignSaveData::removeCampaignAward( const int awardID ) 
+    {
+        _obtainedCampaignAwards.erase( std::remove( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awardID ), _obtainedCampaignAwards.end() );
+    }
+
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
     {
         _currentScenarioBonus = bonus;
