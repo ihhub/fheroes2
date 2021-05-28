@@ -2011,7 +2011,6 @@ void Maps::Tiles::CaptureFlags32( int obj, int col )
         index += 14;
         CorrectFlags32( index, true );
         break;
-        // case MP2::OBJ_DRAGONCITY:	index += 35; CorrectFlags32(index); break; unused
     case MP2::OBJ_LIGHTHOUSE:
         index += 42;
         CorrectFlags32( index, false );
@@ -2312,18 +2311,12 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
         return;
     }
 
-    const uint8_t index = art.IndexSprite();
-
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = index;
+    tile.objectIndex = art.IndexSprite();
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
-
-        if ( shadow )
-            shadow->index = index - 1;
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
     }
 }
 
@@ -2334,11 +2327,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
     // replace shadow artifact
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
-
-        if ( shadow )
-            shadow->index = tile.objectIndex - 1;
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
     }
 }
 
@@ -2698,6 +2687,17 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
         area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
+    }
+}
+
+void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
+{
+    Maps::TilesAddon * addon = tile.FindAddonLevel1( uid );
+    if ( addon != nullptr ) {
+        addon->index = newIndex;
+    }
+    else if ( tile.uniq == uid ) {
+        tile.objectIndex = newIndex;
     }
 }
 

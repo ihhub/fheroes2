@@ -312,6 +312,8 @@ namespace Maps
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
 
+        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
 #ifdef WITH_XML
