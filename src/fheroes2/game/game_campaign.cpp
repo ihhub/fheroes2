@@ -446,15 +446,52 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        saveData.addCampaignAward( obtainableAwards[i]._id );
+        const uint32_t awardType = obtainableAwards[i]._type;
 
-        if ( obtainableAwards[i]._type == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
             Kingdom & humanKingdom = world.GetKingdom( Settings::Get().GetPlayers().HumanColors() );
 
             const Heroes * lastBattleWinHero = humanKingdom.GetLastBattleWinHero();
 
             if ( lastBattleWinHero )
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
+        }
+
+        if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
+            const uint32_t artifactID = obtainableAwards[i]._subType;
+            const ArtifactSetData * artifactSetToForm = ArtifactSetData::tryGetArtifactSetData( obtainableAwards[i]._subType );
+
+            // feel free to add artifacts that are not part of any set, or is not the result of the set combination
+            if ( artifactSetToForm == nullptr || !artifactSetToForm->isCombinationResult( artifactID ) ) {
+                saveData.addCampaignAward( obtainableAwards[i]._id );
+                continue;
+            }
+
+            const std::vector<Campaign::CampaignAwardData> & obtainedAwards = saveData.getObtainedCampaignAwards();
+            std::vector<uint32_t> artifactSetPartAwardIDs;
+
+            for ( size_t j = 0; j < obtainedAwards.size(); ++j ) {
+                if ( !obtainableAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
+                    continue;
+                else if ( !artifactSetToForm->isPartOfSet( obtainedAwards[j]._subType ) )
+                    continue;
+
+                artifactSetPartAwardIDs.emplace_back( obtainedAwards[j]._id );
+            }
+
+            // If we have all the parts awarded for the set, then we'll proceed to remove the awards for the parts
+            // and then we'll add the award for the assembled artifact
+            if ( artifactSetPartAwardIDs.size() < artifactSetToForm->getNumberOfParts() )
+                continue;
+
+            for ( int j = artifactSetPartAwardIDs.size() - 1; j >= 0; --j ) {
+                saveData.removeCampaignAward( artifactSetPartAwardIDs[j] );
+            }
+
+            saveData.addCampaignAward( obtainableAwards[i]._id );
+        }
+        else {
+            saveData.addCampaignAward( obtainableAwards[i]._id );
         }
     }
 
