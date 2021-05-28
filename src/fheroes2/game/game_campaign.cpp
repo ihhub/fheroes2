@@ -471,7 +471,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
             std::vector<uint32_t> artifactSetPartAwardIDs;
 
             for ( size_t j = 0; j < obtainedAwards.size(); ++j ) {
-                if ( !obtainableAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
+                if ( !( obtainableAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) )
                     continue;
                 else if ( !artifactSetToForm->isPartOfSet( obtainedAwards[j]._subType ) )
                     continue;
