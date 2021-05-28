@@ -101,9 +101,13 @@ namespace
             obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::HELMET_ANDURAN );
             break;
         case 6:
-            // will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // Will assemble Battle Garb of Anduran along with the previous anduran set pieces
+            // If we get all the parts, we'll obtain the Battle Garb award while removing the awards for the individual parts
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+
+            // seems that Kraeger is a custom name for Dainwin in this case
+            obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
             break;
         }
 
