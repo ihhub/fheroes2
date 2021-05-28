@@ -24,6 +24,7 @@
 #include "army.h"
 #include "castle.h"
 #include "castle_ui.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
@@ -426,6 +427,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         break;
     }
 
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     const Settings & settings = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -608,6 +611,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
 void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image box
@@ -752,6 +757,8 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
 void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
