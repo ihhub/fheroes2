@@ -52,7 +52,7 @@ namespace
         return false;
     }
 
-    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color)
+    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
     {
         fheroes2::DrawRect( image, roi, color );
         fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
