@@ -305,7 +305,7 @@ fheroes2::GameMode ShowWarningLostTownsDialog()
     if ( 0 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
         GameOver::Result::Get().SetResult( GameOver::LOSS_ALL );
-        return fheroes2::GameMode::MAIN_MENU;
+        return fheroes2::GameMode::END_TURN;
     }
     else if ( 1 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
