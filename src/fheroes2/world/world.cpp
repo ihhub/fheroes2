@@ -627,7 +627,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     // create valid points
     for ( const Maps::Tiles & tile : vec_tiles ) {
-        if ( tile.isWater() || MP2::OBJ_ZERO != tile.GetObject() || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+        if ( tile.isWater() || ( MP2::OBJ_ZERO != tile.GetObject() && tile.GetObject() != MP2::OBJ_COAST ) || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
             continue;
         }
 
@@ -1116,7 +1116,10 @@ void World::resetPathfinder()
 void World::PostLoad()
 {
     // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdatePassable(); } );
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updateEmpty();
+        tile.UpdatePassable();
+    }
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );

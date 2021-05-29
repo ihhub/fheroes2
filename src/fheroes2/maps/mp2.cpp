@@ -394,7 +394,7 @@ const char * MP2::StringObject( int object )
         return _( "Dwarf Cottage" );
     case OBJN_STONELITHS:
     case OBJ_STONELITHS:
-        return _( "Stone Liths" ); // https://sourceforge.net/projects/fheroes2/forums/forum/335991/topic/4605429
+        return _( "Stone Liths" );
     case OBJN_MAGICWELL:
     case OBJ_MAGICWELL:
         return _( "Magic Well" );

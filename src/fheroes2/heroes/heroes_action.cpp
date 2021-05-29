@@ -315,7 +315,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
 
                 tile.MonsterSetCount( 0 );
                 tile.RemoveObjectSprite();
-                tile.SetObject( MP2::OBJ_ZERO );
+                tile.setAsEmpty();
 
                 Game::ObjectFadeAnimation::PerformFadeTask();
             }
@@ -417,7 +417,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
             tile.RemoveObjectSprite();
             tile.QuantityReset();
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
 
             Game::ObjectFadeAnimation::PerformFadeTask();
         }
@@ -775,7 +775,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
         tile.RemoveObjectSprite();
         tile.MonsterSetCount( 0 );
-        tile.SetObject( MP2::OBJ_ZERO );
+        tile.setAsEmpty();
 
         Game::ObjectFadeAnimation::PerformFadeTask();
 
@@ -2949,7 +2949,7 @@ void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
         tile.RemoveObjectSprite();
-        tile.SetObject( MP2::OBJ_ZERO );
+        tile.setAsEmpty();
 
         Game::ObjectFadeAnimation::PerformFadeTask();
 
@@ -3096,7 +3096,7 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
             tile.SetObject( MP2::OBJ_HEROES );
         }
         else {
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
             hero.SetMapsObject( MP2::OBJ_HEROES );
         }
     }

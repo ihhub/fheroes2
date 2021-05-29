@@ -927,8 +927,9 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
             SetObject( hero->GetMapsObject() );
             hero->SetMapsObject( MP2::OBJ_ZERO );
         }
-        else
-            SetObject( MP2::OBJ_ZERO );
+        else {
+            setAsEmpty();
+        }
 
         heroID = 0;
     }
@@ -2218,7 +2219,7 @@ void Maps::Tiles::RemoveJailSprite( void )
         topTile.Remove( uniq );
 
         if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
-            topTile.SetObject( MP2::OBJ_ZERO );
+            topTile.setAsEmpty();
             topTile.FixObject();
         }
 
@@ -2228,7 +2229,7 @@ void Maps::Tiles::RemoveJailSprite( void )
             leftTile.Remove( uniq );
 
             if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
-                leftTile.SetObject( MP2::OBJ_ZERO );
+                leftTile.setAsEmpty();
                 leftTile.FixObject();
             }
         }
@@ -2699,6 +2700,40 @@ void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const 
     else if ( tile.uniq == uid ) {
         tile.objectIndex = newIndex;
     }
+}
+
+void Maps::Tiles::updateEmpty()
+{
+    if ( mp2_object == MP2::OBJ_ZERO ) {
+        setAsEmpty();
+    }
+}
+
+void Maps::Tiles::setAsEmpty()
+{
+    // If an object is removed we should validate if this tile a potential candidate to be a coast.
+    // Check if this tile is not water and it have neighbouring water tiles.
+    if ( isWater() ) {
+        SetObject( MP2::OBJ_ZERO );
+        return;
+    }
+
+    bool isCoast = false;
+
+    const Indexes tileIndices = Maps::GetAroundIndexes( _index, 1 );
+    for ( const int tileIndex : tileIndices ) {
+        if ( tileIndex < 0 ) {
+            // Invalid tile index.
+            continue;
+        }
+
+        if ( world.GetTiles( tileIndex ).isWater() ) {
+            isCoast = true;
+            break;
+        }
+    }
+
+    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

@@ -464,26 +464,28 @@ u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
 
 void Maps::MinimizeAreaForCastle( const fheroes2::Point & center )
 {
-    // reset castle ID
-    for ( s32 yy = -3; yy < 2; ++yy )
-        for ( s32 xx = -2; xx < 3; ++xx ) {
-            Maps::Tiles & tile = world.GetTiles( center.x + xx, center.y + yy );
+    // Reset castle ID
+    for ( int32_t y = -3; y < 2; ++y ) {
+        for ( int32_t x = -2; x < 3; ++x ) {
+            Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
             if ( MP2::OBJN_RNDCASTLE == tile.GetObject() || MP2::OBJN_RNDTOWN == tile.GetObject() || MP2::OBJN_CASTLE == tile.GetObject() )
-                tile.SetObject( MP2::OBJ_ZERO );
+                tile.setAsEmpty();
         }
+    }
 
     // set minimum area castle ID
-    for ( s32 yy = -1; yy < 1; ++yy )
-        for ( s32 xx = -2; xx < 3; ++xx ) {
-            Maps::Tiles & tile = world.GetTiles( center.x + xx, center.y + yy );
+    for ( int32_t y = -1; y < 1; ++y ) {
+        for ( int32_t x = -2; x < 3; ++x ) {
+            Maps::Tiles & tile = world.GetTiles( center.x + x, center.y + y );
 
             // skip angle
-            if ( yy == -1 && ( xx == -2 || xx == 2 ) )
+            if ( y == -1 && ( x == -2 || x == 2 ) )
                 continue;
 
             tile.SetObject( MP2::OBJN_CASTLE );
         }
+    }
 
     // restore center ID
     world.GetTiles( center.x, center.y ).SetObject( MP2::OBJ_CASTLE );
@@ -515,7 +517,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         return;
     }
 
-    int raceIndex = 0;
+    int raceIndex = 0; // Race::KNIGHT
     switch ( race ) {
     case Race::BARB:
         raceIndex = 1;
