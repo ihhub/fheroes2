@@ -223,6 +223,14 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
     }
 }
 
+std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
+{
+    const uint8_t * paletteData = smk_get_palette( _videoFile );
+    assert( paletteData != nullptr );
+
+    return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
+}
+
 const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const
 {
     return _audioChannel;

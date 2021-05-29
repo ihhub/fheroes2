@@ -36,6 +36,7 @@
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"
+#include "smk_decoder.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
@@ -201,7 +202,72 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
     campaignSaveData.setCurrentScenarioID( 0 );
 
-    return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    std::string videoPath;
+    if ( !Video::isVideoFile( "IVYPOL.SMK", videoPath ) ) {
+        // File doesn't exist. Fallback to PoL campaign.
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    SMKVideoSequence video( videoPath );
+    if ( video.frameCount() < 1 ) {
+        // File is incorrect. Fallback to PoL campaign.
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    const std::vector<uint8_t> palette = video.getCurrentPalette();
+    screenRestorer.changePalette( palette.data() );
+
+    Cursor::Get().setVideoPlaybackCursor();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+
+    display.fill( 0 );
+
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::X_IVY, 1 );
+    fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );
+
+    const fheroes2::Sprite & campaignChoice = fheroes2::AGG::GetICN( ICN::X_IVY, 0 );
+    fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(), campaignChoice.height() );
+
+    const fheroes2::Rect priceOfLoyaltyRoi( roiOffset.x + 192, roiOffset.y + 23, 248, 163 );
+    const fheroes2::Rect voyageHomeRoi( roiOffset.x + 19, roiOffset.y + 120, 166, 193 );
+    const fheroes2::Rect wizardsIsleRoi( roiOffset.x + 450, roiOffset.y + 120, 166, 193 );
+    const fheroes2::Rect descendantsRoi( roiOffset.x + 192, roiOffset.y + 240, 248, 163 );
+
+    fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() ) {
+        if ( le.MouseClickLeft( priceOfLoyaltyRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( voyageHomeRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( wizardsIsleRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( descendantsRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+    }
+
+    display.fill( 0 );
+
+    return gameChoice;
 }
 
 #ifdef NETWORK_ENABLE
