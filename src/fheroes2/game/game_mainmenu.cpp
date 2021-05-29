@@ -168,9 +168,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        Dialog::Message( _( "Greetings!" ),
-                         _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ),
-                         Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
+                         Dialog::OK );
 
         bool isResolutionChanged = Dialog::SelectResolution();
         if ( isResolutionChanged ) {
