@@ -279,6 +279,12 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
+        // If tile is empty (MP2::OBJ_UNKNOWN) then verify whether it is a coast and update the tile if needed.
+        void updateEmpty();
+
+        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_UNKNOWN)
+        void setAsEmpty();
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );

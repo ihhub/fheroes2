@@ -445,7 +445,7 @@ void Maps::Tiles::QuantityReset( void )
     }
 
     if ( MP2::isPickupObject( mp2_object ) )
-        SetObject( MP2::OBJ_ZERO );
+        setAsEmpty();
 }
 
 void Maps::Tiles::QuantityUpdate( bool isFirstLoad )

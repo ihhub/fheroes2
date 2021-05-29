@@ -1598,7 +1598,7 @@ void World::ProcessNewMap()
         // remove ultimate artifact sprite
         const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
-        it->SetObject( MP2::OBJ_ZERO );
+        it->setAsEmpty();
         ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
         ultimate_pos = ( *it ).GetCenter();
     }

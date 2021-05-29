@@ -698,7 +698,7 @@ namespace AI
         if ( destroy ) {
             tile.RemoveObjectSprite();
             tile.MonsterSetCount( 0 );
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
 
             if ( map_troop )
                 world.RemoveMapObject( map_troop );
@@ -1367,7 +1367,7 @@ namespace AI
                 // remove ancient lamp sprite
                 if ( MP2::OBJ_ANCIENTLAMP == obj ) {
                     tile.RemoveObjectSprite();
-                    tile.SetObject( MP2::OBJ_ZERO );
+                    tile.setAsEmpty();
                 }
             }
         }
@@ -1432,7 +1432,7 @@ namespace AI
 
         if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) ) {
             tile.RemoveObjectSprite();
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
         }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );

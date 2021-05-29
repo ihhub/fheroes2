@@ -63,7 +63,6 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     std::string str = _( "%{name} is a level %{value} %{race} " );
 
-    // FIXME: It is necessary to consider locale features for numerals (with getext).
     if ( count ) {
         str += count > 1 ? _( "with %{count} artifacts." ) : _( "with 1 artifact." );
     }

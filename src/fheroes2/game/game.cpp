@@ -265,7 +265,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
 
         if ( tile.GetObject() == fadeTask.object ) {
             tile.RemoveObjectSprite();
-            tile.SetObject( MP2::OBJ_ZERO );
+            tile.setAsEmpty();
         }
     };
     auto addObject = []() {
