@@ -1079,7 +1079,7 @@ void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
     }
 
     tile.QuantityReset();
-    hero.SetVisited( dst_index, Visit::GLOBAL );
+    hero.setVisitedForAllies( dst_index );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

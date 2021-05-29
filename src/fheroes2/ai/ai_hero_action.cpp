@@ -774,7 +774,7 @@ namespace AI
             AIToCaptureObject( hero, obj, dst_index );
 
         tile.QuantityReset();
-        hero.SetVisited( dst_index, Visit::GLOBAL );
+        hero.setVisitedForAllies( dst_index );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
