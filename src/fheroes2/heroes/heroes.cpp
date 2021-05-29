@@ -851,7 +851,6 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
-
 void Heroes::SetVisited( s32 index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
