@@ -37,7 +37,7 @@ namespace
 {
     enum
     {
-        // UNUSED = 0x00000001,
+        GLOBAL_FIRST_RUN = 0x00000001,
         // UNUSED = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
@@ -332,6 +332,7 @@ Settings::Settings()
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
     ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
+    opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
@@ -616,6 +617,10 @@ bool Settings::Read( const std::string & filename )
             _controllerPointerSpeed = 0;
     }
 
+    if ( config.Exists( "first time game run" ) && config.StrParams( "first time game run" ) == "off" ) {
+        resetFirstGameRun();
+    }
+
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -785,6 +790,9 @@ std::string Settings::String() const
 
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
+
+    os << std::endl << "# show first time game run information: on off" << std::endl;
+    os << "first time game run = " << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -1813,6 +1821,16 @@ void Settings::BinaryLoad()
 bool Settings::FullScreen() const
 {
     return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+}
+
+bool Settings::isFirstGameRun() const
+{
+    return opt_global.Modes( GLOBAL_FIRST_RUN );
+}
+
+void Settings::resetFirstGameRun()
+{
+    opt_global.ResetModes( GLOBAL_FIRST_RUN );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )

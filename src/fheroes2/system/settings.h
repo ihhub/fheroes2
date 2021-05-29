@@ -181,6 +181,10 @@ public:
     bool MusicExt() const;
     bool MusicMIDI() const;
     bool MusicCD() const;
+
+    bool isFirstGameRun() const;
+    void resetFirstGameRun();
+
     void BinarySave() const;
     void BinaryLoad();
 
