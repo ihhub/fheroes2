@@ -75,6 +75,9 @@ namespace Maps
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
 
     void ClearFog( s32, int scoute, int color );
+
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor );
+
     u32 GetApproximateDistance( s32, s32 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );

@@ -302,32 +302,63 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
 
 void Maps::ClearFog( s32 index, int scoute, int color )
 {
-    if ( 0 != scoute && isValidAbsIndex( index ) ) {
-        const fheroes2::Point center = GetPoint( index );
+    if ( scoute <= 0 || !isValidAbsIndex( index ) ) {
+        return;
+    }
 
-        // AI advantage
-        const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
-        if ( isAIPlayer ) {
-            scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+    const fheroes2::Point center = GetPoint( index );
+
+    // AI advantage
+    const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
+    if ( isAIPlayer ) {
+        scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+    }
+
+    const int alliedColors = Players::GetPlayerFriends( color );
+
+    const int revealRadiusSquared = scoute * scoute + 4; // constant factor for "backwards compatibility"
+    for ( int32_t y = center.y - scoute; y <= center.y + scoute; ++y ) {
+        for ( int32_t x = center.x - scoute; x <= center.x + scoute; ++x ) {
+            const int32_t dx = x - center.x;
+            const int32_t dy = y - center.y;
+            if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
+                Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
+                if ( isAIPlayer && tile.isFog( color ) )
+                    AI::Get().revealFog( tile );
+
+                tile.ClearFog( alliedColors );
+            }
         }
+    }
+}
 
-        const int alliedColors = Players::GetPlayerFriends( color );
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor )
+{
+    const fheroes2::Point center = GetPoint( tileIndex );
 
-        const int revealRadiusSquared = scoute * scoute + 4; // constant factor for "backwards compatibility"
-        for ( s32 y = center.y - scoute; y <= center.y + scoute; ++y ) {
-            for ( s32 x = center.x - scoute; x <= center.x + scoute; ++x ) {
-                const s32 dx = x - center.x;
-                const s32 dy = y - center.y;
-                if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
-                    Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
-                    if ( isAIPlayer && tile.isFog( color ) )
-                        AI::Get().revealFog( tile );
+    // AI advantage
+    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    if ( isAIPlayer ) {
+        scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+    }
 
-                    tile.ClearFog( alliedColors );
+    int32_t tileCount = 0;
+
+    const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
+    for ( int32_t y = center.y - scouteValue; y <= center.y + scouteValue; ++y ) {
+        for ( int32_t x = center.x - scouteValue; x <= center.x + scouteValue; ++x ) {
+            const int32_t dx = x - center.x;
+            const int32_t dy = y - center.y;
+            if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
+                Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
+                if ( tile.isFog( playerColor ) ) {
+                    ++tileCount;
                 }
             }
         }
     }
+
+    return tileCount;
 }
 
 Maps::Indexes Maps::ScanAroundObject( s32 center, int obj )
