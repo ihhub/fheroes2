@@ -1595,7 +1595,7 @@ void Battle::Interface::RedrawCover()
 
             if ( Board::isValidDirection( index_pos, tailDirection ) ) {
                 const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
-                if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && tailCell->GetUnit() == nullptr ) {
+                if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && ( tailCell->GetUnit() == nullptr || tailCell->GetUnit() == _currentUnit ) ) {
                     highlightCells.emplace( tailCell );
                 }
             }
