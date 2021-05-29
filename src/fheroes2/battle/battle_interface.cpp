@@ -1589,6 +1589,28 @@ void Battle::Interface::RedrawCover()
                 }
             }
         }
+        else if ( _currentUnit->GetTailIndex() != -1 && ( Cursor::Get().Themes() == Cursor::WAR_MOVE || Cursor::Get().Themes() == Cursor::WAR_FLY ) ) {
+            highlightCells.emplace( cell );
+            int tailDirection = _currentUnit->isReflect() ? RIGHT : LEFT;
+
+            if ( Board::isValidDirection( index_pos, tailDirection ) ) {
+                const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
+                if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && tailCell->GetUnit() == nullptr ) {
+                    highlightCells.emplace( tailCell );
+                }
+            }
+
+            if ( highlightCells.size() == 1 ) {
+                // Try opposite direction
+                tailDirection = _currentUnit->isReflect() ? LEFT : RIGHT;
+                if ( Board::isValidDirection( index_pos, tailDirection ) ) {
+                    const Cell * tailCell = Board::GetCell( Board::GetIndexDirection( index_pos, tailDirection ) );
+                    if ( tailCell != nullptr && tailCell->GetDirection() != UNKNOWN && tailCell->GetUnit() == nullptr ) {
+                        highlightCells.emplace( tailCell );
+                    }
+                }
+            }
+        }
         else {
             highlightCells.emplace( cell );
         }
