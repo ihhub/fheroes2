@@ -303,7 +303,7 @@ public:
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
 
     // Set global visited state for itself and for allies.
-    void setVisitedForAllies( const int32_t tileIndex );
+    void setVisitedForAllies( const int32_t tileIndex ) const;
 
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;

@@ -864,7 +864,7 @@ void Heroes::SetVisited( s32 index, Visit::type_t type )
     }
 }
 
-void Heroes::setVisitedForAllies( const int32_t tileIndex )
+void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const int objectId = tile.GetObject( false );
