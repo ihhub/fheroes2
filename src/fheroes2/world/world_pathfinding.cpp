@@ -79,35 +79,6 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
     const Maps::Tiles & fromTile = GetTiles( index );
     const bool fromWater = fromTile.isWater();
 
-    // check corner water/coast
-    if ( fromWater ) {
-        const int mapWidth = world.w();
-        switch ( direction ) {
-        case Direction::TOP_LEFT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::TOP_RIGHT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
-                return false;
-            break;
-
-        case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
-                return false;
-            break;
-
-        default:
-            break;
-        }
-    }
-
     if ( !fromTile.isPassable( direction, fromWater, false, heroColor ) )
         return false;
 
