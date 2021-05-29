@@ -168,16 +168,22 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        Dialog::Message( _( "Greetings!" ),
+                         _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ),
+                         Font::BIG, Dialog::OK );
+
         bool isResolutionChanged = Dialog::SelectResolution();
-        conf.Save( "fheroes2.cfg" );
         if ( isResolutionChanged ) {
             fheroes2::drawMainMenuScreen();
         }
 
-        Dialog::Message( _( "Please remember" ),
+        Dialog::Message( _( "Please Remember" ),
                          _( "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
                             "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
                          Font::BIG, Dialog::OK );
+
+        conf.resetFirstGameRun();
+        conf.Save( "fheroes2.cfg" );
     }
 
     LocalEvent & le = LocalEvent::Get();

@@ -69,7 +69,7 @@ namespace
         return EXIT_SUCCESS;
     }
 
-    bool ReadConfigs()
+    void ReadConfigs()
     {
         Settings & conf = Settings::Get();
         const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
@@ -89,8 +89,6 @@ namespace
 
         if ( !isValidConfigurationFile )
             conf.Save( configurationFileName );
-
-        return !isValidConfigurationFile;
     }
 
     void InitHomeDir()
@@ -165,7 +163,7 @@ int main( int argc, char ** argv )
     conf.SetProgramPath( argv[0] );
 
     InitHomeDir();
-    const bool isFirstGameRun = ReadConfigs();
+    ReadConfigs();
 
     // getopt
     {
@@ -251,11 +249,6 @@ int main( int argc, char ** argv )
 
             // read data dir
             if ( !AGG::Init() ) {
-                // Since it is a fresh start we should delete newly created configuration file.
-                if ( isFirstGameRun ) {
-                    remove( configurationFileName );
-                }
-
                 fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
             }
@@ -275,7 +268,7 @@ int main( int argc, char ** argv )
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-            Game::mainGameLoop( isFirstGameRun );
+            Game::mainGameLoop( conf.isFirstGameRun() );
         }
         catch ( const std::exception & ex ) {
             ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
