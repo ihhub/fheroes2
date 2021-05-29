@@ -2017,6 +2017,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     WhirlpoolTroopLooseEffect( hero );
 
     hero.GetPath().Reset();
+    hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
     hero.ActionNewPosition();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
