@@ -195,7 +195,12 @@ namespace Maps
         uint32_t GetRegion() const;
         void UpdateRegion( uint32_t newRegionID );
         void UpdatePassable( void );
+
+        // ICN::FLAGS32 version
         void CaptureFlags32( int obj, int col );
+
+        // Removes all ICN::FLAGS32 objects from this tile.
+        void removeFlags();
 
         void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
@@ -301,6 +306,8 @@ namespace Maps
 
     private:
         TilesAddon * FindFlags( void );
+
+        // correct flags, ICN::FLAGS32 vesion
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
         bool isLongObject( int direction );
