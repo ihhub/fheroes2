@@ -28,7 +28,6 @@
 
 #define CELLW 44
 #define CELLH 52
-#define CELLH_VER_SIDE 32
 
 namespace Battle
 {
