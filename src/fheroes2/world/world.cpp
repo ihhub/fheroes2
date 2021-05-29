@@ -1118,7 +1118,7 @@ void World::PostLoad()
     // update tile passable
     for ( Maps::Tiles & tile : vec_tiles ) {
         tile.updateEmpty();
-        tile.UpdatePassable(); 
+        tile.UpdatePassable();
     }
 
     // cache data that's accessed often
