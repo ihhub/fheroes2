@@ -851,16 +851,32 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
-/* set visited cell */
+
 void Heroes::SetVisited( s32 index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     int object = tile.GetObject( false );
 
-    if ( Visit::GLOBAL == type )
+    if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, object );
-    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != object )
+    }
+    else if ( !isVisited( tile ) && MP2::OBJ_ZERO != object ) {
         visit_object.push_front( IndexObject( index, object ) );
+    }
+}
+
+void Heroes::setVisitedForAllies( const int32_t tileIndex )
+{
+    const Maps::Tiles & tile = world.GetTiles( tileIndex );
+    const int objectId = tile.GetObject( false );
+
+    // Set visited to all allies as well.
+    const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
+    for ( const int friendColor : friendColors ) {
+        if ( friendColor != GetColor() ) {
+            world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
+        }
+    }
 }
 
 void Heroes::SetVisitedWideTile( s32 index, int object, Visit::type_t type )

@@ -299,7 +299,12 @@ public:
     int GetDirection() const;
     void setDirection( int directionToSet );
 
+    // set visited cell
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
+
+    // Set global visited state for itself and for allies.
+    void setVisitedForAllies( const int32_t tileIndex );
+
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
