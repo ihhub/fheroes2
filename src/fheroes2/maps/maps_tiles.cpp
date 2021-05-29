@@ -1965,7 +1965,12 @@ Maps::TilesAddon * Maps::Tiles::FindFlags( void )
     return addons_level1.end() != it ? &( *it ) : NULL;
 }
 
-/* ICN::FLAGS32 version */
+void Maps::Tiles::removeFlags()
+{
+    addons_level1.remove_if( TilesAddon::isFlag32 );
+    addons_level2.remove_if( TilesAddon::isFlag32 );
+}
+
 void Maps::Tiles::CaptureFlags32( int obj, int col )
 {
     u32 index = 0;
@@ -2052,7 +2057,6 @@ void Maps::Tiles::CaptureFlags32( int obj, int col )
     }
 }
 
-/* correct flags, ICN::FLAGS32 vesion */
 void Maps::Tiles::CorrectFlags32( u32 index, bool up )
 {
     TilesAddon * taddon = FindFlags();
