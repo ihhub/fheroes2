@@ -140,6 +140,7 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , _attackedMonsterTileIndex( -1 )
 {}
 
 Heroes::Heroes( int heroID, int race, int initialLevel )
@@ -169,6 +170,7 @@ Heroes::Heroes( int heroid, int rc )
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , _attackedMonsterTileIndex( -1 )
 {
     name = _( Heroes::GetName( heroid ) );
 
@@ -1526,42 +1528,24 @@ bool Heroes::AllowBattle( bool attacker ) const
 
 void Heroes::ActionPreBattle( void ) {}
 
-void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
-{
-    // redraw gamearea for monster action sprite
-    if ( hero.isControlHuman() ) {
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.RedrawFocus();
-        I.Redraw();
-        // force flip, for monster attack show sprite
-        fheroes2::Display::instance().render();
-    }
-    hero.Action( dst, true );
-}
-
 void Heroes::ActionNewPosition( void )
 {
-    // check around monster
-    MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
+    // scan for monsters around
+    const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
 
-    if ( targets.size() ) {
-        bool skip_battle = false;
+    if ( !targets.empty() ) {
         SetMove( false );
         GetPath().Hide();
 
-        // first target
-        MapsIndexes::iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
-        if ( it != targets.end() ) {
-            RedrawGameAreaAndHeroAttackMonster( *this, *it );
-            targets.erase( it );
-            skip_battle = true;
-        }
+        // first fight the monsters on the destination tile (if any)
+        MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
 
-        // other around targets
-        for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
-            RedrawGameAreaAndHeroAttackMonster( *this, *it );
-            skip_battle = true;
+        if ( it != targets.end() ) {
+            Action( *it, true );
+        }
+        // otherwise fight the monsters on the first adjacent tile
+        else {
+            Action( targets.front(), true );
         }
     }
 
@@ -1737,6 +1721,16 @@ std::string Heroes::String( void ) const
     }
 
     return os.str();
+}
+
+int Heroes::GetAttackedMonsterTileIndex() const
+{
+    return _attackedMonsterTileIndex;
+}
+
+void Heroes::SetAttackedMonsterTileIndex( int idx )
+{
+    _attackedMonsterTileIndex = idx;
 }
 
 AllHeroes::AllHeroes()

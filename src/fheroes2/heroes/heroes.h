@@ -367,6 +367,9 @@ public:
 
     fheroes2::Point MovementDirection() const;
 
+    int GetAttackedMonsterTileIndex() const;
+    void SetAttackedMonsterTileIndex( int idx );
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -426,6 +429,8 @@ private:
     RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
+
+    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
     enum
     {
