@@ -2359,7 +2359,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
 
     // draw attack sprite
-    if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
+    if ( attackerIndex != -1 ) {
         spriteIndices.first += 7;
 
         switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {

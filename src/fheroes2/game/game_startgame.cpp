@@ -688,10 +688,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         res = ShowWarningLostTownsDialog();
     }
 
-    // check around actions (and skip for h2 orig, bug?)
-    if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
-        myKingdom.HeroesActionNewPosition();
-
     int fastScrollRepeatCount = 0;
     const int fastScrollStartThreshold = 2;
 

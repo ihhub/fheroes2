@@ -145,10 +145,6 @@ namespace
             _( "world: allow set guardian to objects" ),
         },
         {
-            Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK,
-            _( "world: only the first monster will attack (H2 bug)." ),
-        },
-        {
             Settings::WORLD_EYE_EAGLE_AS_SCHOLAR,
             _( "world: Eagle Eye also works like Scholar in H3." ),
         },
@@ -330,7 +326,6 @@ Settings::Settings()
 {
     ExtSetModes( GAME_AUTOSAVE_ON );
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
-    ExtSetModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
@@ -1572,11 +1567,6 @@ bool Settings::ExtWorldAllowSetGuardian() const
 bool Settings::ExtWorldArtifactCrystalBall() const
 {
     return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
-}
-
-bool Settings::ExtWorldOnlyFirstMonsterAttack() const
-{
-    return ExtModes( WORLD_ONLY_FIRST_MONSTER_ATTACK );
 }
 
 bool Settings::ExtWorldEyeEagleAsScholar() const

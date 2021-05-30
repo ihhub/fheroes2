@@ -1542,7 +1542,6 @@ void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
 
 void Heroes::ActionNewPosition( void )
 {
-    const Settings & conf = Settings::Get();
     // check around monster
     MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
 
@@ -1556,15 +1555,13 @@ void Heroes::ActionNewPosition( void )
         if ( it != targets.end() ) {
             RedrawGameAreaAndHeroAttackMonster( *this, *it );
             targets.erase( it );
-            if ( conf.ExtWorldOnlyFirstMonsterAttack() )
-                skip_battle = true;
+            skip_battle = true;
         }
 
         // other around targets
         for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
             RedrawGameAreaAndHeroAttackMonster( *this, *it );
-            if ( conf.ExtWorldOnlyFirstMonsterAttack() )
-                skip_battle = true;
+            skip_battle = true;
         }
     }
 
