@@ -378,16 +378,17 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
+        if ( Maps::getFogTileCountToBeRevealed( currentNodeIdx, hero.GetScoute(), _currentColor ) > 0 ) {
+            return currentNodeIdx;
+        }
+
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
                 const int newIndex = currentNodeIdx + _mapOffset[i];
                 if ( newIndex == start )
                     continue;
 
-                if ( world.GetTiles( newIndex ).isFog( _currentColor ) ) {
-                    return currentNodeIdx;
-                }
-                else if ( !tilesVisited[newIndex] ) {
+                if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
 
                     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
