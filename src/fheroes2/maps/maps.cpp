@@ -35,6 +35,39 @@
 #include "translations.h"
 #include "world.h"
 
+namespace
+{
+    std::vector<int32_t> getTileToClearIndicies( const int32_t tileIndex, int scouteValue, const int playerColor )
+    {
+        std::vector<int32_t> indicies;
+
+        if ( scouteValue <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
+            return indicies;
+        }
+
+        const fheroes2::Point center = Maps::GetPoint( tileIndex );
+
+        // AI is cheating!
+        const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+        if ( isAIPlayer ) {
+            scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+        }
+
+        const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
+        for ( int32_t y = center.y - scouteValue; y <= center.y + scouteValue; ++y ) {
+            for ( int32_t x = center.x - scouteValue; x <= center.x + scouteValue; ++x ) {
+                const int32_t dx = x - center.x;
+                const int32_t dy = y - center.y;
+                if ( Maps::isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
+                    indicies.emplace_back( Maps::GetIndexFromAbsPoint( x, y ) );
+                }
+            }
+        }
+
+        return indicies;
+    }
+}
+
 struct ComparsionDistance
 {
     explicit ComparsionDistance( const int32_t index )
@@ -300,61 +333,37 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
     return results;
 }
 
-void Maps::ClearFog( s32 index, int scoute, int color )
+void Maps::ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor )
 {
-    if ( scoute <= 0 || !isValidAbsIndex( index ) ) {
+    const std::vector<int32_t> tileIndicies = getTileToClearIndicies( tileIndex, scouteValue, playerColor );
+    if ( tileIndicies.empty() ) {
+        // Nothing to uncover.
         return;
     }
 
-    const fheroes2::Point center = GetPoint( index );
+    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    const int alliedColors = Players::GetPlayerFriends( playerColor );
 
-    // AI advantage
-    const bool isAIPlayer = world.GetKingdom( color ).isControlAI();
-    if ( isAIPlayer ) {
-        scoute += Difficulty::GetScoutingBonus( Game::getDifficulty() );
-    }
-
-    const int alliedColors = Players::GetPlayerFriends( color );
-
-    const int revealRadiusSquared = scoute * scoute + 4; // constant factor for "backwards compatibility"
-    for ( int32_t y = center.y - scoute; y <= center.y + scoute; ++y ) {
-        for ( int32_t x = center.x - scoute; x <= center.x + scoute; ++x ) {
-            const int32_t dx = x - center.x;
-            const int32_t dy = y - center.y;
-            if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
-                Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
-                if ( isAIPlayer && tile.isFog( color ) )
-                    AI::Get().revealFog( tile );
-
-                tile.ClearFog( alliedColors );
-            }
+    for ( const int32_t index : tileIndicies ) {
+        Maps::Tiles & tile = world.GetTiles( index );
+        if ( isAIPlayer && tile.isFog( playerColor ) ) {
+            AI::Get().revealFog( tile );
         }
+
+        tile.ClearFog( alliedColors );
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor )
 {
-    const fheroes2::Point center = GetPoint( tileIndex );
-
-    // AI advantage
-    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
-    if ( isAIPlayer ) {
-        scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
-    }
+    const std::vector<int32_t> tileIndicies = getTileToClearIndicies( tileIndex, scouteValue, playerColor );
 
     int32_t tileCount = 0;
 
-    const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
-    for ( int32_t y = center.y - scouteValue; y <= center.y + scouteValue; ++y ) {
-        for ( int32_t x = center.x - scouteValue; x <= center.x + scouteValue; ++x ) {
-            const int32_t dx = x - center.x;
-            const int32_t dy = y - center.y;
-            if ( isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
-                Maps::Tiles & tile = world.GetTiles( GetIndexFromAbsPoint( x, y ) );
-                if ( tile.isFog( playerColor ) ) {
-                    ++tileCount;
-                }
-            }
+    for ( const int32_t index : tileIndicies ) {
+        Maps::Tiles & tile = world.GetTiles( index );
+        if ( tile.isFog( playerColor ) ) {
+            ++tileCount;
         }
     }
 
