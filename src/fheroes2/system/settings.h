@@ -82,7 +82,7 @@ public:
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
-        WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
+        // UNUSED = 0x20000080,
         WORLD_EYE_EAGLE_AS_SCHOLAR = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         WORLD_BAN_WEEKOF = 0x20000400,
@@ -206,7 +206,6 @@ public:
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;
     bool ExtWorldArtifactCrystalBall() const;
-    bool ExtWorldOnlyFirstMonsterAttack() const;
     bool ExtWorldEyeEagleAsScholar() const;
     bool ExtWorldBanMonthOfMonsters() const;
     bool ExtWorldBanWeekOf() const;
