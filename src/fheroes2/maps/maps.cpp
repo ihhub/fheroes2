@@ -361,7 +361,7 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     int32_t tileCount = 0;
 
     for ( const int32_t index : tileIndicies ) {
-        Maps::Tiles & tile = world.GetTiles( index );
+        const Maps::Tiles & tile = world.GetTiles( index );
         if ( tile.isFog( playerColor ) ) {
             ++tileCount;
         }
