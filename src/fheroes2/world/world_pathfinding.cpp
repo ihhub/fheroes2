@@ -380,7 +380,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
-        if ( Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor ) > 0 ) {
+        if ( start != currentNodeIdx && Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor ) > 0 ) {
             return currentNodeIdx;
         }
 
