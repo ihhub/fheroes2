@@ -375,10 +375,12 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     nodesToExplore.push_back( start );
     tilesVisited[start] = true;
 
+    const int scouteValue = hero.GetScoute();
+
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
-        if ( Maps::getFogTileCountToBeRevealed( currentNodeIdx, hero.GetScoute(), _currentColor ) > 0 ) {
+        if ( Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor ) > 0 ) {
             return currentNodeIdx;
         }
 
