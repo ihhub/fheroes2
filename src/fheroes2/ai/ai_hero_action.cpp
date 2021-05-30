@@ -76,6 +76,10 @@ namespace
     // Never cache the value of this function as it depends on hero's path and location.
     bool AIHeroesShowAnimation( const Heroes & hero, const uint32_t colors )
     {
+        if ( Settings::Get().AIMoveSpeed() == 0 ) {
+            return false;
+        }
+
         if ( colors == 0 )
             return false;
 
