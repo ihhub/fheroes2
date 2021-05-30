@@ -55,10 +55,16 @@ namespace
 
         const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
         for ( int32_t y = center.y - scouteValue; y <= center.y + scouteValue; ++y ) {
+            if ( y < 0 || y >= world.h() )
+                continue;
+
             for ( int32_t x = center.x - scouteValue; x <= center.x + scouteValue; ++x ) {
+                if ( x < 0 || x >= world.w() )
+                    continue;
+
                 const int32_t dx = x - center.x;
                 const int32_t dy = y - center.y;
-                if ( Maps::isValidAbsPoint( x, y ) && revealRadiusSquared >= dx * dx + dy * dy ) {
+                if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                     indicies.emplace_back( Maps::GetIndexFromAbsPoint( x, y ) );
                 }
             }
