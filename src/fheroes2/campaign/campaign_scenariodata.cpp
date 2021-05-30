@@ -338,7 +338,11 @@ namespace Campaign
 {
     bool isCampaignMap( const std::string & fullMapPath, const std::string & scenarioMapName )
     {
-        return fullMapPath.find( scenarioMapName ) != std::string::npos;
+        if ( fullMapPath.size() < scenarioMapName.size() ) {
+            return false;
+        }
+        const std::string lowerFullPath = StringLower( fullMapPath );
+        return lowerFullPath.compare( lowerFullPath.size() - scenarioMapName.size(), scenarioMapName.size(), scenarioMapName ) == 0;
     }
 
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
