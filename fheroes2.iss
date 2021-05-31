@@ -34,4 +34,4 @@ Source: "fheroes2.key"; DestDir: "{app}"
 Source: "LICENSE"; DestDir: "{app}"
 
 [Run]
-Filename: "{app}\demo_windows.bat"; Description: "Load demo files"; Flags: postinstall runascurrentuser unchecked
+Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser
