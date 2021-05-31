@@ -67,9 +67,13 @@ namespace fheroes2
 
         void setPosition( int32_t offsetX_, int32_t offsetY_ );
 
-        void draw( Image & area = Display::instance() ); // will draw on screen by default
-        bool drawOnPress( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
-        bool drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
+        void draw( Image & output = Display::instance() ); // will draw on screen by default
+
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnPress( Image & output = Display::instance() );
+
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnRelease( Image & output = Display::instance() );
 
         Rect area() const;
 
