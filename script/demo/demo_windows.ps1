@@ -36,7 +36,7 @@ try {
     }
 
     $shell = New-Object -ComObject "Shell.Application"
-    $webClient = New-Object Net.WebClient
+    $webClient = New-Object System.Net.WebClient
 
     $fheroes2Path = ""
 
