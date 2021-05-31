@@ -364,6 +364,13 @@ void Heroes::Action( int tileIndex, bool isDestination )
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
+    // immediately center the map on the hero to avoid subsequent minor screen movements
+    Interface::Basic & I = Interface::Basic::Get();
+
+    I.GetGameArea().SetCenter( GetCenter() );
+    I.GetGameArea().SetRedraw();
+    I.Redraw();
+
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
 
