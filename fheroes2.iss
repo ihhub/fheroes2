@@ -6,7 +6,7 @@
 AppName={#AppName}
 AppId={#AppId}
 AppVersion={#AppVersion}
-OutputBaseFilename={#AppName}-{#Platform}-{#DeployConfName}
+OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
