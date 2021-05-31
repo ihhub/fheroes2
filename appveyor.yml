@@ -41,6 +41,7 @@ platform:
 clone_folder: C:\projects\fheroes2
 
 install:
+  - choco install -y innosetup
   - cd C:\projects\fheroes2\script\windows
   - if not exist C:\projects\fheroes2\VisualStudio\packages\installed call install_packages.bat
   - cd C:\projects\fheroes2
@@ -52,18 +53,11 @@ build:
   project: fheroes2-vs2015.vcxproj
 
 after_build:
-  - cmd: cd C:\projects\fheroes2\build\%platform%\%configuration%
-  - cmd: if "%platform%" == "x86" xcopy /Y /s /Q "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" "."
-  - cmd: if "%platform%" == "x86" xcopy /Y /s /Q "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" "."
-  - cmd: 7z a fheroes2_windows_%platform%_%deploy_conf_name%.zip fheroes2.exe SDL*.dll lib*.dll zlib*.dll msvcp*.dll vcruntime*.dll
   - cmd: cd C:\projects\fheroes2
-  - cmd: xcopy /Y /s /Q "doc\README.txt" "."
-  - cmd: xcopy /Y /s /Q "script\demo\demo_windows.bat" "."
-  - cmd: xcopy /Y /s /Q "script\demo\demo_windows.ps1" "."
-  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat demo_windows.ps1 LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: iscc fheroes2.iss "/DBuildDir=C:\projects\fheroes2\build\%platform%\%configuration%" /DPlatform=%platform% /DDeployConfName=%deploy_conf_name%
 
 artifacts:
-  - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).zip
+  - path: build\$(platform)\$(configuration)\fheroes2-$(platform)-$(deploy_conf_name).exe
     name: fheroes2-%platform%-%deploy_conf_name%
 
 deploy:
