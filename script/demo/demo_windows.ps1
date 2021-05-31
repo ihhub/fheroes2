@@ -64,6 +64,14 @@ try {
         [void](New-Item -Path "demo" -ItemType "directory")
     }
 
+    # Reserve space for the Invoke-WebRequest progress indicator
+    for ($i = 0; $i -Le 7; $i++) {
+        Write-Host ""
+    }
+
+    Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
+                                             "It may take a few minutes, please wait...`r`n"))
+
     Write-Host "[1/4] downloading demo version"
 
     Get-FileViaHTTP -URL $h2DemoURL -FilePath "demo\h2demo.zip"
