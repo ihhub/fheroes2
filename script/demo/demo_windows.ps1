@@ -23,7 +23,7 @@ try {
                 } catch {
                     Write-Host -ForegroundColor Yellow "WARNING: Neither Get-FileHash cmdlet nor certutil.exe are supported on this system, hash of downloaded file cannot be verified"
 
-                    if ($output -Ne $null) {
+                    if ($null -Ne $output) {
                         Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
                     }
 
