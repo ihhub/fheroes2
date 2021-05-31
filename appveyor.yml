@@ -54,7 +54,7 @@ build:
 
 after_build:
   - cmd: cd C:\projects\fheroes2
-  - cmd: iscc fheroes2.iss "/DBuildDir=C:\projects\fheroes2\build\%platform%\%configuration%" /DPlatform=%platform% /DDeployConfName=%deploy_conf_name%
+  - cmd: iscc script\windows\fheroes2.iss "/DBuildDir=C:\projects\fheroes2\build\%platform%\%configuration%" /DPlatform=%platform% /DDeployConfName=%deploy_conf_name%
 
 artifacts:
   - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).exe
