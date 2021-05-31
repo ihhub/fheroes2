@@ -1117,7 +1117,8 @@ namespace
 
             copyImageToSurface( display, _surface, roi );
 
-            SDL_UpdateRect( _surface, roi.x, roi.y, roi.width, roi.height );
+            // Logically we should call SDL_UpdateRect but some systems have flickering effect with this function.
+            SDL_Flip( _surface );
         }
 
         void clear() override
