@@ -7,6 +7,25 @@ $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
 $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
+    function Get-FileViaHTTP {
+        param (
+            [string]$URL,
+            [string]$FilePath
+        )
+
+        try {
+            Invoke-WebRequest -Uri $URL -OutFile $FilePath
+        } catch [System.Management.Automation.CommandNotFoundException] {
+            if ($_.Exception.CommandName -Eq "Invoke-WebRequest") {
+                $webClient = New-Object System.Net.WebClient
+
+                $webClient.DownloadFile($URL, $FilePath)
+            } else {
+                throw
+            }
+        }
+    }
+
     function Get-SHA256HashForFile {
         param (
             [string]$Path
@@ -35,9 +54,6 @@ try {
         }
     }
 
-    $shell = New-Object -ComObject "Shell.Application"
-    $webClient = New-Object System.Net.WebClient
-
     $fheroes2Path = ""
 
     if (-Not (Test-Path -Path "fheroes2.exe" -PathType Leaf) -And (Test-Path -Path "..\..\src" -PathType Container)) {
@@ -50,7 +66,7 @@ try {
 
     Write-Host "[1/4] downloading demo version"
 
-    $webClient.DownloadFile($h2DemoURL, "demo\h2demo.zip")
+    Get-FileViaHTTP -URL $h2DemoURL -FilePath "demo\h2demo.zip"
 
     $result = Get-SHA256HashForFile -Path "demo\h2demo.zip"
 
@@ -65,7 +81,7 @@ try {
 
     Write-Host "[2/4] downloading wing32.dll library"
 
-    $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
+    Get-FileViaHTTP -URL $wing32URL -FilePath "demo\wing32.zip"
 
     $result = Get-SHA256HashForFile -Path "demo\wing32.zip"
 
@@ -79,6 +95,8 @@ try {
     }
 
     Write-Host "[3/4] unpacking archives"
+
+    $shell = New-Object -ComObject "Shell.Application"
 
     $zip = $shell.NameSpace((Resolve-Path "demo\h2demo.zip").Path)
 
