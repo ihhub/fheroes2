@@ -7,7 +7,7 @@ $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
 $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
-    function Calculate-SHA256 {
+    function Get-SHA256HashForFile {
         param (
             [string]$Path
         )
@@ -52,7 +52,7 @@ try {
 
     $webClient.DownloadFile($h2DemoURL, "demo\h2demo.zip")
 
-    $result = Calculate-SHA256 -Path "demo\h2demo.zip"
+    $result = Get-SHA256HashForFile -Path "demo\h2demo.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $h2DemoSHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
@@ -67,7 +67,7 @@ try {
 
     $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
 
-    $result = Calculate-SHA256 -Path "demo\wing32.zip"
+    $result = Get-SHA256HashForFile -Path "demo\wing32.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $wing32SHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
