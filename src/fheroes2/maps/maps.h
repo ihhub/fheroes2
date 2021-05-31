@@ -78,7 +78,7 @@ namespace Maps
 
     int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor );
 
-    u32 GetApproximateDistance( s32, s32 );
+    uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void MinimizeAreaForCastle( const fheroes2::Point & );

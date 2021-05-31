@@ -498,12 +498,12 @@ Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
     return result;
 }
 
-u32 Maps::GetApproximateDistance( s32 index1, s32 index2 )
+uint32_t Maps::GetApproximateDistance( const int32_t pos1, const int32_t pos2 )
 {
-    const fheroes2::Point point1( GetPoint( index1 ) );
-    const fheroes2::Point point2( GetPoint( index2 ) );
+    const fheroes2::Point point1( GetPoint( pos1 ) );
+    const fheroes2::Point point2( GetPoint( pos2 ) );
 
-    const fheroes2::Size sz( point1.x - point2.x, point1.y - point2.y );
+    const fheroes2::Size sz( std::abs( point1.x - point2.x ), std::abs( point1.y - point2.y ) );
     // diagonal move costs 1.5 as much
     return std::max( sz.width, sz.height ) + std::min( sz.width, sz.height ) / 2;
 }
