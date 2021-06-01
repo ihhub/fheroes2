@@ -358,7 +358,7 @@ fheroes2::GameMode Game::NewGame()
 
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() ) { // new game loop
+    while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
 
         if ( buttonCampainGame.isEnabled() ) {
@@ -387,13 +387,15 @@ fheroes2::GameMode Game::NewGame()
 
         if ( le.MousePressRight( buttonStandartGame.area() ) )
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonCampainGame.area() ) )
+        else if ( le.MousePressRight( buttonCampainGame.area() ) )
             Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
-        if ( le.MousePressRight( buttonMultiGame.area() ) )
+        else if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonSettings.area() ) )
+        else if ( le.MousePressRight( buttonBattleGame.area() ) )
+            Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
+        else if ( le.MousePressRight( buttonSettings.area() ) )
             Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame.area() ) )
+        else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 
