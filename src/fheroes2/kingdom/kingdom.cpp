@@ -314,8 +314,13 @@ void Kingdom::AddCastle( const Castle * castle )
 void Kingdom::RemoveCastle( const Castle * castle )
 {
     if ( castle ) {
-        if ( castles.size() )
-            castles.erase( std::find( castles.begin(), castles.end(), castle ) );
+        if ( !castles.empty() ) {
+            auto it = std::find( castles.begin(), castles.end(), castle );
+            assert( it != castles.end() );
+            if ( it != castles.end() ) {
+                castles.erase( it );
+            }
+        }
 
         Player * player = Settings::Get().GetPlayers().Get( GetColor() );
 
