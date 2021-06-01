@@ -22,6 +22,7 @@
 
 #include "agg.h"
 #include "agg_image.h"
+#include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "campaign_scenariodata.h"
@@ -298,7 +299,8 @@ namespace
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
-                            kingdom.RemoveHeroes( heroes[j] );
+                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
+                            heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
                     }

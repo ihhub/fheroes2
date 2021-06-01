@@ -38,6 +38,8 @@
 #include "visit.h"
 #include "world.h"
 
+#include <cassert>
+
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
     return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
@@ -270,8 +272,13 @@ std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
 void Kingdom::RemoveHeroes( const Heroes * hero )
 {
     if ( hero ) {
-        if ( heroes.size() )
-            heroes.erase( std::find( heroes.begin(), heroes.end(), hero ) );
+        if ( !heroes.empty() ) {
+            auto it = std::find( heroes.begin(), heroes.end(), hero );
+            assert( it != heroes.end() );
+            if ( it != heroes.end() ) {
+                heroes.erase( it );
+            }
+        }
 
         Player * player = Settings::Get().GetPlayers().Get( GetColor() );
 
