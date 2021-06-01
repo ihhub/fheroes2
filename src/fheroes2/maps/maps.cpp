@@ -77,7 +77,7 @@ namespace
 struct ComparsionDistance
 {
     explicit ComparsionDistance( const int32_t index )
-        : centerPoint(  Maps::GetPoint( index ) )
+        : centerPoint( Maps::GetPoint( index ) )
     {}
 
     ComparsionDistance() = delete;
