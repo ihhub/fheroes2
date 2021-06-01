@@ -41,9 +41,9 @@ platform:
 clone_folder: C:\projects\fheroes2
 
 install:
-  - choco install -y innosetup
   - cd C:\projects\fheroes2\script\windows
   - if not exist C:\projects\fheroes2\VisualStudio\packages\installed call install_packages.bat
+  - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
   - cd C:\projects\fheroes2
 
 init:
