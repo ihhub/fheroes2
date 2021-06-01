@@ -77,15 +77,25 @@ namespace
 struct ComparsionDistance
 {
     explicit ComparsionDistance( const int32_t index )
-        : center( index )
+        : centerPoint(  Maps::GetPoint( index ) )
     {}
+
+    ComparsionDistance() = delete;
 
     bool operator()( const int32_t index1, const int32_t index2 ) const
     {
-        return Maps::GetApproximateDistance( center, index1 ) < Maps::GetApproximateDistance( center, index2 );
+        const fheroes2::Point point1( Maps::GetPoint( index1 ) );
+        const fheroes2::Point point2( Maps::GetPoint( index2 ) );
+
+        const int32_t diffX1 = std::abs( centerPoint.x - point1.x );
+        const int32_t diffY1 = std::abs( centerPoint.y - point1.y );
+        const int32_t diffX2 = std::abs( centerPoint.x - point2.x );
+        const int32_t diffY2 = std::abs( centerPoint.y - point2.y );
+
+        return ( diffX1 * diffX1 + diffY1 * diffY1 ) < ( diffX2 * diffX2 + diffY2 * diffY2 );
     }
 
-    int32_t center;
+    const fheroes2::Point centerPoint;
 };
 
 Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes = true )
