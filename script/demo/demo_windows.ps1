@@ -54,16 +54,6 @@ try {
         }
     }
 
-    $fheroes2Path = ""
-
-    if (-Not (Test-Path -Path "fheroes2.exe" -PathType Leaf) -And (Test-Path -Path "..\..\src" -PathType Container)) {
-        $fheroes2Path = "..\..\"
-    }
-
-    if (-Not (Test-Path -Path "demo" -PathType Container)) {
-        [void](New-Item -Path "demo" -ItemType "directory")
-    }
-
     # Reserve space for the Invoke-WebRequest progress indicator
     for ($i = 0; $i -Le 7; $i++) {
         Write-Host ""
@@ -72,11 +62,31 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/4] downloading demo version"
+    Write-Host "[1/5] preparing directories"
 
-    Get-FileViaHTTP -URL $h2DemoURL -FilePath "demo\h2demo.zip"
+    $fheroes2Path = $Env:APPDATA
 
-    $result = Get-SHA256HashForFile -Path "demo\h2demo.zip"
+    if ($null -Eq $fheroes2Path) {
+        $fheroes2Path = "."
+    } else {
+        $fheroes2Path = "$fheroes2Path\fheroes2"
+    }
+
+    if (-Not (Test-Path -Path $fheroes2Path -PathType Container)) {
+        [void](New-Item -Path $fheroes2Path -ItemType "directory")
+    }
+
+    $demoPath = "$fheroes2Path\demo"
+
+    if (-Not (Test-Path -Path $demoPath -PathType Container)) {
+        [void](New-Item -Path $demoPath -ItemType "directory")
+    }
+
+    Write-Host "[2/5] downloading demo version"
+
+    Get-FileViaHTTP -URL $h2DemoURL -FilePath "$demoPath\h2demo.zip"
+
+    $result = Get-SHA256HashForFile -Path "$demoPath\h2demo.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $h2DemoSHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
@@ -87,11 +97,11 @@ try {
         return
     }
 
-    Write-Host "[2/4] downloading wing32.dll library"
+    Write-Host "[3/5] downloading wing32.dll library"
 
-    Get-FileViaHTTP -URL $wing32URL -FilePath "demo\wing32.zip"
+    Get-FileViaHTTP -URL $wing32URL -FilePath "$demoPath\wing32.zip"
 
-    $result = Get-SHA256HashForFile -Path "demo\wing32.zip"
+    $result = Get-SHA256HashForFile -Path "$demoPath\wing32.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $wing32SHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
@@ -102,26 +112,26 @@ try {
         return
     }
 
-    Write-Host "[3/4] unpacking archives"
+    Write-Host "[4/5] unpacking archives"
 
     $shell = New-Object -ComObject "Shell.Application"
 
-    $zip = $shell.NameSpace((Resolve-Path "demo\h2demo.zip").Path)
+    $zip = $shell.NameSpace((Resolve-Path "$demoPath\h2demo.zip").Path)
 
     foreach ($item in $zip.items()) {
-        $shell.Namespace((Resolve-Path "demo").Path).CopyHere($item, 0x14)
+        $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
-    $zip = $shell.NameSpace((Resolve-Path "demo\wing32.zip").Path)
+    $zip = $shell.NameSpace((Resolve-Path "$demoPath\wing32.zip").Path)
 
     foreach ($item in $zip.items()) {
-        $shell.Namespace((Resolve-Path "demo").Path).CopyHere($item, 0x14)
+        $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
-    Write-Host "[4/4] copying files"
+    Write-Host "[5/5] copying files"
 
-    $dataPath = (-Join($fheroes2Path, "data"))
-    $mapsPath = (-Join($fheroes2Path, "maps"))
+    $dataPath = "$fheroes2Path\data"
+    $mapsPath = "$fheroes2Path\maps"
 
     if (-Not (Test-Path -Path $dataPath -PathType Container)) {
         [void](New-Item -Path $dataPath -ItemType "directory")
@@ -130,8 +140,8 @@ try {
         [void](New-Item -Path $mapsPath -ItemType "directory")
     }
 
-    $data = $shell.NameSpace((Resolve-Path "demo\DATA").Path)
-    $maps = $shell.NameSpace((Resolve-Path "demo\MAPS").Path)
+    $data = $shell.NameSpace((Resolve-Path "$demoPath\DATA").Path)
+    $maps = $shell.NameSpace((Resolve-Path "$demoPath\MAPS").Path)
 
     foreach ($item in $data.items()) {
         $shell.Namespace((Resolve-Path $dataPath).Path).CopyHere($item, 0x14)
@@ -140,7 +150,7 @@ try {
         $shell.Namespace((Resolve-Path $mapsPath).Path).CopyHere($item, 0x14)
     }
 } catch {
-    Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", $_))
+    Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
 } finally {
     Write-Host "Press any key to exit..."
 
