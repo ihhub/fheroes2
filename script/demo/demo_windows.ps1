@@ -62,27 +62,25 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/5] preparing directories"
+    Write-Host "[1/5] preparing user data directory"
 
-    $fheroes2Path = $Env:APPDATA
+    $fheroes2Path = "."
 
-    if ($null -Eq $fheroes2Path) {
-        $fheroes2Path = "."
-    } else {
-        $fheroes2Path = "$fheroes2Path\fheroes2"
+    if ($null -Ne $Env:APPDATA) {
+        $fheroes2Path = "$Env:APPDATA\fheroes2"
     }
 
     if (-Not (Test-Path -Path $fheroes2Path -PathType Container)) {
         [void](New-Item -Path $fheroes2Path -ItemType "directory")
     }
 
+    Write-Host "[2/5] downloading demo version"
+
     $demoPath = "$fheroes2Path\demo"
 
     if (-Not (Test-Path -Path $demoPath -PathType Container)) {
         [void](New-Item -Path $demoPath -ItemType "directory")
     }
-
-    Write-Host "[2/5] downloading demo version"
 
     Get-FileViaHTTP -URL $h2DemoURL -FilePath "$demoPath\h2demo.zip"
 
