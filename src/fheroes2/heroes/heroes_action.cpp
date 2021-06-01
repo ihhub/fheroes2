@@ -379,7 +379,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     ListActions * list = world.GetListActions( tileIndex );
     bool cancel_default = false;
 
-    if ( MP2::isActionObject( object, isShipMaster() ) || list ) {
+    if ( Modes( ACTION ) || list ) {
         // most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
         Interface::Basic & I = Interface::Basic::Get();
 
