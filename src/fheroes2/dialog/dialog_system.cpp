@@ -69,15 +69,12 @@ int Dialog::SystemOptions( void )
     const fheroes2::Point optionStep( 92, 110 );
 
     std::vector<fheroes2::Rect> rects;
-    rects.emplace_back( optionOffset.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
-    rects.emplace_back( optionOffset.x + 2 * optionStep.x, optionOffset.y + 2 * optionStep.y, optionSprite.width(), optionSprite.height() );
+
+    for ( int32_t y = 0; y < 3; ++y ) {
+        for ( int32_t x = 0; x < 3; ++x ) {
+            rects.emplace_back( optionOffset.x + x * optionStep.x, optionOffset.y + y * optionStep.y, optionSprite.width(), optionSprite.height() );
+        }
+    }
 
     const fheroes2::Rect & rect1 = rects[0];
     const fheroes2::Rect & rect2 = rects[1];
@@ -209,6 +206,27 @@ int Dialog::SystemOptions( void )
             saveConfig = true;
         }
 
+        if ( le.MousePressRight( rect1 ) )
+            Dialog::Message( _( "Music" ), _( "Toggle ambient music level." ), Font::BIG );
+        else if ( le.MousePressRight( rect2 ) )
+            Dialog::Message( _( "Effects" ), _( "Toggle foreground sounds level." ), Font::BIG );
+        else if ( le.MousePressRight( rect3 ) )
+            Dialog::Message( _( "Music Type" ), _( "Change the type of music." ), Font::BIG );
+        else if ( le.MousePressRight( rect4 ) )
+            Dialog::Message( _( "Hero Speed" ), _( "Change the speed at which your heroes move on the main screen." ), Font::BIG );
+        else if ( le.MousePressRight( rect5 ) )
+            Dialog::Message( _( "Enemy Speed" ), _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), Font::BIG );
+        else if ( le.MousePressRight( rect6 ) )
+            Dialog::Message( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), Font::BIG );
+        else if ( le.MousePressRight( rect7 ) )
+            Dialog::Message( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), Font::BIG );
+        else if ( le.MousePressRight( rect8 ) )
+            Dialog::Message( _( "Interface" ), _( "Toggle interface visibility." ), Font::BIG );
+        else if ( le.MousePressRight( rect9 ) )
+            Dialog::Message( _( "Battles" ), _( "Toggle instant battle mode." ), Font::BIG );
+        else if ( le.MousePressRight( buttonOkay.area() ) )
+            Dialog::Message( _( "OK" ), _( "Exit this menu." ), Font::BIG );
+
         if ( redraw ) {
             fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
             DrawSystemInfo( rects );
@@ -299,10 +317,13 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y - text.h() - textOffset );
 
-    if ( heroSpeed )
+    if ( heroSpeed == 10 ) {
+        str = _( "Jump" );
+    }
+    else {
         str = std::to_string( heroSpeed );
-    else
-        str = _( "off" );
+    }
+
     text.Set( str );
     text.Blit( rect4.x + ( rect4.width - text.w() ) / 2, rect4.y + rect4.height + textOffset );
 
@@ -316,10 +337,16 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     text.Set( str );
     text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y - text.h() - textOffset );
 
-    if ( aiSpeed )
-        str = std::to_string( aiSpeed );
-    else
+    if ( aiSpeed == 0 ) {
         str = _( "Don't Show" );
+    }
+    else if ( aiSpeed == 10 ) {
+        str = _( "Jump" );
+    }
+    else {
+        str = std::to_string( aiSpeed );
+    }
+
     text.Set( str );
     text.Blit( rect5.x + ( rect5.width - text.w() ) / 2, rect5.y + rect5.height + textOffset );
 
@@ -342,7 +369,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const fheroes2::Sprite & sprite7 = fheroes2::AGG::GetICN( ICN::SPANEL, ( isEvilInterface ? 17 : 16 ) );
     const fheroes2::Rect & rect7 = rects[6];
     fheroes2::Blit( sprite7, display, rect7.x, rect7.y );
-    str = _( "Interface" );
+    str = _( "Interface Type" );
     text.Set( str );
     text.Blit( rect7.x + ( rect7.width - text.w() ) / 2, rect7.y - text.h() - textOffset );
 

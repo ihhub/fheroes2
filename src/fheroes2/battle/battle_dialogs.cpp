@@ -792,22 +792,29 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
         }
 
-        if ( le.MousePressRight( btnCast.area() ) )
+        if ( le.MousePressRight( btnCast.area() ) ) {
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
-        else if ( le.MousePressRight( btnRetreat.area() ) )
+        }
+        else if ( le.MousePressRight( btnRetreat.area() ) ) {
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnSurrender.area() ) )
+        }
+        else if ( le.MousePressRight( btnSurrender.area() ) ) {
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnClose.area() ) )
+        }
+        else if ( le.MousePressRight( portraitArea ) ) {
+            Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( btnClose.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
+        }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
