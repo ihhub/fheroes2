@@ -16,7 +16,7 @@ fi
 cd "$FHEROES2_PATH/demo"
 
 if [[ "$(command -v wget)" != "" ]]; then
-    wget "$H2DEMO_URL"
+    wget -O h2demo.zip "$H2DEMO_URL"
 elif [[ "$(command -v curl)" != "" ]]; then
     curl -O -L "$H2DEMO_URL" > h2demo.zip
 else
