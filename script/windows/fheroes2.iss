@@ -6,6 +6,7 @@
 AppName={#AppName}
 AppId={#AppId}
 AppVersion={#AppVersion}
+LicenseFile=..\..\LICENSE
 OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
