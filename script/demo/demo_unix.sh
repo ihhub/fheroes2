@@ -5,15 +5,15 @@ set -e
 H2DEMO_URL="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
 H2DEMO_SHA256="12048c8b03875c81e69534a3813aaf6340975e77b762dc1b79a4ff5514240e3c"
 
-[[ ! -d demo ]] && mkdir demo
-
-cd demo
-
-FHEROES2_PATH=".."
-
-if [[ ( ! -f ../fheroes2 ) && ( -d ../../../src ) ]]; then
-    FHEROES2_PATH="../../.."
+if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
+    FHEROES2_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
+else
+    FHEROES2_PATH="$HOME/.fheroes2"
 fi
+
+[[ ! -d "$FHEROES2_PATH/demo" ]] && mkdir -p "$FHEROES2_PATH/demo"
+
+cd "$FHEROES2_PATH/demo"
 
 if [[ "$(command -v wget)" != "" ]]; then
     wget "$H2DEMO_URL"
