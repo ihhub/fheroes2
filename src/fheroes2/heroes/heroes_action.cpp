@@ -364,13 +364,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
     if ( GetKingdom().isControlAI() )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
-    // immediately center the map on the hero to avoid subsequent minor screen movements
-    Interface::Basic & I = Interface::Basic::Get();
-
-    I.GetGameArea().SetCenter( GetCenter() );
-    I.GetGameArea().SetRedraw();
-    I.Redraw();
-
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
 
@@ -382,9 +375,18 @@ void Heroes::Action( int tileIndex, bool isDestination )
         SetModes( ACTION );
     }
 
-    /* new format map only */
+    // new format map only
     ListActions * list = world.GetListActions( tileIndex );
     bool cancel_default = false;
+
+    if ( MP2::isActionObject( object, isShipMaster() ) || list ) {
+        // most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
+        Interface::Basic & I = Interface::Basic::Get();
+
+        I.GetGameArea().SetCenter( GetCenter() );
+        I.GetGameArea().SetRedraw();
+        I.Redraw();
+    }
 
     if ( list ) {
         for ( ListActions::const_iterator it = list->begin(); it != list->end(); ++it ) {
