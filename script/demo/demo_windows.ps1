@@ -7,7 +7,26 @@ $wing32URL = "https://wikidll.com/download/25503/wing32.zip"
 $wing32SHA256 = "0CD89F09C66F53F30782858DF5453F6AC4C8A6D482F558E4FDF24C26E0A05A49"
 
 try {
-    function Calculate-SHA256 {
+    function Get-FileViaHTTP {
+        param (
+            [string]$URL,
+            [string]$FilePath
+        )
+
+        try {
+            Invoke-WebRequest -Uri $URL -OutFile $FilePath
+        } catch [System.Management.Automation.CommandNotFoundException] {
+            if ($_.Exception.CommandName -Eq "Invoke-WebRequest") {
+                $webClient = New-Object System.Net.WebClient
+
+                $webClient.DownloadFile($URL, $FilePath)
+            } else {
+                throw
+            }
+        }
+    }
+
+    function Get-SHA256HashForFile {
         param (
             [string]$Path
         )
@@ -23,7 +42,7 @@ try {
                 } catch {
                     Write-Host -ForegroundColor Yellow "WARNING: Neither Get-FileHash cmdlet nor certutil.exe are supported on this system, hash of downloaded file cannot be verified"
 
-                    if ($output -Ne $null) {
+                    if ($null -Ne $output) {
                         Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
                     }
 
@@ -35,9 +54,6 @@ try {
         }
     }
 
-    $shell = New-Object -ComObject "Shell.Application"
-    $webClient = New-Object Net.WebClient
-
     $fheroes2Path = ""
 
     if (-Not (Test-Path -Path "fheroes2.exe" -PathType Leaf) -And (Test-Path -Path "..\..\src" -PathType Container)) {
@@ -48,11 +64,19 @@ try {
         [void](New-Item -Path "demo" -ItemType "directory")
     }
 
+    # Reserve space for the Invoke-WebRequest progress indicator
+    for ($i = 0; $i -Le 7; $i++) {
+        Write-Host ""
+    }
+
+    Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
+                                             "It may take a few minutes, please wait...`r`n"))
+
     Write-Host "[1/4] downloading demo version"
 
-    $webClient.DownloadFile($h2DemoURL, "demo\h2demo.zip")
+    Get-FileViaHTTP -URL $h2DemoURL -FilePath "demo\h2demo.zip"
 
-    $result = Calculate-SHA256 -Path "demo\h2demo.zip"
+    $result = Get-SHA256HashForFile -Path "demo\h2demo.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $h2DemoSHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for HoMM2 demo archive`r`n", `
@@ -65,9 +89,9 @@ try {
 
     Write-Host "[2/4] downloading wing32.dll library"
 
-    $webClient.DownloadFile($wing32URL, "demo\wing32.zip")
+    Get-FileViaHTTP -URL $wing32URL -FilePath "demo\wing32.zip"
 
-    $result = Calculate-SHA256 -Path "demo\wing32.zip"
+    $result = Get-SHA256HashForFile -Path "demo\wing32.zip"
 
     if (-Not ($result -Is [Boolean]) -And ($result -Ne $wing32SHA256)) {
         Write-Host -ForegroundColor Red (-Join("FATAL ERROR: Invalid hash for wing32.dll archive`r`n", `
@@ -79,6 +103,8 @@ try {
     }
 
     Write-Host "[3/4] unpacking archives"
+
+    $shell = New-Object -ComObject "Shell.Application"
 
     $zip = $shell.NameSpace((Resolve-Path "demo\h2demo.zip").Path)
 
