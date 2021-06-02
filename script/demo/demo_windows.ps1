@@ -62,21 +62,40 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/5] preparing user data directory"
+    Write-Host "[1/5] determining destination directory"
 
-    $fheroes2Path = "."
+    $destPath = "."
 
-    if ($null -Ne $Env:APPDATA) {
-        $fheroes2Path = "$Env:APPDATA\fheroes2"
+    # Special hack for developers running this script from the source tree
+    if (-Not (Test-Path -Path "fheroes2.exe" -PathType Leaf) -And (Test-Path -Path "..\..\src" -PathType Container)) {
+        $destPath = "..\.."
     }
 
-    if (-Not (Test-Path -Path $fheroes2Path -PathType Container)) {
-        [void](New-Item -Path $fheroes2Path -ItemType "directory")
+    try {
+        if (-Not (Test-Path -Path "$destPath\.test-writable" -PathType Container)) {
+            [void](New-Item -Path "$destPath\.test-writable" -ItemType "directory")
+        }
+
+        Remove-Item -Path "$destPath\.test-writable"
+    } catch {
+        if ($null -Eq $Env:APPDATA) {
+            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
+
+            return
+        }
+
+        $destPath = "$Env:APPDATA\fheroes2"
+
+        if (-Not (Test-Path -Path $destPath -PathType Container)) {
+            [void](New-Item -Path $destPath -ItemType "directory")
+        }
     }
+
+    Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
 
     Write-Host "[2/5] downloading demo version"
 
-    $demoPath = "$fheroes2Path\demo"
+    $demoPath = "$destPath\demo"
 
     if (-Not (Test-Path -Path $demoPath -PathType Container)) {
         [void](New-Item -Path $demoPath -ItemType "directory")
@@ -128,8 +147,8 @@ try {
 
     Write-Host "[5/5] copying files"
 
-    $dataPath = "$fheroes2Path\data"
-    $mapsPath = "$fheroes2Path\maps"
+    $dataPath = "$destPath\data"
+    $mapsPath = "$destPath\maps"
 
     if (-Not (Test-Path -Path $dataPath -PathType Container)) {
         [void](New-Item -Path $dataPath -ItemType "directory")
