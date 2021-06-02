@@ -355,8 +355,6 @@ public:
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
 
-    bool AllowBattle( bool attacker ) const;
-
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
 
