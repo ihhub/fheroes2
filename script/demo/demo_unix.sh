@@ -5,11 +5,21 @@ set -e
 H2DEMO_URL="https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip"
 H2DEMO_SHA256="12048c8b03875c81e69534a3813aaf6340975e77b762dc1b79a4ff5514240e3c"
 
-if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
-    FHEROES2_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-else
-    FHEROES2_PATH="$HOME/.fheroes2"
+FHEROES2_PATH="."
+
+if [[ ! -f fheroes2 && -d ../../src ]]; then
+    FHEROES2_PATH="../.."
 fi
+
+if ! touch "$FHEROES2_PATH/.test-writable" 2> /dev/null || ! rm "$FHEROES2_PATH/.test-writable" 2>/dev/null; then
+    if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
+        FHEROES2_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
+    else
+        FHEROES2_PATH="$HOME/.fheroes2"
+    fi
+fi
+
+echo "Destination directory: $FHEROES2_PATH"
 
 [[ ! -d "$FHEROES2_PATH/demo" ]] && mkdir -p "$FHEROES2_PATH/demo"
 
@@ -37,8 +47,8 @@ fi
 
 unzip -o h2demo.zip
 
-[[ ! -d "$FHEROES2_PATH/data" ]] && mkdir "$FHEROES2_PATH/data"
-[[ ! -d "$FHEROES2_PATH/maps" ]] && mkdir "$FHEROES2_PATH/maps"
+[[ ! -d ../data ]] && mkdir ../data
+[[ ! -d ../maps ]] && mkdir ../maps
 
-cp -r DATA/* "$FHEROES2_PATH/data"
-cp -r MAPS/* "$FHEROES2_PATH/maps"
+cp -r DATA/* ../data
+cp -r MAPS/* ../maps
