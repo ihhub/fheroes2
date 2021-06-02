@@ -44,13 +44,14 @@ void fheroes2::showTeamInfo()
     display.render();
 
     uint8_t alpha = 250;
+    const uint64_t animationDelay = 40;
 
-    while ( le.HandleEvents() && alpha > 20 ) {
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && alpha > 20 ) {
         if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
             break;
 
         // Subsequent frames must update only the area within the text.
-        if ( Game::validateCustomAnimationDelay( 40 ) ) {
+        if ( Game::validateCustomAnimationDelay( animationDelay ) ) {
             Copy( textImage, 0, 0, display, roi.x, roi.y, roi.width, roi.height );
             fheroes2::ApplyAlpha( display, roi.x, roi.y, display, roi.x, roi.y, roi.width, roi.height, alpha );
             display.render( roi );
