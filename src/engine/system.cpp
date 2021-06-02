@@ -63,6 +63,34 @@
 
 #include "tools.h"
 
+#if !defined( __LINUX__ )
+namespace
+{
+    std::string GetHomeDirectory( const std::string & prog )
+    {
+#if defined( FHEROES2_VITA )
+        return "ux0:data/fheroes2";
+#endif
+
+        if ( System::GetEnvironment( "HOME" ) )
+            return System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
+
+        if ( System::GetEnvironment( "APPDATA" ) )
+            return System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+
+        std::string res;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        char * path = SDL_GetPrefPath( "", prog.c_str() );
+        if ( path ) {
+            res = path;
+            SDL_free( path );
+        }
+#endif
+        return res;
+    }
+}
+#endif
+
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
@@ -81,28 +109,42 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return std::string( str1 + SEPARATOR + str2 );
 }
 
-std::string System::GetHomeDirectory( const std::string & prog )
+std::string System::GetConfigDirectory( const std::string & prog )
 {
-#if defined( FHEROES2_VITA )
-    return "ux0:data/fheroes2";
-#endif
-
-    std::string res;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    char * path = SDL_GetPrefPath( "", prog.c_str() );
-    if ( path ) {
-        res = path;
-        SDL_free( path );
+#if defined( __LINUX__ )
+    const char * configEnv = System::GetEnvironment( "XDG_CONFIG_HOME" );
+    if ( configEnv ) {
+        return System::ConcatePath( configEnv, prog );
     }
+
+    const char * homeEnv = System::GetEnvironment( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
+    }
+
+    return std::string();
+#else
+    return GetHomeDirectory( prog );
 #endif
+}
 
-    if ( System::GetEnvironment( "HOME" ) )
-        res = System::ConcatePath( System::GetEnvironment( "HOME" ), std::string( "." ).append( prog ) );
-    else if ( System::GetEnvironment( "APPDATA" ) )
-        res = System::ConcatePath( System::GetEnvironment( "APPDATA" ), prog );
+std::string System::GetDataDirectory( const std::string & prog )
+{
+#if defined( __LINUX__ )
+    const char * dataEnv = System::GetEnvironment( "XDG_DATA_HOME" );
+    if ( dataEnv ) {
+        return System::ConcatePath( dataEnv, prog );
+    }
 
-    return res;
+    const char * homeEnv = System::GetEnvironment( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
+    }
+
+    return std::string();
+#else
+    return GetHomeDirectory( prog );
+#endif
 }
 
 ListDirs System::GetDataDirectories( const std::string & prog )

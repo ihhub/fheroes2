@@ -659,7 +659,8 @@ bool Settings::Save( const std::string & filename ) const
     const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
     file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
 #else
-    file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+    const std::string cfgFilename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), filename );
+    file.open( cfgFilename.data(), std::fstream::out | std::fstream::trunc );
 #endif
     if ( !file )
         return false;
@@ -886,10 +887,15 @@ ListDirs Settings::GetRootDirs()
     // from dirname
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
-    // from HOME
-    const std::string & home = System::GetHomeDirectory( "fheroes2" );
-    if ( !home.empty() )
-        dirs.push_back( home );
+    // from user config
+    const std::string & config = System::GetConfigDirectory( "fheroes2" );
+    if ( !config.empty() )
+        dirs.push_back( config );
+
+    // from user data
+    const std::string & data = System::GetDataDirectory( "fheroes2" );
+    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
+        dirs.push_back( data );
 
     fheroes2::AddOSSpecificDirectories( dirs );
 
@@ -1781,7 +1787,7 @@ void Settings::SetPosStatus( const fheroes2::Point & pt )
 
 void Settings::BinarySave() const
 {
-    const std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
+    const std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1793,7 +1799,7 @@ void Settings::BinarySave() const
 
 void Settings::BinaryLoad()
 {
-    std::string fname = System::ConcatePath( GetWriteableDir( "save" ), "fheroes2.bin" );
+    std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
     if ( !System::IsFile( fname ) )
         fname = GetLastFile( "", "fheroes2.bin" );

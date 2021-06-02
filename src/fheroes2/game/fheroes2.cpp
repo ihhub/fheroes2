@@ -91,27 +91,33 @@ namespace
             conf.Save( configurationFileName );
     }
 
-    void InitHomeDir()
+    void InitConfigDir()
     {
-        const std::string home = System::GetHomeDirectory( "fheroes2" );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !home.empty() ) {
-            const std::string home_maps = System::ConcatePath( home, "maps" );
-            const std::string home_files = System::ConcatePath( home, "files" );
-            const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-            if ( !System::IsDirectory( home ) )
-                System::MakeDirectory( home );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-                System::MakeDirectory( home_maps );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-                System::MakeDirectory( home_files );
-
-            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-                System::MakeDirectory( home_files_save );
+        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+            System::MakeDirectory( configDir );
         }
+    }
+
+    void InitDataDir()
+    {
+        const std::string dataDir = System::GetDataDirectory( "fheroes2" );
+
+        if ( dataDir.empty() )
+            return;
+
+        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
+        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+
+        if ( !System::IsDirectory( dataDir ) )
+            System::MakeDirectory( dataDir );
+
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
+            System::MakeDirectory( dataFiles );
+
+        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
+            System::MakeDirectory( dataFilesSave );
     }
 
     void SetTimidityEnvPath()
@@ -162,7 +168,8 @@ int main( int argc, char ** argv )
     Settings & conf = Settings::Get();
     conf.SetProgramPath( argv[0] );
 
-    InitHomeDir();
+    InitConfigDir();
+    InitDataDir();
     ReadConfigs();
 
     // getopt
