@@ -39,35 +39,14 @@ Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
 
 [Tasks]
-Name: desktopicon; Description: "Desktop icon"
+Name: desktopicon; Description: "Desktop shortcut"
 
 [Icons]
 Name: "{group}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
-Name: "{group}\Download demo version files"; Filename: "{app}\demo_windows.bat"; WorkingDir: "{app}"; AfterInstall: SetElevationBit('{group}\Download demo version files.lnk')
+Name: "{group}\Download demo version files"; Filename: "{app}\demo_windows.bat"; WorkingDir: "{app}"
+Name: "{group}\Game data files"; Filename: "%APPDATA%\{#AppName}"; Flags: foldershortcut
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{userdesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser
-
-[Code]
-procedure SetElevationBit(Filename: string);
-var
-  Buffer: string;
-  Stream: TStream;
-begin
-  Filename := ExpandConstant(Filename);
-  Log('Setting elevation bit for ' + Filename);
-
-  Stream := TFileStream.Create(FileName, fmOpenReadWrite);
-  try
-    Stream.Seek(21, soFromBeginning);
-    SetLength(Buffer, 1);
-    Stream.ReadBuffer(Buffer, 1);
-    Buffer[1] := Chr(Ord(Buffer[1]) or $20);
-    Stream.Seek(-1, soFromCurrent);
-    Stream.WriteBuffer(Buffer, 1);
-  finally
-    Stream.Free;
-  end;
-end;
