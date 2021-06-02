@@ -384,7 +384,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-        I.GetGameArea().SetRedraw();
+
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         I.Redraw();
     }
 
@@ -753,7 +754,7 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
         hero.SetAttackedMonsterTileIndex( dst_index );
 
-        I.GetGameArea().SetRedraw();
+        I.SetRedraw( Interface::REDRAW_GAMEAREA );
         I.Redraw();
 
         Army army( tile );
