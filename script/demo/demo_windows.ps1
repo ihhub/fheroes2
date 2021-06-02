@@ -72,11 +72,13 @@ try {
     }
 
     try {
-        if (-Not (Test-Path -Path "$destPath\.test-writable" -PathType Container)) {
-            [void](New-Item -Path "$destPath\.test-writable" -ItemType "directory")
+        $randName = [System.IO.Path]::GetRandomFileName()
+
+        if (-Not (Test-Path -Path "$destPath\$randName" -PathType Container)) {
+            [void](New-Item -Path "$destPath\$randName" -ItemType "directory")
         }
 
-        Remove-Item -Path "$destPath\.test-writable"
+        Remove-Item -Path "$destPath\$randName"
     } catch {
         if ($null -Eq $Env:APPDATA) {
             Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
