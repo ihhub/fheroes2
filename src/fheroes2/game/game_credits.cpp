@@ -117,6 +117,7 @@ namespace
                 break;
             }
         }
+
     private:
         const int32_t _imageCount;
         int32_t _alphaValue = 0;
