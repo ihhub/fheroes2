@@ -43,7 +43,7 @@ namespace
         assert( !out.singleLayer() );
 
         uint8_t * image = out.image();
-        uint8_t * transform = out.transform();
+        const uint8_t * transform = out.transform();
         const uint8_t * imageEnd = image + out.width() * out.height();
 
         for ( ; image != imageEnd; ++image, ++transform ) {
@@ -64,7 +64,7 @@ namespace
     {
     public:
         AnimationSequence() = delete;
-        AnimationSequence( const int32_t imageCount )
+        explicit AnimationSequence( const int32_t imageCount )
             : _imageCount( imageCount )
         {}
 
