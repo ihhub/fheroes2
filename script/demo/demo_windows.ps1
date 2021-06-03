@@ -64,14 +64,20 @@ try {
 
     Write-Host "[1/5] determining destination directory"
 
-    $destPath = "."
+    $destPath = $null
 
-    # Special hack for developers running this script from the source tree
-    if (-Not (Test-Path -Path "fheroes2.exe" -PathType Leaf) -And (Test-Path -Path "..\..\src" -PathType Container)) {
+    if (Test-Path -Path "fheroes2.exe" -PathType Leaf) {
+        $destPath = "."
+    } elseif (Test-Path -Path "..\..\src" -PathType Container) {
+        # Special hack for developers running this script from the source tree
         $destPath = "..\.."
     }
 
     try {
+        if ($null -Eq $destPath) {
+            throw
+        }
+
         $randName = [System.IO.Path]::GetRandomFileName()
 
         if (-Not (Test-Path -Path "$destPath\$randName" -PathType Container)) {
