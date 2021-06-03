@@ -1,4 +1,5 @@
 version 0.9.4 (04 June 2021)
+- add Windows executable installers
 - use user profile directories to store files to allow multi-user access to the game
 - fix incorrect text splitting in some rare cases
 - fix crash in Roland campaign, scenario 10

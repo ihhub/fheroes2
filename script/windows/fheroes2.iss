@@ -1,6 +1,6 @@
 #define AppName "fheroes2"
 #define AppId "fheroes2"
-#define AppVersion "0.9.3"
+#define AppVersion "0.9.4"
 
 [Setup]
 AppName={#AppName}
