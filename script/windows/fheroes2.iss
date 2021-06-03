@@ -46,7 +46,7 @@ Name: "{group}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe
 Name: "{group}\Download demo version files"; Filename: "{app}\demo_windows.bat"; WorkingDir: "{app}"
 Name: "{group}\Game data files"; Filename: "%APPDATA%\{#AppName}"; Flags: foldershortcut
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
-Name: "{userdesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\demo_windows.bat"; Description: "Download demo version files"; Flags: postinstall runascurrentuser
