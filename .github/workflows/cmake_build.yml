@@ -34,3 +34,5 @@ jobs:
         run: |
           cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON
           cmake --build build -j2
+        env:
+          FHEROES2_STRICT_COMPILATION: "ON"
