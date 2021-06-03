@@ -63,6 +63,6 @@ SpacesBeforeTrailingComments: 1
 SpacesInCStyleCastParentheses: false
 SpacesInParentheses: true
 SpacesInSquareBrackets: false
-Standard: Cpp03
+Standard: Cpp11
 TabWidth: 4
 UseTab: Never
