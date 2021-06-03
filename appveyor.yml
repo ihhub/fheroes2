@@ -75,7 +75,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
-  artifact: /.*\.zip/
+  artifact: fheroes2-%platform%-%deploy_conf_name%
   draft: false
   prerelease: true
   force_update: true
