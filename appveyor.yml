@@ -80,7 +80,7 @@ deploy:
   prerelease: true
   force_update: true
   on:
-    branch: multiple_artifacts
+    branch: master
 
 cache:
   - C:\projects\fheroes2\VisualStudio\packages\installed -> appveyor.yml, script\windows\install_packages.bat, script\windows\setup_packages.bat
