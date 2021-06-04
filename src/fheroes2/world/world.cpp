@@ -700,7 +700,12 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( tile.GetHeroes() != nullptr ) {
+                continue;
+            }
+
+            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
@@ -1009,7 +1014,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
     const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
@@ -1056,7 +1061,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
             return GameOver::LOSS_ALL;
     }
 
-    const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
