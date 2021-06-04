@@ -381,7 +381,7 @@ namespace Campaign
 
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT:
-            objectName = Artifact( _subType ).GetName();
+            objectName = Artifact( _subType ).GetCampaignName();
             break;
         case ScenarioBonusData::RESOURCES:
             objectName = Resource::String( _subType );
@@ -390,7 +390,7 @@ namespace Campaign
             objectName = Monster( _subType ).GetPluralName( _amount );
             break;
         case ScenarioBonusData::SPELL:
-            objectName = Spell( _subType ).GetName();
+            objectName = Spell( _subType ).GetCampaignName();
             break;
         case ScenarioBonusData::STARTING_RACE:
             objectName = Race::String( _subType );

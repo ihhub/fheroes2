@@ -228,6 +228,16 @@ const char * Spell::GetName( void ) const
     return _( spells[id].name );
 }
 
+const char * Spell::GetCampaignName( void ) const
+{
+    switch( id ) {
+        case SUMMONEELEMENT:
+            return _("Summon Earth");
+        default:
+            return GetName();
+    }
+}
+
 const char * Spell::GetDescription( void ) const
 {
     return _( spells[id].description );
