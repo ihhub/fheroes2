@@ -55,6 +55,11 @@ void PlayerFixMultiControl( Player * player )
         player->SetControl( CONTROL_AI );
 }
 
+void PlayerRemoveAlreadySelectedRaces( Player * player, std::vector<int> & availableraces )
+{
+    availableraces.erase( remove_if( availableraces.begin(), availableraces.end(), [player]( int race ) { return player->GetRace() == race; } ), availableraces.end() );
+}
+
 void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
 {
     if ( player && player->GetRace() == Race::RAND ) {
@@ -427,6 +432,7 @@ void Players::SetStartGame( void )
     vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
     for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
