@@ -37,7 +37,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
 {
     const Army * armyFrom = troopFrom.GetArmy();
     const bool saveLastTroop = armyFrom->SaveLastTroop() && armyFrom != armyTarget;
-    const bool isSameTroopType = troopFrom.GetID() == troopTarget.GetID();
+    const bool isSameTroopType = troopTarget.isValid() && troopFrom.GetID() == troopTarget.GetID();
 
     if ( troopFrom.GetCount() <= 1 ) {
         // cross-army split logic - prevent splits where we'd lose the last stack of a hero
@@ -73,7 +73,7 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
 
         if ( !useFastSplit && slots == 2 ) {
             // this logic is used when splitting to a stack with the same unit
-            if ( troopFrom.GetID() == troopTarget.GetID() )
+            if ( isSameTroopType )
                 troopTarget.SetCount( troopTarget.GetCount() + redistributeCount );
             else
                 troopTarget.Set( troopFrom, redistributeCount );
@@ -359,7 +359,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         ArmyTroop * selectedTroop = GetSelectedItem();
         assert( selectedTroop != nullptr );
 
-        const bool isSameTroopType = troop.GetID() == selectedTroop->GetID();
+        const bool isSameTroopType = troop.isValid() && troop.GetID() == selectedTroop->GetID();
 
         // prioritize standard split via shift hotkey
         if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
@@ -444,7 +444,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    const bool isSameTroopType = destTroop.GetID() == selectedTroop.GetID();
+    const bool isSameTroopType = destTroop.isValid() && destTroop.GetID() == selectedTroop.GetID();
 
     // specifically for shift hotkey, handle this logic before anything else
     // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
