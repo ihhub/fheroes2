@@ -1511,19 +1511,6 @@ void Heroes::SetMapsObject( int obj )
     save_maps_object = obj != MP2::OBJ_HEROES ? obj : MP2::OBJ_ZERO;
 }
 
-bool Heroes::AllowBattle( bool attacker ) const
-{
-    if ( !attacker )
-        switch ( world.GetTiles( GetIndex() ).GetObject( false ) ) {
-        case MP2::OBJ_TEMPLE:
-            return false;
-        default:
-            break;
-        }
-
-    return true;
-}
-
 void Heroes::ActionPreBattle( void ) {}
 
 void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
