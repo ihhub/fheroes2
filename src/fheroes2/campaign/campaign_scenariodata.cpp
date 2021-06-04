@@ -367,7 +367,6 @@ namespace
             return Spell( spellId ).GetName();
         }
     }
-
 }
 
 namespace Campaign
