@@ -1,3 +1,88 @@
+version 0.9.4 (04 June 2021)
+- add Windows executable installers
+- use user profile directories to store files to allow multi-user access to the game
+- fix incorrect text splitting in some rare cases
+- fix crash in Roland campaign, scenario 10
+- add missing popup dialogs for system options and buttons
+- fix inaccurate object sorting by distance
+- fix multiple issues with AI and spell logic using distance evaluation
+- read campaign files in non-case sensitive manner
+- make fog uncovering task for AI more efficient
+- fix AI obsession over Observation Towers
+- fix missing path drawing while a hero moving through Whirlpool
+- mark resource generator objects as visited for allies
+- fix incorrect game ending during time loss condition
+- show extended shadow for 2-hex monsters in battle
+- do not show gray flag over Haunted mine
+- add configuration option for first game run
+- support PoL heroes and artifacts in "battle only" mode
+- fix inaccessible beach tiles
+- add hiding and showing cursor logic for SDL2
+- fix shadows for random resources and artifacts
+- draw correct castle icon in popup window
+- fix incorrect hero position facing left
+- remove unneeded AI hero animation under fog
+- do not clear morale modifiers too early for Tavern case
+- highlight the door in Main Menu for mouse over event
+- speed up and fix many places with cursor rendering
+- recruit an AI hero if none exists
+- fix cheating AI behavior for dwellings with defenders
+- add an option to replay Intro video for campaign
+- force display rendering on app activation
+- fix Stables, Alchemist's Tower and Water Wheel passabilities
+- fix puzzle drawings
+- avoid using useless spell during battle for AI
+- return to load screen after cancelling loaded campaign scenario
+- play hero's vanishing sound after AI vs human battle
+- make Ultimate Crown as artifact for campaign scenarios
+- fix incorrect hero receiving a bonus spell for campaign scenario
+- fix monster recruitment logic when a hero present in a castle
+- fix well's max button hiring logic
+- add an option to open Hero Screen within battle
+- fix move points and spell points replenishment logic for heroes from hero pool
+- set proper difficulty level for campaign scenarios
+- directly show next campaign scenario for end of scenario save
+- modernize and secure demo version installation scripts
+- add video playback for campaign scenarios
+- do not reset hero mana points to maximum in the beginning of a new week if they are above maximum
+- fix Roland, chapter 9 map conditions
+- fix Tower shooting logic during castle's siege
+- build Mage Guild before Special building for AI
+- do not count monsters under fog for Visions spell
+- mute sound by setting music and effects volume to zero instead of pausing them
+- speed up AI hero movement
+- add an option to hide AI movements
+- do not draw objects under the fog if they are far from a revealed area
+- add base code for the Price of Loyalty campaign support
+- add dismiss and upgrade hotkeys in unit dialog info
+- add shadow for Spell Book
+- unveil the fog at the start of hero's movement
+- fix extra place with hero's double shadow at adventure world
+- add extended cursor icons from 4+ to 7+
+- fix UI defect of selected creature appearing after closing meeting dialog
+- fix incorrect rendering of View World image
+- add Lose Sorceress Village Condition for The Succession Wars campaign
+- fix flags in Oracle/Thieves' Guild dialog
+- fix sound mute in background on MacOS with SDL1
+- add Home and End button support for save naming
+- fix elements layout for Oracle/Thieves dialogs
+- generate obstacles on battlefield based on the battle tile index
+- use non-plural name for 1 creature while viewing with Crystal Ball
+- add correct support of The Price of Loyalty add-on maps
+- fix double clicking between dialog in castle's window
+- speed up MIDI loading
+- fix bug with mouse cursor not visible after left-clicking on hero's secondary skill in Kingdom Overview
+- fix the "world: use unique artifacts for resource affecting" option
+- reduce CPU usage for video playback and puzzle revealing
+- fix Mix-up in Roland's Campaign Scenarios
+- fix issue when troop info window was not showing after moving a single unit between army bars using drag & drop method
+- simulate level-ups for campaign-specific heroes that start at a higher level
+- reset current music from the previous turn in the beginning of a new human turn
+- upgrade Rendering engine
+- fix broken behavior of scrollbars
+- do not offer to exchange artifact with spell book
+- disable controllers on non-console platforms
+
 version 0.9.3 (04 May 2021)
 - add additional info to oracle dialog
 - check that unit is (im)movable after each unit action

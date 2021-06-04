@@ -1,7 +1,7 @@
 # For file(GLOB_RECOURSE CONFIGURE_DEPENDS ...)
 cmake_minimum_required(VERSION 3.12)
 
-project(fheroes2 VERSION 0.9.3 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.4 LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
