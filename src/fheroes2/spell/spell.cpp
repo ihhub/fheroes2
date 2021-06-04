@@ -230,11 +230,11 @@ const char * Spell::GetName( void ) const
 
 const char * Spell::GetCampaignName( void ) const
 {
-    switch( id ) {
-        case SUMMONEELEMENT:
-            return _("Summon Earth");
-        default:
-            return GetName();
+    switch ( id ) {
+    case SUMMONEELEMENT:
+        return _( "Summon Earth" );
+    default:
+        return GetName();
     }
 }
 
