@@ -700,9 +700,12 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            if ( GetTiles( *it ).GetHeroes() != NULL )
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( tile.GetHeroes() != nullptr ) {
                 continue;
-            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
+            }
+
+            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
