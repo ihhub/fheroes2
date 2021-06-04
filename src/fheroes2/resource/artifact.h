@@ -191,7 +191,6 @@ public:
     int GetSpell( void ) const;
 
     const char * GetName( void ) const;
-    const char * GetCampaignName( void ) const;
     std::string GetDescription( void ) const;
 
     static int Rand( level_t );

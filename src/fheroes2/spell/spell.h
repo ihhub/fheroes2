@@ -122,7 +122,6 @@ public:
     int GetID( void ) const;
 
     const char * GetName( void ) const;
-    const char * GetCampaignName( void ) const;
     const char * GetDescription( void ) const;
 
     u32 SpellPoint( const HeroBase * hero = NULL ) const;

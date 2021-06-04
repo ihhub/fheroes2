@@ -314,30 +314,6 @@ const char * Artifact::GetName( void ) const
     return _( artifacts[id].name );
 }
 
-const char * Artifact::GetCampaignName( void ) const
-{
-    switch ( id ) {
-    case Artifact::THUNDER_MACE:
-        return _( "Thunder Mace" );
-    case Artifact::MINOR_SCROLL:
-        return _( "Minor Scroll" );
-    case Artifact::DRAGON_SWORD:
-        return _( "Dragon Sword" );
-    case Artifact::DIVINE_BREASTPLATE:
-        return _( "Breastplate" );
-    case Artifact::FIZBIN_MISFORTUNE:
-        return _( "Fibzin Medal" );
-    case Artifact::MAGE_RING:
-        return _( "Mage's ring" );
-    case Artifact::DEFENDER_HELM:
-        return _( "Defender Helm" );
-    case Artifact::POWER_AXE:
-        return _( "Power Axe" );
-    default:
-        return GetName();
-    }
-}
-
 int Artifact::Type( void ) const
 {
     return artifacts[id].type;
