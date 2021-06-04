@@ -234,6 +234,8 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     const fheroes2::Sprite & campaignChoice = fheroes2::AGG::GetICN( ICN::X_IVY, 0 );
     fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(), campaignChoice.height() );
 
+    display.render();
+
     const fheroes2::Rect priceOfLoyaltyRoi( roiOffset.x + 192, roiOffset.y + 23, 248, 163 );
     const fheroes2::Rect voyageHomeRoi( roiOffset.x + 19, roiOffset.y + 120, 166, 193 );
     const fheroes2::Rect wizardsIsleRoi( roiOffset.x + 450, roiOffset.y + 120, 166, 193 );
