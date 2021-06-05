@@ -26,6 +26,7 @@
 #include "resource.h"
 #include "skill.h"
 #include "spell.h"
+#include "translations.h"
 #include <cassert>
 
 namespace
@@ -332,6 +333,40 @@ namespace
 
         return bonus;
     }
+
+    const char * getArtifactCampaignName( const int32_t artifactId )
+    {
+        switch ( artifactId ) {
+        case Artifact::THUNDER_MACE:
+            return _( "Thunder Mace" );
+        case Artifact::MINOR_SCROLL:
+            return _( "Minor Scroll" );
+        case Artifact::DRAGON_SWORD:
+            return _( "Dragon Sword" );
+        case Artifact::DIVINE_BREASTPLATE:
+            return _( "Breastplate" );
+        case Artifact::FIZBIN_MISFORTUNE:
+            return _( "Fibzin Medal" );
+        case Artifact::MAGE_RING:
+            return _( "Mage's ring" );
+        case Artifact::DEFENDER_HELM:
+            return _( "Defender Helm" );
+        case Artifact::POWER_AXE:
+            return _( "Power Axe" );
+        default:
+            return Artifact( artifactId ).GetName();
+        }
+    }
+
+    const char * getSpellCampaignName( const Uint32 spellId )
+    {
+        switch ( spellId ) {
+        case Spell::SUMMONEELEMENT:
+            return _( "Summon Earth" );
+        default:
+            return Spell( spellId ).GetName();
+        }
+    }
 }
 
 namespace Campaign
@@ -381,7 +416,7 @@ namespace Campaign
 
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT:
-            objectName = Artifact( _subType ).GetName();
+            objectName = getArtifactCampaignName( _subType );
             break;
         case ScenarioBonusData::RESOURCES:
             objectName = Resource::String( _subType );
@@ -390,7 +425,7 @@ namespace Campaign
             objectName = Monster( _subType ).GetPluralName( _amount );
             break;
         case ScenarioBonusData::SPELL:
-            objectName = Spell( _subType ).GetName();
+            objectName = getSpellCampaignName( _subType );
             break;
         case ScenarioBonusData::STARTING_RACE:
             objectName = Race::String( _subType );
