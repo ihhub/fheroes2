@@ -104,7 +104,7 @@ namespace AI
         if ( distance == 0 )
             return value;
         // scale non-linearly (more value lost as distance increases)
-        return value - ( distance * std::log10( distance ) );
+        return value - ( 1.5 * distance * std::log10( distance ) );
     }
 
     double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
@@ -380,7 +380,7 @@ namespace AI
             }
 
             if ( bestTargetIndex == -1 ) {
-                // Nothing to do. Stop eveything
+                // Nothing to do. Stop everything
                 break;
             }
 
