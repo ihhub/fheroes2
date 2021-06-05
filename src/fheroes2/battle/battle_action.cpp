@@ -943,8 +943,9 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
-        std::for_each( resistTargets.begin(), resistTargets.end(),
-                       [&playResistSound, this]( TargetInfo & target ) { interface->RedrawActionResistSpell( *target.defender, playResistSound ); } );
+        for ( const TargetInfo & target : resistTargets ) {
+            interface->RedrawActionResistSpell( *target.defender, playResistSound );
+        }
     }
 
     TargetsApplySpell( current_commander, spell, targets );
