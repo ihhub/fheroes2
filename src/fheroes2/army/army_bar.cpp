@@ -57,7 +57,6 @@ void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * ar
     else {
         uint32_t freeSlots = static_cast<uint32_t>( 1 + armyTarget->Size() - armyTarget->GetCount() );
 
-
         if ( isSameTroopType )
             ++freeSlots;
 
