@@ -123,8 +123,8 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( u32 size )
 {
-    const char * str_size[] = {_( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
-                               _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" )};
+    const char * str_size[] = { _( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
+                                _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" ) };
 
     switch ( ArmyGetSize( size ) ) {
     default:
@@ -1249,6 +1249,16 @@ const HeroBase * Army::GetCommander( void ) const
 int Army::GetControl( void ) const
 {
     return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
+}
+
+u32 Army::getTotalCount( void ) const
+{
+    uint32_t total = 0;
+    for ( const_iterator it = begin(); it != end(); ++it ) {
+        if ( ( *it )->isValid() )
+            total += ( *it )->GetCount();
+    }
+    return total;
 }
 
 std::string Army::String( void ) const
