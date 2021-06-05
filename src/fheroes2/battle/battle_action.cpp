@@ -927,13 +927,14 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     bool playResistSound = false;
     TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst, &playResistSound );
+    TargetsInfo resistTargets;
 
     if ( interface ) {
         interface->RedrawActionSpellCastStatus( spell, dst, current_commander->GetName(), targets );
 
         for ( const auto & target : targets ) {
             if ( target.resist ) {
-                interface->RedrawActionResistSpell( *target.defender, playResistSound );
+                resistTargets.push_back( target );
             }
         }
     }
@@ -942,6 +943,9 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
+        for ( const TargetInfo & target : resistTargets ) {
+            interface->RedrawActionResistSpell( *target.defender, playResistSound );
+        }
     }
 
     TargetsApplySpell( current_commander, spell, targets );
