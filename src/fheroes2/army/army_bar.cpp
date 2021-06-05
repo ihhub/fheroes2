@@ -32,7 +32,6 @@
 #include "world.h"
 
 #include <cassert>
-#include <iostream>
 
 void RedistributeArmy( ArmyTroop & troopFrom, ArmyTroop & troopTarget, Army * armyTarget )
 {
