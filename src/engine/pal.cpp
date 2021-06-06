@@ -22,11 +22,11 @@
 #include <cassert>
 #include <cstring>
 
-#define PALETTE_SIZE 256
-
-namespace PAL
+namespace
 {
-    const uint8_t yellow_text_table[PALETTE_SIZE]
+    const size_t paletteSize = 256;
+
+    const uint8_t yellow_text_table[paletteSize]
         = {0,   0,   0,   0,   0,   0, 0, 0, 0, 0, 114, 115, 115, 116, 117, 117, 118, 119, 119, 120, 121, 121, 122, 123, 123, 124, 125, 125, 126, 127, 127, 128,
            129, 129, 130, 130, 130, 0, 0, 0, 0, 0, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
            0,   0,   0,   0,   0,   0, 0, 0, 0, 0, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -36,7 +36,7 @@ namespace PAL
            0,   0,   0,   0,   0,   0, 0, 0, 0, 0, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
            0,   0,   0,   0,   0,   0, 0, 0, 0, 0, 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
 
-    const uint8_t white_text_table[PALETTE_SIZE]
+    const uint8_t white_text_table[paletteSize]
         = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
@@ -44,7 +44,7 @@ namespace PAL
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0};
 
-    const uint8_t gray_text_table[PALETTE_SIZE]
+    const uint8_t gray_text_table[paletteSize]
         = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 36, 36, 36, 36, 36, 0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
@@ -52,7 +52,7 @@ namespace PAL
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0, 0, 0,
            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 0, 0, 0};
 
-    const uint8_t tan_table[PALETTE_SIZE]
+    const uint8_t tan_table[paletteSize]
         = {213, 213, 213, 213, 213, 213, 213, 213, 213, 213, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 200, 201, 203, 204, 206, 207,
            208, 209, 210, 211, 213, 213, 213, 213, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 199, 200, 201, 203, 204, 205, 207,
            207, 209, 210, 211, 212, 198, 198, 198, 198, 198, 201, 203, 205, 207, 208, 210, 210, 211, 212, 212, 213, 213, 213, 213, 213, 213, 213, 198, 198,
@@ -63,7 +63,7 @@ namespace PAL
            198, 198, 198, 198, 198, 198, 198, 198, 199, 202, 205, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 198, 200, 203, 204, 207, 208, 209, 201,
            203, 207, 209, 206, 209, 208, 198, 198, 207, 213, 198, 201, 206, 208, 213, 213, 213, 213, 213, 213, 213, 213, 213, 213};
 
-    const uint8_t no_cycle_table[PALETTE_SIZE]
+    const uint8_t no_cycle_table[paletteSize]
         = {0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,
            29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,
            58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  85,  86,
@@ -74,7 +74,7 @@ namespace PAL
            203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 188, 188, 188, 188, 118, 118, 118, 118, 222, 223, 224, 225, 226, 227, 228, 229, 230, 69,
            69,  69,  69,  69,  69,  69,  69,  69,  69,  69,  242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
 
-    const uint8_t gray_table[PALETTE_SIZE]
+    const uint8_t gray_table[paletteSize]
         = {36, 36, 36, 36, 36, 36, 36, 36, 36, 36, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
            10, 11, 12, 12, 13, 14, 15, 16, 17, 18, 18, 19, 20, 20, 21, 22, 22, 23, 24, 25, 26, 26, 27, 28, 29, 31, 14, 16, 17, 18, 20, 21, 22, 24, 25, 26, 28,
            28, 29, 30, 31, 32, 32, 33, 33, 33, 34, 34, 16, 17, 18, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 32, 33, 34, 35, 35, 36, 36, 36, 11, 11, 11,
@@ -83,7 +83,7 @@ namespace PAL
            15, 15, 16, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 10, 10, 11, 11, 11, 12, 12, 12, 12, 14, 16, 17, 18, 20, 22, 24, 17, 10, 12, 15, 19, 10, 10, 15,
            17, 18, 20, 21, 22, 23, 25, 26, 27, 27, 24, 21, 22, 26, 26, 27, 36, 12, 18, 25, 19, 21, 24, 26, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36};
 
-    const uint8_t red_table[PALETTE_SIZE]
+    const uint8_t red_table[paletteSize]
         = {197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 180, 182, 184, 186, 208, 209, 210, 210, 211, 211, 212, 213, 213, 196, 197, 197, 197, 197, 197,
            197, 197, 197, 197, 197, 197, 197, 197, 180, 180, 182, 182, 184, 186, 208, 209, 209, 210, 210, 210, 211, 211, 193, 212, 212, 213, 213, 196, 197,
            197, 197, 197, 197, 197, 208, 209, 210, 211, 193, 212, 213, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 209, 210,
@@ -94,7 +94,7 @@ namespace PAL
            203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 187, 211, 180, 180, 215, 191, 192, 193, 194, 213, 197, 197, 197, 197,
            197, 197, 197, 197, 197, 197, 197, 197, 211, 197, 211, 212, 196, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197, 197};
 
-    const uint8_t brown_table[PALETTE_SIZE]
+    const uint8_t brown_table[paletteSize]
         = {50, 42, 42, 42, 42, 50, 50, 50, 50, 53, 42, 43, 43, 44, 44, 45, 46, 46, 47, 47, 48, 49, 50, 51, 52, 52, 53, 54, 55, 56, 57, 58, 60, 62, 62, 62, 62,
            37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 45, 46, 47, 48, 50, 51, 52, 54, 55, 56, 58,
            58, 59, 60, 60, 61, 62, 62, 62, 62, 62, 62, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 58, 60, 60, 62, 62, 62, 62, 62, 62, 62, 62, 62, 43, 43, 44,
@@ -104,7 +104,7 @@ namespace PAL
            47, 49, 50, 51, 52, 53, 55, 56, 58, 51, 52, 55, 57, 54, 57, 56, 44, 48, 54, 62, 49, 51, 54, 57, 50, 50, 50, 50, 50, 50, 50, 50, 50, 42};
 
     // this palette was modified as it was containing 238, 238, 239, 240 values instead of 238, 239, 240, 241
-    const uint8_t mirror_image_table[PALETTE_SIZE]
+    const uint8_t mirror_image_table[paletteSize]
         = {0,   1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  10,  10,  10,  10,  11,  12,  13,  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,
            25,  26,  27,  28,  29,  30,  31,  32,  37,  37,  37,  37,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,
            54,  55,  56,  57,  58,  63,  63,  63,  63,  63,  64,  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  85,  85,
@@ -115,7 +115,7 @@ namespace PAL
            199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 214, 215, 216, 217, 218, 219, 220, 221, 222, 222, 223, 224, 225, 226, 227, 228, 229, 231,
            232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 242, 243, 244, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255};
 
-    const uint8_t darkeningTable[PALETTE_SIZE]
+    const uint8_t darkeningTable[paletteSize]
         = {0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32,  33,  34,  35,  36,  36,
            36,  36,  36,  36,  36,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  62,  62,  62,  62,  62,  62,  68,
            69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,  84,  84,  84,  84,  84,  84,  91,  92,  93,  94,  95,  96,  97,  98,  99,  100, 101,
@@ -143,8 +143,8 @@ std::vector<uint8_t> PAL::GetCyclingPalette( int stepId )
 {
     std::vector<uint8_t> palette = PAL::GetPalette( PaletteType::STANDARD );
 
-    const std::vector<PAL::CyclingColorSet> & set = PAL::GetCyclingColors();
-    for ( std::vector<PAL::CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
+    const std::vector<CyclingColorSet> & set = GetCyclingColors();
+    for ( std::vector<CyclingColorSet>::const_iterator it = set.begin(); it != set.end(); ++it ) {
         for ( int id = 0; id < it->length; ++id ) {
             const int lastColorID = it->length - 1;
             const uint8_t newColorID = it->forward ? it->start + ( id + stepId ) % it->length : it->start + lastColorID - ( lastColorID + stepId - id ) % it->length;
@@ -159,43 +159,43 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
 {
     switch ( type ) {
     case PaletteType::YELLOW_TEXT: {
-        static std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( yellow_text_table, yellow_text_table + paletteSize );
         return palette;
     }
     case PaletteType::WHITE_TEXT: {
-        static std::vector<uint8_t> palette( white_text_table, white_text_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( white_text_table, white_text_table + paletteSize );
         return palette;
     }
     case PaletteType::GRAY_TEXT: {
-        static std::vector<uint8_t> palette( gray_text_table, gray_text_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( gray_text_table, gray_text_table + paletteSize );
         return palette;
     }
     case PaletteType::RED: {
-        static std::vector<uint8_t> palette( red_table, red_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( red_table, red_table + paletteSize );
         return palette;
     }
     case PaletteType::GRAY: {
-        static std::vector<uint8_t> palette( gray_table, gray_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( gray_table, gray_table + paletteSize );
         return palette;
     }
     case PaletteType::BROWN: {
-        static std::vector<uint8_t> palette( brown_table, brown_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( brown_table, brown_table + paletteSize );
         return palette;
     }
     case PaletteType::TAN: {
-        static std::vector<uint8_t> palette( tan_table, tan_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( tan_table, tan_table + paletteSize );
         return palette;
     }
     case PaletteType::NO_CYCLE: {
-        static std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( no_cycle_table, no_cycle_table + paletteSize );
         return palette;
     }
     case PaletteType::MIRROR_IMAGE: {
-        static std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( mirror_image_table, mirror_image_table + paletteSize );
         return palette;
     }
     case PaletteType::DARKENING: {
-        static std::vector<uint8_t> palette( darkeningTable, darkeningTable + PALETTE_SIZE );
+        static const std::vector<uint8_t> palette( darkeningTable, darkeningTable + paletteSize );
         return palette;
     }
     case PaletteType::CUSTOM:
@@ -203,12 +203,16 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
         break;
     case PaletteType::STANDARD:
         break;
+    default:
+        // Some new palette?
+        assert( 0 );
+        break;
     }
 
     static std::vector<uint8_t> standard;
     if ( standard.empty() ) {
-        standard.resize( PALETTE_SIZE, 0 );
-        for ( int i = 0; i < PALETTE_SIZE; ++i ) {
+        standard.resize( paletteSize, 0 );
+        for ( size_t i = 0; i < paletteSize; ++i ) {
             standard[i] = static_cast<uint8_t>( i );
         }
     }
@@ -218,12 +222,12 @@ const std::vector<uint8_t> & PAL::GetPalette( const PaletteType type )
 
 std::vector<uint8_t> PAL::CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second )
 {
-    if ( first.size() != PALETTE_SIZE || second.size() != PALETTE_SIZE )
+    if ( first.size() != paletteSize || second.size() != paletteSize )
         return std::vector<uint8_t>();
 
-    std::vector<uint8_t> combined( PALETTE_SIZE, 0 );
+    std::vector<uint8_t> combined( paletteSize, 0 );
 
-    for ( size_t i = 0; i < first.size(); ++i ) {
+    for ( size_t i = 0; i < paletteSize; ++i ) {
         combined[i] = second[first[i]];
     }
 

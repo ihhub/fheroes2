@@ -214,13 +214,13 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     u32 lantern_frame = 0;
 
-    ButtonInfo buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
+    std::vector<ButtonInfo> buttons{{NEWGAME_DEFAULT, buttonNewGame, false, false},
                             {LOADGAME_DEFAULT, buttonLoadGame, false, false},
                             {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
                             {CREDITS_DEFAULT, buttonCredits, false, false},
                             {QUIT_DEFAULT, buttonQuit, false, false}};
 
-    for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
+    for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
     }
@@ -243,7 +243,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         bool redrawScreen = false;
 
-        for ( u32 i = 0; i < ARRAY_COUNT( buttons ); ++i ) {
+        for ( size_t i = 0; i < buttons.size(); ++i ) {
             buttons[i].wasOver = buttons[i].isOver;
 
             if ( le.MousePressLeft( buttons[i].button.area() ) ) {

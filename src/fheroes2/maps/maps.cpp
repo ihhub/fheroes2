@@ -262,33 +262,32 @@ fheroes2::Point Maps::GetPoint( const int32_t index )
     return fheroes2::Point( index % world.w(), index / world.w() );
 }
 
-bool Maps::isValidAbsIndex( s32 ii )
+bool Maps::isValidAbsIndex( const int32_t index )
 {
-    return 0 <= ii && ii < world.w() * world.h();
+    return 0 <= index && index < world.w() * world.h();
 }
 
-bool Maps::isValidAbsPoint( s32 x, s32 y )
+bool Maps::isValidAbsPoint( const int32_t x, const int32_t y )
 {
     return 0 <= x && world.w() > x && 0 <= y && world.h() > y;
 }
 
-/* convert maps point to index maps */
-s32 Maps::GetIndexFromAbsPoint( const fheroes2::Point & mp )
+int32_t Maps::GetIndexFromAbsPoint( const fheroes2::Point & mp )
 {
-    return GetIndexFromAbsPoint( mp.x, mp.y );
-}
-
-s32 Maps::GetIndexFromAbsPoint( s32 px, s32 py )
-{
-    const s32 res = py * world.w() + px;
-
-    if ( px < 0 || py < 0 ) {
-        VERBOSE_LOG( "Maps::GetIndexFromAbsPoint: error coods, "
-                     << "x: " << px << ", y: " << py );
+    if ( mp.x < 0 || mp.y < 0 ) {
         return -1;
     }
 
-    return res;
+    return mp.y * world.w() + mp.x;
+}
+
+int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
+{
+    if ( x < 0 || y < 0 ) {
+        return -1;
+    }
+
+    return y * world.w() + x;
 }
 
 Maps::Indexes Maps::GetAroundIndexes( s32 center )
@@ -330,21 +329,27 @@ Maps::Indexes Maps::GetAroundIndexes( s32 center )
     return result;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( s32 center, int dist, bool sort )
+Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles )
 {
     Indexes results;
-    results.reserve( dist * 12 );
+    results.reserve( maxDistanceFromTile * 12 );
 
-    const fheroes2::Point cp = GetPoint( center );
+    const int32_t width = world.w();
+    const int32_t size = world.h() * width;
 
-    for ( s32 xx = cp.x - dist; xx <= cp.x + dist; ++xx )
-        for ( s32 yy = cp.y - dist; yy <= cp.y + dist; ++yy ) {
-            if ( isValidAbsPoint( xx, yy ) && ( xx != cp.x || yy != cp.y ) )
-                results.push_back( GetIndexFromAbsPoint( xx, yy ) );
+    for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
+        int32_t tileId = tileIndex + y * width;
+        for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
+            tileId += x;
+            if ( tileId >= 0 && tileId < size && tileId != tileIndex ) {
+                results.push_back( tileId );
+            }
         }
+    }
 
-    if ( sort )
-        std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
+    if ( sortTiles ) {
+        std::sort( results.begin(), results.end(), ComparsionDistance( tileIndex ) );
+    }
 
     return results;
 }
