@@ -25,6 +25,8 @@
 
 #include "types.h"
 
+#include <cstddef>
+
 #define LOOPXX_COUNT 28
 
 namespace M82
