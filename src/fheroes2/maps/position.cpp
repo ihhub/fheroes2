@@ -29,7 +29,7 @@ MapPosition::MapPosition( const fheroes2::Point & pt )
 
 s32 MapPosition::GetIndex( void ) const
 {
-    return center.x < 0 && center.y < 0 ? -1 : Maps::GetIndexFromAbsPoint( center );
+    return Maps::GetIndexFromAbsPoint( center );
 }
 
 void MapPosition::SetCenter( const fheroes2::Point & pt )

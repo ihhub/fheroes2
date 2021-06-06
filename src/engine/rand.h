@@ -81,16 +81,6 @@ namespace Rand
         return *it;
     }
 
-    template <typename T>
-    const T & GetWithGen( const std::list<T> & list, std::mt19937 & gen )
-    {
-        assert( !list.empty() );
-
-        typename std::list<T>::const_iterator it = list.begin();
-        std::advance( it, Rand::GetWithGen( 0, static_cast<uint32_t>( list.size() - 1 ), gen ) );
-        return *it;
-    }
-
     using ValuePercent = std::pair<int32_t, uint32_t>;
 
     class Queue : private std::vector<ValuePercent>
