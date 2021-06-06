@@ -214,11 +214,11 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     u32 lantern_frame = 0;
 
-    std::vector<ButtonInfo> buttons{{NEWGAME_DEFAULT, buttonNewGame, false, false},
-                            {LOADGAME_DEFAULT, buttonLoadGame, false, false},
-                            {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
-                            {CREDITS_DEFAULT, buttonCredits, false, false},
-                            {QUIT_DEFAULT, buttonQuit, false, false}};
+    std::vector<ButtonInfo> buttons{ { NEWGAME_DEFAULT, buttonNewGame, false, false },
+                                     { LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                     { HIGHSCORES_DEFAULT, buttonHighScores, false, false },
+                                     { CREDITS_DEFAULT, buttonCredits, false, false },
+                                     { QUIT_DEFAULT, buttonQuit, false, false } };
 
     for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
