@@ -98,7 +98,7 @@ struct ComparsionDistance
     const fheroes2::Point centerPoint;
 };
 
-Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes = true )
+Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
@@ -109,7 +109,7 @@ Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const in
     return result;
 }
 
-Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
+Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
