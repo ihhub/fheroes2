@@ -965,35 +965,6 @@ std::string Settings::GetLangDir()
     return "";
 }
 
-std::string Settings::GetWriteableDir( const char * subdir )
-{
-    ListDirs dirs = GetRootDirs();
-    dirs.Append( System::GetDataDirectories( "fheroes2" ) );
-
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        std::string dir_files = System::ConcatePath( *it, "files" );
-
-        // create files
-        if ( System::IsDirectory( *it, true ) && !System::IsDirectory( dir_files, true ) )
-            System::MakeDirectory( dir_files );
-
-        // create subdir
-        if ( System::IsDirectory( dir_files, true ) ) {
-            std::string dir_subdir = System::ConcatePath( dir_files, subdir );
-
-            if ( !System::IsDirectory( dir_subdir, true ) )
-                System::MakeDirectory( dir_subdir );
-
-            if ( System::IsDirectory( dir_subdir, true ) )
-                return dir_subdir;
-        }
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
-
-    return "";
-}
-
 bool Settings::MusicExt() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_EXT );
