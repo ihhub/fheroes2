@@ -436,13 +436,14 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
                 cursorFrom.setPosition( rect_from.x - 2, rect_from.y - 2 );
 
-                if ( resourceTo )
+                if ( resourceTo ) {
                     cursorTo.hide();
+                }
                 RedrawToResource( pt2, true, kingdom, fromTradingPost, resourceFrom );
-                if ( resourceTo )
+                if ( resourceTo ) {
                     cursorTo.show();
-                if ( resourceTo )
                     gui.ShowTradeArea( kingdom, resourceFrom, resourceTo, max_buy, max_sell, count_buy, count_sell, fromTradingPost );
+                }
 
                 display.render();
             }
