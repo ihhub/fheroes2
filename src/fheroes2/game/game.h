@@ -155,8 +155,6 @@ namespace Game
 
         // town screen exclusive, not applied to build screen!
         EVENT_TOWN_TAVERN,
-        EVENT_TOWN_JUMP_TO_PREVIOUS_TOWN,
-        EVENT_TOWN_JUMP_TO_NEXT_TOWN,
         EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
 
         EVENT_LAST,

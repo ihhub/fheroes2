@@ -285,8 +285,6 @@ void Game::HotKeysDefaults( void )
     // town screen only
     key_events[EVENT_TOWN_TAVERN] = KEY_r;
     key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
-    key_events[EVENT_TOWN_JUMP_TO_PREVIOUS_TOWN] = KEY_UP;
-    key_events[EVENT_TOWN_JUMP_TO_NEXT_TOWN] = KEY_DOWN;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
