@@ -347,7 +347,7 @@ namespace M82
     const char * GetString( int );
     int FromSpell( int );
     u32 GetIndexLOOP00XXFromObject( int );
-    int GetLOOP00XX( int );
+    int GetLOOP00XX( const size_t index );
 }
 
 #endif

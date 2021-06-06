@@ -59,7 +59,7 @@ Battle::Command::Command( int cmd, int param1, int param2, const Indexes & param
     case MSG_BATTLE_MOVE:
         for ( Indexes::const_reverse_iterator it = param3.rbegin(); it != param3.rend(); ++it )
             *this << *it;
-        *this << param3.size() << param2 << param1; // path, dst, uid
+        *this << static_cast<int>( param3.size() ) << param2 << param1; // path, dst, uid
         break;
 
     default:

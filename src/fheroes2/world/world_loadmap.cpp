@@ -906,7 +906,7 @@ bool World::LoadMapMAP( const std::string & filename )
                 VERBOSE_LOG( "parse error: " << doc.ErrorDesc() );
                 return false;
             }
-            // SaveMemToFile(raw_data, "raw.data");
+
             xml_data = doc.FirstChildElement( "data" );
             *xml_data >> *this;
             return true;

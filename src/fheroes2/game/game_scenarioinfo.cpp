@@ -346,9 +346,9 @@ fheroes2::GameMode Game::ScenarioInfo()
     return result;
 }
 
-u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
+int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
-    return current * width * KINGDOMMAX / count + ( width * ( KINGDOMMAX - count ) / ( 2 * count ) );
+    return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
 }
 
 void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw )
