@@ -826,12 +826,6 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" );
     }
-    else if ( !hero.AllowBattle( true ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " currently can not allow battle" );
-    }
-    else if ( !other_hero->AllowBattle( false ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
-    }
     else {
         const Castle * other_hero_castle = other_hero->inCastle();
         if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
