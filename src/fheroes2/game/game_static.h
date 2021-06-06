@@ -78,20 +78,4 @@ namespace GameStatic
     void SetSpell_DD_HP( int );
 }
 
-#ifdef WITH_XML
-class TiXmlElement;
-namespace Game
-{
-    void CastleUpdateGrowth( const TiXmlElement * );
-    void KingdomUpdateStartingResource( const TiXmlElement * );
-    void HeroesUpdateStatic( const TiXmlElement * );
-    void KingdomUpdateStatic( const TiXmlElement * );
-    void GameOverUpdateStatic( const TiXmlElement * );
-    void OverViewUpdateStatic( const TiXmlElement * );
-    void WhirlpoolUpdateStatic( const TiXmlElement * );
-    void MonsterUpdateStatic( const TiXmlElement * );
-    void SkillUpdateStatic( const TiXmlElement * );
-}
-#endif
-
 #endif

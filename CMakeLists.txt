@@ -14,7 +14,6 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE    "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
-option(ENABLE_XML      "Enable XML support (requires libtinyxml)" ON)
 option(ENABLE_ZLIB     "Enable Zlib support (for compressed savefiles)" ON)
 option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
 option(ENABLE_TOOLS    "Enable additional tools" OFF)

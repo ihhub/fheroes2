@@ -30,10 +30,6 @@
 #include "army_troop.h"
 #include "players.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -191,9 +187,6 @@ public:
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Army & );
-#endif
 
     HeroBase * commander;
     bool combat_format;

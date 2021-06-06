@@ -196,7 +196,6 @@ public:
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
     static const char * GetScenario( const Artifact & );
-    static void UpdateStats( const std::string & );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Artifact & );

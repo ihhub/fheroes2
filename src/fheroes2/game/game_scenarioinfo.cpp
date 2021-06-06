@@ -325,9 +325,6 @@ fheroes2::GameMode Game::ScenarioInfo()
             if ( ext == "mp2" || ext == "mx2" ) {
                 result = world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
-            else if ( ext == "map" ) {
-                result = world.LoadMapMAP( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
-            }
             else {
                 result = fheroes2::GameMode::MAIN_MENU;
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
