@@ -27,7 +27,6 @@
 # WITHOUT_UNICODE: build without unicode (disable translation and ttf font)
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITH_TOOLS: build tools
-# WITHOUT_BUNDLED_LIBS: do not build XML third party library
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
 #
 # -DCONFIGURE_FHEROES2_LOCALEDIR: system locale dir
