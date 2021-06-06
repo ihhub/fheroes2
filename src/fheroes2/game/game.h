@@ -141,6 +141,24 @@ namespace Game
         EVENT_JOINSTACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
+        EVENT_TOWN_CREATURE_1,
+        EVENT_TOWN_CREATURE_2,
+        EVENT_TOWN_CREATURE_3,
+        EVENT_TOWN_CREATURE_4,
+        EVENT_TOWN_CREATURE_5,
+        EVENT_TOWN_CREATURE_6,
+        EVENT_TOWN_WELL,
+        EVENT_TOWN_MARKETPLACE,
+        EVENT_TOWN_MAGE_GUILD,
+        EVENT_TOWN_SHIPYARD,
+        EVENT_TOWN_THIEVES_GUILD,
+
+        // town screen exclusive, not applied to build screen!
+        EVENT_TOWN_TAVERN,
+        EVENT_TOWN_JUMP_TO_PREVIOUS_TOWN,
+        EVENT_TOWN_JUMP_TO_NEXT_TOWN,
+        EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
+
         EVENT_LAST,
     };
 
