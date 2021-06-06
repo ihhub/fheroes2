@@ -21,16 +21,20 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
+#include "resource.h"
+
+#include <set>
+
 namespace Monster_Info
 {
-    enum ATTACK_DIR
+    enum AttackDirection : int
     {
         TOP,
         FRONT,
         BOTTOM
     };
 
-    enum ANIMATION_TYPE
+    enum AnimationType : int
     {
         NONE,
         STATIC,
@@ -57,5 +61,55 @@ namespace Monster_Info
         KILL,
         INVALID
     };
+
+    enum class MonsterAbility : int
+    {
+    
+    };
+
+    enum class MonsterWeakness : int
+    {
+    
+    };
+
+    struct MonsterStats
+    {
+        MonsterStats() = delete;
+
+        uint8_t attack;
+        uint8_t defense;
+        uint8_t damageMin;
+        uint8_t damageMax;
+        uint16_t hp;
+        uint8_t speed;
+        uint8_t baseGrowth;
+        uint8_t shots;
+        const char * name;
+        const char * multiname;
+        cost_t cost;
+
+        std::set<MonsterAbility> abilities;
+        std::set<MonsterWeakness> weaknesses;
+    };
+
+    struct MonsterSound
+    {
+        int attack;
+        int death;
+        int movement;
+        int wince;
+    };
+
+    struct MonsterData
+    {
+        int icnId;
+
+        MonsterStats stats;
+
+        MonsterSound sounds;
+    };
+
+    // const char * getMonsterAbilityDescription( const MonsterAbility ability );
+    // const char * getMonsterWeaknessDescription( const MonsterWeakness weakness );
 }
 #endif

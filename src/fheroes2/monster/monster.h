@@ -141,22 +141,6 @@ public:
     struct monstersprite_t
     {
         int icn_file;
-        animframe_t frm_static;
-        animframe_t frm_idle;
-        animframe_t frm_move;
-        animframe_t frm_fly1;
-        animframe_t frm_fly2;
-        animframe_t frm_fly3;
-        animframe_t frm_shot0;
-        animframe_t frm_shot1;
-        animframe_t frm_shot2;
-        animframe_t frm_shot3;
-        animframe_t frm_attk0;
-        animframe_t frm_attk1;
-        animframe_t frm_attk2;
-        animframe_t frm_attk3;
-        animframe_t frm_wnce;
-        animframe_t frm_kill;
         int m82_attk;
         int m82_kill;
         int m82_move;
@@ -268,8 +252,8 @@ private:
     int _frameOffset;
     bool _isFlyer;
 
-    void _pushFrames( Monster_Info::ANIMATION_TYPE type );
-    void _addValidMove( Monster_Info::ANIMATION_TYPE type );
+    void _pushFrames( const Monster_Info::AnimationType type );
+    void _addValidMove( const Monster_Info::AnimationType type );
     void _updateFrameInfo();
 };
 
