@@ -918,8 +918,6 @@ ListFiles Settings::GetListFiles( const std::string & prefix, const std::string 
             res.ReadDir( path, filter, false );
     }
 
-    res.Append( System::GetListFiles( "fheroes2", prefix, filter ) );
-
     return res;
 }
 
