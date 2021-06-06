@@ -32,6 +32,8 @@ namespace System
 
     int MakeDirectory( const std::string & );
     std::string ConcatePath( const std::string &, const std::string & );
+
+    ListDirs GetOSSpecificDirectories();
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 

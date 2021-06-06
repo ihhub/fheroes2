@@ -884,20 +884,21 @@ ListDirs Settings::GetRootDirs()
     if ( System::GetEnvironment( "FHEROES2_DATA" ) )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
 
-    // from dirname
+    // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
-    // from user config
+    // os-specific directories
+    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+
+    // user config directory
     const std::string & config = System::GetConfigDirectory( "fheroes2" );
     if ( !config.empty() )
         dirs.push_back( config );
 
-    // from user data
+    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
     const std::string & data = System::GetDataDirectory( "fheroes2" );
     if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
         dirs.push_back( data );
-
-    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }

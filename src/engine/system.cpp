@@ -109,6 +109,17 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return std::string( str1 + SEPARATOR + str2 );
 }
 
+ListDirs System::GetOSSpecificDirectories()
+{
+    ListDirs dirs;
+
+#if defined( FHEROES2_VITA )
+    dirs.emplace_back( "ux0:app/FHOMM0002" );
+#endif
+
+    return dirs;
+}
+
 std::string System::GetConfigDirectory( const std::string & prog )
 {
 #if defined( __LINUX__ )
