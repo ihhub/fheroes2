@@ -1251,14 +1251,9 @@ int Army::GetControl( void ) const
     return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
 }
 
-u32 Army::getTotalCount( void ) const
+uint32_t Army::getTotalCount( void ) const
 {
-    uint32_t total = 0;
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        if ( ( *it )->isValid() )
-            total += ( *it )->GetCount();
-    }
-    return total;
+    return std::accumulate( begin(), end(), 0u, []( uint32_t count, Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
 std::string Army::String( void ) const

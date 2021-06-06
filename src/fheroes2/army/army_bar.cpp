@@ -324,7 +324,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
 
 bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop )
 {
-    bool save_last_troop = selectedTroop.GetArmy()->getTotalCount() <= 1;
+    bool save_last_troop = ( selectedTroop.GetArmy()->getTotalCount() <= 1 ) && selectedTroop.GetArmy()->SaveLastTroop();
 
     if ( destTroop.isValid() ) {
         if ( destTroop.GetID() != selectedTroop.GetID() ) {
