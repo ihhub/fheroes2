@@ -959,7 +959,7 @@ void Maps::Tiles::SetObject( int object )
 void Maps::Tiles::setBoat( int direction )
 {
     if ( objectTileset != 0 && objectIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( 0, 0, objectTileset, objectIndex ) );
+        AddonsPushLevel1( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
     }
     SetObject( MP2::OBJ_BOAT );
     objectTileset = ICN::BOAT32;
