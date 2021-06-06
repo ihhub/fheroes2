@@ -147,92 +147,6 @@ SwapButton::SwapButton( s32 px, s32 py )
 
 int Castle::OpenDialog( bool readonly )
 {
-    auto processBuildCastle = [&]( CastleDialog::FadeBuilding & fadeBuilding, fheroes2::Display & display, CastleHeroes & heroes, const fheroes2::Point & cur_pt,
-                                   ArmyBar & selectArmy1, ArmyBar & selectArmy2, fheroes2::Image & surfaceHero, int & alphaHero ) {
-        uint32_t build = fadeBuilding.GetBuild();
-        if ( build != BUILD_NOTHING ) {
-            BuyBuilding( build );
-            if ( BUILD_CAPTAIN == build ) {
-                RedrawIcons( *this, heroes, cur_pt );
-                display.render();
-            }
-        }
-        fadeBuilding.StopFadeBuilding();
-        const Heroes * prev = heroes.Guest();
-        build = OpenTown();
-        heroes = world.GetHeroes( *this );
-        const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
-
-        if ( BUILD_NOTHING != build ) {
-            AGG::PlaySound( M82::BUILDTWN );
-            fadeBuilding.StartFadeBuilding( build );
-        }
-
-        if ( buyhero ) {
-            if ( prev ) {
-                selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
-                selectArmy2.SetArmy( NULL );
-                RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
-                selectArmy1.Redraw();
-                if ( selectArmy2.isValid() )
-                    selectArmy2.Redraw();
-                display.render();
-            }
-            selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
-            AGG::PlaySound( M82::BUILDTWN );
-
-            // animate fade in for hero army bar
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
-            const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
-            if ( !port.empty() )
-                fheroes2::Blit( port, surfaceHero, 5, 5 );
-
-            const fheroes2::Point savept = selectArmy2.GetPos();
-            selectArmy2.SetPos( 112, 5 );
-            selectArmy2.Redraw( surfaceHero );
-            selectArmy2.SetPos( savept.x, savept.y );
-
-            RedrawResourcePanel( cur_pt );
-            alphaHero = 0;
-        }
-    };
-
-    auto processMageGuild = [&]( CastleHeroes & heroes, fheroes2::Button & buttonExit, bool & needRedraw ) {
-        fheroes2::ButtonRestorer exitRestorer( buttonExit );
-        bool noFreeSpaceForMagicBook = false;
-
-        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-            if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
-            }
-            else if ( heroes.Guard()->BuySpellBook( this ) ) {
-                needRedraw = true;
-            }
-        }
-
-        if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-            if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
-            }
-            else if ( heroes.Guest()->BuySpellBook( this ) ) {
-                needRedraw = true;
-            }
-        }
-
-        if ( noFreeSpaceForMagicBook ) {
-            const Heroes * hero = heroes.Guard();
-            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
-                hero = heroes.Guest();
-
-            Dialog::Message(
-                hero->GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
-        }
-
-        OpenMageGuild( heroes );
-    };
-
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
@@ -523,7 +437,39 @@ int Castle::OpenDialog( bool readonly )
 
                 if ( le.MouseClickLeft( buildingCoord ) || isBuildingHotkeyPressed ) {
                     if ( isMageGuild ) {
-                        processMageGuild( heroes, buttonExit, need_redraw );
+                        fheroes2::ButtonRestorer exitRestorer( buttonExit );
+                        bool noFreeSpaceForMagicBook = false;
+
+                        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+                            if ( heroes.Guard()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
+                            }
+                            else if ( heroes.Guard()->BuySpellBook( this ) ) {
+                                need_redraw = true;
+                            }
+                        }
+
+                        if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
+                            if ( heroes.Guest()->IsFullBagArtifacts() ) {
+                                noFreeSpaceForMagicBook = true;
+                            }
+                            else if ( heroes.Guest()->BuySpellBook( this ) ) {
+                                need_redraw = true;
+                            }
+                        }
+
+                        if ( noFreeSpaceForMagicBook ) {
+                            const Heroes * hero = heroes.Guard();
+                            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
+                                hero = heroes.Guest();
+
+                            Dialog::Message(
+                                hero->GetName(),
+                                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                                Font::BIG, Dialog::OK );
+                        }
+
+                        OpenMageGuild( heroes );
                         continue;
                     }
                     else if ( isCreatureDwelling ) {
