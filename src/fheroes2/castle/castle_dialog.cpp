@@ -51,6 +51,38 @@
 
 void CastleRedrawTownName( const Castle & castle, const fheroes2::Point & dst );
 
+building_t getPressedBuildingHotkey()
+{
+    if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_1 ) )
+        return DWELLING_MONSTER1;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_2 ) )
+        return DWELLING_MONSTER2;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_3 ) )
+        return DWELLING_MONSTER3;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_4 ) )
+        return DWELLING_MONSTER4;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_5 ) )
+        return DWELLING_MONSTER5;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_CREATURE_6 ) )
+        return DWELLING_MONSTER6;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) )
+        return BUILD_MARKETPLACE;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) )
+        return BUILD_WELL;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) )
+        return BUILD_MAGEGUILD;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) )
+        return BUILD_SHIPYARD;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) )
+        return BUILD_THIEVESGUILD;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) )
+        return BUILD_TAVERN;
+    else if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) )
+        return BUILD_CASTLE;
+
+    return BUILD_NOTHING;
+}
+
 void RedrawIcons( const Castle & castle, const CastleHeroes & heroes, const fheroes2::Point & pt )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -537,15 +569,27 @@ int Castle::OpenDialog( bool readonly )
                 }
 
                 const bool isMageGuild = BUILD_MAGEGUILD & buildingID;
-                if ( le.MouseClickLeft( buildingCoord ) ) {
+                const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
+
+                bool isBuildingHotkeyPressed = false;
+                if ( isMageGuild ) {
+                    isBuildingHotkeyPressed = BUILD_MAGEGUILD == pressedHotkeyBuildingID;
+                }
+                else if ( isCreatureDwelling ) {
+                    isBuildingHotkeyPressed = buildingID == GetActualDwelling( pressedHotkeyBuildingID );
+                }
+                else {
+                    isBuildingHotkeyPressed = buildingID == pressedHotkeyBuildingID;
+                }
+
+                if ( le.MouseClickLeft( buildingCoord ) || isBuildingHotkeyPressed ) {
                     if ( isMageGuild ) {
                         processMageGuild( heroes, buttonExit, need_redraw );
                         continue;
                     }
                     else if ( isCreatureDwelling ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                        if ( Castle::RecruitMonster(
-                                 Dialog::RecruitMonster( Monster( race, GetActualDwelling( ( *it ).id ) ), getMonstersInDwelling( ( *it ).id ), true ) ) ) {
+                        if ( Castle::RecruitMonster( Dialog::RecruitMonster( Monster( race, buildingID ), getMonstersInDwelling( ( *it ).id ), true ) ) ) {
                             need_redraw = true;
                         }
                     }
