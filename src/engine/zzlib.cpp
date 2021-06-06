@@ -39,7 +39,8 @@ std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
         uLong dstsz = static_cast<uLong>( res.size() );
         int ret = Z_BUF_ERROR;
 
-        while ( Z_BUF_ERROR == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
+        while ( Z_BUF_ERROR
+                == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
             dstsz = static_cast<uLong>( res.size() * 2 );
             res.resize( dstsz );
         }
