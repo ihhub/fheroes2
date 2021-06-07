@@ -1434,8 +1434,23 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             _dpadScrollActive = false;
         }
 
-        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+#if defined( FHEROES2_VITA )
+        if ( dpadInputActive && ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) ) {
             key_value = KEY_SHIFT;
+            return;
+        }
+#endif
+        if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
+            key_value = KEY_h;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
+            key_value = KEY_t;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_X ) {
+            key_value = KEY_e;
+        }
+        else if ( button.button == SDL_CONTROLLER_BUTTON_Y ) {
+            key_value = KEY_c;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_BACK ) {
             key_value = KEY_f;
