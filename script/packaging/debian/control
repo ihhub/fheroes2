@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/ihhub/fheroes2
 Package: fheroes2
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: free implementation of Heroes of Might and Magic II game engine
+Description: Free remake of Heroes of Might and Magic II game engine
  Heroes of Might and Magic II is a classic turn-based fantasy strategy.
  .
  Original game files are needed to play this game.
