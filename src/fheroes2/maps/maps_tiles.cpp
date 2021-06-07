@@ -1675,7 +1675,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
 
     const int objectID = GetObject( false );
     // animate objects
-    if ( objectID == MP2::OBJ_ABANDONEDMINE ) {
+    if ( objectID == MP2::OBJ_ABANDONEDMINE && GetQuantity3() == Spell::HAUNT ) {
         area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
     else if ( objectID == MP2::OBJ_MINES ) {
