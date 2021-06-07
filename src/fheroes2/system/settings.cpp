@@ -884,20 +884,21 @@ ListDirs Settings::GetRootDirs()
     if ( System::GetEnvironment( "FHEROES2_DATA" ) )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
 
-    // from dirname
+    // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
-    // from user config
+    // os-specific directories
+    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+
+    // user config directory
     const std::string & config = System::GetConfigDirectory( "fheroes2" );
     if ( !config.empty() )
         dirs.push_back( config );
 
-    // from user data
+    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
     const std::string & data = System::GetDataDirectory( "fheroes2" );
     if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
         dirs.push_back( data );
-
-    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }
@@ -917,8 +918,6 @@ ListFiles Settings::GetListFiles( const std::string & prefix, const std::string 
         if ( System::IsDirectory( path ) )
             res.ReadDir( path, filter, false );
     }
-
-    res.Append( System::GetListFiles( "fheroes2", prefix, filter ) );
 
     return res;
 }
@@ -961,35 +960,6 @@ std::string Settings::GetLangDir()
             return res;
     }
 #endif
-
-    return "";
-}
-
-std::string Settings::GetWriteableDir( const char * subdir )
-{
-    ListDirs dirs = GetRootDirs();
-    dirs.Append( System::GetDataDirectories( "fheroes2" ) );
-
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        std::string dir_files = System::ConcatePath( *it, "files" );
-
-        // create files
-        if ( System::IsDirectory( *it, true ) && !System::IsDirectory( dir_files, true ) )
-            System::MakeDirectory( dir_files );
-
-        // create subdir
-        if ( System::IsDirectory( dir_files, true ) ) {
-            std::string dir_subdir = System::ConcatePath( dir_files, subdir );
-
-            if ( !System::IsDirectory( dir_subdir, true ) )
-                System::MakeDirectory( dir_subdir );
-
-            if ( System::IsDirectory( dir_subdir, true ) )
-                return dir_subdir;
-        }
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }
