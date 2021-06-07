@@ -19,7 +19,6 @@ option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
 option(ENABLE_TOOLS    "Enable additional tools" OFF)
 option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
 
-option(USE_SYSTEM_TINYXML        "Use system libtinyxml instead bundled version" OFF)
 option(USE_SYSTEM_LIBSMACKER     "Use system libsmacker instead bundled version" OFF)
 
 option(FHEROES2_STRICT_COMPILATION "Enable -Werror strict compilation" OFF)
