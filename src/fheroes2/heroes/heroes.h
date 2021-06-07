@@ -355,8 +355,6 @@ public:
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
 
-    bool AllowBattle( bool attacker ) const;
-
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
 
@@ -366,6 +364,9 @@ public:
     static void ScholarAction( Heroes &, Heroes & );
 
     fheroes2::Point MovementDirection() const;
+
+    int GetAttackedMonsterTileIndex() const;
+    void SetAttackedMonsterTileIndex( int idx );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
@@ -424,6 +425,8 @@ private:
     RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
+
+    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
     enum
     {
