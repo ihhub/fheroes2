@@ -688,19 +688,19 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved under version " << GetVersion() << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
-    os << std::endl << "# path to directory data" << std::endl;
+    os << std::endl << "# path to the data directory" << std::endl;
     os << "data = " << data_params << std::endl;
 
-    os << std::endl << "# path to directory maps (you can set few map directies)" << std::endl;
+    os << std::endl << "# path to the maps directory (you can specify multiple directories here)" << std::endl;
     for ( ListDirs::const_iterator it = maps_params.begin(); it != maps_params.end(); ++it )
         os << "maps = " << *it << std::endl;
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << std::endl << "# sound: on off" << std::endl;
+    os << std::endl << "# sound: on/off" << std::endl;
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# music: original, expansion, cd, external" << std::endl;
@@ -712,19 +712,19 @@ std::string Settings::String() const
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
+    os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
+    os << std::endl << "# use alternative resources (no longer used)" << std::endl;
     os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# run in debug mode (0 - 11) [only for development]" << std::endl;
+    os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
 
-    os << std::endl << "# heroes move speed: 1 - 10" << std::endl;
+    os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
 
-    os << std::endl << "# AI move speed: 0 - 10" << std::endl;
+    os << std::endl << "# AI movement speed: 0 - 10" << std::endl;
     os << "ai speed = " << ai_speed << std::endl;
 
     os << std::endl << "# battle speed: 1 - 10" << std::endl;
@@ -753,28 +753,28 @@ std::string Settings::String() const
 
     os << std::endl;
 
-    os << std::endl << "# show battle grid: on off" << std::endl;
+    os << std::endl << "# show battle grid: on/off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow movement: on off" << std::endl;
+    os << std::endl << "# show battle shadow movement: on/off" << std::endl;
     os << "battle shadow movement = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow cursor: on off" << std::endl;
+    os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto resolve battles: on off" << std::endl;
+    os << std::endl << "# auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto combat spell casting: on off" << std::endl;
+    os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     if ( video_driver.size() ) {
-        os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
+        os << std::endl << "# sdl video driver, windows: windib, directx; wince: gapi, raw; linux: x11; other: see sdl manual (will be deprecated)" << std::endl;
         os << "videodriver = " << video_driver << std::endl;
     }
 
 #ifdef WITH_TTF
-    os << std::endl << "Below options are experimental and disabled in the game for now" << std::endl;
+    os << std::endl << "# options below are experimental and are currently disabled in the game" << std::endl;
     os << "fonts normal = " << font_normal << std::endl
        << "fonts small = " << font_small << std::endl
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
@@ -787,7 +787,7 @@ std::string Settings::String() const
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
-    os << std::endl << "# show first time game run information: on off" << std::endl;
+    os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
 
     return os.str();
