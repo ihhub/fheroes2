@@ -1383,6 +1383,16 @@ void Maps::Tiles::AddonsSort( void )
         addons_level1.erase( lastObject );
     }
 
+    // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
+    if ( !addons_level1.empty() && !tileIsRoad && ( MP2::OBJ_ZERO == mp2_object || MP2::OBJ_COAST == mp2_object ) ) {
+        for ( const TilesAddon & addon : addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tileIsRoad = true;
+                break;
+            }
+        }
+    }
+
     // FIXME: check if sort is still needed
     // if ( !addons_level1.empty() )
     //    addons_level1.sort( TilesAddon::PredicateSortRules1 );
