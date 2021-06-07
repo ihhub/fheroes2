@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -959,7 +960,7 @@ void Maps::Tiles::SetObject( int object )
 void Maps::Tiles::setBoat( int direction )
 {
     if ( objectTileset != 0 && objectIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( 0, 0, objectTileset, objectIndex ) );
+        AddonsPushLevel1( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
     }
     SetObject( MP2::OBJ_BOAT );
     objectTileset = ICN::BOAT32;
@@ -1380,6 +1381,16 @@ void Maps::Tiles::AddonsSort( void )
         objectTileset = lastObject->object;
         objectIndex = lastObject->index;
         addons_level1.erase( lastObject );
+    }
+
+    // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
+    if ( !addons_level1.empty() && !tileIsRoad && ( MP2::OBJ_ZERO == mp2_object || MP2::OBJ_COAST == mp2_object ) ) {
+        for ( const TilesAddon & addon : addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tileIsRoad = true;
+                break;
+            }
+        }
     }
 
     // FIXME: check if sort is still needed
@@ -2341,24 +2352,23 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     const int tileIndex = tile._index;
     int attackerIndex = -1;
 
-    // scan hero around
-    const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        const Tiles & heroTile = world.GetTiles( *it );
-        const Heroes * hero = heroTile.GetHeroes();
-        if ( hero == NULL ) { // not a hero? How can it be?!
-            continue;
-        }
+    // scan for a hero around
+    const MapsIndexes aroundIndexes = Maps::GetAroundIndexes( tileIndex );
 
-        if ( tile.isWater() == heroTile.isWater() ) {
-            attackerIndex = *it;
+    for ( const int32_t idx : Maps::MapsIndexesFilteredObject( aroundIndexes, MP2::OBJ_HEROES, false ) ) {
+        const Heroes * hero = world.GetTiles( idx ).GetHeroes();
+        assert( hero != nullptr );
+
+        // hero is going to attack monsters on this tile
+        if ( hero->GetAttackedMonsterTileIndex() == tileIndex ) {
+            attackerIndex = idx;
             break;
         }
     }
 
     std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
 
-    // draw attack sprite
+    // draw an attacking sprite if there is an attacking hero nearby
     if ( attackerIndex != -1 ) {
         spriteIndices.first += 7;
 

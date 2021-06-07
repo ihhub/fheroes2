@@ -265,7 +265,7 @@ u32 M82::GetIndexLOOP00XXFromObject( int obj )
     return 0xFF;
 }
 
-int M82::GetLOOP00XX( int index )
+int M82::GetLOOP00XX( const size_t index )
 {
     switch ( index ) {
     case 0:

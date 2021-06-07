@@ -41,8 +41,6 @@ namespace Skill
     uint32_t GetNecromancyBonus( const HeroBase & hero );
     uint32_t GetNecromancyPercent( const HeroBase & hero );
 
-    void UpdateStats( const std::string & );
-
     namespace Level
     {
         enum

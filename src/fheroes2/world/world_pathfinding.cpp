@@ -38,7 +38,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
             if ( otherHero->isFriends( color ) )
                 return true;
             else
-                return !otherHero->AllowBattle( false ) || otherHero->GetArmy().GetStrength() > armyStrength;
+                return otherHero->GetArmy().GetStrength() > armyStrength;
         }
     }
 

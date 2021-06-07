@@ -702,7 +702,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
         res.defender = targetUnits[i];
         // store temp priority for calculate damage
-        res.damage = i;
+        res.damage = static_cast<uint32_t>( i );
     }
     return targets;
 }

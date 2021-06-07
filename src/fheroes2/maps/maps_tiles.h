@@ -32,10 +32,6 @@
 #include "resource.h"
 #include "skill.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Heroes;
 class Spell;
 class Monster;
@@ -329,9 +325,7 @@ namespace Maps
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
-#ifdef WITH_XML
-        friend TiXmlElement & operator>>( TiXmlElement &, Tiles & );
-#endif
+
         friend bool operator<( const Tiles & l, const Tiles & r )
         {
             return l.GetIndex() < r.GetIndex();

@@ -31,10 +31,6 @@
 #include "skill.h"
 #include "spell_book.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Army;
 class Castle;
 
@@ -129,9 +125,6 @@ public:
 protected:
     friend StreamBase & operator<<( StreamBase &, const HeroBase & );
     friend StreamBase & operator>>( StreamBase &, HeroBase & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, HeroBase & );
-#endif
 
     u32 magic_point;
     u32 move_point;

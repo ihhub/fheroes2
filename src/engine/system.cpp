@@ -109,6 +109,17 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return std::string( str1 + SEPARATOR + str2 );
 }
 
+ListDirs System::GetOSSpecificDirectories()
+{
+    ListDirs dirs;
+
+#if defined( FHEROES2_VITA )
+    dirs.emplace_back( "ux0:app/FHOMM0002" );
+#endif
+
+    return dirs;
+}
+
 std::string System::GetConfigDirectory( const std::string & prog )
 {
 #if defined( __LINUX__ )
@@ -145,61 +156,6 @@ std::string System::GetDataDirectory( const std::string & prog )
 #else
     return GetHomeDirectory( prog );
 #endif
-}
-
-ListDirs System::GetDataDirectories( const std::string & prog )
-{
-    ListDirs dirs;
-
-#if defined( ANDROID )
-    const char * internal = SDL_AndroidGetInternalStoragePath();
-    if ( internal )
-        dirs.push_back( System::ConcatePath( internal, prog ) );
-
-    if ( SDL_ANDROID_EXTERNAL_STORAGE_READ && SDL_AndroidGetExternalStorageState() ) {
-        const char * external = SDL_AndroidGetExternalStoragePath();
-        if ( external )
-            dirs.push_back( System::ConcatePath( external, prog ) );
-    }
-
-    dirs.push_back( System::ConcatePath( "/storage/sdcard0", prog ) );
-    dirs.push_back( System::ConcatePath( "/storage/sdcard1", prog ) );
-#else
-    (void)prog;
-#endif
-
-    return dirs;
-}
-
-ListFiles System::GetListFiles( const std::string & prog, const std::string & prefix, const std::string & filter )
-{
-    ListFiles res;
-
-#if defined( ANDROID )
-    VERBOSE_LOG( prefix << ", " << filter );
-
-    // check assets
-    StreamFile sf;
-    if ( sf.open( "assets.list", "rb" ) ) {
-        std::list<std::string> rows = StringSplit( GetString( sf.getRaw( sf.size() ) ), "\n" );
-        for ( std::list<std::string>::const_iterator it = rows.begin(); it != rows.end(); ++it )
-            if ( prefix.empty() || ( ( prefix.size() <= ( *it ).size() && 0 == prefix.compare( ( *it ).substr( 0, prefix.size() ) ) ) ) ) {
-                if ( filter.empty() || ( 0 == filter.compare( ( *it ).substr( ( *it ).size() - filter.size(), filter.size() ) ) ) )
-                    res.push_back( *it );
-            }
-    }
-
-    ListDirs dirs = GetDataDirectories( prog );
-
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        res.ReadDir( prefix.size() ? System::ConcatePath( *it, prefix ) : *it, filter, false );
-    }
-#else
-    (void)prog;
-    (void)prefix;
-    (void)filter;
-#endif
-    return res;
 }
 
 std::string System::GetDirname( const std::string & str )

@@ -169,50 +169,6 @@ buildstats_t _builds[] = {
     {BUILD_NOTHING, Race::NONE, {0, 0, 0, 0, 0, 0, 0}},
 };
 
-void BuildingInfo::UpdateCosts( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse buildings.xml
-    TiXmlDocument doc;
-
-    if ( doc.LoadFile( spec.c_str() ) ) {
-        const TiXmlElement * xml_buildings = doc.FirstChildElement( "buildings" );
-        if ( xml_buildings != NULL ) {
-            size_t index = 0;
-
-            for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
-                  xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
-                cost_t & cost = _builds[index].cost;
-                int value;
-
-                xml_building->Attribute( "gold", &value );
-                cost.gold = value;
-                xml_building->Attribute( "wood", &value );
-                cost.wood = value;
-                xml_building->Attribute( "mercury", &value );
-                cost.mercury = value;
-                xml_building->Attribute( "ore", &value );
-                cost.ore = value;
-                xml_building->Attribute( "sulfur", &value );
-                cost.sulfur = value;
-                xml_building->Attribute( "crystal", &value );
-                cost.crystal = value;
-                xml_building->Attribute( "gems", &value );
-                cost.gems = value;
-            }
-        }
-        else {
-            VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-        }
-    }
-    else {
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-    }
-#else
-    (void)spec;
-#endif
-}
-
 payment_t BuildingInfo::GetCost( u32 build, int race )
 {
     payment_t payment;
