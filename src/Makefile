@@ -73,14 +73,6 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
 endif
 endif
 
-ifndef WITHOUT_XML
-CFLAGS := $(CFLAGS) -DWITH_XML
-ifdef WITHOUT_BUNDLED_LIBS
-CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
-LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
-endif
-endif
-
 ifndef WITHOUT_ZLIB
 CFLAGS := $(CFLAGS) -DWITH_ZLIB
 LIBS := $(LIBS) -lz
@@ -128,11 +120,6 @@ export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 .PHONY: clean
 
 all:
-ifndef WITHOUT_XML
-ifndef WITHOUT_BUNDLED_LIBS
-	$(MAKE) -C thirdparty/tinyxml CFLAGS="$(CXXFLAGS_TP)"
-endif
-endif
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
@@ -144,7 +131,6 @@ ifndef WITHOUT_UNICODE
 endif
 
 clean:
-	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean

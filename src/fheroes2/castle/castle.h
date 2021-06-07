@@ -238,9 +238,6 @@ private:
 private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Castle & );
-#endif
 
     int race;
     u32 building;
