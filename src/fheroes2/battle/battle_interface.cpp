@@ -2617,7 +2617,7 @@ void Battle::Interface::AnimateUnitWithDelay( Unit & unit, uint32_t delay )
         return;
 
     LocalEvent & le = LocalEvent::Get();
-    const uint32_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
+    const uint64_t frameDelay = ( unit.animation.animationLength() > 0 ) ? delay / unit.animation.animationLength() : 0;
 
     while ( le.HandleEvents( false ) ) {
         CheckGlobalEvents( le );
@@ -2692,7 +2692,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
     if ( isMage )
         fheroes2::delayforMs( Game::ApplyBattleSpeed( 115 ) );
     else
-        missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) );
+        missile = fheroes2::AGG::GetICN( Monster::GetMissileICN( monsterID ), static_cast<int32_t>( Bin_Info::GetMonsterInfo( monsterID ).getProjectileID( angle ) ) );
 
     // Lich/Power lich has projectile speed of 25
     const std::vector<fheroes2::Point> points = GetEuclideanLine( startPos, endPos, isMage ? 50 : std::max( missile.width(), 25 ) );

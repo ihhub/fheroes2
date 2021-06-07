@@ -45,15 +45,16 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 
     clear();
 
-    for ( Players::iterator it = players.begin(); it != players.end(); ++it ) {
-        const u32 current = std::distance( players.begin(), it );
+    const int32_t playerCount = static_cast<int32_t>( players.size() ); // safe to cast as the number of players <= 8.
+
+    for ( int32_t i = 0; i < playerCount; ++i ) {
         PlayerInfo info;
 
-        info.player = *it;
-        info.rect1 = fheroes2::Rect( pt1.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt1.y, sprite.width(), sprite.height() );
-        info.rect2 = fheroes2::Rect( pt2.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt2.y, sprite.width(), sprite.height() );
+        info.player = players[i];
+        info.rect1 = fheroes2::Rect( pt1.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt1.y, sprite.width(), sprite.height() );
+        info.rect2 = fheroes2::Rect( pt2.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt2.y, sprite.width(), sprite.height() );
 
-        push_back( info );
+        emplace_back( std::move( info ) );
     }
 
     for ( iterator it = begin(); it != end(); ++it ) {
