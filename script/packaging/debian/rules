@@ -3,16 +3,7 @@
 # output every command that modifies files on the build system.
 #export DH_VERBOSE = 1
 
-export WITHOUT_BUNDLED_LIBS = 1
 export RELEASE = 1
 
 %:
 	dh $@ --parallel
-
-override_dh_auto_build:
-	dh_auto_build
-	convert src/resources/fheroes2.png debian/fheroes2.xpm
-
-override_dh_clean:
-	dh_clean
-	rm -f debian/*.xpm
