@@ -421,7 +421,7 @@ int Castle::OpenDialog( bool readonly )
                     continue;
                 }
 
-                const bool isMageGuild = BUILD_MAGEGUILD & buildingID;
+                const bool isMageGuild = (BUILD_MAGEGUILD & buildingID) != 0;
                 const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
                 bool isBuildingHotkeyPressed = false;
