@@ -1,13 +1,23 @@
---- Install ---
+--- Copyright ---
+All rights for the original game and its resources belong to former The 3DO Company.
+These rights were transferred to Ubisoft. We do not encourage and do not support
+any form of illegal usage of the original game. We strongly advise to purchase
+the original game on GOG or Ubisoft Store platforms. Alternatively, you can
+download a free demo version of the game with help of our scripts.
 
-fheroes2 requires data files from the original Heroes of Might and Magic II. All rights to original game files is owned by Ubisoft.
+--- Installation and Requirements ---
+You are required to have at a demo or full version of Heroes of Might and Magic II
+game to be able to play it.
 
-Copy *.AGG from the original game data folder and everything from the original maps folder into $XDG_DATA_HOME/fheroes2/{data,maps}.
-If you have GOG version of game, you can place music files in OGG format into the $XDG_DATA_HOME/fheroes2/music folder.
-*.SMK files should be placed inside $XDG_DATA_HOME/fheroes2/heroes2/anim folder.
-Optionally for reassigning hotkeys, copy /usr/share/doc/fheroes2/fheroes2.key to $XDG_CONFIG_HOME/fheroes2 and edit it.
+If you have a legally purchased game, you need to copy all directories which
+belong to HoMM2 (such as DATA, MAPS and etc) into
+$XDG_DATA_HOME/fheroes2 location.
+
+--- License ---
+This project is under GNU General Public License v2.0. Please refer to file
+LICENSE for more details.
 
 --- Donation ---
-Currently dev team accepts donations via Patreon at https://www.patreon.com/fheroes2.
-All donations will be used only for the future project development as developers do not
+Currently we accept donations via Patreon at https://www.patreon.com/fheroes2.
+All donations will be used only for the future project development as we do not
 consider this project as a source of income by any means.
