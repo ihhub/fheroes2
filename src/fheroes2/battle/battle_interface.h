@@ -26,10 +26,10 @@
 #include <string>
 
 #include "battle_board.h"
+#include "cursor.h"
 #include "dialog.h"
 #include "game_delays.h"
 #include "gamedefs.h"
-#include "icn.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
@@ -97,8 +97,6 @@ namespace Battle
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
         bool isFinishFrame( void ) const;
-        bool isStartFrame( void ) const;
-        int GetColor( void ) const;
         const HeroBase * GetHero( void ) const;
         fheroes2::Point Offset() const;
 
@@ -246,7 +244,7 @@ namespace Battle
         void RedrawLowObjects( s32 );
         void RedrawHighObjects( s32 );
         void RedrawCastle1( const Castle & );
-        void RedrawCastle2( const Castle &, s32 );
+        void RedrawCastle2( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
         void RedrawInterface( void );
@@ -298,7 +296,6 @@ namespace Battle
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
-        int GetAllowSwordDirection( u32 );
 
         Arena & arena;
         Dialog::FrameBorder border;
@@ -329,7 +326,7 @@ namespace Battle
         int catapult_frame;
 
         uint8_t _contourColor;
-        bool _brightLandType; // used to determin current monster contour cycling colors
+        bool _brightLandType; // used to determine current monster contour cycling colors
         uint32_t _contourCycle;
 
         const Unit * _currentUnit;
@@ -348,6 +345,7 @@ namespace Battle
         PopupDamageInfo popup;
         ArmiesOrder armies_order;
 
+        CursorRestorer _cursorRestorer;
         std::unique_ptr<fheroes2::StandardWindow> _background;
     };
 }

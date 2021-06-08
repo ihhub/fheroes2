@@ -167,7 +167,7 @@ namespace Game
     fheroes2::GameMode LoadHotseat();
     fheroes2::GameMode LoadNetwork();
     fheroes2::GameMode ScenarioInfo();
-    fheroes2::GameMode SelectCampaignScenario();
+    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode );
     fheroes2::GameMode SelectScenario();
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();
@@ -234,7 +234,7 @@ namespace Game
         void PerformFadeTask();
     }
 
-    u32 GetStep4Player( u32, u32, u32 );
+    int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }

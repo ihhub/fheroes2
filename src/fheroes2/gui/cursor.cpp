@@ -244,3 +244,49 @@ int Cursor::WithoutDistanceThemes( const int theme )
 
     return theme;
 }
+
+CursorRestorer::CursorRestorer()
+{
+    const Cursor & cursor = Cursor::Get();
+
+    _visible = cursor.isVisible();
+    _theme = cursor.Themes();
+}
+
+CursorRestorer::CursorRestorer( bool visible, int theme )
+    : CursorRestorer()
+{
+    Cursor & cursor = Cursor::Get();
+
+    cursor.SetThemes( theme );
+
+    if ( visible ) {
+        cursor.Show();
+    }
+    else {
+        cursor.Hide();
+    }
+}
+
+CursorRestorer::~CursorRestorer()
+{
+    Cursor & cursor = Cursor::Get();
+
+    if ( cursor.isVisible() != _visible || cursor.Themes() != _theme ) {
+        cursor.SetThemes( _theme );
+
+        if ( _visible ) {
+            cursor.Show();
+        }
+        else {
+            cursor.Hide();
+        }
+
+        // immediately render cursor area in case of software emulated cursor
+        if ( fheroes2::cursor().isSoftwareEmulation() ) {
+            const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
+
+            fheroes2::Display::instance().render( fheroes2::Rect( pos.x, pos.y, 1, 1 ) );
+        }
+    }
+}

@@ -63,11 +63,12 @@ struct SelectRecipientsColors
     {
         positions.reserve( colors.size() );
 
-        for ( size_t i = 0; i < colors.size(); ++i ) {
+        const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
+
+        for ( int32_t i = 0; i < colorCount; ++i ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
 
-            positions.emplace_back( pos.x + Game::GetStep4Player( static_cast<uint32_t>( i ), sprite.width() + 15, colors.size() ), pos.y, sprite.width(),
-                                    sprite.height() );
+            positions.emplace_back( pos.x + Game::GetStep4Player( i, sprite.width() + 15, colorCount ), pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -201,12 +202,11 @@ struct ResourceBar
 
 void Dialog::MakeGiftResource( Kingdom & kingdom )
 {
-    Cursor & cursor = Cursor::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 224 );
     const fheroes2::Rect box( frameborder.activeArea() );
@@ -237,7 +237,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     btnGroups.button( 0 ).disable();
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     u32 count = Color::Count( selector.recipients );
@@ -247,7 +246,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         if ( selector.QueueEventProcessing() ) {
             u32 new_count = Color::Count( selector.recipients );
-            cursor.Hide();
+
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
                 btnGroups.button( 0 ).disable();
             else
@@ -260,14 +259,12 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
                 info2.Redraw();
                 count = new_count;
             }
+
             btnGroups.draw();
             selector.Redraw();
-            cursor.Show();
             display.render();
         }
         else if ( info2.QueueEventProcessing( funds1, count ) ) {
-            cursor.Hide();
-
             if ( 0 == Color::Count( selector.recipients ) || 0 == funds2.GetValidItemsCount() )
                 btnGroups.button( 0 ).disable();
             else
@@ -276,7 +273,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
             info1.Redraw();
             info2.Redraw();
             btnGroups.draw();
-            cursor.Show();
             display.render();
         }
 

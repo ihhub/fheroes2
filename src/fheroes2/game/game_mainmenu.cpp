@@ -133,10 +133,16 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario();
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario();
+            break;
+        case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
+            result = Game::CompleteCampaignScenario();
+            if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
+                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN );
+            }
             break;
 
         default:
@@ -154,26 +160,29 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     conf.SetGameType( TYPE_MENU );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
+                         Dialog::OK );
+
         bool isResolutionChanged = Dialog::SelectResolution();
-        conf.Save( "fheroes2.cfg" );
         if ( isResolutionChanged ) {
             fheroes2::drawMainMenuScreen();
         }
 
-        Dialog::Message( _( "Please remember" ),
+        Dialog::Message( _( "Please Remember" ),
                          _( "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
                             "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
                          Font::BIG, Dialog::OK );
+
+        conf.resetFirstGameRun();
+        conf.Save( "fheroes2.cfg" );
     }
 
     LocalEvent & le = LocalEvent::Get();
@@ -196,7 +205,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    cursor.Show();
     display.render();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
@@ -206,18 +214,19 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
     u32 lantern_frame = 0;
 
-    ButtonInfo buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
-                            {LOADGAME_DEFAULT, buttonLoadGame, false, false},
-                            {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
-                            {CREDITS_DEFAULT, buttonCredits, false, false},
-                            {QUIT_DEFAULT, buttonQuit, false, false}};
+    std::vector<ButtonInfo> buttons{ { NEWGAME_DEFAULT, buttonNewGame, false, false },
+                                     { LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                     { HIGHSCORES_DEFAULT, buttonHighScores, false, false },
+                                     { CREDITS_DEFAULT, buttonCredits, false, false },
+                                     { QUIT_DEFAULT, buttonQuit, false, false } };
 
-    for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
-        cursor.Hide();
+    for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
-        cursor.Show();
     }
+
+    fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
+    fheroes2::ApplyPalette( highlightDoor, 8 );
 
     // mainmenu loop
     while ( 1 ) {
@@ -234,7 +243,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         bool redrawScreen = false;
 
-        for ( u32 i = 0; i < ARRAY_COUNT( buttons ); ++i ) {
+        for ( size_t i = 0; i < buttons.size(); ++i ) {
             buttons[i].wasOver = buttons[i].isOver;
 
             if ( le.MousePressLeft( buttons[i].button.area() ) ) {
@@ -253,7 +262,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
                     ++frame;
 
                 if ( !redrawScreen ) {
-                    cursor.Hide();
                     redrawScreen = true;
                 }
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
@@ -262,7 +270,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( redrawScreen ) {
-            cursor.Show();
             display.render();
         }
 
@@ -305,11 +312,14 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
 
         if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
-            cursor.Hide();
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            cursor.Show();
+            if ( le.MouseCursor( resolutionArea ) ) {
+                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
+                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+            }
+
             display.render();
         }
     }

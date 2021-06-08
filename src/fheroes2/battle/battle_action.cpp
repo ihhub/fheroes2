@@ -567,7 +567,10 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     // Genie special attack
     if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
         // Replaces the damage, not adding to it
-        res.damage = defender.GetHitPoints() / 2;
+        if ( defender.GetCount() == 1 )
+            res.damage = defender.GetHitPoints();
+        else
+            res.damage = defender.GetHitPoints() / 2;
 
         if ( Arena::GetInterface() ) {
             std::string str( _( "%{name} half the enemy troops!" ) );
@@ -636,8 +639,8 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
 
 std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
 {
-    std::vector<Battle::Unit *> result = {firstUnit};
-    std::vector<Battle::Unit *> ignoredTroops = {firstUnit};
+    std::vector<Battle::Unit *> result = { firstUnit };
+    std::vector<Battle::Unit *> ignoredTroops = { firstUnit };
 
     std::vector<Battle::Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
@@ -699,7 +702,7 @@ Battle::TargetsInfo Battle::Arena::TargetsForChainLightning( const HeroBase * he
 
         res.defender = targetUnits[i];
         // store temp priority for calculate damage
-        res.damage = i;
+        res.damage = static_cast<uint32_t>( i );
     }
     return targets;
 }
@@ -924,13 +927,14 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     bool playResistSound = false;
     TargetsInfo targets = GetTargetsForSpells( current_commander, spell, dst, &playResistSound );
+    TargetsInfo resistTargets;
 
     if ( interface ) {
         interface->RedrawActionSpellCastStatus( spell, dst, current_commander->GetName(), targets );
 
         for ( const auto & target : targets ) {
             if ( target.resist ) {
-                interface->RedrawActionResistSpell( *target.defender, playResistSound );
+                resistTargets.push_back( target );
             }
         }
     }
@@ -939,6 +943,9 @@ void Battle::Arena::ApplyActionSpellDefaults( Command & cmd, const Spell & spell
 
     if ( interface ) {
         interface->RedrawActionSpellCastPart1( spell, dst, current_commander, targets );
+        for ( const TargetInfo & target : resistTargets ) {
+            interface->RedrawActionResistSpell( *target.defender, playResistSound );
+        }
     }
 
     TargetsApplySpell( current_commander, spell, targets );
@@ -982,7 +989,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 
     const HeroBase * commander = GetCurrentCommander();
     const std::pair<int, int> range = commander ? getEarthquakeDamageRange( commander ) : std::make_pair( 0, 0 );
-    const std::vector<int> wallHexPositions = {FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION};
+    const std::vector<int> wallHexPositions = { FIRST_WALL_HEX_POSITION, SECOND_WALL_HEX_POSITION, THIRD_WALL_HEX_POSITION, FORTH_WALL_HEX_POSITION };
     for ( int position : wallHexPositions ) {
         if ( 0 != board[position].GetObject() ) {
             board[position].SetObject( Rand::Get( range.first, range.second ) );

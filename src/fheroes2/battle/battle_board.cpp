@@ -84,17 +84,6 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
         ( *it ).SetArea( area );
 }
 
-fheroes2::Rect Battle::Board::GetArea( void ) const
-{
-    std::vector<fheroes2::Rect> rects;
-    rects.reserve( size() );
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        rects.push_back( ( *it ).GetPos() );
-
-    return GetBoundaryRect( rects );
-}
-
 void Battle::Board::Reset( void )
 {
     for ( iterator it = begin(); it != end(); ++it ) {
@@ -198,7 +187,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); i++ ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( i, unit ) ) ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).SetDirection( CENTER );
             }
         }

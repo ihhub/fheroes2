@@ -31,11 +31,8 @@ int Dialog::Message( const std::string & header, const std::string & message, in
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( buttons != 0, Cursor::POINTER );
 
     TextBox textbox1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox textbox2( message, ft, BOXAREA_WIDTH );
@@ -53,7 +50,6 @@ int Dialog::Message( const std::string & header, const std::string & message, in
     fheroes2::ButtonGroup group( pos, buttons );
     group.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -64,10 +60,6 @@ int Dialog::Message( const std::string & header, const std::string & message, in
             break;
         result = group.processEvents();
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }

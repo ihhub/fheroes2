@@ -40,7 +40,6 @@ namespace Battle
 {
     struct ModeDuration : public std::pair<u32, u32>
     {
-        ModeDuration();
         ModeDuration( u32, u32 );
 
         bool isMode( u32 ) const;
@@ -59,9 +58,6 @@ namespace Battle
 
         u32 FindZeroDuration( void ) const;
     };
-
-    StreamBase & operator<<( StreamBase &, const ModesAffected & );
-    StreamBase & operator>>( StreamBase &, ModesAffected & );
 
     enum
     {
@@ -157,14 +153,9 @@ namespace Battle
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
-        const AnimationState & GetFrameState( void ) const;
-        AnimationSequence GetFrameState( int ) const;
-        void SetDeathAnim();
         void IncreaseAnimFrame( bool loop = false );
-        bool isStartAnimFrame( void ) const;
         bool isFinishAnimFrame( void ) const;
         int GetFrame( void ) const;
-        int GetFrameStart( void ) const;
         uint32_t GetCustomAlpha() const;
         void SetCustomAlpha( uint32_t alpha );
 
@@ -175,8 +166,6 @@ namespace Battle
         int M82Move( void ) const;
         int M82Wnce( void ) const;
         int M82Expl( void ) const;
-
-        int ICNFile( void ) const;
 
         fheroes2::Point GetBackPoint( void ) const;
         fheroes2::Point GetCenterPoint() const;
@@ -205,9 +194,6 @@ namespace Battle
         AnimationState animation;
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const Unit & );
-        friend StreamBase & operator>>( StreamBase &, Unit & );
-
         u32 uid;
         u32 hp;
         u32 count0;
@@ -224,9 +210,6 @@ namespace Battle
         bool blindanswer;
         uint32_t customAlphaMask;
     };
-
-    StreamBase & operator<<( StreamBase &, const Unit & );
-    StreamBase & operator>>( StreamBase &, Unit & );
 }
 
 #endif

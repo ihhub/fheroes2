@@ -44,6 +44,9 @@ namespace Maps
 
     using Indexes = MapsIndexes;
 
+    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const int obj, const bool ignoreHeroes = true );
+    Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true );
+
     const char * SizeString( int size );
     const char * GetMinesName( int res );
 
@@ -51,16 +54,17 @@ namespace Maps
     int32_t GetDirectionIndex( int32_t from, int vector );
     bool isValidDirection( int32_t from, int vector );
 
-    bool isValidAbsIndex( int32_t ii );
-    bool isValidAbsPoint( int32_t x, int32_t y );
+    bool isValidAbsIndex( const int32_t index );
+    bool isValidAbsPoint( const int32_t x, const int32_t y );
 
     fheroes2::Point GetPoint( const int32_t index );
 
+    // Convert maps point to index maps. Returns -1 if x or y is negative.
     int32_t GetIndexFromAbsPoint( const fheroes2::Point & mp );
-    int32_t GetIndexFromAbsPoint( int32_t px, int32_t py );
+    int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
-    Indexes GetAroundIndexes( int32_t center );
-    Indexes GetAroundIndexes( int32_t center, int dist, bool sort = false ); // sorting distance
+    Indexes GetAroundIndexes( s32 );
+    Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
 
     Indexes ScanAroundObject( int32_t center, int obj );
     Indexes ScanAroundObject( int32_t center, uint32_t dist, int obj );
@@ -75,8 +79,12 @@ namespace Maps
 
     int TileIsCoast( int32_t center, int direct = DIRECTION_ALL );
 
-    void ClearFog( int32_t index, int scoute, int color );
-    uint32_t GetApproximateDistance( int32_t index1, int32_t index2 );
+    void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
+
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor );
+
+    // This method should be avoided unless high precision is not important.
+    uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void MinimizeAreaForCastle( const fheroes2::Point & );

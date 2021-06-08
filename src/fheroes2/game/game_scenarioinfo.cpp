@@ -106,10 +106,8 @@ fheroes2::GameMode Game::ScenarioInfo()
     fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -209,7 +207,6 @@ fheroes2::GameMode Game::ScenarioInfo()
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     while ( 1 ) {
@@ -232,6 +229,7 @@ fheroes2::GameMode Game::ScenarioInfo()
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+
             if ( fi ) {
                 SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
@@ -240,7 +238,6 @@ fheroes2::GameMode Game::ScenarioInfo()
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-                cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.resetSelection();
@@ -250,7 +247,7 @@ fheroes2::GameMode Game::ScenarioInfo()
                 buttonOk.draw();
                 buttonCancel.draw();
             }
-            cursor.Show();
+
             display.render();
         }
         else
@@ -271,18 +268,14 @@ fheroes2::GameMode Game::ScenarioInfo()
 
             // select difficulty
             if ( 0 <= index ) {
-                cursor.Hide();
                 levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                 levelCursor.redraw();
                 Game::saveDifficulty( index );
                 RedrawRatingInfo( rating );
-                cursor.Show();
                 display.render();
             }
-            else
-                // playersInfo
-                if ( playersInfo.QueueEventProcessing() ) {
-                cursor.Hide();
+            // playersInfo
+            else if ( playersInfo.QueueEventProcessing() ) {
                 RedrawScenarioStaticInfo( rectPanel );
                 levelCursor.redraw();
                 RedrawDifficultyInfo( pointDifficultyInfo );
@@ -291,7 +284,6 @@ fheroes2::GameMode Game::ScenarioInfo()
                 RedrawRatingInfo( rating );
                 buttonOk.draw();
                 buttonCancel.draw();
-                cursor.Show();
                 display.render();
             }
         }
@@ -319,8 +311,6 @@ fheroes2::GameMode Game::ScenarioInfo()
 
     SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
 
-    cursor.Hide();
-
     if ( result == fheroes2::GameMode::START_GAME ) {
         players.SetStartGame();
         if ( conf.ExtGameUseFade() )
@@ -334,9 +324,6 @@ fheroes2::GameMode Game::ScenarioInfo()
 
             if ( ext == "mp2" || ext == "mx2" ) {
                 result = world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
-            }
-            else if ( ext == "map" ) {
-                result = world.LoadMapMAP( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
             else {
                 result = fheroes2::GameMode::MAIN_MENU;
@@ -356,9 +343,9 @@ fheroes2::GameMode Game::ScenarioInfo()
     return result;
 }
 
-u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
+int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
-    return current * width * KINGDOMMAX / count + ( width * ( KINGDOMMAX - count ) / ( 2 * count ) );
+    return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
 }
 
 void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw )

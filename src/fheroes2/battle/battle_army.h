@@ -44,8 +44,6 @@ namespace Battle
 
         void SortSlowest();
         void SortFastest();
-        void SortStrongest( void );
-        void SortWeakest( void );
         void SortArchers();
     };
 
@@ -83,9 +81,6 @@ namespace Battle
         Army & army;
         std::vector<u32> uids;
     };
-
-    StreamBase & operator<<( StreamBase &, const Force & );
-    StreamBase & operator>>( StreamBase &, Force & );
 }
 
 #endif

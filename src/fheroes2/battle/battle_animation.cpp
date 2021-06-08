@@ -98,23 +98,12 @@ int AnimationSequence::firstFrame() const
     return isValid() ? _seq.front() : 0;
 }
 
-void AnimationSequence::setToLastFrame()
-{
-    if ( isValid() )
-        _currentFrame = _seq.size() - 1;
-}
-
 double AnimationSequence::movementProgress() const
 {
     if ( _seq.size() > 1 )
         return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
 
     return 0;
-}
-
-bool AnimationSequence::isFirstFrame() const
-{
-    return _currentFrame == 0;
 }
 
 bool AnimationSequence::isLastFrame() const
@@ -125,69 +114,6 @@ bool AnimationSequence::isLastFrame() const
 bool AnimationSequence::isValid() const
 {
     return !_seq.empty();
-}
-
-TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
-    : AnimationSequence( seq )
-    , _currentTime( 0 )
-    , _duration( duration )
-{}
-
-int TimedSequence::playAnimation( uint32_t delta, bool loop )
-{
-    _currentTime += delta;
-    if ( _currentTime > _duration ) {
-        _currentTime = loop ? _currentTime % _duration : _duration;
-    }
-
-    _currentFrame = getFrameID( _currentTime );
-    return getFrame();
-}
-
-int TimedSequence::restartAnimation()
-{
-    _currentTime = 0;
-    _currentFrame = 0;
-    return getFrame();
-}
-
-int TimedSequence::getFrameAt( uint32_t time ) const
-{
-    return isValid() ? _seq[getFrameID( time )] : 0;
-}
-
-size_t TimedSequence::getFrameID( uint32_t time ) const
-{
-    // isValid makes sure duration and length is not 0
-    if ( isValid() ) {
-        const size_t frame = static_cast<size_t>( time / ( _duration / static_cast<double>( animationLength() ) ) );
-        // check if time >= duration
-        return ( frame < animationLength() ) ? frame : animationLength() - 1;
-    }
-    return 0;
-}
-
-uint32_t TimedSequence::getCurrentTime() const
-{
-    return _currentTime;
-}
-
-uint32_t TimedSequence::getDuration() const
-{
-    return _duration;
-}
-
-double TimedSequence::movementProgress() const
-{
-    if ( isValid() )
-        return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
-
-    return 0;
-}
-
-bool TimedSequence::isValid() const
-{
-    return !_seq.empty() && _currentTime <= _duration && _duration > 0;
 }
 
 AnimationReference::AnimationReference()
@@ -306,7 +232,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
             Rand::Queue picker;
 
             for ( size_t i = 0; i < _idle.size(); ++i ) {
-                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
+                picker.Push( static_cast<int32_t>( i ), static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
             }
             // picker is expected to return at least 0
             const size_t id = static_cast<size_t>( picker.Get() );
@@ -441,11 +367,6 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
     return offset;
 }
 
-AnimationSequence AnimationReference::getAnimationSequence( int animState ) const
-{
-    return AnimationSequence( getAnimationVector( animState ) );
-}
-
 uint32_t AnimationReference::getMoveSpeed() const
 {
     return _monsterInfo.moveSpeed;
@@ -459,11 +380,6 @@ uint32_t AnimationReference::getFlightSpeed() const
 uint32_t AnimationReference::getShootingSpeed() const
 {
     return _monsterInfo.shootSpeed;
-}
-
-size_t AnimationReference::getProjectileID( const double angle ) const
-{
-    return _monsterInfo.getProjectileID( angle );
 }
 
 fheroes2::Point AnimationReference::getBlindOffset() const
@@ -568,19 +484,9 @@ int AnimationState::firstFrame() const
     return _currentSequence.firstFrame();
 }
 
-void AnimationState::setToLastFrame()
-{
-    return _currentSequence.setToLastFrame();
-}
-
 double AnimationState::movementProgress() const
 {
     return _currentSequence.movementProgress();
-}
-
-bool AnimationState::isFirstFrame() const
-{
-    return _currentSequence.isFirstFrame();
 }
 
 bool AnimationState::isLastFrame() const

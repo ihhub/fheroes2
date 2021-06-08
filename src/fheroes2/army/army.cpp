@@ -312,7 +312,7 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
 {
     if ( mons.isValid() && count ) {
         auto findEmptySlot = []( const Troop * troop ) { return !troop->isValid(); };
-        auto findMonster = [&mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); };
+        auto findMonster = [&mons]( const Troop * troop ) { return troop->isValid() && troop->isMonster( mons.GetID() ); };
 
         iterator it = emptySlotFirst ? std::find_if( begin(), end(), findEmptySlot ) : std::find_if( begin(), end(), findMonster );
         if ( it == end() ) {
@@ -416,34 +416,6 @@ double Troops::GetStrength() const
     return strength;
 }
 
-u32 Troops::GetAttack( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += static_cast<Monster *>( *it )->GetAttack();
-            ++count;
-        }
-
-    return count ? res / count : 0;
-}
-
-u32 Troops::GetDefense( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += static_cast<Monster *>( *it )->GetDefense();
-            ++count;
-        }
-
-    return count ? res / count : 0;
-}
-
 u32 Troops::GetHitPoints( void ) const
 {
     u32 res = 0;
@@ -453,34 +425,6 @@ u32 Troops::GetHitPoints( void ) const
             res += ( *it )->GetHitPoints();
 
     return res;
-}
-
-u32 Troops::GetDamageMin( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += ( *it )->GetDamageMin();
-            ++count;
-        }
-
-    return count ? res / count : 0;
-}
-
-u32 Troops::GetDamageMax( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += ( *it )->GetDamageMax();
-            ++count;
-        }
-
-    return count ? res / count : 0;
 }
 
 void Troops::Clean( void )
@@ -1037,26 +981,6 @@ void Army::SetColor( int cl )
     color = cl;
 }
 
-int Army::GetRace( void ) const
-{
-    std::vector<int> races;
-    races.reserve( size() );
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() )
-            races.push_back( ( *it )->GetRace() );
-
-    std::sort( races.begin(), races.end() );
-    races.resize( std::distance( races.begin(), std::unique( races.begin(), races.end() ) ) );
-
-    if ( races.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "empty" );
-        return Race::NONE;
-    }
-
-    return 1 < races.size() ? Race::MULT : races[0];
-}
-
 int Army::GetLuck( void ) const
 {
     const HeroBase * currentCommander = GetCommander();
@@ -1207,34 +1131,6 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     return result;
-}
-
-u32 Army::GetAttack( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += ( *it )->GetAttack();
-            ++count;
-        }
-
-    return count ? res / count : 0;
-}
-
-u32 Army::GetDefense( void ) const
-{
-    u32 res = 0;
-    u32 count = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            res += ( *it )->GetDefense();
-            ++count;
-        }
-
-    return count ? res / count : 0;
 }
 
 double Army::GetStrength( void ) const

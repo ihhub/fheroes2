@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
@@ -927,8 +928,9 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
             SetObject( hero->GetMapsObject() );
             hero->SetMapsObject( MP2::OBJ_ZERO );
         }
-        else
-            SetObject( MP2::OBJ_ZERO );
+        else {
+            setAsEmpty();
+        }
 
         heroID = 0;
     }
@@ -958,7 +960,7 @@ void Maps::Tiles::SetObject( int object )
 void Maps::Tiles::setBoat( int direction )
 {
     if ( objectTileset != 0 && objectIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( 0, 0, objectTileset, objectIndex ) );
+        AddonsPushLevel1( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
     }
     SetObject( MP2::OBJ_BOAT );
     objectTileset = ICN::BOAT32;
@@ -1379,6 +1381,16 @@ void Maps::Tiles::AddonsSort( void )
         objectTileset = lastObject->object;
         objectIndex = lastObject->index;
         addons_level1.erase( lastObject );
+    }
+
+    // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
+    if ( !addons_level1.empty() && !tileIsRoad && ( MP2::OBJ_ZERO == mp2_object || MP2::OBJ_COAST == mp2_object ) ) {
+        for ( const TilesAddon & addon : addons_level1 ) {
+            if ( addon.isRoad() ) {
+                tileIsRoad = true;
+                break;
+            }
+        }
     }
 
     // FIXME: check if sort is still needed
@@ -1964,7 +1976,12 @@ Maps::TilesAddon * Maps::Tiles::FindFlags( void )
     return addons_level1.end() != it ? &( *it ) : NULL;
 }
 
-/* ICN::FLAGS32 version */
+void Maps::Tiles::removeFlags()
+{
+    addons_level1.remove_if( TilesAddon::isFlag32 );
+    addons_level2.remove_if( TilesAddon::isFlag32 );
+}
+
 void Maps::Tiles::CaptureFlags32( int obj, int col )
 {
     u32 index = 0;
@@ -2011,7 +2028,6 @@ void Maps::Tiles::CaptureFlags32( int obj, int col )
         index += 14;
         CorrectFlags32( index, true );
         break;
-        // case MP2::OBJ_DRAGONCITY:	index += 35; CorrectFlags32(index); break; unused
     case MP2::OBJ_LIGHTHOUSE:
         index += 42;
         CorrectFlags32( index, false );
@@ -2052,7 +2068,6 @@ void Maps::Tiles::CaptureFlags32( int obj, int col )
     }
 }
 
-/* correct flags, ICN::FLAGS32 vesion */
 void Maps::Tiles::CorrectFlags32( u32 index, bool up )
 {
     TilesAddon * taddon = FindFlags();
@@ -2219,7 +2234,7 @@ void Maps::Tiles::RemoveJailSprite( void )
         topTile.Remove( uniq );
 
         if ( topTile.GetObject() == MP2::OBJ_JAIL ) {
-            topTile.SetObject( MP2::OBJ_ZERO );
+            topTile.setAsEmpty();
             topTile.FixObject();
         }
 
@@ -2229,7 +2244,7 @@ void Maps::Tiles::RemoveJailSprite( void )
             leftTile.Remove( uniq );
 
             if ( leftTile.GetObject() == MP2::OBJ_JAIL ) {
-                leftTile.SetObject( MP2::OBJ_ZERO );
+                leftTile.setAsEmpty();
                 leftTile.FixObject();
             }
         }
@@ -2312,18 +2327,12 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
         return;
     }
 
-    const uint8_t index = art.IndexSprite();
-
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = index;
+    tile.objectIndex = art.IndexSprite();
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
-
-        if ( shadow )
-            shadow->index = index - 1;
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
     }
 }
 
@@ -2334,11 +2343,7 @@ void Maps::Tiles::UpdateRNDResourceSprite( Tiles & tile )
 
     // replace shadow artifact
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        Maps::Tiles & left_tile = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) );
-        Maps::TilesAddon * shadow = left_tile.FindAddonLevel1( tile.uniq );
-
-        if ( shadow )
-            shadow->index = tile.objectIndex - 1;
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
     }
 }
 
@@ -2347,25 +2352,24 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     const int tileIndex = tile._index;
     int attackerIndex = -1;
 
-    // scan hero around
-    const MapsIndexes & v = ScanAroundObject( tileIndex, MP2::OBJ_HEROES );
-    for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it ) {
-        const Tiles & heroTile = world.GetTiles( *it );
-        const Heroes * hero = heroTile.GetHeroes();
-        if ( hero == NULL ) { // not a hero? How can it be?!
-            continue;
-        }
+    // scan for a hero around
+    const MapsIndexes aroundIndexes = Maps::GetAroundIndexes( tileIndex );
 
-        if ( tile.isWater() == heroTile.isWater() ) {
-            attackerIndex = *it;
+    for ( const int32_t idx : Maps::MapsIndexesFilteredObject( aroundIndexes, MP2::OBJ_HEROES, false ) ) {
+        const Heroes * hero = world.GetTiles( idx ).GetHeroes();
+        assert( hero != nullptr );
+
+        // hero is going to attack monsters on this tile
+        if ( hero->GetAttackedMonsterTileIndex() == tileIndex ) {
+            attackerIndex = idx;
             break;
         }
     }
 
     std::pair<uint32_t, uint32_t> spriteIndices( monsterIndex * 9, 0 );
 
-    // draw attack sprite
-    if ( attackerIndex != -1 && !Settings::Get().ExtWorldOnlyFirstMonsterAttack() ) {
+    // draw an attacking sprite if there is an attacking hero nearby
+    if ( attackerIndex != -1 ) {
         spriteIndices.first += 7;
 
         switch ( Maps::GetDirection( tileIndex, attackerIndex ) ) {
@@ -2395,40 +2399,27 @@ bool Maps::Tiles::isFogAllAround( const int color ) const
     const int32_t center = GetIndex();
     const fheroes2::Point mp = Maps::GetPoint( center );
     const int32_t width = world.w();
+    const int32_t height = world.h();
 
-    if ( mp.y > 0 ) {
-        if ( mp.x > 0 && !world.GetTiles( center - width - 1 ).isFog( color ) ) {
-            return false;
-        }
+    // Verify all tiles around the current one with radius of 2 to cover moving hero case as well.
+    for ( int32_t y = -2; y < 3; ++y ) {
+        const int32_t offsetY = mp.y + y;
+        if ( offsetY < 0 || offsetY >= height )
+            continue;
 
-        if ( !world.GetTiles( center - width ).isFog( color ) ) {
-            return false;
-        }
+        const int32_t centerY = center + y * width;
 
-        if ( mp.x < width - 1 && !world.GetTiles( center - width + 1 ).isFog( color ) ) {
-            return false;
-        }
-    }
+        for ( int32_t x = -2; x < 3; ++x ) {
+            if ( x == 0 && y == 0 )
+                continue;
 
-    if ( mp.x > 0 && !world.GetTiles( center - 1 ).isFog( color ) ) {
-        return false;
-    }
+            const int32_t offsetX = mp.x + x;
+            if ( offsetX < 0 || offsetX >= width )
+                continue;
 
-    if ( mp.x < width - 1 && !world.GetTiles( center + 1 ).isFog( color ) ) {
-        return false;
-    }
-
-    if ( mp.y < world.h() - 1 ) {
-        if ( mp.x > 0 && !world.GetTiles( center + width - 1 ).isFog( color ) ) {
-            return false;
-        }
-
-        if ( !world.GetTiles( center + width ).isFog( color ) ) {
-            return false;
-        }
-
-        if ( mp.x < width - 1 && !world.GetTiles( center + width + 1 ).isFog( color ) ) {
-            return false;
+            if ( !world.GetTiles( centerY + x ).isFog( color ) ) {
+                return false;
+            }
         }
     }
 
@@ -2712,6 +2703,51 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CLOP32, index );
         area.BlitOnTile( dst, sprite, ( revert ? sprite.x() + TILEWIDTH - sprite.width() : sprite.x() ), sprite.y(), mp, revert );
     }
+}
+
+void Maps::Tiles::updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex )
+{
+    Maps::TilesAddon * addon = tile.FindAddonLevel1( uid );
+    if ( addon != nullptr ) {
+        addon->index = newIndex;
+    }
+    else if ( tile.uniq == uid ) {
+        tile.objectIndex = newIndex;
+    }
+}
+
+void Maps::Tiles::updateEmpty()
+{
+    if ( mp2_object == MP2::OBJ_ZERO ) {
+        setAsEmpty();
+    }
+}
+
+void Maps::Tiles::setAsEmpty()
+{
+    // If an object is removed we should validate if this tile a potential candidate to be a coast.
+    // Check if this tile is not water and it have neighbouring water tiles.
+    if ( isWater() ) {
+        SetObject( MP2::OBJ_ZERO );
+        return;
+    }
+
+    bool isCoast = false;
+
+    const Indexes tileIndices = Maps::GetAroundIndexes( _index, 1 );
+    for ( const int tileIndex : tileIndices ) {
+        if ( tileIndex < 0 ) {
+            // Invalid tile index.
+            continue;
+        }
+
+        if ( world.GetTiles( tileIndex ).isWater() ) {
+            isCoast = true;
+            break;
+        }
+    }
+
+    SetObject( isCoast ? MP2::OBJ_COAST : MP2::OBJ_ZERO );
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )

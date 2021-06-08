@@ -59,6 +59,9 @@ fheroes2::GameMode Game::LoadMulti()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     // image background
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
@@ -140,9 +143,8 @@ fheroes2::GameMode Game::LoadGame()
     AGG::PlayMusic( MUS::MAINMENU, true, true );
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
     fheroes2::drawMainMenuScreen();
@@ -177,7 +179,6 @@ fheroes2::GameMode Game::LoadGame()
     buttons.back().setPosition( buttonXPos, buttonYPos + buttonYStep * 5 );
     buttons.back().draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -236,18 +237,24 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.SetThemes( cursor.POINTER );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image background
     fheroes2::drawMainMenuScreen();
 
     fheroes2::Display::instance().render();
 
-    std::string file = Dialog::SelectFileLoad();
-    if ( file.empty() || !Game::Load( file ) )
+    const std::string file = Dialog::SelectFileLoad();
+    if ( file.empty() ) {
         return fheroes2::GameMode::LOAD_GAME;
+    }
 
-    return fheroes2::GameMode::START_GAME;
+    const fheroes2::GameMode returnValue = Game::Load( file );
+    if ( returnValue == fheroes2::GameMode::CANCEL ) {
+        return fheroes2::GameMode::LOAD_GAME;
+    }
+
+    return returnValue;
 }

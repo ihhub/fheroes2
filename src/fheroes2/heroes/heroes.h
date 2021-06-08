@@ -149,12 +149,12 @@ public:
     enum flags_t
     {
         SHIPMASTER = 0x00000001,
-        // UNUSED	= 0x00000002,
+        // UNUSED = 0x00000002,
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
-        SAVE_SP_POINTS = 0x00000010,
-        // UNUSED	= 0x00000020,
-        // UNUSED	= 0x00000040,
+        // UNUSED = 0x00000010,
+        // UNUSED = 0x00000020,
+        // UNUSED = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
         SAVE_MP_POINTS = 0x00000200,
@@ -284,6 +284,9 @@ public:
     void ActionAfterBattle() override;
     void ActionPreBattle() override;
 
+    // Called from World::NewDay() for all heroes, hired or not
+    void ReplenishSpellPoints();
+
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
     const Route::Path & GetPath() const;
@@ -296,7 +299,12 @@ public:
     int GetDirection() const;
     void setDirection( int directionToSet );
 
+    // set visited cell
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
+
+    // Set global visited state for itself and for allies.
+    void setVisitedForAllies( const int32_t tileIndex ) const;
+
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
@@ -347,8 +355,6 @@ public:
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
 
-    bool AllowBattle( bool attacker ) const;
-
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
 
@@ -359,12 +365,13 @@ public:
 
     fheroes2::Point MovementDirection() const;
 
+    int GetAttackedMonsterTileIndex() const;
+    void SetAttackedMonsterTileIndex( int idx );
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Heroes & );
-#endif
+
     friend class Recruits;
     friend class Battle::Only;
 
@@ -418,6 +425,8 @@ private:
     RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
+
+    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
     enum
     {

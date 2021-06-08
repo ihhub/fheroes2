@@ -39,9 +39,4 @@ struct ListDirs : public std::list<std::string>
     void Append( const std::list<std::string> & );
 };
 
-namespace fheroes2
-{
-    void AddOSSpecificDirectories( ListDirs & dirs );
-}
-
 #endif

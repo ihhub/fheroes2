@@ -33,9 +33,18 @@
 
 namespace
 {
-    const std::vector<std::string> videoDir = {"anim", System::ConcatePath( "heroes2", "anim" )};
+    const std::vector<std::string> videoDir = { "anim", System::ConcatePath( "heroes2", "anim" ), "data" };
 
-    bool IsFile( const std::string & fileName, std::string & path )
+    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
+    {
+        fheroes2::DrawRect( image, roi, color );
+        fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
+    }
+}
+
+namespace Video
+{
+    bool isVideoFile( const std::string & fileName, std::string & path )
     {
         std::string temp;
 
@@ -51,14 +60,14 @@ namespace
 
         return false;
     }
-}
 
-namespace Video
-{
     int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
     {
+        // Stop any cycling animation.
+        const fheroes2::ScreenPaletteRestorer screenRestorer;
+
         std::string videoPath;
-        if ( !IsFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
+        if ( !isVideoFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
             DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
             return 0;
         }
@@ -69,12 +78,15 @@ namespace Video
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
-        const bool hideCursor = roi.empty();
+        // setup cursor
+        std::unique_ptr<const CursorRestorer> cursorRestorer;
 
-        if ( hideCursor ) {
-            Cursor::Get().Hide();
+        if ( roi.empty() ) {
+            cursorRestorer.reset( new CursorRestorer( false, Cursor::Get().Themes() ) );
         }
         else {
+            cursorRestorer.reset( new CursorRestorer( true, Cursor::Get().Themes() ) );
+
             Cursor::Get().setVideoPlaybackCursor();
         }
 
@@ -96,13 +108,8 @@ namespace Video
         }
 
         if ( action == VideoAction::IGNORE_VIDEO ) {
-            if ( hideCursor ) {
-                Cursor::Get().Show();
-            }
             return 0;
         }
-
-        const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;
@@ -162,7 +169,7 @@ namespace Video
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {
-                            fheroes2::DrawRect( display, roi[i], selectionColor );
+                            drawRectangle( roi[i], display, selectionColor );
                             break;
                         }
                     }
@@ -199,7 +206,7 @@ namespace Video
 
                     for ( size_t i = 0; i < roi.size(); ++i ) {
                         if ( le.MouseCursor( roi[i] ) ) {
-                            fheroes2::DrawRect( display, roi[i], selectionColor );
+                            drawRectangle( roi[i], display, selectionColor );
                             break;
                         }
                     }
@@ -218,13 +225,6 @@ namespace Video
         }
 
         display.fill( 0 );
-
-        if ( hideCursor ) {
-            Cursor::Get().Show();
-        }
-        else {
-            Cursor::Get().resetVideoPlaybackCursor();
-        }
 
         return roiChosenId;
     }

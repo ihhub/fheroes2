@@ -37,11 +37,10 @@
 void Dialog::GameInfo( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::SCENIBKG, 0 );
 
@@ -113,7 +112,6 @@ void Dialog::GameInfo( void )
     buttonOk.draw();
     buttonCfg.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -125,13 +123,10 @@ void Dialog::GameInfo( void )
 
         if ( le.MouseClickLeft( buttonCfg.area() ) ) {
             Dialog::ExtSettings( true );
-            Cursor::Get().Show();
             display.render();
         }
 
         if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
             break;
     }
-
-    cursor.Hide();
 }

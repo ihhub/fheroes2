@@ -25,7 +25,6 @@
 
 #include <algorithm>
 
-#include "cursor.h"
 #include "localevent.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
@@ -35,6 +34,7 @@ namespace Interface
     struct ListBasic
     {
         virtual ~ListBasic() = default;
+        virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw( void ) = 0;
         virtual bool QueueEventProcessing( void ) = 0;
     };
@@ -44,7 +44,8 @@ namespace Interface
     {
     public:
         explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
-            : content( NULL )
+            : needRedraw( false )
+            , content( NULL )
             , _currentId( -1 )
             , _topId( -1 )
             , maxItems( 0 )
@@ -158,7 +159,7 @@ namespace Interface
 
         void Redraw( void ) override
         {
-            Cursor::Get().Hide();
+            needRedraw = false;
 
             RedrawBackground( ptRedraw );
 
@@ -179,6 +180,11 @@ namespace Interface
         bool IsValid() const
         {
             return content != NULL && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
+        }
+
+        bool IsNeedRedraw() const override
+        {
+            return needRedraw;
         }
 
         Item & GetCurrent( void ) // always call this function only after IsValid()!
@@ -267,7 +273,6 @@ namespace Interface
         bool QueueEventProcessing( void ) override
         {
             LocalEvent & le = LocalEvent::Get();
-            Cursor & cursor = Cursor::Get();
 
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
             le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
@@ -276,7 +281,8 @@ namespace Interface
                 return false;
 
             if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( _topId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 if ( _topId > maxItems )
                     _topId -= maxItems;
                 else
@@ -284,59 +290,73 @@ namespace Interface
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( _topId + maxItems < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 _topId += maxItems;
                 if ( _topId + maxItems >= _size() )
                     _topId = _size() - maxItems;
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( _currentId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 --_currentId;
                 SetCurrentVisible();
                 ActionCurrentUp();
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 ++_currentId;
                 SetCurrentVisible();
                 ActionCurrentDn();
+
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) ) && ( _topId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 --_topId;
                 _scrollbar.backward();
+
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
                       && ( _topId + maxItems < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 ++_topId;
                 _scrollbar.forward();
+
                 return true;
             }
             else if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 UpdateScrollbarRange();
 
                 const fheroes2::Point & mousePos = le.GetMouseCursor();
                 _scrollbar.moveToPos( mousePos );
                 _topId = _scrollbar.currentIndex();
+
                 return true;
             }
 
             const fheroes2::Point & mousePos = le.GetMouseCursor();
             if ( rtAreaItems & mousePos ) { // within our rectangle
+                needRedraw = true;
+
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
-                cursor.Hide();
 
                 if ( id < _size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
@@ -361,13 +381,15 @@ namespace Interface
                     }
                 }
 
-                cursor.Show();
+                needRedraw = false;
             }
 
             return false;
         }
 
     protected:
+        bool needRedraw;
+
         fheroes2::Rect rtAreaItems;
 
         fheroes2::Button buttonPgUp;

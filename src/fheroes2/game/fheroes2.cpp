@@ -69,51 +69,51 @@ namespace
         return EXIT_SUCCESS;
     }
 
-    bool ReadConfigs()
+    void ReadConfigs()
     {
         Settings & conf = Settings::Get();
-        const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
 
-        bool isValidConfigurationFile = false;
-        for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            if ( System::IsFile( *it ) && conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+        if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
+
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
-
-        if ( !isValidConfigurationFile )
+        else {
             conf.Save( configurationFileName );
-
-        return !isValidConfigurationFile;
+        }
     }
 
-    void InitHomeDir()
+    void InitConfigDir()
     {
-        const std::string home = System::GetHomeDirectory( "fheroes2" );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !home.empty() ) {
-            const std::string home_maps = System::ConcatePath( home, "maps" );
-            const std::string home_files = System::ConcatePath( home, "files" );
-            const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-            if ( !System::IsDirectory( home ) )
-                System::MakeDirectory( home );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-                System::MakeDirectory( home_maps );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-                System::MakeDirectory( home_files );
-
-            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-                System::MakeDirectory( home_files_save );
+        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+            System::MakeDirectory( configDir );
         }
+    }
+
+    void InitDataDir()
+    {
+        const std::string dataDir = System::GetDataDirectory( "fheroes2" );
+
+        if ( dataDir.empty() )
+            return;
+
+        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
+        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+
+        if ( !System::IsDirectory( dataDir ) )
+            System::MakeDirectory( dataDir );
+
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
+            System::MakeDirectory( dataFiles );
+
+        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
+            System::MakeDirectory( dataFilesSave );
     }
 
     void SetTimidityEnvPath()
@@ -164,8 +164,9 @@ int main( int argc, char ** argv )
     Settings & conf = Settings::Get();
     conf.SetProgramPath( argv[0] );
 
-    InitHomeDir();
-    const bool isFirstGameRun = ReadConfigs();
+    InitConfigDir();
+    InitDataDir();
+    ReadConfigs();
 
     // getopt
     {
@@ -251,11 +252,6 @@ int main( int argc, char ** argv )
 
             // read data dir
             if ( !AGG::Init() ) {
-                // Since it is a fresh start we should delete newly created configuration file.
-                if ( isFirstGameRun ) {
-                    remove( configurationFileName );
-                }
-
                 fheroes2::Display::instance().release();
                 return EXIT_FAILURE;
             }
@@ -265,9 +261,6 @@ int main( int argc, char ** argv )
             // load BIN data
             Bin_Info::InitBinInfo();
 
-            // init cursor
-            Cursor::Get().SetThemes( Cursor::POINTER );
-
             // init game data
             Game::Init();
 
@@ -275,7 +268,10 @@ int main( int argc, char ** argv )
 
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
-            Game::mainGameLoop( isFirstGameRun );
+            // init cursor
+            const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+            Game::mainGameLoop( conf.isFirstGameRun() );
         }
         catch ( const std::exception & ex ) {
             ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );

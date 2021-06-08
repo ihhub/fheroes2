@@ -36,34 +36,42 @@
 #include "text.h"
 #include "world.h"
 
-u32 HowManyRecruitMonster( const Castle & castle, u32 dw, const Funds & add, Funds & res )
+namespace
 {
-    const Monster ms( castle.GetRace(), castle.GetActualDwelling( dw ) );
-    const Kingdom & kingdom = castle.GetKingdom();
+    uint32_t HowManyRecruitMonster( const Castle & castle, Troops & tempArmy, const uint32_t dw, const Funds & add, Funds & res )
+    {
+        const Monster ms( castle.GetRace(), castle.GetActualDwelling( dw ) );
+        if ( !tempArmy.CanJoinTroop( ms ) )
+            return 0;
 
-    if ( !castle.GetArmy().CanJoinTroop( ms ) )
-        return 0;
+        uint32_t count = castle.getMonstersInDwelling( dw );
+        payment_t payment;
 
-    u32 count = castle.getMonstersInDwelling( dw );
-    payment_t payment;
+        const Kingdom & kingdom = castle.GetKingdom();
 
-    while ( count ) {
-        payment = ms.GetCost() * count;
-        res = payment;
-        payment += add;
-        if ( kingdom.AllowPayment( payment ) )
-            break;
-        --count;
+        while ( count ) {
+            payment = ms.GetCost() * count;
+            res = payment;
+            payment += add;
+            if ( kingdom.AllowPayment( payment ) )
+                break;
+            --count;
+        }
+
+        if ( count > 0 ) {
+            tempArmy.JoinTroop( ms, count );
+        }
+
+        return count;
     }
-
-    return count;
 }
 
 void Castle::OpenWell( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
@@ -111,35 +119,35 @@ void Castle::OpenWell( void )
     alldwellings.push_back( DWELLING_MONSTER2 );
     alldwellings.push_back( DWELLING_MONSTER1 );
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
-
-    // loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        buttonMax.isEnabled() && le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
+        le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
             break;
-
-        // extended version (click - buy dialog monster)
-        if ( buttonMax.isEnabled() && le.MouseClickLeft( buttonMax.area() ) ) {
+        }
+        else if ( le.MouseClickLeft( buttonMax.area() ) ) {
             std::vector<Troop> results;
-            Funds cur, total;
-            u32 can_recruit;
+            Funds cur;
+            Funds total;
             std::string str;
 
-            for ( std::vector<u32>::const_iterator it = alldwellings.begin(); it != alldwellings.end(); ++it ) {
-                if ( 0 != ( can_recruit = HowManyRecruitMonster( *this, *it, total, cur ) ) ) {
-                    const Monster ms( race, GetActualDwelling( *it ) );
-                    results.emplace_back( ms, can_recruit );
+            const Troops & currentArmy = GetArmy();
+            Troops tempArmy( currentArmy );
+
+            for ( const uint32_t dwellingType : alldwellings ) {
+                const uint32_t canRecruit = HowManyRecruitMonster( *this, tempArmy, dwellingType, total, cur );
+                if ( canRecruit != 0 ) {
+                    const Monster ms( race, GetActualDwelling( dwellingType ) );
+                    results.emplace_back( ms, canRecruit );
                     total += cur;
-                    str.append( ms.GetPluralName( can_recruit ) );
+                    str.append( ms.GetPluralName( canRecruit ) );
                     str.append( " - " );
-                    str.append( std::to_string( can_recruit ) );
+                    str.append( std::to_string( canRecruit ) );
                     str.append( "\n" );
                 }
             }
@@ -165,8 +173,7 @@ void Castle::OpenWell( void )
                 }
             }
         }
-
-        if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
+        else if ( ( building & DWELLING_MONSTER1 ) && le.MouseClickLeft( rectMonster1 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], false ) );
         else if ( ( building & DWELLING_MONSTER2 ) && le.MouseClickLeft( rectMonster2 ) )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true ) );
@@ -180,14 +187,12 @@ void Castle::OpenWell( void )
             RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true ) );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
-            cursor.Hide();
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
 
             for ( size_t i = 0; i < monsterAnimInfo.size(); ++i )
                 monsterAnimInfo[i].increment();
 
             buttonMax.draw();
-            cursor.Show();
             display.render();
         }
     }

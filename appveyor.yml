@@ -10,7 +10,7 @@ skip_commits:
 skip_tags: true
 
 # version format
-version: 0.9.3.{build}
+version: 0.9.4.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2015
@@ -43,6 +43,7 @@ clone_folder: C:\projects\fheroes2
 install:
   - cd C:\projects\fheroes2\script\windows
   - if not exist C:\projects\fheroes2\VisualStudio\packages\installed call install_packages.bat
+  - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
   - cd C:\projects\fheroes2
 
 init:
@@ -61,9 +62,10 @@ after_build:
   - cmd: xcopy /Y /s /Q "script\demo\demo_windows.bat" "."
   - cmd: xcopy /Y /s /Q "script\demo\demo_windows.ps1" "."
   - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat demo_windows.ps1 LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: iscc script\windows\fheroes2.iss "/DBuildDir=C:\projects\fheroes2\build\%platform%\%configuration%" /DPlatform=%platform% /DDeployConfName=%deploy_conf_name%
 
 artifacts:
-  - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).zip
+  - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).*
     name: fheroes2-%platform%-%deploy_conf_name%
 
 deploy:
@@ -73,7 +75,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
-  artifact: /.*\.zip/
+  artifact: fheroes2-%platform%-%deploy_conf_name%
   draft: false
   prerelease: true
   force_update: true

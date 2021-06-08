@@ -26,29 +26,21 @@
 
 namespace Campaign
 {
-    enum ScenarioIcon
-    {
-        SCENARIOICON_CLEARED = 10,
-        SCENARIOICON_AVAILABLE = 11,
-        SCENARIOICON_UNAVAILABLE = 12,
-        SCENARIOICON_GOOD_SELECTED = 14,
-        SCENARIOICON_EVIL_SELECTED = 17,
-    };
-
     enum CampaignID
     {
         ROLAND_CAMPAIGN = 0,
         ARCHIBALD_CAMPAIGN = 1,
         PRICE_OF_LOYALTY_CAMPAIGN = 2,
-        VOYAGE_HOME_CAMPAIGN = 3,
-        WIZARDS_TALE_CAMPAIGN = 4,
-        DESCENDANTS_CAMPAIGN = 5
+        DESCENDANTS_CAMPAIGN = 3,
+        WIZARDS_ISLE_CAMPAIGN = 4,
+        VOYAGE_HOME_CAMPAIGN = 5
     };
 
     enum class ScenarioVictoryCondition : int
     {
         STANDARD = 0, // standard map's defined victory condition
-        CAPTURE_DRAGON_CITY = 1
+        CAPTURE_DRAGON_CITY = 1,
+        OBTAIN_ULTIMATE_CROWN = 2
     };
 
     enum class ScenarioLossCondition : int
@@ -67,7 +59,8 @@ namespace Campaign
             TROOP,
             SPELL,
             STARTING_RACE,
-            SKILL
+            SKILL_PRIMARY,
+            SKILL_SECONDARY
         };
 
         uint32_t _type;
@@ -98,8 +91,8 @@ namespace Campaign
     public:
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
-                      const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+                      const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
+                      const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
         const std::vector<int> & getNextMaps() const
@@ -120,6 +113,11 @@ namespace Campaign
         int getScenarioID() const
         {
             return _scenarioID;
+        }
+
+        const std::string & getScenarioName() const
+        {
+            return _scenarioName;
         }
 
         const std::string & getDescription() const
@@ -155,7 +153,9 @@ namespace Campaign
         std::vector<int> _nextMaps;
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
-        std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
+        // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else
+        std::string _scenarioName;
+        std::string _description;
         ScenarioVictoryCondition _victoryCondition;
         ScenarioLossCondition _lossCondition;
 

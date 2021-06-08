@@ -26,7 +26,7 @@
 
 namespace Difficulty
 {
-    enum
+    enum DifficultyLevel : int
     {
         EASY,
         NORMAL,

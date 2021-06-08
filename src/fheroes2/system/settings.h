@@ -72,7 +72,7 @@ public:
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
-        GAME_DYNAMIC_INTERFACE = 0x10010000,
+        // UNUSED = 0x10010000,
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
 
@@ -82,7 +82,7 @@ public:
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
-        WORLD_ONLY_FIRST_MONSTER_ATTACK = 0x20000080,
+        // UNUSED = 0x20000080,
         WORLD_EYE_EAGLE_AS_SCHOLAR = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         WORLD_BAN_WEEKOF = 0x20000400,
@@ -181,6 +181,10 @@ public:
     bool MusicExt() const;
     bool MusicMIDI() const;
     bool MusicCD() const;
+
+    bool isFirstGameRun() const;
+    void resetFirstGameRun();
+
     void BinarySave() const;
     void BinaryLoad();
 
@@ -202,7 +206,6 @@ public:
     bool ExtWorldScouteExtended() const;
     bool ExtWorldAllowSetGuardian() const;
     bool ExtWorldArtifactCrystalBall() const;
-    bool ExtWorldOnlyFirstMonsterAttack() const;
     bool ExtWorldEyeEagleAsScholar() const;
     bool ExtWorldBanMonthOfMonsters() const;
     bool ExtWorldBanWeekOf() const;
@@ -232,7 +235,6 @@ public:
     bool ExtGameAutosaveOn() const;
     bool ExtGameUseFade() const;
     bool ExtGameEvilInterface() const;
-    bool ExtGameDynamicInterface() const;
     bool ExtGameHideInterface() const;
 
     const fheroes2::Size & VideoMode() const;
@@ -313,7 +315,6 @@ public:
     static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
-    static std::string GetWriteableDir( const char * );
     static std::string GetLangDir();
 
     static ListFiles FindFiles( const std::string & directory, const std::string & fileName );

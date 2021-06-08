@@ -350,12 +350,6 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
         result += castle->GetMoraleModificator( strs );
 
     // army modificator
-    if ( GetArmy().AllTroopsIsRace( Race::NECR ) ) {
-        if ( strs )
-            strs->clear();
-        result = 0;
-    }
-
     result += GetArmy().GetMoraleModificator( strs );
 
     return result;

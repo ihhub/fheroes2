@@ -391,9 +391,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
 
-                Cursor::Get().Hide();
                 iconsPanel.RedrawIcons( ICON_HEROES );
-                Cursor::Get().Show();
                 fheroes2::Display::instance().render();
 
                 // check game over for ultimate artifact

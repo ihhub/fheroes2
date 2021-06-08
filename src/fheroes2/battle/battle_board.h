@@ -53,7 +53,6 @@ namespace Battle
 
         void Reset( void );
 
-        fheroes2::Rect GetArea( void ) const;
         void SetArea( const fheroes2::Rect & );
 
         s32 GetIndexAbsPosition( const fheroes2::Point & ) const;
