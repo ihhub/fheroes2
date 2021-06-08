@@ -49,6 +49,13 @@ install:
 init:
   - git config --global core.autocrlf true
 
+# src/fheroes2/system/version.h: BUILD_VERSION will be set to %build_version% inside VisualStudio/common.props
+# src/resources/fheroes2.rc: BUILD_VERSION is limited to 16 bit
+#
+# double percent sign is stripped by AppVeyor, so we can't calculate modulo in the usual way
+before_build:
+  - cmd: set /a build_version = %APPVEYOR_BUILD_NUMBER% - %APPVEYOR_BUILD_NUMBER% / 32768 * 32768
+
 build:
   project: fheroes2-vs2015.vcxproj
 
