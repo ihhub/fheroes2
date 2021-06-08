@@ -212,6 +212,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const int friendColors = Players::FriendColors();
 
+    const Maps::Tiles * tileMovingHero = nullptr;
+
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -272,8 +274,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 if ( drawHeroes ) {
                     drawList.emplace_back( &tile );
                     Heroes * hero = tile.GetHeroes();
-                    if ( hero && ( drawTop || drawBottom ) ) {
-                        hero->SetRedrawIndexes();
+                    if ( hero ) {
+                        if ( drawTop || drawBottom ) {
+                            hero->SetRedrawIndexes();
+                        }
+                        if ( hero->isMoveEnabled() && ( hero->GetDirection() == Direction::BOTTOM_RIGHT || hero->GetDirection() == Direction::TOP_LEFT ) ) {
+                            tileMovingHero = &tile;
+                        }
                     }
                 }
                 else if ( drawTop ) {
@@ -295,25 +302,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    if ( drawList.size() > 1 ) {
-        for ( size_t i = 0; i < drawList.size() - 1; ++i ) {
-            const Maps::Tiles * tile1 = drawList[i];
-            const Heroes * hero1 = tile1->GetHeroes();
-            if ( hero1 == nullptr || hero1->GetDirection() != Direction::BOTTOM_RIGHT || !hero1->isMoveEnabled() ) {
-                continue;
+    if ( drawList.size() > 1 && tileMovingHero != nullptr ) {
+        const Heroes * hero = tileMovingHero->GetHeroes();
+        if ( hero->GetDirection() == Direction::BOTTOM_RIGHT ) {
+            const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::RIGHT ) );
+            if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
+                const auto it = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                std::iter_swap( it, it + 1 );
             }
-            const Maps::Tiles * tile2 = drawList[i + 1];
-            const int object = tile2->GetObject();
-            const Heroes * hero2 = tile2->GetHeroes();
-            if ( ( hero2 == nullptr && MP2::OBJ_BOAT != object ) || !Maps::isValidDirection( tile1->GetIndex(), Direction::RIGHT ) ) {
-                continue;
+        }
+        else {
+            const Maps::Tiles & tileNeighborHero = world.GetTiles( Maps::GetDirectionIndex( tileMovingHero->GetIndex(), Direction::LEFT ) );
+            if ( tileNeighborHero.GetHeroes() != nullptr || tileNeighborHero.GetObject() == MP2::OBJ_BOAT ) {
+                const auto it = std::find( drawList.begin(), drawList.end(), tileMovingHero );
+                std::iter_swap( it, it - 1 );
             }
-            const Maps::Tiles & tileRight = world.GetTiles( Maps::GetDirectionIndex( tile1->GetIndex(), Direction::RIGHT ) );
-            if ( tileRight.GetIndex() != tile2->GetIndex() ) {
-                continue;
-            }
-            std::swap( drawList[i], drawList[i + 1] );
-            break;
         }
     }
 
