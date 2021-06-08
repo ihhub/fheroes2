@@ -33,6 +33,5 @@ using u32 = uint32_t;
 #define MAXU16 0xFFFF
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
-#define ARRAY_COUNT_END( A ) A + ARRAY_COUNT( A )
 
 #endif

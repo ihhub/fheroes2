@@ -236,7 +236,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
             troops[ii].SetCount( st.getLE16() );
 
-        army.Assign( troops, ARRAY_COUNT_END( troops ) );
+        army.Assign( troops, std::end( troops ) );
     }
     else
         st.skip( 15 );
