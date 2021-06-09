@@ -27,6 +27,8 @@
 
 namespace fheroes2
 {
+    // TODO: the old Text classes render text with 2 pixel shift by Y axis. We need to do something to keep the same drawings while replacing old code.
+
     enum class FontSize : uint8_t
     {
         SMALL,
@@ -77,6 +79,9 @@ namespace fheroes2
 
         // Draw text as a multi-line limited by width of a line.
         virtual void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const = 0;
+
+        // Returns true if here is something to draw.
+        virtual bool empty() const = 0;
     };
 
     class Text : public TextBase
@@ -96,6 +101,8 @@ namespace fheroes2
 
         void draw( const int32_t x, const int32_t y, Image & output ) const override;
         void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
+
+        bool empty() const override;
 
     private:
         std::string _text;
@@ -120,6 +127,8 @@ namespace fheroes2
 
         void draw( const int32_t x, const int32_t y, Image & output ) const override;
         void draw( const int32_t x, const int32_t y, const int32_t maxWidth, Image & output ) const override;
+
+        bool empty() const override;
 
     private:
         std::vector<Text> _texts;

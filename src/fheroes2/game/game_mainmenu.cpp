@@ -39,6 +39,8 @@
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -176,10 +178,17 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::drawMainMenuScreen();
         }
 
-        Dialog::Message( _( "Please Remember" ),
-                         _( "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
-                            "and full screen modes press 'F4' key on the keyboard. Enjoy the game!" ),
-                         Font::BIG, Dialog::OK );
+        fheroes2::Text header( _( "Please Remember" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+        fheroes2::MultiFontText body;
+        body.add( { _( "You can always change game resolution by clicking on the "), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "door"), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress "),
+                  { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "F4"), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( " key on the keyboard.\n\nEnjoy the game!"), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+
+        fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
         conf.Save( "fheroes2.cfg" );

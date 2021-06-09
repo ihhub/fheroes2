@@ -31,12 +31,11 @@ namespace
     class CharValidator
     {
     public:
-        CharValidator() = delete;
         explicit CharValidator( const fheroes2::FontSize fontSize )
             : _charLimit( fheroes2::AGG::getCharacterLimit( fontSize ) )
         {}
 
-        inline bool isValid( const uint8_t character ) const
+        bool isValid( const uint8_t character ) const
         {
             return character >= 0x21 && character <= _charLimit;
         }
@@ -153,6 +152,9 @@ namespace
                 if ( lineLength > 0 ) {
                     const uint8_t * line = character - lineLength;
                     offset->x += getTruncatedLineWidth( line, lineLength, fontType );
+                    lineLength = 0;
+                    lastWordLength = 0;
+                    lineWidth = 0;
                 }
 
                 offsets.emplace_back( 0, offset->y + rowHeight );
@@ -216,11 +218,6 @@ namespace
             }
 
             const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( *character, fontType );
-            if ( charSprite.empty() ) {
-                // Should we assert here?
-                continue;
-            }
-
             fheroes2::Blit( charSprite, output, offsetX + charSprite.x(), y + charSprite.y() );
             offsetX += charSprite.width() + charSprite.x();
         }
@@ -273,6 +270,9 @@ namespace
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
                     renderLine( character - lineLength, lineLength, x + offset->x, yPos + offset->y, maxWidth, output, fontType, align );
+                    lineLength = 0;
+                    lastWordLength = 0;
+                    lineWidth = 0;
                 }
 
                 if ( !offsets.empty() ) {
@@ -366,11 +366,13 @@ namespace fheroes2
 
     int32_t Text::height( const int32_t maxWidth ) const
     {
+        const int32_t fontHeight = getFontHeight( _fontType.size );
+
         std::deque<Point> offsets;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, getFontHeight( _fontType.size ),
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight,
                          offsets );
 
-        return offsets.back().y;
+        return offsets.back().y + fontHeight;
     }
 
     int32_t Text::rows( const int32_t maxWidth ) const
@@ -409,6 +411,11 @@ namespace fheroes2
         std::deque<Point> offsets;
         render( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), x, y, maxWidth, output, _fontType,
                 getFontHeight( _fontType.size ), true, offsets );
+    }
+
+    bool Text::empty() const
+    {
+        return _text.empty();
     }
 
     MultiFontText::~MultiFontText() = default;
@@ -460,7 +467,7 @@ namespace fheroes2
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
                              offsets );
         }
-        return offsets.back().y;
+        return offsets.back().y + maxFontHeight;
     }
 
     int32_t MultiFontText::rows( const int32_t maxWidth ) const
@@ -522,5 +529,10 @@ namespace fheroes2
             render( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), x, y, maxWidth, output,
                     _texts[i]._fontType, maxFontHeight, false, offsets );
         }
+    }
+
+    bool MultiFontText::empty() const
+    {
+        return _texts.empty();
     }
 }
