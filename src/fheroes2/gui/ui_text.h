@@ -43,6 +43,8 @@ namespace fheroes2
 
     struct FontType
     {
+        FontType() = default;
+
         FontType( const FontSize size_, const FontColor color_ )
             : size( size_ )
             , color( color_ )
