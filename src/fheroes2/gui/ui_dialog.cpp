@@ -18,33 +18,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#pragma once
+#include "ui_dialog.h"
+#include "cursor.h"
+#include "dialog.h"
+#include "localevent.h"
+#include "screen.h"
+#include "ui_button.h"
 
-#include <cstdint>
+namespace
+{
+    const int32_t textOffsetY = 10;
+}
 
 namespace fheroes2
 {
-    class Image;
-    class Sprite;
-    enum class FontSize : uint8_t;
-    struct FontType;
-
-    namespace AGG
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons )
     {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
+        // setup cursor
+        const CursorRestorer cursorRestorer( buttons != 0, ::Cursor::POINTER );
 
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
-        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
+        const int32_t headerHeight = header.empty() ? 0 : header.height( BOXAREA_WIDTH ) + textOffsetY;
 
-        // Returns the last supported ASCII character in existing font.
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
+        Dialog::FrameBox box( textOffsetY + headerHeight + body.height( BOXAREA_WIDTH ), buttons != 0 );
+        const Rect & pos = box.GetArea();
 
-        int32_t GetAbsoluteICNHeight( int icnId );
+        Display & display = Display::instance();
+        header.draw( pos.x, pos.y + textOffsetY, BOXAREA_WIDTH, display );
+        body.draw( pos.x, pos.y + textOffsetY + headerHeight, BOXAREA_WIDTH, display );
 
-        uint32_t getCharacterLimit( const FontSize fontSize );
-        const Sprite & getChar( const uint8_t character, const FontType & fontType );
+        ButtonGroup group( pos, buttons );
+        group.draw();
+
+        display.render();
+
+        int result = Dialog::ZERO;
+        LocalEvent & le = LocalEvent::Get();
+
+        while ( result == Dialog::ZERO && le.HandleEvents() ) {
+            if ( !buttons && !le.MousePressRight() ) {
+                break;
+            }
+
+            result = group.processEvents();
+        }
+
+        return result;
     }
 }

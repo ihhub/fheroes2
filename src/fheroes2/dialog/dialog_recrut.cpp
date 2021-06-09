@@ -77,22 +77,11 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const payment_t paymentMonster = monster.GetCost();
     const bool extres = 2 == paymentMonster.GetValidItemsCount();
 
-    // smear hardcored text "Cost per troop:"
-    const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    fheroes2::Point dst_pt( pos.x + 144, pos.y + 55 );
-    fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
-
-    Text text( _( "Cost per troop:" ), Font::SMALL );
-    dst_pt.x = pos.x + 206 - text.w() / 2;
-    dst_pt.y = pos.y + 55;
-    text.Blit( dst_pt.x, dst_pt.y );
-
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
-    text.Set( str, Font::YELLOW_BIG );
-    dst_pt.x = pos.x + ( pos.width - text.w() ) / 2;
-    dst_pt.y = pos.y + 25;
+    Text text( str, Font::YELLOW_BIG );
+    fheroes2::Point dst_pt( pos.x + ( pos.width - text.w() ) / 2, pos.y + 25 );
     text.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
