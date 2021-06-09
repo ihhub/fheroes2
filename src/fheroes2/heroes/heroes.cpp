@@ -399,7 +399,7 @@ Army & Heroes::GetArmy( void )
 int Heroes::GetMobilityIndexSprite( void ) const
 {
     // valid range (0 - 25)
-    int index = !CanMove() ? 0 : static_cast<int>( std::round( move_point / 100.0f ) );
+    int index = CanMove() ? ( move_point + 50 ) / 100 : 0;
     return 25 >= index ? index : 25;
 }
 
