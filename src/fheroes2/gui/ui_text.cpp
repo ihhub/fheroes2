@@ -218,6 +218,8 @@ namespace
             }
 
             const fheroes2::Sprite & charSprite = fheroes2::AGG::getChar( *character, fontType );
+            assert( !charSprite.empty() );
+
             fheroes2::Blit( charSprite, output, offsetX + charSprite.x(), y + charSprite.y() );
             offsetX += charSprite.width() + charSprite.x();
         }
