@@ -156,7 +156,7 @@ public:
 
     int GetColor( void ) const;
     int GetControl( void ) const override;
-    uint32_t getTotalCount( void ) const;
+    uint32_t getTotalCount() const;
 
     double GetStrength() const override;
     double getReinforcementValue( const Troops & reinforcement ) const;
