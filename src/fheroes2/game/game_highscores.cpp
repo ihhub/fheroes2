@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstring>
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -34,10 +33,9 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "icn.h"
-#include "logging.h"
 #include "mus.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"

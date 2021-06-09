@@ -32,6 +32,7 @@
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
+#include "settings.h"
 #include "speed.h"
 #include "translations.h"
 

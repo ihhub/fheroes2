@@ -25,7 +25,6 @@
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"

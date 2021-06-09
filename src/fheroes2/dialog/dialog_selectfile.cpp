@@ -38,6 +38,7 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "world.h"
 

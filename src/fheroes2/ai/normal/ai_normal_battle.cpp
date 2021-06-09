@@ -22,8 +22,6 @@
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
-#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_tower.h"
@@ -33,6 +31,7 @@
 #include "game.h"
 #include "heroes.h"
 #include "logging.h"
+#include "settings.h"
 #include "speed.h"
 
 #include <cassert>

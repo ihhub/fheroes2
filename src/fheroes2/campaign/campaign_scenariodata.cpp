@@ -24,8 +24,10 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include <cassert>
 

@@ -23,7 +23,7 @@
 #ifndef H2BITMODES_H
 #define H2BITMODES_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 class StreamBase;
 

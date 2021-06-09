@@ -22,8 +22,6 @@
 #include "palette_h2.h"
 
 #include <cassert>
-#include <cmath>
-#include <cstdlib>
 #include <cstring>
 
 namespace

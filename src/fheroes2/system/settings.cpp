@@ -22,15 +22,16 @@
 
 #include <algorithm>
 #include <fstream>
-#include <sstream>
 
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
+#include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "tinyconfig.h"
+#include "tools.h"
+#include "translations.h"
 #include "version.h"
 
 namespace

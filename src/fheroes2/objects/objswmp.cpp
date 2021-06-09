@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objswmp.h"
 

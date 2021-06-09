@@ -20,11 +20,9 @@
 
 #pragma once
 
-#include <string>
-
-#include "ui_text.h"
-
 namespace fheroes2
 {
+    class TextBase;
+
     int showMessage( const TextBase & header, const TextBase & body, const int buttons );
 }

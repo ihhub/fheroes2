@@ -21,10 +21,8 @@
 #include "ai_normal.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
-#include "battle_command.h"
 #include "battle_troop.h"
-#include "heroes.h"
+#include "heroes_base.h"
 #include "logging.h"
 
 using namespace Battle;

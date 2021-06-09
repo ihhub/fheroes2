@@ -21,12 +21,15 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
-#include "army.h"
-#include "campaign_data.h"
+#include "army_troop.h"
 #include "campaign_scenariodata.h"
+
+class Troops;
 
 namespace Campaign
 {
+    struct CampaignAwardData;
+
     class CampaignSaveData
     {
     public:

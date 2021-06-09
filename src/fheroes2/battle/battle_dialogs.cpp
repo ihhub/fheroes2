@@ -33,13 +33,14 @@
 #include "game.h"
 #include "heroes.h"
 #include "icn.h"
+#include "kingdom.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
-#include "world.h"
+#include "tools.h"
 
 namespace
 {

@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -39,6 +38,7 @@
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
+#include "settings.h"
 #include "system.h"
 #include "translations.h"
 #include "ui_tool.h"

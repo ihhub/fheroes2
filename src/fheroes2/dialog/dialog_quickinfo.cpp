@@ -34,9 +34,10 @@
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
-#include "monster.h"
 #include "profit.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 std::string GetMinesIncomeString( int type )

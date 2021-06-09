@@ -21,9 +21,7 @@
  ***************************************************************************/
 
 #include "heroes_recruits.h"
-#include "game.h"
 #include "heroes.h"
-#include "settings.h"
 #include "world.h"
 
 Recruits::Recruits()

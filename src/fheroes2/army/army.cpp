@@ -22,12 +22,11 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>
-#include <numeric>
 #include <set>
 
 #include "agg_image.h"
 #include "army.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "color.h"
@@ -44,7 +43,7 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
-#include "speed.h"
+#include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "world.h"

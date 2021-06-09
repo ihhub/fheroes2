@@ -39,11 +39,12 @@
 #include "ground.h"
 #include "icn.h"
 #include "interface_list.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "pal.h"
 #include "race.h"
 #include "rand.h"
+#include "settings.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 

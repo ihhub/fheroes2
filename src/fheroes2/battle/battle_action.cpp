@@ -25,7 +25,6 @@
 
 #include "battle_arena.h"
 #include "battle_bridge.h"
-#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_interface.h"
@@ -34,7 +33,9 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "rand.h"
+#include "settings.h"
 #include "spell.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

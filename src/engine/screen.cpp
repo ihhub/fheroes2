@@ -36,7 +36,6 @@
 #include <cassert>
 #include <cmath>
 #include <set>
-#include <type_traits>
 
 #if defined( FHEROES2_VITA )
 #include <vita2d.h>

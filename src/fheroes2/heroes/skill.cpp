@@ -24,16 +24,14 @@
 #include <cstring>
 #include <sstream>
 
-#include "cursor.h"
-#include "game.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
-#include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Skill

@@ -23,9 +23,9 @@
 #include <ctime>
 
 #include "game.h"
-#include "game_interface.h"
 #include "localevent.h"
 #include "logging.h"
+#include "screen.h"
 #include "settings.h"
 #include "tinyconfig.h"
 

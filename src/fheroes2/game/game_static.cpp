@@ -20,16 +20,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
 #include <cstring>
 
-#include "difficulty.h"
-#include "game.h"
 #include "game_static.h"
 #include "mp2.h"
 #include "race.h"
 #include "resource.h"
-#include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
 

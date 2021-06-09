@@ -24,6 +24,7 @@
 #include "localevent.h"
 #include "screen.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 namespace
 {

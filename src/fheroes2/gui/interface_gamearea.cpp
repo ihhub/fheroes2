@@ -32,6 +32,8 @@
 #include "maps.h"
 #include "pal.h"
 #include "route.h"
+#include "settings.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>

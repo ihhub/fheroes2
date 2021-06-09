@@ -24,6 +24,7 @@
 
 #include "ai.h"
 #include "battle.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "color.h"
 #include "difficulty.h"
@@ -35,6 +36,7 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "visit.h"
 #include "world.h"
 
