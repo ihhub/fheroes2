@@ -40,6 +40,9 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
+#ifndef BUILD_RELEASE
+#include "tools.h"
+#endif
 #include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
