@@ -1161,7 +1161,6 @@ namespace fheroes2
                 }
                 break;
             default:
-                
                 break;
             }
 

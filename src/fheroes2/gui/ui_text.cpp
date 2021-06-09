@@ -33,7 +33,7 @@ namespace
     public:
         CharValidator() = delete;
         explicit CharValidator( const fheroes2::FontSize fontSize )
-            : _charLimit( fheroes2::AGG::getCharacterLimit( fontSize )  )
+            : _charLimit( fheroes2::AGG::getCharacterLimit( fontSize ) )
         {}
 
         inline bool isValid( const uint8_t character ) const
@@ -127,7 +127,7 @@ namespace
     }
 
     void getMultiRowInfo( const uint8_t * data, const int32_t size, const int32_t maxWidth, const fheroes2::FontType & fontType, const int32_t rowHeight,
-                          std::deque<fheroes2::Point> & offsets)
+                          std::deque<fheroes2::Point> & offsets )
     {
         assert( data != nullptr && size > 0 && maxWidth > 0 );
 
@@ -347,16 +347,14 @@ namespace
 
 namespace fheroes2
 {
-    TextBase::~TextBase()
-    {}
+    TextBase::~TextBase() {}
 
     Text::Text( const std::string & text, const FontType fontType )
         : _text( text )
         , _fontType( fontType )
     {}
 
-    Text::~Text()
-    {}
+    Text::~Text() {}
 
     int32_t Text::width() const
     {
@@ -415,8 +413,7 @@ namespace fheroes2
                 getFontHeight( _fontType.size ), true, offsets );
     }
 
-    MultiFontText::~MultiFontText()
-    {}
+    MultiFontText::~MultiFontText() {}
 
     void MultiFontText::add( const Text & text )
     {
