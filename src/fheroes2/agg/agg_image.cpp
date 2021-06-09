@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstring>
 #include <map>
 #include <vector>
@@ -32,8 +33,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
-
-#include "image_tool.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -1104,6 +1104,70 @@ namespace fheroes2
             }
 
             return height;
+        }
+
+        uint32_t getCharacterLimit( const FontSize fontSize )
+        {
+            switch ( fontSize ) {
+            case FontSize::SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            case FontSize::NORMAL:
+            case FontSize::LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            default:
+                assert( 0 ); // Did you add a new font size? Please add implementation.
+            }
+
+            return 0;
+        }
+
+        const Sprite & getChar( const uint8_t character, const FontType & fontType )
+        {
+            if ( character < 0x21 ) {
+                return errorImage;
+            }
+
+            switch ( fontType.size ) {
+            case FontSize::SMALL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::SMALFONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::NORMAL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::FONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::LARGE:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            default:
+                
+                break;
+            }
+
+            assert( 0 ); // Did you add a new font size? Please add implementation.
+
+            return errorImage;
         }
     }
 }
