@@ -60,7 +60,7 @@ namespace fheroes2
     {
     public:
         TextBase() = default;
-        virtual ~TextBase() = 0;
+        virtual ~TextBase();
 
         // Returns width of a text as a single-line text only.
         virtual int32_t width() const = 0;
