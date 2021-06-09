@@ -34,6 +34,9 @@
 #include "game.h"
 #include "game_over.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
+#include "logging.h"
+#endif
 #include "mus.h"
 #include "settings.h"
 #include "system.h"

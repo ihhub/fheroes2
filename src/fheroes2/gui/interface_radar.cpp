@@ -26,6 +26,9 @@
 #include "game_interface.h"
 #include "ground.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
+#include "logging.h"
+#endif
 #include "settings.h"
 #include "text.h"
 #include "world.h"
