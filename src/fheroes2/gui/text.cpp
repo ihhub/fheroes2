@@ -514,6 +514,16 @@ u32 Text::height( const std::string & str, int ft, u32 width )
     return 0;
 }
 
+int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
+{
+#ifdef WITH_TTF
+    if ( Settings::Get().Unicode() ) {
+        return TextUnicode::CharWidth( character, fontType );
+    }
+#endif
+    return TextAscii::CharWidth( character, fontType );
+}
+
 int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
 {
     if ( text.empty() || width_ < 1 )

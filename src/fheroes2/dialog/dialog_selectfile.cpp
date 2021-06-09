@@ -41,6 +41,31 @@
 #include "ui_button.h"
 #include "world.h"
 
+namespace
+{
+    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
+    {
+        if ( text.empty() ) {
+            // The text is empty, return start position.
+            return 0;
+        }
+
+        if ( cursorPosition <= startXPosition ) {
+            return 0;
+        }
+
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
+            if ( positionOffset + startXPosition > cursorPosition ) {
+                return i;
+            }
+        }
+
+        return text.size();
+    }
+}
+
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
 bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
@@ -144,22 +169,6 @@ std::string ResizeToShortName( const std::string & str )
     if ( std::string::npos != it )
         res.resize( it );
     return res;
-}
-
-size_t GetInsertPosition( const std::string & name, s32 cx, s32 posx )
-{
-    if ( name.size() ) {
-        s32 tw = Text::width( name, Font::SMALL );
-        if ( cx <= posx )
-            return 0;
-        else if ( cx >= posx + tw )
-            return name.size();
-        else {
-            float cw = tw / name.size();
-            return static_cast<size_t>( ( cx - posx ) / cw );
-        }
-    }
-    return 0;
 }
 
 MapsFileInfoList GetSortedMapsFileInfoList( void )
