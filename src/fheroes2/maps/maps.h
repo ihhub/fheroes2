@@ -22,10 +22,10 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
-#include "mp2.h"
 #include "direction.h"
 #include "gamedefs.h"
 #include "math_base.h"
+#include "mp2.h"
 
 #define TILEWIDTH 32
 
