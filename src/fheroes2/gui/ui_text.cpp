@@ -369,8 +369,7 @@ namespace fheroes2
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
         std::deque<Point> offsets;
-        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight,
-                         offsets );
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets );
 
         return offsets.back().y + fontHeight;
     }
