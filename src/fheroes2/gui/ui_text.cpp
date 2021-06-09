@@ -145,8 +145,6 @@ namespace
         int32_t lastWordLength = 0;
         int32_t lineWidth = 0;
 
-        const int32_t fontHeight = getFontHeight( fontType.size );
-
         fheroes2::Point * offset = &offsets.back();
 
         for ( ; character != characterEnd; ) {
@@ -521,7 +519,6 @@ namespace fheroes2
         }
 
         for ( size_t i = 0; i < _texts.size(); ++i ) {
-            const int32_t fontHeight = getFontHeight( _texts[i]._fontType.size );
             render( reinterpret_cast<const uint8_t *>( _texts[i]._text.data() ), static_cast<int32_t>( _texts[i]._text.size() ), x, y, maxWidth, output,
                     _texts[i]._fontType, maxFontHeight, false, offsets );
         }
