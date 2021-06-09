@@ -23,8 +23,8 @@ Requirements
 ---------------------------
 You are required to have at least a demo version of Heroes of Might and Magic 2 game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
 
-### Mac OS
-Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS do not fully support SDL 1.
+### macOS
+Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For macOS we highly recommend to use SDL 2 as latest versions of macOS do not fully support SDL 1.
 
 ### Debian-based
 Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
@@ -55,10 +55,11 @@ Windows
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
 
-MacOS and Linux
+macOS and Linux
 -------------------
 
-- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file (with `-d` flag for Linux). For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
+- for macOS: open `script/macos` directory and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. We do not recommend to run SDL 1 as latest versions of macOS do not support it fully.
+- for Linux: open `script/linux` directory and run **install_sdl_2_dev.sh** (default setup) or **install_sdl_1_dev.sh** file.
 - open `script/demo` directory and run **demo_unix.sh** file. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 
