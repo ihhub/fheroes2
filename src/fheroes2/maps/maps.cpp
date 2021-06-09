@@ -391,19 +391,19 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     return tileCount;
 }
 
-Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::OBJ obj, const bool ignoreHeroes )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::OBJ obj )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, obj );
 }
 
-Maps::Indexes Maps::ScanAroundObject( const int32_t center, const uint32_t dist, const MP2::OBJ obj )
+Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj )
 {
     Indexes results = Maps::GetAroundIndexes( center, dist, true );
     return MapsIndexesFilteredObject( results, obj );

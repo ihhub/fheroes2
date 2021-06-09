@@ -261,7 +261,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum OBJ
+    enum
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,

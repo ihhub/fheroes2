@@ -558,7 +558,7 @@ bool ActionSpellTownPortal( Heroes & hero )
 bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
-    MapsIndexes monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
     monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
