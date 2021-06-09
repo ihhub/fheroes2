@@ -364,7 +364,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
     // find water
     int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::FindBoatTiles( center );
+    MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO, false );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const fheroes2::Point & leftPoint = Maps::GetPoint( left );
         const fheroes2::Point & rightPoint = Maps::GetPoint( right );
