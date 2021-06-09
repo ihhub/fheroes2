@@ -147,7 +147,7 @@ namespace
 
         fheroes2::Point * offset = &offsets.back();
 
-        for ( ; character != characterEnd; ) {
+        while ( character != characterEnd ) {
             if ( *character == lineSeparator ) {
                 // End of line.
                 if ( lineLength > 0 ) {
@@ -268,7 +268,7 @@ namespace
         const int32_t fontHeight = getFontHeight( fontType.size );
         const int32_t yPos = y + ( rowHeight - fontHeight ) / 2;
 
-        for ( ; character != characterEnd; ) {
+        while ( character != characterEnd ) {
             if ( *character == lineSeparator ) {
                 // End of line. Render the current line.
                 if ( lineLength > 0 ) {
@@ -345,14 +345,14 @@ namespace
 
 namespace fheroes2
 {
-    TextBase::~TextBase() {}
+    TextBase::~TextBase() = default;
 
     Text::Text( const std::string & text, const FontType fontType )
         : _text( text )
         , _fontType( fontType )
     {}
 
-    Text::~Text() {}
+    Text::~Text() = default;
 
     int32_t Text::width() const
     {
@@ -411,7 +411,7 @@ namespace fheroes2
                 getFontHeight( _fontType.size ), true, offsets );
     }
 
-    MultiFontText::~MultiFontText() {}
+    MultiFontText::~MultiFontText() = default;
 
     void MultiFontText::add( const Text & text )
     {
