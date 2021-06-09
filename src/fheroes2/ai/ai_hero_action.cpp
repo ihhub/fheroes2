@@ -849,7 +849,7 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     Maps::Tiles::UpdateAbandoneMineSprite( tile );
-                    tile.SetHeroes( &hero );
+                    hero.SetMapsObject( MP2::OBJ_MINES );
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );

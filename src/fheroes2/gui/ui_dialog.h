@@ -20,31 +20,11 @@
 
 #pragma once
 
-#include <cstdint>
+#include <string>
+
+#include "ui_text.h"
 
 namespace fheroes2
 {
-    class Image;
-    class Sprite;
-    enum class FontSize : uint8_t;
-    struct FontType;
-
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
-
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
-        const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
-
-        // Returns the last supported ASCII character in existing font.
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
-
-        int32_t GetAbsoluteICNHeight( int icnId );
-
-        uint32_t getCharacterLimit( const FontSize fontSize );
-        const Sprite & getChar( const uint8_t character, const FontType & fontType );
-    }
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons );
 }

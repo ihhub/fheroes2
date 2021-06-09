@@ -80,9 +80,9 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     char shortTime[20];
     time_t timeval = info.localtime;
 
-    std::fill( shortDate, ARRAY_COUNT_END( shortDate ), 0 );
-    std::fill( shortHours, ARRAY_COUNT_END( shortHours ), 0 );
-    std::fill( shortTime, ARRAY_COUNT_END( shortTime ), 0 );
+    std::fill( shortDate, std::end( shortDate ), 0 );
+    std::fill( shortHours, std::end( shortHours ), 0 );
+    std::fill( shortTime, std::end( shortTime ), 0 );
     std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
     std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
     std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
