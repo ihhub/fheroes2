@@ -697,7 +697,7 @@ const char * Artifact::GetScenario( const Artifact & art )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Artifact & art )

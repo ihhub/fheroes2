@@ -225,12 +225,12 @@ void Troops::PopBack( void )
 
 Troop * Troops::GetTroop( size_t pos )
 {
-    return pos < size() ? at( pos ) : NULL;
+    return pos < size() ? at( pos ) : nullptr;
 }
 
 const Troop * Troops::GetTroop( size_t pos ) const
 {
-    return pos < size() ? at( pos ) : NULL;
+    return pos < size() ? at( pos ) : nullptr;
 }
 
 void Troops::UpgradeMonsters( const Monster & m )
@@ -449,7 +449,7 @@ void Troops::UpgradeTroops( const Castle & castle )
 Troop * Troops::GetFirstValid( void )
 {
     iterator it = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } );
-    return it == end() ? NULL : *it;
+    return it == end() ? nullptr : *it;
 }
 
 Troop * Troops::GetWeakestTroop( void )
@@ -466,7 +466,7 @@ Troop * Troops::GetWeakestTroop( void )
             ++first;
 
     if ( first == end() )
-        return NULL;
+        return nullptr;
     lowest = first;
 
     if ( first != last )
@@ -789,7 +789,7 @@ Army::Army( HeroBase * s )
 }
 
 Army::Army( const Maps::Tiles & t )
-    : commander( NULL )
+    : commander( nullptr )
     , combat_format( true )
     , color( Color::NONE )
 {
@@ -941,7 +941,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            const MapMonster * map_troop = NULL;
+            const MapMonster * map_troop = nullptr;
             if ( tile.GetObject() == MP2::OBJ_MONSTER )
                 map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
@@ -984,7 +984,7 @@ void Army::SetColor( int cl )
 int Army::GetLuck( void ) const
 {
     const HeroBase * currentCommander = GetCommander();
-    return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( NULL );
+    return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( nullptr );
 }
 
 int Army::GetLuckModificator( const std::string * ) const
@@ -995,7 +995,7 @@ int Army::GetLuckModificator( const std::string * ) const
 int Army::GetMorale( void ) const
 {
     const HeroBase * currentCommander = GetCommander();
-    return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( NULL );
+    return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( nullptr );
 }
 
 // TODO:: need optimize
@@ -1145,7 +1145,7 @@ double Army::GetStrength( void ) const
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Troop * troop = *it;
-        if ( troop != NULL && troop->isValid() ) {
+        if ( troop != nullptr && troop->isValid() ) {
             double strength = troop->GetStrengthWithBonus( bonusAttack, bonusDefense );
 
             if ( archery > 0 && troop->isArchers() ) {
@@ -1233,17 +1233,17 @@ void Army::SetCommander( HeroBase * c )
 
 HeroBase * Army::GetCommander( void )
 {
-    return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? NULL : commander;
+    return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? nullptr : commander;
 }
 
 const Castle * Army::inCastle( void ) const
 {
-    return commander ? commander->inCastle() : NULL;
+    return commander ? commander->inCastle() : nullptr;
 }
 
 const HeroBase * Army::GetCommander( void ) const
 {
-    return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? NULL : commander;
+    return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? nullptr : commander;
 }
 
 int Army::GetControl( void ) const
@@ -1311,7 +1311,7 @@ bool Army::isMeleeDominantArmy() const
     double other = 0;
 
     for ( const Troop * troop : *this ) {
-        if ( troop != NULL && troop->isValid() ) {
+        if ( troop != nullptr && troop->isValid() ) {
             if ( !troop->isArchers() && !troop->isFlying() ) {
                 meleeInfantry += troop->GetStrength();
             }
@@ -1350,7 +1350,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    const MapMonster * map_troop = NULL;
+    const MapMonster * map_troop = nullptr;
     if ( tile.GetObject() == MP2::OBJ_MONSTER )
         map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
@@ -1492,7 +1492,7 @@ StreamBase & operator>>( StreamBase & msg, Army & army )
     }
 
     // set later from owner (castle, heroes)
-    army.commander = NULL;
+    army.commander = nullptr;
 
     return msg;
 }

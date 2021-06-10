@@ -114,7 +114,7 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
 
     std::string perday = _( "%{count} / day" );
     payment_t info = ProfitConditions::FromMine( res );
-    const s32 * current = NULL;
+    const s32 * current = nullptr;
 
     switch ( res ) {
     case Resource::MERCURY:
@@ -996,7 +996,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapResource * map_resource = NULL;
+    const MapResource * map_resource = nullptr;
 
     if ( tile.GetObject() == obj )
         map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
@@ -1248,7 +1248,7 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
 
     // check spell book
     if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( NULL, spell_level ) ) {
+        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
             body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
@@ -1723,7 +1723,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
 void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapArtifact * map_artifact = NULL;
+    const MapArtifact * map_artifact = nullptr;
 
     if ( tile.GetObject() == obj )
         map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
@@ -2287,11 +2287,11 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
 {
-    const char * str_empty = NULL;
-    const char * str_recr = NULL;
-    const char * str_warn = NULL;
-    const char * str_wins = NULL;
-    const char * str_scss = NULL;
+    const char * str_empty = nullptr;
+    const char * str_recr = nullptr;
+    const char * str_warn = nullptr;
+    const char * str_wins = nullptr;
+    const char * str_scss = nullptr;
 
     switch ( obj ) {
     case MP2::OBJ_CITYDEAD:

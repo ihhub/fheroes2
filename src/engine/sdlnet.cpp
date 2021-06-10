@@ -29,22 +29,22 @@
 #include "sdlnet.h"
 
 Network::Socket::Socket()
-    : sd( NULL )
-    , sdset( NULL )
+    : sd( nullptr )
+    , sdset( nullptr )
     , status( 0 )
 {}
 
 Network::Socket::Socket( const TCPsocket csd )
-    : sd( NULL )
-    , sdset( NULL )
+    : sd( nullptr )
+    , sdset( nullptr )
     , status( 0 )
 {
     Assign( csd );
 }
 
 Network::Socket::Socket( const Socket & )
-    : sd( NULL )
-    , sdset( NULL )
+    : sd( nullptr )
+    , sdset( nullptr )
     , status( 0 )
 {}
 
@@ -74,7 +74,7 @@ void Network::Socket::Assign( const TCPsocket csd )
 
 u32 Network::Socket::Host( void ) const
 {
-    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
+    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : nullptr;
     if ( remoteIP )
         return SDLNet_Read32( &remoteIP->host );
     ERROR_LOG( SDLNet_GetError() );
@@ -83,7 +83,7 @@ u32 Network::Socket::Host( void ) const
 
 u16 Network::Socket::Port( void ) const
 {
-    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : NULL;
+    IPaddress * remoteIP = sd ? SDLNet_TCP_GetPeerAddress( sd ) : nullptr;
     if ( remoteIP )
         return SDLNet_Read16( &remoteIP->port );
     ERROR_LOG( SDLNet_GetError() );
@@ -175,10 +175,10 @@ void Network::Socket::Close( void )
         if ( sdset ) {
             SDLNet_TCP_DelSocket( sdset, sd );
             SDLNet_FreeSocketSet( sdset );
-            sdset = NULL;
+            sdset = nullptr;
         }
         SDLNet_TCP_Close( sd );
-        sd = NULL;
+        sd = nullptr;
     }
 }
 

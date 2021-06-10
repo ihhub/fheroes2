@@ -622,7 +622,7 @@ void Kingdom::OverviewDialog( void )
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
-    Interface::ListBasic * listStats = NULL;
+    Interface::ListBasic * listStats = nullptr;
 
     // set state view: castles
     if ( Modes( OVERVIEWCSTL ) ) {

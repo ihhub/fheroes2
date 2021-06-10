@@ -126,7 +126,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
+    bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 

@@ -166,7 +166,7 @@ namespace fheroes2
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
-        Display::instance().changePalette( NULL );
+        Display::instance().changePalette( nullptr );
         LocalEvent::Get().ResumeCycling();
     }
 

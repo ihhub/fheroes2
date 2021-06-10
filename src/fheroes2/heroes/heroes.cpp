@@ -438,7 +438,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
 
 int Heroes::GetAttack( void ) const
 {
-    return GetAttack( NULL );
+    return GetAttack( nullptr );
 }
 
 int Heroes::GetAttack( std::string * strs ) const
@@ -449,7 +449,7 @@ int Heroes::GetAttack( std::string * strs ) const
 
 int Heroes::GetDefense( void ) const
 {
-    return GetDefense( NULL );
+    return GetDefense( nullptr );
 }
 
 int Heroes::GetDefense( std::string * strs ) const
@@ -460,7 +460,7 @@ int Heroes::GetDefense( std::string * strs ) const
 
 int Heroes::GetPower( void ) const
 {
-    return GetPower( NULL );
+    return GetPower( nullptr );
 }
 
 int Heroes::GetPower( std::string * strs ) const
@@ -471,7 +471,7 @@ int Heroes::GetPower( std::string * strs ) const
 
 int Heroes::GetKnowledge( void ) const
 {
-    return GetKnowledge( NULL );
+    return GetKnowledge( nullptr );
 }
 
 int Heroes::GetKnowledge( std::string * strs ) const
@@ -600,7 +600,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
 
 int Heroes::GetMorale( void ) const
 {
-    return GetMoraleWithModificators( NULL );
+    return GetMoraleWithModificators( nullptr );
 }
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
@@ -636,7 +636,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
 int Heroes::GetLuck( void ) const
 {
-    return GetLuckWithModificators( NULL );
+    return GetLuckWithModificators( nullptr );
 }
 
 int Heroes::GetLuckWithModificators( std::string * strs ) const
@@ -822,14 +822,14 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : NULL;
-    return castle && castle->GetHeroes() == this ? castle : NULL;
+    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : NULL;
-    return castle && castle->GetHeroes() == this ? castle : NULL;
+    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 /* is visited cell */
@@ -1471,7 +1471,7 @@ void Heroes::SetFreeman( int reason )
             kingdom.RemoveHeroes( this );
 
         SetColor( Color::NONE );
-        world.GetTiles( GetIndex() ).SetHeroes( NULL );
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
         modes = 0;
         SetIndex( -1 );
         move_point_scale = -1;
@@ -1575,7 +1575,7 @@ void Heroes::MovePointsScaleFixed( void )
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
-        world.GetTiles( GetIndex() ).SetHeroes( NULL );
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
         SetIndex( dstIndex );
         Scoute( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
@@ -1808,7 +1808,7 @@ void AllHeroes::clear( void )
 Heroes * VecHeroes::Get( int hid ) const
 {
     const std::vector<Heroes *> & vec = *this;
-    return 0 <= hid && hid < Heroes::UNKNOWN ? vec[hid] : NULL;
+    return 0 <= hid && hid < Heroes::UNKNOWN ? vec[hid] : nullptr;
 }
 
 Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
@@ -1817,14 +1817,14 @@ Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
     for ( ; it != end(); ++it )
         if ( ( *it )->isPosition( center ) )
             break;
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
     const_iterator it
         = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
@@ -1836,7 +1836,7 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
                                                                                       return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
                                                                                   } )
                                                                   : end();
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetFreeman( int race ) const
@@ -1902,7 +1902,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     // not found, all heroes busy
     if ( freeman_heroes.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
-        return NULL;
+        return nullptr;
     }
 
     return at( Rand::Get( freeman_heroes ) );
@@ -1924,7 +1924,7 @@ void AllHeroes::Scoute( int colors ) const
 Heroes * AllHeroes::FromJail( s32 index ) const
 {
     const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 bool AllHeroes::HaveTwoFreemans( void ) const
@@ -1980,12 +1980,12 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
     u32 size;
     msg >> size;
 
-    heroes.resize( size, NULL );
+    heroes.resize( size, nullptr );
 
     for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
         u32 hid;
         msg >> hid;
-        *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : NULL );
+        *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : nullptr );
     }
 
     return msg;
@@ -2052,7 +2052,7 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
     msg >> size;
 
     heroes.clear();
-    heroes.resize( size, NULL );
+    heroes.resize( size, nullptr );
 
     for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
         *it = new Heroes();

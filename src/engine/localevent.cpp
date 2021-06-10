@@ -224,8 +224,8 @@ LocalEvent::LocalEvent()
     , mouse_state( 0 )
     , mouse_button( 0 )
     , mouse_st( 0, 0 )
-    , redraw_cursor_func( NULL )
-    , keyboard_filter_func( NULL )
+    , redraw_cursor_func( nullptr )
+    , keyboard_filter_func( nullptr )
     , loop_delay( 1 )
 {}
 
@@ -1087,7 +1087,7 @@ void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRend
 void LocalEvent::PauseCycling() const
 {
     colorCycling.pause();
-    fheroes2::Display::instance().subscribe( NULL, NULL );
+    fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
 void LocalEvent::ResumeCycling() const
@@ -1893,7 +1893,7 @@ void LocalEvent::SetStateDefaults( void )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SetState( SDL_WINDOWEVENT, true );
 
-    SDL_SetEventFilter( GlobalFilterEvents, NULL );
+    SDL_SetEventFilter( GlobalFilterEvents, nullptr );
 #else
     SetState( SDL_ACTIVEEVENT, true );
 

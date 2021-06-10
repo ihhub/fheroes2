@@ -605,8 +605,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     const int scholar2 = hero2.GetLevelSkill( Skill::Secondary::EAGLEEYE );
     int scholar = 0;
 
-    Heroes * teacher = NULL;
-    Heroes * learner = NULL;
+    Heroes * teacher = nullptr;
+    Heroes * learner = nullptr;
 
     if ( scholar1 && scholar1 >= scholar2 ) {
         teacher = &hero1;
