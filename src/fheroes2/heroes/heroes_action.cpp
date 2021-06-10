@@ -988,7 +988,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.GetPath().Hide();
     hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( true );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2005,7 +2005,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2039,7 +2039,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

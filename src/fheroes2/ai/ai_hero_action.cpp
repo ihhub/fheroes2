@@ -948,7 +948,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -974,7 +974,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1584,7 +1584,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
             hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
 

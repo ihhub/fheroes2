@@ -1515,24 +1515,26 @@ void Heroes::SetMapsObject( int obj )
 
 void Heroes::ActionPreBattle( void ) {}
 
-void Heroes::ActionNewPosition( void )
+void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
-    // scan for monsters around
-    const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
+    if ( allowMonsterAttack ) {
+        // scan for monsters around
+        const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
 
-    if ( !targets.empty() ) {
-        SetMove( false );
-        GetPath().Hide();
+        if ( !targets.empty() ) {
+            SetMove( false );
+            GetPath().Hide();
 
-        // first fight the monsters on the destination tile (if any)
-        MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
+            // first fight the monsters on the destination tile (if any)
+            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
 
-        if ( it != targets.end() ) {
-            Action( *it, true );
-        }
-        // otherwise fight the monsters on the first adjacent tile
-        else {
-            Action( targets.front(), true );
+            if ( it != targets.end() ) {
+                Action( *it, true );
+            }
+            // otherwise fight the monsters on the first adjacent tile
+            else {
+                Action( targets.front(), true );
+            }
         }
     }
 
