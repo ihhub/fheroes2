@@ -351,14 +351,14 @@ fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite 
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     const fheroes2::Rect & ar = gamearea.GetROI();
 
-    int32_t xpos = mx + TILEWIDTH - (imageBox.width() / 2);
-    int32_t ypos = my + TILEWIDTH - (imageBox.height() / 2);
+    int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
+    int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
 
     // clamp box to edges of adventure screen game area
-    xpos = clamp(xpos, BORDERWIDTH, (ar.width - imageBox.width()) + BORDERWIDTH);
-    ypos = clamp(ypos, BORDERWIDTH, (ar.height - imageBox.height()) + BORDERWIDTH);
+    xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+    ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
 
-    return fheroes2::Rect(xpos, ypos, imageBox.width(), imageBox.height());
+    return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
 }
 
 uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
