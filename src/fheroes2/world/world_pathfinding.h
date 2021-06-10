@@ -24,10 +24,11 @@
 #include "color.h"
 #include "pairs.h"
 #include "pathfinding.h"
+#include "mp2.h"
 #include "route.h"
 
 // Abstract class that provides base functionality to path through World map
-class WorldPathfinder : public Pathfinder<PathfindingNode>
+class WorldPathfinder : public Pathfinder<PathfindingNode<MP2::OBJ>>
 {
 public:
     WorldPathfinder() = default;

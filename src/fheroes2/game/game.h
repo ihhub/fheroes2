@@ -27,6 +27,7 @@
 
 #include "game_mode.h"
 #include "gamedefs.h"
+#include "mp2.h"
 #include "types.h"
 
 class Players;
@@ -214,10 +215,10 @@ namespace Game
         {
             FadeTask();
 
-            FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_, bool fadeIn_,
-                      uint8_t objectTileset_ );
+            FadeTask( MP2::OBJ object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+                      bool fadeIn_, uint8_t objectTileset_ );
 
-            int object;
+            MP2::OBJ object;
             uint32_t objectIndex;
             uint32_t animationIndex;
             int32_t fromIndex;
@@ -230,7 +231,7 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PrepareFadeTask( int object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PrepareFadeTask( const MP2::OBJ obj, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
         void PerformFadeTask();
     }
 

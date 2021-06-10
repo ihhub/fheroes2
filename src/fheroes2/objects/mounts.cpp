@@ -25,7 +25,6 @@
 #include "direction.h"
 #include "icn.h"
 #include "mounts.h"
-#include "mp2.h"
 
 /*
     Mnts1: MTNDSRT, MTNGRAS, MTNLAVA, MTNMULT, MTNSNOW, MTNSWMP
@@ -69,12 +68,12 @@ bool ObjMnts2::isAction( u32 index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-int ObjMnts1::GetActionObject( u32 )
+MP2::OBJ ObjMnts1::GetActionObject( u32 )
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjMnts2::GetActionObject( u32 )
+MP2::OBJ ObjMnts2::GetActionObject( u32 )
 {
     return MP2::OBJ_ZERO;
 }

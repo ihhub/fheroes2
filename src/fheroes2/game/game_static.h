@@ -61,7 +61,7 @@ namespace GameStatic
     bool isCustomMonsterUpgradeOption();
     float GetMonsterUpgradeRatio();
 
-    s32 ObjectVisitedModifiers( int obj );
+    s32 ObjectVisitedModifiers( const MP2::OBJ obj );
 
     int GetBattleMoatReduceDefense( void );
 

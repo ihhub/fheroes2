@@ -115,7 +115,7 @@ void CapturedObjects::SetColor( s32 index, int col )
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( s32 index, int obj, int col )
+void CapturedObjects::Set( s32 index, const MP2::OBJ obj, int col )
 {
     CapturedObject & co = Get( index );
 
@@ -125,7 +125,7 @@ void CapturedObjects::Set( s32 index, int obj, int col )
     co.Set( obj, col );
 }
 
-u32 CapturedObjects::GetCount( int obj, int col ) const
+u32 CapturedObjects::GetCount( const MP2::OBJ obj, int col ) const
 {
     u32 result = 0;
 
@@ -214,7 +214,7 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, int obj )
+Funds CapturedObjects::TributeCapturedObject( int color, const MP2::OBJ obj )
 {
     Funds result;
 
@@ -622,7 +622,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
     excld.reserve( vec_tiles.size() / 2 );
 
     const int32_t dist = 2;
-    const std::vector<uint8_t> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+    const std::vector<MP2::OBJ> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
 
     // create exclude list
     const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
@@ -745,7 +745,7 @@ s32 World::NextWhirlpool( s32 index ) const
 /* return message from sign */
 
 /* return count captured object */
-u32 World::CountCapturedObject( int obj, int col ) const
+u32 World::CountCapturedObject( const MP2::OBJ obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
@@ -768,7 +768,7 @@ u32 World::CountCapturedMines( int type, int color ) const
 /* capture object */
 void World::CaptureObject( s32 index, int color )
 {
-    int obj = GetTiles( index ).GetObject( false );
+    const MP2::OBJ obj = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, obj, color );
 
     if ( MP2::OBJ_CASTLE == obj ) {

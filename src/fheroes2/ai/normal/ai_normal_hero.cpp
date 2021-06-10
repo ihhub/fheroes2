@@ -73,7 +73,7 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo )
+        double value( const std::pair<int, MP2::OBJ> & objectInfo )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
@@ -107,13 +107,13 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
+    double Normal::getObjectValue( const Heroes & hero, int index, const MP2::OBJ obj, double valueToIgnore ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
 
-        if ( objectID == MP2::OBJ_CASTLE ) {
+        if ( obj == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
             if ( !castle )
                 return valueToIgnore;
@@ -131,7 +131,7 @@ namespace AI
                 return castle->getBuildingValue() * 150.0 + 3000;
             }
         }
-        else if ( objectID == MP2::OBJ_HEROES ) {
+        else if ( obj == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
             if ( !otherHero )
                 return valueToIgnore;
@@ -146,44 +146,44 @@ namespace AI
             }
             return 5000.0;
         }
-        else if ( objectID == MP2::OBJ_MONSTER ) {
+        else if ( obj == MP2::OBJ_MONSTER ) {
             return 1000.0;
         }
-        else if ( objectID == MP2::OBJ_MINES || objectID == MP2::OBJ_SAWMILL || objectID == MP2::OBJ_ALCHEMYLAB ) {
+        else if ( obj == MP2::OBJ_MINES || obj == MP2::OBJ_SAWMILL || obj == MP2::OBJ_ALCHEMYLAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
             return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 4000.0 : 2000.0;
         }
-        else if ( MP2::isArtifactObject( objectID ) && tile.QuantityArtifact().isValid() ) {
+        else if ( MP2::isArtifactObject( obj ) && tile.QuantityArtifact().isValid() ) {
             return 1000.0 * tile.QuantityArtifact().getArtifactValue();
         }
-        else if ( MP2::isPickupObject( objectID ) ) {
+        else if ( MP2::isPickupObject( obj ) ) {
             return 850.0;
         }
-        else if ( MP2::isCaptureObject( objectID ) && MP2::isQuantityObject( objectID ) ) {
+        else if ( MP2::isCaptureObject( obj ) && MP2::isQuantityObject( obj ) ) {
             // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
             return 500.0;
         }
-        else if ( objectID == MP2::OBJ_XANADU ) {
+        else if ( obj == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectID == MP2::OBJ_SHRINE1 ) {
+        else if ( obj == MP2::OBJ_SHRINE1 ) {
             return 100;
         }
-        else if ( objectID == MP2::OBJ_SHRINE2 ) {
+        else if ( obj == MP2::OBJ_SHRINE2 ) {
             return 250;
         }
-        else if ( objectID == MP2::OBJ_SHRINE3 ) {
+        else if ( obj == MP2::OBJ_SHRINE3 ) {
             return 500;
         }
-        else if ( MP2::isHeroUpgradeObject( objectID ) ) {
+        else if ( MP2::isHeroUpgradeObject( obj ) ) {
             return 500.0;
         }
-        else if ( MP2::isMonsterDwelling( objectID ) ) {
+        else if ( MP2::isMonsterDwelling( obj ) ) {
             return tile.QuantityTroop().GetStrength();
         }
-        else if ( objectID == MP2::OBJ_STONELITHS ) {
+        else if ( obj == MP2::OBJ_STONELITHS ) {
             const MapsIndexes & list = world.GetTeleportEndPoints( index );
             for ( const int teleportIndex : list ) {
                 if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
@@ -191,7 +191,7 @@ namespace AI
             }
             return valueToIgnore;
         }
-        else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
+        else if ( obj == MP2::OBJ_OBSERVATIONTOWER ) {
             const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
@@ -199,7 +199,7 @@ namespace AI
             }
             return fogCountToUncover * 100.0;
         }
-        else if ( objectID == MP2::OBJ_COAST ) {
+        else if ( obj == MP2::OBJ_COAST ) {
             const RegionStats & regionStats = _regions[tile.GetRegion()];
             const size_t objectCount = regionStats.validObjects.size();
             if ( objectCount < 1 )
@@ -210,7 +210,7 @@ namespace AI
                 value -= suboptimalTaskPenalty;
             return value;
         }
-        else if ( objectID == MP2::OBJ_WHIRLPOOL ) {
+        else if ( obj == MP2::OBJ_WHIRLPOOL ) {
             const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
             for ( const int whirlpoolIndex : list ) {
                 if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
@@ -218,11 +218,11 @@ namespace AI
             }
             return -dangerousTaskPenalty; // no point to even loose the army for this
         }
-        else if ( objectID == MP2::OBJ_BOAT ) {
+        else if ( obj == MP2::OBJ_BOAT ) {
             // de-prioritize the water movement even harder
             return -5000.0;
         }
-        else if ( objectID == MP2::OBJ_MAGICWELL ) {
+        else if ( obj == MP2::OBJ_MAGICWELL ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
@@ -231,7 +231,7 @@ namespace AI
             }
             return 0;
         }
-        else if ( objectID == MP2::OBJ_TEMPLE ) {
+        else if ( obj == MP2::OBJ_TEMPLE ) {
             const int moral = hero.GetMorale();
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
@@ -262,7 +262,7 @@ namespace AI
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-        int objectID = MP2::OBJ_ZERO;
+        MP2::OBJ objectID = MP2::OBJ_ZERO;
 #endif
 
         // pre-cache the pathfinder

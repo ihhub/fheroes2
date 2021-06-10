@@ -61,7 +61,7 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            int objectID = tile.GetObject();
+            const MP2::OBJ objectID = tile.GetObject();
 
             if ( !kingdom.isValidKingdomObject( tile, objectID ) )
                 continue;

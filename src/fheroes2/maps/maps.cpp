@@ -98,7 +98,7 @@ struct ComparsionDistance
     const fheroes2::Point centerPoint;
 };
 
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes /* = true */ )
+Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const MP2::OBJ obj, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
@@ -109,7 +109,7 @@ Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, co
     return result;
 }
 
-Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
+Maps::Indexes Maps::MapsIndexesObject( const MP2::OBJ obj, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
@@ -391,31 +391,31 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     return tileCount;
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, int obj )
+Maps::Indexes Maps::ScanAroundObject( s32 center, const MP2::OBJ obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, obj );
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, int obj )
+Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, const MP2::OBJ obj )
 {
     Indexes results = Maps::GetAroundIndexes( center, dist, true );
     return MapsIndexesFilteredObject( results, obj );
 }
 
-Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( const MP2::OBJ obj, bool ignoreHeroes )
 {
     return MapsIndexesObject( obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( s32 center, const MP2::OBJ obj, bool ignoreHeroes )
 {
     Indexes results = MapsIndexesObject( obj, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
+Maps::Indexes Maps::GetObjectsPositions( const std::vector<MP2::OBJ>& objs )
 {
     if ( objs.size() == 1 ) {
         return MapsIndexesObject( objs[0], true );
@@ -427,9 +427,9 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
 
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        const int objectID = world.GetTiles( idx ).GetObject( true );
+        const MP2::OBJ objectID = world.GetTiles( idx ).GetObject( true );
 
-        for ( const uint8_t obj : objs ) {
+        for ( const MP2::OBJ obj : objs ) {
             if ( obj == objectID ) {
                 result.push_back( idx );
                 break;
@@ -568,7 +568,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 
     // correct only RND town and castle
     const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
-    const int entranceObject = entranceTile.GetObject();
+    const MP2::OBJ entranceObject = entranceTile.GetObject();
     const uint32_t castleID = entranceTile.GetObjectUID();
 
     if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {

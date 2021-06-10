@@ -239,8 +239,8 @@ public:
     int GetLuckWithModificators( std::string * str = NULL ) const;
     int GetLevel( void ) const;
 
-    int GetMapsObject( void ) const;
-    void SetMapsObject( int );
+    MP2::OBJ GetMapsObject( void ) const;
+    void SetMapsObject( const MP2::OBJ obj );
 
     const fheroes2::Point & GetCenterPatrol( void ) const;
     void SetCenterPatrol( const fheroes2::Point & );
@@ -305,8 +305,8 @@ public:
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( s32, const MP2::OBJ obj, Visit::type_t = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::OBJ object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );

@@ -695,7 +695,7 @@ void World::ProcessNewMap()
 
     // set ultimate
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
-                                           []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
+                                           []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
     fheroes2::Point ultimate_pos;
 
     // not found

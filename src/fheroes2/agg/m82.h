@@ -23,6 +23,7 @@
 #ifndef H2M82_H
 #define H2M82_H
 
+#include "mp2.h"
 #include "types.h"
 
 #include <cstddef>
@@ -348,7 +349,7 @@ namespace M82
 
     const char * GetString( int );
     int FromSpell( int );
-    u32 GetIndexLOOP00XXFromObject( int );
+    u32 GetIndexLOOP00XXFromObject( const MP2::OBJ obj );
     int GetLOOP00XX( const size_t index );
 }
 

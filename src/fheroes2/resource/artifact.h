@@ -26,6 +26,7 @@
 
 #include "gamedefs.h"
 #include "interface_itemsbar.h"
+#include "mp2.h"
 #include "serialize.h"
 #include "ui_tool.h"
 
@@ -207,7 +208,7 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
-u32 GoldInsteadArtifact( int );
+u32 GoldInsteadArtifact( const MP2::OBJ obj );
 
 class BagArtifacts : public std::vector<Artifact>
 {

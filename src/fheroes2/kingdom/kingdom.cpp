@@ -391,36 +391,36 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject() );
 }
 
-bool Kingdom::isVisited( s32 index, int object ) const
+bool Kingdom::isVisited( s32 index, const MP2::OBJ obj ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
-    return visit_object.end() != it && ( *it ).isObject( object );
+    return visit_object.end() != it && ( *it ).isObject( obj );
 }
 
 /* return true if object visited */
-bool Kingdom::isVisited( int object ) const
+bool Kingdom::isVisited( const MP2::OBJ obj ) const
 {
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [obj]( const IndexObject & v ) { return v.isObject( obj ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( int object ) const
+u32 Kingdom::CountVisitedObjects( const MP2::OBJ obj ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::count_if( visit_object.begin(), visit_object.end(), [obj]( const IndexObject & v ) { return v.isObject( obj ); } );
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, int object )
+void Kingdom::SetVisited( s32 index, const MP2::OBJ obj = MP2::OBJ_ZERO )
 {
-    if ( !isVisited( index, object ) && object != MP2::OBJ_ZERO )
-        visit_object.push_front( IndexObject( index, object ) );
+    if ( !isVisited( index, obj ) && obj != MP2::OBJ_ZERO )
+        visit_object.push_front( IndexObject( index, obj ) );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::OBJ obj ) const
 {
-    if ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST )
+    if ( !MP2::isGroundObject( obj ) && obj != MP2::OBJ_COAST )
         return false;
 
-    if ( isVisited( tile.GetIndex(), objectID ) )
+    if ( isVisited( tile.GetIndex(), obj ) )
         return false;
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
@@ -434,15 +434,15 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-    if ( objectID == MP2::OBJ_HEROES ) {
+    if ( obj == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
-    if ( MP2::isCaptureObject( objectID ) )
+    if ( MP2::isCaptureObject( obj ) )
         return !Players::isFriends( color, tile.QuantityColor() );
 
-    if ( MP2::isQuantityObject( objectID ) )
+    if ( MP2::isQuantityObject( obj ) )
         return tile.QuantityIsValid();
 
     return true;
@@ -883,7 +883,7 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, const MP2::OBJ obj )
 {
     for ( u32 ii = 0; ii < size(); ++ii )
         if ( kingdoms[ii].isPlay() ) {

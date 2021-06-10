@@ -444,7 +444,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( mp2_object ) )
+    if ( MP2::isPickupObject( static_cast<MP2::OBJ>(mp2_object) ) )
         setAsEmpty();
 }
 
@@ -1019,7 +1019,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
-    const int obj = tile.GetObject( false );
+    const MP2::OBJ obj = tile.GetObject( false );
 
     switch ( obj ) {
     // join monsters

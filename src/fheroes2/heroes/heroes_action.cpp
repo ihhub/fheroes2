@@ -50,56 +50,56 @@
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index );
+void ActionToMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToBoat( Heroes & hero, s32 dst_index );
 void ActionToCoast( Heroes & hero, s32 dst_index );
 void ActionToWagon( Heroes & hero, s32 dst_index );
-void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index );
-void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index );
-void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
+void ActionToSkeleton( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToObjectResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToPickupResource( const Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToFlotSam( const Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToArtifact( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToShipwreckSurvivor( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
-void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToPyramid( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToWitchsHut( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToGoodLuckObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToPyramid( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToSign( const Heroes & hero, s32 dst_index );
 void ActionToMagicWell( Heroes & hero, s32 dst_index );
 void ActionToTradingPost( const Heroes & hero );
-void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToAncientLamp( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToPrimarySkillObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToPoorMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToGoodMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToExperienceObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToTreasureChest( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToAncientLamp( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToTeleports( Heroes & hero, s32 dst_index );
 void ActionToWhirlpools( Heroes & hero, s32 dst_index );
-void ActionToObservationTower( const Heroes & hero, u32 obj, s32 dst_index );
-void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToUpgradeArmyObject( Heroes & hero, u32 obj );
-void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToObservationTower( const Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToCaptureObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToDwellingJoinMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToDwellingBattleMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToArtesianSpring( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToAbandoneMine( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToXanadu( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToUpgradeArmyObject( Heroes & hero, const MP2::OBJ obj );
+void ActionToMagellanMaps( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToEvent( Heroes & hero, s32 dst_index );
-void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToOracle( const Heroes & hero, uint32_t obj );
-void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index );
+void ActionToObelisk( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToTreeKnowledge( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToOracle( const Heroes & hero, const MP2::OBJ obj );
+void ActionToDaemonCave( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 void ActionToAlchemistsTower( Heroes & hero );
-void ActionToStables( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArena( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index );
-void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToEyeMagi( const Heroes & hero, u32 obj );
-void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index );
-void ActionToTravellersTent( const Heroes & hero, u32 obj, s32 dst_index );
+void ActionToStables( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToArena( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToSirens( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToJail( const Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToHutMagi( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToEyeMagi( const Heroes & hero, const MP2::OBJ obj );
+void ActionToSphinx( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToBarrier( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+void ActionToTravellersTent( const Heroes & hero, const MP2::OBJ obj, s32 dst_index );
 
 u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
 {
@@ -365,12 +365,12 @@ void Heroes::Action( int tileIndex, bool isDestination )
         return AI::HeroesAction( *this, tileIndex, isDestination );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const int object = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+    const MP2::OBJ obj = ( tileIndex == GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
 
-    if ( MUS::FromMapObject( object ) != MUS::UNKNOWN )
-        AGG::PlayMusic( MUS::FromMapObject( object ), false );
+    if ( MUS::FromMapObject( obj ) != MUS::UNKNOWN )
+        AGG::PlayMusic( MUS::FromMapObject( obj ), false );
 
-    if ( MP2::isActionObject( object, isShipMaster() ) ) {
+    if ( MP2::isActionObject( obj, isShipMaster() ) ) {
         Interface::StatusWindow::ResetTimer();
         SetModes( ACTION );
     }
@@ -422,7 +422,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
     /* default actions */
     if ( cancel_default ) {
-        if ( MP2::isPickupObject( object ) ) {
+        if ( MP2::isPickupObject( obj ) ) {
             Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
             tile.RemoveObjectSprite();
@@ -433,9 +433,9 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
     }
     else
-        switch ( object ) {
+        switch ( obj ) {
         case MP2::OBJ_MONSTER:
-            ActionToMonster( *this, object, tileIndex );
+            ActionToMonster( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_CASTLE:
@@ -457,39 +457,39 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_LEANTO:
-            ActionToObjectResource( *this, object, tileIndex );
+            ActionToObjectResource( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_WAGON:
             ActionToWagon( *this, tileIndex );
             break;
         case MP2::OBJ_SKELETON:
-            ActionToSkeleton( *this, object, tileIndex );
+            ActionToSkeleton( *this, obj, tileIndex );
             break;
 
         // pickup object
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_BOTTLE:
         case MP2::OBJ_CAMPFIRE:
-            ActionToPickupResource( *this, object, tileIndex );
+            ActionToPickupResource( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_TREASURECHEST:
-            ActionToTreasureChest( *this, object, tileIndex );
+            ActionToTreasureChest( *this, obj, tileIndex );
             break;
         case MP2::OBJ_ANCIENTLAMP:
-            ActionToAncientLamp( *this, object, tileIndex );
+            ActionToAncientLamp( *this, obj, tileIndex );
             break;
         case MP2::OBJ_FLOTSAM:
-            ActionToFlotSam( *this, object, tileIndex );
+            ActionToFlotSam( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_SHIPWRECKSURVIROR:
-            ActionToShipwreckSurvivor( *this, object, tileIndex );
+            ActionToShipwreckSurvivor( *this, obj, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
-            ActionToArtifact( *this, object, tileIndex );
+            ActionToArtifact( *this, obj, tileIndex );
             break;
 
             // shrine circle
@@ -501,7 +501,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
         // witchs hut
         case MP2::OBJ_WITCHSHUT:
-            ActionToWitchsHut( *this, object, tileIndex );
+            ActionToWitchsHut( *this, obj, tileIndex );
             break;
 
         // info message
@@ -513,11 +513,11 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
-            ActionToGoodLuckObject( *this, object, tileIndex );
+            ActionToGoodLuckObject( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_PYRAMID:
-            ActionToPyramid( *this, object, tileIndex );
+            ActionToPyramid( *this, obj, tileIndex );
             break;
         case MP2::OBJ_MAGICWELL:
             ActionToMagicWell( *this, tileIndex );
@@ -531,7 +531,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
-            ActionToPrimarySkillObject( *this, object, tileIndex );
+            ActionToPrimarySkillObject( *this, obj, tileIndex );
             break;
 
         // morale modification
@@ -539,21 +539,21 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_TEMPLE:
         case MP2::OBJ_WATERINGHOLE:
         case MP2::OBJ_BUOY:
-            ActionToGoodMoraleObject( *this, object, tileIndex );
+            ActionToGoodMoraleObject( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
         case MP2::OBJ_DERELICTSHIP:
-            ActionToPoorMoraleObject( *this, object, tileIndex );
+            ActionToPoorMoraleObject( *this, obj, tileIndex );
             break;
 
         // experience modification
         case MP2::OBJ_GAZEBO:
-            ActionToExperienceObject( *this, object, tileIndex );
+            ActionToExperienceObject( *this, obj, tileIndex );
             break;
         case MP2::OBJ_DAEMONCAVE:
-            ActionToDaemonCave( *this, object, tileIndex );
+            ActionToDaemonCave( *this, obj, tileIndex );
             break;
 
             // teleports
@@ -567,10 +567,10 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
         // obsv tower
         case MP2::OBJ_OBSERVATIONTOWER:
-            ActionToObservationTower( *this, object, tileIndex );
+            ActionToObservationTower( *this, obj, tileIndex );
             break;
         case MP2::OBJ_MAGELLANMAPS:
-            ActionToMagellanMaps( *this, object, tileIndex );
+            ActionToMagellanMaps( *this, obj, tileIndex );
             break;
 
         // capture color object
@@ -578,11 +578,11 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_MINES:
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_LIGHTHOUSE:
-            ActionToCaptureObject( *this, object, tileIndex );
+            ActionToCaptureObject( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_ABANDONEDMINE:
-            ActionToAbandoneMine( *this, object, tileIndex );
+            ActionToAbandoneMine( *this, obj, tileIndex );
             break;
 
             // accept army
@@ -596,7 +596,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT:
-            ActionToDwellingJoinMonster( *this, object, tileIndex );
+            ActionToDwellingJoinMonster( *this, obj, tileIndex );
             break;
 
             // recruit army
@@ -604,27 +604,27 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
         case MP2::OBJ_DESERTTENT:
-            ActionToDwellingRecruitMonster( *this, object, tileIndex );
+            ActionToDwellingRecruitMonster( *this, obj, tileIndex );
             break;
 
         // battle and recruit army
         case MP2::OBJ_DRAGONCITY:
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE:
-            ActionToDwellingBattleMonster( *this, object, tileIndex );
+            ActionToDwellingBattleMonster( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_ARTESIANSPRING:
-            ActionToArtesianSpring( *this, object, tileIndex );
+            ActionToArtesianSpring( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_XANADU:
-            ActionToXanadu( *this, object, tileIndex );
+            ActionToXanadu( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_HILLFORT:
         case MP2::OBJ_FREEMANFOUNDRY:
-            ActionToUpgradeArmyObject( *this, object );
+            ActionToUpgradeArmyObject( *this, obj );
             break;
 
         case MP2::OBJ_EVENT:
@@ -632,18 +632,18 @@ void Heroes::Action( int tileIndex, bool isDestination )
             break;
 
         case MP2::OBJ_OBELISK:
-            ActionToObelisk( *this, object, tileIndex );
+            ActionToObelisk( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_TREEKNOWLEDGE:
-            ActionToTreeKnowledge( *this, object, tileIndex );
+            ActionToTreeKnowledge( *this, obj, tileIndex );
             break;
 
         case MP2::OBJ_ORACLE:
-            ActionToOracle( *this, object );
+            ActionToOracle( *this, obj );
             break;
         case MP2::OBJ_SPHINX:
-            ActionToSphinx( *this, object, tileIndex );
+            ActionToSphinx( *this, obj, tileIndex );
             break;
 
             // loyalty version
@@ -652,38 +652,38 @@ void Heroes::Action( int tileIndex, bool isDestination )
         case MP2::OBJ_FIREALTAR:
         case MP2::OBJ_EARTHALTAR:
         case MP2::OBJ_BARROWMOUNDS:
-            ActionToDwellingRecruitMonster( *this, object, tileIndex );
+            ActionToDwellingRecruitMonster( *this, obj, tileIndex );
             break;
         case MP2::OBJ_ALCHEMYTOWER:
             ActionToAlchemistsTower( *this );
             break;
         case MP2::OBJ_STABLES:
-            ActionToStables( *this, object, tileIndex );
+            ActionToStables( *this, obj, tileIndex );
             break;
         case MP2::OBJ_ARENA:
-            ActionToArena( *this, object, tileIndex );
+            ActionToArena( *this, obj, tileIndex );
             break;
         case MP2::OBJ_MERMAID:
-            ActionToGoodLuckObject( *this, object, tileIndex );
+            ActionToGoodLuckObject( *this, obj, tileIndex );
             break;
         case MP2::OBJ_SIRENS:
-            ActionToSirens( *this, object, tileIndex );
+            ActionToSirens( *this, obj, tileIndex );
             break;
         case MP2::OBJ_JAIL:
-            ActionToJail( *this, object, tileIndex );
+            ActionToJail( *this, obj, tileIndex );
             break;
         case MP2::OBJ_HUTMAGI:
-            ActionToHutMagi( *this, object, tileIndex );
+            ActionToHutMagi( *this, obj, tileIndex );
             break;
         case MP2::OBJ_EYEMAGI:
-            ActionToEyeMagi( *this, object );
+            ActionToEyeMagi( *this, obj );
             break;
 
         case MP2::OBJ_BARRIER:
-            ActionToBarrier( *this, object, tileIndex );
+            ActionToBarrier( *this, obj, tileIndex );
             break;
         case MP2::OBJ_TRAVELLERTENT:
-            ActionToTravellersTent( *this, object, tileIndex );
+            ActionToTravellersTent( *this, obj, tileIndex );
             break;
 
             // object
@@ -692,7 +692,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
 }
 
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
+void ActionToMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     MapMonster * map_troop = tile.GetObject() == obj ? dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) ) : nullptr;
@@ -993,7 +993,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
+void ActionToPickupResource( const Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const MapResource * map_resource = NULL;
@@ -1039,7 +1039,7 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToObjectResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     ResourceCount rc = tile.QuantityResourceCount();
@@ -1105,7 +1105,7 @@ void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToSkeleton( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     std::string message( _( "You come upon the remains of an unfortunate adventurer." ) );
@@ -1187,7 +1187,7 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index )
+void ActionToFlotSam( const Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     std::string msg;
@@ -1277,7 +1277,7 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToWitchsHut( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Skill::Secondary & skill = world.GetTiles( dst_index ).QuantitySkill();
 
@@ -1313,7 +1313,7 @@ void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToGoodLuckObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     bool visited = hero.isObjectTypeVisited( obj );
     std::string msg;
@@ -1358,7 +1358,7 @@ void ActionToGoodLuckObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPyramid( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToPyramid( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Spell & spell = tile.QuantitySpell();
@@ -1462,7 +1462,7 @@ void ActionToTradingPost( const Heroes & hero )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToPrimarySkillObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1520,7 +1520,7 @@ void ActionToPrimarySkillObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToPoorMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     u32 gold = tile.QuantityGold();
@@ -1594,7 +1594,7 @@ void ActionToPoorMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToGoodMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     std::string msg;
     u32 move = 0;
@@ -1646,7 +1646,7 @@ void ActionToGoodMoraleObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToExperienceObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1687,7 +1687,7 @@ void ActionToExperienceObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
+void ActionToShipwreckSurvivor( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1720,7 +1720,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
+void ActionToArtifact( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const MapArtifact * map_artifact = NULL;
@@ -1868,7 +1868,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToTreasureChest( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const std::string & hdr = MP2::StringObject( obj );
@@ -1950,7 +1950,7 @@ void ActionToTreasureChest( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToAncientLamp( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToAncientLamp( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Troop & troop = tile.QuantityTroop();
@@ -2044,7 +2044,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToAbandoneMine( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     if ( Dialog::YES
          == Dialog::Message( "", _( "You come upon an abandoned gold mine. The mine appears to be haunted. Do you wish to enter?" ), Font::BIG,
@@ -2054,7 +2054,7 @@ void ActionToAbandoneMine( Heroes & hero, u32 obj, s32 dst_index )
 }
 
 /* capture color object */
-void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToCaptureObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     std::string header;
@@ -2174,7 +2174,7 @@ void ActionToCaptureObject( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( obj ) );
 }
 
-void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToDwellingJoinMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Troop & troop = tile.QuantityTroop();
@@ -2211,7 +2211,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
-void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -2285,7 +2285,7 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
-void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToDwellingBattleMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const char * str_empty = NULL;
     const char * str_recr = NULL;
@@ -2358,13 +2358,13 @@ void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( obj ) );
 }
 
-void ActionToObservationTower( const Heroes & hero, u32 obj, s32 dst_index )
+void ActionToObservationTower( const Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Dialog::Message( MP2::StringObject( obj ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
     Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
 }
 
-void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToArtesianSpring( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
@@ -2393,7 +2393,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToXanadu( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToXanadu( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -2461,7 +2461,7 @@ bool ActionToUpgradeArmy( Army & army, const Monster & mons, std::string & str1,
     return false;
 }
 
-void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
+void ActionToUpgradeArmyObject( Heroes & hero, const MP2::OBJ obj )
 {
     std::string monsters;
     std::string monsters_upgrade;
@@ -2582,7 +2582,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToMagellanMaps( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToMagellanMaps( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Funds payment( Resource::GOLD, 1000 );
     Kingdom & kingdom = hero.GetKingdom();
@@ -2649,7 +2649,7 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToObelisk( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Kingdom & kingdom = hero.GetKingdom();
     if ( !hero.isVisited( world.GetTiles( dst_index ), Visit::GLOBAL ) ) {
@@ -2668,7 +2668,7 @@ void ActionToObelisk( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToTreeKnowledge( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -2724,7 +2724,7 @@ void ActionToTreeKnowledge( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToOracle( const Heroes & hero, uint32_t obj )
+void ActionToOracle( const Heroes & hero, const MP2::OBJ obj )
 {
     Dialog::Message(
         MP2::StringObject( obj ),
@@ -2736,7 +2736,7 @@ void ActionToOracle( const Heroes & hero, uint32_t obj )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToDaemonCave( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToDaemonCave( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -2886,7 +2886,7 @@ void ActionToAlchemistsTower( Heroes & hero )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToStables( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const bool cavalry = hero.GetArmy().HasMonster( Monster::CAVALRY );
     const bool visited = hero.isObjectTypeVisited( obj );
@@ -2920,7 +2920,7 @@ void ActionToStables( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToArena( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     if ( hero.isObjectTypeVisited( obj ) ) {
         Dialog::Message( MP2::StringObject( obj ), _( "The Arena guards turn you away." ), Font::BIG, Dialog::OK );
@@ -2934,7 +2934,7 @@ void ActionToArena( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToSirens( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     if ( hero.isObjectTypeVisited( obj ) ) {
         Dialog::Message( MP2::StringObject( obj ),
@@ -2956,7 +2956,7 @@ void ActionToSirens( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
+void ActionToJail( const Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     const Kingdom & kingdom = hero.GetKingdom();
 
@@ -2991,7 +2991,7 @@ void ActionToJail( const Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToHutMagi( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Dialog::Message( MP2::StringObject( obj ),
                      _( "You enter a rickety hut and talk to the magician who lives there. He tells you of places near and far which may aid you in your journeys." ),
@@ -3026,7 +3026,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToEyeMagi( const Heroes & hero, u32 obj )
+void ActionToEyeMagi( const Heroes & hero, const MP2::OBJ obj )
 {
     Dialog::Message( MP2::StringObject( obj ), _( "This eye seems to be intently studying its surroundings." ), Font::BIG, Dialog::OK );
 
@@ -3034,7 +3034,7 @@ void ActionToEyeMagi( const Heroes & hero, u32 obj )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToSphinx( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     MapSphinx * riddle = dynamic_cast<MapSphinx *>( world.GetMapObject( dst_index ) );
     const std::string title = MP2::StringObject( obj );
@@ -3094,7 +3094,7 @@ void ActionToSphinx( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
+void ActionToBarrier( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
     const Kingdom & kingdom = hero.GetKingdom();
@@ -3132,7 +3132,7 @@ void ActionToBarrier( Heroes & hero, u32 obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToTravellersTent( const Heroes & hero, u32 obj, s32 dst_index )
+void ActionToTravellersTent( const Heroes & hero, const MP2::OBJ obj, s32 dst_index )
 {
     AGG::PlaySound( M82::EXPERNCE );
     Dialog::Message(

@@ -205,7 +205,7 @@ int M82::FromSpell( int spell )
     return UNKNOWN;
 }
 
-u32 M82::GetIndexLOOP00XXFromObject( int obj )
+u32 M82::GetIndexLOOP00XXFromObject( const MP2::OBJ obj )
 {
     switch ( obj ) {
     case MP2::OBJ_BUOY:

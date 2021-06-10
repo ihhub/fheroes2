@@ -152,12 +152,12 @@ int MUS::FromRace( int race )
     return UNKNOWN;
 }
 
-int MUS::FromMapObject( int object )
+int MUS::FromMapObject( const MP2::OBJ obj )
 {
     if ( Settings::Get().MusicMIDI() )
         return MUS::UNKNOWN;
 
-    switch ( object ) {
+    switch ( obj ) {
     case MP2::OBJ_PYRAMID:
     case MP2::OBJ_DRAGONCITY:
     case MP2::OBJ_CITYDEAD:

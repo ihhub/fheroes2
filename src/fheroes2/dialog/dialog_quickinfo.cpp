@@ -302,7 +302,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::OBJ objectType = tile.GetObject( false );
 
     std::string str;
     if ( objectType == MP2::OBJ_COAST ) {
@@ -400,10 +400,10 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::OBJ obj = tile.GetObject( false );
 
     // check
-    switch ( objectType ) {
+    switch ( obj ) {
     case MP2::OBJN_MINES:
     case MP2::OBJN_ABANDONEDMINE:
     case MP2::OBJN_SAWMILL:
@@ -462,11 +462,11 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         name_object = _( "Uncharted Territory" );
     else
         // check guardians mine
-        if ( MP2::OBJ_ABANDONEDMINE == objectType || tile.CaptureObjectIsProtection() ) {
+        if ( MP2::OBJ_ABANDONEDMINE == obj || tile.CaptureObjectIsProtection() ) {
         name_object = ShowGuardiansInfo( tile, settings.CurrentColor() == tile.QuantityColor(), extendedScoutingOption, scoutingLevelForTile );
     }
     else
-        switch ( objectType ) {
+        switch ( obj ) {
         case MP2::OBJ_MONSTER:
             name_object = ShowMonsterInfo( tile, isVisibleFromCrystalBall, extendedScoutingOption, scoutingLevelForTile );
             break;
@@ -491,7 +491,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
-            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( objectType ) : ShowGlobalVisitInfo( tile, kingdom, showVisitedOption );
+            name_object = Settings::Get().ExtWorldExtObjectsCaptured() ? MP2::StringObject( obj ) : ShowGlobalVisitInfo( tile, kingdom, showVisitedOption );
             break;
 
         case MP2::OBJ_CAMPFIRE:
@@ -514,7 +514,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
         case MP2::OBJ_ALCHEMYLAB:
         case MP2::OBJ_SAWMILL:
-            name_object = MP2::StringObject( objectType );
+            name_object = MP2::StringObject( obj );
             if ( settings.CurrentColor() == tile.QuantityColor() )
                 name_object.append( GetMinesIncomeString( tile.QuantityResourceCount().first ) );
             break;
@@ -591,7 +591,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
             break;
 
         default:
-            name_object = MP2::StringObject( objectType );
+            name_object = MP2::StringObject( obj );
             break;
         }
 

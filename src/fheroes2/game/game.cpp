@@ -77,7 +77,8 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask::FadeTask( int object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+        FadeTask::FadeTask( MP2::OBJ object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
+ bool fadeOut_,
                             bool fadeIn_, uint8_t objectTileset_ )
             : object( object_ )
             , objectIndex( objectIndex_ )
@@ -226,27 +227,27 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::PrepareFadeTask( int object, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::OBJ obj, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
     const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
 
-    if ( object == MP2::OBJ_ZERO ) {
+    if ( obj == MP2::OBJ_ZERO ) {
         fadeTask = FadeTask();
     }
-    else if ( object == MP2::OBJ_MONSTER ) {
+    else if ( obj == MP2::OBJ_MONSTER ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
 
-        fadeTask = FadeTask( object, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = FadeTask( obj, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
-    else if ( object == MP2::OBJ_BOAT ) {
-        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+    else if ( obj == MP2::OBJ_BOAT ) {
+        fadeTask = FadeTask( obj, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
-        const int icn = MP2::GetICNObject( object );
+        const int icn = MP2::GetICNObject( obj );
         const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
 
-        fadeTask = FadeTask( object, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
+        fadeTask = FadeTask( obj, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
     }
 }
 

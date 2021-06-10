@@ -1481,7 +1481,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         if ( !spmon2.empty() )
             fheroes2::Blit( spmon2, _mainSurface, sp.x, sp.y, b.isReflect() );
     }
-}
+} 
 
 void Battle::Interface::RedrawTroopCount( const Unit & unit )
 {
