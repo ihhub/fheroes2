@@ -458,37 +458,40 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
         }
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
-            const uint32_t artifactID = obtainableAwards[i]._subType;
-            const ArtifactSetData * artifactSetToForm = ArtifactSetData::tryGetArtifactSetData( obtainableAwards[i]._subType );
-
-            // feel free to add artifacts that are not part of any set, or is not the result of the set combination
-            if ( artifactSetToForm == nullptr || !artifactSetToForm->isCombinationResult( artifactID ) ) {
-                saveData.addCampaignAward( obtainableAwards[i]._id );
-                continue;
-            }
-
             const std::vector<Campaign::CampaignAwardData> & obtainedAwards = saveData.getObtainedCampaignAwards();
-            std::vector<uint32_t> artifactSetPartAwardIDs;
+
+            // prepare to check if the obtained artifacts so far can be assembled into something else
+            BagArtifacts awardedArtifacts;
+            awardedArtifacts.PushArtifact( obtainableAwards[i]._subType );
 
             for ( size_t j = 0; j < obtainedAwards.size(); ++j ) {
                 if ( !( obtainableAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) )
                     continue;
-                else if ( !artifactSetToForm->isPartOfSet( obtainedAwards[j]._subType ) )
-                    continue;
 
-                artifactSetPartAwardIDs.emplace_back( obtainedAwards[j]._id );
+                awardedArtifacts.PushArtifact( obtainedAwards[j]._subType );
             }
 
-            // If we have all the parts awarded for the set, then we'll proceed to remove the awards for the parts
-            // and then we'll add the award for the assembled artifact
-            if ( artifactSetPartAwardIDs.size() < artifactSetToForm->getNumberOfParts() )
-                continue;
+            const ArtifactSetData * assembledArtifactSetData = awardedArtifacts.assembleArtifactSetIfPossible();
 
-            for ( int j = artifactSetPartAwardIDs.size() - 1; j >= 0; --j ) {
-                saveData.removeCampaignAward( artifactSetPartAwardIDs[j] );
+            if ( assembledArtifactSetData && assembledArtifactSetData->isValid() ) {
+                const std::vector<uint32_t> & assembledArtifactParts = assembledArtifactSetData->getArtifactPartIDs();
+                // If we manage to assemble an artifact, remove the awarded parts
+                // Also please create another campaign award for the assembled artifact because we shouldn't create a new campaign award from here
+                for ( uint32_t artifactPart : assembledArtifactParts ) {
+                    for ( int j = static_cast<int>( obtainedAwards.size() - 1 ); j >= 0; --j ) {
+                        if ( !( obtainedAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) )
+                            continue;
+                        else if ( obtainedAwards[j]._subType != artifactPart )
+                            continue;
+
+                        saveData.removeCampaignAward( obtainedAwards[j]._id );
+                    }
+                }
             }
-
-            saveData.addCampaignAward( obtainableAwards[i]._id );
+            else {
+                // if we are not assembling anything (or if the award is already the assembled artifact), simply add the award
+                saveData.addCampaignAward( obtainableAwards[i]._id );
+            }
         }
         else {
             saveData.addCampaignAward( obtainableAwards[i]._id );

@@ -61,8 +61,9 @@ struct artifactstats_t
     const char * description;
 };
 
-std::vector<ArtifactSetData> artifactSets
-    = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+const ArtifactSetData artifactSets[1]
+    = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN },
+          _( "The three Anduran artifacts magically combine into one." ) } };
 
 artifactstats_t artifacts[] = {
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
@@ -793,24 +794,6 @@ bool BagArtifacts::isFull( void ) const
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
 }
 
-bool BagArtifacts::MakeBattleGarb( void )
-{
-    iterator it1, it2, it3;
-    it1 = std::find( begin(), end(), Artifact( Artifact::BREASTPLATE_ANDURAN ) );
-    it2 = std::find( begin(), end(), Artifact( Artifact::HELMET_ANDURAN ) );
-    it3 = std::find( begin(), end(), Artifact( Artifact::SWORD_ANDURAN ) );
-    if ( it1 == end() || it2 == end() || it3 == end() )
-        return false;
-
-    *it1 = Artifact::UNKNOWN;
-    *it2 = Artifact::UNKNOWN;
-    *it3 = Artifact::UNKNOWN;
-
-    PushArtifact( Artifact::BATTLE_GARB );
-
-    return true;
-}
-
 u32 BagArtifacts::CountArtifacts( void ) const
 {
     // no way that we have more than 4 billion artifacts so static_cast is totally valid
@@ -1191,71 +1174,48 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
 }
 
-ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs )
-    : _artifactID( artifactID )
+ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs, const std::string & assembleMessage )
+    : _assembledArtifactID( artifactID )
     , _artifactPartIDs( artifactPartIDs )
+    , _assembleMessage( assembleMessage )
 {}
 
-bool ArtifactSetData::isPartOfSet( const uint32_t artifactID ) const
+const ArtifactSetData * BagArtifacts::assembleArtifactSetIfPossible()
 {
-    for ( size_t i = 0; i < _artifactPartIDs.size(); ++i ) {
-        if ( _artifactPartIDs[i] == artifactID )
-            return true;
-    }
+    std::vector<iterator> artifactPartsInBag;
 
-    return false;
-}
+    for ( size_t i = 0; i < std::size( artifactSets ); ++i ) {
+        const std::vector<uint32_t> artifactParts = artifactSets[i].getArtifactPartIDs();
+        const size_t partsCount = artifactParts.size();
 
-bool ArtifactSetData::isCombinationResult( const uint32_t artifactID ) const
-{
-    return artifactID == _artifactID;
-}
+        for ( size_t j = 0; j < partsCount; ++j ) {
+            iterator artifactPart = std::find( begin(), end(), Artifact( artifactParts[j] ) );
 
-size_t ArtifactSetData::getNumberOfParts() const
-{
-    return _artifactPartIDs.size();
-}
+            // cannot find artifact part, so try to assemble another
+            if ( artifactPart == end() ) {
+                artifactPartsInBag.clear();
+                break;
+            }
 
-const ArtifactSetData * ArtifactSetData::tryGetArtifactSetData( const uint32_t artifactID )
-{
-    for ( size_t i = 0; i < artifactSets.size(); ++i ) {
-        if ( artifactSets[i].isPartOfSet( artifactID ) || artifactSets[i].isCombinationResult( artifactID ) )
-            return &artifactSets[i];
+            artifactPartsInBag.emplace_back( artifactPart );
+
+            // finished assembling
+            if ( j == partsCount - 1 ) {
+                // remove the artifact parts
+                for ( iterator assembledArtifactPart : artifactPartsInBag ) {
+                    *assembledArtifactPart = Artifact::UNKNOWN;
+                }
+
+                PushArtifact( artifactSets[i].getAssembledArtifactID() );
+                return &artifactSets[i];
+            }
+        }
     }
 
     return nullptr;
 }
 
-uint32_t ArtifactSetData::tryFormArtifactSet( const std::vector<uint32_t> & artifactPartIDs )
+void ArtifactSetData::DisplayAssembleMessage() const
 {
-    ArtifactSetData * artifactSetDataToForm = nullptr;
-    int artifactSetObtainedParts = 0;
-    int artifactSetPartCount = 0;
-
-    for ( size_t i = 0; i < artifactPartIDs.size(); ++i ) {
-        // try to find an artifact to form
-        if ( artifactSetDataToForm == nullptr ) {
-            for ( size_t j = 0; i < artifactSets.size(); ++j ) {
-                if ( !artifactSets[i].isPartOfSet( artifactPartIDs[i] ) )
-                    continue;
-
-                artifactSetDataToForm = &artifactSets[i];
-
-                // we already get the first set part from this for loop :)
-                artifactSetObtainedParts = 1;
-                artifactSetPartCount = artifactSets[i]._artifactPartIDs.size();
-                break;
-            }
-        }
-        // already found an artifact to form, so next artifacts should try to form the artifact set obtained above
-        else {
-            if ( artifactSetDataToForm->isPartOfSet( artifactPartIDs[i] ) )
-                ++artifactSetObtainedParts;
-
-            if ( artifactSetObtainedParts == artifactSetPartCount )
-                return artifactSetDataToForm->_artifactID;
-        }
-    }
-
-    return Artifact::ART_NONE;
+    Dialog::ArtifactInfo( "", _assembleMessage, _assembledArtifactID );
 }

@@ -448,8 +448,14 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
-                Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
+            const ArtifactSetData * assembledArtifactSetData1 = bag_artifacts.assembleArtifactSetIfPossible();
+            const ArtifactSetData * assembledArtifactSetData2 = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+
+            if ( assembledArtifactSetData1 && assembledArtifactSetData1->isValid() ) {
+                assembledArtifactSetData1->DisplayAssembleMessage();
+            }
+            else if ( assembledArtifactSetData2 && assembledArtifactSetData2->isValid() ) {
+                assembledArtifactSetData2->DisplayAssembleMessage();
             }
 
             selectArtifacts1.Redraw();
