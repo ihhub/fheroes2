@@ -161,21 +161,6 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     }
 }
 
-void Cursor::Show() const
-{
-    fheroes2::cursor().show( true );
-}
-
-void Cursor::Hide() const
-{
-    fheroes2::cursor().show( false );
-}
-
-bool Cursor::isVisible( void ) const
-{
-    return fheroes2::cursor().isVisible();
-}
-
 void Cursor::setVideoPlaybackCursor()
 {
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
@@ -246,41 +231,26 @@ int Cursor::WithoutDistanceThemes( const int theme )
 }
 
 CursorRestorer::CursorRestorer()
-{
-    const Cursor & cursor = Cursor::Get();
+    : _theme( Cursor::Get().Themes() )
+    , _visible( fheroes2::cursor().isVisible() )
+{}
 
-    _visible = cursor.isVisible();
-    _theme = cursor.Themes();
-}
-
-CursorRestorer::CursorRestorer( bool visible, int theme )
+CursorRestorer::CursorRestorer( const bool visible, const int theme )
     : CursorRestorer()
 {
-    Cursor & cursor = Cursor::Get();
+    Cursor::Get().SetThemes( theme );
 
-    cursor.SetThemes( theme );
-
-    if ( visible ) {
-        cursor.Show();
-    }
-    else {
-        cursor.Hide();
-    }
+    fheroes2::cursor().show( visible );
 }
 
 CursorRestorer::~CursorRestorer()
 {
     Cursor & cursor = Cursor::Get();
 
-    if ( cursor.isVisible() != _visible || cursor.Themes() != _theme ) {
+    if ( fheroes2::cursor().isVisible() != _visible || cursor.Themes() != _theme ) {
         cursor.SetThemes( _theme );
 
-        if ( _visible ) {
-            cursor.Show();
-        }
-        else {
-            cursor.Hide();
-        }
+        fheroes2::cursor().show( _visible );
 
         // immediately render cursor area in case of software emulated cursor
         if ( fheroes2::cursor().isSoftwareEmulation() ) {
