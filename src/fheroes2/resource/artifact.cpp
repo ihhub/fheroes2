@@ -61,7 +61,7 @@ struct artifactstats_t
     const char * description;
 };
 
-const ArtifactSetData artifactSets[1]
+const std::vector<ArtifactSetData> artifactSets
     = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN },
           _( "The three Anduran artifacts magically combine into one." ) } };
 
@@ -1184,7 +1184,7 @@ const ArtifactSetData * BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::vector<iterator> artifactPartsInBag;
 
-    for ( size_t i = 0; i < std::size( artifactSets ); ++i ) {
+    for ( size_t i = 0; i < artifactSets.size(); ++i ) {
         const std::vector<uint32_t> artifactParts = artifactSets[i].getArtifactPartIDs();
         const size_t partsCount = artifactParts.size();
 
