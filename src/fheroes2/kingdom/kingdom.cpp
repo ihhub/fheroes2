@@ -605,13 +605,6 @@ u32 Kingdom::GetMaxHeroes( void )
     return GameStatic::GetKingdomMaxHeroes();
 }
 
-void Kingdom::HeroesActionNewPosition() const
-{
-    // Heroes::ActionNewPosition: can remove elements from heroes vector.
-    KingdomHeroes heroes2( heroes );
-    std::for_each( heroes2.begin(), heroes2.end(), []( Heroes * hero ) { hero->ActionNewPosition( true ); } );
-}
-
 Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 {
     Funds totalIncome;
