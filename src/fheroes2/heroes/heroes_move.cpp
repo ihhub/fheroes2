@@ -406,8 +406,7 @@ bool Heroes::isInVisibleMapArea() const
 
 bool Heroes::isDeepOcean() const
 {
-    const int32_t tileIndex
-        = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
+    const int32_t tileIndex = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
     for ( const int tileDirection : Direction::All() ) {
         if ( Maps::isValidDirection( tileIndex, tileDirection ) && !world.GetTiles( Maps::GetDirectionIndex( tileIndex, tileDirection ) ).isWater() ) {
             return false;
