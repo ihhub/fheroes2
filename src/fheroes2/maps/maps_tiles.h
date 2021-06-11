@@ -341,7 +341,7 @@ namespace Maps
         uint32_t uniq = 0;
         uint8_t objectTileset = 0;
         uint8_t objectIndex = 255;
-        uint8_t mp2_object = 0;
+        MP2::OBJ mp2_object = MP2::OBJ_ZERO;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
 

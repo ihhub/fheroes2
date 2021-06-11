@@ -836,12 +836,12 @@ Castle * Heroes::inCastle( void )
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
-    const MP2::OBJ object = tile.GetObject( false );
+    const MP2::OBJ obj = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
-        return GetKingdom().isVisited( index, object );
+        return GetKingdom().isVisited( index, obj );
 
-    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, object ) );
+    return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, obj ) );
 }
 
 /* return true if object visited */

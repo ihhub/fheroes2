@@ -262,7 +262,7 @@ namespace AI
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-        MP2::OBJ objectID = MP2::OBJ_ZERO;
+        MP2::OBJ obj = MP2::OBJ_ZERO;
 #endif
 
         // pre-cache the pathfinder
@@ -307,7 +307,7 @@ namespace AI
                     maxPriority = value;
                     priorityTarget = node.first;
 #ifdef WITH_DEBUG
-                    objectID = node.second;
+                    obj = node.second;
 #endif
 
                     DEBUG_LOG( DBG_AI, DBG_TRACE,
@@ -318,7 +318,7 @@ namespace AI
 
         if ( priorityTarget != -1 ) {
             DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectID ) << ")" );
+                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( obj ) << ")" );
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );

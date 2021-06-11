@@ -61,9 +61,9 @@ namespace AI
 
         for ( int idx = 0; idx < mapSize; ++idx ) {
             const Maps::Tiles & tile = world.GetTiles( idx );
-            const MP2::OBJ objectID = tile.GetObject();
+            const MP2::OBJ obj = tile.GetObject();
 
-            if ( !kingdom.isValidKingdomObject( tile, objectID ) )
+            if ( !kingdom.isValidKingdomObject( tile, obj ) )
                 continue;
 
             const uint32_t regionID = tile.GetRegion();
@@ -74,14 +74,14 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            if ( objectID != MP2::OBJ_COAST )
-                stats.validObjects.emplace_back( idx, objectID );
+            if ( obj != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, obj );
 
             if ( !tile.isFog( color ) ) {
-                _mapObjects.emplace_back( idx, objectID );
+                _mapObjects.emplace_back( idx, obj );
 
                 const int tileColor = tile.QuantityColor();
-                if ( objectID == MP2::OBJ_HEROES ) {
+                if ( obj == MP2::OBJ_HEROES ) {
                     const Heroes * hero = tile.GetHeroes();
                     if ( !hero )
                         continue;
@@ -99,7 +99,7 @@ namespace AI
                         }
                     }
                 }
-                else if ( objectID == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
+                else if ( obj == MP2::OBJ_CASTLE && tileColor != Color::NONE && !Players::isFriends( color, tileColor ) ) {
                     const Castle * castle = world.GetCastle( Maps::GetPoint( idx ) );
                     if ( !castle )
                         continue;
@@ -112,7 +112,7 @@ namespace AI
                         stats.highestThreat = castleThreat;
                     }
                 }
-                else if ( objectID == MP2::OBJ_MONSTER ) {
+                else if ( obj == MP2::OBJ_MONSTER ) {
                     stats.averageMonster += Army( tile ).GetStrength();
                     ++stats.monsterCount;
                 }
