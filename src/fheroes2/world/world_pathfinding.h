@@ -22,9 +22,9 @@
 
 #include "army.h"
 #include "color.h"
+#include "mp2.h"
 #include "pairs.h"
 #include "pathfinding.h"
-#include "mp2.h"
 #include "route.h"
 
 // Abstract class that provides base functionality to path through World map
