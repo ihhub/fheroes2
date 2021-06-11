@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 #include <set>
 
 #include "agg_image.h"
