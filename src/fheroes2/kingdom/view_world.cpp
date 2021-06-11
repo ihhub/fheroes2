@@ -293,6 +293,8 @@ namespace
                                     }
                                 }
                                 break;
+                            default:
+                                break;
                             }
                         }
                     }
