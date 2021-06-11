@@ -457,16 +457,17 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
         dstShad.y += oy;
         dstFroth.y += oy;
     }
-      
-    assert( _alphaValue >= 0 && _alphaValue <= 255 );      
+
+    assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
     if ( isShipMaster() && isMoveEnabled() && isDeepOcean() ) {
         const fheroes2::Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
-        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.height, _alphaValue, reflect );
+        fheroes2::AlphaBlit( spriteFroth, blitArea.x, blitArea.y, dst, dstFroth.x, dstFroth.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ),
+                             reflect );
     }
 
     const fheroes2::Rect blitArea = area.RectFixed( dstShad, spriteShad.width(), spriteShad.height() );
-    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.width, blitArea.height, _alphaValue );
+    fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ) );
 }
 
 void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
@@ -488,7 +489,6 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
     fheroes2::Point flagOffset;
     const fheroes2::Sprite & spriteHero = SpriteHero( *this, sprite_index, false );
     const fheroes2::Sprite & spriteFlag = SpriteFlag( *this, flagFrameID, false, flagOffset );
-
 
     // Reflected hero sprite should be shifted by 1 pixel to right.
     fheroes2::Point dstHero( dx + ( reflect ? TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
@@ -523,12 +523,14 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
 
     // redraw sprites hero and flag
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
-  
+
     const fheroes2::Rect blitAreaHero = area.RectFixed( dstHero, spriteHero.width(), spriteHero.height() );
-    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.width, blitAreaHero.height, static_cast<uint8_t>( _alphaValue ), reflect );
+    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.width, blitAreaHero.height,
+                         static_cast<uint8_t>( _alphaValue ), reflect );
 
     const fheroes2::Rect blitAreaFlag = area.RectFixed( dstFlag, spriteFlag.width(), spriteFlag.height() );
-    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.width, blitAreaFlag.height, static_cast<uint8_t>( _alphaValue ), reflect );
+    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.width, blitAreaFlag.height,
+                         static_cast<uint8_t>( _alphaValue ), reflect );
 }
 
 void Heroes::SetRedrawIndexes()
