@@ -302,11 +302,11 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    const MP2::OBJ objectType = tile.GetObject( false );
+    const MP2::OBJ obj = tile.GetObject( false );
 
     std::string str;
-    if ( objectType == MP2::OBJ_COAST ) {
-        str = MP2::StringObject( objectType );
+    if ( obj == MP2::OBJ_COAST ) {
+        str = MP2::StringObject( obj );
     }
     else if ( tile.isRoad() ) {
         str = _( "Road" );

@@ -890,7 +890,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
     SetTile( mp2.tileIndex, mp2.flags );
     SetIndex( index );
-    SetObject( static_cast<MP2::OBJ>(mp2.mapObject) );
+    SetObject( static_cast<MP2::OBJ>( mp2.mapObject ) );
 
     addons_level1.clear();
     addons_level2.clear();
@@ -917,7 +917,7 @@ Heroes * Maps::Tiles::GetHeroes( void ) const
 void Maps::Tiles::SetHeroes( Heroes * hero )
 {
     if ( hero ) {
-        hero->SetMapsObject( static_cast<MP2::OBJ>(mp2_object) );
+        hero->SetMapsObject( mp2_object );
         heroID = hero->GetID() + 1;
         SetObject( MP2::OBJ_HEROES );
     }

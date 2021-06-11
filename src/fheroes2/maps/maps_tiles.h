@@ -29,8 +29,8 @@
 #include "artifact.h"
 #include "direction.h"
 #include "gamedefs.h"
-#include "resource.h"
 #include "mp2.h"
+#include "resource.h"
 #include "skill.h"
 
 class Heroes;

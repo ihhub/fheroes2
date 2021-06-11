@@ -415,7 +415,7 @@ Maps::Indexes Maps::GetObjectPositions( s32 center, const MP2::OBJ obj, bool ign
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<MP2::OBJ>& objs )
+Maps::Indexes Maps::GetObjectsPositions( const std::vector<MP2::OBJ> & objs )
 {
     if ( objs.size() == 1 ) {
         return MapsIndexesObject( objs[0], true );

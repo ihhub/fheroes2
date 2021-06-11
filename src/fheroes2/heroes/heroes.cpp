@@ -134,7 +134,7 @@ Heroes::Heroes()
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
     , _race( UNKNOWN )
-    , save_maps_object( 0 )
+    , save_maps_object( MP2::OBJ )
     , path( *this )
     , direction( Direction::RIGHT )
     , sprite_index( 18 )
@@ -1503,9 +1503,9 @@ uint32_t Heroes::GetStartingXp()
     return Rand::Get( 40, 90 );
 }
 
-MP2::OBJ Heroes::GetMapsObject( void ) const
+MP2::OBJ Heroes::GetMapsObject() const
 {
-    return static_cast<MP2::OBJ>(save_maps_object);
+    return save_maps_object;
 }
 
 void Heroes::SetMapsObject( const MP2::OBJ obj )

@@ -239,7 +239,7 @@ public:
     int GetLuckWithModificators( std::string * str = NULL ) const;
     int GetLevel( void ) const;
 
-    MP2::OBJ GetMapsObject( void ) const;
+    MP2::OBJ GetMapsObject() const;
     void SetMapsObject( const MP2::OBJ obj );
 
     const fheroes2::Point & GetCenterPatrol( void ) const;
@@ -408,7 +408,7 @@ private:
     int hid; /* hero id */
     int portrait; /* hero id */
     int _race;
-    int save_maps_object;
+    MP2::OBJ save_maps_object;
 
     Route::Path path;
 
