@@ -266,7 +266,6 @@ int Castle::OpenDialog( bool readonly )
             Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
         }
 
-
         // selector troops event
         if ( ( selectArmy2.isValid()
                && ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2, &msg_status ) )
@@ -316,7 +315,6 @@ int Castle::OpenDialog( bool readonly )
             }
 
             if ( army1 || army2 ) {
-                cursor.Hide();
                 if ( selectArmy1.isSelected() )
                     selectArmy1.ResetSelected();
                 if ( selectArmy2.isValid() && selectArmy2.isSelected() )
@@ -507,24 +505,13 @@ int Castle::OpenDialog( bool readonly )
                             break;
                         }
 
-                            case BUILD_CASTLE: {
-                                uint32_t build = fadeBuilding.GetBuild();
-                                if ( build != BUILD_NOTHING ) {
-                                    BuyBuilding( build );
-                                    if ( BUILD_CAPTAIN == build ) {
-                                        RedrawIcons( *this, heroes, cur_pt );
-                                        display.render();
-                                    }
-                                }
-                                fadeBuilding.StopFadeBuilding();
-                                const Heroes * prev = heroes.Guest();
-                                build = OpenTown();
-                                heroes = world.GetHeroes( *this );
-                                const bool buyhero = ( heroes.Guest() && ( heroes.Guest() != prev ) );
-
-                                if ( BUILD_NOTHING != build ) {
-                                    AGG::PlaySound( M82::BUILDTWN );
-                                    fadeBuilding.StartFadeBuilding( build );
+                        case BUILD_CASTLE: {
+                            uint32_t build = fadeBuilding.GetBuild();
+                            if ( build != BUILD_NOTHING ) {
+                                BuyBuilding( build );
+                                if ( BUILD_CAPTAIN == build ) {
+                                    RedrawIcons( *this, heroes, cur_pt );
+                                    display.render();
                                 }
                             }
                             fadeBuilding.StopFadeBuilding();
@@ -538,32 +525,15 @@ int Castle::OpenDialog( bool readonly )
                                 fadeBuilding.StartFadeBuilding( build );
                             }
 
-                                if ( buyhero ) {
-                                    if ( prev ) {
-                                        selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
-                                        selectArmy2.SetArmy( NULL );
-                                        RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
-                                        selectArmy1.Redraw();
-                                        if ( selectArmy2.isValid() )
-                                            selectArmy2.Redraw();
-                                        display.render();
-                                    }
-                                    selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
-                                    AGG::PlaySound( M82::BUILDTWN );
-
-                                    // animate fade in for hero army bar
-                                    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 0 ), 0, 100, surfaceHero, 0, 0, 552, 107 );
-                                    const fheroes2::Sprite & port = heroes.Guest()->GetPortrait( PORT_BIG );
-                                    if ( !port.empty() )
-                                        fheroes2::Blit( port, surfaceHero, 5, 5 );
-
-                                    const fheroes2::Point savept = selectArmy2.GetPos();
-                                    selectArmy2.SetPos( 112, 5 );
-                                    selectArmy2.Redraw( surfaceHero );
-                                    selectArmy2.SetPos( savept.x, savept.y );
-
-                                    RedrawResourcePanel( cur_pt );
-                                    alphaHero = 0;
+                            if ( buyhero ) {
+                                if ( prev ) {
+                                    selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
+                                    selectArmy2.SetArmy( NULL );
+                                    RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
+                                    selectArmy1.Redraw();
+                                    if ( selectArmy2.isValid() )
+                                        selectArmy2.Redraw();
+                                    display.render();
                                 }
                                 selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
                                 AGG::PlaySound( M82::BUILDTWN );
