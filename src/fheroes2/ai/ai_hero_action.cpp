@@ -888,7 +888,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isObjectTypeVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
