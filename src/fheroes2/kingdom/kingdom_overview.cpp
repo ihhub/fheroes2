@@ -52,7 +52,7 @@ struct HeroRow
     std::unique_ptr<SecondarySkillsBar> secskillsBar;
     std::unique_ptr<PrimarySkillsBar> primskillsBar;
 
-    HeroRow( Heroes * ptr = nullptr )
+    explicit HeroRow( Heroes * ptr = nullptr )
     {
         assert( ptr != nullptr );
         Init( ptr );
@@ -72,7 +72,7 @@ struct HeroRow
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
-        artifactsBar.reset( new ArtifactsBar( hero, true, false ) );
+        artifactsBar.reset( new ArtifactsBar( hero, true, false, false, true, nullptr ) );
         artifactsBar->SetColRows( 7, 2 );
         artifactsBar->SetHSpace( 1 );
         artifactsBar->SetVSpace( 8 );
@@ -94,31 +94,31 @@ struct HeroRow
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
 public:
-    StatsHeroesList( const Point & pt, KingdomHeroes & );
+    StatsHeroesList( const fheroes2::Point & pt, const KingdomHeroes & );
 
     bool Refresh( KingdomHeroes & heroes );
 
-    virtual void RedrawItem( const HeroRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
-    virtual void ActionCurrentUp() override {}
-    virtual void ActionCurrentDn() override {}
-    virtual void ActionListSingleClick( HeroRow & ) override {}
-    virtual void ActionListDoubleClick( HeroRow & ) override {}
-    virtual void ActionListPressRight( HeroRow & ) override {}
+    void ActionCurrentUp() override {}
+    void ActionCurrentDn() override {}
+    void ActionListSingleClick( HeroRow & ) override {}
+    void ActionListDoubleClick( HeroRow & ) override {}
+    void ActionListPressRight( HeroRow & ) override {}
 
-    virtual void ActionListSingleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( HeroRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( HeroRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( HeroRow &, const Point & ) override;
+    void ActionListSingleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListDoubleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListPressRight( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
+    bool ActionListCursor( HeroRow &, const fheroes2::Point & ) override;
 
 private:
     std::vector<HeroRow> content;
 
-    void SetContent( KingdomHeroes & heroes );
+    void SetContent( const KingdomHeroes & heroes );
 };
 
-StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
+StatsHeroesList::StatsHeroesList( const fheroes2::Point & pt, const KingdomHeroes & heroes )
     : Interface::ListBox<HeroRow>( pt )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
@@ -132,7 +132,7 @@ StatsHeroesList::StatsHeroesList( const Point & pt, KingdomHeroes & heroes )
     SetContent( heroes );
 }
 
-void StatsHeroesList::SetContent( KingdomHeroes & heroes )
+void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 {
     content.clear();
     content.reserve( heroes.size() );
@@ -158,47 +158,41 @@ bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
     return false;
 }
 
-void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
     ActionListSingleClick( row, cursor, ox, oy );
 }
 
-void StatsHeroesList::ActionListSingleClick( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero
-         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Game::OpenHeroesDialog( *row.hero, false, false );
 }
 
-void StatsHeroesList::ActionListPressRight( HeroRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
-    if ( row.hero
-         && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) )
+    if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Dialog::QuickInfo( *row.hero );
 }
 
-bool StatsHeroesList::ActionListCursor( HeroRow & row, const Point & cursor )
+bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & cursor )
 {
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
     if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
         if ( row.artifactsBar->isSelected() )
             row.artifactsBar->ResetSelected();
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
         if ( row.armyBar->isSelected() )
             row.armyBar->ResetSelected();
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.primskillsBar->GetArea() & cursorPos ) && row.primskillsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.secskillsBar->GetArea() & cursorPos ) && row.secskillsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         return true;
     }
 
@@ -246,7 +240,7 @@ void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool 
     }
 }
 
-void StatsHeroesList::RedrawBackground( const Point & dst )
+void StatsHeroesList::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Text text( "", Font::SMALL );
@@ -280,7 +274,7 @@ struct CstlRow
     std::unique_ptr<ArmyBar> armyBarGuest;
     std::unique_ptr<DwellingsBar> dwellingsBar;
 
-    CstlRow( Castle * ptr = nullptr )
+    explicit CstlRow( Castle * ptr = nullptr )
     {
         assert( ptr != nullptr );
         Init( ptr );
@@ -323,27 +317,27 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const Point & pt, KingdomCastles & );
+    StatsCastlesList( const fheroes2::Point & pt, const KingdomCastles & );
 
-    virtual void RedrawItem( const CstlRow &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
-    virtual void ActionCurrentUp( void ) override {}
-    virtual void ActionCurrentDn( void ) override {}
-    virtual void ActionListDoubleClick( CstlRow & ) override {}
-    virtual void ActionListSingleClick( CstlRow & ) override {}
-    virtual void ActionListPressRight( CstlRow & ) override {}
+    void ActionCurrentUp( void ) override {}
+    void ActionCurrentDn( void ) override {}
+    void ActionListDoubleClick( CstlRow & ) override {}
+    void ActionListSingleClick( CstlRow & ) override {}
+    void ActionListPressRight( CstlRow & ) override {}
 
-    virtual void ActionListSingleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListDoubleClick( CstlRow &, const Point &, s32, s32 ) override;
-    virtual void ActionListPressRight( CstlRow &, const Point &, s32, s32 ) override;
-    virtual bool ActionListCursor( CstlRow &, const Point & ) override;
+    void ActionListSingleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListDoubleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListPressRight( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
+    bool ActionListCursor( CstlRow &, const fheroes2::Point & ) override;
 
 private:
     std::vector<CstlRow> content;
 };
 
-StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
+StatsCastlesList::StatsCastlesList( const fheroes2::Point & pt, const KingdomCastles & castles )
     : Interface::ListBox<CstlRow>( pt )
 {
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
@@ -363,22 +357,22 @@ StatsCastlesList::StatsCastlesList( const Point & pt, KingdomCastles & castles )
     SetListContent( content );
 }
 
-void StatsCastlesList::ActionListDoubleClick( CstlRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListDoubleClick( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
     ActionListSingleClick( row, cursor, ox, oy );
 }
 
-void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
     if ( row.castle ) {
         // click castle icon
-        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
+        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Game::OpenCastleDialog( *row.castle, false );
             row.Init( row.castle );
         }
         else
             // click hero icon
-            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) ) {
+            if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero ) {
                 Game::OpenHeroesDialog( *hero, false, false );
@@ -388,13 +382,12 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const Point & curso
     }
 }
 
-void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
 {
     if ( row.castle ) {
-        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & fheroes2::Point( cursor.x, cursor.y ) )
+        if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor )
             Dialog::QuickInfo( *row.castle );
-        else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() )
-                  & fheroes2::Point( cursor.x, cursor.y ) ) {
+        else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHeroes().GuardFirst();
             if ( hero )
                 Dialog::QuickInfo( *hero );
@@ -402,26 +395,23 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const Point & cursor
     }
 }
 
-bool StatsCastlesList::ActionListCursor( CstlRow & row, const Point & cursor )
+bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & cursor )
 {
     const fheroes2::Point cursorPos( cursor.x, cursor.y );
 
     if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursorPos )
          && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
         return true;
     }
     else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursorPos )
               && ( row.armyBarGuard ? row.armyBarGuest->QueueEventProcessing( *row.armyBarGuard ) : row.armyBarGuest->QueueEventProcessing() ) ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
             row.armyBarGuard->ResetSelected();
         return true;
     }
     else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
         if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
@@ -475,7 +465,7 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
     }
 }
 
-void StatsCastlesList::RedrawBackground( const Point & dst )
+void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Text text( "", Font::SMALL );
@@ -525,7 +515,7 @@ std::string CapturedExtInfoString( int res, int color, const Funds & funds )
     return os.str();
 }
 
-void RedrawIncomeInfo( const Point & pt, const Kingdom & myKingdom )
+void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
     const Funds income = myKingdom.GetIncome( INCOME_ARTIFACTS | INCOME_HEROSKILLS );
     Text text( "", Font::SMALL );
@@ -552,7 +542,7 @@ void RedrawIncomeInfo( const Point & pt, const Kingdom & myKingdom )
     text.Blit( pt.x + 494 - text.w() / 2, pt.y + 408 );
 }
 
-void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
+void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
     const Funds & funds = myKingdom.GetFunds();
     Text text( "", Font::SMALL );
@@ -600,14 +590,14 @@ void RedrawFundsInfo( const Point & pt, const Kingdom & myKingdom )
 void Kingdom::OverviewDialog( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
-    const Point cur_pt( background.activeArea().x, background.activeArea().y );
-    Point dst_pt( cur_pt );
+    const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
+    fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -630,7 +620,7 @@ void Kingdom::OverviewDialog( void )
     dst_pt.y = cur_pt.y + 453;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::OVERVIEW, 4, 5 );
 
-    const Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
+    const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
     Interface::ListBasic * listStats = NULL;
 
@@ -654,7 +644,6 @@ void Kingdom::OverviewDialog( void )
     buttonCastle.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -667,7 +656,6 @@ void Kingdom::OverviewDialog( void )
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
-            cursor.Hide();
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
             listStats = &listHeroes;
@@ -675,7 +663,6 @@ void Kingdom::OverviewDialog( void )
             redraw = true;
         }
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
-            cursor.Hide();
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
             listStats = &listCastles;
@@ -694,30 +681,32 @@ void Kingdom::OverviewDialog( void )
         else if ( le.MousePressRight( rectIncome ) )
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
-        if ( !cursor.isVisible() || redraw ) {
-            // check if graphics in main world map window should change, this can happen in several situations:
-            // - hero dismissed -> hero icon list is updated and world map focus changed
-            // - hero hired -> hero icon list is updated
-            // So, it's equivalent to check if hero list changed
-            if ( listHeroes.Refresh( heroes ) ) {
-                worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
-                // redraw the main game window on screen, which will also erase current kingdom window
-                Interface::Basic::Get().Redraw();
-                // redraw Kingdom window from scratch, because it's now invalid
-                background.render();
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
-                buttonHeroes.draw();
-                buttonCastle.draw();
-                buttonExit.draw();
-            }
-
-            listStats->Redraw();
-            RedrawIncomeInfo( cur_pt, *this );
-            RedrawFundsInfo( cur_pt, *this );
-            cursor.Show();
-            display.render();
-            redraw = false;
+        if ( !listStats->IsNeedRedraw() && !redraw ) {
+            continue;
         }
+
+        // check if graphics in main world map window should change, this can happen in several situations:
+        // - hero dismissed -> hero icon list is updated and world map focus changed
+        // - hero hired -> hero icon list is updated
+        // So, it's equivalent to check if hero list changed
+        if ( listHeroes.Refresh( heroes ) ) {
+            worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
+            // redraw the main game window on screen, which will also erase current kingdom window
+            Interface::Basic::Get().Redraw();
+            // redraw Kingdom window from scratch, because it's now invalid
+            background.render();
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
+            buttonHeroes.draw();
+            buttonCastle.draw();
+            buttonExit.draw();
+        }
+
+        listStats->Redraw();
+        RedrawIncomeInfo( cur_pt, *this );
+        RedrawFundsInfo( cur_pt, *this );
+        display.render();
+
+        redraw = false;
     }
 
     if ( worldMapRedrawMask != 0 ) {

@@ -185,7 +185,7 @@ struct XMIData
 {
     XMITracks tracks;
 
-    XMIData( const std::vector<u8> & buf )
+    explicit XMIData( const std::vector<u8> & buf )
     {
         StreamBuf sb( buf );
 
@@ -342,8 +342,8 @@ struct MidiEvents : std::vector<MidiChunk>
         return res;
     }
 
-    MidiEvents() {}
-    MidiEvents( const XMITrack & t )
+    MidiEvents() = default;
+    explicit MidiEvents( const XMITrack & t )
     {
         const u8 * ptr = &t.evnt[0];
         const u8 * end = ptr + t.evnt.size();
@@ -446,11 +446,11 @@ struct MidTrack
     MidTrack()
         : mtrk( TAG_MTRK, 0 )
     {}
-    MidTrack( const XMITrack & t )
+    explicit MidTrack( const XMITrack & t )
         : mtrk( TAG_MTRK, 0 )
         , events( t )
     {
-        mtrk.length = events.size();
+        mtrk.length = static_cast<uint32_t>( events.size() );
     }
 
     size_t size( void ) const
@@ -481,8 +481,8 @@ struct MidTracks : std::list<MidTrack>
         return res;
     }
 
-    MidTracks() {}
-    MidTracks( const XMITracks & tracks )
+    MidTracks() = default;
+    explicit MidTracks( const XMITracks & tracks )
     {
         for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
             emplace_back( *it );
@@ -508,7 +508,7 @@ struct MidData
         , format( 0 )
         , ppqn( 0 )
     {}
-    MidData( const XMITracks & t )
+    explicit MidData( const XMITracks & t )
         : mthd( TAG_MTHD, 6 )
         , format( 0 )
         , ppqn( 60 )
@@ -525,7 +525,7 @@ StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
 {
     sb << st.mthd;
     sb.putBE16( st.format );
-    sb.putBE16( st.tracks.count() );
+    sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
     sb.putBE16( st.ppqn );
     sb << st.tracks;
     return sb;

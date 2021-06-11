@@ -32,6 +32,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -46,13 +47,13 @@
 #include "ui_tool.h"
 #include "world.h"
 
-void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw = false );
+void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false );
 void RedrawRatingInfo( TextSprite & );
-void RedrawDifficultyInfo( const Point & dst );
+void RedrawDifficultyInfo( const fheroes2::Point & dst );
 
-int Game::SelectScenario( void )
+fheroes2::GameMode Game::SelectScenario( void )
 {
-    return SCENARIOINFO;
+    return fheroes2::GameMode::SCENARIO_INFO;
 }
 
 void updatePlayers( Players & players, const int humanPlayerCount )
@@ -90,7 +91,7 @@ size_t GetSelectedMapId( MapsFileInfoList & lists )
     return 0;
 }
 
-int Game::ScenarioInfo( void )
+fheroes2::GameMode Game::ScenarioInfo()
 {
     Settings & conf = Settings::Get();
 
@@ -99,34 +100,31 @@ int Game::ScenarioInfo( void )
     MapsFileInfoList lists;
     if ( !PrepareMapsFileInfoList( lists, ( conf.IsGameType( Game::TYPE_MULTI ) ) ) ) {
         Dialog::Message( _( "Warning" ), _( "No maps available!" ), Font::BIG, Dialog::OK );
-        return MAINMENU;
+        return fheroes2::GameMode::MAIN_MENU;
     }
 
-    int result = QUITGAME;
+    fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    Point pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
-    Rect rectPanel;
+    fheroes2::Point pointDifficultyInfo, pointOpponentInfo, pointClassInfo;
+    fheroes2::Rect rectPanel;
 
     // vector coord difficulty
-    Rects coordDifficulty;
+    std::vector<fheroes2::Rect> coordDifficulty;
     coordDifficulty.reserve( 5 );
 
     const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
 
-    rectPanel = Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-    pointDifficultyInfo = Point( rectPanel.x + 24, rectPanel.y + 93 );
-    pointOpponentInfo = Point( rectPanel.x + 24, rectPanel.y + 202 );
-    pointClassInfo = Point( rectPanel.x + 24, rectPanel.y + 282 );
+    rectPanel = fheroes2::Rect( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
+    pointDifficultyInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 93 );
+    pointOpponentInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 202 );
+    pointClassInfo = fheroes2::Point( rectPanel.x + 24, rectPanel.y + 282 );
 
     const uint32_t ngextraWidth = ngextra.width();
     const uint32_t ngextraHeight = ngextra.height();
@@ -140,7 +138,7 @@ int Game::ScenarioInfo( void )
     fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
     fheroes2::Button buttonCancel( rectPanel.x + 287, rectPanel.y + 380, ICN::NGEXTRA, 68, 69 );
 
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
 
     bool resetStartingSettings = conf.MapsFile().empty();
     Players & players = conf.GetPlayers();
@@ -209,15 +207,14 @@ int Game::ScenarioInfo( void )
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME ) {
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 if ( conf.ExtGameUseFade() )
                     fheroes2::FadeDisplay();
-                return QUITGAME;
+                return fheroes2::GameMode::QUIT_GAME;
             }
             else {
                 continue;
@@ -232,6 +229,7 @@ int Game::ScenarioInfo( void )
         // click select
         if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
             const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+
             if ( fi ) {
                 SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
                 conf.SetCurrentFileInfo( *fi );
@@ -240,7 +238,6 @@ int Game::ScenarioInfo( void )
                 updatePlayers( players, humanPlayerCount );
                 playersInfo.UpdateInfo( players, pointOpponentInfo, pointClassInfo );
 
-                cursor.Hide();
                 RedrawScenarioStaticInfo( rectPanel );
                 RedrawDifficultyInfo( pointDifficultyInfo );
                 playersInfo.resetSelection();
@@ -250,39 +247,35 @@ int Game::ScenarioInfo( void )
                 buttonOk.draw();
                 buttonCancel.draw();
             }
-            cursor.Show();
+
             display.render();
         }
         else
             // click cancel
             if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
-            result = MAINMENU;
+            result = fheroes2::GameMode::MAIN_MENU;
             break;
         }
         else
             // click ok
             if ( HotKeyPressEvent( EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
-            result = STARTGAME;
+            result = fheroes2::GameMode::START_GAME;
             break;
         }
         else if ( le.MouseClickLeft( rectPanel ) ) {
-            const s32 index = coordDifficulty.GetIndex( le.GetMouseCursor() );
+            const s32 index = GetRectIndex( coordDifficulty, le.GetMouseCursor() );
 
             // select difficulty
             if ( 0 <= index ) {
-                cursor.Hide();
                 levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                 levelCursor.redraw();
                 Game::saveDifficulty( index );
                 RedrawRatingInfo( rating );
-                cursor.Show();
                 display.render();
             }
-            else
-                // playersInfo
-                if ( playersInfo.QueueEventProcessing() ) {
-                cursor.Hide();
+            // playersInfo
+            else if ( playersInfo.QueueEventProcessing() ) {
                 RedrawScenarioStaticInfo( rectPanel );
                 levelCursor.redraw();
                 RedrawDifficultyInfo( pointDifficultyInfo );
@@ -291,7 +284,6 @@ int Game::ScenarioInfo( void )
                 RedrawRatingInfo( rating );
                 buttonOk.draw();
                 buttonCancel.draw();
-                cursor.Show();
                 display.render();
             }
         }
@@ -299,7 +291,7 @@ int Game::ScenarioInfo( void )
         if ( le.MousePressRight( rectPanel ) ) {
             if ( le.MousePressRight( buttonSelectMaps.area() ) )
                 Dialog::Message( _( "Scenario" ), _( "Click here to select which scenario to play." ), Font::BIG );
-            else if ( 0 <= coordDifficulty.GetIndex( le.GetMouseCursor() ) )
+            else if ( 0 <= GetRectIndex( coordDifficulty, le.GetMouseCursor() ) )
                 Dialog::Message(
                     _( "Game Difficulty" ),
                     _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
@@ -319,9 +311,7 @@ int Game::ScenarioInfo( void )
 
     SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
 
-    cursor.Hide();
-
-    if ( result == STARTGAME ) {
+    if ( result == fheroes2::GameMode::START_GAME ) {
         players.SetStartGame();
         if ( conf.ExtGameUseFade() )
             fheroes2::FadeDisplay();
@@ -333,20 +323,17 @@ int Game::ScenarioInfo( void )
             std::string ext = lower.substr( lower.size() - 3 );
 
             if ( ext == "mp2" || ext == "mx2" ) {
-                result = world.LoadMapMP2( conf.MapsFile() ) ? STARTGAME : MAINMENU;
-            }
-            else if ( ext == "map" ) {
-                result = world.LoadMapMAP( conf.MapsFile() ) ? STARTGAME : MAINMENU;
+                result = world.LoadMapMP2( conf.MapsFile() ) ? fheroes2::GameMode::START_GAME : fheroes2::GameMode::MAIN_MENU;
             }
             else {
-                result = MAINMENU;
+                result = fheroes2::GameMode::MAIN_MENU;
                 DEBUG_LOG( DBG_GAME, DBG_WARN,
                            conf.MapsFile() << ", "
                                            << "unknown map format" );
             }
         }
         else {
-            result = MAINMENU;
+            result = fheroes2::GameMode::MAIN_MENU;
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        conf.MapsFile() << ", "
                                        << "unknown map format" );
@@ -356,12 +343,12 @@ int Game::ScenarioInfo( void )
     return result;
 }
 
-u32 Game::GetStep4Player( u32 current, u32 width, u32 count )
+int32_t Game::GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount )
 {
-    return current * width * KINGDOMMAX / count + ( width * ( KINGDOMMAX - count ) / ( 2 * count ) );
+    return currentId * width * KINGDOMMAX / totalCount + ( width * ( KINGDOMMAX - totalCount ) / ( 2 * totalCount ) );
 }
 
-void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
+void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw )
 {
     const Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -379,26 +366,26 @@ void RedrawScenarioStaticInfo( const Rect & rt, bool firstDraw )
 
     // text scenario
     Text text( _( "Scenario:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 23 );
+    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 23 );
 
     // maps name
     text.Set( conf.MapsName() );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 46 );
+    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 46 );
 
     // text game difficulty
     text.Set( _( "Game Difficulty:" ) );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 75 );
+    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 75 );
 
     // text opponents
     text.Set( _( "Opponents:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 181 );
+    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 181 );
 
     // text class
     text.Set( _( "Class:" ), Font::BIG );
-    text.Blit( rt.x + ( rt.w - text.w() ) / 2, rt.y + 262 );
+    text.Blit( rt.x + ( rt.width - text.w() ) / 2, rt.y + 262 );
 }
 
-void RedrawDifficultyInfo( const Point & dst )
+void RedrawDifficultyInfo( const fheroes2::Point & dst )
 {
     const uint32_t width = 65;
     const uint32_t height = 69;

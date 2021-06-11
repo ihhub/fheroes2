@@ -20,6 +20,7 @@
 
 #include "dialog_resolution.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "icn.h"
@@ -42,29 +43,29 @@ namespace
     class ResolutionList : public Interface::ListBox<fheroes2::Size>
     {
     public:
-        explicit ResolutionList( const Point & offset )
+        explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::Size>( offset )
             , _isDoubleClicked( false )
         {}
 
-        virtual void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
+        void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
         {
             const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
         }
 
-        virtual void RedrawBackground( const Point & dst ) override
+        void RedrawBackground( const fheroes2::Point & dst ) override
         {
             const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
             fheroes2::Blit( panel, fheroes2::Display::instance(), dst.x, dst.y );
         }
 
-        virtual void ActionCurrentUp() override {}
-        virtual void ActionCurrentDn() override {}
-        virtual void ActionListSingleClick( fheroes2::Size & ) override {}
-        virtual void ActionListPressRight( fheroes2::Size & ) override {}
+        void ActionCurrentUp() override {}
+        void ActionCurrentDn() override {}
+        void ActionListSingleClick( fheroes2::Size & ) override {}
+        void ActionListPressRight( fheroes2::Size & ) override {}
 
-        virtual void ActionListDoubleClick( fheroes2::Size & ) override
+        void ActionListDoubleClick( fheroes2::Size & ) override
         {
             _isDoubleClicked = true;
         }
@@ -99,10 +100,9 @@ namespace Dialog
             return false;
 
         fheroes2::Display & display = fheroes2::Display::instance();
-        Cursor & cursor = Cursor::Get();
 
-        cursor.Hide();
-        cursor.SetThemes( cursor.POINTER );
+        // setup cursor
+        const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
         const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -111,16 +111,16 @@ namespace Dialog
         const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
 
         fheroes2::ImageRestorer restorer( display, shadowOffset.x, shadowOffset.y, sprite.width() + BORDERWIDTH, sprite.height() + BORDERWIDTH );
-        const Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
+        const fheroes2::Rect roi( dialogOffset.x, dialogOffset.y, sprite.width(), sprite.height() );
 
         fheroes2::Blit( spriteShadow, display, roi.x - BORDERWIDTH, roi.y + BORDERWIDTH );
 
         fheroes2::Button buttonOk( roi.x + 34, roi.y + 315, ICN::REQUEST, 1, 2 );
         fheroes2::Button buttonCancel( roi.x + 244, roi.y + 315, ICN::REQUEST, 3, 4 );
 
-        ResolutionList resList( roi );
+        ResolutionList resList( roi.getPosition() );
 
-        resList.RedrawBackground( roi );
+        resList.RedrawBackground( roi.getPosition() );
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( roi.x + 327, roi.y + 55 ) );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
         resList.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
@@ -145,9 +145,8 @@ namespace Dialog
         buttonOk.draw();
         buttonCancel.draw();
 
-        RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
+        RedrawInfo( roi.getPosition(), selectedResolution );
 
-        cursor.Show();
         display.render();
 
         LocalEvent & le = LocalEvent::Get();
@@ -170,24 +169,23 @@ namespace Dialog
                 selectedResolution = resList.GetCurrent();
             }
 
-            if ( !cursor.isVisible() ) {
-                resList.Redraw();
-                buttonOk.draw();
-                buttonCancel.draw();
-                RedrawInfo( fheroes2::Point( roi.x, roi.y ), selectedResolution );
-                cursor.Show();
-                display.render();
+            if ( !resList.IsNeedRedraw() ) {
+                continue;
             }
-        }
 
-        cursor.Hide();
+            resList.Redraw();
+            buttonOk.draw();
+            buttonCancel.draw();
+            RedrawInfo( roi.getPosition(), selectedResolution );
+            display.render();
+        }
 
         if ( selectedResolution.width > 0 && selectedResolution.height > 0
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
             display.resize( selectedResolution.width, selectedResolution.height );
 
 #ifdef WITH_ZLIB
-            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImageLayer, sizeof( iconImageLayer ), iconTransformLayer, sizeof( iconTransformLayer ) );
+            const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
 #endif
 

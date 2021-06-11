@@ -30,22 +30,20 @@
 #include "settings.h"
 #include "text.h"
 
-int Dialog::FileOptions( void )
+fheroes2::GameMode Dialog::FileOptions()
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     // preload
-    const int cpanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::CPANBKGE : ICN::CPANBKG;
-    const int cpanel = Settings::Get().ExtGameEvilInterface() ? ICN::CPANELE : ICN::CPANEL;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int cpanbkg = isEvilInterface ? ICN::CPANBKGE : ICN::CPANBKG;
+    const int cpanel = isEvilInterface ? ICN::CPANELE : ICN::CPANEL;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
@@ -64,10 +62,9 @@ int Dialog::FileOptions( void )
     buttonQuit.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
-    int result = Game::QUITGAME;
+    fheroes2::GameMode result = fheroes2::GameMode::QUIT_GAME;
 
     // dialog menu loop
     while ( le.HandleEvents() ) {
@@ -78,8 +75,8 @@ int Dialog::FileOptions( void )
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonNew.area() ) ) {
-            if ( Interface::Basic::Get().EventNewGame() == Game::NEWGAME ) {
-                result = Game::NEWGAME;
+            if ( Interface::Basic::Get().EventNewGame() == fheroes2::GameMode::NEW_GAME ) {
+                result = fheroes2::GameMode::NEW_GAME;
                 break;
             }
         }
@@ -97,13 +94,13 @@ int Dialog::FileOptions( void )
             break;
         }
         else if ( le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::EventExit() == Game::QUITGAME ) {
-                result = Game::QUITGAME;
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                result = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
         }
         else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-            result = Game::CANCEL;
+            result = fheroes2::GameMode::CANCEL;
             break;
         }
         else if ( le.MousePressRight( buttonNew.area() ) ) {
@@ -124,10 +121,7 @@ int Dialog::FileOptions( void )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

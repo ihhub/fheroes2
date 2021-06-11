@@ -19,9 +19,12 @@
  ***************************************************************************/
 
 #include "campaign_savedata.h"
+#include "artifact.h"
 #include "game.h"
+#include "heroes.h"
 #include "serialize.h"
 #include "settings.h"
+#include "translations.h"
 #include <algorithm>
 #include <cassert>
 
@@ -29,7 +32,7 @@ namespace Campaign
 {
     CampaignSaveData::CampaignSaveData()
         : _finishedMaps()
-        , _earnedCampaignAwards()
+        , _obtainedCampaignAwards()
         , _currentScenarioID( 0 )
         , _campaignID( 0 )
         , _daysPassed( 0 )
@@ -42,9 +45,9 @@ namespace Campaign
         return instance;
     }
 
-    void CampaignSaveData::addCampaignAward( const std::string & award )
+    void CampaignSaveData::addCampaignAward( const int awardID )
     {
-        _earnedCampaignAwards.emplace_back( award );
+        _obtainedCampaignAwards.emplace_back( awardID );
     }
 
     void CampaignSaveData::setCurrentScenarioBonus( const ScenarioBonusData & bonus )
@@ -77,23 +80,66 @@ namespace Campaign
     void CampaignSaveData::reset()
     {
         _finishedMaps.clear();
-        _earnedCampaignAwards.clear();
+        _obtainedCampaignAwards.clear();
+        _carryOverTroops.clear();
         _currentScenarioID = 0;
         _campaignID = 0;
         _daysPassed = 0;
     }
 
+    void CampaignSaveData::setCarryOverTroops( const Troops & troops )
+    {
+        _carryOverTroops.clear();
+
+        for ( size_t i = 0; i < troops.Size(); ++i ) {
+            _carryOverTroops.emplace_back( *troops.GetTroop( i ) );
+        }
+    }
+
+    int CampaignSaveData::getLastCompletedScenarioID() const
+    {
+        assert( !_finishedMaps.empty() );
+        return _finishedMaps.back();
+    }
+
+    const std::vector<Campaign::CampaignAwardData> CampaignSaveData::getObtainedCampaignAwards() const
+    {
+        std::vector<Campaign::CampaignAwardData> obtainedAwards;
+
+        for ( size_t i = 0; i < _finishedMaps.size(); ++i ) {
+            const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignAwardData::getCampaignAwardData( _campaignID, _finishedMaps[i] );
+
+            for ( size_t j = 0; j < awards.size(); ++j ) {
+                if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), awards[j]._id ) != _obtainedCampaignAwards.end() )
+                    obtainedAwards.emplace_back( awards[j] );
+            }
+        }
+
+        return obtainedAwards;
+    }
+
     StreamBase & operator<<( StreamBase & msg, const Campaign::CampaignSaveData & data )
     {
-        return msg << data._earnedCampaignAwards << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed;
+        return msg << data._currentScenarioID << data._currentScenarioBonus << data._finishedMaps << data._campaignID << data._daysPassed << data._obtainedCampaignAwards
+                   << data._carryOverTroops;
     }
 
     StreamBase & operator>>( StreamBase & msg, Campaign::CampaignSaveData & data )
     {
-        msg >> data._earnedCampaignAwards >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+        const int loadVersion = Game::GetLoadVersion();
 
-        if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE )
+        if ( loadVersion < FORMAT_VERSION_093_RELEASE ) {
+            std::vector<std::string> tempOldObtainedCampaignAwards;
+            msg >> tempOldObtainedCampaignAwards;
+        }
+
+        msg >> data._currentScenarioID >> data._currentScenarioBonus >> data._finishedMaps;
+
+        if ( loadVersion >= FORMAT_VERSION_091_RELEASE )
             msg >> data._campaignID >> data._daysPassed;
+
+        if ( loadVersion >= FORMAT_VERSION_093_RELEASE )
+            msg >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
         return msg;
     }

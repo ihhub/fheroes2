@@ -32,23 +32,19 @@
 
 int Dialog::AdventureOptions( bool enabledig )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-
     // preload
-    const int apanbkg = Settings::Get().ExtGameEvilInterface() ? ICN::APANBKGE : ICN::APANBKG;
-    const int apanel = Settings::Get().ExtGameEvilInterface() ? ICN::APANELE : ICN::APANEL;
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
+    const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
 
     // The sprite contains shadow area at left and bottom side so to center it we have to subtract it
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() + BORDERWIDTH ) / 2 );
     fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
     fheroes2::Blit( box, display, rb.x, rb.y );
@@ -70,7 +66,6 @@ int Dialog::AdventureOptions( bool enabledig )
     buttonDig.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -118,10 +113,7 @@ int Dialog::AdventureOptions( bool enabledig )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

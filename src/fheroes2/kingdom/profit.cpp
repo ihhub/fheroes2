@@ -62,32 +62,6 @@ profitstats_t _profits[] = {
     {NULL, {0, 0, 0, 0, 0, 0, 0}},
 };
 
-void ProfitConditions::UpdateCosts( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse profits.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_profits = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_profits = doc.FirstChildElement( "profits" ) ) ) {
-        profitstats_t * ptr = &_profits[0];
-
-        while ( ptr->id ) {
-            const TiXmlElement * xml_profit = xml_profits->FirstChildElement( ptr->id );
-
-            if ( xml_profit )
-                LoadCostFromXMLElement( ptr->cost, *xml_profit );
-
-            ++ptr;
-        }
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 payment_t ProfitConditions::FromBuilding( u32 building, int race )
 {
     payment_t result;

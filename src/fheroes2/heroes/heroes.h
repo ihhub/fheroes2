@@ -149,12 +149,12 @@ public:
     enum flags_t
     {
         SHIPMASTER = 0x00000001,
-        // UNUSED	= 0x00000002,
+        // UNUSED = 0x00000002,
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
-        SAVE_SP_POINTS = 0x00000010,
-        // UNUSED	= 0x00000020,
-        // UNUSED	= 0x00000040,
+        // UNUSED = 0x00000010,
+        // UNUSED = 0x00000020,
+        // UNUSED = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
         SAVE_MP_POINTS = 0x00000200,
@@ -191,28 +191,29 @@ public:
 
     Heroes();
     Heroes( int heroid, int rc );
+    Heroes( int heroID, int race, int initialLevel );
 
-    virtual bool isValid() const override;
+    bool isValid() const override;
     bool isFreeman( void ) const;
     void SetFreeman( int reason );
 
-    virtual const Castle * inCastle() const override;
+    const Castle * inCastle() const override;
     Castle * inCastle();
 
     void LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf );
     void PostLoad( void );
 
-    virtual int GetRace() const override;
-    virtual const std::string & GetName() const override;
-    virtual int GetColor() const override;
-    virtual int GetType() const override;
-    virtual int GetControl() const override;
+    int GetRace() const override;
+    const std::string & GetName() const override;
+    int GetColor() const override;
+    int GetType() const override;
+    int GetControl() const override;
 
     int GetKillerColor( void ) const;
     void SetKillerColor( int );
 
-    virtual const Army & GetArmy() const override;
-    virtual Army & GetArmy() override;
+    const Army & GetArmy() const override;
+    Army & GetArmy() override;
 
     int GetID( void ) const;
 
@@ -220,10 +221,10 @@ public:
     double getRecruitValue() const;
     int getStatsValue() const;
 
-    virtual int GetAttack() const override;
-    virtual int GetDefense() const override;
-    virtual int GetPower() const override;
-    virtual int GetKnowledge() const override;
+    int GetAttack() const override;
+    int GetDefense() const override;
+    int GetPower() const override;
+    int GetKnowledge() const override;
 
     int GetAttack( std::string * ) const;
     int GetDefense( std::string * ) const;
@@ -232,8 +233,8 @@ public:
 
     void IncreasePrimarySkill( int skill );
 
-    virtual int GetMorale() const override;
-    virtual int GetLuck() const override;
+    int GetMorale() const override;
+    int GetLuck() const override;
     int GetMoraleWithModificators( std::string * str = NULL ) const;
     int GetLuckWithModificators( std::string * str = NULL ) const;
     int GetLevel( void ) const;
@@ -241,11 +242,11 @@ public:
     int GetMapsObject( void ) const;
     void SetMapsObject( int );
 
-    const Point & GetCenterPatrol( void ) const;
-    void SetCenterPatrol( const Point & );
+    const fheroes2::Point & GetCenterPatrol( void ) const;
+    void SetCenterPatrol( const fheroes2::Point & );
     int GetSquarePatrol( void ) const;
 
-    virtual u32 GetMaxSpellPoints() const override;
+    u32 GetMaxSpellPoints() const override;
     u32 GetMaxMovePoints() const;
 
     u32 GetMovePoints( void ) const;
@@ -253,12 +254,11 @@ public:
     bool MayStillMove( void ) const;
     void ResetMovePoints( void );
     void MovePointsScaleFixed( void );
-    void RecalculateMovePoints( void );
 
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill( void ) const;
-    virtual int GetLevelSkill( int ) const override;
-    virtual u32 GetSecondaryValues( int ) const override;
+    int GetLevelSkill( int ) const override;
+    u32 GetSecondaryValues( int ) const override;
     void LearnSkill( const Skill::Secondary & );
     Skill::SecSkills & GetSecondarySkills( void );
 
@@ -268,33 +268,43 @@ public:
     bool IsFullBagArtifacts( void ) const;
 
     int GetMobilityIndexSprite( void ) const;
+
+    // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite( void ) const;
 
-    int OpenDialog( bool readonly = false, bool fade = false );
+    int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
     void MeetingDialog( Heroes & );
 
-    bool Recruit( int col, const Point & pt );
+    bool Recruit( int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );
 
     void ActionNewDay( void );
     void ActionNewWeek( void );
     void ActionNewMonth( void );
-    virtual void ActionAfterBattle() override;
-    virtual void ActionPreBattle() override;
+    void ActionAfterBattle() override;
+    void ActionPreBattle() override;
+
+    // Called from World::NewDay() for all heroes, hired or not
+    void ReplenishSpellPoints();
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
-    const Route::Path & GetPath( void ) const;
-    Route::Path & GetPath( void );
+    const Route::Path & GetPath() const;
+    Route::Path & GetPath();
     int GetRangeRouteDays( s32 ) const;
     void ShowPath( bool );
-    void RescanPath( void );
-    void RescanPathPassable( void );
+    void RescanPath();
+    void RescanPathPassable();
 
-    int GetDirection( void ) const;
+    int GetDirection() const;
     void setDirection( int directionToSet );
 
+    // set visited cell
     void SetVisited( s32, Visit::type_t = Visit::LOCAL );
+
+    // Set global visited state for itself and for allies.
+    void setVisitedForAllies( const int32_t tileIndex ) const;
+
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
@@ -309,7 +319,7 @@ public:
     bool isAction( void ) const;
     void ResetAction( void );
     void Action( int tileIndex, bool isDestination );
-    void ActionNewPosition( void );
+    void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
@@ -319,21 +329,21 @@ public:
     void SetRedrawIndexes();
     void UpdateRedrawTop( const Maps::Tiles & tile );
     void UpdateRedrawBottom( const Maps::Tiles & tile );
-    void RedrawTop( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & dst, const Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
-    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
+    void Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    void RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
-    virtual void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
+    void PortraitRedraw( s32 px, s32 py, PortraitType type, fheroes2::Image & dstsf ) const override;
     int GetSpriteIndex( void ) const;
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
     void SetSpriteIndex( int index );
     void SetOffset( const fheroes2::Point & offset );
 
-    void FadeOut( const Point & offset = Point() ) const;
-    void FadeIn( const Point & offset = Point() ) const;
-    void Scoute( void ) const;
+    void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
+    void Scoute( const int tileIndex ) const;
     int GetScoute( void ) const;
     u32 GetVisionsDistance( void ) const;
 
@@ -345,8 +355,6 @@ public:
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
 
-    bool AllowBattle( bool attacker ) const;
-
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
 
@@ -355,14 +363,15 @@ public:
 
     static void ScholarAction( Heroes &, Heroes & );
 
-    Point MovementDirection() const;
+    fheroes2::Point MovementDirection() const;
+
+    int GetAttackedMonsterTileIndex() const;
+    void SetAttackedMonsterTileIndex( int idx );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Heroes & );
-#endif
+
     friend class Recruits;
     friend class Battle::Only;
 
@@ -398,7 +407,7 @@ private:
 
     int hid; /* hero id */
     int portrait; /* hero id */
-    int race;
+    int _race;
     int save_maps_object;
 
     Route::Path path;
@@ -407,7 +416,7 @@ private:
     int sprite_index;
     fheroes2::Point _offset; // used only during hero's movement
 
-    Point patrol_center;
+    fheroes2::Point patrol_center;
     int patrol_square;
 
     std::list<IndexObject> visit_object;
@@ -416,6 +425,8 @@ private:
     RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
+
+    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
     enum
     {
@@ -426,13 +437,17 @@ private:
 struct VecHeroes : public std::vector<Heroes *>
 {
     Heroes * Get( int /* hero id */ ) const;
-    Heroes * Get( const Point & ) const;
+    Heroes * Get( const fheroes2::Point & ) const;
 };
 
 struct AllHeroes : public VecHeroes
 {
     AllHeroes();
+    AllHeroes( const AllHeroes & ) = delete;
+
     ~AllHeroes();
+
+    AllHeroes & operator=( const AllHeroes & ) = delete;
 
     void Init( void );
     void clear( void );
@@ -443,6 +458,7 @@ struct AllHeroes : public VecHeroes
     Heroes * GetGuard( const Castle & ) const;
     Heroes * GetFreeman( int race ) const;
     Heroes * FromJail( s32 ) const;
+    Heroes * GetFreemanSpecial( int heroID ) const;
 
     bool HaveTwoFreemans( void ) const;
 };

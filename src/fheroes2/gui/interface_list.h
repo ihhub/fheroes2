@@ -25,7 +25,6 @@
 
 #include <algorithm>
 
-#include "cursor.h"
 #include "localevent.h"
 #include "ui_button.h"
 #include "ui_scrollbar.h"
@@ -34,7 +33,8 @@ namespace Interface
 {
     struct ListBasic
     {
-        virtual ~ListBasic() {}
+        virtual ~ListBasic() = default;
+        virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw( void ) = 0;
         virtual bool QueueEventProcessing( void ) = 0;
     };
@@ -43,18 +43,19 @@ namespace Interface
     class ListBox : public ListBasic
     {
     public:
-        ListBox( const Point & pt = Point() )
-            : content( NULL )
+        explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
+            : needRedraw( false )
+            , content( NULL )
             , _currentId( -1 )
             , _topId( -1 )
             , maxItems( 0 )
             , ptRedraw( pt )
             , useHotkeys( true )
         {}
-        virtual ~ListBox() {}
+        ~ListBox() override = default;
 
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
-        virtual void RedrawBackground( const Point & ) = 0;
+        virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
         virtual void ActionCurrentUp( void ) = 0;
         virtual void ActionCurrentDn( void ) = 0;
@@ -63,27 +64,27 @@ namespace Interface
         virtual void ActionListSingleClick( Item & ) = 0;
         virtual void ActionListPressRight( Item & ) = 0;
 
-        virtual void ActionListDoubleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListDoubleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListDoubleClick( item );
         }
 
-        virtual void ActionListSingleClick( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListSingleClick( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListSingleClick( item );
         }
 
-        virtual void ActionListPressRight( Item & item, const Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
+        virtual void ActionListPressRight( Item & item, const fheroes2::Point & /*mousePos*/, int32_t /*itemOffsetX*/, int32_t /*itemOffsetY*/ )
         {
             ActionListPressRight( item );
         }
 
-        virtual bool ActionListCursor( Item &, const Point & )
+        virtual bool ActionListCursor( Item &, const fheroes2::Point & )
         {
             return false;
         }
 
-        void SetTopLeft( const Point & tl )
+        void SetTopLeft( const fheroes2::Point & tl )
         {
             ptRedraw = tl;
         }
@@ -156,9 +157,9 @@ namespace Interface
             useHotkeys = !f;
         }
 
-        void Redraw( void )
+        void Redraw( void ) override
         {
-            Cursor::Get().Hide();
+            needRedraw = false;
 
             RedrawBackground( ptRedraw );
 
@@ -181,12 +182,17 @@ namespace Interface
             return content != NULL && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
         }
 
+        bool IsNeedRedraw() const override
+        {
+            return needRedraw;
+        }
+
         Item & GetCurrent( void ) // always call this function only after IsValid()!
         {
             return ( *content )[_currentId];
         }
 
-        Item * GetFromPosition( const Point & mp )
+        Item * GetFromPosition( const fheroes2::Point & mp )
         {
             Verify();
             if ( !IsValid() )
@@ -202,7 +208,7 @@ namespace Interface
             if ( _topId + id >= _size() ) // out of items
                 return NULL;
 
-            return &( *content )[id];
+            return &( *content )[_topId + id];
         }
 
         void SetCurrent( size_t posId )
@@ -264,10 +270,9 @@ namespace Interface
                 _currentId = -1;
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing( void ) override
         {
             LocalEvent & le = LocalEvent::Get();
-            Cursor & cursor = Cursor::Get();
 
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
             le.MousePressLeft( buttonPgDn.area() ) ? buttonPgDn.drawOnPress() : buttonPgDn.drawOnRelease();
@@ -276,7 +281,8 @@ namespace Interface
                 return false;
 
             if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( _topId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 if ( _topId > maxItems )
                     _topId -= maxItems;
                 else
@@ -284,91 +290,106 @@ namespace Interface
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( _topId + maxItems < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 _topId += maxItems;
                 if ( _topId + maxItems >= _size() )
                     _topId = _size() - maxItems;
 
                 UpdateScrollbarRange();
                 _scrollbar.moveToIndex( _topId );
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( _currentId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 --_currentId;
                 SetCurrentVisible();
                 ActionCurrentUp();
+
                 return true;
             }
             else if ( useHotkeys && le.KeyPress( KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 ++_currentId;
                 SetCurrentVisible();
                 ActionCurrentDn();
+
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) ) && ( _topId > 0 ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 --_topId;
                 _scrollbar.backward();
+
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
                       && ( _topId + maxItems < _size() ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 ++_topId;
                 _scrollbar.forward();
+
                 return true;
             }
             else if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
-                cursor.Hide();
+                needRedraw = true;
+
                 UpdateScrollbarRange();
 
-                const Point & mousePos = le.GetMouseCursor();
-                _scrollbar.moveToPos( fheroes2::Point( mousePos.x, mousePos.y ) );
+                const fheroes2::Point & mousePos = le.GetMouseCursor();
+                _scrollbar.moveToPos( mousePos );
                 _topId = _scrollbar.currentIndex();
+
                 return true;
             }
 
-            const Point & position = le.GetMouseCursor();
-            const fheroes2::Point mousePos( position.x, position.y );
+            const fheroes2::Point & mousePos = le.GetMouseCursor();
             if ( rtAreaItems & mousePos ) { // within our rectangle
+                needRedraw = true;
+
                 const int id = ( mousePos.y - rtAreaItems.y ) * maxItems / rtAreaItems.height + _topId;
-                cursor.Hide();
 
                 if ( id < _size() ) {
                     Item & item = ( *content )[static_cast<size_t>( id )]; // id is always >= 0
                     const int32_t offsetY = ( id - _topId ) * rtAreaItems.height / maxItems;
 
-                    if ( ActionListCursor( item, position ) )
+                    if ( ActionListCursor( item, mousePos ) )
                         return true;
 
                     if ( le.MouseClickLeft( rtAreaItems ) ) {
                         if ( id == _currentId ) {
-                            ActionListDoubleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListDoubleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         else {
                             _currentId = id;
-                            ActionListSingleClick( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                            ActionListSingleClick( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         }
                         return true;
                     }
                     else if ( le.MousePressRight( rtAreaItems ) ) {
-                        ActionListPressRight( item, position, rtAreaItems.x, rtAreaItems.y + offsetY );
+                        ActionListPressRight( item, mousePos, rtAreaItems.x, rtAreaItems.y + offsetY );
                         return true;
                     }
                 }
 
-                cursor.Show();
+                needRedraw = false;
             }
 
             return false;
         }
 
     protected:
+        bool needRedraw;
+
         fheroes2::Rect rtAreaItems;
 
         fheroes2::Button buttonPgUp;
@@ -387,7 +408,7 @@ namespace Interface
         int _topId;
         int maxItems;
 
-        Point ptRedraw;
+        fheroes2::Point ptRedraw;
 
         bool useHotkeys;
 

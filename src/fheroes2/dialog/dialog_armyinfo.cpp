@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_static.h"
 #include "icn.h"
 #include "luck.h"
@@ -51,13 +52,6 @@ namespace
 
     struct SpellInfo
     {
-        SpellInfo()
-            : spriteId( 0 )
-            , duration( 0 )
-            , offset( 0 )
-            , space( 0 )
-        {}
-
         SpellInfo( const uint32_t spriteId_, const uint32_t duration_, const int32_t offset_, const int32_t space_ )
             : spriteId( spriteId_ )
             , duration( duration_ )
@@ -95,9 +89,8 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     const fheroes2::Sprite & sprite_dialog = fheroes2::AGG::GetICN( viewarmy, 0 );
     const fheroes2::Sprite & spriteDialogShadow = fheroes2::AGG::GetICN( viewarmy, 7 );
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( ( flags & BUTTONS ) != 0, Cursor::POINTER );
 
     fheroes2::Point dialogOffset( ( display.width() - sprite_dialog.width() ) / 2, ( display.height() - sprite_dialog.height() ) / 2 );
     if ( isEvilInterface ) {
@@ -124,7 +117,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     if ( troop.isBattle() )
         DrawBattleStats( battleStatOffset, troop );
 
-    DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+    DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     RandomMonsterAnimation monsterAnimation( troop );
@@ -171,7 +164,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     LocalEvent & le = LocalEvent::Get();
     int result = Dialog::ZERO;
 
-    cursor.Show();
     display.render();
 
     // dialog menu loop
@@ -184,7 +176,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? ( buttonExit ).drawOnPress() : ( buttonExit ).drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && le.MouseClickLeft( buttonUpgrade.area() ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
                     const std::string msg( "You can't afford to upgrade your troops!" );
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
@@ -210,7 +202,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && le.MouseClickLeft( buttonDismiss.area() )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
                  && Dialog::YES == Dialog::Message( "", _( "Are you sure you want to dismiss this army?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 result = Dialog::DISMISS;
                 break;
@@ -221,9 +213,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
 
-            if ( Game::AnimateInfrequentDelay( Game::CASTLE_UNIT_DELAY ) ) {
-                cursor.Hide();
-
+            if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
                 fheroes2::Blit( sprite_dialog, display, dialogOffset.x, dialogOffset.y );
 
                 DrawMonsterStats( monsterStatOffset, troop );
@@ -231,7 +221,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( troop.isBattle() )
                     DrawBattleStats( battleStatOffset, troop );
 
-                DrawMonsterInfo( fheroes2::Point( pos_rt.x, pos_rt.y ), troop );
+                DrawMonsterInfo( pos_rt.getPosition(), troop );
                 DrawMonster( monsterAnimation, troop, monsterOffset, isReflected, true, dialogRoi );
 
                 if ( buttonUpgrade.isEnabled() )
@@ -243,7 +233,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 if ( buttonExit.isEnabled() )
                     buttonExit.draw();
 
-                cursor.Show();
                 display.render();
             }
         }
@@ -252,8 +241,6 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
         }
     }
-
-    cursor.Hide();
 
     return result;
 }
@@ -469,7 +456,7 @@ void DrawBattleStats( const fheroes2::Point & dst, const Troop & b )
         if ( widthDiff > 0 ) {
             if ( space > 10 )
                 space = 10;
-            ow = dst.x + ( spritesWidth + space * ( spellsInfo.size() - 1 ) ) / 2;
+            ow = dst.x + ( spritesWidth + space * static_cast<int>( spellsInfo.size() - 1 ) ) / 2;
         }
         else {
             ow = dst.x + maxSpritesWidth / 2;
@@ -530,11 +517,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
@@ -582,7 +566,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     }
 
     btnGroup.draw();
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -597,7 +580,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
         result = btnGroup.processEvents();
 
         if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
                 btnGroup.button( 0 ).enable();
@@ -608,17 +591,12 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
 
             btnGroup.draw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( btnHeroes.area() ) ) {
             Dialog::Message( "", _( "View Hero" ), Font::BIG );
         }
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }
@@ -628,11 +606,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     std::string message;
 
@@ -679,7 +654,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
                         Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
     tsTotal.Show();
 
-    fheroes2::ButtonGroup btnGroup( fheroes2::Rect( pos.x, pos.y, pos.width, pos.height ), buttons );
+    fheroes2::ButtonGroup btnGroup( pos, buttons );
 
     fheroes2::Sprite marketButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 4 );
     fheroes2::Sprite marketButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 5 );
@@ -715,8 +690,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     Kingdom & kingdom = hero.GetKingdom();
 
-    Rect btnMarketArea = btnMarket.area();
-    Rect btnHeroesArea = btnHeroes.area();
+    fheroes2::Rect btnMarketArea = btnMarket.area();
+    fheroes2::Rect btnHeroesArea = btnHeroes.area();
 
     if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
         btnGroup.button( 0 ).disable();
@@ -734,6 +709,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     else {
         std::string msg = _( "Not enough gold (%{gold})" );
         StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
+        tsNotEnoughGold.SetText( msg, Font::SMALL );
         tsNotEnoughGold.Show();
         btnMarket.enable();
         btnMarket.draw();
@@ -756,7 +732,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     }
 
     btnGroup.draw();
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -781,7 +756,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             needRedraw = true;
         }
         else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            hero.OpenDialog( false, false );
+            hero.OpenDialog( false, false, true, true );
 
             needRedraw = true;
         }
@@ -790,7 +765,6 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             continue;
         }
 
-        cursor.Hide();
         tsTotal.Hide();
         tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
         tsTotal.Show();
@@ -833,13 +807,8 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
             noRoom2.Show();
         }
 
-        cursor.Show();
         display.render();
     }
-
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
 
     return result;
 }

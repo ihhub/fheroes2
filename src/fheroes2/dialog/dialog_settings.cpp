@@ -36,20 +36,20 @@
 class SettingsListBox : public Interface::ListBox<u32>
 {
 public:
-    SettingsListBox( const Point & pt, bool f )
+    SettingsListBox( const fheroes2::Point & pt, bool f )
         : Interface::ListBox<u32>( pt )
         , readonly( f )
         , _restorer( fheroes2::Display::instance() )
     {}
 
-    virtual void RedrawItem( const u32 &, s32, s32, bool ) override;
-    virtual void RedrawBackground( const Point & ) override;
+    void RedrawItem( const u32 &, s32, s32, bool ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
-    virtual void ActionCurrentUp( void ) override {}
-    virtual void ActionCurrentDn( void ) override {}
-    virtual void ActionListDoubleClick( u32 & ) override;
-    virtual void ActionListSingleClick( u32 & ) override;
-    virtual void ActionListPressRight( u32 & ) override {}
+    void ActionCurrentUp( void ) override {}
+    void ActionCurrentDn( void ) override {}
+    void ActionListDoubleClick( u32 & ) override;
+    void ActionListSingleClick( u32 & ) override;
+    void ActionListPressRight( u32 & ) override {}
 
     bool readonly;
     fheroes2::ImageRestorer _restorer;
@@ -78,7 +78,7 @@ void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*curre
         msg.Blit( ox + cell.width() + 5, oy + 4 );
 }
 
-void SettingsListBox::RedrawBackground( const Point & origin )
+void SettingsListBox::RedrawBackground( const fheroes2::Point & origin )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -124,13 +124,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
             }
             break;
 
-        case Settings::WORLD_NEW_VERSION_WEEKOF:
-            if ( conf.ExtModes( Settings::WORLD_NEW_VERSION_WEEKOF ) )
-                conf.ExtSetModes( Settings::WORLD_BAN_WEEKOF );
-            else
-                conf.ExtResetModes( Settings::WORLD_BAN_WEEKOF );
-            break;
-
         default:
             break;
         }
@@ -142,16 +135,14 @@ void Dialog::ExtSettings( bool readonly )
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( 320, 400 );
-    const Rect area( frameborder.activeArea() );
+    const fheroes2::Rect area( frameborder.activeArea() );
 
     Text text( "Experimental Game Settings", Font::YELLOW_BIG );
-    text.Blit( area.x + ( area.w - text.w() ) / 2, area.y + 6 );
+    text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
     states.reserve( 64 );
@@ -160,8 +151,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
-
-    states.push_back( Settings::GAME_DYNAMIC_INTERFACE );
 
     states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
@@ -172,15 +161,12 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_VISITED_CONTENT );
     states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
-    states.push_back( Settings::WORLD_ABANDONED_MINE_RANDOM );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
-    states.push_back( Settings::WORLD_ONLY_FIRST_MONSTER_ATTACK );
     states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
     states.push_back( Settings::WORLD_BAN_WEEKOF );
-    states.push_back( Settings::WORLD_NEW_VERSION_WEEKOF );
     states.push_back( Settings::WORLD_BAN_PLAGUES );
     states.push_back( Settings::WORLD_BAN_MONTHOF_MONSTERS );
     states.push_back( Settings::WORLD_STARTHERO_LOSSCOND4HUMANS );
@@ -212,13 +198,13 @@ void Dialog::ExtSettings( bool readonly )
     std::sort( states.begin(), states.end(),
                [&conf]( uint32_t first, uint32_t second ) { return std::string( conf.ExtName( first ) ) > std::string( conf.ExtName( second ) ); } );
 
-    SettingsListBox listbox( area, readonly );
+    SettingsListBox listbox( area.getPosition(), readonly );
 
     listbox._restorer.update( area.x + 15, area.y + 25, 280, 336 );
 
     const int ah = 340;
 
-    listbox.RedrawBackground( area );
+    listbox.RedrawBackground( area.getPosition() );
     listbox.SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( area.x + 295, area.y + 25 ) );
     listbox.SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
     listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( area.x + 300, area.y + 49, 12, ah - 47 ) );
@@ -229,7 +215,7 @@ void Dialog::ExtSettings( bool readonly )
 
     LocalEvent & le = LocalEvent::Get();
 
-    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.w - 10, area.h - 5 );
+    const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.width - 10, area.height - 5 );
 
     const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
@@ -239,7 +225,6 @@ void Dialog::ExtSettings( bool readonly )
 
     buttonOk.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -251,11 +236,12 @@ void Dialog::ExtSettings( bool readonly )
 
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
 
     Settings::Get().BinarySave();

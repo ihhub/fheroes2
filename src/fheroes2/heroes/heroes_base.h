@@ -31,10 +31,6 @@
 #include "skill.h"
 #include "spell_book.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Army;
 class Castle;
 
@@ -71,7 +67,7 @@ public:
 
     virtual const std::string & GetName( void ) const = 0;
     virtual int GetColor( void ) const = 0;
-    virtual int GetControl( void ) const = 0;
+    int GetControl( void ) const override = 0;
     virtual bool isValid( void ) const = 0;
 
     virtual const Army & GetArmy( void ) const = 0;
@@ -90,8 +86,8 @@ public:
 
     virtual int GetType( void ) const = 0;
 
-    bool isCaptain( void ) const;
-    bool isHeroes( void ) const;
+    virtual bool isCaptain( void ) const;
+    virtual bool isHeroes( void ) const;
 
     int GetAttackModificator( std::string * = NULL ) const;
     int GetDefenseModificator( std::string * = NULL ) const;
@@ -123,16 +119,12 @@ public:
     BagArtifacts & GetBagArtifacts( void );
     const BagArtifacts & GetBagArtifacts( void ) const;
     u32 HasArtifact( const Artifact & ) const;
-    bool PickupArtifact( const Artifact & );
 
     void LoadDefaults( int type, int race );
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const HeroBase & );
     friend StreamBase & operator>>( StreamBase &, HeroBase & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, HeroBase & );
-#endif
 
     u32 magic_point;
     u32 move_point;

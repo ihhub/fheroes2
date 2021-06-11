@@ -27,17 +27,23 @@
 #include "gamedefs.h"
 #include "serialize.h"
 
+enum class GameVersion : int
+{
+    SUCCESSION_WARS = 0,
+    PRICE_OF_LOYALTY = 1
+};
+
 namespace Maps
 {
-    class FileInfo
+    struct FileInfo
     {
-    public:
         FileInfo();
         FileInfo( const FileInfo & );
 
+        ~FileInfo() = default;
+
         FileInfo & operator=( const FileInfo & );
 
-        bool ReadMAP( const std::string & );
         bool ReadMP2( const std::string & );
         bool ReadSAV( const std::string & );
 
@@ -66,13 +72,12 @@ namespace Maps
         int WinsFindArtifactID( void ) const;
         bool WinsFindUltimateArtifact( void ) const;
         u32 WinsAccumulateGold( void ) const;
-        Point WinsMapsPositionObject( void ) const;
-        Point LossMapsPositionObject( void ) const;
+        fheroes2::Point WinsMapsPositionObject( void ) const;
+        fheroes2::Point LossMapsPositionObject( void ) const;
         u32 LossCountDays( void ) const;
 
         std::string String( void ) const;
         void Reset( void );
-        void FillUnions( void );
 
         std::string file;
         std::string name;
@@ -89,23 +94,48 @@ namespace Maps
         u8 allow_comp_colors;
         u8 rnd_races;
 
-        u8 conditions_wins; // 0: wins def, 1: town, 2: hero, 3: artifact, 4: side, 5: gold
+        enum VictoryCondition : uint8_t
+        {
+            VICTORY_DEFEAT_EVERYONE = 0,
+            VICTORY_CAPTURE_TOWN = 1,
+            VICTORY_KILL_HERO = 2,
+            VICTORY_OBTAIN_ARTIFACT = 3,
+            VICTORY_DEFEAT_OTHER_SIDE = 4,
+            VICTORY_COLLECT_ENOUGH_GOLD = 5
+        };
+
+        enum LossCondition : uint8_t
+        {
+            LOSS_DEFAULT = 0,
+            LOSS_TOWN = 1,
+            LOSS_HERO = 2,
+            LOSS_OUT_OF_TIME = 3
+        };
+
+        uint8_t conditions_wins; // refer to VictoryCondition
         bool comp_also_wins;
         bool allow_normal_victory;
         u16 wins1;
         u16 wins2;
-        u8 conditions_loss; // 0: loss def, 1: town, 2: hero, 3: out time
+        uint8_t conditions_loss; // refer to LossCondition
         u16 loss1;
         u16 loss2;
 
         u32 localtime;
 
-        bool with_heroes;
+        bool startWithHeroInEachCastle;
+
+        GameVersion _version;
+
+    private:
+        void FillUnions( const int side1Colors, const int side2Colors );
     };
 
     StreamBase & operator<<( StreamBase &, const FileInfo & );
     StreamBase & operator>>( StreamBase &, FileInfo & );
 }
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version );
 
 using MapsFileInfoList = std::vector<Maps::FileInfo>;
 

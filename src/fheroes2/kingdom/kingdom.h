@@ -35,7 +35,7 @@ class Castle;
 class Heroes;
 struct AllHeroes;
 struct VecHeroes;
-struct AllCastles;
+class AllCastles;
 struct VecCastles;
 struct CapturedObjects;
 
@@ -67,7 +67,7 @@ public:
     };
 
     Kingdom();
-    virtual ~Kingdom() {}
+    ~Kingdom() override = default;
 
     void Init( int color );
     void clear( void );
@@ -85,12 +85,17 @@ public:
     void AddHeroStartCondLoss( Heroes * );
     std::string GetNamesHeroStartCondLoss( void ) const;
 
+    void SetLastBattleWinHero( const Heroes & hero );
+
     Heroes * GetLastLostHero( void ) const;
+    Heroes * GetLastBattleWinHero() const;
 
     const Heroes * GetFirstHeroStartCondLoss( void ) const;
     Heroes * GetBestHero();
 
-    int GetControl( void ) const;
+    Monster GetStrongestMonster() const;
+
+    int GetControl( void ) const override;
     int GetColor( void ) const;
     int GetRace( void ) const;
 
@@ -139,7 +144,6 @@ public:
     void AddHeroes( Heroes * );
     void RemoveHeroes( const Heroes * );
     void ApplyPlayWithStartingHero( void );
-    void HeroesActionNewPosition() const;
 
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );
@@ -178,6 +182,7 @@ private:
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
 
     int color;
+    int _lastBattleWinHeroID;
     Funds resource;
 
     u32 lost_town_days;
@@ -199,7 +204,7 @@ private:
 class Kingdoms
 {
 public:
-    Kingdoms();
+    Kingdoms() = default;
 
     void Init( void );
     void clear( void );
@@ -213,7 +218,6 @@ public:
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    int GetLossColors( void ) const;
     int GetNotLossColors( void ) const;
     int FindWins( int ) const;
 

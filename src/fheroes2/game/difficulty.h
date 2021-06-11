@@ -24,10 +24,9 @@
 
 #include "gamedefs.h"
 
-struct cost_t;
 namespace Difficulty
 {
-    enum
+    enum DifficultyLevel : int
     {
         EASY,
         NORMAL,
@@ -41,7 +40,6 @@ namespace Difficulty
     int GetScoutingBonus( int difficulty );
     double GetGoldIncomeBonus( int difficulty );
     double GetUnitGrowthBonus( int difficulty );
-    double GetBattleExperienceBonus( int difficulty );
     int GetHeroMovementBonus( int difficulty );
     double GetAIRetreatRatio( int difficulty );
 }

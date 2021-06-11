@@ -25,50 +25,22 @@
 
 #include <string>
 
+#include "game_mode.h"
 #include "gamedefs.h"
-#include "rect.h"
 #include "types.h"
 
 class Players;
 class Heroes;
 class Castle;
 
+namespace Campaign
+{
+    struct CampaignAwardData;
+    class CampaignSaveData;
+}
+
 namespace Game
 {
-    enum
-    {
-        CANCEL = 0,
-        QUITGAME,
-        MAINMENU,
-        NEWGAME,
-        LOADGAME,
-        HIGHSCORES,
-        CREDITS,
-        NEWSTANDARD,
-        NEWCAMPAIGN,
-        NEWMULTI,
-        NEWHOTSEAT,
-        NEWNETWORK,
-        NEWBATTLEONLY,
-        LOADSTANDARD,
-        LOADCAMPAIN,
-        LOADMULTI,
-        LOADHOTSEAT,
-        LOADNETWORK,
-        SCENARIOINFO,
-        SELECTSCENARIO,
-        STARTGAME,
-        SAVEGAME,
-        EDITMAINMENU,
-        EDITNEWMAP,
-        EDITLOADMAP,
-        EDITSAVEMAP,
-        EDITSTART,
-        ENDTURN,
-        SELECT_CAMPAIGN_SCENARIO,
-        COMPLETE_CAMPAIGN_SCENARIO
-    };
-
     void Init( void );
 
     const std::string & GetLastSavename( void );
@@ -167,82 +139,43 @@ namespace Game
         EVENT_STACKSPLIT_SHIFT,
         EVENT_STACKSPLIT_CTRL,
         EVENT_JOINSTACKS,
+        EVENT_UPGRADE_TROOP,
+        EVENT_DISMISS_TROOP,
         EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
 
-    enum
-    {
-        SCROLL_DELAY,
-        MAIN_MENU_DELAY,
-        MAPS_DELAY,
-        CASTLE_TAVERN_DELAY,
-        CASTLE_AROUND_DELAY,
-        CASTLE_BUYHERO_DELAY,
-        CASTLE_BUILD_DELAY,
-        CASTLE_UNIT_DELAY,
-        HEROES_FADE_DELAY,
-        HEROES_PICKUP_DELAY,
-        PUZZLE_FADE_DELAY,
-        BATTLE_DIALOG_DELAY,
-        BATTLE_FRAME_DELAY,
-        BATTLE_MISSILE_DELAY,
-        BATTLE_SPELL_DELAY,
-        BATTLE_DISRUPTING_DELAY,
-        BATTLE_CATAPULT_DELAY,
-        BATTLE_CATAPULT2_DELAY,
-        BATTLE_CATAPULT3_DELAY,
-        BATTLE_BRIDGE_DELAY,
-        BATTLE_IDLE_DELAY,
-        BATTLE_OPPONENTS_DELAY,
-        BATTLE_FLAGS_DELAY,
-        BATTLE_POPUP_DELAY,
-        BATTLE_COLOR_CYCLE_DELAY,
-        BATTLE_SELECTED_UNIT_DELAY,
-        //
-        CURRENT_HERO_DELAY,
-        CURRENT_AI_DELAY,
-        CUSTOM_DELAY,
-        //
-        LAST_DELAY
-    };
+    void mainGameLoop( bool isFirstGameRun );
 
-    bool AnimateCustomDelay( uint32_t delay );
-    bool AnimateInfrequentDelay( int );
-    void AnimateResetDelay( int );
-    void UpdateGameSpeed( void );
+    fheroes2::GameMode MainMenu( bool isFirstGameRun );
+    fheroes2::GameMode NewGame();
+    fheroes2::GameMode LoadGame();
+    fheroes2::GameMode HighScores();
+    fheroes2::GameMode Credits();
+    fheroes2::GameMode NewStandard();
+    fheroes2::GameMode CampaignSelection();
+    fheroes2::GameMode NewSuccessionWarsCampaign();
+    fheroes2::GameMode NewPriceOfLoyaltyCampaign();
+    fheroes2::GameMode NewMulti();
+    fheroes2::GameMode NewHotSeat();
+    fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode LoadStandard();
+    fheroes2::GameMode LoadCampaign();
+    fheroes2::GameMode LoadMulti();
+    fheroes2::GameMode LoadHotseat();
+    fheroes2::GameMode LoadNetwork();
+    fheroes2::GameMode ScenarioInfo();
+    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode );
+    fheroes2::GameMode SelectScenario();
+    fheroes2::GameMode StartGame();
+    fheroes2::GameMode StartBattleOnly();
+    fheroes2::GameMode DisplayLoadGameDialog();
+    fheroes2::GameMode CompleteCampaignScenario();
 
-    int HumanHeroAnimSkip();
-    int AIHeroAnimSkip();
-
-    uint32_t ApplyBattleSpeed( uint32_t delay );
-    int MainMenu( bool isFirstGameRun );
-    int NewGame( void );
-    int LoadGame( void );
-    int HighScores();
-    int Credits( void );
-    int NewStandard( void );
-    int NewCampaign();
-    int NewMulti( void );
-    int NewHotSeat( void );
-    int NewNetwork( void );
-    int NewBattleOnly( void );
-    int LoadStandard( void );
-    int LoadCampain( void );
-    int LoadMulti( void );
-    int LoadHotseat();
-    int LoadNetwork();
-    int ScenarioInfo( void );
-    int SelectCampaignScenario();
-    int SelectScenario( void );
-    int StartGame( void );
-    int StartBattleOnly( void );
-    int DisplayLoadGameDialog();
-    int CompleteCampaignScenario();
-
-    bool IsOriginalCampaignPresent();
+    bool isSuccessionWarsCampaignPresent();
+    bool isPriceOfLoyaltyCampaignPresent();
 
     void EnvironmentSoundMixer( void );
     int GetKingdomColors( void );
@@ -262,7 +195,7 @@ namespace Game
     void PlayPickupSound( void );
     void DisableChangeMusic( bool );
     bool ChangeMusicDisabled( void );
-    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld );
+    void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );
     // Returns the difficulty level based on the type of game.
@@ -301,7 +234,7 @@ namespace Game
         void PerformFadeTask();
     }
 
-    u32 GetStep4Player( u32, u32, u32 );
+    int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }

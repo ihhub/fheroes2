@@ -60,8 +60,6 @@ namespace fheroes2
         , _releasedDisabled()
     {}
 
-    ButtonBase::~ButtonBase() {}
-
     bool ButtonBase::isEnabled() const
     {
         return _isEnabled;
@@ -139,7 +137,7 @@ namespace fheroes2
         _offsetY = offsetY_;
     }
 
-    void ButtonBase::draw( Image & area )
+    void ButtonBase::draw( Image & output )
     {
         if ( !isVisible() )
             return;
@@ -147,12 +145,12 @@ namespace fheroes2
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = _getPressed();
-            Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+            Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
         else {
             const Sprite & sprite = _getReleased();
             if ( isEnabled() ) {
-                Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+                Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
             }
             else {
                 if ( !_releasedDisabled || ( _releasedSprite != &sprite ) ) {
@@ -160,28 +158,28 @@ namespace fheroes2
                     _releasedDisabled.reset( new Sprite( sprite ) );
                     ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
                 }
-                Blit( *_releasedDisabled, area, _offsetX + _releasedDisabled->x(), _offsetY + _releasedDisabled->y() );
+                Blit( *_releasedDisabled, output, _offsetX + _releasedDisabled->x(), _offsetY + _releasedDisabled->y() );
             }
         }
     }
 
-    bool ButtonBase::drawOnPress( Image & area )
+    bool ButtonBase::drawOnPress( Image & output )
     {
         if ( !isPressed() ) {
             press();
-            draw( area );
-            Display::instance().render();
+            draw( output );
+            Display::instance().render( area() );
             return true;
         }
         return false;
     }
 
-    bool ButtonBase::drawOnRelease( Image & area )
+    bool ButtonBase::drawOnRelease( Image & output )
     {
         if ( isPressed() ) {
             release();
-            draw( area );
-            Display::instance().render();
+            draw( output );
+            Display::instance().render( area() );
             return true;
         }
         return false;
@@ -206,8 +204,6 @@ namespace fheroes2
         , _releasedIndex( releasedIndex )
         , _pressedIndex( pressedIndex )
     {}
-
-    Button::~Button() {}
 
     void Button::setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex )
     {
@@ -235,8 +231,6 @@ namespace fheroes2
         , _released( released )
         , _pressed( pressed )
     {}
-
-    ButtonSprite::~ButtonSprite() {}
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed )
     {
@@ -398,17 +392,6 @@ namespace fheroes2
 
         _button.push_back( button );
         button->subscribe( this );
-    }
-
-    ButtonBase * OptionButtonGroup::currentPressedButton() const
-    {
-        for ( size_t i = 0; i < _button.size(); ++i ) {
-            if ( _button[i]->isPressed() ) {
-                return _button[i];
-            }
-        }
-
-        return nullptr;
     }
 
     void OptionButtonGroup::draw( Image & area ) const

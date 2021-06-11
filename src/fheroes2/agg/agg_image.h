@@ -26,6 +26,8 @@ namespace fheroes2
 {
     class Image;
     class Sprite;
+    enum class FontSize : uint8_t;
+    struct FontType;
 
     namespace AGG
     {
@@ -37,6 +39,12 @@ namespace fheroes2
         const Sprite & GetLetter( uint32_t character, uint32_t fontType );
         const Sprite & GetUnicodeLetter( uint32_t character, uint32_t fontType );
 
+        // Returns the last supported ASCII character in existing font.
+        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
+
         int32_t GetAbsoluteICNHeight( int icnId );
+
+        uint32_t getCharacterLimit( const FontSize fontSize );
+        const Sprite & getChar( const uint8_t character, const FontType & fontType );
     }
 }

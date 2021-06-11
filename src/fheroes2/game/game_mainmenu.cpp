@@ -27,7 +27,9 @@
 #include "dialog.h"
 #include "dialog_resolution.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
+#include "game_mainmenu_ui.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "image.h"
@@ -37,6 +39,8 @@
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -58,7 +62,98 @@ namespace
     };
 }
 
-int Game::MainMenu( bool isFirstGameRun )
+void Game::mainGameLoop( bool isFirstGameRun )
+{
+    fheroes2::GameMode result = fheroes2::GameMode::MAIN_MENU;
+
+    while ( result != fheroes2::GameMode::QUIT_GAME ) {
+        switch ( result ) {
+        case fheroes2::GameMode::MAIN_MENU:
+            result = Game::MainMenu( isFirstGameRun );
+            isFirstGameRun = false;
+            break;
+        case fheroes2::GameMode::NEW_GAME:
+            result = Game::NewGame();
+            break;
+        case fheroes2::GameMode::LOAD_GAME:
+            result = Game::LoadGame();
+            break;
+        case fheroes2::GameMode::HIGHSCORES:
+            result = Game::HighScores();
+            break;
+        case fheroes2::GameMode::CREDITS:
+            result = Game::Credits();
+            break;
+        case fheroes2::GameMode::NEW_STANDARD:
+            result = Game::NewStandard();
+            break;
+        case fheroes2::GameMode::NEW_CAMPAIGN_SELECTION:
+            result = Game::CampaignSelection();
+            break;
+        case fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN:
+            result = Game::NewSuccessionWarsCampaign();
+            break;
+        case fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN:
+            result = Game::NewPriceOfLoyaltyCampaign();
+            break;
+        case fheroes2::GameMode::NEW_MULTI:
+            result = Game::NewMulti();
+            break;
+        case fheroes2::GameMode::NEW_HOT_SEAT:
+            result = Game::NewHotSeat();
+            break;
+#ifdef NETWORK_ENABLE
+        case fheroes2::GameMode::NEW_NETWORK:
+            result = Game::NewNetwork();
+            break;
+#endif
+        case fheroes2::GameMode::NEW_BATTLE_ONLY:
+            result = Game::NewBattleOnly();
+            break;
+        case fheroes2::GameMode::LOAD_STANDARD:
+            result = Game::LoadStandard();
+            break;
+        case fheroes2::GameMode::LOAD_CAMPAIN:
+            result = Game::LoadCampaign();
+            break;
+        case fheroes2::GameMode::LOAD_MULTI:
+            result = Game::LoadMulti();
+            break;
+        case fheroes2::GameMode::LOAD_HOT_SEAT:
+            result = Game::LoadHotseat();
+            break;
+        case fheroes2::GameMode::LOAD_NETWORK:
+            result = Game::LoadNetwork();
+            break;
+        case fheroes2::GameMode::SCENARIO_INFO:
+            result = Game::ScenarioInfo();
+            break;
+        case fheroes2::GameMode::SELECT_SCENARIO:
+            result = Game::SelectScenario();
+            break;
+        case fheroes2::GameMode::START_GAME:
+            result = Game::StartGame();
+            break;
+        case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME );
+            break;
+        case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
+            result = Game::CompleteCampaignScenario();
+            break;
+        case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
+            result = Game::CompleteCampaignScenario();
+            if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
+                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN );
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
@@ -67,26 +162,36 @@ int Game::MainMenu( bool isFirstGameRun )
 
     conf.SetGameType( TYPE_MENU );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // image background
-    fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+    fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
+        Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
+                         Dialog::OK );
+
         bool isResolutionChanged = Dialog::SelectResolution();
-        conf.Save( "fheroes2.cfg" );
         if ( isResolutionChanged ) {
-            fheroes2::Copy( fheroes2::AGG::GetICN( ICN::HEROES, 0 ), display );
+            fheroes2::drawMainMenuScreen();
         }
 
-        Dialog::Message( "Please remember",
-                         "You can always change game resolution by clicking on the door on the left side of main menu. To switch between windowed "
-                         "and full screen modes press 'F4' key on the keyboard. Enjoy the game!",
-                         Font::BIG, Dialog::OK );
+        fheroes2::Text header( _( "Please Remember" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+
+        fheroes2::MultiFontText body;
+        body.add( { _( "You can always change game resolution by clicking on the " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "door" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ),
+                    { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "F4" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
+        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+
+        fheroes2::showMessage( header, body, Dialog::OK );
+
+        conf.resetFirstGameRun();
+        conf.Save( "fheroes2.cfg" );
     }
 
     LocalEvent & le = LocalEvent::Get();
@@ -96,8 +201,6 @@ int Game::MainMenu( bool isFirstGameRun )
     fheroes2::Button buttonHighScores( 0, 0, ICN::BTNSHNGL, HIGHSCORES_DEFAULT, HIGHSCORES_DEFAULT + 2 );
     fheroes2::Button buttonCredits( 0, 0, ICN::BTNSHNGL, CREDITS_DEFAULT, CREDITS_DEFAULT + 2 );
     fheroes2::Button buttonQuit( 0, 0, ICN::BTNSHNGL, QUIT_DEFAULT, QUIT_DEFAULT + 2 );
-
-    const Point lt_pt( 0, 0 );
 
     const fheroes2::Sprite & lantern10 = fheroes2::AGG::GetICN( ICN::SHNGANIM, 0 );
     fheroes2::Blit( lantern10, display, lantern10.x(), lantern10.y() );
@@ -111,7 +214,6 @@ int Game::MainMenu( bool isFirstGameRun )
     buttonCredits.draw();
     buttonQuit.draw();
 
-    cursor.Show();
     display.render();
 
     const double scaleX = static_cast<double>( display.width() ) / fheroes2::Display::DEFAULT_WIDTH;
@@ -121,23 +223,24 @@ int Game::MainMenu( bool isFirstGameRun )
 
     u32 lantern_frame = 0;
 
-    ButtonInfo buttons[] = {{NEWGAME_DEFAULT, buttonNewGame, false, false},
-                            {LOADGAME_DEFAULT, buttonLoadGame, false, false},
-                            {HIGHSCORES_DEFAULT, buttonHighScores, false, false},
-                            {CREDITS_DEFAULT, buttonCredits, false, false},
-                            {QUIT_DEFAULT, buttonQuit, false, false}};
+    std::vector<ButtonInfo> buttons{ { NEWGAME_DEFAULT, buttonNewGame, false, false },
+                                     { LOADGAME_DEFAULT, buttonLoadGame, false, false },
+                                     { HIGHSCORES_DEFAULT, buttonHighScores, false, false },
+                                     { CREDITS_DEFAULT, buttonCredits, false, false },
+                                     { QUIT_DEFAULT, buttonQuit, false, false } };
 
-    for ( u32 i = 0; le.MouseMotion() && i < ARRAY_COUNT( buttons ); ++i ) {
-        cursor.Hide();
+    for ( size_t i = 0; le.MouseMotion() && i < buttons.size(); ++i ) {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, buttons[i].frame );
         fheroes2::Blit( sprite, display, sprite.x(), sprite.y() );
-        cursor.Show();
     }
+
+    fheroes2::Sprite highlightDoor = fheroes2::AGG::GetICN( ICN::SHNGANIM, 18 );
+    fheroes2::ApplyPalette( highlightDoor, 8 );
 
     // mainmenu loop
     while ( 1 ) {
         if ( !le.HandleEvents( true, true ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME ) {
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
                 //    display.Fade();
                 break;
@@ -149,7 +252,7 @@ int Game::MainMenu( bool isFirstGameRun )
 
         bool redrawScreen = false;
 
-        for ( u32 i = 0; i < ARRAY_COUNT( buttons ); ++i ) {
+        for ( size_t i = 0; i < buttons.size(); ++i ) {
             buttons[i].wasOver = buttons[i].isOver;
 
             if ( le.MousePressLeft( buttons[i].button.area() ) ) {
@@ -168,7 +271,6 @@ int Game::MainMenu( bool isFirstGameRun )
                     ++frame;
 
                 if ( !redrawScreen ) {
-                    cursor.Hide();
                     redrawScreen = true;
                 }
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BTNSHNGL, frame );
@@ -177,23 +279,22 @@ int Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( redrawScreen ) {
-            cursor.Show();
             display.render();
         }
 
         if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
-            return NEWGAME;
+            return fheroes2::GameMode::NEW_GAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame.area() ) )
-            return LOADGAME;
+            return fheroes2::GameMode::LOAD_GAME;
         else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
-            return HIGHSCORES;
+            return fheroes2::GameMode::HIGHSCORES;
         else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
-            return CREDITS;
+            return fheroes2::GameMode::CREDITS;
         else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
-            if ( Interface::Basic::EventExit() == QUITGAME ) {
+            if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( conf.ExtGameUseFade() )
                 //     display.Fade();
-                return QUITGAME;
+                return fheroes2::GameMode::QUIT_GAME;
             }
         }
         else if ( le.MouseClickLeft( resolutionArea ) ) {
@@ -201,7 +302,7 @@ int Game::MainMenu( bool isFirstGameRun )
                 conf.Save( "fheroes2.cfg" );
                 // force interface to reset area and positions
                 Interface::Basic::Get().Reset();
-                return MAINMENU;
+                return fheroes2::GameMode::MAIN_MENU;
             }
         }
 
@@ -219,15 +320,18 @@ int Game::MainMenu( bool isFirstGameRun )
         else if ( le.MousePressRight( resolutionArea ) )
             Dialog::Message( _( "Select Game Resolution" ), _( "Change resolution of the game." ), Font::BIG );
 
-        if ( AnimateInfrequentDelay( MAIN_MENU_DELAY ) ) {
-            cursor.Hide();
+        if ( validateAnimationDelay( MAIN_MENU_DELAY ) ) {
             const fheroes2::Sprite & lantern12 = fheroes2::AGG::GetICN( ICN::SHNGANIM, ICN::AnimationFrame( ICN::SHNGANIM, 0, lantern_frame ) );
             ++lantern_frame;
             fheroes2::Blit( lantern12, display, lantern12.x(), lantern12.y() );
-            cursor.Show();
+            if ( le.MouseCursor( resolutionArea ) ) {
+                const int32_t offsetY = static_cast<int32_t>( 55 * scaleY );
+                fheroes2::Blit( highlightDoor, 0, offsetY, display, highlightDoor.x(), highlightDoor.y() + offsetY, highlightDoor.width(), highlightDoor.height() );
+            }
+
             display.render();
         }
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }

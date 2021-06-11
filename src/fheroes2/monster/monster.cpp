@@ -20,7 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <math.h>
+#include <cmath>
 
 #include "castle.h"
 #include "difficulty.h"
@@ -393,86 +393,22 @@ uint32_t Monster::GetMissileICN( uint32_t monsterID )
     return ICN::UNKNOWN;
 }
 
-void Monster::UpdateStats( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse monsters.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_monsters = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_monsters = doc.FirstChildElement( "monsters" ) ) ) {
-        size_t index = 0;
-        const TiXmlElement * xml_monster = xml_monsters->FirstChildElement( "monster" );
-        for ( ; xml_monster && index < MONSTER_RND1; xml_monster = xml_monster->NextSiblingElement( "monster" ), ++index ) {
-            monstats_t * ptr = &monsters[index];
-            cost_t & cost = ptr->cost;
-            int value;
-
-            xml_monster->Attribute( "skip", &value );
-            if ( 0 == value ) {
-                xml_monster->Attribute( "attack", &value );
-                if ( value )
-                    ptr->attack = value;
-                xml_monster->Attribute( "defense", &value );
-                if ( value )
-                    ptr->defense = value;
-                xml_monster->Attribute( "damage_min", &value );
-                if ( value )
-                    ptr->damageMin = value;
-                xml_monster->Attribute( "damage_max", &value );
-                if ( value )
-                    ptr->damageMax = value;
-                xml_monster->Attribute( "hp", &value );
-                if ( value )
-                    ptr->hp = value;
-                xml_monster->Attribute( "speed", &value );
-                ptr->speed = Speed::FromInt( value );
-                xml_monster->Attribute( "grown", &value );
-                ptr->grown = value;
-                xml_monster->Attribute( "shots", &value );
-                ptr->shots = value;
-                xml_monster->Attribute( "gold", &value );
-                cost.gold = value;
-                xml_monster->Attribute( "wood", &value );
-                cost.wood = value;
-                xml_monster->Attribute( "mercury", &value );
-                cost.mercury = value;
-                xml_monster->Attribute( "ore", &value );
-                cost.ore = value;
-                xml_monster->Attribute( "sulfur", &value );
-                cost.sulfur = value;
-                xml_monster->Attribute( "crystal", &value );
-                cost.crystal = value;
-                xml_monster->Attribute( "gems", &value );
-                cost.gems = value;
-            }
-
-            ++ptr;
-        }
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
-Monster::Monster( int m )
+Monster::Monster( const int m )
     : id( UNKNOWN )
 {
     if ( m <= WATER_ELEMENT ) {
         id = m;
     }
     else if ( MONSTER_RND1 == m )
-        id = Rand( LEVEL1 ).GetID();
+        id = Rand( LevelType::LEVEL_1 ).GetID();
     else if ( MONSTER_RND2 == m )
-        id = Rand( LEVEL2 ).GetID();
+        id = Rand( LevelType::LEVEL_2 ).GetID();
     else if ( MONSTER_RND3 == m )
-        id = Rand( LEVEL3 ).GetID();
+        id = Rand( LevelType::LEVEL_3 ).GetID();
     else if ( MONSTER_RND4 == m )
-        id = Rand( LEVEL4 ).GetID();
+        id = Rand( LevelType::LEVEL_4 ).GetID();
     else if ( MONSTER_RND == m )
-        id = Rand( LEVEL0 ).GetID();
+        id = Rand( LevelType::LEVEL_ANY ).GetID();
 }
 
 Monster::Monster( const Spell & sp )
@@ -516,11 +452,6 @@ Monster::Monster( int race, u32 dw )
 bool Monster::isValid( void ) const
 {
     return id != UNKNOWN;
-}
-
-bool Monster::operator<( const Monster & m ) const
-{
-    return id < m.id;
 }
 
 bool Monster::operator==( const Monster & m ) const
@@ -817,11 +748,6 @@ bool Monster::isElemental( void ) const
     }
 
     return false;
-}
-
-bool Monster::isAlive( void ) const
-{
-    return !isUndead() && !isElemental();
 }
 
 bool Monster::isDragons( void ) const
@@ -1328,21 +1254,19 @@ Monster Monster::FromDwelling( int race, u32 dwelling )
     return Monster( UNKNOWN );
 }
 
-Monster Monster::Rand( level_t level )
+Monster Monster::Rand( const LevelType type )
 {
-    if ( level < LEVEL0 || level > LEVEL4 )
-        return Monster( UNKNOWN );
-    if ( level == LEVEL0 )
+    if ( type == LevelType::LEVEL_ANY )
         return Monster( Rand::Get( PEASANT, WATER_ELEMENT ) );
-    static std::vector<Monster> monstersVec[LEVEL4 - LEVEL0];
+    static std::vector<Monster> monstersVec[static_cast<int>( LevelType::LEVEL_4 )];
     if ( monstersVec[0].empty() ) {
-        for ( u32 i = PEASANT; i <= WATER_ELEMENT; ++i ) {
+        for ( uint32_t i = PEASANT; i <= WATER_ELEMENT; ++i ) {
             const Monster monster( i );
-            if ( monster.GetRandomUnitLevel() > LEVEL0 )
-                monstersVec[monster.GetRandomUnitLevel() - LEVEL0 - 1].push_back( monster );
+            if ( monster.GetRandomUnitLevel() > LevelType::LEVEL_ANY )
+                monstersVec[static_cast<int>( monster.GetRandomUnitLevel() ) - 1].push_back( monster );
         }
     }
-    return Rand::Get( monstersVec[level - LEVEL0 - 1] );
+    return Rand::Get( monstersVec[static_cast<int>( type ) - 1] );
 }
 
 u32 Monster::Rand4WeekOf( void )
@@ -1605,7 +1529,7 @@ int Monster::GetMonsterLevel() const
     return 0;
 }
 
-int Monster::GetRandomUnitLevel( void ) const
+Monster::LevelType Monster::GetRandomUnitLevel() const
 {
     switch ( id ) {
     case PEASANT:
@@ -1619,7 +1543,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case ZOMBIE:
     case ROGUE:
     case MONSTER_RND1:
-        return LEVEL1;
+        return LevelType::LEVEL_1;
 
     case RANGER:
     case PIKEMAN:
@@ -1637,7 +1561,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case MUMMY:
     case NOMAD:
     case MONSTER_RND2:
-        return LEVEL2;
+        return LevelType::LEVEL_2;
 
     case SWORDSMAN:
     case MASTER_SWORDSMAN:
@@ -1667,7 +1591,7 @@ int Monster::GetRandomUnitLevel( void ) const
     case FIRE_ELEMENT:
     case WATER_ELEMENT:
     case MONSTER_RND3:
-        return LEVEL3;
+        return LevelType::LEVEL_3;
 
     case PALADIN:
     case CRUSADER:
@@ -1684,18 +1608,18 @@ int Monster::GetRandomUnitLevel( void ) const
     case BONE_DRAGON:
     case GENIE:
     case MONSTER_RND4:
-        return LEVEL4;
+        return LevelType::LEVEL_4;
 
     case MONSTER_RND:
         switch ( Rand::Get( 0, 3 ) ) {
         default:
-            return LEVEL1;
+            return LevelType::LEVEL_1;
         case 1:
-            return LEVEL2;
+            return LevelType::LEVEL_2;
         case 2:
-            return LEVEL3;
+            return LevelType::LEVEL_3;
         case 3:
-            return LEVEL4;
+            return LevelType::LEVEL_4;
         }
         break;
 
@@ -1703,7 +1627,7 @@ int Monster::GetRandomUnitLevel( void ) const
         break;
     }
 
-    return LEVEL0;
+    return LevelType::LEVEL_ANY;
 }
 
 u32 Monster::GetDwelling( void ) const

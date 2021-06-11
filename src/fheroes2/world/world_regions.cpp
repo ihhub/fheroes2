@@ -144,18 +144,6 @@ size_t MapRegion::getNeighboursCount() const
     return _neighbours.size();
 }
 
-std::vector<IndexObject> MapRegion::getObjectList() const
-{
-    std::vector<IndexObject> result;
-
-    for ( const MapRegionNode & node : _nodes ) {
-        if ( node.mapObject != 0 ) {
-            result.emplace_back( node.index, node.mapObject );
-        }
-    }
-    return result;
-}
-
 size_t World::getRegionCount() const
 {
     return _regions.size();
@@ -180,8 +168,6 @@ void World::ComputeStaticAnalysis()
 
     // Step 1. Split map into terrain, water and ground points
     // Initialize the obstacles vector
-    const int width = w();
-    const int height = h();
     TileDataVector obstacles[4];
 
     obstacles[0].reserve( width );
@@ -254,7 +240,7 @@ void World::ComputeStaticAnalysis()
     const size_t totalMapTiles = vec_tiles.size();
     for ( const TileData & castleTile : castleCenters ) {
         // Check if a lot of players next to each other? (Slugfest map)
-        // GetCastle( Point( val % width, val / width ) )->GetColor();
+        // GetCastle( fheroes2::Point( val % width, val / width ) )->GetColor();
         const int castleIndex = castleTile.first + width;
         AppendIfFarEnough( regionCenters, ( castleIndex >= 0 && static_cast<size_t>( castleIndex ) > totalMapTiles ) ? castleTile.first : castleIndex, castleRegionSize );
     }

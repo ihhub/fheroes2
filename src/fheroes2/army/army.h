@@ -30,10 +30,6 @@
 #include "army_troop.h"
 #include "players.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -46,7 +42,7 @@ namespace Maps
 class Troops : protected std::vector<Troop *>
 {
 public:
-    Troops();
+    Troops() = default;
     Troops( const Troops & troops );
     virtual ~Troops();
     Troops & operator=( const Troops & rhs );
@@ -80,16 +76,15 @@ public:
     void JoinTroops( Troops & );
     bool CanJoinTroops( const Troops & ) const;
 
+    // Used only for moving full army in hero's meeting dialog.
+    void MoveTroops( Troops & from );
+
     void MergeTroops();
     Troops GetOptimized( void ) const;
 
-    virtual u32 GetAttack( void ) const;
-    virtual u32 GetDefense( void ) const;
     virtual double GetStrength() const;
 
     u32 GetHitPoints( void ) const;
-    u32 GetDamageMin( void ) const;
-    u32 GetDamageMax( void ) const;
 
     void Clean( void );
     void UpgradeTroops( const Castle & );
@@ -102,7 +97,6 @@ public:
     void ArrangeForBattle( bool = false );
 
     void JoinStrongest( Troops &, bool );
-    void KeepOnlyWeakest( Troops &, bool );
 
     void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
@@ -120,9 +114,6 @@ enum
 
 struct JoinCount : std::pair<int, u32>
 {
-    JoinCount()
-        : std::pair<int, u32>( JOIN_NONE, 0 )
-    {}
     JoinCount( int reason, u32 count )
         : std::pair<int, u32>( reason, count )
     {}
@@ -143,30 +134,27 @@ public:
 
     // 0: fight, 1: free join, 2: join with gold, 3: flee
     static JoinCount GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
-    static bool ArmyStrongerThanEnemy( const Army &, const Army & );
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
                                   bool isScouteView = true );
 
-    Army( HeroBase * s = nullptr );
-    Army( const Maps::Tiles & );
+    explicit Army( HeroBase * s = nullptr );
+    explicit Army( const Maps::Tiles & );
     Army( const Army & ) = delete;
     Army( Army && ) = delete;
     Army & operator=( const Army & ) = delete;
     Army & operator=( Army && ) = delete;
-    ~Army();
+    ~Army() override;
 
     void Reset( bool = false ); // reset: soft or hard
     void setFromTile( const Maps::Tiles & tile );
 
-    int GetRace( void ) const;
     int GetColor( void ) const;
-    int GetControl( void ) const;
-    u32 GetAttack( void ) const;
-    u32 GetDefense( void ) const;
+    int GetControl( void ) const override;
+    uint32_t getTotalCount() const;
 
-    double GetStrength() const;
+    double GetStrength() const override;
     double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
@@ -188,7 +176,6 @@ public:
     std::string String( void ) const;
 
     void JoinStrongestFromArmy( Army & );
-    void KeepOnlyWeakestTroops( Army & );
 
     void SetSpreadFormat( bool );
     bool isSpreadFormat( void ) const;
@@ -196,12 +183,11 @@ public:
     bool isFullHouse( void ) const;
     bool SaveLastTroop( void ) const;
 
+    Monster GetStrongestMonster() const;
+
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Army & );
-#endif
 
     HeroBase * commander;
     bool combat_format;

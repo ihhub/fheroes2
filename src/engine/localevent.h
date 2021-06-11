@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include "rect.h"
+#include "math_base.h"
 #include "timing.h"
 #include "types.h"
 
@@ -161,6 +161,9 @@ enum KeySym
     KEY_KP_ENTER = SDLK_KP_ENTER,
     KEY_KP_EQUALS = SDLK_KP_EQUALS,
 
+    KEY_HOME = SDLK_HOME,
+    KEY_END = SDLK_END,
+
     KEY_LAST
 };
 
@@ -172,8 +175,6 @@ bool PressIntKey( u32 max, u32 & result );
 
 size_t InsertKeySym( std::string &, size_t, KeySym, u16 mod = 0 );
 
-KeySym KeySymFromChar( char );
-
 char CharFromKeySym( KeySym, u16 mod = 0 );
 
 class LocalEvent
@@ -184,9 +185,6 @@ public:
 
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
-    void SetGlobalFilter( bool );
-    void SetMouseOffsetX( int16_t );
-    void SetMouseOffsetY( int16_t );
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );
@@ -195,60 +193,47 @@ public:
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
     bool MouseMotion( void ) const;
-    bool MouseMotion( const Rect & rt ) const;
 
-    const Point & GetMouseCursor( void )
+    const fheroes2::Point & GetMouseCursor( void ) const
     {
         return mouse_cu;
     }
 
-    const Point & GetMousePressLeft( void ) const;
-    const Point & GetMousePressMiddle( void ) const;
-    const Point & GetMousePressRight( void ) const;
-    const Point & GetMouseReleaseLeft( void ) const;
-    const Point & GetMouseReleaseMiddle( void ) const;
-    const Point & GetMouseReleaseRight( void ) const;
+    const fheroes2::Point & GetMousePressLeft( void ) const;
 
-    void ResetPressLeft( void );
-    void ResetPressRight( void );
-    void ResetPressMiddle( void );
+    void ResetPressLeft();
 
-    void ResetReleaseLeft( void );
-    void ResetReleaseRight( void );
-    void ResetReleaseMiddle( void );
+    bool MouseClickLeft();
+    bool MouseClickMiddle();
+    bool MouseClickRight();
 
-    bool MouseClickLeft( void );
-    bool MouseClickMiddle( void );
-    bool MouseClickRight( void );
+    bool MouseClickLeft( const fheroes2::Rect & rt );
+    bool MouseClickMiddle( const fheroes2::Rect & rt );
+    bool MouseClickRight( const fheroes2::Rect & rt );
 
-    bool MouseClickLeft( const Rect & rt );
-    bool MouseClickMiddle( const Rect & rt );
-    bool MouseClickRight( const Rect & rt );
+    bool MouseWheelUp() const;
+    bool MouseWheelDn() const;
 
-    bool MouseWheelUp( void ) const;
-    bool MouseWheelDn( void ) const;
+    bool MousePressLeft() const;
+    bool MousePressLeft( const fheroes2::Rect & rt ) const;
+    bool MousePressMiddle() const;
+    bool MousePressMiddle( const fheroes2::Rect & rt ) const;
+    bool MousePressRight() const;
+    bool MousePressRight( const fheroes2::Rect & rt ) const;
 
-    bool MousePressLeft( void ) const;
-    bool MousePressLeft( const Rect & rt ) const;
-    bool MousePressLeft( const Point & pt, u32 w, u32 h ) const;
-    bool MousePressMiddle( void ) const;
-    bool MousePressMiddle( const Rect & rt ) const;
-    bool MousePressRight( void ) const;
-    bool MousePressRight( const Rect & rt ) const;
+    bool MouseReleaseLeft() const;
+    bool MouseReleaseLeft( const fheroes2::Rect & rt ) const;
+    bool MouseReleaseMiddle() const;
+    bool MouseReleaseMiddle( const fheroes2::Rect & rt ) const;
+    bool MouseReleaseRight() const;
+    bool MouseReleaseRight( const fheroes2::Rect & rt ) const;
 
-    bool MouseReleaseLeft( void ) const;
-    bool MouseReleaseLeft( const Rect & rt ) const;
-    bool MouseReleaseMiddle( void ) const;
-    bool MouseReleaseMiddle( const Rect & rt ) const;
-    bool MouseReleaseRight( void ) const;
-    bool MouseReleaseRight( const Rect & rt ) const;
+    bool MouseWheelUp( const fheroes2::Rect & rt ) const;
+    bool MouseWheelDn( const fheroes2::Rect & rt ) const;
 
-    bool MouseWheelUp( const Rect & rt ) const;
-    bool MouseWheelDn( const Rect & rt ) const;
+    bool MouseCursor( const fheroes2::Rect & rt ) const;
 
-    bool MouseCursor( const Rect & rt ) const;
-
-    bool KeyPress( void ) const;
+    bool KeyPress() const;
     bool KeyPress( KeySym key ) const;
 
     bool KeyHold() const
@@ -256,14 +241,14 @@ public:
         return ( modes & KEY_HOLD ) != 0;
     }
 
-    KeySym KeyValue( void ) const;
-    int KeyMod( void ) const;
+    KeySym KeyValue() const;
+    int KeyMod() const;
 
     void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
 
     // These two methods are useful for video playback
-    void PauseCycling();
-    void ResumeCycling();
+    void PauseCycling() const;
+    void ResumeCycling() const;
 
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
@@ -287,19 +272,24 @@ private:
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+
     void StopSounds();
     void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+
+    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+
     void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
+
+    void OnActiveEvent( const SDL_Event & event );
 #endif
 
     enum flag_t
@@ -307,15 +297,10 @@ private:
         KEY_PRESSED = 0x0001,
         MOUSE_MOTION = 0x0002,
         MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
-        GLOBAL_FILTER = 0x0008,
-        MOUSE_RELEASED = 0x0010, // mouse button has just been released
-        MOUSE_CLICKED = 0x0020, // mouse button has been clicked
-        UNUSED_1 = 0x0040,
-        UNUSED_2 = 0x0080,
-        MOUSE_OFFSET = 0x0100,
-        UNUSED_3 = 0x0200,
-        MOUSE_WHEEL = 0x0400,
-        KEY_HOLD = 0x0800
+        MOUSE_RELEASED = 0x0008, // mouse button has just been released
+        MOUSE_CLICKED = 0x0010, // mouse button has been clicked
+        MOUSE_WHEEL = 0x0020,
+        KEY_HOLD = 0x0040
     };
 
     void SetModes( flag_t );
@@ -323,33 +308,24 @@ private:
 
     int modes;
     KeySym key_value;
-    int mouse_state;
     int mouse_button;
 
-    Point mouse_st; // mouse offset for pocketpc
+    fheroes2::Point mouse_pl; // press left
+    fheroes2::Point mouse_pm; // press middle
+    fheroes2::Point mouse_pr; // press right
 
-    Point mouse_pl; // press left
-    Point mouse_pm; // press middle
-    Point mouse_pr; // press right
+    fheroes2::Point mouse_rl; // release left
+    fheroes2::Point mouse_rm; // release middle
+    fheroes2::Point mouse_rr; // release right
 
-    Point mouse_rl; // release left
-    Point mouse_rm; // release middle
-    Point mouse_rr; // release right
+    fheroes2::Point mouse_cu; // point cursor
 
-    Point mouse_cu; // point cursor
-
-    Point mouse_wm; // wheel movement
+    fheroes2::Point mouse_wm; // wheel movement
 
     void ( *redraw_cursor_func )( s32, s32 );
     void ( *keyboard_filter_func )( int, int );
 
-    int loop_delay;
-
-    // These members are used for restoring music and sounds when an user reopens the window
-    bool _isHiddenWindow;
-    bool _isMusicPaused;
-    bool _isSoundPaused;
-    uint16_t _musicVolume;
+    uint32_t loop_delay;
 
     enum
     {

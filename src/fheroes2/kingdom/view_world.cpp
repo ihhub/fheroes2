@@ -39,17 +39,18 @@ namespace
 {
     const int tileSizePerZoomLevel[4] = {4, 6, 12, 32};
     const int icnPerZoomLevel[4] = {ICN::MISC4, ICN::MISC6, ICN::MISC12, ICN::MISC12};
+    const int icnLetterPerZoomLevel[4] = { ICN::LETTER4, ICN::LETTER6, ICN::LETTER12, ICN::LETTER12 };
     const int icnPerZoomLevelFlags[4] = {ICN::VWFLAG4, ICN::VWFLAG6, ICN::VWFLAG12, ICN::VWFLAG12};
 
     // Compute a rectangle that defines which world pixels we can see in the "view world" window,
     // based on given zoom level and initial center
     fheroes2::Rect computeROI( const fheroes2::Point & centerInPixel, const ViewWorld::ZoomLevel zoomLevel )
     {
-        const Size & sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & sizeInPixels = Interface::Basic::Get().GetGameArea().GetROI();
 
         // how many pixels from "world map" we can see in "view world" window, given current zoom
-        const int pixelsW = sizeInPixels.w * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
-        const int pixelsH = sizeInPixels.h * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
+        const int pixelsW = sizeInPixels.width * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
+        const int pixelsH = sizeInPixels.height * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( zoomLevel )];
 
         const int x = centerInPixel.x - pixelsW / 2;
         const int y = centerInPixel.y - pixelsH / 2;
@@ -164,7 +165,7 @@ namespace
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
                 for ( int y = 0; y < worldHeightPixels; y += blockSizeY ) {
-                    gamearea.SetCenterInPixels( Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
+                    gamearea.SetCenterInPixels( fheroes2::Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
                     for ( size_t i = 0; i < cachedImages.size(); ++i ) {
@@ -183,14 +184,14 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = cache.cachedImages[static_cast<int>( ROI._zoomLevel )];
 
-        const Rect & roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
+        const fheroes2::Rect & roiScreen = Interface::Basic::Get().GetGameArea().GetROI();
 
         const int offsetPixelsX = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().x / TILEWIDTH;
         const int offsetPixelsY = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )] * ROI.GetROIinPixels().y / TILEWIDTH;
 
         const fheroes2::Point inPos( offsetPixelsX < 0 ? 0 : offsetPixelsX, offsetPixelsY < 0 ? 0 : offsetPixelsY );
         const fheroes2::Point outPos( BORDERWIDTH + ( offsetPixelsX < 0 ? -offsetPixelsX : 0 ), BORDERWIDTH + ( offsetPixelsY < 0 ? -offsetPixelsY : 0 ) );
-        const fheroes2::Size outSize( roiScreen.w + 2 * BORDERWIDTH + RADARWIDTH, roiScreen.h );
+        const fheroes2::Size outSize( roiScreen.width + 2 * BORDERWIDTH + RADARWIDTH, roiScreen.height );
 
         fheroes2::Blit( image, inPos, display, outPos, outSize );
 
@@ -219,30 +220,32 @@ namespace
         const bool revealArtifacts = revealAll || ( mode == ViewWorldMode::ViewArtifacts );
         const bool revealResources = revealAll || ( mode == ViewWorldMode::ViewResources );
 
-        const int tileSize = tileSizePerZoomLevel[static_cast<int>( ROI._zoomLevel )];
-        const int icnBase = icnPerZoomLevel[static_cast<int>( ROI._zoomLevel )];
-        const int icnFlagsBase = icnPerZoomLevelFlags[static_cast<int>( ROI._zoomLevel )];
+        const int zoomLevelId = static_cast<int>( ROI._zoomLevel );
+        const int tileSize = tileSizePerZoomLevel[zoomLevelId];
+        const int icnBase = icnPerZoomLevel[zoomLevelId];
+        const int icnLetterId = icnLetterPerZoomLevel[zoomLevelId];
+        const int icnFlagsBase = icnPerZoomLevelFlags[zoomLevelId];
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
-        const Rect roiPixels = ROI.GetROIinPixels();
+        const fheroes2::Rect roiPixels = ROI.GetROIinPixels();
 
         const int offsetX = roiPixels.x * tileSize / TILEWIDTH;
         const int offsetY = roiPixels.y * tileSize / TILEWIDTH;
 
-        const Rect roiTiles = ROI.GetROIinTiles();
+        const fheroes2::Rect roiTiles = ROI.GetROIinTiles();
 
         // add margin because we also draw under the radar zone
         const int32_t marginForRightSide = ( 2 * BORDERWIDTH + RADARWIDTH ) / tileSize + 1;
 
         // add a margin of 2 tiles because icons outside of view can still show on the view
         const int32_t minTileX = clamp( roiTiles.x - 2, 0, worldWidth );
-        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.w + marginForRightSide + 2, 0, worldWidth );
+        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.width + marginForRightSide + 2, 0, worldWidth );
         const int32_t minTileY = clamp( roiTiles.y - 2, 0, worldHeight );
-        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.h + 2, 0, worldHeight );
+        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.height + 2, 0, worldHeight );
 
         for ( int32_t posY = minTileY; posY < maxTileY; ++posY ) {
             const int dsty = posY * tileSize - offsetY + BORDERWIDTH;
@@ -253,6 +256,8 @@ namespace
                 const Maps::Tiles & tile = world.GetTiles( posX, posY );
                 int icn = icnBase;
                 int index = -1;
+
+                int letterIndex = -1;
 
                 int spriteOffsetX = 0;
                 int spriteOffsetY = 0;
@@ -306,10 +311,10 @@ namespace
                 case MP2::OBJ_ALCHEMYLAB:
                 case MP2::OBJ_MINES:
                 case MP2::OBJ_SAWMILL:
-                    // TODO show mine name
                     if ( revealMines || !tile.isFog( color ) ) {
                         index = colorToOffsetICN( tile.QuantityColor() );
                         spriteOffsetX = -6; // TODO -4 , -3
+                        letterIndex = tile.QuantityResourceCount().first;
                     }
                     break;
 
@@ -320,9 +325,9 @@ namespace
                     break;
 
                 case MP2::OBJ_RESOURCE:
-                    // TODO show resource name
                     if ( revealResources || !tile.isFog( color ) ) {
                         index = 13;
+                        letterIndex = tile.GetQuantity1();
                     }
                     break;
 
@@ -333,6 +338,38 @@ namespace
                 if ( index >= 0 ) {
                     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
                     fheroes2::Blit( sprite, display, dstx + spriteOffsetX, dsty + spriteOffsetY );
+
+                    if ( letterIndex >= 0 ) {
+                        switch ( letterIndex ) {
+                        case Resource::WOOD:
+                            letterIndex = 0;
+                            break;
+                        case Resource::MERCURY:
+                            letterIndex = 1;
+                            break;
+                        case Resource::ORE:
+                            letterIndex = 2;
+                            break;
+                        case Resource::SULFUR:
+                            letterIndex = 3;
+                            break;
+                        case Resource::CRYSTAL:
+                            letterIndex = 4;
+                            break;
+                        case Resource::GEMS:
+                            letterIndex = 5;
+                            break;
+                        case Resource::GOLD:
+                            letterIndex = 6;
+                            break;
+                        default:
+                            break;
+                        }
+
+                        const fheroes2::Sprite & letter = fheroes2::AGG::GetICN( icnLetterId, letterIndex );
+                        fheroes2::Blit( letter, display, dstx + spriteOffsetX + ( sprite.width() - letter.width() ) / 2,
+                                        dsty + spriteOffsetY + ( sprite.height() - letter.height() ) / 2 );
+                    }
                 }
             }
         }
@@ -413,30 +450,29 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     fheroes2::ImageRestorer restorer( display );
 
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();
 
     // Creates fixed radar on top-right, even if hidden interface
     Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
 
-    const Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
+    const fheroes2::Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
+    const fheroes2::Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
 
     // Initial view is centered on where the player is centered
-    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.w / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.h / 2 );
+    fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
 
     // Special case: full map picture can be contained within the window -> center view on center of the map
-    if ( world.w() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.w
-         && world.h() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.h ) {
+    if ( world.w() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.width
+         && world.h() * tileSizePerZoomLevel[static_cast<int>( ZoomLevel::ZoomLevel2 )] <= visibleScreenInPixels.height ) {
         viewCenterInPixels.x = world.w() * TILEWIDTH / 2;
         viewCenterInPixels.y = world.h() * TILEWIDTH / 2;
     }
 
     ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
-
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.SetThemes( Cursor::POINTER );
 
     CacheForMapWithResources cache( mode == ViewWorldMode::ViewAll );
 
@@ -462,9 +498,11 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::Button buttonExit( buttonExitPosition.x, buttonExitPosition.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 2, 3 );
     buttonExit.draw();
 
+    display.render();
+
     // Use for dragging the map from main window
     bool isDrag = false;
-    Point initMousePos;
+    fheroes2::Point initMousePos;
     fheroes2::Point initRoiCenter;
 
     // message loop
@@ -481,14 +519,11 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             changed = currentROI.ChangeZoom( false, true );
         }
         else if ( le.MouseCursor( radar.GetRect() ) ) {
-            if ( Cursor::POINTER != cursor.Themes() )
-                cursor.SetThemes( Cursor::POINTER );
-
             changed = radar.QueueEventProcessingForWorldView( currentROI );
         }
         else if ( le.MousePressLeft( visibleScreenInPixels ) ) {
             if ( isDrag ) {
-                const Point newMousePos = le.GetMouseCursor();
+                const fheroes2::Point & newMousePos = le.GetMouseCursor();
                 const fheroes2::Point
                     newRoiCenter( initRoiCenter.x - ( newMousePos.x - initMousePos.x ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )],
                                   initRoiCenter.y - ( newMousePos.y - initMousePos.y ) * TILEWIDTH / tileSizePerZoomLevel[static_cast<int>( currentROI._zoomLevel )] );
@@ -511,8 +546,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             isDrag = false;
         }
 
-        cursor.Show();
-
         if ( changed ) {
             DrawWorld( currentROI, cache );
             DrawObjectsIcons( color, mode, currentROI );
@@ -522,8 +555,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             display.render();
         }
     }
-
-    cursor.SetThemes( oldcursor );
 
     le.ResumeCycling();
 }

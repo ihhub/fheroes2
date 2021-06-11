@@ -40,7 +40,7 @@
 #include "ui_button.h"
 #include "world.h"
 
-int Castle::DialogBuyHero( const Heroes * hero )
+int Castle::DialogBuyHero( const Heroes * hero ) const
 {
     if ( !hero )
         return Dialog::CANCEL;
@@ -48,8 +48,9 @@ int Castle::DialogBuyHero( const Heroes * hero )
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const int spacer = 10;
     const fheroes2::Sprite & portrait_frame = fheroes2::AGG::GetICN( ICN::SURRENDR, 4 );
@@ -62,7 +63,6 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     std::string str = _( "%{name} is a level %{value} %{race} " );
 
-    // FIXME: It is necessary to consider locale features for numerals (with getext).
     if ( count ) {
         str += count > 1 ? _( "with %{count} artifacts." ) : _( "with 1 artifact." );
     }
@@ -79,7 +79,7 @@ int Castle::DialogBuyHero( const Heroes * hero )
 
     Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
 
-    Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().h, true );
+    Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().height, true );
     const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Point dst_pt;
@@ -119,7 +119,6 @@ int Castle::DialogBuyHero( const Heroes * hero )
     button1.draw();
     button2.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -146,15 +145,16 @@ int Castle::DialogBuyCastle( bool buttons ) const
 u32 Castle::OpenTown( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::ImageRestorer restorer( display, ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2,
                                             ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2, fheroes2::Display::DEFAULT_WIDTH,
                                             fheroes2::Display::DEFAULT_HEIGHT );
 
-    const Point cur_pt( restorer.x(), restorer.y() );
-    Point dst_pt( cur_pt );
+    const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
+    fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
@@ -162,11 +162,11 @@ u32 Castle::OpenTown( void )
     if ( !( building & BUILD_CAPTAIN ) ) {
         dst_pt.x = 530;
         dst_pt.y = 163;
-        const Rect rect( dst_pt, 110, 84 );
+        const fheroes2::Rect rect( dst_pt.x, dst_pt.y, 110, 84 );
         dst_pt.x += cur_pt.x;
         dst_pt.y += cur_pt.y;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.w, rect.h );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.width, rect.height );
     }
 
     // draw castle sprite
@@ -227,7 +227,7 @@ u32 Castle::OpenTown( void )
     buildingMageGuild.Redraw();
 
     // tavern
-    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().PriceLoyaltyVersion();
+    const bool isSkipTavernInteraction = ( Race::NECR == race ) && !Settings::Get().isCurrentMapPriceOfLoyalty();
     BuildingInfo buildingTavern( *this, BUILD_TAVERN );
     buildingTavern.SetPos( cur_pt.x + 149, cur_pt.y + 157 );
     buildingTavern.Redraw();
@@ -360,9 +360,9 @@ u32 Castle::OpenTown( void )
     // first hero
     dst_pt.x = cur_pt.x + 443;
     dst_pt.y = cur_pt.y + 260;
-    const Rect rectHero1( dst_pt, 102, 93 );
+    const fheroes2::Rect rectHero1( dst_pt.x, dst_pt.y, 102, 93 );
 
-    fheroes2::Image noHeroPortrait( rectHero1.w, rectHero1.h );
+    fheroes2::Image noHeroPortrait( rectHero1.width, rectHero1.height );
     noHeroPortrait.fill( 0 );
 
     if ( hero1 ) {
@@ -381,7 +381,7 @@ u32 Castle::OpenTown( void )
     // second hero
     dst_pt.x = cur_pt.x + 443;
     dst_pt.y = cur_pt.y + 363;
-    const Rect rectHero2( dst_pt, 102, 94 );
+    const fheroes2::Rect rectHero2( dst_pt.x, dst_pt.y, 102, 94 );
     if ( hero2 ) {
         hero2->PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
     }
@@ -411,10 +411,9 @@ u32 Castle::OpenTown( void )
     buttonExit.draw();
 
     // redraw resource panel
-    const Rect & rectResource = RedrawResourcePanel( cur_pt );
-    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.w, buttonExit.area().y - rectResource.y - 3 );
+    const fheroes2::Rect & rectResource = RedrawResourcePanel( cur_pt );
+    const fheroes2::Rect resActiveArea( rectResource.x, rectResource.y, rectResource.width, buttonExit.area().y - rectResource.y - 3 );
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -491,16 +490,12 @@ u32 Castle::OpenTown( void )
         }
         else if ( isBuild( BUILD_CAPTAIN ) ) {
             if ( le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointSpreadArmyFormat.x, pointSpreadArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( true );
             }
             else if ( le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-                cursor.Hide();
                 cursorFormat.setPosition( pointGroupedArmyFormat.x, pointGroupedArmyFormat.y );
-                cursor.Show();
                 display.render();
                 army.SetSpreadFormat( false );
             }
@@ -515,12 +510,10 @@ u32 Castle::OpenTown( void )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             hero1->OpenDialog( true );
-            cursor.Show();
             display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             hero2->OpenDialog( true );
-            cursor.Show();
             display.render();
         }
 

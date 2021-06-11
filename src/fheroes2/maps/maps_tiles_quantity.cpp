@@ -232,6 +232,7 @@ u32 Maps::Tiles::QuantityGold( void ) const
     case MP2::OBJ_DAEMONCAVE:
         switch ( QuantityVariant() ) {
         case 2:
+        case 3:
         case 4:
             return 2500;
         default:
@@ -413,7 +414,7 @@ Monster Maps::Tiles::QuantityMonster( void ) const
         break;
     }
 
-    return MP2::isCaptureObject( GetObject( false ) ) ? world.GetCapturedObject( GetIndex() ).GetTroop() : Monster( Monster::UNKNOWN );
+    return MP2::isCaptureObject( GetObject( false ) ) ? Monster( world.GetCapturedObject( GetIndex() ).GetTroop().GetID() ) : Monster( Monster::UNKNOWN );
 }
 
 Troop Maps::Tiles::QuantityTroop( void ) const
@@ -444,7 +445,7 @@ void Maps::Tiles::QuantityReset( void )
     }
 
     if ( MP2::isPickupObject( mp2_object ) )
-        SetObject( MP2::OBJ_ZERO );
+        setAsEmpty();
 }
 
 void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
@@ -791,29 +792,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     case MP2::OBJ_ABANDONEDMINE: {
         Troop & troop = world.GetCapturedObject( GetIndex() ).GetTroop();
 
-        // I checked in Heroes II: min 3 x 13, and max 3 x 15
+        // Min is 3 x 13, and max is 3 x 15
         troop.Set( Monster::GHOST, 3 * Rand::Get( 13, 15 ) );
 
-        if ( !Settings::Get().ExtWorldAbandonedMineRandom() )
-            QuantitySetResource( Resource::GOLD, 1000 );
-        else
-            switch ( Rand::Get( 1, 5 ) ) {
-            case 1:
-                QuantitySetResource( Resource::ORE, 2 );
-                break;
-            case 2:
-                QuantitySetResource( Resource::SULFUR, 1 );
-                break;
-            case 3:
-                QuantitySetResource( Resource::CRYSTAL, 1 );
-                break;
-            case 4:
-                QuantitySetResource( Resource::GEMS, 1 );
-                break;
-            default:
-                QuantitySetResource( Resource::GOLD, 1000 );
-                break;
-            }
+        QuantitySetResource( Resource::GOLD, 1000 );
     } break;
 
     case MP2::OBJ_BOAT:
@@ -949,7 +931,7 @@ void Maps::Tiles::MonsterSetCount( u32 count )
     quantity2 = 0x00FF & count;
 }
 
-void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 count )
+void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 
@@ -998,19 +980,19 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
     else {
         switch ( tile.GetObject() ) {
         case MP2::OBJ_RNDMONSTER:
-            mons = Monster::Rand().GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_ANY ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER1:
-            mons = Monster::Rand( Monster::LEVEL1 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_1 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER2:
-            mons = Monster::Rand( Monster::LEVEL2 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_2 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER3:
-            mons = Monster::Rand( Monster::LEVEL3 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_3 ).GetID();
             break;
         case MP2::OBJ_RNDMONSTER4:
-            mons = Monster::Rand( Monster::LEVEL4 ).GetID();
+            mons = Monster::Rand( Monster::LevelType::LEVEL_4 ).GetID();
             break;
         default:
             break;

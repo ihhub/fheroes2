@@ -24,8 +24,8 @@
 #include "rand.h"
 #include <algorithm>
 
-RandomizedDelay::RandomizedDelay( uint32_t delay )
-    : TimeDelay( delay )
+RandomizedDelay::RandomizedDelay( const uint32_t delay )
+    : fheroes2::TimeDelay( delay )
     , halfDelay( delay / 2 )
     , timerIsSet( false )
 {}
@@ -34,12 +34,14 @@ bool RandomizedDelay::checkDelay()
 {
     if ( !timerIsSet ) {
         // Randomize delay as 0.75 to 1.25 original value
-        second = Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2;
+        setDelay( Rand::Get( 0, halfDelay ) + halfDelay * 3 / 2 );
         timerIsSet = true;
     }
-    const bool res = Trigger();
-    if ( res )
+    const bool res = isPassed();
+    if ( res ) {
+        reset();
         timerIsSet = false;
+    }
     return res;
 }
 
@@ -96,23 +98,12 @@ int AnimationSequence::firstFrame() const
     return isValid() ? _seq.front() : 0;
 }
 
-void AnimationSequence::setToLastFrame()
-{
-    if ( isValid() )
-        _currentFrame = _seq.size() - 1;
-}
-
 double AnimationSequence::movementProgress() const
 {
     if ( _seq.size() > 1 )
         return static_cast<double>( _currentFrame ) / ( static_cast<double>( animationLength() ) );
 
     return 0;
-}
-
-bool AnimationSequence::isFirstFrame() const
-{
-    return _currentFrame == 0;
 }
 
 bool AnimationSequence::isLastFrame() const
@@ -123,69 +114,6 @@ bool AnimationSequence::isLastFrame() const
 bool AnimationSequence::isValid() const
 {
     return !_seq.empty();
-}
-
-TimedSequence::TimedSequence( const std::vector<int> & seq, uint32_t duration )
-    : AnimationSequence( seq )
-    , _currentTime( 0 )
-    , _duration( duration )
-{}
-
-int TimedSequence::playAnimation( uint32_t delta, bool loop )
-{
-    _currentTime += delta;
-    if ( _currentTime > _duration ) {
-        _currentTime = loop ? _currentTime % _duration : _duration;
-    }
-
-    _currentFrame = getFrameID( _currentTime );
-    return getFrame();
-}
-
-int TimedSequence::restartAnimation()
-{
-    _currentTime = 0;
-    _currentFrame = 0;
-    return getFrame();
-}
-
-int TimedSequence::getFrameAt( uint32_t time ) const
-{
-    return isValid() ? _seq[getFrameID( time )] : 0;
-}
-
-size_t TimedSequence::getFrameID( uint32_t time ) const
-{
-    // isValid makes sure duration and length is not 0
-    if ( isValid() ) {
-        const size_t frame = static_cast<size_t>( time / ( _duration / static_cast<double>( animationLength() ) ) );
-        // check if time >= duration
-        return ( frame < animationLength() ) ? frame : animationLength() - 1;
-    }
-    return 0;
-}
-
-uint32_t TimedSequence::getCurrentTime() const
-{
-    return _currentTime;
-}
-
-uint32_t TimedSequence::getDuration() const
-{
-    return _duration;
-}
-
-double TimedSequence::movementProgress() const
-{
-    if ( isValid() )
-        return static_cast<double>( _currentTime ) / static_cast<double>( _duration );
-
-    return 0;
-}
-
-bool TimedSequence::isValid() const
-{
-    return !_seq.empty() && _currentTime <= _duration && _duration > 0;
 }
 
 AnimationReference::AnimationReference()
@@ -284,8 +212,6 @@ AnimationReference::AnimationReference( int monsterID )
     }
 }
 
-AnimationReference::~AnimationReference() {}
-
 bool AnimationReference::appendFrames( std::vector<int> & target, int animID )
 {
     if ( _monsterInfo.hasAnim( animID ) ) {
@@ -306,7 +232,7 @@ const std::vector<int> & AnimationReference::getAnimationVector( int animState )
             Rand::Queue picker;
 
             for ( size_t i = 0; i < _idle.size(); ++i ) {
-                picker.Push( i, static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
+                picker.Push( static_cast<int32_t>( i ), static_cast<uint32_t>( _monsterInfo.idlePriority[i] * 100 ) );
             }
             // picker is expected to return at least 0
             const size_t id = static_cast<size_t>( picker.Get() );
@@ -441,21 +367,6 @@ std::vector<int> AnimationReference::getAnimationOffset( int animState ) const
     return offset;
 }
 
-AnimationSequence AnimationReference::getAnimationSequence( int animState ) const
-{
-    return AnimationSequence( getAnimationVector( animState ) );
-}
-
-int AnimationReference::getStaticFrame() const
-{
-    return _static.back();
-}
-
-int AnimationReference::getDeathFrame() const
-{
-    return ( _death.empty() ) ? _static.back() : _death.back();
-}
-
 uint32_t AnimationReference::getMoveSpeed() const
 {
     return _monsterInfo.moveSpeed;
@@ -471,12 +382,7 @@ uint32_t AnimationReference::getShootingSpeed() const
     return _monsterInfo.shootSpeed;
 }
 
-size_t AnimationReference::getProjectileID( const double angle ) const
-{
-    return _monsterInfo.getProjectileID( angle );
-}
-
-Point AnimationReference::getBlindOffset() const
+fheroes2::Point AnimationReference::getBlindOffset() const
 {
     return _monsterInfo.eyePosition;
 }
@@ -486,12 +392,12 @@ int AnimationReference::getTroopCountOffset( bool isReflect ) const
     return isReflect ? _monsterInfo.troopCountOffsetRight : _monsterInfo.troopCountOffsetLeft;
 }
 
-Point AnimationReference::getProjectileOffset( size_t direction ) const
+fheroes2::Point AnimationReference::getProjectileOffset( size_t direction ) const
 {
     if ( _monsterInfo.projectileOffset.size() > direction ) {
         return _monsterInfo.projectileOffset[direction];
     }
-    return Point();
+    return fheroes2::Point();
 }
 
 uint32_t AnimationReference::getIdleDelay() const
@@ -504,15 +410,6 @@ AnimationState::AnimationState( int monsterID )
     , _animState( Monster_Info::STATIC )
     , _currentSequence( _static )
 {}
-
-AnimationState::AnimationState( const AnimationReference & ref, int state )
-    : AnimationReference( ref )
-    , _currentSequence( _static )
-{
-    switchAnimation( state );
-}
-
-AnimationState::~AnimationState() {}
 
 bool AnimationState::switchAnimation( int animState, bool reverse )
 {
@@ -577,7 +474,7 @@ int AnimationState::getFrame() const
     return _currentSequence.getFrame();
 }
 
-int AnimationState::animationLength() const
+size_t AnimationState::animationLength() const
 {
     return _currentSequence.animationLength();
 }
@@ -587,19 +484,9 @@ int AnimationState::firstFrame() const
     return _currentSequence.firstFrame();
 }
 
-void AnimationState::setToLastFrame()
-{
-    return _currentSequence.setToLastFrame();
-}
-
 double AnimationState::movementProgress() const
 {
     return _currentSequence.movementProgress();
-}
-
-bool AnimationState::isFirstFrame() const
-{
-    return _currentSequence.isFirstFrame();
 }
 
 bool AnimationState::isLastFrame() const

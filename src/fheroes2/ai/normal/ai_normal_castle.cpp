@@ -29,11 +29,11 @@ namespace AI
 {
     struct BuildOrder
     {
-        building_t building = BUILD_NOTHING;
-        int priority = 1;
+        const building_t building = BUILD_NOTHING;
+        const int priority = 1;
 
-        BuildOrder() {}
-        BuildOrder( building_t b, int p )
+        BuildOrder() = default;
+        BuildOrder( const building_t b, const int p )
             : building( b )
             , priority( p )
         {}
@@ -47,10 +47,10 @@ namespace AI
         return ( type == Race::WRLK ) ? warlock : standard;
     }
 
-    const std::vector<BuildOrder> & GetDefensiveStructures( int )
+    const std::vector<BuildOrder> & GetDefensiveStructures()
     {
-        static const std::vector<BuildOrder> defensive
-            = {{BUILD_LEFTTURRET, 1}, {BUILD_RIGHTTURRET, 1}, {BUILD_MOAT, 1}, {BUILD_CAPTAIN, 1}, {BUILD_SPEC, 2}, {BUILD_TAVERN, 1}};
+        static const std::vector<BuildOrder> defensive = { { BUILD_LEFTTURRET, 1 }, { BUILD_RIGHTTURRET, 1 }, { BUILD_MOAT, 1 },  { BUILD_CAPTAIN, 1 },
+                                                           { BUILD_MAGEGUILD1, 1 }, { BUILD_SPEC, 2 },        { BUILD_TAVERN, 1 } };
 
         return defensive;
     }
@@ -131,7 +131,7 @@ namespace AI
         const bool islandOrPeninsula = neighbourRegions < 3;
 
         // force building a shipyard, +1 to cost check since we can have 0 neighbours
-        if ( islandOrPeninsula && BuildIfEnoughResources( castle, BUILD_SHIPYARD, neighbourRegions + 1 ) ) {
+        if ( islandOrPeninsula && BuildIfEnoughResources( castle, BUILD_SHIPYARD, static_cast<uint32_t>( neighbourRegions + 1 ) ) ) {
             return true;
         }
 
@@ -143,13 +143,13 @@ namespace AI
         if ( castle.GetKingdom().GetFunds() >= PaymentConditions::BuyBoat() * ( islandOrPeninsula ? 2 : 4 ) )
             castle.BuyBoat();
 
-        return Build( castle, GetDefensiveStructures( castle.GetRace() ), 10 );
+        return Build( castle, GetDefensiveStructures(), 10 );
     }
 
     void Normal::CastleTurn( Castle & castle, bool defensive )
     {
         if ( defensive ) {
-            Build( castle, GetDefensiveStructures( castle.GetRace() ) );
+            Build( castle, GetDefensiveStructures() );
 
             castle.recruitBestAvailable( castle.GetKingdom().GetFunds() );
             OptimizeTroopsOrder( castle.GetArmy() );

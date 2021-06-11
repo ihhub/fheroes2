@@ -36,6 +36,57 @@
 #include "skill_bar.h"
 #include "text.h"
 
+namespace
+{
+    void createMoveButton( fheroes2::ButtonSprite & button, const int32_t icnId, const fheroes2::Point & offset, const fheroes2::Point & screenOffset )
+    {
+        const fheroes2::Sprite & buttonBackground = fheroes2::AGG::GetICN( ICN::STONEBAK, 0 );
+        const fheroes2::Sprite & originalReleasedImage = fheroes2::AGG::GetICN( icnId, 0 );
+        const fheroes2::Sprite & originalPressedImage = fheroes2::AGG::GetICN( icnId, 1 );
+
+        const int32_t offsetX = std::min( originalReleasedImage.x(), originalPressedImage.x() );
+        const int32_t width = std::min( originalReleasedImage.width(), originalPressedImage.width() );
+        const int32_t height = std::min( originalReleasedImage.height(), originalPressedImage.height() );
+
+        fheroes2::Point extraOffset( 2, 1 );
+
+        const int32_t extendedWidth = width + extraOffset.x * 2;
+        const int32_t extendedHeight = height + extraOffset.y * 2;
+
+        fheroes2::Sprite releasedButton( extendedWidth, extendedHeight );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, releasedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalReleasedImage, 0, 0, releasedButton, extraOffset.x, extraOffset.y, originalReleasedImage.width(), originalReleasedImage.height() );
+
+        fheroes2::Sprite pressedButton( extendedWidth, height + extraOffset.y * 2 );
+        fheroes2::Copy( buttonBackground, offset.x + offsetX - extraOffset.x, offset.y - extraOffset.y, pressedButton, 0, 0, extendedWidth, extendedHeight );
+        fheroes2::Blit( originalPressedImage, 0, 0, pressedButton, extraOffset.x, extraOffset.y + 1, originalPressedImage.width(), originalPressedImage.height() );
+
+        button.setPosition( screenOffset.x + offset.x + offsetX - extraOffset.x, screenOffset.y + offset.y - extraOffset.y );
+        button.setSprite( releasedButton, pressedButton );
+    }
+
+    void moveArtifacts( BagArtifacts & bagFrom, BagArtifacts & bagTo )
+    {
+        size_t toIdx = 0;
+
+        for ( size_t fromIdx = 0; fromIdx < bagFrom.size(); ++fromIdx ) {
+            if ( bagFrom[fromIdx]() != Artifact::UNKNOWN && bagFrom[fromIdx]() != Artifact::MAGIC_BOOK ) {
+                while ( toIdx < bagTo.size() ) {
+                    if ( bagTo[toIdx]() == Artifact::UNKNOWN )
+                        break;
+
+                    ++toIdx;
+                }
+
+                if ( toIdx == bagTo.size() )
+                    break;
+
+                std::swap( bagFrom[fromIdx], bagTo[toIdx] );
+            }
+        }
+    }
+}
+
 class MeetingArmyBar : public ArmyBar
 {
 public:
@@ -43,17 +94,17 @@ public:
         : ArmyBar( army, true, false, false )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    virtual void RedrawItem( ArmyTroop & troop, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( ArmyTroop & troop, const fheroes2::Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !troop.isValid() )
             return;
@@ -63,18 +114,18 @@ public:
         const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
         fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-        if ( mons32.width() > roi.w ) {
-            srcrt.x = ( mons32.width() - roi.w ) / 2;
-            srcrt.width = roi.w;
+        if ( mons32.width() > roi.width ) {
+            srcrt.x = ( mons32.width() - roi.width ) / 2;
+            srcrt.width = roi.width;
         }
 
-        if ( mons32.height() > roi.h ) {
-            srcrt.y = ( mons32.height() - roi.h ) / 2;
-            srcrt.height = roi.h;
+        if ( mons32.height() > roi.height ) {
+            srcrt.y = ( mons32.height() - roi.height ) / 2;
+            srcrt.height = roi.height;
         }
 
-        int32_t offsetX = ( roi.w - mons32.width() ) / 2;
-        int32_t offsetY = roi.h - mons32.height() - 3;
+        int32_t offsetX = ( roi.width - mons32.width() ) / 2;
+        int32_t offsetY = roi.height - mons32.height() - 3;
 
         if ( offsetX < 1 )
             offsetX = 1;
@@ -84,7 +135,7 @@ public:
 
         fheroes2::Blit( mons32, srcrt.x, srcrt.y, image, roi.x + offsetX, roi.y + offsetY, srcrt.width, srcrt.height );
 
-        text.Blit( roi.x + ( roi.w - text.w() ) / 2, roi.y + roi.h - 1, image );
+        text.Blit( roi.x + ( roi.width - text.w() ) / 2, roi.y + roi.height - 1, image );
 
         if ( isSelected ) {
             spcursor.setPosition( roi.x, roi.y );
@@ -100,20 +151,20 @@ class MeetingArtifactBar : public ArtifactsBar
 {
 public:
     explicit MeetingArtifactBar( const Heroes * hero )
-        : ArtifactsBar( hero, true, false, false )
+        : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    virtual void RedrawItem( Artifact & arifact, const Rect & roi, bool isSelected, fheroes2::Image & image ) override
+    void RedrawItem( Artifact & arifact, const fheroes2::Rect & roi, bool isSelected, fheroes2::Image & image ) override
     {
         if ( !arifact.isValid() )
             return;
@@ -137,7 +188,7 @@ public:
         : PrimarySkillsBar( hero, true )
     {}
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override
     {
         // Just do nothing
     }
@@ -150,60 +201,56 @@ public:
         : SecondarySkillsBar( hero )
     {}
 
-    virtual void RedrawBackground( const Rect & roi, fheroes2::Image & image ) override
+    void RedrawBackground( const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( _cachedBackground.empty() ) {
-            _cachedBackground.resize( roi.w, roi.h );
-            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.w, roi.h );
+            _cachedBackground.resize( roi.width, roi.height );
+            fheroes2::Copy( image, roi.x, roi.y, _cachedBackground, 0, 0, roi.width, roi.height );
         }
 
-        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.w, roi.h );
+        fheroes2::Blit( _cachedBackground, 0, 0, image, roi.x, roi.y, roi.width, roi.height );
     }
 
-    virtual void RedrawItem( Skill::Secondary & skill, const Rect & roi, fheroes2::Image & image ) override
+    void RedrawItem( Skill::Secondary & skill, const fheroes2::Rect & roi, fheroes2::Image & image ) override
     {
         if ( !skill.isValid() )
             return;
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() );
-        fheroes2::Blit( sprite, image, roi.x + ( roi.w - sprite.width() ) / 2, roi.y + ( roi.h - sprite.height() ) / 2 );
+        fheroes2::Blit( sprite, image, roi.x + ( roi.width - sprite.width() ) / 2, roi.y + ( roi.height - sprite.height() ) / 2 );
 
         Text text( std::to_string( skill.Level() ), Font::SMALL );
-        text.Blit( roi.x + ( roi.w - text.w() ) - 3, roi.y + roi.h - text.h(), image );
+        text.Blit( roi.x + ( roi.width - text.w() ) - 3, roi.y + roi.height - text.h(), image );
     }
 
 private:
     fheroes2::Image _cachedBackground;
 };
 
-void RedrawPrimarySkillInfo( const Point &, PrimarySkillsBar *, PrimarySkillsBar * );
-
-void Heroes::MeetingDialog( Heroes & heroes2 )
+void Heroes::MeetingDialog( Heroes & otherHero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-    const Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
+    const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
-    Point dst_pt( cur_pt );
+    fheroes2::Point dst_pt( cur_pt );
     std::string message;
 
-    Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y;
-    fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.w, src_rt.h );
+    fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
     // header
     message = _( "%{name1} meets %{name2}" );
     StringReplace( message, "%{name1}", GetName() );
-    StringReplace( message, "%{name2}", heroes2.GetName() );
+    StringReplace( message, "%{name2}", otherHero.GetName() );
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
@@ -220,31 +267,31 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     dst_pt.x = cur_pt.x + 445;
     dst_pt.y = cur_pt.y + portraitYOffset;
-    const fheroes2::Sprite & portrait2 = heroes2.GetPortrait( PORT_BIG );
+    const fheroes2::Sprite & portrait2 = otherHero.GetPortrait( PORT_BIG );
     fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
-    heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
+    otherHero.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     MoraleIndicator moraleIndicator1( this );
     dst_pt.x = cur_pt.x + iconsH1XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().h / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator1.GetArea().height / 3;
     moraleIndicator1.SetPos( dst_pt );
     moraleIndicator1.Redraw();
 
     LuckIndicator luckIndicator1( this );
     dst_pt.x = cur_pt.x + iconsH1XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().h * 4 / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait1.height() - luckIndicator1.GetArea().height * 4 / 3;
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
-    MoraleIndicator moraleIndicator2( &heroes2 );
+    MoraleIndicator moraleIndicator2( &otherHero );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().h / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().height / 3;
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
-    LuckIndicator luckIndicator2( &heroes2 );
+    LuckIndicator luckIndicator2( &otherHero );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
-    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().h * 4 / 3;
+    dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().height * 4 / 3;
     luckIndicator2.SetPos( dst_pt );
     luckIndicator2.Redraw();
 
@@ -257,13 +304,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     primskill_bar1.SetTextOff( 70, -25 );
     primskill_bar1.SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-    MeetingPrimarySkillsBar primskill_bar2( &heroes2 );
+    MeetingPrimarySkillsBar primskill_bar2( &otherHero );
     primskill_bar2.SetColRows( 1, 4 );
     primskill_bar2.SetVSpace( -1 );
     primskill_bar2.SetTextOff( -70, -25 );
     primskill_bar2.SetPos( cur_pt.x + 389, cur_pt.y + 51 );
 
-    RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+    fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
     MeetingSecondarySkillsBar secskill_bar1( *this );
@@ -273,10 +320,10 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
     secskill_bar1.Redraw();
 
-    MeetingSecondarySkillsBar secskill_bar2( heroes2 );
+    MeetingSecondarySkillsBar secskill_bar2( otherHero );
     secskill_bar2.SetColRows( 8, 1 );
     secskill_bar2.SetHSpace( -1 );
-    secskill_bar2.SetContent( heroes2.GetSecondarySkills().ToVector() );
+    secskill_bar2.SetContent( otherHero.GetSecondarySkills().ToVector() );
     secskill_bar2.SetPos( cur_pt.x + 353, cur_pt.y + 199 );
     secskill_bar2.Redraw();
 
@@ -295,7 +342,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 381;
     dst_pt.y = cur_pt.y + 267;
 
-    MeetingArmyBar selectArmy2( &heroes2.GetArmy() );
+    MeetingArmyBar selectArmy2( &otherHero.GetArmy() );
     selectArmy2.SetColRows( 5, 1 );
     selectArmy2.SetPos( dst_pt.x, dst_pt.y );
     selectArmy2.SetHSpace( 2 );
@@ -316,11 +363,11 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 367;
     dst_pt.y = cur_pt.y + 347;
 
-    MeetingArtifactBar selectArtifacts2( &heroes2 );
+    MeetingArtifactBar selectArtifacts2( &otherHero );
     selectArtifacts2.SetColRows( 7, 2 );
     selectArtifacts2.SetHSpace( 2 );
     selectArtifacts2.SetVSpace( 2 );
-    selectArtifacts2.SetContent( heroes2.GetBagArtifacts() );
+    selectArtifacts2.SetContent( otherHero.GetBagArtifacts() );
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
@@ -331,29 +378,50 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     buttonExit.draw();
 
-    cursor.Show();
+    // The original resources do not have such animated buttons so we have to create those.
+    const fheroes2::Point windowOffset( cur_pt.x, cur_pt.y );
+    fheroes2::ButtonSprite moveArmyToHero2;
+    createMoveButton( moveArmyToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 270 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArmyToHero1;
+    createMoveButton( moveArmyToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 291 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero2;
+    createMoveButton( moveArtifactsToHero2, ICN::SWAP_ARROW_LEFT_TO_RIGHT, fheroes2::Point( 297, 363 ), windowOffset );
+
+    fheroes2::ButtonSprite moveArtifactsToHero1;
+    createMoveButton( moveArtifactsToHero1, ICN::SWAP_ARROW_RIGHT_TO_LEFT, fheroes2::Point( 295, 384 ), windowOffset );
+
+    moveArmyToHero2.draw();
+    moveArmyToHero1.draw();
+    moveArtifactsToHero2.draw();
+    moveArtifactsToHero1.draw();
+
     display.render();
 
     MovePointsScaleFixed();
-    heroes2.MovePointsScaleFixed();
+    otherHero.MovePointsScaleFixed();
 
     // scholar action
     if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-        Heroes::ScholarAction( *this, heroes2 );
+        Heroes::ScholarAction( *this, otherHero );
 
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero2.area() ) ? moveArmyToHero2.drawOnPress() : moveArmyToHero2.drawOnRelease();
+        le.MousePressLeft( moveArmyToHero1.area() ) ? moveArmyToHero1.drawOnPress() : moveArmyToHero1.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero2.area() ) ? moveArtifactsToHero2.drawOnPress() : moveArtifactsToHero2.drawOnRelease();
+        le.MousePressLeft( moveArtifactsToHero1.area() ) ? moveArtifactsToHero1.drawOnPress() : moveArtifactsToHero1.drawOnRelease();
+
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
             break;
 
         // selector troops event
         if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
              || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -368,21 +436,19 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
         // selector artifacts event
         if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
              || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || heroes2.bag_artifacts.MakeBattleGarb() ) {
+            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
                 Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
             }
 
@@ -390,12 +456,12 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts2.Redraw();
 
             backPrimary.restore();
-            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
@@ -403,7 +469,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
              || ( le.MouseCursor( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
-            cursor.Show();
             display.render();
         }
 
@@ -421,75 +486,108 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         }
 
         if ( le.MouseClickLeft( hero1Area ) ) {
-            const bool noDismiss = Modes( Heroes::NOTDISMISS );
-
-            SetModes( Heroes::NOTDISMISS );
-            OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts1.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            const bool noDismiss = heroes2.Modes( Heroes::NOTDISMISS );
-
-            heroes2.SetModes( Heroes::NOTDISMISS );
-            heroes2.OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                heroes2.ResetModes( Heroes::NOTDISMISS );
-            }
+            Game::OpenHeroesDialog( otherHero, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
+            otherHero.GetArmy().MoveTroops( GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
+            GetArmy().MoveTroops( otherHero.GetArmy() );
+
+            armyCountBackgroundRestorer.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw();
+            selectArmy2.Redraw();
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
+            moveArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
+            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
+
+            selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            backPrimary.restore();
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+            luckIndicator1.Redraw();
+            luckIndicator2.Redraw();
+
             display.render();
         }
     }
+
+    selectArmy1.ResetSelected();
+    selectArmy2.ResetSelected();
+    selectArtifacts1.ResetSelected();
+    selectArtifacts2.ResetSelected();
 
     backPrimary.reset();
     armyCountBackgroundRestorer.reset();
     restorer.restore();
     display.render();
-}
-
-void RedrawPrimarySkillInfo( const Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
-{
-    // attack skill
-    Text text( _( "Attack Skill" ), Font::SMALL );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 64 );
-
-    // defense skill
-    text.Set( _( "Defense Skill" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 96 );
-
-    // spell power
-    text.Set( _( "Spell Power" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 128 );
-
-    // knowledge
-    text.Set( _( "Knowledge" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 160 );
-
-    if ( bar1 )
-        bar1->Redraw();
-    if ( bar2 )
-        bar2->Redraw();
 }
 
 void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )

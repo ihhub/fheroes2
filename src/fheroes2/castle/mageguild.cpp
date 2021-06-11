@@ -28,7 +28,6 @@
 #include "rand.h"
 #include "settings.h"
 
-Spell GetCombatSpellCompatibility( int race, int level );
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();
 Spell GetGuaranteedNonDamageSpellForMageGuild();
@@ -133,14 +132,6 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     }
 
     return v.size() ? Rand::Get( v ) : Spell( Spell::NONE );
-}
-
-Spell GetCombatSpellCompatibility( int race, int lvl )
-{
-    Spell spell = Spell::RandCombat( lvl );
-    while ( !spell.isRaceCompatible( race ) )
-        spell = Spell::RandCombat( lvl );
-    return spell;
 }
 
 Spell GetGuaranteedDamageSpellForMageGuild()

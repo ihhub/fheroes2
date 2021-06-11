@@ -24,8 +24,9 @@
 
 #include <list>
 #include <string>
+#include <vector>
 
-#include "rect.h"
+#include "math_base.h"
 #include "types.h"
 
 std::string GetStringShort( int );
@@ -58,16 +59,27 @@ std::string InsertString( const std::string &, size_t, const char * );
 bool SaveMemToFile( const std::vector<u8> &, const std::string & );
 std::vector<u8> LoadFileToMem( const std::string & );
 
-double GetAngle( const Point & start, const Point & target );
-Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step );
-Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step );
-Points GetArcPoints( const Point & from, const Point & to, const Point & max, u16 step );
-
 // std::clamp replacement until we can use C++17
 template <typename T>
 T clamp( const T & value, const T & min, const T & max )
 {
     return ( value < min ) ? min : ( max < value ) ? max : value;
+}
+
+namespace fheroes2
+{
+    double GetAngle( const Point & start, const Point & target );
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step );
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step );
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step );
+
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt );
+
+    std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt );
+
+    Rect GetCommonRect( const Rect & rt1, const Rect & rt2, const bool intersect );
+
+    Rect GetBoundaryRect( const std::vector<Rect> & rects );
 }
 
 #endif

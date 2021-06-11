@@ -50,8 +50,15 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     unsigned long audioRate[audioChannelCount] = {0};
     std::vector<std::vector<uint8_t> > soundBuffer( audioChannelCount );
 
+    unsigned long width = 0;
+    unsigned long height = 0;
+
     smk_info_all( _videoFile, NULL, &_frameCount, &usf );
-    smk_info_video( _videoFile, &_width, &_height, NULL );
+    smk_info_video( _videoFile, &width, &height, NULL );
+
+    _width = static_cast<int32_t>( width );
+    _height = static_cast<int32_t>( height );
+
     smk_info_audio( _videoFile, &trackMask, channel, audioBitDepth, audioRate );
     smk_enable_video( _videoFile, 1 );
 
@@ -141,16 +148,14 @@ SMKVideoSequence::~SMKVideoSequence()
     }
 }
 
-unsigned long SMKVideoSequence::width() const
+int32_t SMKVideoSequence::width() const
 {
     return _width;
 }
 
-unsigned long SMKVideoSequence::height() const
+int32_t SMKVideoSequence::height() const
 {
-    // Some videos are written in compressed format where video's height is exactly a half of the original height of the screen.
-    // Detecting such videos and rescaling helps to deal with such situations.
-    return ( _width == 640 && _height == 240 ) ? 480 : _height;
+    return _height;
 }
 
 double SMKVideoSequence::fps() const
@@ -172,41 +177,41 @@ void SMKVideoSequence::resetFrame()
     _currentFrameId = 0;
 }
 
-void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_t> & palette )
+void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
 {
-    if ( _videoFile == NULL )
+    if ( _videoFile == NULL || image.empty() || x < 0 || y < 0 || x >= image.width() || y >= image.height() || !image.singleLayer() ) {
+        width = 0;
+        height = 0;
         return;
-
-    const bool resizedImage = ( image.width() != static_cast<int32_t>( width() ) ) || ( image.height() != static_cast<int32_t>( height() ) );
-
-    image.resize( width(), height() );
-    image._disableTransformLayer();
+    }
 
     const uint8_t * data = smk_get_video( _videoFile );
     const uint8_t * paletteData = smk_get_palette( _videoFile );
 
-    const size_t size = static_cast<size_t>( _width ) * _height;
+    width = _width;
+    height = _height;
 
-    // Some videos are written in compressed format where video's height is exactly a half of the original height of the screen.
-    // Detecting such videos and rescaling helps to deal with such situations.
-    if ( _height != height() ) {
-        assert( _height * 2 == height() );
-        uint8_t * imageData = image.image();
-        for ( unsigned long i = 0; i < _height; ++i ) {
-            std::copy( data, data + _width, imageData );
-            imageData += _width;
-            std::copy( data, data + _width, imageData );
-            imageData += _width;
-
-            data += _width;
-        }
-    }
-    else {
+    if ( image.width() == _width && image.height() == _height && x == 0 && y == 0 ) {
+        const size_t size = static_cast<size_t>( _width ) * _height;
         std::copy( data, data + size, image.image() );
     }
+    else {
+        if ( x + width > image.width() ) {
+            width = image.width() - x;
+        }
+        if ( y + height > image.height() ) {
+            height = image.height() - y;
+        }
 
-    if ( resizedImage ) {
-        std::fill( image.transform(), image.transform() + size, 0 );
+        const uint8_t * inY = data;
+
+        const int32_t imageWidth = image.width();
+        uint8_t * outY = image.image() + x + y * imageWidth;
+        const uint8_t * outYEnd = outY + height * imageWidth;
+
+        for ( ; outY != outYEnd; outY += imageWidth, inY += _width ) {
+            std::copy( inY, inY + width, outY );
+        }
     }
 
     palette.resize( 256 * 3 );
@@ -216,6 +221,14 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, std::vector<uint8_
     if ( _currentFrameId < _frameCount ) {
         smk_next( _videoFile );
     }
+}
+
+std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
+{
+    const uint8_t * paletteData = smk_get_palette( _videoFile );
+    assert( paletteData != nullptr );
+
+    return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
 }
 
 const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const

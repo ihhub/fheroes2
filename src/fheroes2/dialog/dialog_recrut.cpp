@@ -77,22 +77,11 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const payment_t paymentMonster = monster.GetCost();
     const bool extres = 2 == paymentMonster.GetValidItemsCount();
 
-    // smear hardcored text "Cost per troop:"
-    const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    fheroes2::Point dst_pt( pos.x + 144, pos.y + 55 );
-    fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
-
-    Text text( _( "Cost per troop:" ), Font::SMALL );
-    dst_pt.x = pos.x + 206 - text.w() / 2;
-    dst_pt.y = pos.y + 55;
-    text.Blit( dst_pt.x, dst_pt.y );
-
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
-    text.Set( str, Font::YELLOW_BIG );
-    dst_pt.x = pos.x + ( pos.width - text.w() ) / 2;
-    dst_pt.y = pos.y + 25;
+    Text text( str, Font::YELLOW_BIG );
+    fheroes2::Point dst_pt( pos.x + ( pos.width - text.w() ) / 2, pos.y + 25 );
     text.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
@@ -113,7 +102,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     // info resource
     // gold
     const fheroes2::Sprite & sgold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    RedrawResourceInfo( sgold, fheroes2::Point( pos.x, pos.y ), paymentMonster.gold, extres ? 150 : 175, 75, extres ? 183 : 205, 103 );
+    RedrawResourceInfo( sgold, pos.getPosition(), paymentMonster.gold, extres ? 150 : 175, 75, extres ? 183 : 205, 103 );
     if ( showTotalSum ) {
         dst_pt.x = pos.x + ( extres ? 105 : 130 );
         dst_pt.y = pos.y + 200;
@@ -122,7 +111,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
 
     if ( paymentMonster.crystal ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 4 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.crystal, 222, 69, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.crystal, 222, 69, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 177;
             dst_pt.y = pos.y + 194;
@@ -131,7 +120,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     }
     else if ( paymentMonster.mercury ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 1 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.mercury, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.mercury, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -140,7 +129,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     }
     else if ( paymentMonster.wood ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 0 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.wood, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.wood, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -149,7 +138,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     }
     else if ( paymentMonster.ore ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 2 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.ore, 225, 72, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.ore, 225, 72, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 197;
@@ -158,7 +147,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     }
     else if ( paymentMonster.sulfur ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 3 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.sulfur, 225, 75, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.sulfur, 225, 75, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 200;
@@ -167,7 +156,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     }
     else if ( paymentMonster.gems ) {
         const fheroes2::Sprite & sres = fheroes2::AGG::GetICN( ICN::RESOURCE, 5 );
-        RedrawResourceInfo( sres, fheroes2::Point( pos.x, pos.y ), paymentMonster.gems, 225, 75, 240, 103 );
+        RedrawResourceInfo( sres, pos.getPosition(), paymentMonster.gems, 225, 75, 240, 103 );
         if ( showTotalSum ) {
             dst_pt.x = pos.x + 180;
             dst_pt.y = pos.y + 200;
@@ -225,11 +214,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // calculate max count
     Monster monster = monster0;
@@ -310,7 +296,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     const Funds & funds = kingdom.GetFunds();
     std::string maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, true );
-    RedrawCurrentInfo( fheroes2::Point( pos.x, pos.y ), result, paymentMonster, paymentCosts, funds, maxmin );
+    RedrawCurrentInfo( pos.getPosition(), result, paymentMonster, paymentCosts, funds, maxmin );
 
     buttonOk.draw();
     buttonCancel.draw();
@@ -323,10 +309,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     monsterSwitchLeft.draw();
     monsterSwitchRight.draw();
 
-    cursor.Show();
     display.render();
-
-    bool redraw = false;
 
     std::vector<Monster> upgrades = {monster0};
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
@@ -335,6 +318,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     // str loop
     while ( le.HandleEvents() ) {
+        bool redraw = false;
+
         if ( buttonOk.isEnabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
@@ -454,9 +439,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         }
 
         if ( redraw ) {
-            cursor.Hide();
             RedrawStaticInfo( pos, monster, available );
-            RedrawCurrentInfo( fheroes2::Point( pos.x, pos.y ), result, paymentMonster, paymentCosts, funds, maxmin );
+            RedrawCurrentInfo( pos.getPosition(), result, paymentMonster, paymentCosts, funds, maxmin );
 
             if ( 0 == result ) {
                 buttonOk.disable();
@@ -475,9 +459,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             monsterSwitchLeft.draw();
             monsterSwitchRight.draw();
 
-            cursor.Show();
             display.render();
-            redraw = false;
         }
 
         if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
@@ -489,12 +471,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
         }
     }
 
-    cursor.Hide();
-
-    cursor.SetThemes( oldcursor );
     back.restore();
-
-    cursor.Show();
     display.render();
 
     return Troop( monster, result );
@@ -504,11 +481,8 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
     const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
@@ -526,14 +500,11 @@ void Dialog::DwellingInfo( const Monster & monster, u32 available )
 
     RedrawMonsterInfo( pos, monster, available, false );
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() && le.MousePressRight() )
         ;
 
-    cursor.SetThemes( oldcursor );
     back.restore();
-
     display.render();
 }

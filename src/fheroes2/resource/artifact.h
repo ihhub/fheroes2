@@ -196,7 +196,6 @@ public:
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
     static const char * GetScenario( const Artifact & );
-    static void UpdateStats( const std::string & );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Artifact & );
@@ -236,24 +235,24 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
-    ArtifactsBar( const Heroes * hero, bool mini, bool ro, bool change = false, StatusBar * bar = nullptr );
+    ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
-    virtual void RedrawBackground( const Rect &, fheroes2::Image & ) override;
-    virtual void RedrawItem( Artifact &, const Rect &, bool, fheroes2::Image & ) override;
+    void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
+    void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected( void );
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
-    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
-    virtual bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
-    virtual bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
-    virtual bool ActionBarRightMouseHold( Artifact & artifact ) override;
+    bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
+    bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
+    bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
+    bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
     bool QueueEventProcessing( std::string * = NULL );
     bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
 
-    virtual bool ActionBarCursor( Artifact & ) override;
-    virtual bool ActionBarCursor( Artifact &, Artifact & ) override;
+    bool ActionBarCursor( Artifact & ) override;
+    bool ActionBarCursor( Artifact &, Artifact & ) override;
 
 protected:
     fheroes2::MovableSprite spcursor;
@@ -261,11 +260,16 @@ protected:
 private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    bool use_mini_sprite;
-    bool read_only;
-    bool can_change;
+    const bool use_mini_sprite;
+    const bool read_only;
+    const bool can_change;
+    const bool _allowOpeningMagicBook;
     StatusBar * _statusBar;
     std::string msg;
+
+    static bool isMagicBook( const Artifact & artifact );
+
+    void messageMagicBookAbortTrading() const;
 };
 
 #endif

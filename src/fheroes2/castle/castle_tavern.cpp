@@ -27,6 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_delays.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -35,7 +36,7 @@
 #include "text.h"
 #include "world.h"
 
-void Castle::OpenTavern( void )
+void Castle::OpenTavern( void ) const
 {
     const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
@@ -44,8 +45,9 @@ void Castle::OpenTavern( void )
     const std::string & message = world.GetRumors();
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Text text( tavern, Font::YELLOW_BIG );
     const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
@@ -83,7 +85,6 @@ void Castle::OpenTavern( void )
 
     buttonYes.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -96,8 +97,7 @@ void Castle::OpenTavern( void )
             break;
 
         // animation
-        if ( Game::AnimateInfrequentDelay( Game::CASTLE_TAVERN_DELAY ) ) {
-            cursor.Hide();
+        if ( Game::validateAnimationDelay( Game::CASTLE_TAVERN_DELAY ) ) {
             fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
 
             if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame ) ) {
@@ -106,7 +106,6 @@ void Castle::OpenTavern( void )
             }
             ++frame;
 
-            cursor.Show();
             display.render();
         }
     }

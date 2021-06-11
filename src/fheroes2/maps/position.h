@@ -29,21 +29,19 @@
 class MapPosition
 {
 public:
-    MapPosition( const Point & = Point( -1, -1 ) );
+    explicit MapPosition( const fheroes2::Point & = fheroes2::Point( -1, -1 ) );
 
-    bool operator==( s32 ) const;
-
-    const Point & GetCenter() const
+    const fheroes2::Point & GetCenter() const
     {
         return center;
     }
 
-    s32 GetIndex( void ) const;
+    int32_t GetIndex() const;
 
-    void SetCenter( const Point & );
+    void SetCenter( const fheroes2::Point & );
     void SetIndex( const int32_t index );
 
-    bool isPosition( const Point & pt ) const
+    bool isPosition( const fheroes2::Point & pt ) const
     {
         return pt == center;
     }
@@ -52,7 +50,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const MapPosition & );
     friend StreamBase & operator>>( StreamBase &, MapPosition & );
 
-    Point center;
+    fheroes2::Point center;
 };
 
 StreamBase & operator<<( StreamBase &, const MapPosition & );

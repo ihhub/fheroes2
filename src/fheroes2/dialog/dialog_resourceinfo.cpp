@@ -31,11 +31,8 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -43,7 +40,7 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
 
     const int spacer = 10;
 
-    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().h, buttons != 0 );
+    FrameBox box( box1.h() + spacer + box2.h() + spacer + rbs.GetArea().height, buttons != 0 );
     fheroes2::Point pos( box.GetArea().x, box.GetArea().y );
 
     if ( header.size() )
@@ -62,7 +59,6 @@ int Dialog::ResourceInfo( const std::string & header, const std::string & messag
     fheroes2::ButtonGroup btnGroups( box.GetArea(), buttons );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;

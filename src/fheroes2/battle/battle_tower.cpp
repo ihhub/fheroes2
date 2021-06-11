@@ -33,7 +33,6 @@ Battle::Tower::Tower( const Castle & castle, int twr )
     , valid( true )
 {
     count += castle.CountBuildings();
-    count += castle.GetLevelMageGuild() - 1;
 
     if ( count > 20 )
         count = 20;
@@ -86,25 +85,21 @@ int Battle::Tower::GetColor( void ) const
     return color;
 }
 
-Point Battle::Tower::GetPortPosition( void ) const
+fheroes2::Point Battle::Tower::GetPortPosition( void ) const
 {
-    Point res;
-
     switch ( type ) {
     case TWR_LEFT:
-        res = Point( 410, 70 );
+        return fheroes2::Point( 410, 70 );
         break;
     case TWR_RIGHT:
-        res = Point( 410, 320 );
-        break;
+        return fheroes2::Point( 410, 320 );
     case TWR_CENTER:
-        res = Point( 560, 170 );
-        break;
+        return fheroes2::Point( 560, 170 );
     default:
         break;
     }
 
-    return res;
+    return fheroes2::Point();
 }
 
 void Battle::Tower::SetDestroy( void )

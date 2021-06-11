@@ -38,7 +38,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
             if ( otherHero->isFriends( color ) )
                 return true;
             else
-                return !otherHero->AllowBattle( false ) || otherHero->GetArmy().GetStrength() > armyStrength;
+                return otherHero->GetArmy().GetStrength() > armyStrength;
         }
     }
 
@@ -129,18 +129,6 @@ void WorldPathfinder::checkWorldSize()
             _mapOffset[i] = Maps::GetDirectionIndex( 0, directions[i] );
         }
     }
-}
-
-bool WorldPathfinder::isBlockedByObject( int target, bool fromWater ) const
-{
-    int currentNode = target;
-    while ( currentNode != _pathStart && currentNode != -1 ) {
-        if ( world.isTileBlocked( currentNode, fromWater ) ) {
-            return true;
-        }
-        currentNode = _cache[currentNode]._from;
-    }
-    return false;
 }
 
 uint32_t WorldPathfinder::getMovementPenalty( int from, int target, int direction, uint8_t skill ) const
@@ -387,8 +375,14 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     nodesToExplore.push_back( start );
     tilesVisited[start] = true;
 
+    const int scouteValue = hero.GetScoute();
+
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
+
+        if ( start != currentNodeIdx && Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor ) > 0 ) {
+            return currentNodeIdx;
+        }
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
@@ -396,10 +390,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 if ( newIndex == start )
                     continue;
 
-                if ( world.GetTiles( newIndex ).isFog( _currentColor ) ) {
-                    return currentNodeIdx;
-                }
-                else if ( !tilesVisited[newIndex] ) {
+                if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
 
                     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
@@ -503,12 +494,6 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( int targetIndex, bool isPla
     }
 
     return path;
-}
-
-uint32_t AIWorldPathfinder::getDistance( const Heroes & hero, int targetIndex )
-{
-    reEvaluateIfNeeded( hero );
-    return _cache[targetIndex]._cost;
 }
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )

@@ -44,13 +44,13 @@ public:
         JOIN_CONDITION_FORCE = 3
     };
 
-    enum level_t
+    enum class LevelType : int
     {
-        LEVEL0,
-        LEVEL1,
-        LEVEL2,
-        LEVEL3,
-        LEVEL4
+        LEVEL_ANY = 0,
+        LEVEL_1,
+        LEVEL_2,
+        LEVEL_3,
+        LEVEL_4
     };
 
     enum monster_t
@@ -163,12 +163,11 @@ public:
         int m82_wnce;
     };
 
-    Monster( int = UNKNOWN );
-    Monster( const Spell & );
+    Monster( const int m = UNKNOWN );
+    explicit Monster( const Spell & );
     Monster( int race, u32 dw );
-    virtual ~Monster() {}
+    virtual ~Monster() = default;
 
-    bool operator<( const Monster & ) const;
     bool operator==( const Monster & ) const;
     bool operator!=( const Monster & ) const;
 
@@ -195,7 +194,7 @@ public:
     u32 GetSpeed( void ) const;
     u32 GetGrown( void ) const;
     int GetMonsterLevel() const;
-    int GetRandomUnitLevel( void ) const;
+    LevelType GetRandomUnitLevel() const;
     u32 GetRNDSize( bool skip ) const;
 
     const char * GetName( void ) const;
@@ -217,7 +216,6 @@ public:
     bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
-    bool isAlive( void ) const;
     bool hasMeleePenalty() const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
@@ -230,13 +228,11 @@ public:
 
     const monstersprite_t & GetMonsterSprite() const;
 
-    static Monster Rand( level_t = LEVEL0 );
+    static Monster Rand( const LevelType type );
     static u32 Rand4WeekOf( void );
     static u32 Rand4MonthOf( void );
 
     static u32 GetCountFromHitPoints( const Monster &, u32 );
-
-    static void UpdateStats( const std::string & );
 
     static uint32_t GetICNByMonsterID( uint32_t monsterID );
     static uint32_t GetMissileICN( uint32_t monsterID );

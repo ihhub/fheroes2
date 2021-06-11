@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"
@@ -151,7 +152,7 @@ namespace Battle
 {
     void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
     void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas );
-    void RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet );
+    void RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
 
 void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
@@ -180,29 +181,29 @@ void Battle::RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas )
     display.render();
 }
 
-void Battle::RedrawOnOffSetting( const Rect & area, const std::string & name, uint32_t index, bool isSet )
+void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CSPANEL, isSet ? index + 1 : index );
     const int textOffset = 2;
 
-    TextBox upperText( name, Font::SMALL, area.w );
-    upperText.Blit( area.x + ( area.w - upperText.w() ) / 2, area.y - upperText.h() - textOffset );
+    TextBox upperText( name, Font::SMALL, area.width );
+    upperText.Blit( area.x + ( area.width - upperText.w() ) / 2, area.y - upperText.h() - textOffset );
 
     fheroes2::Blit( sprite, display, area.x, area.y );
 
     const Text lowerText( isSet ? _( "On" ) : _( "Off" ), Font::SMALL );
-    lowerText.Blit( area.x + ( area.w - lowerText.w() ) / 2, area.y + area.h + textOffset );
+    lowerText.Blit( area.x + ( area.width - lowerText.w() ) / 2, area.y + area.height + textOffset );
 }
 
 void Battle::DialogBattleSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -224,19 +225,19 @@ void Battle::DialogBattleSettings( void )
     const int32_t panelHeight = panelSprite.height();
 
     std::vector<fheroes2::Rect> optionAreas;
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 36, pos_rt.y + 47, panelWidth, panelHeight ) ); // speed
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 128, pos_rt.y + 47, panelWidth, panelHeight ) ); // info
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 220, pos_rt.y + 47, panelWidth, panelHeight ) ); // auto spell cast
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 36, pos_rt.y + 157, panelWidth, panelHeight ) ); // grid
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 128, pos_rt.y + 157, panelWidth, panelHeight ) ); // move shadow
-    optionAreas.push_back( fheroes2::Rect( pos_rt.x + 220, pos_rt.y + 157, panelWidth, panelHeight ) ); // cursor shadow
+    optionAreas.reserve( 6 );
+    optionAreas.emplace_back( pos_rt.x + 36, pos_rt.y + 47, panelWidth, panelHeight ); // speed
+    optionAreas.emplace_back( pos_rt.x + 128, pos_rt.y + 47, panelWidth, panelHeight ); // info
+    optionAreas.emplace_back( pos_rt.x + 220, pos_rt.y + 47, panelWidth, panelHeight ); // auto spell cast
+    optionAreas.emplace_back( pos_rt.x + 36, pos_rt.y + 157, panelWidth, panelHeight ); // grid
+    optionAreas.emplace_back( pos_rt.x + 128, pos_rt.y + 157, panelWidth, panelHeight ); // move shadow
+    optionAreas.emplace_back( pos_rt.x + 220, pos_rt.y + 157, panelWidth, panelHeight ); // cursor shadow
 
     fheroes2::Button btn_ok( pos_rt.x + 113, pos_rt.y + 252, ( isEvilInterface ? ICN::CSPANBTE : ICN::CSPANBTN ), 0, 1 );
     btn_ok.draw();
 
     RedrawBattleSettings( optionAreas );
 
-    cursor.Show();
     display.render();
 
     bool saveConfiguration = false;
@@ -328,14 +329,14 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
     const Troops killed1 = army1->GetKilledTroops();
     const Troops killed2 = army2->GetKilledTroops();
 
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     std::string msg;
     std::string title;
@@ -382,8 +383,9 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     if ( sequence.isFinished() ) // Cannot be!
         sequence.push( ICN::UNKNOWN, false );
 
-    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
-    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );
+    const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 1 );
 
     const fheroes2::Point dialogOffset( ( display.width() - dialog.width() ) / 2, ( display.height() - dialog.height() ) / 2 );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -404,7 +406,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     fheroes2::Blit( sequenceStart, display, pos_rt.x + anime_ox + sequenceStart.x(), pos_rt.y + anime_oy + sequenceStart.y() );
 
     const int buttonOffset = allowToCancel ? 39 : 121;
-    const bool isEvilInterface = conf.ExtGameEvilInterface();
     const int buttonICN
         = isEvilInterface ? ( allowToCancel ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::WINCMBBE ) : ( allowToCancel ? ICN::NON_UNIFORM_GOOD_OKAY_BUTTON : ICN::WINCMBTB );
     fheroes2::Button btn_ok( pos_rt.x + buttonOffset, pos_rt.y + 410, buttonICN, 0, 1 );
@@ -455,7 +456,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
     btn_ok.draw();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {
@@ -474,7 +474,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
         }
 
         // animation
-        if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
             const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
             const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
@@ -544,7 +544,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                         break;
 
                     // animation
-                    if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+                    if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
                         const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
                         const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
@@ -631,7 +631,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
             break;
 
         // animation
-        if ( Game::AnimateInfrequentDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
+        if ( Game::validateAnimationDelay( Game::BATTLE_DIALOG_DELAY ) && !sequence.nextFrame() ) {
             const fheroes2::Sprite & base = fheroes2::AGG::GetICN( sequence.id(), 0 );
             const fheroes2::Sprite & sequenceCurrent = fheroes2::AGG::GetICN( sequence.id(), sequence.frameId() );
 
@@ -643,13 +643,11 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
     }
 }
 
-int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
+int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
+    Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::POINTER );
 
     const bool readonly = current_color != hero.GetColor() || !buttons;
@@ -657,6 +655,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
     const fheroes2::Point dialogShadow( 15, 15 );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Rect pos_rt( ( display.width() - dialog.width() - dialogShadow.x ) / 2, ( display.height() - dialog.height() - dialogShadow.y ) / 2, dialog.width(),
                            dialog.height() );
 
@@ -667,6 +666,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
     // first 15 pixels in the dialog is left shadow, skip
     pos_rt.x += 15;
     pos_rt.width -= 15;
+
+    const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
+    const Heroes * actionHero = ( current_color == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
 
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
@@ -743,11 +745,35 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
 
     display.render();
 
+    std::string statusMessage = _( "Hero's Options" );
+
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() && !result ) {
         btnCast.isEnabled() && le.MousePressLeft( btnCast.area() ) ? btnCast.drawOnPress() : btnCast.drawOnRelease();
         btnRetreat.isEnabled() && le.MousePressLeft( btnRetreat.area() ) ? btnRetreat.drawOnPress() : btnRetreat.drawOnRelease();
         btnSurrender.isEnabled() && le.MousePressLeft( btnSurrender.area() ) ? btnSurrender.drawOnPress() : btnSurrender.drawOnRelease();
         le.MousePressLeft( btnClose.area() ) ? btnClose.drawOnPress() : btnClose.drawOnRelease();
+
+        if ( buttons ) {
+            if ( le.MouseCursor( btnCast.area() ) ) {
+                statusMessage = _( "Cast Spell" );
+            }
+            else if ( le.MouseCursor( btnRetreat.area() ) ) {
+                statusMessage = _( "Retreat" );
+            }
+            else if ( le.MouseCursor( btnSurrender.area() ) ) {
+                statusMessage = _( "Surrender" );
+            }
+            else if ( le.MouseCursor( btnClose.area() ) ) {
+                statusMessage = _( "Cancel" );
+            }
+            else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr ) {
+                statusMessage = _( "Hero Screen" );
+            }
+            else {
+                statusMessage = _( "Hero's Options" );
+            }
+        }
 
         if ( !buttons && !le.MousePressRight() )
             break;
@@ -761,26 +787,43 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, bool buttons ) const
         if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
             result = 3;
 
-        if ( le.MousePressRight( btnCast.area() ) )
+        if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
+            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
+        }
+
+        if ( le.MousePressRight( btnCast.area() ) ) {
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
-        else if ( le.MousePressRight( btnRetreat.area() ) )
+        }
+        else if ( le.MousePressRight( btnRetreat.area() ) ) {
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnSurrender.area() ) )
+        }
+        else if ( le.MousePressRight( btnSurrender.area() ) ) {
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnClose.area() ) )
+        }
+        else if ( le.MousePressRight( portraitArea ) ) {
+            Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( btnClose.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
+        }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
             break;
+
+        if ( statusMessage != status.GetMessage() ) {
+            status.SetMessage( statusMessage );
+            status.Redraw();
+        }
     }
 
     return result;
@@ -792,12 +835,11 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         return false;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -880,7 +922,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         drawGoldMsg();
     }
 
-    cursor.Show();
     display.render();
 
     bool result = false;

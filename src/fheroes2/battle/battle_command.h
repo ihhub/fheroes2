@@ -58,7 +58,7 @@ namespace Battle
         int type;
 
     public:
-        Command( int );
+        explicit Command( int cmd );
         Command( int cmd, int param1, int param2, const Indexes & );
         Command( int cmd, int param1, int param2 = -1, int param3 = -1, int param4 = -1 );
 

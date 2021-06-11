@@ -44,10 +44,9 @@ namespace Battle
 
     Unit * ForceGetCurrentUnitPart( Units & units1, Units & units2, bool part1, bool units1_first, bool orders_mode )
     {
-        Units::iterator it1 = part1 ? std::find_if( units1.begin(), units1.end(), []( const Unit * v ) { return AllowPart1( v ); } )
-                                    : std::find_if( units1.begin(), units1.end(), []( const Unit * v ) { return AllowPart2( v ); } );
-        Units::iterator it2 = part1 ? std::find_if( units2.begin(), units2.end(), []( const Unit * v ) { return AllowPart1( v ); } )
-                                    : std::find_if( units2.begin(), units2.end(), []( const Unit * v ) { return AllowPart2( v ); } );
+        auto allowPartFunc = part1 ? AllowPart1 : AllowPart2;
+        Units::iterator it1 = std::find_if( units1.begin(), units1.end(), allowPartFunc );
+        Units::iterator it2 = std::find_if( units2.begin(), units2.end(), allowPartFunc );
         Unit * result = NULL;
 
         if ( it1 != units1.end() && it2 != units2.end() ) {
@@ -97,24 +96,6 @@ Battle::Units::Units( const Units & units, bool filter )
         resize( std::distance( begin(), std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ) ) );
 }
 
-Battle::Units::Units( const Units & units1, const Units & units2 )
-{
-    const size_t capacity = units1.size() + units2.size();
-    reserve( CAPACITY < capacity ? capacity : CAPACITY );
-    insert( end(), units1.begin(), units1.end() );
-    insert( end(), units2.begin(), units2.end() );
-}
-
-Battle::Units::~Units() {}
-
-Battle::Units & Battle::Units::operator=( const Units & units )
-{
-    reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
-    assign( units.begin(), units.end() );
-
-    return *this;
-}
-
 void Battle::Units::SortSlowest()
 {
     std::stable_sort( begin(), end(), Army::SlowestTroop );
@@ -123,16 +104,6 @@ void Battle::Units::SortSlowest()
 void Battle::Units::SortFastest()
 {
     std::stable_sort( begin(), end(), Army::FastestTroop );
-}
-
-void Battle::Units::SortStrongest( void )
-{
-    std::sort( begin(), end(), Army::StrongestTroop );
-}
-
-void Battle::Units::SortWeakest( void )
-{
-    std::sort( begin(), end(), Army::WeakestTroop );
 }
 
 void Battle::Units::SortArchers( void )
@@ -316,33 +287,6 @@ Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force &
     Unit * result = ForceGetCurrentUnitPart( units1, units2, part1, preferredColor != army2.GetColor(), false );
 
     return result && result->isValid() ? result : nullptr;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Force & f )
-{
-    msg << static_cast<const BitModes &>( f ) << static_cast<u32>( f.size() );
-
-    for ( Force::const_iterator it = f.begin(); it != f.end(); ++it )
-        msg << ( *it )->GetUID() << **it;
-
-    return msg;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Force & f )
-{
-    u32 size = 0;
-    u32 uid = 0;
-
-    msg >> static_cast<BitModes &>( f ) >> size;
-
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        msg >> uid;
-        Unit * b = f.FindUID( uid );
-        if ( b )
-            msg >> *b;
-    }
-
-    return msg;
 }
 
 Troops Battle::Force::GetKilledTroops( void ) const

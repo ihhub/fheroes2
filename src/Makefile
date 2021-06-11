@@ -34,7 +34,7 @@ LIBS := -pthread
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion flags back once we fix all other warnings!
+# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
 CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
 
 ifdef FHEROES2_STRICT_COMPILATION
@@ -49,13 +49,10 @@ SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
-ifndef WITHOUT_MIXER
-CFLAGS := $(CFLAGS) -DWITH_MIXER
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
-endif
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
@@ -73,14 +70,6 @@ ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
-endif
-endif
-
-ifndef WITHOUT_XML
-CFLAGS := $(CFLAGS) -DWITH_XML
-ifdef WITHOUT_BUNDLED_LIBS
-CFLAGS := $(CFLAGS) $(shell pkg-config tinyxml --cflags)
-LIBS := $(LIBS) $(shell pkg-config tinyxml --libs)
 endif
 endif
 
@@ -131,11 +120,6 @@ export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
 .PHONY: clean
 
 all:
-ifndef WITHOUT_XML
-ifndef WITHOUT_BUNDLED_LIBS
-	$(MAKE) -C thirdparty/tinyxml CFLAGS="$(CXXFLAGS_TP)"
-endif
-endif
 	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
@@ -147,7 +131,6 @@ ifndef WITHOUT_UNICODE
 endif
 
 clean:
-	$(MAKE) -C thirdparty/tinyxml clean
 	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean

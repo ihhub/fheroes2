@@ -173,16 +173,16 @@ void Interface::GameBorderRedraw( const bool viewWorldMode )
     fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
 }
 
-Interface::BorderWindow::BorderWindow( const Rect & rt )
+Interface::BorderWindow::BorderWindow( const fheroes2::Rect & rt )
     : area( rt )
 {}
 
-const Rect & Interface::BorderWindow::GetRect( void ) const
+const fheroes2::Rect & Interface::BorderWindow::GetRect() const
 {
     return Settings::Get().ExtGameHideInterface() && border.isValid() ? border.GetRect() : GetArea();
 }
 
-const Rect & Interface::BorderWindow::GetArea( void ) const
+const fheroes2::Rect & Interface::BorderWindow::GetArea() const
 {
     return area;
 }
@@ -194,8 +194,8 @@ void Interface::BorderWindow::Redraw() const
 
 void Interface::BorderWindow::SetPosition( int32_t px, int32_t py, uint32_t pw, uint32_t ph )
 {
-    area.w = pw;
-    area.h = ph;
+    area.width = pw;
+    area.height = ph;
 
     SetPosition( px, py );
 }
@@ -205,20 +205,20 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
     if ( Settings::Get().ExtGameHideInterface() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( px + area.w < 0 )
+        if ( px + area.width < 0 )
             px = 0;
-        else if ( px > display.width() - area.w + border.BorderWidth() )
-            px = display.width() - area.w;
+        else if ( px > display.width() - area.width + border.BorderWidth() )
+            px = display.width() - area.width;
 
-        if ( py + area.h < 0 )
+        if ( py + area.height < 0 )
             py = 0;
-        else if ( py > display.height() - area.h + border.BorderHeight() )
-            py = display.height() - area.h;
+        else if ( py > display.height() - area.height + border.BorderHeight() )
+            py = display.height() - area.height;
 
         area.x = px + border.BorderWidth();
         area.y = py + border.BorderHeight();
 
-        border.SetPosition( px, py, area.w, area.h );
+        border.SetPosition( px, py, area.width, area.height );
         SavePosition();
     }
     else {
@@ -234,34 +234,28 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
 
     if ( conf.ExtGameHideInterface() && le.MousePressLeft( border.GetTop() ) ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-        Cursor & cursor = Cursor::Get();
 
-        const Point & mp = le.GetMouseCursor();
-        const Rect & pos = GetRect();
+        const fheroes2::Point & mp = le.GetMouseCursor();
+        const fheroes2::Rect & pos = GetRect();
 
-        fheroes2::MovableSprite moveIndicator( pos.w, pos.h, pos.x, pos.y );
+        fheroes2::MovableSprite moveIndicator( pos.width, pos.height, pos.x, pos.y );
         moveIndicator.reset();
         fheroes2::DrawBorder( moveIndicator, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ), 6 );
 
         const int32_t ox = mp.x - pos.x;
         const int32_t oy = mp.y - pos.y;
 
-        cursor.Hide();
         moveIndicator.setPosition( pos.x, pos.y );
         moveIndicator.redraw();
-        cursor.Show();
         display.render();
 
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             if ( le.MouseMotion() ) {
-                cursor.Hide();
                 moveIndicator.setPosition( mp.x - ox, mp.y - oy );
-                cursor.Show();
                 display.render();
             }
         }
 
-        cursor.Hide();
         SetPos( mp.x - ox, mp.y - oy );
         Interface::Basic::Get().SetRedraw( REDRAW_GAMEAREA );
 

@@ -35,14 +35,45 @@ namespace fheroes2
 
     double Time::get() const
     {
-        const std::chrono::time_point<std::chrono::high_resolution_clock> endTime = std::chrono::high_resolution_clock::now();
-        const std::chrono::duration<double> time = endTime - _startTime;
+        const std::chrono::duration<double> time = std::chrono::high_resolution_clock::now() - _startTime;
         return time.count();
     }
 
     uint64_t Time::getMs() const
     {
         return static_cast<uint64_t>( get() * 1000 + 0.5 );
+    }
+
+    TimeDelay::TimeDelay( const uint64_t delayMs )
+        : _prevTime( std::chrono::high_resolution_clock::now() )
+        , _delayMs( delayMs )
+    {}
+
+    void TimeDelay::setDelay( const uint64_t delayMs )
+    {
+        _delayMs = delayMs;
+    }
+
+    bool TimeDelay::isPassed() const
+    {
+        return isPassed( _delayMs );
+    }
+
+    bool TimeDelay::isPassed( const uint64_t delayMs ) const
+    {
+        const std::chrono::duration<double> time = std::chrono::high_resolution_clock::now() - _prevTime;
+        const uint64_t passedMs = static_cast<uint64_t>( time.count() * 1000 + 0.5 );
+        return passedMs >= delayMs;
+    }
+
+    void TimeDelay::reset()
+    {
+        _prevTime = std::chrono::high_resolution_clock::now();
+    }
+
+    void TimeDelay::pass()
+    {
+        _prevTime = std::chrono::high_resolution_clock::now() - std::chrono::milliseconds( 2 * _delayMs );
     }
 
     void delayforMs( const uint32_t delayMs )

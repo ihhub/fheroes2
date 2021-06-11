@@ -23,6 +23,7 @@
 #ifndef H2INTERFACE_CPANEL_H
 #define H2INTERFACE_CPANEL_H
 
+#include "game_mode.h"
 #include "image.h"
 
 #include <memory>
@@ -34,14 +35,14 @@ namespace Interface
     class ControlPanel : protected fheroes2::Rect
     {
     public:
-        ControlPanel( Basic & );
+        explicit ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
-        void Redraw( void );
+        void Redraw( void ) const;
         void ResetTheme( void );
-        int QueueEventProcessing( void );
+        fheroes2::GameMode QueueEventProcessing();
 
-        const fheroes2::Rect & GetArea( void );
+        const fheroes2::Rect & GetArea( void ) const;
 
     private:
         Basic & interface;

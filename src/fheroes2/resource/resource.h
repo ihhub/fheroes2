@@ -43,11 +43,6 @@ struct cost_t
 
 class ResourceCount;
 
-#ifdef WITH_XML
-class TiXmlElement;
-void LoadCostFromXMLElement( cost_t &, const TiXmlElement & );
-#endif
-
 namespace Resource
 {
     enum
@@ -70,8 +65,8 @@ public:
     Funds();
     Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 _gems, s32 _gold );
     Funds( int rs, u32 count );
-    Funds( const cost_t & );
-    Funds( const ResourceCount & );
+    explicit Funds( const cost_t & );
+    explicit Funds( const ResourceCount & );
 
     Funds operator+( const Funds & ) const;
     Funds operator*( u32 mul ) const;
@@ -84,9 +79,6 @@ public:
     s32 Get( int rs ) const;
     s32 * GetPtr( int rs );
 
-    bool operator<( const Funds & ) const;
-    bool operator<=( const Funds & ) const;
-    bool operator>( const Funds & ) const;
     bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;
@@ -125,12 +117,12 @@ namespace Resource
     u32 GetIndexSprite2( int resource );
     int FromIndexSprite2( u32 index );
 
-    class BoxSprite : protected Rect
+    class BoxSprite : protected fheroes2::Rect
     {
     public:
-        BoxSprite( const Funds &, u32 );
+        BoxSprite( const Funds &, int32_t );
 
-        const Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea( void ) const;
         void SetPos( s32, s32 );
         void Redraw( void ) const;
 

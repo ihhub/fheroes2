@@ -52,7 +52,8 @@ struct hgs_t
 {
     hgs_t()
         : days( 0 )
-        , rating( 0 ){};
+        , rating( 0 )
+    {}
 
     bool operator==( const hgs_t & ) const;
 
@@ -86,7 +87,7 @@ bool RatingSort( const hgs_t & h1, const hgs_t & h2 )
 class HGSData
 {
 public:
-    HGSData() {}
+    HGSData() = default;
 
     bool Load( const std::string & );
     bool Save( const std::string & ) const;
@@ -181,32 +182,29 @@ void HGSData::RedrawList( int32_t ox, int32_t oy )
     }
 }
 
-int Game::HighScores()
+fheroes2::GameMode Game::HighScores()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
         std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
-        return MAINMENU;
+        return fheroes2::GameMode::MAIN_MENU;
     }
 #endif
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     HGSData hgs;
 
     std::ostringstream stream;
     stream << System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
-    cursor.SetThemes( cursor.POINTER );
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
     hgs.Load( stream.str().c_str() );
 
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
-
-    cursor.Hide();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
@@ -222,7 +220,6 @@ int Game::HighScores()
     buttonCampain.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     const u32 rating = GetGameOverScores();
@@ -232,7 +229,6 @@ int Game::HighScores()
     if ( rating && ( gameResult.GetResult() & GameOver::WINS ) ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player );
-        cursor.Hide();
         if ( player.empty() )
             player = _( "Unknown Hero" );
         hgs.ScoreRegistry( player, Settings::Get().CurrentFileInfo().name, days, rating );
@@ -240,7 +236,6 @@ int Game::HighScores()
         hgs.RedrawList( top.x, top.y );
         buttonCampain.draw();
         buttonExit.draw();
-        cursor.Show();
         display.render();
         gameResult.Reset();
     }
@@ -258,8 +253,8 @@ int Game::HighScores()
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }

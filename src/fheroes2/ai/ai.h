@@ -67,7 +67,7 @@ namespace AI
     {
     public:
         virtual void KingdomTurn( Kingdom & kingdom );
-        virtual void CastleTurn( Castle & castle, bool defensive = false );
+        virtual void CastleTurn( Castle & castle, bool defensive );
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
         virtual void HeroTurn( Heroes & hero );
         virtual void HeroesTurn( VecHeroes & ) {}
@@ -101,12 +101,12 @@ namespace AI
         virtual void Reset();
         virtual void resetPathfinder() = 0;
 
-        virtual ~Base() {}
+        virtual ~Base() = default;
 
     protected:
         int _personality = NONE;
 
-        Base() {}
+        Base() = default;
 
     private:
         friend StreamBase & operator<<( StreamBase &, const AI::Base & );

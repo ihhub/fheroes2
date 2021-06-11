@@ -41,25 +41,51 @@
 #include "ui_button.h"
 #include "world.h"
 
+namespace
+{
+    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
+    {
+        if ( text.empty() ) {
+            // The text is empty, return start position.
+            return 0;
+        }
+
+        if ( cursorPosition <= startXPosition ) {
+            return 0;
+        }
+
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
+            if ( positionOffset + startXPosition > cursorPosition ) {
+                return i;
+            }
+        }
+
+        return text.size();
+    }
+}
+
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
 bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
 
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
-    FileInfoListBox( const Point & pt, bool & edit )
+    FileInfoListBox( const fheroes2::Point & pt, bool & edit )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , edit_mode( edit )
-        , _isDoubleClicked( false ){};
+        , _isDoubleClicked( false )
+    {}
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool );
-    void RedrawBackground( const Point & );
+    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void );
-    void ActionCurrentDn( void );
-    void ActionListDoubleClick( Maps::FileInfo & );
-    void ActionListSingleClick( Maps::FileInfo & );
-    void ActionListPressRight( Maps::FileInfo & ){};
+    void ActionCurrentUp( void ) override;
+    void ActionCurrentDn( void ) override;
+    void ActionListDoubleClick( Maps::FileInfo & ) override;
+    void ActionListSingleClick( Maps::FileInfo & ) override;
+    void ActionListPressRight( Maps::FileInfo & ) override {}
 
     bool & edit_mode;
 
@@ -79,9 +105,9 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     char shortTime[20];
     time_t timeval = info.localtime;
 
-    std::fill( shortDate, ARRAY_COUNT_END( shortDate ), 0 );
-    std::fill( shortHours, ARRAY_COUNT_END( shortHours ), 0 );
-    std::fill( shortTime, ARRAY_COUNT_END( shortTime ), 0 );
+    std::fill( shortDate, std::end( shortDate ), 0 );
+    std::fill( shortHours, std::end( shortHours ), 0 );
+    std::fill( shortTime, std::end( shortTime ), 0 );
     std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
     std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
     std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
@@ -110,7 +136,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     }
 }
 
-void FileInfoListBox::RedrawBackground( const Point & dst )
+void FileInfoListBox::RedrawBackground( const fheroes2::Point & dst )
 {
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::REQBKG, 0 ), fheroes2::Display::instance(), dst.x, dst.y );
 }
@@ -139,26 +165,10 @@ void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & )
 std::string ResizeToShortName( const std::string & str )
 {
     std::string res = System::GetBasename( str );
-    size_t it = res.find( '.' );
+    size_t it = res.rfind( '.' );
     if ( std::string::npos != it )
         res.resize( it );
     return res;
-}
-
-size_t GetInsertPosition( const std::string & name, s32 cx, s32 posx )
-{
-    if ( name.size() ) {
-        s32 tw = Text::width( name, Font::SMALL );
-        if ( cx <= posx )
-            return 0;
-        else if ( cx >= posx + tw )
-            return name.size();
-        else {
-            float cw = tw / name.size();
-            return static_cast<size_t>( ( cx - posx ) / cw );
-        }
-    }
-    return 0;
 }
 
 MapsFileInfoList GetSortedMapsFileInfoList( void )
@@ -204,11 +214,10 @@ std::string Dialog::SelectFileLoad( void )
 std::string SelectFileListSimple( const std::string & header, const std::string & lastfile, const bool editor )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::REQBKG, 0 );
     const fheroes2::Sprite & spriteShadow = fheroes2::AGG::GetICN( ICN::REQBKG, 1 );
@@ -229,9 +238,9 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     bool edit_mode = false;
 
     MapsFileInfoList lists = GetSortedMapsFileInfoList();
-    FileInfoListBox listbox( Point( rt.x, rt.y ), edit_mode );
+    FileInfoListBox listbox( rt.getPosition(), edit_mode );
 
-    listbox.RedrawBackground( Point( rt.x, rt.y ) );
+    listbox.RedrawBackground( rt.getPosition() );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
     listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
@@ -272,12 +281,11 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     }
 
     listbox.Redraw();
-    RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
+    RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
 
     buttonOk.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
     le.OpenVirtualKeyboard();
 
@@ -289,6 +297,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
         listbox.QueueEventProcessing();
+
+        bool needRedraw = false;
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( filename.size() )
@@ -304,7 +314,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             charInsertPos = GetInsertPosition( filename, le.GetMouseCursor().x, enter_field.x );
             if ( filename.empty() )
                 buttonOk.disable();
-            cursor.Hide();
+
+            needRedraw = true;
         }
         else if ( edit_mode && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
@@ -312,7 +323,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 buttonOk.disable();
             else
                 buttonOk.enable();
-            cursor.Hide();
+
+            needRedraw = true;
         }
         if ( !edit_mode && le.KeyPress( KEY_DELETE ) && listbox.isSelected() ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
@@ -325,30 +337,31 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                     buttonOk.disable();
                 listbox.SetListContent( lists );
             }
-            cursor.Hide();
+
+            needRedraw = true;
         }
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-
-            if ( edit_mode && editor )
-                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, InsertString( filename, charInsertPos, "_" ), enter_field );
-            else if ( listbox.isSelected() ) {
-                filename = ResizeToShortName( listbox.GetCurrent().file );
-                charInsertPos = filename.size();
-                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
-            }
-            else
-                is_limit = RedrawExtraInfo( fheroes2::Point( rt.x, rt.y ), header, filename, enter_field );
-
-            buttonOk.draw();
-            buttonCancel.draw();
-            cursor.Show();
-            display.render();
+        if ( !needRedraw && !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+
+        if ( edit_mode && editor )
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, InsertString( filename, charInsertPos, "_" ), enter_field );
+        else if ( listbox.isSelected() ) {
+            filename = ResizeToShortName( listbox.GetCurrent().file );
+            charInsertPos = filename.size();
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+        }
+        else
+            is_limit = RedrawExtraInfo( rt.getPosition(), header, filename, enter_field );
+
+        buttonOk.draw();
+        buttonCancel.draw();
+        display.render();
     }
 
-    cursor.Hide();
     le.CloseVirtualKeyboard();
 
     return result;

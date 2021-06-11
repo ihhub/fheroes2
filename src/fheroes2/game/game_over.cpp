@@ -312,12 +312,12 @@ int GameOver::Result::GetResult( void ) const
     return result;
 }
 
-int GameOver::Result::LocalCheckGameOver( void )
+fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
     if ( continue_game )
-        return Game::CANCEL;
+        return fheroes2::GameMode::CANCEL;
 
-    int res = Game::CANCEL;
+    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
     const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
     const int humanColors = Players::HumanColors();
@@ -349,37 +349,37 @@ int GameOver::Result::LocalCheckGameOver( void )
             if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
 
-                if ( conf.GameType() & Game::TYPE_CAMPAIGN ) {
-                    res = Game::COMPLETE_CAMPAIGN_SCENARIO;
+                if ( conf.isCampaignGameType() ) {
+                    res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {
                     AGG::ResetMixer();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-                    res = Game::HIGHSCORES;
+                    res = fheroes2::GameMode::HIGHSCORES;
                 }
             }
             else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
                 GameOver::DialogLoss( result );
                 AGG::ResetMixer();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
-                res = Game::MAINMENU;
+                res = fheroes2::GameMode::MAIN_MENU;
             }
         }
 
         // set: continue after victory
-        if ( Game::CANCEL != res && conf.ExtGameContinueAfterVictory() && ( !myKingdom.GetCastles().empty() || !myKingdom.GetHeroes().empty() ) ) {
+        if ( fheroes2::GameMode::CANCEL != res && conf.ExtGameContinueAfterVictory() && ( !myKingdom.GetCastles().empty() || !myKingdom.GetHeroes().empty() ) ) {
             if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
                 continue_game = true;
-                if ( res == Game::HIGHSCORES )
+                if ( res == fheroes2::GameMode::HIGHSCORES )
                     Game::HighScores();
-                res = Game::CANCEL;
+                res = fheroes2::GameMode::CANCEL;
                 Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
             }
         }
     }
     else {
         if ( activeHumanColors == 0 || ( activeHumanColors == 1 && activeHumanColors == activeColors ) ) {
-            res = Game::MAINMENU;
+            res = fheroes2::GameMode::MAIN_MENU;
         }
     }
 

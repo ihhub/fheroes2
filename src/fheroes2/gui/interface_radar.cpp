@@ -77,23 +77,23 @@ uint8_t GetPaletteIndexFromGround( int ground )
 {
     switch ( ground ) {
     case Maps::Ground::DESERT:
-        return ( COLOR_DESERT );
+        return COLOR_DESERT;
     case Maps::Ground::SNOW:
-        return ( COLOR_SNOW );
+        return COLOR_SNOW;
     case Maps::Ground::SWAMP:
-        return ( COLOR_SWAMP );
+        return COLOR_SWAMP;
     case Maps::Ground::WASTELAND:
-        return ( COLOR_WASTELAND );
+        return COLOR_WASTELAND;
     case Maps::Ground::BEACH:
-        return ( COLOR_BEACH );
+        return COLOR_BEACH;
     case Maps::Ground::LAVA:
-        return ( COLOR_LAVA );
+        return COLOR_LAVA;
     case Maps::Ground::DIRT:
-        return ( COLOR_DIRT );
+        return COLOR_DIRT;
     case Maps::Ground::GRASS:
-        return ( COLOR_GRASS );
+        return COLOR_GRASS;
     case Maps::Ground::WATER:
-        return ( COLOR_WATER );
+        return COLOR_WATER;
     default:
         break;
     }
@@ -125,7 +125,7 @@ uint8_t GetPaletteIndexFromColor( int color )
 
 /* constructor */
 Interface::Radar::Radar( Basic & basic )
-    : BorderWindow( Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
+    : BorderWindow( fheroes2::Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
@@ -141,7 +141,7 @@ Interface::Radar::Radar( const Radar & radar )
 
 void Interface::Radar::SavePosition( void )
 {
-    Settings::Get().SetPosRadar( GetRect() );
+    Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
 void Interface::Radar::SetPos( s32 ox, s32 oy )
@@ -159,7 +159,6 @@ void Interface::Radar::Build( void )
 /* generate mini maps */
 void Interface::Radar::Generate( void )
 {
-    const Size & size = GetArea();
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
 
@@ -185,24 +184,24 @@ void Interface::Radar::Generate( void )
         }
     }
 
-    if ( spriteArea.width() != size.w || spriteArea.height() != size.h ) {
+    if ( spriteArea.width() != area.width || spriteArea.height() != area.height ) {
         fheroes2::Size new_sz;
 
         if ( worldWidth < worldHeight ) {
-            new_sz.width = ( worldWidth * size.h ) / worldHeight;
-            new_sz.height = size.h;
-            offset.x = ( size.w - new_sz.width ) / 2;
+            new_sz.width = ( worldWidth * area.height ) / worldHeight;
+            new_sz.height = area.height;
+            offset.x = ( area.width - new_sz.width ) / 2;
             offset.y = 0;
         }
         else if ( worldWidth > worldHeight ) {
-            new_sz.width = size.w;
-            new_sz.height = ( worldHeight * size.w ) / worldWidth;
+            new_sz.width = area.width;
+            new_sz.height = ( worldHeight * area.width ) / worldWidth;
             offset.x = 0;
-            offset.y = ( size.h - new_sz.height ) / 2;
+            offset.y = ( area.height - new_sz.height ) / 2;
         }
         else {
-            new_sz.width = size.w;
-            new_sz.height = size.h;
+            new_sz.width = area.width;
+            new_sz.height = area.height;
         }
 
         fheroes2::Image resized( new_sz.width, new_sz.height );
@@ -232,7 +231,7 @@ void Interface::Radar::Redraw()
 
     if ( !hideInterface || conf.ShowRadar() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-        const Rect & rect = GetArea();
+        const fheroes2::Rect & rect = GetArea();
         if ( hide ) {
             fheroes2::Blit( fheroes2::AGG::GetICN( ( conf.ExtGameEvilInterface() ? ICN::HEROLOGE : ICN::HEROLOGO ), 0 ), display, rect.x, rect.y );
         }
@@ -248,11 +247,11 @@ void Interface::Radar::Redraw()
 void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, const ViewWorldMode mode )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
     cursorArea.hide();
     fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
     RedrawObjects( Players::FriendColors(), mode );
-    const Rect roiInTiles = roi.GetROIinTiles();
+    const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
     RedrawCursor( &roiInTiles );
 }
 
@@ -265,17 +264,17 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
     const bool revealArtifacts = revealAll || ( flags == ViewWorldMode::ViewArtifacts );
     const bool revealResources = revealAll || ( flags == ViewWorldMode::ViewResources );
 
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
-    const int areaw = ( offset.x ? rect.w - 2 * offset.x : rect.w );
-    const int areah = ( offset.y ? rect.h - 2 * offset.y : rect.h );
+    const int areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
+    const int areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
 
-    int stepx = worldWidth / rect.w;
-    int stepy = worldHeight / rect.h;
+    int stepx = worldWidth / rect.width;
+    int stepy = worldHeight / rect.height;
 
     if ( 0 == stepx )
         stepx = 1;
@@ -364,7 +363,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 }
 
 // Redraw radar cursor. RoiRectangle is a rectangle in tile unit of the current radar view.
-void Interface::Radar::RedrawCursor( const Rect * roiRectangle /* =nullptr */ )
+void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
 {
     const Settings & conf = Settings::Get();
 
@@ -372,16 +371,16 @@ void Interface::Radar::RedrawCursor( const Rect * roiRectangle /* =nullptr */ )
         if ( world.w() < 1 || world.h() < 1 )
             return;
 
-        const Rect & rect = GetArea();
-        const Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
+        const fheroes2::Rect & rect = GetArea();
+        const fheroes2::Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
 
-        s32 areaw = ( offset.x ? rect.w - 2 * offset.x : rect.w );
-        s32 areah = ( offset.y ? rect.h - 2 * offset.y : rect.h );
+        s32 areaw = ( offset.x ? rect.width - 2 * offset.x : rect.width );
+        s32 areah = ( offset.y ? rect.height - 2 * offset.y : rect.height );
 
         int32_t xStart = rectMaps.x;
-        int32_t xEnd = rectMaps.x + rectMaps.w;
+        int32_t xEnd = rectMaps.x + rectMaps.width;
         int32_t yStart = rectMaps.y;
-        int32_t yEnd = rectMaps.y + rectMaps.h;
+        int32_t yEnd = rectMaps.y + rectMaps.height;
         if ( xStart < 0 )
             xStart = 0;
         if ( yStart < 0 )
@@ -391,8 +390,8 @@ void Interface::Radar::RedrawCursor( const Rect * roiRectangle /* =nullptr */ )
         if ( yEnd >= world.h() )
             yEnd = world.h();
 
-        const uint16_t width = static_cast<uint16_t>( xEnd - xStart );
-        const uint16_t height = static_cast<uint16_t>( yEnd - yStart );
+        const uint32_t width = xEnd - xStart;
+        const uint32_t height = yEnd - yStart;
 
         const fheroes2::Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
 
@@ -412,7 +411,7 @@ void Interface::Radar::QueueEventProcessing( void )
     GameArea & gamearea = interface.GetGameArea();
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
 
     // move border
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
@@ -422,14 +421,14 @@ void Interface::Radar::QueueEventProcessing( void )
         // move cursor
         if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
-            const Point prev( gamearea.GetVisibleTileROI() );
-            const Point & pt = le.GetMouseCursor();
+            fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
+            const fheroes2::Point prev( visibleROI.x, visibleROI.y );
+            const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                gamearea.SetCenter( Point( ( pt.x - rect.x ) * world.w() / rect.w, ( pt.y - rect.y ) * world.h() / rect.h ) );
-
-                if ( prev != gamearea.GetVisibleTileROI() ) {
-                    Cursor::Get().Hide();
+                gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
+                visibleROI = gamearea.GetVisibleTileROI();
+                if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
                     RedrawCursor();
                     gamearea.SetRedraw();
                 }
@@ -438,15 +437,15 @@ void Interface::Radar::QueueEventProcessing( void )
         else if ( le.MousePressRight( GetRect() ) )
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         else if ( conf.ExtGameHideInterface() ) {
-            Size newSize( rect.w, rect.h );
+            fheroes2::Size newSize( rect.width, rect.height );
 
             if ( le.MouseWheelUp() ) {
-                if ( rect.w != world.w() || rect.h != world.h() )
-                    newSize = Size( world.w(), world.h() );
+                if ( rect.width != world.w() || rect.height != world.h() )
+                    newSize = fheroes2::Size( world.w(), world.h() );
             }
             else if ( le.MouseWheelDn() ) {
-                if ( rect.w != RADARWIDTH || rect.h != RADARWIDTH )
-                    newSize = Size( RADARWIDTH, RADARWIDTH );
+                if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
+                    newSize = fheroes2::Size( RADARWIDTH, RADARWIDTH );
             }
 
             ChangeAreaSize( newSize );
@@ -454,24 +453,23 @@ void Interface::Radar::QueueEventProcessing( void )
     }
 }
 
-bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi )
+bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const
 {
     LocalEvent & le = LocalEvent::Get();
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
 
     // move cursor
     if ( le.MouseCursor( rect ) ) {
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
             const fheroes2::Rect initROI = roi.GetROIinPixels();
             const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
-            const Point & pt = le.GetMouseCursor();
+            const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.w, ( pt.y - rect.y ) * world.h() / rect.h );
+                const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height );
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    Cursor::Get().Hide();
                     return roi.ChangeCenter( fheroes2::Point( newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH ) );
                 }
             }
@@ -490,15 +488,14 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
 }
 void Interface::Radar::ResetAreaSize( void )
 {
-    ChangeAreaSize( Size( RADARWIDTH, RADARWIDTH ) );
+    ChangeAreaSize( fheroes2::Size( RADARWIDTH, RADARWIDTH ) );
 }
 
-void Interface::Radar::ChangeAreaSize( const Size & newSize )
+void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
 {
-    if ( newSize != area ) {
-        const Rect & rect = GetRect();
-        Cursor::Get().Hide();
-        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.w, newSize.h );
+    if ( newSize.width != area.width || newSize.height != area.height ) {
+        const fheroes2::Rect & rect = GetRect();
+        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
         Generate();
         RedrawCursor();
         interface.GetGameArea().SetRedraw();

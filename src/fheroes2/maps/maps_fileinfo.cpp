@@ -35,20 +35,71 @@
 #include "game_over.h"
 #include "logging.h"
 #include "maps_fileinfo.h"
+#include "maps_tiles.h"
+#include "mp2.h"
 #include "race.h"
 #include "settings.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
-#define LENGTHNAME 16
-#define LENGTHDESCRIPTION 143
-
-template <typename CharType>
-bool AlphabeticalCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+namespace
 {
-    return std::use_facet<std::collate<CharType> >( std::locale() ).compare( lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size() ) == -1;
+    const size_t mapNameLength = 16;
+    const size_t mapDescriptionLength = 143;
+
+    template <typename CharType>
+    bool AlphabeticalCompare( const std::basic_string<CharType> & lhs, const std::basic_string<CharType> & rhs )
+    {
+        return std::use_facet<std::collate<CharType> >( std::locale() ).compare( lhs.data(), lhs.data() + lhs.size(), rhs.data(), rhs.data() + rhs.size() ) == -1;
+    }
+
+    int ByteToColor( const int byte )
+    {
+        switch ( byte ) {
+        case 0:
+            return Color::BLUE;
+        case 1:
+            return Color::GREEN;
+        case 2:
+            return Color::RED;
+        case 3:
+            return Color::YELLOW;
+        case 4:
+            return Color::ORANGE;
+        case 5:
+            return Color::PURPLE;
+
+        default:
+            break;
+        }
+
+        return Color::NONE;
+    }
+
+    int ByteToRace( const int byte )
+    {
+        switch ( byte ) {
+        case 0x00:
+            return Race::KNGT;
+        case 0x01:
+            return Race::BARB;
+        case 0x02:
+            return Race::SORC;
+        case 0x03:
+            return Race::WRLK;
+        case 0x04:
+            return Race::WZRD;
+        case 0x05:
+            return Race::NECR;
+        case 0x06:
+            return Race::MULT;
+        case 0x07:
+            return Race::RAND;
+
+        default:
+            break;
+        }
+
+        return Race::NONE;
+    }
 }
 
 namespace Editor
@@ -70,57 +121,8 @@ namespace Editor
     };
 }
 
-int ByteToColor( int byte )
-{
-    switch ( byte ) {
-    case 0:
-        return Color::BLUE;
-    case 1:
-        return Color::GREEN;
-    case 2:
-        return Color::RED;
-    case 3:
-        return Color::YELLOW;
-    case 4:
-        return Color::ORANGE;
-    case 5:
-        return Color::PURPLE;
-
-    default:
-        break;
-    }
-
-    return Color::NONE;
-}
-
-int ByteToRace( int byte )
-{
-    switch ( byte ) {
-    case 0x00:
-        return Race::KNGT;
-    case 0x01:
-        return Race::BARB;
-    case 0x02:
-        return Race::SORC;
-    case 0x03:
-        return Race::WRLK;
-    case 0x04:
-        return Race::WZRD;
-    case 0x05:
-        return Race::NECR;
-    case 0x06:
-        return Race::MULT;
-    case 0x07:
-        return Race::RAND;
-
-    default:
-        break;
-    }
-
-    return Race::NONE;
-}
-
 Maps::FileInfo::FileInfo()
+    : _version( GameVersion::SUCCESSION_WARS )
 {
     Reset();
 }
@@ -157,7 +159,8 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     loss1 = f.loss1;
     loss2 = f.loss2;
     localtime = f.localtime;
-    with_heroes = f.with_heroes;
+    startWithHeroInEachCastle = f.startWithHeroInEachCastle;
+    _version = f._version;
 
     return *this;
 }
@@ -183,7 +186,9 @@ void Maps::FileInfo::Reset( void )
     loss1 = 0;
     loss2 = 0;
     localtime = 0;
-    with_heroes = false;
+    startWithHeroInEachCastle = false;
+
+    _version = GameVersion::SUCCESSION_WARS;
 
     for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
         races[ii] = Race::NONE;
@@ -195,201 +200,6 @@ bool Maps::FileInfo::ReadSAV( const std::string & filename )
 {
     Reset();
     return Game::LoadSAV2FileInfo( filename, *this );
-}
-
-bool Maps::FileInfo::ReadMAP( const std::string & filename )
-{
-#ifdef WITH_XML
-    Reset();
-
-    TiXmlDocument doc;
-    const TiXmlElement * xml_map = NULL;
-
-    if ( doc.LoadFile( filename.c_str() ) && NULL != ( xml_map = doc.FirstChildElement( "map" ) ) ) {
-        const TiXmlElement * xml_header = xml_map->FirstChildElement( "header" );
-        if ( !xml_header ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       filename << ", "
-                                << "header not found" );
-            return false;
-        }
-
-        const TiXmlElement * xml;
-
-        xml = xml_header->FirstChildElement( "name" );
-        if ( xml && xml->GetText() )
-            name = xml->GetText();
-
-        xml = xml_header->FirstChildElement( "description" );
-        if ( xml && xml->GetText() )
-            description = xml->GetText();
-
-        xml = xml_header->FirstChildElement( "info" );
-
-        if ( xml && xml->GetText() ) {
-            std::vector<u8> bytes = decodeBase64( xml->GetText() );
-            StreamBuf st( bytes );
-
-            if ( bytes.size() >= 89 ) {
-                st.skip( 4 ); // version
-                localtime = st.getLE32();
-                size_w = st.getLE32();
-                size_h = st.getLE32();
-
-                switch ( st.getLE32() ) {
-                case 0x00:
-                    difficulty = Difficulty::EASY;
-                    break;
-                case 0x01:
-                    difficulty = Difficulty::NORMAL;
-                    break;
-                case 0x02:
-                    difficulty = Difficulty::HARD;
-                    break;
-                case 0x03:
-                    difficulty = Difficulty::EXPERT;
-                    break;
-                default:
-                    difficulty = Difficulty::NORMAL;
-                    break;
-                }
-
-                kingdom_colors = st.getLE32();
-                allow_human_colors = st.getLE32();
-                allow_comp_colors = st.getLE32();
-
-                for ( u32 col = 0; col < 6; ++col ) {
-                    int v = st.getLE32();
-                    races[col] = 1 < CountBits( v ) ? Race::MULT : v;
-
-                    if ( v & Race::RAND )
-                        switch ( col ) {
-                        case 0:
-                            rnd_races |= Color::BLUE;
-                            break;
-                        case 1:
-                            rnd_races |= Color::GREEN;
-                            break;
-                        case 2:
-                            rnd_races |= Color::RED;
-                            break;
-                        case 3:
-                            rnd_races |= Color::YELLOW;
-                            break;
-                        case 4:
-                            rnd_races |= Color::ORANGE;
-                            break;
-                        case 5:
-                            rnd_races |= Color::PURPLE;
-                            break;
-                        default:
-                            break;
-                        }
-                }
-
-                with_heroes = 0 != st.get();
-
-                int cond1[4], cond2[4];
-
-                for ( u32 it = 0; it < 4; ++it )
-                    cond1[it] = st.getLE32();
-
-                for ( u32 it = 0; it < 4; ++it )
-                    cond2[it] = st.getLE32();
-
-                comp_also_wins = cond1[0] & Editor::CompAlsoWins;
-                allow_normal_victory = cond1[0] & Editor::AllowNormalVictory;
-
-                switch ( cond1[0] & 0x10FF ) {
-                case Editor::Wins:
-                    conditions_wins = 0;
-                    break;
-
-                case Editor::CaptureTown:
-                    conditions_wins = 1;
-                    wins1 = cond1[2];
-                    wins2 = cond1[3];
-                    break;
-
-                case Editor::DefeatHero:
-                    conditions_wins = 2;
-                    wins1 = cond1[2];
-                    wins2 = cond1[3];
-                    break;
-
-                case Editor::FindArtifact:
-                    conditions_wins = 3;
-                    wins1 = cond1[2];
-                    break;
-
-                case Editor::SideWins:
-                    conditions_wins = 4;
-                    // wins1 =; FIX:: Editor::ConditionSidePart
-                    break;
-
-                case Editor::AccumulateGold:
-                    conditions_wins = 5;
-                    wins1 = cond1[2] / 1000;
-                    break;
-
-                default:
-                    break;
-                }
-
-                switch ( cond2[0] & 0x20FF ) {
-                case Editor::Loss:
-                    conditions_loss = 0;
-                    break;
-
-                case Editor::LoseTown:
-                    conditions_loss = 1;
-                    loss1 = cond2[2];
-                    loss2 = cond2[3];
-                    break;
-
-                case Editor::LoseHero:
-                    conditions_loss = 2;
-                    loss1 = cond2[2];
-                    loss2 = cond2[3];
-                    break;
-
-                case Editor::OutTime:
-                    conditions_loss = 3;
-                    loss1 = cond2[2];
-                    break;
-
-                default:
-                    break;
-                }
-
-                file = filename;
-                return true;
-            }
-            else {
-                DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           filename << ", "
-                                    << "incorrect header decode"
-                                    << ", "
-                                    << "size: " << bytes.size() );
-            }
-        }
-        else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN,
-                       filename << ", "
-                                << "incorrect info" );
-        }
-
-        return false;
-    }
-    else
-        VERBOSE_LOG( filename << ": " << doc.ErrorDesc() );
-#else
-    (void)filename;
-    DEBUG_LOG( DBG_GAME, DBG_WARN,
-               filename << ", "
-                        << "unsupported map format" );
-#endif
-    return false;
 }
 
 bool Maps::FileInfo::ReadMP2( const std::string & filename )
@@ -440,22 +250,28 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     // height
     size_h = fs.get();
 
-    Colors colors( Color::ALL );
+    const Colors colors( Color::ALL );
 
     // kingdom color - blue, green, red, yellow, orange, purple
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it )
-        if ( fs.get() )
-            kingdom_colors |= *it;
+    for ( const int color : colors ) {
+        if ( fs.get() != 0 ) {
+            kingdom_colors |= color;
+        }
+    }
 
     // allow human color - blue, green, red, yellow, orange, purple
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it )
-        if ( fs.get() )
-            allow_human_colors |= *it;
+    for ( const int color : colors ) {
+        if ( fs.get() != 0 ) {
+            allow_human_colors |= color;
+        }
+    }
 
     // allow comp color - blue, green, red, yellow, orange, purple
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it )
-        if ( fs.get() )
-            allow_comp_colors |= *it;
+    for ( const int color : colors ) {
+        if ( fs.get() != 0 ) {
+            allow_comp_colors |= color;
+        }
+    }
 
     // kingdom count
     // fs.seekg(0x1A, std::ios_base::beg);
@@ -485,54 +301,98 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
     // start with hero
     fs.seek( 0x25 );
-    with_heroes = 0 == fs.get();
+    startWithHeroInEachCastle = ( 0 == fs.get() );
 
     // race color
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
-        int race = ByteToRace( fs.get() );
-        races[Color::GetIndex( *it )] = race;
+    for ( const int color : colors ) {
+        const int race = ByteToRace( fs.get() );
+        races[Color::GetIndex( color )] = race;
         if ( Race::RAND == race )
-            rnd_races |= *it;
+            rnd_races |= color;
+    }
+
+    bool skipUnionSetup = false;
+    // If loss conditions are LOSS_HERO and victory conditions are VICTORY_DEFEAT_EVERYONE then we have to verify the color to which this object belongs to.
+    // If the color is under computer control only we have to make it as an ally for human player.
+    if ( conditions_loss == LOSS_HERO && conditions_wins == VICTORY_DEFEAT_EVERYONE && Colors( allow_human_colors ).size() == 1 ) {
+        // Each tile needs 16 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 8 + 16 + 32 + 32 = 160 bits or 20 bytes.
+        fs.seek( MP2OFFSETDATA + ( loss1 + loss2 * size_w ) * 20 );
+
+        MP2::mp2tile_t mp2tile;
+        mp2tile.tileIndex = fs.getLE16();
+        mp2tile.objectName1 = fs.get();
+        mp2tile.indexName1 = fs.get();
+        mp2tile.quantity1 = fs.get();
+        mp2tile.quantity2 = fs.get();
+        mp2tile.objectName2 = fs.get();
+        mp2tile.indexName2 = fs.get();
+        mp2tile.flags = fs.get();
+        mp2tile.mapObject = fs.get();
+
+        // offset first addon
+        fs.getLE16();
+
+        mp2tile.editorObjectLink = fs.getLE32();
+        mp2tile.editorObjectOverlay = fs.getLE32();
+
+        Maps::Tiles tile;
+        tile.Init( 0, mp2tile );
+
+        std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
+        if ( ( colorRace.first & allow_human_colors ) == 0 ) {
+            const int side1 = colorRace.first | allow_human_colors;
+            const int side2 = allow_comp_colors ^ colorRace.first;
+            FillUnions( side1, side2 );
+            conditions_wins = VICTORY_DEFEAT_OTHER_SIDE;
+            skipUnionSetup = true;
+        }
     }
 
     // name
     fs.seek( 0x3A );
-    name = Game::GetEncodeString( fs.toString( LENGTHNAME ) );
+    name = Game::GetEncodeString( fs.toString( mapNameLength ) );
 
     // description
     fs.seek( 0x76 );
-    description = Game::GetEncodeString( fs.toString( LENGTHDESCRIPTION ) );
+    description = Game::GetEncodeString( fs.toString( mapDescriptionLength ) );
 
     // fill unions
-    if ( 4 == conditions_wins )
-        FillUnions();
+    if ( conditions_wins == VICTORY_DEFEAT_OTHER_SIDE && !skipUnionSetup ) {
+        int side1 = 0;
+        int side2 = 0;
+
+        const Colors availableColors( kingdom_colors );
+
+        for ( const int color : availableColors ) {
+            if ( Color::GetIndex( color ) < wins1 )
+                side1 |= color;
+            else
+                side2 |= color;
+        }
+        FillUnions( side1, side2 );
+    }
+
+    // Determine the type of the map.
+    const size_t pos = filename.rfind( '.' );
+    if ( pos != std::string::npos ) {
+        const std::string fileExtension = StringLower( filename.substr( pos + 1 ) );
+        _version = ( fileExtension == "mx2" || fileExtension == "hxc" ) ? GameVersion::PRICE_OF_LOYALTY : GameVersion::SUCCESSION_WARS;
+    }
 
     return true;
 }
 
-void Maps::FileInfo::FillUnions( void )
+void Maps::FileInfo::FillUnions( const int side1Colors, const int side2Colors )
 {
-    int side1 = 0;
-    int side2 = 0;
+    for ( uint32_t i = 0; i < KINGDOMMAX; ++i ) {
+        const int color = ByteToColor( i );
 
-    const Colors colors( kingdom_colors );
-
-    for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
-        if ( Color::GetIndex( *it ) < wins1 )
-            side1 |= *it;
+        if ( side1Colors & color )
+            unions[i] = side1Colors;
+        else if ( side2Colors & color )
+            unions[i] = side2Colors;
         else
-            side2 |= *it;
-    }
-
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii ) {
-        int cl = ByteToColor( ii );
-
-        if ( side1 & cl )
-            unions[ii] = side1;
-        else if ( side2 & cl )
-            unions[ii] = side2;
-        else
-            unions[ii] = cl;
+            unions[i] = color;
     }
 }
 
@@ -637,14 +497,14 @@ u32 Maps::FileInfo::WinsAccumulateGold( void ) const
     return wins1 * 1000;
 }
 
-Point Maps::FileInfo::WinsMapsPositionObject( void ) const
+fheroes2::Point Maps::FileInfo::WinsMapsPositionObject( void ) const
 {
-    return Point( wins1, wins2 );
+    return fheroes2::Point( wins1, wins2 );
 }
 
-Point Maps::FileInfo::LossMapsPositionObject( void ) const
+fheroes2::Point Maps::FileInfo::LossMapsPositionObject( void ) const
 {
-    return Point( loss1, loss2 );
+    return fheroes2::Point( loss1, loss2 );
 }
 
 u32 Maps::FileInfo::LossCountDays( void ) const
@@ -731,7 +591,7 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
     const Settings & conf = Settings::Get();
 
     ListFiles maps_old = GetMapsFiles( ".mp2" );
-    if ( conf.PriceLoyaltyVersion() )
+    if ( conf.isPriceOfLoyaltySupported() )
         maps_old.Append( GetMapsFiles( ".mx2" ) );
 
     for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
@@ -739,16 +599,6 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
         if ( fi.ReadMP2( *it ) )
             lists.push_back( fi );
     }
-
-#ifdef WITH_XML
-    ListFiles maps_new = GetMapsFiles( ".map" );
-
-    for ( ListFiles::const_iterator it = maps_new.begin(); it != maps_new.end(); ++it ) {
-        Maps::FileInfo fi;
-        if ( fi.ReadMAP( *it ) )
-            lists.push_back( fi );
-    }
-#endif
 
     if ( lists.empty() )
         return false;
@@ -782,7 +632,10 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
         msg << fi.races[ii] << fi.unions[ii];
 
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
-        << fi.wins1 << fi.wins2 << fi.conditions_loss << fi.loss1 << fi.loss2 << fi.localtime << fi.with_heroes;
+        << fi.wins1 << fi.wins2 << fi.conditions_loss << fi.loss1 << fi.loss2 << fi.localtime << fi.startWithHeroInEachCastle;
+
+    // Please take a note that game version is written to save files starting from FORMAT_VERSION_094_RELEASE.
+    msg << static_cast<int>( fi._version );
 
     return msg;
 }
@@ -797,7 +650,18 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
         msg >> fi.races[ii] >> fi.unions[ii];
 
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory
-        >> fi.wins1 >> fi.wins2 >> fi.conditions_loss >> fi.loss1 >> fi.loss2 >> fi.localtime >> fi.with_heroes;
+        >> fi.wins1 >> fi.wins2 >> fi.conditions_loss >> fi.loss1 >> fi.loss2 >> fi.localtime >> fi.startWithHeroInEachCastle;
 
+    // Versions of FileInfo before FORMAT_VERSION_094_RELEASE do not contain GameVersion flag and in this case the only to properly support it is to load separately.
+    // Please take a look at HeaderSAV class in game_io.cpp file.
+    // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE add GameVersion loading code here and remove the separate function below.
     return msg;
+}
+
+StreamBase & operator>>( StreamBase & stream, GameVersion & version )
+{
+    int temp = 0;
+    stream >> temp;
+    version = static_cast<GameVersion>( temp );
+    return stream;
 }

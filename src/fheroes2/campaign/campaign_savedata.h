@@ -21,6 +21,8 @@
 #ifndef H2CAMPAIGN_SAVEDATA_H
 #define H2CAMPAIGN_SAVEDATA_H
 
+#include "army.h"
+#include "campaign_data.h"
 #include "campaign_scenariodata.h"
 
 namespace Campaign
@@ -40,11 +42,6 @@ namespace Campaign
             return _finishedMaps;
         }
 
-        const std::vector<std::string> & getEarnedCampaignAwards() const
-        {
-            return _earnedCampaignAwards;
-        }
-
         int getCampaignID() const
         {
             return _campaignID;
@@ -55,10 +52,8 @@ namespace Campaign
             return _currentScenarioID;
         }
 
-        int getLastCompletedScenarioID() const
-        {
-            return _finishedMaps.back();
-        }
+        // Make sure that this is not the first scenario in the campaign. Please call isStarting to verify this.
+        int getLastCompletedScenarioID() const;
 
         bool isStarting() const
         {
@@ -70,11 +65,19 @@ namespace Campaign
             return _daysPassed;
         }
 
+        const std::vector<Troop> & getCarryOverTroops() const
+        {
+            return _carryOverTroops;
+        }
+
+        const std::vector<Campaign::CampaignAwardData> getObtainedCampaignAwards() const;
+
         void setCurrentScenarioBonus( const ScenarioBonusData & bonus );
         void setCurrentScenarioID( const int scenarioID );
         void setCampaignID( const int campaignID );
         void addCurrentMapToFinished();
-        void addCampaignAward( const std::string & award );
+        void addCampaignAward( const int awardID );
+        void setCarryOverTroops( const Troops & troops );
         void reset();
         void addDaysPassed( const uint32_t days );
 
@@ -85,7 +88,8 @@ namespace Campaign
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );
 
         std::vector<int> _finishedMaps;
-        std::vector<std::string> _earnedCampaignAwards; // should have its own data format
+        std::vector<int> _obtainedCampaignAwards;
+        std::vector<Troop> _carryOverTroops;
         int _currentScenarioID;
         int _campaignID;
         uint32_t _daysPassed;

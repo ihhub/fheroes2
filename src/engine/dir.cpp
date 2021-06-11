@@ -168,16 +168,3 @@ void ListDirs::Append( const std::list<std::string> & dirs )
 {
     insert( end(), dirs.begin(), dirs.end() );
 }
-
-namespace fheroes2
-{
-    void AddOSSpecificDirectories( ListDirs & dirs )
-    {
-#if defined( FHEROES2_VITA )
-        dirs.emplace_back( "ux0:app/FHOMM0002" );
-        dirs.emplace_back( "ux0:data/fheroes2" );
-#else
-        (void)dirs;
-#endif
-    }
-}

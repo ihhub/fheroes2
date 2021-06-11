@@ -28,7 +28,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <math.h>
 #include <sstream>
 
 #include "logging.h"
@@ -278,7 +277,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
 {
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "wb" );
 
-    if ( rw && 1 == SDL_RWwrite( rw, &data[0], data.size(), 1 ) )
+    if ( rw && 1 == SDL_RWwrite( rw, &data[0], static_cast<int>( data.size() ), 1 ) )
         SDL_RWclose( rw );
     else {
         ERROR_LOG( SDL_GetError() );
@@ -302,7 +301,7 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     if ( length > 0 ) {
         data.resize( length );
         SDL_RWseek( rw, 0, RW_SEEK_SET );
-        SDL_RWread( rw, &data[0], data.size(), 1 );
+        SDL_RWread( rw, &data[0], static_cast<int>( data.size() ), 1 );
     }
 
     SDL_RWclose( rw );
@@ -383,105 +382,6 @@ std::string EncodeString( const std::string & str, const char * charset )
 }
 #endif
 
-double GetAngle( const Point & start, const Point & target )
-{
-    const int dx = target.x - start.x;
-    const int dy = target.y - start.y;
-    double angle = atan2( -dy, dx ) * 180.0 / M_PI;
-    // we only care about two quadrants, normalize
-    if ( dx < 0 ) {
-        angle = ( dy <= 0 ) ? 180 - angle : -angle - 180;
-    }
-    return angle;
-}
-
-Points GetEuclideanLine( const Point & pt1, const Point & pt2, u16 step )
-{
-    const int dx = pt2.x - pt1.x;
-    const int dy = pt2.y - pt1.y;
-    const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
-    // round up the integer division
-    const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
-    const double moveX = dx / static_cast<double>( length );
-    const double moveY = dy / static_cast<double>( length );
-
-    Points line;
-    line.reserve( length );
-
-    for ( uint32_t i = 0; i <= length; ++i ) {
-        line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
-    }
-
-    return line;
-}
-
-Points GetLinePoints( const Point & pt1, const Point & pt2, u16 step )
-{
-    Points res;
-    res.reserve( 10 );
-
-    const u16 dx = std::abs( pt2.x - pt1.x );
-    const u16 dy = std::abs( pt2.y - pt1.y );
-
-    int16_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
-    Point pt( pt1 );
-
-    for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
-        if ( dx > dy ) {
-            pt.x < pt2.x ? ++pt.x : --pt.x;
-            ns -= dy;
-        }
-        else {
-            pt.y < pt2.y ? ++pt.y : --pt.y;
-            ns -= dx;
-        }
-
-        if ( ns < 0 ) {
-            if ( dx > dy ) {
-                pt.y < pt2.y ? ++pt.y : --pt.y;
-                ns += dx;
-            }
-            else {
-                pt.x < pt2.x ? ++pt.x : --pt.x;
-                ns += dy;
-            }
-        }
-
-        if ( 0 == ( i % step ) )
-            res.push_back( pt );
-    }
-
-    return res;
-}
-
-Points GetArcPoints( const Point & from, const Point & to, const Point & max, u16 step )
-{
-    Points res;
-    Point pt1, pt2;
-
-    pt1 = from;
-    pt2 = Point( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
-    const Points & pts1 = GetLinePoints( pt1, pt2, step );
-    res.insert( res.end(), pts1.begin(), pts1.end() );
-
-    pt1 = pt2;
-    pt2 = max;
-    const Points & pts2 = GetLinePoints( pt1, pt2, step );
-    res.insert( res.end(), pts2.begin(), pts2.end() );
-
-    pt1 = max;
-    pt2 = Point( max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 );
-    const Points & pts3 = GetLinePoints( pt1, pt2, step );
-    res.insert( res.end(), pts3.begin(), pts3.end() );
-
-    pt1 = pt2;
-    pt2 = to;
-    const Points & pts4 = GetLinePoints( pt1, pt2, step );
-    res.insert( res.end(), pts4.begin(), pts4.end() );
-
-    return res;
-}
-
 u32 decodeChar( int v )
 {
     if ( 'A' <= v && v <= 'Z' )
@@ -507,7 +407,7 @@ std::vector<u8> decodeBase64( const std::string & src )
     std::vector<u8> res;
 
     if ( src.size() % 4 == 0 ) {
-        u32 size = 3 * src.size() / 4;
+        size_t size = 3 * src.size() / 4;
 
         if ( src[src.size() - 1] == '=' )
             --size;
@@ -556,4 +456,190 @@ int CheckSum( const std::vector<u8> & v )
 int CheckSum( const std::string & str )
 {
     return CheckSum( std::vector<u8>( str.begin(), str.end() ) );
+}
+
+namespace fheroes2
+{
+    double GetAngle( const Point & start, const Point & target )
+    {
+        const int dx = target.x - start.x;
+        const int dy = target.y - start.y;
+        double angle = atan2( -dy, dx ) * 180.0 / M_PI;
+        // we only care about two quadrants, normalize
+        if ( dx < 0 ) {
+            angle = ( dy <= 0 ) ? 180 - angle : -angle - 180;
+        }
+        return angle;
+    }
+
+    std::vector<Point> GetEuclideanLine( const Point & pt1, const Point & pt2, const uint32_t step )
+    {
+        const int dx = pt2.x - pt1.x;
+        const int dy = pt2.y - pt1.y;
+        const uint32_t dist = static_cast<uint32_t>( std::hypot( std::abs( dx ), std::abs( dy ) ) );
+        // round up the integer division
+        const uint32_t length = ( step > 0 ) ? ( dist + step / 2 ) / step : 1;
+        const double moveX = dx / static_cast<double>( length );
+        const double moveY = dy / static_cast<double>( length );
+
+        std::vector<Point> line;
+        line.reserve( length );
+
+        for ( uint32_t i = 0; i <= length; ++i ) {
+            line.emplace_back( static_cast<int>( pt1.x + i * moveX ), static_cast<int>( pt1.y + i * moveY ) );
+        }
+
+        return line;
+    }
+
+    std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step )
+    {
+        std::vector<Point> res;
+        res.reserve( 10 );
+
+        const int32_t dx = std::abs( pt2.x - pt1.x );
+        const int32_t dy = std::abs( pt2.y - pt1.y );
+
+        int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
+        Point pt( pt1 );
+
+        for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
+            if ( dx > dy ) {
+                pt.x < pt2.x ? ++pt.x : --pt.x;
+                ns -= dy;
+            }
+            else {
+                pt.y < pt2.y ? ++pt.y : --pt.y;
+                ns -= dx;
+            }
+
+            if ( ns < 0 ) {
+                if ( dx > dy ) {
+                    pt.y < pt2.y ? ++pt.y : --pt.y;
+                    ns += dx;
+                }
+                else {
+                    pt.x < pt2.x ? ++pt.x : --pt.x;
+                    ns += dy;
+                }
+            }
+
+            if ( 0 == ( i % step ) )
+                res.push_back( pt );
+        }
+
+        return res;
+    }
+
+    std::vector<Point> GetArcPoints( const Point & from, const Point & to, const Point & max, const int32_t step )
+    {
+        std::vector<Point> res;
+        Point pt1, pt2;
+
+        pt1 = from;
+        pt2 = Point( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
+        const std::vector<Point> & pts1 = GetLinePoints( pt1, pt2, step );
+        res.insert( res.end(), pts1.begin(), pts1.end() );
+
+        pt1 = pt2;
+        pt2 = max;
+        const std::vector<Point> & pts2 = GetLinePoints( pt1, pt2, step );
+        res.insert( res.end(), pts2.begin(), pts2.end() );
+
+        pt1 = max;
+        pt2 = Point( max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 );
+        const std::vector<Point> & pts3 = GetLinePoints( pt1, pt2, step );
+        res.insert( res.end(), pts3.begin(), pts3.end() );
+
+        pt1 = pt2;
+        pt2 = to;
+        const std::vector<Point> & pts4 = GetLinePoints( pt1, pt2, step );
+        res.insert( res.end(), pts4.begin(), pts4.end() );
+
+        return res;
+    }
+
+    int32_t GetRectIndex( const std::vector<Rect> & rects, const Point & pt )
+    {
+        for ( size_t i = 0; i < rects.size(); ++i ) {
+            if ( rects[i] & pt )
+                return static_cast<int32_t>( i );
+        }
+
+        return -1;
+    }
+
+    std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt )
+    {
+        std::pair<Rect, Point> res;
+        Rect & srcrtfix = res.first;
+        Point & dstptfix = res.second;
+
+        if ( srcrt.width && srcrt.height && srcrt.x + srcrt.width > dstrt.x && srcrt.y + srcrt.height > dstrt.y && srcrt.x < dstrt.x + dstrt.width
+             && srcrt.y < dstrt.y + dstrt.height ) {
+            srcrtfix.width = srcrt.width;
+            srcrtfix.height = srcrt.height;
+            dstptfix.x = srcrt.x;
+            dstptfix.y = srcrt.y;
+
+            if ( srcrt.x < dstrt.x ) {
+                srcrtfix.x = dstrt.x - srcrt.x;
+                dstptfix.x = dstrt.x;
+            }
+
+            if ( srcrt.y < dstrt.y ) {
+                srcrtfix.y = dstrt.y - srcrt.y;
+                dstptfix.y = dstrt.y;
+            }
+
+            if ( dstptfix.x + srcrtfix.width > dstrt.x + dstrt.width )
+                srcrtfix.width = dstrt.x + dstrt.width - dstptfix.x;
+
+            if ( dstptfix.y + srcrtfix.height > dstrt.y + dstrt.height )
+                srcrtfix.height = dstrt.y + dstrt.height - dstptfix.y;
+        }
+
+        return res;
+    }
+
+    Rect GetCommonRect( const Rect & rt1, const Rect & rt2, const bool intersect )
+    {
+        Rect rt3;
+
+        if ( intersect ) {
+            if ( rt1 & rt2 ) {
+                rt3.x = std::max( rt1.x, rt2.x );
+                rt3.y = std::max( rt1.y, rt2.y );
+                rt3.width = std::min( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
+                rt3.height = std::min( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
+            }
+        }
+        else
+        // max
+        {
+            rt3.x = rt1.x < rt2.x ? rt1.x : rt2.x;
+            rt3.y = rt1.y < rt2.y ? rt1.y : rt2.y;
+            rt3.width = rt1.x + rt1.width > rt2.x + rt2.width ? rt1.x + rt1.width - rt3.x : rt2.x + rt2.width - rt3.x;
+            rt3.height = rt1.y + rt1.height > rt2.y + rt2.height ? rt1.y + rt1.height - rt3.y : rt2.y + rt2.height - rt3.y;
+        }
+
+        return rt3;
+    }
+
+    Rect GetBoundaryRect( const std::vector<Rect> & rects )
+    {
+        Rect res;
+
+        if ( rects.empty() ) {
+            return res;
+        }
+
+        res = rects[0];
+
+        for ( size_t i = 1; i < rects.size(); ++i ) {
+            res = GetCommonRect( rects[i], res, false );
+        }
+
+        return res;
+    }
 }

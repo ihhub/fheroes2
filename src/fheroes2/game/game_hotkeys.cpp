@@ -265,6 +265,9 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
     key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
     key_events[EVENT_JOINSTACKS] = KEY_ALT;
+
+    key_events[EVENT_UPGRADE_TROOP] = KEY_u;
+    key_events[EVENT_DISMISS_TROOP] = KEY_d;
 }
 
 bool Game::HotKeyPressEvent( int evnt )
@@ -304,9 +307,7 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 {
     // system hotkeys
     if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
-        Cursor::Get().Hide();
         fheroes2::engine().toggleFullScreen();
-        Cursor::Get().Show();
         fheroes2::Display::instance().render();
 
         Settings & conf = Settings::Get();

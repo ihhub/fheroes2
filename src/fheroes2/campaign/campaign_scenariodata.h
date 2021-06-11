@@ -21,17 +21,32 @@
 #ifndef H2CAMPAIGN_SCENARIODATA_H
 #define H2CAMPAIGN_SCENARIODATA_H
 
+#include "game_video_type.h"
 #include "maps_fileinfo.h"
 
 namespace Campaign
 {
-    enum ScenarioIcon
+    enum CampaignID
     {
-        SCENARIOICON_CLEARED = 10,
-        SCENARIOICON_AVAILABLE = 11,
-        SCENARIOICON_UNAVAILABLE = 12,
-        SCENARIOICON_GOOD_SELECTED = 14,
-        SCENARIOICON_EVIL_SELECTED = 17,
+        ROLAND_CAMPAIGN = 0,
+        ARCHIBALD_CAMPAIGN = 1,
+        PRICE_OF_LOYALTY_CAMPAIGN = 2,
+        DESCENDANTS_CAMPAIGN = 3,
+        WIZARDS_ISLE_CAMPAIGN = 4,
+        VOYAGE_HOME_CAMPAIGN = 5
+    };
+
+    enum class ScenarioVictoryCondition : int
+    {
+        STANDARD = 0, // standard map's defined victory condition
+        CAPTURE_DRAGON_CITY = 1,
+        OBTAIN_ULTIMATE_CROWN = 2
+    };
+
+    enum class ScenarioLossCondition : int
+    {
+        STANDARD = 0, // standard map's defined loss condition
+        LOSE_ALL_SORCERESS_VILLAGES = 1
     };
 
     struct ScenarioBonusData
@@ -44,7 +59,8 @@ namespace Campaign
             TROOP,
             SPELL,
             STARTING_RACE,
-            SKILL
+            SKILL_PRIMARY,
+            SKILL_SECONDARY
         };
 
         uint32_t _type;
@@ -58,14 +74,26 @@ namespace Campaign
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
         std::string ToString() const;
+
+        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID );
     };
+
+    struct ScenarioIntroVideoInfo
+    {
+        std::string fileName;
+        Video::VideoAction action;
+    };
+
+    using VideoSequence = std::vector<ScenarioIntroVideoInfo>;
 
     class ScenarioData
     {
     public:
         ScenarioData() = delete;
         ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & description );
+                      const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
+                      const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+                      const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
         const std::vector<int> & getNextMaps() const
         {
@@ -87,9 +115,34 @@ namespace Campaign
             return _scenarioID;
         }
 
+        const std::string & getScenarioName() const
+        {
+            return _scenarioName;
+        }
+
         const std::string & getDescription() const
         {
             return _description;
+        }
+
+        ScenarioVictoryCondition getVictoryCondition() const
+        {
+            return _victoryCondition;
+        }
+
+        ScenarioLossCondition getLossCondition() const
+        {
+            return _lossCondition;
+        }
+
+        const std::vector<ScenarioIntroVideoInfo> & getStartScenarioVideoPlayback() const
+        {
+            return _startScenarioVideoPlayback;
+        }
+
+        const std::vector<ScenarioIntroVideoInfo> & getEndScenarioVideoPlayback() const
+        {
+            return _endScenarioVideoPlayback;
         }
 
         bool isMapFilePresent() const;
@@ -100,7 +153,14 @@ namespace Campaign
         std::vector<int> _nextMaps;
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
-        std::string _description; // at least for campaign maps, the description isn't obtained from the map's description, so we have to write one manually
+        // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else
+        std::string _scenarioName;
+        std::string _description;
+        ScenarioVictoryCondition _victoryCondition;
+        ScenarioLossCondition _lossCondition;
+
+        VideoSequence _startScenarioVideoPlayback;
+        VideoSequence _endScenarioVideoPlayback;
     };
 }
 

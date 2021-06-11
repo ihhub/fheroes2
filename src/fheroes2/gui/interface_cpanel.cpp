@@ -22,7 +22,6 @@
 
 #include "interface_cpanel.h"
 #include "agg_image.h"
-#include "game.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "localevent.h"
@@ -56,7 +55,7 @@ void Interface::ControlPanel::ResetTheme( void )
                                  fheroes2::AGG::GetICN( icn, 8 ) ) );
 }
 
-const fheroes2::Rect & Interface::ControlPanel::GetArea( void )
+const fheroes2::Rect & Interface::ControlPanel::GetArea( void ) const
 {
     return *this;
 }
@@ -78,7 +77,7 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     rt_quit.y = y;
 }
 
-void Interface::ControlPanel::Redraw( void )
+void Interface::ControlPanel::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -93,7 +92,7 @@ void Interface::ControlPanel::Redraw( void )
     }
 }
 
-int Interface::ControlPanel::QueueEventProcessing( void )
+fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -108,5 +107,5 @@ int Interface::ControlPanel::QueueEventProcessing( void )
     else if ( le.MouseClickLeft( rt_quit ) )
         return interface.EventEndTurn();
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }

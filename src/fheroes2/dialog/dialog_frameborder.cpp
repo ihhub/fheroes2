@@ -38,8 +38,8 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz, const fheroes2::Ima
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     SetPosition( ( display.width() - sz.width - border * 2 ) / 2, ( display.height() - sz.height - border * 2 ) / 2, sz.width, sz.height );
-    const Rect & currentArea = GetRect();
-    RenderOther( sf, fheroes2::Rect( currentArea.x, currentArea.y, currentArea.w, currentArea.h ) );
+    const fheroes2::Rect & currentArea = GetRect();
+    RenderOther( sf, currentArea );
 }
 
 Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
@@ -51,24 +51,9 @@ Dialog::FrameBorder::FrameBorder( const fheroes2::Size & sz )
     RenderRegular( GetRect() );
 }
 
-Dialog::FrameBorder::FrameBorder( s32 posx, s32 posy, u32 encw, u32 ench )
-    : restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
-    , border( BORDERWIDTH )
-{
-    SetPosition( posx, posy, encw, ench );
-    RenderRegular( GetRect() );
-}
-
-Dialog::FrameBorder::~FrameBorder()
-{
-    if ( Cursor::Get().isVisible() ) {
-        Cursor::Get().Hide();
-    }
-}
-
 bool Dialog::FrameBorder::isValid() const
 {
-    return rect.w != 0 && rect.h != 0;
+    return rect.width != 0 && rect.height != 0;
 }
 
 int Dialog::FrameBorder::BorderWidth() const
@@ -89,13 +74,13 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw
     rect.y = posy;
 
     if ( encw > 0 && ench > 0 ) {
-        rect.w = encw + 2 * border;
-        rect.h = ench + 2 * border;
+        rect.width = encw + 2 * border;
+        rect.height = ench + 2 * border;
 
-        restorer.update( rect.x, rect.y, rect.w, rect.h );
+        restorer.update( rect.x, rect.y, rect.width, rect.height );
 
-        area.w = encw;
-        area.h = ench;
+        area.width = encw;
+        area.height = ench;
     }
     else {
         restorer.update( posx, posy, restorer.width(), restorer.height() );
@@ -104,28 +89,29 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw
     area.x = posx + border;
     area.y = posy + border;
 
-    top = Rect( posx, posy, area.w, border );
+    top = fheroes2::Rect( posx, posy, area.width, border );
 }
 
-const Rect & Dialog::FrameBorder::GetTop() const
+const fheroes2::Rect & Dialog::FrameBorder::GetTop() const
 {
     return top;
 }
 
-const Rect & Dialog::FrameBorder::GetRect() const
+const fheroes2::Rect & Dialog::FrameBorder::GetRect() const
 {
     return rect;
 }
 
-const Rect & Dialog::FrameBorder::GetArea() const
+const fheroes2::Rect & Dialog::FrameBorder::GetArea() const
 {
     return area;
 }
 
-void Dialog::FrameBorder::RenderRegular( const Rect & dstrt )
+void Dialog::FrameBorder::RenderRegular( const fheroes2::Rect & dstrt )
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ( Settings::Get().ExtGameEvilInterface() ? ICN::SURDRBKE : ICN::SURDRBKG ), 0 );
-    const fheroes2::Image renderedImage = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.w, dstrt.h );
+    const fheroes2::Image renderedImage
+        = fheroes2::Stretch( sprite, SHADOWWIDTH, 0, sprite.width() - SHADOWWIDTH, sprite.height() - SHADOWWIDTH, dstrt.width, dstrt.height );
     fheroes2::Blit( renderedImage, fheroes2::Display::instance(), dstrt.x, dstrt.y );
 }
 

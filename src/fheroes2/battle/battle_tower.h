@@ -42,16 +42,16 @@ namespace Battle
     public:
         Tower( const Castle &, int );
 
-        bool isValid( void ) const;
-        int GetColor( void ) const;
+        bool isValid( void ) const override;
+        int GetColor( void ) const override;
         u32 GetType( void ) const;
         u32 GetBonus( void ) const;
-        u32 GetAttack( void ) const;
+        u32 GetAttack( void ) const override;
 
         const char * GetName( void ) const;
 
         void SetDestroy( void );
-        Point GetPortPosition( void ) const;
+        fheroes2::Point GetPortPosition( void ) const;
 
         static std::string GetInfo( const Castle & );
 

@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <cassert>
-#include <sstream>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -31,38 +30,65 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"
+#include "smk_decoder.h"
 #include "text.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "world.h"
 
-int Game::NewStandard( void )
+namespace
+{
+    const int32_t buttonYStep = 66;
+
+    // Draw button panel and return the position for a button.
+    fheroes2::Point drawButtonPanel()
+    {
+        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
+        const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
+
+        const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
+        const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
+        fheroes2::Blit( panel, fheroes2::Display::instance(), panelXPos, panelOffset );
+
+        const int32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
+
+        const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
+        const int32_t buttonWidth = buttonSample.width();
+        const int32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
+        const int32_t buttonYPos = 46;
+
+        return fheroes2::Point( buttonXPos, buttonYPos );
+    }
+}
+
+fheroes2::GameMode Game::NewStandard()
 {
     Settings & conf = Settings::Get();
-    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
     conf.SetGameType( Game::TYPE_STANDARD );
     conf.SetPreferablyCountPlayers( 0 );
-    return Game::SELECTSCENARIO;
+    return fheroes2::GameMode::SELECT_SCENARIO;
 }
 
-int Game::NewBattleOnly( void )
+fheroes2::GameMode Game::NewBattleOnly()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType( Game::TYPE_BATTLEONLY );
 
-    return Game::NEWMULTI;
+    return fheroes2::GameMode::NEW_MULTI;
 }
 
-int Game::NewHotSeat( void )
+fheroes2::GameMode Game::NewHotSeat()
 {
     Settings & conf = Settings::Get();
-    if ( conf.GameType() == Game::TYPE_CAMPAIGN )
+    if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
     if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
@@ -75,13 +101,59 @@ int Game::NewHotSeat( void )
         const u32 select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
-            return Game::SELECTSCENARIO;
+            return fheroes2::GameMode::SELECT_SCENARIO;
         }
     }
-    return Game::MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 
-int Game::NewCampaign()
+fheroes2::GameMode Game::CampaignSelection()
+{
+    if ( !isPriceOfLoyaltyCampaignPresent() ) {
+        return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
+    }
+
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
+
+    fheroes2::Button buttonSuccessionWars( buttonPos.x, buttonPos.y, ICN::X_LOADCM, 0, 1 );
+    fheroes2::Button buttonPriceOfLoyalty( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::X_LOADCM, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNMP, 8, 9 );
+
+    buttonSuccessionWars.draw();
+    buttonPriceOfLoyalty.draw();
+    buttonCancelGame.draw();
+
+    fheroes2::Display::instance().render();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonSuccessionWars.area() ) ? buttonSuccessionWars.drawOnPress() : buttonSuccessionWars.drawOnRelease();
+        le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
+        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
+
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) )
+            return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) )
+            return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+            return fheroes2::GameMode::MAIN_MENU;
+
+        if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
+            Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Font::BIG );
+        }
+        if ( le.MousePressRight( buttonPriceOfLoyalty.area() ) ) {
+            Dialog::Message( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Font::BIG );
+        }
+        if ( le.MousePressRight( buttonCancelGame.area() ) ) {
+            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+        }
+    }
+
+    return fheroes2::GameMode::QUIT_GAME;
+}
+
+fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 {
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
@@ -103,11 +175,14 @@ int Game::NewCampaign()
 
     // Reset all sound and music before playing videos
     AGG::ResetMixer();
-    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::DO_NOTHING );
+
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
+    Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
     AGG::ResetMixer();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::DO_NOTHING );
-    const size_t chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+    const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
@@ -116,51 +191,117 @@ int Game::NewCampaign()
 
     AGG::PlayMusic( MUS::VICTORY, true, true );
 
-    return Game::SELECT_CAMPAIGN_SCENARIO;
+    return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+}
+
+fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
+{
+    // TODO: Properly choose the campaign instead of this hackish way
+    Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+    campaignSaveData.reset();
+    campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+    campaignSaveData.setCurrentScenarioID( 0 );
+
+    std::string videoPath;
+    if ( !Video::isVideoFile( "IVYPOL.SMK", videoPath ) ) {
+        // File doesn't exist. Fallback to PoL campaign.
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    SMKVideoSequence video( videoPath );
+    if ( video.frameCount() < 1 ) {
+        // File is incorrect. Fallback to PoL campaign.
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    const std::vector<uint8_t> palette = video.getCurrentPalette();
+    screenRestorer.changePalette( palette.data() );
+
+    Cursor::Get().setVideoPlaybackCursor();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
+
+    display.fill( 0 );
+
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::X_IVY, 1 );
+    fheroes2::Blit( background, 0, 0, display, roiOffset.x, roiOffset.y, background.width(), background.height() );
+
+    const fheroes2::Sprite & campaignChoice = fheroes2::AGG::GetICN( ICN::X_IVY, 0 );
+    fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(), campaignChoice.height() );
+
+    display.render();
+
+    const fheroes2::Rect priceOfLoyaltyRoi( roiOffset.x + 192, roiOffset.y + 23, 248, 163 );
+    const fheroes2::Rect voyageHomeRoi( roiOffset.x + 19, roiOffset.y + 120, 166, 193 );
+    const fheroes2::Rect wizardsIsleRoi( roiOffset.x + 450, roiOffset.y + 120, 166, 193 );
+    const fheroes2::Rect descendantsRoi( roiOffset.x + 192, roiOffset.y + 240, 248, 163 );
+
+    fheroes2::GameMode gameChoice = fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() ) {
+        if ( le.MouseClickLeft( priceOfLoyaltyRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( voyageHomeRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( wizardsIsleRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+        else if ( le.MouseClickLeft( descendantsRoi ) ) {
+            campaignSaveData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+            gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+            break;
+        }
+    }
+
+    display.fill( 0 );
+
+    return gameChoice;
 }
 
 #ifdef NETWORK_ENABLE
-int Game::NewNetwork( void )
+fheroes2::GameMode Game::NewNetwork()
 {
     Settings & conf = Settings::Get();
     conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
 
-    // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Blit( back, display );
-    const uint32_t backgroundWidth = back.width();
-
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    fheroes2::Blit( panel, display, backgroundWidth - 235, 5 );
-
-    LocalEvent & le = LocalEvent::Get();
-
-    fheroes2::Button buttonHost( backgroundWidth - 185, 45, ICN::BTNNET, 0, 1 );
-    fheroes2::Button buttonGuest( backgroundWidth - 185, 110, ICN::BTNNET, 2, 3 );
-    fheroes2::Button buttonCancelGame( backgroundWidth - 185, 375, ICN::BTNMP, 8, 9 );
+    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
+    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNMP, 8, 9 );
 
     buttonHost.draw();
     buttonGuest.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
-    display.render();
+    fheroes2::Display::instance().render();
 
-    // newgame loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonHost.area() ) ? buttonHost.drawOnPress() : buttonHost.drawOnRelease();
         le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
 
         // right info
         if ( le.MousePressRight( buttonHost.area() ) )
@@ -173,11 +314,11 @@ int Game::NewNetwork( void )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 
-    return Game::MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 #endif
 
-int Game::NewGame( void )
+fheroes2::GameMode Game::NewGame()
 {
     Mixer::Pause();
     AGG::PlayMusic( MUS::MAINMENU, true, true );
@@ -186,39 +327,25 @@ int Game::NewGame( void )
     // reset last save name
     Game::SetLastSavename( "" );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // load game settings
     conf.BinaryLoad();
 
-    // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
 
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
+    fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
+    fheroes2::Button buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
+    fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
+    fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
-    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-    const uint32_t buttonWidth = buttonSample.width();
-    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const uint32_t buttonYPos = 46;
-    const uint32_t buttonYStep = 66;
-    fheroes2::Button buttonStandartGame( buttonXPos, buttonYPos, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::Button buttonCampainGame( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
-    fheroes2::Button buttonMultiGame( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
-    fheroes2::Button buttonBattleGame( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
-    fheroes2::Button buttonSettings( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
-    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
-
-    if ( !IsOriginalCampaignPresent() ) {
+    if ( !isSuccessionWarsCampaignPresent() ) {
         buttonCampainGame.disable();
     }
 
@@ -229,12 +356,11 @@ int Game::NewGame( void )
     buttonSettings.draw();
     buttonCancelGame.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() ) { // new game loop
+    while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
 
         if ( buttonCampainGame.isEnabled() ) {
@@ -246,88 +372,71 @@ int Game::NewGame( void )
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( HotKeyPressEvent( EVENT_BUTTON_STANDARD ) || le.MouseClickLeft( buttonStandartGame.area() ) )
-            return NEWSTANDARD;
+            return fheroes2::GameMode::NEW_STANDARD;
         if ( buttonCampainGame.isEnabled() && ( HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) || le.MouseClickLeft( buttonCampainGame.area() ) ) )
-            return NEWCAMPAIGN;
+            return fheroes2::GameMode::NEW_CAMPAIGN_SELECTION;
         if ( HotKeyPressEvent( EVENT_BUTTON_MULTI ) || le.MouseClickLeft( buttonMultiGame.area() ) )
-            return NEWMULTI;
+            return fheroes2::GameMode::NEW_MULTI;
         if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( buttonSettings.area() ) ) {
             Dialog::ExtSettings( false );
-            cursor.Show();
             display.render();
         }
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
 
         if ( HotKeyPressEvent( EVENT_BUTTON_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame.area() ) )
-            return NEWBATTLEONLY;
+            return fheroes2::GameMode::NEW_BATTLE_ONLY;
 
         if ( le.MousePressRight( buttonStandartGame.area() ) )
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonCampainGame.area() ) )
+        else if ( le.MousePressRight( buttonCampainGame.area() ) )
             Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
-        if ( le.MousePressRight( buttonMultiGame.area() ) )
+        else if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonSettings.area() ) )
+        else if ( le.MousePressRight( buttonBattleGame.area() ) )
+            Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
+        else if ( le.MousePressRight( buttonSettings.area() ) )
             Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame.area() ) )
+        else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }
 
-int Game::NewMulti( void )
+fheroes2::GameMode Game::NewMulti()
 {
     Settings & conf = Settings::Get();
 
     if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
         conf.SetGameType( Game::TYPE_STANDARD );
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
 
-    // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
-
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
-
-    LocalEvent & le = LocalEvent::Get();
-
-    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-    const uint32_t buttonWidth = buttonSample.width();
-    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const uint32_t buttonYPos = 46;
-    const uint32_t buttonYStep = 66;
-    fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
+    fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
     buttonNetwork.disable();
 
-    cursor.Show();
-    display.render();
+    fheroes2::Display::instance().render();
 
+    LocalEvent & le = LocalEvent::Get();
     // newgame loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) )
-            return NEWHOTSEAT;
+            return fheroes2::GameMode::NEW_HOT_SEAT;
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
-            return MAINMENU;
+            return fheroes2::GameMode::MAIN_MENU;
 
         // right info
         if ( le.MousePressRight( buttonHotSeat.area() ) )
@@ -341,7 +450,7 @@ int Game::NewMulti( void )
         if ( buttonNetwork.isEnabled() ) {
             le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
             if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
-                return NEWNETWORK;
+                return fheroes2::GameMode::NEWNETWORK;
             if ( le.MousePressRight( buttonNetwork.area() ) )
                 Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
                                  Font::BIG );
@@ -349,41 +458,23 @@ int Game::NewMulti( void )
 #endif
     }
 
-    return QUITGAME;
+    return fheroes2::GameMode::QUIT_GAME;
 }
 
 u32 Game::SelectCountPlayers( void )
 {
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
 
-    // image background
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HEROES, 0 );
-    fheroes2::Copy( back, display );
-
-    const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REDBACK, 0 );
-    const uint32_t panelOffset = fheroes2::Display::DEFAULT_HEIGHT - panel.height();
-    const uint32_t panelXPos = back.width() - ( panel.width() + panelOffset );
-    fheroes2::Blit( panel, display, panelXPos, panelOffset );
-
-    LocalEvent & le = LocalEvent::Get();
-
-    const uint32_t buttonMiddlePos = panelXPos + SHADOWWIDTH + ( panel.width() - SHADOWWIDTH ) / 2;
-    const fheroes2::Sprite & buttonSample = fheroes2::AGG::GetICN( ICN::BTNNEWGM, 0 );
-    const uint32_t buttonWidth = buttonSample.width();
-    const uint32_t buttonXPos = buttonMiddlePos - buttonWidth / 2 - 3; // 3 is button shadow
-    const uint32_t buttonYPos = 46;
-    const uint32_t buttonYStep = 66;
-    fheroes2::Button button2Players( buttonXPos, buttonYPos, ICN::BTNHOTST, 0, 1 );
-    fheroes2::Button button3Players( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNHOTST, 2, 3 );
-    fheroes2::Button button4Players( buttonXPos, buttonYPos + buttonYStep * 2, ICN::BTNHOTST, 4, 5 );
-    fheroes2::Button button5Players( buttonXPos, buttonYPos + buttonYStep * 3, ICN::BTNHOTST, 6, 7 );
-    fheroes2::Button button6Players( buttonXPos, buttonYPos + buttonYStep * 4, ICN::BTNHOTST, 8, 9 );
-    fheroes2::Button buttonCancel( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
+    fheroes2::Button button2Players( buttonPos.x, buttonPos.y, ICN::BTNHOTST, 0, 1 );
+    fheroes2::Button button3Players( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNHOTST, 2, 3 );
+    fheroes2::Button button4Players( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNHOTST, 4, 5 );
+    fheroes2::Button button5Players( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNHOTST, 6, 7 );
+    fheroes2::Button button6Players( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNHOTST, 8, 9 );
+    fheroes2::Button buttonCancel( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNNEWGM, 6, 7 );
 
     button2Players.draw();
     button3Players.draw();
@@ -392,10 +483,9 @@ u32 Game::SelectCountPlayers( void )
     button6Players.draw();
     buttonCancel.draw();
 
-    cursor.Show();
-    display.render();
+    fheroes2::Display::instance().render();
 
-    // newgame loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( button2Players.area() ) ? button2Players.drawOnPress() : button2Players.drawOnRelease();
         le.MousePressLeft( button3Players.area() ) ? button3Players.drawOnPress() : button3Players.drawOnRelease();

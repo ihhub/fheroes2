@@ -50,35 +50,12 @@ u32 Route::Step::GetPenalty( void ) const
     return penalty;
 }
 
-bool Route::Step::isBad( void ) const
-{
-    return from < 0 || ( direction == Direction::UNKNOWN || direction == Direction::CENTER );
-}
-
 /* construct */
 Route::Path::Path( const Heroes & h )
     : hero( &h )
     , dst( h.GetIndex() )
     , hide( true )
 {}
-
-Route::Path::Path( const Path & p )
-    : std::list<Step>( p )
-    , hero( p.hero )
-    , dst( p.dst )
-    , hide( p.hide )
-{}
-
-Route::Path & Route::Path::operator=( const Path & p )
-{
-    assign( p.begin(), p.end() );
-
-    hero = p.hero;
-    dst = p.dst;
-    hide = p.hide;
-
-    return *this;
-}
 
 int Route::Path::GetFrontDirection( void ) const
 {
@@ -133,11 +110,6 @@ void Route::Path::Reset( void )
         clear();
         hide = true;
     }
-}
-
-bool Route::Path::isComplete( void ) const
-{
-    return dst == hero->GetIndex() || ( empty() && Direction::UNKNOWN != Maps::GetDirection( hero->GetIndex(), dst ) );
 }
 
 bool Route::Path::isValid( void ) const
@@ -411,17 +383,6 @@ int Route::Path::GetIndexSprite( int from, int to, int mod )
     }
 
     return index;
-}
-
-/* total penalty cast */
-u32 Route::Path::GetTotalPenalty( void ) const
-{
-    u32 result = 0;
-
-    for ( const_iterator it = begin(); it != end(); ++it )
-        result += ( *it ).GetPenalty();
-
-    return result;
 }
 
 uint32_t Route::Path::getLastMovePenalty() const

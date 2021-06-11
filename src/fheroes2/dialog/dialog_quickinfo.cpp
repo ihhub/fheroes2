@@ -23,6 +23,7 @@
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
+#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -30,14 +31,9 @@
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
-#include "interface_gamearea.h"
 #include "kingdom.h"
-#include "logging.h"
-#include "maps.h"
 #include "monster.h"
 #include "profit.h"
-#include "race.h"
-#include "spell.h"
 #include "text.h"
 #include "world.h"
 
@@ -58,7 +54,7 @@ std::string GetMinesIncomeString( int type )
     return res;
 }
 
-std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool extendedScoutingOption, uint32_t basicScoutingLevel )
 {
     std::string str;
     const Troop & troop = tile.QuantityTroop();
@@ -80,25 +76,39 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
         str = MP2::StringObject( tile.GetObject() );
     }
 
-    if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) ) {
+    if ( troop.isValid() && ( isOwned || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) ) {
         str.append( "\n \n" );
         str.append( _( "guarded by %{count} %{monster}" ) );
 
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
-        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), isOwned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) ) );
+        const int scoutingLevel = isOwned ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+        StringReplace( str, "%{count}", StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+        }
+        else {
+            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        }
     }
 
     return str;
 }
 
-std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t scoutingLevel )
+std::string ShowMonsterInfo( const Maps::Tiles & tile, bool isVisibleFromCrystalBall, bool extendedScoutingOption, uint32_t basicScoutingLevel )
 {
     const Troop & troop = tile.QuantityTroop();
 
-    if ( isVisibleFromCrystalBall || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
+    if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
         std::string str = "%{count} %{monster}";
-        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
-        StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+
+        const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
+        StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
+        if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
+            StringReplace( str, "%{monster}", StringLower( troop.GetName() ) );
+        }
+        else {
+            StringReplace( str, "%{monster}", StringLower( troop.GetMultiName() ) );
+        }
+
         return str;
     }
     else {
@@ -326,33 +336,29 @@ std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPena
     return str;
 }
 
-fheroes2::Rect MakeRectQuickInfo( LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
+fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
 {
     if ( position.x > 0 && position.y > 0 ) {
         return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
     }
 
     // place box next to mouse cursor
-    const Point & mp = le.GetMouseCursor();
+    const fheroes2::Point & mp = le.GetMouseCursor();
 
     const int32_t mx = ( ( mp.x - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
     const int32_t my = ( ( mp.y - BORDERWIDTH ) / TILEWIDTH ) * TILEWIDTH;
 
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
-    const Rect & ar = gamearea.GetROI();
+    const fheroes2::Rect & ar = gamearea.GetROI();
 
-    if ( mx <= ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top left
-        return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
-    }
-    else if ( mx > ar.x + ar.w / 2 && my <= ar.y + ar.h / 2 ) { // top right
-        return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
-    }
-    else if ( mx <= ar.x + ar.w / 2 && my > ar.y + ar.h / 2 ) { // bottom left
-        return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
-    }
-    else { // bottom right
-        return fheroes2::Rect( mx - imageBox.width(), my - imageBox.height(), imageBox.width(), imageBox.height() );
-    }
+    int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
+    int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
+
+    // clamp box to edges of adventure screen game area
+    xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+    ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+
+    return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
 }
 
 uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
@@ -417,10 +423,10 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         break;
     }
 
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     const Settings & settings = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
 
     // preload
     const int qwikinfo = ICN::QWIKINFO;
@@ -588,7 +594,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     TextBox text( name_object, Font::SMALL, 118 );
     text.Blit( pos.x + BORDERWIDTH + ( pos.width - BORDERWIDTH - text.w() ) / 2, pos.y + ( pos.height - BORDERWIDTH - text.h() ) / 2 );
 
-    cursor.Show();
     display.render();
 
     // quick info loop
@@ -602,12 +607,12 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 
 void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const int qwiktown = ICN::QWIKTOWN;
-
     // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( qwiktown, 0 );
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
 
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
@@ -615,7 +620,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     fheroes2::ImageRestorer back( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
-    cur_rt = fheroes2::Rect( cur_rt.x + 28, cur_rt.y + 9, 178, 140 );
+    cur_rt = fheroes2::Rect( cur_rt.x + 22, cur_rt.y + 9, 192, 154 );
     fheroes2::Point dst_pt;
     Text text;
 
@@ -625,40 +630,17 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     dst_pt.y = cur_rt.y;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    u32 index = 0;
-
-    switch ( castle.GetRace() ) {
-    case Race::KNGT:
-        index = ( castle.isCastle() ? 9 : 15 );
-        break;
-    case Race::BARB:
-        index = ( castle.isCastle() ? 10 : 16 );
-        break;
-    case Race::SORC:
-        index = ( castle.isCastle() ? 11 : 17 );
-        break;
-    case Race::WRLK:
-        index = ( castle.isCastle() ? 12 : 18 );
-        break;
-    case Race::WZRD:
-        index = ( castle.isCastle() ? 13 : 19 );
-        break;
-    case Race::NECR:
-        index = ( castle.isCastle() ? 14 : 20 );
-        break;
-    default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
-        return;
-    }
-
     // castle icon
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::LOCATORS, index );
+    const Settings & conf = Settings::Get();
+    const fheroes2::Sprite & castleIcon = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
 
-    dst_pt.x = cur_rt.x + ( cur_rt.width - sprite.width() ) / 2;
-    dst_pt.y += 15;
-    fheroes2::Blit( sprite, display, dst_pt.x, dst_pt.y );
+    dst_pt.x = cur_rt.x + ( cur_rt.width - castleIcon.width() ) / 2;
+    dst_pt.y += 11;
+    fheroes2::Blit( castleIcon, display, dst_pt.x, dst_pt.y );
+    fheroes2::drawCastleIcon( castle, display, fheroes2::Point( dst_pt.x + 4, dst_pt.y + 4 ) );
 
     // color flags
+    uint32_t index = 0;
     switch ( castle.GetColor() ) {
     case Color::BLUE:
         index = 0;
@@ -685,52 +667,41 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         break;
     }
 
+    const fheroes2::Point flagOffset( 5, 4 );
+
     const fheroes2::Sprite & l_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - 60 ) / 2 - l_flag.width();
-    fheroes2::Blit( l_flag, display, dst_pt.x, dst_pt.y );
+    fheroes2::Blit( l_flag, display, dst_pt.x - flagOffset.x - l_flag.width(), dst_pt.y + flagOffset.y );
 
     const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
-    dst_pt.x = cur_rt.x + ( cur_rt.width + 60 ) / 2;
-    fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
-
-    // info
-    text.Set( _( "Defenders:" ) );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-    dst_pt.y += sprite.height() + 5;
-    text.Blit( dst_pt.x, dst_pt.y );
-
-    //
-    u32 count = castle.GetArmy().GetCount();
-    const Settings & conf = Settings::Get();
-
-    const Heroes * from_hero = Interface::GetFocusHeroes();
-    const Heroes * guardian = castle.GetHeroes().Guard();
+    fheroes2::Blit( r_flag, display, dst_pt.x + flagOffset.x + castleIcon.width(), dst_pt.y + flagOffset.y );
 
     const int currentColor = conf.CurrentColor();
     const Kingdom & kingdom = world.GetKingdom( currentColor );
 
-    const uint32_t thievesGuildCount = kingdom.GetCountThievesGuild();
-    const bool isVisibleCrystalBall = kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
     const bool isFriend = castle.isFriends( currentColor );
+    const bool isVisibleFromCrystalBall = kingdom.IsTileVisibleFromCrystalBall( castle.GetIndex() );
 
-    uint32_t scoutSkillLevel = thievesGuildCount > Skill::Level::EXPERT ? static_cast<int>( Skill::Level::EXPERT ) : thievesGuildCount;
-    if ( isFriend || isVisibleCrystalBall ) {
+    uint32_t scoutSkillLevel = Skill::Level::NONE;
+
+    if ( isFriend || isVisibleFromCrystalBall ) {
         scoutSkillLevel = Skill::Level::EXPERT;
     }
+    else {
+        scoutSkillLevel = std::min( kingdom.GetCountThievesGuild(), static_cast<uint32_t>( Skill::Level::EXPERT ) );
+    }
 
-    // draw guardian portrait
-    if ( guardian &&
-         // my  colors
-         ( castle.GetColor() == currentColor || isVisibleCrystalBall ||
-           // show guardians (scouting: advanced)
-           ( from_hero && Skill::Level::ADVANCED <= from_hero->GetSecondaryValues( Skill::Secondary::SCOUTING ) ) ) ) {
-        // heroes name
+    const Heroes * guardian = castle.GetHeroes().Guard();
+    const bool isGuardianVisible = guardian && scoutSkillLevel >= Skill::Level::ADVANCED;
+
+    // show guardian
+    if ( isGuardianVisible ) {
+        // hero name
         text.Set( guardian->GetName(), Font::SMALL );
         dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += 10;
+        dst_pt.y += castleIcon.height() + 5;
         text.Blit( dst_pt.x, dst_pt.y );
 
-        // mini port heroes
+        // hero avatar
         const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
         if ( !port.empty() ) {
             dst_pt.x = cur_rt.x + ( cur_rt.width - port.width() ) / 2;
@@ -738,6 +709,14 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
             fheroes2::Blit( port, display, dst_pt.x, dst_pt.y );
         }
     }
+    else {
+        text.Set( _( "Defenders:" ) );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        dst_pt.y += castleIcon.height() + 5;
+        text.Blit( dst_pt.x, dst_pt.y );
+    }
+
+    const uint32_t count = castle.GetArmy().GetCount();
 
     // draw defenders
     if ( count == 0 ) {
@@ -747,7 +726,12 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
         text.Blit( dst_pt.x, dst_pt.y );
     }
     else if ( scoutSkillLevel > Skill::Level::NONE ) {
-        Army::DrawMonsterLines( castle.GetArmy(), cur_rt.x - 5, cur_rt.y + 62, 192, scoutSkillLevel, true, true );
+        const bool isScouteView = isFriend || isVisibleFromCrystalBall;
+
+        dst_pt.x = cur_rt.x - 5;
+        dst_pt.y += 20;
+
+        Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
         text.Set( _( "Unknown" ) );
@@ -769,11 +753,10 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
 
 void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*= fheroes2::Point()*/ )
 {
+    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
+
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
-
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -952,7 +935,6 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
         Army::DrawMonsterLines( hero.GetArmy(), cur_rt.x - 6, cur_rt.y + 60, 160, Skill::Level::NONE, false, true );
     }
 
-    cursor.Show();
     display.render();
 
     // quick info loop

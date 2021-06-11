@@ -25,6 +25,7 @@
 
 #include "agg_image.h"
 #include "artifact.h"
+#include "campaign_savedata.h"
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
@@ -67,860 +68,6 @@ std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 }
 #endif
 
-#ifdef WITH_XML
-namespace Maps
-{
-    TiXmlElement & operator>>( TiXmlElement & doc, Addons & levels )
-    {
-        TiXmlElement * xml_sprite = doc.FirstChildElement( "sprite" );
-        for ( ; xml_sprite; xml_sprite = xml_sprite->NextSiblingElement( "sprite" ) ) {
-            int uid, ext, index, level, icn;
-
-            xml_sprite->Attribute( "uid", &uid );
-            xml_sprite->Attribute( "ext", &ext );
-            xml_sprite->Attribute( "index", &index );
-            xml_sprite->Attribute( "level", &level );
-            xml_sprite->Attribute( "icn", &icn );
-
-            levels.push_back( TilesAddon( level, uid, icn, index ) );
-        }
-
-        return doc;
-    }
-
-    TiXmlElement & operator>>( TiXmlElement & doc, Tiles & tile )
-    {
-        int sprite, shape, object, base, local;
-
-        doc.Attribute( "tileSprite", &sprite );
-        doc.Attribute( "tileShape", &shape );
-        doc.Attribute( "objectID", &object );
-        doc.Attribute( "base", &base );
-        doc.Attribute( "local", &local );
-
-        tile.SetTile( sprite, shape );
-        tile.SetObject( object );
-
-        TiXmlElement * xml_levels1 = doc.FirstChildElement( "levels1" );
-        if ( xml_levels1 )
-            *xml_levels1 >> tile.addons_level1;
-
-        TiXmlElement * xml_levels2 = doc.FirstChildElement( "levels2" );
-        if ( xml_levels2 )
-            *xml_levels2 >> tile.addons_level2;
-
-        return doc;
-    }
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, const MapsTiles & /*tiles*/ )
-{
-    TiXmlElement * xml_tile = doc.FirstChildElement( "tile" );
-    for ( ; xml_tile; xml_tile = xml_tile->NextSiblingElement( "tile" ) ) {
-        int posx, posy;
-        xml_tile->Attribute( "posx", &posx );
-        xml_tile->Attribute( "posy", &posy );
-
-        Maps::Tiles & tile = world.GetTiles( posx, posy );
-        tile.SetIndex( Maps::GetIndexFromAbsPoint( posx, posy ) );
-        *xml_tile >> tile;
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Army & army )
-{
-    army.Clean();
-
-    TiXmlElement * xml_troop = doc.FirstChildElement( "troop" );
-    for ( int position = 0; xml_troop; xml_troop = xml_troop->NextSiblingElement( "troop" ) ) {
-        int type, count;
-        xml_troop->Attribute( "type", &type );
-        xml_troop->Attribute( "count", &count );
-        Troop * troop = army.GetTroop( position );
-        ++position;
-        if ( troop )
-            troop->Set( type, count );
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Castle & town )
-{
-    int posx, posy, race, color, build, dwell, custom1, custom2, custom3, forcetown, iscastle, captain;
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "race", &race );
-    doc.Attribute( "color", &color );
-    doc.Attribute( "buildings", &build );
-    doc.Attribute( "dwellings", &dwell );
-    doc.Attribute( "customTroops", &custom1 );
-    doc.Attribute( "customDwellings", &custom2 );
-    doc.Attribute( "customBuildings", &custom3 );
-    doc.Attribute( "forceTown", &forcetown );
-    doc.Attribute( "isCastle", &iscastle );
-    doc.Attribute( "captainPresent", &captain );
-
-    town.SetCenter( Point( posx, posy ) );
-    town.SetColor( color );
-
-    town.building = 0;
-    if ( custom3 )
-        town.building |= build;
-    if ( custom2 )
-        town.building |= dwell;
-    town.name = doc.Attribute( "name" );
-
-    if ( 1 != forcetown )
-        town.SetModes( Castle::ALLOWCASTLE );
-
-    town.building |= 1 == iscastle ? BUILD_CASTLE : BUILD_TENT;
-
-    if ( 1 == captain )
-        town.building |= BUILD_CAPTAIN;
-
-    // default building
-    if ( 1 != custom3 && 1 != custom2 ) {
-        town.building |= DWELLING_MONSTER1;
-        u32 dwelling2 = 0;
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            dwelling2 = 80;
-            break;
-        case Difficulty::NORMAL:
-            dwelling2 = 65;
-            break;
-        case Difficulty::HARD:
-            dwelling2 = 15;
-            break;
-        default:
-            break;
-        }
-        if ( dwelling2 && dwelling2 >= Rand::Get( 1, 100 ) )
-            town.building |= DWELLING_MONSTER2;
-    }
-
-    if ( race == Race::RAND ) {
-        u32 kingdom_race = Players::GetPlayerRace( town.GetColor() );
-        race = Color::NONE != town.GetColor() && ( Race::ALL & kingdom_race ) ? kingdom_race : Race::Rand();
-
-        Maps::UpdateCastleSprite( town.GetCenter(), race, town.isCastle(), true );
-    }
-    town.race = race;
-
-    Maps::MinimizeAreaForCastle( town.GetCenter() );
-    world.CaptureObject( town.GetIndex(), town.GetColor() );
-
-    TiXmlElement * xml_troops = doc.FirstChildElement( "troops" );
-    if ( xml_troops )
-        *xml_troops >> town.army;
-
-    town.PostLoad();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, AllCastles & castles )
-{
-    TiXmlElement * xml_town = doc.FirstChildElement( "town" );
-    for ( ; xml_town; xml_town = xml_town->NextSiblingElement( "town" ) ) {
-        Castle * town = new Castle();
-        *xml_town >> *town;
-        castles.push_back( town );
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Skill::SecSkills & skills )
-{
-    TiXmlElement * xml_skill = doc.FirstChildElement( "skill" );
-    for ( ; xml_skill; xml_skill = xml_skill->NextSiblingElement( "skill" ) ) {
-        int skill, level;
-        xml_skill->Attribute( "id", &skill );
-        xml_skill->Attribute( "level", &level );
-
-        skills.AddSkill( Skill::Secondary( skill, level ) );
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, BagArtifacts & bag )
-{
-    TiXmlElement * xml_art = doc.FirstChildElement( "artifact" );
-    for ( ; xml_art; xml_art = xml_art->NextSiblingElement( "artifact" ) ) {
-        int art = 0;
-        xml_art->Attribute( "id", &art );
-
-        if ( art )
-            bag.PushArtifact( art - 1 );
-    }
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, SpellBook & book )
-{
-    book.clear();
-
-    TiXmlElement * xml_spell = doc.FirstChildElement( "spell" );
-    for ( ; xml_spell; xml_spell = xml_spell->NextSiblingElement( "spell" ) ) {
-        int spell = 0;
-        xml_spell->Attribute( "id", &spell );
-
-        if ( spell )
-            book.Append( Spell( spell ) );
-    }
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Heroes & hero )
-{
-    int posx, posy, color, portrait, exp, patrol, square, attack, defense, power, knowledge, race, jail, book;
-
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    hero.SetCenter( Point( posx, posy ) );
-
-    doc.Attribute( "color", &color );
-    hero.SetColor( color );
-
-    doc.Attribute( "attack", &attack );
-    hero.attack = attack;
-
-    doc.Attribute( "defense", &defense );
-    hero.defense = defense;
-
-    doc.Attribute( "power", &power );
-    hero.power = power;
-
-    doc.Attribute( "knowledge", &knowledge );
-    hero.knowledge = knowledge;
-
-    doc.Attribute( "portrait", &portrait );
-    if ( portrait )
-        hero.portrait = portrait - 1;
-
-    doc.Attribute( "race", &race );
-    if ( race & Race::ALL )
-        hero.race = race;
-
-    doc.Attribute( "experience", &exp );
-    hero.experience = exp;
-
-    doc.Attribute( "patrolMode", &patrol );
-    if ( patrol ) {
-        hero.SetModes( Heroes::PATROL );
-        doc.Attribute( "patrolSquare", &square );
-        hero.patrol_center = Point( posx, posy );
-        hero.patrol_square = square;
-    }
-
-    doc.Attribute( "jailMode", &jail );
-    if ( jail ) {
-        hero.SetModes( Heroes::JAIL );
-        hero.SetColor( Color::NONE );
-    }
-
-    hero.name = doc.Attribute( "name" );
-    if ( hero.name == "Random" || hero.name == "Unknown" )
-        hero.name = Heroes::GetName( hero.GetID() );
-
-    // skills
-    Skill::SecSkills skills;
-
-    TiXmlElement * xml_skills = doc.FirstChildElement( "skills" );
-    if ( xml_skills )
-        *xml_skills >> skills;
-
-    if ( skills.Count() ) {
-        hero.SetModes( Heroes::CUSTOMSKILLS );
-        hero.secondary_skills = skills;
-    }
-
-    // artifacts
-    doc.Attribute( "haveBook", &book );
-    if ( book )
-        hero.bag_artifacts.PushArtifact( Artifact::MAGIC_BOOK );
-    else
-        hero.bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
-
-    TiXmlElement * xml_artifacts = doc.FirstChildElement( "artifacts" );
-    if ( xml_artifacts )
-        *xml_artifacts >> hero.bag_artifacts;
-
-    // troops
-    TiXmlElement * xml_troops = doc.FirstChildElement( "troops" );
-    if ( xml_troops )
-        *xml_troops >> hero.army;
-
-    // spells
-    if ( book ) {
-        TiXmlElement * xml_spells = doc.FirstChildElement( "spells" );
-        if ( xml_spells )
-            *xml_spells >> hero.spell_book;
-    }
-
-    hero.PostLoad();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, const AllHeroes & /*heroes*/ )
-{
-    TiXmlElement * xml_hero = doc.FirstChildElement( "hero" );
-    for ( ; xml_hero; xml_hero = xml_hero->NextSiblingElement( "hero" ) ) {
-        int posx, posy, portrait, race;
-        xml_hero->Attribute( "posx", &posx );
-        xml_hero->Attribute( "posy", &posy );
-        xml_hero->Attribute( "portrait", &portrait );
-        xml_hero->Attribute( "race", &race );
-
-        const Maps::Tiles & tile = world.GetTiles( posx, posy );
-        const uint8_t object = tile.GetObject();
-        bool jail = false;
-
-        if ( object != MP2::OBJ_HEROES ) {
-            jail = object == MP2::OBJ_JAIL;
-
-            if ( !jail ) {
-                VERBOSE_LOG( "xml error: heroes not found"
-                             << ", "
-                             << "posx: " << posx << ", "
-                             << "posy: " << posy );
-                continue;
-            }
-        }
-
-        std::pair<int, int> colorRace( Color::NONE, race );
-        Heroes * hero = NULL;
-
-        if ( !jail ) {
-            colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
-            const Kingdom & kingdom = world.GetKingdom( colorRace.first );
-
-            if ( colorRace.second == Race::RAND && colorRace.first != Color::NONE )
-                colorRace.second = kingdom.GetRace();
-
-            // check heroes max count
-            if ( !kingdom.AllowRecruitHero( false, 0 ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_WARN,
-                           "kingdom recruil full, skip hero"
-                               << ", "
-                               << "posx: " << posx << ", "
-                               << "posy: " << posy );
-                continue;
-            }
-        }
-
-        if ( 0 < portrait )
-            hero = world.GetHeroes( portrait );
-
-        if ( !hero || !hero->isFreeman() )
-            hero = world.GetFreemanHeroes( colorRace.second );
-
-        if ( hero ) {
-            *xml_hero >> *hero;
-
-            if ( jail )
-                hero->SetModes( Heroes::JAIL );
-        }
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Funds & funds )
-{
-    int ore, mercury, wood, sulfur, crystal, gems, gold;
-    doc.Attribute( "ore", &ore );
-    doc.Attribute( "mercury", &mercury );
-    doc.Attribute( "wood", &wood );
-    doc.Attribute( "sulfur", &sulfur );
-    doc.Attribute( "crytal", &crystal );
-    doc.Attribute( "gems", &gems );
-    doc.Attribute( "gold", &gold );
-
-    funds.ore = ore;
-    funds.mercury = mercury;
-    funds.wood = wood;
-    funds.sulfur = crystal;
-    funds.gems = gems;
-    funds.gold = gold;
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapSphinx & riddle )
-{
-    int posx, posy, uid, artifact;
-
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-    doc.Attribute( "artifact", &artifact );
-
-    riddle.SetCenter( Point( posx, posy ) );
-    riddle.SetUID( uid );
-    riddle.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
-    riddle.valid = true;
-
-    const TiXmlElement * xml_answers = doc.FirstChildElement( "answers" );
-    if ( xml_answers ) {
-        TiXmlElement * xml_answer = doc.FirstChildElement( "answer" );
-        for ( ; xml_answer; xml_answer = xml_answer->NextSiblingElement( "answer" ) )
-            if ( xml_answer->GetText() )
-                riddle.answers.emplace_back( xml_answer->GetText() );
-    }
-
-    TiXmlElement * xml_resources = doc.FirstChildElement( "resources" );
-    if ( xml_resources )
-        *xml_resources >> riddle.resources;
-
-    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
-    if ( xml_msg && xml_msg->GetText() )
-        riddle.message = xml_msg->GetText();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapEvent & event )
-{
-    int posx, posy, uid, colors, allow, cancel, artifact;
-
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-    doc.Attribute( "cancelAfterFirstVisit", &cancel );
-    doc.Attribute( "colors", &colors );
-    doc.Attribute( "allowComputer", &allow );
-    doc.Attribute( "artifact", &artifact );
-
-    event.SetCenter( Point( posx, posy ) );
-    event.SetUID( uid );
-    event.computer = allow;
-    event.colors = colors;
-    event.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
-    event.cancel = cancel;
-
-    TiXmlElement * xml_resources = doc.FirstChildElement( "resources" );
-    if ( xml_resources )
-        *xml_resources >> event.resources;
-
-    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
-    if ( xml_msg && xml_msg->GetText() )
-        event.message = xml_msg->GetText();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, EventDate & event )
-{
-    int day1, day2, colors, allow;
-
-    doc.Attribute( "dayFirst", &day1 );
-    doc.Attribute( "daySubsequent", &day2 );
-    doc.Attribute( "colors", &colors );
-    doc.Attribute( "allowComputer", &allow );
-
-    event.computer = allow;
-    event.first = day1;
-    event.subsequent = day2;
-    event.colors = colors;
-
-    TiXmlElement * xml_resources = doc.FirstChildElement( "resources" );
-    if ( xml_resources )
-        *xml_resources >> event.resource;
-
-    const TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
-    if ( xml_msg && xml_msg->GetText() )
-        event.message = xml_msg->GetText();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, EventsDate & events )
-{
-    TiXmlElement * xml_event = doc.FirstChildElement( "event" );
-    for ( ; xml_event; xml_event = xml_event->NextSiblingElement( "event" ) ) {
-        events.emplace_back( EventDate() );
-        *xml_event >> events.back();
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, Rumors & rumors )
-{
-    TiXmlElement * xml_msg = doc.FirstChildElement( "msg" );
-    for ( ; xml_msg; xml_msg = xml_msg->NextSiblingElement( "msg" ) )
-        if ( xml_msg->GetText() )
-            rumors.emplace_back( xml_msg->GetText() );
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapSign & obj )
-{
-    int posx, posy, uid;
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-
-    obj.SetCenter( Point( posx, posy ) );
-    obj.SetUID( uid );
-    if ( doc.GetText() )
-        obj.message = doc.GetText();
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapResource & obj )
-{
-    int posx, posy, uid, type, count;
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-    doc.Attribute( "type", &type );
-    doc.Attribute( "count", &count );
-
-    obj.SetCenter( Point( posx, posy ) );
-    obj.SetUID( uid );
-    obj.resource = ResourceCount( type, count );
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapMonster & obj )
-{
-    int posx, posy, uid, type, cond, count;
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-    doc.Attribute( "type", &type );
-    doc.Attribute( "condition", &cond );
-    doc.Attribute( "count", &count );
-
-    obj.SetCenter( Point( posx, posy ) );
-    obj.SetUID( uid );
-    obj.monster = Monster( type );
-
-    /* join condition: random: -1, fight: 0, all join: 1, for money: 2 */
-    if ( cond < 0 ) {
-        cond = 0;
-
-        // 20% chance for join
-        if ( 3 > Rand::Get( 1, 10 ) ) {
-            cond = 4 > Rand::Get( 1, 10 ) ? 1 : 2;
-        }
-    }
-
-    if ( obj.monster.GetID() == Monster::GHOST || obj.monster.isElemental() )
-        cond = 0;
-
-    if ( count == 0 ) {
-        int mul = 4;
-
-        // set random count
-        switch ( Game::getDifficulty() ) {
-        case Difficulty::EASY:
-            mul = 3;
-            break;
-        case Difficulty::NORMAL:
-            mul = 4;
-            break;
-        case Difficulty::HARD:
-            mul = 4;
-            break;
-        case Difficulty::EXPERT:
-            mul = 5;
-            break;
-        case Difficulty::IMPOSSIBLE:
-            mul = 6;
-            break;
-        default:
-            break;
-        }
-
-        count = mul * obj.monster.GetRNDSize( true );
-    }
-
-    obj.condition = cond;
-    obj.count = count;
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapArtifact & obj )
-{
-    int posx, posy, uid, type, cond;
-    doc.Attribute( "posx", &posx );
-    doc.Attribute( "posy", &posy );
-    doc.Attribute( "uid", &uid );
-    doc.Attribute( "type", &type );
-    doc.Attribute( "condition", &cond );
-
-    obj.SetCenter( Point( posx, posy ) );
-    obj.SetUID( uid );
-    obj.artifact = Artifact( type );
-
-    if ( 0 > cond ) {
-        // 0: 70% none
-        // 1,2,3 - 2000g, 2500g+3res, 3000g+5res,
-        // 4,5 - need have skill wisard or leadership,
-        // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4,
-        // 15 - spell
-        cond = Rand::Get( 1, 10 ) < 4 ? Rand::Get( 1, 13 ) : 0;
-    }
-
-    obj.condition = cond;
-
-    if ( cond == 2 || cond == 3 )
-        obj.extended = Resource::Rand();
-
-    if ( type == Artifact::SPELL_SCROLL ) {
-        int spell;
-        doc.Attribute( "spell", &spell );
-        obj.artifact.SetSpell( spell );
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapObjects & objects )
-{
-    TiXmlElement * xml_objects = doc.FirstChildElement();
-    for ( ; xml_objects; xml_objects = xml_objects->NextSiblingElement() ) {
-        const std::string name = StringLower( xml_objects->Value() );
-        int posx, posy;
-        xml_objects->Attribute( "posx", &posx );
-        xml_objects->Attribute( "posy", &posy );
-
-        if ( name == "sign" ) {
-            MapSign * ptr = new MapSign();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-        else if ( name == "sphinx" ) {
-            MapSphinx * ptr = new MapSphinx();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-        else if ( name == "event" ) {
-            MapEvent * ptr = new MapEvent();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-        else if ( name == "monster" ) {
-            MapMonster * ptr = new MapMonster();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-        else if ( name == "artifact" ) {
-            MapArtifact * ptr = new MapArtifact();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-        else if ( name == "resource" ) {
-            MapResource * ptr = new MapResource();
-            *xml_objects >> *ptr;
-            objects.add( ptr );
-        }
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, ActionDefault & st )
-{
-    int enabled;
-    doc.Attribute( "enabled", &enabled );
-    st.enabled = enabled;
-    if ( doc.GetText() )
-        st.message = doc.GetText();
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, ActionAccess & st )
-{
-    int colors, comp, cancel;
-    doc.Attribute( "allowPlayers", &colors );
-    doc.Attribute( "allowComputer", &comp );
-    doc.Attribute( "cancelAfterFirstVisit", &cancel );
-    st.allowPlayers = colors;
-    st.allowComputer = comp;
-    st.cancelAfterFirstVisit = cancel;
-    if ( doc.GetText() )
-        st.message = doc.GetText();
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, ActionMessage & st )
-{
-    if ( doc.GetText() )
-        st.message = doc.GetText();
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, ActionResources & st )
-{
-    doc >> st.resources;
-    if ( doc.GetText() )
-        st.message = doc.GetText();
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, ActionArtifact & st )
-{
-    int artifact;
-    doc.Attribute( "artifact", &artifact );
-    st.artifact = artifact ? artifact - 1 : Artifact::UNKNOWN;
-    if ( st.artifact() == Artifact::SPELL_SCROLL ) {
-        int spell = 0;
-        doc.Attribute( "spell", &spell );
-        if ( 0 == spell )
-            spell = Spell::RANDOM;
-        st.artifact.SetSpell( spell );
-    }
-    if ( doc.GetText() )
-        st.message = doc.GetText();
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, MapActions & objects )
-{
-    TiXmlElement * xml_actions = doc.FirstChildElement( "actions" );
-    for ( ; xml_actions; xml_actions = xml_actions->NextSiblingElement( "actions" ) ) {
-        int posx, posy, uid;
-
-        xml_actions->Attribute( "posx", &posx );
-        xml_actions->Attribute( "posy", &posy );
-        xml_actions->Attribute( "uid", &uid );
-
-        s32 index = Maps::GetIndexFromAbsPoint( posx, posy );
-
-        if ( Maps::isValidAbsIndex( index ) ) {
-            ListActions & list = objects[index];
-            list.clear();
-
-            TiXmlElement * xml_action = xml_actions->FirstChildElement();
-            for ( ; xml_action; xml_action = xml_action->NextSiblingElement() ) {
-                const std::string name = StringLower( xml_action->Value() );
-
-                if ( name == "defaultaction" ) {
-                    ActionDefault * ptr = new ActionDefault();
-                    *xml_action >> *ptr;
-                    list.push_back( ptr );
-                }
-                else if ( name == "access" ) {
-                    ActionAccess * ptr = new ActionAccess();
-                    *xml_action >> *ptr;
-                    list.push_back( ptr );
-                }
-                else if ( name == "message" ) {
-                    ActionMessage * ptr = new ActionMessage();
-                    *xml_action >> *ptr;
-                    list.push_back( ptr );
-                }
-                else if ( name == "resources" ) {
-                    ActionResources * ptr = new ActionResources();
-                    *xml_action >> *ptr;
-                    list.push_back( ptr );
-                }
-                else if ( name == "artifact" ) {
-                    ActionArtifact * ptr = new ActionArtifact();
-                    *xml_action >> *ptr;
-                    list.push_back( ptr );
-                }
-            }
-        }
-    }
-
-    return doc;
-}
-
-TiXmlElement & operator>>( TiXmlElement & doc, World & w )
-{
-    TiXmlElement * xml_tiles = doc.FirstChildElement( "tiles" );
-    int value;
-
-    if ( !xml_tiles )
-        return doc;
-
-    Size & sw = w;
-
-    xml_tiles->Attribute( "width", &value );
-    sw.w = value;
-
-    xml_tiles->Attribute( "height", &value );
-    sw.h = value;
-
-    w.vec_tiles.resize( sw.w * sw.h );
-
-    *xml_tiles >> w.vec_tiles;
-
-    TiXmlElement * xml_objects = doc.FirstChildElement( "objects" );
-    if ( xml_objects ) {
-        xml_objects->Attribute( "lastUID", &value );
-        GameStatic::uniq = value;
-
-        *xml_objects >> w.vec_castles >> w.vec_heroes >> w.map_objects >> w.map_actions;
-    }
-
-    TiXmlElement * xml_events = doc.FirstChildElement( "events" );
-    if ( xml_events )
-        *xml_events >> w.vec_eventsday;
-
-    TiXmlElement * xml_rumors = doc.FirstChildElement( "rumors" );
-    if ( xml_rumors )
-        *xml_rumors >> w.vec_rumors;
-    w.ProcessNewMap();
-
-    return doc;
-}
-
-/* load maps */
-bool World::LoadMapMAP( const std::string & filename )
-{
-#ifdef WITH_ZLIB
-    Reset();
-    Defaults();
-
-    TiXmlDocument doc;
-    TiXmlElement * xml_map = NULL;
-
-    if ( doc.LoadFile( filename.c_str() ) && NULL != ( xml_map = doc.FirstChildElement( "map" ) ) ) {
-        TiXmlElement * xml_data = xml_map->FirstChildElement( "data" );
-        if ( !xml_data->Attribute( "compress" ) ) {
-            *xml_data >> *this;
-            return true;
-        }
-        else if ( xml_data->GetText() ) {
-            std::vector<u8> raw_data = DecodeBase64AndUncomress( xml_data->GetText() );
-            raw_data.push_back( 0 );
-            doc.Parse( reinterpret_cast<const char *>( &raw_data[0] ) );
-            if ( doc.Error() ) {
-                VERBOSE_LOG( "parse error: " << doc.ErrorDesc() );
-                return false;
-            }
-            // SaveMemToFile(raw_data, "raw.data");
-            xml_data = doc.FirstChildElement( "data" );
-            *xml_data >> *this;
-            return true;
-        }
-    }
-#endif
-    return false;
-}
-#else
-bool World::LoadMapMAP( const std::string & )
-{
-    return false;
-}
-#endif // WITH_XML
-
 bool World::LoadMapMP2( const std::string & filename )
 {
     Reset();
@@ -931,9 +78,6 @@ bool World::LoadMapMP2( const std::string & filename )
         DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() );
         return false;
     }
-
-    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
-    vec_object.reserve( 100 );
 
     // check (mp2, mx2) ID
     if ( fs.getBE32() != 0x5C000000 )
@@ -952,47 +96,47 @@ bool World::LoadMapMP2( const std::string & filename )
     // width
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::w = Maps::SMALL;
+        width = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::w = Maps::MEDIUM;
+        width = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::w = Maps::LARGE;
+        width = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::w = Maps::XLARGE;
+        width = Maps::XLARGE;
         break;
     default:
-        Size::w = 0;
+        width = 0;
         break;
     }
 
     // height
     switch ( fs.getLE32() ) {
     case Maps::SMALL:
-        Size::h = Maps::SMALL;
+        height = Maps::SMALL;
         break;
     case Maps::MEDIUM:
-        Size::h = Maps::MEDIUM;
+        height = Maps::MEDIUM;
         break;
     case Maps::LARGE:
-        Size::h = Maps::LARGE;
+        height = Maps::LARGE;
         break;
     case Maps::XLARGE:
-        Size::h = Maps::XLARGE;
+        height = Maps::XLARGE;
         break;
     default:
-        Size::h = 0;
+        height = 0;
         break;
     }
 
-    if ( Size::w == 0 || Size::h == 0 || Size::w != Size::h ) {
+    if ( width == 0 || height == 0 || width != height ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" );
         return false;
     }
 
-    const int32_t worldSize = w() * h();
+    const int32_t worldSize = width * height;
 
     // seek to ADDONS block
     fs.skip( worldSize * SIZEOFMP2TILE );
@@ -1019,6 +163,14 @@ bool World::LoadMapMP2( const std::string & filename )
     fs.seek( MP2OFFSETDATA );
 
     vec_tiles.resize( worldSize );
+
+    // In the future we need to check 3 things which could point that this map is The Price of Loyalty version:
+    // - new object types
+    // - new artifact types on map
+    // - new artifact types in hero's bag
+
+    MapsIndexes vec_object; // index maps for OBJ_CASTLE, OBJ_HEROES, OBJ_SIGN, OBJ_BOTTLE, OBJ_EVENT
+    vec_object.reserve( 100 );
 
     // read all tiles
     for ( int32_t i = 0; i < worldSize; ++i ) {
@@ -1081,10 +233,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood castles
     // 72 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 72; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 72; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1093,43 +245,43 @@ bool World::LoadMapMP2( const std::string & filename )
         switch ( id ) {
         case 0x00: // tower: knight
         case 0x80: // castle: knight
-            vec_castles.push_back( new Castle( cx, cy, Race::KNGT ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::KNGT ) );
             break;
 
         case 0x01: // tower: barbarian
         case 0x81: // castle: barbarian
-            vec_castles.push_back( new Castle( cx, cy, Race::BARB ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::BARB ) );
             break;
 
         case 0x02: // tower: sorceress
         case 0x82: // castle: sorceress
-            vec_castles.push_back( new Castle( cx, cy, Race::SORC ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::SORC ) );
             break;
 
         case 0x03: // tower: warlock
         case 0x83: // castle: warlock
-            vec_castles.push_back( new Castle( cx, cy, Race::WRLK ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WRLK ) );
             break;
 
         case 0x04: // tower: wizard
         case 0x84: // castle: wizard
-            vec_castles.push_back( new Castle( cx, cy, Race::WZRD ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::WZRD ) );
             break;
 
         case 0x05: // tower: necromancer
         case 0x85: // castle: necromancer
-            vec_castles.push_back( new Castle( cx, cy, Race::NECR ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NECR ) );
             break;
 
         case 0x06: // tower: random
         case 0x86: // castle: random
-            vec_castles.push_back( new Castle( cx, cy, Race::NONE ) );
+            vec_castles.AddCastle( new Castle( cx, cy, Race::NONE ) );
             break;
 
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "castle block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
         // preload in to capture objects cache
@@ -1141,10 +293,10 @@ bool World::LoadMapMP2( const std::string & filename )
 
     // cood resource kingdoms
     // 144 x 3 byte (cx, cy, id)
-    for ( u32 ii = 0; ii < 144; ++ii ) {
-        u32 cx = fs.get();
-        u32 cy = fs.get();
-        u32 id = fs.get();
+    for ( int32_t i = 0; i < 144; ++i ) {
+        const uint32_t cx = fs.get();
+        const uint32_t cy = fs.get();
+        const uint32_t id = fs.get();
 
         // empty block
         if ( 0xFF == cx && 0xFF == cy )
@@ -1186,7 +338,7 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "kingdom block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * w() );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
             break;
         }
     }
@@ -1200,11 +352,8 @@ bool World::LoadMapMP2( const std::string & filename )
     // count final mp2 blocks
     u32 countblock = 0;
     while ( 1 ) {
-        u32 l = fs.get();
-        u32 h = fs.get();
-
-        // VERBOSE_LOG("dump block: 0x" << std::setw(2) << std::setfill('0') << std::hex << l <<
-        //	std::setw(2) << std::setfill('0') << std::hex << h);
+        const u32 l = fs.get();
+        const u32 h = fs.get();
 
         if ( 0 == h && 0 == l )
             break;
@@ -1409,12 +558,10 @@ bool World::LoadMapMP2( const std::string & filename )
 void World::ProcessNewMap()
 {
     // modify other objects
-    for ( size_t ii = 0; ii < vec_tiles.size(); ++ii ) {
-        Maps::Tiles & tile = vec_tiles[ii];
-
+    for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
+        Maps::Tiles & tile = vec_tiles[i];
         Maps::Tiles::FixedPreload( tile );
 
-        //
         switch ( tile.GetObject() ) {
         case MP2::OBJ_WITCHSHUT:
         case MP2::OBJ_SHRINE1:
@@ -1495,7 +642,7 @@ void World::ProcessNewMap()
             if ( MP2::GetICNObject( tile.GetObjectTileset() ) == ICN::MINIHERO )
                 tile.Remove( tile.GetObjectUID() );
 
-            tile.SetHeroes( GetHeroes( Maps::GetPoint( ii ) ) );
+            tile.SetHeroes( GetHeroes( Maps::GetPoint( static_cast<int32_t>( i ) ) ) );
         } break;
 
         default:
@@ -1537,11 +684,11 @@ void World::ProcessNewMap()
 
         if ( !kingdom.GetCastles().empty() ) {
             const Castle * castle = kingdom.GetCastles().front();
-            const Point & cp = castle->GetCenter();
+            const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
             if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), Point( cp.x, cp.y + 1 ) );
+                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
             }
         }
     }
@@ -1549,7 +696,7 @@ void World::ProcessNewMap()
     // set ultimate
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
                                            []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
-    Point ultimate_pos;
+    fheroes2::Point ultimate_pos;
 
     // not found
     if ( vec_tiles.end() == it ) {
@@ -1559,12 +706,12 @@ void World::ProcessNewMap()
 
         for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
             const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % w();
-            if ( x < ultimateArtifactOffset || x >= w() - ultimateArtifactOffset )
+            const int32_t x = tile.GetIndex() % width;
+            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
                 continue;
 
-            const int32_t y = tile.GetIndex() / w();
-            if ( y < ultimateArtifactOffset || y >= h() - ultimateArtifactOffset )
+            const int32_t y = tile.GetIndex() / width;
+            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
                 continue;
 
             if ( tile.GoodForUltimateArtifact() )
@@ -1572,8 +719,24 @@ void World::ProcessNewMap()
         }
 
         if ( !pools.empty() ) {
+            Artifact ultimate = Artifact::Rand( Artifact::ART_ULTIMATE );
+            if ( Settings::Get().isCampaignGameType() ) {
+                const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+
+                const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
+                const int scenarioId = campaignData.getCurrentScenarioID();
+                assert( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() );
+
+                if ( scenarioId >= 0 && static_cast<size_t>( scenarioId ) < scenarios.size() ) {
+                    const Campaign::ScenarioVictoryCondition victoryCondition = scenarios[scenarioId].getVictoryCondition();
+                    if ( victoryCondition == Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN ) {
+                        ultimate = Artifact::ULTIMATE_CROWN;
+                    }
+                }
+            }
+
             const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, Artifact::Rand( Artifact::ART_ULTIMATE ) );
+            ultimate_artifact.Set( pos, ultimate );
             ultimate_pos = Maps::GetPoint( pos );
         }
     }
@@ -1581,7 +744,7 @@ void World::ProcessNewMap()
         // remove ultimate artifact sprite
         const uint8_t objectIndex = it->GetObjectSpriteIndex();
         it->Remove( it->GetObjectUID() );
-        it->SetObject( MP2::OBJ_ZERO );
+        it->setAsEmpty();
         ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
         ultimate_pos = ( *it ).GetCenter();
     }
@@ -1591,26 +754,26 @@ void World::ProcessNewMap()
 
     vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
 
-    if ( world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    if ( height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
     }
-    else if ( 2 * world.h() / 3 > ultimate_pos.y ) {
-        if ( world.w() / 3 > ultimate_pos.x )
+    else if ( 2 * height / 3 > ultimate_pos.y ) {
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
     }
     else {
-        if ( world.w() / 3 > ultimate_pos.x )
+        if ( width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
-        else if ( 2 * world.w() / 3 > ultimate_pos.x )
+        else if ( 2 * width / 3 > ultimate_pos.x )
             StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
         else
             StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );

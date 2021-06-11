@@ -82,11 +82,8 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
     const fheroes2::Sprite & sprite_skill1 = fheroes2::AGG::GetICN( ICN::SECSKILL, sec1.GetIndexSprite1() );
@@ -116,7 +113,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().height - fheroes2::AGG::GetICN( system, 9 ).height();
     fheroes2::Button button_learn2( pt.x, pt.y, system, 9, 10 );
 
-    const Rect & boxArea = box.GetArea();
+    const fheroes2::Rect & boxArea = box.GetArea();
     fheroes2::Point pos( boxArea.x, boxArea.y );
 
     if ( header.size() )
@@ -159,9 +156,10 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     pt.y = box.GetArea().y + box.GetArea().height - 36;
 
     const Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
 
-    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
-    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
+    fheroes2::Sprite armyButtonReleased = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 0 );
+    fheroes2::Sprite armyButtonPressed = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVEBTNS : ICN::ADVBTNS, 1 );
     fheroes2::AddTransparency( armyButtonReleased, 36 );
     fheroes2::AddTransparency( armyButtonPressed, 36 );
 
@@ -182,7 +180,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     button_learn2.draw();
     button_hero.draw();
 
-    cursor.Show();
     display.render();
     LocalEvent & le = LocalEvent::Get();
 
@@ -197,14 +194,7 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         else if ( le.MouseClickLeft( button_learn2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) )
             return sec2.Skill();
         else if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
-            const bool noDismiss = hero.Modes( Heroes::NOTDISMISS );
-            hero.SetModes( Heroes::NOTDISMISS );
-            hero.OpenDialog( false, true );
-
-            if ( !noDismiss ) {
-                hero.ResetModes( Heroes::NOTDISMISS );
-            }
-            cursor.Show();
+            hero.OpenDialog( false, true, true, true );
             display.render();
         }
 
@@ -216,15 +206,11 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec1, hero, false );
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            cursor.Hide();
             Dialog::SecondarySkillInfo( sec2, hero, false );
-            cursor.Show();
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {
@@ -232,7 +218,6 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
     }
 
-    cursor.Hide();
     return Skill::Secondary::UNKNOWN;
 }
 

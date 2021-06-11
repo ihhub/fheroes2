@@ -333,7 +333,7 @@ bool AGG::ReadDataDir( void )
         }
     }
 
-    conf.SetPriceLoyaltyVersion( heroes2x_agg.isGood() );
+    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
 
     return heroes2_agg.isGood();
 }
@@ -363,7 +363,6 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-#ifdef WITH_MIXER
     const Settings & conf = Settings::Get();
 
     if ( conf.UseAltResource() ) {
@@ -388,17 +387,15 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
             return;
         }
     }
-#endif
 
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
     if ( body.size() ) {
-#ifdef WITH_MIXER
         // create WAV format
         StreamBuf wavHeader( 44 );
         wavHeader.putLE32( 0x46464952 ); // RIFF
-        wavHeader.putLE32( body.size() + 0x24 ); // size
+        wavHeader.putLE32( static_cast<uint32_t>( body.size() ) + 0x24 ); // size
         wavHeader.putLE32( 0x45564157 ); // WAVE
         wavHeader.putLE32( 0x20746D66 ); // FMT
         wavHeader.putLE32( 0x10 ); // size_t
@@ -414,32 +411,6 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
         v.reserve( body.size() + 44 );
         v.assign( wavHeader.data(), wavHeader.data() + 44 );
         v.insert( v.begin() + 44, body.begin(), body.end() );
-#else
-        Audio::Spec wav_spec;
-        wav_spec.format = AUDIO_U8;
-        wav_spec.channels = 1;
-        wav_spec.freq = 22050;
-
-        const Audio::Spec & hardware = Audio::GetHardwareSpec();
-
-        Audio::CVT cvt;
-
-        if ( cvt.Build( wav_spec, hardware ) ) {
-            const u32 size = cvt.len_mult * body.size();
-
-            cvt.buf = new u8[size];
-            cvt.len = body.size();
-
-            memcpy( cvt.buf, &body[0], body.size() );
-
-            cvt.Convert();
-
-            v.assign( cvt.buf, cvt.buf + size - 1 );
-
-            delete[] cvt.buf;
-            cvt.buf = NULL;
-        }
-#endif
     }
 }
 
@@ -497,9 +468,9 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     // set volume loop sounds
-    for ( std::vector<int>::const_iterator itv = vols.begin(); itv != vols.end(); ++itv ) {
-        int vol = *itv;
-        int m82 = M82::GetLOOP00XX( std::distance( vols.begin(), itv ) );
+    for ( size_t i = 0; i < vols.size(); ++i ) {
+        int vol = vols[i];
+        int m82 = M82::GetLOOP00XX( i );
         if ( M82::UNKNOWN == m82 )
             continue;
 
@@ -507,7 +478,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
         std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), m82 );
 
         if ( itl != loop_sounds.end() ) {
-            // unused and free
+            // unused, stop
             if ( 0 == vol || conf.SoundVolume() == 0 ) {
                 if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                     Mixer::Pause( ( *itl ).channel );
@@ -516,7 +487,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
                 }
                 ( *itl ).sound = M82::UNKNOWN;
             }
-            // used and set vols
+            // used, update volume
             else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
                 Mixer::Pause( ( *itl ).channel );
                 Mixer::Volume( ( *itl ).channel, vol * conf.SoundVolume() / 10 );
@@ -527,7 +498,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
             // new sound
             if ( 0 != vol ) {
             const std::vector<u8> & v = GetWAV( m82 );
-            const int ch = Mixer::Play( &v[0], v.size(), -1, true );
+            const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, true );
 
             if ( 0 <= ch ) {
                 Mixer::Pause( ch );
@@ -573,7 +544,7 @@ void AGG::PlaySoundInternally( const int m82 )
 
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & v = AGG::GetWAV( m82 );
-    const int ch = Mixer::Play( &v[0], v.size(), -1, false );
+    const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
     Mixer::Pause( ch );
     Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
     Mixer::Resume( ch );
@@ -608,7 +579,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         return;
     }
 
-    Game::SetCurrentMusic( mus );
     const std::string prefix_music( "music" );
     const MusicSource type = conf.MusicType();
 
@@ -641,6 +611,8 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         if ( filename.size() ) {
             Music::Play( filename, loop );
             isSongFound = true;
+
+            Game::SetCurrentMusic( mus );
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
@@ -648,6 +620,9 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
         Cdrom::Play( mus, loop );
         isSongFound = true;
+
+        Game::SetCurrentMusic( mus );
+
         DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
     }
 #endif
@@ -664,20 +639,12 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         }
 
         if ( XMI::UNKNOWN != xmi ) {
-#ifdef WITH_MIXER
             const std::vector<u8> & v = GetMID( xmi );
-            if ( v.size() )
+            if ( v.size() ) {
                 Music::Play( v, loop );
-#else
-            std::string mid = XMI::GetString( xmi );
-            StringReplace( mid, ".XMI", ".MID" );
-            const std::string file = System::ConcatePath( Settings::GetWriteableDir( "music" ), mid );
 
-            if ( !System::IsFile( file ) )
-                SaveMemToFile( GetMID( xmi ), file );
-
-            Music::Play( file, loop );
-#endif
+                Game::SetCurrentMusic( mus );
+            }
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
     }
@@ -764,7 +731,7 @@ bool AGG::Init( void )
 
 #ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
-        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ) );
+        const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
         display.fill( 0 );
         fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );

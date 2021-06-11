@@ -43,7 +43,7 @@ namespace
 }
 
 Interface::StatusWindow::StatusWindow( Basic & basic )
-    : BorderWindow( Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
     , _oldState( StatusType::STATUS_UNKNOWN )
@@ -79,7 +79,7 @@ u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
 
 void Interface::StatusWindow::SavePosition( void )
 {
-    Settings::Get().SetPosStatus( GetRect() );
+    Settings::Get().SetPosStatus( GetRect().getPosition() );
 }
 
 void Interface::StatusWindow::SetRedraw( void ) const
@@ -105,14 +105,14 @@ void Interface::StatusWindow::SetState( const StatusType status )
         _state = status;
 }
 
-void Interface::StatusWindow::Redraw( void )
+void Interface::StatusWindow::Redraw( void ) const
 {
     const Settings & conf = Settings::Get();
-    const Rect & pos = GetArea();
+    const fheroes2::Rect & pos = GetArea();
 
     if ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) {
         if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.w, pos.h, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
+            fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
             BorderWindow::Redraw();
         }
         else {
@@ -121,12 +121,12 @@ void Interface::StatusWindow::Redraw( void )
 
         // draw info: Day and Funds and Army
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-        const uint32_t stonHeight = ston.height();
+        const int32_t stonHeight = ston.height();
 
         if ( StatusType::STATUS_AITURN == _state ) {
             DrawAITurns();
         }
-        else if ( StatusType::STATUS_UNKNOWN != _state && pos.h >= ( stonHeight * 3 + 15 ) ) {
+        else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
             DrawDayInfo();
 
             if ( conf.CurrentColor() & Players::HumanColors() ) {
@@ -138,7 +138,7 @@ void Interface::StatusWindow::Redraw( void )
                     DrawResourceInfo( 2 * stonHeight + 10 );
             }
         }
-        else if ( StatusType::STATUS_UNKNOWN != _state && pos.h >= ( stonHeight * 2 + 15 ) ) {
+        else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 2 + 15 ) ) {
             DrawDayInfo();
 
             switch ( _state ) {
@@ -187,7 +187,7 @@ void Interface::StatusWindow::Redraw( void )
 
 void Interface::StatusWindow::NextState( void )
 {
-    const int32_t areaHeight = GetArea().h;
+    const int32_t areaHeight = GetArea().height;
     const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
 
@@ -219,7 +219,7 @@ void Interface::StatusWindow::NextState( void )
 
 void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
 {
-    const Rect & pos = GetArea();
+    const fheroes2::Rect & pos = GetArea();
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     // sprite all resource
@@ -256,7 +256,7 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
 
 void Interface::StatusWindow::DrawDayInfo( int oh ) const
 {
-    const Rect & pos = GetArea();
+    const fheroes2::Rect & pos = GetArea();
 
     const int dayOfWeek = world.GetDay();
     const int weekOfMonth = world.GetWeek();
@@ -273,12 +273,12 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     StringReplace( message, "%{month}", world.GetMonth() );
     StringReplace( message, "%{week}", world.GetWeek() );
     Text text( message, Font::SMALL );
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 30 + oh );
+    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 30 + oh );
 
     message = _( "Day: %{day}" );
     StringReplace( message, "%{day}", world.GetDay() );
     text.Set( message, Font::BIG );
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + 46 + oh );
+    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
 }
 
 void Interface::StatusWindow::SetResource( int res, u32 count )
@@ -307,18 +307,18 @@ void Interface::StatusWindow::ResetTimer( void )
 
 void Interface::StatusWindow::DrawResourceInfo( int oh ) const
 {
-    const Rect & pos = GetArea();
+    const fheroes2::Rect & pos = GetArea();
 
     std::string message = _( "You find a small\nquantity of %{resource}." );
     StringReplace( message, "%{resource}", Resource::String( lastResource ) );
-    TextBox text( message, Font::SMALL, pos.w );
+    TextBox text( message, Font::SMALL, pos.width );
     text.Blit( pos.x, pos.y + 4 + oh );
 
     const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
-    fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.w - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
+    fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
-    text.Set( std::to_string( countLastResource ), Font::SMALL, pos.w );
-    text.Blit( pos.x + ( pos.w - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
+    text.Set( std::to_string( countLastResource ), Font::SMALL, pos.width );
+    text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + oh + text.h() * 2 + spr.height() + 8 );
 }
 
 void Interface::StatusWindow::DrawArmyInfo( int oh ) const
@@ -331,7 +331,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
         armies = &GetFocusCastle()->GetArmy();
 
     if ( armies ) {
-        const Rect & pos = GetArea();
+        const fheroes2::Rect & pos = GetArea();
         Army::DrawMonsterLines( *armies, pos.x + 4, pos.y + 1 + oh, 138, Skill::Level::EXPERT );
     }
 }
@@ -347,10 +347,10 @@ void Interface::StatusWindow::DrawAITurns( void ) const
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
-        const Rect & pos = GetArea();
+        const fheroes2::Rect & pos = GetArea();
 
-        s32 dst_x = pos.x + ( pos.w - glass.width() ) / 2;
-        s32 dst_y = pos.y + ( pos.h - glass.height() ) / 2;
+        s32 dst_x = pos.x + ( pos.width - glass.width() ) / 2;
+        s32 dst_y = pos.y + ( pos.height - glass.height() ) / 2;
 
         fheroes2::Blit( glass, display, dst_x, dst_y );
 
@@ -399,7 +399,7 @@ void Interface::StatusWindow::DrawBackground( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-    const Rect & pos = GetArea();
+    const fheroes2::Rect & pos = GetArea();
 
     if ( !Settings::Get().ExtGameHideInterface() && display.height() - BORDERWIDTH - icnston.height() > pos.y ) {
         // top
@@ -411,7 +411,7 @@ void Interface::StatusWindow::DrawBackground( void ) const
 
         // middle
         srcrt = fheroes2::Rect( 0, startY, icnston.width(), copyHeight );
-        const int32_t count = ( pos.h - ( icnston.height() - copyHeight ) ) / copyHeight;
+        const int32_t count = ( pos.height - ( icnston.height() - copyHeight ) ) / copyHeight;
         for ( int32_t i = 0; i < count; ++i ) {
             dstpt = fheroes2::Point( pos.x, pos.y + copyHeight * i + startY );
             fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
@@ -419,7 +419,7 @@ void Interface::StatusWindow::DrawBackground( void ) const
 
         // botom
         srcrt = fheroes2::Rect( 0, startY, icnston.width(), icnston.height() - startY );
-        dstpt = fheroes2::Point( pos.x, pos.y + pos.h - ( icnston.height() - startY ) );
+        dstpt = fheroes2::Point( pos.x, pos.y + pos.height - ( icnston.height() - startY ) );
         fheroes2::Blit( icnston, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
     }
     else {
@@ -434,20 +434,17 @@ void Interface::StatusWindow::QueueEventProcessing( void )
     }
 
     LocalEvent & le = LocalEvent::Get();
-    const Rect & drawnArea = GetArea();
+    const fheroes2::Rect & drawnArea = GetArea();
 
     if ( le.MouseClickLeft( drawnArea ) ) {
-        Cursor & cursor = Cursor::Get();
-        cursor.Hide();
         NextState();
         Redraw();
-        cursor.Show();
         fheroes2::Display::instance().render();
     }
     if ( le.MousePressRight( GetRect() ) ) {
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-        const Rect & pos = GetArea();
-        const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.h >= ( ston.height() * 3 + 15 );
+        const fheroes2::Rect & pos = GetArea();
+        const bool isFullInfo = StatusType::STATUS_UNKNOWN != _state && pos.height >= ( ston.height() * 3 + 15 );
         if ( isFullInfo ) {
             Dialog::Message( _( "Status Window" ), _( "This window provides information on the status of your hero or kingdom, and shows the date." ), Font::BIG );
         }
@@ -465,8 +462,6 @@ void Interface::StatusWindow::RedrawTurnProgress( u32 v )
     turn_progress = v;
     SetRedraw();
 
-    Cursor::Get().Hide();
     interface.Redraw();
-    Cursor::Get().Show();
     fheroes2::Display::instance().render();
 }

@@ -1,3 +1,154 @@
+version 0.9.4 (04 June 2021)
+- add Windows executable installers
+- use user profile directories to store files to allow multi-user access to the game
+- fix incorrect text splitting in some rare cases
+- fix crash in Roland campaign, scenario 10
+- add missing popup dialogs for system options and buttons
+- fix inaccurate object sorting by distance
+- fix multiple issues with AI and spell logic using distance evaluation
+- read campaign files in non-case sensitive manner
+- make fog uncovering task for AI more efficient
+- fix AI obsession over Observation Towers
+- fix missing path drawing while a hero moving through Whirlpool
+- mark resource generator objects as visited for allies
+- fix incorrect game ending during time loss condition
+- show extended shadow for 2-hex monsters in battle
+- do not show gray flag over Haunted mine
+- add configuration option for first game run
+- support PoL heroes and artifacts in "battle only" mode
+- fix inaccessible beach tiles
+- add hiding and showing cursor logic for SDL2
+- fix shadows for random resources and artifacts
+- draw correct castle icon in popup window
+- fix incorrect hero position facing left
+- remove unneeded AI hero animation under fog
+- do not clear morale modifiers too early for Tavern case
+- highlight the door in Main Menu for mouse over event
+- speed up and fix many places with cursor rendering
+- recruit an AI hero if none exists
+- fix cheating AI behavior for dwellings with defenders
+- add an option to replay Intro video for campaign
+- force display rendering on app activation
+- fix Stables, Alchemist's Tower and Water Wheel passabilities
+- fix puzzle drawings
+- avoid using useless spell during battle for AI
+- return to load screen after cancelling loaded campaign scenario
+- play hero's vanishing sound after AI vs human battle
+- make Ultimate Crown as artifact for campaign scenarios
+- fix incorrect hero receiving a bonus spell for campaign scenario
+- fix monster recruitment logic when a hero present in a castle
+- fix well's max button hiring logic
+- add an option to open Hero Screen within battle
+- fix move points and spell points replenishment logic for heroes from hero pool
+- set proper difficulty level for campaign scenarios
+- directly show next campaign scenario for end of scenario save
+- modernize and secure demo version installation scripts
+- add video playback for campaign scenarios
+- do not reset hero mana points to maximum in the beginning of a new week if they are above maximum
+- fix Roland, chapter 9 map conditions
+- fix Tower shooting logic during castle's siege
+- build Mage Guild before Special building for AI
+- do not count monsters under fog for Visions spell
+- mute sound by setting music and effects volume to zero instead of pausing them
+- speed up AI hero movement
+- add an option to hide AI movements
+- do not draw objects under the fog if they are far from a revealed area
+- add base code for the Price of Loyalty campaign support
+- add dismiss and upgrade hotkeys in unit dialog info
+- add shadow for Spell Book
+- unveil the fog at the start of hero's movement
+- fix extra place with hero's double shadow at adventure world
+- add extended cursor icons from 4+ to 7+
+- fix UI defect of selected creature appearing after closing meeting dialog
+- fix incorrect rendering of View World image
+- add Lose Sorceress Village Condition for The Succession Wars campaign
+- fix flags in Oracle/Thieves' Guild dialog
+- fix sound mute in background on MacOS with SDL1
+- add Home and End button support for save naming
+- fix elements layout for Oracle/Thieves dialogs
+- generate obstacles on battlefield based on the battle tile index
+- use non-plural name for 1 creature while viewing with Crystal Ball
+- add correct support of The Price of Loyalty add-on maps
+- fix double clicking between dialog in castle's window
+- speed up MIDI loading
+- fix bug with mouse cursor not visible after left-clicking on hero's secondary skill in Kingdom Overview
+- fix the "world: use unique artifacts for resource affecting" option
+- reduce CPU usage for video playback and puzzle revealing
+- fix Mix-up in Roland's Campaign Scenarios
+- fix issue when troop info window was not showing after moving a single unit between army bars using drag & drop method
+- simulate level-ups for campaign-specific heroes that start at a higher level
+- reset current music from the previous turn in the beginning of a new human turn
+- upgrade Rendering engine
+- fix broken behavior of scrollbars
+- do not offer to exchange artifact with spell book
+- disable controllers on non-console platforms
+
+version 0.9.3 (04 May 2021)
+- add additional info to oracle dialog
+- check that unit is (im)movable after each unit action
+- save completed Campaign scenario to file
+- drop support of saves older than 0.9 version
+- remove incorrect battle background for Graveyard
+- fix catapult miss animation: show this animation near the actual target object
+- fix magic book behavior in inventory
+- fix spell indicator for hero's icon
+- add special Victory conditions for campaign scenarios
+- add initial support for Campaign Awards
+- allow switching heroes in hero dialog if it was opened from meeting dialog
+- fix issues with battles logs and sounds while Dwarves resist spell
+- fix inability ot Teleport monster in battle for certain cases
+- add missing "Not enough gold (xxxx)" text in joining window with Diplomacy
+- do not generate Puzzle image on map loading
+- do not take Mage Guild level into account when calculating count of archers in castle towers
+- fix shadows for all monster mini sprites
+- allow the hero to retreat if, while in the castle, he attacks the hero outside the castle
+- show Mage Guild building always in center
+- add titles to Arena, Alchemist Tower and Stables dialogs
+- add World animation during Dimension door spell
+- show correct message for hero's option dialog buttons
+- fix bridge operation for flying units in instant battle
+- add letters for World View and View spells
+- properly handle filenames with dots
+- fix Main Menu UI redraw
+- do not run animation of lowering the bridge on bridge destruction if bridge is already lowered
+- fix the display of the army in the castle quick info window
+- display correct message when capturing abandoned mine
+- align columns and flags at oracle dialog
+- fix cursor during video playback
+- do not allow the player to scroll world map while hero is moving
+- add initial support of other languages: German, Polish, French and Russian
+- fix information displayed in castle quick info window
+- fix sphinx riddle dialogs
+- add swap buttons in hero meeting dialog
+- correct spells order in Magic Book
+- enable triggering of positive morale event after soft wait
+- fix saving scroll speed in the game config file
+- fix Artesian Springs logic
+- fix inability to use Stone Liths
+- fix incorrect heroes for surrender conditions
+- fix gold and experience dialog for the demon cave
+- remove exclamation mark in Hero info window for "Blood" morale
+- fix double shadow from heroes
+- preserve the order of catapult shots
+- highlight Lich's shot area
+- implement correct post-battle necromancy window
+- rename Coast to Beach
+- fix large object coverage in battles
+- add message when visiting Oracle
+- update hero's path while selecting next hero by an option button
+- fix Dragon City guardians
+- load correct video files to be played
+- implement the "faster monster of opposite army goes first" logic in the battle mode
+- fix excessive FPS issue in dialog of joining the army
+- fix game score calculation
+- reset the spell on tile when AI-controlled hero has successfully captured an object
+- immediately hide hero's path before executing the animation of the Dimension Door spell
+- fix Necromancy incorrect percentage output
+- fix ultimate artifact digging logic
+- speed up images loading from resource files
+- fix fading animation synchronization
+- fix a case of inability to confirm end turn while cursor is over options buttons
+
 version 0.9.2 (04 April 2021)
 - fix full artifact bag message
 - add missing dot to sentences in few windows

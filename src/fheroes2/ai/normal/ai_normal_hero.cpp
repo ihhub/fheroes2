@@ -21,6 +21,7 @@
 #include <algorithm>
 
 #include "ai_normal.h"
+#include "game.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -41,7 +42,7 @@ namespace
     class ObjectValidator
     {
     public:
-        ObjectValidator( const Heroes & hero )
+        explicit ObjectValidator( const Heroes & hero )
             : _hero( hero )
         {}
 
@@ -191,7 +192,12 @@ namespace AI
             return valueToIgnore;
         }
         else if ( objectID == MP2::OBJ_OBSERVATIONTOWER ) {
-            return _regions[tile.GetRegion()].fogCount * 100.0;
+            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            if ( fogCountToUncover <= 0 ) {
+                // Nothing to uncover.
+                return -dangerousTaskPenalty;
+            }
+            return fogCountToUncover * 100.0;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const RegionStats & regionStats = _regions[tile.GetRegion()];

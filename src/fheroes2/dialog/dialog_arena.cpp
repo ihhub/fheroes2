@@ -31,8 +31,8 @@
 #include "text.h"
 #include "ui_button.h"
 
-void InfoSkillClear( const Rect &, const Rect &, const Rect &, const Rect & );
-void InfoSkillSelect( int, const Rect &, const Rect &, const Rect &, const Rect & );
+void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
+void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
 int InfoSkillNext( int );
 int InfoSkillPrev( int );
 
@@ -42,11 +42,10 @@ int Dialog::SelectSkillFromArena( void )
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
     const bool allSkills = Settings::Get().ExtHeroArenaCanChoiseAnySkills();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    int oldthemes = cursor.Themes();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    TextBox title( _( "Arena" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
     TextBox textbox(
         _( "You enter the arena and face a pack of vicious lions. You handily defeat them, to the wild cheers of the crowd.  Impressed by your skill, the aged trainer of gladiators agrees to train you in a skill of your choice." ),
@@ -54,10 +53,13 @@ int Dialog::SelectSkillFromArena( void )
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::XPRIMARY, 0 );
     const int spacer = 10;
 
-    Dialog::FrameBox box( textbox.h() + spacer + sprite.height() + 15, true );
+    Dialog::FrameBox box( title.h() + textbox.h() + 2 * spacer + sprite.height() + 15, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x, box_rt.y );
+
+    title.Blit( dst_pt.x, dst_pt.y );
+    dst_pt.y += title.h() + spacer;
 
     textbox.Blit( dst_pt.x, dst_pt.y );
     dst_pt.y += textbox.h() + spacer;
@@ -103,14 +105,14 @@ int Dialog::SelectSkillFromArena( void )
     fheroes2::Button buttonOk( dst_pt.x, dst_pt.y, system, 1, 2 );
 
     LocalEvent & le = LocalEvent::Get();
-    bool redraw = false;
 
     buttonOk.draw();
-    cursor.Show();
     display.render();
 
     // message loop
     while ( le.HandleEvents() ) {
+        bool redraw = false;
+
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
@@ -139,26 +141,19 @@ int Dialog::SelectSkillFromArena( void )
         }
 
         if ( redraw ) {
-            cursor.Hide();
             InfoSkillClear( rect1, rect2, rect3, rect4 );
             InfoSkillSelect( res, rect1, rect2, rect3, rect4 );
-            cursor.Show();
             display.render();
-            redraw = false;
         }
 
         if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) )
             break;
     }
 
-    cursor.Hide();
-    cursor.SetThemes( oldthemes );
-    cursor.Show();
-
     return res;
 }
 
-void InfoSkillClear( const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
+void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -170,7 +165,7 @@ void InfoSkillClear( const Rect & rect1, const Rect & rect2, const Rect & rect3,
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 ), display, rect4.x, rect4.y );
 }
 
-void InfoSkillSelect( int skill, const Rect & rect1, const Rect & rect2, const Rect & rect3, const Rect & rect4 )
+void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

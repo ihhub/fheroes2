@@ -24,6 +24,7 @@
 
 #include "agg_image.h"
 #include "castle.h"
+#include "castle_ui.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
@@ -31,8 +32,6 @@
 #include "icn.h"
 #include "interface_icons.h"
 #include "kingdom.h"
-#include "logging.h"
-#include "race.h"
 #include "world.h"
 
 namespace
@@ -62,58 +61,9 @@ u32 Interface::IconsBar::GetItemHeight( void )
     return ICONS_HEIGHT;
 }
 
-void Interface::RedrawCastleIcon( const Castle & castle, s32 sx, s32 sy )
+void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const bool evil = Settings::Get().ExtGameEvilInterface();
-    u32 index_sprite = 1;
-
-    switch ( castle.GetRace() ) {
-    case Race::KNGT:
-        index_sprite = castle.isCastle() ? 9 : 15;
-        break;
-    case Race::BARB:
-        index_sprite = castle.isCastle() ? 10 : 16;
-        break;
-    case Race::SORC:
-        index_sprite = castle.isCastle() ? 11 : 17;
-        break;
-    case Race::WRLK:
-        index_sprite = castle.isCastle() ? 12 : 18;
-        break;
-    case Race::WZRD:
-        index_sprite = castle.isCastle() ? 13 : 19;
-        break;
-    case Race::NECR:
-        index_sprite = castle.isCastle() ? 14 : 20;
-        break;
-    default:
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
-    }
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( evil ? ICN::LOCATORE : ICN::LOCATORS, index_sprite ), display, sx, sy );
-
-    // castle build marker
-    switch ( Castle::GetAllBuildingStatus( castle ) ) {
-    // white marker
-    case UNKNOWN_COND:
-    case NOT_TODAY:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), display, sx + 40, sy );
-        break;
-
-    // green marker
-    // case LACK_RESOURCES:
-    //    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 2 ), display, sx + 40, sy );
-    //    break;
-
-    // red marker
-    case REQUIRES_BUILD:
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 1 ), display, sx + 40, sy );
-        break;
-
-    default:
-        break;
-    }
+    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), fheroes2::Point( sx, sy ) );
 }
 
 void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
@@ -121,7 +71,7 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const Point & pos )
+void Interface::IconsBar::RedrawBackground( const fheroes2::Point & pos ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -163,7 +113,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
     }
 }
 
-void Interface::CastleIcons::RedrawBackground( const Point & pos )
+void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 {
     IconsBar::RedrawBackground( pos );
 }
@@ -198,7 +148,6 @@ void Interface::CastleIcons::ActionListSingleClick( CASTLE & item )
 void Interface::CastleIcons::ActionListPressRight( CASTLE & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }
@@ -220,7 +169,7 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
-    _topLeftCorner = Point( px, py );
+    _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
     SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
@@ -244,7 +193,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
     }
 }
 
-void Interface::HeroesIcons::RedrawBackground( const Point & pos )
+void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 {
     IconsBar::RedrawBackground( pos );
 }
@@ -286,7 +235,6 @@ void Interface::HeroesIcons::ActionListSingleClick( HEROES & item )
 void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
-        Cursor::Get().Hide();
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
         Dialog::QuickInfo( *item, p );
     }
@@ -308,7 +256,7 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
-    _topLeftCorner = Point( px, py );
+    _topLeftCorner = fheroes2::Point( px, py );
     SetTopLeft( _topLeftCorner );
     SetScrollBar( fheroes2::AGG::GetICN( icnscroll, 4 ), fheroes2::Rect( px + ICONS_CURSOR_WIDTH + 3, py + 19, 10, ICONS_CURSOR_HEIGHT * iconsCount - 38 ) );
     SetScrollButtonUp( icnscroll, 0, 1, fheroes2::Point( px + ICONS_CURSOR_WIDTH + 1, py + 1 ) );
@@ -323,7 +271,7 @@ void Interface::HeroesIcons::SetPos( s32 px, s32 py )
 
 /* Interface::IconsPanel */
 Interface::IconsPanel::IconsPanel( Basic & basic )
-    : BorderWindow( Rect( 0, 0, 144, 128 ) )
+    : BorderWindow( fheroes2::Rect( 0, 0, 144, 128 ) )
     , interface( basic )
     , castleIcons( 4, sfMarker )
     , heroesIcons( 4, sfMarker )
@@ -333,14 +281,9 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
-u32 Interface::IconsPanel::CountIcons( void ) const
-{
-    return castleIcons.CountIcons();
-}
-
 void Interface::IconsPanel::SavePosition( void )
 {
-    Settings::Get().SetPosIcons( GetRect() );
+    Settings::Get().SetPosIcons( GetRect().getPosition() );
 }
 
 void Interface::IconsPanel::SetRedraw( icons_t type ) const
@@ -381,7 +324,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
 
     BorderWindow::SetPosition( ox, oy, 144, iconsCount * ICONS_CURSOR_HEIGHT );
 
-    const Rect & rect = GetArea();
+    const fheroes2::Rect & rect = GetArea();
 
     heroesIcons.SetIconsCount( iconsCount );
     castleIcons.SetIconsCount( iconsCount );

@@ -18,8 +18,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext clang-tools
     - name: compile
-      run: scan-build -v make -j 2
+      run: scan-build --status-bugs -v make -j 2
       env:
-        WITHOUT_XML: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
         WITH_TOOLS: "ON"

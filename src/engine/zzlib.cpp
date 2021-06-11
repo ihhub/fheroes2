@@ -36,11 +36,12 @@ std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
         if ( realsz )
             res.reserve( realsz );
         res.resize( ( realsz ? realsz : srcsz * 7 ), 0 );
-        uLong dstsz = res.size();
+        uLong dstsz = static_cast<uLong>( res.size() );
         int ret = Z_BUF_ERROR;
 
-        while ( Z_BUF_ERROR == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), srcsz ) ) ) {
-            dstsz = res.size() * 2;
+        while ( Z_BUF_ERROR
+                == ( ret = uncompress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) ) ) ) {
+            dstsz = static_cast<uLong>( res.size() * 2 );
             res.resize( dstsz );
         }
 
@@ -62,9 +63,9 @@ std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
     std::vector<u8> res;
 
     if ( src && srcsz ) {
-        res.resize( compressBound( srcsz ) );
-        uLong dstsz = res.size();
-        int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), srcsz );
+        res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
+        uLong dstsz = static_cast<uLong>( res.size() );
+        int ret = compress( reinterpret_cast<Bytef *>( &res[0] ), &dstsz, reinterpret_cast<const Bytef *>( src ), static_cast<uLong>( srcsz ) );
 
         if ( ret == Z_OK )
             res.resize( dstsz );
@@ -125,8 +126,8 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
         std::vector<u8> zip = zlibCompress( data(), size() );
 
         if ( !zip.empty() ) {
-            sf.put32( size() );
-            sf.put32( zip.size() );
+            sf.put32( static_cast<uint32_t>( size() ) );
+            sf.put32( static_cast<uint32_t>( zip.size() ) );
             sf.put32( 0 ); // unused, old format support
             sf.putRaw( reinterpret_cast<char *>( &zip[0] ), zip.size() );
             return !sf.fail();
@@ -140,35 +141,30 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
     return false;
 }
 
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize )
+fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
 {
     if ( imageData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
         return fheroes2::Image();
 
     const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
-    if ( static_cast<size_t>( width * height ) != uncompressedData.size() )
+    if ( doubleLayer && ( uncompressedData.size() & 1 ) == 1 ) {
+        return fheroes2::Image();
+    }
+
+    const size_t uncompressedSize = doubleLayer ? uncompressedData.size() / 2 : uncompressedData.size();
+
+    if ( static_cast<size_t>( width * height ) != uncompressedSize )
         return fheroes2::Image();
 
     fheroes2::Image out( width, height );
-    out.fill( 0 );
 
-    std::memcpy( out.image(), uncompressedData.data(), uncompressedData.size() );
-    return out;
-}
-
-fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, const uint8_t * transformData, size_t transformSize )
-{
-    if ( imageData == NULL || transformData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
-        return fheroes2::Image();
-
-    const std::vector<uint8_t> & uncompressedImageData = zlibDecompress( imageData, imageSize );
-    const std::vector<uint8_t> & uncompressedTransformData = zlibDecompress( transformData, transformSize );
-    if ( static_cast<size_t>( width * height ) != uncompressedImageData.size() || uncompressedImageData.size() != uncompressedTransformData.size() )
-        return fheroes2::Image();
-
-    fheroes2::Image out( width, height );
-    std::memcpy( out.image(), uncompressedImageData.data(), uncompressedImageData.size() );
-    std::memcpy( out.transform(), uncompressedTransformData.data(), uncompressedTransformData.size() );
+    std::memcpy( out.image(), uncompressedData.data(), uncompressedSize );
+    if ( doubleLayer ) {
+        std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
+    }
+    else {
+        std::fill( out.transform(), out.transform() + uncompressedSize, 0 );
+    }
     return out;
 }
 

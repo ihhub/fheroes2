@@ -205,19 +205,19 @@ int MP2::GetICNObject( int tileset )
 
     // extra objects for loyalty version
     case 61:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC1;
         break;
 
     // extra objects for loyalty version
     case 62:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC2;
         break;
 
     // extra objects for loyalty version
     case 63:
-        if ( Settings::Get().PriceLoyaltyVersion() )
+        if ( Settings::Get().isPriceOfLoyaltySupported() )
             return ICN::X_LOC3;
         break;
 
@@ -394,7 +394,7 @@ const char * MP2::StringObject( int object )
         return _( "Dwarf Cottage" );
     case OBJN_STONELITHS:
     case OBJ_STONELITHS:
-        return _( "Stone Liths" ); // https://sourceforge.net/projects/fheroes2/forums/forum/335991/topic/4605429
+        return _( "Stone Liths" );
     case OBJN_MAGICWELL:
     case OBJ_MAGICWELL:
         return _( "Magic Well" );
@@ -835,13 +835,13 @@ bool MP2::isWaterObject( int obj )
     }
 
     // price loyalty: editor allow place other objects
-    return Settings::Get().PriceLoyaltyVersion() ? isGroundObject( obj ) : false;
+    return Settings::Get().isPriceOfLoyaltySupported() ? isGroundObject( obj ) : false;
 }
 
 bool MP2::isGroundObject( int obj )
 {
     // check if first bit is set
-    return obj > 127 && obj != OBJ_EVENT;
+    return obj > 127 && obj != OBJ_EVENT && obj != OBJN_STABLES && obj != OBJN_ALCHEMYTOWER;
 }
 
 bool MP2::isQuantityObject( int obj )
@@ -1172,7 +1172,7 @@ int MP2::GetObjectDirect( int obj )
         return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 
     case OBJ_WATERWHEEL:
-        return Direction::CENTER | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
+        return Direction::CENTER | Direction::LEFT | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
 
     case OBJ_MAGELLANMAPS:
         return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;

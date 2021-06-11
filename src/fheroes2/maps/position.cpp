@@ -23,36 +23,44 @@
 #include "position.h"
 #include "maps.h"
 
-MapPosition::MapPosition( const Point & pt )
+MapPosition::MapPosition( const fheroes2::Point & pt )
     : center( pt )
 {}
 
-bool MapPosition::operator==( s32 index ) const
-{
-    return index == GetIndex();
-}
-
 s32 MapPosition::GetIndex( void ) const
 {
-    return center.x < 0 && center.y < 0 ? -1 : Maps::GetIndexFromAbsPoint( center );
+    return Maps::GetIndexFromAbsPoint( center );
 }
 
-void MapPosition::SetCenter( const Point & pt )
+void MapPosition::SetCenter( const fheroes2::Point & pt )
 {
     center = pt;
 }
 
 void MapPosition::SetIndex( const int32_t index )
 {
-    center = Maps::isValidAbsIndex( index ) ? Maps::GetPoint( index ) : Point( -1, -1 );
+    center = Maps::isValidAbsIndex( index ) ? Maps::GetPoint( index ) : fheroes2::Point( -1, -1 );
 }
 
 StreamBase & operator<<( StreamBase & sb, const MapPosition & st )
 {
-    return sb << st.center;
+    // TODO: before 0.9.4 Point was int16_t type
+    const int16_t x = static_cast<int16_t>( st.center.x );
+    const int16_t y = static_cast<int16_t>( st.center.y );
+
+    return sb << x << y;
 }
 
 StreamBase & operator>>( StreamBase & sb, MapPosition & st )
 {
-    return sb >> st.center;
+    // TODO: before 0.9.4 Point was int16_t type
+    int16_t x = 0;
+    int16_t y = 0;
+
+    sb >> x >> y;
+
+    st.center.x = x;
+    st.center.y = y;
+
+    return sb;
 }

@@ -72,16 +72,6 @@ Skill::Primary::Primary()
     , knowledge( 0 )
 {}
 
-bool Skill::Primary::isCaptain( void ) const
-{
-    return false;
-}
-
-bool Skill::Primary::isHeroes( void ) const
-{
-    return false;
-}
-
 void Skill::Primary::LoadDefaults( int type, int race )
 {
     const stats_t * ptr = GameStatic::GetSkillStats( race );
@@ -304,11 +294,6 @@ int Skill::Secondary::Skill( void ) const
 int Skill::Secondary::Level( void ) const
 {
     return second;
-}
-
-bool Skill::Secondary::isLevel( int level ) const
-{
-    return level == second;
 }
 
 bool Skill::Secondary::isSkill( int skill ) const
@@ -647,7 +632,7 @@ u32 Skill::SecSkills::GetValues( int skill ) const
 
 int Skill::SecSkills::Count( void ) const
 {
-    return std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } );
+    return static_cast<int>( std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } ) ); // it's safe to cast as number is small
 }
 
 int Skill::SecSkills::GetTotalLevel() const

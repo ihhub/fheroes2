@@ -22,15 +22,15 @@
 #define H2BATTLE_ANIMATION_H
 
 #include "bin_info.h"
-#include "game_delays.h"
 #include "gamedefs.h"
 #include "monster_info.h"
+#include "timing.h"
 
 // This timer is used for randomized idle animation delays, automatically setting it in range of 75%-125% of the intended value
-class RandomizedDelay : protected TimeDelay
+class RandomizedDelay : protected fheroes2::TimeDelay
 {
 public:
-    RandomizedDelay( uint32_t delay );
+    explicit RandomizedDelay( const uint32_t delay );
 
     // This function triggers the current delay, returning true if it is passed and automatically resets the timer.
     bool checkDelay();
@@ -49,72 +49,44 @@ struct monsterReturnAnim
 class AnimationSequence
 {
 public:
-    AnimationSequence( const std::vector<int> & seq );
+    explicit AnimationSequence( const std::vector<int> & seq );
+    AnimationSequence( const AnimationSequence & ) = default;
 
+    AnimationSequence & operator=( const AnimationSequence & ) = delete;
     AnimationSequence & operator=( const std::vector<int> & rhs );
+
     virtual ~AnimationSequence();
 
     int playAnimation( bool loop = false );
     virtual int restartAnimation();
-    void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
     size_t animationLength() const;
     virtual double movementProgress() const;
-    bool isFirstFrame() const;
     bool isLastFrame() const;
     virtual bool isValid() const;
 
 protected:
     std::vector<int> _seq;
     size_t _currentFrame;
-
-private:
-    AnimationSequence();
-};
-
-class TimedSequence : public AnimationSequence
-{
-public:
-    TimedSequence( const std::vector<int> & seq, uint32_t duration );
-
-    int playAnimation( uint32_t delta, bool loop = false );
-    virtual int restartAnimation();
-
-    int getFrameAt( uint32_t time ) const;
-    uint32_t getCurrentTime() const;
-    uint32_t getDuration() const;
-    virtual double movementProgress() const;
-    virtual bool isValid() const;
-
-private:
-    uint32_t _currentTime;
-    uint32_t _duration;
-
-    // Private function: make sure object is valid before calling this
-    size_t getFrameID( uint32_t time ) const;
 };
 
 class AnimationReference
 {
 public:
     AnimationReference();
-    AnimationReference( int id );
-    virtual ~AnimationReference();
+    explicit AnimationReference( int id );
 
-    int getStaticFrame() const;
-    int getDeathFrame() const;
+    virtual ~AnimationReference() = default;
 
     const std::vector<int> & getAnimationVector( int animState ) const;
     std::vector<int> getAnimationOffset( int animState ) const;
-    AnimationSequence getAnimationSequence( int animState ) const;
     uint32_t getMoveSpeed() const;
     uint32_t getFlightSpeed() const;
     uint32_t getShootingSpeed() const;
-    size_t getProjectileID( const double angle ) const;
-    Point getBlindOffset() const;
-    Point getProjectileOffset( size_t direction ) const;
+    fheroes2::Point getBlindOffset() const;
+    fheroes2::Point getProjectileOffset( size_t direction ) const;
     int getTroopCountOffset( bool isReflect ) const;
     uint32_t getIdleDelay() const;
 
@@ -141,9 +113,8 @@ protected:
 class AnimationState : public AnimationReference
 {
 public:
-    AnimationState( int monsterID );
-    AnimationState( const AnimationReference & animMap, int state );
-    virtual ~AnimationState();
+    explicit AnimationState( int monsterID );
+    ~AnimationState() override = default;
 
     bool switchAnimation( int animstate, bool reverse = false );
     bool switchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -152,13 +123,11 @@ public:
     // pass-down methods
     int playAnimation( bool loop = false );
     int restartAnimation();
-    void setToLastFrame();
 
     int getFrame() const;
     int firstFrame() const;
-    int animationLength() const;
+    size_t animationLength() const;
     double movementProgress() const;
-    bool isFirstFrame() const;
     bool isLastFrame() const;
     bool isValid() const;
 

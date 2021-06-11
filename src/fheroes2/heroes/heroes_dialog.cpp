@@ -43,21 +43,21 @@
 #include "ui_window.h"
 #include "world.h"
 
-/* readonly: false, fade: false */
-int Heroes::OpenDialog( bool readonly, bool fade )
+int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
 
     // fade
     if ( fade && Settings::Get().ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
-    const Point cur_pt( background.activeArea().x, background.activeArea().y );
-    Point dst_pt( cur_pt );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
+    fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
     fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
@@ -67,13 +67,13 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // portrait
     dst_pt.x = cur_pt.x + 49;
     dst_pt.y = cur_pt.y + 31;
-    const Rect portPos( dst_pt.x, dst_pt.y, 101, 93 );
+    const fheroes2::Rect portPos( dst_pt.x, dst_pt.y, 101, 93 );
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     // name
     message = _( "%{name} the %{race} (Level %{level})" );
     StringReplace( message, "%{name}", name );
-    StringReplace( message, "%{race}", Race::String( race ) );
+    StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 1 );
@@ -106,10 +106,10 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::HSICONS, 9 );
     fheroes2::Blit( sprite1, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectSpreadArmyFormat( dst_pt, sprite1.width(), sprite1.height() );
+    const fheroes2::Rect rectSpreadArmyFormat( dst_pt.x, dst_pt.y, sprite1.width(), sprite1.height() );
     const std::string descriptionSpreadArmyFormat
         = _( "'Spread' combat formation spreads your armies from the top to the bottom of the battlefield, with at least one empty space between each army." );
-    const Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
+    const fheroes2::Point army1_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // army format grouped
     dst_pt.x = cur_pt.x + 552;
@@ -117,23 +117,23 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( ICN::HSICONS, 10 );
     fheroes2::Blit( sprite2, display, dst_pt.x, dst_pt.y );
 
-    const Rect rectGroupedArmyFormat( dst_pt, sprite2.width(), sprite2.height() );
+    const fheroes2::Rect rectGroupedArmyFormat( dst_pt.x, dst_pt.y, sprite2.width(), sprite2.height() );
     const std::string descriptionGroupedArmyFormat = _( "'Grouped' combat formation bunches your army together in the center of your side of the battlefield." );
-    const Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
+    const fheroes2::Point army2_pt( dst_pt.x - 1, dst_pt.y - 1 );
 
     // cursor format
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
-    const Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
+    const fheroes2::Point cursorFormatPos = army.isSpreadFormat() ? army1_pt : army2_pt;
     cursorFormat.setPosition( cursorFormatPos.x, cursorFormatPos.y );
 
     // experience
     ExperienceIndicator experienceInfo( this );
-    experienceInfo.SetPos( Point( cur_pt.x + 512, cur_pt.y + 86 ) );
+    experienceInfo.SetPos( fheroes2::Point( cur_pt.x + 512, cur_pt.y + 86 ) );
     experienceInfo.Redraw();
 
     // spell points
     SpellPointsIndicator spellPointsInfo( this );
-    spellPointsInfo.SetPos( Point( cur_pt.x + 550, cur_pt.y + 88 ) );
+    spellPointsInfo.SetPos( fheroes2::Point( cur_pt.x + 550, cur_pt.y + 88 ) );
     spellPointsInfo.Redraw();
 
     // crest
@@ -174,8 +174,7 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     dst_pt.x = cur_pt.x + 51;
     dst_pt.y = cur_pt.y + 308;
 
-    ArtifactsBar selectArtifacts( this, false, readonly, false, &statusBar );
-
+    ArtifactsBar selectArtifacts( this, false, readonly, false, true, &statusBar );
     selectArtifacts.SetColRows( 7, 2 );
     selectArtifacts.SetHSpace( 15 );
     selectArtifacts.SetVSpace( 15 );
@@ -205,13 +204,15 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
     LocalEvent & le = LocalEvent::GetClean();
 
-    if ( inCastle() || readonly || Modes( NOTDISMISS ) ) {
+    if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();
-        if ( readonly )
+
+        if ( readonly || disableDismiss ) {
             buttonDismiss.hide();
+        }
     }
 
-    if ( readonly || 2 > GetKingdom().GetHeroes().size() ) {
+    if ( readonly || disableSwitch || 2 > GetKingdom().GetHeroes().size() ) {
         buttonNextHero.disable();
         buttonPrevHero.disable();
     }
@@ -221,7 +222,6 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     buttonDismiss.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     bool redrawMorale = false;
@@ -231,17 +231,13 @@ int Heroes::OpenDialog( bool readonly, bool fade )
     // dialog menu loop
     while ( le.HandleEvents() ) {
         if ( redrawMorale ) {
-            cursor.Hide();
             moraleIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawMorale = false;
         }
 
         if ( redrawLuck ) {
-            cursor.Hide();
             luckIndicator.Redraw();
-            cursor.Show();
             display.render();
             redrawLuck = false;
         }
@@ -252,20 +248,21 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
         // heroes troops
         if ( le.MouseCursor( selectArmy.GetArea() ) && selectArmy.QueueEventProcessing( &message ) ) {
-            cursor.Hide();
             if ( selectArtifacts.isSelected() )
                 selectArtifacts.ResetSelected();
             selectArmy.Redraw();
+
             redrawMorale = true;
             redrawLuck = true;
         }
 
         if ( le.MouseCursor( selectArtifacts.GetArea() ) && selectArtifacts.QueueEventProcessing( &message ) ) {
-            cursor.Hide();
             if ( selectArmy.isSelected() )
                 selectArmy.ResetSelected();
             selectArtifacts.Redraw();
+
             spellPointsInfo.Redraw();
+
             redrawMorale = true;
             redrawLuck = true;
         }
@@ -306,25 +303,19 @@ int Heroes::OpenDialog( bool readonly, bool fade )
 
         // left click info
         if ( !readonly && le.MouseClickLeft( rectSpreadArmyFormat ) && !army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army1_pt.x, army1_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( true );
         }
         else if ( !readonly && le.MouseClickLeft( rectGroupedArmyFormat ) && army.isSpreadFormat() ) {
-            cursor.Hide();
             cursorFormat.setPosition( army2_pt.x, army2_pt.y );
-            cursor.Show();
             display.render();
             army.SetSpreadFormat( false );
         }
         else if ( le.MouseCursor( secskill_bar.GetArea() ) && secskill_bar.QueueEventProcessing( &message ) ) {
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseCursor( primskill_bar.GetArea() ) && primskill_bar.QueueEventProcessing( &message ) ) {
-            cursor.Show();
             display.render();
         }
 
@@ -355,16 +346,19 @@ int Heroes::OpenDialog( bool readonly, bool fade )
             message = _( "Set army combat formation to 'Grouped'" );
         else if ( le.MouseCursor( buttonExit.area() ) )
             message = _( "Exit Hero Screen" );
-        else if ( le.MouseCursor( buttonDismiss.area() ) ) {
-            if ( buttonDismiss.isVisible() ) {
-                if ( Modes( NOTDISMISS ) ) {
-                    message = "Dismiss disabled, see game info";
-                }
-                else {
-                    message = _( "Dismiss %{name} the %{race}" );
-                    StringReplace( message, "%{name}", name );
-                    StringReplace( message, "%{race}", Race::String( race ) );
-                }
+        else if ( buttonDismiss.isVisible() && le.MouseCursor( buttonDismiss.area() ) ) {
+            if ( inCastle() ) {
+                message = _( "You cannot dismiss a hero in a castle" );
+            }
+            else if ( Modes( NOTDISMISS ) ) {
+                message = _( "Dismissal of %{name} the %{race} is prohibited by scenario" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( _race ) );
+            }
+            else if ( buttonDismiss.isEnabled() ) {
+                message = _( "Dismiss %{name} the %{race}" );
+                StringReplace( message, "%{name}", name );
+                StringReplace( message, "%{race}", Race::String( _race ) );
             }
         }
         else if ( buttonPrevHero.isEnabled() && le.MouseCursor( buttonPrevHero.area() ) )

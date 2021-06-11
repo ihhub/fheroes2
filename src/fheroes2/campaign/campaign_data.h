@@ -43,11 +43,6 @@ namespace Campaign
             return _campaignID;
         }
 
-        bool isGoodCampaign() const
-        {
-            return _isGoodCampaign;
-        }
-
         const std::vector<ScenarioData> & getAllScenarios() const
         {
             return _scenarios;
@@ -62,15 +57,51 @@ namespace Campaign
         bool isStartingScenario( const int scenarioID ) const;
 
         void setCampaignID( const int campaignID );
-        void setCampaignAlignment( const bool isGoodCampaign );
         void setCampaignDescription( const std::string & campaignDescription );
         void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
 
+        static const CampaignData & getCampaignData( const int campaignID );
+
     private:
         int _campaignID;
-        bool _isGoodCampaign;
         std::string _campaignDescription;
         std::vector<ScenarioData> _scenarios;
+    };
+
+    struct CampaignAwardData
+    {
+    public:
+        enum AwardType : int
+        {
+            TYPE_CREATURE_CURSE, // eg: dwarf bane
+            TYPE_CREATURE_ALLIANCE, // eg: dwarf alliance
+            TYPE_GET_ARTIFACT, // eg: ultimate crown
+            TYPE_GET_SPELL, // eg: guardian spell in wizard's isle
+            TYPE_CARRY_OVER_FORCES, // eg: the gauntlet
+            TYPE_HIREABLE_HERO, // eg: sorceress guild
+            TYPE_DEFEAT_ENEMY_HERO, // eg: corlagon defeated
+            TYPE_RESOURCE_BONUS, // eg: wood bonus in price of loyalty
+        };
+
+        // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
+        // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
+        // also usable when we have to remove specific awards when completing a mission (PoL campaign)
+        int _id;
+        uint32_t _type;
+        uint32_t _subType;
+        uint32_t _amount;
+        uint32_t _startScenarioID;
+        std::string _customName;
+
+        CampaignAwardData();
+        CampaignAwardData( int id, uint32_t type, uint32_t subType );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
+
+        std::string ToString() const;
+
+        static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID );
     };
 }
 

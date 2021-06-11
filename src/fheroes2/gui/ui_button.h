@@ -30,7 +30,7 @@ namespace fheroes2
     {
     public:
         ActionObject();
-        virtual ~ActionObject() {}
+        virtual ~ActionObject() = default;
 
         void subscribe( ActionObject * receiver );
         void unsubscribe();
@@ -49,7 +49,7 @@ namespace fheroes2
     {
     public:
         ButtonBase( int32_t offsetX = 0, int32_t offsetY = 0 );
-        virtual ~ButtonBase();
+        ~ButtonBase() override = default;
 
         bool isEnabled() const;
         bool isDisabled() const;
@@ -67,9 +67,13 @@ namespace fheroes2
 
         void setPosition( int32_t offsetX_, int32_t offsetY_ );
 
-        void draw( Image & area = Display::instance() ); // will draw on screen by default
-        bool drawOnPress( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
-        bool drawOnRelease( Image & area = Display::instance() ); // will draw on screen by default. Returns true in case of state change
+        void draw( Image & output = Display::instance() ); // will draw on screen by default
+
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnPress( Image & output = Display::instance() );
+
+        // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
+        bool drawOnRelease( Image & output = Display::instance() );
 
         Rect area() const;
 
@@ -94,13 +98,13 @@ namespace fheroes2
     public:
         Button( int32_t offsetX = 0, int32_t offsetY = 0 );
         Button( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
-        virtual ~Button();
+        ~Button() override = default;
 
         void setICNInfo( int icnId, uint32_t releasedIndex, uint32_t pressedIndex );
 
     protected:
-        virtual const Sprite & _getPressed() const override;
-        virtual const Sprite & _getReleased() const override;
+        const Sprite & _getPressed() const override;
+        const Sprite & _getReleased() const override;
 
     private:
         int _icnId;
@@ -114,13 +118,13 @@ namespace fheroes2
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
         ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed );
-        virtual ~ButtonSprite();
+        ~ButtonSprite() override = default;
 
         void setSprite( const Sprite & released, const Sprite & pressed );
 
     protected:
-        virtual const Sprite & _getPressed() const override;
-        virtual const Sprite & _getReleased() const override;
+        const Sprite & _getPressed() const override;
+        const Sprite & _getReleased() const override;
 
     private:
         Sprite _released;
@@ -132,7 +136,11 @@ namespace fheroes2
     public:
         // Please refer to dialog.h enumeration for states
         ButtonGroup( const Rect & area = Rect(), int buttonTypes = 0 );
+        ButtonGroup( const ButtonGroup & ) = delete;
+
         ~ButtonGroup();
+
+        ButtonGroup & operator=( const ButtonGroup & ) = delete;
 
         void createButton( int32_t offsetX, int32_t offsetY, int icnId, uint32_t releasedIndex, uint32_t pressedIndex, int returnValue );
         void createButton( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, int returnValue );
@@ -156,7 +164,11 @@ namespace fheroes2
     {
     public:
         explicit ButtonRestorer( ButtonBase & button, Image & area = Display::instance() );
+        ButtonRestorer( const ButtonRestorer & ) = delete;
+
         ~ButtonRestorer();
+
+        ButtonRestorer & operator=( const ButtonRestorer & ) = delete;
 
     private:
         ButtonBase & _button;
@@ -169,12 +181,10 @@ namespace fheroes2
     public:
         void addButton( ButtonBase * button );
 
-        ButtonBase * currentPressedButton() const;
-
         void draw( Image & area = Display::instance() ) const; // will draw on screen by default
 
     protected:
-        virtual void senderUpdate( const ActionObject * sender ) override;
+        void senderUpdate( const ActionObject * sender ) override;
 
     private:
         std::vector<ButtonBase *> _button;

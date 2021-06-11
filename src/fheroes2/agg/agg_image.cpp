@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstring>
 #include <map>
 #include <vector>
@@ -32,6 +33,43 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "ui_text.h"
+
+namespace
+{
+    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points )
+    {
+        fheroes2::Image digit( width, height );
+        digit.reset();
+
+        fheroes2::SetPixel( digit, points, 115 );
+        fheroes2::Blit( fheroes2::CreateContour( digit, 35 ), digit );
+
+        return digit;
+    }
+
+    fheroes2::Image addDigit( const fheroes2::Sprite & original, const fheroes2::Image & digit, const fheroes2::Point & offset )
+    {
+        fheroes2::Image combined( original.width() + digit.width() + offset.x, original.height() + ( offset.y < 0 ? 0 : offset.y ) );
+        combined.reset();
+
+        fheroes2::Copy( original, 0, 0, combined, 0, 0, original.width(), original.height() );
+        fheroes2::Blit( digit, 0, 0, combined, original.width() + offset.x, combined.height() - digit.height() + ( offset.y >= 0 ? 0 : offset.y ), digit.width(),
+                        digit.height() );
+
+        return combined;
+    }
+
+    void populateCursorIcons( std::vector<fheroes2::Sprite> & output, const fheroes2::Sprite & origin, const std::vector<fheroes2::Image> & digits,
+                              const fheroes2::Point & offset )
+    {
+        output.emplace_back( origin );
+        for ( size_t i = 0; i < digits.size(); ++i ) {
+            output.emplace_back( addDigit( origin, digits[i], offset ) );
+            output.back().setPosition( output.back().width() - origin.width(), output.back().height() - origin.height() );
+        }
+    }
+}
 
 namespace fheroes2
 {
@@ -115,16 +153,34 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::ROUTE, PAL::PaletteType::RED );
                 return true;
             case ICN::FONT:
+            case ICN::SMALFONT: {
                 LoadOriginalICN( id );
-                // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
-                    ReplaceColorIdByTransformId( _icnVsSprite[id][i], 50, 2 );
+                auto & imageArray = _icnVsSprite[id];
+                if ( id == ICN::FONT ) {
+                    // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
+                    for ( size_t i = 0; i < imageArray.size(); ++i ) {
+                        ReplaceColorIdByTransformId( imageArray[i], 50, 2 );
+                    }
+                }
+
+                // Some checks that we really have CP1251 font
+                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 15;
+                if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
+                    // Engine expects that letter indexes correspond to charcode - 0x20.
+                    // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
+                    // We rearrange sprites array for corresponding sprite indexes to charcode - 0x20.
+                    imageArray.insert( imageArray.begin() + 0x80 - 0x20, 0xC0 - 0x80, imageArray[0] );
+                    std::swap( imageArray[0xA8 - 0x20], imageArray[128 + 0xC0 - 0x80] ); // Move sprites for chars 0xA8
+                    std::swap( imageArray[0xB8 - 0x20], imageArray[161 + 0xC0 - 0x80] ); // and 0xB8 to it's places.
+                    imageArray.pop_back();
+                    imageArray.erase( imageArray.begin() + 128 + 0xC0 - 0x80 );
                 }
                 return true;
+            }
             case ICN::YELLOW_FONT:
                 CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
-            case ICN::YELLOW_SMALFONT:
+            case ICN::YELLOW_SMALLFONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
                 return true;
             case ICN::GRAY_FONT:
@@ -465,17 +521,8 @@ namespace fheroes2
                 return true;
             case ICN::MONS32:
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() > 2 ) { // Ranger's sprite
-                    const Sprite & source = _icnVsSprite[id][1];
-                    Sprite & modified = _icnVsSprite[id][2];
-                    Sprite temp( source.width(), source.height() + 1 );
-                    temp.reset();
-                    Copy( source, 0, 0, temp, 0, 1, source.width(), source.height() );
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
-                    modified.setPosition( 0, 1 );
-                }
-                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman's sprite
+
+                if ( _icnVsSprite[id].size() > 4 ) { // Veteran Pikeman
                     Sprite & modified = _icnVsSprite[id][4];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -484,7 +531,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 7, 0, 4, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman's sprite
+                if ( _icnVsSprite[id].size() > 6 ) { // Master Swordsman
                     Sprite & modified = _icnVsSprite[id][6];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -493,7 +540,7 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 2, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 8 ) { // Champion's sprite
+                if ( _icnVsSprite[id].size() > 8 ) { // Champion
                     Sprite & modified = _icnVsSprite[id][8];
 
                     Sprite temp( modified.width(), modified.height() + 1 );
@@ -502,12 +549,31 @@ namespace fheroes2
                     modified = temp;
                     Fill( modified, 12, 0, 5, 1, 36 );
                 }
-                if ( _icnVsSprite[id].size() > 44 ) { // Archimage's sprite
-                    Sprite & modified = _icnVsSprite[id][44];
-                    Sprite temp = _icnVsSprite[id][43];
-                    Blit( modified, 0, 0, temp, 1, 0, modified.width(), modified.height() );
-                    modified = temp;
+                if ( _icnVsSprite[id].size() > 62 ) {
+                    const Point shadowOffset( -1, 2 );
+                    for ( size_t i = 0; i < 62; ++i ) {
+                        Sprite & modified = _icnVsSprite[id][i];
+                        const Point originalOffset( modified.x(), modified.y() );
+                        Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
+                        temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
+
+                        const fheroes2::Rect area = GetActiveROI( temp, 2 );
+                        if ( area.x > 0 || area.height != temp.height() ) {
+                            const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
+                            modified = Crop( temp, area.x, area.y, area.width, area.height );
+                            modified.setPosition( offset.x, offset.y );
+                        }
+                        else {
+                            std::swap( modified, temp );
+                        }
+                    }
                 }
+                if ( _icnVsSprite[id].size() > 63 && _icnVsSprite[id][63].width() == 19 && _icnVsSprite[id][63].height() == 37 ) { // Air Elemental
+                    Sprite & modified = _icnVsSprite[id][63];
+                    modified.image()[19 * 9 + 9] = modified.image()[19 * 5 + 11];
+                    modified.transform()[19 * 9 + 9] = modified.transform()[19 * 5 + 11];
+                }
+
                 return true;
             case ICN::MONSTER_SWITCH_LEFT_ARROW:
                 _icnVsSprite[id].resize( 2 );
@@ -699,6 +765,136 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::SWAP_ARROW_LEFT_TO_RIGHT: {
+                // Since the original game does not have such resources we could generate it from hero meeting sprite.
+                const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
+                std::vector<Image> input( 4 );
+
+                const int32_t width = 43;
+                const int32_t height = 20;
+
+                for ( Image & image : input )
+                    image.resize( width, height );
+
+                Copy( original, 297, 270, input[0], 0, 0, width, height );
+                Copy( original, 295, 291, input[1], 0, 0, width, height );
+                Copy( original, 297, 363, input[2], 0, 0, width, height );
+                Copy( original, 295, 384, input[3], 0, 0, width, height );
+
+                input[1] = Flip( input[1], true, false );
+                input[3] = Flip( input[3], true, false );
+
+                _icnVsSprite[id].resize( 2 );
+                _icnVsSprite[id][0] = ExtractCommonPattern( input );
+                Sprite & out = _icnVsSprite[id][0];
+
+                // Here are 2 pixels which should be removed.
+                if ( out.width() == 43 && out.height() == 20 ) {
+                    if ( out.image()[38] != 0 ) {
+                        out.image()[38] = 0;
+                        out.transform()[38] = 1;
+                    }
+                    if ( out.image()[28 + 3 * 43] != 0 ) {
+                        out.image()[28 + 3 * 43] = 0;
+                        out.transform()[28 + 3 * 43] = 1;
+                    }
+                }
+
+                _icnVsSprite[id][1] = _icnVsSprite[id][0];
+                ApplyPalette( _icnVsSprite[id][1], 4 );
+
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
+                _icnVsSprite[id][0].setPosition( -3, 0 );
+                _icnVsSprite[id][1].setPosition( -2, 1 );
+
+                return true;
+            }
+            case ICN::SWAP_ARROW_RIGHT_TO_LEFT: {
+                // Since the original game does not have such resources we could generate it from hero meeting sprite.
+                const Sprite & original = GetICN( ICN::SWAPWIN, 0 );
+                std::vector<Image> input( 4 );
+
+                const int32_t width = 43;
+                const int32_t height = 20;
+
+                for ( Image & image : input )
+                    image.resize( width, height );
+
+                Copy( original, 297, 270, input[0], 0, 0, width, height );
+                Copy( original, 295, 291, input[1], 0, 0, width, height );
+                Copy( original, 297, 363, input[2], 0, 0, width, height );
+                Copy( original, 295, 384, input[3], 0, 0, width, height );
+
+                input[1] = Flip( input[1], true, false );
+                input[3] = Flip( input[3], true, false );
+
+                _icnVsSprite[id].resize( 2 );
+                Image temp = ExtractCommonPattern( input );
+
+                // Here are 2 pixels which should be removed.
+                if ( temp.width() == 43 && temp.height() == 20 ) {
+                    if ( temp.image()[38] != 0 ) {
+                        temp.image()[38] = 0;
+                        temp.transform()[38] = 1;
+                    }
+                    if ( temp.image()[28 + 3 * 43] != 0 ) {
+                        temp.image()[28 + 3 * 43] = 0;
+                        temp.transform()[28 + 3 * 43] = 1;
+                    }
+                }
+
+                _icnVsSprite[id][0] = Flip( temp, true, false );
+
+                _icnVsSprite[id][1] = _icnVsSprite[id][0];
+                ApplyPalette( _icnVsSprite[id][1], 4 );
+
+                _icnVsSprite[id][0] = addShadow( _icnVsSprite[id][0], Point( -3, 3 ), 3 );
+                _icnVsSprite[id][1] = addShadow( _icnVsSprite[id][1], Point( -2, 2 ), 3 );
+                _icnVsSprite[id][0].setPosition( -3, 0 );
+                _icnVsSprite[id][1].setPosition( -2, 1 );
+
+                return true;
+            }
+            case ICN::HEROES:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() ) {
+                    // This is main menu image which doesn't shouldn't have any transform layer.
+                    _icnVsSprite[id][0]._disableTransformLayer();
+                }
+                return true;
+            case ICN::CURSOR_ADVENTURE_MAP: {
+                // Create needed numbers
+                const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
+                const std::vector<Point> threePoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
+                const std::vector<Point> fivePoints
+                    = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> sixPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 1, 4 }, { 4, 4 }, { 2, 5 }, { 3, 5 } };
+                const std::vector<Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
+                const std::vector<Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
+
+                std::vector<Image> digits( 7 );
+                digits[0] = createDigit( 6, 7, twoPoints );
+                digits[1] = createDigit( 6, 7, threePoints );
+                digits[2] = createDigit( 6, 7, fourPoints );
+                digits[3] = createDigit( 6, 7, fivePoints );
+                digits[4] = createDigit( 6, 7, sixPoints );
+                digits[5] = createDigit( 6, 7, sevenPoints );
+                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), Point( -1, -1 ) );
+
+                _icnVsSprite[id].reserve( 7 * 8 );
+
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, Point( -2, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, Point( 1, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, Point( 0, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, Point( -2, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, Point( 1, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
+
+                return true;
+            }
             default:
                 break;
             }
@@ -855,7 +1051,7 @@ namespace fheroes2
             case Font::YELLOW_BIG:
                 return GetICN( ICN::YELLOW_FONT, character - 0x20 );
             case Font::YELLOW_SMALL:
-                return GetICN( ICN::YELLOW_SMALFONT, character - 0x20 );
+                return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
             case Font::BIG:
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
@@ -875,6 +1071,23 @@ namespace fheroes2
             return GetLetter( character, fontType );
         }
 
+        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType )
+        {
+            switch ( fontType ) {
+            case Font::BIG:
+            case Font::GRAY_BIG:
+            case Font::YELLOW_BIG:
+            case Font::WHITE_LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            case Font::SMALL:
+            case Font::GRAY_SMALL:
+            case Font::YELLOW_SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            default:
+                return 0;
+            }
+        }
+
         int32_t GetAbsoluteICNHeight( int icnId )
         {
             const uint32_t frameCount = GetICNCount( icnId );
@@ -891,6 +1104,69 @@ namespace fheroes2
             }
 
             return height;
+        }
+
+        uint32_t getCharacterLimit( const FontSize fontSize )
+        {
+            switch ( fontSize ) {
+            case FontSize::SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            case FontSize::NORMAL:
+            case FontSize::LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            default:
+                assert( 0 ); // Did you add a new font size? Please add implementation.
+            }
+
+            return 0;
+        }
+
+        const Sprite & getChar( const uint8_t character, const FontType & fontType )
+        {
+            if ( character < 0x21 ) {
+                return errorImage;
+            }
+
+            switch ( fontType.size ) {
+            case FontSize::SMALL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::SMALFONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::NORMAL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::FONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::LARGE:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+
+            assert( 0 ); // Did you add a new font size? Please add implementation.
+
+            return errorImage;
         }
     }
 }

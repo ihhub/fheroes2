@@ -175,19 +175,31 @@ namespace AI
             if ( spell.GetID() == Spell::CHAINLIGHTNING ) {
                 for ( const Unit * enemy : enemies ) {
                     const int32_t index = enemy->GetHeadIndex();
-                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index, false ), index, _myColor );
+                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }
             }
             else {
                 const Board & board = *Arena::GetBoard();
                 for ( const Cell & cell : board ) {
                     const int32_t index = cell.GetIndex();
-                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index, false ), index, _myColor );
+                    areaOfEffectCheck( arena.GetTargetsForSpells( _commander, spell, index ), index, _myColor );
                 }
             }
         }
 
         return bestOutcome;
+    }
+
+    uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
+    {
+        uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
+        duration += _commander->HasArtifact( Artifact::WIZARD_HAT ) * Artifact( Artifact::WIZARD_HAT ).ExtraValue()
+                    + _commander->HasArtifact( Artifact::ENCHANTED_HOURGLASS ) * Artifact( Artifact::ENCHANTED_HOURGLASS ).ExtraValue();
+
+        if ( duration < 2 && target.Modes( TR_MOVED ) )
+            return 0;
+
+        return 1;
     }
 
     double BattlePlanner::spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const
@@ -332,7 +344,7 @@ namespace AI
             ratio /= ReduceEffectivenessByDistance( target );
         }
 
-        return target.GetStrength() * ratio;
+        return target.GetStrength() * ratio * spellDurationMultiplier( target );
     }
 
     SpellcastOutcome BattlePlanner::spellEffectValue( const Spell & spell, const Units & targets ) const

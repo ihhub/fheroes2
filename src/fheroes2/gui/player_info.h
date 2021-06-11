@@ -30,25 +30,23 @@ namespace Interface
             : player( NULL )
         {}
 
-        bool operator==( const Player * ) const;
-
         Player * player;
-        Rect rect1; // opponent
-        Rect rect2; // class
-        Rect rect3; // change
+        fheroes2::Rect rect1; // opponent
+        fheroes2::Rect rect2; // class
+        fheroes2::Rect rect3; // change
     };
 
     struct PlayersInfo : std::vector<PlayerInfo>
     {
         PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
 
-        void UpdateInfo( Players &, const Point & opponents, const Point & classes );
+        void UpdateInfo( Players &, const fheroes2::Point & opponents, const fheroes2::Point & classes );
         bool SwapPlayers( Player & player1, Player & player2 ) const;
 
-        Player * GetFromOpponentClick( const Point & pt );
-        Player * GetFromOpponentNameClick( const Point & pt );
-        Player * GetFromOpponentChangeClick( const Point & pt );
-        Player * GetFromClassClick( const Point & pt );
+        Player * GetFromOpponentClick( const fheroes2::Point & pt );
+        Player * GetFromOpponentNameClick( const fheroes2::Point & pt );
+        Player * GetFromOpponentChangeClick( const fheroes2::Point & pt );
+        Player * GetFromClassClick( const fheroes2::Point & pt );
 
         void RedrawInfo( bool show_play_info = false ) const;
         void resetSelection();

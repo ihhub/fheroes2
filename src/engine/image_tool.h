@@ -26,10 +26,13 @@ namespace fheroes2
 {
     bool Save( const Image & image, const std::string & path );
 
-    // Save an image into file. 'background' represents palette index from the original palette. Default value is 23.
-    bool Save( const Image & image, const std::string & path, uint8_t background );
+    // Save an image into file. 'background' represents palette index from the original palette. Recommended value is 23.
+    bool Save( const Image & image, const std::string & path, const uint8_t background );
 
     bool Load( const std::string & path, Image & image );
 
     Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
+
+    // Generates a new image with a shadow of the shape of existing image. Shadow must have only (-x, +y) offset.
+    Sprite addShadow( const Sprite & in, const Point & shadowOffset, const uint8_t shadowType );
 }

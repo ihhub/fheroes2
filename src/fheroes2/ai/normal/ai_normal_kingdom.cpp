@@ -194,8 +194,8 @@ namespace AI
                     const Heroes * hero = castle->GetHeroes().Guest();
                     const int mapIndex = castle->GetIndex();
 
-                    // make sure there is no hero in castle already and we're not under threat
-                    if ( hero || std::find( castlesInDanger.begin(), castlesInDanger.end(), mapIndex ) != castlesInDanger.end() )
+                    // Make sure there is no hero in castle already and we're not under threat while having other heroes.
+                    if ( hero != nullptr || ( !heroes.empty() && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
                         continue;
 
                     const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
@@ -245,9 +245,9 @@ namespace AI
         }
 
         // Step 6. Castle development according to kingdom budget
-        for ( KingdomCastles::iterator it = sortedCastleList.begin(); it != sortedCastleList.end(); ++it ) {
-            if ( *it ) {
-                CastleTurn( **it, std::find( castlesInDanger.begin(), castlesInDanger.end(), ( *it )->GetIndex() ) != castlesInDanger.end() );
+        for ( Castle * castle : sortedCastleList ) {
+            if ( castle != nullptr ) {
+                CastleTurn( *castle, castlesInDanger.find( castle->GetIndex() ) != castlesInDanger.end() );
             }
         }
     }

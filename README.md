@@ -51,7 +51,6 @@ Please follow below instructions to be able to compile the project:
 
 Windows
 ------------------------
-- **Optional step**: Install **7-zip** archiver at its default location as `C:\Program Files\7-Zip\7z.exe` or otherwise, you will need to manually extract each downloaded package (follow the instructions shown by batch scripts mentioned below).
 - open `script/windows` directory and run **install_packages.bat** file. It installs necessary packages for Visual Studio build.
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
@@ -59,8 +58,12 @@ Windows
 MacOS and Linux
 -------------------
 - open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
-- open `script/demo` directory and run **demo_macos.sh** or **demo_linux.sh** file depending on your OS. It downloads a demo version of the game which is needed for minimum development.
+- open `script/demo` directory and run **demo_unix.sh** file. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
+
+Compilation with CMake
+-------------------
+If you would like to build the project using CMake please follow the instructions on [this page](https://github.com/ihhub/fheroes2/blob/master/doc/README_cmake.md). 
 
 Contribution
 ---------------------------

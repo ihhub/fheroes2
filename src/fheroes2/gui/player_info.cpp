@@ -30,11 +30,6 @@
 #include "settings.h"
 #include "text.h"
 
-bool Interface::PlayerInfo::operator==( const Player * p ) const
-{
-    return player == p;
-}
-
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
     , show_race( race )
@@ -44,30 +39,32 @@ Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     reserve( KINGDOMMAX );
 }
 
-void Interface::PlayersInfo::UpdateInfo( Players & players, const Point & pt1, const Point & pt2 )
+void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Point & pt1, const fheroes2::Point & pt2 )
 {
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::NGEXTRA, 3 );
 
     clear();
 
-    for ( Players::iterator it = players.begin(); it != players.end(); ++it ) {
-        const u32 current = std::distance( players.begin(), it );
+    const int32_t playerCount = static_cast<int32_t>( players.size() ); // safe to cast as the number of players <= 8.
+
+    for ( int32_t i = 0; i < playerCount; ++i ) {
         PlayerInfo info;
 
-        info.player = *it;
-        info.rect1 = Rect( pt1.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt1.y, sprite.width(), sprite.height() );
-        info.rect2 = Rect( pt2.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt2.y, sprite.width(), sprite.height() );
+        info.player = players[i];
+        info.rect1 = fheroes2::Rect( pt1.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt1.y, sprite.width(), sprite.height() );
+        info.rect2 = fheroes2::Rect( pt2.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt2.y, sprite.width(), sprite.height() );
 
-        push_back( info );
+        emplace_back( std::move( info ) );
     }
 
     for ( iterator it = begin(); it != end(); ++it ) {
         if ( ( it + 1 ) != end() ) {
-            const Rect & rect1 = ( *it ).rect2;
-            const Rect & rect2 = ( *( it + 1 ) ).rect2;
+            const fheroes2::Rect & rect1 = ( *it ).rect2;
+            const fheroes2::Rect & rect2 = ( *( it + 1 ) ).rect2;
             const fheroes2::Sprite & iconSprite = fheroes2::AGG::GetICN( ICN::ADVMCO, 8 );
 
-            ( *it ).rect3 = Rect( rect1.x + rect1.w + ( rect2.x - ( rect1.x + rect1.w ) ) / 2 - 5, rect1.y + rect1.h + 20, iconSprite.width(), iconSprite.height() );
+            ( *it ).rect3 = fheroes2::Rect( rect1.x + rect1.width + ( rect2.x - ( rect1.x + rect1.width ) ) / 2 - 5, rect1.y + rect1.height + 20, iconSprite.width(),
+                                            iconSprite.height() );
         }
     }
 }
@@ -132,7 +129,7 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
     return swap;
 }
 
-Player * Interface::PlayersInfo::GetFromOpponentClick( const Point & pt )
+Player * Interface::PlayersInfo::GetFromOpponentClick( const fheroes2::Point & pt )
 {
     for ( iterator it = begin(); it != end(); ++it )
         if ( ( *it ).rect1 & pt )
@@ -141,16 +138,16 @@ Player * Interface::PlayersInfo::GetFromOpponentClick( const Point & pt )
     return NULL;
 }
 
-Player * Interface::PlayersInfo::GetFromOpponentNameClick( const Point & pt )
+Player * Interface::PlayersInfo::GetFromOpponentNameClick( const fheroes2::Point & pt )
 {
     for ( iterator it = begin(); it != end(); ++it )
-        if ( Rect( ( *it ).rect1.x, ( *it ).rect1.y + ( *it ).rect1.h, ( *it ).rect1.w, 10 ) & pt )
+        if ( fheroes2::Rect( ( *it ).rect1.x, ( *it ).rect1.y + ( *it ).rect1.height, ( *it ).rect1.width, 10 ) & pt )
             return ( *it ).player;
 
     return NULL;
 }
 
-Player * Interface::PlayersInfo::GetFromOpponentChangeClick( const Point & pt )
+Player * Interface::PlayersInfo::GetFromOpponentChangeClick( const fheroes2::Point & pt )
 {
     for ( iterator it = begin(); it != end(); ++it )
         if ( ( *it ).rect3 & pt )
@@ -159,7 +156,7 @@ Player * Interface::PlayersInfo::GetFromOpponentChangeClick( const Point & pt )
     return NULL;
 }
 
-Player * Interface::PlayersInfo::GetFromClassClick( const Point & pt )
+Player * Interface::PlayersInfo::GetFromClassClick( const fheroes2::Point & pt )
 {
     for ( iterator it = begin(); it != end(); ++it )
         if ( ( *it ).rect2 & pt )
@@ -179,9 +176,9 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Player & player = *( ( *it ).player );
-        const Rect & rect1 = ( *it ).rect1;
-        const Rect & rect2 = ( *it ).rect2;
-        const Rect & rect3 = ( *it ).rect3;
+        const fheroes2::Rect & rect1 = ( *it ).rect1;
+        const fheroes2::Rect & rect2 = ( *it ).rect2;
+        const fheroes2::Rect & rect3 = ( *it ).rect3;
 
         // 1. redraw opponents
 
@@ -226,7 +223,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
 
             const int32_t maximumTextWidth = playerIcon.width() - 4;
             const int32_t fitWidth = Text::getFitWidth( player.GetName(), Font::SMALL, maximumTextWidth );
-            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.h - 1, maximumTextWidth );
+            name.Blit( rect1.x + 2 + ( maximumTextWidth - fitWidth ) / 2, rect1.y + rect1.height - 1, maximumTextWidth );
         }
 
         // 2. redraw class
@@ -270,7 +267,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         if ( show_race ) {
             const std::string & name = ( Race::NECR == player.GetRace() ? _( "Necroman" ) : Race::String( player.GetRace() ) );
             Text text( name, Font::SMALL );
-            text.Blit( rect2.x + ( rect2.w - text.w() ) / 2, rect2.y + rect2.h + 2 );
+            text.Blit( rect2.x + ( rect2.width - text.w() ) / 2, rect2.y + rect2.height + 2 );
         }
 
         // "swap" sprite

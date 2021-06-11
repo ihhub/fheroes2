@@ -39,23 +39,23 @@
 
 namespace
 {
-    Point GetFlagOffset( int race )
+    fheroes2::Point GetFlagOffset( int race )
     {
         switch ( race ) {
         case Race::KNGT:
-            return Point( 36, 10 );
+            return fheroes2::Point( 36, 10 );
         case Race::BARB:
-            return Point( 35, 9 );
+            return fheroes2::Point( 35, 9 );
         case Race::SORC:
-            return Point( 36, 10 );
+            return fheroes2::Point( 36, 10 );
         case Race::WRLK:
-            return Point( 34, 10 );
+            return fheroes2::Point( 34, 10 );
         case Race::WZRD:
-            return Point( 35, 9 );
+            return fheroes2::Point( 35, 9 );
         case Race::NECR:
-            return Point( 35, 10 );
+            return fheroes2::Point( 35, 10 );
         default:
-            return Point();
+            return fheroes2::Point();
         }
     }
 }
@@ -169,50 +169,6 @@ buildstats_t _builds[] = {
     {BUILD_NOTHING, Race::NONE, {0, 0, 0, 0, 0, 0, 0}},
 };
 
-void BuildingInfo::UpdateCosts( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse buildings.xml
-    TiXmlDocument doc;
-
-    if ( doc.LoadFile( spec.c_str() ) ) {
-        const TiXmlElement * xml_buildings = doc.FirstChildElement( "buildings" );
-        if ( xml_buildings != NULL ) {
-            size_t index = 0;
-
-            for ( const TiXmlElement * xml_building = xml_buildings->FirstChildElement( "building" ); xml_building && BUILD_NOTHING != _builds[index].id2;
-                  xml_building = xml_building->NextSiblingElement( "building" ), ++index ) {
-                cost_t & cost = _builds[index].cost;
-                int value;
-
-                xml_building->Attribute( "gold", &value );
-                cost.gold = value;
-                xml_building->Attribute( "wood", &value );
-                cost.wood = value;
-                xml_building->Attribute( "mercury", &value );
-                cost.mercury = value;
-                xml_building->Attribute( "ore", &value );
-                cost.ore = value;
-                xml_building->Attribute( "sulfur", &value );
-                cost.sulfur = value;
-                xml_building->Attribute( "crystal", &value );
-                cost.crystal = value;
-                xml_building->Attribute( "gems", &value );
-                cost.gems = value;
-            }
-        }
-        else {
-            VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-        }
-    }
-    else {
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-    }
-#else
-    (void)spec;
-#endif
-}
-
 payment_t BuildingInfo::GetCost( u32 build, int race )
 {
     payment_t payment;
@@ -313,7 +269,7 @@ BuildingInfo::BuildingInfo( const Castle & c, building_t b )
     building = castle.isBuild( b ) ? castle.GetUpgradeBuilding( b ) : b;
 
     if ( BUILD_TAVERN == building && Race::NECR == castle.GetRace() )
-        building = Settings::Get().PriceLoyaltyVersion() ? BUILD_SHRINE : BUILD_TAVERN;
+        building = ( Settings::Get().isCurrentMapPriceOfLoyalty() ) ? BUILD_SHRINE : BUILD_NOTHING;
 
     bcond = castle.CheckBuyBuilding( building );
 
@@ -395,7 +351,7 @@ bool BuildingInfo::IsDwelling( void ) const
     return false;
 }
 
-void BuildingInfo::RedrawCaptain( void )
+void BuildingInfo::RedrawCaptain( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     if ( bcond == ALREADY_BUILT ) {
@@ -403,7 +359,7 @@ void BuildingInfo::RedrawCaptain( void )
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::GetFlagIcnId( castle.GetColor() ), 0 );
 
         fheroes2::Blit( captainSprite, display, area.x, area.y );
-        const Point flagOffset = GetFlagOffset( castle.GetRace() );
+        const fheroes2::Point flagOffset = GetFlagOffset( castle.GetRace() );
         fheroes2::Blit( flag, display, area.x + flagOffset.x, area.y + flagOffset.y );
     }
     else {
@@ -427,7 +383,7 @@ void BuildingInfo::RedrawCaptain( void )
     }
 }
 
-void BuildingInfo::Redraw( void )
+void BuildingInfo::Redraw( void ) const
 {
     if ( BUILD_CAPTAIN == building ) {
         RedrawCaptain();
@@ -447,7 +403,7 @@ void BuildingInfo::Redraw( void )
         }
 
         // build image
-        if ( BUILD_DISABLE == bcond && BUILD_TAVERN == building ) { // skip necromancer's tavern
+        if ( BUILD_NOTHING == building ) {
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
@@ -493,7 +449,7 @@ const char * BuildingInfo::GetName( void ) const
     return Castle::GetStringBuilding( building, castle.GetRace() );
 }
 
-bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
+bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -511,12 +467,16 @@ bool BuildingInfo::QueueEventProcessing( fheroes2::ButtonBase & exitButton )
 
 bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 {
+    if ( building == BUILD_NOTHING ) {
+        return false;
+    }
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
 
-    const Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( buttons, Cursor::POINTER );
 
     std::string box1str = description;
 
@@ -553,7 +513,7 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     const fheroes2::Sprite & window_icons = fheroes2::AGG::GetICN( ICN::BLDGXTRA, 0 );
     const int space = 10;
-    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().h,
+    Dialog::FrameBox box( space + window_icons.height() + space + box1.h() + space + ( isRequired ? requires_text.h() + box2.h() + space : 0 ) + rbs.GetArea().height,
                           buttons );
     const fheroes2::Rect & box_rt = box.GetArea();
     LocalEvent & le = LocalEvent::Get();
@@ -609,7 +569,6 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         button2.draw();
     }
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -653,16 +612,16 @@ std::string BuildingInfo::GetConditionDescription( void ) const
     switch ( bcond ) {
     case NOT_TODAY:
     case NEED_CASTLE:
-        res = GetBuildConditionDescription( bcond );
-        break;
+        return GetBuildConditionDescription( bcond );
 
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
             res = _( "Cannot build %{name} because castle is too far from water." );
             StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
         }
-        else
+        else {
             res = "disable build.";
+        }
         break;
 
     case LACK_RESOURCES:
@@ -694,7 +653,9 @@ std::string BuildingInfo::GetConditionDescription( void ) const
 
 void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
 {
-    std::string str;
+    if ( building == BUILD_NOTHING ) {
+        return;
+    }
 
     switch ( bcond ) {
     case NOT_TODAY:
@@ -704,14 +665,12 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     case LACK_RESOURCES:
     case REQUIRES_BUILD:
     case ALLOW_BUILD:
-        str = GetConditionDescription();
+        bar.ShowMessage( GetConditionDescription() );
         break;
 
     default:
         break;
     }
-
-    bar.ShowMessage( str );
 }
 
 DwellingItem::DwellingItem( const Castle & castle, u32 dw )
@@ -735,20 +694,20 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     SetItemSize( sz.width, sz.height );
 }
 
-void DwellingsBar::RedrawBackground( const Rect & pos, fheroes2::Image & dstsf )
+void DwellingsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
 }
 
-void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::Image & dstsf )
+void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
     const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, dwl.mons.GetSpriteIndex() );
-    fheroes2::Blit( mons32, dstsf, pos.x + ( pos.w - mons32.width() ) / 2, pos.y + ( pos.h - 3 - mons32.height() ) );
+    fheroes2::Blit( mons32, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + ( pos.height - 3 - mons32.height() ) );
 
     if ( castle.isBuild( dwl.type ) ) {
         // count
         Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
-        text.Blit( pos.x + pos.w - text.w() - 3, pos.y + pos.h - text.h() - 1 );
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1 );
 
         u32 grown = dwl.mons.GetGrown();
         if ( castle.isBuild( BUILD_WELL ) )
@@ -758,10 +717,10 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const Rect & pos, fheroes2::I
 
         // grown
         text.Set( "+" + std::to_string( grown ), Font::YELLOW_SMALL );
-        text.Blit( pos.x + pos.w - text.w() - 3, pos.y + 2 );
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + 2 );
     }
     else
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.w - 10, pos.y + 4 );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CSLMARKER, 0 ), dstsf, pos.x + pos.width - 10, pos.y + 4 );
 }
 
 bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )

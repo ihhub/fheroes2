@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "math_base.h"
 #include "types.h"
 
 struct Point;
@@ -55,7 +56,7 @@ public:
     StreamBase()
         : flags( 0 )
     {}
-    virtual ~StreamBase() {}
+    virtual ~StreamBase() = default;
 
     void setbigendian( bool );
 
@@ -84,10 +85,11 @@ public:
     void put16( u16 );
     void put32( u32 );
 
-    int get( void )
+    uint8_t get()
     {
         return get8();
-    } // get char
+    }
+
     void put( char ch )
     {
         put8( ch );
@@ -104,9 +106,7 @@ public:
     StreamBase & operator>>( float & );
     StreamBase & operator>>( std::string & );
 
-    StreamBase & operator>>( Rect & );
-    StreamBase & operator>>( Point & );
-    StreamBase & operator>>( Size & );
+    StreamBase & operator>>( fheroes2::Point & point_ );
 
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
@@ -119,9 +119,7 @@ public:
     StreamBase & operator<<( const float );
     StreamBase & operator<<( const std::string & );
 
-    StreamBase & operator<<( const Rect & );
-    StreamBase & operator<<( const Point & );
-    StreamBase & operator<<( const Size & );
+    StreamBase & operator<<( const fheroes2::Point & point_ );
 
     template <class Type1, class Type2>
     StreamBase & operator>>( std::pair<Type1, Type2> & p )
@@ -203,12 +201,12 @@ class ZStreamBuf;
 class StreamBuf : public StreamBase
 {
 public:
-    StreamBuf( size_t = 0 );
+    explicit StreamBuf( size_t = 0 );
     StreamBuf( const StreamBuf & );
-    StreamBuf( const std::vector<u8> & );
+    explicit StreamBuf( const std::vector<u8> & );
     StreamBuf( const u8 *, size_t );
 
-    ~StreamBuf();
+    ~StreamBuf() override;
 
     StreamBuf & operator=( const StreamBuf & );
 
@@ -217,37 +215,37 @@ public:
     size_t capacity( void ) const;
 
     void seek( size_t );
-    void skip( size_t );
+    void skip( size_t ) override;
 
-    u16 getBE16();
-    u16 getLE16();
-    u32 getBE32();
-    u32 getLE32();
+    u16 getBE16() override;
+    u16 getLE16() override;
+    u32 getBE32() override;
+    u32 getLE32() override;
 
-    void putBE32( u32 );
-    void putLE32( u32 );
-    void putBE16( u16 );
-    void putLE16( u16 );
+    void putBE32( u32 ) override;
+    void putLE32( u32 ) override;
+    void putBE16( u16 ) override;
+    void putLE16( u16 ) override;
 
-    std::vector<u8> getRaw( size_t = 0 /* all data */ );
-    void putRaw( const char *, size_t );
+    std::vector<u8> getRaw( size_t = 0 /* all data */ ) override;
+    void putRaw( const char *, size_t ) override;
 
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
     void reset( void );
 
-    size_t tellg( void ) const;
-    size_t tellp( void ) const;
-    size_t sizeg( void ) const;
-    size_t sizep( void ) const;
+    size_t tellg( void ) const override;
+    size_t tellp( void ) const override;
+    size_t sizeg( void ) const override;
+    size_t sizep( void ) const override;
 
     void copy( const StreamBuf & );
     void reallocbuf( size_t );
     void setfail( void );
 
-    u8 get8();
-    void put8( char );
+    u8 get8() override;
+    void put8( char ) override;
 
 #ifdef WITH_ZLIB
     friend class ZStreamBuf;
@@ -266,7 +264,7 @@ class StreamFile : public StreamBase
 public:
     StreamFile();
     StreamFile( const std::string &, const char * mode );
-    ~StreamFile();
+    ~StreamFile() override;
 
     size_t size( void ) const;
     size_t tell( void ) const;
@@ -277,20 +275,20 @@ public:
     StreamBuf toStreamBuf( size_t = 0 /* all data */ );
 
     void seek( size_t );
-    void skip( size_t );
+    void skip( size_t ) override;
 
-    uint16_t getBE16();
-    uint16_t getLE16();
-    uint32_t getBE32();
-    uint32_t getLE32();
+    uint16_t getBE16() override;
+    uint16_t getLE16() override;
+    uint32_t getBE32() override;
+    uint32_t getLE32() override;
 
-    void putBE16( uint16_t );
-    void putLE16( uint16_t );
-    void putBE32( uint32_t );
-    void putLE32( uint32_t );
+    void putBE16( uint16_t ) override;
+    void putLE16( uint16_t ) override;
+    void putBE32( uint32_t ) override;
+    void putLE32( uint32_t ) override;
 
-    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ );
-    void putRaw( const char *, size_t );
+    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) override;
+    void putRaw( const char *, size_t ) override;
 
     std::string toString( size_t = 0 /* all data */ );
 
@@ -300,13 +298,13 @@ protected:
         return *this;
     }
 
-    size_t sizeg( void ) const;
-    size_t sizep( void ) const;
-    size_t tellg( void ) const;
-    size_t tellp( void ) const;
+    size_t sizeg( void ) const override;
+    size_t sizep( void ) const override;
+    size_t tellg( void ) const override;
+    size_t tellp( void ) const override;
 
-    u8 get8();
-    void put8( char );
+    u8 get8() override;
+    void put8( char ) override;
 
 private:
     std::FILE * _file;

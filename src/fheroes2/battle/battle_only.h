@@ -40,17 +40,18 @@ namespace Battle
 {
     struct ControlInfo
     {
-        ControlInfo( const Point & pt, int ctrl )
+        ControlInfo( const fheroes2::Point & pt, int ctrl )
             : result( ctrl )
             , rtLocal( pt.x, pt.y, 24, 24 )
-            , rtAI( pt.x + 75, pt.y, 24, 24 ){};
+            , rtAI( pt.x + 75, pt.y, 24, 24 )
+        {}
 
-        void Redraw( void );
+        void Redraw( void ) const;
 
         int result;
 
-        const Rect rtLocal;
-        const Rect rtAI;
+        const fheroes2::Rect rtLocal;
+        const fheroes2::Rect rtAI;
     };
 
     class Only
@@ -59,13 +60,12 @@ namespace Battle
         Only();
 
         bool ChangeSettings( void );
-        void RedrawBaseInfo( const Point & );
+        void RedrawBaseInfo( const fheroes2::Point & ) const;
         void StartBattle( void );
-        void UpdateHero1( const Point & );
-        void UpdateHero2( const Point & );
+        void UpdateHero1( const fheroes2::Point & );
+        void UpdateHero2( const fheroes2::Point & );
 
-        static Recruits GetHeroesFromStreamBuf( StreamBuf & );
-
+    private:
         Heroes * hero1;
         Heroes * hero2;
 
@@ -76,7 +76,6 @@ namespace Battle
         Army * army2;
         Army monsters;
 
-    private:
         std::unique_ptr<MoraleIndicator> moraleIndicator1;
         std::unique_ptr<MoraleIndicator> moraleIndicator2;
 
@@ -97,12 +96,9 @@ namespace Battle
 
         std::unique_ptr<ControlInfo> cinfo2;
 
-        Rect rtPortrait1;
-        Rect rtPortrait2;
+        fheroes2::Rect rtPortrait1;
+        fheroes2::Rect rtPortrait2;
     };
 }
-
-StreamBase & operator<<( StreamBase &, const Battle::Only & );
-StreamBase & operator>>( StreamBase &, Battle::Only & );
 
 #endif

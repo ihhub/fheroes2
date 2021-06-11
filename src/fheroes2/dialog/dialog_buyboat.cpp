@@ -41,8 +41,8 @@ int Dialog::BuyBoat( bool enable )
 
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
 
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Resource::BoxSprite rbs( PaymentConditions::BuyBoat(), BOXAREA_WIDTH );
 
@@ -50,7 +50,7 @@ int Dialog::BuyBoat( bool enable )
     Text text( _( "Build a new ship:" ), Font::BIG );
     const int spacer = 10;
 
-    Dialog::FrameBox box( text.h() + spacer + sprite.height() + spacer + text.h() + spacer + rbs.GetArea().h - 20, true );
+    Dialog::FrameBox box( text.h() + spacer + sprite.height() + spacer + text.h() + spacer + rbs.GetArea().height - 20, true );
 
     const fheroes2::Rect & box_rt = box.GetArea();
     fheroes2::Point dst_pt( box_rt.x + ( box_rt.width - text.w() ) / 2, box_rt.y );
@@ -85,7 +85,6 @@ int Dialog::BuyBoat( bool enable )
     button1.draw();
     button2.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
