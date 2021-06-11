@@ -406,17 +406,17 @@ bool Heroes::isInVisibleMapArea() const
 
 bool Heroes::isDeepOcean() const
 {
-    const int32_t centerIndex
+    const int32_t tileIndex
         = ( sprite_index % 9 > 4 && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
-    for ( const int _direction : Direction::All() ) {
-        if ( Maps::isValidDirection( centerIndex, _direction ) && !world.GetTiles( Maps::GetDirectionIndex( centerIndex, _direction ) ).isWater() ) {
+    for ( const int tileDirection : Direction::All() ) {
+        if ( Maps::isValidDirection( tileIndex, tileDirection ) && !world.GetTiles( Maps::GetDirectionIndex( tileIndex, tileDirection ) ).isWater() ) {
             return false;
         }
     }
     return true;
 }
 
-void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
         return;
@@ -470,7 +470,7 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
     fheroes2::AlphaBlit( spriteShad, blitArea.x, blitArea.y, dst, dstShad.x, dstShad.y, blitArea.width, blitArea.height, static_cast<uint8_t>( _alphaValue ) );
 }
 
-void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Heroes::Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     if ( !( visibleTileROI & GetCenter() ) )
         return;
