@@ -20,6 +20,5 @@ jobs:
     - name: compile
       run: scan-build --status-bugs -v make -j 2
       env:
-        WITHOUT_XML: "ON"
         FHEROES2_STRICT_COMPILATION: "ON"
         WITH_TOOLS: "ON"

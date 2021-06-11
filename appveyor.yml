@@ -10,7 +10,7 @@ skip_commits:
 skip_tags: true
 
 # version format
-version: 0.9.3.{build}
+version: 0.9.4.{build}
 
 # Build worker image (VM template)
 image: Visual Studio 2015
@@ -43,10 +43,18 @@ clone_folder: C:\projects\fheroes2
 install:
   - cd C:\projects\fheroes2\script\windows
   - if not exist C:\projects\fheroes2\VisualStudio\packages\installed call install_packages.bat
+  - set PATH=%PATH%;"C:\Program Files (x86)\Inno Setup 5"
   - cd C:\projects\fheroes2
 
 init:
   - git config --global core.autocrlf true
+
+# src/fheroes2/system/version.h: BUILD_VERSION will be set to %fheroes2_build_version% inside VisualStudio/common.props
+# src/resources/fheroes2.rc: BUILD_VERSION is limited to 16 bit
+#
+# double percent sign is stripped by AppVeyor, so we can't calculate modulo in the usual way
+before_build:
+  - cmd: set /a fheroes2_build_version = %APPVEYOR_BUILD_NUMBER% - %APPVEYOR_BUILD_NUMBER% / 32768 * 32768
 
 build:
   project: fheroes2-vs2015.vcxproj
@@ -59,10 +67,12 @@ after_build:
   - cmd: cd C:\projects\fheroes2
   - cmd: xcopy /Y /s /Q "doc\README.txt" "."
   - cmd: xcopy /Y /s /Q "script\demo\demo_windows.bat" "."
-  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: xcopy /Y /s /Q "script\demo\demo_windows.ps1" "."
+  - cmd: 7z a build\%platform%\%configuration%\fheroes2_windows_%platform%_%deploy_conf_name%.zip demo_windows.bat demo_windows.ps1 LICENSE fheroes2.key changelog.txt README.txt
+  - cmd: iscc script\windows\fheroes2.iss "/DBuildDir=C:\projects\fheroes2\build\%platform%\%configuration%" /DPlatform=%platform% /DDeployConfName=%deploy_conf_name%
 
 artifacts:
-  - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).zip
+  - path: build\$(platform)\$(configuration)\fheroes2_windows_$(platform)_$(deploy_conf_name).*
     name: fheroes2-%platform%-%deploy_conf_name%
 
 deploy:
@@ -72,7 +82,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 0KcyoHsROl98QBsNcB+so6hegLvgWZ0R2zYammwgqdDyVXkNDejMjiDpr5sqDnx9
-  artifact: /.*\.zip/
+  artifact: fheroes2-%platform%-%deploy_conf_name%
   draft: false
   prerelease: true
   force_update: true

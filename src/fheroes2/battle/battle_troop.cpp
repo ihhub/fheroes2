@@ -40,10 +40,6 @@
 #include "speed.h"
 #include "world.h"
 
-Battle::ModeDuration::ModeDuration()
-    : std::pair<u32, u32>( 0, 0 )
-{}
-
 Battle::ModeDuration::ModeDuration( u32 mode, u32 duration )
     : std::pair<u32, u32>( mode, duration )
 {}
@@ -973,50 +969,6 @@ std::string Battle::Unit::String( bool more ) const
     return ss.str();
 }
 
-StreamBase & Battle::operator<<( StreamBase & msg, const ModesAffected & v )
-{
-    msg << static_cast<u32>( v.size() );
-
-    for ( size_t ii = 0; ii < v.size(); ++ii )
-        msg << v[ii].first << v[ii].second;
-
-    return msg;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, ModesAffected & v )
-{
-    u32 size = 0;
-    msg >> size;
-    v.clear();
-
-    for ( size_t ii = 0; ii < size; ++ii ) {
-        ModeDuration md;
-        msg >> md.first >> md.second;
-        v.push_back( md );
-    }
-
-    return msg;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Unit & b )
-{
-    return msg << b.modes << b.id << b.count << b.uid << b.hp << b.count0 << b.dead << b.shots << b.disruptingray << b.reflect << b.GetHeadIndex()
-               << ( b.mirror ? b.mirror->GetUID() : static_cast<u32>( 0 ) ) << b.affected << b.blindanswer;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Unit & b )
-{
-    s32 head = -1;
-    u32 uid = 0;
-
-    msg >> b.modes >> b.id >> b.count >> b.uid >> b.hp >> b.count0 >> b.dead >> b.shots >> b.disruptingray >> b.reflect >> head >> uid >> b.affected >> b.blindanswer;
-
-    b.position.Set( head, b.isWide(), b.isReflect() );
-    b.mirror = GetArena()->GetTroopUID( uid );
-
-    return msg;
-}
-
 bool Battle::Unit::AllowResponse( void ) const
 {
     return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
@@ -1122,12 +1074,12 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     const Unit & attacker = *this;
 
     const double defendersDamage = CalculateDamageUnit( attacker, ( static_cast<double>( defender.GetDamageMin() ) + defender.GetDamageMax() ) / 2.0 );
-    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
+    const double attackerPowerLost = ( attacker.Modes( CAP_MIRRORIMAGE ) || defender.Modes( CAP_TOWER ) || defendersDamage >= hp ) ? 1.0 : defendersDamage / hp;
     const bool attackerIsArchers = isArchers();
 
     double attackerThreat = CalculateDamageUnit( defender, ( static_cast<double>( GetDamageMin() ) + GetDamageMax() ) / 2.0 );
 
-    if ( !canReach( defender ) && !( defender.Modes( CAP_TOWER ) && attackerIsArchers ) ) {
+    if ( !canReach( defender ) && !defender.Modes( CAP_TOWER ) && !attackerIsArchers ) {
         // Can't reach, so unit is not dangerous to defender at the moment
         attackerThreat /= 2;
     }
@@ -1752,22 +1704,9 @@ bool Battle::Unit::isHaveDamage( void ) const
     return hp < count0 * Monster::GetHitPoints();
 }
 
-int Battle::Unit::GetFrameStart( void ) const
-{
-    return animation.firstFrame();
-}
-
 int Battle::Unit::GetFrame( void ) const
 {
     return animation.getFrame();
-}
-
-void Battle::Unit::SetDeathAnim()
-{
-    if ( animation.getCurrentState() != Monster_Info::KILL ) {
-        SwitchAnimation( Monster_Info::KILL );
-    }
-    animation.setToLastFrame();
 }
 
 void Battle::Unit::SetCustomAlpha( uint32_t alpha )
@@ -1785,25 +1724,9 @@ void Battle::Unit::IncreaseAnimFrame( bool loop )
     animation.playAnimation( loop );
 }
 
-bool Battle::Unit::isStartAnimFrame( void ) const
-{
-    return animation.isFirstFrame();
-}
-
 bool Battle::Unit::isFinishAnimFrame( void ) const
 {
     return animation.isLastFrame();
-}
-
-AnimationSequence Battle::Unit::GetFrameState( int state ) const
-{
-    // Can't return a reference here - it will be destroyed
-    return animation.getAnimationSequence( state );
-}
-
-const AnimationState & Battle::Unit::GetFrameState( void ) const
-{
-    return animation;
 }
 
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
@@ -1889,11 +1812,6 @@ int Battle::Unit::M82Expl( void ) const
     }
 
     return M82::UNKNOWN;
-}
-
-int Battle::Unit::ICNFile( void ) const
-{
-    return GetMonsterSprite().icn_file;
 }
 
 fheroes2::Rect Battle::Unit::GetRectPosition() const

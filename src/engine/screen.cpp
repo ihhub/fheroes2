@@ -22,20 +22,21 @@
 #include "palette_h2.h"
 
 #include <SDL_version.h>
+#include <SDL_video.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#include <SDL_events.h>
 #include <SDL_hints.h>
 #include <SDL_mouse.h>
 #include <SDL_render.h>
-#include <SDL_video.h>
 #else
 #include <SDL_active.h>
-#include <SDL_video.h>
 #endif
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <set>
+#include <type_traits>
 
 #if defined( FHEROES2_VITA )
 #include <vita2d.h>
@@ -95,7 +96,7 @@ namespace
         // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
         // In this case populate the list with missing resolutions.
         if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480 );
+            static_assert( fheroes2::Display::DEFAULT_WIDTH == 640 && fheroes2::Display::DEFAULT_HEIGHT == 480, "Default resolution must be 640 x 480" );
             const std::vector<fheroes2::Size> possibleResolutions
                 = {fheroes2::Size( 640, 480 ), fheroes2::Size( 800, 600 ), fheroes2::Size( 1024, 768 ), fheroes2::Size( 1280, 960 ), fheroes2::Size( 1920, 1080 )};
             const fheroes2::Size & currentResolution = resolutions.front();
@@ -353,18 +354,26 @@ namespace
             clear();
         }
 
+        void show( const bool enable ) override
+        {
+            fheroes2::Cursor::show( enable );
+
+            if ( !_emulation ) {
+                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+            }
+        }
+
         bool isVisible() const override
         {
             if ( _emulation )
                 return fheroes2::Cursor::isVisible();
             else
-                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( -1 ) == 1 );
+                return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
         {
             if ( _emulation ) {
-                SDL_ShowCursor( 0 );
                 fheroes2::Cursor::update( image, offsetX, offsetY );
                 return;
             }
@@ -408,7 +417,7 @@ namespace
 
             SDL_Cursor * tempCursor = SDL_CreateColorCursor( surface, offsetX, offsetY );
             SDL_SetCursor( tempCursor );
-            SDL_ShowCursor( 1 );
+            SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
             SDL_FreeSurface( surface );
 
             clear();
@@ -422,9 +431,14 @@ namespace
 
             if ( enable ) {
                 clear();
+
+                SDL_ShowCursor( SDL_DISABLE );
+
                 _emulation = true;
             }
             else {
+                SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
+
                 _emulation = false;
             }
 
@@ -443,6 +457,8 @@ namespace
         {
             // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
+
+            SDL_ShowCursor( _show ? SDL_ENABLE : SDL_DISABLE );
         }
 
     private:
@@ -1101,7 +1117,8 @@ namespace
 
             copyImageToSurface( display, _surface, roi );
 
-            SDL_UpdateRect( _surface, roi.x, roi.y, roi.width, roi.height );
+            // Logically we should call SDL_UpdateRect but some systems have flickering effect with this function.
+            SDL_Flip( _surface );
         }
 
         void clear() override

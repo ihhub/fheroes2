@@ -23,6 +23,7 @@
 #include "interface_gamearea.h"
 
 #include "agg_image.h"
+#include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "ground.h"
@@ -159,13 +160,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
-                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
+                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI );
+                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
                 }
                 else {
                     world.GetTiles( offset.x, offset.y ).RedrawTile( dst, tileROI, *this );
@@ -193,6 +194,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::vector<const Maps::Tiles *> monsterList;
     std::vector<const Maps::Tiles *> topList;
     std::vector<const Maps::Tiles *> objectList;
+    std::vector<const Maps::Tiles *> fogList;
 
     const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
     topList.reserve( areaSize );
@@ -203,10 +205,26 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
     const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
+#ifdef WITH_DEBUG
+    const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
+#else
+    const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
+#endif
+
+    const int friendColors = Players::FriendColors();
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            if ( drawFog && tile.isFog( friendColors ) ) {
+                // don't redraw tile if fog all around
+                fogList.emplace_back( &tile );
+                if ( tile.isFogAllAround( friendColors ) ) {
+                    continue;
+                }
+            }
+
             const int object = tile.GetObject();
 
             switch ( object ) {
@@ -482,16 +500,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     else
 #endif
         // redraw fog
-        if ( flag & LEVEL_FOG ) {
-        const int colors = Players::FriendColors();
-
-        for ( int32_t y = minY; y < maxY; ++y ) {
-            for ( int32_t x = minX; x < maxX; ++x ) {
-                const Maps::Tiles & tile = world.GetTiles( x, y );
-
-                if ( tile.isFog( colors ) )
-                    tile.RedrawFogs( dst, colors, *this );
-            }
+        if ( drawFog ) {
+        for ( const Maps::Tiles * tile : fogList ) {
+            tile->RedrawFogs( dst, friendColors, *this );
         }
     }
 }

@@ -44,6 +44,9 @@ namespace Maps
 
     using Indexes = MapsIndexes;
 
+    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const int obj, const bool ignoreHeroes = true );
+    Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true );
+
     const char * SizeString( int size );
     const char * GetMinesName( int res );
 
@@ -51,16 +54,17 @@ namespace Maps
     s32 GetDirectionIndex( s32, int direct );
     bool isValidDirection( s32, int direct );
 
-    bool isValidAbsIndex( s32 );
-    bool isValidAbsPoint( s32 x, s32 y );
+    bool isValidAbsIndex( const int32_t index );
+    bool isValidAbsPoint( const int32_t x, const int32_t y );
 
     fheroes2::Point GetPoint( const int32_t index );
 
-    s32 GetIndexFromAbsPoint( const fheroes2::Point & mp );
-    s32 GetIndexFromAbsPoint( s32 px, s32 py );
+    // Convert maps point to index maps. Returns -1 if x or y is negative.
+    int32_t GetIndexFromAbsPoint( const fheroes2::Point & mp );
+    int32_t GetIndexFromAbsPoint( const int32_t x, const int32_t y );
 
     Indexes GetAroundIndexes( s32 );
-    Indexes GetAroundIndexes( s32, int dist, bool sort = false ); // sorting distance
+    Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
 
     Indexes ScanAroundObject( s32, int obj );
     Indexes ScanAroundObject( s32, u32 dist, int obj );
@@ -74,8 +78,12 @@ namespace Maps
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
 
-    void ClearFog( s32, int scoute, int color );
-    u32 GetApproximateDistance( s32, s32 );
+    void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
+
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor );
+
+    // This method should be avoided unless high precision is not important.
+    uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void MinimizeAreaForCastle( const fheroes2::Point & );

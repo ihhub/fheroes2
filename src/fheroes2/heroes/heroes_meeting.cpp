@@ -227,16 +227,12 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-void RedrawPrimarySkillInfo( const fheroes2::Point &, PrimarySkillsBar *, PrimarySkillsBar * );
-
-void Heroes::MeetingDialog( Heroes & heroes2 )
+void Heroes::MeetingDialog( Heroes & otherHero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
@@ -254,7 +250,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     // header
     message = _( "%{name1} meets %{name2}" );
     StringReplace( message, "%{name1}", GetName() );
-    StringReplace( message, "%{name2}", heroes2.GetName() );
+    StringReplace( message, "%{name2}", otherHero.GetName() );
     Text text( message, Font::BIG );
     text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 27 );
 
@@ -271,9 +267,9 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
 
     dst_pt.x = cur_pt.x + 445;
     dst_pt.y = cur_pt.y + portraitYOffset;
-    const fheroes2::Sprite & portrait2 = heroes2.GetPortrait( PORT_BIG );
+    const fheroes2::Sprite & portrait2 = otherHero.GetPortrait( PORT_BIG );
     fheroes2::Rect hero2Area( dst_pt.x, dst_pt.y, portrait2.width(), portrait2.height() );
-    heroes2.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
+    otherHero.PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     MoraleIndicator moraleIndicator1( this );
     dst_pt.x = cur_pt.x + iconsH1XOffset;
@@ -287,13 +283,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     luckIndicator1.SetPos( dst_pt );
     luckIndicator1.Redraw();
 
-    MoraleIndicator moraleIndicator2( &heroes2 );
+    MoraleIndicator moraleIndicator2( &otherHero );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
     dst_pt.y = cur_pt.y + portraitYOffset + moraleIndicator2.GetArea().height / 3;
     moraleIndicator2.SetPos( dst_pt );
     moraleIndicator2.Redraw();
 
-    LuckIndicator luckIndicator2( &heroes2 );
+    LuckIndicator luckIndicator2( &otherHero );
     dst_pt.x = cur_pt.x + iconsH2XOffset;
     dst_pt.y = cur_pt.y + portraitYOffset + portrait2.height() - luckIndicator2.GetArea().height * 4 / 3;
     luckIndicator2.SetPos( dst_pt );
@@ -308,13 +304,13 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     primskill_bar1.SetTextOff( 70, -25 );
     primskill_bar1.SetPos( cur_pt.x + 216, cur_pt.y + 51 );
 
-    MeetingPrimarySkillsBar primskill_bar2( &heroes2 );
+    MeetingPrimarySkillsBar primskill_bar2( &otherHero );
     primskill_bar2.SetColRows( 1, 4 );
     primskill_bar2.SetVSpace( -1 );
     primskill_bar2.SetTextOff( -70, -25 );
     primskill_bar2.SetPos( cur_pt.x + 389, cur_pt.y + 51 );
 
-    RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+    fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
 
     // secondary skill
     MeetingSecondarySkillsBar secskill_bar1( *this );
@@ -324,10 +320,10 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     secskill_bar1.SetPos( cur_pt.x + 22, cur_pt.y + 199 );
     secskill_bar1.Redraw();
 
-    MeetingSecondarySkillsBar secskill_bar2( heroes2 );
+    MeetingSecondarySkillsBar secskill_bar2( otherHero );
     secskill_bar2.SetColRows( 8, 1 );
     secskill_bar2.SetHSpace( -1 );
-    secskill_bar2.SetContent( heroes2.GetSecondarySkills().ToVector() );
+    secskill_bar2.SetContent( otherHero.GetSecondarySkills().ToVector() );
     secskill_bar2.SetPos( cur_pt.x + 353, cur_pt.y + 199 );
     secskill_bar2.Redraw();
 
@@ -346,7 +342,7 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 381;
     dst_pt.y = cur_pt.y + 267;
 
-    MeetingArmyBar selectArmy2( &heroes2.GetArmy() );
+    MeetingArmyBar selectArmy2( &otherHero.GetArmy() );
     selectArmy2.SetColRows( 5, 1 );
     selectArmy2.SetPos( dst_pt.x, dst_pt.y );
     selectArmy2.SetHSpace( 2 );
@@ -367,11 +363,11 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     dst_pt.x = cur_pt.x + 367;
     dst_pt.y = cur_pt.y + 347;
 
-    MeetingArtifactBar selectArtifacts2( &heroes2 );
+    MeetingArtifactBar selectArtifacts2( &otherHero );
     selectArtifacts2.SetColRows( 7, 2 );
     selectArtifacts2.SetHSpace( 2 );
     selectArtifacts2.SetVSpace( 2 );
-    selectArtifacts2.SetContent( heroes2.GetBagArtifacts() );
+    selectArtifacts2.SetContent( otherHero.GetBagArtifacts() );
     selectArtifacts2.SetPos( dst_pt.x, dst_pt.y );
     selectArtifacts2.Redraw();
 
@@ -401,15 +397,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
     moveArtifactsToHero2.draw();
     moveArtifactsToHero1.draw();
 
-    cursor.Show();
     display.render();
 
     MovePointsScaleFixed();
-    heroes2.MovePointsScaleFixed();
+    otherHero.MovePointsScaleFixed();
 
     // scholar action
     if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-        Heroes::ScholarAction( *this, heroes2 );
+        Heroes::ScholarAction( *this, otherHero );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -427,8 +422,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
         // selector troops event
         if ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2 ) )
              || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArtifacts1.isSelected() )
                 selectArtifacts1.ResetSelected();
             else if ( selectArtifacts2.isSelected() )
@@ -443,21 +436,19 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
         // selector artifacts event
         if ( ( le.MouseCursor( selectArtifacts1.GetArea() ) && selectArtifacts1.QueueEventProcessing( selectArtifacts2 ) )
              || ( le.MouseCursor( selectArtifacts2.GetArea() ) && selectArtifacts2.QueueEventProcessing( selectArtifacts1 ) ) ) {
-            cursor.Hide();
-
             if ( selectArmy1.isSelected() )
                 selectArmy1.ResetSelected();
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            if ( bag_artifacts.MakeBattleGarb() || heroes2.bag_artifacts.MakeBattleGarb() ) {
+            if ( bag_artifacts.MakeBattleGarb() || otherHero.bag_artifacts.MakeBattleGarb() ) {
                 Dialog::ArtifactInfo( "", _( "The three Anduran artifacts magically combine into one." ), Artifact::BATTLE_GARB );
             }
 
@@ -465,12 +456,12 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts2.Redraw();
 
             backPrimary.restore();
-            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
-            cursor.Show();
+
             display.render();
         }
 
@@ -478,7 +469,6 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
              || ( le.MouseCursor( primskill_bar2.GetArea() ) && primskill_bar2.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar1.GetArea() ) && secskill_bar1.QueueEventProcessing() )
              || ( le.MouseCursor( secskill_bar2.GetArea() ) && secskill_bar2.QueueEventProcessing() ) ) {
-            cursor.Show();
             display.render();
         }
 
@@ -499,30 +489,32 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             Game::OpenHeroesDialog( *this, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts1.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             luckIndicator1.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( hero2Area ) ) {
-            Game::OpenHeroesDialog( heroes2, false, false, true );
+            Game::OpenHeroesDialog( otherHero, false, false, true );
 
             armyCountBackgroundRestorer.restore();
+
             selectArtifacts2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator2.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
-            heroes2.GetArmy().MoveTroops( GetArmy() );
+            otherHero.GetArmy().MoveTroops( GetArmy() );
 
             armyCountBackgroundRestorer.restore();
 
@@ -530,14 +522,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
-            GetArmy().MoveTroops( heroes2.GetArmy() );
+            GetArmy().MoveTroops( otherHero.GetArmy() );
 
             armyCountBackgroundRestorer.restore();
 
@@ -545,14 +537,14 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
+
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero2.area() ) ) {
-            moveArtifacts( GetBagArtifacts(), heroes2.GetBagArtifacts() );
+            moveArtifacts( GetBagArtifacts(), otherHero.GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -560,17 +552,16 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts2.Redraw();
 
             backPrimary.restore();
-            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
         else if ( le.MouseClickLeft( moveArtifactsToHero1.area() ) ) {
-            moveArtifacts( heroes2.GetBagArtifacts(), GetBagArtifacts() );
+            moveArtifacts( otherHero.GetBagArtifacts(), GetBagArtifacts() );
 
             selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
@@ -578,45 +569,25 @@ void Heroes::MeetingDialog( Heroes & heroes2 )
             selectArtifacts2.Redraw();
 
             backPrimary.restore();
-            RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
+            fheroes2::RedrawPrimarySkillInfo( cur_pt, &primskill_bar1, &primskill_bar2 );
             moraleIndicator1.Redraw();
             moraleIndicator2.Redraw();
             luckIndicator1.Redraw();
             luckIndicator2.Redraw();
 
-            cursor.Show();
             display.render();
         }
     }
+
+    selectArmy1.ResetSelected();
+    selectArmy2.ResetSelected();
+    selectArtifacts1.ResetSelected();
+    selectArtifacts2.ResetSelected();
 
     backPrimary.reset();
     armyCountBackgroundRestorer.reset();
     restorer.restore();
     display.render();
-}
-
-void RedrawPrimarySkillInfo( const fheroes2::Point & cur_pt, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
-{
-    // attack skill
-    Text text( _( "Attack Skill" ), Font::SMALL );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 64 );
-
-    // defense skill
-    text.Set( _( "Defense Skill" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 96 );
-
-    // spell power
-    text.Set( _( "Spell Power" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 128 );
-
-    // knowledge
-    text.Set( _( "Knowledge" ) );
-    text.Blit( cur_pt.x + 320 - text.w() / 2, cur_pt.y + 160 );
-
-    if ( bar1 )
-        bar1->Redraw();
-    if ( bar2 )
-        bar2->Redraw();
 }
 
 void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )

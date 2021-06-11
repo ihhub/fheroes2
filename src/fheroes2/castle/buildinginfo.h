@@ -43,7 +43,6 @@ public:
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static void UpdateCosts( const std::string & );
     static payment_t GetCost( u32, int );
 
 private:

@@ -300,12 +300,26 @@ void World::Reset( void )
 void World::NewMaps( int32_t sw, int32_t sh )
 {
     Reset();
+
+    width = sw;
+    height = sh;
+
+    Maps::FileInfo fi;
+
+    fi.size_w = static_cast<uint16_t>( width );
+    fi.size_h = static_cast<uint16_t>( height );
+
+    Settings & conf = Settings::Get();
+
+    if ( conf.isPriceOfLoyaltySupported() ) {
+        fi._version = GameVersion::PRICE_OF_LOYALTY;
+    }
+
+    conf.SetCurrentFileInfo( fi );
+
     Defaults();
 
-    fheroes2::Size::width = sw;
-    fheroes2::Size::height = sh;
-
-    vec_tiles.resize( static_cast<size_t>( fheroes2::Size::width ) * fheroes2::Size::height );
+    vec_tiles.resize( static_cast<size_t>( width ) * height );
 
     // init all tiles
     for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
@@ -326,13 +340,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
 
         vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
-
-    // reset current maps info
-    Maps::FileInfo fi;
-    fi.size_w = static_cast<uint16_t>( width );
-    fi.size_h = static_cast<uint16_t>( height );
-
-    Settings::Get().SetCurrentFileInfo( fi );
 }
 
 void World::InitKingdoms( void )
@@ -533,6 +540,13 @@ void World::NewDay( void )
             ++month;
     }
 
+    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
+        // reset move points of all heroes if option "heroes: remember move points for retreat/surrender result" is active
+        hero->ResetModes( Heroes::SAVE_MP_POINTS );
+        // replenish spell points of all heroes
+        hero->ReplenishSpellPoints();
+    } );
+
     // action new day
     vec_kingdoms.NewDay();
 
@@ -583,12 +597,6 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
-
-    // new day - reset option: "heroes: remember move points for retreat/surrender result"
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) {
-        hero->ResetModes( Heroes::SAVE_SP_POINTS );
-        hero->ResetModes( Heroes::SAVE_MP_POINTS );
-    } );
 }
 
 void World::NewMonth( void )
@@ -626,7 +634,7 @@ void World::MonthOfMonstersAction( const Monster & mons )
 
     // create valid points
     for ( const Maps::Tiles & tile : vec_tiles ) {
-        if ( tile.isWater() || MP2::OBJ_ZERO != tile.GetObject() || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+        if ( tile.isWater() || ( MP2::OBJ_ZERO != tile.GetObject() && tile.GetObject() != MP2::OBJ_COAST ) || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
             continue;
         }
 
@@ -692,7 +700,12 @@ MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
         std::map<s32, MapsIndexes> uniq_whirlpools;
 
         for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            uniq_whirlpools[GetTiles( *it ).GetObjectUID()].push_back( *it );
+            const Maps::Tiles & tile = GetTiles( *it );
+            if ( tile.GetHeroes() != nullptr ) {
+                continue;
+            }
+
+            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
         }
 
         if ( 2 > uniq_whirlpools.size() ) {
@@ -1001,11 +1014,11 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
     const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
-        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
         const int scenarioId = campaignData.getCurrentScenarioID();
@@ -1048,10 +1061,10 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
             return GameOver::LOSS_ALL;
     }
 
-    const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
-        Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
+        const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
 
         const std::vector<Campaign::ScenarioData> & scenarios = Campaign::CampaignData::getCampaignData( campaignData.getCampaignID() ).getAllScenarios();
         const int scenarioId = campaignData.getCurrentScenarioID();
@@ -1115,7 +1128,10 @@ void World::resetPathfinder()
 void World::PostLoad()
 {
     // update tile passable
-    std::for_each( vec_tiles.begin(), vec_tiles.end(), []( Maps::Tiles & tile ) { tile.UpdatePassable(); } );
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updateEmpty();
+        tile.UpdatePassable();
+    }
 
     // cache data that's accessed often
     _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );

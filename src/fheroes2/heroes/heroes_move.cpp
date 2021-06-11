@@ -38,6 +38,8 @@
 #include "race.h"
 #include "world.h"
 
+#include <cassert>
+
 namespace
 {
     const int heroFrameCount = 9;
@@ -455,6 +457,8 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, int32_t dx, int32_t dy, const 
         dstShad.y += oy;
         dstFroth.y += oy;
     }
+      
+    assert( _alphaValue >= 0 && _alphaValue <= 255 );      
 
     if ( isShipMaster() && isMoveEnabled() && isDeepOcean() ) {
         const fheroes2::Rect blitArea = area.RectFixed( dstFroth, spriteFroth.width(), spriteFroth.height() );
@@ -485,12 +489,15 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
     const fheroes2::Sprite & spriteHero = SpriteHero( *this, sprite_index, false );
     const fheroes2::Sprite & spriteFlag = SpriteFlag( *this, flagFrameID, false, flagOffset );
 
-    fheroes2::Point dstHero( dx + ( reflect ? TILEWIDTH - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
+
+    // Reflected hero sprite should be shifted by 1 pixel to right.
+    fheroes2::Point dstHero( dx + ( reflect ? TILEWIDTH + 1 - spriteHero.x() - spriteHero.width() : spriteHero.x() ), dy + spriteHero.y() + TILEWIDTH );
     fheroes2::Point dstFlag( dx + ( reflect ? TILEWIDTH - spriteFlag.x() - flagOffset.x - spriteFlag.width() : spriteFlag.x() + flagOffset.x ),
                              dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
     if ( sprite_index < 45 ) {
+        fheroes2::Point offset;
         int frame = ( sprite_index % 9 );
         if ( frame > 0 )
             --frame;
@@ -515,10 +522,13 @@ void Heroes::Redraw( fheroes2::Image & dst, int32_t dx, int32_t dy, const fheroe
     }
 
     // redraw sprites hero and flag
+    assert( _alphaValue >= 0 && _alphaValue <= 255 );
+  
     const fheroes2::Rect blitAreaHero = area.RectFixed( dstHero, spriteHero.width(), spriteHero.height() );
-    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.width, blitAreaHero.height, _alphaValue, reflect );
+    fheroes2::AlphaBlit( spriteHero, blitAreaHero.x, blitAreaHero.y, dst, dstHero.x, dstHero.y, blitAreaHero.width, blitAreaHero.height, static_cast<uint8_t>( _alphaValue ), reflect );
+
     const fheroes2::Rect blitAreaFlag = area.RectFixed( dstFlag, spriteFlag.width(), spriteFlag.height() );
-    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.width, blitAreaFlag.height, _alphaValue, reflect );
+    fheroes2::AlphaBlit( spriteFlag, blitAreaFlag.x, blitAreaFlag.y, dst, dstFlag.x, dstFlag.y, blitAreaFlag.width, blitAreaFlag.height, static_cast<uint8_t>( _alphaValue ), reflect );
 }
 
 void Heroes::SetRedrawIndexes()
@@ -663,7 +673,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
     if ( newpos ) {
         hero.Move2Dest( indexTo );
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
         path.PopFront();
 
         // possible that hero loses the battle
@@ -691,6 +701,8 @@ bool Heroes::MoveStep( bool fast )
     const fheroes2::Point & mp = GetCenter();
 
     if ( fast ) {
+        // Unveil fog before moving the hero.
+        Scoute( indexTo );
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) )
             MoveStep( *this, indexTo, false );
         else
@@ -709,6 +721,10 @@ bool Heroes::MoveStep( bool fast )
             if ( GetKingdom().isControlHuman() )
                 PlayWalkSound( world.GetTiles( mp.x, mp.y ).GetGround() );
         }
+    }
+    else if ( sprite_index % 9 == 1 ) {
+        // This is a start of hero's movement. We should clear fog around him.
+        Scoute( indexTo );
     }
     else if ( 8 == sprite_index % 9 ) {
         sprite_index -= 8;
@@ -903,17 +919,15 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
     LocalEvent & le = LocalEvent::Get();
     _alphaValue = 255 - 8 * multiplier;
 
-    while ( le.HandleEvents() && _alphaValue > 0 ) {
+    const std::vector<Game::DelayType> delayTypes = { Game::HEROES_FADE_DELAY };
+    while ( le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) && _alphaValue > 0 ) {
         if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            Cursor::Get().Hide();
-
             if ( offsetScreen ) {
                 gamearea.ShiftCenter( offset );
             }
 
             gamearea.Redraw( display, Interface::LEVEL_ALL );
 
-            Cursor::Get().Show();
             display.render();
             _alphaValue -= 8 * multiplier;
         }
@@ -939,17 +953,15 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     LocalEvent & le = LocalEvent::Get();
     _alphaValue = 8 * multiplier;
 
-    while ( le.HandleEvents() && _alphaValue < 250 ) {
+    const std::vector<Game::DelayType> delayTypes = { Game::HEROES_FADE_DELAY };
+    while ( le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) && _alphaValue < 250 ) {
         if ( Game::validateAnimationDelay( Game::HEROES_FADE_DELAY ) ) {
-            Cursor::Get().Hide();
-
             if ( offsetScreen ) {
                 gamearea.ShiftCenter( offset );
             }
 
             gamearea.Redraw( display, Interface::LEVEL_ALL );
 
-            Cursor::Get().Show();
             display.render();
             _alphaValue += 8 * multiplier;
         }

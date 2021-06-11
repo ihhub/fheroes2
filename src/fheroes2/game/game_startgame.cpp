@@ -58,28 +58,28 @@ namespace
     }
 }
 
-int Game::StartBattleOnly( void )
+fheroes2::GameMode Game::StartBattleOnly( void )
 {
     Battle::Only main;
 
     if ( main.ChangeSettings() )
         main.StartBattle();
 
-    return Game::MAINMENU;
+    return fheroes2::GameMode::MAIN_MENU;
 }
 
-int Game::StartGame( void )
+fheroes2::GameMode Game::StartGame()
 {
     AI::Get().Reset();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    cursor.Hide();
     AGG::ResetMixer();
 
     Interface::Basic::Get().Reset();
@@ -124,6 +124,9 @@ void Game::DialogPlayers( int color, std::string str )
 /* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     Mixer::Pause();
 
     const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
@@ -180,6 +183,9 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
 /* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = hero.GetKingdom();
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
@@ -292,14 +298,14 @@ void ShowEventDayDialog( void )
     }
 }
 
-int ShowWarningLostTownsDialog( void )
+fheroes2::GameMode ShowWarningLostTownsDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
     if ( 0 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
         GameOver::Result::Get().SetResult( GameOver::LOSS_ALL );
-        return Game::MAINMENU;
+        return fheroes2::GameMode::END_TURN;
     }
     else if ( 1 == myKingdom.GetLostTownDays() ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
@@ -310,7 +316,7 @@ int ShowWarningLostTownsDialog( void )
         Game::DialogPlayers( myKingdom.GetColor(), str );
     }
 
-    return Game::CANCEL;
+    return fheroes2::GameMode::CANCEL;
 }
 
 /* return changee cursor */
@@ -346,7 +352,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     switch ( tile.GetObject() ) {
     case MP2::OBJ_MONSTER:
-        return water ? Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) ) : Cursor::POINTER;
+        return water ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) ) : Cursor::POINTER;
 
     case MP2::OBJ_BOAT:
         return Cursor::POINTER;
@@ -368,23 +374,23 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
                 return Cursor::HEROES;
             else if ( from_hero.GetColor() == to_hero->GetColor() )
-                return Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( from_hero.isFriends( to_hero->GetColor() ) )
-                return conf.ExtUnionsAllowHeroesMeetings() ? Cursor::CHANGE : Cursor::POINTER;
-            else if ( to_hero->AllowBattle( false ) )
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return conf.ExtUnionsAllowHeroesMeetings() ? static_cast<int>( Cursor::CURSOR_HERO_MEET ) : static_cast<int>( Cursor::POINTER );
+            else
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
     } break;
 
     case MP2::OBJ_COAST:
-        return Cursor::DistanceThemes( Cursor::ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+        return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ANCHOR, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     default:
         if ( water ) {
             if ( MP2::isWaterObject( tile.GetObject() ) )
-                return Cursor::DistanceThemes( Cursor::REDBOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
-                return Cursor::DistanceThemes( Cursor::BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         break;
     }
@@ -406,7 +412,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
         else
-            return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
@@ -423,17 +429,17 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
             }
             else if ( from_hero.GetColor() == castle->GetColor() ) {
-                return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else if ( from_hero.isFriends( castle->GetColor() ) ) {
-                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
+                return conf.ExtUnionsAllowCastleVisiting() ? Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) )
                                                            : Cursor::POINTER;
             }
             else if ( castle->GetActualArmy().isValid() ) {
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
             else {
-                return Cursor::DistanceThemes( Cursor::ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.GetRangeRouteDays( castle->GetIndex() ) );
             }
         }
     } break;
@@ -447,20 +453,20 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
                 return Cursor::HEROES;
             else if ( from_hero.GetColor() == to_hero->GetColor() ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 return newcur != Cursor::POINTER ? newcur : Cursor::HEROES;
             }
             else if ( from_hero.isFriends( to_hero->GetColor() ) ) {
-                int newcur = Cursor::DistanceThemes( Cursor::CHANGE, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                int newcur = Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
                 return conf.ExtUnionsAllowHeroesMeetings() ? newcur : Cursor::POINTER;
             }
             else
-                return Cursor::DistanceThemes( Cursor::FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
     } break;
 
     case MP2::OBJ_BOAT:
-        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
 
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
@@ -474,12 +480,12 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                 protection = Maps::TileIsUnderProtection( tile.GetIndex() );
             }
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassable( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
             bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
 
-            return Cursor::DistanceThemes( ( protection ? Cursor::FIGHT : Cursor::MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         break;
     }
@@ -510,9 +516,8 @@ int Interface::Basic::GetCursorTileIndex( s32 dst_index )
     return Cursor::POINTER;
 }
 
-int Interface::Basic::StartGame( void )
+fheroes2::GameMode Interface::Basic::StartGame()
 {
-    Cursor & cursor = Cursor::Get();
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -529,12 +534,12 @@ int Interface::Basic::StartGame( void )
 
     bool skip_turns = conf.LoadedGameVersion();
     GameOver::Result & gameResult = GameOver::Result::Get();
-    int res = Game::ENDTURN;
+    fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
     std::vector<Player *> sortedPlayers = conf.GetPlayers();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
-    while ( res == Game::ENDTURN ) {
+    while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !skip_turns )
             world.NewDay();
 
@@ -565,7 +570,6 @@ int Interface::Basic::StartGame( void )
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        cursor.Hide();
                         iconsPanel.HideIcons();
                         statusWindow.Reset();
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
@@ -585,14 +589,12 @@ int Interface::Basic::StartGame( void )
 
                 // CONTROL_AI turn
                 default:
-                    if ( res == Game::ENDTURN ) {
+                    if ( res == fheroes2::GameMode::END_TURN ) {
                         statusWindow.Reset();
                         statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                        cursor.Hide();
-                        cursor.SetThemes( Cursor::WAIT );
+                        Cursor::Get().SetThemes( Cursor::WAIT );
                         Redraw();
-                        cursor.Show();
                         display.render();
 
                         AI::Get().KingdomTurn( kingdom );
@@ -600,37 +602,36 @@ int Interface::Basic::StartGame( void )
                     break;
                 }
 
-                if ( res != Game::ENDTURN )
+                if ( res != fheroes2::GameMode::END_TURN )
                     break;
 
                 res = gameResult.LocalCheckGameOver();
 
-                if ( Game::CANCEL != res )
+                if ( fheroes2::GameMode::CANCEL != res )
                     break;
                 else
-                    res = Game::ENDTURN;
+                    res = fheroes2::GameMode::END_TURN;
             }
 
         fheroes2::delayforMs( 10 );
     }
 
-    if ( res == Game::ENDTURN )
+    if ( res == fheroes2::GameMode::END_TURN )
         display.fill( 0 );
     else if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    return res == Game::ENDTURN ? Game::QUITGAME : res;
+    return res == fheroes2::GameMode::END_TURN ? fheroes2::GameMode::QUIT_GAME : res;
 }
 
-int Interface::Basic::HumanTurn( bool isload )
+fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Cursor & cursor = Cursor::Get();
     const Settings & conf = Settings::Get();
-    int res = Game::CANCEL;
+    fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
     LocalEvent & le = LocalEvent::Get();
-    cursor.Hide();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -661,7 +662,6 @@ int Interface::Basic::HumanTurn( bool isload )
 
     Game::EnvironmentSoundMixer();
 
-    cursor.Show();
     display.render();
 
     if ( !isload ) {
@@ -684,13 +684,9 @@ int Interface::Basic::HumanTurn( bool isload )
     res = gameResult.LocalCheckGameOver();
 
     // warning lost all town
-    if ( res == Game::CANCEL && myCastles.empty() ) {
+    if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         res = ShowWarningLostTownsDialog();
     }
-
-    // check around actions (and skip for h2 orig, bug?)
-    if ( !conf.ExtWorldOnlyFirstMonsterAttack() )
-        myKingdom.HeroesActionNewPosition();
 
     int fastScrollRepeatCount = 0;
     const int fastScrollStartThreshold = 2;
@@ -707,10 +703,10 @@ int Interface::Basic::HumanTurn( bool isload )
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
     // startgame loop
-    while ( Game::CANCEL == res ) {
+    while ( fheroes2::GameMode::CANCEL == res ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
-            if ( EventExit() == Game::QUITGAME ) {
-                res = Game::QUITGAME;
+            if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
+                res = fheroes2::GameMode::QUIT_GAME;
                 break;
             }
             else {
@@ -818,7 +814,7 @@ int Interface::Basic::HumanTurn( bool isload )
                 EventOpenFocus();
         }
 
-        if ( res != Game::CANCEL ) {
+        if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
 
@@ -914,7 +910,7 @@ int Interface::Basic::HumanTurn( bool isload )
             buttonsArea.ResetButtons();
         }
 
-        if ( res != Game::CANCEL ) {
+        if ( res != fheroes2::GameMode::CANCEL ) {
             break;
         }
 
@@ -1025,18 +1021,12 @@ int Interface::Basic::HumanTurn( bool isload )
         }
 
         if ( NeedRedraw() ) {
-            cursor.Hide();
             Redraw();
-            cursor.Show();
-            display.render();
-        }
-        else if ( !cursor.isVisible() ) {
-            cursor.Show();
             display.render();
         }
     }
 
-    if ( Game::ENDTURN == res ) {
+    if ( fheroes2::GameMode::END_TURN == res ) {
         // warning lost all town
         if ( myHeroes.size() && myCastles.empty() && Game::GetLostTownDays() < myKingdom.GetLostTownDays() ) {
             Game::DialogPlayers( conf.CurrentColor(),
@@ -1096,13 +1086,13 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             Cursor::Get().SetThemes( Cursor::CASTLE );
         }
     } break;
-    case Cursor::FIGHT:
-    case Cursor::MOVE:
-    case Cursor::BOAT:
-    case Cursor::ANCHOR:
-    case Cursor::CHANGE:
-    case Cursor::ACTION:
-    case Cursor::REDBOAT:
+    case Cursor::CURSOR_HERO_FIGHT:
+    case Cursor::CURSOR_HERO_MOVE:
+    case Cursor::CURSOR_HERO_BOAT:
+    case Cursor::CURSOR_HERO_ANCHOR:
+    case Cursor::CURSOR_HERO_MEET:
+    case Cursor::CURSOR_HERO_ACTION:
+    case Cursor::CURSOR_HERO_BOAT_ACTION:
         if ( from_hero == NULL )
             break;
 

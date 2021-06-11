@@ -445,7 +445,7 @@ void Maps::Tiles::QuantityReset( void )
     }
 
     if ( MP2::isPickupObject( mp2_object ) )
-        SetObject( MP2::OBJ_ZERO );
+        setAsEmpty();
 }
 
 void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
@@ -931,7 +931,7 @@ void Maps::Tiles::MonsterSetCount( u32 count )
     quantity2 = 0x00FF & count;
 }
 
-void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, u32 count )
+void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count )
 {
     tile.SetObject( MP2::OBJ_MONSTER );
 

@@ -61,11 +61,8 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( ok_button, Cursor::POINTER );
 
     TextBox box1( header, Font::YELLOW_BIG, BOXAREA_WIDTH );
     TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
@@ -106,10 +103,10 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
         button.disable();
     }
 
-    if ( button.isEnabled() )
+    if ( button.isEnabled() ) {
         button.draw();
+    }
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -125,6 +122,4 @@ void Dialog::SpellInfo( const std::string & header, const std::string & message,
             break;
         }
     }
-
-    cursor.Hide();
 }

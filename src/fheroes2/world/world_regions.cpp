@@ -144,18 +144,6 @@ size_t MapRegion::getNeighboursCount() const
     return _neighbours.size();
 }
 
-std::vector<IndexObject> MapRegion::getObjectList() const
-{
-    std::vector<IndexObject> result;
-
-    for ( const MapRegionNode & node : _nodes ) {
-        if ( node.mapObject != 0 ) {
-            result.emplace_back( node.index, node.mapObject );
-        }
-    }
-    return result;
-}
-
 size_t World::getRegionCount() const
 {
     return _regions.size();

@@ -28,7 +28,6 @@
 
 #define CELLW 44
 #define CELLH 52
-#define CELLH_VER_SIDE 32
 
 namespace Battle
 {
@@ -52,7 +51,6 @@ namespace Battle
     class Cell
     {
     public:
-        Cell();
         explicit Cell( int32_t );
 
         void ResetQuality( void );
@@ -81,9 +79,6 @@ namespace Battle
         void SetUnit( Unit * );
 
     private:
-        friend StreamBase & operator<<( StreamBase &, const Cell & );
-        friend StreamBase & operator>>( StreamBase &, Cell & );
-
         s32 index;
         fheroes2::Rect pos;
         int object;
@@ -92,9 +87,6 @@ namespace Battle
         Unit * troop;
         fheroes2::Point coord[7];
     };
-
-    StreamBase & operator<<( StreamBase &, const Cell & );
-    StreamBase & operator>>( StreamBase &, Cell & );
 
     class Position : protected std::pair<Cell *, Cell *>
     {
@@ -106,7 +98,6 @@ namespace Battle
         void Set( s32 head, bool wide, bool reflect );
         void Swap( void );
         bool isReflect( void ) const;
-        bool isValid( void ) const;
         bool contains( int cellIndex ) const;
 
         static Position GetCorrect( const Unit &, s32 );

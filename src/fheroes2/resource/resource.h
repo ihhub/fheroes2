@@ -43,11 +43,6 @@ struct cost_t
 
 class ResourceCount;
 
-#ifdef WITH_XML
-class TiXmlElement;
-void LoadCostFromXMLElement( cost_t &, const TiXmlElement & );
-#endif
-
 namespace Resource
 {
     enum

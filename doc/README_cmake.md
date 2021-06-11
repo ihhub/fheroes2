@@ -8,10 +8,10 @@ Next, you can build project with following commands:
 
 ```shell
 # SDL1
-cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON
+cmake -B build -DUSE_SDL_VERSION=SDL -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON
 # OR
 # SDL2
-cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_MIXER=ON -DENABLE_UNICODE=ON
+cmake -B build -DUSE_SDL_VERSION=SDL2 -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON
 ```
 
 After configuration let's build project:

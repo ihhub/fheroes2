@@ -32,10 +32,6 @@
 #include "resource.h"
 #include "skill.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Heroes;
 class Spell;
 class Monster;
@@ -195,10 +191,15 @@ namespace Maps
         uint32_t GetRegion() const;
         void UpdateRegion( uint32_t newRegionID );
         void UpdatePassable( void );
+
+        // ICN::FLAGS32 version
         void CaptureFlags32( int obj, int col );
 
+        // Removes all ICN::FLAGS32 objects from this tile.
+        void removeFlags();
+
         void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI );
+        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
         void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
@@ -209,7 +210,7 @@ namespace Maps
         void RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
-        void RedrawFogs( fheroes2::Image &, int, const Interface::GameArea & area ) const;
+        void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI ) const;
 
@@ -234,6 +235,7 @@ namespace Maps
             return ( fog_colors & colors ) == colors;
         }
 
+        bool isFogAllAround( const int color ) const;
         void ClearFog( int color );
 
         /* monster operation */
@@ -278,21 +280,30 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
-        static int ColorFromBarrierSprite( uint8_t tileset, uint8_t icnIndex );
-        static int ColorFromTravellerTentSprite( uint8_t tileset, uint8_t icnIndex );
-        static int GetLoyaltyObject( uint8_t tileset, uint8_t icnIndex );
-        static bool isShadowSprite( uint8_t tileset, uint8_t icnIndex );
-        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, int resource );
+        // If tile is empty (MP2::OBJ_ZERO) then verify whether it is a coast and update the tile if needed.
+        void updateEmpty();
+
+        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
+        void setAsEmpty();
+
+        static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
+        static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
+        static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
         static void UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index );
-        static int GetPassable( uint32_t tileset, uint32_t index );
-        static std::pair<int, int> ColorRaceFromHeroSprite( uint32_t heroSpriteIndex );
-        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, uint32_t monsterIndex );
-        static void PlaceMonsterOnTile( Tiles &, const Monster &, u32 );
-        static void UpdateAbandoneMineSprite( Tiles & );
-        static void FixedPreload( Tiles & );
+        static int GetPassable( const uint32_t tileset, const uint32_t index );
+        static std::pair<int, int> ColorRaceFromHeroSprite( const uint32_t heroSpriteIndex );
+        static std::pair<uint32_t, uint32_t> GetMonsterSpriteIndices( const Tiles & tile, const uint32_t monsterIndex );
+        static void PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const uint32_t count );
+        static void UpdateAbandoneMineSprite( Tiles & tile );
+        static void FixedPreload( Tiles & tile );
 
     private:
         TilesAddon * FindFlags( void );
+
+        // correct flags, ICN::FLAGS32 vesion
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
         bool isLongObject( int direction );
@@ -310,11 +321,11 @@ namespace Maps
         static void UpdateRNDArtifactSprite( Tiles & );
         static void UpdateRNDResourceSprite( Tiles & );
 
+        static void updateTileById( Maps::Tiles & tile, const uint32_t uid, const uint8_t newIndex );
+
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
-#ifdef WITH_XML
-        friend TiXmlElement & operator>>( TiXmlElement &, Tiles & );
-#endif
+
         friend bool operator<( const Tiles & l, const Tiles & r )
         {
             return l.GetIndex() < r.GetIndex();

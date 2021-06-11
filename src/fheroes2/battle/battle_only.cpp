@@ -47,8 +47,6 @@ namespace
     const uint32_t primaryMaxValue = 20;
 }
 
-void RedrawPrimarySkillInfo( const fheroes2::Point &, PrimarySkillsBar *, PrimarySkillsBar * ); /* heroes_meeting.cpp */
-
 void Battle::ControlInfo::Redraw( void ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -97,11 +95,10 @@ bool Battle::Only::ChangeSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::StandardWindow frameborder( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
@@ -180,7 +177,6 @@ bool Battle::Only::ChangeSettings( void )
     fheroes2::Button buttonStart( cur_pt.x + 280, cur_pt.y + 428, ICN::SYSTEM, 1, 2 );
     buttonStart.draw();
 
-    cursor.Show();
     display.render();
 
     // message loop
@@ -369,28 +365,34 @@ bool Battle::Only::ChangeSettings( void )
             }
         }
 
-        if ( redraw || !cursor.isVisible() ) {
-            cursor.Hide();
-            RedrawBaseInfo( cur_pt );
-            moraleIndicator1->Redraw();
-            luckIndicator1->Redraw();
-            secskill_bar1->Redraw();
-            selectArtifacts1->Redraw();
-            selectArmy1->Redraw();
-            if ( hero2 ) {
-                moraleIndicator2->Redraw();
-                luckIndicator2->Redraw();
-                secskill_bar2->Redraw();
-                selectArtifacts2->Redraw();
-            }
-            selectArmy2->Redraw();
-            if ( cinfo2 )
-                cinfo2->Redraw();
-            buttonStart.draw();
-            cursor.Show();
-            display.render();
-            redraw = false;
+        if ( !redraw ) {
+            continue;
         }
+
+        RedrawBaseInfo( cur_pt );
+        moraleIndicator1->Redraw();
+        luckIndicator1->Redraw();
+        secskill_bar1->Redraw();
+        selectArtifacts1->Redraw();
+        selectArmy1->Redraw();
+
+        if ( hero2 ) {
+            moraleIndicator2->Redraw();
+            luckIndicator2->Redraw();
+            secskill_bar2->Redraw();
+            selectArtifacts2->Redraw();
+        }
+
+        selectArmy2->Redraw();
+
+        if ( cinfo2 ) {
+            cinfo2->Redraw();
+        }
+
+        buttonStart.draw();
+        display.render();
+
+        redraw = false;
     }
 
     moraleIndicator1.reset();
@@ -561,7 +563,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
 
     // primary skill
-    RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
+    fheroes2::RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
 void Battle::Only::StartBattle( void )

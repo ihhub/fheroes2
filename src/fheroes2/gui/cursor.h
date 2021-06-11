@@ -22,13 +22,12 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
-#include "gamedefs.h"
 #include "math_base.h"
 
 class Cursor
 {
 public:
-    enum
+    enum CursorType : int
     {
         NONE = 0x0000,
         // ADVMCO.ICN
@@ -36,34 +35,7 @@ public:
         WAIT = 0x1001,
         HEROES = 0x1002,
         CASTLE = 0x1003,
-        MOVE = 0x1004,
-        FIGHT = 0x1005,
-        BOAT = 0x1006,
-        ANCHOR = 0x1007,
-        CHANGE = 0x1008,
-        ACTION = 0x1009,
-        MOVE2 = 0x100A,
-        FIGHT2 = 0x100B,
-        BOAT2 = 0x100C,
-        ANCHOR2 = 0x100D,
-        CHANGE2 = 0x100E,
-        ACTION2 = 0x100F,
-        MOVE3 = 0x1010,
-        FIGHT3 = 0x1011,
-        BOAT3 = 0x1012,
-        ANCHOR3 = 0x1013,
-        CHANGE3 = 0x1014,
-        ACTION3 = 0x1015,
-        MOVE4 = 0x1016,
-        FIGHT4 = 0x1017,
-        BOAT4 = 0x1018,
-        ANCHOR4 = 0x1019,
-        CHANGE4 = 0x101A,
-        ACTION4 = 0x101B,
-        REDBOAT = 0x101C,
-        REDBOAT2 = 0x101D,
-        REDBOAT3 = 0x101E,
-        REDBOAT4 = 0x101F,
+        // 0x1004 to 0x101F are not in use anymore
         SCROLL_TOP = 0x1020,
         SCROLL_TOPRIGHT = 0x1021,
         SCROLL_RIGHT = 0x1022,
@@ -132,18 +104,79 @@ public:
         SP_ARROW = 0x3026
     };
 
+    enum MapHeroCursor : int
+    {
+        CURSOR_HERO_MOVE = 0x4000,
+        CURSOR_HERO_MOVE_2,
+        CURSOR_HERO_MOVE_3,
+        CURSOR_HERO_MOVE_4,
+        CURSOR_HERO_MOVE_5,
+        CURSOR_HERO_MOVE_6,
+        CURSOR_HERO_MOVE_7,
+        CURSOR_HERO_MOVE_8,
+        CURSOR_HERO_FIGHT,
+        CURSOR_HERO_FIGHT_2,
+        CURSOR_HERO_FIGHT_3,
+        CURSOR_HERO_FIGHT_4,
+        CURSOR_HERO_FIGHT_5,
+        CURSOR_HERO_FIGHT_6,
+        CURSOR_HERO_FIGHT_7,
+        CURSOR_HERO_FIGHT_8,
+        CURSOR_HERO_BOAT,
+        CURSOR_HERO_BOAT_2,
+        CURSOR_HERO_BOAT_3,
+        CURSOR_HERO_BOAT_4,
+        CURSOR_HERO_BOAT_5,
+        CURSOR_HERO_BOAT_6,
+        CURSOR_HERO_BOAT_7,
+        CURSOR_HERO_BOAT_8,
+        CURSOR_HERO_ANCHOR,
+        CURSOR_HERO_ANCHOR_2,
+        CURSOR_HERO_ANCHOR_3,
+        CURSOR_HERO_ANCHOR_4,
+        CURSOR_HERO_ANCHOR_5,
+        CURSOR_HERO_ANCHOR_6,
+        CURSOR_HERO_ANCHOR_7,
+        CURSOR_HERO_ANCHOR_8,
+        CURSOR_HERO_MEET,
+        CURSOR_HERO_MEET_2,
+        CURSOR_HERO_MEET_3,
+        CURSOR_HERO_MEET_4,
+        CURSOR_HERO_MEET_5,
+        CURSOR_HERO_MEET_6,
+        CURSOR_HERO_MEET_7,
+        CURSOR_HERO_MEET_8,
+        CURSOR_HERO_ACTION,
+        CURSOR_HERO_ACTION_2,
+        CURSOR_HERO_ACTION_3,
+        CURSOR_HERO_ACTION_4,
+        CURSOR_HERO_ACTION_5,
+        CURSOR_HERO_ACTION_6,
+        CURSOR_HERO_ACTION_7,
+        CURSOR_HERO_ACTION_8,
+        CURSOR_HERO_BOAT_ACTION,
+        CURSOR_HERO_BOAT_ACTION_2,
+        CURSOR_HERO_BOAT_ACTION_3,
+        CURSOR_HERO_BOAT_ACTION_4,
+        CURSOR_HERO_BOAT_ACTION_5,
+        CURSOR_HERO_BOAT_ACTION_6,
+        CURSOR_HERO_BOAT_ACTION_7,
+        CURSOR_HERO_BOAT_ACTION_8
+    };
+
+    Cursor( const Cursor & ) = delete;
+
+    Cursor & operator=( const Cursor & ) = delete;
+
     static Cursor & Get( void );
 
     static void Redraw( int32_t, int32_t );
-    static int DistanceThemes( int, u32 );
-    static int WithoutDistanceThemes( int );
+    static int DistanceThemes( const int theme, uint32_t distance );
+    static int WithoutDistanceThemes( const int theme );
     static void Refresh();
 
     int Themes() const;
     bool SetThemes( int, bool force = false );
-    void Show() const;
-    void Hide() const;
-    bool isVisible( void ) const;
 
     // Only for software emulation.
     void setVideoPlaybackCursor();
@@ -159,6 +192,22 @@ private:
     int theme;
     int32_t offset_x;
     int32_t offset_y;
+};
+
+class CursorRestorer
+{
+public:
+    CursorRestorer();
+    CursorRestorer( const bool visible, const int theme ); // For convenience, also sets visibility and theme of the cursor
+    CursorRestorer( const CursorRestorer & ) = delete;
+
+    ~CursorRestorer();
+
+    CursorRestorer & operator=( const CursorRestorer & ) = delete;
+
+private:
+    const int _theme;
+    const bool _visible;
 };
 
 #endif

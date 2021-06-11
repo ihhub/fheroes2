@@ -234,7 +234,6 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
 
     if ( conf.ExtGameHideInterface() && le.MousePressLeft( border.GetTop() ) ) {
         fheroes2::Display & display = fheroes2::Display::instance();
-        Cursor & cursor = Cursor::Get();
 
         const fheroes2::Point & mp = le.GetMouseCursor();
         const fheroes2::Rect & pos = GetRect();
@@ -246,22 +245,17 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
         const int32_t ox = mp.x - pos.x;
         const int32_t oy = mp.y - pos.y;
 
-        cursor.Hide();
         moveIndicator.setPosition( pos.x, pos.y );
         moveIndicator.redraw();
-        cursor.Show();
         display.render();
 
         while ( le.HandleEvents() && le.MousePressLeft() ) {
             if ( le.MouseMotion() ) {
-                cursor.Hide();
                 moveIndicator.setPosition( mp.x - ox, mp.y - oy );
-                cursor.Show();
                 display.render();
             }
         }
 
-        cursor.Hide();
         SetPos( mp.x - ox, mp.y - oy );
         Interface::Basic::Get().SetRedraw( REDRAW_GAMEAREA );
 

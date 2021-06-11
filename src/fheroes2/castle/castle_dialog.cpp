@@ -118,23 +118,16 @@ int Castle::OpenDialog( bool readonly )
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
 
-    const bool interface = conf.ExtGameEvilInterface();
-    if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( ( GetRace() & ( Race::BARB | Race::WRLK | Race::NECR ) ) != 0 );
-
     CastleHeroes heroes = world.GetHeroes( *this );
-
-    // cursor
-    Cursor & cursor = Cursor::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
 
     // fade
     if ( conf.ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
@@ -241,7 +234,6 @@ int Castle::OpenDialog( bool readonly )
     AGG::PlayMusic( MUS::FromRace( race ), true, true );
 
     LocalEvent & le = LocalEvent::Get();
-    cursor.Show();
 
     bool firstDraw = true;
 
@@ -281,7 +273,6 @@ int Castle::OpenDialog( bool readonly )
                    && ( ( le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( selectArmy2, &msg_status ) )
                         || ( le.MouseCursor( selectArmy2.GetArea() ) && selectArmy2.QueueEventProcessing( selectArmy1, &msg_status ) ) ) )
                  || ( !selectArmy2.isValid() && le.MouseCursor( selectArmy1.GetArea() ) && selectArmy1.QueueEventProcessing( &msg_status ) ) ) {
-                cursor.Hide();
                 need_redraw = true;
             }
 
@@ -321,7 +312,6 @@ int Castle::OpenDialog( bool readonly )
                 }
 
                 if ( army1 || army2 ) {
-                    cursor.Hide();
                     if ( selectArmy1.isSelected() )
                         selectArmy1.ResetSelected();
                     if ( selectArmy2.isValid() && selectArmy2.isSelected() )
@@ -517,9 +507,7 @@ int Castle::OpenDialog( bool readonly )
                                 if ( build != BUILD_NOTHING ) {
                                     BuyBuilding( build );
                                     if ( BUILD_CAPTAIN == build ) {
-                                        cursor.Hide();
                                         RedrawIcons( *this, heroes, cur_pt );
-                                        cursor.Show();
                                         display.render();
                                     }
                                 }
@@ -538,12 +526,10 @@ int Castle::OpenDialog( bool readonly )
                                     if ( prev ) {
                                         selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
                                         selectArmy2.SetArmy( NULL );
-                                        cursor.Hide();
                                         RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
                                         selectArmy1.Redraw();
                                         if ( selectArmy2.isValid() )
                                             selectArmy2.Redraw();
-                                        cursor.Show();
                                         display.render();
                                     }
                                     selectArmy2.SetArmy( &heroes.Guest()->GetArmy() );
@@ -591,7 +577,6 @@ int Castle::OpenDialog( bool readonly )
             }
         }
         if ( need_redraw ) {
-            cursor.Hide();
             selectArmy1.Redraw();
             if ( selectArmy2.isValid() && alphaHero >= 255 )
                 selectArmy2.Redraw();
@@ -603,7 +588,6 @@ int Castle::OpenDialog( bool readonly )
             }
             if ( buttonExit.isPressed() )
                 buttonExit.draw();
-            cursor.Show();
             display.render();
         }
 
@@ -643,10 +627,8 @@ int Castle::OpenDialog( bool readonly )
                 BuyBuilding( build );
                 if ( BUILD_CAPTAIN == build )
                     RedrawIcons( *this, heroes, cur_pt );
-                cursor.Hide();
                 CastleRedrawTownName( *this, cur_pt );
                 RedrawResourcePanel( cur_pt );
-                cursor.Show();
                 display.render();
             }
             fadeBuilding.StopFadeBuilding();
@@ -654,17 +636,13 @@ int Castle::OpenDialog( bool readonly )
         // animation sprite
         if ( firstDraw || Game::validateAnimationDelay( Game::CASTLE_AROUND_DELAY ) ) {
             firstDraw = false;
-            cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );
-            cursor.Show();
             display.render();
 
             Game::CastleAnimationFrame() += 1; // this function returns variable by reference
         }
         else if ( need_redraw ) {
-            cursor.Hide();
             CastleDialog::RedrawAllBuilding( *this, cur_pt, cacheBuildings, fadeBuilding );
-            cursor.Show();
             display.render();
             need_redraw = false;
         }
@@ -674,9 +652,6 @@ int Castle::OpenDialog( bool readonly )
     if ( build != BUILD_NOTHING ) {
         BuyBuilding( build );
     }
-
-    if ( conf.ExtGameDynamicInterface() )
-        conf.SetEvilInterface( interface );
 
     Game::DisableChangeMusic( false );
 

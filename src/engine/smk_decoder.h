@@ -45,6 +45,8 @@ public:
     // If the image is smaller than the frame then only a part of the frame will be drawn.
     void getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette );
 
+    std::vector<uint8_t> getCurrentPalette() const;
+
     const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
 
     int32_t width() const;

@@ -92,8 +92,8 @@ public:
     void ActionListPressRight( int32_t & index ) override
     {
         const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
+
         if ( castle != nullptr ) {
-            Cursor::Get().Hide();
             Dialog::QuickInfo( *castle );
         }
     }
@@ -273,7 +273,6 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        Cursor::Get().Hide();
         hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
@@ -411,10 +410,8 @@ bool ActionSpellDimensionDoor( Heroes & hero )
     const u32 distance = Spell::CalculateDimensionDoorDistance( hero.GetPower(), hero.GetArmy().GetHitPoints() );
 
     Interface::Basic & I = Interface::Basic::Get();
-    Cursor & cursor = Cursor::Get();
 
     // center hero
-    cursor.Hide();
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.RedrawFocus();
     I.Redraw();
@@ -430,7 +427,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
-        cursor.Hide();
         hero.ApplyPenaltyMovement( dimensionDoorPenalty );
         hero.Move2Dest( dst );
 
@@ -442,9 +438,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-
-        // No action is being made. Uncomment this code if the logic will be changed
-        // hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         I.ResetFocus( GameFocus::HEROES );
 
@@ -475,10 +469,8 @@ bool ActionSpellTownGate( Heroes & hero )
         }
 
     Interface::Basic & I = Interface::Basic::Get();
-    Cursor & cursor = Cursor::Get();
 
     // center hero
-    cursor.Hide();
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.RedrawFocus();
     I.Redraw();
@@ -501,12 +493,12 @@ bool ActionSpellTownPortal( Heroes & hero )
     std::vector<s32> castles;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     LocalEvent & le = LocalEvent::Get();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
 
     for ( KingdomCastles::const_iterator it = kingdom.GetCastles().begin(); it != kingdom.GetCastles().end(); ++it )
         if ( *it && !( *it )->GetHeroes().Guest() )
@@ -540,18 +532,18 @@ bool ActionSpellTownPortal( Heroes & hero )
                             Dialog::CANCEL );
     btnGroups.draw();
 
-    cursor.Show();
     display.render();
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         result = btnGroups.processEvents();
         listbox.QueueEventProcessing();
 
-        if ( !cursor.isVisible() ) {
-            listbox.Redraw();
-            cursor.Show();
-            display.render();
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
         }
+
+        listbox.Redraw();
+        display.render();
     }
     frameborder.reset();
     // store
@@ -564,7 +556,12 @@ bool ActionSpellTownPortal( Heroes & hero )
 bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
-    const MapsIndexes & monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+    MapsIndexes monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+
+    const int32_t heroColor = hero.GetColor();
+    monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
+                                                                      [heroColor]( const int32_t index ) { return world.GetTiles( index ).isFog( heroColor ); } ) ) );
+
     if ( monsters.empty() ) {
         std::string msg = _( "You must be within %{count} spaces of a monster for the Visions spell to work." );
         StringReplace( msg, "%{count}", dist );
@@ -637,6 +634,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
 
         if ( spell == Spell::HAUNT ) {
             world.CaptureObject( tile.GetIndex(), Color::UNUSED );
+            tile.removeFlags();
             hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
 

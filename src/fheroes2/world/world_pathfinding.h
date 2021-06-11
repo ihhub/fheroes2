@@ -36,7 +36,6 @@ public:
     virtual void checkWorldSize();
 
     // Shared helper methods
-    bool isBlockedByObject( int target, bool fromWater = false ) const;
     uint32_t getMovementPenalty( int start, int target, int direction, uint8_t skill = Skill::Level::EXPERT ) const;
 
 protected:
@@ -78,7 +77,6 @@ public:
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
     std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
-    uint32_t getDistance( const Heroes & hero, int targetIndex );
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );

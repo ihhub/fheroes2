@@ -185,9 +185,6 @@ public:
 
     void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) );
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
-    void SetGlobalFilter( bool );
-    void SetMouseOffsetX( int32_t );
-    void SetMouseOffsetY( int32_t );
 
     static void SetStateDefaults( void );
     static void SetState( u32 type, bool enable );
@@ -275,19 +272,24 @@ private:
     void HandleMouseMotionEvent( const SDL_MouseMotionEvent & );
     void HandleMouseButtonEvent( const SDL_MouseButtonEvent & );
     void HandleKeyboardEvent( const SDL_KeyboardEvent & );
+
     void StopSounds();
     void ResumeSounds();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     static int GlobalFilterEvents( void *, SDL_Event * );
+
+    void HandleMouseWheelEvent( const SDL_MouseWheelEvent & );
     void HandleControllerAxisEvent( const SDL_ControllerAxisEvent & motion );
     void HandleControllerButtonEvent( const SDL_ControllerButtonEvent & button );
     void ProcessControllerAxisMotion();
     void HandleTouchEvent( const SDL_TouchFingerEvent & event );
+
     void OnSdl2WindowEvent( const SDL_Event & event );
 #else
     static int GlobalFilterEvents( const SDL_Event * );
+
+    void OnActiveEvent( const SDL_Event & event );
 #endif
 
     enum flag_t
@@ -295,15 +297,10 @@ private:
         KEY_PRESSED = 0x0001,
         MOUSE_MOTION = 0x0002,
         MOUSE_PRESSED = 0x0004, // mouse button is currently pressed
-        GLOBAL_FILTER = 0x0008,
-        MOUSE_RELEASED = 0x0010, // mouse button has just been released
-        MOUSE_CLICKED = 0x0020, // mouse button has been clicked
-        UNUSED_1 = 0x0040,
-        UNUSED_2 = 0x0080,
-        MOUSE_OFFSET = 0x0100,
-        UNUSED_3 = 0x0200,
-        MOUSE_WHEEL = 0x0400,
-        KEY_HOLD = 0x0800
+        MOUSE_RELEASED = 0x0008, // mouse button has just been released
+        MOUSE_CLICKED = 0x0010, // mouse button has been clicked
+        MOUSE_WHEEL = 0x0020,
+        KEY_HOLD = 0x0040
     };
 
     void SetModes( flag_t );
@@ -311,10 +308,7 @@ private:
 
     int modes;
     KeySym key_value;
-    int mouse_state;
     int mouse_button;
-
-    fheroes2::Point mouse_st; // mouse offset for pocketpc
 
     fheroes2::Point mouse_pl; // press left
     fheroes2::Point mouse_pm; // press middle
@@ -332,12 +326,6 @@ private:
     void ( *keyboard_filter_func )( int, int );
 
     uint32_t loop_delay;
-
-    // These members are used for restoring music and sounds when an user reopens the window
-    bool _isHiddenWindow;
-    bool _isMusicPaused;
-    bool _isSoundPaused;
-    uint16_t _musicVolume;
 
     enum
     {

@@ -37,12 +37,8 @@ int Dialog::AdventureOptions( bool enabledig )
     const int apanbkg = isEvilInterface ? ICN::APANBKGE : ICN::APANBKG;
     const int apanel = isEvilInterface ? ICN::APANELE : ICN::APANEL;
 
-    // cursor
-    Cursor & cursor = Cursor::Get();
-    const int oldcursor = cursor.Themes();
-
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( apanbkg, 0 );
@@ -70,7 +66,6 @@ int Dialog::AdventureOptions( bool enabledig )
     buttonDig.draw();
     buttonCancel.draw();
 
-    cursor.Show();
     display.render();
 
     int result = Dialog::ZERO;
@@ -118,10 +113,7 @@ int Dialog::AdventureOptions( bool enabledig )
     }
 
     // restore background
-    cursor.Hide();
     back.restore();
-    cursor.SetThemes( oldcursor );
-    cursor.Show();
     display.render();
 
     return result;

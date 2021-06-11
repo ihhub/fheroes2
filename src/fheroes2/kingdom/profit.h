@@ -30,8 +30,6 @@ namespace ProfitConditions
     payment_t FromBuilding( u32, int );
     payment_t FromArtifact( int );
     payment_t FromMine( int );
-
-    void UpdateCosts( const std::string & );
 }
 
 #endif

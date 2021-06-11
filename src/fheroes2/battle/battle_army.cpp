@@ -106,16 +106,6 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-void Battle::Units::SortStrongest( void )
-{
-    std::sort( begin(), end(), Army::StrongestTroop );
-}
-
-void Battle::Units::SortWeakest( void )
-{
-    std::sort( begin(), end(), Army::WeakestTroop );
-}
-
 void Battle::Units::SortArchers( void )
 {
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
@@ -297,33 +287,6 @@ Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force &
     Unit * result = ForceGetCurrentUnitPart( units1, units2, part1, preferredColor != army2.GetColor(), false );
 
     return result && result->isValid() ? result : nullptr;
-}
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Force & f )
-{
-    msg << static_cast<const BitModes &>( f ) << static_cast<u32>( f.size() );
-
-    for ( Force::const_iterator it = f.begin(); it != f.end(); ++it )
-        msg << ( *it )->GetUID() << **it;
-
-    return msg;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Force & f )
-{
-    u32 size = 0;
-    u32 uid = 0;
-
-    msg >> static_cast<BitModes &>( f ) >> size;
-
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        msg >> uid;
-        Unit * b = f.FindUID( uid );
-        if ( b )
-            msg >> *b;
-    }
-
-    return msg;
 }
 
 Troops Battle::Force::GetKilledTroops( void ) const

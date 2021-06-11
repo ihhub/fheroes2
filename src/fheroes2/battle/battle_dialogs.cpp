@@ -32,6 +32,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "heroes.h"
+#include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"
@@ -198,11 +199,11 @@ void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string 
 void Battle::DialogBattleSettings( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     Settings & conf = Settings::Get();
 
-    cursor.Hide();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -237,7 +238,6 @@ void Battle::DialogBattleSettings( void )
 
     RedrawBattleSettings( optionAreas );
 
-    cursor.Show();
     display.render();
 
     bool saveConfiguration = false;
@@ -329,14 +329,14 @@ void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 ex
 bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transferArtifacts, bool allowToCancel ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
     const Troops killed1 = army1->GetKilledTroops();
     const Troops killed2 = army2->GetKilledTroops();
 
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     std::string msg;
     std::string title;
@@ -456,7 +456,6 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
     btn_ok.draw();
 
-    cursor.Show();
     display.render();
 
     while ( le.HandleEvents() ) {
@@ -668,6 +667,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     pos_rt.x += 15;
     pos_rt.width -= 15;
 
+    const fheroes2::Rect portraitArea( pos_rt.x + 7, pos_rt.y + 35, 113, 108 );
+    const Heroes * actionHero = ( current_color == hero.GetColor() ) ? dynamic_cast<const Heroes *>( &hero ) : nullptr;
+
     hero.PortraitRedraw( pos_rt.x + 12, pos_rt.y + 42, PORT_BIG, display );
     int col = ( Color::NONE == hero.GetColor() ? 1 : Color::GetIndex( hero.GetColor() ) + 1 );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::VIEWGEN, col ), display, pos_rt.x + 133, pos_rt.y + 36 );
@@ -765,6 +767,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             else if ( le.MouseCursor( btnClose.area() ) ) {
                 statusMessage = _( "Cancel" );
             }
+            else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr ) {
+                statusMessage = _( "Hero Screen" );
+            }
             else {
                 statusMessage = _( "Hero's Options" );
             }
@@ -782,22 +787,34 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
             result = 3;
 
-        if ( le.MousePressRight( btnCast.area() ) )
+        if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
+            // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
+        }
+
+        if ( le.MousePressRight( btnCast.area() ) ) {
             Dialog::Message( _( "Cast Spell" ),
                              _( "Cast a magical spell. You may only cast one spell per combat round. The round is reset when every creature has had a turn." ),
                              Font::BIG );
-        else if ( le.MousePressRight( btnRetreat.area() ) )
+        }
+        else if ( le.MousePressRight( btnRetreat.area() ) ) {
             Dialog::Message(
                 _( "Retreat" ),
                 _( "Retreat your hero, abandoning your creatures. Your hero will be available for you to recruit again, however, the hero will have only a novice hero's forces." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnSurrender.area() ) )
+        }
+        else if ( le.MousePressRight( btnSurrender.area() ) ) {
             Dialog::Message(
                 _( "Surrender" ),
                 _( "Surrendering costs gold. However if you pay the ransom, the hero and all of his or her surviving creatures will be available to recruit again." ),
                 Font::BIG );
-        else if ( le.MousePressRight( btnClose.area() ) )
+        }
+        else if ( le.MousePressRight( portraitArea ) ) {
+            Dialog::Message( _( "Hero Screen" ), _( "Open Hero Screen to view full information about the hero." ), Font::BIG );
+        }
+        else if ( le.MousePressRight( btnClose.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Return to the battle." ), Font::BIG );
+        }
 
         // exit
         if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
@@ -818,12 +835,11 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         return false;
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    cursor.Hide();
-    cursor.SetThemes( Cursor::POINTER );
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
 
@@ -906,7 +922,6 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         drawGoldMsg();
     }
 
-    cursor.Show();
     display.render();
 
     bool result = false;

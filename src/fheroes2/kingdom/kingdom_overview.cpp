@@ -182,21 +182,17 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & c
     if ( ( row.armyBar->GetArea() & cursorPos ) && row.armyBar->QueueEventProcessing() ) {
         if ( row.artifactsBar->isSelected() )
             row.artifactsBar->ResetSelected();
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.artifactsBar->GetArea() & cursorPos ) && row.artifactsBar->QueueEventProcessing() ) {
         if ( row.armyBar->isSelected() )
             row.armyBar->ResetSelected();
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.primskillsBar->GetArea() & cursorPos ) && row.primskillsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         return true;
     }
     else if ( ( row.secskillsBar->GetArea() & cursorPos ) && row.secskillsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         return true;
     }
 
@@ -405,20 +401,17 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & 
 
     if ( row.armyBarGuard && ( row.armyBarGuard->GetArea() & cursorPos )
          && ( row.armyBarGuest ? row.armyBarGuard->QueueEventProcessing( *row.armyBarGuest ) : row.armyBarGuard->QueueEventProcessing() ) ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
         return true;
     }
     else if ( row.armyBarGuest && ( row.armyBarGuest->GetArea() & cursorPos )
               && ( row.armyBarGuard ? row.armyBarGuest->QueueEventProcessing( *row.armyBarGuard ) : row.armyBarGuest->QueueEventProcessing() ) ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
             row.armyBarGuard->ResetSelected();
         return true;
     }
     else if ( row.dwellingsBar && ( row.dwellingsBar->GetArea() & cursorPos ) && row.dwellingsBar->QueueEventProcessing() ) {
-        Cursor::Get().Hide();
         if ( row.armyBarGuest && row.armyBarGuest->isSelected() )
             row.armyBarGuest->ResetSelected();
         if ( row.armyBarGuard && row.armyBarGuard->isSelected() )
@@ -597,9 +590,9 @@ void RedrawFundsInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 void Kingdom::OverviewDialog( void )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    cursor.Hide();
-    cursor.SetThemes( cursor.POINTER );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::StandardWindow background( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
@@ -651,7 +644,6 @@ void Kingdom::OverviewDialog( void )
     buttonCastle.draw();
     buttonExit.draw();
 
-    cursor.Show();
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -664,7 +656,6 @@ void Kingdom::OverviewDialog( void )
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
-            cursor.Hide();
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
             listStats = &listHeroes;
@@ -672,7 +663,6 @@ void Kingdom::OverviewDialog( void )
             redraw = true;
         }
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
-            cursor.Hide();
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
             listStats = &listCastles;
@@ -691,30 +681,32 @@ void Kingdom::OverviewDialog( void )
         else if ( le.MousePressRight( rectIncome ) )
             Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
 
-        if ( !cursor.isVisible() || redraw ) {
-            // check if graphics in main world map window should change, this can happen in several situations:
-            // - hero dismissed -> hero icon list is updated and world map focus changed
-            // - hero hired -> hero icon list is updated
-            // So, it's equivalent to check if hero list changed
-            if ( listHeroes.Refresh( heroes ) ) {
-                worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
-                // redraw the main game window on screen, which will also erase current kingdom window
-                Interface::Basic::Get().Redraw();
-                // redraw Kingdom window from scratch, because it's now invalid
-                background.render();
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
-                buttonHeroes.draw();
-                buttonCastle.draw();
-                buttonExit.draw();
-            }
-
-            listStats->Redraw();
-            RedrawIncomeInfo( cur_pt, *this );
-            RedrawFundsInfo( cur_pt, *this );
-            cursor.Show();
-            display.render();
-            redraw = false;
+        if ( !listStats->IsNeedRedraw() && !redraw ) {
+            continue;
         }
+
+        // check if graphics in main world map window should change, this can happen in several situations:
+        // - hero dismissed -> hero icon list is updated and world map focus changed
+        // - hero hired -> hero icon list is updated
+        // So, it's equivalent to check if hero list changed
+        if ( listHeroes.Refresh( heroes ) ) {
+            worldMapRedrawMask |= Interface::Basic::Get().GetRedrawMask();
+            // redraw the main game window on screen, which will also erase current kingdom window
+            Interface::Basic::Get().Redraw();
+            // redraw Kingdom window from scratch, because it's now invalid
+            background.render();
+            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::OVERBACK, 0 ), display, cur_pt.x, cur_pt.y );
+            buttonHeroes.draw();
+            buttonCastle.draw();
+            buttonExit.draw();
+        }
+
+        listStats->Redraw();
+        RedrawIncomeInfo( cur_pt, *this );
+        RedrawFundsInfo( cur_pt, *this );
+        display.render();
+
+        redraw = false;
     }
 
     if ( worldMapRedrawMask != 0 ) {

@@ -156,7 +156,7 @@ namespace fheroes2
         friend Display;
         virtual ~Cursor() = default;
 
-        void show( const bool enable )
+        virtual void show( const bool enable )
         {
             _show = enable;
         }

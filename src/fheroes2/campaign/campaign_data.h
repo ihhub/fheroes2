@@ -43,11 +43,6 @@ namespace Campaign
             return _campaignID;
         }
 
-        bool isGoodCampaign() const
-        {
-            return _isGoodCampaign;
-        }
-
         const std::vector<ScenarioData> & getAllScenarios() const
         {
             return _scenarios;
@@ -62,7 +57,6 @@ namespace Campaign
         bool isStartingScenario( const int scenarioID ) const;
 
         void setCampaignID( const int campaignID );
-        void setCampaignAlignment( const bool isGoodCampaign );
         void setCampaignDescription( const std::string & campaignDescription );
         void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
 
@@ -70,7 +64,6 @@ namespace Campaign
 
     private:
         int _campaignID;
-        bool _isGoodCampaign;
         std::string _campaignDescription;
         std::vector<ScenarioData> _scenarios;
     };

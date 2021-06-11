@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+#include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
 
@@ -80,7 +81,7 @@ namespace Dialog
     };
 
     int AdventureOptions( bool enabledig );
-    int FileOptions( void );
+    fheroes2::GameMode FileOptions();
     int SystemOptions( void );
     std::string SelectFileLoad( void );
     std::string SelectFileSave( void );
@@ -152,7 +153,6 @@ namespace Dialog
         explicit FrameBorder( int v = BORDERWIDTH );
         explicit FrameBorder( const fheroes2::Size & );
         FrameBorder( const fheroes2::Size &, const fheroes2::Image & );
-        ~FrameBorder();
 
         int BorderWidth() const;
         int BorderHeight() const;

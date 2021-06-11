@@ -385,13 +385,3 @@ bool Battle::Result::DefenderWins( void ) const
 {
     return ( army2 & RESULT_WINS ) != 0;
 }
-
-StreamBase & Battle::operator<<( StreamBase & msg, const Result & res )
-{
-    return msg << res.army1 << res.army2 << res.exp1 << res.exp2 << res.killed;
-}
-
-StreamBase & Battle::operator>>( StreamBase & msg, Result & res )
-{
-    return msg >> res.army1 >> res.army2 >> res.exp1 >> res.exp2 >> res.killed;
-}
