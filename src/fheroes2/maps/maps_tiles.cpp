@@ -869,7 +869,7 @@ Maps::Tiles::Tiles()
     , uniq( 0 )
     , objectTileset( 0 )
     , objectIndex( 255 )
-    , mp2_object( 0 )
+    , mp2_object( MP2::OBJ_ZERO )
     , tilePassable( DIRECTION_ALL )
     , fog_colors( Color::ALL )
     , quantity1( 0 )
@@ -948,7 +948,7 @@ MP2::OBJ Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */ ) const
         return hero ? hero->GetMapsObject() : MP2::OBJ_ZERO;
     }
 
-    return static_cast<MP2::OBJ>(mp2_object);
+    return mp2_object;
 }
 
 void Maps::Tiles::SetObject( const MP2::OBJ object )
