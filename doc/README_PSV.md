@@ -27,9 +27,13 @@ make -f Makefile.vita
 
 ## Controls
 - Left analog stick - Pointer movement
-- X button - Left mouse button
-- O button - Right mouse button
 - D-Pad / Right analog stick - Map scrolling
+- × - Left mouse button
+- ○ - Right mouse button
+- □ - End turn
+- △ - Open spellbook
+- L1 - Next hero
+- R1 - Next castle
 - SELECT - System menu
 - START - Enter
 

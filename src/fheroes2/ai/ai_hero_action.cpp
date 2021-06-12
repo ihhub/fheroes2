@@ -888,7 +888,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isObjectTypeVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
@@ -948,7 +948,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -974,7 +974,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1584,7 +1584,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
             hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
 
