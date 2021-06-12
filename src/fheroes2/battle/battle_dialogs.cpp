@@ -541,7 +541,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                     // display captured artifact info on right click
                     const fheroes2::Rect artRect( pos_rt.x + 119, pos_rt.y + 310, artifact.width() + 10, artifact.height() + 10 );
-                    if( le.MousePressRight( artRect ) )
+                    if ( le.MousePressRight( artRect ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
