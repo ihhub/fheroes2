@@ -264,9 +264,11 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            fheroes2::showTeamInfo();
+            if ( conf.isShowIntro() ) {
+                fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            }
 
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );

@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <numeric>
 #include <set>
 
 #include "agg_image.h"
@@ -123,8 +124,8 @@ std::string Army::TroopSizeString( const Troop & troop )
 
 std::string Army::SizeString( u32 size )
 {
-    const char * str_size[] = {_( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
-                               _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" )};
+    const char * str_size[] = { _( "army|Few" ),    _( "army|Several" ), _( "army|Pack" ),   _( "army|Lots" ),  _( "army|Horde" ),
+                                _( "army|Throng" ), _( "army|Swarm" ),   _( "army|Zounds" ), _( "army|Legion" ) };
 
     switch ( ArmyGetSize( size ) ) {
     default:
@@ -1249,6 +1250,11 @@ const HeroBase * Army::GetCommander( void ) const
 int Army::GetControl( void ) const
 {
     return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
+}
+
+uint32_t Army::getTotalCount() const
+{
+    return std::accumulate( begin(), end(), 0u, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
 std::string Army::String( void ) const
