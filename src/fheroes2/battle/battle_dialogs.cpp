@@ -539,6 +539,11 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
+                    // display captured artifact info on right click
+                    const fheroes2::Rect artRect( pos_rt.x + 119, pos_rt.y + 310, artifact.width() + 10, artifact.height() + 10 );
+                    if( le.MousePressRight(artRect) )
+                        Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
+
                     // exit
                     if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
                         break;
