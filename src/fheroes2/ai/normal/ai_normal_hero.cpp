@@ -104,7 +104,7 @@ namespace AI
         if ( distance == 0 )
             return value;
         // scale non-linearly (more value lost as distance increases)
-        return value - ( 1.5 * distance * std::log10( distance ) );
+        return value - ( distance * std::log10( distance ) );
     }
 
     double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
@@ -128,7 +128,11 @@ namespace AI
                 return value;
             }
             else {
-                return castle->getBuildingValue() * 150.0 + 3000;
+                double value = castle->getBuildingValue() * 150.0 + 3000;
+                // If the castle is defenseless
+                if ( castle->GetActualArmy().GetStrength() <= 0 )
+                    value += 5;
+                return value;
             }
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
@@ -293,7 +297,12 @@ namespace AI
                         value += valueStorage.value( pair );
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
-                if ( heroStrength < regionStats.highestThreat )
+
+                const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
+                if ( node.second == MP2::OBJ_CASTLE && ( castle && ( castle->GetActualArmy().GetStrength() <= 0 || castle->GetColor() == hero.GetColor() ) ) )
+                    value -= dangerousTaskPenalty / 2;
+
+                else if ( heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
 
                 if ( dist > leftMovePoints ) {

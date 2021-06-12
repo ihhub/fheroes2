@@ -431,11 +431,6 @@ int Castle::getBuildingValue() const
         ++increase;
     }
 
-    // If a castle is defenseless we should probably capture it ?
-    if ( army.GetStrength() <= 0.0 ) {
-        value += 10;
-    }
-
     return value;
 }
 
