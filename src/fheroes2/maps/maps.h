@@ -75,7 +75,7 @@ namespace Maps
 
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
     Indexes GetObjectPositions( s32, const MP2::MapObjectType objectType, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const std::vector<MP2::MapObjectType>& objectTypes );
+    Indexes GetObjectsPositions( const std::vector<MP2::MapObjectType> & objectTypes );
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
 
