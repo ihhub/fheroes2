@@ -73,7 +73,7 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, MP2::OBJ> & objectInfo )
+        double value( const std::pair<int, MP2::MapObjectType> & objectInfo )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
@@ -107,7 +107,7 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, int index, const MP2::OBJ obj, double valueToIgnore ) const
+    double Normal::getObjectValue( const Heroes & hero, int index, const MP2::MapObjectType obj, double valueToIgnore ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -262,7 +262,7 @@ namespace AI
         int priorityTarget = -1;
         maxPriority = lowestPossibleValue;
 #ifdef WITH_DEBUG
-        MP2::OBJ obj = MP2::OBJ_ZERO;
+        MP2::MapObjectType obj = MP2::OBJ_ZERO;
 #endif
 
         // pre-cache the pathfinder

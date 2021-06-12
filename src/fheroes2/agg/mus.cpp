@@ -152,7 +152,7 @@ int MUS::FromRace( int race )
     return UNKNOWN;
 }
 
-int MUS::FromMapObject( const MP2::OBJ obj )
+int MUS::FromMapObject( const MP2::MapObjectType obj )
 {
     if ( Settings::Get().MusicMIDI() )
         return MUS::UNKNOWN;

@@ -31,7 +31,7 @@ namespace ObjMnts1
     bool isAction( u32 index );
     bool isShadow( u32 index );
     int GetPassable( int icn, u32 index );
-    MP2::OBJ GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( u32 index );
 }
 
 namespace ObjMnts2
@@ -39,7 +39,7 @@ namespace ObjMnts2
     bool isAction( u32 index );
     bool isShadow( u32 index );
     int GetPassable( int icn, u32 index );
-    MP2::OBJ GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( u32 index );
 }
 
 #endif

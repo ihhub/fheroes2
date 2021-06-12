@@ -77,7 +77,8 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask::FadeTask( MP2::OBJ object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+        FadeTask::FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
+                            bool fadeOut_,
                             bool fadeIn_, uint8_t objectTileset_ )
             : object( object_ )
             , objectIndex( objectIndex_ )
@@ -226,7 +227,7 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::OBJ obj, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType obj, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
     const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );

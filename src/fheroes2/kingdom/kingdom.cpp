@@ -391,31 +391,31 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject() );
 }
 
-bool Kingdom::isVisited( s32 index, const MP2::OBJ obj ) const
+bool Kingdom::isVisited( s32 index, const MP2::MapObjectType obj ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( obj );
 }
 
 /* return true if object visited */
-bool Kingdom::isVisited( const MP2::OBJ obj ) const
+bool Kingdom::isVisited( const MP2::MapObjectType obj ) const
 {
     return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [obj]( const IndexObject & v ) { return v.isObject( obj ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( const MP2::OBJ obj ) const
+u32 Kingdom::CountVisitedObjects( const MP2::MapObjectType obj ) const
 {
     return std::count_if( visit_object.begin(), visit_object.end(), [obj]( const IndexObject & v ) { return v.isObject( obj ); } );
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, const MP2::OBJ obj = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( s32 index, const MP2::MapObjectType obj = MP2::OBJ_ZERO )
 {
     if ( !isVisited( index, obj ) && obj != MP2::OBJ_ZERO )
         visit_object.push_front( IndexObject( index, obj ) );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::OBJ obj ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType obj ) const
 {
     if ( !MP2::isGroundObject( obj ) && obj != MP2::OBJ_COAST )
         return false;
@@ -883,7 +883,7 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, const MP2::OBJ obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, const MP2::MapObjectType obj )
 {
     for ( u32 ii = 0; ii < size(); ++ii )
         if ( kingdoms[ii].isPlay() ) {

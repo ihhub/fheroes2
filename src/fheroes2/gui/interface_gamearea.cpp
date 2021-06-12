@@ -225,9 +225,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            const MP2::OBJ obj = tile.GetObject();
+            const MP2::MapObjectType objectType = tile.GetObject();
 
-            switch ( obj ) {
+            switch ( objectType ) {
             case MP2::OBJ_ZERO: {
                 if ( drawBottom ) {
                     tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
@@ -364,7 +364,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const Maps::Tiles * tile : drawList ) {
-        const MP2::OBJ obj = tile->GetObject();
+        const MP2::MapObjectType obj = tile->GetObject();
         if ( drawHeroes && MP2::OBJ_HEROES == obj ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
@@ -421,7 +421,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Heroes and boats.
     if ( drawTop || drawBottom ) {
         for ( const Maps::Tiles * tile : drawList ) {
-            const MP2::OBJ obj = tile->GetObject();
+            const MP2::MapObjectType obj = tile->GetObject();
             if ( drawHeroes && MP2::OBJ_HEROES == obj ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {

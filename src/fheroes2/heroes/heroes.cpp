@@ -88,7 +88,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, const MP2::OBJ * objs, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType * objs, u32 size, const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -614,7 +614,8 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const MP2::OBJ objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
+    const MP2::MapObjectType objs[]
+        = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
 
     // result
@@ -650,7 +651,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const MP2::OBJ objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
+    const MP2::MapObjectType objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
 
     if ( result < Luck::AWFUL )
@@ -836,7 +837,7 @@ Castle * Heroes::inCastle( void )
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
-    const MP2::OBJ obj = tile.GetObject( false );
+    const MP2::MapObjectType obj = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( index, obj );
@@ -845,7 +846,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 }
 
 /* return true if object visited */
-bool Heroes::isObjectTypeVisited( const MP2::OBJ object, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType object, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
@@ -856,7 +857,7 @@ bool Heroes::isObjectTypeVisited( const MP2::OBJ object, Visit::type_t type ) co
 void Heroes::SetVisited( s32 index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
-    const MP2::OBJ obj = tile.GetObject( false );
+    const MP2::MapObjectType obj = tile.GetObject( false );
 
     if ( Visit::GLOBAL == type ) {
         GetKingdom().SetVisited( index, obj );
@@ -869,7 +870,7 @@ void Heroes::SetVisited( s32 index, Visit::type_t type )
 void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::OBJ obj = tile.GetObject( false );
+    const MP2::MapObjectType obj = tile.GetObject( false );
 
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
@@ -880,7 +881,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 }
 
-void Heroes::SetVisitedWideTile( s32 index, const MP2::OBJ obj, Visit::type_t type )
+void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType obj, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();
@@ -1503,12 +1504,12 @@ uint32_t Heroes::GetStartingXp()
     return Rand::Get( 40, 90 );
 }
 
-MP2::OBJ Heroes::GetMapsObject() const
+MP2::MapObjectType Heroes::GetMapsObject() const
 {
     return save_maps_object;
 }
 
-void Heroes::SetMapsObject( const MP2::OBJ obj )
+void Heroes::SetMapsObject( const MP2::MapObjectType obj )
 {
     save_maps_object = obj != MP2::OBJ_HEROES ? obj : MP2::OBJ_ZERO;
 }

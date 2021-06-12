@@ -1019,7 +1019,7 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
-    const MP2::OBJ obj = tile.GetObject( false );
+    const MP2::MapObjectType obj = tile.GetObject( false );
 
     switch ( obj ) {
     // join monsters

@@ -349,7 +349,7 @@ namespace M82
 
     const char * GetString( int );
     int FromSpell( int );
-    u32 GetIndexLOOP00XXFromObject( const MP2::OBJ obj );
+    u32 GetIndexLOOP00XXFromObject( const MP2::MapObjectType obj );
     int GetLOOP00XX( const size_t index );
 }
 

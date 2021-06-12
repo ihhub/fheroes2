@@ -45,8 +45,8 @@ namespace Maps
 
     using Indexes = MapsIndexes;
 
-    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const MP2::OBJ obj, const bool ignoreHeroes = true );
-    Indexes MapsIndexesObject( const MP2::OBJ obj, const bool ignoreHeroes = true );
+    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const MP2::MapObjectType obj, const bool ignoreHeroes = true );
+    Indexes MapsIndexesObject( const MP2::MapObjectType obj, const bool ignoreHeroes = true );
 
     const char * SizeString( int size );
     const char * GetMinesName( int res );
@@ -67,15 +67,15 @@ namespace Maps
     Indexes GetAroundIndexes( s32 );
     Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
 
-    Indexes ScanAroundObject( s32, const MP2::OBJ obj );
-    Indexes ScanAroundObject( s32, u32 dist, const MP2::OBJ obj );
+    Indexes ScanAroundObject( s32, const MP2::MapObjectType obj );
+    Indexes ScanAroundObject( s32, u32 dist, const MP2::MapObjectType obj );
 
     Indexes GetTilesUnderProtection( s32 );
     bool TileIsUnderProtection( s32 );
 
-    Indexes GetObjectPositions( const MP2::OBJ obj, bool ignoreHeroes );
-    Indexes GetObjectPositions( s32, const MP2::OBJ obj, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const std::vector<MP2::OBJ> & objs );
+    Indexes GetObjectPositions( const MP2::MapObjectType obj, bool ignoreHeroes );
+    Indexes GetObjectPositions( s32, const MP2::MapObjectType obj, bool ignoreHeroes );
+    Indexes GetObjectsPositions( const std::vector<MP2::MapObjectType> & objs );
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );
 

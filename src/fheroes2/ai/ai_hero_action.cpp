@@ -100,32 +100,32 @@ namespace
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToPickupResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToTreasureChest( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToPickupResource( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToTreasureChest( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
-    void AIToObjectResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToObjectResource( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
-    void AIToSkeleton( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToCaptureObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToSkeleton( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToFlotSam( const Heroes & hero, s32 dst_index );
     void AIToObservationTower( Heroes & hero, s32 dst_index );
     void AIToMagellanMaps( Heroes & hero, s32 dst_index );
     void AIToTeleports( Heroes & hero, s32 dst_index );
     void AIToWhirlpools( Heroes & hero, s32 dst_index );
-    void AIToPrimarySkillObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToExperienceObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToExperienceObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToWitchsHut( Heroes & hero, s32 dst_index );
     void AIToShrine( Heroes & hero, s32 dst_index );
-    void AIToGoodMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToMagicWell( Heroes & hero, s32 dst_index );
-    void AIToArtesianSpring( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToXanadu( Heroes & hero, s32 dst_index );
     void AIToEvent( Heroes & hero, s32 dst_index );
-    void AIToUpgradeArmyObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToPoorMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToPyramid( Heroes & hero, s32 dst_index );
-    void AIToGoodLuckObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToObelisk( Heroes & hero, const Maps::Tiles & tile );
     void AIToTreeKnowledge( Heroes & hero, s32 dst_index );
     void AIToDaemonCave( Heroes & hero, s32 dst_index );
@@ -133,13 +133,13 @@ namespace AI
     void AIToSign( Heroes & hero, s32 dst_index );
     void AIToDwellingJoinMonster( Heroes & hero, s32 dst_index );
     void AIToHeroes( Heroes & hero, s32 dst_index );
-    void AIToDwellingRecruitMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToDwellingBattleMonster( Heroes & hero, const MP2::OBJ object, const int32_t tileIndex );
-    void AIToStables( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
-    void AIToAbandoneMine( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType object, const int32_t tileIndex );
+    void AIToStables( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
+    void AIToAbandoneMine( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToBarrier( const Heroes & hero, s32 dst_index );
     void AIToTravellersTent( const Heroes & hero, s32 dst_index );
-    void AIToShipwreckSurvivor( Heroes & hero, const MP2::OBJ obj, s32 dst_index );
+    void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index );
     void AIToBoat( Heroes & hero, s32 dst_index );
     void AIToCoast( Heroes & hero, s32 dst_index );
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
@@ -254,7 +254,7 @@ namespace AI
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MP2::OBJ object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
+        const MP2::MapObjectType object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
         bool isAction = true;
 
         if ( MP2::isActionObject( object, hero.isShipMaster() ) )
@@ -625,7 +625,7 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -703,7 +703,7 @@ namespace AI
         }
     }
 
-    void AIToPickupResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToPickupResource( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const MapResource * map_resource = NULL;
@@ -723,7 +723,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " pickup small resource" );
     }
 
-    void AIToTreasureChest( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToTreasureChest( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         u32 gold = tile.QuantityGold();
@@ -760,7 +760,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToObjectResource( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToObjectResource( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const ResourceCount & rc = tile.QuantityResourceCount();
@@ -777,7 +777,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToSkeleton( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToSkeleton( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -818,7 +818,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToCaptureObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToCaptureObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -979,7 +979,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToPrimarySkillObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1031,7 +1031,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToExperienceObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToExperienceObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1084,7 +1084,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToGoodLuckObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToGoodLuckObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         // check already visited
         if ( !hero.isObjectTypeVisited( obj ) )
@@ -1092,7 +1092,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToGoodMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         u32 move = 0;
 
@@ -1135,7 +1135,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtesianSpring( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToArtesianSpring( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         const u32 max = hero.GetMaxSpellPoints();
 
@@ -1187,7 +1187,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToUpgradeArmyObject( Heroes & hero, const MP2::OBJ obj, s32 /*dst_index*/ )
+    void AIToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType obj, s32 /*dst_index*/ )
     {
         switch ( obj ) {
         case MP2::OBJ_HILLFORT:
@@ -1215,7 +1215,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToPoorMoraleObject( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         u32 gold = tile.QuantityGold();
@@ -1349,7 +1349,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToDwellingRecruitMonster( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
@@ -1373,7 +1373,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToDwellingBattleMonster( Heroes & hero, const MP2::OBJ object, const int32_t tileIndex )
+    void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType object, const int32_t tileIndex )
     {
         Maps::Tiles & tile = world.GetTiles( tileIndex );
         const Troop & troop = tile.QuantityTroop();
@@ -1404,7 +1404,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << ", object: " << MP2::StringObject( object ) );
     }
 
-    void AIToStables( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToStables( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         // check already visited
         if ( !hero.isObjectTypeVisited( obj ) ) {
@@ -1418,7 +1418,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToAbandoneMine( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToAbandoneMine( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         AIToCaptureObject( hero, obj, dst_index );
     }
@@ -1446,7 +1446,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToShipwreckSurvivor( Heroes & hero, const MP2::OBJ obj, s32 dst_index )
+    void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
 
@@ -1615,7 +1615,7 @@ namespace AI
     bool HeroesValidObject( const Heroes & hero, s32 index )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
-        const MP2::OBJ obj = tile.GetObject();
+        const MP2::MapObjectType obj = tile.GetObject();
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 

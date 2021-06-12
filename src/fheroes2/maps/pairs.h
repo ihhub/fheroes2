@@ -29,15 +29,15 @@
 #include "mp2.h"
 #include "resource.h"
 
-class IndexObject : public std::pair<int32_t, MP2::OBJ>
+class IndexObject : public std::pair<int32_t, MP2::MapObjectType>
 {
 public:
     IndexObject()
-        : std::pair<int32_t, MP2::OBJ>( -1, MP2::OBJ_ZERO )
+        : std::pair<int32_t, MP2::MapObjectType>( -1, MP2::OBJ_ZERO )
     {}
 
-    IndexObject( int32_t index, const MP2::OBJ obj )
-        : std::pair<int32_t, MP2::OBJ>( index, obj )
+    IndexObject( int32_t index, const MP2::MapObjectType obj )
+        : std::pair<int32_t, MP2::MapObjectType>( index, obj )
     {}
 
     bool isIndex( int32_t index ) const
@@ -45,7 +45,7 @@ public:
         return index == first;
     }
 
-    bool isObject( const MP2::OBJ obj ) const
+    bool isObject( const MP2::MapObjectType obj ) const
     {
         return obj == second;
     }
@@ -53,18 +53,18 @@ public:
 
 StreamBase & operator>>( StreamBase &, IndexObject & );
 
-class ObjectColor : public std::pair<MP2::OBJ, int>
+class ObjectColor : public std::pair<MP2::MapObjectType, int>
 {
 public:
     ObjectColor()
-        : std::pair<MP2::OBJ, int>( MP2::OBJ_ZERO, Color::NONE )
+        : std::pair<MP2::MapObjectType, int>( MP2::OBJ_ZERO, Color::NONE )
     {}
 
-    ObjectColor( const MP2::OBJ obj, int color )
-        : std::pair<MP2::OBJ, int>( obj, color )
+    ObjectColor( const MP2::MapObjectType obj, int color )
+        : std::pair<MP2::MapObjectType, int>( obj, color )
     {}
 
-    bool isObject( const MP2::OBJ obj ) const
+    bool isObject( const MP2::MapObjectType obj ) const
     {
         return obj == first;
     }

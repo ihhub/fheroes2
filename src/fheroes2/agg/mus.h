@@ -89,7 +89,7 @@ namespace MUS
 
     int FromGround( int );
     int FromRace( int );
-    int FromMapObject( const MP2::OBJ obj );
+    int FromMapObject( const MP2::MapObjectType obj );
 
     int GetBattleRandom( void );
 }

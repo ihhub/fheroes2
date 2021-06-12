@@ -237,7 +237,7 @@ bool MP2::isHiddenForPuzzle( uint8_t tileset, uint8_t index )
     return ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) );
 }
 
-const char * MP2::StringObject( const OBJ obj )
+const char * MP2::StringObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_ZERO:
@@ -694,7 +694,7 @@ const char * MP2::StringObject( const OBJ obj )
     return NULL;
 }
 
-bool MP2::isDayLife( const OBJ obj )
+bool MP2::isDayLife( const MapObjectType obj )
 {
     // FIXME: list day object life
     switch ( obj ) {
@@ -708,7 +708,7 @@ bool MP2::isDayLife( const OBJ obj )
     return false;
 }
 
-bool MP2::isWeekLife( const OBJ obj )
+bool MP2::isWeekLife( const MapObjectType obj )
 {
     // FIXME: list week object life
     switch ( obj ) {
@@ -759,12 +759,12 @@ bool MP2::isWeekLife( const OBJ obj )
     return false;
 }
 
-bool MP2::isMonthLife( const OBJ obj )
+bool MP2::isMonthLife( const MapObjectType obj )
 {
     return obj == OBJ_CASTLE;
 }
 
-bool MP2::isBattleLife( const OBJ obj )
+bool MP2::isBattleLife( const MapObjectType obj )
 {
     // FIXME: list battle object life
     switch ( obj ) {
@@ -793,7 +793,7 @@ bool MP2::isBattleLife( const OBJ obj )
     return false;
 }
 
-bool MP2::isActionObject( const OBJ obj, bool water )
+bool MP2::isActionObject( const MapObjectType obj, bool water )
 {
     if ( water )
         return isWaterObject( obj );
@@ -801,7 +801,7 @@ bool MP2::isActionObject( const OBJ obj, bool water )
     return isGroundObject( obj );
 }
 
-bool MP2::isWaterObject( const OBJ obj )
+bool MP2::isWaterObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_WATERCHEST:
@@ -838,13 +838,13 @@ bool MP2::isWaterObject( const OBJ obj )
     return Settings::Get().isPriceOfLoyaltySupported() ? isGroundObject( obj ) : false;
 }
 
-bool MP2::isGroundObject( const OBJ obj )
+bool MP2::isGroundObject( const MapObjectType obj )
 {
     // check if first bit is set
     return obj > 127 && obj != OBJ_EVENT && obj != OBJN_STABLES && obj != OBJN_ALCHEMYTOWER;
 }
 
-bool MP2::isQuantityObject( const OBJ obj )
+bool MP2::isQuantityObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_SKELETON:
@@ -875,7 +875,7 @@ bool MP2::isQuantityObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isCaptureObject( const OBJ obj )
+bool MP2::isCaptureObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_MINES:
@@ -898,7 +898,7 @@ bool MP2::isCaptureObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isPickupObject( const OBJ obj )
+bool MP2::isPickupObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_WATERCHEST:
@@ -919,7 +919,7 @@ bool MP2::isPickupObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isArtifactObject( const OBJ obj )
+bool MP2::isArtifactObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_ARTIFACT:
@@ -940,7 +940,7 @@ bool MP2::isArtifactObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isHeroUpgradeObject( const OBJ obj )
+bool MP2::isHeroUpgradeObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_GAZEBO:
@@ -963,7 +963,7 @@ bool MP2::isHeroUpgradeObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isMonsterDwelling( const OBJ obj )
+bool MP2::isMonsterDwelling( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_WATCHTOWER:
@@ -997,7 +997,7 @@ bool MP2::isMonsterDwelling( const OBJ obj )
     return false;
 }
 
-bool MP2::isProtectedObject( const MP2::OBJ obj )
+bool MP2::isProtectedObject( const MP2::MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_MONSTER:
@@ -1020,7 +1020,7 @@ bool MP2::isProtectedObject( const MP2::OBJ obj )
     return isCaptureObject( obj );
 }
 
-bool MP2::isMoveObject( const OBJ obj )
+bool MP2::isMoveObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_STONELITHS:
@@ -1034,12 +1034,12 @@ bool MP2::isMoveObject( const OBJ obj )
     return false;
 }
 
-bool MP2::isAbandonedMine( const OBJ obj )
+bool MP2::isAbandonedMine( const MapObjectType obj )
 {
     return obj == OBJN_ABANDONEDMINE || obj == OBJ_ABANDONEDMINE;
 }
 
-bool MP2::isRemoveObject( const OBJ obj )
+bool MP2::isRemoveObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_MONSTER:
@@ -1053,7 +1053,7 @@ bool MP2::isRemoveObject( const OBJ obj )
     return isPickupObject( obj );
 }
 
-bool MP2::isNeedStayFront( const OBJ obj )
+bool MP2::isNeedStayFront( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_MONSTER:
@@ -1073,7 +1073,7 @@ bool MP2::isNeedStayFront( const OBJ obj )
     return isPickupObject( obj );
 }
 
-bool MP2::isClearGroundObject( const OBJ obj )
+bool MP2::isClearGroundObject( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_ZERO:
@@ -1087,7 +1087,7 @@ bool MP2::isClearGroundObject( const OBJ obj )
     return false;
 }
 
-int MP2::GetObjectDirect( const OBJ obj )
+int MP2::GetObjectDirect( const MapObjectType obj )
 {
     switch ( obj ) {
     case OBJ_JAIL:
