@@ -36,6 +36,7 @@
 #include "speed.h"
 
 #include <cassert>
+#include <cmath>
 
 using namespace Battle;
 
