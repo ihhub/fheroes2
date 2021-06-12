@@ -29,10 +29,10 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
-    const MP2::MapObjectType obj = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.GetObject();
 
     // Special cases: check if we can defeat the Hero/Monster and pass through
-    if ( obj == MP2::OBJ_HEROES ) {
+    if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * otherHero = tile.GetHeroes();
         if ( otherHero ) {
             if ( otherHero->isFriends( color ) )
@@ -42,33 +42,33 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
         }
     }
 
-    if ( obj == MP2::OBJ_MONSTER || ( obj == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+    if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
         return Army( tile ).GetStrength() > armyStrength;
 
     // check if AI has the key for the barrier
-    if ( obj == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
+    if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
         return false;
 
     // if none of the special cases apply, check if tile can be moved on
-    if ( MP2::isNeedStayFront( obj ) )
+    if ( MP2::isNeedStayFront( objectType ) )
         return true;
 
-    return ( fromWater && !toWater && obj == MP2::OBJ_COAST );
+    return ( fromWater && !toWater && objectType == MP2::OBJ_COAST );
 }
 
 bool World::isTileBlocked( int tileIndex, bool fromWater ) const
 {
     const Maps::Tiles & tile = world.GetTiles( tileIndex );
     const bool toWater = tile.isWater();
-    const MP2::MapObjectType object = tile.GetObject();
+    const MP2::MapObjectType objectType = tile.GetObject();
 
-    if ( object == MP2::OBJ_HEROES || object == MP2::OBJ_MONSTER || object == MP2::OBJ_BOAT )
+    if ( objectType == MP2::OBJ_HEROES || objectType == MP2::OBJ_MONSTER || objectType == MP2::OBJ_BOAT )
         return true;
 
-    if ( MP2::isPickupObject( object ) || MP2::isActionObject( object, fromWater ) )
+    if ( MP2::isPickupObject( objectType ) || MP2::isActionObject( objectType, fromWater ) )
         return true;
 
-    if ( fromWater && !toWater && object == MP2::OBJ_COAST )
+    if ( fromWater && !toWater && objectType == MP2::OBJ_COAST )
         return true;
 
     return false;
@@ -414,10 +414,10 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex,
     const Directions & directions = Direction::All();
 
     std::set<int> uniqueIndicies;
-    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, const MP2::MapObjectType object ) {
+    auto validateAndAdd = [&kingdom, &result, &uniqueIndicies]( int index, const MP2::MapObjectType objectType ) {
         // std::set insert returns a pair, second value is true if it was unique
-        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), object ) ) {
-            result.emplace_back( index, object );
+        if ( uniqueIndicies.insert( index ).second && kingdom.isValidKingdomObject( world.GetTiles( index ), objectType ) ) {
+            result.emplace_back( index, objectType );
         }
     };
 

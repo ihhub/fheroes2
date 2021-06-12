@@ -98,23 +98,23 @@ struct ComparsionDistance
     const fheroes2::Point centerPoint;
 };
 
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const MP2::MapObjectType obj, const bool ignoreHeroes /* = true */ )
+Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const MP2::MapObjectType objectType, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == objectType ) {
             result.push_back( indexes[idx] );
         }
     }
     return result;
 }
 
-Maps::Indexes Maps::MapsIndexesObject( const MP2::MapObjectType obj, const bool ignoreHeroes /* = true */ )
+Maps::Indexes Maps::MapsIndexesObject( const MP2::MapObjectType objectType, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
+        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == objectType ) {
             result.push_back( idx );
         }
     }
@@ -391,46 +391,46 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     return tileCount;
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, const MP2::MapObjectType obj )
+Maps::Indexes Maps::ScanAroundObject( s32 center, const MP2::MapObjectType objectType )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
-    return MapsIndexesFilteredObject( results, obj );
+    return MapsIndexesFilteredObject( results, objectType );
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, const MP2::MapObjectType obj )
+Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, const MP2::MapObjectType objectType )
 {
     Indexes results = Maps::GetAroundIndexes( center, dist, true );
-    return MapsIndexesFilteredObject( results, obj );
+    return MapsIndexesFilteredObject( results, objectType );
 }
 
-Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType obj, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes )
 {
-    return MapsIndexesObject( obj, ignoreHeroes );
+    return MapsIndexesObject( objectType, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, const MP2::MapObjectType obj, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( s32 center, const MP2::MapObjectType objectType, bool ignoreHeroes )
 {
-    Indexes results = MapsIndexesObject( obj, ignoreHeroes );
+    Indexes results = MapsIndexesObject( objectType, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<MP2::MapObjectType> & objs )
+Maps::Indexes Maps::GetObjectsPositions( const std::vector<MP2::MapObjectType> & objectTypes )
 {
-    if ( objs.size() == 1 ) {
-        return MapsIndexesObject( objs[0], true );
+    if ( objectTypes.size() == 1 ) {
+        return MapsIndexesObject( objectTypes[0], true );
     }
 
     Maps::Indexes result;
-    if ( objs.empty() )
+    if ( objectTypes.empty() )
         return result;
 
     const int32_t size = static_cast<int32_t>( world.getSize() );
     for ( int32_t idx = 0; idx < size; ++idx ) {
-        const MP2::MapObjectType objectID = world.GetTiles( idx ).GetObject( true );
+        const MP2::MapObjectType objectTypeTile = world.GetTiles( idx ).GetObject( true );
 
-        for ( const MP2::MapObjectType obj : objs ) {
-            if ( obj == objectID ) {
+        for ( const MP2::MapObjectType objectType : objectTypes ) {
+            if ( objectType == objectTypeTile ) {
                 result.push_back( idx );
                 break;
             }
@@ -568,10 +568,10 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
 
     // correct only RND town and castle
     const Maps::Tiles & entranceTile = world.GetTiles( center.x, center.y );
-    const MP2::MapObjectType entranceObject = entranceTile.GetObject();
+    const MP2::MapObjectType objectType = entranceTile.GetObject();
     const uint32_t castleID = entranceTile.GetObjectUID();
 
-    if ( isRandom && ( entranceObject != MP2::OBJ_RNDCASTLE && entranceObject != MP2::OBJ_RNDTOWN ) ) {
+    if ( isRandom && ( objectType != MP2::OBJ_RNDCASTLE && objectType != MP2::OBJ_RNDTOWN ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "incorrect object"
                        << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );

@@ -1019,9 +1019,9 @@ void Maps::Tiles::UpdateMonsterInfo( Tiles & tile )
 void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 {
     uint32_t count = isFirstLoad ? 0 : tile.MonsterCount();
-    const MP2::MapObjectType obj = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
-    switch ( obj ) {
+    switch ( objectType ) {
     // join monsters
     case MP2::OBJ_HALFLINGHOLE:
         count += isFirstLoad ? Rand::Get( 20, 40 ) : Rand::Get( 5, 10 );

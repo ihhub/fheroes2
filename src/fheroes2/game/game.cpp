@@ -77,10 +77,10 @@ namespace Game
 
     namespace ObjectFadeAnimation
     {
-        FadeTask::FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
+        FadeTask::FadeTask( MP2::MapObjectType objectType_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
                             bool fadeOut_,
                             bool fadeIn_, uint8_t objectTileset_ )
-            : object( object_ )
+            : objectType( objectType_ )
             , objectIndex( objectIndex_ )
             , animationIndex( animationIndex_ )
             , fromIndex( fromIndex_ )
@@ -92,7 +92,7 @@ namespace Game
         {}
 
         FadeTask::FadeTask()
-            : object( MP2::OBJ_ZERO )
+            : objectType( MP2::OBJ_ZERO )
             , objectIndex( 0 )
             , animationIndex( 0 )
             , fromIndex( 0 )
@@ -227,27 +227,27 @@ void Game::SetCurrentMusic( int mus )
     current_music = mus;
 }
 
-void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType obj, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
+void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
 {
     const uint8_t alpha = fadeOut ? 255u : 0;
     const Maps::Tiles & fromTile = world.GetTiles( fromIndex );
 
-    if ( obj == MP2::OBJ_ZERO ) {
+    if ( objectType == MP2::OBJ_ZERO ) {
         fadeTask = FadeTask();
     }
-    else if ( obj == MP2::OBJ_MONSTER ) {
+    else if ( objectType == MP2::OBJ_MONSTER ) {
         const auto & spriteIndicies = Maps::Tiles::GetMonsterSpriteIndices( fromTile, fromTile.QuantityMonster().GetSpriteIndex() );
 
-        fadeTask = FadeTask( obj, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+        fadeTask = FadeTask( objectType, spriteIndicies.first, spriteIndicies.second, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
-    else if ( obj == MP2::OBJ_BOAT ) {
-        fadeTask = FadeTask( obj, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
+    else if ( objectType == MP2::OBJ_BOAT ) {
+        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), 0, fromIndex, toIndex, alpha, fadeOut, fadeIn, 0 );
     }
     else {
-        const int icn = MP2::GetICNObject( obj );
+        const int icn = MP2::GetICNObject( objectType );
         const uint32_t animationIndex = ICN::AnimationFrame( icn, fromTile.GetObjectSpriteIndex(), Game::MapsAnimationFrame(), fromTile.GetQuantity2() != 0 );
 
-        fadeTask = FadeTask( obj, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
+        fadeTask = FadeTask( objectType, fromTile.GetObjectSpriteIndex(), animationIndex, fromIndex, toIndex, alpha, fadeOut, fadeIn, fromTile.GetObjectTileset() );
     }
 }
 
@@ -256,7 +256,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     auto removeObject = []() {
         Maps::Tiles & tile = world.GetTiles( fadeTask.fromIndex );
 
-        if ( tile.GetObject() == fadeTask.object ) {
+        if ( tile.GetObject() == fadeTask.objectType ) {
             tile.RemoveObjectSprite();
             tile.setAsEmpty();
         }
@@ -264,7 +264,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     auto addObject = []() {
         Maps::Tiles & tile = world.GetTiles( fadeTask.toIndex );
 
-        if ( tile.GetObject() != fadeTask.object && fadeTask.object == MP2::OBJ_BOAT ) {
+        if ( tile.GetObject() != fadeTask.objectType && fadeTask.objectType == MP2::OBJ_BOAT ) {
             tile.setBoat( Direction::RIGHT );
         }
     };

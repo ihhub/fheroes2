@@ -951,9 +951,9 @@ MP2::MapObjectType Maps::Tiles::GetObject( bool ignoreObjectUnderHero /* true */
     return mp2_object;
 }
 
-void Maps::Tiles::SetObject( const MP2::MapObjectType object )
+void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 {
-    mp2_object = object;
+    mp2_object = objectType;
     world.resetPathfinder();
 }
 
@@ -1180,11 +1180,11 @@ void Maps::Tiles::UpdatePassable( void )
     impassableTileRule = 0;
 #endif
 
-    const MP2::MapObjectType obj = GetObject( false );
-    const bool emptyobj = MP2::OBJ_ZERO == obj || MP2::OBJ_COAST == obj || MP2::OBJ_EVENT == obj;
+    const MP2::MapObjectType objectType = GetObject( false );
+    const bool emptyobj = MP2::OBJ_ZERO == objectType || MP2::OBJ_COAST == objectType || MP2::OBJ_EVENT == objectType;
 
-    if ( MP2::isActionObject( obj, isWater() ) ) {
-        tilePassable = MP2::GetObjectDirect( obj );
+    if ( MP2::isActionObject( objectType, isWater() ) ) {
+        tilePassable = MP2::GetObjectDirect( objectType );
 #ifdef WITH_DEBUG
         if ( tilePassable == 0 )
             impassableTileRule = 1;
@@ -1235,7 +1235,7 @@ void Maps::Tiles::UpdatePassable( void )
     }
 
     // fix bottom border: disable passable for all no action objects
-    if ( tilePassable && !Maps::isValidDirection( _index, Direction::BOTTOM ) && !emptyobj && !MP2::isActionObject( obj, isWater() ) ) {
+    if ( tilePassable && !Maps::isValidDirection( _index, Direction::BOTTOM ) && !emptyobj && !MP2::isActionObject( objectType, isWater() ) ) {
         tilePassable = 0;
 #ifdef WITH_DEBUG
         impassableTileRule = 7;
@@ -1520,11 +1520,11 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 
 void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
-    const MP2::MapObjectType obj = GetObject();
+    const MP2::MapObjectType objectType = GetObject();
 
     // monsters and boats will be drawn later, on top of everything else
     // hero object is accepted here since it replaces what was there originally
-    if ( obj != MP2::OBJ_BOAT && obj != MP2::OBJ_MONSTER && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
+    if ( objectType != MP2::OBJ_BOAT && objectType != MP2::OBJ_MONSTER && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
         const int icn = MP2::GetICNObject( objectTileset );
 
         if ( ICN::UNKNOWN != icn ) {
@@ -1574,7 +1574,7 @@ void Maps::Tiles::RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect 
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
     const uint8_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
+        = ( MP2::OBJ_BOAT == fadeTask.objectType && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
               ? fadeTask.alpha
               : 255;
 
@@ -1593,7 +1593,7 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visi
 
     const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
     const uint8_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
+        = ( MP2::OBJ_BOAT == fadeTask.objectType && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
               ? fadeTask.alpha
               : 255;
 
@@ -1673,12 +1673,12 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
     if ( !( visibleTileROI & mp ) )
         return;
 
-    const MP2::MapObjectType obj = GetObject( false );
+    const MP2::MapObjectType objectType = GetObject( false );
     // animate objects
-    if ( obj == MP2::OBJ_ABANDONEDMINE ) {
+    if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
         area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
-    else if ( obj == MP2::OBJ_MINES ) {
+    else if ( objectType == MP2::OBJ_MINES ) {
         const uint8_t spellID = quantity3;
         if ( spellID == Spell::HAUNT ) {
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
@@ -1949,9 +1949,9 @@ bool Maps::Tiles::hasSpriteAnimation() const
     return objectTileset & 1;
 }
 
-bool Maps::Tiles::isObject( const MP2::MapObjectType obj ) const
+bool Maps::Tiles::isObject( const MP2::MapObjectType objectType ) const
 {
-    return obj == mp2_object;
+    return objectType == mp2_object;
 }
 
 uint8_t Maps::Tiles::GetObjectTileset() const
@@ -1982,7 +1982,7 @@ void Maps::Tiles::removeFlags()
     addons_level2.remove_if( TilesAddon::isFlag32 );
 }
 
-void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType obj, int col )
+void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
 {
     u32 index = 0;
 
@@ -2010,7 +2010,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType obj, int col )
         break;
     }
 
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_WINDMILL:
         index += 42;
         CorrectFlags32( index, false );
@@ -2097,18 +2097,18 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
         case MP2::OBJ_UNKNW_7A:
         case MP2::OBJ_UNKNW_F9:
         case MP2::OBJ_UNKNW_FA: {
-            MP2::MapObjectType obj = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
-            if ( obj == MP2::OBJ_ZERO ) {
+            MP2::MapObjectType objectType = Maps::Tiles::GetLoyaltyObject( tile.objectTileset, tile.objectIndex );
+            if ( objectType == MP2::OBJ_ZERO ) {
                 // if nothing was found it means there's overlay tile on top of the object; search for it
                 for ( auto it = tile.addons_level2.begin(); it != tile.addons_level2.end(); ++it ) {
-                    obj = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
-                    if ( obj != MP2::OBJ_ZERO )
+                    objectType = Maps::Tiles::GetLoyaltyObject( it->object, it->index );
+                    if ( objectType != MP2::OBJ_ZERO )
                         break;
                 }
             }
 
-            if ( MP2::OBJ_ZERO != obj )
-                tile.SetObject( obj );
+            if ( MP2::OBJ_ZERO != objectType )
+                tile.SetObject( objectType );
             else {
                 DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid expansion object at index: " << tile._index );
             }
@@ -2122,10 +2122,10 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
 /* true: if protection or has guardians */
 bool Maps::Tiles::CaptureObjectIsProtection( void ) const
 {
-    const MP2::MapObjectType obj = GetObject( false );
+    const MP2::MapObjectType objectType = GetObject( false );
 
-    if ( MP2::isCaptureObject( obj ) ) {
-        if ( MP2::OBJ_CASTLE == obj ) {
+    if ( MP2::isCaptureObject( objectType ) ) {
+        if ( MP2::OBJ_CASTLE == objectType ) {
             Castle * castle = world.GetCastle( GetCenter() );
             if ( castle )
                 return castle->GetArmy().isValid();

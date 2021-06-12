@@ -161,7 +161,7 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isObject( const MP2::MapObjectType obj ) const;
+        bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
@@ -176,7 +176,7 @@ namespace Maps
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-        void SetObject( const MP2::MapObjectType object );
+        void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
         {
@@ -194,7 +194,7 @@ namespace Maps
         void UpdatePassable( void );
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( const MP2::MapObjectType obj, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();

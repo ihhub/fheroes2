@@ -36,8 +36,8 @@ public:
         : std::pair<int32_t, MP2::MapObjectType>( -1, MP2::OBJ_ZERO )
     {}
 
-    IndexObject( int32_t index, const MP2::MapObjectType obj )
-        : std::pair<int32_t, MP2::MapObjectType>( index, obj )
+    IndexObject( int32_t index, const MP2::MapObjectType objectType )
+        : std::pair<int32_t, MP2::MapObjectType>( index, objectType )
     {}
 
     bool isIndex( int32_t index ) const
@@ -45,9 +45,9 @@ public:
         return index == first;
     }
 
-    bool isObject( const MP2::MapObjectType obj ) const
+    bool isObject( const MP2::MapObjectType objectType ) const
     {
-        return obj == second;
+        return objectType == second;
     }
 };
 
@@ -60,13 +60,13 @@ public:
         : std::pair<MP2::MapObjectType, int>( MP2::OBJ_ZERO, Color::NONE )
     {}
 
-    ObjectColor( const MP2::MapObjectType obj, int color )
-        : std::pair<MP2::MapObjectType, int>( obj, color )
+    ObjectColor( const MP2::MapObjectType objectType, int color )
+        : std::pair<MP2::MapObjectType, int>( objectType, color )
     {}
 
-    bool isObject( const MP2::MapObjectType obj ) const
+    bool isObject( const MP2::MapObjectType objectType ) const
     {
-        return obj == first;
+        return objectType == first;
     }
 
     bool isColor( int colors ) const

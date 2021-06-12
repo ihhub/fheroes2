@@ -364,15 +364,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     for ( const Maps::Tiles * tile : drawList ) {
-        const MP2::MapObjectType obj = tile->GetObject();
-        if ( drawHeroes && MP2::OBJ_HEROES == obj ) {
+        const MP2::MapObjectType objectType = tile->GetObject();
+        if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
                 const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
                 hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
             }
         }
-        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == obj ) {
+        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
             tile->RedrawBoatShadow( dst, tileROI, *this );
         }
     }
@@ -380,7 +380,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
 
     // fade out animation for objects only
-    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
+    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.objectType && MP2::OBJ_BOAT != fadeTask.objectType && MP2::OBJ_MONSTER != fadeTask.objectType ) {
         const int icn = MP2::GetICNObject( fadeTask.objectTileset );
         const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
 
@@ -401,7 +401,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
 
         // fade out animation for monsters only
-        if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
+        if ( MP2::OBJ_MONSTER == fadeTask.objectType && fadeTask.fadeOut ) {
             const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
             BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + TILEWIDTH, mp, false, fadeTask.alpha );
@@ -421,8 +421,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Heroes and boats.
     if ( drawTop || drawBottom ) {
         for ( const Maps::Tiles * tile : drawList ) {
-            const MP2::MapObjectType obj = tile->GetObject();
-            if ( drawHeroes && MP2::OBJ_HEROES == obj ) {
+            const MP2::MapObjectType objectType = tile->GetObject();
+            if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {
                     const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
@@ -435,7 +435,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
             }
-            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == obj ) {
+            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
                 tile->RedrawBoat( dst, tileROI, *this );
                 if ( drawTop ) {
                     tile->RedrawTop( dst, tileROI, *this );

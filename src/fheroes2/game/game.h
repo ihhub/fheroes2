@@ -215,10 +215,11 @@ namespace Game
         {
             FadeTask();
 
-            FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
+            FadeTask( MP2::MapObjectType objectType_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_,
+                      bool fadeOut_,
                       bool fadeIn_, uint8_t objectTileset_ );
 
-            MP2::MapObjectType object;
+            MP2::MapObjectType objectType;
             uint32_t objectIndex;
             uint32_t animationIndex;
             int32_t fromIndex;
@@ -231,7 +232,7 @@ namespace Game
 
         const FadeTask & GetFadeTask();
 
-        void PrepareFadeTask( const MP2::MapObjectType obj, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
+        void PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
         void PerformFadeTask();
     }
 

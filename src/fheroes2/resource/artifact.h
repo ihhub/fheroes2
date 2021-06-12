@@ -208,7 +208,7 @@ private:
 
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
-u32 GoldInsteadArtifact( const MP2::MapObjectType obj );
+u32 GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
 class BagArtifacts : public std::vector<Artifact>
 {

@@ -537,32 +537,32 @@ namespace MP2
     };
 
     int GetICNObject( int tileset );
-    const char * StringObject( const MapObjectType obj );
+    const char * StringObject( const MapObjectType objectType );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
-    bool isActionObject( const MapObjectType obj, bool water );
-    bool isGroundObject( const MapObjectType obj );
-    bool isWaterObject( const MapObjectType obj );
-    bool isQuantityObject( const MapObjectType obj );
-    bool isCaptureObject( const MapObjectType obj );
-    bool isPickupObject( const MapObjectType obj );
-    bool isArtifactObject( const MapObjectType obj );
-    bool isHeroUpgradeObject( const MapObjectType obj );
-    bool isMonsterDwelling( const MapObjectType obj );
-    bool isRemoveObject( const MapObjectType obj );
-    bool isMoveObject( const MapObjectType obj );
-    bool isAbandonedMine( const MapObjectType obj );
-    bool isProtectedObject( const MapObjectType obj );
+    bool isActionObject( const MapObjectType objectType, bool water );
+    bool isGroundObject( const MapObjectType objectType );
+    bool isWaterObject( const MapObjectType objectType );
+    bool isQuantityObject( const MapObjectType objectType );
+    bool isCaptureObject( const MapObjectType objectType );
+    bool isPickupObject( const MapObjectType objectType );
+    bool isArtifactObject( const MapObjectType objectType );
+    bool isHeroUpgradeObject( const MapObjectType objectType );
+    bool isMonsterDwelling( const MapObjectType objectType );
+    bool isRemoveObject( const MapObjectType objectType );
+    bool isMoveObject( const MapObjectType objectType );
+    bool isAbandonedMine( const MapObjectType objectType );
+    bool isProtectedObject( const MapObjectType objectType );
 
-    bool isNeedStayFront( const MapObjectType obj );
-    bool isClearGroundObject( const MapObjectType obj );
+    bool isNeedStayFront( const MapObjectType objectType );
+    bool isClearGroundObject( const MapObjectType objectType );
 
-    bool isDayLife( const MapObjectType obj );
-    bool isWeekLife( const MapObjectType obj );
-    bool isMonthLife( const MapObjectType obj );
-    bool isBattleLife( const MapObjectType obj );
+    bool isDayLife( const MapObjectType objectType );
+    bool isWeekLife( const MapObjectType objectType );
+    bool isMonthLife( const MapObjectType objectType );
+    bool isBattleLife( const MapObjectType objectType );
 
-    int GetObjectDirect( const MapObjectType obj );
+    int GetObjectDirect( const MapObjectType objectType );
 }
 
 #endif

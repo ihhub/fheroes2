@@ -115,21 +115,21 @@ void CapturedObjects::SetColor( s32 index, int col )
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( s32 index, const MP2::MapObjectType obj, int col )
+void CapturedObjects::Set( s32 index, const MP2::MapObjectType objectType, int col )
 {
     CapturedObject & co = Get( index );
 
     if ( co.GetColor() != col && co.guardians.isValid() )
         co.guardians.Reset();
 
-    co.Set( obj, col );
+    co.Set( objectType, col );
 }
 
-u32 CapturedObjects::GetCount( const MP2::MapObjectType obj, int col ) const
+u32 CapturedObjects::GetCount( const MP2::MapObjectType objectType, int col ) const
 {
     u32 result = 0;
 
-    const ObjectColor objcol( obj, col );
+    const ObjectColor objcol( objectType, col );
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         if ( objcol == ( *it ).second.objcol )
@@ -214,14 +214,14 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, const MP2::MapObjectType obj )
+Funds CapturedObjects::TributeCapturedObject( int color, const MP2::MapObjectType objectType )
 {
     Funds result;
 
     for ( iterator it = begin(); it != end(); ++it ) {
         const ObjectColor & objcol = ( *it ).second.objcol;
 
-        if ( objcol.isObject( obj ) && objcol.isColor( color ) ) {
+        if ( objcol.isObject( objectType ) && objcol.isColor( color ) ) {
             Maps::Tiles & tile = world.GetTiles( ( *it ).first );
 
             result += Funds( tile.QuantityResourceCount() );
@@ -622,10 +622,10 @@ void World::MonthOfMonstersAction( const Monster & mons )
     excld.reserve( vec_tiles.size() / 2 );
 
     const int32_t dist = 2;
-    const std::vector<MP2::MapObjectType> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+    const std::vector<MP2::MapObjectType> objectTypes = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
 
     // create exclude list
-    const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
+    const MapsIndexes & objv = Maps::GetObjectsPositions( objectTypes );
 
     for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
         const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
@@ -745,9 +745,9 @@ s32 World::NextWhirlpool( s32 index ) const
 /* return message from sign */
 
 /* return count captured object */
-u32 World::CountCapturedObject( const MP2::MapObjectType obj, int col ) const
+u32 World::CountCapturedObject( const MP2::MapObjectType objectType, int col ) const
 {
-    return map_captureobj.GetCount( obj, col );
+    return map_captureobj.GetCount( objectType, col );
 }
 
 /* return count captured mines */
@@ -768,17 +768,17 @@ u32 World::CountCapturedMines( int type, int color ) const
 /* capture object */
 void World::CaptureObject( s32 index, int color )
 {
-    const MP2::MapObjectType obj = GetTiles( index ).GetObject( false );
-    map_captureobj.Set( index, obj, color );
+    const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
+    map_captureobj.Set( index, objectType, color );
 
-    if ( MP2::OBJ_CASTLE == obj ) {
+    if ( MP2::OBJ_CASTLE == objectType ) {
         Castle * castle = GetCastle( Maps::GetPoint( index ) );
         if ( castle && castle->GetColor() != color )
             castle->ChangeColor( color );
     }
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( obj, color );
+        GetTiles( index ).CaptureFlags32( objectType, color );
 }
 
 /* return color captured object */
