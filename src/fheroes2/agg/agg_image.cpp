@@ -557,7 +557,7 @@ namespace fheroes2
                         Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
 
-                        const fheroes2::Rect area = GetActiveROI( temp, 2 );
+                        const Rect area = GetActiveROI( temp, 2 );
                         if ( area.x > 0 || area.height != temp.height() ) {
                             const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
                             modified = Crop( temp, area.x, area.y, area.width, area.height );
@@ -859,7 +859,7 @@ namespace fheroes2
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // This is main menu image which doesn't shouldn't have any transform layer.
+                    // This is the main menu image which shouldn't have any transform layer.
                     _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
@@ -893,6 +893,48 @@ namespace fheroes2
                 populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
 
+                return true;
+            }
+            case ICN::DISMISS_HERO_DISABLED_BUTTON:
+            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON:
+            case ICN::MAX_DISABLED_BUTTON: {
+                _icnVsSprite[id].resize( 1 );
+                fheroes2::Sprite & output = _icnVsSprite[id][0];
+
+                int buttonIcnId = ICN::UNKNOWN;
+                uint32_t startIcnId = 0;
+
+                if ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::HSBTNS;
+                    startIcnId = 0;
+                }
+                else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::BTNNEWGM;
+                    startIcnId = 2;
+                }
+                else if ( id == ICN::MAX_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::RECRUIT;
+                    startIcnId = 4;
+                }
+
+                assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
+
+                const fheroes2::Sprite & released = GetICN( buttonIcnId, startIcnId );
+                const fheroes2::Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
+                output = released;
+
+                fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+                std::vector<fheroes2::Image> dismissImages;
+                dismissImages.emplace_back( released );
+                dismissImages.emplace_back( pressed );
+
+                fheroes2::Image common = fheroes2::ExtractCommonPattern( dismissImages );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+                common = fheroes2::FilterOnePixelNoise( common );
+
+                fheroes2::Blit( common, output );
                 return true;
             }
             default:

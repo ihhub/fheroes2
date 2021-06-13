@@ -942,6 +942,10 @@ namespace ICN
 
         CURSOR_ADVENTURE_MAP,
 
+        DISMISS_HERO_DISABLED_BUTTON,
+        NEW_CAMPAIGN_DISABLED_BUTTON,
+        MAX_DISABLED_BUTTON,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
