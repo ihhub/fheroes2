@@ -1560,8 +1560,8 @@ namespace fheroes2
             const uint8_t * transformInX = transformInY;
 
             for ( int32_t x = 0; x < width; ++x ) {
-                if ( *transformInX == 0 && ( x == 0 || x == width - 1 || *( transformInX - 1 ) == 0 || *( transformInX + 1 ) == 0 ) &&
-                    ( y== 0 || y == height - 1 || *( transformInX - width ) == 0 || *( transformInX + width ) == 0 ) ) {
+                if ( *transformInX == 0 && ( x == 0 || x == width - 1 || *( transformInX - 1 ) == 0 || *( transformInX + 1 ) == 0 )
+                     && ( y == 0 || y == height - 1 || *( transformInX - width ) == 0 || *( transformInX + width ) == 0 ) ) {
                     *( transformOutY + x ) = 0;
                     *( imageOutY + x ) = *( imageInY + x );
                 }
