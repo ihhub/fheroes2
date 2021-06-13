@@ -137,7 +137,7 @@ namespace fheroes2
         _offsetY = offsetY_;
     }
 
-    void ButtonBase::draw( Image & output )
+    void ButtonBase::draw( Image & output ) const
     {
         if ( !isVisible() )
             return;
