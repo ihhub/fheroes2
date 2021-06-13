@@ -112,7 +112,7 @@ namespace
         return obtainableAwards;
     }
 
-    std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyExtraCampaignAwardData() 
+    std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyExtraCampaignAwardData()
     {
         std::vector<Campaign::CampaignAwardData> extraAwards;
 

@@ -125,7 +125,7 @@ namespace Campaign
             if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), extraAwards[i]._id ) != _obtainedCampaignAwards.end() )
                 obtainedAwards.emplace_back( extraAwards[i] );
         }
-        
+
         return obtainedAwards;
     }
 
