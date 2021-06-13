@@ -144,7 +144,6 @@ public:
     void AddHeroes( Heroes * );
     void RemoveHeroes( const Heroes * );
     void ApplyPlayWithStartingHero( void );
-    void HeroesActionNewPosition() const;
 
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );

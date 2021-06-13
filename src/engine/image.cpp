@@ -1538,6 +1538,47 @@ namespace fheroes2
         }
     }
 
+    Image FilterOnePixelNoise( const Image & input )
+    {
+        if ( input.width() < 3 || input.height() < 3 ) {
+            return input;
+        }
+
+        const int32_t width = input.width();
+        const int32_t height = input.height();
+
+        Image output( width, height );
+        output.reset();
+
+        const uint8_t * imageInY = input.image();
+        const uint8_t * transformInY = input.transform();
+
+        uint8_t * imageOutY = output.image();
+        uint8_t * transformOutY = output.transform();
+
+        for ( int32_t y = 0; y < height; ++y ) {
+            const uint8_t * transformInX = transformInY;
+
+            for ( int32_t x = 0; x < width; ++x ) {
+                if ( *transformInX == 0 && ( x == 0 || x == width - 1 || *( transformInX - 1 ) == 0 || *( transformInX + 1 ) == 0 )
+                     && ( y == 0 || y == height - 1 || *( transformInX - width ) == 0 || *( transformInX + width ) == 0 ) ) {
+                    *( transformOutY + x ) = 0;
+                    *( imageOutY + x ) = *( imageInY + x );
+                }
+
+                ++transformInX;
+            }
+
+            imageInY += width;
+            transformInY += width;
+
+            imageOutY += width;
+            transformOutY += width;
+        }
+
+        return output;
+    }
+
     bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi )
     {
         if ( !Validate( out, outputRoi.x, outputRoi.y, outputRoi.width, outputRoi.height ) ) {

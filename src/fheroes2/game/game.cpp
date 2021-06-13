@@ -206,7 +206,6 @@ void Game::Init( void )
     LocalEvent & le = LocalEvent::Get();
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
-    le.SetGlobalFilter( true );
 
     Game::AnimateDelaysInitialize();
 
