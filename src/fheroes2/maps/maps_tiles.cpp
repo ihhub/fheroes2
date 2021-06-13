@@ -898,7 +898,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     // those bitfields are set by map editor regardless if map object is there
     tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
 
-    if ( mp2.mapObject == MP2::OBJ_ZERO || ( quantity1 >> 1 ) & 1 ) {
+    if ( mp2.mapObject == MP2::OBJ_ZERO || mp2.mapObject == MP2::OBJ_CRATER || ( quantity1 >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
@@ -1625,7 +1625,8 @@ bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t 
         return true;
 
     case ICN::OBJNCRCK:
-        return ( icnIndex == 58 || icnIndex == 59 || icnIndex == 64 || icnIndex == 65 || icnIndex == 188 || icnIndex == 189 || ( passable & DIRECTION_TOP_ROW ) );
+        return ( icnIndex == 235 || icnIndex == 58 || icnIndex == 59 || icnIndex == 64 || icnIndex == 65 || icnIndex == 188 || icnIndex == 189
+                 || ( passable & DIRECTION_TOP_ROW ) );
 
     case ICN::OBJNDIRT:
     case ICN::OBJNDSRT:
