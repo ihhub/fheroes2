@@ -88,6 +88,11 @@ namespace
     std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyCampaignAwardData( const int scenarioID )
     {
         std::vector<Campaign::CampaignAwardData> obtainableAwards;
+        // this award is the result of assembling the three anduran artifacts, and should not be obtained directly from clearing a campaign scenario
+        Campaign::CampaignAwardData battleGarbAwardData( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+        battleGarbAwardData._obtainedFromScenarioClear = false;
+
+        obtainableAwards.emplace_back( battleGarbAwardData );
 
         switch ( scenarioID ) {
         case 1:
@@ -104,7 +109,6 @@ namespace
             // Will assemble Battle Garb of Anduran along with the previous anduran set pieces
             // If we get all the parts, we'll obtain the Battle Garb award while removing the awards for the individual parts
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
 
             // seems that Kraeger is a custom name for Dainwin in this case
             obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
@@ -664,6 +668,7 @@ namespace Campaign
         , _amount( 0 )
         , _startScenarioID( 0 )
         , _customName()
+        , _obtainedFromScenarioClear( true )
     {}
 
     // default amount to 1 for initialized campaign award data
@@ -679,13 +684,15 @@ namespace Campaign
         : CampaignAwardData( id, type, subType, 1, 0, customName )
     {}
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName,
+                                          bool obtainedFromScenarioClear )
         : _id( id )
         , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
         , _customName( customName )
+        , _obtainedFromScenarioClear( obtainedFromScenarioClear )
     {}
 
     std::string CampaignAwardData::ToString() const

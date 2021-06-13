@@ -446,6 +446,9 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
+        if ( !obtainableAwards[i]._obtainedFromScenarioClear )
+            continue;
+
         const uint32_t awardType = obtainableAwards[i]._type;
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {

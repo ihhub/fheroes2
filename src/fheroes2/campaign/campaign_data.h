@@ -92,12 +92,14 @@ namespace Campaign
         uint32_t _amount;
         uint32_t _startScenarioID;
         std::string _customName;
+        bool _obtainedFromScenarioClear;
 
         CampaignAwardData();
         CampaignAwardData( int id, uint32_t type, uint32_t subType );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
+        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string(),
+                           bool obtainedFromScenarioClear = true );
 
         std::string ToString() const;
 
