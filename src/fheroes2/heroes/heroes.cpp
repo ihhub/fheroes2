@@ -874,9 +874,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
-        if ( friendColor != GetColor() ) {
-            world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
-        }
+        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
     }
 }
 
