@@ -899,7 +899,7 @@ namespace fheroes2
             case ICN::NEW_CAMPAIGN_DISABLED_BUTTON:
             case ICN::MAX_DISABLED_BUTTON: {
                 _icnVsSprite[id].resize( 1 );
-                fheroes2::Sprite & output = _icnVsSprite[id][0];
+                Sprite & output = _icnVsSprite[id][0];
 
                 int buttonIcnId = ICN::UNKNOWN;
                 uint32_t startIcnId = 0;
@@ -919,22 +919,22 @@ namespace fheroes2
 
                 assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
 
-                const fheroes2::Sprite & released = GetICN( buttonIcnId, startIcnId );
-                const fheroes2::Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
+                const Sprite & released = GetICN( buttonIcnId, startIcnId );
+                const Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
                 output = released;
 
-                fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+                ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-                std::vector<fheroes2::Image> dismissImages;
+                std::vector<Image> dismissImages;
                 dismissImages.emplace_back( released );
                 dismissImages.emplace_back( pressed );
 
-                fheroes2::Image common = fheroes2::ExtractCommonPattern( dismissImages );
-                common = fheroes2::FilterOnePixelNoise( common );
-                common = fheroes2::FilterOnePixelNoise( common );
-                common = fheroes2::FilterOnePixelNoise( common );
+                Image common = ExtractCommonPattern( dismissImages );
+                common = FilterOnePixelNoise( common );
+                common = FilterOnePixelNoise( common );
+                common = FilterOnePixelNoise( common );
 
-                fheroes2::Blit( common, output );
+                Blit( common, output );
                 return true;
             }
             default:
