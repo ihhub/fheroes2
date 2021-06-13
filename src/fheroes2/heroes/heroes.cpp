@@ -88,7 +88,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType * objectTypes, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, const MP2::MapObjectType * objectTypes, const uint32_t size, const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -846,7 +846,7 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 }
 
 /* return true if object visited */
-bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t type ) const
+bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, const Visit::type_t type /* = Visit::LOCAL */ ) const
 {
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( objectType );
@@ -881,7 +881,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 }
 
-void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType, Visit::type_t type )
+void Heroes::SetVisitedWideTile( const int32_t index, const MP2::MapObjectType objectType, const Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();

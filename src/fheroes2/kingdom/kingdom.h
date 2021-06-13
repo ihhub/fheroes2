@@ -154,11 +154,11 @@ public:
     void ActionNewWeek( void );
     void ActionNewMonth( void );
 
-    void SetVisited( s32 index, const MP2::MapObjectType objectType );
-    u32 CountVisitedObjects( const MP2::MapObjectType objectType ) const;
+    void SetVisited( const int32_t index, const MP2::MapObjectType objectType );
+    uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
-    bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
+    bool isVisited( const Maps::Tiles & tile ) const;
+    bool isVisited( const int32_t index, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
@@ -226,7 +226,7 @@ public:
     void AddCastles( const AllCastles & );
 
     void AddCondLossHeroes( const AllHeroes & );
-    void AddTributeEvents( CapturedObjects &, u32 day, const MP2::MapObjectType objectType );
+    void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
     u32 size( void ) const;
 

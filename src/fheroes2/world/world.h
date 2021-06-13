@@ -95,7 +95,7 @@ struct CapturedObject
         return guardians;
     }
 
-    void Set( const MP2::MapObjectType objectType, int col )
+    void Set( const MP2::MapObjectType objectType, const int col )
     {
         objcol = ObjectColor( objectType, col );
     }
@@ -111,15 +111,15 @@ struct CapturedObject
 
 struct CapturedObjects : std::map<s32, CapturedObject>
 {
-    void Set( s32, const MP2::MapObjectType objectType, int );
+    void Set( const int32_t index, const MP2::MapObjectType objectType, const int col );
     void SetColor( s32, int );
     void ClearFog( int );
     void ResetColor( int );
 
     CapturedObject & Get( s32 );
-    Funds TributeCapturedObject( int col, const MP2::MapObjectType objectType );
+    Funds TributeCapturedObject( const int color, const MP2::MapObjectType objectType );
 
-    u32 GetCount( const MP2::MapObjectType objectType, int ) const;
+    uint32_t GetCount( const MP2::MapObjectType objectType, const int col ) const;
     u32 GetCountMines( int, int ) const;
     int GetColor( s32 ) const;
 };
@@ -241,7 +241,7 @@ public:
     MapsIndexes GetWhirlpoolEndPoints( s32 ) const;
 
     void CaptureObject( s32, int col );
-    u32 CountCapturedObject( const MP2::MapObjectType objectType, int col ) const;
+    uint32_t CountCapturedObject( const MP2::MapObjectType objectType, const int col ) const;
     u32 CountCapturedMines( int type, int col ) const;
     u32 CountObeliskOnMaps( void );
     int ColorCapturedObject( s32 ) const;

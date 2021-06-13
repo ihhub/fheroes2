@@ -115,7 +115,7 @@ void CapturedObjects::SetColor( s32 index, int col )
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( s32 index, const MP2::MapObjectType objectType, int col )
+void CapturedObjects::Set( const int32_t index, const MP2::MapObjectType objectType, const int col )
 {
     CapturedObject & co = Get( index );
 
@@ -125,7 +125,7 @@ void CapturedObjects::Set( s32 index, const MP2::MapObjectType objectType, int c
     co.Set( objectType, col );
 }
 
-u32 CapturedObjects::GetCount( const MP2::MapObjectType objectType, int col ) const
+uint32_t CapturedObjects::GetCount( const MP2::MapObjectType objectType, const int col ) const
 {
     u32 result = 0;
 
@@ -214,7 +214,7 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-Funds CapturedObjects::TributeCapturedObject( int color, const MP2::MapObjectType objectType )
+Funds CapturedObjects::TributeCapturedObject( const int color, const MP2::MapObjectType objectType )
 {
     Funds result;
 
@@ -745,7 +745,7 @@ s32 World::NextWhirlpool( s32 index ) const
 /* return message from sign */
 
 /* return count captured object */
-u32 World::CountCapturedObject( const MP2::MapObjectType objectType, int col ) const
+uint32_t World::CountCapturedObject( const MP2::MapObjectType objectType, const int col ) const
 {
     return map_captureobj.GetCount( objectType, col );
 }

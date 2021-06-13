@@ -67,14 +67,14 @@ namespace Maps
     Indexes GetAroundIndexes( s32 );
     Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
 
-    Indexes ScanAroundObject( s32, const MP2::MapObjectType objectType );
-    Indexes ScanAroundObject( s32, u32 dist, const MP2::MapObjectType objectType );
+    Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType );
+    Indexes ScanAroundObject( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType );
 
     Indexes GetTilesUnderProtection( s32 );
     bool TileIsUnderProtection( s32 );
 
-    Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
-    Indexes GetObjectPositions( s32, const MP2::MapObjectType objectType, bool ignoreHeroes );
+    Indexes GetObjectPositions( const MP2::MapObjectType objectType, const bool ignoreHeroes );
+    Indexes GetObjectPositions( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
     Indexes GetObjectsPositions( const std::vector<MP2::MapObjectType> & objectTypes );
 
     int TileIsCoast( s32, int direct = DIRECTION_ALL );

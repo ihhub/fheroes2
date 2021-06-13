@@ -305,8 +305,8 @@ public:
     // Set global visited state for itself and for allies.
     void setVisitedForAllies( const int32_t tileIndex ) const;
 
-    void SetVisitedWideTile( s32, const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL );
-    bool isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::type_t = Visit::LOCAL ) const;
+    void SetVisitedWideTile( const int32_t index, const MP2::MapObjectType objectType, const Visit::type_t type = Visit::LOCAL );
+    bool isObjectTypeVisited( const MP2::MapObjectType objectType, const Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );

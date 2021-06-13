@@ -391,7 +391,7 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject() );
 }
 
-bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
+bool Kingdom::isVisited( const int32_t index, const MP2::MapObjectType objectType ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( objectType );
@@ -403,13 +403,13 @@ bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
     return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
+uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
 {
     return std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( const int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
         visit_object.push_front( IndexObject( index, objectType ) );
@@ -883,7 +883,7 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, const MP2::MapObjectType objectType )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
 {
     for ( u32 ii = 0; ii < size(); ++ii )
         if ( kingdoms[ii].isPlay() ) {

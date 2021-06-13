@@ -1982,7 +1982,7 @@ void Maps::Tiles::removeFlags()
     addons_level2.remove_if( TilesAddon::isFlag32 );
 }
 
-void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
+void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, const int col )
 {
     u32 index = 0;
 
@@ -2120,7 +2120,7 @@ void Maps::Tiles::FixedPreload( Tiles & tile )
 }
 
 /* true: if protection or has guardians */
-bool Maps::Tiles::CaptureObjectIsProtection( void ) const
+bool Maps::Tiles::CaptureObjectIsProtection() const
 {
     const MP2::MapObjectType objectType = GetObject( false );
 

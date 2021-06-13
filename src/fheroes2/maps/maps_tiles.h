@@ -194,7 +194,7 @@ namespace Maps
         void UpdatePassable( void );
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, const int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();
@@ -251,7 +251,7 @@ namespace Maps
         void MonsterSetCount( u32 count );
         u32 MonsterCount( void ) const;
 
-        bool CaptureObjectIsProtection( void ) const;
+        bool CaptureObjectIsProtection() const;
 
         /* object quantity operation */
         void QuantityUpdate( bool isFirstLoad = true );

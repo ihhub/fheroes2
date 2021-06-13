@@ -363,7 +363,7 @@ u32 GameStatic::GetCastleGrownMonthOf( void )
     return castle_grown_month_of;
 }
 
-s32 GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
+int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:

@@ -391,24 +391,24 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     return tileCount;
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, const MP2::MapObjectType objectType )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objectType );
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, const MP2::MapObjectType objectType )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const uint32_t dist, const MP2::MapObjectType objectType )
 {
     Indexes results = Maps::GetAroundIndexes( center, dist, true );
     return MapsIndexesFilteredObject( results, objectType );
 }
 
-Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
     return MapsIndexesObject( objectType, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, const MP2::MapObjectType objectType, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes )
 {
     Indexes results = MapsIndexesObject( objectType, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
