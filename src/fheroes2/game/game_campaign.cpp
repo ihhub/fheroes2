@@ -446,9 +446,6 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
-        if ( !obtainableAwards[i]._obtainedFromScenarioClear )
-            continue;
-
         const uint32_t awardType = obtainableAwards[i]._type;
 
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_CARRY_OVER_FORCES ) {
@@ -460,44 +457,41 @@ fheroes2::GameMode Game::CompleteCampaignScenario()
                 saveData.setCarryOverTroops( lastBattleWinHero->GetArmy() );
         }
 
+        saveData.addCampaignAward( obtainableAwards[i]._id );
+
+        // after adding an artifact award, check whether the artifacts can be assembled into something else
         if ( awardType == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) {
-            const std::vector<Campaign::CampaignAwardData> & obtainedAwards = saveData.getObtainedCampaignAwards();
+            const std::vector<Campaign::CampaignAwardData> obtainedAwards = saveData.getObtainedCampaignAwards();
+            std::map<uint32_t, Campaign::CampaignAwardData> artifactAwards;
+            BagArtifacts bagArtifacts;
 
-            // prepare to check if the obtained artifacts so far can be assembled into something else
-            BagArtifacts awardedArtifacts;
-            awardedArtifacts.PushArtifact( obtainableAwards[i]._subType );
-
-            for ( size_t j = 0; j < obtainedAwards.size(); ++j ) {
-                if ( !( obtainableAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) )
+            for ( const Campaign::CampaignAwardData & awardData : obtainedAwards ) {
+                if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
                     continue;
 
-                awardedArtifacts.PushArtifact( obtainedAwards[j]._subType );
+                artifactAwards.emplace( awardData._subType, awardData );
+                bagArtifacts.PushArtifact( awardData._subType );
+                saveData.removeCampaignAward( awardData._id );
             }
 
-            const ArtifactSetData * assembledArtifactSetData = awardedArtifacts.assembleArtifactSetIfPossible();
+            // add the assembled artifact's campaign award to artifactAwards
+            for ( const Campaign::CampaignAwardData & awardData : Campaign::CampaignAwardData::getExtraCampaignAwardData( saveData.getCampaignID() ) ) {
+                if ( awardData._type != Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT )
+                    continue;
 
-            if ( assembledArtifactSetData && assembledArtifactSetData->isValid() ) {
-                const std::vector<uint32_t> & assembledArtifactParts = assembledArtifactSetData->getArtifactPartIDs();
-                // If we manage to assemble an artifact, remove the awarded parts
-                // Also please create another campaign award for the assembled artifact because we shouldn't create a new campaign award from here
-                for ( uint32_t artifactPart : assembledArtifactParts ) {
-                    for ( int j = static_cast<int>( obtainedAwards.size() - 1 ); j >= 0; --j ) {
-                        if ( !( obtainedAwards[j]._type == Campaign::CampaignAwardData::AwardType::TYPE_GET_ARTIFACT ) )
-                            continue;
-                        else if ( obtainedAwards[j]._subType != artifactPart )
-                            continue;
+                artifactAwards.emplace( awardData._subType, awardData );
+            }
 
-                        saveData.removeCampaignAward( obtainedAwards[j]._id );
-                    }
-                }
+            bagArtifacts.assembleArtifactSetIfPossible();
+
+            for ( const Artifact & artifact : bagArtifacts ) {
+                if ( !artifact.isValid() )
+                    continue;
+
+                const auto foundArtifact = artifactAwards.find( artifact.GetID() );
+                if ( foundArtifact != artifactAwards.end() )
+                    saveData.addCampaignAward( foundArtifact->second._id );
             }
-            else {
-                // if we are not assembling anything (or if the award is already the assembled artifact), simply add the award
-                saveData.addCampaignAward( obtainableAwards[i]._id );
-            }
-        }
-        else {
-            saveData.addCampaignAward( obtainableAwards[i]._id );
         }
     }
 

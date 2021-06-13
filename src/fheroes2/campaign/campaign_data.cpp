@@ -88,12 +88,6 @@ namespace
     std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyCampaignAwardData( const int scenarioID )
     {
         std::vector<Campaign::CampaignAwardData> obtainableAwards;
-        // this award is the result of assembling the three anduran artifacts, and should not be obtained directly from clearing a campaign scenario
-        Campaign::CampaignAwardData battleGarbAwardData( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
-        battleGarbAwardData._obtainedFromScenarioClear = false;
-
-        obtainableAwards.emplace_back( battleGarbAwardData );
-
         switch ( scenarioID ) {
         case 1:
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
@@ -116,6 +110,14 @@ namespace
         }
 
         return obtainableAwards;
+    }
+
+    std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyExtraCampaignAwardData() 
+    {
+        std::vector<Campaign::CampaignAwardData> extraAwards;
+
+        extraAwards.emplace_back( 10, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BATTLE_GARB );
+        return extraAwards;
     }
 
     std::vector<Campaign::CampaignAwardData> getWizardsIsleCampaignAwardData( const int scenarioID )
@@ -542,6 +544,29 @@ namespace Campaign
         return std::vector<Campaign::CampaignAwardData>();
     }
 
+    // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getExtraCampaignAwardData( const int campaignID )
+    {
+        assert( campaignID >= 0 );
+
+        switch ( campaignID ) {
+        case ROLAND_CAMPAIGN:
+            break;
+        case ARCHIBALD_CAMPAIGN:
+            break;
+        case PRICE_OF_LOYALTY_CAMPAIGN:
+            return getPriceOfLoyaltyExtraCampaignAwardData();
+        case DESCENDANTS_CAMPAIGN:
+            break;
+        case WIZARDS_ISLE_CAMPAIGN:
+            break;
+        case VOYAGE_HOME_CAMPAIGN:
+            break;
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
+    }
+
     std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
         std::vector<int> scenarioIDs;
@@ -668,7 +693,6 @@ namespace Campaign
         , _amount( 0 )
         , _startScenarioID( 0 )
         , _customName()
-        , _obtainedFromScenarioClear( true )
     {}
 
     // default amount to 1 for initialized campaign award data
@@ -684,15 +708,13 @@ namespace Campaign
         : CampaignAwardData( id, type, subType, 1, 0, customName )
     {}
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName,
-                                          bool obtainedFromScenarioClear )
+    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName )
         : _id( id )
         , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
         , _customName( customName )
-        , _obtainedFromScenarioClear( obtainedFromScenarioClear )
     {}
 
     std::string CampaignAwardData::ToString() const

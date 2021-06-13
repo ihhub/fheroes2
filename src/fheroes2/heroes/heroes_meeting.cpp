@@ -448,15 +448,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            const ArtifactSetData * assembledArtifactSetData1 = bag_artifacts.assembleArtifactSetIfPossible();
-            const ArtifactSetData * assembledArtifactSetData2 = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            const auto assembledArtifacts1 = bag_artifacts.assembleArtifactSetIfPossible();
+            const auto assembledArtifacts2 = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            if ( assembledArtifactSetData1 && assembledArtifactSetData1->isValid() ) {
-                assembledArtifactSetData1->DisplayAssembleMessage();
-            }
-            else if ( assembledArtifactSetData2 && assembledArtifactSetData2->isValid() ) {
-                assembledArtifactSetData2->DisplayAssembleMessage();
-            }
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts1 )
+                artifactSetData.DisplayAssembleMessage();
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts2 )
+                artifactSetData.DisplayAssembleMessage();
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();

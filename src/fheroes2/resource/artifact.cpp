@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -61,9 +62,8 @@ struct artifactstats_t
     const char * description;
 };
 
-const std::vector<ArtifactSetData> artifactSets
-    = { { Artifact::BATTLE_GARB, std::vector<uint32_t>{ Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN },
-          _( "The three Anduran artifacts magically combine into one." ) } };
+const std::map<ArtifactSetData, std::vector<uint32_t> > artifactSets = { { { Artifact::BATTLE_GARB, _( "The three Anduran artifacts magically combine into one." ) },
+                                                                           { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
 artifactstats_t artifacts[] = {
     {0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." )},
@@ -892,6 +892,11 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
+bool operator<( const ArtifactSetData & a, const ArtifactSetData & b )
+{
+    return a._assembledArtifactID < b._assembledArtifactID;
+}
+
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
     : _hero( hero )
     , use_mini_sprite( mini )
@@ -1174,48 +1179,48 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
 }
 
-ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs, const std::string & assembleMessage )
+ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
     : _assembledArtifactID( artifactID )
-    , _artifactPartIDs( artifactPartIDs )
     , _assembleMessage( assembleMessage )
 {}
 
-const ArtifactSetData * BagArtifacts::assembleArtifactSetIfPossible()
+const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
-    std::vector<iterator> artifactPartsInBag;
+    std::set<ArtifactSetData> assembledArtifactSets;
 
-    for ( size_t i = 0; i < artifactSets.size(); ++i ) {
-        const std::vector<uint32_t> artifactParts = artifactSets[i].getArtifactPartIDs();
-        const size_t partsCount = artifactParts.size();
+    for ( std::pair<ArtifactSetData, std::vector<uint32_t> > setData : artifactSets ) {
+        while ( true ) {
+            bool foundAllArtifacts = true;
 
-        for ( size_t j = 0; j < partsCount; ++j ) {
-            iterator artifactPart = std::find( begin(), end(), Artifact( artifactParts[j] ) );
-
-            // cannot find artifact part, so try to assemble another
-            if ( artifactPart == end() ) {
-                artifactPartsInBag.clear();
-                break;
-            }
-
-            artifactPartsInBag.emplace_back( artifactPart );
-
-            // finished assembling
-            if ( j == partsCount - 1 ) {
-                // remove the artifact parts
-                for ( iterator assembledArtifactPart : artifactPartsInBag ) {
-                    *assembledArtifactPart = Artifact::UNKNOWN;
+            for ( const int artifactId : setData.second ) {
+                if ( std::find( begin(), end(), Artifact( artifactId ) ) == end() ) {
+                    foundAllArtifacts = false;
+                    break;
                 }
-
-                PushArtifact( artifactSets[i].getAssembledArtifactID() );
-                return &artifactSets[i];
             }
+
+            if ( !foundAllArtifacts )
+                break;
+
+            // At this point, we have confirmed that all the artifact parts are present
+            // so remove the parts and then add the assembled artifact to BagArtifacts
+            for ( const int artifactId : setData.second )
+                RemoveArtifact( artifactId );
+
+            assembledArtifactSets.insert( setData.first );
+            PushArtifact( setData.first._assembledArtifactID );
         }
     }
 
-    return nullptr;
+    return assembledArtifactSets;
 }
 
 void ArtifactSetData::DisplayAssembleMessage() const
 {
     Dialog::ArtifactInfo( "", _assembleMessage, _assembledArtifactID );
+}
+
+bool ArtifactSetData::operator==( const uint32_t artifactID ) const
+{
+    return _assembledArtifactID == artifactID;
 }

@@ -958,10 +958,10 @@ bool Heroes::PickupArtifact( const Artifact & art )
         return false;
     }
 
-    // check: anduran garb
-    const ArtifactSetData * assembledArtifactSetData = bag_artifacts.assembleArtifactSetIfPossible();
-    if ( assembledArtifactSetData && assembledArtifactSetData->isValid() && isControlHuman() )
-        assembledArtifactSetData->DisplayAssembleMessage();
+    // check: artifact sets such as anduran garb
+    const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+    for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
+        artifactSetData.DisplayAssembleMessage();
 
     return true;
 }

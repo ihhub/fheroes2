@@ -22,6 +22,7 @@
 #ifndef H2ARTIFACT_H
 #define H2ARTIFACT_H
 
+#include <set>
 #include <vector>
 
 #include "gamedefs.h"
@@ -210,53 +211,19 @@ StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
 u32 GoldInsteadArtifact( int );
 
-class ArtifactSetData
+struct ArtifactSetData
 {
 public:
     ArtifactSetData() = default;
-    ArtifactSetData( const uint32_t artifactID, const std::vector<uint32_t> & artifactPartIDs, const std::string & assembleMessage );
-
-    const std::string & getAssembleMessage() const
-    {
-        return _assembleMessage;
-    }
-
-    const std::vector<uint32_t> & getArtifactPartIDs() const
-    {
-        return _artifactPartIDs;
-    }
-
-    uint32_t getAssembledArtifactID() const
-    {
-        return _assembledArtifactID;
-    }
-
-    bool isValid() const
-    {
-        return _assembledArtifactID != Artifact::ART_NONE;
-    }
-
-    bool isCombinationResult( const uint32_t artifactID ) const
-    {
-        return artifactID == _assembledArtifactID;
-    }
-
-    bool isPartOfSet( const uint32_t artifactID ) const
-    {
-        for ( size_t i = 0; i < _artifactPartIDs.size(); ++i ) {
-            if ( _artifactPartIDs[i] == artifactID )
-                return true;
-        }
-
-        return false;
-    }
+    ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
 
     void DisplayAssembleMessage() const;
 
-private:
     uint32_t _assembledArtifactID;
-    std::vector<uint32_t> _artifactPartIDs;
     std::string _assembleMessage;
+
+    bool operator==( const uint32_t artifactID ) const;
+    friend bool operator<( const ArtifactSetData & a, const ArtifactSetData & b );
 };
 
 class BagArtifacts : public std::vector<Artifact>
@@ -269,7 +236,6 @@ public:
     bool PushArtifact( const Artifact & );
     bool isFull( void ) const;
     bool ContainUltimateArtifact( void ) const;
-    const ArtifactSetData * assembleArtifactSetIfPossible();
 
     void RemoveArtifact( const Artifact & );
     void RemoveScroll( const Artifact & );
@@ -278,6 +244,8 @@ public:
     int getArtifactValue() const;
     u32 CountArtifacts( void ) const;
     u32 Count( const Artifact & ) const;
+
+    const std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
     std::string String( void ) const;
 };

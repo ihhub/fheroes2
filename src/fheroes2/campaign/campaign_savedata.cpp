@@ -120,6 +120,12 @@ namespace Campaign
             }
         }
 
+        const std::vector<Campaign::CampaignAwardData> extraAwards = Campaign::CampaignAwardData::getExtraCampaignAwardData( _campaignID );
+        for ( size_t i = 0; i < extraAwards.size(); ++i ) {
+            if ( std::find( _obtainedCampaignAwards.begin(), _obtainedCampaignAwards.end(), extraAwards[i]._id ) != _obtainedCampaignAwards.end() )
+                obtainedAwards.emplace_back( extraAwards[i] );
+        }
+        
         return obtainedAwards;
     }
 
