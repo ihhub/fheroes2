@@ -46,5 +46,16 @@ endif(ENABLE_ZLIB)
 
 add_subdirectory(src)
 
-install(FILES doc/README.txt LICENSE changelog.txt DESTINATION ${CMAKE_INSTALL_DOCDIR})
-
+install(
+    FILES doc/README.txt LICENSE changelog.txt
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}
+)
+install(
+    FILES script/demo/demo_unix.sh
+    PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+)
+install(
+    FILES script/demo/demo_windows.bat script/demo/demo_windows.ps1
+    DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+)
