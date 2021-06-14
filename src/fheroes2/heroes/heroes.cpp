@@ -584,7 +584,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-            point += 500;
+            point += 400;
     }
 
     acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
@@ -721,10 +721,6 @@ void Heroes::ActionNewDay( void )
     move_point = GetMaxMovePoints();
     MovePointsScaleFixed();
 
-    // stables visited?
-    if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-        move_point += 400;
-
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
 
@@ -832,7 +828,6 @@ Castle * Heroes::inCastle( void )
     return castle && castle->GetHeroes() == this ? castle : NULL;
 }
 
-/* is visited cell */
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
@@ -844,7 +839,6 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, object ) );
 }
 
-/* return true if object visited */
 bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
@@ -911,6 +905,19 @@ void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
         visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+void Heroes::unmarkHeroMeeting()
+{
+    const KingdomHeroes & heroes = GetKingdom().GetHeroes();
+    for ( Heroes * hero : heroes ) {
+        if ( hero == nullptr || hero == this ) {
+            continue;
+        }
+
+        hero->visit_object.remove( IndexObject( hid, MP2::OBJ_HEROES ) );
+        visit_object.remove( IndexObject( hero->hid, MP2::OBJ_HEROES ) );
+    }
 }
 
 bool Heroes::hasMetWithHero( int heroID ) const
