@@ -58,9 +58,9 @@ endif
 ifdef FHEROES2_IMAGE_SUPPORT
 CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
 ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
 endif
 
