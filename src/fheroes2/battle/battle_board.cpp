@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <functional>
 #include <iterator>
 #include <set>
