@@ -260,7 +260,7 @@ namespace AI
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
             double movementBonus = daysActive * 400.0 - 2.0 * distance;
             if ( movementBonus < 0 ) {
-                // Looks like this 
+                // Looks like this is too far away.
                 movementBonus = 0;
             }
 
@@ -272,25 +272,26 @@ namespace AI
             const double upgradeSwordsmanValue = Monster( Monster::MASTER_SWORDSMAN ).GetMonsterStrength() - Monster( Monster::SWORDSMAN ).GetMonsterStrength();
             const double upgradeGolemValue = Monster( Monster::STEEL_GOLEM ).GetMonsterStrength() - Monster( Monster::IRON_GOLEM ).GetMonsterStrength();
 
-            return upgradePikemanValue * hero.GetArmy().GetCountMonsters( Monster::PIKEMAN ) + upgradeSwordsmanValue * hero.GetArmy().GetCountMonsters( Monster::SWORDSMAN ) +
-                upgradeGolemValue * hero.GetArmy().GetCountMonsters( Monster::IRON_GOLEM );
+            return upgradePikemanValue * hero.GetArmy().GetCountMonsters( Monster::PIKEMAN )
+                   + upgradeSwordsmanValue * hero.GetArmy().GetCountMonsters( Monster::SWORDSMAN )
+                   + upgradeGolemValue * hero.GetArmy().GetCountMonsters( Monster::IRON_GOLEM );
         }
         else if ( objectID == MP2::OBJ_HILLFORT ) {
             const double upgradeDwarfValue = Monster( Monster::BATTLE_DWARF ).GetMonsterStrength() - Monster( Monster::DWARF ).GetMonsterStrength();
             const double upgradeOrcValue = Monster( Monster::ORC_CHIEF ).GetMonsterStrength() - Monster( Monster::ORC ).GetMonsterStrength();
             const double upgradeOgreValue = Monster( Monster::OGRE_LORD ).GetMonsterStrength() - Monster( Monster::OGRE ).GetMonsterStrength();
 
-            return upgradeDwarfValue * hero.GetArmy().GetCountMonsters( Monster::DWARF ) + upgradeOrcValue * hero.GetArmy().GetCountMonsters( Monster::ORC ) +
-                upgradeOgreValue * hero.GetArmy().GetCountMonsters( Monster::OGRE );
+            return upgradeDwarfValue * hero.GetArmy().GetCountMonsters( Monster::DWARF ) + upgradeOrcValue * hero.GetArmy().GetCountMonsters( Monster::ORC )
+                   + upgradeOgreValue * hero.GetArmy().GetCountMonsters( Monster::OGRE );
         }
         else if ( objectID == MP2::OBJ_TRAVELLERTENT ) {
             // Most likely it'll lead to opening more land.
             return 1000;
         }
-        else if ( objectID == MP2::OBJ_OASIS) {
+        else if ( objectID == MP2::OBJ_OASIS ) {
             return std::max( 800.0 - 2.0 * distance, 0.0 );
         }
-        else if ( objectID == MP2::OBJ_WATERINGHOLE) {
+        else if ( objectID == MP2::OBJ_WATERINGHOLE ) {
             return std::max( 400.0 - 2.0 * distance, 0.0 );
         }
 

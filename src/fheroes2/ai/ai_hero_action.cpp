@@ -1734,13 +1734,14 @@ namespace AI
         case MP2::OBJ_SHRINE3: {
             const Spell & spell = tile.QuantitySpell();
             assert( spell.isValid() );
-            if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell ) ||
-                ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+            if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell )
+                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
                 return false;
             }
 
-            if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL ) && ( spell == Spell::VIEWALL || spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES ||
-                spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
+            if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL )
+                 && ( spell == Spell::VIEWALL || spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
+                      || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
                 // AI never uses View spells.
                 return false;
             }
@@ -1885,7 +1886,7 @@ namespace AI
             }
             break;
 
-        // case MP2::OBJ_PYRAMID:
+            // case MP2::OBJ_PYRAMID:
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
