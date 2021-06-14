@@ -113,7 +113,16 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 
 #endif // WITH_ZLIB
 
-bool ZStreamFile::read( const std::string & fn, size_t offset )
+ZStreamFile::ZStreamFile( bool compressed )
+    : StreamBuf()
+    , _compressed( compressed )
+{
+#ifndef WITH_ZLIB
+    (void)_compressed; // Silence the "private field is not used" compiler warning
+#endif
+}
+
+bool ZStreamFile::read( const std::string & fn, size_t offset /* = 0 */ )
 {
     StreamFile sf;
     sf.setbigendian( true );
@@ -122,53 +131,63 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
         if ( offset )
             sf.seek( offset );
 #ifdef WITH_ZLIB
-        const u32 size0 = sf.get32(); // raw size
-        if ( size0 == 0 ) {
-            return false;
+        if ( _compressed ) {
+            const u32 size0 = sf.get32(); // raw size
+            if ( size0 == 0 ) {
+                return false;
+            }
+            const u32 size1 = sf.get32(); // zip size
+            if ( size1 == 0 ) {
+                return false;
+            }
+            sf.skip( 4 ); // old stream format
+            std::vector<u8> zip = sf.getRaw( size1 );
+            std::vector<u8> raw = zlibDecompress( &zip[0], zip.size(), size0 );
+            putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
+            seek( 0 );
         }
-        const u32 size1 = sf.get32(); // zip size
-        if ( size1 == 0 ) {
-            return false;
+        else {
+#endif
+            const u32 size0 = sf.get32(); // raw size
+            if ( size0 == 0 ) {
+                return false;
+            }
+            std::vector<u8> raw = sf.getRaw( size0 );
+            putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
+            seek( 0 );
+#ifdef WITH_ZLIB
         }
-        sf.skip( 4 ); // old stream format
-        std::vector<u8> zip = sf.getRaw( size1 );
-        std::vector<u8> raw = zlibDecompress( &zip[0], zip.size(), size0 );
-        putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
-        seek( 0 );
-#else
-        const u32 size0 = sf.get32(); // raw size
-        if ( size0 == 0 ) {
-            return false;
-        }
-        std::vector<u8> raw = sf.getRaw( size0 );
-        putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
-        seek( 0 );
 #endif
         return !fail();
     }
     return false;
 }
 
-bool ZStreamFile::write( const std::string & fn, bool append ) const
+bool ZStreamFile::write( const std::string & fn, bool append /* = false */ ) const
 {
     StreamFile sf;
     sf.setbigendian( true );
 
     if ( sf.open( fn, append ? "ab" : "wb" ) ) {
 #ifdef WITH_ZLIB
-        std::vector<u8> zip = zlibCompress( data(), size() );
+        if ( _compressed ) {
+            std::vector<u8> zip = zlibCompress( data(), size() );
 
-        if ( !zip.empty() ) {
-            sf.put32( static_cast<uint32_t>( size() ) );
-            sf.put32( static_cast<uint32_t>( zip.size() ) );
-            sf.put32( 0 ); // unused, old format support
-            sf.putRaw( reinterpret_cast<char *>( &zip[0] ), zip.size() );
-            return !sf.fail();
+            if ( !zip.empty() ) {
+                sf.put32( static_cast<uint32_t>( size() ) );
+                sf.put32( static_cast<uint32_t>( zip.size() ) );
+                sf.put32( 0 ); // unused, old format support
+                sf.putRaw( reinterpret_cast<char *>( &zip[0] ), zip.size() );
+                return !sf.fail();
+            }
         }
-#else
-        sf.put32( size() );
-        sf.putRaw( reinterpret_cast<const char *>( data() ), size() );
-        return !sf.fail();
+        else {
+#endif
+            sf.put32( size() );
+            sf.putRaw( reinterpret_cast<const char *>( data() ), size() );
+            return !sf.fail();
+#ifdef WITH_ZLIB
+        }
 #endif
     }
     return false;

@@ -136,7 +136,7 @@ bool Game::Save( const std::string & fn )
        << HeaderSAV( conf.CurrentFileInfo(), conf.GameType(), CURRENT_FORMAT_VERSION );
     fs.close();
 
-    ZStreamFile fz;
+    ZStreamFile fz( true );
     fz.setbigendian( true );
 
     // zip game data content
@@ -206,7 +206,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     }
 #endif
 
-    ZStreamFile fz;
+    ZStreamFile fz( ( header.status & HeaderSAV::IS_COMPRESS ) == HeaderSAV::IS_COMPRESS );
     fz.setbigendian( true );
 
     if ( !fz.read( fn, offset ) ) {

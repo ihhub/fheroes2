@@ -100,7 +100,7 @@ private:
 
 bool HGSData::Load( const std::string & fn )
 {
-    ZStreamFile hdata;
+    ZStreamFile hdata( true );
     if ( !hdata.read( fn ) )
         return false;
 
@@ -119,7 +119,7 @@ bool HGSData::Load( const std::string & fn )
 
 bool HGSData::Save( const std::string & fn ) const
 {
-    ZStreamFile hdata;
+    ZStreamFile hdata( true );
     hdata.setbigendian( true );
     hdata << static_cast<u16>( HGS_ID ) << list;
     if ( hdata.fail() || !hdata.write( fn ) )
