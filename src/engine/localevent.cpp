@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 
 #include "localevent.h"
 #include "audio_mixer.h"

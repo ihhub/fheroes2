@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cstdlib>
 
 #include "agg.h"
 #include "agg_image.h"
