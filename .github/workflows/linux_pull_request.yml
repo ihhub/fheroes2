@@ -14,6 +14,8 @@ jobs:
           env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON" }
         - name: debug
           env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+        - name: without_zlib
+          env: { FHEROES2_SDL1: "ON", FHEROES2_STRICT_COMPILATION: "ON", WITHOUT_ZLIB: "ON" }
     name: sdl1 ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +37,8 @@ jobs:
           env: { FHEROES2_STRICT_COMPILATION: "ON" }
         - name: debug
           env: { FHEROES2_STRICT_COMPILATION: "ON", DEBUG: "ON" }
+        - name: without_zlib
+          env: { FHEROES2_STRICT_COMPILATION: "ON", WITHOUT_ZLIB: "ON" }
     name: sdl2 ${{ matrix.name }}
     steps:
     - uses: actions/checkout@v2
