@@ -371,7 +371,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-double HeroBase::GetSpellcastStrength( double armyLimit ) const
+double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 {
     const std::vector<Spell> & spells = GetSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
