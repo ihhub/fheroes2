@@ -183,7 +183,7 @@ bool ZStreamFile::write( const std::string & fn, bool append /* = false */ ) con
         }
         else {
 #endif
-            sf.put32( size() );
+            sf.put32( static_cast<uint32_t>( size() ) );
             sf.putRaw( reinterpret_cast<const char *>( data() ), size() );
             return !sf.fail();
 #ifdef WITH_ZLIB
