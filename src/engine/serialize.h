@@ -194,9 +194,7 @@ public:
     }
 };
 
-#ifdef WITH_ZLIB
 class ZStreamBuf;
-#endif
 
 class StreamBuf : public StreamBase
 {
@@ -247,9 +245,7 @@ protected:
     u8 get8() override;
     void put8( char ) override;
 
-#ifdef WITH_ZLIB
     friend class ZStreamBuf;
-#endif
 
     u8 * itbeg;
     u8 * itget;
