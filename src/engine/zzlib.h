@@ -44,10 +44,4 @@ public:
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
 
-class ImageZlib : public fheroes2::Image
-{
-    ImageZlib( int32_t width, int32_t height, const uint8_t * data, size_t size );
-    ~ImageZlib() override = default;
-};
-
 #endif
