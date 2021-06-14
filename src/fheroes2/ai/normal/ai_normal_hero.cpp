@@ -107,7 +107,7 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distance ) const
+    double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -258,7 +258,7 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_STABLES ) {
             const int daysActive = DAYOFWEEK - world.GetDay() + 1;
-            double movementBonus = daysActive * 400.0 - 2.0 * distance;
+            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
             if ( movementBonus < 0 ) {
                 // Looks like this is too far away.
                 movementBonus = 0;
@@ -289,10 +289,10 @@ namespace AI
             return 1000;
         }
         else if ( objectID == MP2::OBJ_OASIS ) {
-            return std::max( 800.0 - 2.0 * distance, 0.0 );
+            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
         }
         else if ( objectID == MP2::OBJ_WATERINGHOLE ) {
-            return std::max( 400.0 - 2.0 * distance, 0.0 );
+            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
         }
 
         // TODO: add support for all possible objects.
