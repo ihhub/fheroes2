@@ -371,13 +371,35 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-double HeroBase::GetSpellcastStrength() const
+double HeroBase::GetSpellcastStrength( double armyLimit ) const
 {
-    if ( GetSpells().empty() )
-        return 0.0;
+    const std::vector<Spell> & spells = GetSpells();
+    const uint32_t currentSpellPoints = GetSpellPoints();
+    const int spellPower = GetPower();
 
-    // Benchmark for strength is 20 power * 20 knowledge (200 spell points) is 3000.0
-    return GetPower() * sqrt( GetSpellPoints() / 2 ) * 15.0;
+    double bestValue = 0;
+    for ( const Spell & spell : spells ) {
+        if ( spell.isCombat() && spell.SpellPoint() <= currentSpellPoints ) {
+            const int id = spell.GetID();
+
+            // High impact spells can turn tide of battle, otherwise look for damage spells
+            if ( spell.isSummon() ) {
+                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower );
+            }
+            else if ( spell.isDamage() ) {
+                // Benchmark for Lightning for 20 power * 20 knowledge (200 spell points) is 2500.0
+                bestValue = std::max( bestValue, spell.Damage() / 2.0 * spellPower * sqrt( currentSpellPoints / 2 ) );
+            }
+            else if ( spell.isResurrect() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+                bestValue = std::max( bestValue, armyLimit * 0.5 );
+            }
+            else {
+                bestValue = std::max( bestValue, armyLimit * 0.2 );
+            }
+        }
+    }
+
+    return bestValue;
 }
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const

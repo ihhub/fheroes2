@@ -1136,7 +1136,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
 
 double Army::GetStrength( void ) const
 {
-    double result = ( commander ) ? commander->GetSpellcastStrength() : 0;
+    double result = 0;
     const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
     // Hero bonus calculation is slow, cache it
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
@@ -1161,6 +1161,10 @@ double Army::GetStrength( void ) const
 
             result += strength;
         }
+    }
+
+    if ( commander ) {
+        result += commander->GetSpellcastStrength( result );
     }
 
     return result;
