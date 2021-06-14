@@ -20,15 +20,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifdef WITH_ZLIB
 #include <cstring>
 #include <sstream>
+
+#ifdef WITH_ZLIB
 #include <zlib.h>
+#endif
 
 #include "logging.h"
 #include "zzlib.h"
 
-std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz )
+#ifdef WITH_ZLIB
+std::vector<u8> zlibDecompress( const u8 * src, size_t srcsz, size_t realsz /* = 0 */ )
 {
     std::vector<u8> res;
 
@@ -79,6 +82,7 @@ std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
 
     return res;
 }
+#endif
 
 bool ZStreamFile::read( const std::string & fn, size_t offset )
 {
@@ -108,7 +112,7 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
             return false;
         }
         std::vector<u8> raw = sf.getRaw( size0 );
-        putRaw( &raw[0], raw.size() );
+        putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
         seek( 0 );
 #endif
         return !fail();
@@ -134,13 +138,14 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
         }
 #else
         sf.put32( size() );
-        sf.putRaw( data(), size() );
+        sf.putRaw( reinterpret_cast<const char *>( data() ), size() );
         return !sf.fail();
 #endif
     }
     return false;
 }
 
+#ifdef WITH_ZLIB
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
 {
     if ( imageData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
@@ -167,5 +172,4 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
     }
     return out;
 }
-
 #endif
