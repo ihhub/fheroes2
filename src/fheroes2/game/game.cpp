@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
 #include <map>
 
 #include "agg.h"
@@ -206,7 +207,6 @@ void Game::Init( void )
     LocalEvent & le = LocalEvent::Get();
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
-    le.SetGlobalFilter( true );
 
     Game::AnimateDelaysInitialize();
 

@@ -38,12 +38,12 @@ namespace
     enum
     {
         GLOBAL_FIRST_RUN = 0x00000001,
-        // UNUSED = 0x00000002,
+        GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
         // UNUSED = 0x00000008,
-        GLOBAL_DEDICATEDSERVER = 0x00000010,
-        GLOBAL_LOCALCLIENT = 0x00000020,
+        // UNUSED = 0x00000010,
+        // UNUSED = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
@@ -328,6 +328,7 @@ Settings::Settings()
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
 
     opt_global.SetModes( GLOBAL_FIRST_RUN );
+    opt_global.SetModes( GLOBAL_SHOW_INTRO );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
@@ -616,6 +617,10 @@ bool Settings::Read( const std::string & filename )
         resetFirstGameRun();
     }
 
+    if ( config.Exists( "show game intro" ) ) {
+        setShowIntro( config.StrParams( "show game intro" ) == "on" );
+    }
+
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -789,6 +794,9 @@ std::string Settings::String() const
 
     os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
+    os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -1072,6 +1080,16 @@ void Settings::setFullScreen( const bool enable )
     }
     else {
         opt_global.ResetModes( GLOBAL_FULLSCREEN );
+    }
+}
+
+void Settings::setShowIntro( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_SHOW_INTRO );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_SHOW_INTRO );
     }
 }
 
@@ -1792,6 +1810,11 @@ bool Settings::FullScreen() const
 bool Settings::isFirstGameRun() const
 {
     return opt_global.Modes( GLOBAL_FIRST_RUN );
+}
+
+bool Settings::isShowIntro() const
+{
+    return opt_global.Modes( GLOBAL_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()

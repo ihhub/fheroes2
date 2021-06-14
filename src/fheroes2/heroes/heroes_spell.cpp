@@ -438,9 +438,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-
-        // No action is being made. Uncomment this code if the logic will be changed
-        // hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         I.ResetFocus( GameFocus::HEROES );
 

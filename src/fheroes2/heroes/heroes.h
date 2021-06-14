@@ -319,7 +319,7 @@ public:
     bool isAction( void ) const;
     void ResetAction( void );
     void Action( int tileIndex, bool isDestination );
-    void ActionNewPosition( void );
+    void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 

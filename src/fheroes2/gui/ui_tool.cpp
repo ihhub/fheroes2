@@ -25,6 +25,8 @@
 #include "text.h"
 
 #include <chrono>
+#include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <deque>

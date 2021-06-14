@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <cmath>
+#include <cstdlib>
 
 #include "agg_image.h"
 #include "dialog.h"

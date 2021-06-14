@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdlib>
+
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
@@ -351,18 +353,14 @@ fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite 
     const Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
     const fheroes2::Rect & ar = gamearea.GetROI();
 
-    if ( mx <= ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top left
-        return fheroes2::Rect( mx + TILEWIDTH, my + TILEWIDTH, imageBox.width(), imageBox.height() );
-    }
-    else if ( mx > ar.x + ar.width / 2 && my <= ar.y + ar.height / 2 ) { // top right
-        return fheroes2::Rect( mx - imageBox.width(), my + TILEWIDTH, imageBox.width(), imageBox.height() );
-    }
-    else if ( mx <= ar.x + ar.width / 2 && my > ar.y + ar.height / 2 ) { // bottom left
-        return fheroes2::Rect( mx + TILEWIDTH, my - imageBox.height(), imageBox.width(), imageBox.height() );
-    }
-    else { // bottom right
-        return fheroes2::Rect( mx - imageBox.width(), my - imageBox.height(), imageBox.width(), imageBox.height() );
-    }
+    int32_t xpos = mx + TILEWIDTH - ( imageBox.width() / 2 );
+    int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
+
+    // clamp box to edges of adventure screen game area
+    xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+    ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+
+    return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
 }
 
 uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
