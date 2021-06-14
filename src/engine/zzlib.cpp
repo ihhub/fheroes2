@@ -113,12 +113,12 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 
 #endif // WITH_ZLIB
 
-ZStreamFile::ZStreamFile( bool compressed )
+ZStreamFile::ZStreamFile( bool compressIfSupported )
     : StreamBuf()
-    , _compressed( compressed )
+    , _compressIfSupported( compressIfSupported )
 {
 #ifndef WITH_ZLIB
-    (void)_compressed; // Silence the "private field is not used" compiler warning
+    (void)_compressIfSupported; // Silence the "private field is not used" compiler warning
 #endif
 }
 
@@ -131,7 +131,7 @@ bool ZStreamFile::read( const std::string & fn, size_t offset /* = 0 */ )
         if ( offset )
             sf.seek( offset );
 #ifdef WITH_ZLIB
-        if ( _compressed ) {
+        if ( _compressIfSupported ) {
             const u32 size0 = sf.get32(); // raw size
             if ( size0 == 0 ) {
                 return false;
@@ -170,7 +170,7 @@ bool ZStreamFile::write( const std::string & fn, bool append /* = false */ ) con
 
     if ( sf.open( fn, append ? "ab" : "wb" ) ) {
 #ifdef WITH_ZLIB
-        if ( _compressed ) {
+        if ( _compressIfSupported ) {
             std::vector<u8> zip = zlibCompress( data(), size() );
 
             if ( !zip.empty() ) {

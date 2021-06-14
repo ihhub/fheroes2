@@ -40,13 +40,13 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
 class ZStreamFile : public StreamBuf
 {
 public:
-    ZStreamFile( bool compressed );
+    ZStreamFile( const bool compressIfSupported );
 
     bool read( const std::string &, size_t offset = 0 );
     bool write( const std::string &, bool append = false ) const;
 
 private:
-    bool _compressed;
+    const bool _compressIfSupported;
 };
 
 #endif
