@@ -1541,7 +1541,7 @@ namespace AI
         const s32 from_index = hero.GetIndex();
 
         // disabled nearest coasts (on week MP2::isWeekLife)
-        MapsIndexes coasts = Maps::ScanAroundObject( from_index, 4, MP2::OBJ_COAST );
+        MapsIndexes coasts = Maps::ScanAroundObjectWithDistance( from_index, 4, MP2::OBJ_COAST );
         coasts.push_back( from_index );
 
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
