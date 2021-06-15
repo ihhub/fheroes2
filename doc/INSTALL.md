@@ -15,7 +15,7 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-osx-sdl1_dev)
 ),
-**Ubuntu Linux** (
+**Ubuntu** (
 [**SDL2**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl2_dev) and
 [**SDL1**](https://github.com/ihhub/fheroes2/releases/tag/fheroes2-linux-sdl1_dev)
 ) and
@@ -92,6 +92,6 @@ openSUSE supports the One-Click-Install using the `SDL_mixer.ymp` file from the 
 
 ### Gentoo
 
-Run following command: `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
+Run the following command: `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
 
 After all dependencies are installed, copy all files belonging to the original game to the fheroes2 installation directory if you have a legally purchased copy of the original game. Otherwise, you can download and install the demo version of the original game by running the `demo_unix.sh` script supplied in the ZIP archive.
