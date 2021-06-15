@@ -445,7 +445,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 
     // Route
-    const Heroes * hero = drawHeroes ? GetFocusHeroes() : NULL;
+    const Heroes * hero = drawHeroes ? GetFocusHeroes() : nullptr;
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
 
     if ( hero && hero->GetPath().isShow() && drawRoutes ) {

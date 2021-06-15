@@ -102,7 +102,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
 }
 
 Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
-    : ArmyTroop( NULL, t )
+    : ArmyTroop( nullptr, t )
     , animation( id )
     , uid( World::GetUniq() )
     , hp( t.GetHitPoints() )
@@ -111,7 +111,7 @@ Battle::Unit::Unit( const Troop & t, s32 pos, bool ref )
     , shots( t.GetShots() )
     , disruptingray( 0 )
     , reflect( ref )
-    , mirror( NULL )
+    , mirror( nullptr )
     , idleTimer( animation.getIdleDelay() )
     , blindanswer( false )
     , customAlphaMask( 255 )
@@ -138,9 +138,9 @@ Battle::Unit::~Unit()
 void Battle::Unit::SetPosition( s32 pos )
 {
     if ( position.GetHead() )
-        position.GetHead()->SetUnit( NULL );
+        position.GetHead()->SetUnit( nullptr );
     if ( position.GetTail() )
-        position.GetTail()->SetUnit( NULL );
+        position.GetTail()->SetUnit( nullptr );
 
     position.Set( pos, isWide(), reflect );
 
@@ -153,9 +153,9 @@ void Battle::Unit::SetPosition( s32 pos )
 void Battle::Unit::SetPosition( const Position & pos )
 {
     if ( position.GetHead() )
-        position.GetHead()->SetUnit( NULL );
+        position.GetHead()->SetUnit( nullptr );
     if ( position.GetTail() )
-        position.GetTail()->SetUnit( NULL );
+        position.GetTail()->SetUnit( nullptr );
 
     position = pos;
 
@@ -448,7 +448,7 @@ void Battle::Unit::NewTurn( void )
             }
 
             mirror->SetCount( 0 );
-            mirror = NULL;
+            mirror = nullptr;
         }
     }
 }
@@ -647,14 +647,14 @@ void Battle::Unit::PostKilledAction( void )
         modes = 0;
         mirror->hp = 0;
         mirror->SetCount( 0 );
-        mirror->mirror = NULL;
-        mirror = NULL;
+        mirror->mirror = nullptr;
+        mirror = nullptr;
         ResetModes( CAP_MIRROROWNER );
     }
     // kill mirror image (slave)
-    if ( Modes( CAP_MIRRORIMAGE ) && mirror != NULL ) {
+    if ( Modes( CAP_MIRRORIMAGE ) && mirror != nullptr ) {
         mirror->ResetModes( CAP_MIRROROWNER );
-        mirror = NULL;
+        mirror = nullptr;
     }
 
     ResetModes( TR_RESPONSED );
@@ -677,9 +677,9 @@ void Battle::Unit::PostKilledAction( void )
     Cell * head = Board::GetCell( GetHeadIndex() );
     Cell * tail = Board::GetCell( GetTailIndex() );
     if ( head )
-        head->SetUnit( NULL );
+        head->SetUnit( nullptr );
     if ( tail )
-        tail->SetUnit( NULL );
+        tail->SetUnit( nullptr );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." );
     // possible also..
@@ -874,7 +874,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
     // HACK!!! Chain lightining is the only spell which can't be casted on allies but could be applied on them
     const bool isForceApply = ( spell() == Spell::CHAINLIGHTNING );
 
-    if ( !AllowApplySpell( spell, hero, NULL, isForceApply ) )
+    if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
         return false;
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
@@ -1890,7 +1890,7 @@ int Battle::Unit::GetCurrentControl() const
 
 const HeroBase * Battle::Unit::GetCommander( void ) const
 {
-    return GetArmy() ? GetArmy()->GetCommander() : NULL;
+    return GetArmy() ? GetArmy()->GetCommander() : nullptr;
 }
 
 const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const

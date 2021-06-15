@@ -168,7 +168,7 @@ const char * Game::EventsName( int evnt )
     default:
         break;
     }
-    return NULL;
+    return nullptr;
 }
 
 void Game::HotKeysDefaults( void )

@@ -31,7 +31,7 @@ namespace Cdrom
     void Open( void );
     void Close( void );
 
-    static SDL_CD * cd = NULL;
+    static SDL_CD * cd = nullptr;
     static int currentTrack = -1;
     static unsigned int startTime = 0;
     static unsigned int tickLength;
@@ -59,7 +59,7 @@ void Cdrom::Open( void )
     }
 
     if ( cd ) {
-        loopThread = SDL_CreateThread( &LoopCheck, NULL );
+        loopThread = SDL_CreateThread( &LoopCheck, nullptr );
         cdLock = SDL_CreateMutex();
     }
 
@@ -73,7 +73,7 @@ void Cdrom::Close( void )
         SDL_KillThread( loopThread );
         SDL_DestroyMutex( cdLock );
         SDL_CDClose( cd );
-        cd = NULL;
+        cd = nullptr;
     }
 }
 

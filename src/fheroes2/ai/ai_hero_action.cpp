@@ -242,7 +242,7 @@ namespace AI
         const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
         if ( castle ) {
             if ( hero.GetColor() == castle->GetColor() ) {
-                return castle->GetHeroes().Guest() == NULL;
+                return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
                 return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * ARMY_STRENGTH_ADVANTAGE_MEDUIM;
@@ -629,7 +629,7 @@ namespace AI
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = NULL;
+        MapMonster * map_troop = nullptr;
         if ( tile.GetObject() == obj ) {
             map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
         }
@@ -708,7 +708,7 @@ namespace AI
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapResource * map_resource = NULL;
+        const MapResource * map_resource = nullptr;
         if ( tile.GetObject() == obj ) {
             map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
         }
@@ -1474,7 +1474,7 @@ namespace AI
     void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapArtifact * map_artifact = NULL;
+        const MapArtifact * map_artifact = nullptr;
         if ( tile.GetObject() == obj ) {
             map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
         }

@@ -365,7 +365,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 #endif
 
 Text::Text()
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {
@@ -378,7 +378,7 @@ Text::Text()
 }
 
 Text::Text( const std::string & msg, int ft )
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {
@@ -395,7 +395,7 @@ Text::Text( const std::string & msg, int ft )
 
 #ifdef WITH_TTF
 Text::Text( const u16 * pt, size_t sz, int ft )
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {

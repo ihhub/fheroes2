@@ -121,7 +121,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
             }
             else {
                 // magic attack not depends from hero
-                TargetsApplySpell( NULL, spell, targets );
+                TargetsApplySpell( nullptr, spell, targets );
             }
 
             if ( interface ) {
@@ -556,8 +556,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     TargetsInfo targets;
     targets.reserve( 8 );
 
-    Unit * enemy = NULL;
-    Cell * cell = NULL;
+    Unit * enemy = nullptr;
+    Cell * cell = nullptr;
     TargetInfo res;
 
     // first target
@@ -584,7 +584,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     if ( attacker.isDoubleCellAttack() ) {
         const int dir = Board::GetDirection( attacker.GetHeadIndex(), dst );
         if ( !defender.isWide() || 0 == ( ( RIGHT | LEFT ) & dir ) ) {
-            if ( NULL != ( cell = Board::GetCell( dst, dir ) ) && NULL != ( enemy = cell->GetUnit() ) && enemy != &defender ) {
+            if ( nullptr != ( cell = Board::GetCell( dst, dir ) ) && nullptr != ( enemy = cell->GetUnit() ) && enemy != &defender ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
                 targets.push_back( res );
@@ -596,7 +596,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         const Indexes around = Board::GetAroundIndexes( attacker );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
+            if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
                 targets.push_back( res );
@@ -609,7 +609,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
             const Indexes around = Board::GetAroundIndexes( dst );
 
             for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-                if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
+                if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
                     res.defender = enemy;
                     res.damage = attacker.GetDamage( *enemy );
                     targets.push_back( res );
@@ -726,7 +726,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
         // skip center
-        target = NULL;
+        target = nullptr;
         break;
 
     default:
@@ -740,7 +740,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
 
     // resurrect spell? get target from graveyard
-    if ( NULL == target && GraveyardAllowResurrect( dest, spell ) ) {
+    if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
         target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) ) {
@@ -1009,7 +1009,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
     const int32_t who = cmd.GetValue();
     Unit * troop = GetTroopBoard( who );
 
-    if ( troop != NULL ) {
+    if ( troop != nullptr ) {
         Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
         const int32_t centerIndex = troop->GetHeadIndex();

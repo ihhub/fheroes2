@@ -113,7 +113,7 @@ namespace Interface
         Item * GetItem( const fheroes2::Point & pt )
         {
             ItemsIterator posItem = GetItemIter( pt );
-            return posItem != items.end() ? *posItem : NULL;
+            return posItem != items.end() ? *posItem : nullptr;
         }
 
         fheroes2::Point GetPos() const

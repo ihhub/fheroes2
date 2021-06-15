@@ -58,8 +58,8 @@ public:
     bool ActionBarCursor( ArmyTroop & ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
-    bool QueueEventProcessing( ArmyBar &, std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
+    bool QueueEventProcessing( ArmyBar &, std::string * = nullptr );
 
 protected:
     fheroes2::MovableSprite spcursor;

@@ -454,7 +454,7 @@ bool ActionSpellTownGate( Heroes & hero )
     const KingdomCastles & castles = kingdom.GetCastles();
     KingdomCastles::const_iterator it;
 
-    const Castle * castle = NULL;
+    const Castle * castle = nullptr;
     const s32 center = hero.GetIndex();
     s32 min = -1;
 
@@ -571,7 +571,7 @@ bool ActionSpellVisions( Heroes & hero )
 
     for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
         const Maps::Tiles & tile = world.GetTiles( *it );
-        const MapMonster * map_troop = NULL;
+        const MapMonster * map_troop = nullptr;
         if ( tile.GetObject() == MP2::OBJ_MONSTER )
             map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 

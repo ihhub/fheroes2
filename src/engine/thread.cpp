@@ -26,7 +26,7 @@
 using namespace SDL;
 
 Thread::Thread()
-    : thread( NULL )
+    : thread( nullptr )
 {}
 
 Thread::~Thread()
@@ -35,7 +35,7 @@ Thread::~Thread()
 }
 
 Thread::Thread( const Thread & )
-    : thread( NULL )
+    : thread( nullptr )
 {}
 
 Thread & Thread::operator=( const Thread & )
@@ -57,7 +57,7 @@ int Thread::Wait( void )
     int status = 0;
     if ( thread )
         SDL_WaitThread( thread, &status );
-    thread = NULL;
+    thread = nullptr;
     return status;
 }
 
@@ -67,7 +67,7 @@ void Thread::Kill( void )
 #else
     if ( thread )
         SDL_KillThread( thread );
-    thread = NULL;
+    thread = nullptr;
 #endif
 }
 
