@@ -78,7 +78,7 @@ Extract the downloaded ZIP archive to a suitable directory of your choice. Then 
 
 Run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux` subdirectory.
 
-### Arch
+### Pacman-based (e.g. Arch Linux)
 
 Run the following command: `sudo pacman -S sdl sdl_mixer`.
 
