@@ -27,6 +27,7 @@
 #include "spell.h"
 
 #include <cassert>
+#include <sstream>
 
 namespace
 {
@@ -324,6 +325,8 @@ namespace
         monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
 
+        monsterData[Monster::GARGOYLE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE );
@@ -394,7 +397,7 @@ namespace
         monsterData[Monster::MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::CURSE );
 
         monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
-        monsterData[Monster::MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 30, Spell::CURSE );
+        monsterData[Monster::ROYAL_MUMMY].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 30, Spell::CURSE );
 
         monsterData[Monster::VAMPIRE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
         monsterData[Monster::VAMPIRE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
@@ -412,16 +415,17 @@ namespace
         monsterData[Monster::POWER_LICH].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::AREA_SHOT );
 
         monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MORAL_DECREMENT );
+        monsterData[Monster::BONE_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MORAL_DECREMENT, 100, 1 );
 
         monsterData[Monster::ROGUE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
 
         monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SOUL_EATER );
         monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ENEMY_HALFING );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ENEMY_HALFING, 10, 0 );
         monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
 
         monsterData[Monster::MEDUSA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
@@ -475,12 +479,11 @@ namespace fheroes2
 {
     const MonsterData & getMonsterData( const int monsterId )
     {
-        assert( monsterId >= 0 && static_cast<size_t>( monsterId ) < monsterData.size() );
-
         if ( monsterData.empty() ) {
             populateMonsterData();
         }
 
+        assert( monsterId >= 0 && static_cast<size_t>( monsterId ) < monsterData.size() );
         if ( monsterId < 0 || static_cast<size_t>( monsterId ) >= monsterData.size() ) {
             return monsterData.front();
         }
@@ -494,51 +497,51 @@ namespace fheroes2
         case MonsterAbilityType::NONE:
             return "";
         case MonsterAbilityType::DOUBLE_SHOOTING:
-            return "";
+            return "Double shot";
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return "";
+            return "2-hex monster";
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
-            return "";
+            return "Double strike";
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
-            return "";
+            return "Double damage to Undead";
         case MonsterAbilityType::MAGIC_IMMUNITY:
-            return "";
+            return std::to_string( ability.percentage ) + "% magic immunity";
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
-            return "";
+            return std::to_string( ability.percentage ) + "% immunity to " + Spell( ability.value ).GetName() + " spell";
         case MonsterAbilityType::SPELL_DAMAGE_REDUCTION:
-            return "";
+            return std::to_string( ability.percentage ) + "% damage from " + Spell( ability.value ).GetName() + " spell";;
         case MonsterAbilityType::SPELL_CASTER:
-            return "";
+            return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";;
         case MonsterAbilityType::HP_REGENERATION:
-            return "";
+            return "HP regeneration";
         case MonsterAbilityType::DOUBLE_CELL_MELEE_ATTACK:
-            return "";
+            return "Double cell melee attack";
         case MonsterAbilityType::FLYING:
-            return "";
+            return "Flyer";
         case MonsterAbilityType::ALWAYS_RETALIATE:
-            return "";
+            return "Always retaliate";
         case MonsterAbilityType::ALL_AROUND_CELL_MELEE_ATTACK:
-            return "";
+            return "Attack all enemies around";
         case MonsterAbilityType::NO_MELEE_PENALTY:
-            return "";
+            return "No melee penalty";
         case MonsterAbilityType::DRAGON:
-            return "";
+            return "Dragon";
         case MonsterAbilityType::UNDEAD:
-            return "";
+            return "Undead";
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
-            return "";
+            return "No enemy retaliation";
         case MonsterAbilityType::HP_DRAIN:
-            return "";
+            return "HP drain";
         case MonsterAbilityType::AREA_SHOT:
-            return "";
+            return "Area shooting attack";
         case MonsterAbilityType::MORAL_DECREMENT:
-            return "";
+            return "Decreases enemy's moral by " + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
-            return "";
+            return std::to_string( ability.percentage ) + "% chance to half enemy";
         case MonsterAbilityType::SOUL_EATER:
-            return "";
+            return "Soul eater";
         case MonsterAbilityType::NEUTRAL_MORAL:
-            return "";
+            return "Always neutral moral";
         }
 
         assert( 0 ); // Did you add a new ability? Please add the implementation!
@@ -551,7 +554,7 @@ namespace fheroes2
         case MonsterWeaknessType::NONE:
             return "";
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL:
-            return std::to_string( weakness.percentage + 100 ) + "% from " + Spell( weakness.value ).GetName();
+            return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
         default:
             break;
         }
@@ -562,17 +565,49 @@ namespace fheroes2
 
     std::string getMonsterDescription( const int monsterId )
     {
-        assert( monsterId >= 0 && static_cast<size_t>( monsterId ) < monsterData.size() );
-
         if ( monsterData.empty() ) {
             populateMonsterData();
         }
 
+        assert( monsterId >= 0 && static_cast<size_t>( monsterId ) < monsterData.size() );
         if ( monsterId < 0 || static_cast<size_t>( monsterId ) >= monsterData.size() ) {
             return "";
         }
 
-        return "";
+        const MonsterData & monster = monsterData[monsterId];
+
+        std::ostringstream os;
+        os << "----------" << std::endl;
+        os << "Name: " << monster.generalStats.name << std::endl;
+        os << "Plural name: " << monster.generalStats.pluralName << std::endl;
+        os << "Base growth: " << monster.generalStats.baseGrowth << std::endl;
+        os << "Race: " << Race::String( monster.generalStats.race ) << std::endl;
+        os << "Level: " << monster.generalStats.level << std::endl;
+        os << "Cost: " << Funds( monster.generalStats.cost ).String() << std::endl;
+        os << std::endl;
+        os << "Attack: " << monster.battleStats.attack << std::endl;
+        os << "Defense: " << monster.battleStats.defense << std::endl;
+        os << "Min damage: " << monster.battleStats.damageMin << std::endl;
+        os << "Max damage: " << monster.battleStats.damageMax << std::endl;
+        os << "Hit Points: " << monster.battleStats.hp << std::endl;
+        os << "Speed: " << Speed::String( monster.battleStats.speed ) << std::endl;
+        os << "Number of shots: " << monster.battleStats.shots << std::endl;
+        if ( !monster.battleStats.abilities.empty() ) {
+            os << std::endl;
+            os << "Abilities:" << std::endl;
+            for ( const MonsterAbility & ability : monster.battleStats.abilities ) {
+                os << "   " << getMonsterAbilityDescription( ability ) << std::endl;
+            }
+        }
+
+        if ( !monster.battleStats.weaknesses.empty() ) {
+            os << std::endl;
+            os << "Weaknesses:" << std::endl;
+            for ( const MonsterWeakness & weakness : monster.battleStats.weaknesses ) {
+                os << "   " << getMonsterWeaknessDescription( weakness ) << std::endl;
+            }
+        }
+
+        return os.str();
     }
 }
-

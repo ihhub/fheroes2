@@ -78,7 +78,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
+        explicit MonsterAbility( const MonsterAbilityType type_, const int percentage_, const int value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
@@ -86,14 +86,14 @@ namespace fheroes2
 
         bool operator <( const MonsterAbility & another ) const
         {
-            return type < another.type;
+            return type < another.type || ( type == another.type && value < another.value );
         }
 
         MonsterAbilityType type;
 
-        uint32_t percentage;
+        int percentage;
 
-        uint32_t value;
+        int value;
     };
 
     struct MonsterWeakness
@@ -111,7 +111,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
+        explicit MonsterWeakness( const MonsterWeaknessType type_, const int percentage_, const int value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
@@ -119,14 +119,14 @@ namespace fheroes2
 
         bool operator <( const MonsterWeakness & another ) const
         {
-            return type < another.type;
+            return type < another.type || ( type == another.type && value < another.value );
         }
 
         MonsterWeaknessType type;
 
-        uint32_t percentage;
+        int percentage;
 
-        uint32_t value;
+        int value;
     };
 
     struct MonsterBattleStats
@@ -146,7 +146,7 @@ namespace fheroes2
     struct MonsterGeneralStats
     {
         const char * name;
-        const char * multiName;
+        const char * pluralName;
 
         uint32_t baseGrowth;
         uint32_t race;
