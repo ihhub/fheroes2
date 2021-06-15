@@ -527,21 +527,22 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+                const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
                 fheroes2::Sprite image = border;
-                fheroes2::Blit( artifact, image, 5, 5 );
-
-                fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );
+                const int32_t borderSize = 5;
+                fheroes2::Blit( artifact, image, borderSize, borderSize );
+                fheroes2::Blit( image, display, artifactOffset.x, artifactOffset.y );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + 310 + image.height() + 5 );
+                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
                     // display captured artifact info on right click
-                    const fheroes2::Rect artRect( pos_rt.x + 119, pos_rt.y + 310, artifact.width() + 10, artifact.height() + 10 );
-                    if ( le.MousePressRight( artRect ) )
+                    const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
+                    if ( le.MousePressRight( artifactArea ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
