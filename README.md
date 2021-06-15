@@ -33,9 +33,9 @@ Please follow below instructions to be able to compile the project:
 - open `script/demo` directory and run `demo_windows.bat` file. It downloads a demo version of the game which is needed for minimum development.
 - open `fheroes2-vs2015.vcxproj` or `fheroes2-vs2019.vcxproj` file depending on your Visual Studio and compile the project.
 
-### MacOS and Linux
+### macOS and Linux
 
-- open `script/macos` or `script/linux` directory depending on your OS and run `install_sdl_2.sh` (default setup) or `install_sdl_1.sh` file. For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
+- open `script/macos` or `script/linux` directory depending on your OS and run `install_sdl_2.sh` (default setup) or `install_sdl_1.sh` file. For macOS we do not recommend to run SDL 1 as latest versions of macOS do not support it fully.
 - open `script/demo` directory and run `demo_unix.sh` file. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 
