@@ -19,3 +19,76 @@
  ***************************************************************************/
 
 #pragma once
+
+#include "battle_animation.h"
+
+class Monster;
+
+namespace Monster_Info
+{
+    enum AttackDirection : int
+    {
+        TOP,
+        FRONT,
+        BOTTOM
+    };
+
+    enum AnimationType : int
+    {
+        NONE,
+        STATIC,
+        IDLE,
+        MOVE_START,
+        MOVING,
+        MOVE_END,
+        MOVE_QUICK,
+        FLY_UP,
+        FLY_LAND,
+        MELEE_TOP,
+        MELEE_TOP_END,
+        MELEE_FRONT,
+        MELEE_FRONT_END,
+        MELEE_BOT,
+        MELEE_BOT_END,
+        RANG_TOP,
+        RANG_TOP_END,
+        RANG_FRONT,
+        RANG_FRONT_END,
+        RANG_BOT,
+        RANG_BOT_END,
+        WNCE, // combined UP and RETURN anim
+        KILL,
+        INVALID
+    };
+}
+
+namespace fheroes2
+{
+    class RandomMonsterAnimation
+    {
+    public:
+        explicit RandomMonsterAnimation( const Monster & monster );
+
+        void increment();
+
+        int icnFile() const;
+        int frameId() const;
+        int offset() const;
+
+        void reset(); // reset to static animation
+
+    private:
+        AnimationReference _reference;
+        int _icnID;
+        std::vector<int> _validMoves;
+        std::list<int> _frameSet;
+        std::list<int> _offsetSet;
+        int _frameId;
+        int _frameOffset;
+        bool _isFlyer;
+
+        void _pushFrames( const Monster_Info::AnimationType type );
+        void _addValidMove( const Monster_Info::AnimationType type );
+        void _updateFrameInfo();
+    };
+}

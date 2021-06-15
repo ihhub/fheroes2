@@ -24,72 +24,135 @@
 #include "resource.h"
 
 #include <set>
+#include <string>
 
-namespace Monster_Info
+namespace fheroes2
 {
-    enum AttackDirection : int
-    {
-        TOP,
-        FRONT,
-        BOTTOM
-    };
 
-    enum AnimationType : int
+    enum class MonsterAbilityType : int
     {
         NONE,
-        STATIC,
-        IDLE,
-        MOVE_START,
-        MOVING,
-        MOVE_END,
-        MOVE_QUICK,
-        FLY_UP,
-        FLY_LAND,
-        MELEE_TOP,
-        MELEE_TOP_END,
-        MELEE_FRONT,
-        MELEE_FRONT_END,
-        MELEE_BOT,
-        MELEE_BOT_END,
-        RANG_TOP,
-        RANG_TOP_END,
-        RANG_FRONT,
-        RANG_FRONT_END,
-        RANG_BOT,
-        RANG_BOT_END,
-        WNCE, // combined UP and RETURN anim
-        KILL,
-        INVALID
+        DOUBLE_SHOOTING,
+        DOUBLE_HEX_SIZE,
+        DOUBLE_MELEE_ATTACK,
+        DOUBLE_DAMAGE_TO_UNDEAD,
+        MAGIC_IMMUNITY,
+        IMMUNE_TO_CERTAIN_SPELL,
+        SPELL_DAMAGE_REDUCTION,
+        SPELL_CASTER,
+        HP_REGENERATION,
+        DOUBLE_CELL_MELEE_ATTACK,
+        FLYING,
+        ALWAYS_RETALIATE,
+        ALL_AROUND_CELL_MELEE_ATTACK,
+        NO_MELEE_PENALTY,
+        DRAGON,
+        UNDEAD,
+        NO_ENEMY_RETALIATION,
+        HP_DRAIN,
+        AREA_SHOT,
+        MORAL_DECREMENT,
+        ENEMY_HALFING,
+        SOUL_EATER,
+        NEUTRAL_MORAL
     };
 
-    enum class MonsterAbility : int
+    enum class MonsterWeaknessType : int
     {
-    
+        NONE,
+        EXTRA_DAMAGE_FROM_SPELL
     };
 
-    enum class MonsterWeakness : int
+    struct MonsterAbility
     {
-    
+        MonsterAbility()
+            : type( MonsterAbilityType::NONE )
+            , percentage( 0 )
+            , value( 0 )
+        {
+        }
+
+        explicit MonsterAbility( const MonsterAbilityType type_ )
+            : type( type_ )
+            , percentage( 0 )
+            , value( 0 )
+        {}
+
+        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
+            : type( type_ )
+            , percentage( percentage_ )
+            , value( value_ )
+        {}
+
+        bool operator <( const MonsterAbility & another ) const
+        {
+            return type < another.type;
+        }
+
+        MonsterAbilityType type;
+
+        uint32_t percentage;
+
+        uint32_t value;
     };
 
-    struct MonsterStats
+    struct MonsterWeakness
     {
-        MonsterStats() = delete;
+        MonsterWeakness()
+            : type( MonsterWeaknessType::NONE )
+            , percentage( 0 )
+            , value( 0 )
+        {
+        }
 
-        uint8_t attack;
-        uint8_t defense;
-        uint8_t damageMin;
-        uint8_t damageMax;
-        uint16_t hp;
-        uint8_t speed;
-        uint8_t baseGrowth;
-        uint8_t shots;
-        const char * name;
-        const char * multiname;
-        cost_t cost;
+        explicit MonsterWeakness( const MonsterWeaknessType type_ )
+            : type( type_ )
+            , percentage( 0 )
+            , value( 0 )
+        {}
+
+        explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
+            : type( type_ )
+            , percentage( percentage_ )
+            , value( value_ )
+        {}
+
+        bool operator <( const MonsterWeakness & another ) const
+        {
+            return type < another.type;
+        }
+
+        MonsterWeaknessType type;
+
+        uint32_t percentage;
+
+        uint32_t value;
+    };
+
+    struct MonsterBattleStats
+    {
+        uint32_t attack;
+        uint32_t defense;
+        uint32_t damageMin;
+        uint32_t damageMax;
+        uint32_t hp;
+        uint32_t speed;
+        uint32_t shots;
 
         std::set<MonsterAbility> abilities;
         std::set<MonsterWeakness> weaknesses;
+    };
+
+    struct MonsterGeneralStats
+    {
+        const char * name;
+        const char * multiName;
+
+        uint32_t baseGrowth;
+        uint32_t race;
+        uint32_t level;
+
+        cost_t cost;
     };
 
     struct MonsterSound
@@ -102,14 +165,29 @@ namespace Monster_Info
 
     struct MonsterData
     {
+        MonsterData() = delete;
+
+        MonsterData( const int icnId_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_, const MonsterGeneralStats & generalStats_ )
+            : icnId( icnId_ )
+            , sounds( sounds_ )
+            , battleStats( battleStats_ )
+            , generalStats( generalStats_ )
+        {}
+
         int icnId;
 
-        MonsterStats stats;
-
         MonsterSound sounds;
+
+        MonsterBattleStats battleStats;
+
+        MonsterGeneralStats generalStats;
     };
 
-    // const char * getMonsterAbilityDescription( const MonsterAbility ability );
-    // const char * getMonsterWeaknessDescription( const MonsterWeakness weakness );
+    const MonsterData & getMonsterData( const int monsterId );
+
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness );
+
+    std::string getMonsterDescription( const int monsterId );
 }
 #endif

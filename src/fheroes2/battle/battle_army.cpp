@@ -25,6 +25,7 @@
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
+#include "monster_anim.h"
 #include "settings.h"
 #include "speed.h"
 

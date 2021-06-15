@@ -76,7 +76,7 @@ namespace
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
 void DrawBattleStats( const fheroes2::Point &, const Troop & );
 void DrawMonsterInfo( const fheroes2::Point & dst, const Troop & troop );
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi );
 
 int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
@@ -120,7 +120,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
     DrawMonsterInfo( pos_rt.getPosition(), troop );
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
-    RandomMonsterAnimation monsterAnimation( troop );
+    fheroes2::RandomMonsterAnimation monsterAnimation( troop );
     const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 180 );
     if ( !isAnimated )
         monsterAnimation.reset();
@@ -488,7 +488,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 }
 
-void DrawMonster( RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
+void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
                   const fheroes2::Rect & roi )
 {
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( monsterAnimation.icnFile(), monsterAnimation.frameId() );

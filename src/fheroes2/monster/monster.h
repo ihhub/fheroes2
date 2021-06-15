@@ -129,13 +129,10 @@ public:
         MONSTER_RND2,
         MONSTER_RND3,
         MONSTER_RND4,
-        MONSTER_RND
-    };
+        MONSTER_RND,
 
-    struct animframe_t
-    {
-        int start;
-        int count;
+        // IMPORTANT! Put all new monsters above line.
+        MONSTER_COUNT
     };
 
     struct monstersprite_t
@@ -225,34 +222,6 @@ protected:
     static Monster FromDwelling( int race, u32 dw );
 
     int id;
-};
-
-class RandomMonsterAnimation
-{
-public:
-    explicit RandomMonsterAnimation( const Monster & monster = Monster() );
-
-    void increment();
-
-    int icnFile() const;
-    int frameId() const;
-    int offset() const;
-
-    void reset(); // reset to static animation
-
-private:
-    AnimationReference _reference;
-    int _icnID;
-    std::vector<int> _validMoves;
-    std::list<int> _frameSet;
-    std::list<int> _offsetSet;
-    int _frameId;
-    int _frameOffset;
-    bool _isFlyer;
-
-    void _pushFrames( const Monster_Info::AnimationType type );
-    void _addValidMove( const Monster_Info::AnimationType type );
-    void _updateFrameInfo();
 };
 
 struct MonsterStaticData
