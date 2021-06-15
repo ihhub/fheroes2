@@ -514,12 +514,6 @@ namespace AI
         else if ( hero.isFriends( other_hero->GetColor() ) ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " disable meeting" );
         }
-        else if ( !hero.AllowBattle( true ) ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " currently can not allow battle" );
-        }
-        else if ( !other_hero->AllowBattle( false ) ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
-        }
         else {
             const Castle * other_hero_castle = other_hero->inCastle();
             if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
@@ -855,7 +849,7 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     Maps::Tiles::UpdateAbandoneMineSprite( tile );
-                    tile.SetHeroes( &hero );
+                    hero.SetMapsObject( MP2::OBJ_MINES );
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
@@ -894,7 +888,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isObjectTypeVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
@@ -954,7 +948,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -980,7 +974,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1590,7 +1584,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
             hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
 
@@ -1948,7 +1942,7 @@ namespace AI
                     return false;
                 else if ( otherHeroInCastle )
                     return AIShouldVisitCastle( hero, index );
-                else if ( hero2->AllowBattle( false ) && army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
+                else if ( army.isStrongerThan( hero2->GetArmy(), ARMY_STRENGTH_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;

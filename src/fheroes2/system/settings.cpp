@@ -38,12 +38,12 @@ namespace
     enum
     {
         GLOBAL_FIRST_RUN = 0x00000001,
-        // UNUSED = 0x00000002,
+        GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
         // UNUSED = 0x00000008,
-        GLOBAL_DEDICATEDSERVER = 0x00000010,
-        GLOBAL_LOCALCLIENT = 0x00000020,
+        // UNUSED = 0x00000010,
+        // UNUSED = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
@@ -328,6 +328,7 @@ Settings::Settings()
     ExtSetModes( WORLD_SHOW_VISITED_CONTENT );
 
     opt_global.SetModes( GLOBAL_FIRST_RUN );
+    opt_global.SetModes( GLOBAL_SHOW_INTRO );
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
@@ -616,6 +617,10 @@ bool Settings::Read( const std::string & filename )
         resetFirstGameRun();
     }
 
+    if ( config.Exists( "show game intro" ) ) {
+        setShowIntro( config.StrParams( "show game intro" ) == "on" );
+    }
+
 #ifndef WITH_TTF
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
@@ -688,19 +693,19 @@ std::string Settings::String() const
         musicType = "original";
     }
 
-    os << "# fheroes2 configuration file (saved under version " << GetVersion() << ")" << std::endl;
+    os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
-    os << std::endl << "# path to directory data" << std::endl;
+    os << std::endl << "# path to the data directory" << std::endl;
     os << "data = " << data_params << std::endl;
 
-    os << std::endl << "# path to directory maps (you can set few map directies)" << std::endl;
+    os << std::endl << "# path to the maps directory (you can specify multiple directories here)" << std::endl;
     for ( ListDirs::const_iterator it = maps_params.begin(); it != maps_params.end(); ++it )
         os << "maps = " << *it << std::endl;
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << std::endl << "# sound: on off" << std::endl;
+    os << std::endl << "# sound: on/off" << std::endl;
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# music: original, expansion, cd, external" << std::endl;
@@ -712,19 +717,19 @@ std::string Settings::String() const
     os << std::endl << "# music volume: 0 - 10" << std::endl;
     os << "music volume = " << music_volume << std::endl;
 
-    os << std::endl << "# run in fullscreen mode: on off (use F4 key to switch between)" << std::endl;
+    os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# use alternative resources (not in use anymore)" << std::endl;
+    os << std::endl << "# use alternative resources (no longer used)" << std::endl;
     os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# run in debug mode (0 - 11) [only for development]" << std::endl;
+    os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
 
-    os << std::endl << "# heroes move speed: 1 - 10" << std::endl;
+    os << std::endl << "# heroes movement speed: 1 - 10" << std::endl;
     os << "heroes speed = " << heroes_speed << std::endl;
 
-    os << std::endl << "# AI move speed: 0 - 10" << std::endl;
+    os << std::endl << "# AI movement speed: 0 - 10" << std::endl;
     os << "ai speed = " << ai_speed << std::endl;
 
     os << std::endl << "# battle speed: 1 - 10" << std::endl;
@@ -753,28 +758,28 @@ std::string Settings::String() const
 
     os << std::endl;
 
-    os << std::endl << "# show battle grid: on off" << std::endl;
+    os << std::endl << "# show battle grid: on/off" << std::endl;
     os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow movement: on off" << std::endl;
+    os << std::endl << "# show battle shadow movement: on/off" << std::endl;
     os << "battle shadow movement = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# show battle shadow cursor: on off" << std::endl;
+    os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
     os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto resolve battles: on off" << std::endl;
+    os << std::endl << "# auto resolve battles: on/off" << std::endl;
     os << "auto resolve battles = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# auto combat spell casting: on off" << std::endl;
+    os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     if ( video_driver.size() ) {
-        os << std::endl << "# sdl video driver, windows: windib, directx, wince: gapi, raw, linux: x11, other see sdl manual (to be deprecated)" << std::endl;
+        os << std::endl << "# sdl video driver, windows: windib, directx; wince: gapi, raw; linux: x11; other: see sdl manual (will be deprecated)" << std::endl;
         os << "videodriver = " << video_driver << std::endl;
     }
 
 #ifdef WITH_TTF
-    os << std::endl << "Below options are experimental and disabled in the game for now" << std::endl;
+    os << std::endl << "# options below are experimental and are currently disabled in the game" << std::endl;
     os << "fonts normal = " << font_normal << std::endl
        << "fonts small = " << font_small << std::endl
        << "fonts normal size = " << static_cast<int>( size_normal ) << std::endl
@@ -787,8 +792,11 @@ std::string Settings::String() const
     os << std::endl << "# controller pointer speed: 0 - 100" << std::endl;
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
-    os << std::endl << "# show first time game run information: on off" << std::endl;
+    os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
     os << "first time game run = " << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
+    os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -884,20 +892,21 @@ ListDirs Settings::GetRootDirs()
     if ( System::GetEnvironment( "FHEROES2_DATA" ) )
         dirs.push_back( System::GetEnvironment( "FHEROES2_DATA" ) );
 
-    // from dirname
+    // from app path
     dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
 
-    // from user config
+    // os-specific directories
+    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+
+    // user config directory
     const std::string & config = System::GetConfigDirectory( "fheroes2" );
     if ( !config.empty() )
         dirs.push_back( config );
 
-    // from user data
+    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
     const std::string & data = System::GetDataDirectory( "fheroes2" );
     if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
         dirs.push_back( data );
-
-    fheroes2::AddOSSpecificDirectories( dirs );
 
     return dirs;
 }
@@ -917,8 +926,6 @@ ListFiles Settings::GetListFiles( const std::string & prefix, const std::string 
         if ( System::IsDirectory( path ) )
             res.ReadDir( path, filter, false );
     }
-
-    res.Append( System::GetListFiles( "fheroes2", prefix, filter ) );
 
     return res;
 }
@@ -961,35 +968,6 @@ std::string Settings::GetLangDir()
             return res;
     }
 #endif
-
-    return "";
-}
-
-std::string Settings::GetWriteableDir( const char * subdir )
-{
-    ListDirs dirs = GetRootDirs();
-    dirs.Append( System::GetDataDirectories( "fheroes2" ) );
-
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        std::string dir_files = System::ConcatePath( *it, "files" );
-
-        // create files
-        if ( System::IsDirectory( *it, true ) && !System::IsDirectory( dir_files, true ) )
-            System::MakeDirectory( dir_files );
-
-        // create subdir
-        if ( System::IsDirectory( dir_files, true ) ) {
-            std::string dir_subdir = System::ConcatePath( dir_files, subdir );
-
-            if ( !System::IsDirectory( dir_subdir, true ) )
-                System::MakeDirectory( dir_subdir );
-
-            if ( System::IsDirectory( dir_subdir, true ) )
-                return dir_subdir;
-        }
-    }
-
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "writable directory not found" );
 
     return "";
 }
@@ -1102,6 +1080,16 @@ void Settings::setFullScreen( const bool enable )
     }
     else {
         opt_global.ResetModes( GLOBAL_FULLSCREEN );
+    }
+}
+
+void Settings::setShowIntro( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_SHOW_INTRO );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_SHOW_INTRO );
     }
 }
 
@@ -1488,7 +1476,7 @@ bool Settings::ExtModes( u32 f ) const
 
 const char * Settings::ExtName( u32 f ) const
 {
-    const settings_t * ptr = std::find( settingsFHeroes2, ARRAY_COUNT_END( settingsFHeroes2 ) - 1, f );
+    const settings_t * ptr = std::find( settingsFHeroes2, std::end( settingsFHeroes2 ) - 1, f );
 
     return ptr ? _( ptr->str ) : NULL;
 }
@@ -1822,6 +1810,11 @@ bool Settings::FullScreen() const
 bool Settings::isFirstGameRun() const
 {
     return opt_global.Modes( GLOBAL_FIRST_RUN );
+}
+
+bool Settings::isShowIntro() const
+{
+    return opt_global.Modes( GLOBAL_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()

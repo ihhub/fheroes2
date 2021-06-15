@@ -34,7 +34,7 @@
 namespace
 {
     const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = {NULL};
+    Player * _players[playersSize] = { NULL };
     int human_colors = 0;
 
     enum
@@ -55,10 +55,25 @@ void PlayerFixMultiControl( Player * player )
         player->SetControl( CONTROL_AI );
 }
 
-void PlayerFixRandomRace( Player * player )
+void PlayerRemoveAlreadySelectedRaces( Player * player, std::vector<int> & availableRaces )
 {
-    if ( player && player->GetRace() == Race::RAND )
-        player->SetRace( Race::Rand() );
+    const int raceToRemove = player->GetRace();
+    availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
+                          availableRaces.end() );
+}
+
+void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
+{
+    if ( player && player->GetRace() == Race::RAND ) {
+        if ( availableRaces.empty() ) {
+            player->SetRace( Race::Rand() );
+        }
+        else {
+            const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+            player->SetRace( availableRaces[raceIndex] );
+            availableRaces.erase( availableRaces.begin() + raceIndex );
+        }
+    }
 }
 
 bool Control::isControlAI( void ) const
@@ -416,9 +431,11 @@ void Players::SetPlayerInGame( int color, bool f )
 
 void Players::SetStartGame( void )
 {
+    vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFixRandomRace( player ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
     current_color = Color::NONE;

@@ -377,7 +377,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_MEET, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( from_hero.isFriends( to_hero->GetColor() ) )
                 return conf.ExtUnionsAllowHeroesMeetings() ? static_cast<int>( Cursor::CURSOR_HERO_MEET ) : static_cast<int>( Cursor::POINTER );
-            else if ( to_hero->AllowBattle( false ) )
+            else
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_FIGHT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
     } break;

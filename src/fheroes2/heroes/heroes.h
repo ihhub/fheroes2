@@ -319,7 +319,7 @@ public:
     bool isAction( void ) const;
     void ResetAction( void );
     void Action( int tileIndex, bool isDestination );
-    void ActionNewPosition( void );
+    void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 
@@ -355,8 +355,6 @@ public:
     u32 GetExperience( void ) const;
     void IncreaseExperience( u32 );
 
-    bool AllowBattle( bool attacker ) const;
-
     std::string String( void ) const;
     const fheroes2::Sprite & GetPortrait( int type ) const;
 
@@ -367,12 +365,13 @@ public:
 
     fheroes2::Point MovementDirection() const;
 
+    int GetAttackedMonsterTileIndex() const;
+    void SetAttackedMonsterTileIndex( int idx );
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Heroes & );
-#endif
+
     friend class Recruits;
     friend class Battle::Only;
 
@@ -426,6 +425,8 @@ private:
     RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
+
+    int _attackedMonsterTileIndex; // used only when hero attacks a group of wandering monsters
 
     enum
     {

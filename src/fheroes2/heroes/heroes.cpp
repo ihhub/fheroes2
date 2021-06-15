@@ -65,25 +65,25 @@ namespace
 const char * Heroes::GetName( int id )
 {
     const char * names[]
-        = {// knight
-           _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
-           // barbarian
-           _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
-           // sorceress
-           _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
-           // warlock
-           _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
-           // wizard
-           _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
-           // necromant
-           _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
-           // campains
-           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
-           // loyalty version
-           _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
-           _( "Martine" ), _( "Jarkonas" ),
-           // debug
-           "Debug Hero", "Unknown"};
+        = { // knight
+            _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+            // barbarian
+            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
+            // sorceress
+            _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
+            // warlock
+            _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
+            // wizard
+            _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
+            // necromant
+            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
+            // campains
+            _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
+            // loyalty version
+            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
+            _( "Martine" ), _( "Jarkonas" ),
+            // debug
+            "Debug Hero", "Unknown" };
 
     return names[id];
 }
@@ -140,6 +140,7 @@ Heroes::Heroes()
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , _attackedMonsterTileIndex( -1 )
 {}
 
 Heroes::Heroes( int heroID, int race, int initialLevel )
@@ -169,6 +170,7 @@ Heroes::Heroes( int heroid, int rc )
     , sprite_index( 18 )
     , patrol_square( 0 )
     , _alphaValue( 255 )
+    , _attackedMonsterTileIndex( -1 )
 {
     name = _( Heroes::GetName( heroid ) );
 
@@ -234,7 +236,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
             troops[ii].SetCount( st.getLE16() );
 
-        army.Assign( troops, ARRAY_COUNT_END( troops ) );
+        army.Assign( troops, std::end( troops ) );
     }
     else
         st.skip( 15 );
@@ -399,7 +401,7 @@ Army & Heroes::GetArmy( void )
 int Heroes::GetMobilityIndexSprite( void ) const
 {
     // valid range (0 - 25)
-    int index = !CanMove() ? 0 : move_point / 100;
+    int index = CanMove() ? ( move_point + 50 ) / 100 : 0;
     return 25 >= index ? index : 25;
 }
 
@@ -612,7 +614,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const u8 objs[] = {MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK};
+    const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
 
     // result
@@ -648,7 +650,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const u8 objs[] = {MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID};
+    const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
 
     if ( result < Luck::AWFUL )
@@ -872,9 +874,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
-        if ( friendColor != GetColor() ) {
-            world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
-        }
+        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
     }
 }
 
@@ -1511,57 +1511,28 @@ void Heroes::SetMapsObject( int obj )
     save_maps_object = obj != MP2::OBJ_HEROES ? obj : MP2::OBJ_ZERO;
 }
 
-bool Heroes::AllowBattle( bool attacker ) const
-{
-    if ( !attacker )
-        switch ( world.GetTiles( GetIndex() ).GetObject( false ) ) {
-        case MP2::OBJ_TEMPLE:
-            return false;
-        default:
-            break;
-        }
-
-    return true;
-}
-
 void Heroes::ActionPreBattle( void ) {}
 
-void RedrawGameAreaAndHeroAttackMonster( Heroes & hero, s32 dst )
+void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
-    // redraw gamearea for monster action sprite
-    if ( hero.isControlHuman() ) {
-        Interface::Basic & I = Interface::Basic::Get();
-        I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.RedrawFocus();
-        I.Redraw();
-        // force flip, for monster attack show sprite
-        fheroes2::Display::instance().render();
-    }
-    hero.Action( dst, true );
-}
+    if ( allowMonsterAttack ) {
+        // scan for monsters around
+        const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
 
-void Heroes::ActionNewPosition( void )
-{
-    // check around monster
-    MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
+        if ( !targets.empty() ) {
+            SetMove( false );
+            GetPath().Hide();
 
-    if ( targets.size() ) {
-        bool skip_battle = false;
-        SetMove( false );
-        GetPath().Hide();
+            // first fight the monsters on the destination tile (if any)
+            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
 
-        // first target
-        MapsIndexes::iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
-        if ( it != targets.end() ) {
-            RedrawGameAreaAndHeroAttackMonster( *this, *it );
-            targets.erase( it );
-            skip_battle = true;
-        }
-
-        // other around targets
-        for ( it = targets.begin(); it != targets.end() && !isFreeman() && !skip_battle; ++it ) {
-            RedrawGameAreaAndHeroAttackMonster( *this, *it );
-            skip_battle = true;
+            if ( it != targets.end() ) {
+                Action( *it, true );
+            }
+            // otherwise fight the monsters on the first adjacent tile
+            else {
+                Action( targets.front(), true );
+            }
         }
     }
 
@@ -1737,6 +1708,16 @@ std::string Heroes::String( void ) const
     }
 
     return os.str();
+}
+
+int Heroes::GetAttackedMonsterTileIndex() const
+{
+    return _attackedMonsterTileIndex;
+}
+
+void Heroes::SetAttackedMonsterTileIndex( int idx )
+{
+    _attackedMonsterTileIndex = idx;
 }
 
 AllHeroes::AllHeroes()

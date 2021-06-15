@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
 #include <map>
 
 #include "agg.h"
@@ -61,8 +62,6 @@ namespace Game
     u32 GetMixerChannelFromObject( const Maps::Tiles & );
     void AnimateDelaysInitialize( void );
     void KeyboardGlobalFilter( int, int );
-    void UpdateGlobalDefines( const std::string & );
-    void LoadExternalResource();
 
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
@@ -201,20 +200,13 @@ void Game::DisableChangeMusic( bool /*f*/ )
 
 void Game::Init( void )
 {
-    const Settings & conf = Settings::Get();
-    LocalEvent & le = LocalEvent::Get();
-
-    // update all global defines
-    if ( conf.UseAltResource() )
-        LoadExternalResource();
-
     // default events
     LocalEvent::SetStateDefaults();
 
     // set global events
+    LocalEvent & le = LocalEvent::Get();
     le.SetGlobalFilterMouseEvents( Cursor::Redraw );
     le.SetGlobalFilterKeysEvents( Game::KeyboardGlobalFilter );
-    le.SetGlobalFilter( true );
 
     Game::AnimateDelaysInitialize();
 
@@ -494,95 +486,9 @@ u32 Game::GetViewDistance( u32 d )
     return GameStatic::GetOverViewDistance( d );
 }
 
-void Game::UpdateGlobalDefines( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse profits.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_globals = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_globals = doc.FirstChildElement( "globals" ) ) ) {
-        // starting_resource
-        KingdomUpdateStartingResource( xml_globals->FirstChildElement( "starting_resource" ) );
-        // view_distance
-        OverViewUpdateStatic( xml_globals->FirstChildElement( "view_distance" ) );
-        // kingdom
-        KingdomUpdateStatic( xml_globals->FirstChildElement( "kingdom" ) );
-        // game_over
-        GameOverUpdateStatic( xml_globals->FirstChildElement( "game_over" ) );
-        // whirlpool
-        WhirlpoolUpdateStatic( xml_globals->FirstChildElement( "whirlpool" ) );
-        // heroes
-        HeroesUpdateStatic( xml_globals->FirstChildElement( "heroes" ) );
-        // castle_extra_growth
-        CastleUpdateGrowth( xml_globals->FirstChildElement( "castle_extra_growth" ) );
-        // monster upgrade ratio
-        MonsterUpdateStatic( xml_globals->FirstChildElement( "monster_upgrade" ) );
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 u32 Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
-}
-
-void Game::LoadExternalResource()
-{
-    std::string spec;
-    const std::string prefix_stats = System::ConcatePath( "files", "stats" );
-
-    // globals.xml
-    spec = Settings::GetLastFile( prefix_stats, "globals.xml" );
-
-    if ( System::IsFile( spec ) )
-        Game::UpdateGlobalDefines( spec );
-
-    // monsters.xml
-    spec = Settings::GetLastFile( prefix_stats, "monsters.xml" );
-
-    if ( System::IsFile( spec ) )
-        Monster::UpdateStats( spec );
-
-    // spells.xml
-    spec = Settings::GetLastFile( prefix_stats, "spells.xml" );
-
-    if ( System::IsFile( spec ) )
-        Spell::UpdateStats( spec );
-
-    // artifacts.xml
-    spec = Settings::GetLastFile( prefix_stats, "artifacts.xml" );
-
-    if ( System::IsFile( spec ) )
-        Artifact::UpdateStats( spec );
-
-    // buildings.xml
-    spec = Settings::GetLastFile( prefix_stats, "buildings.xml" );
-
-    if ( System::IsFile( spec ) )
-        BuildingInfo::UpdateCosts( spec );
-
-    // payments.xml
-    spec = Settings::GetLastFile( prefix_stats, "payments.xml" );
-
-    if ( System::IsFile( spec ) )
-        PaymentConditions::UpdateCosts( spec );
-
-    // profits.xml
-    spec = Settings::GetLastFile( prefix_stats, "profits.xml" );
-
-    if ( System::IsFile( spec ) )
-        ProfitConditions::UpdateCosts( spec );
-
-    // skills.xml
-    spec = Settings::GetLastFile( prefix_stats, "skills.xml" );
-
-    if ( System::IsFile( spec ) )
-        Skill::UpdateStats( spec );
 }
 
 std::string Game::GetEncodeString( const std::string & str1 )

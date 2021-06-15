@@ -72,23 +72,19 @@ namespace
     void ReadConfigs()
     {
         Settings & conf = Settings::Get();
-        const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
 
-        bool isValidConfigurationFile = false;
-        for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            if ( System::IsFile( *it ) && conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+        if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
+
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
-
-        if ( !isValidConfigurationFile )
+        else {
             conf.Save( configurationFileName );
+        }
     }
 
     void InitConfigDir()
@@ -268,9 +264,11 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            fheroes2::showTeamInfo();
+            if ( conf.isShowIntro() ) {
+                fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            }
 
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );

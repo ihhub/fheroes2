@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cmath>
 #include <set>
 
 #include "ground.h"
@@ -38,7 +39,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
             if ( otherHero->isFriends( color ) )
                 return true;
             else
-                return !otherHero->AllowBattle( false ) || otherHero->GetArmy().GetStrength() > armyStrength;
+                return otherHero->GetArmy().GetStrength() > armyStrength;
         }
     }
 

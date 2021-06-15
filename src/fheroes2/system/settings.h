@@ -181,6 +181,7 @@ public:
     bool MusicExt() const;
     bool MusicMIDI() const;
     bool MusicCD() const;
+    bool isShowIntro() const;
 
     bool isFirstGameRun() const;
     void resetFirstGameRun();
@@ -260,6 +261,7 @@ public:
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
+    void setShowIntro( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -315,7 +317,6 @@ public:
     static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
-    static std::string GetWriteableDir( const char * );
     static std::string GetLangDir();
 
     static ListFiles FindFiles( const std::string & directory, const std::string & fileName );

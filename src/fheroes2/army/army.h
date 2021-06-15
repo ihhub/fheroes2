@@ -30,10 +30,6 @@
 #include "army_troop.h"
 #include "players.h"
 
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
-
 class Castle;
 class HeroBase;
 class Heroes;
@@ -156,6 +152,7 @@ public:
 
     int GetColor( void ) const;
     int GetControl( void ) const override;
+    uint32_t getTotalCount() const;
 
     double GetStrength() const override;
     double getReinforcementValue( const Troops & reinforcement ) const;
@@ -191,9 +188,6 @@ public:
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Army & );
-#endif
 
     HeroBase * commander;
     bool combat_format;

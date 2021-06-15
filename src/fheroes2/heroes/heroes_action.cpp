@@ -375,9 +375,19 @@ void Heroes::Action( int tileIndex, bool isDestination )
         SetModes( ACTION );
     }
 
-    /* new format map only */
+    // new format map only
     ListActions * list = world.GetListActions( tileIndex );
     bool cancel_default = false;
+
+    if ( Modes( ACTION ) || list ) {
+        // most likely there will be some action, immediately center the map on the hero to avoid subsequent minor screen movements
+        Interface::Basic & I = Interface::Basic::Get();
+
+        I.GetGameArea().SetCenter( GetCenter() );
+
+        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        I.Redraw();
+    }
 
     if ( list ) {
         for ( ListActions::const_iterator it = list->begin(); it != list->end(); ++it ) {
@@ -684,17 +694,13 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
 void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 {
-    bool destroy = false;
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = NULL;
-    if ( tile.GetObject() == obj )
-        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-
+    MapMonster * map_troop = tile.GetObject() == obj ? dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) ) : nullptr;
     Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
 
-    JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+    Interface::Basic & I = Interface::Basic::Get();
 
-    const Interface::StatusWindow & statusWindow = Interface::Basic::Get().GetStatusWindow();
+    JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
     // free join
     if ( JOIN_FREE == join.first ) {
@@ -702,71 +708,88 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
-            statusWindow.SetRedraw();
+
+            I.GetStatusWindow().SetRedraw();
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
+
             join.first = JOIN_NONE;
         }
     }
-    else
-        // join with cost
-        if ( JOIN_COST == join.first ) {
+    // join with cost
+    else if ( JOIN_COST == join.first ) {
         const u32 gold = troop.GetCost().gold;
+
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
 
             hero.GetArmy().JoinTroop( troop(), join.second );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
-            statusWindow.SetRedraw();
+
+            I.GetStatusWindow().SetRedraw();
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
+
             join.first = JOIN_NONE;
         }
     }
-    else
-        // flee
-        if ( JOIN_FLEE == join.first ) {
+    // flee
+    else if ( JOIN_FLEE == join.first ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
         StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
 
-        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO )
-            destroy = true;
-        else
-            join.first = 0;
+        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+            join.first = JOIN_NONE;
+        }
     }
 
-    // bool allow_move = false;
+    bool destroy = false;
 
     // fight
     if ( JOIN_NONE == join.first ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
+
+        // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
+        hero.SetAttackedMonsterTileIndex( dst_index );
+
+        I.SetRedraw( Interface::REDRAW_GAMEAREA );
+        I.Redraw();
+
         Army army( tile );
+
         Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
 
         if ( res.AttackerWins() ) {
             hero.IncreaseExperience( res.GetExperienceAttacker() );
+
             destroy = true;
-            // allow_move = true;
         }
         else {
             BattleLose( hero, res, true );
+
             tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
-            // reset "can join"
-            if ( tile.MonsterJoinConditionFree() )
+
+            // reset join condition
+            if ( tile.MonsterJoinConditionFree() ) {
                 tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+            }
 
             if ( map_troop ) {
                 map_troop->count = army.GetCountMonsters( troop() );
-                if ( map_troop->JoinConditionFree() )
+
+                // reset join condition
+                if ( map_troop->JoinConditionFree() ) {
                     map_troop->condition = Monster::JOIN_CONDITION_MONEY;
+                }
             }
         }
     }
-    // unknown
-    else
+    // just remove group of monsters
+    else {
         destroy = true;
+    }
 
     if ( destroy ) {
         AGG::PlaySound( M82::KILLFADE );
@@ -779,9 +802,13 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
 
         Game::ObjectFadeAnimation::PerformFadeTask();
 
-        if ( map_troop )
+        if ( map_troop ) {
             world.RemoveMapObject( map_troop );
+        }
     }
+
+    // clear the hero's attacked monster tile index
+    hero.SetAttackedMonsterTileIndex( -1 );
 }
 
 void ActionToHeroes( Heroes & hero, s32 dst_index )
@@ -798,12 +825,6 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
     }
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" );
-    }
-    else if ( !hero.AllowBattle( true ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " currently can not allow battle" );
-    }
-    else if ( !other_hero->AllowBattle( false ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, other_hero->GetName() << " currently can not allow battle" );
     }
     else {
         const Castle * other_hero_castle = other_hero->inCastle();
@@ -967,7 +988,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.GetPath().Hide();
     hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( true );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1984,7 +2005,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2018,7 +2039,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

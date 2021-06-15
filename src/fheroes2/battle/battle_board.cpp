@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <functional>
 #include <iterator>
 #include <set>
@@ -187,7 +188,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); i++ ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( i, unit ) ) ) {
+            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !Board::isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).SetDirection( CENTER );
             }
         }

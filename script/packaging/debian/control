@@ -1,0 +1,17 @@
+Source: fheroes2
+Section: contrib/games
+Priority: optional
+Maintainer: fheroes2 team <fhomm2@gmail.com>
+Build-Depends: debhelper (>= 9), libsdl2-dev,libsdl2-mixer-dev, libsdl2-ttf-dev, libz-dev
+Standards-Version: 3.9.8
+Homepage: https://ihhub.github.io/fheroes2/
+Vcs-Git: https://github.com/ihhub/fheroes2.git
+Vcs-Browser: https://github.com/ihhub/fheroes2
+
+Package: fheroes2
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Free remake of Heroes of Might and Magic II game engine
+ Heroes of Might and Magic II is a classic turn-based fantasy strategy.
+ .
+ Original game files are needed to play this game.

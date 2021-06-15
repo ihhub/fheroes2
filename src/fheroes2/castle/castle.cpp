@@ -201,7 +201,7 @@ void Castle::LoadFromMP2( StreamBuf st )
         for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
             troops[ii].SetCount( st.getLE16() );
 
-        army.Assign( troops, ARRAY_COUNT_END( troops ) );
+        army.Assign( troops, std::end( troops ) );
         SetModes( CUSTOMARMY );
     }
     else

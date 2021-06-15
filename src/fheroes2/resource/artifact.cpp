@@ -232,38 +232,6 @@ bool SkipExtra( int art )
     return false;
 }
 
-void Artifact::UpdateStats( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse artifacts.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_artifacts = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_artifacts = doc.FirstChildElement( "artifacts" ) ) ) {
-        size_t index = 0;
-        const TiXmlElement * xml_artifact = xml_artifacts->FirstChildElement( "artifact" );
-        for ( ; xml_artifact && index < UNKNOWN; xml_artifact = xml_artifact->NextSiblingElement( "artifact" ), ++index ) {
-            int value;
-            artifactstats_t * ptr = &artifacts[index];
-
-            xml_artifact->Attribute( "disable", &value );
-            if ( value )
-                ptr->bits |= ART_DISABLED;
-
-            xml_artifact->Attribute( "extra", &value );
-            if ( value && !SkipExtra( index ) )
-                ptr->extra = value;
-
-            Artifact art( index );
-        }
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
-
 Artifact::Artifact( int art )
     : id( art < UNKNOWN ? art : UNKNOWN )
     , ext( 0 )
@@ -362,7 +330,6 @@ bool Artifact::isAlchemistRemove( void ) const
     case HEART_FIRE:
     case HEART_ICE:
     case BROACH_SHIELDING:
-    case SPHERE_NEGATION:
         return true;
     }
 
