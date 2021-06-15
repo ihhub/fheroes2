@@ -261,7 +261,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum
+    enum MapObjectType : uint8_t
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,
@@ -537,32 +537,32 @@ namespace MP2
     };
 
     int GetICNObject( int tileset );
-    const char * StringObject( int object );
+    const char * StringObject( const MapObjectType objectType );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
-    bool isActionObject( int obj, bool water );
-    bool isGroundObject( int obj );
-    bool isWaterObject( int obj );
-    bool isQuantityObject( int obj );
-    bool isCaptureObject( int obj );
-    bool isPickupObject( int obj );
-    bool isArtifactObject( int obj );
-    bool isHeroUpgradeObject( int obj );
-    bool isMonsterDwelling( int obj );
-    bool isRemoveObject( int obj );
-    bool isMoveObject( int obj );
-    bool isAbandonedMine( int obj );
-    bool isProtectedObject( int obj );
+    bool isActionObject( const MapObjectType objectType, bool water );
+    bool isGroundObject( const MapObjectType objectType );
+    bool isWaterObject( const MapObjectType objectType );
+    bool isQuantityObject( const MapObjectType objectType );
+    bool isCaptureObject( const MapObjectType objectType );
+    bool isPickupObject( const MapObjectType objectType );
+    bool isArtifactObject( const MapObjectType objectType );
+    bool isHeroUpgradeObject( const MapObjectType objectType );
+    bool isMonsterDwelling( const MapObjectType objectType );
+    bool isRemoveObject( const MapObjectType objectType );
+    bool isMoveObject( const MapObjectType objectType );
+    bool isAbandonedMine( const MapObjectType objectType );
+    bool isProtectedObject( const MapObjectType objectType );
 
-    bool isNeedStayFront( int obj );
-    bool isClearGroundObject( int obj );
+    bool isNeedStayFront( const MapObjectType objectType );
+    bool isClearGroundObject( const MapObjectType objectType );
 
-    bool isDayLife( int obj );
-    bool isWeekLife( int obj );
-    bool isMonthLife( int obj );
-    bool isBattleLife( int obj );
+    bool isDayLife( const MapObjectType objectType );
+    bool isWeekLife( const MapObjectType objectType );
+    bool isMonthLife( const MapObjectType objectType );
+    bool isBattleLife( const MapObjectType objectType );
 
-    int GetObjectDirect( int obj );
+    int GetObjectDirect( const MapObjectType objectType );
 }
 
 #endif

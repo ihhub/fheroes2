@@ -29,6 +29,7 @@
 #include "artifact.h"
 #include "direction.h"
 #include "gamedefs.h"
+#include "mp2.h"
 #include "resource.h"
 #include "skill.h"
 
@@ -126,7 +127,7 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter( void ) const;
-        int GetObject( bool ignoreObjectUnderHero = true ) const;
+        MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
         uint8_t GetObjectSpriteIndex() const;
@@ -160,7 +161,7 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
-        bool isObject( int obj ) const;
+        bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
         bool validateWaterRules( bool fromWater ) const;
         bool isPassable( int direct, bool fromWater, bool skipfog, const int heroColor ) const;
@@ -175,7 +176,7 @@ namespace Maps
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
         void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
-        void SetObject( int object );
+        void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
         {
@@ -193,7 +194,7 @@ namespace Maps
         void UpdatePassable( void );
 
         // ICN::FLAGS32 version
-        void CaptureFlags32( int obj, int col );
+        void CaptureFlags32( const MP2::MapObjectType objectType, const int col );
 
         // Removes all ICN::FLAGS32 objects from this tile.
         void removeFlags();
@@ -250,7 +251,7 @@ namespace Maps
         void MonsterSetCount( u32 count );
         u32 MonsterCount( void ) const;
 
-        bool CaptureObjectIsProtection( void ) const;
+        bool CaptureObjectIsProtection() const;
 
         /* object quantity operation */
         void QuantityUpdate( bool isFirstLoad = true );
@@ -288,7 +289,7 @@ namespace Maps
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
-        static int GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
+        static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const uint8_t tileset, const uint8_t icnIndex );
         static bool isShadowSprite( const int tileset, const uint8_t icnIndex );
         static void UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource );
@@ -340,7 +341,7 @@ namespace Maps
         uint32_t uniq = 0;
         uint8_t objectTileset = 0;
         uint8_t objectIndex = 255;
-        uint8_t mp2_object = 0;
+        MP2::MapObjectType mp2_object = MP2::OBJ_ZERO;
         uint16_t tilePassable = DIRECTION_ALL;
         uint8_t fog_colors = Color::ALL;
 

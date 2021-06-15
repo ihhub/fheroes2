@@ -391,36 +391,36 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject() );
 }
 
-bool Kingdom::isVisited( s32 index, int object ) const
+bool Kingdom::isVisited( const int32_t index, const MP2::MapObjectType objectType ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
-    return visit_object.end() != it && ( *it ).isObject( object );
+    return visit_object.end() != it && ( *it ).isObject( objectType );
 }
 
 /* return true if object visited */
-bool Kingdom::isVisited( int object ) const
+bool Kingdom::isVisited( const MP2::MapObjectType objectType ) const
 {
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-u32 Kingdom::CountVisitedObjects( int object ) const
+uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) const
 {
-    return std::count_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::count_if( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, int object )
+void Kingdom::SetVisited( const int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
 {
-    if ( !isVisited( index, object ) && object != MP2::OBJ_ZERO )
-        visit_object.push_front( IndexObject( index, object ) );
+    if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
+        visit_object.push_front( IndexObject( index, objectType ) );
 }
 
-bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) const
+bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const
 {
-    if ( !MP2::isGroundObject( objectID ) && objectID != MP2::OBJ_COAST )
+    if ( !MP2::isGroundObject( objectType ) && objectType != MP2::OBJ_COAST )
         return false;
 
-    if ( isVisited( tile.GetIndex(), objectID ) )
+    if ( isVisited( tile.GetIndex(), objectType ) )
         return false;
 
     // Check castle first to ignore guest hero (tile with both Castle and Hero)
@@ -434,15 +434,15 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
     }
 
     // Hero object can overlay other objects when standing on top of it: force check with GetObject( true )
-    if ( objectID == MP2::OBJ_HEROES ) {
+    if ( objectType == MP2::OBJ_HEROES ) {
         const Heroes * hero = tile.GetHeroes();
         return hero && ( color == hero->GetColor() || !Players::isFriends( color, hero->GetColor() ) );
     }
 
-    if ( MP2::isCaptureObject( objectID ) )
+    if ( MP2::isCaptureObject( objectType ) )
         return !Players::isFriends( color, tile.QuantityColor() );
 
-    if ( MP2::isQuantityObject( objectID ) )
+    if ( MP2::isQuantityObject( objectType ) )
         return tile.QuantityIsValid();
 
     return true;
@@ -876,12 +876,12 @@ void Kingdoms::AddCastles( const AllCastles & castles )
     }
 }
 
-void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj )
+void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType )
 {
     for ( u32 ii = 0; ii < size(); ++ii )
         if ( kingdoms[ii].isPlay() ) {
             const int color = kingdoms[ii].GetColor();
-            const Funds & funds = captureobj.TributeCapturedObject( color, obj );
+            const Funds & funds = captureobj.TributeCapturedObject( color, objectType );
 
             kingdoms[ii].AddFundsResource( funds );
 
@@ -893,7 +893,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, u32 day, int obj 
                 event.first = day;
                 event.colors = color;
                 event.resource = funds;
-                event.message = MP2::StringObject( obj );
+                event.message = MP2::StringObject( objectType );
 
                 world.AddEventDate( event );
             }

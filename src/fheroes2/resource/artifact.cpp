@@ -852,9 +852,9 @@ u32 BagArtifacts::Count( const Artifact & art ) const
     return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
-u32 GoldInsteadArtifact( int obj )
+uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType )
 {
-    switch ( obj ) {
+    switch ( objectType ) {
     case MP2::OBJ_SKELETON:
         return 1000;
     case MP2::OBJ_SHIPWRECKSURVIROR:

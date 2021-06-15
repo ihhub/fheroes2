@@ -304,7 +304,7 @@ std::string ShowBarrierTentInfo( const Maps::Tiles & tile, const Kingdom & kingd
 
 std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     std::string str;
     if ( objectType == MP2::OBJ_COAST ) {
@@ -398,7 +398,7 @@ uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
 
 void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
-    const int objectType = tile.GetObject( false );
+    const MP2::MapObjectType objectType = tile.GetObject( false );
 
     // check
     switch ( objectType ) {
