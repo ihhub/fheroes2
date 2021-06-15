@@ -537,11 +537,12 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
                 artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
 
+                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
+
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
 
                     // display captured artifact info on right click
-                    const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
                     if ( le.MousePressRight( artifactArea ) )
                         Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
