@@ -49,7 +49,7 @@ If you would like to build the project using CMake please follow the instruction
 
 ## Contribution
 
-We welcome and appreciate any help, even if it is a tiny text or code change. Please read [**contribution**](/CONTRIBUTING.md) page before starting work on a pull request. 
+We welcome and appreciate any help, even if it is a tiny text or code change. Please read [**contribution**](https://github.com/ihhub/fheroes2/blob/master/CONTRIBUTING.md) page before starting work on a pull request.
 Not sure what to start with? Feel free to refer to [**good first issue**](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or [**help wanted**](https://github.com/ihhub/fheroes2/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) tags.
 
 ## License
