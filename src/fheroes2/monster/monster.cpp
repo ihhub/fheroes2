@@ -55,11 +55,6 @@ namespace
     monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "Unknown Monster", "Unknown Monsters", { 0, 0, 0, 0, 0, 0, 0 } };
 }
 
-StreamBase & operator<<( StreamBase & msg, const monstats_t & obj )
-{
-    return msg << obj.attack << obj.defense << obj.damageMin << obj.damageMax << obj.hp << obj.speed << obj.grown << obj.shots << obj.cost;
-}
-
 StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
 {
     return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;

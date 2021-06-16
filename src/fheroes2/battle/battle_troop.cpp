@@ -972,7 +972,7 @@ std::string Battle::Unit::String( bool more ) const
 bool Battle::Unit::AllowResponse( void ) const
 {
     return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
-        && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONSED ) );
+             && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )

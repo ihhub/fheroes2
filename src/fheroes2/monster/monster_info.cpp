@@ -20,8 +20,8 @@
 
 #include "monster_info.h"
 #include "icn.h"
-#include "monster.h"
 #include "m82.h"
+#include "monster.h"
 #include "race.h"
 #include "speed.h"
 #include "spell.h"
@@ -130,80 +130,80 @@ namespace
             { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }
         };
 
-        // Monster abilities will be added later.
+        // Monster abilities and weaknesses will be added later.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  },
-            { 1,  1,  1,  1,  1,   Speed::VERYSLOW,  0  },
-            { 5,  3,  2,  3,  10,  Speed::VERYSLOW,  12 },
-            { 5,  3,  2,  3,  10,  Speed::AVERAGE,   24 },
-            { 5,  9,  3,  4,  15,  Speed::AVERAGE,   0  },
-            { 5,  9,  3,  4,  20,  Speed::FAST,      0  },
-            { 7,  9,  4,  6,  25,  Speed::AVERAGE,   0  },
-            { 7,  9,  4,  6,  30,  Speed::FAST,      0  },
-            { 10, 9,  5,  10, 30,  Speed::VERYFAST,  0  },
-            { 10, 9,  5,  10, 40,  Speed::ULTRAFAST, 0  },
-            { 11, 12, 10, 20, 50,  Speed::FAST,      0  },
-            { 11, 12, 10, 20, 65,  Speed::VERYFAST,  0  },
-            { 3,  1,  1,  2,  3,   Speed::AVERAGE,   0  },
-            { 3,  4,  2,  3,  10,  Speed::VERYSLOW,  8  },
-            { 3,  4,  3,  4,  15,  Speed::SLOW,      16 },
-            { 6,  2,  3,  5,  20,  Speed::VERYFAST,  0  },
-            { 9,  5,  4,  6,  40,  Speed::VERYSLOW,  0  },
-            { 9,  5,  5,  7,  60,  Speed::AVERAGE,   0  },
-            { 10, 5,  5,  7,  40,  Speed::AVERAGE,   8  },
-            { 10, 5,  7,  9,  40,  Speed::FAST,      16 },
-            { 12, 9,  12, 24, 80,  Speed::FAST,      0  },
-            { 4,  2,  1,  2,  2,   Speed::AVERAGE,   0  },
-            { 6,  5,  2,  4,  20,  Speed::VERYSLOW,  0  },
-            { 6,  6,  2,  4,  20,  Speed::AVERAGE,   0  },
-            { 4,  3,  2,  3,  15,  Speed::AVERAGE,   24 },
-            { 5,  5,  2,  3,  15,  Speed::VERYFAST,  24 },
-            { 7,  5,  5,  8,  25,  Speed::FAST,      8  },
-            { 7,  7,  5,  8,  25,  Speed::VERYFAST,  16 },
-            { 10, 9,  7,  14, 40,  Speed::FAST,      0  },
-            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0  },
-            { 3,  1,  1,  2,  5,   Speed::AVERAGE,   8  },
-            { 4,  7,  2,  3,  15,  Speed::VERYFAST,  0  },
-            { 6,  6,  3,  5,  25,  Speed::AVERAGE,   0  },
-            { 9,  8,  5,  10, 35,  Speed::AVERAGE,   0  },
-            { 9,  8,  5,  10, 45,  Speed::VERYFAST,  0  },
-            { 8,  9,  6,  12, 75,  Speed::VERYSLOW,  0  },
-            { 12, 12, 25, 50, 200, Speed::AVERAGE,   0  },
-            { 13, 13, 25, 50, 250, Speed::FAST,      0  },
-            { 14, 14, 25, 50, 300, Speed::VERYFAST,  0  },
-            { 2,  1,  1,  3,  3,   Speed::SLOW,      12 },
-            { 5,  4,  2,  3,  15,  Speed::VERYFAST,  0  },
-            { 5,  10, 4,  5,  30,  Speed::VERYSLOW,  0  },
-            { 7,  10, 4,  5,  35,  Speed::SLOW,      0  },
-            { 7,  7,  4,  8,  40,  Speed::AVERAGE,   0  },
-            { 11, 7,  7,  9,  30,  Speed::FAST,      12 },
-            { 12, 8,  7,  9,  35,  Speed::VERYFAST,  24 },
-            { 13, 10, 20, 30, 150, Speed::AVERAGE,   0  },
-            { 15, 15, 20, 30, 300, Speed::VERYFAST,  24 },
-            { 4,  3,  2,  3,  4,   Speed::AVERAGE,   0  },
-            { 5,  2,  2,  3,  15,  Speed::VERYSLOW,  0  },
-            { 5,  2,  2,  3,  20,  Speed::AVERAGE,   0  },
-            { 6,  6,  3,  4,  25,  Speed::AVERAGE,   0  },
-            { 6,  6,  3,  4,  30,  Speed::FAST,      0  },
-            { 8,  6,  5,  7,  30,  Speed::AVERAGE,   0  },
-            { 8,  6,  5,  7,  40,  Speed::FAST,      0  },
-            { 7,  12, 8,  10, 25,  Speed::FAST,      12 },
-            { 7,  13, 8,  10, 35,  Speed::VERYFAST,  24 },
-            { 11, 9,  25, 45, 150, Speed::AVERAGE,   0  },
-            { 6,  1,  1,  2,  4,   Speed::FAST,      0  },
-            { 7,  6,  2,  5,  20,  Speed::VERYFAST,  0  },
-            { 8,  7,  4,  6,  20,  Speed::FAST,      0  },
-            { 10, 9,  20, 30, 50,  Speed::VERYFAST,  0  },
-            { 8,  9,  6,  10, 35,  Speed::AVERAGE,   0  },
-            { 8,  8,  4,  5,  50,  Speed::SLOW,      0  },
-            { 7,  7,  2,  8,  35,  Speed::VERYFAST,  0  },
-            { 8,  6,  4,  6,  40,  Speed::FAST,      0  },
-            { 6,  8,  3,  7,  45,  Speed::AVERAGE,   0  },
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  },
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  },
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  },
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  },
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0  }
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 1,  1,  1,  1,  1,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  3,  2,  3,  10,  Speed::VERYSLOW,  12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  3,  2,  3,  10,  Speed::AVERAGE,   24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  9,  3,  4,  15,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  9,  3,  4,  20,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  9,  4,  6,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  9,  4,  6,  30,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 9,  5,  10, 30,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 9,  5,  10, 40,  Speed::ULTRAFAST, 0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 11, 12, 10, 20, 50,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 11, 12, 10, 20, 65,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 3,  1,  1,  2,  3,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 3,  4,  2,  3,  10,  Speed::VERYSLOW,  8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 3,  4,  3,  4,  15,  Speed::SLOW,      16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  2,  3,  5,  20,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 9,  5,  4,  6,  40,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 9,  5,  5,  7,  60,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 5,  5,  7,  40,  Speed::AVERAGE,   8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 5,  7,  9,  40,  Speed::FAST,      16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 12, 9,  12, 24, 80,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 4,  2,  1,  2,  2,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  5,  2,  4,  20,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  6,  2,  4,  20,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 4,  3,  2,  3,  15,  Speed::AVERAGE,   24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  5,  2,  3,  15,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  5,  5,  8,  25,  Speed::FAST,      8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  7,  5,  8,  25,  Speed::VERYFAST,  16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 9,  7,  14, 40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 3,  1,  1,  2,  5,   Speed::AVERAGE,   8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 4,  7,  2,  3,  15,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  6,  3,  5,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 9,  8,  5,  10, 35,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 9,  8,  5,  10, 45,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  9,  6,  12, 75,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 12, 12, 25, 50, 200, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 13, 13, 25, 50, 250, Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 14, 14, 25, 50, 300, Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 2,  1,  1,  3,  3,   Speed::SLOW,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  4,  2,  3,  15,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  10, 4,  5,  30,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  10, 4,  5,  35,  Speed::SLOW,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  7,  4,  8,  40,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 11, 7,  7,  9,  30,  Speed::FAST,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 12, 8,  7,  9,  35,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 13, 10, 20, 30, 150, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 15, 15, 20, 30, 300, Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 4,  3,  2,  3,  4,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  2,  2,  3,  15,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 5,  2,  2,  3,  20,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  6,  3,  4,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  6,  3,  4,  30,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  6,  5,  7,  30,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  6,  5,  7,  40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  12, 8,  10, 25,  Speed::FAST,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  13, 8,  10, 35,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 11, 9,  25, 45, 150, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  1,  1,  2,  4,   Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  6,  2,  5,  20,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  7,  4,  6,  20,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 10, 9,  20, 30, 50,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  9,  6,  10, 35,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  8,  4,  5,  50,  Speed::SLOW,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 7,  7,  2,  8,  35,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 8,  6,  4,  6,  40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 6,  8,  3,  7,  45,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() },
+            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }
         };
 
         const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT] = {
@@ -462,7 +462,7 @@ namespace
         }
     }
 
-     std::vector<int> replaceMassSpells( const std::vector<int> & spellIds )
+    std::vector<int> replaceMassSpells( const std::vector<int> & spellIds )
     {
         std::set<int> sortedSpellIds( spellIds.begin(), spellIds.end() );
 
@@ -497,7 +497,7 @@ namespace fheroes2
 
     std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility )
     {
-        switch( ability.type ) {
+        switch ( ability.type ) {
         case MonsterAbilityType::NONE:
             return ignoreBasicAbility ? "" : "None";
         case MonsterAbilityType::DOUBLE_SHOOTING:
@@ -537,7 +537,7 @@ namespace fheroes2
                 return std::to_string( ability.percentage ) + "% chance to Blind";
             }
             else {
-                return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";;
+                return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";
             }
         case MonsterAbilityType::HP_REGENERATION:
             return "HP regeneration";

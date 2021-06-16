@@ -28,7 +28,6 @@
 
 namespace fheroes2
 {
-
     enum class MonsterAbilityType : int
     {
         // Basic abilities.
@@ -75,8 +74,7 @@ namespace fheroes2
             : type( MonsterAbilityType::NONE )
             , percentage( 0 )
             , value( 0 )
-        {
-        }
+        {}
 
         explicit MonsterAbility( const MonsterAbilityType type_ )
             : type( type_ )
@@ -90,7 +88,7 @@ namespace fheroes2
             , value( value_ )
         {}
 
-        bool operator <( const MonsterAbility & another ) const
+        bool operator<( const MonsterAbility & another ) const
         {
             return type < another.type || ( type == another.type && value < another.value );
         }
@@ -108,8 +106,7 @@ namespace fheroes2
             : type( MonsterWeaknessType::NONE )
             , percentage( 0 )
             , value( 0 )
-        {
-        }
+        {}
 
         explicit MonsterWeakness( const MonsterWeaknessType type_ )
             : type( type_ )
@@ -123,7 +120,7 @@ namespace fheroes2
             , value( value_ )
         {}
 
-        bool operator <( const MonsterWeakness & another ) const
+        bool operator<( const MonsterWeakness & another ) const
         {
             return type < another.type || ( type == another.type && value < another.value );
         }
@@ -174,7 +171,8 @@ namespace fheroes2
     {
         MonsterData() = delete;
 
-        MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_, const MonsterGeneralStats & generalStats_ )
+        MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_,
+                     const MonsterGeneralStats & generalStats_ )
             : icnId( icnId_ )
             , binFileName( binFileName_ )
             , sounds( sounds_ )
