@@ -30,12 +30,19 @@ You will need to have a demo version or the full version of **Heroes of Might an
 Precompiled binaries of the release version are currently available for the following platforms and operating systems:
 
 * [**Windows**](#windows)
+  * [**Windows installer**](#windows-installer)
+  * [**Windows ZIP archive**](#windows-zip-archive)
 * [**macOS**](#macos)
+  * [**MacPorts**](#macports)
+  * [**macOS ZIP archive**](#macos-zip-archive)
 * [**Linux**](#linux)
+  * [**AUR package**](#aur-package)
+  * [**Linux ZIP archive**](#linux-zip-archive)
 
 <a name="windows"></a>
 ## Windows
 
+<a name="windows-installer"></a>
 ### Windows installer
 
 If you downloaded the installer, launch it and follow the instructions.
@@ -44,6 +51,7 @@ During the installation process, you will be prompted to download and install th
 
 If you have a legally purchased copy of the original game, you can choose not to install the demo version, but to copy all files belonging to the original game to the fheroes2 installation directory.
 
+<a name="windows-zip-archive"></a>
 ### Windows ZIP archive
 
 If you downloaded the ZIP archive, extract it to a suitable directory of your choice.
@@ -53,6 +61,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 <a name="macos"></a>
 ## macOS
 
+<a name="macports"></a>
 ### MacPorts
 
 If you are using [**MacPorts**](https://www.macports.org/), you can install the game by running the following command:
@@ -63,6 +72,7 @@ port install fheroes2
 
 Then follow the instructions on the screen.
 
+<a name="macos-zip-archive"></a>
 ### macOS ZIP archive
 
 If you downloaded the ZIP archive, extract it to a suitable directory of your choice and then run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/macos` subdirectory. This will install the SDL libraries required to run the game.
@@ -72,6 +82,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 <a name="linux"></a>
 ## Linux
 
+<a name="aur-package"></a>
 ### AUR package
 
 Install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2) from AUR.
@@ -96,6 +107,7 @@ makepkg -si
 
 If you have a legally purchased copy of the original game, copy all files belonging to the original game to the `$XDG_DATA_HOME/fheroes2` (usually `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the `/usr/share/fheroes2/demo_unix.sh` script.
 
+<a name="linux-zip-archive"></a>
 ### Linux ZIP archive
 
 Extract the downloaded ZIP archive to a suitable directory of your choice. Then you will need to install the SDL libraries required to run the game. The installation procedure depends on the Linux distribution you are using:
