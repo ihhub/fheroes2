@@ -511,7 +511,7 @@ namespace fheroes2
         case MonsterAbilityType::MAGIC_IMMUNITY:
             return std::to_string( ability.percentage ) + "% magic immunity";
         case MonsterAbilityType::MIND_SPELL_IMMUNITY:
-            return "Mind spells immunity";
+            return "Immune to Mind spells";
         case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
             return "Immune to Elemental spells";
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
