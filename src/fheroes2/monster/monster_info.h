@@ -70,11 +70,7 @@ namespace fheroes2
 
     struct MonsterAbility
     {
-        MonsterAbility()
-            : type( MonsterAbilityType::NONE )
-            , percentage( 0 )
-            , value( 0 )
-        {}
+        MonsterAbility() = delete;
 
         explicit MonsterAbility( const MonsterAbilityType type_ )
             : type( type_ )
@@ -102,11 +98,7 @@ namespace fheroes2
 
     struct MonsterWeakness
     {
-        MonsterWeakness()
-            : type( MonsterWeaknessType::NONE )
-            , percentage( 0 )
-            , value( 0 )
-        {}
+        MonsterWeakness() = delete;
 
         explicit MonsterWeakness( const MonsterWeaknessType type_ )
             : type( type_ )

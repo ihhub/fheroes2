@@ -569,6 +569,8 @@ namespace fheroes2
             return "Soul eater";
         case MonsterAbilityType::ELEMENTAL:
             return "Elemental";
+        default:
+            break;
         }
 
         assert( 0 ); // Did you add a new ability? Please add the implementation!
