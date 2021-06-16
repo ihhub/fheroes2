@@ -662,21 +662,21 @@ namespace fheroes2
             }
         }
 
-        for ( const std::pair<uint32_t, std::vector<int>> & spellInfo : immuneToSpells ) {
-            assert( !spellInfo.second.empty() );
+        for ( auto spellInfoIter = immuneToSpells.begin(); spellInfoIter != immuneToSpells.end(); ++spellInfoIter ) {
+            assert( !spellInfoIter->second.empty() );
 
             if ( !output.empty() ) {
                 output += ' ';
             }
 
-            if ( spellInfo.first == 100 ) {
+            if ( spellInfoIter->first == 100 ) {
                 output += "Immune to ";
             }
             else {
-                output += std::to_string( spellInfo.first ) + "% immunity to ";
+                output += std::to_string( spellInfoIter->first ) + "% immunity to ";
             }
 
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfo.second );
+            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
 
             for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
                 if ( i > 0 ) {
@@ -711,16 +711,16 @@ namespace fheroes2
             }
         }
 
-        for ( const std::pair<uint32_t, std::vector<int>> & spellInfo : extraDamageSpells ) {
-            assert( !spellInfo.second.empty() );
+        for ( auto spellInfoIter = extraDamageSpells.begin(); spellInfoIter != extraDamageSpells.end(); ++spellInfoIter ) {
+            assert( !spellInfoIter->second.empty() );
 
             if ( !output.empty() ) {
                 output += ' ';
             }
 
-            output += std::to_string( spellInfo.first + 100 ) + "% damage from ";
+            output += std::to_string( spellInfoIter->first + 100 ) + "% damage from ";
 
-            const std::vector<int> sortedSpells = replaceMassSpells( spellInfo.second );
+            const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
 
             for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
                 if ( i > 0 ) {
