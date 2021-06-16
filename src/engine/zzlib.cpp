@@ -143,7 +143,7 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
 {
-    if ( imageData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
+    if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 )
         return fheroes2::Image();
 
     const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );

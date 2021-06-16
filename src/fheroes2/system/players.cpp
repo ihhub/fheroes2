@@ -34,7 +34,7 @@
 namespace
 {
     const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = { NULL };
+    Player * _players[playersSize] = { nullptr };
     int human_colors = 0;
 
     enum
@@ -227,7 +227,7 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
         focus.second = world.GetCastle( Maps::GetPoint( index ) );
         break;
     default:
-        focus.second = NULL;
+        focus.second = nullptr;
         break;
     }
 
@@ -275,7 +275,7 @@ void Players::clear( void )
     std::vector<Player *>::clear();
 
     for ( u32 ii = 0; ii < KINGDOMMAX + 1; ++ii )
-        _players[ii] = NULL;
+        _players[ii] = nullptr;
 
     current_color = 0;
     human_colors = 0;
@@ -301,7 +301,7 @@ void Players::Init( const Maps::FileInfo & fi )
         clear();
         const Colors vcolors( fi.kingdom_colors );
 
-        Player * first = NULL;
+        Player * first = nullptr;
 
         for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
             Player * player = new Player( *it );

@@ -34,7 +34,7 @@
 
 namespace
 {
-    Mix_Music * music = NULL;
+    Mix_Music * music = nullptr;
 
     int fadein = 0;
     int fadeout = 0;
@@ -139,7 +139,7 @@ void Music::Reset( void )
             Mix_HaltMusic();
 
         Mix_FreeMusic( music );
-        music = NULL;
+        music = nullptr;
     }
 }
 

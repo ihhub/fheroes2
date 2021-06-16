@@ -94,7 +94,7 @@ namespace
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
-    return CreateDirectoryA( path.c_str(), NULL );
+    return CreateDirectoryA( path.c_str(), nullptr );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
 #elif defined( FHEROES2_VITA )
@@ -231,11 +231,11 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, NULL );
+    char * clocale = std::setlocale( LC_MONETARY, nullptr );
 #elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, NULL );
+    char * clocale = setlocale( LC_MESSAGES, nullptr );
 #else
-    char * clocale = std::setlocale( LC_MESSAGES, NULL );
+    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
 #endif
 
     if ( clocale ) {
@@ -267,7 +267,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 char * System::GetOptionsArgument( void )
 {
 #if defined( _MSC_VER )
-    return NULL;
+    return nullptr;
 #else
     return optarg;
 #endif

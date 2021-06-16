@@ -483,7 +483,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
                     // check heroes max count
                     if ( kingdom.AllowRecruitHero( false, 0 ) ) {
-                        Heroes * hero = NULL;
+                        Heroes * hero = nullptr;
 
                         if ( pblock[17] && pblock[18] < Heroes::BAX )
                             hero = vec_heroes.Get( pblock[18] );

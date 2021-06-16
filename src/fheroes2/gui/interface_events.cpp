@@ -44,7 +44,7 @@
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
 {
-    if ( ( hero == NULL ) || hero->Modes( Heroes::GUARDIAN ) )
+    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
     hero->ResetModes( Heroes::SLEEPER );

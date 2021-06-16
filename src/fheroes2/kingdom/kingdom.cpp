@@ -255,7 +255,7 @@ const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
     for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
         if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
             return *it;
-    return NULL;
+    return nullptr;
 }
 
 std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
@@ -591,7 +591,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
         // get first castle
         const Castle * first = castles.GetFirstCastle();
-        if ( NULL == first )
+        if ( nullptr == first )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
@@ -674,7 +674,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
 Heroes * Kingdom::GetBestHero()
 {
-    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
+    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
 
 Monster Kingdom::GetStrongestMonster() const
@@ -799,12 +799,12 @@ void Kingdom::ResetLastLostHero( void )
 
 Heroes * Kingdom::GetLastLostHero( void ) const
 {
-    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : NULL;
+    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : nullptr;
 }
 
 Heroes * Kingdom::GetLastBattleWinHero() const
 {
-    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : NULL;
+    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
 void Kingdoms::NewDay( void )

@@ -84,7 +84,7 @@ void MapObjects::add( MapObjectSimple * obj )
 MapObjectSimple * MapObjects::get( u32 uid )
 {
     iterator it = find( uid );
-    return it != end() ? ( *it ).second : NULL;
+    return it != end() ? ( *it ).second : nullptr;
 }
 
 std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
@@ -790,7 +790,7 @@ int World::ColorCapturedObject( s32 index ) const
 ListActions * World::GetListActions( s32 index )
 {
     MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : NULL;
+    return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
 CapturedObject & World::GetCapturedObject( s32 index )
@@ -904,12 +904,12 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
+    return res.size() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )
 {
-    return uid ? map_objects.get( uid ) : NULL;
+    return uid ? map_objects.get( uid ) : nullptr;
 }
 
 void World::RemoveMapObject( const MapObjectSimple * obj )
@@ -924,7 +924,7 @@ void World::UpdateRecruits( Recruits & recruits ) const
         while ( recruits.GetID1() == recruits.GetID2() )
             recruits.SetHero2( GetFreemanHeroes() );
     else
-        recruits.SetHero2( NULL );
+        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const

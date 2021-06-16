@@ -45,7 +45,7 @@ namespace Interface
     public:
         explicit ListBox( const fheroes2::Point & pt = fheroes2::Point() )
             : needRedraw( false )
-            , content( NULL )
+            , content( nullptr )
             , _currentId( -1 )
             , _topId( -1 )
             , maxItems( 0 )
@@ -134,7 +134,7 @@ namespace Interface
 
         void Reset( void )
         {
-            if ( content == NULL || content->empty() ) { // empty content. Must be non-initialized array
+            if ( content == nullptr || content->empty() ) { // empty content. Must be non-initialized array
                 _currentId = -1;
                 _topId = -1;
                 _scrollbar.setRange( 0, 0 );
@@ -179,7 +179,7 @@ namespace Interface
 
         bool IsValid() const
         {
-            return content != NULL && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
+            return content != nullptr && !content->empty() && _topId >= 0 && _topId < _size() && _currentId < _size() && maxItems > 0;
         }
 
         bool IsNeedRedraw() const override
@@ -196,17 +196,17 @@ namespace Interface
         {
             Verify();
             if ( !IsValid() )
-                return NULL;
+                return nullptr;
 
             if ( mp.y < rtAreaItems.y || mp.y >= rtAreaItems.y + rtAreaItems.height ) // out of boundaries
-                return NULL;
+                return nullptr;
 
             if ( mp.x < rtAreaItems.x || mp.x >= rtAreaItems.x + rtAreaItems.width ) // out of boundaries
-                return NULL;
+                return nullptr;
 
             const int id = ( mp.y - rtAreaItems.y ) * maxItems / rtAreaItems.height;
             if ( _topId + id >= _size() ) // out of items
-                return NULL;
+                return nullptr;
 
             return &( *content )[_topId + id];
         }
@@ -254,7 +254,7 @@ namespace Interface
 
         void RemoveSelected( void )
         {
-            if ( content != NULL && _currentId >= 0 && _currentId < _size() )
+            if ( content != nullptr && _currentId >= 0 && _currentId < _size() )
                 content->erase( content->begin() + _currentId );
         }
 
@@ -414,7 +414,7 @@ namespace Interface
 
         void Verify()
         {
-            if ( content == NULL || content->empty() ) {
+            if ( content == nullptr || content->empty() ) {
                 _currentId = -1;
                 _topId = -1;
             }
@@ -428,12 +428,12 @@ namespace Interface
 
         int _size() const
         {
-            return content == NULL ? 0 : static_cast<int>( content->size() );
+            return content == nullptr ? 0 : static_cast<int>( content->size() );
         }
 
         void UpdateScrollbarRange()
         {
-            const int maxValue = ( content != NULL && maxItems < _size() ) ? static_cast<int>( _size() - maxItems ) : 0;
+            const int maxValue = ( content != nullptr && maxItems < _size() ) ? static_cast<int>( _size() - maxItems ) : 0;
             if ( _scrollbar.maxIndex() != maxValue )
                 _scrollbar.setRange( 0, maxValue );
         }

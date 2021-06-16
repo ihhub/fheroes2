@@ -76,7 +76,7 @@ namespace Battle
         bool resist;
 
         TargetInfo()
-            : defender( NULL )
+            : defender( nullptr )
             , damage( 0 )
             , killed( 0 )
             , resist( false )

@@ -292,7 +292,7 @@ std::vector<u8> LoadFileToMem( const std::string & file )
 {
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == NULL )
+    if ( rw == nullptr )
         ERROR_LOG( SDL_GetError() );
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );

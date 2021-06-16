@@ -27,7 +27,7 @@ namespace Interface
     struct PlayerInfo
     {
         PlayerInfo()
-            : player( NULL )
+            : player( nullptr )
         {}
 
         Player * player;
