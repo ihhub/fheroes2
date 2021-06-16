@@ -45,79 +45,89 @@ namespace
             ICN::UNKNOWN, ICN::UNKNOWN, ICN::UNKNOWN
         };
 
+        const char * binFileName[Monster::MONSTER_COUNT] = {
+            "UNKNOWN", "PEAS_FRM.BIN", "ARCHRFRM.BIN", "ARCHRFRM.BIN", "PIKMNFRM.BIN", "PIKMNFRM.BIN", "SWRDSFRM.BIN", "SWRDSFRM.BIN", "CVLRYFRM.BIN", "CVLR2FRM.BIN", "PALADFRM.BIN",
+            "PALADFRM.BIN", "GOBLNFRM.BIN", "ORC__FRM.BIN", "ORC__FRM.BIN", "WOLF_FRM.BIN", "OGRE_FRM.BIN", "OGRE_FRM.BIN", "TROLLFRM.BIN", "TROLLFRM.BIN", "CYCLOFRM.BIN", "SPRITFRM.BIN",
+            "DWARFFRM.BIN", "DWARFFRM.BIN", "ELF__FRM.BIN", "ELF__FRM.BIN", "DRUIDFRM.BIN", "DRUIDFRM.BIN", "UNICOFRM.BIN", "PHOENFRM.BIN", "CENTRFRM.BIN", "GARGLFRM.BIN", "GRIFFFRM.BIN",
+            "MINOTFRM.BIN", "MINOTFRM.BIN", "HYDRAFRM.BIN", "DRAGGFRM.BIN", "DRAGRFRM.BIN", "DRAGBFRM.BIN", "HALFLFRM.BIN", "BOAR_FRM.BIN", "GOLEMFRM.BIN", "GOLEMFRM.BIN", "ROC__FRM.BIN",
+            "MAGE1FRM.BIN", "MAGE1FRM.BIN", "TITANFRM.BIN", "TITA2FRM.BIN", "SKEL_FRM.BIN", "ZOMB_FRM.BIN", "ZOMB_FRM.BIN", "MUMMYFRM.BIN", "MUMMYFRM.BIN", "VAMPIFRM.BIN", "VAMPIFRM.BIN",
+            "LICH_FRM.BIN", "LICH_FRM.BIN", "DRABNFRM.BIN", "ROGUEFRM.BIN", "NOMADFRM.BIN", "GHOSTFRM.BIN", "GENIEFRM.BIN", "MEDUSFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN",
+            "FELEMFRM.BIN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN", "UNKNOWN"
+        };
+
         const fheroes2::MonsterSound monsterSounds[Monster::MONSTER_COUNT] = {
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  },
-            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE },
-            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE },
-            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE },
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE },
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE },
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE },
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE },
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE },
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE },
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE },
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE },
-            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE },
-            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE },
-            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE },
-            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE },
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE },
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE },
-            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE },
-            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE },
-            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE },
-            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE },
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE },
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE },
-            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE },
-            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE },
-            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE },
-            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE },
-            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE },
-            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE },
-            { M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE },
-            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE },
-            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE },
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE },
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE },
-            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE },
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE },
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE },
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE },
-            { M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE },
-            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE },
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE },
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE },
-            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE },
-            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE },
-            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE },
-            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE },
-            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE },
-            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE },
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE },
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE },
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE },
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE },
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE },
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE },
-            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE },
-            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE },
-            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE },
-            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE },
-            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE },
-            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE },
-            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE },
-            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE },
-            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE },
-            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE },
-            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE },
-            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE },
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  },
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  },
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  },
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  },
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN  }
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  },
+            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN  },
+            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT },
+            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT },
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN  },
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN  },
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN  },
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN  },
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN  },
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN  },
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN  },
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN  },
+            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE, M82::UNKNOWN  },
+            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT },
+            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT },
+            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE, M82::UNKNOWN  },
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN  },
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN  },
+            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT },
+            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT },
+            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE, M82::UNKNOWN  },
+            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN  },
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN  },
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN  },
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT },
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT },
+            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT },
+            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT },
+            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE, M82::UNKNOWN  },
+            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE, M82::UNKNOWN  },
+            { M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE, M82::CNTRSHOT },
+            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE, M82::UNKNOWN  },
+            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE, M82::UNKNOWN  },
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN  },
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN  },
+            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE, M82::UNKNOWN  },
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  },
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  },
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  },
+            { M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE, M82::HALFSHOT },
+            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE, M82::UNKNOWN  },
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN  },
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN  },
+            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN  },
+            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT },
+            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT },
+            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN  },
+            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::TITNSHOT },
+            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN  },
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN  },
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN  },
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN  },
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN  },
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN  },
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN  },
+            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT },
+            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT },
+            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE, M82::UNKNOWN  },
+            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE, M82::UNKNOWN  },
+            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE, M82::UNKNOWN  },
+            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE, M82::UNKNOWN  },
+            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN  },
+            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE, M82::UNKNOWN  },
+            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE, M82::UNKNOWN  },
+            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN  },
+            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN  },
+            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN  },
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  },
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  },
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  },
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  },
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }
         };
 
         // Monster abilities will be added later.
@@ -274,7 +284,7 @@ namespace
         monsterData.reserve( Monster::MONSTER_COUNT );
 
         for ( int i = 0; i < Monster::MONSTER_COUNT; ++i ) {
-            monsterData.emplace_back( monsterIcnIds[i], monsterSounds[i], monsterBattleStats[i], monsterGeneralStats[i] );
+            monsterData.emplace_back( monsterIcnIds[i], binFileName[i], monsterSounds[i], monsterBattleStats[i], monsterGeneralStats[i] );
         }
 
         // Add monster abilities and weaknesses.
@@ -298,7 +308,7 @@ namespace
 
         monsterData[Monster::WAR_TROLL].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::HP_REGENERATION );
 
-        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_CELL_MELEE_ATTACK );
+        monsterData[Monster::CYCLOPS].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
         monsterData[Monster::CYCLOPS].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::PARALYZE );
 
         monsterData[Monster::SPRITE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
@@ -316,14 +326,11 @@ namespace
         monsterData[Monster::UNICORN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::BLIND );
 
         monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
         monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRAY );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRING );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBALL );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBLAST );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
-        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::PHOENIX].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY );
+
+        monsterData[Monster::CENTAUR].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::GARGOYLE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
 
@@ -332,40 +339,32 @@ namespace
         monsterData[Monster::GRIFFIN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE );
 
         monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALL_AROUND_CELL_MELEE_ATTACK );
+        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
+        monsterData[Monster::HYDRA].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
 
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::BOAR].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::COLDRAY );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::COLDRING );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::FIREBALL );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::FIREBLAST );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::CHAINLIGHTNING );
-        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::ELEMENTALSTORM );
+        monsterData[Monster::IRON_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
 
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::COLDRAY );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::COLDRING );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::FIREBALL );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::FIREBLAST );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::CHAINLIGHTNING );
-        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_DAMAGE_REDUCTION, 50, Spell::ELEMENTALSTORM );
+        monsterData[Monster::STEEL_GOLEM].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION, 50, 0 );
 
         monsterData[Monster::ROC].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::ROC].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
@@ -375,17 +374,10 @@ namespace
         monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
         monsterData[Monster::ARCHMAGE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::DISPEL );
 
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::GIANT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
 
         monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY );
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::TITAN].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
 
         monsterData[Monster::SKELETON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
 
@@ -424,6 +416,7 @@ namespace
 
         monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::SOUL_EATER );
         monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
+        monsterData[Monster::GHOST].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::UNDEAD );
 
         monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ENEMY_HALFING, 10, 0 );
         monsterData[Monster::GENIE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
@@ -433,45 +426,56 @@ namespace
 
         monsterData[Monster::NOMAD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NEUTRAL_MORAL );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::ELEMENTALSTORM );
 
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NEUTRAL_MORAL );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
         monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::METEORSHOWER );
 
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NEUTRAL_MORAL );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBALL );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBLAST );
         monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRAY );
         monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRING );
 
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NEUTRAL_MORAL );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BLIND );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::PARALYZE );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::BERSERKER );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::HYPNOTIZE );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRAY );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRING );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::FIREBALL );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::FIREBLAST );
+    }
+
+    void removeDuplicateSpell( std::set<int> & sortedSpellIds, const int massSpellId, const int spellId )
+    {
+        if ( sortedSpellIds.count( massSpellId ) > 0 && sortedSpellIds.count( spellId ) > 0 ) {
+            sortedSpellIds.erase( massSpellId );
+        }
+    }
+
+     std::vector<int> replaceMassSpells( const std::vector<int> & spellIds )
+    {
+        std::set<int> sortedSpellIds( spellIds.begin(), spellIds.end() );
+
+        removeDuplicateSpell( sortedSpellIds, Spell::CHAINLIGHTNING, Spell::LIGHTNINGBOLT );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSCURE, Spell::CURE );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSCURSE, Spell::CURSE );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSBLESS, Spell::BLESS );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSHASTE, Spell::HASTE );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSSHIELD, Spell::SHIELD );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSDISPEL, Spell::DISPEL );
+        removeDuplicateSpell( sortedSpellIds, Spell::MASSSLOW, Spell::SLOW );
+
+        return std::vector<int>( sortedSpellIds.begin(), sortedSpellIds.end() );
     }
 }
 
@@ -491,37 +495,60 @@ namespace fheroes2
         return monsterData[monsterId];
     }
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability )
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility )
     {
         switch( ability.type ) {
         case MonsterAbilityType::NONE:
-            return "";
+            return ignoreBasicAbility ? "" : "None";
         case MonsterAbilityType::DOUBLE_SHOOTING:
             return "Double shot";
         case MonsterAbilityType::DOUBLE_HEX_SIZE:
-            return "2-hex monster";
+            return ignoreBasicAbility ? "" : "2-hex monster";
         case MonsterAbilityType::DOUBLE_MELEE_ATTACK:
             return "Double strike";
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
             return "Double damage to Undead";
         case MonsterAbilityType::MAGIC_IMMUNITY:
             return std::to_string( ability.percentage ) + "% magic immunity";
+        case MonsterAbilityType::MIND_SPELL_IMMUNITY:
+            return "Mind spells immunity";
+        case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
+            return "Immune to Elemental spells";
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
-            return std::to_string( ability.percentage ) + "% immunity to " + Spell( ability.value ).GetName() + " spell";
-        case MonsterAbilityType::SPELL_DAMAGE_REDUCTION:
-            return std::to_string( ability.percentage ) + "% damage from " + Spell( ability.value ).GetName() + " spell";;
+            if ( ability.percentage == 100 ) {
+                return std::string( "Immune to " ) + Spell( ability.value ).GetName();
+            }
+            else {
+                return std::to_string( ability.percentage ) + "% immunity to " + Spell( ability.value ).GetName() + " spell";
+            }
+        case MonsterAbilityType::ELEMENTAL_SPELL_DAMAGE_REDUCTION:
+            return std::to_string( ability.percentage ) + "% damage from Elemental spells";
         case MonsterAbilityType::SPELL_CASTER:
-            return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";;
+            if ( ability.value == Spell::DISPEL ) {
+                return std::to_string( ability.percentage ) + "% chance to Dispel beneficial spells";
+            }
+            else if ( ability.value == Spell::PARALYZE ) {
+                return std::to_string( ability.percentage ) + "% chance to Paralyze";
+            }
+            else if ( ability.value == Spell::STONE ) {
+                return std::to_string( ability.percentage ) + "% chance to Petrify";
+            }
+            else if ( ability.value == Spell::BLIND ) {
+                return std::to_string( ability.percentage ) + "% chance to Blind";
+            }
+            else {
+                return std::to_string( ability.percentage ) + "% chance to cast " + Spell( ability.value ).GetName() + " spell";;
+            }
         case MonsterAbilityType::HP_REGENERATION:
             return "HP regeneration";
-        case MonsterAbilityType::DOUBLE_CELL_MELEE_ATTACK:
-            return "Double cell melee attack";
+        case MonsterAbilityType::TWO_CELL_MELEE_ATTACK:
+            return "Two hexes attack";
         case MonsterAbilityType::FLYING:
-            return "Flyer";
+            return ignoreBasicAbility ? "" : "Flyer";
         case MonsterAbilityType::ALWAYS_RETALIATE:
             return "Always retaliate";
-        case MonsterAbilityType::ALL_AROUND_CELL_MELEE_ATTACK:
-            return "Attack all enemies around";
+        case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
+            return "Attack all adjacent enemies";
         case MonsterAbilityType::NO_MELEE_PENALTY:
             return "No melee penalty";
         case MonsterAbilityType::DRAGON:
@@ -533,26 +560,26 @@ namespace fheroes2
         case MonsterAbilityType::HP_DRAIN:
             return "HP drain";
         case MonsterAbilityType::AREA_SHOT:
-            return "Area shooting attack";
+            return "Cloud attack";
         case MonsterAbilityType::MORAL_DECREMENT:
             return "Decreases enemy's moral by " + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
-            return std::to_string( ability.percentage ) + "% chance to half enemy";
+            return std::to_string( ability.percentage ) + "% chance to halve enemy";
         case MonsterAbilityType::SOUL_EATER:
             return "Soul eater";
-        case MonsterAbilityType::NEUTRAL_MORAL:
-            return "Always neutral moral";
+        case MonsterAbilityType::ELEMENTAL:
+            return "Elemental";
         }
 
         assert( 0 ); // Did you add a new ability? Please add the implementation!
         return "";
     }
 
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness )
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility )
     {
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
-            return "";
+            return ignoreBasicAbility ? "" : "None";
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL:
             return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
         default:
@@ -596,7 +623,7 @@ namespace fheroes2
             os << std::endl;
             os << "Abilities:" << std::endl;
             for ( const MonsterAbility & ability : monster.battleStats.abilities ) {
-                os << "   " << getMonsterAbilityDescription( ability ) << std::endl;
+                os << "   " << getMonsterAbilityDescription( ability, false ) << std::endl;
             }
         }
 
@@ -604,10 +631,172 @@ namespace fheroes2
             os << std::endl;
             os << "Weaknesses:" << std::endl;
             for ( const MonsterWeakness & weakness : monster.battleStats.weaknesses ) {
-                os << "   " << getMonsterWeaknessDescription( weakness ) << std::endl;
+                os << "   " << getMonsterWeaknessDescription( weakness, false ) << std::endl;
             }
         }
 
         return os.str();
+    }
+
+    std::string getMonsterPropertiesDescription( const int monsterId )
+    {
+        std::string output;
+
+        const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
+
+        const std::set<MonsterAbility> & abilities = battleStats.abilities;
+
+        std::map<uint32_t, std::vector<int>> immuneToSpells;
+        for ( const MonsterAbility & ability : abilities ) {
+            if ( ability.type == MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL ) {
+                immuneToSpells[ability.percentage].emplace_back( ability.value );
+                continue;
+            }
+            const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
+            if ( !abilityDescription.empty() ) {
+                if ( !output.empty() ) {
+                    output += ' ';
+                }
+                output += abilityDescription;
+                output += '.';
+            }
+        }
+
+        for ( const std::pair<uint32_t, std::vector<int>> & spellInfo : immuneToSpells ) {
+            assert( !spellInfo.second.empty() );
+
+            if ( !output.empty() ) {
+                output += ' ';
+            }
+
+            if ( spellInfo.first == 100 ) {
+                output += "Immune to ";
+            }
+            else {
+                output += std::to_string( spellInfo.first ) + "% immunity to ";
+            }
+
+            const std::vector<int> sortedSpells = replaceMassSpells( spellInfo.second );
+
+            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                if ( i > 0 ) {
+                    output += ", ";
+                }
+                output += Spell( sortedSpells[i] ).GetName();
+            }
+
+            if ( sortedSpells.size() > 1 ) {
+                output += " spells.";
+            }
+            else {
+                output += " spell.";
+            }
+        }
+
+        std::map<uint32_t, std::vector<int>> extraDamageSpells;
+        const std::set<MonsterWeakness> & weaknesses = battleStats.weaknesses;
+        for ( const MonsterWeakness & weakness : weaknesses ) {
+            if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL ) {
+                extraDamageSpells[weakness.percentage].emplace_back( weakness.value );
+                continue;
+            }
+
+            const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
+            if ( !weaknessDescription.empty() ) {
+                if ( !output.empty() ) {
+                    output += ' ';
+                }
+                output += weaknessDescription;
+                output += '.';
+            }
+        }
+
+        for ( const std::pair<uint32_t, std::vector<int>> & spellInfo : extraDamageSpells ) {
+            assert( !spellInfo.second.empty() );
+
+            if ( !output.empty() ) {
+                output += ' ';
+            }
+
+            output += std::to_string( spellInfo.first + 100 ) + "% damage from ";
+
+            const std::vector<int> sortedSpells = replaceMassSpells( spellInfo.second );
+
+            for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
+                if ( i > 0 ) {
+                    output += ", ";
+                }
+                output += Spell( sortedSpells[i] ).GetName();
+            }
+
+            if ( sortedSpells.size() > 1 ) {
+                output += " spells.";
+            }
+            else {
+                output += " spell.";
+            }
+        }
+
+        return output;
+    }
+
+    uint32_t getSpellResistance( const int monsterId, const int spellId )
+    {
+        const std::set<MonsterAbility> & abilities = getMonsterData( monsterId ).battleStats.abilities;
+
+        // Find magic immunity for every spell.
+        auto foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MAGIC_IMMUNITY ) );
+        if ( foundAbility != abilities.end() ) {
+            return foundAbility->percentage;
+        }
+
+        foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 0, spellId ) );
+        if ( foundAbility != abilities.end() ) {
+            return foundAbility->percentage;
+        }
+
+        Spell spell( spellId );
+        if ( spell.isMindInfluence() ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MIND_SPELL_IMMUNITY ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell.isALiveOnly() ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell.isUndeadOnly() ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            if ( foundAbility == abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell == Spell::RESURRECT || spell == Spell::RESURRECTTRUE || spell == Spell::ANIMATEDEAD ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
+            if ( foundAbility == abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell == Spell::COLDRAY || spell == Spell::COLDRING || spell == Spell::FIREBALL || spell == Spell::FIREBLAST || spell == Spell::LIGHTNINGBOLT
+             || spell == Spell::CHAINLIGHTNING || spell == Spell::ELEMENTALSTORM ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY ) );
+            if ( foundAbility == abilities.end() ) {
+                return 100;
+            }
+        }
+
+        return 0;
     }
 }

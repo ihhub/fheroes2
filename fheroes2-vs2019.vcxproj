@@ -352,6 +352,8 @@
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
     <ClCompile Include="src\fheroes2\maps\visit.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
     <ClCompile Include="src\fheroes2\objects\mounts.cpp" />
     <ClCompile Include="src\fheroes2\objects\objcrck.cpp" />
     <ClCompile Include="src\fheroes2\objects\objdirt.cpp" />
@@ -517,6 +519,7 @@
     <ClInclude Include="src\fheroes2\maps\position.h" />
     <ClInclude Include="src\fheroes2\maps\visit.h" />
     <ClInclude Include="src\fheroes2\monster\monster.h" />
+    <ClInclude Include="src\fheroes2\monster\monster_anim.h" />
     <ClInclude Include="src\fheroes2\monster\monster_info.h" />
     <ClInclude Include="src\fheroes2\objects\mounts.h" />
     <ClInclude Include="src\fheroes2\objects\objcrck.h" />

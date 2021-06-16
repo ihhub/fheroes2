@@ -89,7 +89,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
     dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
     dst_pt.y = pos.y + 135 - smon.height();
 

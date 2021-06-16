@@ -131,17 +131,8 @@ public:
         MONSTER_RND4,
         MONSTER_RND,
 
-        // IMPORTANT! Put all new monsters above line.
+        // IMPORTANT! Put all new monsters just above line.
         MONSTER_COUNT
-    };
-
-    struct monstersprite_t
-    {
-        int icn_file;
-        int m82_attk;
-        int m82_kill;
-        int m82_move;
-        int m82_wnce;
     };
 
     Monster( const int m = UNKNOWN );
@@ -192,12 +183,11 @@ public:
     bool isTwiceAttack( void ) const;
     bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
-    bool isMultiCellAttack( void ) const;
-    bool isAlwaysRetaliating( void ) const;
     bool ignoreRetaliation( void ) const;
     bool isDragons( void ) const;
     bool isAffectedByMorale( void ) const;
-    bool hasMeleePenalty() const;
+
+    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
     int ICNMonh( void ) const;
@@ -207,7 +197,7 @@ public:
     payment_t GetUpgradeCost( void ) const;
     u32 GetDwelling( void ) const;
 
-    const monstersprite_t & GetMonsterSprite() const;
+    int GetMonsterSprite() const;
 
     static Monster Rand( const LevelType type );
     static u32 Rand4WeekOf( void );
@@ -215,7 +205,6 @@ public:
 
     static u32 GetCountFromHitPoints( const Monster &, u32 );
 
-    static uint32_t GetICNByMonsterID( uint32_t monsterID );
     static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
@@ -230,10 +219,7 @@ struct MonsterStaticData
     static MonsterStaticData & Get( void );
 };
 
-StreamBase & operator<<( StreamBase &, const Monster & );
-StreamBase & operator>>( StreamBase &, const Monster & );
-
-StreamBase & operator<<( StreamBase &, const MonsterStaticData & );
+// TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
 StreamBase & operator>>( StreamBase &, const MonsterStaticData & );
 
 #endif

@@ -39,6 +39,7 @@
 #include "speed.h"
 #include "text.h"
 #include "ui_button.h"
+#include "ui_text.h"
 #include "world.h"
 
 #include <sstream>
@@ -480,6 +481,13 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     Text text( troop.GetName(), Font::YELLOW_BIG );
     fheroes2::Point pos( offset.x + 140 - text.w() / 2, offset.y + 40 );
     text.Blit( pos.x, pos.y );
+
+    // Description.
+    std::string description = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
+    if ( !description.empty() ) {
+        const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        descriptionText.draw( offset.x + 35, offset.y + 195, 210, fheroes2::Display::instance() );
+    }
 
     // amount
     text.Set( std::to_string( troop.GetCount() ), Font::BIG );

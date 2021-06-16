@@ -26,7 +26,7 @@ namespace fheroes2
 {
     RandomMonsterAnimation::RandomMonsterAnimation( const Monster & monster )
         : _reference( monster.GetID() )
-        , _icnID( monster.GetMonsterSprite().icn_file )
+        , _icnID( fheroes2::getMonsterData( monster.GetID() ).icnId )
         , _frameId( 0 )
         , _frameOffset( 0 )
         , _isFlyer( monster.isFlying() )

@@ -135,7 +135,7 @@ bool Game::Save( const std::string & fn )
     fz.setbigendian( true );
 
     // zip game data content
-    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
+    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get();
 
     if ( conf.isCampaignGameType() )
         fz << Campaign::CampaignSaveData::Get();
@@ -221,6 +221,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
 
+    // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
     if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
         std::string warningMessage( "This is an saved game is localized for lang = " );

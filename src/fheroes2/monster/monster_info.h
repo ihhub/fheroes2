@@ -31,20 +31,24 @@ namespace fheroes2
 
     enum class MonsterAbilityType : int
     {
+        // Basic abilities.
         NONE,
-        DOUBLE_SHOOTING,
         DOUBLE_HEX_SIZE,
+        FLYING,
+        // Advanced abilities.
+        DOUBLE_SHOOTING,
         DOUBLE_MELEE_ATTACK,
         DOUBLE_DAMAGE_TO_UNDEAD,
         MAGIC_IMMUNITY,
+        MIND_SPELL_IMMUNITY,
+        ELEMENTAL_SPELL_IMMUNITY,
         IMMUNE_TO_CERTAIN_SPELL,
-        SPELL_DAMAGE_REDUCTION,
+        ELEMENTAL_SPELL_DAMAGE_REDUCTION,
         SPELL_CASTER,
         HP_REGENERATION,
-        DOUBLE_CELL_MELEE_ATTACK,
-        FLYING,
+        TWO_CELL_MELEE_ATTACK,
         ALWAYS_RETALIATE,
-        ALL_AROUND_CELL_MELEE_ATTACK,
+        ALL_ADJACENT_CELL_MELEE_ATTACK,
         NO_MELEE_PENALTY,
         DRAGON,
         UNDEAD,
@@ -54,12 +58,14 @@ namespace fheroes2
         MORAL_DECREMENT,
         ENEMY_HALFING,
         SOUL_EATER,
-        NEUTRAL_MORAL
+        ELEMENTAL
     };
 
     enum class MonsterWeaknessType : int
     {
+        // Basic abilities.
         NONE,
+        // Advanced abilities.
         EXTRA_DAMAGE_FROM_SPELL
     };
 
@@ -157,24 +163,28 @@ namespace fheroes2
 
     struct MonsterSound
     {
-        int attack;
+        int meleeAttack;
         int death;
         int movement;
         int wince;
+        int rangeAttack;
     };
 
     struct MonsterData
     {
         MonsterData() = delete;
 
-        MonsterData( const int icnId_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_, const MonsterGeneralStats & generalStats_ )
+        MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_, const MonsterGeneralStats & generalStats_ )
             : icnId( icnId_ )
+            , binFileName( binFileName_ )
             , sounds( sounds_ )
             , battleStats( battleStats_ )
             , generalStats( generalStats_ )
         {}
 
         int icnId;
+
+        const char * binFileName;
 
         MonsterSound sounds;
 
@@ -185,9 +195,13 @@ namespace fheroes2
 
     const MonsterData & getMonsterData( const int monsterId );
 
-    std::string getMonsterAbilityDescription( const MonsterAbility & ability );
-    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness );
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
 
     std::string getMonsterDescription( const int monsterId );
+
+    std::string getMonsterPropertiesDescription( const int monsterId );
+
+    uint32_t getSpellResistance( const int monsterId, const int spellId );
 }
 #endif
