@@ -314,9 +314,9 @@ namespace
         monsterData[Monster::SPRITE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
         monsterData[Monster::SPRITE].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
 
-        monsterData[Monster::DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 25, 0 );
+        monsterData[Monster::DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
 
-        monsterData[Monster::BATTLE_DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 25, 0 );
+        monsterData[Monster::BATTLE_DWARF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 25, 0 );
 
         monsterData[Monster::ELF].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
 
@@ -345,19 +345,19 @@ namespace
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
         monsterData[Monster::GREEN_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
         monsterData[Monster::RED_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DRAGON );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FLYING );
-        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_IMMUNITY, 100, 0 );
+        monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MAGIC_RESISTANCE, 100, 0 );
         monsterData[Monster::BLACK_DRAGON].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
 
         monsterData[Monster::BOAR].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
@@ -504,8 +504,8 @@ namespace fheroes2
             return "Double strike";
         case MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD:
             return "Double damage to Undead";
-        case MonsterAbilityType::MAGIC_IMMUNITY:
-            return std::to_string( ability.percentage ) + "% magic immunity";
+        case MonsterAbilityType::MAGIC_RESISTANCE:
+            return std::to_string( ability.percentage ) + "% magic resistance";
         case MonsterAbilityType::MIND_SPELL_IMMUNITY:
             return "Immune to Mind spells";
         case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
@@ -733,7 +733,7 @@ namespace fheroes2
         const std::set<MonsterAbility> & abilities = getMonsterData( monsterId ).battleStats.abilities;
 
         // Find magic immunity for every spell.
-        auto foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MAGIC_IMMUNITY ) );
+        auto foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::MAGIC_RESISTANCE ) );
         if ( foundAbility != abilities.end() ) {
             return foundAbility->percentage;
         }
