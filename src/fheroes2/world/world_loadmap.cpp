@@ -44,6 +44,7 @@
 #include "resource.h"
 #include "text.h"
 #include "world.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -55,8 +56,6 @@ namespace GameStatic
     extern u32 uniq;
 }
 
-#ifdef WITH_ZLIB
-#include "zzlib.h"
 std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 {
     std::vector<u8> zdata = decodeBase64( base64 );
@@ -66,7 +65,6 @@ std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
     sb.skip( 4 ); // qt uncompress size
     return zlibDecompress( sb.data(), sb.size(), realsz + 1 );
 }
-#endif
 
 bool World::LoadMapMP2( const std::string & filename )
 {
@@ -483,7 +481,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
                     // check heroes max count
                     if ( kingdom.AllowRecruitHero( false, 0 ) ) {
-                        Heroes * hero = NULL;
+                        Heroes * hero = nullptr;
 
                         if ( pblock[17] && pblock[18] < Heroes::BAX )
                             hero = vec_heroes.Get( pblock[18] );

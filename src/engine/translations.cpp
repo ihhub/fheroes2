@@ -229,7 +229,7 @@ namespace Translation
         LOCALE_TR
     };
 
-    mofile * current = NULL;
+    mofile * current = nullptr;
     std::map<std::string, mofile> domains;
     int locale = LOCALE_EN;
     char context = 0;

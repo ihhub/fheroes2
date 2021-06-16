@@ -110,7 +110,7 @@ namespace
         },
         {
             0,
-            NULL,
+            nullptr,
         },
     };
 
@@ -285,7 +285,7 @@ namespace
             _( "game: offer to continue the game afer victory condition" ),
         },
 
-        { 0, NULL },
+        { 0, nullptr },
     };
 
     const char * GetGeneralSettingDescription( int settingId )
@@ -296,7 +296,7 @@ namespace
                 return ptr->str;
             ++ptr;
         }
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -1478,7 +1478,7 @@ const char * Settings::ExtName( u32 f ) const
 {
     const settings_t * ptr = std::find( settingsFHeroes2, std::end( settingsFHeroes2 ) - 1, f );
 
-    return ptr ? _( ptr->str ) : NULL;
+    return ptr ? _( ptr->str ) : nullptr;
 }
 
 void Settings::ExtSetModes( u32 f )

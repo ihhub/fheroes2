@@ -34,10 +34,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     , _fps( 0 )
     , _frameCount( 0 )
     , _currentFrameId( 0 )
-    , _videoFile( NULL )
+    , _videoFile( nullptr )
 {
     _videoFile = smk_open_file( filePath.c_str(), SMK_MODE_MEMORY );
-    if ( _videoFile == NULL )
+    if ( _videoFile == nullptr )
         return;
 
     double usf = 0;
@@ -53,8 +53,8 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     unsigned long width = 0;
     unsigned long height = 0;
 
-    smk_info_all( _videoFile, NULL, &_frameCount, &usf );
-    smk_info_video( _videoFile, &width, &height, NULL );
+    smk_info_all( _videoFile, nullptr, &_frameCount, &usf );
+    smk_info_video( _videoFile, &width, &height, nullptr );
 
     _width = static_cast<int32_t>( width );
     _height = static_cast<int32_t>( height );
@@ -76,7 +76,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     smk_enable_video( _videoFile, 0 ); // disable video reading
     smk_first( _videoFile );
     unsigned long currentFrame = 0;
-    smk_info_all( _videoFile, &currentFrame, NULL, NULL );
+    smk_info_all( _videoFile, &currentFrame, nullptr, nullptr );
 
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
@@ -143,7 +143,7 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
 
 SMKVideoSequence::~SMKVideoSequence()
 {
-    if ( _videoFile != NULL ) {
+    if ( _videoFile != nullptr ) {
         smk_close( _videoFile );
     }
 }
@@ -170,7 +170,7 @@ unsigned long SMKVideoSequence::frameCount() const
 
 void SMKVideoSequence::resetFrame()
 {
-    if ( _videoFile == NULL )
+    if ( _videoFile == nullptr )
         return;
 
     smk_first( _videoFile );
@@ -179,7 +179,7 @@ void SMKVideoSequence::resetFrame()
 
 void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, const int32_t y, int32_t & width, int32_t & height, std::vector<uint8_t> & palette )
 {
-    if ( _videoFile == NULL || image.empty() || x < 0 || y < 0 || x >= image.width() || y >= image.height() || !image.singleLayer() ) {
+    if ( _videoFile == nullptr || image.empty() || x < 0 || y < 0 || x >= image.width() || y >= image.height() || !image.singleLayer() ) {
         width = 0;
         height = 0;
         return;

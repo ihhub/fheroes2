@@ -198,7 +198,7 @@ int Maps::GetDirection( int from, int to )
     return Direction::UNKNOWN;
 }
 
-s32 Maps::GetDirectionIndex( s32 from, int vector )
+int32_t Maps::GetDirectionIndex( int32_t from, int vector )
 {
     switch ( vector ) {
     case Direction::TOP:
@@ -225,7 +225,7 @@ s32 Maps::GetDirectionIndex( s32 from, int vector )
 }
 
 // check bound
-bool Maps::isValidDirection( s32 from, int vector )
+bool Maps::isValidDirection( int32_t from, int vector )
 {
     const int32_t width = world.w();
 
@@ -291,7 +291,7 @@ int32_t Maps::GetIndexFromAbsPoint( const int32_t x, const int32_t y )
     return y * world.w() + x;
 }
 
-Maps::Indexes Maps::GetAroundIndexes( s32 center )
+Maps::Indexes Maps::GetAroundIndexes( int32_t center )
 {
     Indexes result;
     if ( !isValidAbsIndex( center ) )
@@ -392,13 +392,19 @@ int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int sc
     return tileCount;
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, int obj )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes )
+{
+    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
+}
+
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, obj );
 }
 
-Maps::Indexes Maps::ScanAroundObject( s32 center, u32 dist, int obj )
+Maps::Indexes Maps::ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj )
 {
     Indexes results = Maps::GetAroundIndexes( center, dist, true );
     return MapsIndexesFilteredObject( results, obj );
@@ -409,14 +415,14 @@ Maps::Indexes Maps::GetObjectPositions( int obj, bool ignoreHeroes )
     return MapsIndexesObject( obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::GetObjectPositions( s32 center, int obj, bool ignoreHeroes )
+Maps::Indexes Maps::GetObjectPositions( int32_t center, int obj, bool ignoreHeroes )
 {
     Indexes results = MapsIndexesObject( obj, ignoreHeroes );
     std::sort( results.begin(), results.end(), ComparsionDistance( center ) );
     return results;
 }
 
-Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
+Maps::Indexes Maps::GetObjectsPositions( const std::vector<uint8_t> & objs )
 {
     if ( objs.size() == 1 ) {
         return MapsIndexesObject( objs[0], true );
@@ -440,7 +446,7 @@ Maps::Indexes Maps::GetObjectsPositions( const std::vector<u8> & objs )
     return result;
 }
 
-bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: monster */
+bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
 {
     const Maps::Tiles & tile1 = world.GetTiles( from );
     const Maps::Tiles & tile2 = world.GetTiles( index );
@@ -463,12 +469,12 @@ bool MapsTileIsUnderProtection( s32 from, s32 index ) /* from: center, index: mo
     return false;
 }
 
-bool Maps::TileIsUnderProtection( s32 center )
+bool Maps::TileIsUnderProtection( int32_t center )
 {
     return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : !GetTilesUnderProtection( center ).empty();
 }
 
-Maps::Indexes Maps::GetTilesUnderProtection( s32 center )
+Maps::Indexes Maps::GetTilesUnderProtection( int32_t center )
 {
     Indexes result;
     if ( !isValidAbsIndex( center ) )
@@ -637,7 +643,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     }
 }
 
-int Maps::TileIsCoast( s32 center, int filter )
+int Maps::TileIsCoast( int32_t center, int filter )
 {
     int result = 0;
     const Directions & directions = Direction::All();

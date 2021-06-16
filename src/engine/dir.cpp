@@ -107,7 +107,7 @@ namespace
         }
 
         struct dirent * ep;
-        while ( NULL != ( ep = readdir( dp ) ) ) {
+        while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
             // if not regular file
