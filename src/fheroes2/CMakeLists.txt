@@ -10,7 +10,6 @@ target_compile_definitions(fheroes2 PRIVATE
 	$<$<BOOL:${ENABLE_RELEASE}>:BUILD_RELEASE>
 	$<$<BOOL:${ENABLE_UNICODE}>:WITH_TTF>
 	$<$<BOOL:${ENABLE_UNICODE}>:WITH_ICONV>
-	$<$<BOOL:${ENABLE_ZLIB}>:WITH_ZLIB>
 	)
 target_include_directories(fheroes2 PRIVATE
 	agg
@@ -39,7 +38,7 @@ target_link_libraries(fheroes2
 	${SDL_MIXER_LIBRARIES}
 	engine
 	Threads::Threads
-	$<$<BOOL:${ENABLE_ZLIB}>:ZLIB::ZLIB>
+	ZLIB::ZLIB
 	)
 
 install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
