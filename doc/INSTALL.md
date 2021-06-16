@@ -85,7 +85,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 <a name="aur-package"></a>
 ### AUR package
 
-if you are using Arch Linux, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2) from AUR (Arch User Repository).
+If you are using Arch Linux or compatible distribution, you can install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2) from AUR (Arch User Repository).
 
 #### Install using AUR helper
 
