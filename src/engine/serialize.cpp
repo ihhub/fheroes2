@@ -402,8 +402,8 @@ u8 StreamBuf::get8()
 {
     if ( sizeg() )
         return *itget++;
-    else
-        return 0u;
+
+    return 0u;
 }
 
 u16 StreamBuf::getBE16()

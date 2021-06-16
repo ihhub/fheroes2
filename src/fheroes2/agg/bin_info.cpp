@@ -309,16 +309,14 @@ namespace Bin_Info
         if ( mapIterator != _animMap.end() ) {
             return mapIterator->second;
         }
-        else {
-            const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
-            if ( info.isValid() ) {
-                _animMap[monsterID] = info;
-                return info;
-            }
-            else {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
-            }
+
+        const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
+        if ( info.isValid() ) {
+            _animMap[monsterID] = info;
+            return info;
         }
+
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
         return MonsterAnimInfo();
     }
 

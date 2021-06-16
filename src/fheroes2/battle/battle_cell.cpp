@@ -154,17 +154,17 @@ Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & 
 
     if ( pt == coord[0] )
         return CENTER;
-    else if ( inABC( pt, coord[0], coord[1], coord[2] ) )
+    if ( inABC( pt, coord[0], coord[1], coord[2] ) )
         return TOP_LEFT;
-    else if ( inABC( pt, coord[0], coord[2], coord[3] ) )
+    if ( inABC( pt, coord[0], coord[2], coord[3] ) )
         return TOP_RIGHT;
-    else if ( inABC( pt, coord[0], coord[3], coord[4] ) )
+    if ( inABC( pt, coord[0], coord[3], coord[4] ) )
         return RIGHT;
-    else if ( inABC( pt, coord[0], coord[4], coord[5] ) )
+    if ( inABC( pt, coord[0], coord[4], coord[5] ) )
         return BOTTOM_RIGHT;
-    else if ( inABC( pt, coord[0], coord[5], coord[6] ) )
+    if ( inABC( pt, coord[0], coord[5], coord[6] ) )
         return BOTTOM_LEFT;
-    else if ( inABC( pt, coord[0], coord[1], coord[6] ) )
+    if ( inABC( pt, coord[0], coord[1], coord[6] ) )
         return LEFT;
 
     return UNKNOWN;
@@ -267,13 +267,12 @@ bool Battle::Cell::isPassable3( const Unit & b, bool check_reflect ) const
             const Cell * cell = Board::GetCell( index, b.isReflect() ? RIGHT : LEFT );
             return cell && ( cell->isPassable1( true ) || cell->index == b.GetTailIndex() || cell->index == b.GetHeadIndex() ) && isPassable1( true );
         }
-        else {
-            const Cell * left = Board::GetCell( index, LEFT );
-            const Cell * right = Board::GetCell( index, RIGHT );
-            return ( ( left && ( left->isPassable1( true ) || left->index == b.GetTailIndex() || left->index == b.GetHeadIndex() ) )
-                     || ( right && ( right->isPassable1( true ) || right->index == b.GetTailIndex() || right->index == b.GetHeadIndex() ) ) )
-                   && isPassable1( true );
-        }
+
+        const Cell * left = Board::GetCell( index, LEFT );
+        const Cell * right = Board::GetCell( index, RIGHT );
+        return ( ( left && ( left->isPassable1( true ) || left->index == b.GetTailIndex() || left->index == b.GetHeadIndex() ) )
+                 || ( right && ( right->isPassable1( true ) || right->index == b.GetTailIndex() || right->index == b.GetHeadIndex() ) ) )
+               && isPassable1( true );
     }
 
     return isPassable1( true );

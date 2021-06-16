@@ -35,7 +35,7 @@ int ObjDsrt::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;

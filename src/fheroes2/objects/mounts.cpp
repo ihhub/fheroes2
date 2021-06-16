@@ -38,9 +38,9 @@ int ObjMnts1::GetPassable( int icn, u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else
-        // fix: disable passable: invalid top sprite
-        if ( icn == ICN::MTNGRAS && ( 25 == index || 43 == index || 44 == index || 53 == index || 54 == index || 78 == index ) )
+
+    // fix: disable passable: invalid top sprite
+    if ( icn == ICN::MTNGRAS && ( 25 == index || 43 == index || 44 == index || 53 == index || 54 == index || 78 == index ) )
         return 0;
 
     return std::end( disabled2 ) != std::find( disabled2, std::end( disabled2 ), index ) ? 0 : DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;

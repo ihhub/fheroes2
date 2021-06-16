@@ -34,11 +34,11 @@ int ObjWat2::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( 10 == index )
+    if ( 10 == index )
         return Direction::CENTER | Direction::TOP | Direction::LEFT | Direction::TOP_LEFT;
-    else if ( 22 == index )
+    if ( 22 == index )
         return DIRECTION_CENTER_ROW | Direction::BOTTOM | Direction::BOTTOM_LEFT;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
@@ -51,7 +51,7 @@ int ObjWatr::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;

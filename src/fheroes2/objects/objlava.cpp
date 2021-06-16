@@ -31,7 +31,7 @@ int ObjLav2::GetPassable( u32 index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) )
+    if ( isAction( index ) )
         return 0;
 
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
@@ -52,7 +52,7 @@ int ObjLav3::GetPassable( u32 index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) )
+    if ( isAction( index ) )
         return 0;
 
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;

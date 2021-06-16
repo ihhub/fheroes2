@@ -33,7 +33,7 @@ int ObjXlc1::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
@@ -57,7 +57,7 @@ int ObjXlc2::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || ( 110 < index && index < 136 ) )
+    if ( isAction( index ) || ( 110 < index && index < 136 ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
@@ -78,7 +78,7 @@ int ObjXlc3::GetPassable( u32 index )
 {
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) )
+    if ( isAction( index ) )
         return 0;
 
     return DIRECTION_ALL;

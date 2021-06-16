@@ -32,9 +32,9 @@ int ObjTown::GetPassable( u32 index0 )
     // 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189
     if ( 13 == index || 29 == index )
         return Direction::CENTER | Direction::BOTTOM;
-    else
-        // town/castle
-        if ( ( 5 < index && index < 13 ) || ( 13 < index && index < 16 ) || ( 21 < index && index < 29 ) || ( 29 < index ) )
+
+    // town/castle
+    if ( ( 5 < index && index < 13 ) || ( 13 < index && index < 16 ) || ( 21 < index && index < 29 ) || ( 29 < index ) )
         return 0;
 
     return DIRECTION_ALL;
@@ -48,16 +48,16 @@ int ObjTwba::GetPassable( u32 index0 )
     if ( index == 2 ) {
         return Direction::CENTER | Direction::BOTTOM;
     }
-    else if ( index < 5 ) {
+    if ( index < 5 ) {
         return 0;
     }
-    else {
-        // 7, 17, 27, 37, 47, 57, 67, 77
-        if ( index == 7 )
-            return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW | Direction::TOP;
-        else
-            return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-    }
+
+    // 7, 17, 27, 37, 47, 57, 67, 77
+    int result = DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
+    if ( index == 7 )
+        result |= Direction::TOP;
+
+    return result;
 }
 
 bool ObjTown::isAction( u32 index )

@@ -76,24 +76,23 @@ int TextAscii::CharWidth( const uint8_t character, const int ft )
     if ( character < 0x21 || character > fheroes2::AGG::ASCIILastSupportedCharacter( ft ) ) {
         if ( isSmallFont( ft ) )
             return 4;
-        else if ( isLargeFont( ft ) )
+        if ( isLargeFont( ft ) )
             return 12;
-        else
-            return 6;
+
+        return 6;
     }
-    else {
-        return fheroes2::AGG::GetLetter( character, ft ).width();
-    }
+
+    return fheroes2::AGG::GetLetter( character, ft ).width();
 }
 
 int TextAscii::FontHeight( const int f )
 {
     if ( isSmallFont( f ) )
         return 8 + 2 + 1;
-    else if ( isLargeFont( f ) )
+    if ( isLargeFont( f ) )
         return 26 + 6 + 1;
-    else
-        return 13 + 3 + 1;
+
+    return 13 + 3 + 1;
 }
 
 int TextAscii::w( size_t s, size_t c ) const
@@ -257,14 +256,12 @@ int TextUnicode::CharWidth( int c, int f )
     if ( c < 0x0021 ) {
         if ( isSmallFont( f ) )
             return 4;
-        else if ( isLargeFont( f ) )
+        if ( isLargeFont( f ) )
             return 12;
-        else
-            return 6;
+        return 6;
     }
-    else {
-        return fheroes2::AGG::GetUnicodeLetter( c, f ).width();
-    }
+
+    return fheroes2::AGG::GetUnicodeLetter( c, f ).width();
 }
 
 int TextUnicode::CharHeight( int f )
@@ -305,7 +302,7 @@ int TextUnicode::h( int width ) const
 {
     if ( message.empty() )
         return 0;
-    else if ( 0 == width || w() <= width )
+    if ( 0 == width || w() <= width )
         return CharHeight( font );
 
     int res = 0;
@@ -485,7 +482,6 @@ u32 Text::width( const std::string & str, int ft, u32 start, u32 count )
             TextUnicode text( str, ft );
             return text.w( start, count );
         }
-        else
 #endif
         {
             TextAscii text( str, ft );
@@ -503,7 +499,6 @@ u32 Text::height( const std::string & str, int ft, u32 width )
             TextUnicode text( str, ft );
             return text.h( width );
         }
-        else
 #endif
         {
             TextAscii text( str, ft );

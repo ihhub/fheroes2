@@ -117,32 +117,29 @@ struct mofile
 
         if ( !sf.open( file, "rb" ) )
             return false;
-        else {
-            size_t size = sf.size();
-            u32 id = 0;
-            sf >> id;
 
-            if ( 0x950412de != id ) {
-                ERROR_LOG( "incorrect mo id: " << GetHexString( id ) );
-                return false;
-            }
-            else {
-                u16 major, minor;
-                sf >> major >> minor;
+        size_t size = sf.size();
+        u32 id = 0;
+        sf >> id;
 
-                if ( 0 != major ) {
-                    ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) );
-                    return false;
-                }
-                else {
-                    sf >> count >> offset_strings1 >> offset_strings2 >> hash_size >> hash_offset;
-
-                    sf.seek( 0 );
-                    buf = sf.toStreamBuf( size );
-                    sf.close();
-                }
-            }
+        if ( 0x950412de != id ) {
+            ERROR_LOG( "incorrect mo id: " << GetHexString( id ) );
+            return false;
         }
+
+        u16 major, minor;
+        sf >> major >> minor;
+
+        if ( 0 != major ) {
+            ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) );
+            return false;
+        }
+
+        sf >> count >> offset_strings1 >> offset_strings2 >> hash_size >> hash_offset;
+
+        sf.seek( 0 );
+        buf = sf.toStreamBuf( size );
+        sf.close();
 
         // parse encoding and plural forms
         if ( count ) {

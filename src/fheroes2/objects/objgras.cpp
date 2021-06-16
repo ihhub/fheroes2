@@ -38,7 +38,7 @@ int ObjGras::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
@@ -60,7 +60,7 @@ int ObjGra2::GetPassable( u32 index )
     const u8 restricted[] = {2, 3, 6, 8, 22, 59};
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) )
+    if ( isAction( index ) )
         return 0;
 
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
