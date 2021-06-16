@@ -57,7 +57,7 @@ If you have a legally purchased copy of the original game, copy all files belong
 
 If you are using [**MacPorts**](https://www.macports.org/), you can install the game by running the following command:
 
-```
+```sh
 port install fheroes2
 ```
 
