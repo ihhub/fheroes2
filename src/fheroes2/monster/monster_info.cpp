@@ -427,28 +427,24 @@ namespace
         monsterData[Monster::NOMAD].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::ELEMENTALSTORM );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
         monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::METEORSHOWER );
 
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBALL );
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBLAST );
         monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRAY );
         monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRING );
 
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::MIND_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRAY );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRING );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::FIREBALL );
@@ -552,7 +548,7 @@ namespace fheroes2
         case MonsterAbilityType::NO_MELEE_PENALTY:
             return "No melee penalty";
         case MonsterAbilityType::DRAGON:
-            return "Dragon";
+            return ignoreBasicAbility ? "" : "Dragon";
         case MonsterAbilityType::UNDEAD:
             return "Undead";
         case MonsterAbilityType::NO_ENEMY_RETALIATION:
@@ -687,12 +683,7 @@ namespace fheroes2
                 output += Spell( sortedSpells[i] ).GetName();
             }
 
-            if ( sortedSpells.size() > 1 ) {
-                output += " spells.";
-            }
-            else {
-                output += " spell.";
-            }
+            output += '.';
         }
 
         std::map<uint32_t, std::vector<int>> extraDamageSpells;
@@ -731,12 +722,7 @@ namespace fheroes2
                 output += Spell( sortedSpells[i] ).GetName();
             }
 
-            if ( sortedSpells.size() > 1 ) {
-                output += " spells.";
-            }
-            else {
-                output += " spell.";
-            }
+            output += '.';
         }
 
         return output;
@@ -765,6 +751,11 @@ namespace fheroes2
             }
 
             foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::UNDEAD ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }
