@@ -72,25 +72,51 @@ If you have a legally purchased copy of the original game, copy all files belong
 <a name="linux"></a>
 ## Linux
 
+### AUR package
+
+Install [fheroes2 package](https://aur.archlinux.org/packages/fheroes2) from AUR.
+
+#### Install using AUR helper
+
+If you use one of AUR helpers, e.g. `yay`, you can install the game by running the following command:
+
+```sh
+yay -S aur/fheroes2
+```
+
+#### Install using official guide
+
+Follow [official guide](https://wiki.archlinux.org/title/Arch_User_Repository#Installing_and_upgrading_packages). One of possible command sets:
+
+```sh
+git clone https://aur.archlinux.org/fheroes2.git
+cd fheroes2
+makepkg -si
+```
+
+If you have a legally purchased copy of the original game, copy all files belonging to the original game to the `$XDG_DATA_HOME/fheroes2` (usually `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the `/usr/share/fheroes2/demo_unix.sh` script.
+
+### Linux ZIP archive
+
 Extract the downloaded ZIP archive to a suitable directory of your choice. Then you will need to install the SDL libraries required to run the game. The installation procedure depends on the Linux distribution you are using:
 
-### Debian-based
+#### Debian-based
 
 Run the script `install_sdl_1.sh` or `install_sdl_2.sh` (depending on the downloaded build) from the `script/linux` subdirectory.
 
-### Pacman-based (e.g. Arch Linux)
+#### Pacman-based (e.g. Arch Linux)
 
 Run the following command: `sudo pacman -S sdl sdl_mixer`.
 
-### RedHat-based
+#### RedHat-based
 
 For RPM-based distributions (such as Fedora or RedHat) use the commands `sudo yum install SDL*` or `sudo dnf install SDL*`.
 
-### openSUSE
+#### openSUSE
 
 openSUSE supports the One-Click-Install using the `SDL_mixer.ymp` file from the `script/linux` subdirectory.
 
-### Gentoo
+#### Gentoo
 
 Run the following command: `emerge --ask media-libs/sdl2-mixer media-libs/sdl2-ttf`.
 
