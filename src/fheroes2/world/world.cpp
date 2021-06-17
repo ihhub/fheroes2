@@ -983,6 +983,18 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     return false;
 }
 
+bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, obj ) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 {
     const Settings & conf = Settings::Get();
