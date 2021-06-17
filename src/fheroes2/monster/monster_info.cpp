@@ -57,7 +57,7 @@ namespace
 
         const fheroes2::MonsterSound monsterSounds[Monster::MONSTER_COUNT] = {
             // melee attack | death | movement | wince |ranged attack
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Unknown Monster
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Unknown Monster
             { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN }, // Peasant
             { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Archer
             { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Ranger
@@ -103,7 +103,7 @@ namespace
             { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN }, // Roc
             { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Mage
             { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Archmage
-            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN  }, // Giant
+            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN }, // Giant
             { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::TITNSHOT }, // Titan
             { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN }, // Skeleton
             { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN }, // Zombie
@@ -124,11 +124,11 @@ namespace
             { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN }, // Air Elemental
             { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN }, // Fire Elemental
             { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN }, // Water Elemental
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 1
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 2
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 3
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 4
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 1
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 2
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 3
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 4
         };
 
         // Monster abilities and weaknesses will be added later.
