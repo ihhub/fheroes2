@@ -21,8 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <bits/stdint-intn.h>
-#include <bits/stdint-uintn.h>
 #include <cassert>
 #include <functional>
 
@@ -976,7 +974,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
 bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
 {
     const Colors colors( Game::GetKingdomColors() );
-    for ( const int color : colors) {
+    for ( const int color : colors ) {
         const Kingdom & kingdom = world.GetKingdom( color );
         if ( kingdom.isVisited( dstIndex, obj ) ) {
             return true;
@@ -1016,7 +1014,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, int loss ) const
 int World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     const Settings & conf = Settings::Get();
-    const int wins[] = {GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0};
+    const int wins[] = { GameOver::WINS_ALL, GameOver::WINS_TOWN, GameOver::WINS_HERO, GameOver::WINS_ARTIFACT, GameOver::WINS_SIDE, GameOver::WINS_GOLD, 0 };
     const int mapWinCondition = conf.ConditionWins();
 
     if ( conf.isCampaignGameType() ) {
@@ -1063,7 +1061,7 @@ int World::CheckKingdomLoss( const Kingdom & kingdom ) const
             return GameOver::LOSS_ALL;
     }
 
-    const int loss[] = {GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0};
+    const int loss[] = { GameOver::LOSS_ALL, GameOver::LOSS_TOWN, GameOver::LOSS_HERO, GameOver::LOSS_TIME, 0 };
 
     if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
         const Campaign::CampaignSaveData & campaignData = Campaign::CampaignSaveData::Get();
