@@ -23,8 +23,8 @@ Requirements
 ---------------------------
 You are required to have at least a demo version of Heroes of Might and Magic 2 game to be able to play it. Please use one of our scripts to download the demo version of the original game. A script comes with the compiled game.
 
-### Mac OS
-Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For MacOS we highly recommend to use SDL 2 as latest versions of MacOS do not fully support SDL 1.
+### macOS
+Please go to `script/macos` and run **install_sdl_1.sh** or **install_sdl_2.sh** file. For macOS we highly recommend to use SDL 2 as latest versions of macOS do not fully support SDL 1.
 
 ### Debian-based
 Please go to `script/linux` directory and run **install_sdl_1.sh** or **install_sdl_2.sh** file.
@@ -43,7 +43,7 @@ If you have Gentoo, in addition to basic distribution you need to run following 
 
 Compilation
 ---------------------------
-[![Build status](https://travis-ci.org/ihhub/fheroes2.svg?branch=master)](https://travis-ci.org/ihhub/fheroes2) [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2) [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
+[![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2) [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2) [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2) [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2) [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2) [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/ihhub/fheroes2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ihhub/fheroes2/context:cpp) [![Total alerts](https://img.shields.io/lgtm/alerts/g/ihhub/fheroes2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ihhub/fheroes2/alerts/)
 
@@ -55,9 +55,11 @@ Windows
 - open `script/demo` directory and run **demo_windows.bat** file. It downloads a demo version of the game which is needed for minimum development.
 - open **fheroes2-vs2015.vcxproj** or **fheroes2-vs2019.vcxproj** file depending on your Visual Studio and compile the project.
 
-MacOS and Linux
+macOS and Linux
 -------------------
-- open `script/macos` or `script/linux` directory depending on your OS and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. For MacOS we do not recommend to run SDL 1 as latest versions of MacOS do not support it fully.
+
+- for macOS: open `script/macos` directory and run **install_sdl_2.sh** (default setup) or **install_sdl_1.sh** file. We do not recommend to run SDL 1 as latest versions of macOS do not support it fully.
+- for Linux: open `script/linux` directory and run **install_sdl_2_dev.sh** (default setup) or **install_sdl_1_dev.sh** file.
 - open `script/demo` directory and run **demo_unix.sh** file. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 

@@ -52,7 +52,6 @@ namespace
     {
         enum
         {
-            IS_COMPRESS = 0x8000,
             IS_LOYALTY = 0x4000
         };
 
@@ -76,10 +75,6 @@ namespace
 
             if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
                 status |= IS_LOYALTY;
-
-#ifdef WITH_ZLIB
-            status |= IS_COMPRESS;
-#endif
         }
 
         uint16_t status;
@@ -199,13 +194,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return fheroes2::GameMode::CANCEL;
     }
 
-#ifndef WITH_ZLIB
-    if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
-        return fheroes2::GameMode::CANCEL;
-    }
-#endif
-
     ZStreamFile fz;
     fz.setbigendian( true );
 
@@ -314,14 +302,6 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
-
-#ifndef WITH_ZLIB
-    // check: compress game data
-    if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
-        return false;
-    }
-#endif
 
     finfo = header.info;
     finfo.file = fn;

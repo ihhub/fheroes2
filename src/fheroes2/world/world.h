@@ -278,6 +278,8 @@ public:
 
     uint32_t GetMapSeed() const;
 
+    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
+
 private:
     World()
         : fheroes2::Size( 0, 0 )
