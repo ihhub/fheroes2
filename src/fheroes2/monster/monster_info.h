@@ -70,8 +70,6 @@ namespace fheroes2
 
     struct MonsterAbility
     {
-        MonsterAbility() = delete;
-
         explicit MonsterAbility( const MonsterAbilityType type_ )
             : type( type_ )
             , percentage( 0 )
@@ -98,8 +96,6 @@ namespace fheroes2
 
     struct MonsterWeakness
     {
-        MonsterWeakness() = delete;
-
         explicit MonsterWeakness( const MonsterWeaknessType type_ )
             : type( type_ )
             , percentage( 0 )
@@ -161,8 +157,6 @@ namespace fheroes2
 
     struct MonsterData
     {
-        MonsterData() = delete;
-
         MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_,
                      const MonsterGeneralStats & generalStats_ )
             : icnId( icnId_ )
