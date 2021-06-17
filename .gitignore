@@ -75,14 +75,3 @@ VisualStudio/packages/installed
 
 # Mac magic folders
 .DS_Store
-
-# cmake artifacts
-*.cmake
-CMakeCache.txt
-**/CMakeFiles/**
-compile_commands.json
-.cache/**
-
-# vim temp files
-*.swp
-
