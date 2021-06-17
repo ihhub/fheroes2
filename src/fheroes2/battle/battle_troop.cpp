@@ -1666,6 +1666,7 @@ int Battle::Unit::M82Attk( void ) const
         return sounds.rangeAttack;
     }
 
+    assert( sounds.meleeAttack != M82::UNKNOWN );
     return sounds.meleeAttack;
 }
 

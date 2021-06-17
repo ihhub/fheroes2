@@ -122,7 +122,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
     const bool isAnimated = ( flags & BUTTONS ) != 0;
     fheroes2::RandomMonsterAnimation monsterAnimation( troop );
-    const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 180 );
+    const fheroes2::Point monsterOffset( pos_rt.x + 520 / 4 + 16, pos_rt.y + 175 );
     if ( !isAnimated )
         monsterAnimation.reset();
 
@@ -486,7 +486,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     std::string description = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
     if ( !description.empty() ) {
         const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-        descriptionText.draw( offset.x + 35, offset.y + 195, 210, fheroes2::Display::instance() );
+        descriptionText.draw( offset.x + 37, offset.y + 185, 210, fheroes2::Display::instance() );
     }
 
     // amount

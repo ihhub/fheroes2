@@ -131,7 +131,7 @@ public:
         MONSTER_RND4,
         MONSTER_RND,
 
-        // IMPORTANT! Put all new monsters just above line.
+        // IMPORTANT! Put all new monsters just above this line.
         MONSTER_COUNT
     };
 

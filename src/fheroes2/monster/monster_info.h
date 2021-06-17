@@ -34,6 +34,9 @@ namespace fheroes2
         NONE,
         DOUBLE_HEX_SIZE,
         FLYING,
+        DRAGON,
+        UNDEAD,
+        ELEMENTAL,
         // Advanced abilities.
         DOUBLE_SHOOTING,
         DOUBLE_MELEE_ATTACK,
@@ -49,15 +52,12 @@ namespace fheroes2
         ALWAYS_RETALIATE,
         ALL_ADJACENT_CELL_MELEE_ATTACK,
         NO_MELEE_PENALTY,
-        DRAGON,
-        UNDEAD,
         NO_ENEMY_RETALIATION,
         HP_DRAIN,
         AREA_SHOT,
         MORAL_DECREMENT,
         ENEMY_HALFING,
-        SOUL_EATER,
-        ELEMENTAL
+        SOUL_EATER
     };
 
     enum class MonsterWeaknessType : int
