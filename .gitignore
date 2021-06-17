@@ -79,8 +79,7 @@ VisualStudio/packages/installed
 # cmake artifacts
 *.cmake
 CMakeCache.txt
-CMakeFiles/**
-src/CMakeFiles/**
+**/CMakeFiles/**
 compile_commands.json
 .cache/**
 
