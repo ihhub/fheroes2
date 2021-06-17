@@ -33,8 +33,8 @@
 #include "tinyconfig.h"
 #include "version.h"
 
-#define STRINGIFY(DEF) #DEF
-#define EXPANDDEF(DEF) STRINGIFY(DEF)
+#define STRINGIFY( DEF ) #DEF
+#define EXPANDDEF( DEF ) STRINGIFY( DEF )
 
 namespace
 {
@@ -888,7 +888,7 @@ ListDirs Settings::GetRootDirs()
 
     // from build
 #ifdef CONFIGURE_FHEROES2_DATA
-    dirs.push_back( EXPANDDEF(CONFIGURE_FHEROES2_DATA) );
+    dirs.push_back( EXPANDDEF( CONFIGURE_FHEROES2_DATA ) );
 #endif
 
     // from env
@@ -960,7 +960,7 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
 std::string Settings::GetLangDir()
 {
 #ifdef CONFIGURE_FHEROES2_LOCALEDIR
-    return std::string( EXPANDDEF(CONFIGURE_FHEROES2_LOCALEDIR) );
+    return std::string( EXPANDDEF( CONFIGURE_FHEROES2_LOCALEDIR ) );
 #else
     std::string res;
     const ListDirs dirs = GetRootDirs();
