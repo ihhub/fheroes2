@@ -51,8 +51,6 @@ namespace
         const char * multiname;
         cost_t cost;
     };
-
-    monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "Unknown Monster", "Unknown Monsters", { 0, 0, 0, 0, 0, 0, 0 } };
 }
 
 StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
@@ -64,6 +62,8 @@ StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
     u32 monsters_size;
     msg >> monsters_size;
+
+    monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "", "", { 0, 0, 0, 0, 0, 0, 0 } };
 
     for ( u32 ii = 0; ii < monsters_size; ++ii )
         msg >> dummyMonster; // Use this dummy variable
