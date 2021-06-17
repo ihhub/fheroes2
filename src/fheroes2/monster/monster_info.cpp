@@ -56,233 +56,232 @@ namespace
                 "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN" };
 
         const fheroes2::MonsterSound monsterSounds[Monster::MONSTER_COUNT] = {
-            // melee attack  death          movement       wince          ranged attack
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Unknown Monster
-            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN  }, // Peasant
+            // melee attack | death | movement | wince |ranged attack
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Unknown Monster
+            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN }, // Peasant
             { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Archer
             { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Ranger
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN  }, // Pikeman
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN  }, // Veteran Pikeman
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN  }, // Swordsman
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN  }, // Master Swordsman
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN  }, // Cavalry
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN  }, // Champion
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN  }, // Paladin
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN  }, // Crusader
-            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE, M82::UNKNOWN  }, // Goblin
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN }, // Pikeman
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN }, // Veteran Pikeman
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN }, // Swordsman
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN }, // Master Swordsman
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN }, // Cavalry
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN }, // Champion
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN }, // Paladin
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN }, // Crusader
+            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE, M82::UNKNOWN }, // Goblin
             { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT }, // Orc
             { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT }, // Orc Chief
-            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE, M82::UNKNOWN  }, // Wolf
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN  }, // Ogre
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN  }, // Ogre Lord
+            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE, M82::UNKNOWN }, // Wolf
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN }, // Ogre
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN }, // Ogre Lord
             { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT }, // Troll
             { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT }, // War Troll
-            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE, M82::UNKNOWN  }, // Cyclops
-            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN  }, // Sprite
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN  }, // Dwarf
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN  }, // Battle Dwarf
+            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE, M82::UNKNOWN }, // Cyclops
+            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN }, // Sprite
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN }, // Dwarf
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN }, // Battle Dwarf
             { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT }, // Elf
             { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT }, // Grand Elf
             { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT }, // Druid
             { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT }, // Greater Druid
-            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE, M82::UNKNOWN  }, // Unicorn
-            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE, M82::UNKNOWN  }, // Phoenix
+            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE, M82::UNKNOWN }, // Unicorn
+            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE, M82::UNKNOWN }, // Phoenix
             { M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE, M82::CNTRSHOT }, // Centaur
-            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE, M82::UNKNOWN  }, // Gargoyle
-            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE, M82::UNKNOWN  }, // Griffin
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN  }, // Minotaur
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN  }, // Minotaur King
-            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE, M82::UNKNOWN  }, // Hydra
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  }, // Green Dragon
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  }, // Red Dragon
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN  }, // Black Dragon
+            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE, M82::UNKNOWN }, // Gargoyle
+            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE, M82::UNKNOWN }, // Griffin
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN }, // Minotaur
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN }, // Minotaur King
+            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE, M82::UNKNOWN }, // Hydra
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Green Dragon
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Red Dragon
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Black Dragon
             { M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE, M82::HALFSHOT }, // Halfling
-            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE, M82::UNKNOWN  }, // Boar
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN  }, // Iron Golem
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN  }, // Steel Golem
-            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN  }, // Roc
+            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE, M82::UNKNOWN }, // Boar
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN }, // Iron Golem
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN }, // Steel Golem
+            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN }, // Roc
             { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Mage
             { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Archmage
             { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN  }, // Giant
             { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::TITNSHOT }, // Titan
-            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN  }, // Skeleton
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN  }, // Zombie
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN  }, // Mutant Zombie
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN  }, // Mummy
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN  }, // Royal Mummy
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN  }, // Vampire
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN  }, // Vampire Lord
+            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN }, // Skeleton
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN }, // Zombie
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN }, // Mutant Zombie
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN }, // Mummy
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN }, // Royal Mummy
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN }, // Vampire
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN }, // Vampire Lord
             { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT }, // Lich
             { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT }, // Power Lich
-            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE, M82::UNKNOWN  }, // Bone Dragon
-            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE, M82::UNKNOWN  }, // Rogue
-            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE, M82::UNKNOWN  }, // Nomad
-            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE, M82::UNKNOWN  }, // Ghost
-            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN  }, // Genie
-            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE, M82::UNKNOWN  }, // Medusa
-            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE, M82::UNKNOWN  }, // Earth Elemental
-            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN  }, // Air Elemental
-            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN  }, // Fire Elemental
-            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN  }, // Water Elemental
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Random Monster
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Random Monster 1
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Random Monster 2
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Random Monster 3
-            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN  }, // Random Monster 4
+            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE, M82::UNKNOWN }, // Bone Dragon
+            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE, M82::UNKNOWN }, // Rogue
+            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE, M82::UNKNOWN }, // Nomad
+            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE, M82::UNKNOWN }, // Ghost
+            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN }, // Genie
+            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE, M82::UNKNOWN }, // Medusa
+            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE, M82::UNKNOWN }, // Earth Elemental
+            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN }, // Air Elemental
+            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN }, // Fire Elemental
+            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN }, // Water Elemental
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 1
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 2
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 3
+            { M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN,  M82::UNKNOWN , M82::UNKNOWN }, // Random Monster 4
         };
 
         // Monster abilities and weaknesses will be added later.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
-            // attack  defence  damageMin  damageMax  HP  Speed  Shots  abilities  weaknesses
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unknown Monster
-            { 1,  1,  1,  1,  1,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Peasant
-            { 5,  3,  2,  3,  10,  Speed::VERYSLOW,  12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archer
-            { 5,  3,  2,  3,  10,  Speed::AVERAGE,   24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ranger
-            { 5,  9,  3,  4,  15,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Pikeman
-            { 5,  9,  3,  4,  20,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Veteran Pikeman
-            { 7,  9,  4,  6,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Swordsman
-            { 7,  9,  4,  6,  30,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Master Swordsman
-            { 10, 9,  5,  10, 30,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cavalry
-            { 10, 9,  5,  10, 40,  Speed::ULTRAFAST, 0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Champion
-            { 11, 12, 10, 20, 50,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Paladin
-            { 11, 12, 10, 20, 65,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Crusader
-            { 3,  1,  1,  2,  3,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Goblin
-            { 3,  4,  2,  3,  10,  Speed::VERYSLOW,  8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc
-            { 3,  4,  3,  4,  15,  Speed::SLOW,      16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc Chief
-            { 6,  2,  3,  5,  20,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Wolf
-            { 9,  5,  4,  6,  40,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre
-            { 9,  5,  5,  7,  60,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre Lord
-            { 10, 5,  5,  7,  40,  Speed::AVERAGE,   8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Troll
-            { 10, 5,  7,  9,  40,  Speed::FAST,      16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // War Troll
-            { 12, 9,  12, 24, 80,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cyclops
-            { 4,  2,  1,  2,  2,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Sprite
-            { 6,  5,  2,  4,  20,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Dwarf
-            { 6,  6,  2,  4,  20,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Battle Dwarf
-            { 4,  3,  2,  3,  15,  Speed::AVERAGE,   24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Elf
-            { 5,  5,  2,  3,  15,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Grand Elf
-            { 7,  5,  5,  8,  25,  Speed::FAST,      8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Druid
-            { 7,  7,  5,  8,  25,  Speed::VERYFAST,  16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Greater Druid
-            { 10, 9,  7,  14, 40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unicorn
-            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Phoenix
-            { 3,  1,  1,  2,  5,   Speed::AVERAGE,   8 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Centaur
-            { 4,  7,  2,  3,  15,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Gargoyle
-            { 6,  6,  3,  5,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Griffin
-            { 9,  8,  5,  10, 35,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur
-            { 9,  8,  5,  10, 45,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur King
-            { 8,  9,  6,  12, 75,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Hydra
-            { 12, 12, 25, 50, 200, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Green Dragon
-            { 13, 13, 25, 50, 250, Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Red Dragon
-            { 14, 14, 25, 50, 300, Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Black Dragon
-            { 2,  1,  1,  3,  3,   Speed::SLOW,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Halfling
-            { 5,  4,  2,  3,  15,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Boar
-            { 5,  10, 4,  5,  30,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Iron Golem
-            { 7,  10, 4,  5,  35,  Speed::SLOW,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Steel Golem
-            { 7,  7,  4,  8,  40,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Roc
-            { 11, 7,  7,  9,  30,  Speed::FAST,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mage
-            { 12, 8,  7,  9,  35,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archmage
-            { 13, 10, 20, 30, 150, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Giant
-            { 15, 15, 20, 30, 300, Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Titan
-            { 4,  3,  2,  3,  4,   Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Skeleton
-            { 5,  2,  2,  3,  15,  Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Zombie
-            { 5,  2,  2,  3,  20,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mutant Zombie
-            { 6,  6,  3,  4,  25,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mummy
-            { 6,  6,  3,  4,  30,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Royal Mummy
-            { 8,  6,  5,  7,  30,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire
-            { 8,  6,  5,  7,  40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire Lord
-            { 7,  12, 8,  10, 25,  Speed::FAST,      12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Lich
-            { 7,  13, 8,  10, 35,  Speed::VERYFAST,  24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Power Lich
-            { 11, 9,  25, 45, 150, Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Bone Dragon
-            { 6,  1,  1,  2,  4,   Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Rogue
-            { 7,  6,  2,  5,  20,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Nomad
-            { 8,  7,  4,  6,  20,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ghost
-            { 10, 9,  20, 30, 50,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Genie
-            { 8,  9,  6,  10, 35,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Medusa
-            { 8,  8,  4,  5,  50,  Speed::SLOW,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Earth Elemental
-            { 7,  7,  2,  8,  35,  Speed::VERYFAST,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Air Elemental
-            { 8,  6,  4,  6,  40,  Speed::FAST,      0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Fire Elemental
-            { 6,  8,  3,  7,  45,  Speed::AVERAGE,   0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Water Elemental
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 1
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 2
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 3
-            { 0,  0,  0,  0,  0,   Speed::VERYSLOW,  0 , std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 4
+            // attack | defence | damageMin | damageMax | hp | speed | shots | abilities | weaknesses
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unknown Monster
+            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Peasant
+            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archer
+            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ranger
+            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Pikeman
+            { 5, 9, 3, 4, 20, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Veteran Pikeman
+            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Swordsman
+            { 7, 9, 4, 6, 30, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Master Swordsman
+            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cavalry
+            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Champion
+            { 11, 12, 10, 20, 50, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Paladin
+            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Crusader
+            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Goblin
+            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc
+            { 3, 4, 3, 4, 15, Speed::SLOW, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Orc Chief
+            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Wolf
+            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre
+            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ogre Lord
+            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Troll
+            { 10, 5, 7, 9, 40, Speed::FAST, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // War Troll
+            { 12, 9, 12, 24, 80, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Cyclops
+            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Sprite
+            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Dwarf
+            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Battle Dwarf
+            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Elf
+            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Grand Elf
+            { 7, 5, 5, 8, 25, Speed::FAST, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Druid
+            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Greater Druid
+            { 10, 9, 7, 14, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Unicorn
+            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Phoenix
+            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Centaur
+            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Gargoyle
+            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Griffin
+            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur
+            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Minotaur King
+            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Hydra
+            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Green Dragon
+            { 13, 13, 25, 50, 250, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Red Dragon
+            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Black Dragon
+            { 2, 1, 1, 3, 3, Speed::SLOW, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Halfling
+            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Boar
+            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Iron Golem
+            { 7, 10, 4, 5, 35, Speed::SLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Steel Golem
+            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Roc
+            { 11, 7, 7, 9, 30, Speed::FAST, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mage
+            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Archmage
+            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Giant
+            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Titan
+            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Skeleton
+            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Zombie
+            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mutant Zombie
+            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Mummy
+            { 6, 6, 3, 4, 30, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Royal Mummy
+            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire
+            { 8, 6, 5, 7, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Vampire Lord
+            { 7, 12, 8, 10, 25, Speed::FAST, 12, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Lich
+            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Power Lich
+            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Bone Dragon
+            { 6, 1, 1, 2, 4, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Rogue
+            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Nomad
+            { 8, 7, 4, 6, 20, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Ghost
+            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Genie
+            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Medusa
+            { 8, 8, 4, 5, 50, Speed::SLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Earth Elemental
+            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Air Elemental
+            { 8, 6, 4, 6, 40, Speed::FAST, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Fire Elemental
+            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Water Elemental
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 1
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 2
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 3
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, std::set<fheroes2::MonsterAbility>(), std::set<fheroes2::MonsterWeakness>() }, // Random Monster 4
         };
 
-        const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT] = {
-            // name               plural name          growth  race    level  cost
-            { "Unknown Monster",  "Unknown Monsters",  0,  Race::NONE, 0, { 0,    0, 0, 0, 0, 0, 0 } },
-            { "Peasant",          "Peasants",          12, Race::KNGT, 1, { 20,   0, 0, 0, 0, 0, 0 } },
-            { "Archer",           "Archers",           8,  Race::KNGT, 2, { 150,  0, 0, 0, 0, 0, 0 } },
-            { "Ranger",           "Rangers",           8,  Race::KNGT, 2, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Pikeman",          "Pikemen",           5,  Race::KNGT, 3, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Veteran Pikeman",  "Veteran Pikemen",   5,  Race::KNGT, 3, { 250,  0, 0, 0, 0, 0, 0 } },
-            { "Swordsman",        "Swordsmen",         4,  Race::KNGT, 4, { 250,  0, 0, 0, 0, 0, 0 } },
-            { "Master Swordsman", "Master Swordsmen",  4,  Race::KNGT, 4, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Cavalry",          "Cavalries",         3,  Race::KNGT, 5, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Champion",         "Champions",         3,  Race::KNGT, 5, { 375,  0, 0, 0, 0, 0, 0 } },
-            { "Paladin",          "Paladins",          2,  Race::KNGT, 6, { 600,  0, 0, 0, 0, 0, 0 } },
-            { "Crusader",         "Crusaders",         2,  Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
-            { "Goblin",           "Goblins",           10, Race::BARB, 1, { 40,   0, 0, 0, 0, 0, 0 } },
-            { "Orc",              "Orcs",              8,  Race::BARB, 2, { 140,  0, 0, 0, 0, 0, 0 } },
-            { "Orc Chief",        "Orc Chiefs",        8,  Race::BARB, 2, { 175,  0, 0, 0, 0, 0, 0 } },
-            { "Wolf",             "Wolves",            5,  Race::BARB, 3, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Ogre",             "Ogres",             4,  Race::BARB, 4, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Ogre Lord",        "Ogre Lords",        4,  Race::BARB, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Troll",            "Trolls",            3,  Race::BARB, 5, { 600,  0, 0, 0, 0, 0, 0 } },
-            { "War Troll",        "War Trolls",        3,  Race::BARB, 5, { 700,  0, 0, 0, 0, 0, 0 } },
-            { "Cyclops",          "Cyclopes",          2,  Race::BARB, 6, { 750,  0, 0, 0, 0, 1, 0 } },
-            { "Sprite",           "Sprites",           8,  Race::SORC, 1, { 50,   0, 0, 0, 0, 0, 0 } },
-            { "Dwarf",            "Dwarves",           6,  Race::SORC, 2, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Battle Dwarf",     "Battle Dwarves",    6,  Race::SORC, 2, { 250,  0, 0, 0, 0, 0, 0 } },
-            { "Elf",              "Elves",             4,  Race::SORC, 3, { 250,  0, 0, 0, 0, 0, 0 } },
-            { "Grand Elf",        "Grand Elves",       4,  Race::SORC, 3, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Druid",            "Druids",            3,  Race::SORC, 4, { 350,  0, 0, 0, 0, 0, 0 } },
-            { "Greater Druid",    "Greater Druids",    3,  Race::SORC, 4, { 400,  0, 0, 0, 0, 0, 0 } },
-            { "Unicorn",          "Unicorns",          2,  Race::SORC, 5, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Phoenix",          "Phoenixes",         1,  Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
-            { "Centaur",          "Centaurs",          8,  Race::WRLK, 1, { 60,   0, 0, 0, 0, 0, 0 } },
-            { "Gargoyle",         "Gargoyles",         6,  Race::WRLK, 2, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Griffin",          "Griffins",          4,  Race::WRLK, 3, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Minotaur",         "Minotaurs",         3,  Race::WRLK, 4, { 400,  0, 0, 0, 0, 0, 0 } },
-            { "Minotaur King",    "Minotaur Kings",    3,  Race::WRLK, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Hydra",            "Hydras",            2,  Race::WRLK, 5, { 800,  0, 0, 0, 0, 0, 0 } },
-            { "Green Dragon",     "Green Dragons",     1,  Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
-            { "Red Dragon",       "Red Dragons",       1,  Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
-            { "Black Dragon",     "Black Dragons",     1,  Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
-            { "Halfling",         "Halflings",         8,  Race::WZRD, 1, { 50,   0, 0, 0, 0, 0, 0 } },
-            { "Boar",             "Boars",             6,  Race::WZRD, 2, { 150,  0, 0, 0, 0, 0, 0 } },
-            { "Iron Golem",       "Iron Golems",       4,  Race::WZRD, 3, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Steel Golem",      "Steel Golems",      4,  Race::WZRD, 3, { 350,  0, 0, 0, 0, 0, 0 } },
-            { "Roc",              "Rocs",              3,  Race::WZRD, 4, { 400,  0, 0, 0, 0, 0, 0 } },
-            { "Mage",             "Magi",              2,  Race::WZRD, 5, { 600,  0, 0, 0, 0, 0, 0 } },
-            { "Archmage",         "Archmagi",          2,  Race::WZRD, 5, { 700,  0, 0, 0, 0, 0, 0 } },
-            { "Giant",            "Giants",            1,  Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
-            { "Titan",            "Titans",            1,  Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
-            { "Skeleton",         "Skeletons",         8,  Race::NECR, 1, { 75,   0, 0, 0, 0, 0, 0 } },
-            { "Zombie",           "Zombies",           6,  Race::NECR, 2, { 150,  0, 0, 0, 0, 0, 0 } },
-            { "Mutant Zombie",    "Mutant Zombies",    6,  Race::NECR, 2, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Mummy",            "Mummies",           4,  Race::NECR, 3, { 250,  0, 0, 0, 0, 0, 0 } },
-            { "Royal Mummy",      "Royal Mummies",     4,  Race::NECR, 3, { 300,  0, 0, 0, 0, 0, 0 } },
-            { "Vampire",          "Vampires",          3,  Race::NECR, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Vampire Lord",     "Vampire Lords",     3,  Race::NECR, 4, { 650,  0, 0, 0, 0, 0, 0 } },
-            { "Lich",             "Liches",            2,  Race::NECR, 5, { 750,  0, 0, 0, 0, 0, 0 } },
-            { "Power Lich",       "Power Liches",      2,  Race::NECR, 5, { 900,  0, 0, 0, 0, 0, 0 } },
-            { "Bone Dragon",      "Bone Dragons",      1,  Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
-            { "Rogue",            "Rogues",            8,  Race::NONE, 1, { 50,   0, 0, 0, 0, 0, 0 } },
-            { "Nomad",            "Nomads",            4,  Race::NONE, 2, { 200,  0, 0, 0, 0, 0, 0 } },
-            { "Ghost",            "Ghosts",            3,  Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
-            { "Genie",            "Genies",            2,  Race::NONE, 6, { 650,  0, 0, 0, 0, 0, 1 } },
-            { "Medusa",           "Medusas",           5,  Race::NONE, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Earth Elemental",  "Earth Elementals",  4,  Race::NONE, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Air Elemental",    "Air Elementals",    4,  Race::NONE, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Fire Elemental",   "Fire Elementals",   4,  Race::NONE, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Water Elemental",  "Water Elementals",  4,  Race::NONE, 4, { 500,  0, 0, 0, 0, 0, 0 } },
-            { "Random Monster",   "Random Monsters",   0,  Race::NONE, 0, { 0,    0, 0, 0, 0, 0, 0 } },
-            { "Random Monster 1", "Random Monsters 1", 0,  Race::NONE, 1, { 0,    0, 0, 0, 0, 0, 0 } },
-            { "Random Monster 2", "Random Monsters 2", 0,  Race::NONE, 2, { 0,    0, 0, 0, 0, 0, 0 } },
-            { "Random Monster 3", "Random Monsters 3", 0,  Race::NONE, 3, { 0,    0, 0, 0, 0, 0, 0 } },
-            { "Random Monster 4", "Random Monsters 4", 0,  Race::NONE, 4, { 0,    0, 0, 0, 0, 0, 0 } }
-        };
+        const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT]
+            = { // name | plural name | growth | race | level | cost
+                { "Unknown Monster", "Unknown Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { "Peasant", "Peasants", 12, Race::KNGT, 1, { 20, 0, 0, 0, 0, 0, 0 } },
+                { "Archer", "Archers", 8, Race::KNGT, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { "Ranger", "Rangers", 8, Race::KNGT, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Pikeman", "Pikemen", 5, Race::KNGT, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Veteran Pikeman", "Veteran Pikemen", 5, Race::KNGT, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { "Swordsman", "Swordsmen", 4, Race::KNGT, 4, { 250, 0, 0, 0, 0, 0, 0 } },
+                { "Master Swordsman", "Master Swordsmen", 4, Race::KNGT, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Cavalry", "Cavalries", 3, Race::KNGT, 5, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Champion", "Champions", 3, Race::KNGT, 5, { 375, 0, 0, 0, 0, 0, 0 } },
+                { "Paladin", "Paladins", 2, Race::KNGT, 6, { 600, 0, 0, 0, 0, 0, 0 } },
+                { "Crusader", "Crusaders", 2, Race::KNGT, 6, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { "Goblin", "Goblins", 10, Race::BARB, 1, { 40, 0, 0, 0, 0, 0, 0 } },
+                { "Orc", "Orcs", 8, Race::BARB, 2, { 140, 0, 0, 0, 0, 0, 0 } },
+                { "Orc Chief", "Orc Chiefs", 8, Race::BARB, 2, { 175, 0, 0, 0, 0, 0, 0 } },
+                { "Wolf", "Wolves", 5, Race::BARB, 3, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Ogre", "Ogres", 4, Race::BARB, 4, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Ogre Lord", "Ogre Lords", 4, Race::BARB, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Troll", "Trolls", 3, Race::BARB, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { "War Troll", "War Trolls", 3, Race::BARB, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { "Cyclops", "Cyclopes", 2, Race::BARB, 6, { 750, 0, 0, 0, 0, 1, 0 } },
+                { "Sprite", "Sprites", 8, Race::SORC, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { "Dwarf", "Dwarves", 6, Race::SORC, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Battle Dwarf", "Battle Dwarves", 6, Race::SORC, 2, { 250, 0, 0, 0, 0, 0, 0 } },
+                { "Elf", "Elves", 4, Race::SORC, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { "Grand Elf", "Grand Elves", 4, Race::SORC, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Druid", "Druids", 3, Race::SORC, 4, { 350, 0, 0, 0, 0, 0, 0 } },
+                { "Greater Druid", "Greater Druids", 3, Race::SORC, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { "Unicorn", "Unicorns", 2, Race::SORC, 5, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Phoenix", "Phoenixes", 1, Race::SORC, 6, { 1500, 0, 1, 0, 0, 0, 0 } },
+                { "Centaur", "Centaurs", 8, Race::WRLK, 1, { 60, 0, 0, 0, 0, 0, 0 } },
+                { "Gargoyle", "Gargoyles", 6, Race::WRLK, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Griffin", "Griffins", 4, Race::WRLK, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Minotaur", "Minotaurs", 3, Race::WRLK, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { "Minotaur King", "Minotaur Kings", 3, Race::WRLK, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Hydra", "Hydras", 2, Race::WRLK, 5, { 800, 0, 0, 0, 0, 0, 0 } },
+                { "Green Dragon", "Green Dragons", 1, Race::WRLK, 6, { 3000, 0, 0, 0, 1, 0, 0 } },
+                { "Red Dragon", "Red Dragons", 1, Race::WRLK, 6, { 3500, 0, 0, 0, 1, 0, 0 } },
+                { "Black Dragon", "Black Dragons", 1, Race::WRLK, 6, { 4000, 0, 0, 0, 2, 0, 0 } },
+                { "Halfling", "Halflings", 8, Race::WZRD, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { "Boar", "Boars", 6, Race::WZRD, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { "Iron Golem", "Iron Golems", 4, Race::WZRD, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Steel Golem", "Steel Golems", 4, Race::WZRD, 3, { 350, 0, 0, 0, 0, 0, 0 } },
+                { "Roc", "Rocs", 3, Race::WZRD, 4, { 400, 0, 0, 0, 0, 0, 0 } },
+                { "Mage", "Magi", 2, Race::WZRD, 5, { 600, 0, 0, 0, 0, 0, 0 } },
+                { "Archmage", "Archmagi", 2, Race::WZRD, 5, { 700, 0, 0, 0, 0, 0, 0 } },
+                { "Giant", "Giants", 1, Race::WZRD, 6, { 2000, 0, 0, 0, 0, 0, 1 } },
+                { "Titan", "Titans", 1, Race::WZRD, 6, { 5000, 0, 0, 0, 0, 0, 2 } },
+                { "Skeleton", "Skeletons", 8, Race::NECR, 1, { 75, 0, 0, 0, 0, 0, 0 } },
+                { "Zombie", "Zombies", 6, Race::NECR, 2, { 150, 0, 0, 0, 0, 0, 0 } },
+                { "Mutant Zombie", "Mutant Zombies", 6, Race::NECR, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Mummy", "Mummies", 4, Race::NECR, 3, { 250, 0, 0, 0, 0, 0, 0 } },
+                { "Royal Mummy", "Royal Mummies", 4, Race::NECR, 3, { 300, 0, 0, 0, 0, 0, 0 } },
+                { "Vampire", "Vampires", 3, Race::NECR, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Vampire Lord", "Vampire Lords", 3, Race::NECR, 4, { 650, 0, 0, 0, 0, 0, 0 } },
+                { "Lich", "Liches", 2, Race::NECR, 5, { 750, 0, 0, 0, 0, 0, 0 } },
+                { "Power Lich", "Power Liches", 2, Race::NECR, 5, { 900, 0, 0, 0, 0, 0, 0 } },
+                { "Bone Dragon", "Bone Dragons", 1, Race::NECR, 6, { 1500, 0, 0, 0, 0, 0, 0 } },
+                { "Rogue", "Rogues", 8, Race::NONE, 1, { 50, 0, 0, 0, 0, 0, 0 } },
+                { "Nomad", "Nomads", 4, Race::NONE, 2, { 200, 0, 0, 0, 0, 0, 0 } },
+                { "Ghost", "Ghosts", 3, Race::NONE, 3, { 1000, 0, 0, 0, 0, 0, 0 } },
+                { "Genie", "Genies", 2, Race::NONE, 6, { 650, 0, 0, 0, 0, 0, 1 } },
+                { "Medusa", "Medusas", 5, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Earth Elemental", "Earth Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Air Elemental", "Air Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Fire Elemental", "Fire Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Water Elemental", "Water Elementals", 4, Race::NONE, 4, { 500, 0, 0, 0, 0, 0, 0 } },
+                { "Random Monster", "Random Monsters", 0, Race::NONE, 0, { 0, 0, 0, 0, 0, 0, 0 } },
+                { "Random Monster 1", "Random Monsters 1", 0, Race::NONE, 1, { 0, 0, 0, 0, 0, 0, 0 } },
+                { "Random Monster 2", "Random Monsters 2", 0, Race::NONE, 2, { 0, 0, 0, 0, 0, 0, 0 } },
+                { "Random Monster 3", "Random Monsters 3", 0, Race::NONE, 3, { 0, 0, 0, 0, 0, 0, 0 } },
+                { "Random Monster 4", "Random Monsters 4", 0, Race::NONE, 4, { 0, 0, 0, 0, 0, 0, 0 } } };
 
         monsterData.reserve( Monster::MONSTER_COUNT );
 
