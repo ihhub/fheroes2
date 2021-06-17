@@ -52,8 +52,9 @@ int ObjTwba::GetPassable( u32 index0 )
         return 0;
     }
 
-    // 7, 17, 27, 37, 47, 57, 67, 77
     int result = DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
+
+    // 7, 17, 27, 37, 47, 57, 67, 77
     if ( index == 7 )
         result |= Direction::TOP;
 
