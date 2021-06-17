@@ -589,7 +589,6 @@ namespace fheroes2
             return "200% damage from Cold spells";
         case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
             return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
-        
         default:
             break;
         }
