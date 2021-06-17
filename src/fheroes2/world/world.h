@@ -22,6 +22,7 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <bits/stdint-intn.h>
 #include <vector>
 
 #include "artifact_ultimate.h"
@@ -278,6 +279,8 @@ public:
     static u32 GetUniq( void );
 
     uint32_t GetMapSeed() const;
+    
+    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
 
 private:
     World()
@@ -347,7 +350,5 @@ StreamBase & operator<<( StreamBase &, const MapObjects & );
 StreamBase & operator>>( StreamBase &, MapObjects & );
 
 extern World & world;
-
-bool IsAnyKingdomVisited( const u32 obj, const s32 dstIndex );
 
 #endif

@@ -1141,7 +1141,7 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !IsAnyKingdomVisited( obj, dst_index ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !world.isAnyKingdomVisited( obj, dst_index ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
             hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
         }

@@ -21,6 +21,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <bits/stdint-intn.h>
+#include <bits/stdint-uintn.h>
 #include <cassert>
 #include <functional>
 
@@ -971,10 +973,10 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     return false;
 }
 
-bool IsAnyKingdomVisited( const u32 obj, const s32 dstIndex )
+bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
 {
-    const int maxColor = 1 << KINGDOMMAX;
-    for ( int color = 1; color < maxColor; color = color << 1 ) {
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors) {
         const Kingdom & kingdom = world.GetKingdom( color );
         if ( kingdom.isVisited( dstIndex, obj ) ) {
             return true;
