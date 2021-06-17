@@ -430,27 +430,23 @@ namespace
 
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::AIR_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::LIGHTNINGBOLT );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::CHAINLIGHTNING );
-        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::ELEMENTALSTORM );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
+        monsterData[Monster::AIR_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
 
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::LIGHTNINGBOLT );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::CHAINLIGHTNING );
         monsterData[Monster::EARTH_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::ELEMENTALSTORM );
-        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::METEORSHOWER );
+        monsterData[Monster::EARTH_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL, 100, Spell::METEORSHOWER );
 
         monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBALL );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::FIREBLAST );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRAY );
-        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::COLDRING );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::FIRE_SPELL_IMMUNITY );
+        monsterData[Monster::FIRE_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL );
 
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::ELEMENTAL );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRAY );
-        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL, 100, Spell::COLDRING );
-        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::FIREBALL );
-        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL, 100, Spell::FIREBLAST );
+        monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
+        monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
     }
 
     void removeDuplicateSpell( std::set<int> & sortedSpellIds, const int massSpellId, const int spellId )
@@ -512,6 +508,10 @@ namespace fheroes2
             return "Immune to Mind spells";
         case MonsterAbilityType::ELEMENTAL_SPELL_IMMUNITY:
             return "Immune to Elemental spells";
+        case MonsterAbilityType::FIRE_SPELL_IMMUNITY:
+            return "Immune to Fire spells";
+        case MonsterAbilityType::COLD_SPELL_IMMUNITY:
+            return "Immune to Cold spells";
         case MonsterAbilityType::IMMUNE_TO_CERTAIN_SPELL:
             if ( ability.percentage == 100 ) {
                 return std::string( "Immune to " ) + Spell( ability.value ).GetName();
@@ -583,8 +583,13 @@ namespace fheroes2
         switch ( weakness.type ) {
         case MonsterWeaknessType::NONE:
             return ignoreBasicAbility ? "" : "None";
-        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL:
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL:
+            return "200% damage from Fire spells";
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_COLD_SPELL:
+            return "200% damage from Cold spells";
+        case MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL:
             return std::to_string( weakness.percentage + 100 ) + "% damage from " + Spell( weakness.value ).GetName() + " spell";
+        
         default:
             break;
         }
@@ -694,7 +699,7 @@ namespace fheroes2
         std::map<uint32_t, std::vector<int>> extraDamageSpells;
         const std::set<MonsterWeakness> & weaknesses = battleStats.weaknesses;
         for ( const MonsterWeakness & weakness : weaknesses ) {
-            if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_SPELL ) {
+            if ( weakness.type == MonsterWeaknessType::EXTRA_DAMAGE_FROM_CERTAIN_SPELL ) {
                 extraDamageSpells[weakness.percentage].emplace_back( weakness.value );
                 continue;
             }
@@ -789,6 +794,20 @@ namespace fheroes2
 
         if ( spell == Spell::RESURRECT || spell == Spell::RESURRECTTRUE || spell == Spell::ANIMATEDEAD ) {
             foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::ELEMENTAL ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell.isCold() ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::COLD_SPELL_IMMUNITY ) );
+            if ( foundAbility != abilities.end() ) {
+                return 100;
+            }
+        }
+
+        if ( spell.isFire() ) {
+            foundAbility = abilities.find( MonsterAbility( MonsterAbilityType::FIRE_SPELL_IMMUNITY ) );
             if ( foundAbility != abilities.end() ) {
                 return 100;
             }

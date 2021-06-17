@@ -1841,6 +1841,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf.current_maps_file;
 
     // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE remove this check.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove the check below" );
+
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_094_RELEASE ) {
         msg >> conf.current_maps_file._version;
     }

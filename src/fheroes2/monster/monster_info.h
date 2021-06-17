@@ -44,6 +44,8 @@ namespace fheroes2
         MAGIC_RESISTANCE,
         MIND_SPELL_IMMUNITY,
         ELEMENTAL_SPELL_IMMUNITY,
+        FIRE_SPELL_IMMUNITY,
+        COLD_SPELL_IMMUNITY,
         IMMUNE_TO_CERTAIN_SPELL,
         ELEMENTAL_SPELL_DAMAGE_REDUCTION,
         SPELL_CASTER,
@@ -65,7 +67,9 @@ namespace fheroes2
         // Basic abilities.
         NONE,
         // Advanced abilities.
-        EXTRA_DAMAGE_FROM_SPELL
+        EXTRA_DAMAGE_FROM_FIRE_SPELL,
+        EXTRA_DAMAGE_FROM_COLD_SPELL,
+        EXTRA_DAMAGE_FROM_CERTAIN_SPELL
     };
 
     struct MonsterAbility

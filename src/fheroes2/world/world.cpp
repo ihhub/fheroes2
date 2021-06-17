@@ -1280,15 +1280,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> w._seed;
-    }
-    else {
-        // For old versions, generate a different seed at each map loading
-        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
-    }
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad();
 

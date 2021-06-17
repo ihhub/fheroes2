@@ -90,6 +90,8 @@ namespace
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove version handling in HeaderSAV class." );
+
         if ( hdr._saveFileVersion < FORMAT_VERSION_094_RELEASE ) {
             msg >> hdr.status >> hdr.info >> hdr.gameType;
         }
@@ -221,8 +223,14 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
 
+    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
+
     // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove MonsterStaticData usage" );
+    if ( binver < FORMAT_VERSION_095_RELEASE ) {
+        fz >> MonsterStaticData::Get();
+    }
+
     if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
         std::string warningMessage( "This is an saved game is localized for lang = " );
         warningMessage.append( conf.loadedFileLanguage() );

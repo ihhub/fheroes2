@@ -66,7 +66,7 @@ StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
     monstats_t dummyMonster = { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, "", "", { 0, 0, 0, 0, 0, 0, 0 } };
 
     for ( u32 ii = 0; ii < monsters_size; ++ii )
-        msg >> dummyMonster; // Use this dummy variable
+        msg >> dummyMonster;
     return msg;
 }
 

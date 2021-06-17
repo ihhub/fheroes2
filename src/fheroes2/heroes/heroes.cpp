@@ -2033,11 +2033,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> patrolX >> patrolY;
     hero.patrol_center = fheroes2::Point( patrolX, patrolY );
 
-    msg >> hero.patrol_square >> hero.visit_object;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> hero._lastGroundRegion;
-    }
+    msg >> hero.patrol_square >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
     return msg;
