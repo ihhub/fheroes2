@@ -55,11 +55,14 @@ namespace
 
 StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
     return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
 }
 
 StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
+
     u32 monsters_size;
     msg >> monsters_size;
 
