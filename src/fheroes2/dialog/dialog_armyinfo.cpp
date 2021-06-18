@@ -483,10 +483,47 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     text.Blit( pos.x, pos.y );
 
     // Description.
-    std::string description = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
-    if ( !description.empty() ) {
-        const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
-        descriptionText.draw( offset.x + 37, offset.y + 185, 210, fheroes2::Display::instance() );
+    const std::vector<std::string> descriptions = fheroes2::getMonsterPropertiesDescription( troop.GetID() );
+    if ( !descriptions.empty() ) {
+        const int32_t descriptionWidth = 210;
+        const int32_t maximumRowCount = 3;
+        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+
+        bool asSolidText = true;
+        if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
+            asSolidText = false;
+            for ( const std::string & sentence : descriptions ) {
+                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                    asSolidText = true;
+                    break;
+                }
+            }
+        }
+
+        if ( asSolidText ) {
+            std::string description;
+            for ( const std::string & sentence : descriptions ) {
+                if ( !description.empty() ) {
+                    description += ' ';
+                }
+
+                description += sentence;
+            }
+
+            const fheroes2::Text descriptionText( std::move( description ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const int32_t rowCount = descriptionText.rows( descriptionWidth );
+
+            descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+        }
+        else {
+            int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
+            for ( const std::string & sentence : descriptions ) {
+                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+
+                descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
+                ++sentenceId;
+            }
+        }
     }
 
     // amount

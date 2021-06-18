@@ -547,9 +547,9 @@ namespace fheroes2
         case MonsterAbilityType::FLYING:
             return ignoreBasicAbility ? "" : "Flyer";
         case MonsterAbilityType::ALWAYS_RETALIATE:
-            return "Always retaliate";
+            return "Always retaliates";
         case MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK:
-            return "Attack all adjacent enemies";
+            return "Attacks all adjacent enemies";
         case MonsterAbilityType::NO_MELEE_PENALTY:
             return "No melee penalty";
         case MonsterAbilityType::DRAGON:
@@ -563,13 +563,13 @@ namespace fheroes2
         case MonsterAbilityType::AREA_SHOT:
             return "Cloud attack";
         case MonsterAbilityType::MORAL_DECREMENT:
-            return "Decrease enemy's moral by " + std::to_string( ability.value );
+            return "Decreases enemy's moral by " + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
             return std::to_string( ability.percentage ) + "% chance to halve enemy";
         case MonsterAbilityType::SOUL_EATER:
-            return "Soul eater";
+            return "Soul Eater";
         case MonsterAbilityType::ELEMENTAL:
-            return "Elemental";
+            return ignoreBasicAbility ? "No Morale" : "Elemental";
         default:
             break;
         }
@@ -645,9 +645,9 @@ namespace fheroes2
         return os.str();
     }
 
-    std::string getMonsterPropertiesDescription( const int monsterId )
+    std::vector<std::string> getMonsterPropertiesDescription( const int monsterId )
     {
-        std::string output;
+        std::vector<std::string> output;
 
         const MonsterBattleStats & battleStats = getMonsterData( monsterId ).battleStats;
 
@@ -661,38 +661,39 @@ namespace fheroes2
             }
             const std::string abilityDescription = getMonsterAbilityDescription( ability, true );
             if ( !abilityDescription.empty() ) {
-                if ( !output.empty() ) {
-                    output += ' ';
-                }
-                output += abilityDescription;
-                output += '.';
+                output.emplace_back( abilityDescription + '.' );
             }
         }
 
         for ( auto spellInfoIter = immuneToSpells.begin(); spellInfoIter != immuneToSpells.end(); ++spellInfoIter ) {
             assert( !spellInfoIter->second.empty() );
 
-            if ( !output.empty() ) {
-                output += ' ';
-            }
+            std::string temp;
 
             if ( spellInfoIter->first == 100 ) {
-                output += "Immune to ";
+                temp += "Immune to ";
             }
             else {
-                output += std::to_string( spellInfoIter->first ) + "% immunity to ";
+                temp += std::to_string( spellInfoIter->first ) + "% immunity to ";
             }
 
             const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
 
             for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
                 if ( i > 0 ) {
-                    output += ", ";
+                    temp += ", ";
                 }
-                output += Spell( sortedSpells[i] ).GetName();
+
+                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                    temp += "Lightning";
+                }
+                else {
+                    temp += Spell( sortedSpells[i] ).GetName();
+                }
             }
 
-            output += '.';
+            temp += '.';
+            output.emplace_back( std::move( temp ) );
         }
 
         std::map<uint32_t, std::vector<int>> extraDamageSpells;
@@ -705,33 +706,34 @@ namespace fheroes2
 
             const std::string weaknessDescription = getMonsterWeaknessDescription( weakness, true );
             if ( !weaknessDescription.empty() ) {
-                if ( !output.empty() ) {
-                    output += ' ';
-                }
-                output += weaknessDescription;
-                output += '.';
+                output.emplace_back( weaknessDescription + '.' );
             }
         }
 
         for ( auto spellInfoIter = extraDamageSpells.begin(); spellInfoIter != extraDamageSpells.end(); ++spellInfoIter ) {
             assert( !spellInfoIter->second.empty() );
 
-            if ( !output.empty() ) {
-                output += ' ';
-            }
+            std::string temp;
 
-            output += std::to_string( spellInfoIter->first + 100 ) + "% damage from ";
+            temp += std::to_string( spellInfoIter->first + 100 ) + "% damage from ";
 
             const std::vector<int> sortedSpells = replaceMassSpells( spellInfoIter->second );
 
             for ( size_t i = 0; i < sortedSpells.size(); ++i ) {
                 if ( i > 0 ) {
-                    output += ", ";
+                    temp += ", ";
                 }
-                output += Spell( sortedSpells[i] ).GetName();
+
+                if ( sortedSpells[i] == Spell::LIGHTNINGBOLT ) {
+                    temp += "Lightning";
+                }
+                else {
+                    temp += Spell( sortedSpells[i] ).GetName();
+                }
             }
 
-            output += '.';
+            temp += '.';
+            output.emplace_back( std::move( temp ) );
         }
 
         return output;
