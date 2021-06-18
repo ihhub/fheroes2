@@ -510,7 +510,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
                 description += sentence;
             }
 
-            const fheroes2::Text descriptionText( std::move( description ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
             const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
             descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
