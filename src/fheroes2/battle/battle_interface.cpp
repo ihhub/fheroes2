@@ -1407,7 +1407,7 @@ fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Spr
 
 void Battle::Interface::RedrawTroopSprite( const Unit & b )
 {
-    const Monster::monstersprite_t & msi = b.GetMonsterSprite();
+    const int monsterIcnId = b.GetMonsterSprite();
     fheroes2::Sprite spmon1;
     fheroes2::Sprite spmon2;
 
@@ -1417,12 +1417,12 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
         spmon1 = *b_current_sprite;
     }
     else if ( b.Modes( SP_STONE ) ) { // under medusa's stunning effect
-        spmon1 = fheroes2::AGG::GetICN( msi.icn_file, b.GetFrame() );
+        spmon1 = fheroes2::AGG::GetICN( monsterIcnId, b.GetFrame() );
         applyPalette = PAL::PaletteType::GRAY;
     }
     else {
         // regular
-        spmon1 = fheroes2::AGG::GetICN( msi.icn_file, b.GetFrame() );
+        spmon1 = fheroes2::AGG::GetICN( monsterIcnId, b.GetFrame() );
 
         // this unit's turn, must be covered with contour
         if ( _currentUnit == &b ) {
@@ -1445,7 +1445,7 @@ void Battle::Interface::RedrawTroopSprite( const Unit & b )
 
         // move offset
         if ( _movingUnit == &b ) {
-            const fheroes2::Sprite & spmon0 = fheroes2::AGG::GetICN( msi.icn_file, _movingUnit->animation.firstFrame() );
+            const fheroes2::Sprite & spmon0 = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
             const s32 ox = spmon1.x() - spmon0.x();
 
             if ( _movingUnit->animation.animationLength() ) {
@@ -1579,7 +1579,7 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
             }
         }
-        else if ( ( _currentUnit->GetID() == Monster::LICH || _currentUnit->GetID() == Monster::POWER_LICH )
+        else if ( _currentUnit->isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT )
                   && ( Cursor::Get().Themes() == Cursor::WAR_ARROW || Cursor::Get().Themes() == Cursor::WAR_BROKENARROW ) ) {
             highlightCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
@@ -2756,7 +2756,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
 
     // long distance attack animation
     if ( archer ) {
-        const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite().icn_file, attacker.GetFrame() );
+        const fheroes2::Sprite & attackerSprite = fheroes2::AGG::GetICN( attacker.GetMonsterSprite(), attacker.GetFrame() );
         const fheroes2::Point attackerPos = GetTroopPosition( attacker, attackerSprite );
 
         // For shooter position we need bottom center position of rear tile
@@ -2806,23 +2806,9 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
         }
     }
 
-    // post attack action
-    switch ( attacker.GetID() ) {
-    case Monster::VAMPIRE_LORD:
-        // possible: vampire resurrect animation
-        // RedrawTroopWithFrameAnimation(attacker, , );
-        break;
-
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        // lich clod animation
-        if ( archer ) {
-            RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), NONE );
-        }
-        break;
-
-    default:
-        break;
+    if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && archer ) {
+        // Lich cloud animation.
+        RedrawTroopWithFrameAnimation( defender, ICN::LICHCLOD, attacker.M82Expl(), NONE );
     }
 }
 
@@ -3535,7 +3521,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
     if ( isGoodLuck ) {
         const fheroes2::Sprite & luckSprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 0 );
-        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite().icn_file, unit.GetFrame() );
+        const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( unit.GetMonsterSprite(), unit.GetFrame() );
 
         int width = 2;
         fheroes2::Rect src( 0, 0, width, luckSprite.height() );
@@ -3813,8 +3799,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
+    fheroes2::Sprite sprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
     fheroes2::ApplyPalette( sprite, PAL::GetPalette( PAL::PaletteType::MIRROR_IMAGE ) );
 
     const fheroes2::Rect & rt1 = target.GetRectPosition();
@@ -3989,8 +3974,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
+    fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     std::vector<std::vector<uint8_t> > originalPalette;
     if ( target.Modes( SP_STONE ) ) {
@@ -4049,8 +4033,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const Monster::monstersprite_t & msi = target.GetMonsterSprite();
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( msi.icn_file, target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     fheroes2::Sprite stoneEffect( unitSprite );
     fheroes2::ApplyPalette( stoneEffect, PAL::GetPalette( PAL::PaletteType::GRAY ) );
@@ -4147,7 +4130,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
     RedrawRaySpell( target, ICN::DISRRAY, M82::DISRUPTR, 24 );
 
     // Part 2 - ripple effect
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
     fheroes2::Sprite rippleSprite;
 
     const Unit * old_current = _currentUnit;
@@ -4577,7 +4560,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
 fheroes2::Point CalculateSpellPosition( const Battle::Unit & target, int spellICN, const fheroes2::Sprite & spellSprite )
 {
     const fheroes2::Rect & pos = target.GetRectPosition();
-    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite().icn_file, target.GetFrame() );
+    const fheroes2::Sprite & unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
     // Bottom-left corner (default) position with spell offset applied
     fheroes2::Point result( pos.x + spellSprite.x(), pos.y + pos.height + cellYOffset + spellSprite.y() );
