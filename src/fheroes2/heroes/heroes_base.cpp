@@ -270,7 +270,7 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     switch ( art.Type() ) {
     case 1: // morale/luck arifacts
         unique = true;
-        break; 
+        break;
     case 2:
         unique = Settings::Get().ExtWorldUseUniqueArtifactsRS();
         break; /* resource affecting arts. */
