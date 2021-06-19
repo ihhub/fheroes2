@@ -268,9 +268,9 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     bool unique = true;
 
     switch ( art.Type() ) {
-    case 1:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsML();
-        break; /* morale/luck arts. */
+    case 1: // morale/luck arifacts
+        unique = true;
+        break; 
     case 2:
         unique = Settings::Get().ExtWorldUseUniqueArtifactsRS();
         break; /* resource affecting arts. */
@@ -284,7 +284,12 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
         break;
     }
 
-    return !unique ? bag_artifacts.Count( art ) : ( bag_artifacts.isPresentArtifact( art ) ? 1 : 0 );
+    if ( unique ) {
+        return bag_artifacts.isPresentArtifact( art ) ? 1 : 0;
+    }
+    else {
+        return bag_artifacts.Count( art );
+    }
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
