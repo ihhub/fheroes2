@@ -80,7 +80,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterAbility( const MonsterAbilityType type_, const int percentage_, const int value_ )
+        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
@@ -93,9 +93,9 @@ namespace fheroes2
 
         MonsterAbilityType type;
 
-        int percentage;
+        uint32_t percentage;
 
-        int value;
+        uint32_t value;
     };
 
     struct MonsterWeakness
@@ -106,7 +106,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterWeakness( const MonsterWeaknessType type_, const int percentage_, const int value_ )
+        explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
@@ -119,9 +119,9 @@ namespace fheroes2
 
         MonsterWeaknessType type;
 
-        int percentage;
+        uint32_t percentage;
 
-        int value;
+        uint32_t value;
     };
 
     struct MonsterBattleStats

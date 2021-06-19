@@ -192,7 +192,6 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     std::sort( states.begin(), states.end(),

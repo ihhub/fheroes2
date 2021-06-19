@@ -2670,8 +2670,6 @@ void Battle::Interface::RedrawActionSkipStatus( const Unit & attacker )
     std::string msg;
     if ( attacker.Modes( TR_HARDSKIP ) ) {
         msg = _( "%{name} skipping turn" );
-        if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
-            msg.append( _( ", and get +2 defense" ) );
     }
     else {
         msg = _( "%{name} waiting turn" );

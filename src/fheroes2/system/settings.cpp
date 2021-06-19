@@ -249,10 +249,6 @@ namespace
             _( "battle: soft wait troop" ),
         },
         {
-            Settings::BATTLE_SKIP_INCREASE_DEFENSE,
-            _( "battle: skip increase +2 defense" ),
-        },
-        {
             Settings::BATTLE_REVERSE_WAIT_ORDER,
             _( "battle: reverse wait order (fast, average, slow)" ),
         },
@@ -1596,11 +1592,6 @@ bool Settings::ExtUnionsAllowHeroesMeetings() const
 bool Settings::ExtBattleShowDamage() const
 {
     return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
-}
-
-bool Settings::ExtBattleSkipIncreaseDefense() const
-{
-    return ExtModes( BATTLE_SKIP_INCREASE_DEFENSE );
 }
 
 bool Settings::ExtHeroAllowTranscribingScroll() const
