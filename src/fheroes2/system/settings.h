@@ -102,7 +102,7 @@ public:
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
-        WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
+        // UNUSED = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
         WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
         WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
@@ -212,7 +212,6 @@ public:
     bool ExtWorldStartHeroLossCond4Humans() const;
     bool ExtWorldOneHeroHiredEveryWeek() const;
     bool ExtWorldNeutralArmyDifficultyScaling() const;
-    bool ExtWorldUseUniqueArtifactsML() const;
     bool ExtWorldUseUniqueArtifactsRS() const;
     bool ExtWorldUseUniqueArtifactsPS() const;
     bool ExtWorldUseUniqueArtifactsSS() const;

@@ -181,10 +181,6 @@ namespace
             _( "world: Neutral armies scale with game difficulty" ),
         },
         {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML,
-            _( "world: use unique artifacts for morale/luck" ),
-        },
-        {
             Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
             _( "world: use unique artifacts for resource affecting" ),
         },
@@ -1682,11 +1678,6 @@ bool Settings::ExtCastleOneHeroHiredEveryWeek() const
 bool Settings::ExtWorldNeutralArmyDifficultyScaling() const
 {
     return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-}
-
-bool Settings::ExtWorldUseUniqueArtifactsML() const
-{
-    return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_ML );
 }
 
 bool Settings::ExtWorldUseUniqueArtifactsRS() const
