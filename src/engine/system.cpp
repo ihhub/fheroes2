@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <ctime>
@@ -190,6 +191,17 @@ std::string System::GetBasename( const std::string & str )
     }
 
     return str;
+}
+
+std::string System::GetUniversalBasename( const std::string & str )
+{
+    std::string path = str;
+
+    for ( const char sep : { '/', '\\' } ) {
+        std::replace( path.begin(), path.end(), sep, SEPARATOR );
+    }
+
+    return GetBasename( path );
 }
 
 const char * System::GetEnvironment( const char * name )

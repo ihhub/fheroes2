@@ -39,6 +39,7 @@
 #include "mp2.h"
 #include "race.h"
 #include "settings.h"
+#include "system.h"
 
 namespace
 {
@@ -612,7 +613,8 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
 
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
-    msg << fi.file << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
+    // Only the basename of map filename (fi.file) is saved
+    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
 
     for ( u32 ii = 0; ii < KINGDOMMAX; ++ii )
         msg << fi.races[ii] << fi.unions[ii];
@@ -630,6 +632,7 @@ StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 {
     u8 kingdommax;
 
+    // Only the basename of map filename (fi.file) is loaded
     msg >> fi.file >> fi.name >> fi.description >> fi.size_w >> fi.size_h >> fi.difficulty >> kingdommax;
 
     for ( u32 ii = 0; ii < kingdommax; ++ii )

@@ -302,6 +302,8 @@ public:
     u32 LossCountDays() const;
     int controllerPointerSpeed() const;
 
+    void SetMapsFile( const std::string & file );
+
     std::string GetProgramPath() const
     {
         return path_program;

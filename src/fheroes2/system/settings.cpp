@@ -848,6 +848,11 @@ int Settings::FontsSmallSize() const
     return size_small;
 }
 
+void Settings::SetMapsFile( const std::string & file )
+{
+    current_maps_file.file = file;
+}
+
 void Settings::SetProgramPath( const char * argv0 )
 {
     if ( argv0 )
