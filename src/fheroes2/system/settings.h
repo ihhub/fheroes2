@@ -317,16 +317,6 @@ public:
 
     static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
 
-    // deprecated
-    const std::string & GetDataParams() const
-    {
-        return data_params;
-    }
-    ListDirs GetMapsParams() const
-    {
-        return maps_params;
-    }
-
 protected:
     void PostLoad();
 
@@ -348,8 +338,6 @@ private:
     int game_difficulty;
 
     std::string path_program;
-    std::string data_params;
-    ListDirs maps_params;
 
     std::string font_normal;
     std::string font_small;

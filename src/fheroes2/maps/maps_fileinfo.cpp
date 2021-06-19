@@ -572,27 +572,13 @@ std::string Maps::FileInfo::String( void ) const
     return os.str();
 }
 
-ListFiles GetMapsFiles( const char * suffix )
-{
-    ListFiles maps = Settings::GetListFiles( "maps", suffix );
-    const ListDirs & list = Settings::Get().GetMapsParams();
-
-    if ( !list.empty() ) {
-        for ( ListDirs::const_iterator it = list.begin(); it != list.end(); ++it )
-            if ( *it != "maps" )
-                maps.Append( Settings::GetListFiles( *it, suffix ) );
-    }
-
-    return maps;
-}
-
 bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
 {
     const Settings & conf = Settings::Get();
 
-    ListFiles maps_old = GetMapsFiles( ".mp2" );
+    ListFiles maps_old = Settings::GetListFiles( "maps", ".mp2" );
     if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( GetMapsFiles( ".mx2" ) );
+        maps_old.Append( Settings::GetListFiles( "maps", ".mx2" ) );
 
     for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
         Maps::FileInfo fi;
