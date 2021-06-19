@@ -424,7 +424,6 @@ void Battle::Unit::NewTurn( void )
     ResetModes( TR_MOVED );
     ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
-    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -660,7 +659,6 @@ void Battle::Unit::PostKilledAction( void )
     ResetModes( TR_RESPONSED );
     ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
-    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -1040,10 +1038,6 @@ u32 Battle::Unit::GetDefense( void ) const
         res += Spell( Spell::STONESKIN ).ExtraValue();
     else if ( Modes( SP_STEELSKIN ) )
         res += Spell( Spell::STEELSKIN ).ExtraValue();
-
-    // extra
-    if ( Modes( TR_DEFENSED ) )
-        res += 2;
 
     // disrupting ray accumulate effect
     if ( disruptingray ) {
@@ -1570,48 +1564,19 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
 
 int Battle::Unit::GetSpellMagic() const
 {
-    switch ( GetID() ) {
-    case Monster::UNICORN:
-        // 20% blind
-        if ( 3 > Rand::Get( 1, 10 ) )
-            return Spell::BLIND;
-        break;
-
-    case Monster::CYCLOPS:
-        // 20% paralyze
-        if ( 3 > Rand::Get( 1, 10 ) )
-            return Spell::PARALYZE;
-        break;
-
-    case Monster::MUMMY:
-        // 20% curse
-        if ( 3 > Rand::Get( 1, 10 ) )
-            return Spell::CURSE;
-        break;
-
-    case Monster::ROYAL_MUMMY:
-        // 30% curse
-        if ( 4 > Rand::Get( 1, 10 ) )
-            return Spell::CURSE;
-        break;
-
-    case Monster::ARCHMAGE:
-        // 20% dispel
-        if ( 3 > Rand::Get( 1, 10 ) )
-            return Spell::DISPEL;
-        break;
-
-    case Monster::MEDUSA:
-        // 20% stone
-        if ( 3 > Rand::Get( 1, 10 ) )
-            return Spell::STONE;
-        break;
-
-    default:
-        break;
+    const std::set<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
+    const auto foundAbility = abilities.find( fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+    if ( foundAbility == abilities.end() ) {
+        // Not a spell caster.
+        return Spell::NONE;
     }
 
-    return Spell::NONE;
+    if ( Rand::Get( 1, 100 ) > foundAbility->percentage ) {
+        // No luck to cast the spell.
+        return Spell::NONE;
+    }
+
+    return foundAbility->value;
 }
 
 bool Battle::Unit::isHaveDamage( void ) const

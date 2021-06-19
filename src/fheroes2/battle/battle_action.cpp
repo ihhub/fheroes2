@@ -413,8 +413,6 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             if ( hard || battle->Modes( TR_SKIPMOVE ) ) {
                 battle->SetModes( TR_HARDSKIP );
                 battle->SetModes( TR_MOVED );
-                if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
-                    battle->SetModes( TR_DEFENSED );
             }
 
             battle->SetModes( TR_SKIPMOVE );
