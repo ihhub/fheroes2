@@ -448,7 +448,8 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
-    Troops futureArmy( hero.GetArmy() );
+    const Troops & heroArmy = hero.GetArmy();
+    Troops futureArmy( heroArmy );
     const double heroArmyStrength = futureArmy.GetStrength();
 
     Funds potentialFunds = GetKingdom().GetFunds();
