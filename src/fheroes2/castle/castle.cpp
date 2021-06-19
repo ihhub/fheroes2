@@ -439,13 +439,34 @@ double Castle::getVisitValue( const Heroes & hero ) const
     double spellValue = 0;
     const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
     for ( const Spell & spell : guildSpells ) {
+        if ( spell.isAdventure() ) {
+            // AI is stupid to use Adventure spells.
+            continue;
+        }
         if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.Level() * 250.0;
+            spellValue += spell.Level() * 50.0;
         }
     }
 
-    // we don't spend actual funds, so make a copy here
+    Troops futureArmy( hero.GetArmy() );
+    const double heroArmyStrength = futureArmy.GetStrength();
+
     Funds potentialFunds = GetKingdom().GetFunds();
+
+    for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
+        Troop * monster = futureArmy.GetTroop( i );
+        if ( monster != nullptr && monster->isValid() ) {
+            const payment_t payment = monster->GetUpgradeCost();
+
+            if ( GetRace() == monster->GetRace() && isBuild( monster->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+                potentialFunds -= payment;
+                monster->Upgrade();
+            }
+        }
+    }
+
+    const double upgradeStrength = futureArmy.GetStrength() - heroArmyStrength;
+
     Troops reinforcement;
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
@@ -462,7 +483,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
-    return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
+    return spellValue + futureArmy.getReinforcementValue( reinforcement );
 }
 
 void Castle::ActionNewDay( void )

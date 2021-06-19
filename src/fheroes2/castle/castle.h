@@ -160,6 +160,8 @@ public:
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
+
+    // Used only for AI.
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
