@@ -483,7 +483,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
-    return spellValue + futureArmy.getReinforcementValue( reinforcement );
+    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( reinforcement );
 }
 
 void Castle::ActionNewDay( void )
