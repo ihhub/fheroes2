@@ -124,7 +124,7 @@ public:
     const char * GetName( void ) const;
     const char * GetDescription( void ) const;
 
-    u32 SpellPoint( const HeroBase * hero = NULL ) const;
+    u32 SpellPoint( const HeroBase * hero = nullptr ) const;
     u32 MovePoint( void ) const;
     int Level( void ) const;
     u32 Damage( void ) const;
@@ -154,6 +154,8 @@ public:
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
     bool isEnabled() const;
+    bool isFire() const;
+    bool isCold() const;
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;
@@ -164,7 +166,6 @@ public:
     static Spell RandAdventure( int lvl );
     static Spell Rand( int lvl, bool adv );
 
-    static void UpdateStats( const std::string & );
     static u32 CalculateDimensionDoorDistance( u32 current_sp, u32 total_hp );
 
 private:

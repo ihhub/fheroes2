@@ -32,15 +32,14 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#define FORMAT_VERSION_095_RELEASE 9500
 #define FORMAT_VERSION_094_RELEASE 9400
 #define FORMAT_VERSION_093_RELEASE 9300
-#define FORMAT_VERSION_091_RELEASE 9100
-#define FORMAT_VERSION_090_RELEASE 9001
 
 // TODO: once FORMAT_VERSION_094_RELEASE version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
-#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_090_RELEASE
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_093_RELEASE
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_094_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_095_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -181,6 +180,7 @@ public:
     bool MusicExt() const;
     bool MusicMIDI() const;
     bool MusicCD() const;
+    bool isShowIntro() const;
 
     bool isFirstGameRun() const;
     void resetFirstGameRun();
@@ -260,6 +260,7 @@ public:
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
+    void setShowIntro( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -315,7 +316,6 @@ public:
     static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
-    static std::string GetWriteableDir( const char * );
     static std::string GetLangDir();
 
     static ListFiles FindFiles( const std::string & directory, const std::string & fileName );

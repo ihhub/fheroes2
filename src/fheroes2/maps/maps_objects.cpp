@@ -323,10 +323,10 @@ bool MapMonster::JoinConditionForce( void ) const
 
 StreamBase & operator<<( StreamBase & msg, const MapMonster & obj )
 {
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.monster << obj.condition << obj.count;
+    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.condition << obj.count;
 }
 
 StreamBase & operator>>( StreamBase & msg, MapMonster & obj )
 {
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.monster >> obj.condition >> obj.count;
+    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.condition >> obj.count;
 }

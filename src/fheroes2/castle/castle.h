@@ -31,6 +31,7 @@
 #include "castle_heroes.h"
 #include "heroes.h"
 #include "mageguild.h"
+#include "monster_anim.h"
 #include "position.h"
 #include "ui_button.h"
 
@@ -126,7 +127,7 @@ public:
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = NULL ) const;
+    bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & ) const;
     bool isNecromancyShrineBuild( void ) const;
 
@@ -231,16 +232,13 @@ private:
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
-    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
+    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, Castle & );
-#endif
 
     int race;
     u32 building;

@@ -129,7 +129,7 @@ namespace AI
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero ) override;
 
-        double getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const;
+        double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
         void resetPathfinder() override;
 

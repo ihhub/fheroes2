@@ -24,6 +24,7 @@
 #include <cctype>
 #include <climits>
 #include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iomanip>
@@ -277,7 +278,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & file )
 {
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "wb" );
 
-    if ( rw && 1 == SDL_RWwrite( rw, &data[0], data.size(), 1 ) )
+    if ( rw && 1 == SDL_RWwrite( rw, &data[0], static_cast<int>( data.size() ), 1 ) )
         SDL_RWclose( rw );
     else {
         ERROR_LOG( SDL_GetError() );
@@ -291,7 +292,7 @@ std::vector<u8> LoadFileToMem( const std::string & file )
 {
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == NULL )
+    if ( rw == nullptr )
         ERROR_LOG( SDL_GetError() );
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );
@@ -301,7 +302,7 @@ std::vector<u8> LoadFileToMem( const std::string & file )
     if ( length > 0 ) {
         data.resize( length );
         SDL_RWseek( rw, 0, RW_SEEK_SET );
-        SDL_RWread( rw, &data[0], data.size(), 1 );
+        SDL_RWread( rw, &data[0], static_cast<int>( data.size() ), 1 );
     }
 
     SDL_RWclose( rw );

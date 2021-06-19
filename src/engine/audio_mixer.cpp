@@ -186,7 +186,7 @@ int Mixer::Volume( int channel, int vol /* = -1 */ )
             }
 
             // return the average volume
-            const int prevVolume = std::accumulate( savedVolumes.begin(), savedVolumes.end(), 0 ) / savedVolumes.size();
+            const int prevVolume = std::accumulate( savedVolumes.begin(), savedVolumes.end(), 0 ) / static_cast<int>( savedVolumes.size() );
 
             if ( vol >= 0 ) {
                 std::fill( savedVolumes.begin(), savedVolumes.end(), vol );

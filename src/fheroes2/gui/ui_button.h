@@ -67,7 +67,7 @@ namespace fheroes2
 
         void setPosition( int32_t offsetX_, int32_t offsetY_ );
 
-        void draw( Image & output = Display::instance() ); // will draw on screen by default
+        void draw( Image & output = Display::instance() ) const; // will draw on screen by default
 
         // Will draw on screen by default. Returns true in case of state change. This method calls render() internally.
         bool drawOnPress( Image & output = Display::instance() );
@@ -80,6 +80,7 @@ namespace fheroes2
     protected:
         virtual const Sprite & _getPressed() const = 0;
         virtual const Sprite & _getReleased() const = 0;
+        virtual const Sprite & _getDisabled() const;
 
     private:
         int32_t _offsetX;
@@ -89,8 +90,8 @@ namespace fheroes2
         bool _isEnabled;
         bool _isVisible;
 
-        const Sprite * _releasedSprite;
-        std::unique_ptr<Sprite> _releasedDisabled;
+        mutable const Sprite * _releasedSprite;
+        mutable std::unique_ptr<Sprite> _disabledSprite;
     };
 
     class Button : public ButtonBase
@@ -117,18 +118,20 @@ namespace fheroes2
     {
     public:
         ButtonSprite( int32_t offsetX = 0, int32_t offsetY = 0 );
-        ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed );
+        ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
         ~ButtonSprite() override = default;
 
-        void setSprite( const Sprite & released, const Sprite & pressed );
+        void setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled = Sprite() );
 
     protected:
         const Sprite & _getPressed() const override;
         const Sprite & _getReleased() const override;
+        const Sprite & _getDisabled() const override;
 
     private:
         Sprite _released;
         Sprite _pressed;
+        Sprite _disabled;
     };
 
     class ButtonGroup

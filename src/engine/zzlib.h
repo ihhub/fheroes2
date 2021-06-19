@@ -23,8 +23,6 @@
 #ifndef H2ZLIB_H
 #define H2ZLIB_H
 
-#ifdef WITH_ZLIB
-
 #include <iostream>
 #include <vector>
 
@@ -34,8 +32,6 @@
 
 std::vector<u8> zlibCompress( const u8 *, size_t srcsz );
 std::vector<u8> zlibDecompress( const u8 *, size_t srcsz, size_t realsz = 0 );
-
-#endif
 
 class ZStreamFile : public StreamBuf
 {
@@ -47,11 +43,5 @@ public:
 };
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer );
-
-class ImageZlib : public fheroes2::Image
-{
-    ImageZlib( int32_t width, int32_t height, const uint8_t * data, size_t size );
-    ~ImageZlib() override = default;
-};
 
 #endif

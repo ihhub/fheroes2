@@ -23,3 +23,7 @@
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 9
 #define INTERMEDIATE_VERSION 4
+
+#ifndef BUILD_VERSION
+#define BUILD_VERSION 0
+#endif

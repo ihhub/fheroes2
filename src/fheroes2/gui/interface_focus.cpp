@@ -163,14 +163,14 @@ Castle * Interface::GetFocusCastle( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    return player ? player->GetFocus().GetCastle() : NULL;
+    return player ? player->GetFocus().GetCastle() : nullptr;
 }
 
 Heroes * Interface::GetFocusHeroes( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    return player ? player->GetFocus().GetHeroes() : NULL;
+    return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
 fheroes2::Point Interface::GetFocusCenter( void )

@@ -29,35 +29,35 @@ namespace Skill
 {
     struct level_t
     {
-        u16 basic;
-        u16 advanced;
-        u16 expert;
+        uint16_t basic;
+        uint16_t advanced;
+        uint16_t expert;
     };
 
     struct primary_t
     {
-        u8 attack;
-        u8 defense;
-        u8 power;
-        u8 knowledge;
+        uint8_t attack;
+        uint8_t defense;
+        uint8_t power;
+        uint8_t knowledge;
     };
 
     struct secondary_t
     {
-        u8 archery;
-        u8 ballistics;
-        u8 diplomacy;
-        u8 eagleeye;
-        u8 estates;
-        u8 leadership;
-        u8 logistics;
-        u8 luck;
-        u8 mysticism;
-        u8 navigation;
-        u8 necromancy;
-        u8 pathfinding;
-        u8 scouting;
-        u8 wisdom;
+        uint8_t archery;
+        uint8_t ballistics;
+        uint8_t diplomacy;
+        uint8_t eagleeye;
+        uint8_t estates;
+        uint8_t leadership;
+        uint8_t logistics;
+        uint8_t luck;
+        uint8_t mysticism;
+        uint8_t navigation;
+        uint8_t necromancy;
+        uint8_t pathfinding;
+        uint8_t scouting;
+        uint8_t wisdom;
     };
 
     struct stats_t
@@ -65,10 +65,10 @@ namespace Skill
         const char * id;
         primary_t captain_primary;
         primary_t initial_primary;
-        u8 initial_book;
-        u8 initial_spell;
+        uint8_t initial_book;
+        uint8_t initial_spell;
         secondary_t initial_secondary;
-        u8 over_level;
+        uint8_t over_level;
         primary_t mature_primary_under;
         primary_t mature_primary_over;
         secondary_t mature_secondary;

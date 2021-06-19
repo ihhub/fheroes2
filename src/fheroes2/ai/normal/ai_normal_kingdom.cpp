@@ -185,7 +185,7 @@ namespace AI
 
         if ( heroes.size() < static_cast<size_t>( heroLimit ) ) { // safe to cast as heroLimit is > 0
             Recruits & rec = kingdom.GetRecruits();
-            Castle * recruitmentCastle = NULL;
+            Castle * recruitmentCastle = nullptr;
             int lowestHeroCount = heroLimit;
 
             // search for best castle to recruit hero from
@@ -205,7 +205,7 @@ namespace AI
                     if ( world.getRegion( regionID ).getNeighboursCount() == 0 && heroCount > 0 )
                         continue;
 
-                    if ( recruitmentCastle == NULL || lowestHeroCount > heroCount ) {
+                    if ( recruitmentCastle == nullptr || lowestHeroCount > heroCount ) {
                         recruitmentCastle = castle;
                         lowestHeroCount = heroCount;
                         if ( lowestHeroCount == 0 )
@@ -216,7 +216,7 @@ namespace AI
 
             // target found, buy hero
             if ( recruitmentCastle ) {
-                Heroes * recruit = NULL;
+                Heroes * recruit = nullptr;
                 Heroes * firstRecruit = rec.GetHero1();
                 Heroes * secondRecruit = rec.GetHero2();
                 if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {

@@ -222,7 +222,7 @@ StreamBase & StreamBase::operator<<( const float v )
 
 StreamBase & StreamBase::operator<<( const std::string & v )
 {
-    put32( v.size() );
+    put32( static_cast<uint32_t>( v.size() ) );
 
     for ( std::string::const_iterator it = v.begin(); it != v.end(); ++it )
         put8( *it );
@@ -236,10 +236,10 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
 }
 
 StreamBuf::StreamBuf( size_t sz )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     if ( sz )
         reallocbuf( sz );
@@ -253,19 +253,19 @@ StreamBuf::~StreamBuf()
 }
 
 StreamBuf::StreamBuf( const StreamBuf & st )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     copy( st );
 }
 
 StreamBuf::StreamBuf( const std::vector<u8> & buf )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     itbeg = (u8 *)&buf[0];
     itend = itbeg + buf.size();
@@ -276,10 +276,10 @@ StreamBuf::StreamBuf( const std::vector<u8> & buf )
 }
 
 StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     itbeg = const_cast<u8 *>( buf );
     itend = itbeg + bufsz;
@@ -510,7 +510,7 @@ void StreamBuf::seek( size_t sz )
 }
 
 StreamFile::StreamFile()
-    : _file( NULL )
+    : _file( nullptr )
 {}
 
 StreamFile::StreamFile( const std::string & fn, const char * mode )
@@ -529,14 +529,14 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
     _file = std::fopen( fn.c_str(), mode.c_str() );
     if ( !_file )
         ERROR_LOG( fn );
-    return _file != NULL;
+    return _file != nullptr;
 }
 
 void StreamFile::close( void )
 {
     if ( _file ) {
         std::fclose( _file );
-        _file = NULL;
+        _file = nullptr;
     }
 }
 

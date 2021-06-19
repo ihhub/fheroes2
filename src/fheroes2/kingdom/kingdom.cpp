@@ -255,7 +255,7 @@ const Heroes * Kingdom::GetFirstHeroStartCondLoss( void ) const
     for ( KingdomHeroes::const_iterator it = heroes_cond_loss.begin(); it != heroes_cond_loss.end(); ++it )
         if ( ( *it )->isFreeman() || ( *it )->GetColor() != GetColor() )
             return *it;
-    return NULL;
+    return nullptr;
 }
 
 std::string Kingdom::GetNamesHeroStartCondLoss( void ) const
@@ -591,7 +591,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     if ( !foundHeroes && Settings::Get().GameStartWithHeroes() ) {
         // get first castle
         const Castle * first = castles.GetFirstCastle();
-        if ( NULL == first )
+        if ( nullptr == first )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
@@ -603,13 +603,6 @@ void Kingdom::ApplyPlayWithStartingHero( void )
 u32 Kingdom::GetMaxHeroes( void )
 {
     return GameStatic::GetKingdomMaxHeroes();
-}
-
-void Kingdom::HeroesActionNewPosition() const
-{
-    // Heroes::ActionNewPosition: can remove elements from heroes vector.
-    KingdomHeroes heroes2( heroes );
-    std::for_each( heroes2.begin(), heroes2.end(), []( Heroes * hero ) { hero->ActionNewPosition(); } );
 }
 
 Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
@@ -681,7 +674,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
 Heroes * Kingdom::GetBestHero()
 {
-    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : NULL;
+    return heroes.size() ? *std::max_element( heroes.begin(), heroes.end(), HeroesStrongestArmy ) : nullptr;
 }
 
 Monster Kingdom::GetStrongestMonster() const
@@ -806,12 +799,12 @@ void Kingdom::ResetLastLostHero( void )
 
 Heroes * Kingdom::GetLastLostHero( void ) const
 {
-    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : NULL;
+    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : nullptr;
 }
 
 Heroes * Kingdom::GetLastBattleWinHero() const
 {
-    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : NULL;
+    return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
 void Kingdoms::NewDay( void )
@@ -961,13 +954,9 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
-        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_093_RELEASE )
-        msg >> kingdom._lastBattleWinHeroID;
-
-    return msg;
+    return msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+           >> kingdom.lost_hero >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss
+           >> kingdom._lastBattleWinHeroID;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
