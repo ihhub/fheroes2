@@ -134,7 +134,7 @@ namespace
 
             std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
             if ( translations.size() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )

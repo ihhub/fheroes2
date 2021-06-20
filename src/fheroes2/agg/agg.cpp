@@ -307,7 +307,7 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
+    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
 
     // not found agg, exit
     if ( aggs.empty() )

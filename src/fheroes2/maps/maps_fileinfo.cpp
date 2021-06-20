@@ -577,9 +577,9 @@ bool PrepareMapsFileInfoList( MapsFileInfoList & lists, bool multi )
 {
     const Settings & conf = Settings::Get();
 
-    ListFiles maps_old = Settings::GetListFiles( "maps", ".mp2" );
+    ListFiles maps_old = Settings::FindFiles( "maps", ".mp2", false );
     if ( conf.isPriceOfLoyaltySupported() )
-        maps_old.Append( Settings::GetListFiles( "maps", ".mx2" ) );
+        maps_old.Append( Settings::FindFiles( "maps", ".mx2", false ) );
 
     for ( ListFiles::const_iterator it = maps_old.begin(); it != maps_old.end(); ++it ) {
         Maps::FileInfo fi;
