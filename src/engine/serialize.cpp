@@ -29,6 +29,7 @@
 
 #include "endian_h2.h"
 #include "logging.h"
+#include "save_format_version.h"
 #include "serialize.h"
 
 #define MINCAPACITY 1024
@@ -132,6 +133,8 @@ StreamBase & StreamBase::operator>>( s32 & v )
 
 StreamBase & StreamBase::operator>>( float & v )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
+
     s32 intpart;
     s32 decpart;
     *this >> intpart >> decpart;
@@ -215,6 +218,8 @@ StreamBase & StreamBase::operator<<( const u32 v )
 
 StreamBase & StreamBase::operator<<( const float v )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
+
     s32 intpart = static_cast<s32>( v );
     float decpart = ( v - intpart ) * 100000000;
     return *this << intpart << static_cast<s32>( decpart );
@@ -389,7 +394,7 @@ void StreamBuf::copy( const StreamBuf & sb )
     setbigendian( sb.bigendian() );
 }
 
-void StreamBuf::put8( char v )
+void StreamBuf::put8( const uint8_t v )
 {
     if ( sizep() == 0 )
         reallocbuf( capacity() + capacity() / 2 );
@@ -445,28 +450,28 @@ u32 StreamBuf::getLE32()
 void StreamBuf::putBE16( u16 v )
 {
     put8( v >> 8 );
-    put8( v );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE16( u16 v )
 {
-    put8( v );
+    put8( v & 0xFF );
     put8( v >> 8 );
 }
 
 void StreamBuf::putBE32( u32 v )
 {
     put8( v >> 24 );
-    put8( v >> 16 );
-    put8( v >> 8 );
-    put8( v );
+    put8( ( v >> 16 ) & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE32( u32 v )
 {
-    put8( v );
-    put8( v >> 8 );
-    put8( v >> 16 );
+    put8( v & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( ( v >> 16 ) & 0xFF );
     put8( v >> 24 );
 }
 
@@ -599,9 +604,9 @@ u8 StreamFile::get8()
     return getUint<uint8_t>();
 }
 
-void StreamFile::put8( char ch )
+void StreamFile::put8( const uint8_t v )
 {
-    putUint<char>( ch );
+    putUint<uint8_t>( v );
 }
 
 uint16_t StreamFile::getBE16()
