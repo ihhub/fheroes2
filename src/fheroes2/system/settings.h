@@ -310,12 +310,11 @@ public:
 
     static std::string GetVersion();
 
-    static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
-    static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetLangDir();
 
-    static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
+    static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
+    static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
     // deprecated
     const std::string & GetDataParams() const

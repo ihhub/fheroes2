@@ -49,7 +49,7 @@ namespace Video
         std::string temp;
 
         for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            ListFiles files = Settings::FindFiles( videoDir[i], fileName );
+            ListFiles files = Settings::FindFiles( videoDir[i], fileName, true );
             for ( std::string & name : files ) {
                 if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
                     path.swap( name );

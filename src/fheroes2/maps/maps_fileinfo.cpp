@@ -574,13 +574,13 @@ std::string Maps::FileInfo::String( void ) const
 
 ListFiles GetMapsFiles( const char * suffix )
 {
-    ListFiles maps = Settings::GetListFiles( "maps", suffix );
+    ListFiles maps = Settings::FindFiles( "maps", suffix, false );
     const ListDirs & list = Settings::Get().GetMapsParams();
 
     if ( !list.empty() ) {
         for ( ListDirs::const_iterator it = list.begin(); it != list.end(); ++it )
             if ( *it != "maps" )
-                maps.Append( Settings::GetListFiles( *it, suffix ) );
+                maps.Append( Settings::FindFiles( *it, suffix, false ) );
     }
 
     return maps;

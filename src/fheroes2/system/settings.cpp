@@ -903,38 +903,29 @@ ListDirs Settings::GetRootDirs()
     return dirs;
 }
 
-/* return list files */
-ListFiles Settings::GetListFiles( const std::string & prefix, const std::string & filter )
+ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )
 {
-    const ListDirs dirs = GetRootDirs();
     ListFiles res;
 
-    if ( prefix.size() && System::IsDirectory( prefix ) )
-        res.ReadDir( prefix, filter, false );
+    auto processDir = [&res, &fileNameFilter, exactMatch]( const std::string & dir ) {
+        if ( exactMatch ) {
+            res.FindFileInDir( dir, fileNameFilter, false );
+        }
+        else {
+            res.ReadDir( dir, fileNameFilter, false );
+        }
+    };
 
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        std::string path = prefix.size() ? System::ConcatePath( *it, prefix ) : *it;
-
-        if ( System::IsDirectory( path ) )
-            res.ReadDir( path, filter, false );
+    if ( !prefixDir.empty() && System::IsDirectory( prefixDir ) ) {
+        processDir( prefixDir );
     }
 
-    return res;
-}
+    for ( const std::string & dir : GetRootDirs() ) {
+        const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
 
-ListFiles Settings::FindFiles( const std::string & directory, const std::string & fileName )
-{
-    ListFiles res;
-
-    if ( !directory.empty() && System::IsDirectory( directory ) )
-        res.FindFileInDir( directory, fileName, false );
-
-    const ListDirs dirs = GetRootDirs();
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        const std::string & path = !directory.empty() ? System::ConcatePath( *it, directory ) : *it;
-
-        if ( System::IsDirectory( path ) )
-            res.FindFileInDir( path, fileName, false );
+        if ( System::IsDirectory( path ) ) {
+            processDir( path );
+        }
     }
 
     return res;
@@ -942,7 +933,7 @@ ListFiles Settings::FindFiles( const std::string & directory, const std::string 
 
 std::string Settings::GetLastFile( const std::string & prefix, const std::string & name )
 {
-    const ListFiles & files = GetListFiles( prefix, name );
+    const ListFiles & files = FindFiles( prefix, name, true );
     return files.empty() ? name : files.back();
 }
 
