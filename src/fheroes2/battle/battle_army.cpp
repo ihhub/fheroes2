@@ -174,7 +174,7 @@ int Battle::Force::GetControl( void ) const
 
 bool Battle::Force::isValid( void ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    return std::any_of( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
 }
 
 uint32_t Battle::Force::GetSurrenderCost( void ) const
@@ -344,7 +344,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
+    return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const

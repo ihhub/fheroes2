@@ -171,7 +171,7 @@ bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
     auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
-    return answers.end() != std::find_if( answers.begin(), answers.end(), checkAnswer );
+    return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
 void MapSphinx::SetQuiet( void )
