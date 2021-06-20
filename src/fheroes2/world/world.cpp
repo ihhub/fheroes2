@@ -1230,14 +1230,17 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
         } break;
 
         case MP2::OBJ_RESOURCE: {
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
             assert( 0 );
         } break;
 
         case MP2::OBJ_ARTIFACT: {
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
             assert( 0 );
         } break;
 
         case MP2::OBJ_MONSTER: {
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
             assert( 0 );
         } break;
 
