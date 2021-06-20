@@ -187,8 +187,8 @@ public:
     void SetGlobalFilterKeysEvents( void ( *pf )( int, int ) );
 
     static void SetStateDefaults( void );
-    static void SetState( const uint8_t type, const bool enable );
-    static int GetState( const uint8_t type );
+    static void SetState( u32 type, bool enable );
+    static int GetState( u32 type );
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
