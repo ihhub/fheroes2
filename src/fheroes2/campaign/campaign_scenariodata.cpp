@@ -383,7 +383,7 @@ namespace Campaign
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
-        const ListFiles files = Settings::FindFiles( "maps", fileExtension, false );
+        static const ListFiles files = Settings::FindFiles( "maps", fileExtension, false );
 
         const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
 
