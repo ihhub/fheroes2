@@ -29,7 +29,6 @@
 
 #include "endian_h2.h"
 #include "logging.h"
-#include "save_format_version.h"
 #include "serialize.h"
 
 #define MINCAPACITY 1024
@@ -133,8 +132,6 @@ StreamBase & StreamBase::operator>>( s32 & v )
 
 StreamBase & StreamBase::operator>>( float & v )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
-
     s32 intpart;
     s32 decpart;
     *this >> intpart >> decpart;
@@ -218,8 +215,6 @@ StreamBase & StreamBase::operator<<( const u32 v )
 
 StreamBase & StreamBase::operator<<( const float v )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
-
     s32 intpart = static_cast<s32>( v );
     float decpart = ( v - intpart ) * 100000000;
     return *this << intpart << static_cast<s32>( decpart );
