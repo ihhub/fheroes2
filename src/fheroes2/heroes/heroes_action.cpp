@@ -50,7 +50,7 @@
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index );
+void ActionToMonster( Heroes & hero, s32 dst_index );
 void ActionToBoat( Heroes & hero, s32 dst_index );
 void ActionToCoast( Heroes & hero, s32 dst_index );
 void ActionToWagon( Heroes & hero, s32 dst_index );
@@ -435,7 +435,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     else
         switch ( object ) {
         case MP2::OBJ_MONSTER:
-            ActionToMonster( *this, object, tileIndex );
+            ActionToMonster( *this, tileIndex );
             break;
 
         case MP2::OBJ_CASTLE:
@@ -692,11 +692,10 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
 }
 
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
+void ActionToMonster( Heroes & hero, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = tile.GetObject() == obj ? dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) ) : nullptr;
-    Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+    Troop troop = tile.QuantityTroop();
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -775,15 +774,6 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
             if ( tile.MonsterJoinConditionFree() ) {
                 tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
-
-            if ( map_troop ) {
-                map_troop->count = army.GetCountMonsters( troop() );
-
-                // reset join condition
-                if ( map_troop->JoinConditionFree() ) {
-                    map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
-            }
         }
     }
     // just remove group of monsters
@@ -801,10 +791,6 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         tile.setAsEmpty();
 
         Game::ObjectFadeAnimation::PerformFadeTask();
-
-        if ( map_troop ) {
-            world.RemoveMapObject( map_troop );
-        }
     }
 
     // clear the hero's attacked monster tile index

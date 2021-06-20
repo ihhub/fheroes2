@@ -143,23 +143,4 @@ struct MapArtifact : public MapObjectSimple
 StreamBase & operator<<( StreamBase &, const MapArtifact & );
 StreamBase & operator>>( StreamBase &, MapArtifact & );
 
-struct MapMonster : public MapObjectSimple
-{
-    MapMonster();
-
-    Monster monster;
-
-    int condition;
-    int count;
-
-    Troop QuantityTroop( void ) const;
-    bool JoinConditionSkip( void ) const;
-    bool JoinConditionMoney( void ) const;
-    bool JoinConditionFree( void ) const;
-    bool JoinConditionForce( void ) const;
-};
-
-StreamBase & operator<<( StreamBase &, const MapMonster & );
-StreamBase & operator>>( StreamBase &, MapMonster & );
-
 #endif

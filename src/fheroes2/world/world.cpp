@@ -1197,10 +1197,6 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
                 msg << static_cast<const MapArtifact &>( obj );
                 break;
 
-            case MP2::OBJ_MONSTER:
-                msg << static_cast<const MapMonster &>( obj );
-                break;
-
             default:
                 msg << obj;
                 break;
@@ -1254,9 +1250,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
         } break;
 
         case MP2::OBJ_MONSTER: {
-            MapMonster * ptr = new MapMonster();
-            msg >> *ptr;
-            objs[index] = ptr;
+            assert( 0 );
         } break;
 
         default: {

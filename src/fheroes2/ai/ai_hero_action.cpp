@@ -100,7 +100,7 @@ namespace
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, s32 dst_index );
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
     void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
@@ -269,7 +269,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            AIToMonster( hero, object, dst_index );
+            AIToMonster( hero, dst_index );
             break;
         case MP2::OBJ_HEROES:
             AIToHeroes( hero, dst_index );
@@ -625,15 +625,11 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        Troop troop = tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -681,12 +677,6 @@ namespace AI
                 tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
-
-                if ( map_troop ) {
-                    map_troop->count = army.GetCountMonsters( troop() );
-                    if ( map_troop->JoinConditionFree() )
-                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
             }
         }
         // unknown
@@ -697,9 +687,6 @@ namespace AI
             tile.RemoveObjectSprite();
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
-
-            if ( map_troop )
-                world.RemoveMapObject( map_troop );
         }
 
         hero.unmarkHeroMeeting();

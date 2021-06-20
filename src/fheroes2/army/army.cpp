@@ -960,11 +960,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
             }
         }
         else {
-            const MapMonster * map_troop = nullptr;
-            if ( tile.GetObject() == MP2::OBJ_MONSTER )
-                map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-
-            Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+            Troop troop = tile.QuantityTroop();
 
             at( 0 )->Set( troop );
             if ( troop.isValid() )
@@ -1360,17 +1356,13 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
 
 JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
-    const MapMonster * map_troop = nullptr;
-    if ( tile.GetObject() == MP2::OBJ_MONSTER )
-        map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-
     const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
 
-    const bool join_skip = map_troop ? map_troop->JoinConditionSkip() : tile.MonsterJoinConditionSkip();
-    const bool join_free = map_troop ? map_troop->JoinConditionFree() : tile.MonsterJoinConditionFree();
+    const bool join_skip = tile.MonsterJoinConditionSkip();
+    const bool join_free = tile.MonsterJoinConditionFree();
     // force join for campain and others...
-    const bool join_force = map_troop ? map_troop->JoinConditionForce() : tile.MonsterJoinConditionForce();
+    const bool join_force = tile.MonsterJoinConditionForce();
 
     // Check for creature alliance/bane campaign awards, campaign only and of course, for human players
     // creature alliance -> if we have an alliance with the appropriate creature (inc. players) they will join for free
