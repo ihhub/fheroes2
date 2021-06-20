@@ -21,9 +21,7 @@
 #include "campaign_savedata.h"
 #include "army.h"
 #include "campaign_data.h"
-#include "game.h"
 #include "serialize.h"
-#include "settings.h"
 #include <algorithm>
 #include <cassert>
 

@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iomanip>
 
 #include "battle_arena.h"
 #include "battle_bridge.h"
@@ -33,7 +34,6 @@
 #include "kingdom.h"
 #include "logging.h"
 #include "rand.h"
-#include "settings.h"
 #include "spell.h"
 #include "tools.h"
 #include "world.h"
