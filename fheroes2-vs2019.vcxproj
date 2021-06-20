@@ -373,7 +373,7 @@
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_storage.cpp" />
-    <ClCompile Include="src\fheroes2\system\gamedefs.cpp" />
+    <ClCompile Include="src\fheroes2\system\bitmodes.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
