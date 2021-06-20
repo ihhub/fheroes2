@@ -65,13 +65,6 @@ namespace
         int32_t offset;
         int32_t space;
     };
-
-    std::string GetString( const float value, const uint8_t prec )
-    {
-        std::ostringstream stream;
-        stream << std::setprecision( prec ) << value;
-        return stream.str();
-    }
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
