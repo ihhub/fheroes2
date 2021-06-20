@@ -103,7 +103,7 @@ namespace AI
     void AIToMonster( Heroes & hero, s32 dst_index );
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
+    void AIToArtifact( Heroes & hero, s32 dst_index );
     void AIToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
@@ -290,7 +290,7 @@ namespace AI
             AIToTreasureChest( hero, object, dst_index );
             break;
         case MP2::OBJ_ARTIFACT:
-            AIToArtifact( hero, object, dst_index );
+            AIToArtifact( hero, dst_index );
             break;
 
         case MP2::OBJ_MAGICGARDEN:
@@ -1458,28 +1458,19 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
+    void AIToArtifact( Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapArtifact * map_artifact = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();
             Artifact art = tile.QuantityArtifact();
 
-            if ( map_artifact ) {
-                cond = map_artifact->condition;
-                art = map_artifact->artifact;
-            }
-
             bool result = false;
 
             // 1,2,3 - gold, gold + res
             if ( 0 < cond && cond < 4 ) {
-                Funds payment = map_artifact ? map_artifact->QuantityFunds() : tile.QuantityFunds();
+                Funds payment = tile.QuantityFunds();
 
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
@@ -1512,8 +1503,6 @@ namespace AI
             if ( result && hero.PickupArtifact( art ) ) {
                 tile.RemoveObjectSprite();
                 tile.QuantityReset();
-                if ( map_artifact )
-                    world.RemoveMapObject( map_artifact );
             }
         }
 

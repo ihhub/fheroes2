@@ -58,7 +58,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index );
 void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index );
+void ActionToArtifact( Heroes & hero, s32 dst_index );
 void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
@@ -489,7 +489,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToShipwreckSurvivor( *this, object, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
-            ActionToArtifact( *this, object, tileIndex );
+            ActionToArtifact( *this, tileIndex );
             break;
 
             // shrine circle
@@ -1706,13 +1706,9 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
+void ActionToArtifact( Heroes & hero, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapArtifact * map_artifact = nullptr;
-
-    if ( tile.GetObject() == obj )
-        map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
         Dialog::Message( "", _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
@@ -1720,17 +1716,12 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         u32 cond = tile.QuantityVariant();
         Artifact art = tile.QuantityArtifact();
 
-        if ( map_artifact ) {
-            cond = map_artifact->condition;
-            art = map_artifact->artifact;
-        }
-
         bool result = false;
         std::string msg;
 
         // 1,2,3 - gold, gold + res
         if ( 0 < cond && cond < 4 ) {
-            Funds payment = map_artifact ? map_artifact->QuantityFunds() : tile.QuantityFunds();
+            Funds payment = tile.QuantityFunds();
 
             if ( 1 == cond ) {
                 msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold." );
@@ -1740,7 +1731,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
                 msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold and %{count} %{res}." );
 
                 StringReplace( msg, "%{gold}", payment.Get( Resource::GOLD ) );
-                ResourceCount rc = map_artifact ? map_artifact->QuantityResourceCount() : tile.QuantityResourceCount();
+                ResourceCount rc = tile.QuantityResourceCount();
                 StringReplace( msg, "%{count}", rc.second );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
             }

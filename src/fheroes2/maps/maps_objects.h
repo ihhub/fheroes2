@@ -128,19 +128,4 @@ struct MapResource : public MapObjectSimple
 StreamBase & operator<<( StreamBase &, const MapResource & );
 StreamBase & operator>>( StreamBase &, MapResource & );
 
-struct MapArtifact : public MapObjectSimple
-{
-    MapArtifact();
-
-    Artifact artifact;
-    int condition;
-    int extended;
-
-    Funds QuantityFunds( void ) const;
-    ResourceCount QuantityResourceCount( void ) const;
-};
-
-StreamBase & operator<<( StreamBase &, const MapArtifact & );
-StreamBase & operator>>( StreamBase &, MapArtifact & );
-
 #endif
