@@ -400,10 +400,7 @@ void StreamBuf::put8( char v )
 
 u8 StreamBuf::get8()
 {
-    if ( sizeg() )
-        return *itget++;
-
-    return 0u;
+    return sizeg() ? *itget++ : 0u;
 }
 
 u16 StreamBuf::getBE16()

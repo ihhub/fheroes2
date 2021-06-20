@@ -230,6 +230,12 @@ void Battle::Cell::SetUnit( Unit * val )
     troop = val;
 }
 
+bool Battle::Cell::isPassable( const Unit & b, int dir ) const
+{
+    const Cell * cell = Board::GetCell( index, dir );
+    return cell && ( cell->isPassable1( true ) || cell->index == b.GetTailIndex() || cell->index == b.GetHeadIndex() );
+}
+
 bool Battle::Cell::isPassable4( const Unit & b, const Cell & from ) const
 {
     if ( b.isWide() ) {
@@ -262,20 +268,18 @@ bool Battle::Cell::isPassable3( const Unit & b, bool check_reflect ) const
     if ( index == b.GetHeadIndex() || index == b.GetTailIndex() )
         return true;
 
-    if ( b.isWide() ) {
-        if ( check_reflect ) {
-            const Cell * cell = Board::GetCell( index, b.isReflect() ? RIGHT : LEFT );
-            return cell && ( cell->isPassable1( true ) || cell->index == b.GetTailIndex() || cell->index == b.GetHeadIndex() ) && isPassable1( true );
-        }
+    if ( !b.isWide() )
+        return isPassable1( true );
 
-        const Cell * left = Board::GetCell( index, LEFT );
-        const Cell * right = Board::GetCell( index, RIGHT );
-        return ( ( left && ( left->isPassable1( true ) || left->index == b.GetTailIndex() || left->index == b.GetHeadIndex() ) )
-                 || ( right && ( right->isPassable1( true ) || right->index == b.GetTailIndex() || right->index == b.GetHeadIndex() ) ) )
-               && isPassable1( true );
+    bool passableWide;
+    if ( check_reflect ) {
+        passableWide = isPassable( b, b.isReflect() ? RIGHT : LEFT );
+    }
+    else {
+        passableWide = isPassable( b, LEFT ) || isPassable( b, RIGHT );
     }
 
-    return isPassable1( true );
+    return passableWide && isPassable1( true );
 }
 
 bool Battle::Cell::isPassable1( bool check_troop ) const

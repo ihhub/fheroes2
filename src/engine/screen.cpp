@@ -365,10 +365,7 @@ namespace
 
         bool isVisible() const override
         {
-            if ( _emulation )
-                return fheroes2::Cursor::isVisible();
-
-            return fheroes2::Cursor::isVisible() && ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE );
+            return fheroes2::Cursor::isVisible() && ( _emulation || ( SDL_ShowCursor( SDL_QUERY ) == SDL_ENABLE ) );
         }
 
         void update( const fheroes2::Image & image, int32_t offsetX, int32_t offsetY ) override
