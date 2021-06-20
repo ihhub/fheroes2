@@ -224,6 +224,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     u32 max = CalculateMax( monster, kingdom, available );
     u32 result = max;
+    uint32_t timeDivider = 1;
 
     payment_t paymentCosts( paymentMonster * result );
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
@@ -312,7 +313,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     display.render();
 
-    std::vector<Monster> upgrades = {monster0};
+    std::vector<Monster> upgrades = { monster0 };
     while ( upgrades.back().GetDowngrade() != upgrades.back() ) {
         upgrades.emplace_back( upgrades.back().GetDowngrade() );
     }
@@ -320,6 +321,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
     // str loop
     while ( le.HandleEvents() ) {
         bool redraw = false;
+        constexpr uint32_t SCROLL_DELAY = 127;
 
         if ( buttonOk.isEnabled() )
             le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -400,7 +402,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP )
+               || ( timeDivider % SCROLL_DELAY == 0 && le.MousePressLeft( buttonUp.area() ) ) )
+             && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -413,7 +417,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN )
+                    || ( timeDivider % SCROLL_DELAY == 0 && le.MousePressLeft( buttonDn.area() ) ) )
+                  && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;
@@ -437,6 +443,13 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             result = 1;
             paymentCosts = paymentMonster;
             redraw = true;
+        }
+
+        if ( !le.MousePressLeft( buttonDn.area() ) && !le.MousePressLeft( buttonUp.area() ) ) {
+            timeDivider = 1;
+        }
+        else {
+            ++timeDivider;
         }
 
         if ( redraw ) {

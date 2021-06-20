@@ -237,6 +237,9 @@ int Castle::OpenDialog( bool readonly )
 
     bool firstDraw = true;
 
+    uint32_t timeDivider = 0;
+    constexpr uint32_t SCROLL_DELAY = 127;
+
     int result = Dialog::CANCEL;
     bool need_redraw = false;
 
@@ -362,15 +365,27 @@ int Castle::OpenDialog( bool readonly )
             }
 
             // prev castle
-            if ( buttonPrevCastle.isEnabled() && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
+            if ( buttonPrevCastle.isEnabled()
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || ( le.MousePressLeft( buttonPrevCastle.area() ) && timeDivider % SCROLL_DELAY == 0 )
+                      || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
                 result = Dialog::PREV;
+                ++timeDivider;
                 break;
             }
             else
                 // next castle
-                if ( buttonNextCastle.isEnabled() && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+                if ( buttonNextCastle.isEnabled()
+                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || ( le.MousePressLeft( buttonNextCastle.area() ) && timeDivider % SCROLL_DELAY == 0 )
+                          || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
                 result = Dialog::NEXT;
+                ++timeDivider;
                 break;
+            }
+            if ( !le.MousePressLeft( buttonPrevCastle.area() ) && !le.MousePressLeft( buttonNextCastle.area() ) ) {
+                timeDivider = 1;
+            }
+            else {
+                ++timeDivider;
             }
 
             // buildings event

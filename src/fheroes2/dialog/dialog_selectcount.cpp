@@ -106,20 +106,31 @@ public:
 
     bool QueueEventProcessing( void )
     {
+        constexpr uint32_t SCROLL_DELAY = 127;
+        static uint32_t timeDivider;
         LocalEvent & le = LocalEvent::Get();
 
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || ( le.MousePressLeft( btnUp.area() ) && timeDivider % SCROLL_DELAY == 0 ) ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
+            ++timeDivider;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || ( le.MousePressLeft( btnDn.area() ) && timeDivider % SCROLL_DELAY == 0 ) ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
+            ++timeDivider;
             return true;
+        }
+
+        if ( !le.MousePressLeft( btnDn.area() ) && !le.MousePressLeft( btnUp.area() ) ) {
+            timeDivider = 1;
+        }
+        else {
+            ++timeDivider;
         }
 
         return false;

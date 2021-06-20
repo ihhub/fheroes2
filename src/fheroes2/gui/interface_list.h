@@ -272,6 +272,8 @@ namespace Interface
 
         bool QueueEventProcessing( void ) override
         {
+            constexpr uint32_t SCROLL_DELAY = 127;
+            static uint32_t timeDivider;
             LocalEvent & le = LocalEvent::Get();
 
             le.MousePressLeft( buttonPgUp.area() ) ? buttonPgUp.drawOnPress() : buttonPgUp.drawOnRelease();
@@ -323,18 +325,23 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) ) && ( _topId > 0 ) ) {
+            else if ( ( ( le.MousePressLeft( buttonPgUp.area() ) && timeDivider % SCROLL_DELAY == 0 ) || le.MouseClickLeft( buttonPgUp.area() )
+                        || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) )
+                      && ( _topId > 0 ) ) {
                 needRedraw = true;
 
+                ++timeDivider;
                 --_topId;
                 _scrollbar.backward();
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
+            else if ( ( ( le.MousePressLeft( buttonPgDn.area() ) && timeDivider % SCROLL_DELAY == 0 ) || le.MouseClickLeft( buttonPgDn.area() )
+                        || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
                       && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
+                ++timeDivider;
                 ++_topId;
                 _scrollbar.forward();
 
@@ -350,6 +357,13 @@ namespace Interface
                 _topId = _scrollbar.currentIndex();
 
                 return true;
+            }
+
+            if ( !le.MousePressLeft( buttonPgDn.area() ) && !le.MousePressLeft( buttonPgUp.area() ) ) {
+                timeDivider = 1;
+            }
+            else {
+                ++timeDivider;
             }
 
             const fheroes2::Point & mousePos = le.GetMouseCursor();

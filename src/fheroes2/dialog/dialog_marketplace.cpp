@@ -313,6 +313,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
     Dialog::FrameBox box( 297, true );
 
+    uint32_t timeDivider = 0;
+    constexpr uint32_t SCROLL_DELAY = 127;
+
     const fheroes2::Rect & pos_rt = box.GetArea();
     fheroes2::Point dst_pt( pos_rt.x, pos_rt.y );
 
@@ -531,7 +534,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // decrease trade resource
-        if ( count_buy && ( ( buttonLeft.isEnabled() && le.MouseClickLeft( gui.buttonLeft.area() ) ) || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
+        if ( count_buy
+             && ( ( buttonLeft.isEnabled() && le.MouseClickLeft( gui.buttonLeft.area() ) ) || le.MouseWheelDn( scrollbar.getArea() )
+                  || ( timeDivider % SCROLL_DELAY == 0 && le.MousePressLeft( gui.buttonLeft.area() ) ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell -= Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
@@ -542,7 +547,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // increase trade resource
-        if ( count_buy < max_buy && ( ( buttonRight.isEnabled() && le.MouseClickLeft( buttonRight.area() ) ) || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
+        if ( count_buy < max_buy
+             && ( ( buttonRight.isEnabled() && le.MouseClickLeft( buttonRight.area() ) ) || le.MouseWheelUp( scrollbar.getArea() )
+                  || ( timeDivider % SCROLL_DELAY == 0 && le.MousePressLeft( buttonRight.area() ) ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell += Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
@@ -550,6 +557,13 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
             scrollbar.forward();
             gui.RedrawInfoBuySell( count_sell, count_buy, max_sell, fundsFrom.Get( resourceTo ) );
             display.render();
+        }
+
+        if ( !le.MousePressLeft( buttonRight.area() ) && !le.MousePressLeft( gui.buttonLeft.area() ) ) {
+            timeDivider = 1;
+        }
+        else {
+            ++timeDivider;
         }
     }
 }
