@@ -982,25 +982,19 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapResource * map_resource = nullptr;
-
-    if ( tile.GetObject() == obj )
-        map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
         const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
-        Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
+        Funds funds = tile.QuantityFunds();
 
         if ( obj == MP2::OBJ_CAMPFIRE ) {
             Dialog::ResourceInfo( MP2::StringObject( obj ), _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), funds );
         }
         else {
             ResourceCount rc = tile.QuantityResourceCount();
-            if ( map_resource )
-                rc = map_resource->resource;
 
             Interface::Basic & I = Interface::Basic::Get();
             I.GetStatusWindow().SetResource( rc.first, rc.second );
@@ -1018,9 +1012,6 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
     tile.QuantityReset();
 
     Game::ObjectFadeAnimation::PerformFadeTask();
-
-    if ( map_resource )
-        world.RemoveMapObject( map_resource );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }

@@ -227,17 +227,3 @@ StreamBase & operator>>( StreamBase & msg, MapSign & obj )
 {
     return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
 }
-
-MapResource::MapResource()
-    : MapObjectSimple( MP2::OBJ_RESOURCE )
-{}
-
-StreamBase & operator<<( StreamBase & msg, const MapResource & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resource;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapResource & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resource;
-}

@@ -695,18 +695,12 @@ namespace AI
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapResource * map_resource = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( obj != MP2::OBJ_BOTTLE )
-            hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
+            hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
-        if ( map_resource )
-            world.RemoveMapObject( map_resource );
         hero.GetPath().Reset();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " pickup small resource" );

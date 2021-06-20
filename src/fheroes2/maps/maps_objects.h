@@ -118,14 +118,4 @@ struct MapSign : public MapObjectSimple
 StreamBase & operator<<( StreamBase &, const MapSign & );
 StreamBase & operator>>( StreamBase &, MapSign & );
 
-struct MapResource : public MapObjectSimple
-{
-    MapResource();
-
-    ResourceCount resource;
-};
-
-StreamBase & operator<<( StreamBase &, const MapResource & );
-StreamBase & operator>>( StreamBase &, MapResource & );
-
 #endif
