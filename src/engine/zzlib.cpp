@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifdef WITH_ZLIB
 #include <cstring>
 #include <sstream>
 #include <zlib.h>
@@ -88,7 +87,6 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
     if ( sf.open( fn, "rb" ) ) {
         if ( offset )
             sf.seek( offset );
-#ifdef WITH_ZLIB
         const u32 size0 = sf.get32(); // raw size
         if ( size0 == 0 ) {
             return false;
@@ -102,15 +100,6 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
         std::vector<u8> raw = zlibDecompress( &zip[0], zip.size(), size0 );
         putRaw( reinterpret_cast<char *>( &raw[0] ), raw.size() );
         seek( 0 );
-#else
-        const u32 size0 = sf.get32(); // raw size
-        if ( size0 == 0 ) {
-            return false;
-        }
-        std::vector<u8> raw = sf.getRaw( size0 );
-        putRaw( &raw[0], raw.size() );
-        seek( 0 );
-#endif
         return !fail();
     }
     return false;
@@ -122,7 +111,6 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
     sf.setbigendian( true );
 
     if ( sf.open( fn, append ? "ab" : "wb" ) ) {
-#ifdef WITH_ZLIB
         std::vector<u8> zip = zlibCompress( data(), size() );
 
         if ( !zip.empty() ) {
@@ -132,18 +120,13 @@ bool ZStreamFile::write( const std::string & fn, bool append ) const
             sf.putRaw( reinterpret_cast<char *>( &zip[0] ), zip.size() );
             return !sf.fail();
         }
-#else
-        sf.put32( size() );
-        sf.putRaw( data(), size() );
-        return !sf.fail();
-#endif
     }
     return false;
 }
 
 fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_t * imageData, size_t imageSize, bool doubleLayer )
 {
-    if ( imageData == NULL || imageSize == 0 || width <= 0 || height <= 0 )
+    if ( imageData == nullptr || imageSize == 0 || width <= 0 || height <= 0 )
         return fheroes2::Image();
 
     const std::vector<uint8_t> & uncompressedData = zlibDecompress( imageData, imageSize );
@@ -167,5 +150,3 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
     }
     return out;
 }
-
-#endif

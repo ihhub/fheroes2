@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cmath>
 #include <set>
 
 #include "ground.h"
@@ -380,8 +381,22 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
 
-        if ( start != currentNodeIdx && Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor ) > 0 ) {
-            return currentNodeIdx;
+        if ( start != currentNodeIdx ) {
+            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor );
+            if ( maxTilesToReveal > 0 ) {
+                // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
+                int bestIndex = currentNodeIdx;
+                for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+                    const int nodeIdx = nodesToExplore[lastProcessedNode];
+                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
+                    if ( maxTilesToReveal < tilesToReveal ) {
+                        maxTilesToReveal = tilesToReveal;
+                        bestIndex = nodeIdx;
+                    }
+                }
+
+                return bestIndex;
+            }
         }
 
         for ( size_t i = 0; i < directions.size(); ++i ) {

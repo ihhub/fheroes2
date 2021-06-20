@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cstdlib>
+
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
@@ -406,7 +408,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
     case MP2::OBJN_ALCHEMYLAB: {
         const Maps::Tiles & left = world.GetTiles( tile.GetIndex() - 1 );
         const Maps::Tiles & right = world.GetTiles( tile.GetIndex() + 1 );
-        const Maps::Tiles * center = NULL;
+        const Maps::Tiles * center = nullptr;
 
         if ( MP2::isGroundObject( left.GetObject( false ) ) )
             center = &left;
@@ -802,7 +804,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     // luck
     if ( showFullInfo ) {
-        const s32 luck = hero.GetLuckWithModificators( NULL );
+        const s32 luck = hero.GetLuckWithModificators( nullptr );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > luck ? 0 : ( 0 < luck ? 1 : 2 ) ) );
         u32 count = ( 0 == luck ? 1 : std::abs( luck ) );
         dst_pt.x = cur_rt.x + 120;
@@ -816,7 +818,7 @@ void Dialog::QuickInfo( const Heroes & hero, const fheroes2::Point & position /*
 
     // morale
     if ( showFullInfo ) {
-        const s32 morale = hero.GetMoraleWithModificators( NULL );
+        const s32 morale = hero.GetMoraleWithModificators( nullptr );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINILKMR, ( 0 > morale ? 3 : ( 0 < morale ? 4 : 5 ) ) );
         u32 count = ( 0 == morale ? 1 : std::abs( morale ) );
         dst_pt.x = cur_rt.x + 10;

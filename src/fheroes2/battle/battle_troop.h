@@ -140,7 +140,7 @@ namespace Battle
         u32 CalculateMaxDamage( const Unit & ) const;
         u32 CalculateDamageUnit( const Unit & enemy, double dmg ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
-        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = NULL, bool forceApplyToAlly = false ) const;
+        bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
@@ -179,7 +179,7 @@ namespace Battle
         void PostKilledAction( void );
 
         u32 GetMagicResist( const Spell &, u32 ) const;
-        int GetSpellMagic( bool force = false ) const;
+        int GetSpellMagic() const;
 
         const HeroBase * GetCommander( void ) const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise

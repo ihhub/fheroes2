@@ -124,7 +124,7 @@ public:
     const char * GetName( void ) const;
     const char * GetDescription( void ) const;
 
-    u32 SpellPoint( const HeroBase * hero = NULL ) const;
+    u32 SpellPoint( const HeroBase * hero = nullptr ) const;
     u32 MovePoint( void ) const;
     int Level( void ) const;
     u32 Damage( void ) const;
@@ -154,6 +154,8 @@ public:
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
     bool isEnabled() const;
+    bool isFire() const;
+    bool isCold() const;
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;

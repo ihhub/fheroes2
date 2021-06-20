@@ -54,7 +54,7 @@ Castle::Castle()
     : race( Race::NONE )
     , building( 0 )
     , captain( *this )
-    , army( NULL )
+    , army( nullptr )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
@@ -65,7 +65,7 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     , race( rc )
     , building( 0 )
     , captain( *this )
-    , army( NULL )
+    , army( nullptr )
 {
     std::fill( dwelling, dwelling + CASTLEMAXMONSTER, 0 );
     army.SetCommander( &captain );
@@ -439,13 +439,35 @@ double Castle::getVisitValue( const Heroes & hero ) const
     double spellValue = 0;
     const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
     for ( const Spell & spell : guildSpells ) {
+        if ( spell.isAdventure() ) {
+            // AI is stupid to use Adventure spells.
+            continue;
+        }
         if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.Level() * 250.0;
+            spellValue += spell.Level() * 50.0;
         }
     }
 
-    // we don't spend actual funds, so make a copy here
+    const Troops & heroArmy = hero.GetArmy();
+    Troops futureArmy( heroArmy );
+    const double heroArmyStrength = futureArmy.GetStrength();
+
     Funds potentialFunds = GetKingdom().GetFunds();
+
+    for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
+        Troop * monster = futureArmy.GetTroop( i );
+        if ( monster != nullptr && monster->isValid() ) {
+            const payment_t payment = monster->GetUpgradeCost();
+
+            if ( GetRace() == monster->GetRace() && isBuild( monster->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+                potentialFunds -= payment;
+                monster->Upgrade();
+            }
+        }
+    }
+
+    const double upgradeStrength = futureArmy.GetStrength() - heroArmyStrength;
+
     Troops reinforcement;
     for ( uint32_t dw = DWELLING_MONSTER6; dw >= DWELLING_MONSTER1; dw >>= 1 ) {
         if ( isBuild( dw ) ) {
@@ -462,7 +484,7 @@ double Castle::getVisitValue( const Heroes & hero ) const
         }
     }
 
-    return spellValue + hero.GetArmy().getReinforcementValue( reinforcement );
+    return spellValue + upgradeStrength + futureArmy.getReinforcementValue( reinforcement );
 }
 
 void Castle::ActionNewDay( void )
@@ -497,7 +519,7 @@ u32 * Castle::GetDwelling( u32 dw )
         default:
             break;
         }
-    return NULL;
+    return nullptr;
 }
 
 void Castle::ActionNewWeek( void )
@@ -508,11 +530,11 @@ void Castle::ActionNewWeek( void )
     // increase population
     if ( world.GetWeekType().GetType() != Week::PLAGUE ) {
         const u32 dwellings1[] = {DWELLING_MONSTER1, DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, DWELLING_MONSTER6, 0};
-        u32 * dw = NULL;
+        u32 * dw = nullptr;
 
         // simple growth
         for ( u32 ii = 0; dwellings1[ii]; ++ii )
-            if ( NULL != ( dw = GetDwelling( dwellings1[ii] ) ) ) {
+            if ( nullptr != ( dw = GetDwelling( dwellings1[ii] ) ) ) {
                 u32 growth = Monster( race, GetActualDwelling( dwellings1[ii] ) ).GetGrown();
 
                 // well build
@@ -539,7 +561,7 @@ void Castle::ActionNewWeek( void )
                                       DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0};
 
             for ( u32 ii = 0; dwellings2[ii]; ++ii )
-                if ( NULL != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
+                if ( nullptr != ( dw = GetDwelling( dwellings2[ii] ) ) ) {
                     const Monster mons( race, dwellings2[ii] );
                     if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                         *dw += GetGrownWeekOf();
@@ -571,10 +593,10 @@ void Castle::ActionNewMonth( void )
         if ( world.GetWeekType().GetType() == Week::MONSTERS ) {
         const u32 dwellings[] = {DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
                                  DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0};
-        u32 * dw = NULL;
+        u32 * dw = nullptr;
 
         for ( u32 ii = 0; dwellings[ii]; ++ii )
-            if ( NULL != ( dw = GetDwelling( dwellings[ii] ) ) ) {
+            if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
                 const Monster mons( race, dwellings[ii] );
                 if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
                     *dw += *dw * GetGrownMonthOf() / 100;
@@ -950,7 +972,7 @@ bool Castle::AllowBuyHero( const Heroes & hero, std::string * msg ) const
 Heroes * Castle::RecruitHero( Heroes * hero )
 {
     if ( !hero || !AllowBuyHero( *hero ) )
-        return NULL;
+        return nullptr;
 
     CastleHeroes heroes = world.GetHeroes( *this );
     if ( heroes.Guest() ) {
@@ -959,12 +981,12 @@ Heroes * Castle::RecruitHero( Heroes * hero )
             SwapCastleHeroes( heroes );
         }
         else
-            return NULL;
+            return nullptr;
     }
 
     // recruit
     if ( !hero->Recruit( *this ) )
-        return NULL;
+        return nullptr;
 
     Kingdom & kingdom = GetKingdom();
 
@@ -2283,7 +2305,7 @@ std::string Castle::String( void ) const
 {
     std::ostringstream os;
     const CastleHeroes heroes = GetHeroes();
-    const Heroes * hero = NULL;
+    const Heroes * hero = nullptr;
 
     os << "name and type   : " << name << " (" << Race::String( race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
@@ -2306,11 +2328,11 @@ std::string Castle::String( void ) const
        << "is castle       : " << ( isCastle() ? "yes" : "no" ) << " (" << getBuildingValue() << ")" << std::endl
        << "army            : " << army.String() << std::endl;
 
-    if ( NULL != ( hero = heroes.Guard() ) ) {
+    if ( nullptr != ( hero = heroes.Guard() ) ) {
         os << "army guard      : " << hero->GetArmy().String() << std::endl;
     }
 
-    if ( NULL != ( hero = heroes.Guest() ) ) {
+    if ( nullptr != ( hero = heroes.Guest() ) ) {
         os << "army guest      : " << hero->GetArmy().String() << std::endl;
     }
 
@@ -2607,7 +2629,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
 Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 void VecCastles::SortByBuildingValue()
@@ -2615,7 +2637,7 @@ void VecCastles::SortByBuildingValue()
     std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
         if ( left && right )
             return left->getBuildingValue() > right->getBuildingValue();
-        return right == NULL;
+        return right == nullptr;
     } );
 }
 
@@ -2758,11 +2780,11 @@ StreamBase & operator>>( StreamBase & msg, VecCastles & castles )
     u32 size;
     msg >> size;
 
-    castles.resize( size, NULL );
+    castles.resize( size, nullptr );
 
     for ( auto it = castles.begin(); it != castles.end(); ++it ) {
         msg >> index;
-        *it = ( index < 0 ? NULL : world.GetCastle( Maps::GetPoint( index ) ) );
+        *it = ( index < 0 ? nullptr : world.GetCastle( Maps::GetPoint( index ) ) );
     }
 
     return msg;
@@ -2802,7 +2824,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Guard()->ResetModes( Heroes::GUARDIAN );
         heroes.Swap();
 
-        world.GetTiles( center.x, center.y ).SetHeroes( NULL );
+        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
 
         fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;
@@ -2822,7 +2844,7 @@ void Castle::SwapCastleHeroes( CastleHeroes & heroes )
         heroes.Swap();
         heroes.Guard()->GetArmy().JoinTroops( army );
 
-        world.GetTiles( center.x, center.y ).SetHeroes( NULL );
+        world.GetTiles( center.x, center.y ).SetHeroes( nullptr );
 
         fheroes2::Point position( heroes.Guard()->GetCenter() );
         position.y -= 1;

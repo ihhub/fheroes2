@@ -32,15 +32,14 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
+#define FORMAT_VERSION_095_RELEASE 9500
 #define FORMAT_VERSION_094_RELEASE 9400
 #define FORMAT_VERSION_093_RELEASE 9300
-#define FORMAT_VERSION_091_RELEASE 9100
-#define FORMAT_VERSION_090_RELEASE 9001
 
 // TODO: once FORMAT_VERSION_094_RELEASE version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
-#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_090_RELEASE
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_093_RELEASE
 
-#define CURRENT_FORMAT_VERSION FORMAT_VERSION_094_RELEASE // TODO: update this value for a new release
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_095_RELEASE // TODO: update this value for a new release
 
 enum
 {
@@ -103,7 +102,7 @@ public:
         WORLD_1HERO_HIRED_EVERY_WEEK = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
-        WORLD_USE_UNIQUE_ARTIFACTS_ML = 0x30000100,
+        // UNUSED = 0x30000100,
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
         WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
         WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
@@ -114,8 +113,7 @@ public:
         BATTLE_SHOW_ARMY_ORDER = 0x40004000,
         // UNUSED = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000,
-        BATTLE_SKIP_INCREASE_DEFENSE = 0x40200000
+        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
     };
 
     Settings( const Settings & ) = delete;
@@ -214,7 +212,6 @@ public:
     bool ExtWorldStartHeroLossCond4Humans() const;
     bool ExtWorldOneHeroHiredEveryWeek() const;
     bool ExtWorldNeutralArmyDifficultyScaling() const;
-    bool ExtWorldUseUniqueArtifactsML() const;
     bool ExtWorldUseUniqueArtifactsRS() const;
     bool ExtWorldUseUniqueArtifactsPS() const;
     bool ExtWorldUseUniqueArtifactsSS() const;
@@ -226,7 +223,6 @@ public:
     bool ExtBattleShowDamage() const;
     bool ExtBattleShowBattleOrder() const;
     bool ExtBattleSoftWait() const;
-    bool ExtBattleSkipIncreaseDefense() const;
     bool ExtBattleReverseWaitOrder() const;
     bool ExtGameRememberLastFocus() const;
     bool ExtGameContinueAfterVictory() const;
@@ -314,12 +310,11 @@ public:
 
     static std::string GetVersion();
 
-    static ListFiles GetListFiles( const std::string & prefix, const std::string & filter );
     static ListDirs GetRootDirs();
-    static std::string GetLastFile( const std::string & prefix, const std::string & name );
     static std::string GetLangDir();
 
-    static ListFiles FindFiles( const std::string & directory, const std::string & fileName );
+    static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
+    static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
     // deprecated
     const std::string & GetDataParams() const

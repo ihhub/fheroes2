@@ -306,8 +306,8 @@ namespace
         SDL_Surface * generateIconSurface( const fheroes2::Image & icon )
         {
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, icon.width(), icon.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
-            if ( surface == NULL )
-                return NULL;
+            if ( surface == nullptr )
+                return nullptr;
 
             const uint32_t width = icon.width();
             const uint32_t height = icon.height();
@@ -379,7 +379,7 @@ namespace
             }
 
             SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
-            if ( surface == NULL )
+            if ( surface == nullptr )
                 return;
 
             const uint32_t width = image.width();
@@ -453,7 +453,7 @@ namespace
 
     protected:
         RenderCursor()
-            : _cursor( NULL )
+            : _cursor( nullptr )
         {
             // SDL 2 handles mouse properly without any emulation.
             _emulation = false;
@@ -466,9 +466,9 @@ namespace
 
         void clear()
         {
-            if ( _cursor != NULL ) {
+            if ( _cursor != nullptr ) {
                 SDL_FreeCursor( _cursor );
-                _cursor = NULL;
+                _cursor = nullptr;
             }
         }
     };
@@ -695,7 +695,7 @@ namespace
 
         void toggleFullScreen() override
         {
-            if ( _window == NULL ) {
+            if ( _window == nullptr ) {
                 BaseRenderEngine::toggleFullScreen();
                 return;
             }
@@ -728,7 +728,7 @@ namespace
 
         bool isFullScreen() const override
         {
-            if ( _window == NULL )
+            if ( _window == nullptr )
                 return BaseRenderEngine::isFullScreen();
 
             const uint32_t flags = SDL_GetWindowFlags( _window );
@@ -761,17 +761,17 @@ namespace
 
         void setTitle( const std::string & title ) override
         {
-            if ( _window != NULL )
+            if ( _window != nullptr )
                 SDL_SetWindowTitle( _window, title.c_str() );
         }
 
         void setIcon( const fheroes2::Image & icon ) override
         {
-            if ( _window == NULL )
+            if ( _window == nullptr )
                 return;
 
             SDL_Surface * surface = generateIconSurface( icon );
-            if ( surface == NULL )
+            if ( surface == nullptr )
                 return;
 
             SDL_SetWindowIcon( _window, surface );
@@ -796,26 +796,26 @@ namespace
 
     protected:
         RenderEngine()
-            : _window( NULL )
-            , _surface( NULL )
-            , _renderer( NULL )
-            , _texture( NULL )
+            : _window( nullptr )
+            , _surface( nullptr )
+            , _renderer( nullptr )
+            , _texture( nullptr )
             , _prevWindowPos( SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED )
         {}
 
         void clear() override
         {
-            if ( _texture != NULL ) {
+            if ( _texture != nullptr ) {
                 SDL_DestroyTexture( _texture );
-                _texture = NULL;
+                _texture = nullptr;
             }
 
-            if ( _renderer != NULL ) {
+            if ( _renderer != nullptr ) {
                 SDL_DestroyRenderer( _renderer );
-                _renderer = NULL;
+                _renderer = nullptr;
             }
 
-            if ( _window != NULL ) {
+            if ( _window != nullptr ) {
                 // Let's collect needed info about previous setup
                 if ( !isFullScreen() ) {
                     SDL_GetWindowPosition( _window, &_prevWindowPos.x, &_prevWindowPos.y );
@@ -823,12 +823,12 @@ namespace
                 _previousWindowTitle = SDL_GetWindowTitle( _window );
 
                 SDL_DestroyWindow( _window );
-                _window = NULL;
+                _window = nullptr;
             }
 
-            if ( _surface != NULL ) {
+            if ( _surface != nullptr ) {
                 SDL_FreeSurface( _surface );
-                _surface = NULL;
+                _surface = nullptr;
             }
 
             _windowedSize = fheroes2::Size();
@@ -836,13 +836,13 @@ namespace
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
-            if ( _surface == NULL )
+            if ( _surface == nullptr )
                 return;
 
             copyImageToSurface( display, _surface, roi );
 
-            if ( _texture == NULL ) {
-                if ( _renderer != NULL )
+            if ( _texture == nullptr ) {
+                if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
 
                 _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
@@ -850,9 +850,9 @@ namespace
             else {
                 const bool fullFrame = ( roi.width == display.width() ) && ( roi.height == display.height() );
                 if ( fullFrame ) {
-                    SDL_UpdateTexture( _texture, NULL, _surface->pixels, _surface->pitch );
-                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 ) {
-                        if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                    SDL_UpdateTexture( _texture, nullptr, _surface->pixels, _surface->pitch );
+                    if ( SDL_SetRenderTarget( _renderer, nullptr ) == 0 ) {
+                        if ( SDL_RenderClear( _renderer ) == 0 && SDL_RenderCopy( _renderer, _texture, nullptr, nullptr ) == 0 ) {
                             SDL_RenderPresent( _renderer );
                         }
                     }
@@ -865,7 +865,7 @@ namespace
                     area.h = roi.height;
 
                     SDL_UpdateTexture( _texture, &area, _surface->pixels, _surface->pitch );
-                    if ( SDL_SetRenderTarget( _renderer, NULL ) == 0 && SDL_RenderCopy( _renderer, _texture, NULL, NULL ) == 0 ) {
+                    if ( SDL_SetRenderTarget( _renderer, nullptr ) == 0 && SDL_RenderCopy( _renderer, _texture, nullptr, nullptr ) == 0 ) {
                         SDL_RenderPresent( _renderer );
                     }
                 }
@@ -896,7 +896,7 @@ namespace
             }
 
             _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
-            if ( _window == NULL ) {
+            if ( _window == nullptr ) {
                 clear();
                 return false;
             }
@@ -904,7 +904,7 @@ namespace
             SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
             _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
-            if ( _renderer == NULL ) {
+            if ( _renderer == nullptr ) {
                 clear();
                 return false;
             }
@@ -922,7 +922,7 @@ namespace
             }
 
             _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
-            if ( _surface == NULL ) {
+            if ( _surface == nullptr ) {
                 clear();
                 return false;
             }
@@ -939,7 +939,7 @@ namespace
                 return false;
             }
             _texture = SDL_CreateTextureFromSurface( _renderer, _surface );
-            if ( _texture == NULL ) {
+            if ( _texture == nullptr ) {
                 clear();
                 return false;
             }
@@ -950,7 +950,7 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == NULL || colorIds.size() != 256 )
+            if ( _surface == nullptr || colorIds.size() != 256 )
                 return;
 
             generatePalette( colorIds, _surface );
@@ -961,7 +961,7 @@ namespace
 
         bool isMouseCursorActive() const override
         {
-            return ( _window != NULL ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
+            return ( _window != nullptr ) && ( ( SDL_GetWindowFlags( _window ) & SDL_WINDOW_MOUSE_FOCUS ) == SDL_WINDOW_MOUSE_FOCUS );
         }
 
     private:
@@ -984,7 +984,7 @@ namespace
 
         void _createPalette()
         {
-            if ( _surface == NULL )
+            if ( _surface == nullptr )
                 return;
 
             updatePalette( StandardPaletteIndexes() );
@@ -1032,7 +1032,7 @@ namespace
 
         void toggleFullScreen() override
         {
-            if ( _surface == NULL ) { // nothing to render
+            if ( _surface == nullptr ) { // nothing to render
                 BaseRenderEngine::toggleFullScreen();
                 return;
             }
@@ -1040,7 +1040,7 @@ namespace
             fheroes2::Display & display = fheroes2::Display::instance();
             if ( _surface->format->BitsPerPixel == 8 && _surface->pixels == display.image() ) {
                 if ( display.width() == _surface->w && display.height() == _surface->h ) {
-                    linkRenderSurface( NULL );
+                    linkRenderSurface( nullptr );
                     memcpy( display.image(), _surface->pixels, static_cast<size_t>( display.width() * display.height() ) );
                 }
             }
@@ -1049,7 +1049,7 @@ namespace
             clear();
 
             _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags ^ SDL_FULLSCREEN );
-            if ( _surface == NULL ) {
+            if ( _surface == nullptr ) {
                 _surface = SDL_SetVideoMode( 0, 0, _bitDepth, flags );
             }
 
@@ -1058,7 +1058,7 @@ namespace
 
         bool isFullScreen() const override
         {
-            if ( _surface == NULL )
+            if ( _surface == nullptr )
                 return BaseRenderEngine::isFullScreen();
 
             return ( ( _surface->flags & SDL_FULLSCREEN ) != 0 );
@@ -1070,8 +1070,8 @@ namespace
 
             if ( filteredResolutions.empty() ) {
                 std::set<fheroes2::Size> resolutionSet;
-                SDL_Rect ** modes = SDL_ListModes( NULL, SDL_FULLSCREEN | SDL_HWSURFACE );
-                if ( modes != NULL && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
+                SDL_Rect ** modes = SDL_ListModes( nullptr, SDL_FULLSCREEN | SDL_HWSURFACE );
+                if ( modes != nullptr && modes != reinterpret_cast<SDL_Rect **>( -1 ) ) {
                     for ( int i = 0; modes[i]; ++i ) {
                         resolutionSet.emplace( modes[i]->w, modes[i]->h );
                     }
@@ -1085,16 +1085,16 @@ namespace
 
         void setTitle( const std::string & title ) override
         {
-            SDL_WM_SetCaption( title.c_str(), NULL );
+            SDL_WM_SetCaption( title.c_str(), nullptr );
         }
 
         void setIcon( const fheroes2::Image & icon ) override
         {
             SDL_Surface * surface = generateIconSurface( icon );
-            if ( surface == NULL )
+            if ( surface == nullptr )
                 return;
 
-            SDL_WM_SetIcon( surface, NULL );
+            SDL_WM_SetIcon( surface, nullptr );
 
             SDL_FreeSurface( surface );
         }
@@ -1106,13 +1106,13 @@ namespace
 
     protected:
         RenderEngine()
-            : _surface( NULL )
+            : _surface( nullptr )
             , _bitDepth( 8 )
         {}
 
         void render( const fheroes2::Display & display, const fheroes2::Rect & roi ) override
         {
-            if ( _surface == NULL ) // nothing to render on
+            if ( _surface == nullptr ) // nothing to render on
                 return;
 
             copyImageToSurface( display, _surface, roi );
@@ -1123,11 +1123,11 @@ namespace
 
         void clear() override
         {
-            linkRenderSurface( NULL );
+            linkRenderSurface( nullptr );
 
-            if ( _surface != NULL ) {
+            if ( _surface != nullptr ) {
                 SDL_FreeSurface( _surface );
-                _surface = NULL;
+                _surface = nullptr;
             }
 
             _palette32Bit.clear();
@@ -1151,7 +1151,7 @@ namespace
 
             _surface = SDL_SetVideoMode( width_, height_, _bitDepth, flags );
 
-            if ( _surface == NULL )
+            if ( _surface == nullptr )
                 return false;
 
             if ( _surface->w <= 0 || _surface->h <= 0 || _surface->w != width_ || _surface->h != height_ ) {
@@ -1166,7 +1166,7 @@ namespace
 
         void updatePalette( const std::vector<uint8_t> & colorIds ) override
         {
-            if ( _surface == NULL || colorIds.size() != 256 )
+            if ( _surface == nullptr || colorIds.size() != 256 )
                 return;
 
             generatePalette( colorIds, _surface );
@@ -1195,7 +1195,7 @@ namespace
 
         void _createPalette()
         {
-            if ( _surface == NULL )
+            if ( _surface == nullptr )
                 return;
 
             updatePalette( StandardPaletteIndexes() );
@@ -1229,9 +1229,9 @@ namespace fheroes2
     Display::Display()
         : _engine( RenderEngine::create() )
         , _cursor( RenderCursor::create() )
-        , _preprocessing( NULL )
-        , _postprocessing( NULL )
-        , _renderSurface( NULL )
+        , _preprocessing( nullptr )
+        , _postprocessing( nullptr )
+        , _renderSurface( nullptr )
     {
         _disableTransformLayer();
     }
@@ -1314,12 +1314,12 @@ namespace fheroes2
     void Display::_renderFrame( const Rect & roi ) const
     {
         bool updateImage = true;
-        if ( _preprocessing != NULL ) {
+        if ( _preprocessing != nullptr ) {
             std::vector<uint8_t> palette;
             if ( _preprocessing( palette ) ) {
                 _engine->updatePalette( palette );
                 // when we change a palette for 8-bit image we unwillingly call render so we don't need to re-render the same frame again
-                updateImage = ( _renderSurface == NULL );
+                updateImage = ( _renderSurface == nullptr );
                 if ( updateImage ) {
                     // Pre-processing step is applied to the whole image so we forcefully render the full frame.
                     _engine->render( *this, Rect( 0, 0, width(), height() ) );
@@ -1341,12 +1341,12 @@ namespace fheroes2
 
     uint8_t * Display::image()
     {
-        return _renderSurface != NULL ? _renderSurface : Image::image();
+        return _renderSurface != nullptr ? _renderSurface : Image::image();
     }
 
     const uint8_t * Display::image() const
     {
-        return _renderSurface != NULL ? _renderSurface : Image::image();
+        return _renderSurface != nullptr ? _renderSurface : Image::image();
     }
 
     void Display::linkRenderSurface( uint8_t * surface )
@@ -1362,10 +1362,10 @@ namespace fheroes2
 
     void Display::changePalette( const uint8_t * palette ) const
     {
-        if ( currentPalette == palette || ( palette == NULL && currentPalette == PALPAlette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPAlette() ) )
             return;
 
-        currentPalette = ( palette == NULL ) ? PALPAlette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPAlette() : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

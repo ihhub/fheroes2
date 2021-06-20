@@ -134,7 +134,7 @@ namespace
 
             std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
             if ( translations.size() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
@@ -243,10 +243,8 @@ int main( int argc, char ** argv )
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
-#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-#endif
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
 

@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstdlib>
 #include <iomanip>
 #include <iostream>
 
@@ -911,7 +912,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 
 Heroes * Maps::Tiles::GetHeroes( void ) const
 {
-    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : NULL;
+    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
 }
 
 void Maps::Tiles::SetHeroes( Heroes * hero )
@@ -1747,21 +1748,21 @@ Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
 
-    return it != addons_level1.end() ? &( *it ) : NULL;
+    return it != addons_level1.end() ? &( *it ) : nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
 {
     Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
 
-    return it != addons_level2.end() ? &( *it ) : NULL;
+    return it != addons_level2.end() ? &( *it ) : nullptr;
 }
 
 std::string Maps::Tiles::String( void ) const
@@ -1970,10 +1971,10 @@ Maps::TilesAddon * Maps::Tiles::FindFlags( void )
 
     if ( it == addons_level1.end() ) {
         it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isFlag32 );
-        return addons_level2.end() != it ? &( *it ) : NULL;
+        return addons_level2.end() != it ? &( *it ) : nullptr;
     }
 
-    return addons_level1.end() != it ? &( *it ) : NULL;
+    return addons_level1.end() != it ? &( *it ) : nullptr;
 }
 
 void Maps::Tiles::removeFlags()

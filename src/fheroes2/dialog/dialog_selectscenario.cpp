@@ -161,7 +161,7 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
 const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, size_t selectedId )
 {
     if ( all.empty() )
-        return NULL;
+        return nullptr;
 
     if ( selectedId >= all.size() )
         selectedId = 0;
@@ -172,7 +172,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Maps::FileInfo * result = NULL;
+    const Maps::FileInfo * result = nullptr;
     MapsFileInfoList small;
     MapsFileInfoList medium;
     MapsFileInfoList large;
@@ -284,11 +284,11 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all, siz
 
         if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
-            result = it != all.end() ? &( *it ) : NULL;
+            result = it != all.end() ? &( *it ) : nullptr;
             break;
         }
         else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-            result = NULL;
+            result = nullptr;
             break;
         }
         else if ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) /*&& buttonSelectSmall.isEnabled()*/ ) {

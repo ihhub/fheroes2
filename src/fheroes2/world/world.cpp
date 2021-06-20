@@ -84,7 +84,7 @@ void MapObjects::add( MapObjectSimple * obj )
 MapObjectSimple * MapObjects::get( u32 uid )
 {
     iterator it = find( uid );
-    return it != end() ? ( *it ).second : NULL;
+    return it != end() ? ( *it ).second : nullptr;
 }
 
 std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
@@ -790,7 +790,7 @@ int World::ColorCapturedObject( s32 index ) const
 ListActions * World::GetListActions( s32 index )
 {
     MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : NULL;
+    return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
 CapturedObject & World::GetCapturedObject( s32 index )
@@ -904,12 +904,12 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
+    return res.size() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )
 {
-    return uid ? map_objects.get( uid ) : NULL;
+    return uid ? map_objects.get( uid ) : nullptr;
 }
 
 void World::RemoveMapObject( const MapObjectSimple * obj )
@@ -924,7 +924,7 @@ void World::UpdateRecruits( Recruits & recruits ) const
         while ( recruits.GetID1() == recruits.GetID2() )
             recruits.SetHero2( GetFreemanHeroes() );
     else
-        recruits.SetHero2( NULL );
+        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const
@@ -980,6 +980,18 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         break;
     }
 
+    return false;
+}
+
+bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, obj ) ) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -1280,15 +1292,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> w._seed;
-    }
-    else {
-        // For old versions, generate a different seed at each map loading
-        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
-    }
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad();
 

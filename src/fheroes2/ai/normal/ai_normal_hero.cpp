@@ -73,14 +73,14 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo )
+        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
                 return iter->second;
             }
 
-            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue );
+            const double value = _ai.getObjectValue( _hero, objectInfo.first, _ignoreValue, distance );
 
             _objectValue[objectInfo] = value;
             return value;
@@ -92,6 +92,28 @@ namespace
         const double _ignoreValue;
         std::map<std::pair<int, int>, double> _objectValue;
     };
+
+    double getMonsterUpgradeValue( const Army & army, const int monsterId )
+    {
+        const uint32_t monsterCount = army.GetCountMonsters( monsterId );
+        if ( monsterCount == 0 ) {
+            // Nothing to upgrade.
+            return 0;
+        }
+
+        const Monster currentMonster( monsterId );
+
+        const Monster upgradedMonster = currentMonster.GetUpgrade();
+        if ( upgradedMonster == currentMonster ) {
+            // Monster has no upgrade.
+            return 0;
+        }
+
+        return ( upgradedMonster.GetMonsterStrength() - currentMonster.GetMonsterStrength() ) * monsterCount;
+    }
+
+    // Multiply by this value if you are getting a FREE upgrade.
+    const double freeMonsterUpgradeModifier = 3;
 }
 
 namespace AI
@@ -107,11 +129,12 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
+    double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
+        const int objectID = tile.GetObject();
 
         if ( objectID == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
@@ -120,11 +143,9 @@ namespace AI
 
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
-                if ( value < 1000 )
+                if ( value < 500 )
                     return valueToIgnore;
 
-                if ( hero.isVisited( tile ) )
-                    value -= suboptimalTaskPenalty;
                 return value;
             }
             else {
@@ -133,8 +154,10 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
-            if ( !otherHero )
+            assert( otherHero );
+            if ( !otherHero ) {
                 return valueToIgnore;
+            }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
                 if ( hero.getStatsValue() + 2 > otherHero->getStatsValue() )
@@ -197,7 +220,11 @@ namespace AI
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
             }
-            return fogCountToUncover * 100.0;
+            return fogCountToUncover;
+        }
+        else if ( objectID == MP2::OBJ_MAGELLANMAPS ) {
+            // Very valuable object.
+            return 5000;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const RegionStats & regionStats = _regions[tile.GetRegion()];
@@ -246,9 +273,46 @@ namespace AI
                 return 0;
             }
             else {
-                return 250;
+                return 100;
             }
         }
+        else if ( objectID == MP2::OBJ_STABLES ) {
+            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
+            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            if ( movementBonus < 0 ) {
+                // Looks like this is too far away.
+                movementBonus = 0;
+            }
+
+            const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
+            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
+        }
+        else if ( objectID == MP2::OBJ_FREEMANFOUNDRY ) {
+            const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
+            const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
+            const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
+
+            return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
+        }
+        else if ( objectID == MP2::OBJ_HILLFORT ) {
+            const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
+            const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
+            const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
+
+            return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
+        }
+        else if ( objectID == MP2::OBJ_TRAVELLERTENT ) {
+            // Most likely it'll lead to opening more land.
+            return 1000;
+        }
+        else if ( objectID == MP2::OBJ_OASIS ) {
+            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectID == MP2::OBJ_WATERINGHOLE ) {
+            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+        }
+
+        // TODO: add support for all possible objects.
 
         return 0;
     }
@@ -285,12 +349,17 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = valueStorage.value( node );
+                double value = valueStorage.value( node, dist );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += valueStorage.value( pair );
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                        if ( extraValue > 0 ) {
+                            // There is no need to reduce the quality of the object even if the path has others.
+                            value += extraValue;
+                        }
+                    }
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
                 if ( heroStrength < regionStats.highestThreat )

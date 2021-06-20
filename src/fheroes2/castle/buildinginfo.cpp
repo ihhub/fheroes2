@@ -602,7 +602,7 @@ const char * GetBuildConditionDescription( int bcond )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 std::string BuildingInfo::GetConditionDescription( void ) const

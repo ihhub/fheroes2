@@ -35,6 +35,7 @@
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
+#include "embedded_image.h"
 #include "font.h"
 #include "game.h"
 #include "gamedefs.h"
@@ -47,11 +48,7 @@
 #include "system.h"
 #include "text.h"
 #include "xmi.h"
-
-#ifdef WITH_ZLIB
-#include "embedded_image.h"
 #include "zzlib.h"
-#endif
 
 namespace AGG
 {
@@ -310,11 +307,11 @@ bool AGG::ReadDataDir( void )
 {
     Settings & conf = Settings::Get();
 
-    ListFiles aggs = Settings::GetListFiles( "data", ".agg" );
+    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
     const std::string & other_data = conf.GetDataParams();
 
     if ( other_data.size() && other_data != "data" )
-        aggs.Append( Settings::GetListFiles( other_data, ".agg" ) );
+        aggs.Append( Settings::FindFiles( other_data, ".agg", false ) );
 
     // not found agg, exit
     if ( aggs.empty() )
@@ -729,7 +726,6 @@ bool AGG::Init( void )
     if ( !ReadDataDir() ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "data files not found" );
 
-#ifdef WITH_ZLIB
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
 
@@ -739,7 +735,6 @@ bool AGG::Init( void )
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() )
             ;
-#endif
 
         return false;
     }
