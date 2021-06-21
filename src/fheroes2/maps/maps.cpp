@@ -337,9 +337,9 @@ Maps::Indexes Maps::GetAroundIndexes( const int32_t tileIndex, const int32_t max
     const int32_t size = world.h() * width;
 
     for ( int32_t y = -maxDistanceFromTile; y <= maxDistanceFromTile; ++y ) {
-        int32_t tileId = tileIndex + y * width;
         for ( int32_t x = -maxDistanceFromTile; x <= maxDistanceFromTile; ++x ) {
-            tileId += x;
+            const int32_t tileId = tileIndex + y * width + x;
+
             if ( tileId >= 0 && tileId < size && tileId != tileIndex ) {
                 results.push_back( tileId );
             }
