@@ -21,8 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstdlib>
-#include <numeric>
 
 #include "ai.h"
 #include "difficulty.h"

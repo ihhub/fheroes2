@@ -23,8 +23,9 @@
 #ifndef H2GAMESTATIC_H
 #define H2GAMESTATIC_H
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include "types.h"
+
+class StreamBase;
 
 namespace Skill
 {

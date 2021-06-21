@@ -28,6 +28,7 @@
 #include "agg_image.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {

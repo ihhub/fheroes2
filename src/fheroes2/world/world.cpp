@@ -22,15 +22,14 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -39,7 +38,7 @@
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
-#include "text.h"
+#include "settings.h"
 #include "world.h"
 
 namespace GameStatic

@@ -20,27 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <ctime>
 #include <sstream>
 
-#include "army.h"
 #include "campaign_savedata.h"
-#include "castle.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "game_static.h"
-#include "heroes.h"
-#include "interface_gamearea.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "monster.h"
 #include "save_format_version.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "tools.h"
 #include "world.h"
 #include "zzlib.h"
 

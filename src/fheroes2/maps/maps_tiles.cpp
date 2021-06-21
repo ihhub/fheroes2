@@ -22,18 +22,19 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
-#include <cstdlib>
-#include <iomanip>
 #include <iostream>
 
 #include "agg_image.h"
 #include "castle.h"
 #include "game.h"
-#include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
+#include "game_interface.h"
+#else
+#include "interface_gamearea.h"
+#endif
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -52,8 +53,11 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
+#include "settings.h"
 #include "spell.h"
+#ifdef WITH_DEBUG
 #include "text.h"
+#endif
 #include "til.h"
 #include "trees.h"
 #include "world.h"

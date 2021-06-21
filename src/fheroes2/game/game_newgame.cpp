@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
@@ -32,7 +30,6 @@
 #include "game.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"

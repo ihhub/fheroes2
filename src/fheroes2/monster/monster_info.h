@@ -25,6 +25,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 
 namespace fheroes2
 {

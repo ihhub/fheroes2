@@ -24,10 +24,6 @@
 #include "logging.h"
 #include "monster.h"
 
-#include <algorithm>
-#include <cstdlib>
-#include <iostream>
-
 namespace Bin_Info
 {
     class MonsterAnimCache

@@ -25,6 +25,7 @@
 #include "direction.h"
 #include "gamedefs.h"
 #include "math_base.h"
+#include "types.h"
 
 #define TILEWIDTH 32
 

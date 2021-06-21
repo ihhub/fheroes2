@@ -24,23 +24,20 @@
 #include <memory>
 
 #include "agg.h"
-#include "agg_image.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "color.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes_base.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "settings.h"
 #include "skill.h"
-#include "text.h"
-#include "world.h"
+#include "tools.h"
+#include "translations.h"
 
 namespace Battle
 {

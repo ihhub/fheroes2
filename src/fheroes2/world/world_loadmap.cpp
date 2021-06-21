@@ -21,28 +21,24 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <functional>
 
-#include "agg_image.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "difficulty.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "race.h"
 #include "rand.h"
-#include "resource.h"
-#include "text.h"
+#include "settings.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 #include "zzlib.h"
 

@@ -23,7 +23,7 @@
 #ifndef H2BATTLE_BRIDGE_H
 #define H2BATTLE_BRIDGE_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace Battle
 {

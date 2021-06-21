@@ -24,7 +24,6 @@
 #include "artifact.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "icn.h"
 #include "text.h"
 #include "ui_button.h"

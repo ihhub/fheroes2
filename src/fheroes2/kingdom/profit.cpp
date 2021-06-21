@@ -23,7 +23,6 @@
 #include <cstring>
 
 #include "castle.h"
-#include "logging.h"
 #include "profit.h"
 #include "race.h"
 

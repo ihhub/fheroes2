@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <functional>
 
 #include "agg_image.h"
@@ -32,9 +31,9 @@
 #include "heroes_base.h"
 #include "icn.h"
 #include "image_tool.h"
-#include "skill.h"
 #include "spell_book.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {

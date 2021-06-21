@@ -33,9 +33,10 @@
 #include "logging.h"
 #include "m82.h"
 #include "monster.h"
-#include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 

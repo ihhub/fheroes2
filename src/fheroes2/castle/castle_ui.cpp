@@ -25,6 +25,7 @@
 #include "image.h"
 #include "logging.h"
 #include "race.h"
+#include "settings.h"
 
 #include <cassert>
 

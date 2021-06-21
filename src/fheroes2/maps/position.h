@@ -23,8 +23,9 @@
 #ifndef H2POSITION_H
 #define H2POSITION_H
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include "math_base.h"
+
+class StreamBase;
 
 class MapPosition
 {

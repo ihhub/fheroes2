@@ -22,7 +22,7 @@
 #ifndef H2DIFFICULTY_H
 #define H2DIFFICULTY_H
 
-#include "gamedefs.h"
+#include <string>
 
 namespace Difficulty
 {

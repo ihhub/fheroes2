@@ -22,7 +22,6 @@
 #ifndef H2SPELL_H
 #define H2SPELL_H
 
-#include "gamedefs.h"
 #include "payment.h"
 
 #define DEFAULT_SPELL_DURATION 3

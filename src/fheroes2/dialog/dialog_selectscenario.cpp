@@ -22,6 +22,7 @@
 
 #include "dialog_selectscenario.h"
 #include "agg_image.h"
+#include "color.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
@@ -29,9 +30,7 @@
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"
-#include "settings.h"
 #include "text.h"
-#include "tools.h"
 #include "ui_button.h"
 
 void LossConditionInfo( const Maps::FileInfo & );

@@ -24,7 +24,6 @@
 
 #include "agg.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"

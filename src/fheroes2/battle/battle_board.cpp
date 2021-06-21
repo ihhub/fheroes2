@@ -22,8 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdlib>
-#include <functional>
 #include <iterator>
 #include <set>
 
@@ -35,9 +33,10 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_tiles.h"
 #include "rand.h"
+#include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 namespace
 {
