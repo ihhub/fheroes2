@@ -824,7 +824,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
 
 bool BagArtifacts::ContainUltimateArtifact( void ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
+    return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
 void BagArtifacts::RemoveScroll( const Artifact & art )
