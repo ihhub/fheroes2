@@ -781,12 +781,8 @@ bool Spell::isRaceCompatible( int race ) const
     return true;
 }
 
-u32 Spell::CalculateDimensionDoorDistance( u32 current_sp, u32 total_hp )
+u32 Spell::CalculateDimensionDoorDistance()
 {
-    if ( GameStatic::Spell_DD_Distance() && GameStatic::Spell_DD_HP() && GameStatic::Spell_DD_SP() && total_hp ) {
-        const u32 res = ( GameStatic::Spell_DD_Distance() * current_sp * GameStatic::Spell_DD_HP() ) / ( GameStatic::Spell_DD_SP() * total_hp );
-        return res ? ( res < 255 ? res : 255 ) : 1;
-    }
     // original h2 variant
     return 14;
 }

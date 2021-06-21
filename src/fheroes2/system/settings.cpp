@@ -27,6 +27,7 @@
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "system.h"
 #include "text.h"

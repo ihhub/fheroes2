@@ -65,13 +65,6 @@ namespace
         int32_t offset;
         int32_t space;
     };
-
-    std::string GetString( const float value, const uint8_t prec )
-    {
-        std::ostringstream stream;
-        stream << std::setprecision( prec ) << value;
-        return stream.str();
-    }
 }
 
 void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop );
@@ -186,15 +179,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                     }
                 }
                 else {
-                    std::string msg;
-                    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
-                        msg = _( "Your troops can be upgraded, but it will cost you %{ratio} times the difference in cost for each troop, rounded up to next highest "
-                                 "number. Do you wish to upgrade them?" );
-                        StringReplace( msg, "%{ratio}", GetString( GameStatic::GetMonsterUpgradeRatio(), 2 ) );
-                    }
-                    else {
-                        msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
-                    }
+                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
 
                     if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
                         result = Dialog::UPGRADE;

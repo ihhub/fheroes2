@@ -29,6 +29,7 @@
 #include "mp2.h"
 #include "race.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
@@ -222,49 +223,17 @@ namespace GameStatic
 
 StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
 {
-    msg << whirlpool_lost_percent << kingdom_max_heroes << castle_grown_well << castle_grown_wel2 << castle_grown_week_of << castle_grown_month_of
-        << heroes_spell_points_day << gameover_lost_days << spell_dd_distance << spell_dd_sp << spell_dd_hp;
-
-    u8 array_size = ARRAY_COUNT( overview_distance );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << overview_distance[ii];
-
-    array_size = ARRAY_COUNT( kingdom_starting_resource );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << kingdom_starting_resource[ii];
-
-    array_size = ARRAY_COUNT( mageguild_restore_spell_points_day );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << mageguild_restore_spell_points_day[ii];
-
-    array_size = ARRAY_COUNT( objects_mod );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << objects_mod[ii];
-
-    msg << monsterUpgradeRatio << uniq;
-
-    // skill statics
-    array_size = ARRAY_COUNT( Skill::_stats );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << Skill::_stats[ii];
-
-    array_size = ARRAY_COUNT( Skill::_values );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << Skill::_values[ii];
-
-    msg << Skill::_from_witchs_hut;
-
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
     return msg;
 }
 
 StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
+        return msg;
+    }
+
     msg >> whirlpool_lost_percent >> kingdom_max_heroes >> castle_grown_well >> castle_grown_wel2 >> castle_grown_week_of >> castle_grown_month_of
         >> heroes_spell_points_day >> gameover_lost_days >> spell_dd_distance >> spell_dd_sp >> spell_dd_hp;
 
@@ -302,16 +271,6 @@ StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
     msg >> Skill::_from_witchs_hut;
 
     return msg;
-}
-
-bool GameStatic::isCustomMonsterUpgradeOption()
-{
-    return std::fabs( monsterUpgradeRatio - 1.0f ) > 0.001f;
-}
-
-float GameStatic::GetMonsterUpgradeRatio()
-{
-    return monsterUpgradeRatio;
 }
 
 u32 GameStatic::GetLostOnWhirlpoolPercent( void )
@@ -396,36 +355,6 @@ s32 GameStatic::ObjectVisitedModifiers( int obj )
     }
 
     return 0;
-}
-
-u32 GameStatic::Spell_DD_Distance( void )
-{
-    return spell_dd_distance;
-}
-
-u32 GameStatic::Spell_DD_SP( void )
-{
-    return spell_dd_sp;
-}
-
-u32 GameStatic::Spell_DD_HP( void )
-{
-    return spell_dd_hp;
-}
-
-void GameStatic::SetSpell_DD_Distance( int v )
-{
-    spell_dd_distance = v;
-}
-
-void GameStatic::SetSpell_DD_SP( int v )
-{
-    spell_dd_sp = v;
-}
-
-void GameStatic::SetSpell_DD_HP( int v )
-{
-    spell_dd_hp = v;
 }
 
 const Skill::stats_t * GameStatic::GetSkillStats( int race )
