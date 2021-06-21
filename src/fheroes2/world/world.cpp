@@ -38,6 +38,7 @@
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "world.h"
 
@@ -1188,18 +1189,6 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
                 msg << static_cast<const MapSign &>( obj );
                 break;
 
-            case MP2::OBJ_RESOURCE:
-                msg << static_cast<const MapResource &>( obj );
-                break;
-
-            case MP2::OBJ_ARTIFACT:
-                msg << static_cast<const MapArtifact &>( obj );
-                break;
-
-            case MP2::OBJ_MONSTER:
-                msg << static_cast<const MapMonster &>( obj );
-                break;
-
             default:
                 msg << obj;
                 break;
@@ -1240,23 +1229,12 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             objs[index] = ptr;
         } break;
 
-        case MP2::OBJ_RESOURCE: {
-            MapResource * ptr = new MapResource();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_ARTIFACT: {
-            MapArtifact * ptr = new MapArtifact();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_MONSTER: {
-            MapMonster * ptr = new MapMonster();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_MONSTER:
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
+            assert( 0 );
+            break;
 
         default: {
             MapObjectSimple * ptr = new MapObjectSimple();

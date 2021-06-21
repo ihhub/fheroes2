@@ -95,10 +95,10 @@ namespace
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, s32 dst_index );
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
+    void AIToArtifact( Heroes & hero, s32 dst_index );
     void AIToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
@@ -264,7 +264,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            AIToMonster( hero, object, dst_index );
+            AIToMonster( hero, dst_index );
             break;
         case MP2::OBJ_HEROES:
             AIToHeroes( hero, dst_index );
@@ -285,7 +285,7 @@ namespace AI
             AIToTreasureChest( hero, object, dst_index );
             break;
         case MP2::OBJ_ARTIFACT:
-            AIToArtifact( hero, object, dst_index );
+            AIToArtifact( hero, dst_index );
             break;
 
         case MP2::OBJ_MAGICGARDEN:
@@ -620,15 +620,11 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        Troop troop = tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -676,12 +672,6 @@ namespace AI
                 tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
-
-                if ( map_troop ) {
-                    map_troop->count = army.GetCountMonsters( troop() );
-                    if ( map_troop->JoinConditionFree() )
-                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
             }
         }
         // unknown
@@ -692,9 +682,6 @@ namespace AI
             tile.RemoveObjectSprite();
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
-
-            if ( map_troop )
-                world.RemoveMapObject( map_troop );
         }
 
         hero.unmarkHeroMeeting();
@@ -703,18 +690,12 @@ namespace AI
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapResource * map_resource = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( obj != MP2::OBJ_BOTTLE )
-            hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
+            hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
-        if ( map_resource )
-            world.RemoveMapObject( map_resource );
         hero.GetPath().Reset();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " pickup small resource" );
@@ -1466,28 +1447,19 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
+    void AIToArtifact( Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapArtifact * map_artifact = nullptr;
-        if ( tile.GetObject() == obj ) {
-            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();
             Artifact art = tile.QuantityArtifact();
 
-            if ( map_artifact ) {
-                cond = map_artifact->condition;
-                art = map_artifact->artifact;
-            }
-
             bool result = false;
 
             // 1,2,3 - gold, gold + res
             if ( 0 < cond && cond < 4 ) {
-                Funds payment = map_artifact ? map_artifact->QuantityFunds() : tile.QuantityFunds();
+                Funds payment = tile.QuantityFunds();
 
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
@@ -1520,8 +1492,6 @@ namespace AI
             if ( result && hero.PickupArtifact( art ) ) {
                 tile.RemoveObjectSprite();
                 tile.QuantityReset();
-                if ( map_artifact )
-                    world.RemoveMapObject( map_artifact );
             }
         }
 
