@@ -39,6 +39,7 @@
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
+#include "save_format_version.h"
 #include "text.h"
 #include "world.h"
 
