@@ -40,6 +40,7 @@
 #include "mp2.h"
 #include "mus.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"

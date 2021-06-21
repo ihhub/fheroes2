@@ -59,9 +59,6 @@ namespace GameStatic
     u32 GetHeroesRestoreSpellPointsPerDay( void );
     u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
-    bool isCustomMonsterUpgradeOption();
-    float GetMonsterUpgradeRatio();
-
     s32 ObjectVisitedModifiers( int obj );
 
     int GetBattleMoatReduceDefense( void );
@@ -69,14 +66,6 @@ namespace GameStatic
     const Skill::stats_t * GetSkillStats( int race );
     const Skill::values_t * GetSkillValues( int skill );
     const Skill::secondary_t * GetSkillForWitchsHut( void );
-
-    u32 Spell_DD_Distance( void );
-    u32 Spell_DD_SP( void );
-    u32 Spell_DD_HP( void );
-
-    void SetSpell_DD_Distance( int );
-    void SetSpell_DD_SP( int );
-    void SetSpell_DD_HP( int );
 }
 
 #endif
