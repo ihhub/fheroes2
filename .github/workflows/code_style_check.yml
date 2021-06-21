@@ -1,13 +1,16 @@
 name: Code style check
 
-on: [pull_request]
+on:
+  pull_request:
+    branches: [ master ]
 
 jobs:
-  clang-format:
+  check:
+    name: Code style check
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 50
-    - name: run clang-format-diff
+    - name: Run clang-format-diff
       run: bash ./script/tools/check_code_format.sh
