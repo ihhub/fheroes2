@@ -101,17 +101,17 @@ private:
 
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
-    char shortDate[20];
-    char shortHours[20];
-    char shortTime[20];
+    std::array<char, 20> shortDate;
+    std::array<char, 20> shortHours;
+    std::array<char, 20> shortTime;
     time_t timeval = info.localtime;
 
-    std::fill( shortDate, std::end( shortDate ), 0 );
-    std::fill( shortHours, std::end( shortHours ), 0 );
-    std::fill( shortTime, std::end( shortTime ), 0 );
-    std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
-    std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
-    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
+    shortDate.fill( 0 );
+    shortHours.fill( 0 );
+    shortTime.fill( 0 );
+    std::strftime( shortDate.data(), shortDate.size() - 1, "%b %d,", std::localtime( &timeval ) );
+    std::strftime( shortHours.data(), shortHours.size() - 1, "%H", std::localtime( &timeval ) );
+    std::strftime( shortTime.data(), shortTime.size() - 1, ":%M", std::localtime( &timeval ) );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( savname.size() ) {
@@ -126,13 +126,13 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
         text.Set( savname, ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 5, dsty, 150 );
 
-        text.Set( shortDate, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortDate.data(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 225 - text.w(), dsty );
 
-        text.Set( shortHours, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortHours.data(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 245 - text.w(), dsty );
 
-        text.Set( shortTime, ( current ? Font::YELLOW_BIG : Font::BIG ) );
+        text.Set( shortTime.data(), ( current ? Font::YELLOW_BIG : Font::BIG ) );
         text.Blit( dstx + 245, dsty );
     }
 }

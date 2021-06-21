@@ -89,41 +89,38 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, u8 obj, const Heroes & hero, std::string * strs )
 {
-    int result = 0;
+    if ( !hero.isObjectTypeVisited( obj ) )
+        return 0;
 
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        if ( hero.isObjectTypeVisited( objs[ii] ) ) {
-            result += GameStatic::ObjectVisitedModifiers( objs[ii] );
+    int result = GameStatic::ObjectVisitedModifiers( obj );
 
-            if ( strs ) {
-                switch ( objs[ii] ) {
-                case MP2::OBJ_GRAVEYARD:
-                case MP2::OBJN_GRAVEYARD:
-                case MP2::OBJ_SHIPWRECK:
-                case MP2::OBJN_SHIPWRECK:
-                case MP2::OBJ_DERELICTSHIP:
-                case MP2::OBJN_DERELICTSHIP: {
-                    std::string modRobber = _( "%{object} robber" );
-                    StringReplace( modRobber, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
-                    strs->append( modRobber );
-                } break;
-                case MP2::OBJ_PYRAMID:
-                case MP2::OBJN_PYRAMID: {
-                    std::string modRaided = _( "%{object} raided" );
-                    StringReplace( modRaided, "%{object}", _( MP2::StringObject( objs[ii] ) ) );
-                    strs->append( modRaided );
-                } break;
-                default:
-                    strs->append( _( MP2::StringObject( objs[ii] ) ) );
-                    break;
-                }
-
-                StringAppendModifiers( *strs, GameStatic::ObjectVisitedModifiers( objs[ii] ) );
-                strs->append( "\n" );
-            }
+    if ( strs ) {
+        switch ( obj ) {
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJN_GRAVEYARD:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJN_SHIPWRECK:
+        case MP2::OBJ_DERELICTSHIP:
+        case MP2::OBJN_DERELICTSHIP: {
+            std::string modRobber = _( "%{object} robber" );
+            StringReplace( modRobber, "%{object}", _( MP2::StringObject( obj ) ) );
+            strs->append( modRobber );
+        } break;
+        case MP2::OBJ_PYRAMID:
+        case MP2::OBJN_PYRAMID: {
+            std::string modRaided = _( "%{object} raided" );
+            StringReplace( modRaided, "%{object}", _( MP2::StringObject( obj ) ) );
+            strs->append( modRaided );
+        } break;
+        default:
+            strs->append( _( MP2::StringObject( obj ) ) );
+            break;
         }
+
+        StringAppendModifiers( *strs, result );
+        strs->append( "\n" );
     }
 
     return result;
@@ -230,12 +227,12 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetMonster( st.get() + 1 );
+        for ( auto & troop : troops )
+            troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetCount( st.getLE16() );
+        for ( auto & troop : troops )
+            troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
     }
@@ -616,7 +613,8 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
+    result
+        += std::accumulate( objs, std::end( objs ), 0, [this, &strs]( int sum, u8 obj ) { return sum + ObjectVisitedModifiersResult( MDF_MORALE, obj, *this, strs ); } );
 
     // result
     if ( result < Morale::AWFUL )
@@ -652,7 +650,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
+    result += std::accumulate( objs, std::end( objs ), 0, [this, &strs]( int sum, u8 obj ) { return sum + ObjectVisitedModifiersResult( MDF_LUCK, obj, *this, strs ); } );
 
     if ( result < Luck::AWFUL )
         return Luck::CURSED;
