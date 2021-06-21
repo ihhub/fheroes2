@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <iterator>
 #include <sstream>
 
 #include "game_static.h"
