@@ -248,10 +248,9 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
     BitModes & modes = player;
 
     msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        assert( player._ai );
-        msg >> *player._ai;
-    }
+
+    assert( player._ai );
+    msg >> *player._ai;
 
     return msg;
 }

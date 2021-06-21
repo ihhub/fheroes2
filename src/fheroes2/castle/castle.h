@@ -31,6 +31,7 @@
 #include "castle_heroes.h"
 #include "heroes.h"
 #include "mageguild.h"
+#include "monster_anim.h"
 #include "position.h"
 #include "ui_button.h"
 
@@ -159,6 +160,8 @@ public:
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
     int getBuildingValue() const;
+
+    // Used only for AI.
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
@@ -231,7 +234,7 @@ private:
     void OpenTavern( void ) const;
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
-    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const;
+    void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 

@@ -181,10 +181,6 @@ namespace
             _( "world: Neutral armies scale with game difficulty" ),
         },
         {
-            Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML,
-            _( "world: use unique artifacts for morale/luck" ),
-        },
-        {
             Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS,
             _( "world: use unique artifacts for resource affecting" ),
         },
@@ -247,10 +243,6 @@ namespace
         {
             Settings::BATTLE_SOFT_WAITING,
             _( "battle: soft wait troop" ),
-        },
-        {
-            Settings::BATTLE_SKIP_INCREASE_DEFENSE,
-            _( "battle: skip increase +2 defense" ),
         },
         {
             Settings::BATTLE_REVERSE_WAIT_ORDER,
@@ -911,38 +903,29 @@ ListDirs Settings::GetRootDirs()
     return dirs;
 }
 
-/* return list files */
-ListFiles Settings::GetListFiles( const std::string & prefix, const std::string & filter )
+ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch )
 {
-    const ListDirs dirs = GetRootDirs();
     ListFiles res;
 
-    if ( prefix.size() && System::IsDirectory( prefix ) )
-        res.ReadDir( prefix, filter, false );
+    auto processDir = [&res, &fileNameFilter, exactMatch]( const std::string & dir ) {
+        if ( exactMatch ) {
+            res.FindFileInDir( dir, fileNameFilter, false );
+        }
+        else {
+            res.ReadDir( dir, fileNameFilter, false );
+        }
+    };
 
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        std::string path = prefix.size() ? System::ConcatePath( *it, prefix ) : *it;
-
-        if ( System::IsDirectory( path ) )
-            res.ReadDir( path, filter, false );
+    if ( !prefixDir.empty() && System::IsDirectory( prefixDir ) ) {
+        processDir( prefixDir );
     }
 
-    return res;
-}
+    for ( const std::string & dir : GetRootDirs() ) {
+        const std::string path = !prefixDir.empty() ? System::ConcatePath( dir, prefixDir ) : dir;
 
-ListFiles Settings::FindFiles( const std::string & directory, const std::string & fileName )
-{
-    ListFiles res;
-
-    if ( !directory.empty() && System::IsDirectory( directory ) )
-        res.FindFileInDir( directory, fileName, false );
-
-    const ListDirs dirs = GetRootDirs();
-    for ( ListDirs::const_iterator it = dirs.begin(); it != dirs.end(); ++it ) {
-        const std::string & path = !directory.empty() ? System::ConcatePath( *it, directory ) : *it;
-
-        if ( System::IsDirectory( path ) )
-            res.FindFileInDir( path, fileName, false );
+        if ( System::IsDirectory( path ) ) {
+            processDir( path );
+        }
     }
 
     return res;
@@ -950,7 +933,7 @@ ListFiles Settings::FindFiles( const std::string & directory, const std::string 
 
 std::string Settings::GetLastFile( const std::string & prefix, const std::string & name )
 {
-    const ListFiles & files = GetListFiles( prefix, name );
+    const ListFiles & files = FindFiles( prefix, name, true );
     return files.empty() ? name : files.back();
 }
 
@@ -1598,11 +1581,6 @@ bool Settings::ExtBattleShowDamage() const
     return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
 }
 
-bool Settings::ExtBattleSkipIncreaseDefense() const
-{
-    return ExtModes( BATTLE_SKIP_INCREASE_DEFENSE );
-}
-
 bool Settings::ExtHeroAllowTranscribingScroll() const
 {
     return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
@@ -1691,11 +1669,6 @@ bool Settings::ExtCastleOneHeroHiredEveryWeek() const
 bool Settings::ExtWorldNeutralArmyDifficultyScaling() const
 {
     return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-}
-
-bool Settings::ExtWorldUseUniqueArtifactsML() const
-{
-    return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_ML );
 }
 
 bool Settings::ExtWorldUseUniqueArtifactsRS() const
@@ -1841,6 +1814,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf.current_maps_file;
 
     // TODO: once the minimum supported version will be FORMAT_VERSION_094_RELEASE remove this check.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove the check below" );
+
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_094_RELEASE ) {
         msg >> conf.current_maps_file._version;
     }

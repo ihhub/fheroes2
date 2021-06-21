@@ -179,7 +179,7 @@ namespace Battle
         void PostKilledAction( void );
 
         u32 GetMagicResist( const Spell &, u32 ) const;
-        int GetSpellMagic( bool force = false ) const;
+        int GetSpellMagic() const;
 
         const HeroBase * GetCommander( void ) const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise

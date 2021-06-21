@@ -361,6 +361,16 @@ bool Spell::isEnabled() const
     return ( spells[id].bits & SP_DISABLE ) == 0;
 }
 
+bool Spell::isFire() const
+{
+    return id == FIREBALL || id == FIREBLAST;
+}
+
+bool Spell::isCold() const
+{
+    return id == COLDRAY || id == COLDRING;
+}
+
 bool Spell::isAdventure( void ) const
 {
     return !isCombat();

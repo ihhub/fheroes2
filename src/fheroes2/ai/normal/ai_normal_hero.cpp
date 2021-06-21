@@ -92,6 +92,28 @@ namespace
         const double _ignoreValue;
         std::map<std::pair<int, int>, double> _objectValue;
     };
+
+    double getMonsterUpgradeValue( const Army & army, const int monsterId )
+    {
+        const uint32_t monsterCount = army.GetCountMonsters( monsterId );
+        if ( monsterCount == 0 ) {
+            // Nothing to upgrade.
+            return 0;
+        }
+
+        const Monster currentMonster( monsterId );
+
+        const Monster upgradedMonster = currentMonster.GetUpgrade();
+        if ( upgradedMonster == currentMonster ) {
+            // Monster has no upgrade.
+            return 0;
+        }
+
+        return ( upgradedMonster.GetMonsterStrength() - currentMonster.GetMonsterStrength() ) * monsterCount;
+    }
+
+    // Multiply by this value if you are getting a FREE upgrade.
+    const double freeMonsterUpgradeModifier = 3;
 }
 
 namespace AI
@@ -121,11 +143,9 @@ namespace AI
 
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
-                if ( value < 1000 )
+                if ( value < 500 )
                     return valueToIgnore;
 
-                if ( hero.isVisited( tile ) )
-                    value -= suboptimalTaskPenalty;
                 return value;
             }
             else {
@@ -253,7 +273,7 @@ namespace AI
                 return 0;
             }
             else {
-                return 250;
+                return 100;
             }
         }
         else if ( objectID == MP2::OBJ_STABLES ) {
@@ -264,25 +284,22 @@ namespace AI
                 movementBonus = 0;
             }
 
-            const double upgradeValue = Monster( Monster::CHAMPION ).GetMonsterStrength() - Monster( Monster::CAVALRY ).GetMonsterStrength();
-            return movementBonus + upgradeValue * hero.GetArmy().GetCountMonsters( Monster::CAVALRY );
+            const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
+            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
         }
         else if ( objectID == MP2::OBJ_FREEMANFOUNDRY ) {
-            const double upgradePikemanValue = Monster( Monster::VETERAN_PIKEMAN ).GetMonsterStrength() - Monster( Monster::PIKEMAN ).GetMonsterStrength();
-            const double upgradeSwordsmanValue = Monster( Monster::MASTER_SWORDSMAN ).GetMonsterStrength() - Monster( Monster::SWORDSMAN ).GetMonsterStrength();
-            const double upgradeGolemValue = Monster( Monster::STEEL_GOLEM ).GetMonsterStrength() - Monster( Monster::IRON_GOLEM ).GetMonsterStrength();
+            const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
+            const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
+            const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
 
-            return upgradePikemanValue * hero.GetArmy().GetCountMonsters( Monster::PIKEMAN )
-                   + upgradeSwordsmanValue * hero.GetArmy().GetCountMonsters( Monster::SWORDSMAN )
-                   + upgradeGolemValue * hero.GetArmy().GetCountMonsters( Monster::IRON_GOLEM );
+            return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
         }
         else if ( objectID == MP2::OBJ_HILLFORT ) {
-            const double upgradeDwarfValue = Monster( Monster::BATTLE_DWARF ).GetMonsterStrength() - Monster( Monster::DWARF ).GetMonsterStrength();
-            const double upgradeOrcValue = Monster( Monster::ORC_CHIEF ).GetMonsterStrength() - Monster( Monster::ORC ).GetMonsterStrength();
-            const double upgradeOgreValue = Monster( Monster::OGRE_LORD ).GetMonsterStrength() - Monster( Monster::OGRE ).GetMonsterStrength();
+            const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
+            const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
+            const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
 
-            return upgradeDwarfValue * hero.GetArmy().GetCountMonsters( Monster::DWARF ) + upgradeOrcValue * hero.GetArmy().GetCountMonsters( Monster::ORC )
-                   + upgradeOgreValue * hero.GetArmy().GetCountMonsters( Monster::OGRE );
+            return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
         }
         else if ( objectID == MP2::OBJ_TRAVELLERTENT ) {
             // Most likely it'll lead to opening more land.

@@ -252,6 +252,24 @@ u32 Troops::GetCountMonsters( const Monster & m ) const
     return c;
 }
 
+double Troops::getReinforcementValue( const Troops & reinforcement ) const
+{
+    // NB items that are added in this vector are all of Troop* type, and not ArmyTroop* type
+    // So the GetStrength() computation will be done based on troop strength only (not based on hero bonuses)
+    Troops combined( *this );
+    const double initialValue = combined.GetStrength();
+
+    combined.Insert( reinforcement.GetOptimized() );
+    combined.MergeTroops();
+    combined.SortStrongest();
+
+    while ( combined.Size() > ARMYMAXTROOPS ) {
+        combined.PopBack();
+    }
+
+    return combined.GetStrength() - initialValue;
+}
+
 bool Troops::isValid( void ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -1168,24 +1186,6 @@ double Army::GetStrength( void ) const
     }
 
     return result;
-}
-
-double Army::getReinforcementValue( const Troops & reinforcement ) const
-{
-    // NB items that are added in this vector are all of Troop* type, and not ArmyTroop* type
-    // So the GetStrength() computation will be done based on troop strength only (not based on hero bonuses)
-    Troops combined( *this );
-    const double initialValue = combined.GetStrength();
-
-    combined.Insert( reinforcement.GetOptimized() );
-    combined.MergeTroops();
-    combined.SortStrongest();
-
-    while ( combined.Size() > ARMYMAXTROOPS ) {
-        combined.PopBack();
-    }
-
-    return combined.GetStrength() - initialValue;
 }
 
 void Army::Reset( bool soft )

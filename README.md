@@ -35,7 +35,8 @@ Please follow below instructions to be able to compile the project:
 
 ### macOS and Linux
 
-- open `script/macos` or `script/linux` directory depending on your OS and run `install_sdl_2.sh` (default setup) or `install_sdl_1.sh` file. For macOS we do not recommend to run SDL 1 as latest versions of macOS do not support it fully.
+- for macOS: open `script/macos` directory and run `install_sdl_2.sh` (default setup) or `install_sdl_1.sh` file. We do not recommend to run SDL 1 as latest versions of macOS do not support it fully.
+- for Linux: open `script/linux` directory and run `install_sdl_2_dev.sh` (default setup) or `install_sdl_1_dev.sh` file.
 - open `script/demo` directory and run `demo_unix.sh` file. It downloads a demo version of the game which is needed for minimum development.
 - run `make` command in root directory of the project. For SDL 1 compilation please run `export FHEROES2_SDL1="ON"` command before compiling the project.
 

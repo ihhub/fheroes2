@@ -154,6 +154,8 @@ public:
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
     bool isEnabled() const;
+    bool isFire() const;
+    bool isCold() const;
 
     /* return index sprite spells.icn */
     u32 IndexSprite( void ) const;

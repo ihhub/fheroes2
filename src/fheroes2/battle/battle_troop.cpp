@@ -424,7 +424,6 @@ void Battle::Unit::NewTurn( void )
     ResetModes( TR_MOVED );
     ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
-    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -524,7 +523,7 @@ u32 Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) const
             if ( enemy.Modes( SP_SHIELD ) )
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
         }
-        else if ( hasMeleePenalty() ) {
+        else if ( !isAbilityPresent( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ) {
             dmg /= 2;
         }
     }
@@ -660,7 +659,6 @@ void Battle::Unit::PostKilledAction( void )
     ResetModes( TR_RESPONSED );
     ResetModes( TR_HARDSKIP );
     ResetModes( TR_SKIPMOVE );
-    ResetModes( TR_DEFENSED );
     ResetModes( LUCK_GOOD );
     ResetModes( LUCK_BAD );
     ResetModes( MORALE_GOOD );
@@ -971,7 +969,8 @@ std::string Battle::Unit::String( bool more ) const
 
 bool Battle::Unit::AllowResponse( void ) const
 {
-    return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE ) && ( isAlwaysRetaliating() || !Modes( TR_RESPONSED ) );
+    return ( !Modes( SP_BLIND ) || blindanswer ) && !Modes( IS_PARALYZE_MAGIC ) && !Modes( SP_HYPNOTIZE )
+           && ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) || !Modes( TR_RESPONSED ) );
 }
 
 void Battle::Unit::SetResponse( void )
@@ -1039,10 +1038,6 @@ u32 Battle::Unit::GetDefense( void ) const
         res += Spell( Spell::STONESKIN ).ExtraValue();
     else if ( Modes( SP_STEELSKIN ) )
         res += Spell( Spell::STEELSKIN ).ExtraValue();
-
-    // extra
-    if ( Modes( TR_DEFENSED ) )
-        res += 2;
 
     // disrupting ray accumulate effect
     if ( disruptingray ) {
@@ -1531,95 +1526,9 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     if ( Modes( SP_ANTIMAGIC ) )
         return 100;
 
-    if ( spell.isMindInfluence() && ( isUndead() || isElemental() || GetID() == Monster::GIANT || GetID() == Monster::TITAN ) )
-        return 100;
-
-    if ( spell.isALiveOnly() && isUndead() )
-        return 100;
-
-    if ( spell.isUndeadOnly() && !isUndead() )
-        return 100;
-
-    switch ( GetID() ) {
-    // 25% unfortunatly
-    case Monster::DWARF:
-    case Monster::BATTLE_DWARF:
-        if ( spell.isDamage() || spell.isApplyToEnemies() )
-            return 25;
-        break;
-
-    case Monster::GREEN_DRAGON:
-    case Monster::RED_DRAGON:
-    case Monster::BLACK_DRAGON:
-        return 100;
-
-    case Monster::PHOENIX:
-        switch ( spell() ) {
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-        case Spell::ELEMENTALSTORM:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::CRUSADER:
-        switch ( spell() ) {
-        case Spell::CURSE:
-        case Spell::MASSCURSE:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::EARTH_ELEMENT:
-        switch ( spell() ) {
-        case Spell::METEORSHOWER:
-        case Spell::LIGHTNINGBOLT:
-        case Spell::CHAINLIGHTNING:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::AIR_ELEMENT:
-        switch ( spell() ) {
-        case Spell::METEORSHOWER:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::FIRE_ELEMENT:
-        switch ( spell() ) {
-        case Spell::FIREBALL:
-        case Spell::FIREBLAST:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    case Monster::WATER_ELEMENT:
-        switch ( spell() ) {
-        case Spell::COLDRAY:
-        case Spell::COLDRING:
-            return 100;
-        default:
-            break;
-        }
-        break;
-
-    default:
-        break;
+    const uint32_t spellImmunity = fheroes2::getSpellResistance( id, spell.GetID() );
+    if ( spellImmunity > 0 ) {
+        return spellImmunity;
     }
 
     switch ( spell() ) {
@@ -1632,7 +1541,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     case Spell::RESURRECT:
     case Spell::RESURRECTTRUE:
     case Spell::ANIMATEDEAD:
-        if ( isElemental() || ( GetCount() == count0 ) )
+        if ( GetCount() == count0 )
             return 100;
         break;
 
@@ -1653,50 +1562,21 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
     return 0;
 }
 
-int Battle::Unit::GetSpellMagic( bool force ) const
+int Battle::Unit::GetSpellMagic() const
 {
-    switch ( GetID() ) {
-    case Monster::UNICORN:
-        // 20% blind
-        if ( force || 3 > Rand::Get( 1, 10 ) )
-            return Spell::BLIND;
-        break;
-
-    case Monster::CYCLOPS:
-        // 20% paralyze
-        if ( force || 3 > Rand::Get( 1, 10 ) )
-            return Spell::PARALYZE;
-        break;
-
-    case Monster::MUMMY:
-        // 20% curse
-        if ( force || 3 > Rand::Get( 1, 10 ) )
-            return Spell::CURSE;
-        break;
-
-    case Monster::ROYAL_MUMMY:
-        // 30% curse
-        if ( force || 4 > Rand::Get( 1, 10 ) )
-            return Spell::CURSE;
-        break;
-
-    case Monster::ARCHMAGE:
-        // 20% dispel
-        if ( force || 3 > Rand::Get( 1, 10 ) )
-            return Spell::DISPEL;
-        break;
-
-    case Monster::MEDUSA:
-        // 20% stone
-        if ( force || 3 > Rand::Get( 1, 10 ) )
-            return Spell::STONE;
-        break;
-
-    default:
-        break;
+    const std::set<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( GetID() ).battleStats.abilities;
+    const auto foundAbility = abilities.find( fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+    if ( foundAbility == abilities.end() ) {
+        // Not a spell caster.
+        return Spell::NONE;
     }
 
-    return Spell::NONE;
+    if ( Rand::Get( 1, 100 ) > foundAbility->percentage ) {
+        // No luck to cast the spell.
+        return Spell::NONE;
+    }
+
+    return foundAbility->value;
 }
 
 bool Battle::Unit::isHaveDamage( void ) const
@@ -1743,56 +1623,31 @@ bool Battle::Unit::SwitchAnimation( const std::vector<int> & animationList, bool
 
 int Battle::Unit::M82Attk( void ) const
 {
+    const fheroes2::MonsterSound & sounds = fheroes2::getMonsterData( id ).sounds;
+
     if ( isArchers() && !isHandFighting() ) {
-        switch ( GetID() ) {
-        case Monster::ARCHER:
-        case Monster::RANGER:
-            return M82::ARCHSHOT;
-        case Monster::ORC:
-        case Monster::ORC_CHIEF:
-            return M82::ORC_SHOT;
-        case Monster::TROLL:
-        case Monster::WAR_TROLL:
-            return M82::TRLLSHOT;
-        case Monster::ELF:
-        case Monster::GRAND_ELF:
-            return M82::ELF_SHOT;
-        case Monster::DRUID:
-        case Monster::GREATER_DRUID:
-            return M82::DRUISHOT;
-        case Monster::CENTAUR:
-            return M82::CNTRSHOT;
-        case Monster::HALFLING:
-            return M82::HALFSHOT;
-        case Monster::MAGE:
-        case Monster::ARCHMAGE:
-            return M82::MAGESHOT;
-        case Monster::TITAN:
-            return M82::TITNSHOT;
-        case Monster::LICH:
-        case Monster::POWER_LICH:
-            return M82::LICHSHOT;
-        default:
-            break;
-        }
+        // Added a new shooter without sound? Grant him a voice!
+        assert( sounds.rangeAttack != M82::UNKNOWN );
+        return sounds.rangeAttack;
     }
 
-    return GetMonsterSprite().m82_attk;
+    assert( sounds.meleeAttack != M82::UNKNOWN );
+    return sounds.meleeAttack;
 }
 
-int Battle::Unit::M82Kill( void ) const
+int Battle::Unit::M82Kill() const
 {
-    return GetMonsterSprite().m82_kill;
+    return fheroes2::getMonsterData( id ).sounds.death;
 }
 
-int Battle::Unit::M82Move( void ) const
+int Battle::Unit::M82Move() const
 {
-    return GetMonsterSprite().m82_move;
+    return fheroes2::getMonsterData( id ).sounds.movement;
 }
 
-int Battle::Unit::M82Wnce( void ) const
+int Battle::Unit::M82Wnce() const
 {
-    return GetMonsterSprite().m82_wnce;
+    return fheroes2::getMonsterData( id ).sounds.wince;
 }
 
 int Battle::Unit::M82Expl( void ) const
@@ -1827,7 +1682,7 @@ fheroes2::Point Battle::Unit::GetBackPoint() const
 
 fheroes2::Point Battle::Unit::GetCenterPoint() const
 {
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite().icn_file, GetFrame() );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( GetMonsterSprite(), GetFrame() );
 
     const fheroes2::Rect & pos = position.GetRect();
     const s32 centerY = pos.y + pos.height + sprite.y() / 2 - 10;
