@@ -28,7 +28,6 @@
 #include "dialog.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "localevent.h"
 #include "mus.h"

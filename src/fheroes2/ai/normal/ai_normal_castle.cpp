@@ -20,7 +20,6 @@
 
 #include "ai_normal.h"
 #include "castle.h"
-#include "heroes.h"
 #include "kingdom.h"
 #include "race.h"
 #include "world.h"

@@ -22,12 +22,12 @@
 
 #include <algorithm>
 #include <cmath>
-#include <functional>
 #include <numeric>
 #include <set>
 
 #include "agg_image.h"
 #include "army.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "color.h"
@@ -44,7 +44,7 @@
 #include "race.h"
 #include "rand.h"
 #include "screen.h"
-#include "speed.h"
+#include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "world.h"
@@ -320,11 +320,8 @@ bool Troops::AllTroopsAreUndead() const
 
 bool Troops::CanJoinTroop( const Monster & mons ) const
 {
-    const_iterator it = std::find_if( begin(), end(), [&mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); } );
-    if ( it == end() )
-        it = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
-
-    return it != end();
+    return std::any_of( begin(), end(), [&mons]( const Troop * troop ) { return troop->isMonster( mons.GetID() ); } )
+           || std::any_of( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
 }
 
 bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst )

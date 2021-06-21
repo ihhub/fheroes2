@@ -44,7 +44,7 @@
 #include "logging.h"
 #include "mus.h"
 #include "race.h"
-#include "speed.h"
+#include "settings.h"
 #include "tools.h"
 #include "world.h"
 

@@ -27,14 +27,17 @@
 #include "army.h"
 #include "army_bar.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
-#include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "logging.h"
+#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
+#include "ui_button.h"
 
 namespace
 {

@@ -28,15 +28,15 @@
 #include "artifact.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
 #include "heroes.h"
 #include "icn.h"
 #include "logging.h"
 #include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
 #include "text.h"
-#include "world.h"
+#include "tools.h"
 
 enum
 {
@@ -824,7 +824,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
 
 bool BagArtifacts::ContainUltimateArtifact( void ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
+    return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
 void BagArtifacts::RemoveScroll( const Artifact & art )

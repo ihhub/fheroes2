@@ -22,8 +22,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <iostream>
-#include <iterator>
 
 #include "serialize.h"
 #include "tinyconfig.h"

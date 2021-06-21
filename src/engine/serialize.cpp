@@ -22,9 +22,6 @@
 
 #include <algorithm>
 #include <cstring>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <string>
 
 #include "endian_h2.h"
@@ -389,7 +386,7 @@ void StreamBuf::copy( const StreamBuf & sb )
     setbigendian( sb.bigendian() );
 }
 
-void StreamBuf::put8( char v )
+void StreamBuf::put8( const uint8_t v )
 {
     if ( sizep() == 0 )
         reallocbuf( capacity() + capacity() / 2 );
@@ -445,28 +442,28 @@ u32 StreamBuf::getLE32()
 void StreamBuf::putBE16( u16 v )
 {
     put8( v >> 8 );
-    put8( v );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE16( u16 v )
 {
-    put8( v );
+    put8( v & 0xFF );
     put8( v >> 8 );
 }
 
 void StreamBuf::putBE32( u32 v )
 {
     put8( v >> 24 );
-    put8( v >> 16 );
-    put8( v >> 8 );
-    put8( v );
+    put8( ( v >> 16 ) & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE32( u32 v )
 {
-    put8( v );
-    put8( v >> 8 );
-    put8( v >> 16 );
+    put8( v & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( ( v >> 16 ) & 0xFF );
     put8( v >> 24 );
 }
 
@@ -599,9 +596,9 @@ u8 StreamFile::get8()
     return getUint<uint8_t>();
 }
 
-void StreamFile::put8( char ch )
+void StreamFile::put8( const uint8_t v )
 {
-    putUint<char>( ch );
+    putUint<uint8_t>( v );
 }
 
 uint16_t StreamFile::getBE16()

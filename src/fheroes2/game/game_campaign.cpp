@@ -32,12 +32,9 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
-#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {

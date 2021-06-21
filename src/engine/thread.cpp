@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "thread.h"
-#include "system.h"
 
 using namespace SDL;
 

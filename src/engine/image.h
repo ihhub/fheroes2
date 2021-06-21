@@ -21,7 +21,6 @@
 
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "math_base.h"

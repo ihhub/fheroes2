@@ -21,12 +21,10 @@
  ***************************************************************************/
 
 #include <cstdlib>
-#include <iostream>
 
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "logging.h"
-#include "tools.h"
 
 #include <SDL.h>
 

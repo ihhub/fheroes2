@@ -22,22 +22,18 @@
 
 #include <algorithm>
 #include <cstring>
-#include <functional>
+#include <iomanip>
 
 #include "agg_image.h"
-#include "battle_bridge.h"
 #include "battle_cell.h"
 #include "battle_interface.h"
 #include "battle_troop.h"
-#include "bin_info.h"
-#include "game.h"
 #include "game_static.h"
-#include "heroes.h"
 #include "logging.h"
-#include "luck.h"
 #include "morale.h"
 #include "rand.h"
 #include "speed.h"
+#include "tools.h"
 #include "world.h"
 
 Battle::ModeDuration::ModeDuration( u32 mode, u32 duration )

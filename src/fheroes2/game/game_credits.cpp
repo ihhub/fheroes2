@@ -29,7 +29,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
-#include "ui_window.h"
 
 #include <cassert>
 

@@ -22,7 +22,7 @@
 #ifndef H2MP2_H
 #define H2MP2_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 #define MP2OFFSETDATA 428
 #define SIZEOFMP2TILE 20

@@ -42,7 +42,7 @@ protected:
     size_t flags;
 
     virtual u8 get8() = 0;
-    virtual void put8( char ) = 0;
+    virtual void put8( const uint8_t ) = 0;
 
     virtual size_t sizeg( void ) const = 0;
     virtual size_t sizep( void ) const = 0;
@@ -90,7 +90,7 @@ public:
         return get8();
     }
 
-    void put( char ch )
+    void put( const uint8_t ch )
     {
         put8( ch );
     }
@@ -243,7 +243,7 @@ protected:
     void setfail( void );
 
     u8 get8() override;
-    void put8( char ) override;
+    void put8( const uint8_t v ) override;
 
     friend class ZStreamBuf;
 
@@ -300,7 +300,7 @@ protected:
     size_t tellp( void ) const override;
 
     u8 get8() override;
-    void put8( char ) override;
+    void put8( const uint8_t v ) override;
 
 private:
     std::FILE * _file;

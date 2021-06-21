@@ -24,7 +24,6 @@
 
 #include "agg_image.h"
 #include "army_bar.h"
-#include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -32,16 +31,15 @@
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "kingdom.h"
-#include "payment.h"
 #include "race.h"
 #include "settings.h"
 #include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "ui_window.h"
-#include "world.h"
 
 int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {

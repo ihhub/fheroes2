@@ -21,7 +21,12 @@
 #pragma once
 
 #include "interface_itemsbar.h"
-#include "skill.h"
+
+class Heroes;
+namespace Skill
+{
+    class Secondary;
+}
 
 class PrimarySkillsBar : public Interface::ItemsBar<int>
 {

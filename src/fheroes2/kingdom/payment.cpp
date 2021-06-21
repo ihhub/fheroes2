@@ -23,8 +23,8 @@
 #include <cstring>
 
 #include "buildinginfo.h"
-#include "logging.h"
 #include "payment.h"
+#include "settings.h"
 
 struct paymentstats_t
 {

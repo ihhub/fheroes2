@@ -20,12 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <ctime>
-
 #include "game.h"
-#include "game_interface.h"
 #include "localevent.h"
 #include "logging.h"
+#include "screen.h"
 #include "settings.h"
 #include "tinyconfig.h"
 

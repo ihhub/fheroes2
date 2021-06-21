@@ -30,15 +30,15 @@
 #include "artifact.h"
 #include "battle.h"
 #include "castle.h"
-#include "cursor.h"
+#include "dialog.h"
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_icons.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -46,10 +46,11 @@
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
-#include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "speed.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -844,7 +845,7 @@ bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
 
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 void Heroes::SetVisited( s32 index, Visit::type_t type )

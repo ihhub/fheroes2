@@ -19,12 +19,9 @@
  ***************************************************************************/
 
 #include "campaign_savedata.h"
-#include "artifact.h"
-#include "game.h"
-#include "heroes.h"
+#include "army.h"
+#include "campaign_data.h"
 #include "serialize.h"
-#include "settings.h"
-#include "translations.h"
 #include <algorithm>
 #include <cassert>
 

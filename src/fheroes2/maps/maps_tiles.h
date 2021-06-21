@@ -27,6 +27,7 @@
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "color.h"
 #include "direction.h"
 #include "gamedefs.h"
 #include "resource.h"

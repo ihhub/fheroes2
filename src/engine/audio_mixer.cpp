@@ -25,7 +25,6 @@
 #include <vector>
 
 #include "audio.h"
-#include "audio_cdrom.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "engine.h"

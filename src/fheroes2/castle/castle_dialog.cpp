@@ -20,9 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <string>
-#include <utility>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -38,8 +36,6 @@
 #include "m82.h"
 #include "mus.h"
 #include "payment.h"
-#include "profit.h"
-#include "race.h"
 #include "resource.h"
 #include "settings.h"
 #include "statusbar.h"

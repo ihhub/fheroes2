@@ -33,6 +33,7 @@
 #include "mageguild.h"
 #include "race.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {

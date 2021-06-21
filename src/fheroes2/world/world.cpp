@@ -22,15 +22,14 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -40,7 +39,7 @@
 #include "race.h"
 #include "resource.h"
 #include "save_format_version.h"
-#include "text.h"
+#include "settings.h"
 #include "world.h"
 
 namespace GameStatic
@@ -960,11 +959,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     case GameOver::WINS_ARTIFACT: {
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } ) );
+            return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
         }
     }
 

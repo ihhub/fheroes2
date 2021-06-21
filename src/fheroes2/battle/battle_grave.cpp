@@ -22,7 +22,7 @@
 
 #include <algorithm>
 
-#include "battle_board.h"
+#include "battle_arena.h"
 #include "battle_grave.h"
 #include "battle_troop.h"
 

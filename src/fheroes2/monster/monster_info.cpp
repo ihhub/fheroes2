@@ -563,7 +563,7 @@ namespace fheroes2
         case MonsterAbilityType::AREA_SHOT:
             return "Cloud attack";
         case MonsterAbilityType::MORAL_DECREMENT:
-            return "Decreases enemy's moral by " + std::to_string( ability.value );
+            return "Decreases enemy's morale by " + std::to_string( ability.value );
         case MonsterAbilityType::ENEMY_HALFING:
             return std::to_string( ability.percentage ) + "% chance to halve enemy";
         case MonsterAbilityType::SOUL_EATER:

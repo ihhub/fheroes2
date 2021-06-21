@@ -20,26 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <ctime>
 #include <sstream>
 
-#include "army.h"
 #include "campaign_savedata.h"
-#include "castle.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "game_static.h"
-#include "heroes.h"
-#include "interface_gamearea.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "monster.h"
+#include "save_format_version.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "tools.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -226,8 +221,8 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
 
     // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove MonsterStaticData usage" );
-    if ( binver < FORMAT_VERSION_095_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
+    if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
         fz >> MonsterStaticData::Get();
     }
 

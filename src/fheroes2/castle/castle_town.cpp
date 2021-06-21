@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <string>
-#include <vector>
 
 #include "agg_image.h"
 #include "buildinginfo.h"
@@ -37,6 +36,7 @@
 #include "settings.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "world.h"
 

@@ -22,12 +22,9 @@
 
 #include <algorithm>
 #include <sstream>
-#include <utility>
 
 #include "army.h"
 #include "castle.h"
-#include "color.h"
-#include "game.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"

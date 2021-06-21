@@ -39,6 +39,7 @@
 #include "mp2.h"
 #include "race.h"
 #include "settings.h"
+#include "tools.h"
 
 namespace
 {

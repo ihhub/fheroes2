@@ -24,9 +24,7 @@
 
 #include "heroes_base.h"
 #include "mageguild.h"
-#include "race.h"
 #include "rand.h"
-#include "settings.h"
 
 Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, const int level );
 Spell GetGuaranteedDamageSpellForMageGuild();

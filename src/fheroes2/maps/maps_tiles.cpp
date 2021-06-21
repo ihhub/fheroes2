@@ -22,18 +22,19 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
-#include <cstdlib>
-#include <iomanip>
 #include <iostream>
 
 #include "agg_image.h"
 #include "castle.h"
 #include "game.h"
-#include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
+#include "game_interface.h"
+#else
+#include "interface_gamearea.h"
+#endif
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -52,8 +53,11 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
+#include "settings.h"
 #include "spell.h"
+#ifdef WITH_DEBUG
 #include "text.h"
+#endif
 #include "til.h"
 #include "trees.h"
 #include "world.h"
@@ -1196,8 +1200,8 @@ void Maps::Tiles::UpdatePassable( void )
     // on ground
     if ( MP2::OBJ_HEROES != mp2_object && !isWater() ) {
         bool hasRocksOrTrees = isImpassableIfOverlayed( objectTileset, objectIndex );
-        bool mounts2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isMountsRocs );
-        bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
+        bool mounts2 = std::any_of( addons_level2.begin(), addons_level2.end(), isMountsRocs );
+        bool trees2 = std::any_of( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
         if ( tilePassable && !emptyobj && Maps::TileIsCoast( _index, Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && !isShadow() ) {
@@ -1863,9 +1867,9 @@ std::string Maps::Tiles::String( void ) const
 void Maps::Tiles::FixObject( void )
 {
     if ( MP2::OBJ_ZERO == mp2_object ) {
-        if ( addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
+        if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
+        else if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
