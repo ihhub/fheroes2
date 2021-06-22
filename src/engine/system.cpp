@@ -197,9 +197,7 @@ std::string System::GetUniversalBasename( const std::string & str )
 {
     std::string path = str;
 
-    for ( const char sep : { '/', '\\' } ) {
-        std::replace( path.begin(), path.end(), sep, SEPARATOR );
-    }
+    std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
 
     return GetBasename( path );
 }
