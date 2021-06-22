@@ -90,7 +90,7 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, u8 obj, const Heroes & hero, std::string * strs )
+int ObjectVisitedModifiersResult( int /*type*/, uint8_t obj, const Heroes & hero, std::string * strs )
 {
     if ( !hero.isObjectTypeVisited( obj ) )
         return 0;
@@ -614,8 +614,8 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result
-        += std::accumulate( objs, std::end( objs ), 0, [this, &strs]( int sum, u8 obj ) { return sum + ObjectVisitedModifiersResult( MDF_MORALE, obj, *this, strs ); } );
+    result += std::accumulate( objs, std::end( objs ), 0,
+                               [this, &strs]( int sum, uint8_t obj ) { return sum + ObjectVisitedModifiersResult( MDF_MORALE, obj, *this, strs ); } );
 
     // result
     if ( result < Morale::AWFUL )
@@ -651,7 +651,8 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += std::accumulate( objs, std::end( objs ), 0, [this, &strs]( int sum, u8 obj ) { return sum + ObjectVisitedModifiersResult( MDF_LUCK, obj, *this, strs ); } );
+    result += std::accumulate( objs, std::end( objs ), 0,
+                               [this, &strs]( int sum, uint8_t obj ) { return sum + ObjectVisitedModifiersResult( MDF_LUCK, obj, *this, strs ); } );
 
     if ( result < Luck::AWFUL )
         return Luck::CURSED;

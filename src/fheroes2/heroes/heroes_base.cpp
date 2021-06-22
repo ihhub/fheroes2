@@ -33,7 +33,7 @@
 #include "translations.h"
 #include "world.h"
 
-int ArtifactModifiersResult( int type, u8 artifact, const HeroBase & base, std::string * strs )
+int ArtifactModifiersResult( int type, uint8_t artifact, const HeroBase & base, std::string * strs )
 {
     const Artifact art( artifact );
     if ( !art.isValid() )
@@ -43,7 +43,7 @@ int ArtifactModifiersResult( int type, u8 artifact, const HeroBase & base, std::
     if ( acount == 0 )
         return 0;
 
-    s32 mod = art.ExtraValue();
+    int32_t mod = art.ExtraValue();
 
     switch ( art() ) {
     case Artifact::SWORD_BREAKER:
@@ -67,7 +67,7 @@ int ArtifactModifiersResult( int type, u8 artifact, const HeroBase & base, std::
     // morale
     case Artifact::FIZBIN_MISFORTUNE:
         if ( type == MDF_MORALE )
-            mod = -static_cast<s32>( art.ExtraValue() );
+            mod = -static_cast<int32_t>( art.ExtraValue() );
         break;
     default:
         break;
@@ -88,7 +88,7 @@ int ArtifactsModifiersAttack( const HeroBase & base, std::string * strs )
                        Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
                        Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_ATTACK, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_ATTACK, art, base, strs ); } );
 }
 
 int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
@@ -97,7 +97,7 @@ int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
                        Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
                        Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_DEFENSE, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_DEFENSE, art, base, strs ); } );
 }
 
 int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
@@ -106,7 +106,7 @@ int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
                        Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
                        Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_POWER, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_POWER, art, base, strs ); } );
 }
 
 int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
@@ -114,7 +114,8 @@ int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
                        Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_KNOWLEDGE, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0,
+                            [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_KNOWLEDGE, art, base, strs ); } );
 }
 
 int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
@@ -122,7 +123,7 @@ int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
                        Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_MORALE, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_MORALE, art, base, strs ); } );
 }
 
 int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
@@ -130,7 +131,7 @@ int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
     const u8 arts[]
         = {Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD};
 
-    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, u8 art ) { return sum + ArtifactModifiersResult( MDF_LUCK, art, base, strs ); } );
+    return std::accumulate( arts, std::end( arts ), 0, [&base, &strs]( int sum, uint8_t art ) { return sum + ArtifactModifiersResult( MDF_LUCK, art, base, strs ); } );
 }
 
 HeroBase::HeroBase( int type, int race )
