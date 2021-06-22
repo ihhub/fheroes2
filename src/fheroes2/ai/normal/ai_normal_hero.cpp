@@ -149,7 +149,11 @@ namespace AI
                 return value;
             }
             else {
-                return castle->getBuildingValue() * 150.0 + 3000;
+                double value = castle->getBuildingValue() * 150.0 + 3000;
+                // If the castle is defenseless
+                if ( !castle->GetActualArmy().isValid() )
+                    value *= 1.25;
+                return value;
             }
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
@@ -362,7 +366,12 @@ namespace AI
                     }
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
-                if ( heroStrength < regionStats.highestThreat )
+
+                const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
+                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                    value -= dangerousTaskPenalty / 2;
+
+                else if ( heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
 
                 if ( dist > leftMovePoints ) {
@@ -449,7 +458,7 @@ namespace AI
             }
 
             if ( bestTargetIndex == -1 ) {
-                // Nothing to do. Stop eveything
+                // Nothing to do. Stop everything
                 break;
             }
 
