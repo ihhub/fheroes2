@@ -131,7 +131,7 @@ namespace AI
             else {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
                 // If the castle is defenseless
-                if ( castle->GetActualArmy().GetStrength() <= 0 )
+                if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
                 return value;
             }
