@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "game_video.h"
-#include "agg.h"
 #include "audio_mixer.h"
 #include "cursor.h"
 #include "game_delays.h"

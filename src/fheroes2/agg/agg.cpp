@@ -23,22 +23,18 @@
 #include <algorithm>
 #include <cassert>
 #include <condition_variable>
-#include <iostream>
 #include <map>
 #include <queue>
 #include <thread>
 
 #include "agg.h"
 #include "agg_file.h"
-#include "audio.h"
-#include "audio_cdrom.h"
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "dir.h"
 #include "embedded_image.h"
 #include "font.h"
 #include "game.h"
-#include "gamedefs.h"
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
@@ -46,7 +42,7 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
+#include "tools.h"
 #include "xmi.h"
 #include "zzlib.h"
 

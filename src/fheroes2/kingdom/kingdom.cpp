@@ -24,6 +24,7 @@
 
 #include "ai.h"
 #include "battle.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "color.h"
 #include "difficulty.h"
@@ -35,6 +36,7 @@
 #include "players.h"
 #include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "visit.h"
 #include "world.h"
 
@@ -400,7 +402,7 @@ bool Kingdom::isVisited( s32 index, int object ) const
 /* return true if object visited */
 bool Kingdom::isVisited( int object ) const
 {
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 u32 Kingdom::CountVisitedObjects( int object ) const
@@ -450,7 +452,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, int objectID ) con
 
 bool Kingdom::HeroesMayStillMove( void ) const
 {
-    return heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
+    return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove(); } );
 }
 
 u32 Kingdom::GetCountCapital( void ) const

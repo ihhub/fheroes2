@@ -26,7 +26,6 @@
 #include "game.h"
 #include "icn.h"
 #include "localevent.h"
-#include "profit.h"
 #include "settings.h"
 #include "skill.h"
 #include "text.h"

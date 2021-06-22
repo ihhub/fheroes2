@@ -22,6 +22,7 @@
 #include "image.h"
 
 #include <memory>
+#include <string>
 
 namespace fheroes2
 {

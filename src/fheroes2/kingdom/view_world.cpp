@@ -28,6 +28,7 @@
 #include "image.h"
 #include "interface_border.h"
 #include "maps.h"
+#include "settings.h"
 #include "tools.h"
 #include "world.h"
 

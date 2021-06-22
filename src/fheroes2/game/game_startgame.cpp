@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <vector>
 
 #include "agg.h"
@@ -45,8 +44,9 @@
 #include "maps_tiles.h"
 #include "mus.h"
 #include "route.h"
-#include "system.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

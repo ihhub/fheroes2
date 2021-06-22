@@ -24,13 +24,13 @@
 
 #include "agg_image.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 
 void CastleRedrawTownName( const Castle &, const fheroes2::Point & );
 void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,

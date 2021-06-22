@@ -29,6 +29,7 @@
 #include "icn.h"
 #include "race.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>

@@ -34,7 +34,6 @@
 #include "resource.h"
 #include "speed.h"
 #include "text.h"
-#include "world.h"
 
 namespace
 {

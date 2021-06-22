@@ -118,48 +118,4 @@ struct MapSign : public MapObjectSimple
 StreamBase & operator<<( StreamBase &, const MapSign & );
 StreamBase & operator>>( StreamBase &, MapSign & );
 
-struct MapResource : public MapObjectSimple
-{
-    MapResource();
-
-    ResourceCount resource;
-};
-
-StreamBase & operator<<( StreamBase &, const MapResource & );
-StreamBase & operator>>( StreamBase &, MapResource & );
-
-struct MapArtifact : public MapObjectSimple
-{
-    MapArtifact();
-
-    Artifact artifact;
-    int condition;
-    int extended;
-
-    Funds QuantityFunds( void ) const;
-    ResourceCount QuantityResourceCount( void ) const;
-};
-
-StreamBase & operator<<( StreamBase &, const MapArtifact & );
-StreamBase & operator>>( StreamBase &, MapArtifact & );
-
-struct MapMonster : public MapObjectSimple
-{
-    MapMonster();
-
-    Monster monster;
-
-    int condition;
-    int count;
-
-    Troop QuantityTroop( void ) const;
-    bool JoinConditionSkip( void ) const;
-    bool JoinConditionMoney( void ) const;
-    bool JoinConditionFree( void ) const;
-    bool JoinConditionForce( void ) const;
-};
-
-StreamBase & operator<<( StreamBase &, const MapMonster & );
-StreamBase & operator>>( StreamBase &, MapMonster & );
-
 #endif

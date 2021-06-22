@@ -32,6 +32,8 @@
 #include "morale.h"
 #include "race.h"
 #include "rand.h"
+#include "save_format_version.h"
+#include "settings.h"
 #include "speed.h"
 #include "translations.h"
 
@@ -55,13 +57,13 @@ namespace
 
 StreamBase & operator>>( StreamBase & msg, monstats_t & obj )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
     return msg >> obj.attack >> obj.defense >> obj.damageMin >> obj.damageMax >> obj.hp >> obj.speed >> obj.grown >> obj.shots >> obj.cost;
 }
 
 StreamBase & operator>>( StreamBase & msg, const MonsterStaticData & /*obj*/ )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove this function as it's not supported from 0.9.5" );
 
     u32 monsters_size;
     msg >> monsters_size;
@@ -1235,20 +1237,8 @@ payment_t Monster::GetCost( void ) const
 
 payment_t Monster::GetUpgradeCost( void ) const
 {
-    Monster upgr = GetUpgrade();
-    payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
-
-    if ( GameStatic::isCustomMonsterUpgradeOption() ) {
-        const float upgradeRatio = GameStatic::GetMonsterUpgradeRatio();
-
-        pay.wood = static_cast<int32_t>( pay.wood * upgradeRatio );
-        pay.mercury = static_cast<int32_t>( pay.mercury * upgradeRatio );
-        pay.ore = static_cast<int32_t>( pay.ore * upgradeRatio );
-        pay.sulfur = static_cast<int32_t>( pay.sulfur * upgradeRatio );
-        pay.crystal = static_cast<int32_t>( pay.crystal * upgradeRatio );
-        pay.gems = static_cast<int32_t>( pay.gems * upgradeRatio );
-        pay.gold = static_cast<int32_t>( pay.gold * upgradeRatio );
-    }
+    const Monster upgr = GetUpgrade();
+    const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
 
     return pay;
 }

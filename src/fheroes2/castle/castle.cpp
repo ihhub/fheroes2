@@ -25,7 +25,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
-#include "battle_board.h"
 #include "battle_tower.h"
 #include "castle.h"
 #include "dialog.h"
@@ -42,7 +41,9 @@
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace

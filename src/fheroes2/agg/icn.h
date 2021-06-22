@@ -23,7 +23,7 @@
 #ifndef H2ICN_H
 #define H2ICN_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 namespace ICN
 {

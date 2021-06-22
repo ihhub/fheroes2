@@ -22,7 +22,6 @@
 #ifndef H2SPELL_H
 #define H2SPELL_H
 
-#include "gamedefs.h"
 #include "payment.h"
 
 #define DEFAULT_SPELL_DURATION 3
@@ -166,7 +165,7 @@ public:
     static Spell RandAdventure( int lvl );
     static Spell Rand( int lvl, bool adv );
 
-    static u32 CalculateDimensionDoorDistance( u32 current_sp, u32 total_hp );
+    static u32 CalculateDimensionDoorDistance();
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Spell & );

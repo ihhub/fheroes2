@@ -27,7 +27,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_interface.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"

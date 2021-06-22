@@ -33,9 +33,10 @@
 #include "logging.h"
 #include "m82.h"
 #include "monster.h"
-#include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -407,7 +408,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
 bool ActionSpellDimensionDoor( Heroes & hero )
 {
-    const u32 distance = Spell::CalculateDimensionDoorDistance( hero.GetPower(), hero.GetArmy().GetHitPoints() );
+    const u32 distance = Spell::CalculateDimensionDoorDistance();
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -571,11 +572,8 @@ bool ActionSpellVisions( Heroes & hero )
 
     for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
         const Maps::Tiles & tile = world.GetTiles( *it );
-        const MapMonster * map_troop = nullptr;
-        if ( tile.GetObject() == MP2::OBJ_MONSTER )
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        Troop troop = tile.QuantityTroop();
         const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
         std::string hdr;

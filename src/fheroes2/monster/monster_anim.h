@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <list>
+
 #include "battle_animation.h"
 
 class Monster;

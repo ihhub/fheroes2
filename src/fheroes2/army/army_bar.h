@@ -23,12 +23,11 @@
 #ifndef H2ARMYBAR_H
 #define H2ARMYBAR_H
 
-#include "army_troop.h"
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
 #include "ui_tool.h"
 
 class Army;
+class ArmyTroop;
 
 class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 {

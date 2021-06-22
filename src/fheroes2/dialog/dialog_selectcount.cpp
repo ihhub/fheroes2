@@ -28,6 +28,7 @@
 #include "localevent.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include <cassert>
 

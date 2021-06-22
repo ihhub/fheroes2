@@ -29,7 +29,9 @@
 
 #include "dir.h"
 #include "system.h"
+#if defined( FHEROES2_VITA )
 #include "tools.h"
+#endif
 #include <cstring>
 #if defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp

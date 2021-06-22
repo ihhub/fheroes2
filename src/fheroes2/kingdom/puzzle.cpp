@@ -34,6 +34,7 @@
 #include "mus.h"
 #include "puzzle.h"
 #include "rand.h"
+#include "settings.h"
 #include "ui_window.h"
 #include "world.h"
 

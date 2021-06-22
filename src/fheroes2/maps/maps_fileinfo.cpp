@@ -40,6 +40,7 @@
 #include "race.h"
 #include "settings.h"
 #include "system.h"
+#include "tools.h"
 
 namespace
 {

@@ -30,6 +30,7 @@
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
+#include "types.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 244
