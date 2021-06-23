@@ -293,6 +293,8 @@ public:
     u32 LossCountDays() const;
     int controllerPointerSpeed() const;
 
+    void SetMapsFile( const std::string & file );
+
     std::string GetProgramPath() const
     {
         return path_program;
@@ -306,16 +308,6 @@ public:
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
-
-    // deprecated
-    const std::string & GetDataParams() const
-    {
-        return data_params;
-    }
-    ListDirs GetMapsParams() const
-    {
-        return maps_params;
-    }
 
 protected:
     void PostLoad();
@@ -338,8 +330,6 @@ private:
     int game_difficulty;
 
     std::string path_program;
-    std::string data_params;
-    ListDirs maps_params;
 
     std::string font_normal;
     std::string font_small;

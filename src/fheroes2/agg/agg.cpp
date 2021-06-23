@@ -304,10 +304,6 @@ bool AGG::ReadDataDir( void )
     Settings & conf = Settings::Get();
 
     ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
-    const std::string & other_data = conf.GetDataParams();
-
-    if ( other_data.size() && other_data != "data" )
-        aggs.Append( Settings::FindFiles( other_data, ".agg", false ) );
 
     // not found agg, exit
     if ( aggs.empty() )

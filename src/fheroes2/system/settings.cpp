@@ -421,16 +421,6 @@ bool Settings::Read( const std::string & filename )
         ++ptr;
     }
 
-    // maps directories
-    maps_params.Append( config.ListStr( "maps" ) );
-    maps_params.sort();
-    maps_params.unique();
-
-    // data
-    sval = config.StrParams( "data" );
-    if ( !sval.empty() )
-        data_params = sval;
-
     if ( Unicode() ) {
         sval = config.StrParams( "maps charset" );
         if ( !sval.empty() )
@@ -689,13 +679,6 @@ std::string Settings::String() const
 
     os << "# fheroes2 configuration file (saved by version " << GetVersion() << ")" << std::endl;
 
-    os << std::endl << "# path to the data directory" << std::endl;
-    os << "data = " << data_params << std::endl;
-
-    os << std::endl << "# path to the maps directory (you can specify multiple directories here)" << std::endl;
-    for ( ListDirs::const_iterator it = maps_params.begin(); it != maps_params.end(); ++it )
-        os << "maps = " << *it << std::endl;
-
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
@@ -865,6 +848,11 @@ int Settings::FontsNormalSize() const
 int Settings::FontsSmallSize() const
 {
     return size_small;
+}
+
+void Settings::SetMapsFile( const std::string & file )
+{
+    current_maps_file.file = file;
 }
 
 void Settings::SetProgramPath( const char * argv0 )

@@ -220,6 +220,10 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
 
+    // Settings should contain the full path to the current map file, if this map is available
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove the System::GetUniversalBasename()" );
+    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
+
     // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
     if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
