@@ -1375,11 +1375,11 @@ void Maps::Tiles::AddonsSort()
     addons_level1.sort( TilesAddon::PredicateSortRules1 );
 
     if ( topObjectExists ) {
-        TilesAddon & highestPriorityAddon = addons_level1.back();
+        const TilesAddon & highestPriorityAddon = addons_level1.back();
         uniq = highestPriorityAddon.uniq;
         objectTileset = highestPriorityAddon.object;
         objectIndex = highestPriorityAddon.index;
-        quantity1 = ( ( quantity1 >> 2 ) << 2 ) + highestPriorityAddon.level;
+        quantity1 = ( quantity1 & ( 0xFF - 0x03 ) ) + highestPriorityAddon.level;
 
         addons_level1.pop_back();
     }
