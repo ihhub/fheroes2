@@ -372,10 +372,7 @@ namespace
             return Spell( spellId ).GetName();
         }
     }
-}
 
-namespace Campaign
-{
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
         static const auto fileNameToPath = []() {
@@ -400,7 +397,10 @@ namespace Campaign
 
         return false;
     }
+}
 
+namespace Campaign
+{
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
