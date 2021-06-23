@@ -334,9 +334,9 @@ void World::NewMaps( int32_t sw, int32_t sh )
         mp2tile.indexName2 = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
-        mp2tile.indexAddon = 0;
-        mp2tile.editorObjectLink = 0;
-        mp2tile.editorObjectOverlay = 0;
+        mp2tile.nextAddonIndex = 0;
+        mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
+        mp2tile.level2ObjectUID = 0;
 
         vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
