@@ -390,7 +390,7 @@ namespace Campaign
             return result;
         }();
 
-        auto result = fileNameToPath.find( StringLower( fileName ) );
+        const auto result = fileNameToPath.find( StringLower( fileName ) );
 
         if ( result != fileNameToPath.end() ) {
             matchingFilePath = result->second;
