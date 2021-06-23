@@ -195,11 +195,11 @@ void Castle::LoadFromMP2( StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( auto & troop : troops )
+        for ( Troop & troop : troops )
             troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( auto & troop : troops )
+        for ( Troop & troop : troops )
             troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
