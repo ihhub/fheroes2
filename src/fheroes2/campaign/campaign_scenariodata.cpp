@@ -387,7 +387,7 @@ namespace
             return result;
         }();
 
-        const auto result = fileNameToPath.find( StringLower( fileName ) );
+        const auto result = fileNameToPath.find( fileName );
 
         if ( result != fileNameToPath.end() ) {
             matchingFilePath = result->second;
@@ -489,7 +489,7 @@ namespace Campaign
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
-        , _fileName( fileName )
+        , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )
         , _description( description )
         , _victoryCondition( victoryCondition )
