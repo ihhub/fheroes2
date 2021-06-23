@@ -17,7 +17,7 @@ option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv 
 option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
 option(ENABLE_TOOLS    "Enable additional tools" OFF)
 option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
-option(ENABLE_DEMO     "Fetch and install HoMM II demo data" OFF)
+option(GET_HOMM2_DEMO  "Fetch and install HoMM II demo data" OFF)
 
 option(USE_SYSTEM_LIBSMACKER     "Use system libsmacker instead bundled version" OFF)
 
@@ -50,7 +50,7 @@ install(
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}
 	)
 
-if(ENABLE_DEMO)
+if(GET_HOMM2_DEMO)
 	include(FetchContent)
 	set(FETCHCONTENT_QUIET OFF)
 	FetchContent_Declare(
@@ -66,7 +66,7 @@ if(ENABLE_DEMO)
 		${CONFIGURE_FHEROES2_DATA}/data FILES_MATCHING PATTERN *.*)
 	install(DIRECTORY ${demodata_SOURCE_DIR}/MAPS/ DESTINATION
 		${CONFIGURE_FHEROES2_DATA}/maps FILES_MATCHING PATTERN *.*)
-endif(ENABLE_DEMO)
+endif(GET_HOMM2_DEMO)
 
 if(WIN32)
 	install(

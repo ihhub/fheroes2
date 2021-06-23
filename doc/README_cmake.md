@@ -64,10 +64,10 @@ After building, executable can be found in `build\Release` directory.
 
 ### Using Demo data
 
-CMake project also supports fetching data from HoMM II Demo.
-Just add `-DENABLE_DEMO=ON` to configuration options:
+CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
+To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For example:
 
 ```shell
-cmake -B build -DENABLE_DEMO=ON <some other options>
+cmake -B build -DGET_HOMM2_DEMO=ON <some other options>
 ```
 
