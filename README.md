@@ -5,10 +5,10 @@
 Free implementation of **Heroes of Might and Magic II** game engine.
 
 <p align="center">
-    <img src="files/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="files/images/screenshots/screenshot_castle.png?raw=true" width="410">
+    <img src="doc/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="doc/images/screenshots/screenshot_castle.png?raw=true" width="410">
 </p>
 <p align="center">
-    <img src="files/images/screenshots/screenshot_battle.png?raw=true" width="512">
+    <img src="doc/images/screenshots/screenshot_battle.png?raw=true" width="512">
 </p>
 
 ## Download and install
