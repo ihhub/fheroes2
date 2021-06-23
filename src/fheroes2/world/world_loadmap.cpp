@@ -185,9 +185,6 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.level1ObjectUID = fs.getLE32();
         mp2tile.level2ObjectUID = fs.getLE32();
 
-        // assert( ( mp2tile.quantity1 & 3 ) != 1 );
-
-
         tile.Init( i, mp2tile );
 
         // Read extra information if it's present.
