@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <functional>
+
 #include "image.h"
+#include "timing.h"
 
 namespace fheroes2
 {
@@ -45,6 +48,18 @@ namespace fheroes2
     private:
         ImageRestorer _restorer;
         bool _isHidden;
+    };
+
+    class UITimer
+    {
+    public:
+        explicit UITimer( std::function<bool()> activeFunction, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate );
+
+        bool isActiveForLongEnough();
+
+    private:
+        std::function<bool()> _isActive;
+        fheroes2::TimeDelay _delayBetweenUpdate, _delayBeforeFirstUpdate;
     };
 
     // This class is useful for cases of playing videos only

@@ -381,6 +381,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Button & buttonTrade = gui.buttonTrade;
     fheroes2::Button & buttonLeft = gui.buttonLeft;
     fheroes2::Button & buttonRight = gui.buttonRight;
+    fheroes2::UITimer timedButtonLeft( [&buttonLeft]() { return buttonLeft.isPressed(); }, 100, 500 );
+    fheroes2::UITimer timedButtonRight( [&buttonRight]() { return buttonRight.isPressed(); }, 100, 500 );
     fheroes2::Scrollbar & scrollbar = gui._scrollbar;
 
     // button exit
@@ -531,7 +533,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // decrease trade resource
-        if ( count_buy && ( ( buttonLeft.isEnabled() && le.MouseClickLeft( gui.buttonLeft.area() ) ) || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
+        if ( count_buy
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isActiveForLongEnough() ) )
+                  || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell -= Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
@@ -542,7 +546,9 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // increase trade resource
-        if ( count_buy < max_buy && ( ( buttonRight.isEnabled() && le.MouseClickLeft( buttonRight.area() ) ) || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
+        if ( count_buy < max_buy
+             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isActiveForLongEnough() ) )
+                  || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
             count_sell += Resource::GOLD == resourceTo ? 1 : GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost );
