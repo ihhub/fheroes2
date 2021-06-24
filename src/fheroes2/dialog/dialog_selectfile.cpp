@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cctype>
 #include <ctime>
 #include <iterator>
@@ -100,16 +99,21 @@ private:
     bool _isDoubleClicked;
 };
 
+#define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
+
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
-    std::string shortDate( 20, 0 );
-    std::string shortHours( 20, 0 );
-    std::string shortTime( 20, 0 );
+    char shortDate[20];
+    char shortHours[20];
+    char shortTime[20];
     time_t timeval = info.localtime;
 
-    std::strftime( &shortDate[0], shortDate.size() - 1, "%b %d,", std::localtime( &timeval ) );
-    std::strftime( &shortHours[0], shortHours.size() - 1, "%H", std::localtime( &timeval ) );
-    std::strftime( &shortTime[0], shortTime.size() - 1, ":%M", std::localtime( &timeval ) );
+    std::fill( shortDate, std::end( shortDate ), 0 );
+    std::fill( shortHours, std::end( shortHours ), 0 );
+    std::fill( shortTime, std::end( shortTime ), 0 );
+    std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
+    std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
+    std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
     std::string savname( System::GetBasename( info.file ) );
 
     if ( savname.size() ) {
