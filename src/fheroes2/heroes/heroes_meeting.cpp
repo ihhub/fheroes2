@@ -494,6 +494,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             armyCountBackgroundRestorer.restore();
 
             selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
@@ -507,7 +513,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             armyCountBackgroundRestorer.restore();
 
+            selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
