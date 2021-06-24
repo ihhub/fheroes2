@@ -5,15 +5,15 @@
 Free implementation of **Heroes of Might and Magic II** game engine.
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410">
+    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="images/screenshots/screenshot_castle.png?raw=true" width="410">
 </p>
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="512">
+    <img src="images/screenshots/screenshot_battle.png?raw=true" width="512">
 </p>
 
 ## Download and install
 
-See the [**fheroes2 installation guide**](/docs/INSTALL.md) for a detailed guide on the download and installation process for the different platforms and operating systems.
+See the [**fheroes2 installation guide**](INSTALL.md) for a detailed guide on the download and installation process for the different platforms and operating systems.
 
 ## Copyright
 
@@ -42,11 +42,11 @@ Please follow below instructions to be able to compile the project:
 
 ### PS Vita
 
-If you would like to build and run this project on PS Vita please follow the instructions on [**this page**](/docs/README_PSV.md).
+If you would like to build and run this project on PS Vita please follow the instructions on [**this page**](README_PSV.md).
 
 ### Compilation with CMake
 
-If you would like to build the project using CMake please follow the instructions on [**this page**](/docs/README_cmake.md).
+If you would like to build the project using CMake please follow the instructions on [**this page**](README_cmake.md).
 
 ## Contribution
 
