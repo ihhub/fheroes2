@@ -20,7 +20,8 @@
 
 #include "ui_base.h"
 
-namespace fheroes2 {
+namespace fheroes2
+{
     ActionObject::ActionObject()
         : _receiver( nullptr )
     {}

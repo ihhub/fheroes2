@@ -20,8 +20,8 @@
 
 #pragma once
 
-namespace fheroes2 {
-
+namespace fheroes2
+{
     // Action-event class to communicate between sender and receiver (only for user actions)
     class ActionObject
     {
@@ -41,5 +41,4 @@ namespace fheroes2 {
         ActionObject * _receiver;
     };
 
-    
 }
