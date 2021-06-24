@@ -24,6 +24,7 @@
 
 #include "image.h"
 #include "timing.h"
+#include "ui_base.h"
 
 namespace fheroes2
 {
@@ -50,16 +51,21 @@ namespace fheroes2
         bool _isHidden;
     };
 
-    class UITimer
+    class TimedEventValidator : public ActionObject
     {
     public:
-        explicit UITimer( std::function<bool()> activeFunction, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate );
+        explicit TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate );
+        ~TimedEventValidator() override = default;
 
         bool isActiveForLongEnough();
 
+    protected:
+        void senderUpdate( const ActionObject * sender ) override;
+
     private:
-        std::function<bool()> _isActive;
-        fheroes2::TimeDelay _delayBetweenUpdate, _delayBeforeFirstUpdate;
+        std::function<bool()> _comparator;
+        fheroes2::TimeDelay _delayBetweenUpdate;
+        fheroes2::TimeDelay _delayBeforeFirstUpdate;
     };
 
     // This class is useful for cases of playing videos only

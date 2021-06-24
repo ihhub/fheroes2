@@ -161,23 +161,28 @@ namespace fheroes2
         return _isHidden;
     }
 
-    UITimer::UITimer( std::function<bool()> activeFunction, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate )
-        : _isActive( activeFunction )
+    TimedEventValidator::TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate )
+        : _comparator( comparator )
         , _delayBetweenUpdate( delayBetweenUpdate )
         , _delayBeforeFirstUpdate( delayBeforeFirstUpdate )
     {}
 
-    bool UITimer::isActiveForLongEnough()
+    bool TimedEventValidator::isActiveForLongEnough()
     {
-        if ( _delayBeforeFirstUpdate.isPassed() && _isActive() && _delayBetweenUpdate.isPassed() ) {
+        if ( _delayBeforeFirstUpdate.isPassed() && _comparator() && _delayBetweenUpdate.isPassed() ) {
             _delayBetweenUpdate.reset();
             return true;
         }
-        if ( !_isActive() ) {
-            _delayBeforeFirstUpdate.reset();
-            _delayBetweenUpdate.reset();
-        }
         return false;
+    }
+
+    void TimedEventValidator::senderUpdate( const ActionObject * sender )
+    {
+        if ( sender == nullptr )
+            return;
+
+        _delayBeforeFirstUpdate.reset();
+        _delayBetweenUpdate.reset();
     }
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()
