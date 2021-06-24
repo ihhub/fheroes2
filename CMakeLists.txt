@@ -43,7 +43,7 @@ endif(ENABLE_UNICODE)
 add_subdirectory(src)
 
 install(
-	FILES doc/README.txt LICENSE changelog.txt
+	FILES docs/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}
 	)
 if(WIN32)
