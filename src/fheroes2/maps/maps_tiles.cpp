@@ -1379,7 +1379,7 @@ void Maps::Tiles::AddonsSort()
         uniq = highestPriorityAddon.uniq;
         objectTileset = highestPriorityAddon.object;
         objectIndex = highestPriorityAddon.index;
-        quantity1 = ( quantity1 & ( 0xFF - 0x03 ) ) + highestPriorityAddon.level;
+        quantity1 = ( quantity1 & ( 0xFF - 0x03 ) ) + ( highestPriorityAddon.level & 0x03 );
 
         addons_level1.pop_back();
     }
