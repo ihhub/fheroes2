@@ -21,9 +21,9 @@ All rights for the original game and its resources belong to former The 3DO Comp
 
 ## License
 
-This project is under GNU General Public License v2.0. Please refer to file [**LICENSE**](https://github.com/ihhub/fheroes2/blob/master/LICENSE) for more details.
+This project is licensed under the [**GNU General Public License v2.0**](https://github.com/ihhub/fheroes2/blob/master/LICENSE).
 
-The original project had been developed at [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
+Initially, the project was developed on [**sourceforge**](https://sourceforge.net/projects/fheroes2/).
 
 ## Development
 
