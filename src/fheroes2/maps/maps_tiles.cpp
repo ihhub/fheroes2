@@ -874,7 +874,7 @@ void Maps::Tiles::updatePassability()
             tilePassable &= ~Direction::TOP_LEFT;
         }
     }
-    
+
     // Right side.
     if ( ( tilePassable & Direction::TOP_RIGHT ) && Maps::isValidDirection( _index, Direction::RIGHT ) ) {
         const Tiles & rightTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
