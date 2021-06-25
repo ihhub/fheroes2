@@ -578,14 +578,14 @@ namespace MP2
     bool isProtectedObject( int obj );
 
     bool isNeedStayFront( int obj );
-    bool isClearGroundObject( int obj );
 
     bool isDayLife( int obj );
     bool isWeekLife( int obj );
     bool isMonthLife( int obj );
     bool isBattleLife( int obj );
 
-    int GetObjectDirect( int obj );
+    // Make sure that you pass a valid action object.
+    int getActionObjectDirection( const int objId );
 }
 
 #endif

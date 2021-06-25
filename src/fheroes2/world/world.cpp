@@ -1142,7 +1142,12 @@ void World::PostLoad()
     // update tile passable
     for ( Maps::Tiles & tile : vec_tiles ) {
         tile.updateEmpty();
-        tile.UpdatePassable();
+        tile.setInitialPassability();
+    }
+
+    // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updatePassability();
     }
 
     // cache data that's accessed often
