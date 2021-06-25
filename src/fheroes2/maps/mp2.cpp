@@ -1121,7 +1121,6 @@ int MP2::getActionObjectDirection( const int objId )
     case OBJ_WHIRLPOOL:
     case OBJ_BOTTLE:
     case OBJ_COAST:
-        return DIRECTION_ALL;
     case OBJ_BOAT:
         return DIRECTION_ALL;
 
