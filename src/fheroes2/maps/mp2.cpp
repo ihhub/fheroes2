@@ -869,6 +869,8 @@ bool MP2::isGroundObject( int obj )
     case OBJ_UNKNW_B9:
     case OBJ_UNKNW_D1:
         return false;
+    default:
+        break;
     }
 
     return true;

@@ -228,6 +228,8 @@ namespace
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJN_DERELICTSHIP:
             return true;
+        default:
+            break;
         }
 
         return false;
@@ -1330,25 +1332,6 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & 
             }
         }
     }
-}
-
-Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
-{
-    if ( level == 1 || level == -1 ) {
-        for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
-                return &( *it );
-            }
-        }
-    }
-    if ( level == 2 || level == -1 ) {
-        for ( Addons::iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-            if ( MP2::GetICNObject( it->object ) == icn && ( index == -1 || index == it->index ) ) {
-                return &( *it );
-            }
-        }
-    }
-    return nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )

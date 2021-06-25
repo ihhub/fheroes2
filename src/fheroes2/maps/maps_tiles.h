@@ -157,8 +157,6 @@ namespace Maps
         bool isShadow( void ) const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * FindAddonICN( int icn1, int level = -1, int index = -1 );
-
         TilesAddon * FindAddonLevel1( u32 uniq1 );
         TilesAddon * FindAddonLevel2( u32 uniq2 );
 
