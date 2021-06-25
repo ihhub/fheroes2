@@ -839,7 +839,7 @@ void Maps::Tiles::updatePassability()
             }
 
             if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0 ) {
-                if ( bottomTile.uniq == uniq || isWater() != bottomTile.isWater() ) {
+                if ( bottomTile.uniq == uniq ) {
                     // It's the same object.
                     tilePassable = 0;
                 }
