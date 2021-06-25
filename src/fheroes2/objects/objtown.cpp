@@ -22,7 +22,6 @@
 
 #include "objtown.h"
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 
 int ObjTown::GetPassable( u32 index0 )

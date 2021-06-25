@@ -30,15 +30,15 @@
 #include "artifact.h"
 #include "battle.h"
 #include "castle.h"
-#include "cursor.h"
+#include "dialog.h"
 #include "difficulty.h"
 #include "direction.h"
 #include "game.h"
-#include "game_interface.h"
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#include "interface_icons.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "luck.h"
@@ -46,10 +46,11 @@
 #include "morale.h"
 #include "mp2.h"
 #include "payment.h"
-#include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "speed.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -65,25 +66,25 @@ namespace
 const char * Heroes::GetName( int id )
 {
     const char * names[]
-        = {// knight
-           _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
-           // barbarian
-           _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
-           // sorceress
-           _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
-           // warlock
-           _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
-           // wizard
-           _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
-           // necromant
-           _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
-           // campains
-           _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
-           // loyalty version
-           _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
-           _( "Martine" ), _( "Jarkonas" ),
-           // debug
-           "Debug Hero", "Unknown"};
+        = { // knight
+            _( "Lord Kilburn" ), _( "Sir Gallant" ), _( "Ector" ), _( "Gwenneth" ), _( "Tyro" ), _( "Ambrose" ), _( "Ruby" ), _( "Maximus" ), _( "Dimitry" ),
+            // barbarian
+            _( "Thundax" ), _( "Fineous" ), _( "Jojosh" ), _( "Crag Hack" ), _( "Jezebel" ), _( "Jaclyn" ), _( "Ergon" ), _( "Tsabu" ), _( "Atlas" ),
+            // sorceress
+            _( "Astra" ), _( "Natasha" ), _( "Troyan" ), _( "Vatawna" ), _( "Rebecca" ), _( "Gem" ), _( "Ariel" ), _( "Carlawn" ), _( "Luna" ),
+            // warlock
+            _( "Arie" ), _( "Alamar" ), _( "Vesper" ), _( "Crodo" ), _( "Barok" ), _( "Kastore" ), _( "Agar" ), _( "Falagar" ), _( "Wrathmont" ),
+            // wizard
+            _( "Myra" ), _( "Flint" ), _( "Dawn" ), _( "Halon" ), _( "Myrini" ), _( "Wilfrey" ), _( "Sarakin" ), _( "Kalindra" ), _( "Mandigal" ),
+            // necromant
+            _( "Zom" ), _( "Darlana" ), _( "Zam" ), _( "Ranloo" ), _( "Charity" ), _( "Rialdo" ), _( "Roxana" ), _( "Sandro" ), _( "Celia" ),
+            // campains
+            _( "Roland" ), _( "Lord Corlagon" ), _( "Sister Eliza" ), _( "Archibald" ), _( "Lord Halton" ), _( "Brother Brax" ),
+            // loyalty version
+            _( "Solmyr" ), _( "Dainwin" ), _( "Mog" ), _( "Uncle Ivan" ), _( "Joseph" ), _( "Gallavant" ), _( "Elderian" ), _( "Ceallach" ), _( "Drakonia" ),
+            _( "Martine" ), _( "Jarkonas" ),
+            // debug
+            "Debug Hero", "Unknown" };
 
     return names[id];
 }
@@ -236,7 +237,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
             troops[ii].SetCount( st.getLE16() );
 
-        army.Assign( troops, ARRAY_COUNT_END( troops ) );
+        army.Assign( troops, std::end( troops ) );
     }
     else
         st.skip( 15 );
@@ -401,7 +402,7 @@ Army & Heroes::GetArmy( void )
 int Heroes::GetMobilityIndexSprite( void ) const
 {
     // valid range (0 - 25)
-    int index = !CanMove() ? 0 : move_point / 100;
+    int index = CanMove() ? ( move_point + 50 ) / 100 : 0;
     return 25 >= index ? index : 25;
 }
 
@@ -438,7 +439,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
 
 int Heroes::GetAttack( void ) const
 {
-    return GetAttack( NULL );
+    return GetAttack( nullptr );
 }
 
 int Heroes::GetAttack( std::string * strs ) const
@@ -449,7 +450,7 @@ int Heroes::GetAttack( std::string * strs ) const
 
 int Heroes::GetDefense( void ) const
 {
-    return GetDefense( NULL );
+    return GetDefense( nullptr );
 }
 
 int Heroes::GetDefense( std::string * strs ) const
@@ -460,7 +461,7 @@ int Heroes::GetDefense( std::string * strs ) const
 
 int Heroes::GetPower( void ) const
 {
-    return GetPower( NULL );
+    return GetPower( nullptr );
 }
 
 int Heroes::GetPower( std::string * strs ) const
@@ -471,7 +472,7 @@ int Heroes::GetPower( std::string * strs ) const
 
 int Heroes::GetKnowledge( void ) const
 {
-    return GetKnowledge( NULL );
+    return GetKnowledge( nullptr );
 }
 
 int Heroes::GetKnowledge( std::string * strs ) const
@@ -584,7 +585,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-            point += 500;
+            point += 400;
     }
 
     acount = HasArtifact( Artifact::TRUE_COMPASS_MOBILITY );
@@ -600,7 +601,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
 
 int Heroes::GetMorale( void ) const
 {
-    return GetMoraleWithModificators( NULL );
+    return GetMoraleWithModificators( nullptr );
 }
 
 int Heroes::GetMoraleWithModificators( std::string * strs ) const
@@ -614,7 +615,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
     // object visited
-    const u8 objs[] = {MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK};
+    const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
 
     // result
@@ -636,7 +637,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
 int Heroes::GetLuck( void ) const
 {
-    return GetLuckWithModificators( NULL );
+    return GetLuckWithModificators( nullptr );
 }
 
 int Heroes::GetLuckWithModificators( std::string * strs ) const
@@ -650,7 +651,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
-    const u8 objs[] = {MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID};
+    const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
 
     if ( result < Luck::AWFUL )
@@ -720,10 +721,6 @@ void Heroes::ActionNewDay( void )
     // recovery move points
     move_point = GetMaxMovePoints();
     MovePointsScaleFixed();
-
-    // stables visited?
-    if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
-        move_point += 400;
 
     // remove day visit object
     visit_object.remove_if( Visit::isDayLife );
@@ -822,17 +819,16 @@ void Heroes::RescanPath( void )
 /* if hero in castle */
 const Castle * Heroes::inCastle( void ) const
 {
-    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : NULL;
-    return castle && castle->GetHeroes() == this ? castle : NULL;
+    const Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
 Castle * Heroes::inCastle( void )
 {
-    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : NULL;
-    return castle && castle->GetHeroes() == this ? castle : NULL;
+    Castle * castle = Color::NONE != GetColor() ? world.GetCastle( GetCenter() ) : nullptr;
+    return castle && castle->GetHeroes() == this ? castle : nullptr;
 }
 
-/* is visited cell */
 bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
 {
     const int32_t index = tile.GetIndex();
@@ -844,13 +840,12 @@ bool Heroes::isVisited( const Maps::Tiles & tile, Visit::type_t type ) const
     return visit_object.end() != std::find( visit_object.begin(), visit_object.end(), IndexObject( index, object ) );
 }
 
-/* return true if object visited */
 bool Heroes::isObjectTypeVisited( int object, Visit::type_t type ) const
 {
     if ( Visit::GLOBAL == type )
         return GetKingdom().isVisited( object );
 
-    return visit_object.end() != std::find_if( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
+    return std::any_of( visit_object.begin(), visit_object.end(), [object]( const IndexObject & v ) { return v.isObject( object ); } );
 }
 
 void Heroes::SetVisited( s32 index, Visit::type_t type )
@@ -874,9 +869,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     // Set visited to all allies as well.
     const Colors friendColors( Players::GetPlayerFriends( GetColor() ) );
     for ( const int friendColor : friendColors ) {
-        if ( friendColor != GetColor() ) {
-            world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
-        }
+        world.GetKingdom( friendColor ).SetVisited( tileIndex, objectId );
     }
 }
 
@@ -911,6 +904,19 @@ void Heroes::markHeroMeeting( int heroID )
 {
     if ( heroID < UNKNOWN && !hasMetWithHero( heroID ) )
         visit_object.push_front( IndexObject( heroID, MP2::OBJ_HEROES ) );
+}
+
+void Heroes::unmarkHeroMeeting()
+{
+    const KingdomHeroes & heroes = GetKingdom().GetHeroes();
+    for ( Heroes * hero : heroes ) {
+        if ( hero == nullptr || hero == this ) {
+            continue;
+        }
+
+        hero->visit_object.remove( IndexObject( hid, MP2::OBJ_HEROES ) );
+        visit_object.remove( IndexObject( hero->hid, MP2::OBJ_HEROES ) );
+    }
 }
 
 bool Heroes::hasMetWithHero( int heroID ) const
@@ -1471,7 +1477,7 @@ void Heroes::SetFreeman( int reason )
             kingdom.RemoveHeroes( this );
 
         SetColor( Color::NONE );
-        world.GetTiles( GetIndex() ).SetHeroes( NULL );
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
         modes = 0;
         SetIndex( -1 );
         move_point_scale = -1;
@@ -1515,24 +1521,26 @@ void Heroes::SetMapsObject( int obj )
 
 void Heroes::ActionPreBattle( void ) {}
 
-void Heroes::ActionNewPosition( void )
+void Heroes::ActionNewPosition( const bool allowMonsterAttack )
 {
-    // scan for monsters around
-    const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
+    if ( allowMonsterAttack ) {
+        // scan for monsters around
+        const MapsIndexes targets = Maps::GetTilesUnderProtection( GetIndex() );
 
-    if ( !targets.empty() ) {
-        SetMove( false );
-        GetPath().Hide();
+        if ( !targets.empty() ) {
+            SetMove( false );
+            GetPath().Hide();
 
-        // first fight the monsters on the destination tile (if any)
-        MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
+            // first fight the monsters on the destination tile (if any)
+            MapsIndexes::const_iterator it = std::find( targets.begin(), targets.end(), GetPath().GetDestinedIndex() );
 
-        if ( it != targets.end() ) {
-            Action( *it, true );
-        }
-        // otherwise fight the monsters on the first adjacent tile
-        else {
-            Action( targets.front(), true );
+            if ( it != targets.end() ) {
+                Action( *it, true );
+            }
+            // otherwise fight the monsters on the first adjacent tile
+            else {
+                Action( targets.front(), true );
+            }
         }
     }
 
@@ -1575,7 +1583,7 @@ void Heroes::MovePointsScaleFixed( void )
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
     if ( dstIndex != GetIndex() ) {
-        world.GetTiles( GetIndex() ).SetHeroes( NULL );
+        world.GetTiles( GetIndex() ).SetHeroes( nullptr );
         SetIndex( dstIndex );
         Scoute( dstIndex );
         world.GetTiles( dstIndex ).SetHeroes( this );
@@ -1808,7 +1816,7 @@ void AllHeroes::clear( void )
 Heroes * VecHeroes::Get( int hid ) const
 {
     const std::vector<Heroes *> & vec = *this;
-    return 0 <= hid && hid < Heroes::UNKNOWN ? vec[hid] : NULL;
+    return 0 <= hid && hid < Heroes::UNKNOWN ? vec[hid] : nullptr;
 }
 
 Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
@@ -1817,14 +1825,14 @@ Heroes * VecHeroes::Get( const fheroes2::Point & center ) const
     for ( ; it != end(); ++it )
         if ( ( *it )->isPosition( center ) )
             break;
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetGuest( const Castle & castle ) const
 {
     const_iterator it
         = std::find_if( begin(), end(), [&castle]( const Heroes * hero ) { return castle.GetCenter() == hero->GetCenter() && !hero->Modes( Heroes::GUARDIAN ); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetGuard( const Castle & castle ) const
@@ -1836,7 +1844,7 @@ Heroes * AllHeroes::GetGuard( const Castle & castle ) const
                                                                                       return cpt.x == hpt.x && cpt.y == hpt.y + 1 && hero->Modes( Heroes::GUARDIAN );
                                                                                   } )
                                                                   : end();
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 Heroes * AllHeroes::GetFreeman( int race ) const
@@ -1902,7 +1910,7 @@ Heroes * AllHeroes::GetFreeman( int race ) const
     // not found, all heroes busy
     if ( freeman_heroes.empty() ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all heroes busy." );
-        return NULL;
+        return nullptr;
     }
 
     return at( Rand::Get( freeman_heroes ) );
@@ -1924,7 +1932,7 @@ void AllHeroes::Scoute( int colors ) const
 Heroes * AllHeroes::FromJail( s32 index ) const
 {
     const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
-    return end() != it ? *it : NULL;
+    return end() != it ? *it : nullptr;
 }
 
 bool AllHeroes::HaveTwoFreemans( void ) const
@@ -1980,12 +1988,12 @@ StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
     u32 size;
     msg >> size;
 
-    heroes.resize( size, NULL );
+    heroes.resize( size, nullptr );
 
     for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
         u32 hid;
         msg >> hid;
-        *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : NULL );
+        *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : nullptr );
     }
 
     return msg;
@@ -2026,11 +2034,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> patrolX >> patrolY;
     hero.patrol_center = fheroes2::Point( patrolX, patrolY );
 
-    msg >> hero.patrol_square >> hero.visit_object;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> hero._lastGroundRegion;
-    }
+    msg >> hero.patrol_square >> hero.visit_object >> hero._lastGroundRegion;
 
     hero.army.SetCommander( &hero );
     return msg;
@@ -2052,7 +2056,7 @@ StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
     msg >> size;
 
     heroes.clear();
-    heroes.resize( size, NULL );
+    heroes.resize( size, nullptr );
 
     for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
         *it = new Heroes();

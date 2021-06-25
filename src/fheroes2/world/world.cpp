@@ -22,15 +22,14 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 
 #include "ai.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -39,7 +38,8 @@
 #include "pairs.h"
 #include "race.h"
 #include "resource.h"
-#include "text.h"
+#include "save_format_version.h"
+#include "settings.h"
 #include "world.h"
 
 namespace GameStatic
@@ -84,7 +84,7 @@ void MapObjects::add( MapObjectSimple * obj )
 MapObjectSimple * MapObjects::get( u32 uid )
 {
     iterator it = find( uid );
-    return it != end() ? ( *it ).second : NULL;
+    return it != end() ? ( *it ).second : nullptr;
 }
 
 std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
@@ -334,9 +334,9 @@ void World::NewMaps( int32_t sw, int32_t sh )
         mp2tile.indexName2 = 0xff; // index sprite level 2
         mp2tile.flags = static_cast<uint8_t>( Rand::Get( 0, 3 ) ); // shape reflect % 4, 0 none, 1 vertical, 2 horizontal, 3 any
         mp2tile.mapObject = MP2::OBJ_ZERO;
-        mp2tile.indexAddon = 0;
-        mp2tile.editorObjectLink = 0;
-        mp2tile.editorObjectOverlay = 0;
+        mp2tile.nextAddonIndex = 0;
+        mp2tile.level1ObjectUID = 0; // means that there's no object on this tile.
+        mp2tile.level2ObjectUID = 0;
 
         vec_tiles[i].Init( static_cast<int32_t>( i ), mp2tile );
     }
@@ -790,7 +790,7 @@ int World::ColorCapturedObject( s32 index ) const
 ListActions * World::GetListActions( s32 index )
 {
     MapActions::iterator it = map_actions.find( index );
-    return it != map_actions.end() ? &( *it ).second : NULL;
+    return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
 CapturedObject & World::GetCapturedObject( s32 index )
@@ -904,12 +904,12 @@ void World::ActionForMagellanMaps( int color )
 MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
 {
     std::list<MapObjectSimple *> res = map_objects.get( pos );
-    return res.size() ? static_cast<MapEvent *>( res.front() ) : NULL;
+    return res.size() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
 MapObjectSimple * World::GetMapObject( u32 uid )
 {
-    return uid ? map_objects.get( uid ) : NULL;
+    return uid ? map_objects.get( uid ) : nullptr;
 }
 
 void World::RemoveMapObject( const MapObjectSimple * obj )
@@ -924,7 +924,7 @@ void World::UpdateRecruits( Recruits & recruits ) const
         while ( recruits.GetID1() == recruits.GetID2() )
             recruits.SetHero2( GetFreemanHeroes() );
     else
-        recruits.SetHero2( NULL );
+        recruits.SetHero2( nullptr );
 }
 
 const Heroes * World::GetHeroesCondWins( void ) const
@@ -959,11 +959,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
     case GameOver::WINS_ARTIFACT: {
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } ) );
+            return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
         }
         else {
             const Artifact art = conf.WinsFindArtifactID();
-            return ( heroes.end() != std::find_if( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } ) );
+            return std::any_of( heroes.begin(), heroes.end(), [&art]( const Heroes * hero ) { return hero->HasArtifact( art ) > 0; } );
         }
     }
 
@@ -980,6 +980,18 @@ bool World::KingdomIsWins( const Kingdom & kingdom, int wins ) const
         break;
     }
 
+    return false;
+}
+
+bool World::isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, obj ) ) {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -1177,18 +1189,6 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
                 msg << static_cast<const MapSign &>( obj );
                 break;
 
-            case MP2::OBJ_RESOURCE:
-                msg << static_cast<const MapResource &>( obj );
-                break;
-
-            case MP2::OBJ_ARTIFACT:
-                msg << static_cast<const MapArtifact &>( obj );
-                break;
-
-            case MP2::OBJ_MONSTER:
-                msg << static_cast<const MapMonster &>( obj );
-                break;
-
             default:
                 msg << obj;
                 break;
@@ -1229,23 +1229,12 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
             objs[index] = ptr;
         } break;
 
-        case MP2::OBJ_RESOURCE: {
-            MapResource * ptr = new MapResource();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_ARTIFACT: {
-            MapArtifact * ptr = new MapArtifact();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
-
-        case MP2::OBJ_MONSTER: {
-            MapMonster * ptr = new MapMonster();
-            msg >> *ptr;
-            objs[index] = ptr;
-        } break;
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_ARTIFACT:
+        case MP2::OBJ_MONSTER:
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
+            assert( 0 );
+            break;
 
         default: {
             MapObjectSimple * ptr = new MapObjectSimple();
@@ -1280,15 +1269,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects;
-
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        msg >> w._seed;
-    }
-    else {
-        // For old versions, generate a different seed at each map loading
-        w._seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
-    }
+        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad();
 

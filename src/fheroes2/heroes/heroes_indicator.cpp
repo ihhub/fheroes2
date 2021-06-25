@@ -20,16 +20,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
-
+#include "heroes_indicator.h"
 #include "agg_image.h"
 #include "dialog.h"
 #include "heroes.h"
-#include "heroes_indicator.h"
 #include "icn.h"
 #include "luck.h"
 #include "morale.h"
 #include "text.h"
+#include "tools.h"
 
 namespace fheroes2
 {

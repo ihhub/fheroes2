@@ -24,10 +24,7 @@
 
 #include "army.h"
 #include "army_troop.h"
-#include "game.h"
 #include "heroes_base.h"
-#include "luck.h"
-#include "morale.h"
 #include "speed.h"
 
 Troop::Troop()

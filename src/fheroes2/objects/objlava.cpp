@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objlava.h"
 
@@ -45,7 +44,7 @@ bool ObjLav2::isAction( u32 index )
 bool ObjLav2::isShadow( u32 index )
 {
     const u8 shadows[] = {0, 7, 14, 29, 33, 44, 55, 78};
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjLav3::GetPassable( u32 index )
@@ -66,7 +65,7 @@ bool ObjLav3::isAction( u32 index )
 bool ObjLav3::isShadow( u32 index )
 {
     const u8 shadows[] = {0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 165, 180, 195, 210, 225, 243};
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjLava::GetPassable( u32 index )
@@ -76,10 +75,10 @@ int ObjLava::GetPassable( u32 index )
     const u8 restricted[]
         = {6, 7, 8, 9, 16, 17, 19, 20, 33, 34, 35, 36, 37, 38, 42, 43, 44, 50, 51, 52, 55, 56, 58, 59, 62, 66, 67, 68, 72, 73, 76, 77, 88, 98, 114, 122, 123, 125};
 
-    if ( isAction( index ) || ARRAY_COUNT_END( disabled ) != std::find( disabled, ARRAY_COUNT_END( disabled ), index ) )
+    if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjLava::isAction( u32 index )
@@ -90,7 +89,7 @@ bool ObjLava::isAction( u32 index )
 bool ObjLava::isShadow( u32 index )
 {
     const u8 shadows[] = {10, 11, 45, 49, 77, 109, 113, 116};
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjLav2::GetActionObject( u32 )

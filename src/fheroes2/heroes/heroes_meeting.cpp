@@ -27,14 +27,17 @@
 #include "army.h"
 #include "army_bar.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
-#include "game_interface.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "logging.h"
+#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
+#include "ui_button.h"
 
 namespace
 {
@@ -491,6 +494,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             armyCountBackgroundRestorer.restore();
 
             selectArtifacts1.ResetSelected();
+            selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
@@ -504,7 +513,13 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             armyCountBackgroundRestorer.restore();
 
+            selectArtifacts1.ResetSelected();
             selectArtifacts2.ResetSelected();
+            selectArtifacts1.Redraw();
+            selectArtifacts2.Redraw();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
             selectArmy1.Redraw();
             selectArmy2.Redraw();
 
@@ -605,8 +620,8 @@ void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
     const int scholar2 = hero2.GetLevelSkill( Skill::Secondary::EAGLEEYE );
     int scholar = 0;
 
-    Heroes * teacher = NULL;
-    Heroes * learner = NULL;
+    Heroes * teacher = nullptr;
+    Heroes * learner = nullptr;
 
     if ( scholar1 && scholar1 >= scholar2 ) {
         teacher = &hero1;

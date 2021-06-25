@@ -22,9 +22,6 @@
 #define H2CAMPAIGN_DATA_H
 
 #include "campaign_scenariodata.h"
-#include "gamedefs.h"
-#include "maps_fileinfo.h"
-#include "serialize.h"
 
 namespace Campaign
 {

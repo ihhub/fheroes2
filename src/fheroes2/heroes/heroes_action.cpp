@@ -28,7 +28,6 @@
 #include "audio_mixer.h"
 #include "battle.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
@@ -38,19 +37,20 @@
 #include "logging.h"
 #include "maps_actions.h"
 #include "monster.h"
-#include "morale.h"
 #include "mp2.h"
 #include "mus.h"
 #include "payment.h"
 #include "profit.h"
 #include "race.h"
+#include "settings.h"
 #include "skill.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index );
+void ActionToMonster( Heroes & hero, s32 dst_index );
 void ActionToBoat( Heroes & hero, s32 dst_index );
 void ActionToCoast( Heroes & hero, s32 dst_index );
 void ActionToWagon( Heroes & hero, s32 dst_index );
@@ -58,7 +58,7 @@ void ActionToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index );
 void ActionToFlotSam( const Heroes & hero, u32 obj, s32 dst_index );
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index );
+void ActionToArtifact( Heroes & hero, s32 dst_index );
 void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index );
 void ActionToShrine( Heroes & hero, s32 dst_index );
 void ActionToWitchsHut( Heroes & hero, u32 obj, s32 dst_index );
@@ -114,7 +114,7 @@ u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & st
 
     std::string perday = _( "%{count} / day" );
     payment_t info = ProfitConditions::FromMine( res );
-    const s32 * current = NULL;
+    const s32 * current = nullptr;
 
     switch ( res ) {
     case Resource::MERCURY:
@@ -435,7 +435,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     else
         switch ( object ) {
         case MP2::OBJ_MONSTER:
-            ActionToMonster( *this, object, tileIndex );
+            ActionToMonster( *this, tileIndex );
             break;
 
         case MP2::OBJ_CASTLE:
@@ -489,7 +489,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToShipwreckSurvivor( *this, object, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
-            ActionToArtifact( *this, object, tileIndex );
+            ActionToArtifact( *this, tileIndex );
             break;
 
             // shrine circle
@@ -692,11 +692,10 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
 }
 
-void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
+void ActionToMonster( Heroes & hero, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    MapMonster * map_troop = tile.GetObject() == obj ? dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) ) : nullptr;
-    Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+    Troop troop = tile.QuantityTroop();
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -775,15 +774,6 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
             if ( tile.MonsterJoinConditionFree() ) {
                 tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
-
-            if ( map_troop ) {
-                map_troop->count = army.GetCountMonsters( troop() );
-
-                // reset join condition
-                if ( map_troop->JoinConditionFree() ) {
-                    map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
-            }
         }
     }
     // just remove group of monsters
@@ -801,10 +791,6 @@ void ActionToMonster( Heroes & hero, int obj, s32 dst_index )
         tile.setAsEmpty();
 
         Game::ObjectFadeAnimation::PerformFadeTask();
-
-        if ( map_troop ) {
-            world.RemoveMapObject( map_troop );
-        }
     }
 
     // clear the hero's attacked monster tile index
@@ -988,7 +974,7 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
     hero.GetPath().Hide();
     hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( true );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -996,25 +982,19 @@ void ActionToCoast( Heroes & hero, s32 dst_index )
 void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapResource * map_resource = NULL;
-
-    if ( tile.GetObject() == obj )
-        map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( obj == MP2::OBJ_BOTTLE ) {
         const MapSign * sign = dynamic_cast<MapSign *>( world.GetMapObject( dst_index ) );
         Dialog::Message( MP2::StringObject( obj ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
-        Funds funds = map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds();
+        Funds funds = tile.QuantityFunds();
 
         if ( obj == MP2::OBJ_CAMPFIRE ) {
             Dialog::ResourceInfo( MP2::StringObject( obj ), _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), funds );
         }
         else {
             ResourceCount rc = tile.QuantityResourceCount();
-            if ( map_resource )
-                rc = map_resource->resource;
 
             Interface::Basic & I = Interface::Basic::Get();
             I.GetStatusWindow().SetResource( rc.first, rc.second );
@@ -1032,9 +1012,6 @@ void ActionToPickupResource( const Heroes & hero, int obj, s32 dst_index )
     tile.QuantityReset();
 
     Game::ObjectFadeAnimation::PerformFadeTask();
-
-    if ( map_resource )
-        world.RemoveMapObject( map_resource );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -1248,7 +1225,7 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
 
     // check spell book
     if ( !hero.HaveSpellBook() ) {
-        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( NULL, spell_level ) ) {
+        if ( !Settings::Get().ExtHeroBuySpellBookFromShrine() || !hero.BuySpellBook( nullptr, spell_level ) ) {
             body += _( "\nUnfortunately, you have no Magic Book to record the spell with." );
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
@@ -1720,13 +1697,9 @@ void ActionToShipwreckSurvivor( Heroes & hero, int obj, s32 dst_index )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
+void ActionToArtifact( Heroes & hero, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-    const MapArtifact * map_artifact = NULL;
-
-    if ( tile.GetObject() == obj )
-        map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
 
     if ( hero.IsFullBagArtifacts() )
         Dialog::Message( "", _( "You cannot pick up this artifact, you already have a full load!" ), Font::BIG, Dialog::OK );
@@ -1734,17 +1707,12 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
         u32 cond = tile.QuantityVariant();
         Artifact art = tile.QuantityArtifact();
 
-        if ( map_artifact ) {
-            cond = map_artifact->condition;
-            art = map_artifact->artifact;
-        }
-
         bool result = false;
         std::string msg;
 
         // 1,2,3 - gold, gold + res
         if ( 0 < cond && cond < 4 ) {
-            Funds payment = map_artifact ? map_artifact->QuantityFunds() : tile.QuantityFunds();
+            Funds payment = tile.QuantityFunds();
 
             if ( 1 == cond ) {
                 msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold." );
@@ -1754,7 +1722,7 @@ void ActionToArtifact( Heroes & hero, int obj, s32 dst_index )
                 msg = _( "A leprechaun offers you the %{art} for the small price of %{gold} Gold and %{count} %{res}." );
 
                 StringReplace( msg, "%{gold}", payment.Get( Resource::GOLD ) );
-                ResourceCount rc = map_artifact ? map_artifact->QuantityResourceCount() : tile.QuantityResourceCount();
+                ResourceCount rc = tile.QuantityResourceCount();
                 StringReplace( msg, "%{count}", rc.second );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
             }
@@ -2005,7 +1973,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2039,7 +2007,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-    hero.ActionNewPosition();
+    hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
@@ -2287,11 +2255,11 @@ void ActionToDwellingRecruitMonster( Heroes & hero, u32 obj, s32 dst_index )
 
 void ActionToDwellingBattleMonster( Heroes & hero, u32 obj, s32 dst_index )
 {
-    const char * str_empty = NULL;
-    const char * str_recr = NULL;
-    const char * str_warn = NULL;
-    const char * str_wins = NULL;
-    const char * str_scss = NULL;
+    const char * str_empty = nullptr;
+    const char * str_recr = nullptr;
+    const char * str_warn = nullptr;
+    const char * str_wins = nullptr;
+    const char * str_scss = nullptr;
 
     switch ( obj ) {
     case MP2::OBJ_CITYDEAD:
@@ -2369,7 +2337,7 @@ void ActionToArtesianSpring( Heroes & hero, u32 obj, s32 dst_index )
     const u32 max = hero.GetMaxSpellPoints();
     const std::string & name = MP2::StringObject( MP2::OBJ_ARTESIANSPRING );
 
-    if ( hero.GetKingdom().isVisited( dst_index, obj ) ) {
+    if ( world.isAnyKingdomVisited( obj, dst_index ) ) {
         Dialog::Message( name, _( "The spring only refills once a week, and someone's already been here this week." ), Font::BIG, Dialog::OK );
     }
     else if ( hero.GetSpellPoints() == max * 2 ) {
@@ -2476,14 +2444,14 @@ void ActionToUpgradeArmyObject( Heroes & hero, u32 obj )
 
     switch ( obj ) {
     case MP2::OBJ_HILLFORT: {
-        monsToUpgrade = {Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF )};
+        monsToUpgrade = { Monster( Monster::OGRE ), Monster( Monster::ORC ), Monster( Monster::DWARF ) };
 
         msg1 = _( "All of the %{monsters} you have in your army have been trained by the battle masters of the fort. Your army now contains %{monsters2}." );
         msg2 = _( "An unusual alliance of Ogres, Orcs, and Dwarves offer to train (upgrade) any such troops brought to them. Unfortunately, you have none with you." );
     } break;
 
     case MP2::OBJ_FREEMANFOUNDRY: {
-        monsToUpgrade = {Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM )};
+        monsToUpgrade = { Monster( Monster::SWORDSMAN ), Monster( Monster::PIKEMAN ), Monster( Monster::IRON_GOLEM ) };
 
         msg1 = _( "All of your %{monsters} have been upgraded into %{monsters2}." );
         msg2 = _(

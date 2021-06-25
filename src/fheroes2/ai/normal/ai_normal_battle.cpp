@@ -22,8 +22,6 @@
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "battle_board.h"
-#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_tower.h"
@@ -33,9 +31,11 @@
 #include "game.h"
 #include "heroes.h"
 #include "logging.h"
+#include "settings.h"
 #include "speed.h"
 
 #include <cassert>
+#include <cmath>
 
 using namespace Battle;
 
@@ -380,11 +380,11 @@ namespace AI
         // TODO: replace this hacky code for archers
         // Calculate each hero spell strength and add it to shooter values after castle modifiers were applied
         if ( _commander && _myShooterStr > 1 ) {
-            _myShooterStr += _commander->GetSpellcastStrength();
+            _myShooterStr += _commander->GetSpellcastStrength( _myArmyStrength );
         }
         const HeroBase * enemyCommander = arena.GetCommander( _myColor, true );
         if ( enemyCommander ) {
-            _enemySpellStrength = enemyCommander->GetSpellcastStrength();
+            _enemySpellStrength = enemyCommander->GetSpellcastStrength( _enemyArmyStrength );
             _enemyShooterStr += _enemySpellStrength;
         }
 

@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -39,7 +38,11 @@
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
+#include "settings.h"
 #include "system.h"
+#ifndef BUILD_RELEASE
+#include "tools.h"
+#endif
 #include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
@@ -134,7 +137,7 @@ namespace
 
             std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
             if ( translations.size() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
@@ -243,10 +246,8 @@ int main( int argc, char ** argv )
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
-#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-#endif
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
 
@@ -264,9 +265,11 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            fheroes2::showTeamInfo();
+            if ( conf.isShowIntro() ) {
+                fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            }
 
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );

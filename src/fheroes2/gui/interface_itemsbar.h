@@ -24,6 +24,7 @@
 #define H2INTERFACE_ITEMSBAR_H
 
 #include <algorithm>
+#include <list>
 #include <utility>
 
 #include "gamedefs.h"
@@ -113,7 +114,7 @@ namespace Interface
         Item * GetItem( const fheroes2::Point & pt )
         {
             ItemsIterator posItem = GetItemIter( pt );
-            return posItem != items.end() ? *posItem : NULL;
+            return posItem != items.end() ? *posItem : nullptr;
         }
 
         fheroes2::Point GetPos() const

@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <vector>
 
 #include "agg.h"
@@ -45,8 +44,9 @@
 #include "maps_tiles.h"
 #include "mus.h"
 #include "route.h"
-#include "system.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -327,14 +327,14 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     case MP2::OBJ_CASTLE: {
         const Castle * to_castle = world.GetCastle( tile.GetCenter() );
 
-        if ( NULL != to_castle )
+        if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
     } break;
 
     case MP2::OBJ_HEROES: {
         const Heroes * heroes = tile.GetHeroes();
 
-        if ( NULL != heroes )
+        if ( nullptr != heroes )
             return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
     } break;
 
@@ -418,7 +418,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.GetCastle( tile.GetCenter() );
 
-        if ( NULL != castle ) {
+        if ( nullptr != castle ) {
             if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
                 if ( from_hero.GetColor() == castle->GetColor() )
                     return Cursor::CASTLE;
@@ -447,7 +447,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
 
-        if ( NULL != to_hero ) {
+        if ( nullptr != to_hero ) {
             if ( from_hero.Modes( Heroes::GUARDIAN ) )
                 return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
@@ -1054,7 +1054,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::HEROES: {
         Heroes * to_hero = tile.GetHeroes();
         // focus change/open hero
-        if ( NULL != to_hero ) {
+        if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
                 RedrawFocus();
@@ -1073,7 +1073,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             break;
 
         Castle * to_castle = world.GetCastle( tile.GetCenter() );
-        if ( to_castle == NULL )
+        if ( to_castle == nullptr )
             break;
 
         const Castle * from_castle = GetFocusCastle();
@@ -1093,7 +1093,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CURSOR_HERO_MEET:
     case Cursor::CURSOR_HERO_ACTION:
     case Cursor::CURSOR_HERO_BOAT_ACTION:
-        if ( from_hero == NULL )
+        if ( from_hero == nullptr )
             break;
 
         if ( from_hero->isMoveEnabled() )

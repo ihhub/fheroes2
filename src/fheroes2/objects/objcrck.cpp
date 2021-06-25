@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objcrck.h"
 
@@ -37,10 +36,10 @@ int ObjCrck::GetPassable( u32 index )
         return DIRECTION_ALL;
     else if ( 184 == index )
         return Direction::CENTER | Direction::BOTTOM_RIGHT | DIRECTION_TOP_ROW;
-    else if ( isAction( index ) || ARRAY_COUNT_END( disabled ) != std::find( disabled, ARRAY_COUNT_END( disabled ), index ) )
+    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjCrck::isAction( u32 index )
@@ -51,7 +50,7 @@ bool ObjCrck::isAction( u32 index )
 bool ObjCrck::isShadow( u32 index )
 {
     const u8 shadows[] = {0, 2, 9, 12, 13, 15, 20, 23, 28, 33, 36, 39, 45, 48, 51, 54, 56, 73, 75, 79, 190, 201, 237};
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjCrck::GetActionObject( u32 index )

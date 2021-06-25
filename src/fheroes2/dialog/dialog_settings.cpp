@@ -173,7 +173,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_1HERO_HIRED_EVERY_WEEK );
     states.push_back( Settings::CASTLE_1HERO_HIRED_EVERY_WEEK );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_ML );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
@@ -192,7 +191,6 @@ void Dialog::ExtSettings( bool readonly )
 
     states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_SKIP_INCREASE_DEFENSE );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
 
     std::sort( states.begin(), states.end(),

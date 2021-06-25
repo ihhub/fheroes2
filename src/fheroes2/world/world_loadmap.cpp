@@ -21,29 +21,26 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <functional>
 
-#include "agg_image.h"
 #include "artifact.h"
+#include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "castle.h"
-#include "difficulty.h"
 #include "game.h"
 #include "game_over.h"
-#include "game_static.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
-#include "maps_actions.h"
 #include "maps_tiles.h"
 #include "mp2.h"
-#include "pairs.h"
 #include "race.h"
 #include "rand.h"
-#include "resource.h"
-#include "text.h"
+#include "settings.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
+#include "zzlib.h"
 
 namespace
 {
@@ -55,8 +52,6 @@ namespace GameStatic
     extern u32 uniq;
 }
 
-#ifdef WITH_ZLIB
-#include "zzlib.h"
 std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
 {
     std::vector<u8> zdata = decodeBase64( base64 );
@@ -66,7 +61,6 @@ std::vector<u8> DecodeBase64AndUncomress( const std::string & base64 )
     sb.skip( 4 ); // qt uncompress size
     return zlibDecompress( sb.data(), sb.size(), realsz + 1 );
 }
-#endif
 
 bool World::LoadMapMP2( const std::string & filename )
 {
@@ -145,15 +139,15 @@ bool World::LoadMapMP2( const std::string & filename )
     std::vector<MP2::mp2addon_t> vec_mp2addons( fs.getLE32() /* count mp2addon_t */ );
 
     for ( MP2::mp2addon_t & mp2addon : vec_mp2addons ) {
-        mp2addon.indexAddon = fs.getLE16();
+        mp2addon.nextAddonIndex = fs.getLE16();
         mp2addon.objectNameN1 = fs.get() * 2;
         mp2addon.indexNameN1 = fs.get();
         mp2addon.quantityN = fs.get();
         mp2addon.objectNameN2 = fs.get();
         mp2addon.indexNameN2 = fs.get();
 
-        mp2addon.editorObjectLink = fs.getLE32();
-        mp2addon.editorObjectOverlay = fs.getLE32();
+        mp2addon.level1ObjectUID = fs.getLE32();
+        mp2addon.level2ObjectUID = fs.getLE32();
     }
 
     const size_t endof_addons = fs.tell();
@@ -187,6 +181,25 @@ bool World::LoadMapMP2( const std::string & filename )
         mp2tile.indexName2 = fs.get();
         mp2tile.flags = fs.get();
         mp2tile.mapObject = fs.get();
+        mp2tile.nextAddonIndex = fs.getLE16();
+        mp2tile.level1ObjectUID = fs.getLE32();
+        mp2tile.level2ObjectUID = fs.getLE32();
+
+        tile.Init( i, mp2tile );
+
+        // Read extra information if it's present.
+        size_t addonIndex = mp2tile.nextAddonIndex;
+        while ( addonIndex > 0 ) {
+            if ( vec_mp2addons.size() <= addonIndex ) {
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" );
+                break;
+            }
+            tile.AddonsPushLevel1( vec_mp2addons[addonIndex] );
+            tile.AddonsPushLevel2( vec_mp2addons[addonIndex] );
+            addonIndex = vec_mp2addons[addonIndex].nextAddonIndex;
+        }
+
+        tile.AddonsSort();
 
         switch ( mp2tile.mapObject ) {
         case MP2::OBJ_RNDTOWN:
@@ -203,27 +216,6 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             break;
         }
-
-        // offset first addon
-        size_t offsetAddonsBlock = fs.getLE16();
-
-        mp2tile.editorObjectLink = fs.getLE32();
-        mp2tile.editorObjectOverlay = fs.getLE32();
-
-        tile.Init( i, mp2tile );
-
-        // load all addon for current tils
-        while ( offsetAddonsBlock ) {
-            if ( vec_mp2addons.size() <= offsetAddonsBlock ) {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" );
-                break;
-            }
-            tile.AddonsPushLevel1( vec_mp2addons[offsetAddonsBlock] );
-            tile.AddonsPushLevel2( vec_mp2addons[offsetAddonsBlock] );
-            offsetAddonsBlock = vec_mp2addons[offsetAddonsBlock].indexAddon;
-        }
-
-        tile.AddonsSort();
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles, tellg: " << fs.tell() );
@@ -483,7 +475,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
                     // check heroes max count
                     if ( kingdom.AllowRecruitHero( false, 0 ) ) {
-                        Heroes * hero = NULL;
+                        Heroes * hero = nullptr;
 
                         if ( pblock[17] && pblock[18] < Heroes::BAX )
                             hero = vec_heroes.Get( pblock[18] );

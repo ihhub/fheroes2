@@ -21,19 +21,16 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstring>
 #include <sstream>
 
-#include "cursor.h"
-#include "game.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
-#include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Skill
@@ -666,7 +663,7 @@ void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 Skill::Secondary * Skill::SecSkills::FindSkill( int skill )
 {
     iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
-    return it != end() ? &( *it ) : NULL;
+    return it != end() ? &( *it ) : nullptr;
 }
 
 std::vector<Skill::Secondary> & Skill::SecSkills::ToVector( void )
@@ -782,7 +779,7 @@ void StringAppendModifiers( std::string & str, int value )
     str.append( std::to_string( value ) );
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs = NULL )
+int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
@@ -795,7 +792,7 @@ int Skill::GetLeadershipModifiers( int level, std::string * strs = NULL )
     return skill.GetValues();
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs = NULL )
+int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LUCK, level );
 

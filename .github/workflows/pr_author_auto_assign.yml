@@ -1,13 +1,14 @@
-name: "Author auto assign"
+name: PR author auto assign
 
 on:
   pull_request_target:
     types: [opened, reopened]
 
 jobs:
-  assign-author:
+  assign:
+    name: PR author auto assign
     runs-on: ubuntu-latest
     steps:
-      - uses: toshimaru/auto-author-assign@v1.2.0
-        with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+    - uses: toshimaru/auto-author-assign@v1.2.0
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}

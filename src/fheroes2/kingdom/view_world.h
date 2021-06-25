@@ -21,8 +21,6 @@
 #ifndef H2VIEWWORLD_H
 #define H2VIEWWORLD_H
 
-#include "gamedefs.h"
-#include "image.h"
 #include "math_base.h"
 
 namespace Interface

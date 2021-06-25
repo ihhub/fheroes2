@@ -33,6 +33,7 @@
 #include "mageguild.h"
 #include "race.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {
@@ -110,7 +111,7 @@ void RowSpells::Redraw( void )
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             fheroes2::Blit( icon, display, dst.x + 3 + ( dst.width - icon.width() ) / 2, dst.y + 31 - icon.height() / 2 );
 
-            TextBox text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( NULL ) ) + "]", Font::SMALL, 78 );
+            TextBox text( std::string( spell.GetName() ) + " [" + std::to_string( spell.SpellPoint( nullptr ) ) + "]", Font::SMALL, 78 );
             text.Blit( dst.x + 18, dst.y + 55 );
         }
     }

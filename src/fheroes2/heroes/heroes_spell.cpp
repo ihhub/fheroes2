@@ -33,9 +33,10 @@
 #include "logging.h"
 #include "m82.h"
 #include "monster.h"
-#include "rand.h"
+#include "settings.h"
 #include "spell.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -364,7 +365,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
     // find water
     int32_t dst_water = -1;
-    MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO );
+    MapsIndexes freeTiles = Maps::ScanAroundObject( center, MP2::OBJ_ZERO, false );
     std::sort( freeTiles.begin(), freeTiles.end(), [&centerPoint]( const int32_t left, const int32_t right ) {
         const fheroes2::Point & leftPoint = Maps::GetPoint( left );
         const fheroes2::Point & rightPoint = Maps::GetPoint( right );
@@ -407,7 +408,7 @@ bool ActionSpellSummonBoat( const Heroes & hero )
 
 bool ActionSpellDimensionDoor( Heroes & hero )
 {
-    const u32 distance = Spell::CalculateDimensionDoorDistance( hero.GetPower(), hero.GetArmy().GetHitPoints() );
+    const u32 distance = Spell::CalculateDimensionDoorDistance();
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -438,9 +439,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-
-        // No action is being made. Uncomment this code if the logic will be changed
-        // hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         I.ResetFocus( GameFocus::HEROES );
 
@@ -456,7 +455,7 @@ bool ActionSpellTownGate( Heroes & hero )
     const KingdomCastles & castles = kingdom.GetCastles();
     KingdomCastles::const_iterator it;
 
-    const Castle * castle = NULL;
+    const Castle * castle = nullptr;
     const s32 center = hero.GetIndex();
     s32 min = -1;
 
@@ -558,7 +557,7 @@ bool ActionSpellTownPortal( Heroes & hero )
 bool ActionSpellVisions( Heroes & hero )
 {
     const u32 dist = hero.GetVisionsDistance();
-    MapsIndexes monsters = Maps::ScanAroundObject( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
+    MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
     monsters.resize( std::distance( monsters.begin(), std::remove_if( monsters.begin(), monsters.end(),
@@ -573,11 +572,8 @@ bool ActionSpellVisions( Heroes & hero )
 
     for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
         const Maps::Tiles & tile = world.GetTiles( *it );
-        const MapMonster * map_troop = NULL;
-        if ( tile.GetObject() == MP2::OBJ_MONSTER )
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
 
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        Troop troop = tile.QuantityTroop();
         const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
         std::string hdr;

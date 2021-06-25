@@ -21,14 +21,14 @@
 AR := arm-vita-eabi-gcc-ar
 CC := arm-vita-eabi-gcc
 CXX := arm-vita-eabi-g++
-LIBS :=
+LIBS := -lz
 
 CFLAGS := $(CFLAGS) -DFHEROES2_VITA -I$(VITASDK)/arm-vita-eabi/include -O3 -mcpu=cortex-a9 -mfpu=neon -fgraphite-identity -floop-nest-optimize -fno-lto -fno-tree-slp-vectorize
 LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib $(CFLAGS) -Wl,--sort-common -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -Wl,-q
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2_mixer -lSDL2 -lvita2d -lz -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
+SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2_mixer -lSDL2 -lvita2d -lScePower_stub -lSceAudio_stub -lSceCtrl_stub -lSceHid_stub -lSceTouch_stub -lSceDisplay_stub \
                                            -lSceGxm_stub -lSceAppMgr_stub -lSceSysmodule_stub -lSceCommonDialog_stub -lSceMotion_stub -lFLAC -lmikmod -lmpg123 -lvorbisfile \
                                            -lvorbis -logg
 SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2

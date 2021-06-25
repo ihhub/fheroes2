@@ -20,18 +20,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
-#include <functional>
 
 #include "agg.h"
 #include "ai.h"
 #include "army.h"
 #include "battle.h"
 #include "castle.h"
-#include "cursor.h"
-#include "dialog.h"
-#include "difficulty.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
@@ -45,7 +40,7 @@
 #include "mus.h"
 #include "payment.h"
 #include "race.h"
-#include "text.h"
+#include "settings.h"
 #include "world.h"
 
 namespace
@@ -100,10 +95,10 @@ namespace
 
 namespace AI
 {
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index );
+    void AIToMonster( Heroes & hero, s32 dst_index );
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index );
     void AIToTreasureChest( Heroes & hero, u32 obj, s32 dst_index );
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index );
+    void AIToArtifact( Heroes & hero, s32 dst_index );
     void AIToObjectResource( Heroes & hero, u32 obj, s32 dst_index );
     void AIToWagon( Heroes & hero, s32 dst_index );
     void AIToSkeleton( Heroes & hero, u32 obj, s32 dst_index );
@@ -242,7 +237,7 @@ namespace AI
         const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
         if ( castle ) {
             if ( hero.GetColor() == castle->GetColor() ) {
-                return castle->GetHeroes().Guest() == NULL;
+                return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
                 return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * ARMY_STRENGTH_ADVANTAGE_MEDUIM;
@@ -269,7 +264,7 @@ namespace AI
             break;
 
         case MP2::OBJ_MONSTER:
-            AIToMonster( hero, object, dst_index );
+            AIToMonster( hero, dst_index );
             break;
         case MP2::OBJ_HEROES:
             AIToHeroes( hero, dst_index );
@@ -290,7 +285,7 @@ namespace AI
             AIToTreasureChest( hero, object, dst_index );
             break;
         case MP2::OBJ_ARTIFACT:
-            AIToArtifact( hero, object, dst_index );
+            AIToArtifact( hero, dst_index );
             break;
 
         case MP2::OBJ_MAGICGARDEN:
@@ -625,15 +620,11 @@ namespace AI
         }
     }
 
-    void AIToMonster( Heroes & hero, int obj, s32 dst_index )
+    void AIToMonster( Heroes & hero, s32 dst_index )
     {
         bool destroy = false;
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        MapMonster * map_troop = NULL;
-        if ( tile.GetObject() == obj ) {
-            map_troop = dynamic_cast<MapMonster *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
-        Troop troop = map_troop ? map_troop->QuantityTroop() : tile.QuantityTroop();
+        Troop troop = tile.QuantityTroop();
 
         JoinCount join = Army::GetJoinSolution( hero, tile, troop );
 
@@ -681,12 +672,6 @@ namespace AI
                 tile.MonsterSetCount( army.GetCountMonsters( troop() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
-
-                if ( map_troop ) {
-                    map_troop->count = army.GetCountMonsters( troop() );
-                    if ( map_troop->JoinConditionFree() )
-                        map_troop->condition = Monster::JOIN_CONDITION_MONEY;
-                }
             }
         }
         // unknown
@@ -697,27 +682,20 @@ namespace AI
             tile.RemoveObjectSprite();
             tile.MonsterSetCount( 0 );
             tile.setAsEmpty();
-
-            if ( map_troop )
-                world.RemoveMapObject( map_troop );
         }
+
+        hero.unmarkHeroMeeting();
     }
 
     void AIToPickupResource( Heroes & hero, int obj, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapResource * map_resource = NULL;
-        if ( tile.GetObject() == obj ) {
-            map_resource = dynamic_cast<MapResource *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( obj != MP2::OBJ_BOTTLE )
-            hero.GetKingdom().AddFundsResource( map_resource ? Funds( map_resource->resource ) : tile.QuantityFunds() );
+            hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
-        if ( map_resource )
-            world.RemoveMapObject( map_resource );
         hero.GetPath().Reset();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " pickup small resource" );
@@ -741,8 +719,8 @@ namespace AI
 
             if ( gold ) {
                 const u32 expr = gold > 500 ? gold - 500 : 500;
-                // select gold or exp
-                if ( Rand::Get( 1 ) ) {
+                // Only 10% chance of choosing experience. Make AI rich!
+                if ( Rand::Get( 1, 10 ) == 1 ) {
                     gold = 0;
                     hero.IncreaseExperience( expr );
                 }
@@ -849,7 +827,7 @@ namespace AI
                 // update abandone mine
                 if ( obj == MP2::OBJ_ABANDONEDMINE ) {
                     Maps::Tiles::UpdateAbandoneMineSprite( tile );
-                    tile.SetHeroes( &hero );
+                    hero.SetMapsObject( MP2::OBJ_MINES );
                 }
 
                 tile.QuantitySetColor( hero.GetColor() );
@@ -872,7 +850,7 @@ namespace AI
 
     void AIToSign( Heroes & hero, s32 dst_index )
     {
-        hero.SetVisited( dst_index, Visit::LOCAL );
+        hero.SetVisited( dst_index, Visit::GLOBAL );
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
@@ -888,7 +866,7 @@ namespace AI
         const Funds payment( Resource::GOLD, 1000 );
         Kingdom & kingdom = hero.GetKingdom();
 
-        if ( !hero.isObjectTypeVisited( dst_index, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
+        if ( !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( payment ) ) {
             hero.SetVisited( dst_index, Visit::GLOBAL );
             world.ActionForMagellanMaps( hero.GetColor() );
             kingdom.OddFundsResource( payment );
@@ -948,7 +926,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -974,7 +952,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
             hero.FadeIn();
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( false );
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1079,7 +1057,9 @@ namespace AI
              // check valid level spell and wisdom skill
              !( 3 == spell_level && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
             hero.AppendSpellToBook( spell );
-            hero.SetVisited( dst_index );
+
+            // All heroes will know which spell is here.
+            hero.SetVisited( dst_index, Visit::GLOBAL );
         }
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1139,7 +1119,7 @@ namespace AI
     {
         const u32 max = hero.GetMaxSpellPoints();
 
-        if ( !hero.GetKingdom().isVisited( MP2::OBJ_ARTESIANSPRING ) && hero.GetSpellPoints() < max * 2 ) {
+        if ( !world.isAnyKingdomVisited( obj, dst_index ) && hero.GetSpellPoints() < max * 2 ) {
             hero.SetSpellPoints( max * 2 );
             hero.SetVisitedWideTile( dst_index, obj, Visit::GLOBAL );
         }
@@ -1343,8 +1323,10 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         const Troop & troop = tile.QuantityTroop();
 
-        if ( troop.isValid() && hero.GetArmy().JoinTroop( troop ) )
+        if ( troop.isValid() && hero.GetArmy().JoinTroop( troop ) ) {
             tile.MonsterSetCount( 0 );
+            hero.unmarkHeroMeeting();
+        }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1367,6 +1349,8 @@ namespace AI
                     tile.RemoveObjectSprite();
                     tile.setAsEmpty();
                 }
+
+                hero.unmarkHeroMeeting();
             }
         }
 
@@ -1387,6 +1371,8 @@ namespace AI
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 tile.QuantitySetColor( hero.GetColor() );
                 tile.SetObjectPassable( true );
+
+                hero.unmarkHeroMeeting();
             }
             else {
                 AIBattleLose( hero, res, true, Color::NONE );
@@ -1461,28 +1447,19 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToArtifact( Heroes & hero, int obj, s32 dst_index )
+    void AIToArtifact( Heroes & hero, s32 dst_index )
     {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        const MapArtifact * map_artifact = NULL;
-        if ( tile.GetObject() == obj ) {
-            map_artifact = dynamic_cast<MapArtifact *>( world.GetMapObject( tile.GetObjectUID() ) );
-        }
 
         if ( !hero.IsFullBagArtifacts() ) {
             u32 cond = tile.QuantityVariant();
             Artifact art = tile.QuantityArtifact();
 
-            if ( map_artifact ) {
-                cond = map_artifact->condition;
-                art = map_artifact->artifact;
-            }
-
             bool result = false;
 
             // 1,2,3 - gold, gold + res
             if ( 0 < cond && cond < 4 ) {
-                Funds payment = map_artifact ? map_artifact->QuantityFunds() : tile.QuantityFunds();
+                Funds payment = tile.QuantityFunds();
 
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
@@ -1515,8 +1492,6 @@ namespace AI
             if ( result && hero.PickupArtifact( art ) ) {
                 tile.RemoveObjectSprite();
                 tile.QuantityReset();
-                if ( map_artifact )
-                    world.RemoveMapObject( map_artifact );
             }
         }
 
@@ -1531,7 +1506,7 @@ namespace AI
         const s32 from_index = hero.GetIndex();
 
         // disabled nearest coasts (on week MP2::isWeekLife)
-        MapsIndexes coasts = Maps::ScanAroundObject( from_index, 4, MP2::OBJ_COAST );
+        MapsIndexes coasts = Maps::ScanAroundObjectWithDistance( from_index, 4, MP2::OBJ_COAST );
         coasts.push_back( from_index );
 
         for ( MapsIndexes::const_iterator it = coasts.begin(); it != coasts.end(); ++it )
@@ -1584,7 +1559,7 @@ namespace AI
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
             hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
         }
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
 
         AI::Get().HeroesClearTask( hero );
 
@@ -1619,26 +1594,18 @@ namespace AI
         const Army & army = hero.GetArmy();
         const Kingdom & kingdom = hero.GetKingdom();
 
-        // check other
         switch ( obj ) {
-        // water object
         case MP2::OBJ_SHIPWRECKSURVIROR:
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
-            if ( hero.isShipMaster() )
-                return true;
-            break;
+            return hero.isShipMaster();
 
         case MP2::OBJ_BUOY:
-            if ( !hero.isObjectTypeVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
-                return true;
-            break;
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD;
 
         case MP2::OBJ_MERMAID:
-            if ( !hero.isObjectTypeVisited( obj ) && Luck::IRISH > hero.GetLuck() )
-                return true;
-            break;
+            return !hero.isObjectTypeVisited( obj ) && hero.GetLuck() < Luck::IRISH;
 
         case MP2::OBJ_SIRENS:
             return false;
@@ -1650,7 +1617,6 @@ namespace AI
         case MP2::OBJ_COAST:
             return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
 
-        // capture objects
         case MP2::OBJ_SAWMILL:
         case MP2::OBJ_MINES:
         case MP2::OBJ_ALCHEMYLAB:
@@ -1664,13 +1630,10 @@ namespace AI
             }
             break;
 
-        // pickup object
         case MP2::OBJ_WAGON:
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_SKELETON:
-            if ( tile.QuantityIsValid() )
-                return true;
-            break;
+            return tile.QuantityIsValid();
 
         case MP2::OBJ_MAGICGARDEN:
         case MP2::OBJ_WATERWHEEL:
@@ -1687,13 +1650,10 @@ namespace AI
                 return true;
             break;
 
-        // pickup resource
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_TREASURECHEST:
-            if ( !hero.isShipMaster() )
-                return true;
-            break;
+            return !hero.isShipMaster();
 
         case MP2::OBJ_ARTIFACT: {
             const u32 variants = tile.QuantityVariant();
@@ -1724,56 +1684,51 @@ namespace AI
                 return true;
         }
 
-        // increase view
         case MP2::OBJ_OBSERVATIONTOWER:
-        // obelisk
         case MP2::OBJ_OBELISK:
-            if ( !hero.isVisited( tile, Visit::GLOBAL ) )
-                return true;
-            break;
+            return !hero.isVisited( tile, Visit::GLOBAL );
 
         case MP2::OBJ_BARRIER:
-            if ( kingdom.IsVisitTravelersTent( tile.QuantityColor() ) )
-                return true;
-            break;
+            return kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
         case MP2::OBJ_TRAVELLERTENT:
-            if ( !kingdom.IsVisitTravelersTent( tile.QuantityColor() ) )
-                return true;
-            break;
+            return !kingdom.IsVisitTravelersTent( tile.QuantityColor() );
 
-            // new spell
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3: {
             const Spell & spell = tile.QuantitySpell();
-            if ( spell.isValid() &&
-                 // check spell book
-                 hero.HaveSpellBook() && !hero.HaveSpell( spell ) &&
-                 // check valid level spell and wisdom skill
-                 !( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) )
-                return true;
-        } break;
+            assert( spell.isValid() );
+            if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell )
+                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+                return false;
+            }
 
-            // primary skill
+            if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL )
+                 && ( spell == Spell::VIEWALL || spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
+                      || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
+                // AI never uses View spells.
+                return false;
+            }
+            return true;
+        }
+
+        // primary skill
         case MP2::OBJ_FORT:
         case MP2::OBJ_MERCENARYCAMP:
         case MP2::OBJ_DOCTORHUT:
         case MP2::OBJ_STANDINGSTONES:
         // exp
         case MP2::OBJ_GAZEBO:
-            if ( !hero.isVisited( tile ) )
-                return true;
-            break;
+            return !hero.isVisited( tile );
 
         // sec skill
         case MP2::OBJ_WITCHSHUT: {
             const Skill::Secondary & skill = tile.QuantitySkill();
 
             // check skill
-            if ( skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() ) )
-                return true;
-        } break;
+            return skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() );
+        }
 
         case MP2::OBJ_TREEKNOWLEDGE:
             if ( !hero.isVisited( tile ) ) {
@@ -1787,27 +1742,19 @@ namespace AI
         case MP2::OBJ_FOUNTAIN:
         case MP2::OBJ_FAERIERING:
         case MP2::OBJ_IDOL:
-            if ( !hero.isObjectTypeVisited( obj ) && Luck::IRISH > hero.GetLuck() )
-                return true;
-            break;
+            return !hero.isObjectTypeVisited( obj ) && hero.GetLuck() < Luck::IRISH;
 
         // good morale
         case MP2::OBJ_OASIS:
         case MP2::OBJ_TEMPLE:
         case MP2::OBJ_WATERINGHOLE:
-            if ( !hero.isObjectTypeVisited( obj ) && Morale::BLOOD > hero.GetMorale() )
-                return true;
-            break;
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD;
 
         case MP2::OBJ_MAGICWELL:
-            if ( !hero.isVisited( tile ) && hero.GetMaxSpellPoints() != hero.GetSpellPoints() )
-                return true;
-            break;
+            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
 
         case MP2::OBJ_ARTESIANSPRING:
-            if ( !hero.isVisited( tile ) && 2 * hero.GetMaxSpellPoints() > hero.GetSpellPoints() )
-                return true;
-            break;
+            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
 
         case MP2::OBJ_XANADU: {
             const u32 level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
@@ -1829,12 +1776,15 @@ namespace AI
         case MP2::OBJ_GOBLINHUT:
         case MP2::OBJ_DWARFCOTT:
         case MP2::OBJ_HALFLINGHOLE:
-        case MP2::OBJ_PEASANTHUT:
         case MP2::OBJ_THATCHEDHUT: {
             const Troop & troop = tile.QuantityTroop();
-            if ( troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) ) )
-                return true;
-            break;
+            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+        }
+
+        case MP2::OBJ_PEASANTHUT: {
+            // Peasants are special monsters. They're the weakest! Think twice before getting them.
+            const Troop & troop = tile.QuantityTroop();
+            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
         }
 
         // recruit army
@@ -1848,11 +1798,9 @@ namespace AI
         case MP2::OBJ_EARTHALTAR:
         case MP2::OBJ_BARROWMOUNDS: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t paymentCosts = troop.GetCost();
+            const payment_t & paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() ) )
-                return true;
-            break;
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
         }
 
         // recruit army (battle)
@@ -1864,46 +1812,34 @@ namespace AI
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
-                const payment_t paymentCosts = troop.GetCost();
+                const payment_t & paymentCosts = troop.GetCost();
 
-                if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) ) )
-                    return true;
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
             }
-            break;
         }
 
         // recruit genie
         case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t paymentCosts = troop.GetCost();
+            const payment_t & paymentCosts = troop.GetCost();
 
-            if ( troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) ) )
-                return true;
-            break;
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
         }
 
         // upgrade army
         case MP2::OBJ_HILLFORT:
-            if ( army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE ) )
-                return true;
-            break;
+            return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
 
-            // upgrade army
+        // upgrade army
         case MP2::OBJ_FREEMANFOUNDRY:
-            if ( army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM ) )
-                return true;
-            break;
+            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
 
         // loyalty obj
         case MP2::OBJ_STABLES:
-            if ( army.HasMonster( Monster::CAVALRY ) || !hero.isVisited( tile ) )
-                return true;
-            break;
+            return army.HasMonster( Monster::CAVALRY ) || !hero.isVisited( tile );
 
         case MP2::OBJ_ARENA:
-            if ( !hero.isVisited( tile ) )
-                return true;
-            break;
+            return !hero.isVisited( tile );
 
         // poor morale obj
         case MP2::OBJ_SHIPWRECK:
@@ -1925,11 +1861,9 @@ namespace AI
         case MP2::OBJ_MONSTER:
             return army.isStrongerThan( Army( tile ), ARMY_STRENGTH_ADVANTAGE_MEDUIM );
 
-        // sign
         case MP2::OBJ_SIGN:
-            if ( !hero.isVisited( tile ) )
-                return true;
-            break;
+            // AI has no brains to process anything from sign messages.
+            return false;
 
         case MP2::OBJ_HEROES: {
             const Heroes * hero2 = tile.GetHeroes();

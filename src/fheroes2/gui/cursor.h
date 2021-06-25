@@ -22,13 +22,10 @@
 #ifndef H2CURSOR_H
 #define H2CURSOR_H
 
-#include "gamedefs.h"
 #include "math_base.h"
 
 class Cursor
 {
-    friend class CursorRestorer;
-
 public:
     enum CursorType : int
     {
@@ -189,10 +186,6 @@ private:
     Cursor();
     ~Cursor() = default;
 
-    void Show() const;
-    void Hide() const;
-    bool isVisible( void ) const;
-
     void SetOffset( int name, const fheroes2::Point & defaultOffset );
     void Move( int32_t x, int32_t y ) const;
 
@@ -205,7 +198,7 @@ class CursorRestorer
 {
 public:
     CursorRestorer();
-    CursorRestorer( bool visible, int theme ); // For convenience, also sets visibility and theme of the cursor
+    CursorRestorer( const bool visible, const int theme ); // For convenience, also sets visibility and theme of the cursor
     CursorRestorer( const CursorRestorer & ) = delete;
 
     ~CursorRestorer();
@@ -213,8 +206,8 @@ public:
     CursorRestorer & operator=( const CursorRestorer & ) = delete;
 
 private:
-    bool _visible;
-    int _theme;
+    const int _theme;
+    const bool _visible;
 };
 
 #endif

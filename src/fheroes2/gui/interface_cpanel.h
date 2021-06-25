@@ -24,9 +24,14 @@
 #define H2INTERFACE_CPANEL_H
 
 #include "game_mode.h"
-#include "image.h"
+#include "math_base.h"
 
 #include <memory>
+
+namespace fheroes2
+{
+    class Sprite;
+}
 
 namespace Interface
 {

@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 #include <iterator>
 #include <set>
 
@@ -34,9 +33,10 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "maps_tiles.h"
 #include "rand.h"
+#include "tools.h"
 #include "translations.h"
-#include "world.h"
 
 namespace
 {
@@ -994,7 +994,7 @@ Battle::Cell * Battle::Board::GetCell( s32 position, int dir )
             return &board->at( GetIndexDirection( position, dir ) );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 Battle::Indexes Battle::Board::GetMoveWideIndexes( s32 center, bool reflect )
@@ -1102,11 +1102,11 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
 
 bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 {
-    if ( troop == NULL )
+    if ( troop == nullptr )
         return false;
 
     const Cell * cell = GetCell( index );
-    if ( cell == NULL )
+    if ( cell == nullptr )
         return false;
 
     const bool doubleHex = troop->isWide();
@@ -1120,7 +1120,7 @@ bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
         const bool isReflected = troop->GetHeadIndex() < troop->GetTailIndex();
         const int32_t tailIndex = isReflected ? index + 1 : index - 1;
         const Cell * tailCell = GetCell( tailIndex );
-        if ( tailCell == NULL || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
+        if ( tailCell == nullptr || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
             return false;
 
         if ( !tailCell->isPassable3( *troop, true ) )

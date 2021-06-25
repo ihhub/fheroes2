@@ -30,6 +30,7 @@
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>
@@ -77,22 +78,11 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const payment_t paymentMonster = monster.GetCost();
     const bool extres = 2 == paymentMonster.GetValidItemsCount();
 
-    // smear hardcored text "Cost per troop:"
-    const fheroes2::Sprite & smear = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
-    fheroes2::Point dst_pt( pos.x + 144, pos.y + 55 );
-    fheroes2::Blit( smear, 8, 1, display, dst_pt.x, dst_pt.y, 120, 12 );
-
-    Text text( _( "Cost per troop:" ), Font::SMALL );
-    dst_pt.x = pos.x + 206 - text.w() / 2;
-    dst_pt.y = pos.y + 55;
-    text.Blit( dst_pt.x, dst_pt.y );
-
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
     StringReplace( str, "%{name}", monster.GetMultiName() );
-    text.Set( str, Font::YELLOW_BIG );
-    dst_pt.x = pos.x + ( pos.width - text.w() ) / 2;
-    dst_pt.y = pos.y + 25;
+    Text text( str, Font::YELLOW_BIG );
+    fheroes2::Point dst_pt( pos.x + ( pos.width - text.w() ) / 2, pos.y + 25 );
     text.Blit( dst_pt.x, dst_pt.y );
 
     // sprite monster
@@ -100,7 +90,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
     dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
     dst_pt.y = pos.y + 135 - smon.height();
 
@@ -193,7 +183,7 @@ void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 
     text.Blit( pos.x + 29, pos.y + 163 );
 }
 
-const char * SwitchMaxMinButtons( fheroes2::Button & btnMax, fheroes2::Button & btnMin, bool max )
+const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::ButtonBase & btnMin, bool max )
 {
     if ( btnMax.isEnabled() || btnMin.isEnabled() ) {
         if ( max ) {
@@ -264,7 +254,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
+    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ),
+                                      fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     dst_pt.x = pos.x + 205;

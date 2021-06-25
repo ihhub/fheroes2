@@ -20,26 +20,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstring>
 #include <ctime>
 #include <sstream>
 
-#include "army.h"
 #include "campaign_savedata.h"
-#include "castle.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_io.h"
 #include "game_over.h"
 #include "game_static.h"
-#include "heroes.h"
-#include "interface_gamearea.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "monster.h"
+#include "save_format_version.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "tools.h"
 #include "world.h"
 #include "zzlib.h"
 
@@ -52,7 +47,6 @@ namespace
     {
         enum
         {
-            IS_COMPRESS = 0x8000,
             IS_LOYALTY = 0x4000
         };
 
@@ -76,10 +70,6 @@ namespace
 
             if ( fi._version == GameVersion::PRICE_OF_LOYALTY )
                 status |= IS_LOYALTY;
-
-#ifdef WITH_ZLIB
-            status |= IS_COMPRESS;
-#endif
         }
 
         uint16_t status;
@@ -95,6 +85,8 @@ namespace
 
     StreamBase & operator>>( StreamBase & msg, HeaderSAV & hdr )
     {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_094_RELEASE, "Remove version handling in HeaderSAV class." );
+
         if ( hdr._saveFileVersion < FORMAT_VERSION_094_RELEASE ) {
             msg >> hdr.status >> hdr.info >> hdr.gameType;
         }
@@ -140,7 +132,7 @@ bool Game::Save( const std::string & fn )
     fz.setbigendian( true );
 
     // zip game data content
-    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get() << MonsterStaticData::Get();
+    fz << loadver << World::Get() << Settings::Get() << GameOver::Result::Get() << GameStatic::Data::Get();
 
     if ( conf.isCampaignGameType() )
         fz << Campaign::CampaignSaveData::Get();
@@ -199,13 +191,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return fheroes2::GameMode::CANCEL;
     }
 
-#ifndef WITH_ZLIB
-    if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
-        return fheroes2::GameMode::CANCEL;
-    }
-#endif
-
     ZStreamFile fz;
     fz.setbigendian( true );
 
@@ -233,7 +218,18 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     DEBUG_LOG( DBG_GAME, DBG_TRACE, "load version: " << binver );
     SetLoadVersion( binver );
 
-    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get() >> MonsterStaticData::Get();
+    fz >> World::Get() >> conf >> GameOver::Result::Get() >> GameStatic::Data::Get();
+
+    // Settings should contain the full path to the current map file, if this map is available
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove the System::GetUniversalBasename()" );
+    conf.SetMapsFile( Settings::GetLastFile( "maps", System::GetUniversalBasename( conf.MapsFile() ) ) );
+
+    // TODO: starting from 0.9.5 we do not write any data related to monsters. Remove reading the information for Monsters once minimum supported version is 0.9.5.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_095_RELEASE, "Remove MonsterStaticData usage" );
+    if ( binver < FORMAT_VERSION_PRE_095_RELEASE ) {
+        fz >> MonsterStaticData::Get();
+    }
+
     if ( conf.loadedFileLanguage() != "en" && conf.loadedFileLanguage() != conf.ForceLang() && !conf.Unicode() ) {
         std::string warningMessage( "This is an saved game is localized for lang = " );
         warningMessage.append( conf.loadedFileLanguage() );
@@ -314,14 +310,6 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
     if ( ( Settings::Get().GameType() & fileGameType ) == 0 )
         return false;
-
-#ifndef WITH_ZLIB
-    // check: compress game data
-    if ( header.status & HeaderSAV::IS_COMPRESS ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, fn << ", zlib: unsupported" );
-        return false;
-    }
-#endif
 
     finfo = header.info;
     finfo.file = fn;

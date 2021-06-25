@@ -29,6 +29,7 @@
 #include "icn.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -140,7 +141,7 @@ struct ResourceBar
         text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
     }
 
-    void Redraw( const Funds * res = NULL ) const
+    void Redraw( const Funds * res = nullptr ) const
     {
         if ( !res )
             res = &resource;

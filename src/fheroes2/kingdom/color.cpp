@@ -23,8 +23,8 @@
 #include <sstream>
 
 #include "color.h"
-#include "game.h"
 #include "players.h"
+#include "tools.h"
 #include "translations.h"
 #include "world.h"
 

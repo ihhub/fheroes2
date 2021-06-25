@@ -311,7 +311,9 @@
     <ClCompile Include="src\fheroes2\gui\statusbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_tool.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_window.cpp" />
     <ClCompile Include="src\fheroes2\heroes\direction.cpp" />
@@ -349,6 +351,8 @@
     <ClCompile Include="src\fheroes2\maps\position.cpp" />
     <ClCompile Include="src\fheroes2\maps\visit.cpp" />
     <ClCompile Include="src\fheroes2\monster\monster.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_anim.cpp" />
+    <ClCompile Include="src\fheroes2\monster\monster_info.cpp" />
     <ClCompile Include="src\fheroes2\objects\mounts.cpp" />
     <ClCompile Include="src\fheroes2\objects\objcrck.cpp" />
     <ClCompile Include="src\fheroes2\objects\objdirt.cpp" />
@@ -368,7 +372,7 @@
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_book.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell_storage.cpp" />
-    <ClCompile Include="src\fheroes2\system\gamedefs.cpp" />
+    <ClCompile Include="src\fheroes2\system\bitmodes.cpp" />
     <ClCompile Include="src\fheroes2\system\players.cpp" />
     <ClCompile Include="src\fheroes2\system\settings.cpp" />
     <ClCompile Include="src\fheroes2\world\world.cpp" />
@@ -478,7 +482,9 @@
     <ClInclude Include="src\fheroes2\gui\statusbar.h" />
     <ClInclude Include="src\fheroes2\gui\text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_text.h" />
     <ClInclude Include="src\fheroes2\gui\ui_tool.h" />
     <ClInclude Include="src\fheroes2\gui\ui_window.h" />
     <ClInclude Include="src\fheroes2\heroes\direction.h" />
@@ -512,6 +518,7 @@
     <ClInclude Include="src\fheroes2\maps\position.h" />
     <ClInclude Include="src\fheroes2\maps\visit.h" />
     <ClInclude Include="src\fheroes2\monster\monster.h" />
+    <ClInclude Include="src\fheroes2\monster\monster_anim.h" />
     <ClInclude Include="src\fheroes2\monster\monster_info.h" />
     <ClInclude Include="src\fheroes2\objects\mounts.h" />
     <ClInclude Include="src\fheroes2\objects\objcrck.h" />
@@ -535,6 +542,7 @@
     <ClInclude Include="src\fheroes2\system\bitmodes.h" />
     <ClInclude Include="src\fheroes2\system\gamedefs.h" />
     <ClInclude Include="src\fheroes2\system\players.h" />
+    <ClInclude Include="src\fheroes2\system\save_format_version.h" />
     <ClInclude Include="src\fheroes2\system\settings.h" />
     <ClInclude Include="src\fheroes2\system\version.h" />
     <ClInclude Include="src\fheroes2\world\world.h" />

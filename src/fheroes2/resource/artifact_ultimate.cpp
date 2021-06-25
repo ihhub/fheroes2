@@ -22,7 +22,6 @@
 
 #include "artifact_ultimate.h"
 #include "interface_gamearea.h"
-#include "maps.h"
 
 UltimateArtifact::UltimateArtifact()
     : index( -1 )

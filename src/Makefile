@@ -29,13 +29,13 @@ endif
 CFLAGS := $(CFLAGS) -fsigned-char
 CXXFLAGS := -std=c++11 $(CFLAGS)
 LDFLAGS := $(LDFLAGS)
-LIBS := -pthread
+LIBS := -pthread -lz
 
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
+# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual flags back once we fix all other warnings!
+CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized -Wextra-semi
 
 ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
@@ -56,11 +56,11 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 
 ifdef FHEROES2_IMAGE_SUPPORT
-CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags) -DWITH_ZLIB
+CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
 ifdef FHEROES2_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs) -lz
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
 endif
 endif
 
@@ -71,11 +71,6 @@ SDL_LIBS := $(SDL_LIBS) -lSDL_ttf
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_ttf
 endif
-endif
-
-ifndef WITHOUT_ZLIB
-CFLAGS := $(CFLAGS) -DWITH_ZLIB
-LIBS := $(LIBS) -lz
 endif
 
 ifdef RELEASE

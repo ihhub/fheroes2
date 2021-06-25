@@ -22,9 +22,6 @@
 
 #include <algorithm>
 #include <cstring>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 #include <string>
 
 #include "endian_h2.h"
@@ -236,10 +233,10 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
 }
 
 StreamBuf::StreamBuf( size_t sz )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     if ( sz )
         reallocbuf( sz );
@@ -253,19 +250,19 @@ StreamBuf::~StreamBuf()
 }
 
 StreamBuf::StreamBuf( const StreamBuf & st )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     copy( st );
 }
 
 StreamBuf::StreamBuf( const std::vector<u8> & buf )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     itbeg = (u8 *)&buf[0];
     itend = itbeg + buf.size();
@@ -276,10 +273,10 @@ StreamBuf::StreamBuf( const std::vector<u8> & buf )
 }
 
 StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
-    : itbeg( NULL )
-    , itget( NULL )
-    , itput( NULL )
-    , itend( NULL )
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
 {
     itbeg = const_cast<u8 *>( buf );
     itend = itbeg + bufsz;
@@ -389,7 +386,7 @@ void StreamBuf::copy( const StreamBuf & sb )
     setbigendian( sb.bigendian() );
 }
 
-void StreamBuf::put8( char v )
+void StreamBuf::put8( const uint8_t v )
 {
     if ( sizep() == 0 )
         reallocbuf( capacity() + capacity() / 2 );
@@ -445,28 +442,28 @@ u32 StreamBuf::getLE32()
 void StreamBuf::putBE16( u16 v )
 {
     put8( v >> 8 );
-    put8( v );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE16( u16 v )
 {
-    put8( v );
+    put8( v & 0xFF );
     put8( v >> 8 );
 }
 
 void StreamBuf::putBE32( u32 v )
 {
     put8( v >> 24 );
-    put8( v >> 16 );
-    put8( v >> 8 );
-    put8( v );
+    put8( ( v >> 16 ) & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( v & 0xFF );
 }
 
 void StreamBuf::putLE32( u32 v )
 {
-    put8( v );
-    put8( v >> 8 );
-    put8( v >> 16 );
+    put8( v & 0xFF );
+    put8( ( v >> 8 ) & 0xFF );
+    put8( ( v >> 16 ) & 0xFF );
     put8( v >> 24 );
 }
 
@@ -510,7 +507,7 @@ void StreamBuf::seek( size_t sz )
 }
 
 StreamFile::StreamFile()
-    : _file( NULL )
+    : _file( nullptr )
 {}
 
 StreamFile::StreamFile( const std::string & fn, const char * mode )
@@ -529,14 +526,14 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
     _file = std::fopen( fn.c_str(), mode.c_str() );
     if ( !_file )
         ERROR_LOG( fn );
-    return _file != NULL;
+    return _file != nullptr;
 }
 
 void StreamFile::close( void )
 {
     if ( _file ) {
         std::fclose( _file );
-        _file = NULL;
+        _file = nullptr;
     }
 }
 
@@ -599,9 +596,9 @@ u8 StreamFile::get8()
     return getUint<uint8_t>();
 }
 
-void StreamFile::put8( char ch )
+void StreamFile::put8( const uint8_t v )
 {
-    putUint<char>( ch );
+    putUint<uint8_t>( v );
 }
 
 uint16_t StreamFile::getBE16()

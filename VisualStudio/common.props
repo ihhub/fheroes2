@@ -11,11 +11,13 @@
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\src\engine;$(MSBuildThisFileDirectory)..\src\fheroes2\gui;$(MSBuildThisFileDirectory)..\src\fheroes2\maps;$(MSBuildThisFileDirectory)..\src\fheroes2\kingdom;$(MSBuildThisFileDirectory)..\src\fheroes2\campaign;$(MSBuildThisFileDirectory)..\src\fheroes2\game;$(MSBuildThisFileDirectory)..\src\fheroes2\dialog;$(MSBuildThisFileDirectory)..\src\fheroes2\system;$(MSBuildThisFileDirectory)..\src\fheroes2\spell;$(MSBuildThisFileDirectory)..\src\fheroes2\monster;$(MSBuildThisFileDirectory)..\src\fheroes2\castle;$(MSBuildThisFileDirectory)..\src\fheroes2\agg;$(MSBuildThisFileDirectory)..\src\fheroes2\heroes;$(MSBuildThisFileDirectory)..\src\fheroes2\resource;$(MSBuildThisFileDirectory)..\src\fheroes2\ai;$(MSBuildThisFileDirectory)..\src\fheroes2\army;$(MSBuildThisFileDirectory)..\src\fheroes2\battle;$(MSBuildThisFileDirectory)..\src\fheroes2\pocketpc;$(MSBuildThisFileDirectory)..\src\fheroes2\objects;$(MSBuildThisFileDirectory)..\src\fheroes2\world;$(MSBuildThisFileDirectory)..\src\fheroes2\image;$(MSBuildThisFileDirectory)..\src\thirdparty\libsmacker;$(MSBuildThisFileDirectory)packages\installed\zlib\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;WITH_ZLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TreatSpecificWarningsAsErrors>4018;4028;4100;4189;4245;4267;4309;4319;4389;4456;4458;4554;4592;4702;4706;4715;4800</TreatSpecificWarningsAsErrors>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(fheroes2_build_version)'!=''">BUILD_VERSION=$(fheroes2_build_version);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TreatSpecificWarningsAsErrors>4018;4028;4100;4114;4189;4245;4267;4309;4319;4389;4456;4458;4554;4592;4702;4706;4715;4800</TreatSpecificWarningsAsErrors>
     </ClCompile>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\src\fheroes2\system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions Condition="'$(fheroes2_build_version)'!=''">BUILD_VERSION=$(fheroes2_build_version);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\zlib\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

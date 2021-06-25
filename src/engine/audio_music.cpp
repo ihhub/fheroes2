@@ -21,12 +21,10 @@
  ***************************************************************************/
 
 #include <cstdlib>
-#include <iostream>
 
 #include "audio_mixer.h"
 #include "audio_music.h"
 #include "logging.h"
-#include "tools.h"
 
 #include <SDL.h>
 
@@ -34,7 +32,7 @@
 
 namespace
 {
-    Mix_Music * music = NULL;
+    Mix_Music * music = nullptr;
 
     int fadein = 0;
     int fadeout = 0;
@@ -139,7 +137,7 @@ void Music::Reset( void )
             Mix_HaltMusic();
 
         Mix_FreeMusic( music );
-        music = NULL;
+        music = nullptr;
     }
 }
 

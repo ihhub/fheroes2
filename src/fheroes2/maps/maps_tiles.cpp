@@ -22,17 +22,19 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
-#include <iomanip>
 #include <iostream>
 
 #include "agg_image.h"
 #include "castle.h"
 #include "game.h"
-#include "game_interface.h"
 #include "ground.h"
 #include "heroes.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
+#include "game_interface.h"
+#else
+#include "interface_gamearea.h"
+#endif
 #include "logging.h"
 #include "maps.h"
 #include "maps_tiles.h"
@@ -51,8 +53,11 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
+#include "settings.h"
 #include "spell.h"
+#ifdef WITH_DEBUG
 #include "text.h"
+#endif
 #include "til.h"
 #include "trees.h"
 #include "world.h"
@@ -202,11 +207,6 @@ bool Maps::TilesAddon::isICN( int icn ) const
 bool Maps::TilesAddon::PredicateSortRules1( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
 {
     return ( ( ta1.level % 4 ) > ( ta2.level % 4 ) );
-}
-
-bool Maps::TilesAddon::PredicateSortRules2( const Maps::TilesAddon & ta1, const Maps::TilesAddon & ta2 )
-{
-    return ( ( ta1.level % 4 ) < ( ta2.level % 4 ) );
 }
 
 int Maps::Tiles::GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex )
@@ -904,14 +904,14 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     else {
         objectTileset = mp2.objectName1;
         objectIndex = mp2.indexName1;
-        uniq = mp2.editorObjectLink;
+        uniq = mp2.level1ObjectUID;
     }
     AddonsPushLevel2( mp2 );
 }
 
 Heroes * Maps::Tiles::GetHeroes( void ) const
 {
-    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : NULL;
+    return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
 }
 
 void Maps::Tiles::SetHeroes( Heroes * hero )
@@ -1195,8 +1195,8 @@ void Maps::Tiles::UpdatePassable( void )
     // on ground
     if ( MP2::OBJ_HEROES != mp2_object && !isWater() ) {
         bool hasRocksOrTrees = isImpassableIfOverlayed( objectTileset, objectIndex );
-        bool mounts2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isMountsRocs );
-        bool trees2 = addons_level2.end() != std::find_if( addons_level2.begin(), addons_level2.end(), isForestsTrees );
+        bool mounts2 = std::any_of( addons_level2.begin(), addons_level2.end(), isMountsRocs );
+        bool trees2 = std::any_of( addons_level2.begin(), addons_level2.end(), isForestsTrees );
 
         // fix coast passable
         if ( tilePassable && !emptyobj && Maps::TileIsCoast( _index, Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) && !isShadow() ) {
@@ -1311,7 +1311,7 @@ int Maps::Tiles::GetPassable( void ) const
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 {
     if ( mt.objectName1 && mt.indexName1 < 0xFF )
-        AddonsPushLevel1( TilesAddon( 0, mt.editorObjectLink, mt.objectName1, mt.indexName1 ) );
+        AddonsPushLevel1( TilesAddon( mt.quantity1, mt.level1ObjectUID, mt.objectName1, mt.indexName1 ) );
 
     // MP2 "objectName" is a bitfield
     // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
@@ -1321,8 +1321,9 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN1 && ma.indexNameN1 < 0xFF )
-        AddonsPushLevel1( TilesAddon( ma.quantityN, ma.editorObjectLink, ma.objectNameN1, ma.indexNameN1 ) );
+    if ( ma.objectNameN1 && ma.indexNameN1 < 0xFF ) {
+        AddonsPushLevel1( TilesAddon( ma.quantityN, ma.level1ObjectUID, ma.objectNameN1, ma.indexNameN1 ) );
+    }
 }
 
 void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
@@ -1332,14 +1333,16 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName2 && mt.indexName2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( 0, mt.editorObjectOverlay, mt.objectName2, mt.indexName2 ) );
+    if ( mt.objectName2 && mt.indexName2 < 0xFF ) {
+        AddonsPushLevel2( TilesAddon( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.indexName2 ) );
+    }
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF )
-        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.editorObjectOverlay, ma.objectNameN2, ma.indexNameN2 ) );
+    if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF ) {
+        AddonsPushLevel2( TilesAddon( ma.quantityN, ma.level2ObjectUID, ma.objectNameN2, ma.indexNameN2 ) );
+    }
 }
 
 void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
@@ -1350,41 +1353,17 @@ void Maps::Tiles::AddonsPushLevel2( const TilesAddon & ta )
         addons_level2.push_back( ta );
 }
 
-void Maps::Tiles::AddonsSort( void )
+void Maps::Tiles::AddonsSort()
 {
-    Addons::iterator lastObject = addons_level1.end();
-    for ( Addons::iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        const int icn = MP2::GetICNObject( it->object );
-
-        // force rivers and roads to be lowest priority
-        if ( icn == ICN::STREAM || icn == ICN::ROAD )
-            continue;
-
-        // force monster object on top (fix old saves)
-        if ( mp2_object == MP2::OBJ_MONSTER && icn == ICN::MONS32 ) {
-            lastObject = it;
-            break;
-        }
-        // Level is actually a bitfield, but if 0 then it's an actual "full object"
-        // To compare: level 2 is shadow, level 3 is roads/river
-        else if ( it->level % 4 == 0 ) {
-            lastObject = it;
-        }
-    }
-
-    // Re-order tiles (Fixing mistakes of original maps)
-    if ( lastObject != addons_level1.end() ) {
-        if ( objectTileset != 0 && objectIndex < 255 )
-            addons_level1.push_front( TilesAddon( 0, uniq, objectTileset, objectIndex ) );
-
-        uniq = lastObject->uniq;
-        objectTileset = lastObject->object;
-        objectIndex = lastObject->index;
-        addons_level1.erase( lastObject );
+    // Push everything to the container and sort it by level.
+    bool topObjectExists = false;
+    if ( objectTileset != 0 && objectIndex < 255 ) {
+        topObjectExists = true;
+        addons_level1.emplace_front( quantity1 & 3, uniq, objectTileset, objectIndex );
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
-    if ( !addons_level1.empty() && !tileIsRoad && ( MP2::OBJ_ZERO == mp2_object || MP2::OBJ_COAST == mp2_object ) ) {
+    if ( !tileIsRoad ) {
         for ( const TilesAddon & addon : addons_level1 ) {
             if ( addon.isRoad() ) {
                 tileIsRoad = true;
@@ -1393,11 +1372,19 @@ void Maps::Tiles::AddonsSort( void )
         }
     }
 
-    // FIXME: check if sort is still needed
-    // if ( !addons_level1.empty() )
-    //    addons_level1.sort( TilesAddon::PredicateSortRules1 );
-    // if ( !addons_level2.empty() )
-    //    addons_level2.sort( TilesAddon::PredicateSortRules2 );
+    addons_level1.sort( TilesAddon::PredicateSortRules1 );
+
+    if ( topObjectExists ) {
+        const TilesAddon & highestPriorityAddon = addons_level1.back();
+        uniq = highestPriorityAddon.uniq;
+        objectTileset = highestPriorityAddon.object;
+        objectIndex = highestPriorityAddon.index;
+        quantity1 = ( quantity1 & ( 0xFF - 0x03 ) ) + ( highestPriorityAddon.level & 0x03 );
+
+        addons_level1.pop_back();
+    }
+
+    // Level 2 objects don't have any rendering priorities so they should be rendered first in queue first to render.
 }
 
 int Maps::Tiles::GetGround( void ) const
@@ -1747,21 +1734,21 @@ Maps::TilesAddon * Maps::Tiles::FindAddonICN( int icn, int level, int index )
             }
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
 
-    return it != addons_level1.end() ? &( *it ) : NULL;
+    return it != addons_level1.end() ? &( *it ) : nullptr;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
 {
     Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
 
-    return it != addons_level2.end() ? &( *it ) : NULL;
+    return it != addons_level2.end() ? &( *it ) : nullptr;
 }
 
 std::string Maps::Tiles::String( void ) const
@@ -1862,9 +1849,9 @@ std::string Maps::Tiles::String( void ) const
 void Maps::Tiles::FixObject( void )
 {
     if ( MP2::OBJ_ZERO == mp2_object ) {
-        if ( addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
+        if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
             SetObject( MP2::OBJ_ARTIFACT );
-        else if ( addons_level1.end() != std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
+        else if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isResource ) )
             SetObject( MP2::OBJ_RESOURCE );
     }
 }
@@ -1970,10 +1957,10 @@ Maps::TilesAddon * Maps::Tiles::FindFlags( void )
 
     if ( it == addons_level1.end() ) {
         it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isFlag32 );
-        return addons_level2.end() != it ? &( *it ) : NULL;
+        return addons_level2.end() != it ? &( *it ) : nullptr;
     }
 
-    return addons_level1.end() != it ? &( *it ) : NULL;
+    return addons_level1.end() != it ? &( *it ) : nullptr;
 }
 
 void Maps::Tiles::removeFlags()

@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objdirt.h"
 
@@ -35,10 +34,10 @@ int ObjDirt::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || ARRAY_COUNT_END( disabled ) != std::find( disabled, ARRAY_COUNT_END( disabled ), index ) )
+    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjDirt::isAction( u32 index )
@@ -51,7 +50,7 @@ bool ObjDirt::isShadow( u32 index )
     const u8 shadows[] = {0,  1,  5,   6,   14,  47,  52,  59,  62,  65,  68,  70,  72,  75,  78,  81,  84,  87, 91,
                           94, 97, 100, 103, 111, 114, 117, 126, 128, 136, 149, 150, 161, 165, 177, 181, 196, 200};
 
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjDirt::GetActionObject( u32 index )

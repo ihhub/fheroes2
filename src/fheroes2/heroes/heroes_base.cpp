@@ -22,12 +22,9 @@
 
 #include <algorithm>
 #include <sstream>
-#include <utility>
 
 #include "army.h"
 #include "castle.h"
-#include "color.h"
-#include "game.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
@@ -268,9 +265,9 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     bool unique = true;
 
     switch ( art.Type() ) {
-    case 1:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsML();
-        break; /* morale/luck arts. */
+    case 1: // morale/luck arifacts
+        unique = true;
+        break;
     case 2:
         unique = Settings::Get().ExtWorldUseUniqueArtifactsRS();
         break; /* resource affecting arts. */
@@ -284,7 +281,12 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
         break;
     }
 
-    return !unique ? bag_artifacts.Count( art ) : ( bag_artifacts.isPresentArtifact( art ) ? 1 : 0 );
+    if ( unique ) {
+        return bag_artifacts.isPresentArtifact( art ) ? 1 : 0;
+    }
+    else {
+        return bag_artifacts.Count( art );
+    }
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
@@ -371,13 +373,35 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-double HeroBase::GetSpellcastStrength() const
+double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 {
-    if ( GetSpells().empty() )
-        return 0.0;
+    const std::vector<Spell> & spells = GetSpells();
+    const uint32_t currentSpellPoints = GetSpellPoints();
+    const int spellPower = GetPower();
 
-    // Benchmark for strength is 20 power * 20 knowledge (200 spell points) is 3000.0
-    return GetPower() * sqrt( GetSpellPoints() / 2 ) * 15.0;
+    double bestValue = 0;
+    for ( const Spell & spell : spells ) {
+        if ( spell.isCombat() && spell.SpellPoint() <= currentSpellPoints ) {
+            const int id = spell.GetID();
+
+            // High impact spells can turn tide of battle, otherwise look for damage spells
+            if ( spell.isSummon() ) {
+                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower );
+            }
+            else if ( spell.isDamage() ) {
+                // Benchmark for Lightning for 20 power * 20 knowledge (200 spell points) is 2500.0
+                bestValue = std::max( bestValue, spell.Damage() / 2.0 * spellPower * sqrt( currentSpellPoints / 2 ) );
+            }
+            else if ( spell.isResurrect() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+                bestValue = std::max( bestValue, armyLimit * 0.5 );
+            }
+            else {
+                bestValue = std::max( bestValue, armyLimit * 0.2 );
+            }
+        }
+    }
+
+    return bestValue;
 }
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const

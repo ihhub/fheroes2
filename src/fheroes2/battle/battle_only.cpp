@@ -21,24 +21,21 @@
  ***************************************************************************/
 
 #include "battle_only.h"
-#include "agg.h"
 #include "agg_image.h"
 #include "army_bar.h"
 #include "battle.h"
-#include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "game.h"
-#include "gamedefs.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
-#include "kingdom.h"
-#include "logging.h"
 #include "race.h"
+#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -67,12 +64,12 @@ void Battle::ControlInfo::Redraw( void ) const
 }
 
 Battle::Only::Only()
-    : hero1( NULL )
-    , hero2( NULL )
+    : hero1( nullptr )
+    , hero2( nullptr )
     , player1( Color::BLUE )
     , player2( Color::NONE )
-    , army1( NULL )
-    , army2( NULL )
+    , army1( nullptr )
+    , army2( nullptr )
     , moraleIndicator1( nullptr )
     , moraleIndicator2( nullptr )
     , luckIndicator1( nullptr )
@@ -213,7 +210,7 @@ bool Battle::Only::ChangeSettings( void )
                 if ( hero2 )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
-                if ( player2.isControlLocal() && NULL == cinfo2 ) {
+                if ( player2.isControlLocal() && nullptr == cinfo2 ) {
                     cinfo2.reset( new ControlInfo( fheroes2::Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
                 }
                 redraw = true;
@@ -425,7 +422,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
         player1.SetColor( Color::BLUE );
         player1.SetRace( hero1->GetRace() );
 
-        if ( moraleIndicator1 == NULL ) {
+        if ( moraleIndicator1 == nullptr ) {
             moraleIndicator1.reset( new MoraleIndicator( hero1 ) );
             moraleIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 75 ) );
         }
@@ -433,7 +430,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
             moraleIndicator1->SetHero( hero1 );
         }
 
-        if ( luckIndicator1 == NULL ) {
+        if ( luckIndicator1 == nullptr ) {
             luckIndicator1.reset( new LuckIndicator( hero1 ) );
             luckIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 115 ) );
         }
@@ -480,7 +477,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
         player2.SetColor( Color::RED );
         player2.SetRace( hero2->GetRace() );
 
-        if ( moraleIndicator2 == NULL ) {
+        if ( moraleIndicator2 == nullptr ) {
             moraleIndicator2.reset( new MoraleIndicator( hero2 ) );
             moraleIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 75 ) );
         }
@@ -488,7 +485,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
             moraleIndicator2->SetHero( hero2 );
         }
 
-        if ( luckIndicator2 == NULL ) {
+        if ( luckIndicator2 == nullptr ) {
             luckIndicator2.reset( new LuckIndicator( hero2 ) );
             luckIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 115 ) );
         }

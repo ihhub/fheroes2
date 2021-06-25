@@ -25,6 +25,8 @@
 #include "text.h"
 
 #include <chrono>
+#include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <deque>
@@ -166,7 +168,7 @@ namespace fheroes2
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
-        Display::instance().changePalette( NULL );
+        Display::instance().changePalette( nullptr );
         LocalEvent::Get().ResumeCycling();
     }
 

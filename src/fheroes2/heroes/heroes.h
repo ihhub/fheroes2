@@ -235,8 +235,8 @@ public:
 
     int GetMorale() const override;
     int GetLuck() const override;
-    int GetMoraleWithModificators( std::string * str = NULL ) const;
-    int GetLuckWithModificators( std::string * str = NULL ) const;
+    int GetMoraleWithModificators( std::string * str = nullptr ) const;
+    int GetLuckWithModificators( std::string * str = nullptr ) const;
     int GetLevel( void ) const;
 
     int GetMapsObject( void ) const;
@@ -308,8 +308,11 @@ public:
     void SetVisitedWideTile( s32, int object, Visit::type_t = Visit::LOCAL );
     bool isObjectTypeVisited( int object, Visit::type_t = Visit::LOCAL ) const;
     bool isVisited( const Maps::Tiles &, Visit::type_t = Visit::LOCAL ) const;
+
+    // These methods are used only for AI.
     bool hasMetWithHero( int heroID ) const;
     void markHeroMeeting( int heroID );
+    void unmarkHeroMeeting();
 
     bool Move( bool fast = false );
     void Move2Dest( const int32_t destination );
@@ -319,7 +322,7 @@ public:
     bool isAction( void ) const;
     void ResetAction( void );
     void Action( int tileIndex, bool isDestination );
-    void ActionNewPosition( void );
+    void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
     bool ActionSpellCast( const Spell & );
 

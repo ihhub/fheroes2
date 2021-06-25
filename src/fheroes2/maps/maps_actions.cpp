@@ -22,11 +22,8 @@
 
 #include "maps_actions.h"
 #include "dialog.h"
-#include "game.h"
 #include "heroes.h"
 #include "kingdom.h"
-#include "players.h"
-#include "settings.h"
 #include "text.h"
 #include "world.h"
 

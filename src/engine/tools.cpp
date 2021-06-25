@@ -22,13 +22,11 @@
 
 #include <algorithm>
 #include <cctype>
-#include <climits>
 #include <cmath>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <iomanip>
-#include <iostream>
-#include <sstream>
 
 #include "logging.h"
 #include "tools.h"
@@ -113,19 +111,19 @@ int GetInt( const std::string & str )
     int res = 0;
 
     // decimal
-    if ( str.end() == std::find_if( str.begin(), str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
+    if ( std::all_of( str.begin(), str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else if ( str.size() > 2 && ( str.at( 0 ) == '+' || str.at( 0 ) == '-' )
-              && str.end() == std::find_if( str.begin() + 1, str.end(), []( const char c ) { return !std::isdigit( c ); } ) ) {
+              && std::all_of( str.begin() + 1, str.end(), []( const char c ) { return std::isdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> res;
     }
     else
         // hex
         if ( str.size() > 3 && str.at( 0 ) == '0' && std::tolower( str.at( 1 ) ) == 'x'
-             && str.end() == std::find_if( str.begin() + 2, str.end(), []( const char c ) { return !std::isxdigit( c ); } ) ) {
+             && std::all_of( str.begin() + 2, str.end(), []( const char c ) { return std::isxdigit( c ); } ) ) {
         std::istringstream ss( str );
         ss >> std::hex >> res;
     }
@@ -291,7 +289,7 @@ std::vector<u8> LoadFileToMem( const std::string & file )
 {
     std::vector<u8> data;
     SDL_RWops * rw = SDL_RWFromFile( file.c_str(), "rb" );
-    if ( rw == NULL )
+    if ( rw == nullptr )
         ERROR_LOG( SDL_GetError() );
 
     const Sint64 length = SDL_RWseek( rw, 0, RW_SEEK_END );

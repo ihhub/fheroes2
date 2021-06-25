@@ -14,7 +14,6 @@ set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS ${SDL_VERSIONS})
 
 option(ENABLE_IMAGE    "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_UNICODE  "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
-option(ENABLE_ZLIB     "Enable Zlib support (for compressed savefiles)" ON)
 option(ENABLE_AUDIOCD  "Enable AudioCD support" OFF)
 option(ENABLE_TOOLS    "Enable additional tools" OFF)
 option(ENABLE_RELEASE  "Release mode (disables debug options)" ON)
@@ -29,22 +28,33 @@ set(CONFIGURE_FHEROES2_DATA      "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACH
 # Find libraries and enable/disable features
 find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
+find_package(ZLIB REQUIRED)
 find_package(Threads)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
 	find_package(PNG REQUIRED)
-	find_package(ZLIB REQUIRED)
 endif(ENABLE_IMAGE)
 if(ENABLE_UNICODE)
 	find_package(${USE_SDL_VERSION}_ttf REQUIRED)
 	find_package(Iconv REQUIRED)
 endif(ENABLE_UNICODE)
-if(ENABLE_ZLIB)
-	find_package(ZLIB REQUIRED)
-endif(ENABLE_ZLIB)
 
 add_subdirectory(src)
 
-install(FILES doc/README.txt changelog.txt DESTINATION ${CMAKE_INSTALL_DOCDIR})
-
+install(
+	FILES doc/README.txt LICENSE changelog.txt
+	DESTINATION ${CMAKE_INSTALL_DOCDIR}
+	)
+if(WIN32)
+	install(
+		FILES script/demo/demo_windows.bat script/demo/demo_windows.ps1
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+		)
+else(WIN32)
+	install(
+		FILES script/demo/demo_unix.sh
+		PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
+		)
+endif(WIN32)

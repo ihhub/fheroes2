@@ -23,8 +23,10 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
-#include "gamedefs.h"
-#include "serialize.h"
+#include <utility>
+
+#include "math_base.h"
+#include "types.h"
 
 #define CELLW 44
 #define CELLH 52
@@ -92,7 +94,7 @@ namespace Battle
     {
     public:
         Position()
-            : std::pair<Cell *, Cell *>( NULL, NULL )
+            : std::pair<Cell *, Cell *>( nullptr, nullptr )
         {}
 
         void Set( s32 head, bool wide, bool reflect );

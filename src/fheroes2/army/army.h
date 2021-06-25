@@ -61,6 +61,8 @@ public:
     void UpgradeMonsters( const Monster & );
     u32 GetCountMonsters( const Monster & ) const;
 
+    double getReinforcementValue( const Troops & reinforcement ) const;
+
     u32 GetCount( void ) const;
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
@@ -152,9 +154,9 @@ public:
 
     int GetColor( void ) const;
     int GetControl( void ) const override;
+    uint32_t getTotalCount() const;
 
     double GetStrength() const override;
-    double getReinforcementValue( const Troops & reinforcement ) const;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 

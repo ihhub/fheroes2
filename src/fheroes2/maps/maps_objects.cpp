@@ -28,6 +28,7 @@
 #include "logging.h"
 #include "maps_objects.h"
 #include "mp2.h"
+#include "tools.h"
 
 #define SIZEMESSAGE 400
 
@@ -171,7 +172,7 @@ bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
     auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
-    return answers.end() != std::find_if( answers.begin(), answers.end(), checkAnswer );
+    return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
 void MapSphinx::SetQuiet( void )
@@ -226,107 +227,4 @@ StreamBase & operator<<( StreamBase & msg, const MapSign & obj )
 StreamBase & operator>>( StreamBase & msg, MapSign & obj )
 {
     return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.message;
-}
-
-MapResource::MapResource()
-    : MapObjectSimple( MP2::OBJ_RESOURCE )
-{}
-
-StreamBase & operator<<( StreamBase & msg, const MapResource & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.resource;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapResource & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.resource;
-}
-
-MapArtifact::MapArtifact()
-    : MapObjectSimple( MP2::OBJ_ARTIFACT )
-    , condition( 0 )
-    , extended( 0 )
-{}
-
-Funds MapArtifact::QuantityFunds( void ) const
-{
-    switch ( condition ) {
-    case 1:
-        return Funds( QuantityResourceCount() );
-    case 2:
-        return Funds( Resource::GOLD, 2500 ) + Funds( QuantityResourceCount() );
-    case 3:
-        return Funds( Resource::GOLD, 3000 ) + Funds( QuantityResourceCount() );
-    default:
-        break;
-    }
-
-    return Funds();
-}
-
-ResourceCount MapArtifact::QuantityResourceCount( void ) const
-{
-    switch ( condition ) {
-    case 1:
-        return ResourceCount( Resource::GOLD, 2000 );
-    case 2:
-        return ResourceCount( extended, 3 );
-    case 3:
-        return ResourceCount( extended, 5 );
-    default:
-        break;
-    }
-
-    return ResourceCount();
-}
-
-StreamBase & operator<<( StreamBase & msg, const MapArtifact & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.artifact << obj.condition << obj.extended;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapArtifact & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.artifact >> obj.condition >> obj.extended;
-}
-
-MapMonster::MapMonster()
-    : MapObjectSimple( MP2::OBJ_MONSTER )
-    , condition( 0 )
-    , count( 0 )
-{}
-
-Troop MapMonster::QuantityTroop( void ) const
-{
-    return Troop( monster, count );
-}
-
-bool MapMonster::JoinConditionSkip( void ) const
-{
-    return Monster::JOIN_CONDITION_SKIP == condition;
-}
-
-bool MapMonster::JoinConditionMoney( void ) const
-{
-    return Monster::JOIN_CONDITION_MONEY == condition;
-}
-
-bool MapMonster::JoinConditionFree( void ) const
-{
-    return Monster::JOIN_CONDITION_FREE == condition;
-}
-
-bool MapMonster::JoinConditionForce( void ) const
-{
-    return Monster::JOIN_CONDITION_FORCE == condition;
-}
-
-StreamBase & operator<<( StreamBase & msg, const MapMonster & obj )
-{
-    return msg << static_cast<const MapObjectSimple &>( obj ) << obj.monster << obj.condition << obj.count;
-}
-
-StreamBase & operator>>( StreamBase & msg, MapMonster & obj )
-{
-    return msg >> static_cast<MapObjectSimple &>( obj ) >> obj.monster >> obj.condition >> obj.count;
 }

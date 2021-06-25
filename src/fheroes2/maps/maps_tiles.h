@@ -27,6 +27,7 @@
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "color.h"
 #include "direction.h"
 #include "gamedefs.h"
 #include "resource.h"
@@ -97,7 +98,6 @@ namespace Maps
         static int GetActionObject( const TilesAddon & );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
-        static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
         static bool ForceLevel1( const TilesAddon & );
 

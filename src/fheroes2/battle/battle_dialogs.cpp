@@ -33,13 +33,14 @@
 #include "game.h"
 #include "heroes.h"
 #include "icn.h"
+#include "kingdom.h"
 #include "luck.h"
 #include "morale.h"
 #include "mus.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
-#include "world.h"
+#include "tools.h"
 
 namespace
 {
@@ -485,8 +486,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
     }
 
     if ( transferArtifacts ) {
-        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : NULL ) );
-        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : NULL ) );
+        HeroBase * hero1 = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
+        HeroBase * hero2 = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
         if ( hero1 == nullptr || hero2 == nullptr )
@@ -527,17 +528,24 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
                 const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
                 const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
+                const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
                 fheroes2::Sprite image = border;
-                fheroes2::Blit( artifact, image, 5, 5 );
-
-                fheroes2::Blit( image, display, pos_rt.x + 119, pos_rt.y + 310 );
+                const int32_t borderSize = 5;
+                fheroes2::Blit( artifact, image, borderSize, borderSize );
+                fheroes2::Blit( image, display, artifactOffset.x, artifactOffset.y );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
-                artName.Blit( pos_rt.x + bsTextXOffset, pos_rt.y + 310 + image.height() + 5 );
+                artName.Blit( pos_rt.x + bsTextXOffset, artifactOffset.y + image.height() + borderSize );
+
+                const fheroes2::Rect artifactArea( artifactOffset.x, artifactOffset.y, artifact.width() + borderSize * 2, artifact.height() + borderSize * 2 );
 
                 while ( le.HandleEvents() ) {
                     le.MousePressLeft( btn_ok.area() ) ? btn_ok.drawOnPress() : btn_ok.drawOnRelease();
+
+                    // display captured artifact info on right click
+                    if ( le.MousePressRight( artifactArea ) )
+                        Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
 
                     // exit
                     if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) )
