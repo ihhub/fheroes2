@@ -161,7 +161,7 @@ namespace fheroes2
         return _isHidden;
     }
 
-    TimedEventValidator::TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate )
+    TimedEventValidator::TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBeforeFirstUpdate, const uint64_t delayBetweenUpdate )
         : _comparator( comparator )
         , _delayBetweenUpdate( delayBetweenUpdate )
         , _delayBeforeFirstUpdate( delayBeforeFirstUpdate )
@@ -169,7 +169,7 @@ namespace fheroes2
 
     bool TimedEventValidator::isActiveForLongEnough()
     {
-        if ( _delayBeforeFirstUpdate.isPassed() && _comparator() && _delayBetweenUpdate.isPassed() ) {
+        if ( _delayBeforeFirstUpdate.isPassed() && _delayBetweenUpdate.isPassed() && _comparator() ) {
             _delayBetweenUpdate.reset();
             return true;
         }
@@ -180,7 +180,6 @@ namespace fheroes2
     {
         if ( sender == nullptr )
             return;
-
         _delayBeforeFirstUpdate.reset();
         _delayBetweenUpdate.reset();
     }

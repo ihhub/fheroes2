@@ -382,8 +382,8 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     fheroes2::Button & buttonLeft = gui.buttonLeft;
     fheroes2::Button & buttonRight = gui.buttonRight;
 
-    fheroes2::TimedEventValidator timedButtonLeft( [&buttonLeft]() { return buttonLeft.isPressed(); }, 100, 500 );
-    fheroes2::TimedEventValidator timedButtonRight( [&buttonRight]() { return buttonRight.isPressed(); }, 100, 500 );
+    fheroes2::TimedEventValidator timedButtonLeft( [&buttonLeft]() { return buttonLeft.isPressed(); } );
+    fheroes2::TimedEventValidator timedButtonRight( [&buttonRight]() { return buttonRight.isPressed(); } );
     buttonLeft.subscribe( &timedButtonLeft );
     buttonRight.subscribe( &timedButtonRight );
 

@@ -28,6 +28,8 @@
 
 namespace fheroes2
 {
+    static constexpr uint64_t INITIAL_DELAY = 500;
+    static constexpr uint64_t DELAY_BETWEEN_UPDATES = 100;
     class MovableSprite : public Sprite
     {
     public:
@@ -54,7 +56,8 @@ namespace fheroes2
     class TimedEventValidator : public ActionObject
     {
     public:
-        explicit TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBetweenUpdate, const uint64_t delayBeforeFirstUpdate );
+        explicit TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBeforeFirstUpdate = INITIAL_DELAY,
+                                      const uint64_t delayBetweenUpdate = DELAY_BETWEEN_UPDATES );
         ~TimedEventValidator() override = default;
 
         bool isActiveForLongEnough();

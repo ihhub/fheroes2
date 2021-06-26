@@ -59,6 +59,8 @@ public:
         , vmax( max )
         , vcur( cur )
         , step( st )
+        , timedBtnUp( [this]() { return btnUp.isPressed(); } )
+        , timedBtnDn( [this]() { return btnDn.isPressed(); } )
     {
         if ( vmin >= vmax )
             vmin = 0;
@@ -67,6 +69,9 @@ public:
 
         btnUp.setICNInfo( ICN::TOWNWIND, 5, 6 );
         btnDn.setICNInfo( ICN::TOWNWIND, 7, 8 );
+
+        btnUp.subscribe( &timedBtnUp );
+        btnDn.subscribe( &timedBtnDn );
 
         pos.width = 90;
         pos.height = 30;
@@ -111,13 +116,13 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isActiveForLongEnough() ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isActiveForLongEnough() ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }
@@ -135,6 +140,9 @@ protected:
 
     fheroes2::Button btnUp;
     fheroes2::Button btnDn;
+
+    fheroes2::TimedEventValidator timedBtnUp;
+    fheroes2::TimedEventValidator timedBtnDn;
 };
 
 bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cur, int step )
