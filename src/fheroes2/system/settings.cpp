@@ -54,7 +54,7 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
-        GLOBAL_USESWSURFACE = 0x00010000,
+        // UNUSED = 0x00010000,
 
         GLOBAL_SOUND = 0x00020000,
         GLOBAL_MUSIC_EXT = 0x00040000,
@@ -101,10 +101,6 @@ namespace
         {
             GLOBAL_USEUNICODE,
             "unicode",
-        },
-        {
-            GLOBAL_USESWSURFACE,
-            "use swsurface only",
         },
         {
             0,
