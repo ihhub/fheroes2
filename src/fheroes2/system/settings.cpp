@@ -534,11 +534,6 @@ bool Settings::Read( const std::string & filename )
     // playmus command
     _externalMusicCommand = config.StrParams( "playmus command" );
 
-    // videodriver
-    sval = config.StrParams( "videodriver" );
-    if ( !sval.empty() )
-        video_driver = sval;
-
     // videomode
     sval = config.StrParams( "videomode" );
     if ( !sval.empty() ) {
@@ -589,11 +584,9 @@ bool Settings::Read( const std::string & filename )
 
     BinaryLoad();
 
-    if ( video_driver.size() )
-        video_driver = StringLower( video_driver );
-
-    if ( video_mode.width > 0 && video_mode.height > 0 )
+    if ( video_mode.width > 0 && video_mode.height > 0 ) {
         PostLoad();
+    }
 
     return true;
 }
@@ -719,11 +712,6 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
-    if ( video_driver.size() ) {
-        os << std::endl << "# sdl video driver, windows: windib, directx; wince: gapi, raw; linux: x11; other: see sdl manual (will be deprecated)" << std::endl;
-        os << "videodriver = " << video_driver << std::endl;
-    }
-
 #ifdef WITH_TTF
     os << std::endl << "# options below are experimental and are currently disabled in the game" << std::endl;
     os << "fonts normal = " << font_normal << std::endl
@@ -782,11 +770,6 @@ int Settings::GameDifficulty() const
 int Settings::CurrentColor() const
 {
     return players.current_color;
-}
-
-const std::string & Settings::SelectVideoDriver() const
-{
-    return video_driver;
 }
 
 /* return fontname */

@@ -128,8 +128,6 @@ public:
     int BattleSpeed() const;
     int ScrollSpeed() const;
 
-    const std::string & SelectVideoDriver() const;
-
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
@@ -349,8 +347,6 @@ private:
 
     int game_type;
     int preferably_count_players;
-
-    std::string video_driver;
 
     fheroes2::Point pos_radr;
     fheroes2::Point pos_bttn;

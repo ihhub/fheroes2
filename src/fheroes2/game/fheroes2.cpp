@@ -56,11 +56,6 @@ namespace
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
     }
 
-    void SetVideoDriver( const std::string & driver )
-    {
-        System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
-    }
-
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
@@ -189,9 +184,6 @@ int main( int argc, char ** argv )
                 break;
             }
     }
-
-    if ( conf.SelectVideoDriver().size() )
-        SetVideoDriver( conf.SelectVideoDriver() );
 
     // random init
     if ( conf.Sound() )
