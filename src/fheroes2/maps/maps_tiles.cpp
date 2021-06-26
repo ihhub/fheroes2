@@ -618,6 +618,8 @@ Maps::Tiles::Tiles()
 void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
+
+    // TODO: extract first 2 bits of quantity1 and store it as a separate priority field.
     quantity1 = mp2.quantity1;
     quantity2 = mp2.quantity2;
     quantity3 = 0;
@@ -834,32 +836,28 @@ void Maps::Tiles::updatePassability()
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
 
-            if ( isWater() != bottomTile.isWater() ) {
-                // If object is bordering water it must be marked as not passable.
+            // TODO: run through all objects to get UID, not only the top one.
+            if ( isWater() != bottomTile.isWater() || bottomTile.uniq == uniq ) {
+                // If object is bordering water or it's the same object it must be marked as not passable.
                 tilePassable = 0;
                 return;
             }
 
             if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0 ) {
-                if ( bottomTile.uniq == uniq ) {
-                    // It's the same object.
-                    tilePassable = 0;
-                }
-                else {
-                    const int bottomTileObjId = bottomTile.GetObject( false );
-                    const bool isBottomTileActionObject = MP2::isGroundObject( bottomTileObjId );
-                    if ( isBottomTileActionObject ) {
-                        if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
-                            tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
-                        }
-                    }
-                    else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isGroundObject( bottomTile.mp2_object + 128 )
-                              && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+                const int bottomTileObjId = bottomTile.GetObject( false );
+                const bool isBottomTileActionObject = MP2::isGroundObject( bottomTileObjId );
+                if ( isBottomTileActionObject ) {
+                    if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
                         tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                     }
-                    else {
-                        tilePassable = 0;
-                    }
+                }
+                else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isGroundObject( bottomTile.mp2_object + 128 )
+                          && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+                    // TODO: add extra logic to handle Stables.
+                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                }
+                else {
+                    tilePassable = 0;
                 }
             }
         }
