@@ -795,15 +795,16 @@ bool MP2::isBattleLife( int obj )
     return false;
 }
 
-bool MP2::isActionObject( int obj, bool water )
+bool MP2::isActionObject( const int obj, const bool locatesOnWater )
 {
-    if ( water )
-        return isWaterObject( obj );
+    if ( locatesOnWater ) {
+        return isWaterActionObject( obj );
+    }
 
-    return isGroundObject( obj );
+    return isActionObject( obj );
 }
 
-bool MP2::isWaterObject( int obj )
+bool MP2::isWaterActionObject( const int obj )
 {
     switch ( obj ) {
     case OBJ_WATERCHEST:
@@ -816,31 +817,26 @@ bool MP2::isWaterObject( int obj )
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANMAPS:
     case OBJ_COAST:
-
     case OBJ_MERMAID:
     case OBJ_SIRENS:
     case OBJ_BARRIER:
-
-        // hack (bug: #3142729)
     case OBJ_MONSTER:
     case OBJ_ARTIFACT:
     case OBJ_RESOURCE:
-
         return true;
 
     case OBJ_CASTLE:
     case OBJ_BOAT:
         return false;
-
     default:
         break;
     }
 
     // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isGroundObject( obj ) : false;
+    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( obj ) : false;
 }
 
-bool MP2::isGroundObject( int obj )
+bool MP2::isActionObject( const int obj )
 {
     // check if first bit is set
     if ( obj < 128 ) {
@@ -868,6 +864,7 @@ bool MP2::isGroundObject( int obj )
     case OBJ_UNKNW_B8:
     case OBJ_UNKNW_B9:
     case OBJ_UNKNW_D1:
+    case OBJ_REEFS:
         return false;
     default:
         break;

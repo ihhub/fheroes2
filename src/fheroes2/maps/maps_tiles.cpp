@@ -796,7 +796,7 @@ int Maps::Tiles::getOriginalPassability() const
 {
     const int objId = GetObject( false );
 
-    if ( MP2::isGroundObject( objId ) ) {
+    if ( MP2::isActionObject( objId ) ) {
         return MP2::getActionObjectDirection( objId );
     }
 
@@ -830,7 +830,7 @@ void Maps::Tiles::updatePassability()
     }
 
     const int objId = GetObject( false );
-    const bool isActionObject = MP2::isGroundObject( objId );
+    const bool isActionObject = MP2::isActionObject( objId );
     if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
@@ -845,13 +845,13 @@ void Maps::Tiles::updatePassability()
 
             if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0 ) {
                 const int bottomTileObjId = bottomTile.GetObject( false );
-                const bool isBottomTileActionObject = MP2::isGroundObject( bottomTileObjId );
+                const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
                 if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
                         tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                     }
                 }
-                else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isGroundObject( bottomTile.mp2_object + 128 )
+                else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isActionObject( bottomTile.mp2_object + 128 )
                           && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     // TODO: add extra logic to handle Stables.
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
@@ -1313,7 +1313,7 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & 
 
     if ( ( visibleTileROI & mp ) && !addons_level2.empty() ) {
         for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-            if ( skip_ground && MP2::isGroundObject( ( *it ).object ) )
+            if ( skip_ground && MP2::isActionObject( ( *it ).object ) )
                 continue;
 
             const uint8_t object = ( *it ).object;

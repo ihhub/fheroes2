@@ -387,7 +387,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     default:
         if ( water ) {
-            if ( MP2::isWaterObject( tile.GetObject() ) )
+            if ( MP2::isWaterActionObject( tile.GetObject() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -471,7 +471,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
-        else if ( MP2::isGroundObject( tile.GetObject() ) ) {
+        else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );

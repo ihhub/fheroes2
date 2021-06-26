@@ -563,9 +563,15 @@ namespace MP2
     const char * StringObject( int object );
 
     bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
-    bool isActionObject( int obj, bool water );
-    bool isGroundObject( int obj );
-    bool isWaterObject( int obj );
+
+    // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
+    bool isActionObject( const int obj, const bool locatesOnWater );
+
+    // The method checks if the object is an action independent form its location.
+    bool isActionObject( const int obj );
+
+    bool isWaterActionObject( const int obj );
+
     bool isQuantityObject( int obj );
     bool isCaptureObject( int obj );
     bool isPickupObject( int obj );
