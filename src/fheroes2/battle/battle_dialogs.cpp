@@ -345,22 +345,22 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const bool transfer
 
     if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
+        if ( conf.Sound() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
+        if ( conf.Sound() )
             AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
-        if ( conf.Music() )
+        if ( conf.Sound() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
         GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
-        if ( conf.Music() )
+        if ( conf.Sound() )
             AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
     else

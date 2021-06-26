@@ -54,23 +54,22 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
-        // UNUSED = 0x00010000,
+        GLOBAL_USEUNICODE = 0x00010000,
 
         GLOBAL_SOUND = 0x00020000,
         GLOBAL_MUSIC_EXT = 0x00040000,
         GLOBAL_MUSIC_CD = 0x00080000,
         GLOBAL_MUSIC_MIDI = 0x00100000,
+        GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
 
-        GLOBAL_USEUNICODE = 0x00200000,
+        // UNUSED = 0x00200000,
         // UNUSED = 0x00400000,
 
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
         GLOBAL_BATTLE_AUTO_RESOLVE = 0x04000000,
-        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000,
-
-        GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI
+        GLOBAL_BATTLE_AUTO_SPELLCAST = 0x08000000
     };
 
     struct settings_t
@@ -82,30 +81,6 @@ namespace
         {
             return id && id == i;
         }
-    };
-
-    // external settings
-    const settings_t settingsGeneral[] = {
-        {
-            GLOBAL_SOUND,
-            "sound",
-        },
-        {
-            GLOBAL_MUSIC_MIDI,
-            "music",
-        },
-        {
-            GLOBAL_FULLSCREEN,
-            "fullscreen",
-        },
-        {
-            GLOBAL_USEUNICODE,
-            "unicode",
-        },
-        {
-            0,
-            nullptr,
-        },
     };
 
     // internal settings
@@ -273,17 +248,6 @@ namespace
 
         { 0, nullptr },
     };
-
-    const char * GetGeneralSettingDescription( int settingId )
-    {
-        const settings_t * ptr = settingsGeneral;
-        while ( ptr->id != 0 ) {
-            if ( ptr->id == static_cast<uint32_t>( settingId ) )
-                return ptr->str;
-            ++ptr;
-        }
-        return nullptr;
-    }
 }
 
 std::string Settings::GetVersion()
@@ -347,6 +311,7 @@ Settings & Settings::Get()
 bool Settings::Read( const std::string & filename )
 {
     TinyConfig config( '=', '#' );
+
     std::string sval;
     int ival;
 
@@ -398,19 +363,16 @@ bool Settings::Read( const std::string & filename )
         break;
     }
 
+#ifdef BUILD_RELEASE
+    // reset devel
+    debug &= ~( DBG_DEVEL );
+#endif
+
     Logging::SetDebugLevel( debug );
 
-    // opt_globals
-    const settings_t * ptr = settingsGeneral;
-    while ( ptr->id ) {
-        if ( config.Exists( ptr->str ) ) {
-            if ( 0 == config.IntParams( ptr->str ) )
-                opt_global.ResetModes( ptr->id );
-            else
-                opt_global.SetModes( ptr->id );
-        }
-
-        ++ptr;
+    // unicode
+    if ( config.Exists( "unicode" ) ) {
+        SetUnicode( config.StrParams( "unicode" ) == "on" );
     }
 
     if ( Unicode() ) {
@@ -437,6 +399,24 @@ bool Settings::Read( const std::string & filename )
         ival = config.IntParams( "fonts small size" );
         if ( 0 < ival )
             size_small = ival;
+    }
+
+#ifdef WITH_TTF
+    if ( font_normal.empty() || font_small.empty() ) {
+        opt_global.ResetModes( GLOBAL_USEUNICODE );
+    }
+#else
+    opt_global.ResetModes( GLOBAL_USEUNICODE );
+#endif
+
+    // sound (including music)
+    if ( config.Exists( "sound" ) ) {
+        if ( config.StrParams( "sound" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_SOUND );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_SOUND );
+        }
     }
 
     // music source
@@ -581,6 +561,11 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    // full screen
+    if ( config.Exists( "fullscreen" ) ) {
+        setFullScreen( config.StrParams( "fullscreen" ) == "on" );
+    }
+
     if ( config.Exists( "controller pointer speed" ) ) {
         _controllerPointerSpeed = config.IntParams( "controller pointer speed" );
         if ( _controllerPointerSpeed > 100 )
@@ -594,20 +579,14 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "show game intro" ) ) {
-        setShowIntro( config.StrParams( "show game intro" ) == "on" );
+        if ( config.StrParams( "show game intro" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_SHOW_INTRO );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+        }
     }
 
-#ifndef WITH_TTF
-    opt_global.ResetModes( GLOBAL_USEUNICODE );
-#endif
-
-    if ( font_normal.empty() || font_small.empty() )
-        opt_global.ResetModes( GLOBAL_USEUNICODE );
-
-#ifdef BUILD_RELEASE
-    // reset devel
-    debug &= ~( DBG_DEVEL );
-#endif
     BinaryLoad();
 
     if ( video_driver.size() )
@@ -655,6 +634,7 @@ bool Settings::Save( const std::string & filename ) const
 std::string Settings::String() const
 {
     std::ostringstream os;
+
     std::string musicType;
     if ( MusicType() == MUSIC_EXTERNAL ) {
         musicType = "external";
@@ -674,7 +654,7 @@ std::string Settings::String() const
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
 
-    os << std::endl << "# sound: on/off" << std::endl;
+    os << std::endl << "# sound (including music): on/off" << std::endl;
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# music: original, expansion, cd, external" << std::endl;
@@ -687,7 +667,7 @@ std::string Settings::String() const
     os << "music volume = " << music_volume << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
-    os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
+    os << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
@@ -947,16 +927,10 @@ bool Settings::MusicCD() const
     return opt_global.Modes( GLOBAL_MUSIC_CD );
 }
 
-/* return sound */
+// is all sound (including music) enabled
 bool Settings::Sound() const
 {
     return opt_global.Modes( GLOBAL_SOUND );
-}
-
-/* return music */
-bool Settings::Music() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC );
 }
 
 /* return move speed */
@@ -1042,16 +1016,6 @@ void Settings::setFullScreen( const bool enable )
     }
     else {
         opt_global.ResetModes( GLOBAL_FULLSCREEN );
-    }
-}
-
-void Settings::setShowIntro( const bool enable )
-{
-    if ( enable ) {
-        opt_global.SetModes( GLOBAL_SHOW_INTRO );
-    }
-    else {
-        opt_global.ResetModes( GLOBAL_SHOW_INTRO );
     }
 }
 
@@ -1157,7 +1121,6 @@ void Settings::SetDebug( int d )
     Logging::SetDebugLevel( debug );
 }
 
-/**/
 void Settings::SetGameDifficulty( int d )
 {
     game_difficulty = d;
@@ -1376,11 +1339,6 @@ void Settings::SetBattleMouseShaded( bool f )
 void Settings::ResetSound()
 {
     opt_global.ResetModes( GLOBAL_SOUND );
-}
-
-void Settings::ResetMusic()
-{
-    opt_global.ResetModes( GLOBAL_MUSIC );
 }
 
 void Settings::SetShowPanel( bool f )

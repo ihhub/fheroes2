@@ -194,7 +194,7 @@ int main( int argc, char ** argv )
         SetVideoDriver( conf.SelectVideoDriver() );
 
     // random init
-    if ( conf.Music() )
+    if ( conf.Sound() )
         SetTimidityEnvPath();
 
     u32 subsystem = INIT_VIDEO;
@@ -203,7 +203,7 @@ int main( int argc, char ** argv )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
-    if ( conf.Sound() || conf.Music() )
+    if ( conf.Sound() )
         subsystem |= INIT_AUDIO;
 #ifdef WITH_AUDIOCD
     if ( conf.MusicCD() )
@@ -219,14 +219,12 @@ int main( int argc, char ** argv )
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                if ( conf.Music() ) {
-                    Music::SetFadeIn( 900 );
-                }
+                Music::SetFadeIn( 900 );
             }
-            else if ( conf.Sound() || conf.Music() ) {
+            else if ( conf.Sound() ) {
                 conf.ResetSound();
-                conf.ResetMusic();
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();

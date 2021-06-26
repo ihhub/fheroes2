@@ -109,7 +109,7 @@ int Dialog::SystemOptions( void )
         }
 
         // set music volume
-        if ( conf.Music() && le.MouseClickLeft( rect1 ) ) {
+        if ( conf.Sound() && le.MouseClickLeft( rect1 ) ) {
             conf.SetMusicVolume( 10 > conf.MusicVolume() ? conf.MusicVolume() + 1 : 0 );
             redraw = true;
             Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
@@ -253,14 +253,14 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     const int textOffset = 2;
 
     // music
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Music() ? 1 : 0 );
+    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( ICN::SPANEL, conf.Sound() ? 1 : 0 );
     const fheroes2::Rect & rect1 = rects[0];
     fheroes2::Blit( sprite1, display, rect1.x, rect1.y );
     str = _( "Music" );
     text.Set( str, Font::SMALL );
     text.Blit( rect1.x + ( rect1.width - text.w() ) / 2, rect1.y - text.h() - textOffset );
 
-    if ( conf.Music() && conf.MusicVolume() )
+    if ( conf.Sound() && conf.MusicVolume() )
         str = std::to_string( conf.MusicVolume() );
     else
         str = _( "off" );

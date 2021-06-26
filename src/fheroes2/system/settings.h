@@ -151,8 +151,7 @@ public:
     void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen() const;
-    bool Sound() const;
-    bool Music() const;
+    bool Sound() const; // is all sound (including music) enabled
     bool ShowControlPanel() const;
     bool ShowRadar() const;
     bool ShowIcons() const;
@@ -247,13 +246,11 @@ public:
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
-    void setShowIntro( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
     void SetMusicType( int v );
     void ResetSound();
-    void ResetMusic();
 
     int SoundVolume() const;
     int MusicVolume() const;

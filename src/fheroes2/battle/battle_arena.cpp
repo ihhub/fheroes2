@@ -383,7 +383,7 @@ void Battle::Arena::Turns( void )
     if ( interface ) {
         interface->RedrawActionNewTurn();
 
-        if ( conf.Music() && !Music::isPlaying() ) {
+        if ( conf.Sound() && !Music::isPlaying() ) {
             AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
         }
     }

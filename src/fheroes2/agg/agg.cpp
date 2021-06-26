@@ -533,7 +533,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
     const Settings & conf = Settings::Get();
-    if ( !conf.Music() ) {
+    if ( !conf.Sound() ) {
         return;
     }
 
