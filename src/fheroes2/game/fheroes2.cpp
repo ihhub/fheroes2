@@ -114,15 +114,6 @@ namespace
             System::MakeDirectory( dataFilesSave );
     }
 
-    void SetTimidityEnvPath()
-    {
-        const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
-        const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
-
-        if ( System::IsFile( result ) )
-            System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
-    }
-
     void SetLangEnvPath( const Settings & conf )
     {
 #ifdef WITH_TTF
@@ -184,10 +175,6 @@ int main( int argc, char ** argv )
                 break;
             }
     }
-
-    // random init
-    if ( conf.Sound() )
-        SetTimidityEnvPath();
 
     u32 subsystem = INIT_VIDEO;
 
