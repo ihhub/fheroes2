@@ -62,7 +62,7 @@ namespace
         GLOBAL_MUSIC_MIDI = 0x00100000,
 
         GLOBAL_USEUNICODE = 0x00200000,
-        GLOBAL_ALTRESOURCE = 0x00400000,
+        // UNUSED = 0x00400000,
 
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
@@ -101,10 +101,6 @@ namespace
         {
             GLOBAL_USEUNICODE,
             "unicode",
-        },
-        {
-            GLOBAL_ALTRESOURCE,
-            "alt resource",
         },
         {
             GLOBAL_USESWSURFACE,
@@ -697,9 +693,6 @@ std::string Settings::String() const
     os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
     os << GetGeneralSettingDescription( GLOBAL_FULLSCREEN ) << " = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# use alternative resources (no longer used)" << std::endl;
-    os << "alt resource = " << ( opt_global.Modes( GLOBAL_ALTRESOURCE ) ? "on" : "off" ) << std::endl;
-
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
 
@@ -1086,11 +1079,6 @@ void Settings::SetScrollSpeed( int speed )
         scroll_speed = SCROLL_NORMAL;
         break;
     }
-}
-
-bool Settings::UseAltResource() const
-{
-    return opt_global.Modes( GLOBAL_ALTRESOURCE );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const

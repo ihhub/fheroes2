@@ -164,7 +164,6 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool UseAltResource() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicExt() const;

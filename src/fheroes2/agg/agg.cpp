@@ -352,31 +352,6 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 /* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-    const Settings & conf = Settings::Get();
-
-    if ( conf.UseAltResource() ) {
-        std::string name = StringLower( M82::GetString( m82 ) );
-        std::string prefix_sounds = System::ConcatePath( "files", "sounds" );
-
-        // ogg
-        StringReplace( name, ".82m", ".ogg" );
-        std::string sound = Settings::GetLastFile( prefix_sounds, name );
-        v = LoadFileToMem( sound );
-
-        if ( v.empty() ) {
-            // find mp3
-            StringReplace( name, ".82m", ".mp3" );
-            sound = Settings::GetLastFile( prefix_sounds, name );
-
-            v = LoadFileToMem( sound );
-        }
-
-        if ( v.size() ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_INFO, sound );
-            return;
-        }
-    }
-
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
