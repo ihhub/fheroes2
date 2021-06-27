@@ -46,6 +46,7 @@ namespace Maps
     using Indexes = MapsIndexes;
 
     Indexes MapsIndexesFilteredObject( const Indexes & indexes, const int obj, const bool ignoreHeroes = true );
+    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const std::vector<int> objs, const bool ignoreHeroes = true );
     Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true );
 
     const char * SizeString( int size );
@@ -70,6 +71,7 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const int obj );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
     Indexes ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes );
+    Indexes ScanAroundObject( const int32_t center, const std::vector<int> obj, const bool ignoreHeroes );
 
     Indexes GetTilesUnderProtection( int32_t center );
     bool TileIsUnderProtection( int32_t center );

@@ -108,6 +108,18 @@ Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, co
     return result;
 }
 
+Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const std::vector<int> objs, const bool ignoreHeroes /* = true */ )
+{
+    Maps::Indexes result;
+    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+        const auto objIterator = std::find( objs.begin(), objs.end(), world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) );
+        if ( objIterator != objs.end() ) {
+            result.push_back( indexes[idx] );
+        }
+    }
+    return result;
+}
+
 Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
@@ -122,7 +134,7 @@ Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /*
 
 const char * Maps::SizeString( int s )
 {
-    const char * mapsize[] = {"Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" )};
+    const char * mapsize[] = { "Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" ) };
 
     switch ( s ) {
     case SMALL:
@@ -396,6 +408,12 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
     return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
 }
 
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const std::vector<int> objs, const bool ignoreHeroes )
+{
+    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    return MapsIndexesFilteredObject( results, objs, ignoreHeroes );
+}
+
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
@@ -608,10 +626,10 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
         const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
 
-        static const int castleCoordinates[16][2]
-            = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
-        static const int shadowCoordinates[16][2]
-            = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1}, {-1, -1}, {-4, 0}, {-3, 0}, {-2, 0}, {-1, 0}, {-3, 1}, {-2, 1}, {-1, 1}};
+        static const int castleCoordinates[16][2] = { { 0, -3 }, { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { -1, -1 },
+                                                      { 0, -1 }, { 1, -1 },  { 2, -1 },  { -2, 0 }, { -1, 0 }, { 0, 0 },  { 1, 0 },   { 2, 0 } };
+        static const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
+                                                      { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {
