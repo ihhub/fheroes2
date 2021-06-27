@@ -108,7 +108,7 @@ Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, co
     return result;
 }
 
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const std::vector<int> objs, const bool ignoreHeroes /* = true */ )
+Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const std::vector<int> & objs, const bool ignoreHeroes /* = true */ )
 {
     Maps::Indexes result;
     for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
@@ -408,7 +408,7 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
     return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
 }
 
-Maps::Indexes Maps::ScanAroundObject( const int32_t center, const std::vector<int> objs, const bool ignoreHeroes )
+Maps::Indexes Maps::ScanAroundObject( const int32_t center, const std::vector<int> & objs, const bool ignoreHeroes )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
     return MapsIndexesFilteredObject( results, objs, ignoreHeroes );
