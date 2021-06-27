@@ -497,9 +497,7 @@ namespace AI
             // AI has no advantage or knowledge to use this object.
             break;
         default:
-            if ( isActionObject ) {
-                assert( 0 ); // AI should know what to do with this type of action object! Please add logic for it.
-            }
+            assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
             isAction = false;
             break;
         }
