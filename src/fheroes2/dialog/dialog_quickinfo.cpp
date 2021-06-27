@@ -61,7 +61,7 @@ std::string ShowGuardiansInfo( const Maps::Tiles & tile, bool isOwned, bool exte
     std::string str;
     const Troop & troop = tile.QuantityTroop();
 
-    bool isAbandonnedMine = ( tile.GetObject() == MP2::OBJN_ABANDONEDMINE || tile.GetObject() == MP2::OBJ_ABANDONEDMINE );
+    const bool isAbandonnedMine = ( tile.GetObject() == MP2::OBJN_ABANDONEDMINE || tile.GetObject() == MP2::OBJ_ABANDONEDMINE );
 
     if ( MP2::OBJ_MINES == tile.GetObject() ) {
         str = Maps::GetMinesName( tile.QuantityResourceCount().first );
