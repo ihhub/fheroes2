@@ -99,8 +99,6 @@ int Dialog::SystemOptions( void )
     bool redraw = false;
     bool saveConfig = false;
 
-    const bool externalMusicSupported = System::IsDirectory( "music" );
-
     // dialog menu loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
@@ -129,8 +127,6 @@ int Dialog::SystemOptions( void )
             int type = conf.MusicType() + 1;
             // If there's no expansion files we skip this option
             if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
-                ++type;
-            if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
                 ++type;
 
             conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
