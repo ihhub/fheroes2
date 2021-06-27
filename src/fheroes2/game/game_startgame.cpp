@@ -175,6 +175,9 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
                 basicInterface.SetFocus( heroInCastle );
             }
         }
+        else {
+            basicInterface.ResetFocus( GameFocus::HEROES );
+        }
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
