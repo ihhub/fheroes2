@@ -174,7 +174,6 @@
   <ItemGroup>
     <ClCompile Include="src\engine\agg_file.cpp" />
     <ClCompile Include="src\engine\audio.cpp" />
-    <ClCompile Include="src\engine\audio_cdrom.cpp" />
     <ClCompile Include="src\engine\audio_mixer.cpp" />
     <ClCompile Include="src\engine\audio_music.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
@@ -387,7 +386,6 @@
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
     <ClInclude Include="src\engine\audio.h" />
-    <ClInclude Include="src\engine\audio_cdrom.h" />
     <ClInclude Include="src\engine\audio_mixer.h" />
     <ClInclude Include="src\engine\audio_music.h" />
     <ClInclude Include="src\engine\dir.h" />

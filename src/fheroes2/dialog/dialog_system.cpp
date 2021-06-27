@@ -132,11 +132,8 @@ int Dialog::SystemOptions( void )
                 ++type;
             if ( type == MUSIC_EXTERNAL && !externalMusicSupported )
                 ++type;
-            // CD music is currently not implemented correctly even on SDL1; remove this when done
-            if ( type == MUSIC_CDROM )
-                ++type;
 
-            conf.SetMusicType( type > MUSIC_CDROM ? 0 : type );
+            conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
             result |= 0x02;
             redraw = true;
             saveConfig = true;
@@ -284,7 +281,7 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
 
     // Music Type
     const MusicSource musicType = conf.MusicType();
-    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, ( musicType == MUSIC_CDROM || musicType == MUSIC_EXTERNAL ) ? 11 : 10 );
+    const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
     const fheroes2::Rect & rect3 = rects[2];
     fheroes2::Blit( sprite3, display, rect3.x, rect3.y );
     str = _( "Music Type" );
@@ -296,9 +293,6 @@ void Dialog::DrawSystemInfo( const std::vector<fheroes2::Rect> & rects )
     }
     else if ( musicType == MUSIC_MIDI_EXPANSION ) {
         str = _( "MIDI Expansion" );
-    }
-    else if ( musicType == MUSIC_CDROM ) {
-        str = _( "CD Stereo" );
     }
     else if ( musicType == MUSIC_EXTERNAL ) {
         str = _( "External" );

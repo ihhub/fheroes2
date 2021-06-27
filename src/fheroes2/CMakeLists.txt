@@ -6,7 +6,6 @@ endif(MINGW)
 
 add_executable(fheroes2 ${FHEROES2_SOURCES})
 target_compile_definitions(fheroes2 PRIVATE
-	$<$<BOOL:${ENABLE_AUDIOCD}>:WITH_AUDIOCD>
 	$<$<BOOL:${ENABLE_RELEASE}>:BUILD_RELEASE>
 	$<$<BOOL:${ENABLE_UNICODE}>:WITH_TTF>
 	$<$<BOOL:${ENABLE_UNICODE}>:WITH_ICONV>

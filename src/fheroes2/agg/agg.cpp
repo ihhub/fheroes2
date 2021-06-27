@@ -580,16 +580,6 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
-#ifdef WITH_AUDIOCD
-    else if ( type == MUSIC_CDROM && Cdrom::isValid() ) {
-        Cdrom::Play( mus, loop );
-        isSongFound = true;
-
-        Game::SetCurrentMusic( mus );
-
-        DEBUG_LOG( DBG_ENGINE, DBG_INFO, "cd track " << static_cast<int>( mus ) );
-    }
-#endif
 
     if ( !isSongFound ) {
         // Check if music needs to be pulled from HEROES2X

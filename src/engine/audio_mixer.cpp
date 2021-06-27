@@ -230,10 +230,7 @@ void Mixer::Stop( int channel /* = -1 */ )
 void Mixer::Reset()
 {
     Music::Reset();
-#ifdef WITH_AUDIOCD
-    if ( Cdrom::isValid() )
-        Cdrom::Pause();
-#endif
+
     Mix_HaltChannel( -1 );
 }
 

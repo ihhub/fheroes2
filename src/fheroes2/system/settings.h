@@ -44,8 +44,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
-    MUSIC_EXTERNAL,
-    MUSIC_CDROM
+    MUSIC_EXTERNAL
 };
 
 class Settings
@@ -165,7 +164,6 @@ public:
     bool LoadedGameVersion() const;
     bool MusicExt() const;
     bool MusicMIDI() const;
-    bool MusicCD() const;
     bool isShowIntro() const;
 
     bool isFirstGameRun() const;

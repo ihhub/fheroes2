@@ -58,10 +58,10 @@ namespace
 
         GLOBAL_SOUND = 0x00020000,
         GLOBAL_MUSIC_EXT = 0x00040000,
-        GLOBAL_MUSIC_CD = 0x00080000,
-        GLOBAL_MUSIC_MIDI = 0x00100000,
-        GLOBAL_MUSIC = GLOBAL_MUSIC_CD | GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
+        GLOBAL_MUSIC_MIDI = 0x00080000,
+        GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
 
+        // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
         // UNUSED = 0x00400000,
 
@@ -435,11 +435,6 @@ bool Settings::Read( const std::string & filename )
             if ( isPriceOfLoyaltySupported() )
                 _musicType = MUSIC_MIDI_EXPANSION;
         }
-        else if ( sval == "cd" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_CD );
-            _musicType = MUSIC_CDROM;
-        }
         else if ( sval == "external" ) {
             opt_global.ResetModes( GLOBAL_MUSIC );
             opt_global.SetModes( GLOBAL_MUSIC_EXT );
@@ -632,9 +627,6 @@ std::string Settings::String() const
     if ( MusicType() == MUSIC_EXTERNAL ) {
         musicType = "external";
     }
-    else if ( MusicType() == MUSIC_CDROM ) {
-        musicType = "cd";
-    }
     else if ( MusicType() == MUSIC_MIDI_EXPANSION ) {
         musicType = "expansion";
     }
@@ -650,7 +642,7 @@ std::string Settings::String() const
     os << std::endl << "# sound (including music): on/off" << std::endl;
     os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# music: original, expansion, cd, external" << std::endl;
+    os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
 
     os << std::endl << "# sound volume: 0 - 10" << std::endl;
@@ -905,10 +897,6 @@ bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );
 }
-bool Settings::MusicCD() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_CD );
-}
 
 // is all sound (including music) enabled
 bool Settings::Sound() const
@@ -1142,7 +1130,7 @@ void Settings::SetMusicVolume( int v )
 /* Set music type: check MusicSource enum */
 void Settings::SetMusicType( int v )
 {
-    _musicType = MUSIC_CDROM <= v ? MUSIC_CDROM : static_cast<MusicSource>( v );
+    _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
 }
 
 /* check game type */

@@ -1,7 +1,3 @@
-# ifndef WITHOUT_AUDIOCD
-# CFLAGS := $(CFLAGS) -DWITH_AUDIOCD
-# endif
-
 # ifndef WITHOUT_NETWORK
 # LIBS := $(LIBS) -lwsock32
 # endif

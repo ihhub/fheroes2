@@ -42,14 +42,6 @@ namespace Mixer
     void Quit();
 }
 
-#ifdef WITH_AUDIOCD
-namespace Cdrom
-{
-    void Open( void );
-    void Close( void );
-}
-#endif
-
 bool SDL::Init( const uint32_t system )
 {
     if ( 0 > SDL_Init( system ) ) {
@@ -64,10 +56,6 @@ bool SDL::Init( const uint32_t system )
         LocalEvent::Get().OpenController();
     }
     LocalEvent::Get().OpenTouchpad();
-#endif
-#ifdef WITH_AUDIOCD
-    if ( SDL_INIT_CDROM & system )
-        Cdrom::Open();
 #endif
 #ifdef WITH_TTF
     FontTTF::Init();
@@ -91,10 +79,6 @@ void SDL::Quit()
 #endif
 #ifdef WITH_TTF
     FontTTF::Quit();
-#endif
-#ifdef WITH_AUDIOCD
-    if ( SubSystem( SDL_INIT_CDROM ) )
-        Cdrom::Close();
 #endif
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     if ( SubSystem( SDL_INIT_GAMECONTROLLER ) ) {
