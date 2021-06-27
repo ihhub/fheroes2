@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstring>
 #include <map>
 #include <vector>
@@ -32,8 +33,7 @@
 #include "screen.h"
 #include "text.h"
 #include "til.h"
-
-#include "image_tool.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -557,7 +557,7 @@ namespace fheroes2
                         Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
 
-                        const fheroes2::Rect area = GetActiveROI( temp, 2 );
+                        const Rect area = GetActiveROI( temp, 2 );
                         if ( area.x > 0 || area.height != temp.height() ) {
                             const Point offset( temp.x() - area.x, temp.y() - temp.height() + area.y + area.height );
                             modified = Crop( temp, area.x, area.y, area.width, area.height );
@@ -859,7 +859,7 @@ namespace fheroes2
             case ICN::HEROES:
                 LoadOriginalICN( id );
                 if ( !_icnVsSprite[id].empty() ) {
-                    // This is main menu image which doesn't shouldn't have any transform layer.
+                    // This is the main menu image which shouldn't have any transform layer.
                     _icnVsSprite[id][0]._disableTransformLayer();
                 }
                 return true;
@@ -893,6 +893,48 @@ namespace fheroes2
                 populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
 
+                return true;
+            }
+            case ICN::DISMISS_HERO_DISABLED_BUTTON:
+            case ICN::NEW_CAMPAIGN_DISABLED_BUTTON:
+            case ICN::MAX_DISABLED_BUTTON: {
+                _icnVsSprite[id].resize( 1 );
+                Sprite & output = _icnVsSprite[id][0];
+
+                int buttonIcnId = ICN::UNKNOWN;
+                uint32_t startIcnId = 0;
+
+                if ( id == ICN::DISMISS_HERO_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::HSBTNS;
+                    startIcnId = 0;
+                }
+                else if ( id == ICN::NEW_CAMPAIGN_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::BTNNEWGM;
+                    startIcnId = 2;
+                }
+                else if ( id == ICN::MAX_DISABLED_BUTTON ) {
+                    buttonIcnId = ICN::RECRUIT;
+                    startIcnId = 4;
+                }
+
+                assert( buttonIcnId != ICN::UNKNOWN ); // Did you add a new disabled button and forget to add the condition above?
+
+                const Sprite & released = GetICN( buttonIcnId, startIcnId );
+                const Sprite & pressed = GetICN( buttonIcnId, startIcnId + 1 );
+                output = released;
+
+                ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+
+                std::vector<Image> dismissImages;
+                dismissImages.emplace_back( released );
+                dismissImages.emplace_back( pressed );
+
+                Image common = ExtractCommonPattern( dismissImages );
+                common = FilterOnePixelNoise( common );
+                common = FilterOnePixelNoise( common );
+                common = FilterOnePixelNoise( common );
+
+                Blit( common, output );
                 return true;
             }
             default:
@@ -1104,6 +1146,69 @@ namespace fheroes2
             }
 
             return height;
+        }
+
+        uint32_t getCharacterLimit( const FontSize fontSize )
+        {
+            switch ( fontSize ) {
+            case FontSize::SMALL:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
+            case FontSize::NORMAL:
+            case FontSize::LARGE:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            default:
+                assert( 0 ); // Did you add a new font size? Please add implementation.
+            }
+
+            return 0;
+        }
+
+        const Sprite & getChar( const uint8_t character, const FontType & fontType )
+        {
+            if ( character < 0x21 ) {
+                return errorImage;
+            }
+
+            switch ( fontType.size ) {
+            case FontSize::SMALL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::SMALFONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::NORMAL:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::FONT, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::GRAY_FONT, character - 0x20 );
+                case FontColor::YELLOW:
+                    return GetICN( ICN::YELLOW_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            case FontSize::LARGE:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                default:
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+
+            assert( 0 ); // Did you add a new font size? Please add implementation.
+
+            return errorImage;
         }
     }
 }

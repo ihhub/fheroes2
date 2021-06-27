@@ -20,9 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <string>
-#include <utility>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -38,8 +36,6 @@
 #include "m82.h"
 #include "mus.h"
 #include "payment.h"
-#include "profit.h"
-#include "race.h"
 #include "resource.h"
 #include "settings.h"
 #include "statusbar.h"
@@ -185,7 +181,7 @@ int Castle::OpenDialog( bool readonly )
     dst_pt.x = cur_pt.x + 112;
     dst_pt.y = cur_pt.y + 361;
 
-    ArmyBar selectArmy2( NULL, false, readonly );
+    ArmyBar selectArmy2( nullptr, false, readonly );
     selectArmy2.SetColRows( 5, 1 );
     selectArmy2.SetPos( dst_pt.x, dst_pt.y );
     selectArmy2.SetHSpace( 6 );
@@ -277,8 +273,8 @@ int Castle::OpenDialog( bool readonly )
             }
 
             if ( conf.ExtCastleAllowGuardians() && !readonly ) {
-                Army * army1 = NULL;
-                Army * army2 = NULL;
+                Army * army1 = nullptr;
+                Army * army2 = nullptr;
 
                 // swap guest <-> guardian
                 if ( heroes.Guest() && heroes.Guard() ) {
@@ -323,7 +319,7 @@ int Castle::OpenDialog( bool readonly )
                     }
                     else if ( army1 ) {
                         selectArmy1.SetArmy( army1 );
-                        selectArmy2.SetArmy( NULL );
+                        selectArmy2.SetArmy( nullptr );
                     }
                     else if ( army2 ) {
                         selectArmy1.SetArmy( &army );
@@ -525,8 +521,8 @@ int Castle::OpenDialog( bool readonly )
                                 if ( buyhero ) {
                                     if ( prev ) {
                                         selectArmy1.SetArmy( &heroes.Guard()->GetArmy() );
-                                        selectArmy2.SetArmy( NULL );
-                                        RedrawIcons( *this, CastleHeroes( NULL, heroes.Guard() ), cur_pt );
+                                        selectArmy2.SetArmy( nullptr );
+                                        RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
                                         selectArmy1.Redraw();
                                         if ( selectArmy2.isValid() )
                                             selectArmy2.Redraw();

@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "icn.h"
 #include "interface_list.h"
+#include "settings.h"
 #include "text.h"
 
 class SelectEnum : public Interface::ListBox<int>

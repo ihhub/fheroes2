@@ -29,6 +29,7 @@
 #include "race.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 
 Interface::PlayersInfo::PlayersInfo( bool name, bool race, bool swap )
     : show_name( name )
@@ -45,15 +46,16 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 
     clear();
 
-    for ( Players::iterator it = players.begin(); it != players.end(); ++it ) {
-        const u32 current = std::distance( players.begin(), it );
+    const int32_t playerCount = static_cast<int32_t>( players.size() ); // safe to cast as the number of players <= 8.
+
+    for ( int32_t i = 0; i < playerCount; ++i ) {
         PlayerInfo info;
 
-        info.player = *it;
-        info.rect1 = fheroes2::Rect( pt1.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt1.y, sprite.width(), sprite.height() );
-        info.rect2 = fheroes2::Rect( pt2.x + Game::GetStep4Player( current, sprite.width(), players.size() ), pt2.y, sprite.width(), sprite.height() );
+        info.player = players[i];
+        info.rect1 = fheroes2::Rect( pt1.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt1.y, sprite.width(), sprite.height() );
+        info.rect2 = fheroes2::Rect( pt2.x + Game::GetStep4Player( i, sprite.width(), playerCount ), pt2.y, sprite.width(), sprite.height() );
 
-        push_back( info );
+        emplace_back( std::move( info ) );
     }
 
     for ( iterator it = begin(); it != end(); ++it ) {
@@ -134,7 +136,7 @@ Player * Interface::PlayersInfo::GetFromOpponentClick( const fheroes2::Point & p
         if ( ( *it ).rect1 & pt )
             return ( *it ).player;
 
-    return NULL;
+    return nullptr;
 }
 
 Player * Interface::PlayersInfo::GetFromOpponentNameClick( const fheroes2::Point & pt )
@@ -143,7 +145,7 @@ Player * Interface::PlayersInfo::GetFromOpponentNameClick( const fheroes2::Point
         if ( fheroes2::Rect( ( *it ).rect1.x, ( *it ).rect1.y + ( *it ).rect1.height, ( *it ).rect1.width, 10 ) & pt )
             return ( *it ).player;
 
-    return NULL;
+    return nullptr;
 }
 
 Player * Interface::PlayersInfo::GetFromOpponentChangeClick( const fheroes2::Point & pt )
@@ -152,7 +154,7 @@ Player * Interface::PlayersInfo::GetFromOpponentChangeClick( const fheroes2::Poi
         if ( ( *it ).rect3 & pt )
             return ( *it ).player;
 
-    return NULL;
+    return nullptr;
 }
 
 Player * Interface::PlayersInfo::GetFromClassClick( const fheroes2::Point & pt )
@@ -161,7 +163,7 @@ Player * Interface::PlayersInfo::GetFromClassClick( const fheroes2::Point & pt )
         if ( ( *it ).rect2 & pt )
             return ( *it ).player;
 
-    return NULL;
+    return nullptr;
 }
 
 void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_play_info: show game info with color status (play/not play) */
@@ -285,17 +287,17 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
 {
     Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
-    Player * player = NULL;
+    Player * player = nullptr;
 
     if ( le.MousePressRight() ) {
         // opponent
-        if ( NULL != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) )
+        if ( nullptr != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) )
             Dialog::Message(
                 _( "Opponents" ),
                 _( "This lets you change player starting positions and colors. A particular color will always start in a particular location. Some positions may only be played by a computer player or only by a human player." ),
                 Font::BIG );
         // class
-        else if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) )
+        else if ( nullptr != ( player = GetFromClassClick( le.GetMouseCursor() ) ) )
             Dialog::Message(
                 _( "Class" ),
                 _( "This lets you change the class of a player. Classes are not always changeable. Depending on the scenario, a player may receive additional towns and/or heroes not of their primary alignment." ),
@@ -304,7 +306,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
     // le.MouseClickLeft()
     else {
         // select opponent
-        if ( NULL != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
+        if ( nullptr != ( player = GetFromOpponentClick( le.GetMouseCursor() ) ) ) {
             const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
             if ( conf.IsGameType( Game::TYPE_MULTI ) ) {
@@ -332,7 +334,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             }
         }
         // modify name
-        else if ( show_name && NULL != ( player = GetFromOpponentNameClick( le.GetMouseCursor() ) ) ) {
+        else if ( show_name && nullptr != ( player = GetFromOpponentNameClick( le.GetMouseCursor() ) ) ) {
             std::string res;
             std::string str = _( "%{color} player" );
             StringReplace( str, "%{color}", Color::String( player->GetColor() ) );
@@ -341,7 +343,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 player->SetName( res );
         }
         // select class
-        else if ( NULL != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
+        else if ( nullptr != ( player = GetFromClassClick( le.GetMouseCursor() ) ) ) {
             if ( conf.AllowChangeRace( player->GetColor() ) ) {
                 switch ( player->GetRace() ) {
                 case Race::KNGT:
@@ -371,7 +373,7 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
             }
         }
         // swap players
-        else if ( show_swap && NULL != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
+        else if ( show_swap && nullptr != ( player = GetFromOpponentChangeClick( le.GetMouseCursor() ) ) ) {
             iterator it = std::find_if( begin(), end(), [player]( const PlayerInfo & pi ) { return pi.player == player; } );
             if ( it != end() && ( it + 1 ) != end() ) {
                 Players & players = conf.GetPlayers();
@@ -383,9 +385,9 @@ bool Interface::PlayersInfo::QueueEventProcessing( void )
                 }
             }
             else
-                player = NULL;
+                player = nullptr;
         }
     }
 
-    return player != NULL;
+    return player != nullptr;
 }

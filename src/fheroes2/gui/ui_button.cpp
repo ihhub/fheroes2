@@ -57,7 +57,7 @@ namespace fheroes2
         , _isEnabled( true )
         , _isVisible( true )
         , _releasedSprite( nullptr )
-        , _releasedDisabled()
+        , _disabledSprite()
     {}
 
     bool ButtonBase::isEnabled() const
@@ -137,7 +137,7 @@ namespace fheroes2
         _offsetY = offsetY_;
     }
 
-    void ButtonBase::draw( Image & area )
+    void ButtonBase::draw( Image & output ) const
     {
         if ( !isVisible() )
             return;
@@ -145,41 +145,31 @@ namespace fheroes2
         if ( isPressed() ) {
             // button can't be disabled and pressed
             const Sprite & sprite = _getPressed();
-            Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
+            Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
         else {
-            const Sprite & sprite = _getReleased();
-            if ( isEnabled() ) {
-                Blit( sprite, area, _offsetX + sprite.x(), _offsetY + sprite.y() );
-            }
-            else {
-                if ( !_releasedDisabled || ( _releasedSprite != &sprite ) ) {
-                    _releasedSprite = &sprite;
-                    _releasedDisabled.reset( new Sprite( sprite ) );
-                    ApplyPalette( *_releasedDisabled, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
-                }
-                Blit( *_releasedDisabled, area, _offsetX + _releasedDisabled->x(), _offsetY + _releasedDisabled->y() );
-            }
+            const Sprite & sprite = isEnabled() ? _getReleased() : _getDisabled();
+            Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
     }
 
-    bool ButtonBase::drawOnPress( Image & area )
+    bool ButtonBase::drawOnPress( Image & output )
     {
         if ( !isPressed() ) {
             press();
-            draw( area );
-            Display::instance().render();
+            draw( output );
+            Display::instance().render( area() );
             return true;
         }
         return false;
     }
 
-    bool ButtonBase::drawOnRelease( Image & area )
+    bool ButtonBase::drawOnRelease( Image & output )
     {
         if ( isPressed() ) {
             release();
-            draw( area );
-            Display::instance().render();
+            draw( output );
+            Display::instance().render( area() );
             return true;
         }
         return false;
@@ -189,6 +179,18 @@ namespace fheroes2
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
         return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
+    }
+
+    const Sprite & ButtonBase::_getDisabled() const
+    {
+        const Sprite & sprite = _getReleased();
+        if ( !_disabledSprite || ( _releasedSprite != &sprite ) ) {
+            _releasedSprite = &sprite;
+            _disabledSprite.reset( new Sprite( sprite ) );
+            ApplyPalette( *_disabledSprite, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        }
+
+        return *_disabledSprite.get();
     }
 
     Button::Button( int32_t offsetX, int32_t offsetY )
@@ -224,18 +226,21 @@ namespace fheroes2
 
     ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY )
         : ButtonBase( offsetX, offsetY )
+        , _disabled()
     {}
 
-    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed )
+    ButtonSprite::ButtonSprite( int32_t offsetX, int32_t offsetY, const Sprite & released, const Sprite & pressed, const Sprite & disabled )
         : ButtonBase( offsetX, offsetY )
         , _released( released )
         , _pressed( pressed )
+        , _disabled( disabled )
     {}
 
-    void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed )
+    void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
     {
         _released = released;
         _pressed = pressed;
+        _disabled = disabled;
     }
 
     const Sprite & ButtonSprite::_getPressed() const
@@ -246,6 +251,15 @@ namespace fheroes2
     const Sprite & ButtonSprite::_getReleased() const
     {
         return _released;
+    }
+
+    const Sprite & ButtonSprite::_getDisabled() const
+    {
+        if ( _disabled.empty() ) {
+            return ButtonBase::_getDisabled();
+        }
+
+        return _disabled;
     }
 
     ButtonGroup::ButtonGroup( const Rect & area, int buttonTypes )

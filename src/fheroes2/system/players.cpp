@@ -29,12 +29,13 @@
 #include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
+#include "settings.h"
 #include "world.h"
 
 namespace
 {
     const int playersSize = KINGDOMMAX + 1;
-    Player * _players[playersSize] = {NULL};
+    Player * _players[playersSize] = { nullptr };
     int human_colors = 0;
 
     enum
@@ -55,10 +56,25 @@ void PlayerFixMultiControl( Player * player )
         player->SetControl( CONTROL_AI );
 }
 
-void PlayerFixRandomRace( Player * player )
+void PlayerRemoveAlreadySelectedRaces( Player * player, std::vector<int> & availableRaces )
 {
-    if ( player && player->GetRace() == Race::RAND )
-        player->SetRace( Race::Rand() );
+    const int raceToRemove = player->GetRace();
+    availableRaces.erase( remove_if( availableRaces.begin(), availableRaces.end(), [raceToRemove]( const int race ) { return raceToRemove == race; } ),
+                          availableRaces.end() );
+}
+
+void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
+{
+    if ( player && player->GetRace() == Race::RAND ) {
+        if ( availableRaces.empty() ) {
+            player->SetRace( Race::Rand() );
+        }
+        else {
+            const int raceIndex = Rand::Get( 0, static_cast<uint32_t>( availableRaces.size() - 1 ) );
+            player->SetRace( availableRaces[raceIndex] );
+            availableRaces.erase( availableRaces.begin() + raceIndex );
+        }
+    }
 }
 
 bool Control::isControlAI( void ) const
@@ -212,7 +228,7 @@ StreamBase & operator>>( StreamBase & msg, Focus & focus )
         focus.second = world.GetCastle( Maps::GetPoint( index ) );
         break;
     default:
-        focus.second = NULL;
+        focus.second = nullptr;
         break;
     }
 
@@ -233,10 +249,9 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
     BitModes & modes = player;
 
     msg >> modes >> player.id >> player.control >> player.color >> player.race >> player.friends >> player.name >> player.focus;
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_091_RELEASE ) {
-        assert( player._ai );
-        msg >> *player._ai;
-    }
+
+    assert( player._ai );
+    msg >> *player._ai;
 
     return msg;
 }
@@ -260,7 +275,7 @@ void Players::clear( void )
     std::vector<Player *>::clear();
 
     for ( u32 ii = 0; ii < KINGDOMMAX + 1; ++ii )
-        _players[ii] = NULL;
+        _players[ii] = nullptr;
 
     current_color = 0;
     human_colors = 0;
@@ -286,7 +301,7 @@ void Players::Init( const Maps::FileInfo & fi )
         clear();
         const Colors vcolors( fi.kingdom_colors );
 
-        Player * first = NULL;
+        Player * first = nullptr;
 
         for ( Colors::const_iterator it = vcolors.begin(); it != vcolors.end(); ++it ) {
             Player * player = new Player( *it );
@@ -416,9 +431,11 @@ void Players::SetPlayerInGame( int color, bool f )
 
 void Players::SetStartGame( void )
 {
+    vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFocusReset( player ); } );
-    for_each( begin(), end(), []( Player * player ) { PlayerFixRandomRace( player ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { PlayerRemoveAlreadySelectedRaces( player, races ); } );
+    for_each( begin(), end(), [&races]( Player * player ) { PlayerFixRandomRace( player, races ); } );
     for_each( begin(), end(), []( Player * player ) { PlayerFixMultiControl( player ); } );
 
     current_color = Color::NONE;

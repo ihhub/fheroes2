@@ -29,7 +29,9 @@
 
 #include "dir.h"
 #include "system.h"
+#if defined( FHEROES2_VITA )
 #include "tools.h"
+#endif
 #include <cstring>
 #if defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp
@@ -107,7 +109,7 @@ namespace
         }
 
         struct dirent * ep;
-        while ( NULL != ( ep = readdir( dp ) ) ) {
+        while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
             // if not regular file
@@ -167,17 +169,4 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
 void ListDirs::Append( const std::list<std::string> & dirs )
 {
     insert( end(), dirs.begin(), dirs.end() );
-}
-
-namespace fheroes2
-{
-    void AddOSSpecificDirectories( ListDirs & dirs )
-    {
-#if defined( FHEROES2_VITA )
-        dirs.emplace_back( "ux0:app/FHOMM0002" );
-        dirs.emplace_back( "ux0:data/fheroes2" );
-#else
-        (void)dirs;
-#endif
-    }
 }

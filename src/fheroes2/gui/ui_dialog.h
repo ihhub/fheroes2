@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,16 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
-#include "bitmodes.h"
-#include "serialize.h"
+#pragma once
 
-StreamBase & operator<<( StreamBase & msg, const BitModes & b )
+namespace fheroes2
 {
-    return msg << b.modes;
-}
+    class TextBase;
 
-StreamBase & operator>>( StreamBase & msg, BitModes & b )
-{
-    return msg >> b.modes;
+    int showMessage( const TextBase & header, const TextBase & body, const int buttons );
 }

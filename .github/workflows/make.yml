@@ -1,0 +1,153 @@
+name: Make
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: Linux SDL1 Release
+          os: ubuntu-latest
+          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev gettext
+          env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          package_name: fheroes2_ubuntu_sdl1.zip
+          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh demo_unix.sh changelog.txt README.txt
+          release_name: Ubuntu (Linux) build with SDL 1.2 support (latest commit)
+          release_tag: fheroes2-linux-sdl1_dev
+        - name: Linux SDL1 Debug
+          os: ubuntu-latest
+          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev gettext
+          env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, DEBUG: ON }
+        - name: Linux SDL2 Release
+          os: ubuntu-latest
+          dependencies: libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          package_name: fheroes2_ubuntu_sdl2.zip
+          package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh demo_unix.sh changelog.txt README.txt
+          release_name: Ubuntu (Linux) build with SDL 2.0 support (latest commit)
+          release_tag: fheroes2-linux-sdl2_dev
+        - name: Linux SDL2 Debug
+          os: ubuntu-latest
+          dependencies: libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, DEBUG: ON }
+        - name: macOS SDL1
+          os: macos-10.15
+          dependencies: sdl sdl_ttf sdl_mixer sdl_image
+          env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          package_name: fheroes2_macos10_15_sdl1.zip
+          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh demo_unix.sh changelog.txt README.txt
+          release_name: MacOS build with SDL 1 support (latest commit)
+          release_tag: fheroes2-osx-sdl1_dev
+        - name: macOS SDL2
+          os: macos-10.15
+          dependencies: sdl2 sdl2_ttf sdl2_mixer sdl2_image
+          env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          package_name: fheroes2_macos10_15_sdl2.zip
+          package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh demo_unix.sh changelog.txt README.txt
+          release_name: MacOS build with SDL 2 support (latest commit)
+          release_tag: fheroes2-osx-sdl2_dev
+    name: Make (${{ matrix.config.name }})
+    runs-on: ${{ matrix.config.os }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: Install dependencies (Linux)
+      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ${{ matrix.config.dependencies }}
+    - name: Install dependencies (macOS)
+      if: ${{ matrix.config.os == 'macos-10.15' }}
+      run: |
+        brew install ${{ matrix.config.dependencies }}
+    - name: Build
+      run: make -j 2
+      env: ${{ matrix.config.env }}
+    - name: Create package
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
+      run: |
+        cp doc/README.txt script/demo/demo_unix.sh .
+        zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
+      with:
+        artifacts: ${{ matrix.config.package_name }}
+        body: ${{ github.event.commits[0].message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ matrix.config.release_name }}
+        tag: ${{ matrix.config.release_tag }}
+        allowUpdates: true
+        prerelease: true
+        replacesArtifacts: true
+  build-psv:
+    name: Make (PS Vita)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 50
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libgcc1 gettext
+    - name: Prepare Vita SDK cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.vitasdk-cache
+        key: build-psv-${{ github.sha }}
+        restore-keys: |
+          build-psv-
+    - name: Setup Vita SDK
+      continue-on-error: true
+      run: |
+        git clone https://github.com/vitasdk/vdpm
+        cd vdpm
+        export PATH=$VITASDK/bin:$PATH
+        ./bootstrap-vitasdk.sh
+        ./install-all.sh
+        rm -rf ~/.vitasdk-cache
+      env:
+        VITASDK: /usr/local/vitasdk
+    - name: Restore Vita SDK from cache
+      run: |
+        if [[ -d ~/.vitasdk-cache ]]; then
+            sudo rm -rf /usr/local/vitasdk
+            sudo mv ~/.vitasdk-cache /usr/local/vitasdk
+        fi
+    - name: Build
+      run: |
+        export PATH=$VITASDK/bin:$PATH
+        make -f Makefile.vita -j 2
+      env:
+        FHEROES2_STRICT_COMPILATION: ON
+        VITASDK: /usr/local/vitasdk
+    - name: Update Vita SDK cache
+      run: |
+        if [[ -d /usr/local/vitasdk ]]; then
+            rm -rf ~/.vitasdk-cache
+            sudo mv /usr/local/vitasdk ~/.vitasdk-cache
+        fi
+    - name: Create package
+      if: ${{ github.event_name == 'push' }}
+      run: |
+        cp doc/README.txt .
+        cp doc/README_PSV.md .
+        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+    - uses: ncipollo/release-action@v1
+      if: ${{ github.event_name == 'push' }}
+      with:
+        artifacts: fheroes2_psv_sdl2.zip
+        body: ${{ github.event.commits[0].message }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: PS Vita build with SDL 2.0 support (latest commit)
+        tag: fheroes2-psv-sdl2_dev
+        allowUpdates: true
+        prerelease: true
+        replacesArtifacts: true

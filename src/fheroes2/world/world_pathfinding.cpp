@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <cmath>
 #include <set>
 
 #include "ground.h"
@@ -39,7 +40,7 @@ bool isTileBlockedForArmy( int tileIndex, int color, double armyStrength, bool f
             if ( otherHero->isFriends( color ) )
                 return true;
             else
-                return !otherHero->AllowBattle( false ) || otherHero->GetArmy().GetStrength() > armyStrength;
+                return otherHero->GetArmy().GetStrength() > armyStrength;
         }
     }
 
@@ -408,8 +409,28 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
     nodesToExplore.push_back( start );
     tilesVisited[start] = true;
 
+    const int scouteValue = hero.GetScoute();
+
     for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
         const int currentNodeIdx = nodesToExplore[lastProcessedNode];
+
+        if ( start != currentNodeIdx ) {
+            int32_t maxTilesToReveal = Maps::getFogTileCountToBeRevealed( currentNodeIdx, scouteValue, _currentColor );
+            if ( maxTilesToReveal > 0 ) {
+                // Found a tile where we can reveal fog. Check for other tiles in the queue to find the one with the highest value.
+                int bestIndex = currentNodeIdx;
+                for ( ; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+                    const int nodeIdx = nodesToExplore[lastProcessedNode];
+                    const int32_t tilesToReveal = Maps::getFogTileCountToBeRevealed( nodeIdx, scouteValue, _currentColor );
+                    if ( maxTilesToReveal < tilesToReveal ) {
+                        maxTilesToReveal = tilesToReveal;
+                        bestIndex = nodeIdx;
+                    }
+                }
+
+                return bestIndex;
+            }
+        }
 
         for ( size_t i = 0; i < directions.size(); ++i ) {
             if ( Maps::isValidDirection( currentNodeIdx, directions[i] ) ) {
@@ -417,10 +438,7 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
                 if ( newIndex == start )
                     continue;
 
-                if ( world.GetTiles( newIndex ).isFog( _currentColor ) ) {
-                    return currentNodeIdx;
-                }
-                else if ( !tilesVisited[newIndex] ) {
+                if ( !tilesVisited[newIndex] ) {
                     tilesVisited[newIndex] = true;
 
                     const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );

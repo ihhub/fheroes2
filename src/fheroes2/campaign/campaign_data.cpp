@@ -21,12 +21,10 @@
 #include "campaign_data.h"
 #include "artifact.h"
 #include "heroes.h"
-#include "maps_fileinfo.h"
 #include "monster.h"
-#include "race.h"
 #include "resource.h"
-#include "skill.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include <cassert>
 

@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
@@ -32,7 +30,6 @@
 #include "game.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"
@@ -234,6 +231,8 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     const fheroes2::Sprite & campaignChoice = fheroes2::AGG::GetICN( ICN::X_IVY, 0 );
     fheroes2::Blit( campaignChoice, 0, 0, display, roiOffset.x + campaignChoice.x(), roiOffset.y + campaignChoice.y(), campaignChoice.width(), campaignChoice.height() );
 
+    display.render();
+
     const fheroes2::Rect priceOfLoyaltyRoi( roiOffset.x + 192, roiOffset.y + 23, 248, 163 );
     const fheroes2::Rect voyageHomeRoi( roiOffset.x + 19, roiOffset.y + 120, 166, 193 );
     const fheroes2::Rect wizardsIsleRoi( roiOffset.x + 450, roiOffset.y + 120, 166, 193 );
@@ -337,7 +336,8 @@ fheroes2::GameMode Game::NewGame()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::Button buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::ButtonSprite buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 ),
+                                              fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
     fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
     fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );
@@ -358,7 +358,7 @@ fheroes2::GameMode Game::NewGame()
 
     LocalEvent & le = LocalEvent::Get();
 
-    while ( le.HandleEvents() ) { // new game loop
+    while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonStandartGame.area() ) ? buttonStandartGame.drawOnPress() : buttonStandartGame.drawOnRelease();
 
         if ( buttonCampainGame.isEnabled() ) {
@@ -387,13 +387,15 @@ fheroes2::GameMode Game::NewGame()
 
         if ( le.MousePressRight( buttonStandartGame.area() ) )
             Dialog::Message( _( "Standard Game" ), _( "A single player game playing out a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonCampainGame.area() ) )
+        else if ( le.MousePressRight( buttonCampainGame.area() ) )
             Dialog::Message( _( "Campaign Game" ), _( "A single player game playing through a series of maps." ), Font::BIG );
-        if ( le.MousePressRight( buttonMultiGame.area() ) )
+        else if ( le.MousePressRight( buttonMultiGame.area() ) )
             Dialog::Message( _( "Multi-Player Game" ), _( "A multi-player game, with several human players completing against each other on a single map." ), Font::BIG );
-        if ( le.MousePressRight( buttonSettings.area() ) )
+        else if ( le.MousePressRight( buttonBattleGame.area() ) )
+            Dialog::Message( _( "Battle Only" ), _( "Setup and play a battle without loading any map." ), Font::BIG );
+        else if ( le.MousePressRight( buttonSettings.area() ) )
             Dialog::Message( _( "Settings" ), _( "Experimental game settings." ), Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame.area() ) )
+        else if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
     }
 

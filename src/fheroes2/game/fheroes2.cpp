@@ -20,7 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -39,7 +38,11 @@
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
+#include "settings.h"
 #include "system.h"
+#ifndef BUILD_RELEASE
+#include "tools.h"
+#endif
 #include "translations.h"
 #include "ui_tool.h"
 #include "zzlib.h"
@@ -72,46 +75,48 @@ namespace
     void ReadConfigs()
     {
         Settings & conf = Settings::Get();
-        const ListFiles & files = Settings::GetListFiles( "", configurationFileName );
 
-        bool isValidConfigurationFile = false;
-        for ( ListFiles::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            if ( System::IsFile( *it ) && conf.Read( *it ) ) {
-                isValidConfigurationFile = true;
-                const std::string & externalCommand = conf.externalMusicCommand();
-                if ( !externalCommand.empty() )
-                    Music::SetExtCommand( externalCommand );
+        const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
-                LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
-                break;
-            }
+        if ( System::IsFile( confFile ) && conf.Read( confFile ) ) {
+            const std::string & externalCommand = conf.externalMusicCommand();
+            if ( !externalCommand.empty() )
+                Music::SetExtCommand( externalCommand );
+
+            LocalEvent::Get().SetControllerPointerSpeed( conf.controllerPointerSpeed() );
         }
-
-        if ( !isValidConfigurationFile )
+        else {
             conf.Save( configurationFileName );
+        }
     }
 
-    void InitHomeDir()
+    void InitConfigDir()
     {
-        const std::string home = System::GetHomeDirectory( "fheroes2" );
+        const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !home.empty() ) {
-            const std::string home_maps = System::ConcatePath( home, "maps" );
-            const std::string home_files = System::ConcatePath( home, "files" );
-            const std::string home_files_save = System::ConcatePath( home_files, "save" );
-
-            if ( !System::IsDirectory( home ) )
-                System::MakeDirectory( home );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_maps ) )
-                System::MakeDirectory( home_maps );
-
-            if ( System::IsDirectory( home, true ) && !System::IsDirectory( home_files ) )
-                System::MakeDirectory( home_files );
-
-            if ( System::IsDirectory( home_files, true ) && !System::IsDirectory( home_files_save ) )
-                System::MakeDirectory( home_files_save );
+        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+            System::MakeDirectory( configDir );
         }
+    }
+
+    void InitDataDir()
+    {
+        const std::string dataDir = System::GetDataDirectory( "fheroes2" );
+
+        if ( dataDir.empty() )
+            return;
+
+        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
+        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+
+        if ( !System::IsDirectory( dataDir ) )
+            System::MakeDirectory( dataDir );
+
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
+            System::MakeDirectory( dataFiles );
+
+        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
+            System::MakeDirectory( dataFilesSave );
     }
 
     void SetTimidityEnvPath()
@@ -132,7 +137,7 @@ namespace
 
             std::string mofile = conf.ForceLang().empty() ? System::GetMessageLocale( 1 ).append( ".mo" ) : std::string( conf.ForceLang() ).append( ".mo" );
 
-            ListFiles translations = Settings::GetListFiles( System::ConcatePath( "files", "lang" ), mofile );
+            ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), mofile, false );
 
             if ( translations.size() ) {
                 if ( Translation::bindDomain( "fheroes2", translations.back().c_str() ) )
@@ -162,7 +167,8 @@ int main( int argc, char ** argv )
     Settings & conf = Settings::Get();
     conf.SetProgramPath( argv[0] );
 
-    InitHomeDir();
+    InitConfigDir();
+    InitDataDir();
     ReadConfigs();
 
     // getopt
@@ -240,10 +246,8 @@ int main( int argc, char ** argv )
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
-#ifdef WITH_ZLIB
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
-#endif
 
             DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
 
@@ -261,9 +265,11 @@ int main( int argc, char ** argv )
             // init game data
             Game::Init();
 
-            fheroes2::showTeamInfo();
+            if ( conf.isShowIntro() ) {
+                fheroes2::showTeamInfo();
 
-            Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+                Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            }
 
             // init cursor
             const CursorRestorer cursorRestorer( true, Cursor::POINTER );

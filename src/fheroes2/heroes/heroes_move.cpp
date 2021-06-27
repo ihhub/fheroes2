@@ -23,7 +23,6 @@
 #include "agg.h"
 #include "agg_image.h"
 #include "castle.h"
-#include "cursor.h"
 #include "direction.h"
 #include "game.h"
 #include "game_delays.h"
@@ -36,6 +35,7 @@
 #include "m82.h"
 #include "maps_tiles.h"
 #include "race.h"
+#include "settings.h"
 #include "world.h"
 
 #include <cassert>
@@ -721,7 +721,7 @@ void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
     if ( newpos ) {
         hero.Move2Dest( indexTo );
-        hero.ActionNewPosition();
+        hero.ActionNewPosition( true );
         path.PopFront();
 
         // possible that hero loses the battle

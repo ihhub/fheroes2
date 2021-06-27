@@ -196,7 +196,6 @@ public:
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
     static const char * GetScenario( const Artifact & );
-    static void UpdateStats( const std::string & );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Artifact & );
@@ -249,8 +248,8 @@ public:
     bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
     bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
-    bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
+    bool QueueEventProcessing( ArtifactsBar &, std::string * = nullptr );
 
     bool ActionBarCursor( Artifact & ) override;
     bool ActionBarCursor( Artifact &, Artifact & ) override;

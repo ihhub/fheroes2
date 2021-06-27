@@ -25,11 +25,9 @@
 #include "icn.h"
 #include "image.h"
 #include "logging.h"
-#include "mp2.h"
 #include "pairs.h"
 #include "rand.h"
 #include "text.h"
-#include "world.h"
 
 Funds::Funds()
     : wood( 0 )
@@ -157,7 +155,7 @@ s32 * Funds::GetPtr( int rs )
     default:
         break;
     }
-    return NULL;
+    return nullptr;
 }
 
 s32 Funds::Get( int rs ) const

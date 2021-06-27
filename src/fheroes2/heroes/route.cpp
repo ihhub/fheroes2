@@ -23,11 +23,9 @@
 #include <iostream>
 #include <sstream>
 
-#include "game.h"
 #include "heroes.h"
 #include "maps.h"
 #include "route.h"
-#include "settings.h"
 #include "world.h"
 
 s32 Route::Step::GetIndex( void ) const

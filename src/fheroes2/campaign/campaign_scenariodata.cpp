@@ -24,9 +24,15 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "system.h"
+#include "tools.h"
+#include "translations.h"
+
 #include <cassert>
+#include <map>
 
 namespace
 {
@@ -332,30 +338,69 @@ namespace
 
         return bonus;
     }
-}
 
-namespace Campaign
-{
-    bool isCampaignMap( const std::string & fullMapPath, const std::string & scenarioMapName )
+    const char * getArtifactCampaignName( const int32_t artifactId )
     {
-        return fullMapPath.find( scenarioMapName ) != std::string::npos;
+        switch ( artifactId ) {
+        case Artifact::THUNDER_MACE:
+            return _( "Thunder Mace" );
+        case Artifact::MINOR_SCROLL:
+            return _( "Minor Scroll" );
+        case Artifact::DRAGON_SWORD:
+            return _( "Dragon Sword" );
+        case Artifact::DIVINE_BREASTPLATE:
+            return _( "Breastplate" );
+        case Artifact::FIZBIN_MISFORTUNE:
+            return _( "Fibzin Medal" );
+        case Artifact::MAGE_RING:
+            return _( "Mage's ring" );
+        case Artifact::DEFENDER_HELM:
+            return _( "Defender Helm" );
+        case Artifact::POWER_AXE:
+            return _( "Power Axe" );
+        default:
+            return Artifact( artifactId ).GetName();
+        }
+    }
+
+    const char * getSpellCampaignName( const Uint32 spellId )
+    {
+        switch ( spellId ) {
+        case Spell::SUMMONEELEMENT:
+            return _( "Summon Earth" );
+        default:
+            return Spell( spellId ).GetName();
+        }
     }
 
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
-        const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
-        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
+        static const auto fileNameToPath = []() {
+            std::map<std::string, std::string> result;
 
-        const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
+            const ListFiles files = Settings::FindFiles( "maps", "", false );
 
-        if ( iterator != files.end() ) {
-            matchingFilePath = *iterator;
+            for ( const std::string & file : files ) {
+                result.emplace( StringLower( System::GetBasename( file ) ), file );
+            }
+
+            return result;
+        }();
+
+        const auto result = fileNameToPath.find( fileName );
+
+        if ( result != fileNameToPath.end() ) {
+            matchingFilePath = result->second;
+
             return true;
         }
 
         return false;
     }
+}
 
+namespace Campaign
+{
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
@@ -377,7 +422,7 @@ namespace Campaign
 
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT:
-            objectName = Artifact( _subType ).GetName();
+            objectName = getArtifactCampaignName( _subType );
             break;
         case ScenarioBonusData::RESOURCES:
             objectName = Resource::String( _subType );
@@ -386,7 +431,7 @@ namespace Campaign
             objectName = Monster( _subType ).GetPluralName( _amount );
             break;
         case ScenarioBonusData::SPELL:
-            objectName = Spell( _subType ).GetName();
+            objectName = getSpellCampaignName( _subType );
             break;
         case ScenarioBonusData::STARTING_RACE:
             objectName = Race::String( _subType );
@@ -444,7 +489,7 @@ namespace Campaign
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
-        , _fileName( fileName )
+        , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )
         , _description( description )
         , _victoryCondition( victoryCondition )

@@ -45,7 +45,6 @@ struct ValueColors : std::pair<int, int>
     {
         return v == first;
     }
-    // bool IsColor(int c) const { return (c & second); };
 
     static bool SortValueGreat( const ValueColors & v1, const ValueColors & v2 )
     {
@@ -68,8 +67,8 @@ void GetTownsInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        int value = world.GetKingdom( *color ).GetCountTown();
-        UpdateValuesColors( v, value, *color );
+        const uint32_t townCount = world.GetKingdom( *color ).GetCountTown();
+        UpdateValuesColors( v, static_cast<int32_t>( townCount ), *color );
     }
 
     std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
@@ -80,8 +79,8 @@ void GetCastlesInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        int value = world.GetKingdom( *color ).GetCountCastle();
-        UpdateValuesColors( v, value, *color );
+        const uint32_t castleCount = world.GetKingdom( *color ).GetCountCastle();
+        UpdateValuesColors( v, static_cast<int32_t>( castleCount ), *color );
     }
 
     std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
@@ -92,8 +91,8 @@ void GetHeroesInfo( std::vector<ValueColors> & v, const Colors & colors )
     v.clear();
 
     for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
-        const int value = world.GetKingdom( *color ).GetHeroes().size();
-        UpdateValuesColors( v, value, *color );
+        const size_t heroCount = world.GetKingdom( *color ).GetHeroes().size();
+        UpdateValuesColors( v, static_cast<int>( heroCount ), *color );
     }
 
     std::sort( v.begin(), v.end(), ValueColors::SortValueGreat );
@@ -197,11 +196,11 @@ void GetBestHeroArmyInfo( std::vector<ValueColors> & v, const Colors & colors )
 
 void DrawFlags( const std::vector<ValueColors> & v, const fheroes2::Point & pos, int step, size_t count )
 {
-    for ( int32_t ii = 0; ii < static_cast<int32_t>( count ); ++ii ) {
-        if ( ii < static_cast<int32_t>( v.size() ) ) {
-            const Colors colors( v[ii].second );
+    for ( int32_t i = 0; i < static_cast<int32_t>( count ); ++i ) {
+        if ( i < static_cast<int32_t>( v.size() ) ) {
+            const Colors colors( v[i].second );
             const int32_t sw = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 ).width();
-            int32_t px = pos.x + ii * step - ( colors.size() * sw ) / 2 + 3;
+            int32_t px = pos.x + i * step - ( static_cast<int32_t>( colors.size() ) * sw ) / 2 + 3;
 
             for ( Colors::const_iterator color = colors.begin(); color != colors.end(); ++color ) {
                 const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( ICN::TOWNWIND, 22 + Color::GetIndex( *color ) );
@@ -239,7 +238,7 @@ void DrawHeroStats( const std::vector<ValueColors> & v, const fheroes2::Point & 
         if ( hero == nullptr ) {
             continue;
         }
-        const int32_t px = pos.x - 25 + i * step;
+        const int32_t px = pos.x - 25 + static_cast<int32_t>( i ) * step;
 
         Text text( _( "Att." ), Font::SMALL );
         text.Blit( px, pos.y );
@@ -265,7 +264,7 @@ void DrawPersonality( const Colors & colors, const fheroes2::Point & pos, int st
     for ( size_t i = 0; i < colors.size(); ++i ) {
         const Player * player = Players::Get( colors[i] );
         const Text text( player->isControlHuman() ? _( "Human" ) : player->GetPersonalityString(), Font::SMALL );
-        text.Blit( pos.x - text.w() / 2 + step * i, pos.y );
+        text.Blit( pos.x - text.w() / 2 + step * static_cast<int32_t>( i ), pos.y );
     }
 }
 
@@ -276,7 +275,7 @@ void DrawBestMonsterIcons( const Colors & colors, const fheroes2::Point & pos, i
         if ( monster.isValid() ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MONS32, monster.GetSpriteIndex() );
             if ( !sprite.empty() )
-                fheroes2::Blit( sprite, fheroes2::Display::instance(), pos.x + i * step - sprite.width() / 2, pos.y );
+                fheroes2::Blit( sprite, fheroes2::Display::instance(), pos.x + static_cast<int32_t>( i ) * step - sprite.width() / 2, pos.y );
         }
     }
 }

@@ -26,7 +26,8 @@
 #include <string>
 
 #include "game_mode.h"
-#include "serialize.h"
+
+class StreamBase;
 
 namespace GameOver
 {

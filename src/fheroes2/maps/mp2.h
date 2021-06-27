@@ -22,7 +22,7 @@
 #ifndef H2MP2_H
 #define H2MP2_H
 
-#include "gamedefs.h"
+#include "types.h"
 
 #define MP2OFFSETDATA 428
 #define SIZEOFMP2TILE 20
@@ -40,31 +40,54 @@ namespace MP2
     // origin mp2 tile
     struct mp2tile_t
     {
-        u16 tileIndex; // tile (ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach)
+        uint16_t tileIndex; // Tile index representing a type of surface: ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach.
+
         u8 objectName1; // level 1.0
         u8 indexName1; // index level 1.0 or 0xFF
         u8 quantity1; // Bitfield, first 3 bits are flags, rest is used as quantity
         u8 quantity2; // Used as a part of quantity, field size is actually 13 bits. Has most significant bits
         u8 objectName2; // level 2.0
         u8 indexName2; // index level 2.0 or 0xFF
-        u8 flags; // Bitfield: 1st bit is passability, last two is tile shape: 0 none, 1 vertical, 2 horizontal, 3 any
+
+        // First 2 bits responsible for tile shape (0 - 3). Subsequent 3 bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
+        // between land and sea.
+        uint8_t flags;
+
         u8 mapObject; // zero or object
-        u16 indexAddon; // zero or index addons_t
-        u32 editorObjectLink; // Map editor variable: object link
-        u32 editorObjectOverlay; // Map editor variable: overlay link
+
+        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+
+        // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
+        // UID is used to find all pieces/addons which belong to the same object.
+        // In Editor first object will have UID as 0. Then second object placed on the map will have UID 0 + number of pieces / tiles per previous object and etc.
+        uint32_t level1ObjectUID;
+
+        // Top level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
+        // UID is used to find all pieces/addons which belong to the same object.
+        // In Editor first object will have UID as 0. Then second object placed on the map will have UID 0 + number of pieces / tiles per previous object and etc.
+        uint32_t level2ObjectUID;
     };
 
     // origin mp2 addons tile
     struct mp2addon_t
     {
-        u16 indexAddon; // zero or next addons_t
+        uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.
+
         u8 objectNameN1; // level 1.N. Last bit indicates if object is animated. Second-last controls overlay
         u8 indexNameN1; // level 1.N or 0xFF
         u8 quantityN; // Bitfield containing metadata
         u8 objectNameN2; // level 2.N
         u8 indexNameN2; // level 1.N or 0xFF
-        u32 editorObjectLink; // Map editor variable: object link
-        u32 editorObjectOverlay; // Map editor variable: overlay link
+
+        // Ground (bottom) level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
+        // UID is used to find all pieces/addons which belong to the same object.
+        // In Editor first object will have UID as 0. Then second object placed on the map will have UID 0 + number of pieces / tiles per previous object and etc.
+        uint32_t level1ObjectUID;
+
+        // Top level object UID. An object can allocate more than 1 tile. Each tile could have multiple objects pieces.
+        // UID is used to find all pieces/addons which belong to the same object.
+        // In Editor first object will have UID as 0. Then second object placed on the map will have UID 0 + number of pieces / tiles per previous object and etc.
+        uint32_t level2ObjectUID;
     };
 
     // origin mp2 castle

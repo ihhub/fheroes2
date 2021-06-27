@@ -1,0 +1,3 @@
+fheroes2 usr/games
+script/packaging/common/fheroes2.desktop usr/share/applications
+src/resources/fheroes2.png usr/share/pixmaps

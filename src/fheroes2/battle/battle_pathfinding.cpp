@@ -73,7 +73,7 @@ namespace Battle
         for ( size_t index = 0; index < _cache.size(); ++index ) {
             const ArenaNode & node = _cache[index];
             if ( nodeIsPassable( node ) && node._cost <= moveRange ) {
-                result.push_back( index );
+                result.push_back( static_cast<int>( index ) );
             }
         }
         return result;

@@ -23,7 +23,6 @@
 #include <algorithm>
 
 #include "direction.h"
-#include "icn.h"
 #include "mp2.h"
 #include "objswmp.h"
 
@@ -36,10 +35,10 @@ int ObjSwmp::GetPassable( u32 index )
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
-    else if ( isAction( index ) || ARRAY_COUNT_END( disabled ) != std::find( disabled, ARRAY_COUNT_END( disabled ), index ) )
+    else if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
 
-    return ARRAY_COUNT_END( restricted ) != std::find( restricted, ARRAY_COUNT_END( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
+    return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
 bool ObjSwmp::isAction( u32 index )
@@ -51,7 +50,7 @@ bool ObjSwmp::isShadow( u32 index )
 {
     const u8 shadows[] = {14, 21, 31, 43, 66, 83, 125, 127, 130, 132, 136, 141, 163, 170, 175, 178, 195, 197, 202, 204, 207, 211, 215};
 
-    return ARRAY_COUNT_END( shadows ) != std::find( shadows, ARRAY_COUNT_END( shadows ), index );
+    return std::end( shadows ) != std::find( shadows, std::end( shadows ), index );
 }
 
 int ObjSwmp::GetActionObject( u32 index )

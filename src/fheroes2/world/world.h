@@ -166,7 +166,6 @@ public:
     }
 
     bool LoadMapMP2( const std::string & );
-    bool LoadMapMAP( const std::string & );
 
     void NewMaps( int32_t, int32_t );
 
@@ -279,6 +278,8 @@ public:
 
     uint32_t GetMapSeed() const;
 
+    bool isAnyKingdomVisited( const uint32_t obj, const int32_t dstIndex ) const;
+
 private:
     World()
         : fheroes2::Size( 0, 0 )
@@ -296,9 +297,6 @@ private:
     friend class Radar;
     friend StreamBase & operator<<( StreamBase &, const World & );
     friend StreamBase & operator>>( StreamBase &, World & );
-#ifdef WITH_XML
-    friend TiXmlElement & operator>>( TiXmlElement &, World & );
-#endif
 
     MapsTiles vec_tiles;
     AllHeroes vec_heroes;

@@ -23,7 +23,6 @@
 #include <sstream>
 
 #include "agg_image.h"
-#include "army.h"
 #include "army_bar.h"
 #include "buildinginfo.h"
 #include "castle.h"
@@ -35,9 +34,9 @@
 #include "interface_icons.h"
 #include "interface_list.h"
 #include "kingdom.h"
-#include "settings.h"
 #include "skill_bar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "ui_window.h"
 #include "world.h"
@@ -622,7 +621,7 @@ void Kingdom::OverviewDialog( void )
 
     const fheroes2::Rect rectIncome( cur_pt.x + 1, cur_pt.y + 360, 535, 60 );
 
-    Interface::ListBasic * listStats = NULL;
+    Interface::ListBasic * listStats = nullptr;
 
     // set state view: castles
     if ( Modes( OVERVIEWCSTL ) ) {

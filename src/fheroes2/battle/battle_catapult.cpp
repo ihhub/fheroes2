@@ -22,7 +22,6 @@
 
 #include "battle_catapult.h"
 #include "artifact.h"
-#include "battle_command.h"
 #include "heroes_base.h"
 #include "logging.h"
 #include "rand.h"

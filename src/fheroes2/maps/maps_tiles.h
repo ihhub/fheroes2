@@ -27,14 +27,11 @@
 
 #include "army_troop.h"
 #include "artifact.h"
+#include "color.h"
 #include "direction.h"
 #include "gamedefs.h"
 #include "resource.h"
 #include "skill.h"
-
-#ifdef WITH_XML
-#include "tinyxml.h"
-#endif
 
 class Heroes;
 class Spell;
@@ -101,7 +98,6 @@ namespace Maps
         static int GetActionObject( const TilesAddon & );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
-        static bool PredicateSortRules2( const TilesAddon &, const TilesAddon & );
 
         static bool ForceLevel1( const TilesAddon & );
 
@@ -195,7 +191,12 @@ namespace Maps
         uint32_t GetRegion() const;
         void UpdateRegion( uint32_t newRegionID );
         void UpdatePassable( void );
+
+        // ICN::FLAGS32 version
         void CaptureFlags32( int obj, int col );
+
+        // Removes all ICN::FLAGS32 objects from this tile.
+        void removeFlags();
 
         void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
@@ -279,10 +280,10 @@ namespace Maps
         Heroes * GetHeroes( void ) const;
         void SetHeroes( Heroes * );
 
-        // If tile is empty (MP2::OBJ_UNKNOWN) then verify whether it is a coast and update the tile if needed.
+        // If tile is empty (MP2::OBJ_ZERO) then verify whether it is a coast and update the tile if needed.
         void updateEmpty();
 
-        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_UNKNOWN)
+        // Set tile to coast MP2::OBJ_COAST) if it's near water or to empty (MP2::OBJ_ZERO)
         void setAsEmpty();
 
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
@@ -301,6 +302,8 @@ namespace Maps
 
     private:
         TilesAddon * FindFlags( void );
+
+        // correct flags, ICN::FLAGS32 vesion
         void CorrectFlags32( u32 index, bool );
         void RemoveJailSprite( void );
         bool isLongObject( int direction );
@@ -322,9 +325,7 @@ namespace Maps
 
         friend StreamBase & operator<<( StreamBase &, const Tiles & );
         friend StreamBase & operator>>( StreamBase &, Tiles & );
-#ifdef WITH_XML
-        friend TiXmlElement & operator>>( TiXmlElement &, Tiles & );
-#endif
+
         friend bool operator<( const Tiles & l, const Tiles & r )
         {
             return l.GetIndex() < r.GetIndex();

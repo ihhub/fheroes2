@@ -38,8 +38,34 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "world.h"
+
+namespace
+{
+    size_t GetInsertPosition( const std::string & text, const int32_t cursorPosition, const int32_t startXPosition )
+    {
+        if ( text.empty() ) {
+            // The text is empty, return start position.
+            return 0;
+        }
+
+        if ( cursorPosition <= startXPosition ) {
+            return 0;
+        }
+
+        int32_t positionOffset = 0;
+        for ( size_t i = 0; i < text.size(); ++i ) {
+            positionOffset += Text::getCharacterWidth( static_cast<uint8_t>( text[i] ), Font::BIG );
+            if ( positionOffset + startXPosition > cursorPosition ) {
+                return i;
+            }
+        }
+
+        return text.size();
+    }
+}
 
 std::string SelectFileListSimple( const std::string &, const std::string &, const bool );
 bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::string &, const fheroes2::Rect & );
@@ -80,9 +106,9 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dst
     char shortTime[20];
     time_t timeval = info.localtime;
 
-    std::fill( shortDate, ARRAY_COUNT_END( shortDate ), 0 );
-    std::fill( shortHours, ARRAY_COUNT_END( shortHours ), 0 );
-    std::fill( shortTime, ARRAY_COUNT_END( shortTime ), 0 );
+    std::fill( shortDate, std::end( shortDate ), 0 );
+    std::fill( shortHours, std::end( shortHours ), 0 );
+    std::fill( shortTime, std::end( shortTime ), 0 );
     std::strftime( shortDate, ARRAY_COUNT( shortDate ) - 1, "%b %d,", std::localtime( &timeval ) );
     std::strftime( shortHours, ARRAY_COUNT( shortHours ) - 1, "%H", std::localtime( &timeval ) );
     std::strftime( shortTime, ARRAY_COUNT( shortTime ) - 1, ":%M", std::localtime( &timeval ) );
@@ -144,22 +170,6 @@ std::string ResizeToShortName( const std::string & str )
     if ( std::string::npos != it )
         res.resize( it );
     return res;
-}
-
-size_t GetInsertPosition( const std::string & name, s32 cx, s32 posx )
-{
-    if ( name.size() ) {
-        s32 tw = Text::width( name, Font::SMALL );
-        if ( cx <= posx )
-            return 0;
-        else if ( cx >= posx + tw )
-            return name.size();
-        else {
-            float cw = tw / name.size();
-            return static_cast<size_t>( ( cx - posx ) / cw );
-        }
-    }
-    return 0;
 }
 
 MapsFileInfoList GetSortedMapsFileInfoList( void )

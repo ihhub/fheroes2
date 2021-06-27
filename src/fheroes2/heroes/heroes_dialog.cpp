@@ -24,7 +24,6 @@
 
 #include "agg_image.h"
 #include "army_bar.h"
-#include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -32,16 +31,15 @@
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "kingdom.h"
-#include "payment.h"
 #include "race.h"
 #include "settings.h"
 #include "skill_bar.h"
 #include "statusbar.h"
 #include "text.h"
+#include "tools.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "ui_window.h"
-#include "world.h"
 
 int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
@@ -195,7 +193,8 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // button dismiss
     dst_pt.x = cur_pt.x + 4;
     dst_pt.y = cur_pt.y + 318;
-    fheroes2::Button buttonDismiss( dst_pt.x, dst_pt.y, ICN::HSBTNS, 0, 1 );
+    fheroes2::ButtonSprite buttonDismiss( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::HSBTNS, 0 ), fheroes2::AGG::GetICN( ICN::HSBTNS, 1 ),
+                                          fheroes2::AGG::GetICN( ICN::DISMISS_HERO_DISABLED_BUTTON, 0 ) );
 
     // button exit
     dst_pt.x = cur_pt.x + 603;

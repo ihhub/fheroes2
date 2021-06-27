@@ -32,12 +32,14 @@ namespace System
 
     int MakeDirectory( const std::string & );
     std::string ConcatePath( const std::string &, const std::string & );
-    ListDirs GetDataDirectories( const std::string & );
-    ListFiles GetListFiles( const std::string &, const std::string &, const std::string & );
-    std::string GetHomeDirectory( const std::string & );
+
+    ListDirs GetOSSpecificDirectories();
+    std::string GetConfigDirectory( const std::string & prog );
+    std::string GetDataDirectory( const std::string & prog );
 
     std::string GetDirname( const std::string & );
     std::string GetBasename( const std::string & );
+    std::string GetUniversalBasename( const std::string & str );
 
     void SetLocale( int, const char * );
     std::string GetMessageLocale( int /* 3: en_us.utf-8, 2: en_us, 1: en */ );

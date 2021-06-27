@@ -28,6 +28,7 @@
 #include "agg_image.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 
 namespace
 {
@@ -365,7 +366,7 @@ void TextUnicode::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst )
 #endif
 
 Text::Text()
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {
@@ -378,7 +379,7 @@ Text::Text()
 }
 
 Text::Text( const std::string & msg, int ft )
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {
@@ -395,7 +396,7 @@ Text::Text( const std::string & msg, int ft )
 
 #ifdef WITH_TTF
 Text::Text( const u16 * pt, size_t sz, int ft )
-    : message( NULL )
+    : message( nullptr )
     , gw( 0 )
     , gh( 0 )
 {
@@ -512,6 +513,16 @@ u32 Text::height( const std::string & str, int ft, u32 width )
     }
 
     return 0;
+}
+
+int32_t Text::getCharacterWidth( const uint8_t character, const int fontType )
+{
+#ifdef WITH_TTF
+    if ( Settings::Get().Unicode() ) {
+        return TextUnicode::CharWidth( character, fontType );
+    }
+#endif
+    return TextAscii::CharWidth( character, fontType );
 }
 
 int32_t Text::getFitWidth( const std::string & text, const int fontId, const int32_t width_ )
@@ -652,7 +663,7 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
                 if ( space == msg.begin() ) {
                     if ( pos2 - pos1 < 1 ) // this should never happen!
                         return;
-                    messages.emplace_back( msg.substr( pos1 - msg.begin(), pos2 - pos1 - 1 ), ft );
+                    messages.emplace_back( msg.substr( pos1 - msg.begin(), pos2 - pos1 ), ft );
                 }
                 else {
                     pos2 = space + 1;
@@ -702,7 +713,7 @@ void TextBox::Append( const std::vector<u16> & msg, int ft, u32 width_ )
                 if ( space == msg.begin() ) {
                     if ( pos2 - pos1 < 1 ) // this should never happen!
                         return;
-                    messages.emplace_back( &msg.at( pos1 - msg.begin() ), pos2 - pos1 - 1, ft );
+                    messages.emplace_back( &msg.at( pos1 - msg.begin() ), pos2 - pos1, ft );
                 }
                 else {
                     pos2 = space + 1;

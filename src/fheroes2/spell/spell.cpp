@@ -22,10 +22,8 @@
 
 #include "spell.h"
 #include "artifact.h"
-#include "game.h"
 #include "game_static.h"
 #include "heroes_base.h"
-#include "logging.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -134,60 +132,6 @@ spellstats_t spells[] = {
     { "Random 5", 0, 0, 0, 0, 0, COST_NONE, "Random 5" },
     { "Stone", 0, 0, 0, 0, 0, COST_NONE, "Stone spell from Medusa." },
 };
-
-void Spell::UpdateStats( const std::string & spec )
-{
-#ifdef WITH_XML
-    // parse spells.xml
-    TiXmlDocument doc;
-    const TiXmlElement * xml_spells = NULL;
-
-    if ( doc.LoadFile( spec.c_str() ) && NULL != ( xml_spells = doc.FirstChildElement( "spells" ) ) ) {
-        size_t index = 0;
-        const TiXmlElement * xml_spell = xml_spells->FirstChildElement( "spell" );
-        for ( ; xml_spell && index < STONE; xml_spell = xml_spell->NextSiblingElement( "spell" ), ++index ) {
-            int value;
-            spellstats_t * ptr = &spells[index];
-
-            xml_spell->Attribute( "skip", &value );
-            if ( 0 == value ) {
-                xml_spell->Attribute( "sp", &value );
-                if ( value )
-                    ptr->sp = value;
-                xml_spell->Attribute( "mp", &value );
-                if ( value )
-                    ptr->mp = value;
-                xml_spell->Attribute( "extra", &value );
-                if ( value )
-                    ptr->extra = value;
-            }
-
-            xml_spell->Attribute( "disable", &value );
-            if ( value ) {
-                ptr->bits |= SP_DISABLE;
-            }
-
-            // load dimension door params
-            if ( index == DIMENSIONDOOR ) {
-                xml_spell->Attribute( "conf_distance", &value );
-                GameStatic::SetSpell_DD_Distance( value );
-                xml_spell->Attribute( "conf_sp", &value );
-                GameStatic::SetSpell_DD_SP( value );
-                xml_spell->Attribute( "conf_hp", &value );
-                GameStatic::SetSpell_DD_HP( value );
-            }
-
-            // load spell cost
-            if ( const TiXmlElement * xml_cost = xml_spell->FirstChildElement( "cost" ) )
-                LoadCostFromXMLElement( ptr->cost, *xml_cost );
-        }
-    }
-    else
-        VERBOSE_LOG( spec << ": " << doc.ErrorDesc() );
-#else
-    (void)spec;
-#endif
-}
 
 Spell::Spell( int s )
     : id( s > STONE ? NONE : s )
@@ -413,6 +357,16 @@ bool Spell::isCombat( void ) const
 bool Spell::isEnabled() const
 {
     return ( spells[id].bits & SP_DISABLE ) == 0;
+}
+
+bool Spell::isFire() const
+{
+    return id == FIREBALL || id == FIREBLAST;
+}
+
+bool Spell::isCold() const
+{
+    return id == COLDRAY || id == COLDRING;
 }
 
 bool Spell::isAdventure( void ) const
@@ -825,12 +779,8 @@ bool Spell::isRaceCompatible( int race ) const
     return true;
 }
 
-u32 Spell::CalculateDimensionDoorDistance( u32 current_sp, u32 total_hp )
+u32 Spell::CalculateDimensionDoorDistance()
 {
-    if ( GameStatic::Spell_DD_Distance() && GameStatic::Spell_DD_HP() && GameStatic::Spell_DD_SP() && total_hp ) {
-        const u32 res = ( GameStatic::Spell_DD_Distance() * current_sp * GameStatic::Spell_DD_HP() ) / ( GameStatic::Spell_DD_SP() * total_hp );
-        return res ? ( res < 255 ? res : 255 ) : 1;
-    }
     // original h2 variant
     return 14;
 }

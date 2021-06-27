@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "rand.h"
+#include "settings.h"
 #include "world.h"
 
 bool Maps::Tiles::QuantityIsValid( void ) const
