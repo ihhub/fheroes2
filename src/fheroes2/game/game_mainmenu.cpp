@@ -100,11 +100,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::NEW_HOT_SEAT:
             result = Game::NewHotSeat();
             break;
-#ifdef NETWORK_ENABLE
-        case fheroes2::GameMode::NEW_NETWORK:
-            result = Game::NewNetwork();
-            break;
-#endif
         case fheroes2::GameMode::NEW_BATTLE_ONLY:
             result = Game::NewBattleOnly();
             break;
@@ -119,9 +114,6 @@ void Game::mainGameLoop( bool isFirstGameRun )
             break;
         case fheroes2::GameMode::LOAD_HOT_SEAT:
             result = Game::LoadHotseat();
-            break;
-        case fheroes2::GameMode::LOAD_NETWORK:
-            result = Game::LoadNetwork();
             break;
         case fheroes2::GameMode::SCENARIO_INFO:
             result = Game::ScenarioInfo();

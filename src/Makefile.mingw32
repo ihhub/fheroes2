@@ -9,10 +9,6 @@ CFLAGS := $(CFLAGS) -DWITH_ICONV
 LIBS := $(LIBS) -lfreetype -liconv
 endif
 
-ifndef WITHOUT_NETWORK
-LIBS := $(LIBS) -lwsock32
-endif
-
 ifdef WITH_ICONS
 IDICON := 1099
 CFLAGS := $(CFLAGS) -DID_ICON=$(IDICON)

@@ -269,52 +269,6 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
-#ifdef NETWORK_ENABLE
-fheroes2::GameMode Game::NewNetwork()
-{
-    Settings & conf = Settings::Get();
-    conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
-
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    fheroes2::drawMainMenuScreen();
-    const fheroes2::Point buttonPos = drawButtonPanel();
-
-    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
-    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
-    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNMP, 8, 9 );
-
-    buttonHost.draw();
-    buttonGuest.draw();
-    buttonCancelGame.draw();
-
-    fheroes2::Display::instance().render();
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonHost.area() ) ? buttonHost.drawOnPress() : buttonHost.drawOnRelease();
-        le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
-        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
-
-        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
-            return fheroes2::GameMode::MAIN_MENU;
-
-        // right info
-        if ( le.MousePressRight( buttonHost.area() ) )
-            Dialog::Message( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Font::BIG );
-        if ( le.MousePressRight( buttonGuest.area() ) )
-            Dialog::Message( _( "Guest" ),
-                             _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
-                             Font::BIG );
-        if ( le.MousePressRight( buttonCancelGame.area() ) )
-            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
-    }
-
-    return fheroes2::GameMode::MAIN_MENU;
-}
-#endif
-
 fheroes2::GameMode Game::NewGame()
 {
     Mixer::Pause();
@@ -416,12 +370,10 @@ fheroes2::GameMode Game::NewMulti()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BTNMP, 0, 1 );
-    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
     fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
-    buttonNetwork.disable();
 
     fheroes2::Display::instance().render();
 
@@ -443,17 +395,6 @@ fheroes2::GameMode Game::NewMulti()
                              Font::BIG );
         if ( le.MousePressRight( buttonCancelGame.area() ) )
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
-
-#ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnabled() ) {
-            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
-            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) )
-                return fheroes2::GameMode::NEWNETWORK;
-            if ( le.MousePressRight( buttonNetwork.area() ) )
-                Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
-                                 Font::BIG );
-        }
-#endif
     }
 
     return fheroes2::GameMode::QUIT_GAME;

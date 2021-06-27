@@ -183,7 +183,6 @@
     <ClCompile Include="..\engine\pal.cpp" />
     <ClCompile Include="..\engine\rand.cpp" />
     <ClCompile Include="..\engine\screen.cpp" />
-    <ClCompile Include="..\engine\sdlnet.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\smk_decoder.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
@@ -217,7 +216,6 @@
     <ClInclude Include="..\engine\pathfinding.h" />
     <ClInclude Include="..\engine\rand.h" />
     <ClInclude Include="..\engine\screen.h" />
-    <ClInclude Include="..\engine\sdlnet.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\smk_decoder.h" />
     <ClInclude Include="..\engine\system.h" />

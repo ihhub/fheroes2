@@ -24,9 +24,6 @@
 #include "font.h"
 #include "localevent.h"
 #include "logging.h"
-#ifdef WITH_NET
-#include "sdlnet.h"
-#endif
 
 #if defined( FHEROES2_VITA )
 #include <psp2/kernel/processmgr.h>
@@ -60,9 +57,6 @@ bool SDL::Init( const uint32_t system )
 #ifdef WITH_TTF
     FontTTF::Init();
 #endif
-#ifdef WITH_NET
-    Network::Init();
-#endif
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
@@ -74,9 +68,6 @@ bool SDL::Init( const uint32_t system )
 
 void SDL::Quit()
 {
-#ifdef WITH_NET
-    Network::Quit();
-#endif
 #ifdef WITH_TTF
     FontTTF::Quit();
 #endif

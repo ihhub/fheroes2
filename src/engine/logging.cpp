@@ -42,8 +42,6 @@ namespace Logging
             return "DBG_BATTLE";
         else if ( name & DBG_AI )
             return "DBG_AI";
-        else if ( name & DBG_NETWORK )
-            return "DBG_NETWORK";
         else if ( name & DBG_OTHER )
             return "DBG_OTHER";
         else if ( name & DBG_DEVEL )
@@ -81,5 +79,5 @@ bool IS_DEBUG( const int name, const int level )
 {
     return ( ( DBG_ENGINE & name ) && ( ( DBG_ENGINE & g_debug ) >> 2 ) >= level ) || ( ( DBG_GAME & name ) && ( ( DBG_GAME & g_debug ) >> 4 ) >= level )
            || ( ( DBG_BATTLE & name ) && ( ( DBG_BATTLE & g_debug ) >> 6 ) >= level ) || ( ( DBG_AI & name ) && ( ( DBG_AI & g_debug ) >> 8 ) >= level )
-           || ( ( DBG_NETWORK & name ) && ( ( DBG_NETWORK & g_debug ) >> 10 ) >= level ) || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
+           || ( ( DBG_DEVEL & name ) && ( ( DBG_DEVEL & g_debug ) >> 12 ) >= level );
 }
