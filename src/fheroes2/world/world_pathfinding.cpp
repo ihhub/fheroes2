@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <set>
 
 #include "ground.h"
@@ -78,6 +79,67 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
 {
     const Maps::Tiles & fromTile = GetTiles( index );
     const bool fromWater = fromTile.isWater();
+
+    // check corner water/coast
+    if ( fromWater ) {
+        const int mapWidth = world.w();
+        switch ( direction ) {
+        case Direction::TOP_LEFT: {
+            assert( index >= mapWidth + 1 );
+
+            const bool isLeftTileWater = GetTiles( index - 1 ).isWater();
+            const bool isTopTileWater = GetTiles( index - mapWidth ).isWater();
+            const bool isTopLeftTileWater = GetTiles( index - mapWidth - 1 ).isWater();
+
+            if ( isTopLeftTileWater != isLeftTileWater || isTopLeftTileWater != isTopTileWater ) {
+                return false;
+            }
+
+            break;
+        }
+        case Direction::TOP_RIGHT: {
+            assert( index >= mapWidth && index + 1 < mapWidth * world.h() );
+
+            const bool isRightTileWater = GetTiles( index + 1 ).isWater();
+            const bool isTopTileWater = GetTiles( index - mapWidth ).isWater();
+            const bool isTopRightTileWater = GetTiles( index - mapWidth + 1 ).isWater();
+
+            if ( isTopRightTileWater != isRightTileWater || isTopRightTileWater != isTopTileWater ) {
+                return false;
+            }
+
+            break;
+        }
+        case Direction::BOTTOM_RIGHT: {
+            assert( index + mapWidth + 1 < mapWidth * world.h() );
+
+            const bool isRightTileWater = GetTiles( index + 1 ).isWater();
+            const bool isBottomTileWater = GetTiles( index + mapWidth ).isWater();
+            const bool isBottomRightTileWater = GetTiles( index + mapWidth + 1 ).isWater();
+
+            if ( isBottomRightTileWater != isRightTileWater || isBottomRightTileWater != isBottomTileWater ) {
+                return false;
+            }
+
+            break;
+        }
+        case Direction::BOTTOM_LEFT: {
+            assert( index >= 1 && index + mapWidth - 1 < mapWidth * world.h() );
+
+            const bool isLeftTileWater = GetTiles( index - 1 ).isWater();
+            const bool isBottomTileWater = GetTiles( index + mapWidth ).isWater();
+            const bool isBottomLeftTileWater = GetTiles( index + mapWidth - 1 ).isWater();
+
+            if ( isBottomLeftTileWater != isLeftTileWater || isBottomLeftTileWater != isBottomTileWater ) {
+                return false;
+            }
+
+            break;
+        }
+        default:
+            break;
+        }
+    }
 
     if ( !fromTile.isPassable( direction, fromWater, false, heroColor ) )
         return false;
