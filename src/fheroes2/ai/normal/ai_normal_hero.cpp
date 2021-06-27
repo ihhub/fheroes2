@@ -472,7 +472,6 @@ namespace AI
 
                         const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero );
                         if ( targetIndex != -1 ) {
-                            maxPriority = 0;
                             bestTargetIndex = targetIndex;
                             bestHero = heroInfo.hero;
                             break;
