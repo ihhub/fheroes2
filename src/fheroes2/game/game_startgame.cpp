@@ -186,7 +186,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
             assert( focusedHero != nullptr );
 
             const int heroIndexPos = focusedHero->GetIndex();
-            if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
+            if ( heroIndexPos >= 0 ) {
                 Game::EnvironmentSoundMixer();
                 AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
             }
