@@ -227,6 +227,8 @@ namespace
         case MP2::OBJN_HUTMAGI:
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJN_DERELICTSHIP:
+        case MP2::OBJ_CASTLE:
+        case MP2::OBJN_CASTLE:
             return true;
         default:
             break;
