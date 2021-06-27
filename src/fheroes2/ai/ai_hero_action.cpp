@@ -1602,7 +1602,7 @@ namespace AI
             return hero.isShipMaster();
 
         case MP2::OBJ_BUOY:
-            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD;
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
 
         case MP2::OBJ_MERMAID:
             return !hero.isObjectTypeVisited( obj ) && hero.GetLuck() < Luck::IRISH;
@@ -1622,7 +1622,7 @@ namespace AI
         case MP2::OBJ_ALCHEMYLAB:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
-                    Army enemy( tile );
+                    const Army enemy( tile );
                     return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_SMALL );
                 }
                 else
@@ -1640,7 +1640,7 @@ namespace AI
         case MP2::OBJ_WINDMILL:
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.CaptureObjectIsProtection() ) {
-                    Army enemy( tile );
+                    const Army enemy( tile );
                     return army.isStrongerThan( enemy, ARMY_STRENGTH_ADVANTAGE_MEDUIM );
                 }
                 else
@@ -1685,6 +1685,8 @@ namespace AI
         }
 
         case MP2::OBJ_OBSERVATIONTOWER:
+            return Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() ) > 0;
+
         case MP2::OBJ_OBELISK:
             return !hero.isVisited( tile, Visit::GLOBAL );
 
@@ -1725,9 +1727,23 @@ namespace AI
         // sec skill
         case MP2::OBJ_WITCHSHUT: {
             const Skill::Secondary & skill = tile.QuantitySkill();
+            const int skillType = skill.Skill();
 
-            // check skill
-            return skill.isValid() && !hero.HasMaxSecondarySkill() && !hero.HasSecondarySkill( skill.Skill() );
+            if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
+                return false;
+            }
+
+            if ( hero.GetArmy().AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
+                // For undead army it's pointless to have Leadership skill.
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() && skillType == Skill::Secondary::MYSTICISM ) {
+                // It's useless to have Mysticism with no magic book in hands.
+                return false;
+            }
+
+            return true;
         }
 
         case MP2::OBJ_TREEKNOWLEDGE:
@@ -1746,9 +1762,11 @@ namespace AI
 
         // good morale
         case MP2::OBJ_OASIS:
-        case MP2::OBJ_TEMPLE:
         case MP2::OBJ_WATERINGHOLE:
             return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD;
+
+        case MP2::OBJ_TEMPLE:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
 
         case MP2::OBJ_MAGICWELL:
             return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
