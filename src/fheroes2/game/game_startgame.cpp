@@ -185,7 +185,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 
         switch ( Interface::GetFocusType() ) {
         case GameFocus::HEROES: {
-            Heroes * focusedHero = Interface::GetFocusHeroes();
+            const Heroes * focusedHero = Interface::GetFocusHeroes();
             assert( focusedHero != nullptr );
 
             const int heroIndexPos = focusedHero->GetIndex();
@@ -196,7 +196,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
         } break;
 
         case GameFocus::CASTLE: {
-            Castle * focusedCastle = Interface::GetFocusCastle();
+            const Castle * focusedCastle = Interface::GetFocusCastle();
             assert( focusedCastle != nullptr );
 
             Game::EnvironmentSoundMixer();
