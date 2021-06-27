@@ -214,14 +214,16 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Settings & conf = Settings::Get();
-    Kingdom & myKingdom = hero.GetKingdom();
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
-    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
     Interface::StatusWindow::ResetTimer();
+
+    const Settings & conf = Settings::Get();
+    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
     Interface::Basic & I = Interface::Basic::Get();
     const Interface::GameArea & gameArea = I.GetGameArea();
-    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
+    const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
+    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
     if ( it != myHeroes.end() ) {
         int result = Dialog::ZERO;
@@ -256,7 +258,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+
                 updateFocus = true;
+
                 result = Dialog::CANCEL;
                 break;
 
@@ -268,14 +272,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            Interface::Basic::Get().SetFocus( *it );
+            I.SetFocus( *it );
         }
         else {
-            Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+            I.ResetFocus( GameFocus::HEROES );
         }
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    I.RedrawFocus();
 }
 
 void ShowNewWeekDialog( void )
