@@ -2315,11 +2315,29 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     tile.SetObject( MP2::OBJ_ARTIFACT );
-    tile.objectIndex = art.IndexSprite();
+    uint32_t uidArtifact = 0;
+    
+    if ( MP2::GetICNObject( tile.objectTileset ) == ICN::OBJNARTI ) {
+        uidArtifact = tile.uniq;
+    }
+    else {
+        for ( const TilesAddon & addon : tile.addons_level1 ) {
+            if ( MP2::GetICNObject( addon.object ) == ICN::OBJNARTI ) {
+                uidArtifact = addon.uniq;
+                break;
+            }
+        }
+    }
+
+    if ( uidArtifact == 0 ) {
+        uidArtifact = tile.uniq;
+    }
+
+    updateTileById( tile, uidArtifact, art.IndexSprite() );
 
     // replace artifact shadow
     if ( Maps::isValidDirection( tile._index, Direction::LEFT ) ) {
-        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), tile.uniq, tile.objectIndex - 1 );
+        updateTileById( world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::LEFT ) ), uidArtifact, art.IndexSprite() - 1 );
     }
 }
 
