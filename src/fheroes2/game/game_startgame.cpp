@@ -634,8 +634,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     LocalEvent & le = LocalEvent::Get();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-    const KingdomCastles & myCastles = myKingdom.GetCastles();
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
 
     GameOver::Result & gameResult = GameOver::Result::Get();
 
@@ -684,7 +682,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     res = gameResult.LocalCheckGameOver();
 
     // warning lost all town
-    if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
+    if ( res == fheroes2::GameMode::CANCEL && myKingdom.GetCastles().empty() ) {
         res = ShowWarningLostTownsDialog();
     }
 
@@ -1032,12 +1030,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     if ( fheroes2::GameMode::END_TURN == res ) {
-        // warning lost all town
-        if ( myHeroes.size() && myCastles.empty() && Game::GetLostTownDays() < myKingdom.GetLostTownDays() ) {
-            Game::DialogPlayers( conf.CurrentColor(),
-                                 _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
-        }
-
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
             RedrawFocus();
