@@ -1,8 +1,8 @@
-# For file(GLOB_RECOURSE CONFIGURE_DEPENDS ...)
-cmake_minimum_required(VERSION 3.12)
+# For descent FetchContent()
+cmake_minimum_required(VERSION 3.14)
 
 project(fheroes2 VERSION 0.9.4 LANGUAGES C CXX)
-set (CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -16,6 +16,7 @@ option(ENABLE_IMAGE   "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_UNICODE "Enable Unicode support (requires SDL/SDL2 TTF and iconv libraries)" ON)
 option(ENABLE_TOOLS   "Enable additional tools" OFF)
 option(ENABLE_RELEASE "Release mode (disables debug options)" ON)
+option(GET_HOMM2_DEMO "Fetch and install HoMM II demo data" OFF)
 
 option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of bundled version" OFF)
 
@@ -39,12 +40,33 @@ if(ENABLE_UNICODE)
 	find_package(Iconv REQUIRED)
 endif(ENABLE_UNICODE)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 add_subdirectory(src)
 
 install(
 	FILES doc/README.txt LICENSE changelog.txt
 	DESTINATION ${CMAKE_INSTALL_DOCDIR}
 	)
+
+if(GET_HOMM2_DEMO)
+	include(FetchContent)
+	set(FETCHCONTENT_QUIET OFF)
+	FetchContent_Declare(
+		demodata
+		URL https://archive.org/download/HeroesofMightandMagicIITheSuccessionWars_1020/h2demo.zip
+		URL_HASH SHA256=12048c8b03875c81e69534a3813aaf6340975e77b762dc1b79a4ff5514240e3c
+		)
+	FetchContent_MakeAvailable(demodata)
+	file(COPY ${demodata_SOURCE_DIR}/DATA/ DESTINATION data PATTERN *.*)
+	file(COPY ${demodata_SOURCE_DIR}/MAPS/ DESTINATION maps PATTERN *.*)
+
+	install(DIRECTORY ${demodata_SOURCE_DIR}/DATA/ DESTINATION
+		${CONFIGURE_FHEROES2_DATA}/data FILES_MATCHING PATTERN *.*)
+	install(DIRECTORY ${demodata_SOURCE_DIR}/MAPS/ DESTINATION
+		${CONFIGURE_FHEROES2_DATA}/maps FILES_MATCHING PATTERN *.*)
+endif(GET_HOMM2_DEMO)
+
 if(WIN32)
 	install(
 		FILES script/demo/demo_windows.bat script/demo/demo_windows.ps1

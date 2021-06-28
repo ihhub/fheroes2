@@ -76,6 +76,12 @@ public:
     void reEvaluateIfNeeded( int start, int color, double armyStrength, uint8_t skill );
     void reEvaluateIfNeeded( const Heroes & hero );
     int getFogDiscoveryTile( const Heroes & hero );
+
+    // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
+    int getNeareastTileToMove( const Heroes & hero );
+
+    bool isHeroPossiblyBlockingWay( const Heroes & hero );
+
     std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
 
     // Used for non-hero armies, like castles or monsters
