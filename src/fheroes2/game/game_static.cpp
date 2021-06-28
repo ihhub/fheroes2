@@ -20,6 +20,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
+
 #include "game.h"
 #include "game_static.h"
 #include "mp2.h"
@@ -175,7 +177,7 @@ namespace GameStatic
     u8 whirlpool_lost_percent = 50;
 
     /* town, castle, heroes, artifact_telescope, object_observation_tower, object_magi_eyes */
-    u8 overview_distance[] = {4, 5, 4, 1, 20, 9};
+    std::array<uint8_t, 6> overview_distance = { 4, 5, 4, 1, 20, 9 };
 
     u8 gameover_lost_days = 7;
 
@@ -275,7 +277,7 @@ u32 GameStatic::GetLostOnWhirlpoolPercent( void )
 
 u32 GameStatic::GetOverViewDistance( u32 d )
 {
-    return d >= ARRAY_COUNT( overview_distance ) ? 0 : overview_distance[d];
+    return d >= overview_distance.size() ? 0 : overview_distance[d];
 }
 
 u32 GameStatic::GetGameOverLostDays( void )
