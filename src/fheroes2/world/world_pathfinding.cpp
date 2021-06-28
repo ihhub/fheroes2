@@ -24,6 +24,7 @@
 
 #include "ground.h"
 #include "logging.h"
+#include "rand.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
@@ -449,6 +450,48 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         }
     }
     return -1;
+}
+
+int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
+{
+    // paths have to be pre-calculated to find a spot where we're able to move
+    reEvaluateIfNeeded( hero );
+    const int start = hero.GetIndex();
+
+    Directions directions = Direction::All();
+    // We have to shuffle directions to avoid cases when heroes repeat the same steps again and again.
+    Rand::Shuffle( directions );
+
+    for ( size_t i = 0; i < directions.size(); ++i ) {
+        if ( Maps::isValidDirection( start, directions[i] ) ) {
+            const int newIndex = start + _mapOffset[i];
+            if ( newIndex == start )
+                continue;
+
+            const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
+            if ( _cache[newIndex]._cost && monsters.empty() ) {
+                return newIndex;
+            }
+        }
+    }
+    return -1;
+}
+
+bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
+{
+    // paths have to be pre-calculated to find a spot where we're able to move
+    reEvaluateIfNeeded( hero );
+    const int start = hero.GetIndex();
+
+    const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
+    const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
+    if ( leftSideUnreachable && rightSideUnreachable ) {
+        return true;
+    }
+
+    const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
+    const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
+    return topSideUnreachable && bottomSideUnreachable;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )
