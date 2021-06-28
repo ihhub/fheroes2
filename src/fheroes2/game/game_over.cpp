@@ -304,6 +304,11 @@ void GameOver::Result::Reset( void )
     continueAfterVictory = false;
 }
 
+void GameOver::Result::ResetResult()
+{
+    result = GameOver::COND_NONE;
+}
+
 int GameOver::Result::GetResult( void ) const
 {
     return result;
@@ -358,10 +363,8 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                         if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
+                            // Game::HighScores() calls ResetResult()
                             Game::HighScores();
-
-                            // Reset the game result after updating the high score table
-                            result = GameOver::COND_NONE;
 
                             Interface::Basic & I = Interface::Basic::Get();
 
