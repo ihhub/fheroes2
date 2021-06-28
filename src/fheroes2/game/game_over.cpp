@@ -312,24 +312,23 @@ int GameOver::Result::GetResult( void ) const
 fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
-    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
+    const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
     const int humanColors = Players::HumanColors();
 
     int activeHumanColors = 0;
     int activeColors = 0;
 
-    const Colors colors2( colors );
-    for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
-        if ( !world.GetKingdom( *it ).isPlay() ) {
-            if ( !isSinglePlayer || ( *it & humanColors ) == 0 ) {
-                Game::DialogPlayers( *it, _( "%{color} player has been vanquished!" ) );
+    for ( const int color : Colors( colors ) ) {
+        if ( !world.GetKingdom( color ).isPlay() ) {
+            if ( !isSinglePlayer || ( color & humanColors ) == 0 ) {
+                Game::DialogPlayers( color, _( "%{color} player has been vanquished!" ) );
             }
-            colors &= ( ~*it );
+            colors &= ( ~color );
         }
         else {
             ++activeColors;
-            if ( *it & humanColors ) {
+            if ( color & humanColors ) {
                 ++activeHumanColors;
             }
         }
