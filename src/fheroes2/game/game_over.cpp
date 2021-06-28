@@ -360,7 +360,14 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                             continueAfterVictory = true;
 
                             Game::HighScores();
-                            Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
+
+                            // Reset the game result after updating the high score table
+                            result = GameOver::COND_NONE;
+
+                            Interface::Basic & I = Interface::Basic::Get();
+
+                            I.ResetFocus( GameFocus::HEROES );
+                            I.SetRedraw( Interface::REDRAW_ALL );
 
                             res = fheroes2::GameMode::CANCEL;
                         }
@@ -368,9 +375,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
             }
             else {
-                // The actual result of the game should remain intact if the player decided to continue the game after victory
-                int lossResult = GameOver::COND_NONE;
-
                 if ( !continueAfterVictory ) {
                     // If the player's kingdom has been vanquished, he loses regardless of other conditions
                     if ( !myKingdom.isPlay() || lostAllTownsDeadline ) {
@@ -379,18 +383,16 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     else {
                         result = world.CheckKingdomLoss( myKingdom );
                     }
-
-                    lossResult = result;
                 }
                 // If the player decided to continue the game after victory, just check that his kingdom is not vanquished
                 else if ( !myKingdom.isPlay() || lostAllTownsDeadline ) {
-                    lossResult = GameOver::LOSS_ALL;
+                    result = GameOver::LOSS_ALL;
                 }
 
-                if ( lossResult != GameOver::COND_NONE ) {
+                if ( result != GameOver::COND_NONE ) {
                     // If lostAllTownsDeadline is true then the message about the loss has already been shown in ShowWarningLostTownsDialog()
                     if ( !lostAllTownsDeadline ) {
-                        GameOver::DialogLoss( lossResult );
+                        GameOver::DialogLoss( result );
                     }
 
                     AGG::ResetMixer();
