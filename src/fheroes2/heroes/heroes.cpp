@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <numeric>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -89,7 +90,8 @@ const char * Heroes::GetName( int id )
     return names[id];
 }
 
-int ObjectVisitedModifiersResult( int /*type*/, const u8 * objs, u32 size, const Heroes & hero, std::string * strs )
+template <std::size_t size>
+int ObjectVisitedModifiersResult( int /*type*/, const uint8_t ( &objs )[size], const Heroes & hero, std::string * strs )
 {
     int result = 0;
 
@@ -230,12 +232,12 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         Troop troops[5];
 
         // set monster id
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetMonster( st.get() + 1 );
+        for ( Troop & troop : troops )
+            troop.SetMonster( st.get() + 1 );
 
         // set count
-        for ( u32 ii = 0; ii < ARRAY_COUNT( troops ); ++ii )
-            troops[ii].SetCount( st.getLE16() );
+        for ( Troop & troop : troops )
+            troop.SetCount( st.getLE16() );
 
         army.Assign( troops, std::end( troops ) );
     }
@@ -616,7 +618,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_BUOY, MP2::OBJ_OASIS, MP2::OBJ_WATERINGHOLE, MP2::OBJ_TEMPLE, MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
-    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, ARRAY_COUNT( objs ), *this, strs );
+    result += ObjectVisitedModifiersResult( MDF_MORALE, objs, *this, strs );
 
     // result
     if ( result < Morale::AWFUL )
@@ -652,7 +654,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 
     // object visited
     const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
-    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, ARRAY_COUNT( objs ), *this, strs );
+    result += ObjectVisitedModifiersResult( MDF_LUCK, objs, *this, strs );
 
     if ( result < Luck::AWFUL )
         return Luck::CURSED;
