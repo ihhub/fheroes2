@@ -74,7 +74,7 @@ namespace GameOver
 
         int colors;
         int result;
-        bool continue_game;
+        bool continueAfterVictory;
     };
 
     StreamBase & operator<<( StreamBase &, const Result & );

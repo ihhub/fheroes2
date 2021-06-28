@@ -294,13 +294,14 @@ GameOver::Result & GameOver::Result::Get( void )
 GameOver::Result::Result()
     : colors( 0 )
     , result( 0 )
-    , continue_game( false )
+    , continueAfterVictory( false )
 {}
 
 void GameOver::Result::Reset( void )
 {
     colors = Game::GetKingdomColors();
     result = GameOver::COND_NONE;
+    continueAfterVictory = false;
 }
 
 void GameOver::Result::SetResult( int r )
@@ -315,15 +316,14 @@ int GameOver::Result::GetResult( void ) const
 
 fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 {
-    if ( continue_game )
-        return fheroes2::GameMode::CANCEL;
-
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
     const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
     const int humanColors = Players::HumanColors();
+
     int activeHumanColors = 0;
     int activeColors = 0;
+
     const Colors colors2( colors );
     for ( Colors::const_iterator it = colors2.begin(); it != colors2.end(); ++it ) {
         if ( !world.GetKingdom( *it ).isPlay() ) {
@@ -347,7 +347,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         const Settings & conf = Settings::Get();
 
         if ( myKingdom.isControlHuman() ) {
-            if ( GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
+            if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
 
                 if ( conf.isCampaignGameType() ) {
@@ -357,24 +357,45 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     AGG::ResetMixer();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
                     res = fheroes2::GameMode::HIGHSCORES;
+
+                    if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
+                        if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
+                            continueAfterVictory = true;
+
+                            Game::HighScores();
+                            Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
+
+                            res = fheroes2::GameMode::CANCEL;
+                        }
+                    }
                 }
             }
-            else if ( GameOver::COND_NONE != ( result = world.CheckKingdomLoss( myKingdom ) ) ) {
-                GameOver::DialogLoss( result );
-                AGG::ResetMixer();
-                Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
-                res = fheroes2::GameMode::MAIN_MENU;
-            }
-        }
+            else {
+                // The actual result of the game should remain intact if the player decided to continue the game after victory
+                int lossResult = GameOver::COND_NONE;
 
-        // set: continue after victory
-        if ( fheroes2::GameMode::CANCEL != res && conf.ExtGameContinueAfterVictory() && ( !myKingdom.GetCastles().empty() || !myKingdom.GetHeroes().empty() ) ) {
-            if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                continue_game = true;
-                if ( res == fheroes2::GameMode::HIGHSCORES )
-                    Game::HighScores();
-                res = fheroes2::GameMode::CANCEL;
-                Interface::Basic::Get().SetRedraw( Interface::REDRAW_ALL );
+                if ( !continueAfterVictory ) {
+                    // If the player's kingdom has been vanquished, he loses regardless of other conditions
+                    if ( !myKingdom.isPlay() ) {
+                        result = GameOver::LOSS_ALL;
+                    }
+                    else {
+                        result = world.CheckKingdomLoss( myKingdom );
+                    }
+
+                    lossResult = result;
+                }
+                // If the player decided to continue the game after victory, just check that his kingdom is not vanquished
+                else if ( !myKingdom.isPlay() ) {
+                    lossResult = GameOver::LOSS_ALL;
+                }
+
+                if ( lossResult != GameOver::COND_NONE ) {
+                    GameOver::DialogLoss( lossResult );
+                    AGG::ResetMixer();
+                    Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+                    res = fheroes2::GameMode::MAIN_MENU;
+                }
             }
         }
     }
@@ -389,10 +410,10 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
 StreamBase & GameOver::operator<<( StreamBase & msg, const Result & res )
 {
-    return msg << res.colors << res.result << res.continue_game;
+    return msg << res.colors << res.result << res.continueAfterVictory;
 }
 
 StreamBase & GameOver::operator>>( StreamBase & msg, Result & res )
 {
-    return msg >> res.colors >> res.result >> res.continue_game;
+    return msg >> res.colors >> res.result >> res.continueAfterVictory;
 }
