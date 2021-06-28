@@ -62,7 +62,6 @@ namespace GameOver
         static Result & Get( void );
 
         void Reset( void );
-        void SetResult( int );
         int GetResult( void ) const;
         fheroes2::GameMode LocalCheckGameOver();
 
