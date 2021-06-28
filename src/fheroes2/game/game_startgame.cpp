@@ -1020,7 +1020,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             gameArea.SetRedraw();
         }
 
-        // check that the kingdom is still in the game (has at least one hero or castle)
+        // check that the kingdom is not vanquished yet (has at least one hero or castle)
         if ( res == fheroes2::GameMode::CANCEL && !myKingdom.isPlay() ) {
             res = fheroes2::GameMode::END_TURN;
         }
