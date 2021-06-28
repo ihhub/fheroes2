@@ -238,7 +238,6 @@ fheroes2::GameMode Game::HighScores()
         buttonCampain.draw();
         buttonExit.draw();
         display.render();
-        gameResult.Reset();
     }
 
     LocalEvent & le = LocalEvent::Get();
