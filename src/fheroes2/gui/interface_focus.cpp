@@ -56,7 +56,6 @@ void Interface::Basic::SetFocus( Heroes * hero )
 
         const int heroIndexPos = hero->GetIndex();
         if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
-            AGG::ResetMixer();
             Game::EnvironmentSoundMixer();
             AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
@@ -84,7 +83,6 @@ void Interface::Basic::SetFocus( Castle * castle )
         statusWindow.SetState( StatusType::STATUS_FUNDS );
 
         if ( Game::UpdateSoundsOnFocusUpdate() ) {
-            AGG::ResetMixer();
             Game::EnvironmentSoundMixer();
             AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
         }
