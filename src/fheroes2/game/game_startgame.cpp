@@ -578,75 +578,84 @@ fheroes2::GameMode Interface::Basic::StartGame()
         if ( !skip_turns )
             world.NewDay();
 
-        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it )
+        for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
 
-                if ( !kingdom.isPlay() || ( skip_turns && !player.isColor( conf.CurrentColor() ) ) )
+                if ( skip_turns && !player.isColor( conf.CurrentColor() ) ) {
                     continue;
-
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           std::endl
-                               << world.DateString() << ", "
-                               << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
-
-                radar.SetHide( true );
-                radar.SetRedraw();
-                if ( player.GetControl() == CONTROL_HUMAN ) {
-                    conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
-                }
-                else {
-                    conf.SetCurrentColor( player.GetColor() );
-                    world.ClearFog( player.GetColor() );
-                    kingdom.ActionBeforeTurn();
                 }
 
-                switch ( kingdom.GetControl() ) {
-                case CONTROL_HUMAN:
-                    if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
-                        iconsPanel.HideIcons();
-                        statusWindow.Reset();
-                        SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
-                        Redraw();
-                        display.render();
-                        Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
+                if ( kingdom.isPlay() ) {
+                    DEBUG_LOG( DBG_GAME, DBG_INFO,
+                               std::endl
+                                   << world.DateString() << ", "
+                                   << "color: " << Color::String( player.GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+
+                    radar.SetHide( true );
+                    radar.SetRedraw();
+                    if ( player.GetControl() == CONTROL_HUMAN ) {
+                        conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
                     }
-                    conf.SetCurrentColor( player.GetColor() );
-                    world.ClearFog( player.GetColor() );
-                    kingdom.ActionBeforeTurn();
-                    iconsPanel.SetRedraw();
-                    iconsPanel.ShowIcons();
-                    res = HumanTurn( skip_turns );
-                    if ( skip_turns )
-                        skip_turns = false;
-                    break;
-
-                // CONTROL_AI turn
-                default:
-                    if ( res == fheroes2::GameMode::END_TURN ) {
-                        statusWindow.Reset();
-                        statusWindow.SetState( StatusType::STATUS_AITURN );
-
-                        Cursor::Get().SetThemes( Cursor::WAIT );
-                        Redraw();
-                        display.render();
-
-                        AI::Get().KingdomTurn( kingdom );
+                    else {
+                        conf.SetCurrentColor( player.GetColor() );
+                        world.ClearFog( player.GetColor() );
+                        kingdom.ActionBeforeTurn();
                     }
-                    break;
+
+                    switch ( kingdom.GetControl() ) {
+                    case CONTROL_HUMAN:
+                        if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+                            iconsPanel.HideIcons();
+                            statusWindow.Reset();
+                            SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
+                            Redraw();
+                            display.render();
+                            Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
+                        }
+                        conf.SetCurrentColor( player.GetColor() );
+                        world.ClearFog( player.GetColor() );
+                        kingdom.ActionBeforeTurn();
+                        iconsPanel.SetRedraw();
+                        iconsPanel.ShowIcons();
+                        res = HumanTurn( skip_turns );
+                        if ( skip_turns )
+                            skip_turns = false;
+                        break;
+
+                    // CONTROL_AI turn
+                    default:
+                        if ( res == fheroes2::GameMode::END_TURN ) {
+                            statusWindow.Reset();
+                            statusWindow.SetState( StatusType::STATUS_AITURN );
+
+                            Cursor::Get().SetThemes( Cursor::WAIT );
+                            Redraw();
+                            display.render();
+
+                            AI::Get().KingdomTurn( kingdom );
+                        }
+                        break;
+                    }
+
+                    if ( res != fheroes2::GameMode::END_TURN ) {
+                        break;
+                    }
                 }
 
-                if ( res != fheroes2::GameMode::END_TURN )
-                    break;
-
+                // perform this check even if the current kingdom is vanquished, because we should
+                // properly handle the situation when all the kingdoms in the game are vanquished
                 res = gameResult.LocalCheckGameOver();
 
-                if ( fheroes2::GameMode::CANCEL != res )
+                if ( fheroes2::GameMode::CANCEL != res ) {
                     break;
-                else
+                }
+                else {
                     res = fheroes2::GameMode::END_TURN;
+                }
             }
+        }
 
         fheroes2::delayforMs( 10 );
     }
