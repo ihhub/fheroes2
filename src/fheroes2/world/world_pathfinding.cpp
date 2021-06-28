@@ -88,12 +88,8 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
         switch ( direction ) {
         case Direction::TOP_LEFT: {
             assert( index >= mapWidth + 1 );
-
-            const bool isLeftTileWater = GetTiles( index - 1 ).isWater();
-            const bool isTopTileWater = GetTiles( index - mapWidth ).isWater();
-            const bool isTopLeftTileWater = GetTiles( index - mapWidth - 1 ).isWater();
-
-            if ( isTopLeftTileWater != isLeftTileWater || isTopLeftTileWater != isTopTileWater ) {
+            if ( GetTiles( index - mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
             }
 
@@ -101,12 +97,8 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
         }
         case Direction::TOP_RIGHT: {
             assert( index >= mapWidth && index + 1 < mapWidth * world.h() );
-
-            const bool isRightTileWater = GetTiles( index + 1 ).isWater();
-            const bool isTopTileWater = GetTiles( index - mapWidth ).isWater();
-            const bool isTopRightTileWater = GetTiles( index - mapWidth + 1 ).isWater();
-
-            if ( isTopRightTileWater != isRightTileWater || isTopRightTileWater != isTopTileWater ) {
+            if ( GetTiles( index - mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
             }
 
@@ -114,12 +106,8 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
         }
         case Direction::BOTTOM_RIGHT: {
             assert( index + mapWidth + 1 < mapWidth * world.h() );
-
-            const bool isRightTileWater = GetTiles( index + 1 ).isWater();
-            const bool isBottomTileWater = GetTiles( index + mapWidth ).isWater();
-            const bool isBottomRightTileWater = GetTiles( index + mapWidth + 1 ).isWater();
-
-            if ( isBottomRightTileWater != isRightTileWater || isBottomRightTileWater != isBottomTileWater ) {
+            if ( GetTiles( index + mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
             }
 
@@ -127,12 +115,8 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
         }
         case Direction::BOTTOM_LEFT: {
             assert( index >= 1 && index + mapWidth - 1 < mapWidth * world.h() );
-
-            const bool isLeftTileWater = GetTiles( index - 1 ).isWater();
-            const bool isBottomTileWater = GetTiles( index + mapWidth ).isWater();
-            const bool isBottomLeftTileWater = GetTiles( index + mapWidth - 1 ).isWater();
-
-            if ( isBottomLeftTileWater != isLeftTileWater || isBottomLeftTileWater != isBottomTileWater ) {
+            if ( GetTiles( index + mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
             }
 
