@@ -139,6 +139,8 @@ namespace AI
     void AIToCoast( Heroes & hero, s32 dst_index );
     void AIMeeting( Heroes & hero1, Heroes & hero2 );
     void AIWhirlpoolTroopLooseEffect( Heroes & hero );
+    void AIToJail( const Heroes & hero, const int32_t tileIndex );
+    void AIToHutMagi( Heroes & hero, const uint32_t objectId, const int32_t tileIndex );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -252,7 +254,8 @@ namespace AI
         const int object = ( dst_index == hero.GetIndex() ? tile.GetObject( false ) : tile.GetObject() );
         bool isAction = true;
 
-        if ( MP2::isActionObject( object, hero.isShipMaster() ) )
+        const bool isActionObject = MP2::isActionObject( object, hero.isShipMaster() );
+        if ( isActionObject )
             hero.SetModes( Heroes::ACTION );
 
         switch ( object ) {
@@ -479,7 +482,22 @@ namespace AI
             AIToTravellersTent( hero, dst_index );
             break;
 
+        case MP2::OBJ_JAIL:
+            AIToJail( hero, dst_index );
+            break;
+        case MP2::OBJ_HUTMAGI:
+            AIToHutMagi( hero, object, dst_index );
+            break;
+
+        case MP2::OBJ_ORACLE:
+        case MP2::OBJ_TRADINGPOST:
+        case MP2::OBJ_EYEMAGI:
+        case MP2::OBJ_SPHINX:
+        case MP2::OBJ_SIRENS:
+            // AI has no advantage or knowledge to use this object.
+            break;
         default:
+            assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
             isAction = false;
             break;
         }
@@ -1851,7 +1869,7 @@ namespace AI
             }
             break;
 
-            // case MP2::OBJ_PYRAMID:
+            // TODO: add evaluation for MP2::OBJ_PYRAMID.
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
@@ -1889,6 +1907,11 @@ namespace AI
         case MP2::OBJ_STONELITHS:
             // check later
             return true;
+
+        case MP2::OBJ_JAIL:
+            return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
+        case MP2::OBJ_HUTMAGI:
+            return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
 
         default:
             break;
@@ -2019,6 +2042,35 @@ namespace AI
             }
             else {
                 troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            }
+        }
+    }
+
+    void AIToJail( const Heroes & hero, const int32_t tileIndex )
+    {
+        const Kingdom & kingdom = hero.GetKingdom();
+
+        if ( kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes() ) {
+            Maps::Tiles & tile = world.GetTiles( tileIndex );
+
+            tile.RemoveObjectSprite();
+            tile.setAsEmpty();
+
+            Heroes * prisoner = world.FromJailHeroes( tileIndex );
+
+            if ( prisoner && prisoner->Recruit( hero.GetColor(), Maps::GetPoint( tileIndex ) ) ) {
+                prisoner->ResetModes( Heroes::JAIL );
+            }
+        }
+    }
+
+    void AIToHutMagi( Heroes & hero, const uint32_t objectId, const int32_t tileIndex )
+    {
+        if ( !hero.isObjectTypeVisited( objectId, Visit::GLOBAL ) ) {
+            hero.SetVisited( tileIndex, Visit::GLOBAL );
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+            for ( const int32_t index : eyeMagiIndexes ) {
+                Maps::ClearFog( index, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
             }
         }
     }
