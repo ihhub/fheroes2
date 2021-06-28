@@ -263,6 +263,11 @@ namespace AI
             return 0;
         }
         else if ( objectID == MP2::OBJ_TEMPLE ) {
+            if ( hero.GetArmy().AllTroopsAreUndead() ) {
+                // All troops are undead, no use of Morale.
+                return 0;
+            }
+
             const int moral = hero.GetMorale();
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
