@@ -567,7 +567,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
     Redraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_BORDER );
     iconsPanel.HideIcons();
 
-    bool skip_turns = conf.LoadedGameVersion();
+    bool loadedFromSave = conf.LoadedGameVersion();
+    bool skipTurns = loadedFromSave;
+
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
@@ -575,17 +577,21 @@ fheroes2::GameMode Interface::Basic::StartGame()
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == fheroes2::GameMode::END_TURN ) {
-        if ( !skip_turns )
+        if ( !loadedFromSave ) {
             world.NewDay();
+        }
 
         for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
             if ( *it ) {
                 const Player & player = ( **it );
                 Kingdom & kingdom = world.GetKingdom( player.GetColor() );
 
-                if ( skip_turns && !player.isColor( conf.CurrentColor() ) ) {
+                if ( skipTurns && !player.isColor( conf.CurrentColor() ) ) {
                     continue;
                 }
+
+                // player with conf.CurrentColor() was found, there is no need for further skips
+                skipTurns = false;
 
                 if ( kingdom.isPlay() ) {
                     DEBUG_LOG( DBG_GAME, DBG_INFO,
@@ -619,9 +625,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         kingdom.ActionBeforeTurn();
                         iconsPanel.SetRedraw();
                         iconsPanel.ShowIcons();
-                        res = HumanTurn( skip_turns );
-                        if ( skip_turns )
-                            skip_turns = false;
+                        res = HumanTurn( loadedFromSave );
                         break;
 
                     // CONTROL_AI turn
@@ -643,6 +647,24 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         break;
                     }
                 }
+                // game was loaded from the savefile, but current player is vanquished
+                else if ( loadedFromSave ) {
+                    radar.SetHide( true );
+                    radar.SetRedraw();
+
+                    iconsPanel.HideIcons();
+                    iconsPanel.SetRedraw();
+
+                    statusWindow.Reset();
+                    statusWindow.SetRedraw();
+
+                    Redraw();
+                    display.render();
+                }
+
+                // reset this after potential HumanTurn() call, but regardless of whether current kingdom
+                // is vanquished - next alive kingdom should start a new day from scratch
+                loadedFromSave = false;
 
                 // perform this check even if the current kingdom is already vanquished, because it may
                 // be vanquished just today after world.NewDay() call and we should properly handle this
