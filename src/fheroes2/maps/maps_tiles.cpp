@@ -229,6 +229,35 @@ namespace
         case MP2::OBJN_DERELICTSHIP:
         case MP2::OBJ_CASTLE:
         case MP2::OBJN_CASTLE:
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJN_SHIPWRECK:
+        case MP2::OBJ_OBSERVATIONTOWER:
+        case MP2::OBJN_OBSERVATIONTOWER:
+        case MP2::OBJ_TREEHOUSE:
+        case MP2::OBJN_TREEHOUSE:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isShortObject( const int objectId )
+    {
+        // Some objects don't allow diagonal moves from top to bottom as they're considered as very tall.
+        switch ( objectId ) {
+        case MP2::OBJ_HALFLINGHOLE:
+        case MP2::OBJN_HALFLINGHOLE:
+        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_WATERLAKE:
+        case MP2::OBJ_TARPIT:
+        case MP2::OBJ_MERCENARYCAMP:
+        case MP2::OBJN_MERCENARYCAMP:
+        case MP2::OBJ_STANDINGSTONES:
+        case MP2::OBJ_SHRINE1:
+        case MP2::OBJ_SHRINE2:
+        case MP2::OBJ_SHRINE3:
             return true;
         default:
             break;
@@ -243,7 +272,6 @@ Maps::TilesAddon::TilesAddon()
     , level( 0 )
     , object( 0 )
     , index( 0 )
-    , tmp( 0 )
 {}
 
 Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
@@ -251,7 +279,6 @@ Maps::TilesAddon::TilesAddon( int lv, u32 gid, int obj, u32 ii )
     , level( lv )
     , object( obj )
     , index( ii )
-    , tmp( 0 )
 {}
 
 std::string Maps::TilesAddon::String( int lvl ) const
@@ -261,8 +288,7 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "uniq            : " << uniq << std::endl
        << "tileset         : " << static_cast<int>( object ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl
-       << "tmp             : " << static_cast<int>( tmp ) << std::endl;
+       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl;
     return os.str();
 }
 
@@ -271,7 +297,6 @@ Maps::TilesAddon::TilesAddon( const Maps::TilesAddon & ta )
     , level( ta.level )
     , object( ta.object )
     , index( ta.index )
-    , tmp( ta.tmp )
 {}
 
 bool Maps::TilesAddon::isICN( int icn ) const
@@ -838,33 +863,58 @@ void Maps::Tiles::updatePassability()
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
 
-            // TODO: run through all objects to get UID, not only the top one.
-            if ( isWater() != bottomTile.isWater() || bottomTile.uniq == uniq ) {
-                // If object is bordering water or it's the same object it must be marked as not passable.
+            // If a bottom tile has the same object ID then this tile is inaccessible.
+            std::vector<uint32_t> tileUIDs;
+            if ( objectTileset > 0 && objectIndex < 255 && uniq != 0 && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
+                tileUIDs.emplace_back( uniq );
+            }
+
+            for ( const TilesAddon & addon : addons_level1 ) {
+                if ( addon.uniq != 0 && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+                    tileUIDs.emplace_back( addon.uniq );
+                }
+            }
+
+            for ( const uint32_t objectId : tileUIDs ) {
+                if ( bottomTile.doesObjectExist( objectId ) ) {
+                    tilePassable = 0;
+                    return;
+                }
+            }
+
+            if ( isWater() != bottomTile.isWater() ) {
+                // If object is bordering water then it must be marked as not passable.
                 tilePassable = 0;
                 return;
             }
 
-            if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0 ) {
+            const bool isBottomTileObject = ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0;
+
+            if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && isBottomTileObject ) {
                 const int bottomTileObjId = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
-                if ( isBottomTileActionObject ) {
+                if ( isBottomTileActionObject && isShortObject( bottomTileObjId ) ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
                         tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                     }
                 }
                 else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isActionObject( bottomTile.mp2_object + 128 )
-                          && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
+                          && isShortObject( bottomTile.mp2_object + 128 ) && ( bottomTile.getOriginalPassability() & Direction::TOP ) == 0 ) {
                     // TODO: add extra logic to handle Stables.
+                    tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                }
+                else if ( isShortObject( bottomTile.mp2_object ) ) {
                     tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
                 }
                 else {
                     tilePassable = 0;
+                    return;
                 }
             }
         }
         else {
             tilePassable = 0;
+            return;
         }
     }
 
@@ -885,6 +935,21 @@ void Maps::Tiles::updatePassability()
             tilePassable &= ~Direction::TOP_RIGHT;
         }
     }
+}
+
+bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
+{
+    if ( uniq == uid && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
+        return true;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( addon.uniq == uid && ( ( addon.level >> 1 ) & 1 ) == 0 ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 uint32_t Maps::Tiles::GetRegion() const
@@ -1355,7 +1420,7 @@ std::string Maps::Tiles::String( void ) const
     os << "----------------:>>>>>>>>" << std::endl
        << "Tile index      : " << _index << ", "
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
-       << "id              : " << uniq << std::endl
+       << "uniq            : " << uniq << std::endl
        << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
@@ -2334,12 +2399,16 @@ void Maps::Tiles::setAsEmpty()
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
-    return msg << ta.level << ta.uniq << ta.object << ta.index << ta.tmp;
+    uint8_t temp = 0;
+
+    return msg << ta.level << ta.uniq << ta.object << ta.index << temp;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
-    msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> ta.tmp;
+     uint8_t temp = 0;
+
+    msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> temp;
     return msg;
 }
 

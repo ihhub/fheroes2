@@ -93,7 +93,6 @@ namespace Maps
         u8 level;
         u8 object;
         u8 index;
-        u8 tmp;
     };
 
     struct Addons : public std::list<TilesAddon>
@@ -186,6 +185,8 @@ namespace Maps
         int getOriginalPassability() const;
 
         bool isClearGround() const;
+
+        bool doesObjectExist( const uint32_t uid ) const;
 
         // ICN::FLAGS32 version
         void CaptureFlags32( int obj, int col );
