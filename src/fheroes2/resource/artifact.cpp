@@ -1189,7 +1189,7 @@ const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::set<ArtifactSetData> assembledArtifactSets;
 
-    for ( const std::pair<ArtifactSetData, std::vector<uint32_t> > setData : artifactSets ) {
+    for ( const std::pair<ArtifactSetData, std::vector<uint32_t>> setData : artifactSets ) {
         while ( true ) {
             bool foundAllArtifacts = true;
 
