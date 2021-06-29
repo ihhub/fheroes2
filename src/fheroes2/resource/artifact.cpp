@@ -1180,6 +1180,11 @@ void ArtifactsBar::messageMagicBookAbortTrading() const
     Dialog::Message( "", _( "This item can't be traded." ), Font::BIG, Dialog::OK );
 }
 
+ArtifactSetData::ArtifactSetData()
+    : _assembledArtifactID( Artifact::ART_NONE )
+    , _assembleMessage()
+{}
+
 ArtifactSetData::ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage )
     : _assembledArtifactID( artifactID )
     , _assembleMessage( assembleMessage )
@@ -1189,7 +1194,7 @@ const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::set<ArtifactSetData> assembledArtifactSets;
 
-    for ( std::pair<ArtifactSetData, std::vector<uint32_t>> setData : artifactSets ) {
+    for ( const std::pair<ArtifactSetData, std::vector<uint32_t>> setData : artifactSets ) {
         while ( true ) {
             bool foundAllArtifacts = true;
 
@@ -1221,7 +1226,7 @@ void ArtifactSetData::DisplayAssembleMessage() const
     Dialog::ArtifactInfo( "", _assembleMessage, _assembledArtifactID );
 }
 
-bool ArtifactSetData::operator==( const uint32_t artifactID ) const
+bool ArtifactSetData::operator<( const ArtifactSetData & other ) const
 {
-    return _assembledArtifactID == artifactID;
+    return _assembledArtifactID == other._assembledArtifactID;
 }

@@ -214,7 +214,7 @@ u32 GoldInsteadArtifact( int );
 struct ArtifactSetData
 {
 public:
-    ArtifactSetData() = default;
+    ArtifactSetData();
     ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
 
     void DisplayAssembleMessage() const;
@@ -222,8 +222,7 @@ public:
     uint32_t _assembledArtifactID;
     std::string _assembleMessage;
 
-    bool operator==( const uint32_t artifactID ) const;
-    friend bool operator<( const ArtifactSetData & a, const ArtifactSetData & b );
+    bool operator<( const ArtifactSetData & other ) const;
 };
 
 class BagArtifacts : public std::vector<Artifact>

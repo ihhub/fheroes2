@@ -961,7 +961,7 @@ bool Heroes::PickupArtifact( const Artifact & art )
     // check: artifact sets such as anduran garb
     const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
     for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-        artifactSetData.DisplayAssembleMessage();
+        Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
 
     return true;
 }

@@ -88,6 +88,7 @@ namespace
     std::vector<Campaign::CampaignAwardData> getPriceOfLoyaltyCampaignAwardData( const int scenarioID )
     {
         std::vector<Campaign::CampaignAwardData> obtainableAwards;
+
         switch ( scenarioID ) {
         case 1:
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
@@ -105,7 +106,7 @@ namespace
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
 
             // seems that Kraeger is a custom name for Dainwin in this case
-            obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
             break;
         }
 
