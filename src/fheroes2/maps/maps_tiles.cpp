@@ -245,7 +245,7 @@ namespace
 
     bool isShortObject( const int objectId )
     {
-        // Some objects don't allow diagonal moves from top to bottom as they're considered as very tall.
+        // Some objects allow middle moves even being attached to the bottom.
         switch ( objectId ) {
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJN_HALFLINGHOLE:
@@ -258,6 +258,7 @@ namespace
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
+        case MP2::OBJ_MAGICGARDEN:
             return true;
         default:
             break;
@@ -646,7 +647,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
 
-    // TODO: extract first 2 bits of quantity1 and store it as a separate priority field.
+    _level = mp2.quantity1 & 0x03;
     quantity1 = mp2.quantity1;
     quantity2 = mp2.quantity2;
     quantity3 = 0;
@@ -663,7 +664,7 @@ void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
     tileIsRoad = ( mp2.objectName1 >> 1 ) & 1;
 
     // If an object has priority 2 (shadow) or 3 (ground) then we put it as an addon.
-    if ( mp2.mapObject == MP2::OBJ_ZERO && ( quantity1 >> 1 ) & 1 ) {
+    if ( mp2.mapObject == MP2::OBJ_ZERO && ( _level >> 1 ) & 1 ) {
         AddonsPushLevel1( mp2 );
     }
     else {
@@ -827,7 +828,7 @@ int Maps::Tiles::getOriginalPassability() const
         return MP2::getActionObjectDirection( objId );
     }
 
-    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( quantity1 >> 1 ) & 1 ) ) {
+    if ( ( objectTileset == 0 || objectIndex == 255 ) || ( ( _level >> 1 ) & 1 ) ) {
         // No object exists. Make it fully passable.
         return DIRECTION_ALL;
     }
@@ -858,14 +859,14 @@ void Maps::Tiles::updatePassability()
 
     const int objId = GetObject( false );
     const bool isActionObject = MP2::isActionObject( objId );
-    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
+    if ( !isActionObject && objectTileset > 0 && objectIndex < 255 && ( ( _level >> 1 ) & 1 ) == 0 ) {
         // This is a non-action object.
         if ( Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
             const Tiles & bottomTile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
 
             // If a bottom tile has the same object ID then this tile is inaccessible.
             std::vector<uint32_t> tileUIDs;
-            if ( objectTileset > 0 && objectIndex < 255 && uniq != 0 && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
+            if ( objectTileset > 0 && objectIndex < 255 && uniq != 0 && ( ( _level >> 1 ) & 1 ) == 0 ) {
                 tileUIDs.emplace_back( uniq );
             }
 
@@ -888,14 +889,20 @@ void Maps::Tiles::updatePassability()
                 return;
             }
 
-            const bool isBottomTileObject = ( ( bottomTile.quantity1 >> 1 ) & 1 ) == 0;
+            const bool isBottomTileObject = ( ( bottomTile._level >> 1 ) & 1 ) == 0;
 
             if ( bottomTile.objectTileset > 0 && bottomTile.objectIndex < 255 && isBottomTileObject ) {
                 const int bottomTileObjId = bottomTile.GetObject( false );
                 const bool isBottomTileActionObject = MP2::isActionObject( bottomTileObjId );
-                if ( isBottomTileActionObject && isShortObject( bottomTileObjId ) ) {
+                if ( isBottomTileActionObject ) {
                     if ( ( MP2::getActionObjectDirection( bottomTileObjId ) & Direction::TOP ) == 0 ) {
-                        tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                        if ( isShortObject( bottomTileObjId ) ) {
+                            tilePassable &= ~( Direction::BOTTOM | Direction::BOTTOM_LEFT | Direction::BOTTOM_RIGHT );
+                        }
+                        else {
+                            tilePassable = 0;
+                            return;
+                        }
                     }
                 }
                 else if ( bottomTile.mp2_object != 0 && bottomTile.mp2_object < 128 && MP2::isActionObject( bottomTile.mp2_object + 128 )
@@ -939,7 +946,7 @@ void Maps::Tiles::updatePassability()
 
 bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
 {
-    if ( uniq == uid && ( ( quantity1 >> 1 ) & 1 ) == 0 ) {
+    if ( uniq == uid && ( ( _level >> 1 ) & 1 ) == 0 ) {
         return true;
     }
 
@@ -987,7 +994,7 @@ bool Maps::Tiles::isClearGround() const
         break;
     }
 
-    if ( objectTileset == 0 || objectIndex == 255 || ( ( quantity1 >> 1 ) & 1 ) == 1 ) {
+    if ( objectTileset == 0 || objectIndex == 255 || ( ( _level >> 1 ) & 1 ) == 1 ) {
         if ( MP2::isActionObject( objId, isWater() ) ) {
             return false;
         }
@@ -1040,7 +1047,7 @@ void Maps::Tiles::AddonsSort()
 {
     // Push everything to the container and sort it by level.
     if ( objectTileset != 0 && objectIndex < 255 ) {
-        addons_level1.emplace_front( quantity1 & 3, uniq, objectTileset, objectIndex );
+        addons_level1.emplace_front( _level, uniq, objectTileset, objectIndex );
     }
 
     // Some original maps have issues with identifying tiles as roads. This code fixes it. It's not an ideal solution but works fine in most of cases.
@@ -1060,7 +1067,7 @@ void Maps::Tiles::AddonsSort()
         uniq = highestPriorityAddon.uniq;
         objectTileset = highestPriorityAddon.object;
         objectIndex = highestPriorityAddon.index;
-        quantity1 = ( quantity1 & ( 0xFF - 0x03 ) ) + ( highestPriorityAddon.level & 0x03 );
+        _level = highestPriorityAddon.level & 0x03;
 
         addons_level1.pop_back();
     }
@@ -1424,6 +1431,7 @@ std::string Maps::Tiles::String( void ) const
        << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << static_cast<int>( hasSpriteAnimation() ) << ")" << std::endl
+       << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
        << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );

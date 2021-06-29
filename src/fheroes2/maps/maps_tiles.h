@@ -344,8 +344,10 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // This field does not persist in savegame
+        // These fields do not persist in savegame
         uint32_t _region = 0;
+
+        uint8_t _level = 0;
 
 #ifdef WITH_DEBUG
         uint8_t impassableTileRule = 0;
