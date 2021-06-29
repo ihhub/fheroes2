@@ -217,8 +217,6 @@ public:
     ArtifactSetData();
     ArtifactSetData( const uint32_t artifactID, const std::string & assembleMessage );
 
-    void DisplayAssembleMessage() const;
-
     uint32_t _assembledArtifactID;
     std::string _assembleMessage;
 

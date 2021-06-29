@@ -893,11 +893,6 @@ u32 GoldInsteadArtifact( int obj )
     return 0;
 }
 
-bool operator<( const ArtifactSetData & a, const ArtifactSetData & b )
-{
-    return a._assembledArtifactID < b._assembledArtifactID;
-}
-
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
     : _hero( hero )
     , use_mini_sprite( mini )
@@ -1194,7 +1189,7 @@ const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
 {
     std::set<ArtifactSetData> assembledArtifactSets;
 
-    for ( const std::pair<ArtifactSetData, std::vector<uint32_t>> setData : artifactSets ) {
+    for ( const std::pair<ArtifactSetData, std::vector<uint32_t> > setData : artifactSets ) {
         while ( true ) {
             bool foundAllArtifacts = true;
 
@@ -1219,11 +1214,6 @@ const std::set<ArtifactSetData> BagArtifacts::assembleArtifactSetIfPossible()
     }
 
     return assembledArtifactSets;
-}
-
-void ArtifactSetData::DisplayAssembleMessage() const
-{
-    Dialog::ArtifactInfo( "", _assembleMessage, _assembledArtifactID );
 }
 
 bool ArtifactSetData::operator<( const ArtifactSetData & other ) const
