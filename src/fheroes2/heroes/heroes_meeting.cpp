@@ -448,12 +448,11 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             else if ( selectArmy2.isSelected() )
                 selectArmy2.ResetSelected();
 
-            const auto assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
-            const auto otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> assembledArtifacts = bag_artifacts.assembleArtifactSetIfPossible();
+            std::set<ArtifactSetData> otherHeroAssembledArtifacts = otherHero.bag_artifacts.assembleArtifactSetIfPossible();
 
-            std::set<ArtifactSetData> combinedAssembledArtifacts;
-            std::merge( assembledArtifacts.begin(), assembledArtifacts.end(), otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end(),
-                        std::inserter( combinedAssembledArtifacts, combinedAssembledArtifacts.begin() ) );
+            // Use insert instead of std::merge to make appveyour happy
+            assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
             for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
                 Dialog::ArtifactInfo( "", artifactSetData._assembleMessage, artifactSetData._assembledArtifactID );
