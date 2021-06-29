@@ -71,3 +71,21 @@ const std::string & Luck::Description( int luck )
 
     return str_desc_luck[0];
 }
+
+int Luck::Normalize( int luck )
+{
+    if ( luck < Luck::AWFUL )
+        return Luck::CURSED;
+    if ( luck < Luck::BAD )
+        return Luck::AWFUL;
+    if ( luck < Luck::NORMAL )
+        return Luck::BAD;
+    if ( luck < Luck::GOOD )
+        return Luck::NORMAL;
+    if ( luck < Luck::GREAT )
+        return Luck::GOOD;
+    if ( luck < Luck::IRISH )
+        return Luck::GREAT;
+
+    return Luck::IRISH;
+}
