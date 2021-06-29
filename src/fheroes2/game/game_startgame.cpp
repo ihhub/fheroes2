@@ -1105,7 +1105,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             RedrawFocus();
         }
 
-        if ( myKingdom.isPlay() && conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
+        if ( conf.ExtGameAutosaveOn() && !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
 
