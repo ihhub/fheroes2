@@ -2406,7 +2406,7 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
-     uint8_t temp = 0;
+    uint8_t temp = 0;
 
     msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> temp;
     return msg;
