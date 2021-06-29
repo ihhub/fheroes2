@@ -644,8 +644,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
                 }
 
-                // perform this check even if the current kingdom is vanquished, because we should
-                // properly handle the situation when all the kingdoms in the game are vanquished
+                // perform this check even if the current kingdom is already vanquished, because it may
+                // be vanquished just today after world.NewDay() call and we should properly handle this
                 res = gameResult.LocalCheckGameOver();
 
                 if ( fheroes2::GameMode::CANCEL != res ) {

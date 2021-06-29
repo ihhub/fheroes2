@@ -346,8 +346,6 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         const Settings & conf = Settings::Get();
 
         if ( myKingdom.isControlHuman() ) {
-            const bool lostAllTownsDeadline = myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0;
-
             if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 GameOver::DialogWins( result );
 
@@ -359,7 +357,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
                     res = fheroes2::GameMode::HIGHSCORES;
 
-                    if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() && !lostAllTownsDeadline ) {
+                    if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
                         if ( Dialog::YES == Dialog::Message( "", "Do you wish to continue the game?", Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
@@ -379,7 +377,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             else {
                 if ( !continueAfterVictory ) {
                     // If the player's kingdom has been vanquished, he loses regardless of other conditions
-                    if ( !myKingdom.isPlay() || lostAllTownsDeadline ) {
+                    if ( !myKingdom.isPlay() ) {
                         result = GameOver::LOSS_ALL;
                     }
                     else {
@@ -387,18 +385,16 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     }
                 }
                 // If the player decided to continue the game after victory, just check that his kingdom is not vanquished
-                else if ( !myKingdom.isPlay() || lostAllTownsDeadline ) {
+                else if ( !myKingdom.isPlay() ) {
                     result = GameOver::LOSS_ALL;
                 }
 
                 if ( result != GameOver::COND_NONE ) {
-                    // If lostAllTownsDeadline is true then the message about the loss has already been shown in ShowWarningLostTownsDialog()
-                    if ( !lostAllTownsDeadline ) {
-                        GameOver::DialogLoss( result );
-                    }
+                    GameOver::DialogLoss( result );
 
                     AGG::ResetMixer();
                     Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
+
                     res = fheroes2::GameMode::MAIN_MENU;
                 }
             }
