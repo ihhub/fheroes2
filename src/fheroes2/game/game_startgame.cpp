@@ -122,14 +122,12 @@ void Game::DialogPlayers( int color, std::string str )
 }
 
 /* open castle wrapper */
-void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Mixer::Pause();
-
-    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
@@ -163,11 +161,12 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
+
     if ( updateFocus ) {
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() && updateCastleFocus ) {
+        else if ( it != myCastles.end() ) {
             Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
             if ( heroInCastle == nullptr ) {
                 basicInterface.SetFocus( *it );
@@ -176,7 +175,39 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
                 basicInterface.SetFocus( heroInCastle );
             }
         }
+        else {
+            basicInterface.ResetFocus( GameFocus::HEROES );
+        }
     }
+    else {
+        // If we don't update focus, we still have to restore environment sounds and terrain music theme
+        AGG::ResetMixer();
+
+        switch ( Interface::GetFocusType() ) {
+        case GameFocus::HEROES: {
+            const Heroes * focusedHero = Interface::GetFocusHeroes();
+            assert( focusedHero != nullptr );
+
+            const int heroIndexPos = focusedHero->GetIndex();
+            if ( heroIndexPos >= 0 ) {
+                Game::EnvironmentSoundMixer();
+                AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            }
+        } break;
+
+        case GameFocus::CASTLE: {
+            const Castle * focusedCastle = Interface::GetFocusCastle();
+            assert( focusedCastle != nullptr );
+
+            Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        } break;
+
+        default:
+            break;
+        }
+    }
+
     basicInterface.RedrawFocus();
 }
 
@@ -186,14 +217,16 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Settings & conf = Settings::Get();
-    Kingdom & myKingdom = hero.GetKingdom();
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
-    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
     Interface::StatusWindow::ResetTimer();
+
+    const Settings & conf = Settings::Get();
+    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
     Interface::Basic & I = Interface::Basic::Get();
     const Interface::GameArea & gameArea = I.GetGameArea();
-    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
+    const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
+    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
     if ( it != myHeroes.end() ) {
         int result = Dialog::ZERO;
@@ -228,7 +261,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+
                 updateFocus = true;
+
                 result = Dialog::CANCEL;
                 break;
 
@@ -240,14 +275,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            Interface::Basic::Get().SetFocus( *it );
+            I.SetFocus( *it );
         }
         else {
-            Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+            I.ResetFocus( GameFocus::HEROES );
         }
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    I.RedrawFocus();
 }
 
 void ShowNewWeekDialog( void )

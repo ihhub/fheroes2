@@ -22,7 +22,6 @@
 
 #include "spell.h"
 #include "artifact.h"
-#include "game_static.h"
 #include "heroes_base.h"
 #include "race.h"
 #include "rand.h"

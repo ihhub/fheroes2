@@ -2967,7 +2967,7 @@ void ActionToHutMagi( Heroes & hero, u32 obj, s32 dst_index )
 
     if ( !hero.isObjectTypeVisited( obj, Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
-        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, false );
+        MapsIndexes vec_eyes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
 
         if ( vec_eyes.size() ) {
             Interface::Basic & I = Interface::Basic::Get();

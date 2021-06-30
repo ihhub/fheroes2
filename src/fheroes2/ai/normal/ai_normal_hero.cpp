@@ -263,6 +263,11 @@ namespace AI
             return 0;
         }
         else if ( objectID == MP2::OBJ_TEMPLE ) {
+            if ( hero.GetArmy().AllTroopsAreUndead() ) {
+                // All troops are undead, no use of Morale.
+                return 0;
+            }
+
             const int moral = hero.GetMorale();
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
@@ -314,6 +319,22 @@ namespace AI
         }
         else if ( objectID == MP2::OBJ_WATERINGHOLE ) {
             return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectID == MP2::OBJ_JAIL ) {
+            // A free hero is always good and it could be very powerful.
+            return 3000;
+        }
+        else if ( objectID == MP2::OBJ_HUTMAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+            int fogCountToUncover = 0;
+            const int heroColor = hero.GetColor();
+            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+
+            for ( const int32_t eyeIndex : eyeMagiIndexes ) {
+                fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
+            }
+
+            return fogCountToUncover;
         }
 
         // TODO: add support for all possible objects.
@@ -458,8 +479,31 @@ namespace AI
             }
 
             if ( bestTargetIndex == -1 ) {
-                // Nothing to do. Stop everything
-                break;
+                if ( availableHeroes.size() > 1 ) {
+                    // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
+                    for ( HeroToMove & heroInfo : availableHeroes ) {
+                        // Skip heroes who are in castles or on patrol.
+                        if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+                            continue;
+                        }
+
+                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                            continue;
+                        }
+
+                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero );
+                        if ( targetIndex != -1 ) {
+                            bestTargetIndex = targetIndex;
+                            bestHero = heroInfo.hero;
+                            break;
+                        }
+                    }
+                }
+
+                if ( bestTargetIndex == -1 ) {
+                    // Nothing to do. Stop everything
+                    break;
+                }
             }
 
             _pathfinder.reEvaluateIfNeeded( *bestHero );

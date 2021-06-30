@@ -28,7 +28,6 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
-#include "game_static.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
@@ -40,8 +39,6 @@
 #include "ui_button.h"
 #include "ui_text.h"
 #include "world.h"
-
-#include <sstream>
 
 namespace
 {
