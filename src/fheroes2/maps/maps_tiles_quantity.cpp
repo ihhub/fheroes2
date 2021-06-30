@@ -425,6 +425,7 @@ Troop Maps::Tiles::QuantityTroop( void ) const
 
 void Maps::Tiles::QuantityReset( void )
 {
+    // TODO: don't modify first 2 bits of quantity1.
     quantity1 = 0;
     quantity2 = 0;
 
@@ -451,6 +452,7 @@ void Maps::Tiles::QuantityReset( void )
 
 void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
 {
+    // TODO: don't modify first 2 bits of quantity1.
     switch ( GetObject( false ) ) {
     case MP2::OBJ_WITCHSHUT:
         QuantitySetSkill( Skill::Secondary::RandForWitchsHut() );
