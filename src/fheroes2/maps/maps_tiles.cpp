@@ -215,7 +215,6 @@ namespace
         case MP2::OBJN_TEMPLE:
         case MP2::OBJ_MERMAID:
         case MP2::OBJN_MERMAID:
-        case MP2::OBJ_STANDINGSTONES:
         case MP2::OBJ_PYRAMID:
         case MP2::OBJN_PYRAMID:
         case MP2::OBJ_TROLLBRIDGE:
@@ -235,6 +234,10 @@ namespace
         case MP2::OBJN_OBSERVATIONTOWER:
         case MP2::OBJ_TREEHOUSE:
         case MP2::OBJN_TREEHOUSE:
+        case MP2::OBJ_WITCHSHUT:
+        case MP2::OBJN_WITCHSHUT:
+        case MP2::OBJ_XANADU:
+        case MP2::OBJN_XANADU:
             return true;
         default:
             break;
@@ -246,6 +249,9 @@ namespace
     bool isShortObject( const int objectId )
     {
         // Some objects allow middle moves even being attached to the bottom.
+        // These object actually don't have any sprites on tiles above them within addon 2 level objects.
+        // TODO: find a better way to do not hardcode values here.
+
         switch ( objectId ) {
         case MP2::OBJ_HALFLINGHOLE:
         case MP2::OBJN_HALFLINGHOLE:
@@ -259,6 +265,20 @@ namespace
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
         case MP2::OBJ_MAGICGARDEN:
+        case MP2::OBJ_RUINS:
+        case MP2::OBJN_RUINS:
+        case MP2::OBJ_SIGN:
+        case MP2::OBJ_IDOL:
+        case MP2::OBJ_STONELITHS:
+        case MP2::OBJN_STONELITHS:
+        case MP2::OBJ_WAGON:
+        case MP2::OBJ_WAGONCAMP:
+        case MP2::OBJN_WAGONCAMP:
+        case MP2::OBJ_GOBLINHUT:
+        case MP2::OBJ_FAERIERING:
+        case MP2::OBJN_FAERIERING:
+        case MP2::OBJ_BARRIER:
+        case MP2::OBJ_MAGICWELL:
             return true;
         default:
             break;
