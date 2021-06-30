@@ -661,36 +661,10 @@ void World::ProcessNewMap()
         }
     }
 
-    PostLoad();
-
-    // play with hero
-    vec_kingdoms.ApplyPlayWithStartingHero();
-
-    if ( Settings::Get().ExtWorldStartHeroLossCond4Humans() )
-        vec_kingdoms.AddCondLossHeroes( vec_heroes );
-
-    // play with debug hero
-    if ( IS_DEVEL() ) {
-        // get first castle position
-        Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
-
-        if ( !kingdom.GetCastles().empty() ) {
-            const Castle * castle = kingdom.GetCastles().front();
-            const fheroes2::Point & cp = castle->GetCenter();
-            Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
-
-            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
-            }
-        }
-    }
-
-    // set ultimate
+    // Set Ultimate Artifact.
+    fheroes2::Point ultimate_pos;
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(),
                                            []( const Maps::Tiles & tile ) { return tile.isObject( static_cast<int>( MP2::OBJ_RNDULTIMATEARTIFACT ) ); } );
-    fheroes2::Point ultimate_pos;
-
-    // not found
     if ( vec_tiles.end() == it ) {
         // generate position for ultimate
         MapsIndexes pools;
@@ -739,6 +713,30 @@ void World::ProcessNewMap()
         it->setAsEmpty();
         ultimate_artifact.Set( it->GetIndex(), Artifact::FromMP2IndexSprite( objectIndex ) );
         ultimate_pos = ( *it ).GetCenter();
+    }
+
+    PostLoad();
+
+    // play with hero
+    vec_kingdoms.ApplyPlayWithStartingHero();
+
+    if ( Settings::Get().ExtWorldStartHeroLossCond4Humans() )
+        vec_kingdoms.AddCondLossHeroes( vec_heroes );
+
+    // play with debug hero
+    if ( IS_DEVEL() ) {
+        // get first castle position
+        Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
+
+        if ( !kingdom.GetCastles().empty() ) {
+            const Castle * castle = kingdom.GetCastles().front();
+            const fheroes2::Point & cp = castle->GetCenter();
+            Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
+
+            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
+                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
+            }
+        }
     }
 
     vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );

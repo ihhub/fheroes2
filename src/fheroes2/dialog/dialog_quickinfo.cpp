@@ -416,9 +416,9 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         const Maps::Tiles & right = world.GetTiles( tile.GetIndex() + 1 );
         const Maps::Tiles * center = nullptr;
 
-        if ( MP2::isGroundObject( left.GetObject( false ) ) )
+        if ( MP2::isActionObject( left.GetObject( false ) ) )
             center = &left;
-        else if ( MP2::isGroundObject( right.GetObject( false ) ) )
+        else if ( MP2::isActionObject( right.GetObject( false ) ) )
             center = &right;
 
         if ( center ) {
