@@ -40,6 +40,8 @@
 #include "tools.h"
 #include "world.h"
 
+#include <cassert>
+
 std::string GetMinesIncomeString( int type )
 {
     const payment_t income = ProfitConditions::FromMine( type );
@@ -406,29 +408,61 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
     const int objectType = tile.GetObject( false );
 
-    // check
-    switch ( objectType ) {
-    case MP2::OBJN_MINES:
-    case MP2::OBJN_ABANDONEDMINE:
-    case MP2::OBJN_SAWMILL:
-    case MP2::OBJN_ALCHEMYLAB: {
-        const Maps::Tiles & left = world.GetTiles( tile.GetIndex() - 1 );
-        const Maps::Tiles & right = world.GetTiles( tile.GetIndex() + 1 );
-        const Maps::Tiles * center = nullptr;
+    if ( objectType != MP2::OBJ_ZERO
+         && ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES
+              || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) ) {
+        // This is non-main tile of an action object. We have to find the main tile.
+        // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
+        const int32_t radiusOfSearch = 3;
 
-        if ( MP2::isActionObject( left.GetObject( false ) ) )
-            center = &left;
-        else if ( MP2::isActionObject( right.GetObject( false ) ) )
-            center = &right;
+        // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
+        std::vector<uint32_t> uids;
+        const Maps::Addons & level2Addons = tile.getLevel2Addons();
+        const Maps::Addons & level1Addons = tile.getLevel1Addons();
 
-        if ( center ) {
-            QuickInfo( *center );
-            return;
+        for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
+            if ( iter->uniq != 0 ) {
+                uids.emplace_back( iter->uniq );
+            }
         }
-    } break;
 
-    default:
-        break;
+        if ( tile.GetObjectUID() != 0 ) {
+            uids.emplace_back( tile.GetObjectUID() );
+        }
+
+        for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
+            if ( iter->uniq != 0 ) {
+                uids.emplace_back( iter->uniq );
+            }
+        }
+
+        const int32_t tileIndex = tile.GetIndex();
+        const int32_t mapWidth = world.w();
+
+        int32_t requiredObjectType = 0;
+        if ( objectType == MP2::OBJN_ALCHEMYTOWER ) {
+            requiredObjectType = MP2::OBJ_ALCHEMYTOWER;
+        }
+        else if ( objectType == MP2::OBJN_STABLES ) {
+            requiredObjectType = MP2::OBJ_STABLES;
+        }
+        else {
+            requiredObjectType = objectType + 128;
+        }
+        assert( requiredObjectType > objectType );
+
+        for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
+            for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
+                const int32_t index = tileIndex + y * mapWidth + x;
+                if ( Maps::isValidAbsIndex( index ) ) {
+                    const Maps::Tiles & foundTile = world.GetTiles( index );
+                    if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == requiredObjectType ) {
+                        QuickInfo( foundTile );
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );

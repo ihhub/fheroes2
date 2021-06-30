@@ -216,6 +216,16 @@ namespace Maps
         void AddonsPushLevel2( const MP2::mp2tile_t & );
         void AddonsPushLevel2( const MP2::mp2addon_t & );
 
+        const Addons & getLevel1Addons() const
+        {
+            return addons_level1;
+        }
+
+        const Addons & getLevel2Addons() const
+        {
+            return addons_level2;
+        }
+
         void AddonsSort( void );
         void Remove( u32 uniqID );
         void RemoveObjectSprite( void );
