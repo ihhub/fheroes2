@@ -333,25 +333,19 @@ void ShowEventDayDialog( void )
     }
 }
 
-fheroes2::GameMode ShowWarningLostTownsDialog()
+void ShowWarningLostTownsDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
+    const uint32_t lostTownDays = myKingdom.GetLostTownDays();
 
-    if ( 0 == myKingdom.GetLostTownDays() ) {
-        Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
-
-        return fheroes2::GameMode::END_TURN;
-    }
-    else if ( 1 == myKingdom.GetLostTownDays() ) {
+    if ( lostTownDays == 1 ) {
         Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, this is your last day to capture a town, or you will be banished from this land." ) );
     }
-    else if ( Game::GetLostTownDays() >= myKingdom.GetLostTownDays() ) {
+    else if ( lostTownDays > 0 && lostTownDays <= Game::GetLostTownDays() ) {
         std::string str = _( "%{color} player, you only have %{day} days left to capture a town, or you will be banished from this land." );
-        StringReplace( str, "%{day}", myKingdom.GetLostTownDays() );
+        StringReplace( str, "%{day}", lostTownDays );
         Game::DialogPlayers( myKingdom.GetColor(), str );
     }
-
-    return fheroes2::GameMode::CANCEL;
 }
 
 /* return changee cursor */
@@ -697,6 +691,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     const Settings & conf = Settings::Get();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
+    const KingdomCastles & myCastles = myKingdom.GetCastles();
 
     // current music will be set along with the focus, reset music from the previous turn
     Game::SetCurrentMusic( MUS::UNKNOWN );
@@ -747,9 +742,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     res = gameResult.LocalCheckGameOver();
 
     // warn that all the towns are lost
-    if ( res == fheroes2::GameMode::CANCEL && myKingdom.GetCastles().empty() ) {
-        // may return fheroes2::GameMode::END_TURN
-        res = ShowWarningLostTownsDialog();
+    if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
+        ShowWarningLostTownsDialog();
     }
 
     int fastScrollRepeatCount = 0;
@@ -1099,6 +1093,12 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     if ( fheroes2::GameMode::END_TURN == res ) {
+        // warn that the last town was lost on this turn
+        if ( myKingdom.isPlay() && myCastles.empty() && myKingdom.GetLostTownDays() > Game::GetLostTownDays() ) {
+            Game::DialogPlayers( conf.CurrentColor(),
+                                 _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+        }
+
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
             RedrawFocus();

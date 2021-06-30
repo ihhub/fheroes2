@@ -77,7 +77,7 @@ void Kingdom::clear( void )
 
     color = Color::NONE;
     visited_tents_colors = 0;
-    lost_town_days = Game::GetLostTownDays();
+    lost_town_days = Game::GetLostTownDays() + 1;
 
     heroes.clear();
     castles.clear();
@@ -146,6 +146,12 @@ void Kingdom::ActionBeforeTurn( void )
 
 void Kingdom::ActionNewDay( void )
 {
+    // countdown of days since the loss of the last town, first day isn't counted
+    if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
+        --lost_town_days;
+    }
+
+    // check the conditions of the loss
     if ( isLoss() || 0 == lost_town_days ) {
         LossPostActions();
         return;
@@ -153,10 +159,6 @@ void Kingdom::ActionNewDay( void )
 
     // modes
     ResetModes( IDENTIFYHERO );
-
-    // check lost town
-    if ( castles.empty() )
-        --lost_town_days;
 
     // castle New Day
     std::for_each( castles.begin(), castles.end(), []( Castle * castle ) { castle->ActionNewDay(); } );
@@ -310,7 +312,7 @@ void Kingdom::AddCastle( const Castle * castle )
         AI::Get().CastleAdd( *castle );
     }
 
-    lost_town_days = Game::GetLostTownDays();
+    lost_town_days = Game::GetLostTownDays() + 1;
 }
 
 void Kingdom::RemoveCastle( const Castle * castle )
