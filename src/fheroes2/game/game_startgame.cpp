@@ -692,16 +692,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
 fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    Cursor & cursor = Cursor::Get();
-    const Settings & conf = Settings::Get();
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
 
-    LocalEvent & le = LocalEvent::Get();
+    const Settings & conf = Settings::Get();
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
-
-    GameOver::Result & gameResult = GameOver::Result::Get();
 
     // current music will be set along with the focus, reset music from the previous turn
     Game::SetCurrentMusic( MUS::UNKNOWN );
@@ -726,6 +721,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
     Game::EnvironmentSoundMixer();
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     display.render();
 
     if ( !isload ) {
@@ -743,6 +740,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( conf.ExtGameAutosaveOn() && conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
+
+    GameOver::Result & gameResult = GameOver::Result::Get();
 
     // game over check
     res = gameResult.LocalCheckGameOver();
@@ -766,6 +765,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     bool isCursorOverButtons = false;
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
+
+    LocalEvent & le = LocalEvent::Get();
+    Cursor & cursor = Cursor::Get();
 
     // startgame loop
     while ( fheroes2::GameMode::CANCEL == res ) {
