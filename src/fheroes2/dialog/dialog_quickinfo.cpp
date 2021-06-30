@@ -455,9 +455,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
                 }
             }
         }
-
-        // How is it possible that the main tile is missing?
-        assert( 0 );
     }
 
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
