@@ -408,7 +408,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
     const int objectType = tile.GetObject( false );
 
-    if ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) {
+    if ( objectType != MP2::OBJ_ZERO && ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES
+                                          || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) ) {
         // This is non-main tile of an action object. We have to find the main tile.
         // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
         const int32_t radiusOfSearch = 3;
@@ -419,13 +420,19 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         const Maps::Addons & level1Addons = tile.getLevel1Addons();
 
         for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
-            uids.emplace_back( iter->uniq );
+            if ( iter->uniq != 0 ) {
+                uids.emplace_back( iter->uniq );
+            }
         }
 
-        uids.emplace_back( tile.GetObjectUID() );
+        if ( tile.GetObjectUID() != 0 ) {
+            uids.emplace_back( tile.GetObjectUID() );
+        }
 
         for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
-            uids.emplace_back( iter->uniq );
+            if ( iter->uniq != 0 ) {
+                uids.emplace_back( iter->uniq );
+            }
         }
 
         const int32_t tileIndex = tile.GetIndex();
