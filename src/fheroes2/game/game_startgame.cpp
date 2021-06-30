@@ -744,16 +744,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             Game::AutoSave();
     }
 
+    // game over check
+    res = gameResult.LocalCheckGameOver();
+
     // warn that all the towns are lost
-    if ( myKingdom.GetCastles().empty() ) {
+    if ( res == fheroes2::GameMode::CANCEL && myKingdom.GetCastles().empty() ) {
         // may return fheroes2::GameMode::END_TURN
         res = ShowWarningLostTownsDialog();
-    }
-
-    // if the game over check doesn't return anything meaningful, proceed with the current res value
-    const fheroes2::GameMode gameOverRes = gameResult.LocalCheckGameOver();
-    if ( gameOverRes != fheroes2::GameMode::CANCEL ) {
-        res = gameOverRes;
     }
 
     int fastScrollRepeatCount = 0;
@@ -1044,7 +1041,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         isMovingHero = true;
 
                         if ( hero->isAction() ) {
-                            // check game over
+                            // game over check
                             res = gameResult.LocalCheckGameOver();
 
                             hero->ResetAction();
