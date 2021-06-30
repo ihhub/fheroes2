@@ -408,7 +408,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
 {
     const int objectType = tile.GetObject( false );
 
-    if ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES || ( !MP2::isGroundObject( objectType ) && MP2::isGroundObject( objectType + 128 ) ) ) {
+    if ( objectType == MP2::OBJN_ALCHEMYTOWER || objectType == MP2::OBJN_STABLES || ( !MP2::isActionObject( objectType ) && MP2::isActionObject( objectType + 128 ) ) ) {
         // This is non-main tile of an action object. We have to find the main tile.
         // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
         const int32_t radiusOfSearch = 3;
@@ -457,7 +457,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile )
         }
 
         // How is it possible that the main tile is missing?
-        // assert( 0 );
+        assert( 0 );
     }
 
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
