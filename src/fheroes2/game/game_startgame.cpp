@@ -1093,10 +1093,17 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     }
 
     if ( fheroes2::GameMode::END_TURN == res ) {
-        // warn that the last town was lost on this turn
-        if ( myKingdom.isPlay() && myCastles.empty() && myKingdom.GetLostTownDays() > Game::GetLostTownDays() ) {
-            Game::DialogPlayers( conf.CurrentColor(),
-                                 _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+        // these warnings should be shown at the end of the turn
+        if ( myKingdom.isPlay() && myCastles.empty() ) {
+            const uint32_t lostTownDays = myKingdom.GetLostTownDays();
+
+            if ( lostTownDays > Game::GetLostTownDays() ) {
+                Game::DialogPlayers( conf.CurrentColor(),
+                                     _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+            }
+            else if ( lostTownDays == 1 ) {
+                Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+            }
         }
 
         if ( GetFocusHeroes() ) {

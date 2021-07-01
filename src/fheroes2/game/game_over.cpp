@@ -390,11 +390,9 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 }
 
                 if ( result != GameOver::COND_NONE ) {
-                    // Special case: player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
-                    if ( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) {
-                        Game::DialogPlayers( myKingdom.GetColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
-                    }
-                    else {
+                    // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
+                    // This case was already handled at the end of the Interface::Basic::HumanTurn()
+                    if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
                         GameOver::DialogLoss( result );
                     }
 
