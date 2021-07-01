@@ -117,7 +117,6 @@ namespace AI
 
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
-    bool HeroesValidObject( const Heroes & hero, s32 index );
     void HeroesMove( Heroes & hero );
 
     // functionality in ai_common.cpp
