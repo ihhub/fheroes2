@@ -72,10 +72,12 @@ fheroes2::GameMode Game::LoadMulti()
     const int32_t buttonYStep = 66;
 
     fheroes2::Button buttonHotSeat( buttonXPos, buttonYPos, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonXPos, buttonYPos + buttonYStep * 1, ICN::BTNMP, 2, 3 );
     fheroes2::Button buttonCancelGame( buttonXPos, buttonYPos + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
+    buttonNetwork.disable();
 
     display.render();
 

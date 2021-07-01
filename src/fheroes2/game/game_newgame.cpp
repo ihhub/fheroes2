@@ -269,6 +269,50 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     return gameChoice;
 }
 
+fheroes2::GameMode Game::NewNetwork()
+{
+    Settings & conf = Settings::Get();
+    conf.SetGameType( conf.GameType() | Game::TYPE_NETWORK );
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    fheroes2::drawMainMenuScreen();
+    const fheroes2::Point buttonPos = drawButtonPanel();
+
+    fheroes2::Button buttonHost( buttonPos.x, buttonPos.y, ICN::BTNNET, 0, 1 );
+    fheroes2::Button buttonGuest( buttonPos.x, buttonPos.y + buttonYStep, ICN::BTNNET, 2, 3 );
+    fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNMP, 8, 9 );
+
+    buttonHost.draw();
+    buttonGuest.draw();
+    buttonCancelGame.draw();
+
+    fheroes2::Display::instance().render();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents() ) {
+        le.MousePressLeft( buttonHost.area() ) ? buttonHost.drawOnPress() : buttonHost.drawOnRelease();
+        le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
+        le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
+
+        if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+            return fheroes2::GameMode::MAIN_MENU;
+
+        // right info
+        if ( le.MousePressRight( buttonHost.area() ) )
+            Dialog::Message( _( "Host" ), _( "The host sets up the game options. There can only be one host per network game." ), Font::BIG );
+        if ( le.MousePressRight( buttonGuest.area() ) )
+            Dialog::Message( _( "Guest" ),
+                             _( "The guest waits for the host to set up the game, then is automatically added in. There can be multiple guests for TCP/IP games." ),
+                             Font::BIG );
+        if ( le.MousePressRight( buttonCancelGame.area() ) )
+            Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
+    }
+
+    return fheroes2::GameMode::MAIN_MENU;
+}
+
 fheroes2::GameMode Game::NewGame()
 {
     Mixer::Pause();
@@ -370,10 +414,12 @@ fheroes2::GameMode Game::NewMulti()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonHotSeat( buttonPos.x, buttonPos.y, ICN::BTNMP, 0, 1 );
+    fheroes2::Button buttonNetwork( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNMP, 2, 3 );
     fheroes2::Button buttonCancelGame( buttonPos.x, buttonPos.y + buttonYStep * 5, ICN::BTNMP, 8, 9 );
 
     buttonHotSeat.draw();
     buttonCancelGame.draw();
+    buttonNetwork.disable();
 
     fheroes2::Display::instance().render();
 

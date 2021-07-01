@@ -55,7 +55,8 @@ namespace Game
         TYPE_STANDARD = 0x01,
         TYPE_CAMPAIGN = 0x02,
         TYPE_HOTSEAT = 0x04,
-        TYPE_BATTLEONLY = 0x08,
+        TYPE_NETWORK = 0x08,
+        TYPE_BATTLEONLY = 0x10,
 
         // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.
@@ -159,6 +160,7 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode NewNetwork();
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
