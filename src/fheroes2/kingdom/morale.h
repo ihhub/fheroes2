@@ -40,7 +40,7 @@ namespace Morale
 
     const std::string & String( int );
     const std::string & Description( int );
-    int Normalize( int morale );
+    int Normalize( const int morale );
 }
 
 #endif

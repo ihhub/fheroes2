@@ -74,7 +74,7 @@ const std::string & Morale::Description( int morale )
     return str_desc_morale[0];
 }
 
-int Morale::Normalize( int morale )
+int Morale::Normalize( const int morale )
 {
     if ( morale < Morale::AWFUL )
         return Morale::TREASON;

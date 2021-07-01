@@ -72,7 +72,7 @@ const std::string & Luck::Description( int luck )
     return str_desc_luck[0];
 }
 
-int Luck::Normalize( int luck )
+int Luck::Normalize( const int luck )
 {
     if ( luck < Luck::AWFUL )
         return Luck::CURSED;
