@@ -601,26 +601,29 @@ namespace fheroes2
         return res;
     }
 
-    Rect GetCommonRect( const Rect & rt1, const Rect & rt2, const bool intersect )
+    Rect getIntersectRect( const Rect & rt1, const Rect & rt2 )
+    {
+        if ( !( rt1 & rt2 ) )
+            return {};
+
+        Rect rt3;
+
+        rt3.x = std::max( rt1.x, rt2.x );
+        rt3.y = std::max( rt1.y, rt2.y );
+        rt3.width = std::min( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
+        rt3.height = std::min( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
+
+        return rt3;
+    }
+
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
         Rect rt3;
 
-        if ( intersect ) {
-            if ( rt1 & rt2 ) {
-                rt3.x = std::max( rt1.x, rt2.x );
-                rt3.y = std::max( rt1.y, rt2.y );
-                rt3.width = std::min( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
-                rt3.height = std::min( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
-            }
-        }
-        else
-        // max
-        {
-            rt3.x = rt1.x < rt2.x ? rt1.x : rt2.x;
-            rt3.y = rt1.y < rt2.y ? rt1.y : rt2.y;
-            rt3.width = rt1.x + rt1.width > rt2.x + rt2.width ? rt1.x + rt1.width - rt3.x : rt2.x + rt2.width - rt3.x;
-            rt3.height = rt1.y + rt1.height > rt2.y + rt2.height ? rt1.y + rt1.height - rt3.y : rt2.y + rt2.height - rt3.y;
-        }
+        rt3.x = std::min( rt1.x, rt2.x );
+        rt3.y = std::min( rt1.y, rt2.y );
+        rt3.width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
+        rt3.height = std::max( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
 
         return rt3;
     }
@@ -636,7 +639,7 @@ namespace fheroes2
         res = rects[0];
 
         for ( size_t i = 1; i < rects.size(); ++i ) {
-            res = GetCommonRect( rects[i], res, false );
+            res = getBoundaryRect( rects[i], res );
         }
 
         return res;

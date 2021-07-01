@@ -77,7 +77,8 @@ namespace fheroes2
 
     std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt );
 
-    Rect GetCommonRect( const Rect & rt1, const Rect & rt2, const bool intersect );
+    Rect getIntersectRect( const Rect & rt1, const Rect & rt2 );
+    Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 );
 
     Rect GetBoundaryRect( const std::vector<Rect> & rects );
 }
