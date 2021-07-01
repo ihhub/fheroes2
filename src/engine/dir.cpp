@@ -32,6 +32,7 @@
 #if defined( FHEROES2_VITA )
 #include "tools.h"
 #endif
+
 #include <cstring>
 #if defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp
@@ -52,7 +53,26 @@ namespace
         }
 
         do {
-            files.emplace_back( path + "\\" + data.cFileName );
+            std::string fullname = System::ConcatePath( path, data.cFileName );
+
+            // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
+            if ( !nameAsFilter || !name.empty() ) {
+                const size_t filenameLength = strlen( data.cFileName );
+                if ( filenameLength < name.length() )
+                    continue;
+
+                if ( !nameAsFilter && filenameLength != name.length() ) {
+                    continue;
+                }
+
+                const char * filenamePtr = data.cFileName + filenameLength - name.length();
+
+                if ( _stricmp( filenamePtr, name.c_str() ) != 0 ) {
+                    continue;
+                }
+            }
+
+            files.emplace_back( std::move( fullname ) );
         } while ( FindNextFile( hFind, &data ) != 0 );
 
         FindClose( hFind );
