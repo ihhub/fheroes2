@@ -10,6 +10,8 @@
 
 #### **Did you write a patch that fixes a bug?**
 
+* Ensure your patch follows project's [code style](https://github.com/ihhub/fheroes2/wiki/Code-style).
+
 * Open a new GitHub pull request with the patch.
 
 * Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
@@ -19,6 +21,8 @@
 #### **Do you intend to add a new feature or change an existing one?**
 
 * Suggest your change in an issue first and then start writing code.
+
+* Ensure your code follows project's [code style](https://github.com/ihhub/fheroes2/wiki/Code-style).
 
 * One feature per pull request. 
 
