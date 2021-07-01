@@ -424,12 +424,13 @@ void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall
 
 void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
+    const Settings & conf = Settings::Get();
 
     // set volume loop sounds
     for ( size_t i = 0; i < vols.size(); ++i ) {
@@ -499,8 +500,7 @@ void AGG::PlaySound( int m82, bool asyncronizedCall )
 
 void AGG::PlaySoundInternally( const int m82 )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -510,7 +510,7 @@ void AGG::PlaySoundInternally( const int m82 )
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
     Mixer::Pause( ch );
-    Mixer::Volume( ch, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+    Mixer::Volume( ch, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
     Mixer::Resume( ch );
 }
 
@@ -532,8 +532,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 
 void AGG::PlayMusicInternally( const int mus, const bool loop )
 {
-    const Settings & conf = Settings::Get();
-    if ( !conf.Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 
@@ -544,7 +543,7 @@ void AGG::PlayMusicInternally( const int mus, const bool loop )
     }
 
     const std::string prefix_music( "music" );
-    const MusicSource type = conf.MusicType();
+    const MusicSource type = Settings::Get().MusicType();
 
     bool isSongFound = false;
 

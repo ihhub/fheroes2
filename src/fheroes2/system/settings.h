@@ -148,7 +148,6 @@ public:
     void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen() const;
-    bool Sound() const; // is all sound (including music) enabled
     bool ShowControlPanel() const;
     bool ShowRadar() const;
     bool ShowIcons() const;
@@ -246,7 +245,6 @@ public:
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
     void SetMusicType( int v );
-    void ResetSound();
 
     int SoundVolume() const;
     int MusicVolume() const;

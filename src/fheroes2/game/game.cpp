@@ -334,7 +334,7 @@ u32 & Game::CastleAnimationFrame( void )
 /* play all sound from focus area game */
 void Game::EnvironmentSoundMixer( void )
 {
-    if ( !Settings::Get().Sound() ) {
+    if ( !Mixer::isValid() ) {
         return;
     }
 

@@ -176,14 +176,11 @@ int main( int argc, char ** argv )
             }
     }
 
-    u32 subsystem = INIT_VIDEO;
+    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
-
-    if ( conf.Sound() )
-        subsystem |= INIT_AUDIO;
 
     if ( SDL::Init( subsystem ) ) {
         try
@@ -198,9 +195,6 @@ int main( int argc, char ** argv )
 
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
                 Music::SetFadeIn( 900 );
-            }
-            else if ( conf.Sound() ) {
-                conf.ResetSound();
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();

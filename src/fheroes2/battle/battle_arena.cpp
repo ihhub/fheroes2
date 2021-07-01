@@ -194,8 +194,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         interface = new Interface( *this, index );
         board.SetArea( interface->GetArea() );
 
-        if ( conf.Sound() )
-            AGG::PlaySound( M82::PREBATTL );
+        AGG::PlaySound( M82::PREBATTL );
 
         armies_order = new Units();
         armies_order->reserve( 25 );
@@ -267,9 +266,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local )
         display.render();
 
         // pause for play M82::PREBATTL
-        if ( conf.Sound() )
-            while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
-                ;
+        while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
+            ;
     }
 }
 
@@ -383,7 +381,7 @@ void Battle::Arena::Turns( void )
     if ( interface ) {
         interface->RedrawActionNewTurn();
 
-        if ( conf.Sound() && !Music::isPlaying() ) {
+        if ( !Music::isPlaying() ) {
             AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
         }
     }

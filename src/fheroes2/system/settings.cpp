@@ -59,11 +59,11 @@ namespace
         GLOBAL_FULLSCREEN = 0x00008000,
         GLOBAL_USEUNICODE = 0x00010000,
 
-        GLOBAL_SOUND = 0x00020000,
-        GLOBAL_MUSIC_EXT = 0x00040000,
-        GLOBAL_MUSIC_MIDI = 0x00080000,
+        GLOBAL_MUSIC_EXT = 0x00020000,
+        GLOBAL_MUSIC_MIDI = 0x00040000,
         GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
 
+        // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
         // UNUSED = 0x00400000,
@@ -287,7 +287,6 @@ Settings::Settings()
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
     opt_global.SetModes( GLOBAL_MUSIC_EXT );
-    opt_global.SetModes( GLOBAL_SOUND );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -411,16 +410,6 @@ bool Settings::Read( const std::string & filename )
 #else
     opt_global.ResetModes( GLOBAL_USEUNICODE );
 #endif
-
-    // sound (including music)
-    if ( config.Exists( "sound" ) ) {
-        if ( config.StrParams( "sound" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_SOUND );
-        }
-        else {
-            opt_global.ResetModes( GLOBAL_SOUND );
-        }
-    }
 
     // music source
     _musicType = MUSIC_EXTERNAL;
@@ -641,9 +630,6 @@ std::string Settings::String() const
 
     os << std::endl << "# video mode (game resolution)" << std::endl;
     os << "videomode = " << fheroes2::Display::instance().width() << "x" << fheroes2::Display::instance().height() << std::endl;
-
-    os << std::endl << "# sound (including music): on/off" << std::endl;
-    os << "sound = " << ( opt_global.Modes( GLOBAL_SOUND ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# music: original, expansion, external" << std::endl;
     os << "music = " << musicType << std::endl;
@@ -899,12 +885,6 @@ bool Settings::MusicExt() const
 bool Settings::MusicMIDI() const
 {
     return opt_global.Modes( GLOBAL_MUSIC_MIDI );
-}
-
-// is all sound (including music) enabled
-bool Settings::Sound() const
-{
-    return opt_global.Modes( GLOBAL_SOUND );
 }
 
 /* return move speed */
@@ -1308,11 +1288,6 @@ void Settings::SetBattleMovementShaded( bool f )
 void Settings::SetBattleMouseShaded( bool f )
 {
     f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
-}
-
-void Settings::ResetSound()
-{
-    opt_global.ResetModes( GLOBAL_SOUND );
 }
 
 void Settings::SetShowPanel( bool f )
