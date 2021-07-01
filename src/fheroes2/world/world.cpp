@@ -1142,7 +1142,12 @@ void World::PostLoad()
     // update tile passable
     for ( Maps::Tiles & tile : vec_tiles ) {
         tile.updateEmpty();
-        tile.UpdatePassable();
+        tile.setInitialPassability();
+    }
+
+    // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+    for ( Maps::Tiles & tile : vec_tiles ) {
+        tile.updatePassability();
     }
 
     // cache data that's accessed often
@@ -1232,7 +1237,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_MONSTER:
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
             assert( 0 );
             break;
 

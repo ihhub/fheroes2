@@ -190,8 +190,8 @@ namespace Game
     u32 SelectCountPlayers( void );
     void ShowMapLoadingText( void );
     void PlayPickupSound( void );
-    void DisableChangeMusic( bool );
-    bool ChangeMusicDisabled( void );
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     std::string GetEncodeString( const std::string & );

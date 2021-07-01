@@ -220,14 +220,14 @@ namespace GameStatic
 
 StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
     return msg;
 }
 
 StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
 {
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this method and its calls." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_SECOND_PRE_095_RELEASE ) {
         return msg;
     }
 
