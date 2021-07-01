@@ -27,8 +27,8 @@
 #include "logging.h"
 #include "luck.h"
 #include "maps.h"
-#include "mp2.h"
 #include "morale.h"
+#include "mp2.h"
 #include "settings.h"
 #include "world.h"
 
