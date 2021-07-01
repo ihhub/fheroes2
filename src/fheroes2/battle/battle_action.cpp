@@ -22,10 +22,10 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iomanip>
 
 #include "battle_arena.h"
 #include "battle_bridge.h"
-#include "battle_catapult.h"
 #include "battle_cell.h"
 #include "battle_command.h"
 #include "battle_interface.h"
@@ -35,6 +35,7 @@
 #include "logging.h"
 #include "rand.h"
 #include "spell.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -97,36 +98,38 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, s32 dst, in
     if ( interface )
         interface->RedrawActionAttackPart2( attacker, targets );
 
-    const Spell spell = attacker.GetSpellMagic();
+    if ( defender.isValid() ) {
+        const Spell spell = attacker.GetSpellMagic();
 
-    // magic attack
-    if ( defender.isValid() && spell.isValid() ) {
-        const std::string name( attacker.GetName() );
+        // magic attack
+        if ( spell.isValid() ) {
+            const std::string name( attacker.GetName() );
 
-        targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
+            targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
 
-        bool validSpell = true;
-        if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
-            validSpell = false;
+            bool validSpell = true;
+            if ( attacker == Monster::ARCHMAGE && !defender.Modes( IS_GOOD_MAGIC ) )
+                validSpell = false;
 
-        if ( targets.size() && validSpell ) {
-            if ( interface ) {
-                interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), name, targets );
-                interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
-            }
+            if ( targets.size() && validSpell ) {
+                if ( interface ) {
+                    interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), name, targets );
+                    interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
+                }
 
-            if ( attacker == Monster::ARCHMAGE ) {
-                if ( defender.Modes( IS_GOOD_MAGIC ) )
-                    defender.ResetModes( IS_GOOD_MAGIC );
-            }
-            else {
-                // magic attack not depends from hero
-                TargetsApplySpell( NULL, spell, targets );
-            }
+                if ( attacker == Monster::ARCHMAGE ) {
+                    if ( defender.Modes( IS_GOOD_MAGIC ) )
+                        defender.ResetModes( IS_GOOD_MAGIC );
+                }
+                else {
+                    // magic attack not depends from hero
+                    TargetsApplySpell( nullptr, spell, targets );
+                }
 
-            if ( interface ) {
-                interface->RedrawActionSpellCastPart2( spell, targets );
-                interface->RedrawActionMonsterSpellCastStatus( attacker, targets.front() );
+                if ( interface ) {
+                    interface->RedrawActionSpellCastPart2( spell, targets );
+                    interface->RedrawActionMonsterSpellCastStatus( attacker, targets.front() );
+                }
             }
         }
     }
@@ -411,8 +414,6 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             if ( hard || battle->Modes( TR_SKIPMOVE ) ) {
                 battle->SetModes( TR_HARDSKIP );
                 battle->SetModes( TR_MOVED );
-                if ( Settings::Get().ExtBattleSkipIncreaseDefense() )
-                    battle->SetModes( TR_DEFENSED );
             }
 
             battle->SetModes( TR_SKIPMOVE );
@@ -556,8 +557,8 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     TargetsInfo targets;
     targets.reserve( 8 );
 
-    Unit * enemy = NULL;
-    Cell * cell = NULL;
+    Unit * enemy = nullptr;
+    Cell * cell = nullptr;
     TargetInfo res;
 
     // first target
@@ -584,19 +585,18 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     if ( attacker.isDoubleCellAttack() ) {
         const int dir = Board::GetDirection( attacker.GetHeadIndex(), dst );
         if ( !defender.isWide() || 0 == ( ( RIGHT | LEFT ) & dir ) ) {
-            if ( NULL != ( cell = Board::GetCell( dst, dir ) ) && NULL != ( enemy = cell->GetUnit() ) && enemy != &defender ) {
+            if ( nullptr != ( cell = Board::GetCell( dst, dir ) ) && nullptr != ( enemy = cell->GetUnit() ) && enemy != &defender ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
                 targets.push_back( res );
             }
         }
     }
-    // around hydra
-    else if ( attacker.GetID() == Monster::HYDRA ) {
+    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) ) {
         const Indexes around = Board::GetAroundIndexes( attacker );
 
         for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
+            if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender && enemy->GetColor() != attacker.GetColor() ) {
                 res.defender = enemy;
                 res.damage = attacker.GetDamage( *enemy );
                 targets.push_back( res );
@@ -604,12 +604,12 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
     }
     // lich cloud damages
-    else if ( ( attacker.GetID() == Monster::LICH || attacker.GetID() == Monster::POWER_LICH ) && !attacker.isHandFighting() ) {
+    else if ( attacker.isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) && !attacker.isHandFighting() ) {
         if ( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst ) {
             const Indexes around = Board::GetAroundIndexes( dst );
 
             for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-                if ( NULL != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
+                if ( nullptr != ( enemy = Board::GetCell( *it )->GetUnit() ) && enemy != &defender ) {
                     res.defender = enemy;
                     res.damage = attacker.GetDamage( *enemy );
                     targets.push_back( res );
@@ -617,7 +617,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
             }
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Lich shot at a cell where no mosnter exists: " << dst );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Lich shot at a cell where no monster exists: " << dst );
         }
     }
 
@@ -726,7 +726,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     case Spell::CHAINLIGHTNING:
     case Spell::COLDRING:
         // skip center
-        target = NULL;
+        target = nullptr;
         break;
 
     default:
@@ -740,7 +740,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
 
     // resurrect spell? get target from graveyard
-    if ( NULL == target && GraveyardAllowResurrect( dest, spell ) ) {
+    if ( nullptr == target && GraveyardAllowResurrect( dest, spell ) ) {
         target = GetTroopUID( graveyard.GetLastTroopUID( dest ) );
 
         if ( target && target->AllowApplySpell( spell, hero ) ) {
@@ -1009,7 +1009,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
     const int32_t who = cmd.GetValue();
     Unit * troop = GetTroopBoard( who );
 
-    if ( troop != NULL ) {
+    if ( troop != nullptr ) {
         Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
 
         const int32_t centerIndex = troop->GetHeadIndex();

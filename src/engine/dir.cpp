@@ -29,7 +29,9 @@
 
 #include "dir.h"
 #include "system.h"
+#if defined( FHEROES2_VITA )
 #include "tools.h"
+#endif
 #include <cstring>
 #if defined( __SWITCH__ )
 #include <strings.h> // for strcasecmp
@@ -107,7 +109,7 @@ namespace
         }
 
         struct dirent * ep;
-        while ( NULL != ( ep = readdir( dp ) ) ) {
+        while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
             // if not regular file

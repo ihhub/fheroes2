@@ -21,19 +21,17 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstring>
+#include <iterator>
 #include <sstream>
 
-#include "cursor.h"
-#include "game.h"
 #include "game_static.h"
 #include "heroes.h"
 #include "race.h"
 #include "rand.h"
-#include "settings.h"
 #include "skill.h"
 #include "skill_static.h"
-#include "text.h"
+#include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace Skill
@@ -666,7 +664,7 @@ void Skill::SecSkills::AddSkill( const Skill::Secondary & skill )
 Skill::Secondary * Skill::SecSkills::FindSkill( int skill )
 {
     iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
-    return it != end() ? &( *it ) : NULL;
+    return it != end() ? &( *it ) : nullptr;
 }
 
 std::vector<Skill::Secondary> & Skill::SecSkills::ToVector( void )
@@ -733,9 +731,9 @@ int Skill::SecondaryPriorityFromRace( int race, const std::vector<int> & exclude
 {
     Rand::Queue parts( MAXSECONDARYSKILL );
 
-    for ( u32 ii = 0; ii < ARRAY_COUNT( secskills ); ++ii )
-        if ( exclude.end() == std::find( exclude.begin(), exclude.end(), secskills[ii] ) )
-            parts.Push( secskills[ii], SecondaryGetWeightSkillFromRace( race, secskills[ii] ) );
+    for ( auto skill : secskills )
+        if ( exclude.end() == std::find( exclude.begin(), exclude.end(), skill ) )
+            parts.Push( skill, SecondaryGetWeightSkillFromRace( race, skill ) );
 
     return parts.Size() ? parts.GetWithSeed( seed ) : Secondary::UNKNOWN;
 }
@@ -753,9 +751,7 @@ void Skill::SecSkills::FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint
 
     // exclude is full, add other.
     if ( HEROESMAXSKILL <= Count() ) {
-        for ( u32 ii = 0; ii < ARRAY_COUNT( secskills ); ++ii )
-            if ( Level::NONE == GetLevel( secskills[ii] ) )
-                exclude_skills.push_back( secskills[ii] );
+        std::copy_if( secskills, std::end( secskills ), std::back_inserter( exclude_skills ), [this]( int skill ) { return Level::NONE == GetLevel( skill ); } );
     }
 
     sec1.SetSkill( SecondaryPriorityFromRace( race, exclude_skills, seedSkill1 ) );
@@ -782,7 +778,7 @@ void StringAppendModifiers( std::string & str, int value )
     str.append( std::to_string( value ) );
 }
 
-int Skill::GetLeadershipModifiers( int level, std::string * strs = NULL )
+int Skill::GetLeadershipModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LEADERSHIP, level );
 
@@ -795,7 +791,7 @@ int Skill::GetLeadershipModifiers( int level, std::string * strs = NULL )
     return skill.GetValues();
 }
 
-int Skill::GetLuckModifiers( int level, std::string * strs = NULL )
+int Skill::GetLuckModifiers( int level, std::string * strs = nullptr )
 {
     Secondary skill( Secondary::LUCK, level );
 

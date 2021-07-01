@@ -25,10 +25,11 @@
 #include "direction.h"
 #include "gamedefs.h"
 #include "math_base.h"
+#include "types.h"
 
 #define TILEWIDTH 32
 
-class MapsIndexes : public std::vector<s32>
+class MapsIndexes : public std::vector<int32_t>
 {};
 
 namespace Maps
@@ -51,8 +52,8 @@ namespace Maps
     const char * GetMinesName( int res );
 
     int GetDirection( int from, int to );
-    s32 GetDirectionIndex( s32, int direct );
-    bool isValidDirection( s32, int direct );
+    int32_t GetDirectionIndex( int32_t from, int vector );
+    bool isValidDirection( int32_t from, int vector );
 
     bool isValidAbsIndex( const int32_t index );
     bool isValidAbsPoint( const int32_t x, const int32_t y );
@@ -66,17 +67,18 @@ namespace Maps
     Indexes GetAroundIndexes( s32 );
     Indexes GetAroundIndexes( const int32_t tileIndex, const int32_t maxDistanceFromTile, bool sortTiles = false ); // sorting distance
 
-    Indexes ScanAroundObject( s32, int obj );
-    Indexes ScanAroundObject( s32, u32 dist, int obj );
+    Indexes ScanAroundObject( const int32_t center, const int obj );
+    Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
+    Indexes ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes );
 
-    Indexes GetTilesUnderProtection( s32 );
-    bool TileIsUnderProtection( s32 );
+    Indexes GetTilesUnderProtection( int32_t center );
+    bool TileIsUnderProtection( int32_t center );
 
     Indexes GetObjectPositions( int obj, bool ignoreHeroes );
-    Indexes GetObjectPositions( s32, int obj, bool ignoreHeroes );
-    Indexes GetObjectsPositions( const std::vector<u8> & objs );
+    Indexes GetObjectPositions( int32_t center, int obj, bool ignoreHeroes );
+    Indexes GetObjectsPositions( const std::vector<uint8_t> & objs );
 
-    int TileIsCoast( s32, int direct = DIRECTION_ALL );
+    int TileIsCoast( int32_t center, int direct = DIRECTION_ALL );
 
     void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
 

@@ -34,7 +34,6 @@
 #include "resource.h"
 #include "speed.h"
 #include "text.h"
-#include "world.h"
 
 namespace
 {
@@ -98,7 +97,7 @@ void Castle::OpenWell( void )
 
     buttonExit.draw();
 
-    std::vector<RandomMonsterAnimation> monsterAnimInfo;
+    std::vector<fheroes2::RandomMonsterAnimation> monsterAnimInfo;
     monsterAnimInfo.emplace_back( Monster( race, DWELLING_MONSTER1 ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) );
@@ -198,7 +197,7 @@ void Castle::OpenWell( void )
     }
 }
 
-void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<RandomMonsterAnimation> & monsterAnimInfo ) const
+void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );

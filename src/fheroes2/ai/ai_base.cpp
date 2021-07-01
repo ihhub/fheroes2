@@ -20,17 +20,15 @@
 
 #include "agg.h"
 #include "ai.h"
-#include "battle.h"
 #include "battle_arena.h"
 #include "battle_command.h"
 #include "battle_troop.h"
-#include "castle.h"
-#include "dialog.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "mus.h"
+#include "settings.h"
 
 namespace AI
 {

@@ -24,10 +24,15 @@
 #include "monster.h"
 #include "race.h"
 #include "resource.h"
+#include "settings.h"
 #include "skill.h"
 #include "spell.h"
+#include "system.h"
+#include "tools.h"
 #include "translations.h"
+
 #include <cassert>
+#include <map>
 
 namespace
 {
@@ -367,34 +372,35 @@ namespace
             return Spell( spellId ).GetName();
         }
     }
-}
-
-namespace Campaign
-{
-    bool isCampaignMap( const std::string & fullMapPath, const std::string & scenarioMapName )
-    {
-        if ( fullMapPath.size() < scenarioMapName.size() ) {
-            return false;
-        }
-        const std::string lowerFullPath = StringLower( fullMapPath );
-        return lowerFullPath.compare( lowerFullPath.size() - scenarioMapName.size(), scenarioMapName.size(), scenarioMapName ) == 0;
-    }
 
     bool tryGetMatchingFile( const std::string & fileName, std::string & matchingFilePath )
     {
-        const std::string fileExtension = fileName.substr( fileName.rfind( '.' ) + 1 );
-        const ListFiles files = Settings::GetListFiles( "maps", fileExtension );
+        static const auto fileNameToPath = []() {
+            std::map<std::string, std::string> result;
 
-        const auto iterator = std::find_if( files.begin(), files.end(), [&fileName]( const std::string & filePath ) { return isCampaignMap( filePath, fileName ); } );
+            const ListFiles files = Settings::FindFiles( "maps", "", false );
 
-        if ( iterator != files.end() ) {
-            matchingFilePath = *iterator;
+            for ( const std::string & file : files ) {
+                result.emplace( StringLower( System::GetBasename( file ) ), file );
+            }
+
+            return result;
+        }();
+
+        const auto result = fileNameToPath.find( fileName );
+
+        if ( result != fileNameToPath.end() ) {
+            matchingFilePath = result->second;
+
             return true;
         }
 
         return false;
     }
+}
 
+namespace Campaign
+{
     ScenarioBonusData::ScenarioBonusData()
         : _type( 0 )
         , _subType( 0 )
@@ -483,7 +489,7 @@ namespace Campaign
         : _scenarioID( scenarioID )
         , _nextMaps( nextMaps )
         , _bonuses( bonuses )
-        , _fileName( fileName )
+        , _fileName( StringLower( fileName ) )
         , _scenarioName( scenarioName )
         , _description( description )
         , _victoryCondition( victoryCondition )

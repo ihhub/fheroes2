@@ -20,96 +20,95 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
-#include <cstring>
+#include <array>
 
-#include "difficulty.h"
 #include "game.h"
 #include "game_static.h"
 #include "mp2.h"
 #include "race.h"
 #include "resource.h"
-#include "settings.h"
+#include "save_format_version.h"
 #include "skill.h"
 #include "skill_static.h"
 
 namespace Skill
 {
-    stats_t _stats[] = {{"knight",
-                         {1, 1, 1, 1},
-                         {2, 2, 1, 1},
-                         0,
-                         0,
-                         {0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                         10,
-                         {35, 45, 10, 10},
-                         {25, 25, 25, 25},
-                         {2, 4, 3, 1, 3, 5, 3, 1, 1, 2, 0, 3, 2, 2}},
-                        {"barbarian",
-                         {1, 1, 1, 1},
-                         {3, 1, 1, 1},
-                         0,
-                         0,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0},
-                         10,
-                         {55, 35, 5, 5},
-                         {30, 30, 20, 20},
-                         {3, 3, 2, 1, 2, 3, 3, 2, 1, 3, 0, 4, 4, 1}},
-                        {"sorceress",
-                         {0, 0, 2, 2},
-                         {0, 0, 2, 3},
-                         1,
-                         15,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1},
-                         10,
-                         {10, 10, 30, 50},
-                         {20, 20, 30, 30},
-                         {3, 3, 2, 2, 2, 1, 2, 3, 3, 4, 0, 2, 1, 4}},
-                        {"warlock",
-                         {0, 0, 2, 2},
-                         {0, 0, 3, 2},
-                         1,
-                         19,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1},
-                         10,
-                         {10, 10, 50, 30},
-                         {20, 20, 30, 30},
-                         {1, 3, 2, 3, 2, 1, 2, 1, 3, 2, 1, 2, 4, 5}},
-                        {"wizard",
-                         {0, 0, 2, 2},
-                         {0, 1, 2, 2},
-                         1,
-                         17,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-                         10,
-                         {10, 10, 40, 40},
-                         {20, 20, 30, 30},
-                         {1, 3, 2, 3, 2, 2, 2, 2, 4, 2, 0, 2, 2, 5}},
-                        {"necromancer",
-                         {0, 0, 2, 2},
-                         {1, 0, 2, 2},
-                         1,
-                         10,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-                         10,
-                         {15, 15, 35, 35},
-                         {25, 25, 25, 25},
-                         {1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4}},
-                        {NULL,
-                         {0, 0, 0, 0},
-                         {0, 0, 0, 0},
-                         0,
-                         0,
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                         10,
-                         {0, 0, 0, 0},
-                         {0, 0, 0, 0},
-                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}};
+    stats_t _stats[] = { { "knight",
+                           { 1, 1, 1, 1 },
+                           { 2, 2, 1, 1 },
+                           0,
+                           0,
+                           { 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+                           10,
+                           { 35, 45, 10, 10 },
+                           { 25, 25, 25, 25 },
+                           { 2, 4, 3, 1, 3, 5, 3, 1, 1, 2, 0, 3, 2, 2 } },
+                         { "barbarian",
+                           { 1, 1, 1, 1 },
+                           { 3, 1, 1, 1 },
+                           0,
+                           0,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0 },
+                           10,
+                           { 55, 35, 5, 5 },
+                           { 30, 30, 20, 20 },
+                           { 3, 3, 2, 1, 2, 3, 3, 2, 1, 3, 0, 4, 4, 1 } },
+                         { "sorceress",
+                           { 0, 0, 2, 2 },
+                           { 0, 0, 2, 3 },
+                           1,
+                           15,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1 },
+                           10,
+                           { 10, 10, 30, 50 },
+                           { 20, 20, 30, 30 },
+                           { 3, 3, 2, 2, 2, 1, 2, 3, 3, 4, 0, 2, 1, 4 } },
+                         { "warlock",
+                           { 0, 0, 2, 2 },
+                           { 0, 0, 3, 2 },
+                           1,
+                           19,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
+                           10,
+                           { 10, 10, 50, 30 },
+                           { 20, 20, 30, 30 },
+                           { 1, 3, 2, 3, 2, 1, 2, 1, 3, 2, 1, 2, 4, 5 } },
+                         { "wizard",
+                           { 0, 0, 2, 2 },
+                           { 0, 1, 2, 2 },
+                           1,
+                           17,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 },
+                           10,
+                           { 10, 10, 40, 40 },
+                           { 20, 20, 30, 30 },
+                           { 1, 3, 2, 3, 2, 2, 2, 2, 4, 2, 0, 2, 2, 5 } },
+                         { "necromancer",
+                           { 0, 0, 2, 2 },
+                           { 1, 0, 2, 2 },
+                           1,
+                           10,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1 },
+                           10,
+                           { 15, 15, 35, 35 },
+                           { 25, 25, 25, 25 },
+                           { 1, 3, 2, 3, 2, 0, 2, 1, 3, 2, 5, 3, 1, 4 } },
+                         { nullptr,
+                           { 0, 0, 0, 0 },
+                           { 0, 0, 0, 0 },
+                           0,
+                           0,
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                           10,
+                           { 0, 0, 0, 0 },
+                           { 0, 0, 0, 0 },
+                           { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } } };
 
     values_t _values[] = {
-        {"pathfinding", {25, 50, 100}}, {"archery", {10, 25, 50}},  {"logistics", {10, 20, 30}},  {"scouting", {1, 2, 3}},      {"diplomacy", {25, 50, 100}},
-        {"navigation", {33, 66, 100}},  {"leadership", {1, 2, 3}},  {"wisdom", {3, 4, 5}},        {"mysticism", {2, 3, 4}},     {"luck", {1, 2, 3}},
-        {"ballistics", {0, 0, 0}},      {"eagleeye", {20, 30, 40}}, {"necromancy", {10, 20, 30}}, {"estates", {100, 250, 500}}, {NULL, {0, 0, 0}},
+        { "pathfinding", { 25, 50, 100 } }, { "archery", { 10, 25, 50 } },     { "logistics", { 10, 20, 30 } }, { "scouting", { 1, 2, 3 } },
+        { "diplomacy", { 25, 50, 100 } },   { "navigation", { 33, 66, 100 } }, { "leadership", { 1, 2, 3 } },   { "wisdom", { 3, 4, 5 } },
+        { "mysticism", { 2, 3, 4 } },       { "luck", { 1, 2, 3 } },           { "ballistics", { 0, 0, 0 } },   { "eagleeye", { 20, 30, 40 } },
+        { "necromancy", { 10, 20, 30 } },   { "estates", { 100, 250, 500 } },  { nullptr, { 0, 0, 0 } },
     };
 
     secondary_t _from_witchs_hut = {
@@ -178,7 +177,7 @@ namespace GameStatic
     u8 whirlpool_lost_percent = 50;
 
     /* town, castle, heroes, artifact_telescope, object_observation_tower, object_magi_eyes */
-    u8 overview_distance[] = {4, 5, 4, 1, 20, 9};
+    std::array<uint8_t, 6> overview_distance = { 4, 5, 4, 1, 20, 9 };
 
     u8 gameover_lost_days = 7;
 
@@ -221,49 +220,17 @@ namespace GameStatic
 
 StreamBase & GameStatic::operator<<( StreamBase & msg, const Data & /*obj*/ )
 {
-    msg << whirlpool_lost_percent << kingdom_max_heroes << castle_grown_well << castle_grown_wel2 << castle_grown_week_of << castle_grown_month_of
-        << heroes_spell_points_day << gameover_lost_days << spell_dd_distance << spell_dd_sp << spell_dd_hp;
-
-    u8 array_size = ARRAY_COUNT( overview_distance );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << overview_distance[ii];
-
-    array_size = ARRAY_COUNT( kingdom_starting_resource );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << kingdom_starting_resource[ii];
-
-    array_size = ARRAY_COUNT( mageguild_restore_spell_points_day );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << mageguild_restore_spell_points_day[ii];
-
-    array_size = ARRAY_COUNT( objects_mod );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << objects_mod[ii];
-
-    msg << monsterUpgradeRatio << uniq;
-
-    // skill statics
-    array_size = ARRAY_COUNT( Skill::_stats );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << Skill::_stats[ii];
-
-    array_size = ARRAY_COUNT( Skill::_values );
-    msg << array_size;
-    for ( u32 ii = 0; ii < array_size; ++ii )
-        msg << Skill::_values[ii];
-
-    msg << Skill::_from_witchs_hut;
-
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
     return msg;
 }
 
 StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
 {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this method and its calls." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_SECOND_PRE_095_RELEASE ) {
+        return msg;
+    }
+
     msg >> whirlpool_lost_percent >> kingdom_max_heroes >> castle_grown_well >> castle_grown_wel2 >> castle_grown_week_of >> castle_grown_month_of
         >> heroes_spell_points_day >> gameover_lost_days >> spell_dd_distance >> spell_dd_sp >> spell_dd_hp;
 
@@ -303,16 +270,6 @@ StreamBase & GameStatic::operator>>( StreamBase & msg, const Data & /*obj*/ )
     return msg;
 }
 
-bool GameStatic::isCustomMonsterUpgradeOption()
-{
-    return std::fabs( monsterUpgradeRatio - 1.0f ) > 0.001f;
-}
-
-float GameStatic::GetMonsterUpgradeRatio()
-{
-    return monsterUpgradeRatio;
-}
-
 u32 GameStatic::GetLostOnWhirlpoolPercent( void )
 {
     return whirlpool_lost_percent;
@@ -320,7 +277,7 @@ u32 GameStatic::GetLostOnWhirlpoolPercent( void )
 
 u32 GameStatic::GetOverViewDistance( u32 d )
 {
-    return d >= ARRAY_COUNT( overview_distance ) ? 0 : overview_distance[d];
+    return d >= overview_distance.size() ? 0 : overview_distance[d];
 }
 
 u32 GameStatic::GetGameOverLostDays( void )
@@ -397,36 +354,6 @@ s32 GameStatic::ObjectVisitedModifiers( int obj )
     return 0;
 }
 
-u32 GameStatic::Spell_DD_Distance( void )
-{
-    return spell_dd_distance;
-}
-
-u32 GameStatic::Spell_DD_SP( void )
-{
-    return spell_dd_sp;
-}
-
-u32 GameStatic::Spell_DD_HP( void )
-{
-    return spell_dd_hp;
-}
-
-void GameStatic::SetSpell_DD_Distance( int v )
-{
-    spell_dd_distance = v;
-}
-
-void GameStatic::SetSpell_DD_SP( int v )
-{
-    spell_dd_sp = v;
-}
-
-void GameStatic::SetSpell_DD_HP( int v )
-{
-    spell_dd_hp = v;
-}
-
 const Skill::stats_t * GameStatic::GetSkillStats( int race )
 {
     switch ( race ) {
@@ -446,7 +373,7 @@ const Skill::stats_t * GameStatic::GetSkillStats( int race )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const Skill::values_t * GameStatic::GetSkillValues( int type )
@@ -484,7 +411,7 @@ const Skill::values_t * GameStatic::GetSkillValues( int type )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 const Skill::secondary_t * GameStatic::GetSkillForWitchsHut( void )

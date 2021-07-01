@@ -22,7 +22,6 @@
 #ifndef H2CAPTAIN_H
 #define H2CAPTAIN_H
 
-#include "gamedefs.h"
 #include "heroes_base.h"
 
 class Castle;

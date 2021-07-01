@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include "agg_image.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "icn.h"
 #include "screen.h"

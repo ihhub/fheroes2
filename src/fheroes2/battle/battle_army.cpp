@@ -25,6 +25,7 @@
 #include "battle_army.h"
 #include "battle_troop.h"
 #include "heroes.h"
+#include "monster_anim.h"
 #include "settings.h"
 #include "speed.h"
 
@@ -47,7 +48,7 @@ namespace Battle
         auto allowPartFunc = part1 ? AllowPart1 : AllowPart2;
         Units::iterator it1 = std::find_if( units1.begin(), units1.end(), allowPartFunc );
         Units::iterator it2 = std::find_if( units2.begin(), units2.end(), allowPartFunc );
-        Unit * result = NULL;
+        Unit * result = nullptr;
 
         if ( it1 != units1.end() && it2 != units2.end() ) {
             if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
@@ -115,14 +116,14 @@ Battle::Unit * Battle::Units::FindUID( u32 pid )
 {
     iterator it = std::find_if( begin(), end(), [pid]( const Unit * unit ) { return unit->isUID( pid ); } );
 
-    return it == end() ? NULL : *it;
+    return it == end() ? nullptr : *it;
 }
 
 Battle::Unit * Battle::Units::FindMode( u32 mod )
 {
     iterator it = std::find_if( begin(), end(), [mod]( const Unit * unit ) { return unit->Modes( mod ); } );
 
-    return it == end() ? NULL : *it;
+    return it == end() ? nullptr : *it;
 }
 
 Battle::Force::Force( Army & parent, bool opposite )
@@ -173,7 +174,7 @@ int Battle::Force::GetControl( void ) const
 
 bool Battle::Force::isValid( void ) const
 {
-    return end() != std::find_if( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
+    return std::any_of( begin(), end(), []( const Unit * unit ) { return unit->isValid(); } );
 }
 
 uint32_t Battle::Force::GetSurrenderCost( void ) const
@@ -343,7 +344,7 @@ void Battle::Force::resetIdleAnimation()
 
 bool Battle::Force::HasMonster( const Monster & mons ) const
 {
-    return end() != std::find_if( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
+    return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
 u32 Battle::Force::GetDeadCounts( void ) const

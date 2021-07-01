@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,41 +21,176 @@
 #ifndef H2MONSTER_INFO_H
 #define H2MONSTER_INFO_H
 
-namespace Monster_Info
+#include "resource.h"
+
+#include <set>
+#include <string>
+#include <vector>
+
+namespace fheroes2
 {
-    enum ATTACK_DIR
+    enum class MonsterAbilityType : int
     {
-        TOP,
-        FRONT,
-        BOTTOM
+        // Basic abilities.
+        NONE,
+        DOUBLE_HEX_SIZE,
+        FLYING,
+        DRAGON,
+        UNDEAD,
+        ELEMENTAL,
+        // Advanced abilities.
+        DOUBLE_SHOOTING,
+        DOUBLE_MELEE_ATTACK,
+        DOUBLE_DAMAGE_TO_UNDEAD,
+        MAGIC_RESISTANCE,
+        MIND_SPELL_IMMUNITY,
+        ELEMENTAL_SPELL_IMMUNITY,
+        FIRE_SPELL_IMMUNITY,
+        COLD_SPELL_IMMUNITY,
+        IMMUNE_TO_CERTAIN_SPELL,
+        ELEMENTAL_SPELL_DAMAGE_REDUCTION,
+        SPELL_CASTER,
+        HP_REGENERATION,
+        TWO_CELL_MELEE_ATTACK,
+        ALWAYS_RETALIATE,
+        ALL_ADJACENT_CELL_MELEE_ATTACK,
+        NO_MELEE_PENALTY,
+        NO_ENEMY_RETALIATION,
+        HP_DRAIN,
+        AREA_SHOT,
+        MORAL_DECREMENT,
+        ENEMY_HALFING,
+        SOUL_EATER
     };
 
-    enum ANIMATION_TYPE
+    enum class MonsterWeaknessType : int
     {
+        // Basic abilities.
         NONE,
-        STATIC,
-        IDLE,
-        MOVE_START,
-        MOVING,
-        MOVE_END,
-        MOVE_QUICK,
-        FLY_UP,
-        FLY_LAND,
-        MELEE_TOP,
-        MELEE_TOP_END,
-        MELEE_FRONT,
-        MELEE_FRONT_END,
-        MELEE_BOT,
-        MELEE_BOT_END,
-        RANG_TOP,
-        RANG_TOP_END,
-        RANG_FRONT,
-        RANG_FRONT_END,
-        RANG_BOT,
-        RANG_BOT_END,
-        WNCE, // combined UP and RETURN anim
-        KILL,
-        INVALID
+        // Advanced abilities.
+        EXTRA_DAMAGE_FROM_FIRE_SPELL,
+        EXTRA_DAMAGE_FROM_COLD_SPELL,
+        EXTRA_DAMAGE_FROM_CERTAIN_SPELL
     };
+
+    struct MonsterAbility
+    {
+        explicit MonsterAbility( const MonsterAbilityType type_ )
+            : type( type_ )
+            , percentage( 0 )
+            , value( 0 )
+        {}
+
+        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
+            : type( type_ )
+            , percentage( percentage_ )
+            , value( value_ )
+        {}
+
+        bool operator<( const MonsterAbility & another ) const
+        {
+            return type < another.type || ( type == another.type && value < another.value );
+        }
+
+        MonsterAbilityType type;
+
+        uint32_t percentage;
+
+        uint32_t value;
+    };
+
+    struct MonsterWeakness
+    {
+        explicit MonsterWeakness( const MonsterWeaknessType type_ )
+            : type( type_ )
+            , percentage( 0 )
+            , value( 0 )
+        {}
+
+        explicit MonsterWeakness( const MonsterWeaknessType type_, const uint32_t percentage_, const uint32_t value_ )
+            : type( type_ )
+            , percentage( percentage_ )
+            , value( value_ )
+        {}
+
+        bool operator<( const MonsterWeakness & another ) const
+        {
+            return type < another.type || ( type == another.type && value < another.value );
+        }
+
+        MonsterWeaknessType type;
+
+        uint32_t percentage;
+
+        uint32_t value;
+    };
+
+    struct MonsterBattleStats
+    {
+        uint32_t attack;
+        uint32_t defense;
+        uint32_t damageMin;
+        uint32_t damageMax;
+        uint32_t hp;
+        uint32_t speed;
+        uint32_t shots;
+
+        std::set<MonsterAbility> abilities;
+        std::set<MonsterWeakness> weaknesses;
+    };
+
+    struct MonsterGeneralStats
+    {
+        const char * name;
+        const char * pluralName;
+
+        uint32_t baseGrowth;
+        uint32_t race;
+        uint32_t level;
+
+        cost_t cost;
+    };
+
+    struct MonsterSound
+    {
+        int meleeAttack;
+        int death;
+        int movement;
+        int wince;
+        int rangeAttack;
+    };
+
+    struct MonsterData
+    {
+        MonsterData( const int icnId_, const char * binFileName_, const MonsterSound & sounds_, const MonsterBattleStats & battleStats_,
+                     const MonsterGeneralStats & generalStats_ )
+            : icnId( icnId_ )
+            , binFileName( binFileName_ )
+            , sounds( sounds_ )
+            , battleStats( battleStats_ )
+            , generalStats( generalStats_ )
+        {}
+
+        int icnId;
+
+        const char * binFileName;
+
+        MonsterSound sounds;
+
+        MonsterBattleStats battleStats;
+
+        MonsterGeneralStats generalStats;
+    };
+
+    const MonsterData & getMonsterData( const int monsterId );
+
+    std::string getMonsterAbilityDescription( const MonsterAbility & ability, const bool ignoreBasicAbility );
+    std::string getMonsterWeaknessDescription( const MonsterWeakness & weakness, const bool ignoreBasicAbility );
+
+    std::string getMonsterDescription( const int monsterId );
+
+    std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
+
+    uint32_t getSpellResistance( const int monsterId, const int spellId );
 }
 #endif

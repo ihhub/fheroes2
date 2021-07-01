@@ -20,8 +20,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cassert>
-
 #include "agg.h"
 #include "agg_image.h"
 #include "audio_mixer.h"
@@ -32,7 +30,6 @@
 #include "game.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
-#include "gamedefs.h"
 #include "icn.h"
 #include "mus.h"
 #include "settings.h"
@@ -339,7 +336,8 @@ fheroes2::GameMode Game::NewGame()
     const fheroes2::Point buttonPos = drawButtonPanel();
 
     fheroes2::Button buttonStandartGame( buttonPos.x, buttonPos.y, ICN::BTNNEWGM, 0, 1 );
-    fheroes2::Button buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, ICN::BTNNEWGM, 2, 3 );
+    fheroes2::ButtonSprite buttonCampainGame( buttonPos.x, buttonPos.y + buttonYStep * 1, fheroes2::AGG::GetICN( ICN::BTNNEWGM, 2 ),
+                                              fheroes2::AGG::GetICN( ICN::BTNNEWGM, 3 ), fheroes2::AGG::GetICN( ICN::NEW_CAMPAIGN_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMultiGame( buttonPos.x, buttonPos.y + buttonYStep * 2, ICN::BTNNEWGM, 4, 5 );
     fheroes2::Button buttonBattleGame( buttonPos.x, buttonPos.y + buttonYStep * 3, ICN::BTNBATTLEONLY, 0, 1 );
     fheroes2::Button buttonSettings( buttonPos.x, buttonPos.y + buttonYStep * 4, ICN::BTNDCCFG, 4, 5 );

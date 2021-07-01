@@ -89,17 +89,17 @@ public:
     virtual bool isCaptain( void ) const;
     virtual bool isHeroes( void ) const;
 
-    int GetAttackModificator( std::string * = NULL ) const;
-    int GetDefenseModificator( std::string * = NULL ) const;
-    int GetPowerModificator( std::string * = NULL ) const;
-    int GetKnowledgeModificator( std::string * = NULL ) const;
-    int GetMoraleModificator( std::string * = NULL ) const;
-    int GetLuckModificator( std::string * = NULL ) const;
-    double GetSpellcastStrength() const;
+    int GetAttackModificator( std::string * = nullptr ) const;
+    int GetDefenseModificator( std::string * = nullptr ) const;
+    int GetPowerModificator( std::string * = nullptr ) const;
+    int GetKnowledgeModificator( std::string * = nullptr ) const;
+    int GetMoraleModificator( std::string * = nullptr ) const;
+    int GetLuckModificator( std::string * = nullptr ) const;
+    double GetSpellcastStrength( const double armyLimit ) const;
 
     u32 GetSpellPoints( void ) const;
     bool HaveSpellPoints( const Spell & ) const;
-    bool CanCastSpell( const Spell &, std::string * = NULL ) const;
+    bool CanCastSpell( const Spell &, std::string * = nullptr ) const;
     bool CanTeachSpell( const Spell & ) const;
     bool CanLearnSpell( const Spell & ) const;
     bool CanTranscribeScroll( const Artifact & ) const;

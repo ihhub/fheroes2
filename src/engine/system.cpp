@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include <ctime>
@@ -94,7 +95,7 @@ namespace
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
-    return CreateDirectoryA( path.c_str(), NULL );
+    return CreateDirectoryA( path.c_str(), nullptr );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
 #elif defined( FHEROES2_VITA )
@@ -192,6 +193,15 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
+std::string System::GetUniversalBasename( const std::string & str )
+{
+    std::string path = str;
+
+    std::replace( path.begin(), path.end(), ( SEPARATOR == '/' ) ? '\\' : '/', SEPARATOR );
+
+    return GetBasename( path );
+}
+
 const char * System::GetEnvironment( const char * name )
 {
 #if defined( __MINGW32__ )
@@ -231,11 +241,11 @@ std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
 {
     std::string locname;
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, NULL );
+    char * clocale = std::setlocale( LC_MONETARY, nullptr );
 #elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, NULL );
+    char * clocale = setlocale( LC_MESSAGES, nullptr );
 #else
-    char * clocale = std::setlocale( LC_MESSAGES, NULL );
+    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
 #endif
 
     if ( clocale ) {
@@ -267,7 +277,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 char * System::GetOptionsArgument( void )
 {
 #if defined( _MSC_VER )
-    return NULL;
+    return nullptr;
 #else
     return optarg;
 #endif

@@ -32,12 +32,9 @@
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
-#include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -556,6 +553,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     buttonViewIntro.draw();
 
+    if ( !scenario.isMapFilePresent() ) {
+        buttonOk.disable();
+    }
+
     buttonOk.draw();
     buttonCancel.draw();
 
@@ -611,7 +612,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( le.MouseClickLeft( buttonCancel.area() ) ) {
             return prevMode;
         }
-        else if ( le.MouseClickLeft( buttonOk.area() ) ) {
+        else if ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) {
             const Maps::FileInfo mapInfo = scenario.loadMap();
             conf.SetCurrentFileInfo( mapInfo );
 
@@ -623,14 +624,18 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             players.SetStartGame();
             if ( conf.ExtGameUseFade() )
                 fheroes2::FadeDisplay();
+
+            fheroes2::ImageRestorer restorer( display );
             Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
-                Dialog::Message( _( "Campaign Game loading failure" ), _( "Please make sure that campaign files are correct and present" ), Font::SMALL, Dialog::OK );
+                Dialog::Message( _( "Campaign Scenario loading failure" ), _( "Please make sure that campaign files are correct and present." ), Font::BIG, Dialog::OK );
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
+
+            restorer.reset();
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE )

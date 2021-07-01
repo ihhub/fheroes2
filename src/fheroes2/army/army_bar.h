@@ -23,12 +23,11 @@
 #ifndef H2ARMYBAR_H
 #define H2ARMYBAR_H
 
-#include "army_troop.h"
-#include "gamedefs.h"
 #include "interface_itemsbar.h"
 #include "ui_tool.h"
 
 class Army;
+class ArmyTroop;
 
 class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 {
@@ -58,8 +57,8 @@ public:
     bool ActionBarCursor( ArmyTroop & ) override;
     bool ActionBarCursor( ArmyTroop &, ArmyTroop & ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
-    bool QueueEventProcessing( ArmyBar &, std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
+    bool QueueEventProcessing( ArmyBar &, std::string * = nullptr );
 
 protected:
     fheroes2::MovableSprite spcursor;

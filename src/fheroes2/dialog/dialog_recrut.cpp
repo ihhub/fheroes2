@@ -30,6 +30,7 @@
 #include "payment.h"
 #include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 #include <cassert>
@@ -89,7 +90,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     const Bin_Info::MonsterAnimInfo & monsterInfo = Bin_Info::GetMonsterInfo( monsterId );
     assert( !monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC].empty() );
 
-    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( Monster::GetICNByMonsterID( monsterId ), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
+    const fheroes2::Sprite & smon = fheroes2::AGG::GetICN( monster.GetMonsterSprite(), monsterInfo.animationFrames[Bin_Info::MonsterAnimInfo::STATIC][0] );
     dst_pt.x = pos.x + 80 + smon.x() - ( monster.isWide() ? 22 : 0 );
     dst_pt.y = pos.y + 135 - smon.height();
 
@@ -182,7 +183,7 @@ void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 
     text.Blit( pos.x + 29, pos.y + 163 );
 }
 
-const char * SwitchMaxMinButtons( fheroes2::Button & btnMax, fheroes2::Button & btnMin, bool max )
+const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::ButtonBase & btnMin, bool max )
 {
     if ( btnMax.isEnabled() || btnMin.isEnabled() ) {
         if ( max ) {
@@ -253,7 +254,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
 
     dst_pt.x = pos.x + 229;
     dst_pt.y = pos.y + 156;
-    fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::RECRUIT, 4, 5 );
+    fheroes2::ButtonSprite buttonMax( dst_pt.x, dst_pt.y, fheroes2::AGG::GetICN( ICN::RECRUIT, 4 ), fheroes2::AGG::GetICN( ICN::RECRUIT, 5 ),
+                                      fheroes2::AGG::GetICN( ICN::MAX_DISABLED_BUTTON, 0 ) );
     fheroes2::Button buttonMin( dst_pt.x, dst_pt.y, ICN::NON_UNIFORM_GOOD_MIN_BUTTON, 0, 1 );
 
     dst_pt.x = pos.x + 205;

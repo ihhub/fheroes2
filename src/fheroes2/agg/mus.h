@@ -23,7 +23,7 @@
 #ifndef H2MUS_H
 #define H2MUS_H
 
-#include "gamedefs.h"
+#include <string>
 
 namespace MUS
 {

@@ -20,17 +20,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <cmath>
-
+#include "interface_radar.h"
 #include "agg_image.h"
 #include "castle.h"
-#include "cursor.h"
-#include "game.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "icn.h"
-#include "interface_radar.h"
+#ifdef WITH_DEBUG
 #include "logging.h"
+#endif
+#include "settings.h"
 #include "text.h"
 #include "world.h"
 

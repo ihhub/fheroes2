@@ -21,6 +21,7 @@
 #include "battle_animation.h"
 #include "logging.h"
 #include "monster.h"
+#include "monster_anim.h"
 #include "rand.h"
 #include <algorithm>
 

@@ -1,0 +1,49 @@
+name: CMake
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: Linux SDL1
+          os: ubuntu-latest
+          sdl_version: SDL
+          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev
+        - name: Linux SDL2
+          os: ubuntu-latest
+          sdl_version: SDL2
+          dependencies: libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev
+        - name: macOS SDL1
+          os: macos-latest
+          sdl_version: SDL
+          dependencies: sdl sdl_image sdl_mixer sdl_ttf
+        - name: macOS SDL2
+          os: macos-latest
+          sdl_version: SDL2
+          dependencies: sdl2 sdl2_image sdl2_mixer sdl2_ttf
+    name: CMake (${{ matrix.config.name }})
+    runs-on: ${{ matrix.config.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install dependencies (Linux)
+      if: ${{ matrix.config.os == 'ubuntu-latest' }}
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ${{ matrix.config.dependencies }}
+    - name: Install dependencies (macOS)
+      if: ${{ matrix.config.os == 'macos-latest' }}
+      run: |
+        brew install ${{ matrix.config.dependencies }}
+    - name: Build
+      run: |
+        cmake -B build -DCMAKE_BUILD_TYPE=Release -DUSE_SDL_VERSION=${{ matrix.config.sdl_version }} -DENABLE_IMAGE=ON -DENABLE_UNICODE=ON -DENABLE_TOOLS=ON -DFHEROES2_STRICT_COMPILATION=ON
+        cmake --build build -j2
+    - name: Install
+      run: |
+        sudo cmake --install build

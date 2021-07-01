@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "agg.h"
-#include "agg_image.h"
 #include "audio_mixer.h"
 #include "castle.h"
 #include "cursor.h"
@@ -34,17 +33,18 @@
 #include "game_io.h"
 #include "game_over.h"
 #include "heroes.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
 #include "m82.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
 {
-    if ( ( hero == NULL ) || hero->Modes( Heroes::GUARDIAN ) )
+    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
         return;
 
     hero->ResetModes( Heroes::SLEEPER );
@@ -413,25 +413,18 @@ void Interface::Basic::EventDefaultAction( void )
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
-
         // 1. action object
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) && ( !MP2::isMoveObject( hero->GetMapsObject() ) || hero->CanMove() ) ) {
+            const Maps::Tiles & tile = world.GetTiles( hero->GetIndex() );
+
             hero->Action( hero->GetIndex(), true );
             if ( MP2::OBJ_STONELITHS == tile.GetObject( false ) || MP2::OBJ_WHIRLPOOL == tile.GetObject( false ) )
                 SetRedraw( REDRAW_HEROES );
             SetRedraw( REDRAW_GAMEAREA );
         }
-        else
-            // 2. continue
-            if ( hero->GetPath().isValid() )
-            hero->SetMove( true );
-        else
-            // 3. hero dialog
-            Game::OpenHeroesDialog( *hero, true, true );
     }
     else
-        // 4. town dialog
+        // 2. town dialog
         if ( GetFocusCastle() ) {
         Game::OpenCastleDialog( *GetFocusCastle() );
     }

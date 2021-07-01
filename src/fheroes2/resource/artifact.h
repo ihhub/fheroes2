@@ -248,8 +248,8 @@ public:
     bool ActionBarLeftMouseDoubleClick( Artifact & artifact ) override;
     bool ActionBarRightMouseHold( Artifact & artifact ) override;
 
-    bool QueueEventProcessing( std::string * = NULL );
-    bool QueueEventProcessing( ArtifactsBar &, std::string * = NULL );
+    bool QueueEventProcessing( std::string * = nullptr );
+    bool QueueEventProcessing( ArtifactsBar &, std::string * = nullptr );
 
     bool ActionBarCursor( Artifact & ) override;
     bool ActionBarCursor( Artifact &, Artifact & ) override;

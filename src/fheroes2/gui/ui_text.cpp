@@ -20,6 +20,7 @@
 
 #include "ui_text.h"
 #include "agg_image.h"
+#include "image.h"
 
 #include <cassert>
 #include <deque>

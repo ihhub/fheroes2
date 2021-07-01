@@ -27,6 +27,8 @@
 #include "settings.h"
 #include "translations.h"
 
+#include <cassert>
+
 /* return name icn object */
 int MP2::GetICNObject( int tileset )
 {
@@ -691,7 +693,7 @@ const char * MP2::StringObject( int object )
         break;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 bool MP2::isDayLife( int obj )
@@ -793,15 +795,16 @@ bool MP2::isBattleLife( int obj )
     return false;
 }
 
-bool MP2::isActionObject( int obj, bool water )
+bool MP2::isActionObject( const int obj, const bool locatesOnWater )
 {
-    if ( water )
-        return isWaterObject( obj );
+    if ( locatesOnWater ) {
+        return isWaterActionObject( obj );
+    }
 
-    return isGroundObject( obj );
+    return isActionObject( obj );
 }
 
-bool MP2::isWaterObject( int obj )
+bool MP2::isWaterActionObject( const int obj )
 {
     switch ( obj ) {
     case OBJ_WATERCHEST:
@@ -814,34 +817,60 @@ bool MP2::isWaterObject( int obj )
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANMAPS:
     case OBJ_COAST:
-
     case OBJ_MERMAID:
     case OBJ_SIRENS:
     case OBJ_BARRIER:
-
-        // hack (bug: #3142729)
     case OBJ_MONSTER:
     case OBJ_ARTIFACT:
     case OBJ_RESOURCE:
-
         return true;
 
     case OBJ_CASTLE:
     case OBJ_BOAT:
         return false;
-
     default:
         break;
     }
 
     // price loyalty: editor allow place other objects
-    return Settings::Get().isPriceOfLoyaltySupported() ? isGroundObject( obj ) : false;
+    return Settings::Get().isPriceOfLoyaltySupported() ? isActionObject( obj ) : false;
 }
 
-bool MP2::isGroundObject( int obj )
+bool MP2::isActionObject( const int obj )
 {
     // check if first bit is set
-    return obj > 127 && obj != OBJ_EVENT && obj != OBJN_STABLES && obj != OBJN_ALCHEMYTOWER;
+    if ( obj < 128 ) {
+        return false;
+    }
+    switch ( obj ) {
+    case OBJ_EVENT:
+    case OBJN_STABLES:
+    case OBJN_ALCHEMYTOWER:
+    case OBJ_UNKNW_E2:
+    case OBJ_UNKNW_E3:
+    case OBJ_UNKNW_E4:
+    case OBJ_UNKNW_E5:
+    case OBJ_UNKNW_E6:
+    case OBJ_UNKNW_E7:
+    case OBJ_UNKNW_E8:
+    case OBJ_UNKNW_F9:
+    case OBJ_UNKNW_FA:
+    case OBJ_UNKNW_91:
+    case OBJ_UNKNW_92:
+    case OBJ_UNKNW_9C:
+    case OBJ_UNKNW_A1:
+    case OBJ_UNKNW_AA:
+    case OBJ_UNKNW_B2:
+    case OBJ_UNKNW_B8:
+    case OBJ_UNKNW_B9:
+    case OBJ_UNKNW_D1:
+    case OBJ_REEFS:
+        return false;
+    default:
+        break;
+    }
+
+    return true;
 }
 
 bool MP2::isQuantityObject( int obj )
@@ -1073,28 +1102,29 @@ bool MP2::isNeedStayFront( int obj )
     return isPickupObject( obj );
 }
 
-bool MP2::isClearGroundObject( int obj )
+int MP2::getActionObjectDirection( const int objId )
 {
-    switch ( obj ) {
-    case OBJ_ZERO:
-    case OBJ_COAST:
-        return true;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
-int MP2::GetObjectDirect( int obj )
-{
-    switch ( obj ) {
+    switch ( objId ) {
     case OBJ_JAIL:
     case OBJ_BARRIER:
+    case OBJ_ARTIFACT:
+    case OBJ_RESOURCE:
+    case OBJ_TREASURECHEST:
+    case OBJ_MONSTER:
+    case OBJ_ANCIENTLAMP:
+    case OBJ_CAMPFIRE:
+    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_FLOTSAM:
+    case OBJ_WATERCHEST:
+    case OBJ_BUOY:
+    case OBJ_WHIRLPOOL:
+    case OBJ_BOTTLE:
+    case OBJ_COAST:
+    case OBJ_BOAT:
         return DIRECTION_ALL;
 
     case OBJ_SHIPWRECK:
+        // Logically right tile from Shipwreck is ocean so it could be safe to allow it.
         return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
 
     case OBJ_DERELICTSHIP:
@@ -1169,20 +1199,18 @@ int MP2::GetObjectDirect( int obj )
     case OBJ_ARENA:
     case OBJ_SIRENS:
     case OBJ_MERMAID:
-        return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
-
     case OBJ_WATERWHEEL:
-        return Direction::CENTER | Direction::LEFT | Direction::RIGHT | DIRECTION_BOTTOM_ROW;
-
     case OBJ_MAGELLANMAPS:
-        return Direction::CENTER | Direction::LEFT | DIRECTION_BOTTOM_ROW;
+        return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 
     case OBJ_CASTLE:
         return Direction::CENTER | Direction::BOTTOM;
 
     default:
+        // Did you add a new action object? Please add its passability!
+        assert( 0 );
         break;
     }
 
-    return DIRECTION_ALL;
+    return Direction::UNKNOWN;
 }

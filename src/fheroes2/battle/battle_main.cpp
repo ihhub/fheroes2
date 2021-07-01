@@ -24,23 +24,20 @@
 #include <memory>
 
 #include "agg.h"
-#include "agg_image.h"
 #include "ai.h"
 #include "army.h"
 #include "artifact.h"
 #include "battle_arena.h"
 #include "battle_army.h"
-#include "color.h"
-#include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "heroes_base.h"
-#include "icn.h"
 #include "kingdom.h"
 #include "logging.h"
+#include "settings.h"
 #include "skill.h"
-#include "text.h"
-#include "world.h"
+#include "tools.h"
+#include "translations.h"
 
 namespace Battle
 {
@@ -114,8 +111,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
     Result result = arena->GetResult();
 
-    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
-    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
+    HeroBase * hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+    HeroBase * hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
     u32 loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
     bool isWinnerHuman = hero_wins && hero_wins->isControlHuman();
@@ -148,8 +145,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
 
             // Override the result
             result = arena->GetResult();
-            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : NULL ) );
-            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : NULL ) );
+            hero_wins = ( result.army1 & RESULT_WINS ? commander1 : ( result.army2 & RESULT_WINS ? commander2 : nullptr ) );
+            hero_loss = ( result.army1 & RESULT_LOSS ? commander1 : ( result.army2 & RESULT_LOSS ? commander2 : nullptr ) );
             loss_result = result.army1 & RESULT_LOSS ? result.army1 : result.army2;
 
             isWinnerHuman = hero_wins && hero_wins->isControlHuman();

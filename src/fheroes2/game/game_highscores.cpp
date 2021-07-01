@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cstring>
 #include <ctime>
 #include <sstream>
 #include <string>
@@ -34,10 +33,12 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_over.h"
-#include "gamedefs.h"
 #include "icn.h"
+#ifdef WITH_DEBUG
 #include "logging.h"
+#endif
 #include "mus.h"
+#include "settings.h"
 #include "system.h"
 #include "text.h"
 #include "ui_button.h"
@@ -134,7 +135,7 @@ void HGSData::ScoreRegistry( const std::string & p, const std::string & m, u32 r
 
     h.player = p;
     h.land = m;
-    h.localtime = std::time( NULL );
+    h.localtime = std::time( nullptr );
     h.days = r;
     h.rating = s;
 

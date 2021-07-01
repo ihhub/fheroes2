@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cassert>
 #include <vector>
 
 #include "agg.h"
@@ -45,8 +44,9 @@
 #include "maps_tiles.h"
 #include "mus.h"
 #include "route.h"
-#include "system.h"
+#include "settings.h"
 #include "text.h"
+#include "tools.h"
 #include "world.h"
 
 namespace
@@ -122,14 +122,12 @@ void Game::DialogPlayers( int color, std::string str )
 }
 
 /* open castle wrapper */
-void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
+void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     Mixer::Pause();
-
-    const bool updateCastleFocus = ( Interface::GetFocusType() == GameFocus::CASTLE );
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
@@ -163,11 +161,12 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
     }
 
     Interface::Basic & basicInterface = Interface::Basic::Get();
+
     if ( updateFocus ) {
         if ( heroCountBefore < myKingdom.GetHeroes().size() ) {
             basicInterface.SetFocus( myKingdom.GetHeroes()[heroCountBefore] );
         }
-        else if ( it != myCastles.end() && updateCastleFocus ) {
+        else if ( it != myCastles.end() ) {
             Heroes * heroInCastle = world.GetTiles( ( *it )->GetIndex() ).GetHeroes();
             if ( heroInCastle == nullptr ) {
                 basicInterface.SetFocus( *it );
@@ -176,7 +175,39 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /*= true*/ )
                 basicInterface.SetFocus( heroInCastle );
             }
         }
+        else {
+            basicInterface.ResetFocus( GameFocus::HEROES );
+        }
     }
+    else {
+        // If we don't update focus, we still have to restore environment sounds and terrain music theme
+        AGG::ResetMixer();
+
+        switch ( Interface::GetFocusType() ) {
+        case GameFocus::HEROES: {
+            const Heroes * focusedHero = Interface::GetFocusHeroes();
+            assert( focusedHero != nullptr );
+
+            const int heroIndexPos = focusedHero->GetIndex();
+            if ( heroIndexPos >= 0 ) {
+                Game::EnvironmentSoundMixer();
+                AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            }
+        } break;
+
+        case GameFocus::CASTLE: {
+            const Castle * focusedCastle = Interface::GetFocusCastle();
+            assert( focusedCastle != nullptr );
+
+            Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        } break;
+
+        default:
+            break;
+        }
+    }
+
     basicInterface.RedrawFocus();
 }
 
@@ -186,14 +217,16 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Settings & conf = Settings::Get();
-    Kingdom & myKingdom = hero.GetKingdom();
-    const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
-    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
     Interface::StatusWindow::ResetTimer();
+
+    const Settings & conf = Settings::Get();
+    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
     Interface::Basic & I = Interface::Basic::Get();
     const Interface::GameArea & gameArea = I.GetGameArea();
-    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+
+    const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
+    KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
 
     if ( it != myHeroes.end() ) {
         int result = Dialog::ZERO;
@@ -228,7 +261,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
                 ( *it )->SetFreeman( 0 );
                 it = myHeroes.begin();
+
                 updateFocus = true;
+
                 result = Dialog::CANCEL;
                 break;
 
@@ -240,14 +275,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            Interface::Basic::Get().SetFocus( *it );
+            I.SetFocus( *it );
         }
         else {
-            Interface::Basic::Get().ResetFocus( GameFocus::HEROES );
+            I.ResetFocus( GameFocus::HEROES );
         }
     }
 
-    Interface::Basic::Get().RedrawFocus();
+    I.RedrawFocus();
 }
 
 void ShowNewWeekDialog( void )
@@ -327,14 +362,14 @@ int Interface::Basic::GetCursorFocusCastle( const Castle & from_castle, const Ma
     case MP2::OBJ_CASTLE: {
         const Castle * to_castle = world.GetCastle( tile.GetCenter() );
 
-        if ( NULL != to_castle )
+        if ( nullptr != to_castle )
             return to_castle->GetColor() == from_castle.GetColor() ? Cursor::CASTLE : Cursor::POINTER;
     } break;
 
     case MP2::OBJ_HEROES: {
         const Heroes * heroes = tile.GetHeroes();
 
-        if ( NULL != heroes )
+        if ( nullptr != heroes )
             return heroes->GetColor() == from_castle.GetColor() ? Cursor::HEROES : Cursor::POINTER;
     } break;
 
@@ -387,7 +422,7 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
 
     default:
         if ( water ) {
-            if ( MP2::isWaterObject( tile.GetObject() ) )
+            if ( MP2::isWaterActionObject( tile.GetObject() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT_ACTION, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
             else if ( tile.isPassable( Direction::CENTER, true, false, from_hero.GetColor() ) )
                 return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -418,7 +453,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.GetCastle( tile.GetCenter() );
 
-        if ( NULL != castle ) {
+        if ( nullptr != castle ) {
             if ( tile.GetObject() == MP2::OBJN_CASTLE ) {
                 if ( from_hero.GetColor() == castle->GetColor() )
                     return Cursor::CASTLE;
@@ -447,7 +482,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     case MP2::OBJ_HEROES: {
         const Heroes * to_hero = tile.GetHeroes();
 
-        if ( NULL != to_hero ) {
+        if ( nullptr != to_hero ) {
             if ( from_hero.Modes( Heroes::GUARDIAN ) )
                 return from_hero.GetColor() == to_hero->GetColor() ? Cursor::HEROES : Cursor::POINTER;
             else if ( to_hero->GetCenter() == from_hero.GetCenter() )
@@ -471,7 +506,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     default:
         if ( from_hero.Modes( Heroes::GUARDIAN ) )
             return Cursor::POINTER;
-        else if ( MP2::isGroundObject( tile.GetObject() ) ) {
+        else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
                 protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
@@ -1054,7 +1089,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::HEROES: {
         Heroes * to_hero = tile.GetHeroes();
         // focus change/open hero
-        if ( NULL != to_hero ) {
+        if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
                 RedrawFocus();
@@ -1073,7 +1108,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
             break;
 
         Castle * to_castle = world.GetCastle( tile.GetCenter() );
-        if ( to_castle == NULL )
+        if ( to_castle == nullptr )
             break;
 
         const Castle * from_castle = GetFocusCastle();
@@ -1093,7 +1128,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     case Cursor::CURSOR_HERO_MEET:
     case Cursor::CURSOR_HERO_ACTION:
     case Cursor::CURSOR_HERO_BOAT_ACTION:
-        if ( from_hero == NULL )
+        if ( from_hero == nullptr )
             break;
 
         if ( from_hero->isMoveEnabled() )

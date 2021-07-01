@@ -25,12 +25,371 @@
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
+#include "luck.h"
 #include "maps.h"
+#include "morale.h"
 #include "mp2.h"
+#include "settings.h"
 #include "world.h"
 
 namespace
 {
+    bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
+    {
+        const Castle * castle = world.GetCastle( Maps::GetPoint( castleIndex ) );
+        if ( castle ) {
+            if ( hero.GetColor() == castle->GetColor() ) {
+                return castle->GetHeroes().Guest() == nullptr;
+            }
+            else if ( !hero.isFriends( castle->GetColor() ) ) {
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+            }
+        }
+        return false;
+    }
+
+    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder )
+    {
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const int obj = tile.GetObject();
+        const Army & army = hero.GetArmy();
+        const Kingdom & kingdom = hero.GetKingdom();
+
+        switch ( obj ) {
+        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_WATERCHEST:
+        case MP2::OBJ_FLOTSAM:
+        case MP2::OBJ_BOTTLE:
+            return hero.isShipMaster();
+
+        case MP2::OBJ_BUOY:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
+
+        case MP2::OBJ_MERMAID:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetLuck() < Luck::IRISH;
+
+        case MP2::OBJ_SIRENS:
+            return false;
+
+        case MP2::OBJ_MAGELLANMAPS:
+        case MP2::OBJ_WHIRLPOOL:
+            return hero.isShipMaster() && !hero.isVisited( tile );
+
+        case MP2::OBJ_COAST:
+            return hero.isShipMaster() && !hero.isVisited( tile ) && tile.GetRegion() != hero.lastGroundRegion();
+
+        case MP2::OBJ_SAWMILL:
+        case MP2::OBJ_MINES:
+        case MP2::OBJ_ALCHEMYLAB:
+        case MP2::OBJ_LIGHTHOUSE:
+            if ( !hero.isFriends( tile.QuantityColor() ) ) {
+                if ( tile.CaptureObjectIsProtection() ) {
+                    const Army enemy( tile );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_SMALL );
+                }
+                else
+                    return true;
+            }
+            break;
+
+        case MP2::OBJ_WAGON:
+        case MP2::OBJ_LEANTO:
+        case MP2::OBJ_SKELETON:
+            return tile.QuantityIsValid();
+
+        case MP2::OBJ_MAGICGARDEN:
+        case MP2::OBJ_WATERWHEEL:
+        case MP2::OBJ_WINDMILL:
+            if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
+                if ( tile.CaptureObjectIsProtection() ) {
+                    const Army enemy( tile );
+                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                }
+                else
+                    return true;
+            }
+            else if ( tile.QuantityIsValid() )
+                return true;
+            break;
+
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_TREASURECHEST:
+            return !hero.isShipMaster();
+
+        case MP2::OBJ_ARTIFACT: {
+            const u32 variants = tile.QuantityVariant();
+
+            if ( hero.IsFullBagArtifacts() )
+                return false;
+
+            if ( hero.isShipMaster() )
+                return false;
+            else
+                // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
+                if ( 1 <= variants && 3 >= variants ) {
+                return kingdom.AllowPayment( tile.QuantityFunds() );
+            }
+            else
+                // 4,5 - need have skill wisard or leadership,
+                if ( 3 < variants && 6 > variants ) {
+                return hero.HasSecondarySkill( tile.QuantitySkill().Skill() );
+            }
+            else
+                // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
+                if ( 5 < variants && 14 > variants ) {
+                Army enemy( tile );
+                return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+            }
+            else
+                // other
+                return true;
+        }
+
+        case MP2::OBJ_OBSERVATIONTOWER:
+            return Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() ) > 0;
+
+        case MP2::OBJ_OBELISK:
+            return !hero.isVisited( tile, Visit::GLOBAL );
+
+        case MP2::OBJ_BARRIER:
+            return kingdom.IsVisitTravelersTent( tile.QuantityColor() );
+
+        case MP2::OBJ_TRAVELLERTENT:
+            return !kingdom.IsVisitTravelersTent( tile.QuantityColor() );
+
+        case MP2::OBJ_SHRINE1:
+        case MP2::OBJ_SHRINE2:
+        case MP2::OBJ_SHRINE3: {
+            const Spell & spell = tile.QuantitySpell();
+            assert( spell.isValid() );
+            if ( !spell.isValid() || !hero.HaveSpellBook() || hero.HaveSpell( spell )
+                 || ( 3 == spell.Level() && Skill::Level::NONE == hero.GetLevelSkill( Skill::Secondary::WISDOM ) ) ) {
+                return false;
+            }
+
+            if ( hero.isObjectTypeVisited( obj, Visit::GLOBAL )
+                 && ( spell == Spell::VIEWALL || spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
+                      || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
+                // AI never uses View spells.
+                return false;
+            }
+            return true;
+        }
+
+        // primary skill
+        case MP2::OBJ_FORT:
+        case MP2::OBJ_MERCENARYCAMP:
+        case MP2::OBJ_DOCTORHUT:
+        case MP2::OBJ_STANDINGSTONES:
+        // exp
+        case MP2::OBJ_GAZEBO:
+            return !hero.isVisited( tile );
+
+        // sec skill
+        case MP2::OBJ_WITCHSHUT: {
+            const Skill::Secondary & skill = tile.QuantitySkill();
+            const int skillType = skill.Skill();
+
+            if ( !skill.isValid() || hero.HasMaxSecondarySkill() || hero.HasSecondarySkill( skillType ) ) {
+                return false;
+            }
+
+            if ( hero.GetArmy().AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
+                // For undead army it's pointless to have Leadership skill.
+                return false;
+            }
+
+            if ( !hero.HaveSpellBook() && skillType == Skill::Secondary::MYSTICISM ) {
+                // It's useless to have Mysticism with no magic book in hands.
+                return false;
+            }
+
+            return true;
+        }
+
+        case MP2::OBJ_TREEKNOWLEDGE:
+            if ( !hero.isVisited( tile ) ) {
+                const ResourceCount & rc = tile.QuantityResourceCount();
+                if ( !rc.isValid() || kingdom.AllowPayment( Funds( rc ) ) )
+                    return true;
+            }
+            break;
+
+        // good luck
+        case MP2::OBJ_FOUNTAIN:
+        case MP2::OBJ_FAERIERING:
+        case MP2::OBJ_IDOL:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetLuck() < Luck::IRISH;
+
+        // good morale
+        case MP2::OBJ_OASIS:
+        case MP2::OBJ_WATERINGHOLE:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD;
+
+        case MP2::OBJ_TEMPLE:
+            return !hero.isObjectTypeVisited( obj ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
+
+        case MP2::OBJ_MAGICWELL:
+            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
+
+        case MP2::OBJ_ARTESIANSPRING:
+            return !hero.isVisited( tile ) && hero.HaveSpellBook() && hero.GetSpellPoints() < 2 * hero.GetMaxSpellPoints();
+
+        case MP2::OBJ_XANADU: {
+            const u32 level1 = hero.GetLevelSkill( Skill::Secondary::DIPLOMACY );
+            const u32 level2 = hero.GetLevel();
+
+            if ( !hero.isVisited( tile )
+                 && ( ( level1 == Skill::Level::BASIC && 7 < level2 ) || ( level1 == Skill::Level::ADVANCED && 5 < level2 )
+                      || ( level1 == Skill::Level::EXPERT && 3 < level2 ) || ( 9 < level2 ) ) )
+                return true;
+            break;
+        }
+
+        // accept army
+        case MP2::OBJ_WATCHTOWER:
+        case MP2::OBJ_EXCAVATION:
+        case MP2::OBJ_CAVE:
+        case MP2::OBJ_TREEHOUSE:
+        case MP2::OBJ_ARCHERHOUSE:
+        case MP2::OBJ_GOBLINHUT:
+        case MP2::OBJ_DWARFCOTT:
+        case MP2::OBJ_HALFLINGHOLE:
+        case MP2::OBJ_THATCHEDHUT: {
+            const Troop & troop = tile.QuantityTroop();
+            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+        }
+
+        case MP2::OBJ_PEASANTHUT: {
+            // Peasants are special monsters. They're the weakest! Think twice before getting them.
+            const Troop & troop = tile.QuantityTroop();
+            return troop.isValid() && ( army.HasMonster( troop() ) || ( !army.isFullHouse() && army.GetStrength() < troop.GetStrength() * 10 ) );
+        }
+
+        // recruit army
+        case MP2::OBJ_RUINS:
+        case MP2::OBJ_TREECITY:
+        case MP2::OBJ_WAGONCAMP:
+        case MP2::OBJ_DESERTTENT:
+        case MP2::OBJ_WATERALTAR:
+        case MP2::OBJ_AIRALTAR:
+        case MP2::OBJ_FIREALTAR:
+        case MP2::OBJ_EARTHALTAR:
+        case MP2::OBJ_BARROWMOUNDS: {
+            const Troop & troop = tile.QuantityTroop();
+            const payment_t & paymentCosts = troop.GetCost();
+
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || !army.isFullHouse() );
+        }
+
+        // recruit army (battle)
+        case MP2::OBJ_DRAGONCITY:
+        case MP2::OBJ_CITYDEAD:
+        case MP2::OBJ_TROLLBRIDGE: {
+            if ( Color::NONE == tile.QuantityColor() ) {
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            }
+            else {
+                const Troop & troop = tile.QuantityTroop();
+                const payment_t & paymentCosts = troop.GetCost();
+
+                return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+            }
+        }
+
+        // recruit genie
+        case MP2::OBJ_ANCIENTLAMP: {
+            const Troop & troop = tile.QuantityTroop();
+            const payment_t & paymentCosts = troop.GetCost();
+
+            return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop() ) || ( !army.isFullHouse() ) );
+        }
+
+        // upgrade army
+        case MP2::OBJ_HILLFORT:
+            return army.HasMonster( Monster::DWARF ) || army.HasMonster( Monster::ORC ) || army.HasMonster( Monster::OGRE );
+
+        // upgrade army
+        case MP2::OBJ_FREEMANFOUNDRY:
+            return army.HasMonster( Monster::PIKEMAN ) || army.HasMonster( Monster::SWORDSMAN ) || army.HasMonster( Monster::IRON_GOLEM );
+
+        // loyalty obj
+        case MP2::OBJ_STABLES: {
+            if ( army.HasMonster( Monster::CAVALRY ) ) {
+                return true;
+            }
+
+            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
+            const double movementBonus = daysActive * 400.0 - 2.0 * pathfinder.getDistance( index );
+
+            return !hero.isVisited( tile ) && movementBonus > 0;
+        }
+
+        case MP2::OBJ_ARENA:
+            return !hero.isVisited( tile );
+
+        // poor morale obj
+        case MP2::OBJ_SHIPWRECK:
+        case MP2::OBJ_GRAVEYARD:
+        case MP2::OBJ_DERELICTSHIP:
+            if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
+                Army enemy( tile );
+                return enemy.isValid() && army.isStrongerThan( enemy, 2 );
+            }
+            break;
+
+            // TODO: add evaluation for MP2::OBJ_PYRAMID.
+
+        case MP2::OBJ_DAEMONCAVE:
+            if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
+                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            break;
+
+        case MP2::OBJ_MONSTER:
+            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+
+        case MP2::OBJ_SIGN:
+            // AI has no brains to process anything from sign messages.
+            return false;
+
+        case MP2::OBJ_HEROES: {
+            const Heroes * hero2 = tile.GetHeroes();
+            if ( hero2 ) {
+                const bool otherHeroInCastle = ( hero2->inCastle() != nullptr );
+
+                if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
+                    return !otherHeroInCastle;
+                else if ( hero.isFriends( hero2->GetColor() ) )
+                    return false;
+                else if ( otherHeroInCastle )
+                    return AIShouldVisitCastle( hero, index );
+                else if ( army.isStrongerThan( hero2->GetArmy(), AI::ARMY_STRENGTH_ADVANTAGE_SMALL ) )
+                    return true;
+            }
+            break;
+        }
+
+        case MP2::OBJ_CASTLE:
+            return AIShouldVisitCastle( hero, index );
+
+        case MP2::OBJ_BOAT:
+        case MP2::OBJ_STONELITHS:
+            // check later
+            return true;
+
+        case MP2::OBJ_JAIL:
+            return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
+        case MP2::OBJ_HUTMAGI:
+            return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
+
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     struct HeroToMove
     {
         Heroes * hero = nullptr;
@@ -42,8 +401,9 @@ namespace
     class ObjectValidator
     {
     public:
-        explicit ObjectValidator( const Heroes & hero )
+        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder )
             : _hero( hero )
+            , _pathfinder( pathfinder )
         {}
 
         bool isValid( const int index )
@@ -53,13 +413,15 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = AI::HeroesValidObject( _hero, index );
+            const bool valid = HeroesValidObject( _hero, index, _pathfinder );
             _validObjects[index] = valid;
             return valid;
         }
 
     private:
         const Heroes & _hero;
+        const AIWorldPathfinder & _pathfinder;
+
         std::map<int, bool> _validObjects;
     };
 
@@ -73,14 +435,14 @@ namespace
             , _ignoreValue( ignoreValue )
         {}
 
-        double value( const std::pair<int, int> & objectInfo )
+        double value( const std::pair<int, int> & objectInfo, const uint32_t distance )
         {
             auto iter = _objectValue.find( objectInfo );
             if ( iter != _objectValue.end() ) {
                 return iter->second;
             }
 
-            const double value = _ai.getObjectValue( _hero, objectInfo.first, objectInfo.second, _ignoreValue );
+            const double value = _ai.getObjectValue( _hero, objectInfo.first, _ignoreValue, distance );
 
             _objectValue[objectInfo] = value;
             return value;
@@ -92,6 +454,28 @@ namespace
         const double _ignoreValue;
         std::map<std::pair<int, int>, double> _objectValue;
     };
+
+    double getMonsterUpgradeValue( const Army & army, const int monsterId )
+    {
+        const uint32_t monsterCount = army.GetCountMonsters( monsterId );
+        if ( monsterCount == 0 ) {
+            // Nothing to upgrade.
+            return 0;
+        }
+
+        const Monster currentMonster( monsterId );
+
+        const Monster upgradedMonster = currentMonster.GetUpgrade();
+        if ( upgradedMonster == currentMonster ) {
+            // Monster has no upgrade.
+            return 0;
+        }
+
+        return ( upgradedMonster.GetMonsterStrength() - currentMonster.GetMonsterStrength() ) * monsterCount;
+    }
+
+    // Multiply by this value if you are getting a FREE upgrade.
+    const double freeMonsterUpgradeModifier = 3;
 }
 
 namespace AI
@@ -107,11 +491,12 @@ namespace AI
         return value - ( distance * std::log10( distance ) );
     }
 
-    double Normal::getObjectValue( const Heroes & hero, int index, int objectID, double valueToIgnore ) const
+    double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
+        const int objectID = tile.GetObject();
 
         if ( objectID == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.GetCastle( Maps::GetPoint( index ) );
@@ -120,21 +505,25 @@ namespace AI
 
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
-                if ( value < 1000 )
+                if ( value < 500 )
                     return valueToIgnore;
 
-                if ( hero.isVisited( tile ) )
-                    value -= suboptimalTaskPenalty;
                 return value;
             }
             else {
-                return castle->getBuildingValue() * 150.0 + 3000;
+                double value = castle->getBuildingValue() * 150.0 + 3000;
+                // If the castle is defenseless
+                if ( !castle->GetActualArmy().isValid() )
+                    value *= 1.25;
+                return value;
             }
         }
         else if ( objectID == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
-            if ( !otherHero )
+            assert( otherHero );
+            if ( !otherHero ) {
                 return valueToIgnore;
+            }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
                 if ( hero.getStatsValue() + 2 > otherHero->getStatsValue() )
@@ -197,7 +586,11 @@ namespace AI
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
             }
-            return fogCountToUncover * 100.0;
+            return fogCountToUncover;
+        }
+        else if ( objectID == MP2::OBJ_MAGELLANMAPS ) {
+            // Very valuable object.
+            return 5000;
         }
         else if ( objectID == MP2::OBJ_COAST ) {
             const RegionStats & regionStats = _regions[tile.GetRegion()];
@@ -232,6 +625,11 @@ namespace AI
             return 0;
         }
         else if ( objectID == MP2::OBJ_TEMPLE ) {
+            if ( hero.GetArmy().AllTroopsAreUndead() ) {
+                // All troops are undead, no use of Morale.
+                return 0;
+            }
+
             const int moral = hero.GetMorale();
             if ( moral >= 3 ) {
                 return -dangerousTaskPenalty; // no reason to visit with a maximum moral
@@ -246,9 +644,80 @@ namespace AI
                 return 0;
             }
             else {
-                return 250;
+                return 100;
             }
         }
+        else if ( objectID == MP2::OBJ_STABLES ) {
+            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
+            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            if ( movementBonus < 0 ) {
+                // Looks like this is too far away.
+                movementBonus = 0;
+            }
+
+            const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
+            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
+        }
+        else if ( objectID == MP2::OBJ_FREEMANFOUNDRY ) {
+            const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
+            const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
+            const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
+
+            return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
+        }
+        else if ( objectID == MP2::OBJ_HILLFORT ) {
+            const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
+            const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
+            const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
+
+            return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
+        }
+        else if ( objectID == MP2::OBJ_TRAVELLERTENT ) {
+            // Most likely it'll lead to opening more land.
+            return 1000;
+        }
+        else if ( objectID == MP2::OBJ_OASIS ) {
+            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectID == MP2::OBJ_WATERINGHOLE ) {
+            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectID == MP2::OBJ_JAIL ) {
+            // A free hero is always good and it could be very powerful.
+            return 3000;
+        }
+        else if ( objectID == MP2::OBJ_HUTMAGI ) {
+            const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
+            int fogCountToUncover = 0;
+            const int heroColor = hero.GetColor();
+            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+
+            for ( const int32_t eyeIndex : eyeMagiIndexes ) {
+                fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
+            }
+
+            return fogCountToUncover;
+        }
+        else if ( objectID == MP2::OBJ_GAZEBO ) {
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            const uint32_t heroExperience = hero.GetExperience();
+            const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
+            const uint32_t neededExperience = nextLevelExperience - heroExperience;
+            if ( neededExperience < 1000 ) {
+                // A new level. Have to visit.
+                return 1000;
+            }
+
+            return 1000.0 * 1000.0 / neededExperience;
+        }
+        else if ( objectID == MP2::OBJ_LIGHTHOUSE ) {
+            if ( tile.QuantityColor() == hero.GetColor() ) {
+                return -dangerousTaskPenalty; // don't even attempt to go here
+            }
+            return 500;
+        }
+
+        // TODO: add support for all possible objects.
 
         return 0;
     }
@@ -270,7 +739,7 @@ namespace AI
 
         const uint32_t leftMovePoints = hero.GetMovePoints();
 
-        ObjectValidator objectValidator( hero );
+        ObjectValidator objectValidator( hero, _pathfinder );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
@@ -285,15 +754,25 @@ namespace AI
                 if ( dist == 0 )
                     continue;
 
-                double value = valueStorage.value( node );
+                double value = valueStorage.value( node, dist );
 
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
                 for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) )
-                        value += valueStorage.value( pair );
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                        if ( extraValue > 0 ) {
+                            // There is no need to reduce the quality of the object even if the path has others.
+                            value += extraValue;
+                        }
+                    }
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
-                if ( heroStrength < regionStats.highestThreat )
+
+                const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
+                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                    value -= dangerousTaskPenalty / 2;
+
+                else if ( heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty;
 
                 if ( dist > leftMovePoints ) {
@@ -380,8 +859,31 @@ namespace AI
             }
 
             if ( bestTargetIndex == -1 ) {
-                // Nothing to do. Stop eveything
-                break;
+                if ( availableHeroes.size() > 1 ) {
+                    // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
+                    for ( HeroToMove & heroInfo : availableHeroes ) {
+                        // Skip heroes who are in castles or on patrol.
+                        if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+                            continue;
+                        }
+
+                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                            continue;
+                        }
+
+                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero );
+                        if ( targetIndex != -1 ) {
+                            bestTargetIndex = targetIndex;
+                            bestHero = heroInfo.hero;
+                            break;
+                        }
+                    }
+                }
+
+                if ( bestTargetIndex == -1 ) {
+                    // Nothing to do. Stop everything
+                    break;
+                }
             }
 
             _pathfinder.reEvaluateIfNeeded( *bestHero );

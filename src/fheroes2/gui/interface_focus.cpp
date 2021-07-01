@@ -24,7 +24,6 @@
 
 #include "agg.h"
 #include "castle.h"
-#include "cursor.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
@@ -56,7 +55,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
         statusWindow.SetState( StatusType::STATUS_ARMY );
 
         const int heroIndexPos = hero->GetIndex();
-        if ( !Game::ChangeMusicDisabled() && heroIndexPos >= 0 ) {
+        if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
             AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
@@ -83,8 +82,10 @@ void Interface::Basic::SetFocus( Castle * castle )
         gameArea.SetCenter( castle->GetCenter() );
         statusWindow.SetState( StatusType::STATUS_FUNDS );
 
-        Game::EnvironmentSoundMixer();
-        AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
+        if ( Game::UpdateSoundsOnFocusUpdate() ) {
+            Game::EnvironmentSoundMixer();
+            AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
+        }
     }
 }
 
@@ -163,14 +164,14 @@ Castle * Interface::GetFocusCastle( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    return player ? player->GetFocus().GetCastle() : NULL;
+    return player ? player->GetFocus().GetCastle() : nullptr;
 }
 
 Heroes * Interface::GetFocusHeroes( void )
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
-    return player ? player->GetFocus().GetHeroes() : NULL;
+    return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
 fheroes2::Point Interface::GetFocusCenter( void )

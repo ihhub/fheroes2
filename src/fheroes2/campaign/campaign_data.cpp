@@ -21,12 +21,10 @@
 #include "campaign_data.h"
 #include "artifact.h"
 #include "heroes.h"
-#include "maps_fileinfo.h"
 #include "monster.h"
-#include "race.h"
 #include "resource.h"
-#include "skill.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 #include <cassert>
 
@@ -230,47 +228,46 @@ namespace
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 10 );
 
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), StringLower( "CAMPG01.H2C" ),
-                                    rolandCampaignScenarioNames[0], rolandCampaignDescription[0],
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignScenarioNames[0],
+                                    rolandCampaignDescription[0],
                                     Campaign::VideoSequence{ { "GOOD01V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD01.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), StringLower( "CAMPG02.H2C" ),
-                                    rolandCampaignScenarioNames[1], rolandCampaignDescription[1],
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignScenarioNames[1],
+                                    rolandCampaignDescription[1],
                                     Campaign::VideoSequence{ { "GOOD02W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD02.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD03QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD03.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), StringLower( "CAMPG03.H2C" ),
-                                    rolandCampaignScenarioNames[2], rolandCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignScenarioNames[2],
+                                    rolandCampaignDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD04W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD04.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::ScenarioVictoryCondition::STANDARD, Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), StringLower( "CAMPG04.H2C" ),
-                                    rolandCampaignScenarioNames[3], rolandCampaignDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignScenarioNames[3],
+                                    rolandCampaignDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD05V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), StringLower( "CAMPG05.H2C" ),
-                                    rolandCampaignScenarioNames[4], rolandCampaignDescription[4], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), StringLower( "CAMPG06.H2C" ),
-                                    rolandCampaignScenarioNames[5], rolandCampaignDescription[5],
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignScenarioNames[4],
+                                    rolandCampaignDescription[4], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignScenarioNames[5],
+                                    rolandCampaignDescription[5],
                                     Campaign::VideoSequence{ { "GOOD06AV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
         // NOTE: In Roland's Campaign, scenario 8 is drawn above scenario 7, so we emplace_back scenario 8 first
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), StringLower( "CAMPG08.H2C" ),
-                                    rolandCampaignScenarioNames[7], rolandCampaignDescription[7], emptyPlayback, emptyPlayback,
-                                    Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), StringLower( "CAMPG07.H2C" ),
-                                    rolandCampaignScenarioNames[6], rolandCampaignDescription[6], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), StringLower( "CAMPG09.H2C" ),
-                                    rolandCampaignScenarioNames[8], rolandCampaignDescription[8],
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
+                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignScenarioNames[6],
+                                    rolandCampaignDescription[6], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignScenarioNames[8],
+                                    rolandCampaignDescription[8],
                                     Campaign::VideoSequence{ { "GOOD09W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD09.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), StringLower( "CAMPG10.H2C" ),
-                                    rolandCampaignScenarioNames[9], rolandCampaignDescription[9],
+        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignScenarioNames[9],
+                                    rolandCampaignDescription[9],
                                     Campaign::VideoSequence{ { "GOOD10W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "LIBRARYW.SMK", Video::VideoAction::IGNORE_VIDEO },
@@ -289,48 +286,47 @@ namespace
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 11 );
 
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), StringLower( "CAMPE01.H2C" ),
-                                    archibaldCampaignScenarioNames[0], archibaldCampaignDescription[0],
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignScenarioNames[0],
+                                    archibaldCampaignDescription[0],
                                     Campaign::VideoSequence{ { "EVIL01V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL01.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), StringLower( "CAMPE02.H2C" ),
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C",
                                     archibaldCampaignScenarioNames[1], archibaldCampaignDescription[1],
                                     Campaign::VideoSequence{ { "EVIL02W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL02.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "EVIL03QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL03.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), StringLower( "CAMPE03.H2C" ),
-                                    archibaldCampaignScenarioNames[2], archibaldCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignScenarioNames[2],
+                                    archibaldCampaignDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), StringLower( "CAMPE04.H2C" ),
-                                    archibaldCampaignScenarioNames[3], archibaldCampaignDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignScenarioNames[3],
+                                    archibaldCampaignDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), StringLower( "CAMPE05.H2C" ),
-                                    archibaldCampaignScenarioNames[4], archibaldCampaignDescription[4], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), StringLower( "CAMPE06.H2C" ),
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignScenarioNames[4],
+                                    archibaldCampaignDescription[4], emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C",
                                     archibaldCampaignScenarioNames[5], archibaldCampaignDescription[5],
                                     Campaign::VideoSequence{ { "EVIL06AW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "EVIL07W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), StringLower( "CAMPE07.H2C" ),
-                                    archibaldCampaignScenarioNames[6], archibaldCampaignDescription[6], emptyPlayback,
-                                    Campaign::VideoSequence{ { "EVIL08.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } },
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignScenarioNames[6],
+                                    archibaldCampaignDescription[6], emptyPlayback, Campaign::VideoSequence{ { "EVIL08.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } },
                                     Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), StringLower( "CAMPE08.H2C" ),
+        scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C",
                                     archibaldCampaignScenarioNames[7], archibaldCampaignDescription[7], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL09W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL09.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), StringLower( "CAMPE09.H2C" ),
+        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C",
                                     archibaldCampaignScenarioNames[8], archibaldCampaignDescription[8], emptyPlayback, emptyPlayback,
                                     Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
-        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), StringLower( "CAMPE10.H2C" ),
+        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C",
                                     archibaldCampaignScenarioNames[9], archibaldCampaignDescription[9], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), StringLower( "CAMPE11.H2C" ),
-                                    archibaldCampaignScenarioNames[10], archibaldCampaignDescription[10],
+        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignScenarioNames[10],
+                                    archibaldCampaignDescription[10],
                                     Campaign::VideoSequence{ { "EVIL11W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "PRISON.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } } );
@@ -349,37 +345,37 @@ namespace
         scenarioDatas.reserve( 8 );
 
         const int campaignID = Campaign::PRICE_OF_LOYALTY_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), StringLower( "CAMP1_01.HXC" ),
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP1_01.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[0], priceOfLoyaltyCampaignDescription[0],
                                     Campaign::VideoSequence{ { "MIXPOL1.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL1.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), StringLower( "CAMP1_02.HXC" ),
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP1_02.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[1], priceOfLoyaltyCampaignDescription[1],
                                     Campaign::VideoSequence{ { "MIXPOL2.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL2.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL3.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL3.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), StringLower( "CAMP1_03.HXC" ),
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP1_03.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[2], priceOfLoyaltyCampaignDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), StringLower( "CAMP1_04.HXC" ),
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP1_04.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[3], priceOfLoyaltyCampaignDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), StringLower( "CAMP1_05.HXC" ),
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP1_05.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[4], priceOfLoyaltyCampaignDescription[4],
                                     Campaign::VideoSequence{ { "MIXPOL4.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL4.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), StringLower( "CAMP1_06.HXC" ),
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP1_06.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[5], priceOfLoyaltyCampaignDescription[5],
                                     Campaign::VideoSequence{ { "MIXPOL5.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL5.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL6.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL6.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), StringLower( "CAMP1_07.HXC" ),
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP1_07.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[6], priceOfLoyaltyCampaignDescription[6], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL7.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL7.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), StringLower( "CAMP1_08.HXC" ),
+        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP1_08.HXC",
                                     priceOfLoyaltyCampaignScenarioNames[7], priceOfLoyaltyCampaignDescription[7], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL8.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL8.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
@@ -397,34 +393,34 @@ namespace
         scenarioDatas.reserve( 8 );
 
         const int campaignID = Campaign::DESCENDANTS_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), StringLower( "CAMP2_01.HXC" ),
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP2_01.HXC",
                                     descendantsCampaignScenarioNames[0], descendantsCampaignDescription[0],
                                     Campaign::VideoSequence{ { "MIXDES9.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES9.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), StringLower( "CAMP2_02.HXC" ),
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP2_02.HXC",
                                     descendantsCampaignScenarioNames[1], descendantsCampaignDescription[1],
                                     Campaign::VideoSequence{ { "MIXDES10.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXDES11.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES11.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), StringLower( "CAMP2_03.HXC" ),
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP2_03.HXC",
                                     descendantsCampaignScenarioNames[2], descendantsCampaignDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), StringLower( "CAMP2_04.HXC" ),
+        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP2_04.HXC",
                                     descendantsCampaignScenarioNames[3], descendantsCampaignDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5, 6 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), StringLower( "CAMP2_05.HXC" ),
+        scenarioDatas.emplace_back( 4, std::vector<int>{ 5, 6 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP2_05.HXC",
                                     descendantsCampaignScenarioNames[4], descendantsCampaignDescription[4],
                                     Campaign::VideoSequence{ { "MIXDES12.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES12.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), StringLower( "CAMP2_06.HXC" ),
+        scenarioDatas.emplace_back( 5, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP2_06.HXC",
                                     descendantsCampaignScenarioNames[5], descendantsCampaignDescription[5],
                                     Campaign::VideoSequence{ { "MIXDES13.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), StringLower( "CAMP2_07.HXC" ),
+        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP2_07.HXC",
                                     descendantsCampaignScenarioNames[6], descendantsCampaignDescription[6], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), StringLower( "CAMP2_08.HXC" ),
+        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP2_08.HXC",
                                     descendantsCampaignScenarioNames[7], descendantsCampaignDescription[7],
                                     Campaign::VideoSequence{ { "MIXDES14.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES14.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
@@ -444,22 +440,22 @@ namespace
         scenarioDatas.reserve( 4 );
 
         const int campaignID = Campaign::WIZARDS_ISLE_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), StringLower( "CAMP3_01.HXC" ),
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP3_01.HXC",
                                     wizardsIsleCampaignScenarioNames[0], wizardsIsleCampaignDescription[0],
                                     Campaign::VideoSequence{ { "MIXWIZ16.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ16.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), StringLower( "CAMP3_02.HXC" ),
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP3_02.HXC",
                                     wizardsIsleCampaignScenarioNames[1], wizardsIsleCampaignDescription[1],
                                     Campaign::VideoSequence{ { "MIXWIZ17.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ17.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXWIZ18.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ18.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), StringLower( "CAMP3_03.HXC" ),
+        scenarioDatas.emplace_back( 2, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP3_03.HXC",
                                     wizardsIsleCampaignScenarioNames[2], wizardsIsleCampaignDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ19.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ19.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), StringLower( "CAMP3_04.HXC" ),
+        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP3_04.HXC",
                                     wizardsIsleCampaignScenarioNames[3], wizardsIsleCampaignDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ20.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ20.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
@@ -477,22 +473,22 @@ namespace
         scenarioDatas.reserve( 4 );
 
         const int campaignID = Campaign::VOYAGE_HOME_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), StringLower( "CAMP4_01.HXC" ),
+        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP4_01.HXC",
                                     voyageHomeCampaignScenarioNames[0], voyageHomeCampaignDescription[0],
                                     Campaign::VideoSequence{ { "MIXVOY21.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY21.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), StringLower( "CAMP4_02.HXC" ),
+        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP4_02.HXC",
                                     voyageHomeCampaignScenarioNames[1], voyageHomeCampaignDescription[1],
                                     Campaign::VideoSequence{ { "MIXVOY22.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY22.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXVOY23.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY23.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), StringLower( "CAMP4_03.HXC" ),
+        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP4_03.HXC",
                                     voyageHomeCampaignScenarioNames[2], voyageHomeCampaignDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY24.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY24.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), StringLower( "CAMP4_04.HXC" ),
+        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP4_04.HXC",
                                     voyageHomeCampaignScenarioNames[3], voyageHomeCampaignDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY25.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY25.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );

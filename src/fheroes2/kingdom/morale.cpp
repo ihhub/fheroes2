@@ -73,3 +73,21 @@ const std::string & Morale::Description( int morale )
 
     return str_desc_morale[0];
 }
+
+int Morale::Normalize( const int morale )
+{
+    if ( morale < Morale::AWFUL )
+        return Morale::TREASON;
+    if ( morale < Morale::POOR )
+        return Morale::AWFUL;
+    if ( morale < Morale::NORMAL )
+        return Morale::POOR;
+    if ( morale < Morale::GOOD )
+        return Morale::NORMAL;
+    if ( morale < Morale::GREAT )
+        return Morale::GOOD;
+    if ( morale < Morale::BLOOD )
+        return Morale::GREAT;
+
+    return Morale::BLOOD;
+}

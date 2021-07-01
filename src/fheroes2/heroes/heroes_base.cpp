@@ -21,13 +21,11 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <numeric>
 #include <sstream>
-#include <utility>
 
 #include "army.h"
 #include "castle.h"
-#include "color.h"
-#include "game.h"
 #include "heroes_base.h"
 #include "kingdom.h"
 #include "race.h"
@@ -35,7 +33,8 @@
 #include "translations.h"
 #include "world.h"
 
-int ArtifactsModifiersResult( int type, const u8 * arts, u32 size, const HeroBase & base, std::string * strs )
+template <std::size_t size>
+int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const HeroBase & base, std::string * strs )
 {
     int result = 0;
 
@@ -95,7 +94,7 @@ int ArtifactsModifiersAttack( const HeroBase & base, std::string * strs )
                        Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
                        Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD};
 
-    return ArtifactsModifiersResult( MDF_ATTACK, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_ATTACK, arts, base, strs );
 }
 
 int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
@@ -104,7 +103,7 @@ int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
                        Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
                        Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK};
 
-    return ArtifactsModifiersResult( MDF_DEFENSE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_DEFENSE, arts, base, strs );
 }
 
 int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
@@ -113,7 +112,7 @@ int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
                        Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
                        Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING};
 
-    return ArtifactsModifiersResult( MDF_POWER, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_POWER, arts, base, strs );
 }
 
 int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
@@ -121,7 +120,7 @@ int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
                        Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK};
 
-    return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, base, strs );
 }
 
 int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
@@ -129,7 +128,7 @@ int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
                        Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE};
 
-    return ArtifactsModifiersResult( MDF_MORALE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_MORALE, arts, base, strs );
 }
 
 int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
@@ -137,7 +136,7 @@ int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
     const u8 arts[]
         = {Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD};
 
-    return ArtifactsModifiersResult( MDF_LUCK, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_LUCK, arts, base, strs );
 }
 
 HeroBase::HeroBase( int type, int race )
@@ -268,9 +267,9 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
     bool unique = true;
 
     switch ( art.Type() ) {
-    case 1:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsML();
-        break; /* morale/luck arts. */
+    case 1: // morale/luck arifacts
+        unique = true;
+        break;
     case 2:
         unique = Settings::Get().ExtWorldUseUniqueArtifactsRS();
         break; /* resource affecting arts. */
@@ -284,7 +283,12 @@ u32 HeroBase::HasArtifact( const Artifact & art ) const
         break;
     }
 
-    return !unique ? bag_artifacts.Count( art ) : ( bag_artifacts.isPresentArtifact( art ) ? 1 : 0 );
+    if ( unique ) {
+        return bag_artifacts.isPresentArtifact( art ) ? 1 : 0;
+    }
+    else {
+        return bag_artifacts.Count( art );
+    }
 }
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
@@ -371,13 +375,35 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-double HeroBase::GetSpellcastStrength() const
+double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 {
-    if ( GetSpells().empty() )
-        return 0.0;
+    const std::vector<Spell> & spells = GetSpells();
+    const uint32_t currentSpellPoints = GetSpellPoints();
+    const int spellPower = GetPower();
 
-    // Benchmark for strength is 20 power * 20 knowledge (200 spell points) is 3000.0
-    return GetPower() * sqrt( GetSpellPoints() / 2 ) * 15.0;
+    double bestValue = 0;
+    for ( const Spell & spell : spells ) {
+        if ( spell.isCombat() && spell.SpellPoint() <= currentSpellPoints ) {
+            const int id = spell.GetID();
+
+            // High impact spells can turn tide of battle, otherwise look for damage spells
+            if ( spell.isSummon() ) {
+                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower );
+            }
+            else if ( spell.isDamage() ) {
+                // Benchmark for Lightning for 20 power * 20 knowledge (200 spell points) is 2500.0
+                bestValue = std::max( bestValue, spell.Damage() / 2.0 * spellPower * sqrt( currentSpellPoints / 2 ) );
+            }
+            else if ( spell.isResurrect() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+                bestValue = std::max( bestValue, armyLimit * 0.5 );
+            }
+            else {
+                bestValue = std::max( bestValue, armyLimit * 0.2 );
+            }
+        }
+    }
+
+    return bestValue;
 }
 
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const

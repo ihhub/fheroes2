@@ -1,8 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2021                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,16 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "gamedefs.h"
-#include "bitmodes.h"
-#include "serialize.h"
+#pragma once
 
-StreamBase & operator<<( StreamBase & msg, const BitModes & b )
-{
-    return msg << b.modes;
-}
+#define FORMAT_VERSION_095_RELEASE 9502
+#define FORMAT_VERSION_SECOND_PRE_095_RELEASE 9501
+#define FORMAT_VERSION_PRE_095_RELEASE 9500
+#define FORMAT_VERSION_094_RELEASE 9400
+#define FORMAT_VERSION_093_RELEASE 9300
 
-StreamBase & operator>>( StreamBase & msg, BitModes & b )
-{
-    return msg >> b.modes;
-}
+// TODO: once FORMAT_VERSION_094_RELEASE version becomes minimal supported please remove game version handling in HeaderSAV class and FileInfo structure.
+#define LAST_SUPPORTED_FORMAT_VERSION FORMAT_VERSION_093_RELEASE
+
+#define CURRENT_FORMAT_VERSION FORMAT_VERSION_095_RELEASE // TODO: update this value for a new release
