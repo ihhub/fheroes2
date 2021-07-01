@@ -336,7 +336,7 @@ int Castle::OpenDialog( bool readonly )
 
         // view guardian
         if ( !readonly && heroes.Guard() && le.MouseClickLeft( rectSign1 ) ) {
-            Game::DisableChangeMusic( true );
+            Game::SetUpdateSoundsOnFocusUpdate( false );
             Game::OpenHeroesDialog( *heroes.Guard(), false, false );
 
             if ( selectArmy1.isSelected() )
@@ -349,7 +349,7 @@ int Castle::OpenDialog( bool readonly )
         else
             // view hero
             if ( !readonly && heroes.Guest() && le.MouseClickLeft( rectSign2 ) ) {
-            Game::DisableChangeMusic( true );
+            Game::SetUpdateSoundsOnFocusUpdate( false );
             Game::OpenHeroesDialog( *heroes.Guest(), false, false );
 
             if ( selectArmy1.isSelected() )
