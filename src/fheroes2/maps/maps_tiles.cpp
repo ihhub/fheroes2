@@ -54,6 +54,7 @@
 #include "objwatr.h"
 #include "objxloc.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "settings.h"
 #include "spell.h"
 #ifdef WITH_DEBUG
@@ -2428,27 +2429,45 @@ void Maps::Tiles::setAsEmpty()
 
 StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 {
-    uint8_t temp = 0;
-
-    return msg << ta.level << ta.uniq << ta.object << ta.index << temp;
+    return msg << ta.level << ta.uniq << ta.object << ta.index;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
-    uint8_t temp = 0;
+    msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
 
-    msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> temp;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove temp variable usage here." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_095_RELEASE ) {
+        uint8_t temp = 0;
+        msg >> temp;
+    }
+
     return msg;
 }
 
 StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
 {
     return msg << tile._index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex << tile.mp2_object << tile.fog_colors
-               << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2;
+               << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._level;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 {
-    return msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
-           >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
+    msg >> tile._index >> tile.pack_sprite_index >> tile.tilePassable >> tile.uniq >> tile.objectTileset >> tile.objectIndex >> tile.mp2_object >> tile.fog_colors
+        >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove old saves support here." );
+    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
+        msg >> tile._level;
+    }
+    else {
+        if ( MP2::isActionObject( tile.quantity1 ) ) {
+            tile._level = 0;
+        }
+        else {
+            tile._level = tile.quantity1 & 0x03;
+        }
+    }
+
+    return msg;
 }
