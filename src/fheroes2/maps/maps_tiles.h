@@ -354,7 +354,7 @@ namespace Maps
 
         bool tileIsRoad = false;
 
-        // These fields do not persist in savegame
+        // This field do not persist in savegame.
         uint32_t _region = 0;
 
         uint8_t _level = 0;
