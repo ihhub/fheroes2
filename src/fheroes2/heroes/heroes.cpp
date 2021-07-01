@@ -621,20 +621,7 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
     result += ObjectVisitedModifiersResult( MDF_MORALE, objs, *this, strs );
 
     // result
-    if ( result < Morale::AWFUL )
-        return Morale::TREASON;
-    else if ( result < Morale::POOR )
-        return Morale::AWFUL;
-    else if ( result < Morale::NORMAL )
-        return Morale::POOR;
-    else if ( result < Morale::GOOD )
-        return Morale::NORMAL;
-    else if ( result < Morale::GREAT )
-        return Morale::GOOD;
-    else if ( result < Morale::BLOOD )
-        return Morale::GREAT;
-
-    return Morale::BLOOD;
+    return Morale::Normalize( result );
 }
 
 int Heroes::GetLuck( void ) const
@@ -656,20 +643,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
     const u8 objs[] = { MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( MDF_LUCK, objs, *this, strs );
 
-    if ( result < Luck::AWFUL )
-        return Luck::CURSED;
-    else if ( result < Luck::BAD )
-        return Luck::AWFUL;
-    else if ( result < Luck::NORMAL )
-        return Luck::BAD;
-    else if ( result < Luck::GOOD )
-        return Luck::NORMAL;
-    else if ( result < Luck::GREAT )
-        return Luck::GOOD;
-    else if ( result < Luck::IRISH )
-        return Luck::GREAT;
-
-    return Luck::IRISH;
+    return Luck::Normalize( result );
 }
 
 /* recrut hero */
