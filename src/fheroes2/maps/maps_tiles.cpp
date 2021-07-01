@@ -2434,13 +2434,12 @@ StreamBase & Maps::operator<<( StreamBase & msg, const TilesAddon & ta )
 
 StreamBase & Maps::operator>>( StreamBase & msg, TilesAddon & ta )
 {
+    msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
+
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove temp variable usage here." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
-        msg >> ta.level >> ta.uniq >> ta.object >> ta.index;
-    }
-    else {
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_095_RELEASE ) {
         uint8_t temp = 0;
-        msg >> ta.level >> ta.uniq >> ta.object >> ta.index >> temp;
+        msg >> temp;
     }
 
     return msg;
