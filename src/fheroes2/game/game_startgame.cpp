@@ -595,42 +595,50 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     radar.SetHide( true );
                     radar.SetRedraw();
-                    if ( player.GetControl() == CONTROL_HUMAN ) {
-                        conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
-                    }
-                    else {
-                        conf.SetCurrentColor( player.GetColor() );
-                        world.ClearFog( player.GetColor() );
-                        kingdom.ActionBeforeTurn();
-                    }
 
                     switch ( kingdom.GetControl() ) {
                     case CONTROL_HUMAN:
                         if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
+                            conf.SetCurrentColor( -1 ); // we need to hide world map in hot seat mode
+
                             iconsPanel.HideIcons();
                             statusWindow.Reset();
+
                             SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                             Redraw();
                             display.render();
+
                             Game::DialogPlayers( player.GetColor(), _( "%{color} player's turn." ) );
                         }
+
                         conf.SetCurrentColor( player.GetColor() );
+
                         world.ClearFog( player.GetColor() );
+
                         kingdom.ActionBeforeTurn();
-                        iconsPanel.SetRedraw();
+
                         iconsPanel.ShowIcons();
+                        iconsPanel.SetRedraw();
+
                         res = HumanTurn( loadedFromSave );
                         break;
 
                     // CONTROL_AI turn
                     default:
                         if ( res == fheroes2::GameMode::END_TURN ) {
+                            Cursor::Get().SetThemes( Cursor::WAIT );
+
+                            conf.SetCurrentColor( player.GetColor() );
+
                             statusWindow.Reset();
                             statusWindow.SetState( StatusType::STATUS_AITURN );
 
-                            Cursor::Get().SetThemes( Cursor::WAIT );
                             Redraw();
                             display.render();
+
+                            world.ClearFog( player.GetColor() );
+
+                            kingdom.ActionBeforeTurn();
 
                             AI::Get().KingdomTurn( kingdom );
                         }
