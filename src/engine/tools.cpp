@@ -74,13 +74,6 @@ std::string StringLower( std::string str )
     return str;
 }
 
-/* convert to upper case */
-std::string StringUpper( std::string str )
-{
-    std::transform( str.begin(), str.end(), str.begin(), ::toupper );
-    return str;
-}
-
 std::string GetStringShort( int value )
 {
     if ( std::abs( value ) > 1000 ) {
@@ -249,29 +242,6 @@ std::vector<u16> StringUTF8_to_UNICODE( const std::string & utf8 )
     return unicode;
 }
 
-std::string StringUNICODE_to_UTF8( const std::vector<u16> & unicode )
-{
-    std::string utf8;
-    utf8.reserve( 2 * unicode.size() );
-
-    for ( std::vector<u16>::const_iterator it = unicode.begin(); it != unicode.end(); ++it ) {
-        if ( *it < 128 ) {
-            utf8.append( 1, static_cast<char>( *it ) );
-        }
-        else if ( *it < 2048 ) {
-            utf8.append( 1, static_cast<char>( 192 + ( ( *it - ( *it % 64 ) ) / 64 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( *it % 64 ) ) );
-        }
-        else {
-            utf8.append( 1, static_cast<char>( 224 + ( ( *it - ( *it % 4096 ) ) / 4096 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( ( ( *it % 4096 ) - ( *it % 64 ) ) / 64 ) ) );
-            utf8.append( 1, static_cast<char>( 128 + ( *it % 64 ) ) );
-        }
-    }
-
-    return utf8;
-}
-
 int Sign( int s )
 {
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
@@ -437,28 +407,6 @@ std::vector<u8> decodeBase64( const std::string & src )
     }
 
     return res;
-}
-
-int CheckSum( const std::vector<u8> & v )
-{
-    u32 ret = 0;
-    std::vector<u8>::const_iterator it = v.begin();
-
-    do {
-        u32 b1 = it < v.end() ? *it++ : 0;
-        u32 b2 = it < v.end() ? *it++ : 0;
-        u32 b3 = it < v.end() ? *it++ : 0;
-        u32 b4 = it < v.end() ? *it++ : 0;
-
-        ret += ( b1 << 24 ) | ( b2 << 16 ) | ( b3 << 8 ) | b4;
-    } while ( it != v.end() );
-
-    return ret;
-}
-
-int CheckSum( const std::string & str )
-{
-    return CheckSum( std::vector<u8>( str.begin(), str.end() ) );
 }
 
 namespace fheroes2

@@ -37,7 +37,6 @@ int Sign( int );
 
 std::string StringTrim( std::string );
 std::string StringLower( std::string );
-std::string StringUpper( std::string );
 
 std::list<std::string> StringSplit( const std::string &, const std::string & );
 
@@ -45,12 +44,9 @@ void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
 int CountBits( u32 );
-int CheckSum( const std::vector<u8> & );
-int CheckSum( const std::string & );
 
 std::string EncodeString( const std::string &, const char * charset );
 std::vector<u16> StringUTF8_to_UNICODE( const std::string & );
-std::string StringUNICODE_to_UTF8( const std::vector<u16> & );
 
 std::vector<u8> decodeBase64( const std::string & );
 
