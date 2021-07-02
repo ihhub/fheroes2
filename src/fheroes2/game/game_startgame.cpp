@@ -1040,7 +1040,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                         isMovingHero = true;
 
                         if ( hero->isAction() ) {
-                            // game over check
+                            // check if the game is over after the hero's action
                             res = GameOver::Result::Get().LocalCheckGameOver();
 
                             hero->ResetAction();

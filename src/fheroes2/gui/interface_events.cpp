@@ -394,7 +394,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 iconsPanel.RedrawIcons( ICON_HEROES );
                 fheroes2::Display::instance().render();
 
-                // check game over for ultimate artifact
+                // check if the game is over due to conditions related to the ultimate artifact
                 return GameOver::Result::Get().LocalCheckGameOver();
             }
             else
