@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <array>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
@@ -31,6 +30,12 @@
 
 #include "logging.h"
 #include "tools.h"
+
+#ifdef WITH_ICONV
+#include <iconv.h>
+#else
+#include <array>
+#endif
 
 #include <SDL.h>
 
@@ -309,7 +314,6 @@ std::vector<u8> LoadFileToMem( const std::string & file )
 }
 
 #ifdef WITH_ICONV
-#include <iconv.h>
 std::string EncodeString( const std::string & str, const char * charset )
 {
     iconv_t cd;
