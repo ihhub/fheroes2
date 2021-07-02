@@ -2460,14 +2460,6 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     if ( Game::GetLoadVersion() >= FORMAT_VERSION_095_RELEASE ) {
         msg >> tile._level;
     }
-    else {
-        if ( MP2::isActionObject( tile.quantity1 ) ) {
-            tile._level = 0;
-        }
-        else {
-            tile._level = tile.quantity1 & 0x03;
-        }
-    }
 
     return msg;
 }
