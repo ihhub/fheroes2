@@ -94,7 +94,7 @@ namespace
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
     }
 
-    void DialogLoss( int cond )
+    void DialogLoss( int cond, int color )
     {
         const Settings & conf = Settings::Get();
         std::string body;
@@ -109,7 +109,7 @@ namespace
 
         case GameOver::WINS_SIDE: {
             body = _( "%{color} has fallen!\nAll is lost." );
-            StringReplace( body, "%{color}", Color::String( conf.CurrentColor() ) );
+            StringReplace( body, "%{color}", Color::String( color ) );
             break;
         }
 
@@ -132,7 +132,7 @@ namespace
         }
 
         case GameOver::LOSS_STARTHERO: {
-            const Heroes * hero = world.GetKingdom( conf.CurrentColor() ).GetFirstHeroStartCondLoss();
+            const Heroes * hero = world.GetKingdom( color ).GetFirstHeroStartCondLoss();
             body = _( "You have lost the hero %{name}.\nYour quest is over." );
             if ( hero )
                 StringReplace( body, "%{name}", hero->GetName() );
@@ -396,7 +396,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
                     // This case was already handled at the end of the Interface::Basic::HumanTurn()
                     if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
-                        DialogLoss( result );
+                        DialogLoss( result, humanColors );
                     }
 
                     AGG::ResetMixer();
