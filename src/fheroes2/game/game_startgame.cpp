@@ -552,14 +552,19 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     // draw interface
     gameArea.Build();
-    iconsPanel.ResetIcons();
+
     radar.Build();
+    radar.SetHide( true );
+
+    iconsPanel.ResetIcons();
+    iconsPanel.HideIcons();
+
+    statusWindow.Reset();
 
     if ( conf.ExtGameHideInterface() )
         SetHideInterface( true );
 
-    Redraw( REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_BORDER );
-    iconsPanel.HideIcons();
+    Redraw( REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -573,6 +578,16 @@ fheroes2::GameMode Interface::Basic::StartGame()
     while ( res == fheroes2::GameMode::END_TURN ) {
         if ( !loadedFromSave ) {
             world.NewDay();
+        }
+
+        // check if the game is over at the beginning of a new day
+        res = gameResult.LocalCheckGameOver();
+
+        if ( res != fheroes2::GameMode::CANCEL ) {
+            break;
+        }
+        else {
+            res = fheroes2::GameMode::END_TURN;
         }
 
         for ( Players::const_iterator it = sortedPlayers.begin(); it != sortedPlayers.end(); ++it ) {
@@ -648,36 +663,21 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     if ( res != fheroes2::GameMode::END_TURN ) {
                         break;
                     }
-                }
-                // game was loaded from the savefile, but current player is vanquished
-                else if ( loadedFromSave ) {
-                    radar.SetHide( true );
-                    radar.SetRedraw();
 
-                    iconsPanel.HideIcons();
-                    iconsPanel.SetRedraw();
+                    // check if the game is over after each player's turn
+                    res = gameResult.LocalCheckGameOver();
 
-                    statusWindow.Reset();
-                    statusWindow.SetRedraw();
-
-                    Redraw();
-                    display.render();
+                    if ( res != fheroes2::GameMode::CANCEL ) {
+                        break;
+                    }
+                    else {
+                        res = fheroes2::GameMode::END_TURN;
+                    }
                 }
 
                 // reset this after potential HumanTurn() call, but regardless of whether current kingdom
                 // is vanquished - next alive kingdom should start a new day from scratch
                 loadedFromSave = false;
-
-                // perform this check even if the current kingdom is already vanquished, because it may
-                // be vanquished just today after world.NewDay() call and we should properly handle this
-                res = gameResult.LocalCheckGameOver();
-
-                if ( fheroes2::GameMode::CANCEL != res ) {
-                    break;
-                }
-                else {
-                    res = fheroes2::GameMode::END_TURN;
-                }
             }
         }
 
@@ -744,13 +744,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             Game::AutoSave();
     }
 
-    GameOver::Result & gameResult = GameOver::Result::Get();
-
-    // game over check
-    res = gameResult.LocalCheckGameOver();
-
     // warn that all the towns are lost
-    if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
+    if ( myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
 
@@ -1046,7 +1041,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
                         if ( hero->isAction() ) {
                             // game over check
-                            res = gameResult.LocalCheckGameOver();
+                            res = GameOver::Result::Get().LocalCheckGameOver();
 
                             hero->ResetAction();
                         }
