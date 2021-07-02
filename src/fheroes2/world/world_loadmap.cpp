@@ -715,7 +715,7 @@ void World::ProcessNewMap()
         ultimate_pos = ( *it ).GetCenter();
     }
 
-    PostLoad();
+    PostLoad( true );
 
     // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
