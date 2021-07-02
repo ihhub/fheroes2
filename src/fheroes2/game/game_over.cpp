@@ -37,6 +37,133 @@
 
 #include <cassert>
 
+namespace
+{
+    void DialogWins( int cond )
+    {
+        const Settings & conf = Settings::Get();
+        std::string body;
+
+        switch ( cond ) {
+        case GameOver::WINS_ALL:
+            break;
+
+        case GameOver::WINS_TOWN: {
+            body = _( "You captured %{name}!\nYou are victorious." );
+            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            if ( town )
+                StringReplace( body, "%{name}", town->GetName() );
+        } break;
+
+        case GameOver::WINS_HERO: {
+            body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
+            const Heroes * hero = world.GetHeroesCondWins();
+            if ( hero )
+                StringReplace( body, "%{name}", hero->GetName() );
+            break;
+        }
+
+        case GameOver::WINS_ARTIFACT: {
+            body = _( "You have found the %{name}.\nYour quest is complete." );
+            if ( conf.WinsFindUltimateArtifact() )
+                StringReplace( body, "%{name}", "Ultimate Artifact" );
+            else {
+                const Artifact art = conf.WinsFindArtifactID();
+                StringReplace( body, "%{name}", art.GetName() );
+            }
+            break;
+        }
+
+        case GameOver::WINS_SIDE:
+            body = _( "The enemy is beaten.\nYour side has triumphed!" );
+            break;
+
+        case GameOver::WINS_GOLD: {
+            body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
+            StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+            break;
+        }
+
+        default:
+            break;
+        }
+
+        AGG::PlayMusic( MUS::VICTORY, false );
+
+        if ( body.size() )
+            Dialog::Message( "", body, Font::BIG, Dialog::OK );
+    }
+
+    void DialogLoss( int cond )
+    {
+        const Settings & conf = Settings::Get();
+        std::string body;
+
+        switch ( cond ) {
+        case GameOver::WINS_ARTIFACT: {
+            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
+            const Artifact art = conf.WinsFindArtifactID();
+            StringReplace( body, "%{name}", art.GetName() );
+            break;
+        }
+
+        case GameOver::WINS_SIDE: {
+            body = _( "%{color} has fallen!\nAll is lost." );
+            StringReplace( body, "%{color}", Color::String( conf.CurrentColor() ) );
+            break;
+        }
+
+        case GameOver::WINS_GOLD: {
+            body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
+            StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+            break;
+        }
+
+        case GameOver::LOSS_ALL:
+            body = _( "You have been eliminated from the game!!!" );
+            break;
+
+        case GameOver::LOSS_TOWN: {
+            body = _( "The enemy has captured %{name}!\nThey are triumphant." );
+            const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
+            if ( town )
+                StringReplace( body, "%{name}", town->GetName() );
+            break;
+        }
+
+        case GameOver::LOSS_STARTHERO: {
+            const Heroes * hero = world.GetKingdom( conf.CurrentColor() ).GetFirstHeroStartCondLoss();
+            body = _( "You have lost the hero %{name}.\nYour quest is over." );
+            if ( hero )
+                StringReplace( body, "%{name}", hero->GetName() );
+            break;
+        }
+
+        case GameOver::LOSS_HERO: {
+            body = _( "You have lost the hero %{name}.\nYour quest is over." );
+            const Heroes * hero = world.GetHeroesCondLoss();
+            if ( hero )
+                StringReplace( body, "%{name}", hero->GetName() );
+            else
+                StringReplace( body, "%{name}", "" );
+            break;
+        }
+
+        case GameOver::LOSS_TIME:
+            body = _( "You have failed to complete your quest in time.\nAll is lost." );
+            break;
+
+        default:
+            break;
+        }
+
+        AGG::PlayMusic( MUS::LOSTGAME, false );
+
+        if ( body.size() )
+            Dialog::Message( "", body, Font::BIG, Dialog::OK );
+    }
+}
+
 const char * GameOver::GetString( int cond )
 {
     const char * cond_str[] = {"None",
@@ -161,130 +288,6 @@ std::string GameOver::GetActualDescription( int cond )
     return msg;
 }
 
-void GameOver::DialogWins( int cond )
-{
-    const Settings & conf = Settings::Get();
-    std::string body;
-
-    switch ( cond ) {
-    case WINS_ALL:
-        break;
-
-    case WINS_TOWN: {
-        body = _( "You captured %{name}!\nYou are victorious." );
-        const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
-        if ( town )
-            StringReplace( body, "%{name}", town->GetName() );
-    } break;
-
-    case WINS_HERO: {
-        body = _( "You have captured the enemy hero %{name}!\nYour quest is complete." );
-        const Heroes * hero = world.GetHeroesCondWins();
-        if ( hero )
-            StringReplace( body, "%{name}", hero->GetName() );
-        break;
-    }
-
-    case WINS_ARTIFACT: {
-        body = _( "You have found the %{name}.\nYour quest is complete." );
-        if ( conf.WinsFindUltimateArtifact() )
-            StringReplace( body, "%{name}", "Ultimate Artifact" );
-        else {
-            const Artifact art = conf.WinsFindArtifactID();
-            StringReplace( body, "%{name}", art.GetName() );
-        }
-        break;
-    }
-
-    case WINS_SIDE:
-        body = _( "The enemy is beaten.\nYour side has triumphed!" );
-        break;
-
-    case WINS_GOLD: {
-        body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-        StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
-        break;
-    }
-
-    default:
-        break;
-    }
-
-    AGG::PlayMusic( MUS::VICTORY, false );
-
-    if ( body.size() )
-        Dialog::Message( "", body, Font::BIG, Dialog::OK );
-}
-
-void GameOver::DialogLoss( int cond )
-{
-    const Settings & conf = Settings::Get();
-    std::string body;
-
-    switch ( cond ) {
-    case WINS_ARTIFACT: {
-        body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
-        const Artifact art = conf.WinsFindArtifactID();
-        StringReplace( body, "%{name}", art.GetName() );
-        break;
-    }
-
-    case WINS_SIDE: {
-        body = _( "%{color} has fallen!\nAll is lost." );
-        StringReplace( body, "%{color}", Color::String( conf.CurrentColor() ) );
-        break;
-    }
-
-    case WINS_GOLD: {
-        body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-        StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
-        break;
-    }
-
-    case LOSS_ALL:
-        body = _( "You have been eliminated from the game!!!" );
-        break;
-
-    case LOSS_TOWN: {
-        body = _( "The enemy has captured %{name}!\nThey are triumphant." );
-        const Castle * town = world.GetCastle( conf.WinsMapsPositionObject() );
-        if ( town )
-            StringReplace( body, "%{name}", town->GetName() );
-        break;
-    }
-
-    case LOSS_STARTHERO: {
-        const Heroes * hero = world.GetKingdom( conf.CurrentColor() ).GetFirstHeroStartCondLoss();
-        body = _( "You have lost the hero %{name}.\nYour quest is over." );
-        if ( hero )
-            StringReplace( body, "%{name}", hero->GetName() );
-        break;
-    }
-
-    case LOSS_HERO: {
-        body = _( "You have lost the hero %{name}.\nYour quest is over." );
-        const Heroes * hero = world.GetHeroesCondLoss();
-        if ( hero )
-            StringReplace( body, "%{name}", hero->GetName() );
-        else
-            StringReplace( body, "%{name}", "" );
-        break;
-    }
-
-    case LOSS_TIME:
-        body = _( "You have failed to complete your quest in time.\nAll is lost." );
-        break;
-
-    default:
-        break;
-    }
-
-    AGG::PlayMusic( MUS::LOSTGAME, false );
-
-    if ( body.size() )
-        Dialog::Message( "", body, Font::BIG, Dialog::OK );
-}
-
 GameOver::Result & GameOver::Result::Get( void )
 {
     static Result gresult;
@@ -347,7 +350,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
 
         if ( myKingdom.isControlHuman() ) {
             if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
-                GameOver::DialogWins( result );
+                DialogWins( result );
 
                 if ( conf.isCampaignGameType() ) {
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
@@ -393,7 +396,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // Don't show the loss dialog if player's kingdom has been vanquished due to the expired countdown of days since the loss of the last town
                     // This case was already handled at the end of the Interface::Basic::HumanTurn()
                     if ( !( result == GameOver::LOSS_ALL && myKingdom.GetCastles().empty() && myKingdom.GetLostTownDays() == 0 ) ) {
-                        GameOver::DialogLoss( result );
+                        DialogLoss( result );
                     }
 
                     AGG::ResetMixer();

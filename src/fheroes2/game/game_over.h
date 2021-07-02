@@ -53,8 +53,6 @@ namespace GameOver
 
     const char * GetString( int );
     std::string GetActualDescription( int );
-    void DialogWins( int );
-    void DialogLoss( int );
 
     class Result
     {
