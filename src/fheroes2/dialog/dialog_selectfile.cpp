@@ -99,6 +99,8 @@ private:
     bool _isDoubleClicked;
 };
 
+#define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
+
 void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
 {
     char shortDate[20];

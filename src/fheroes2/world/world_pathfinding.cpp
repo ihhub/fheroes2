@@ -18,11 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cmath>
 #include <set>
 
 #include "ground.h"
 #include "logging.h"
+#include "rand.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
@@ -84,26 +86,42 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
     if ( fromWater ) {
         const int mapWidth = world.w();
         switch ( direction ) {
-        case Direction::TOP_LEFT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+        case Direction::TOP_LEFT: {
+            assert( index >= mapWidth + 1 );
+            if ( GetTiles( index - mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::TOP_RIGHT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::TOP_RIGHT: {
+            assert( index >= mapWidth && index + 1 < mapWidth * world.h() );
+            if ( GetTiles( index - mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_RIGHT: {
+            assert( index + mapWidth + 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_LEFT: {
+            assert( index >= 1 && index + mapWidth - 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
+            break;
+        }
         default:
             break;
         }
@@ -416,6 +434,48 @@ int AIWorldPathfinder::getFogDiscoveryTile( const Heroes & hero )
         }
     }
     return -1;
+}
+
+int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
+{
+    // paths have to be pre-calculated to find a spot where we're able to move
+    reEvaluateIfNeeded( hero );
+    const int start = hero.GetIndex();
+
+    Directions directions = Direction::All();
+    // We have to shuffle directions to avoid cases when heroes repeat the same steps again and again.
+    Rand::Shuffle( directions );
+
+    for ( size_t i = 0; i < directions.size(); ++i ) {
+        if ( Maps::isValidDirection( start, directions[i] ) ) {
+            const int newIndex = start + _mapOffset[i];
+            if ( newIndex == start )
+                continue;
+
+            const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
+            if ( _cache[newIndex]._cost && monsters.empty() ) {
+                return newIndex;
+            }
+        }
+    }
+    return -1;
+}
+
+bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
+{
+    // paths have to be pre-calculated to find a spot where we're able to move
+    reEvaluateIfNeeded( hero );
+    const int start = hero.GetIndex();
+
+    const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
+    const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
+    if ( leftSideUnreachable && rightSideUnreachable ) {
+        return true;
+    }
+
+    const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
+    const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
+    return topSideUnreachable && bottomSideUnreachable;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( int targetIndex, bool checkAdjacent )

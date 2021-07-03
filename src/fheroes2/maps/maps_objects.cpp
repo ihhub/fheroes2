@@ -22,7 +22,6 @@
 
 #include <algorithm>
 
-#include "army_troop.h"
 #include "color.h"
 #include "game.h"
 #include "logging.h"

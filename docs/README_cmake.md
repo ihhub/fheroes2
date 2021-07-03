@@ -20,7 +20,7 @@ After configuration let's build project:
 cmake --build build
 ```
 
-After building, executable can be found in build/src/fheroes2/ directory.
+After building, executable can be found in `build` directory.
 
 ### Windows / Visual Studio
 
@@ -60,4 +60,14 @@ After configuration let's build project:
 cmake --build build --config Release
 ```
 
-After building, executable can be found in build\src\fheroes2\Release directory.
+After building, executable can be found in `build\Release` directory.
+
+### Using Demo data
+
+CMake project allows to download and install original HoMM II Demo files which used by fheroes2 project.
+To do this please add `-DGET_HOMM2_DEMO=ON` to configuration options. For example:
+
+```shell
+cmake -B build -DGET_HOMM2_DEMO=ON <some other options>
+```
+
