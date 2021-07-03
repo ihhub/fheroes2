@@ -406,7 +406,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) || timedButtonUp.isActiveForLongEnough() ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) || timedButtonUp.isDelayPassed() ) && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -419,7 +419,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, bool ext 
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) || timedButtonDn.isActiveForLongEnough() ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) || timedButtonDn.isDelayPassed() ) && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;

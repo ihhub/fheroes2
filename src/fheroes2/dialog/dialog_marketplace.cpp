@@ -538,7 +538,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // decrease trade resource
         if ( count_buy
-             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isActiveForLongEnough() ) )
+             && ( ( buttonLeft.isEnabled() && ( le.MouseClickLeft( gui.buttonLeft.area() ) || timedButtonLeft.isDelayPassed() ) )
                   || le.MouseWheelDn( scrollbar.getArea() ) ) ) {
             count_buy -= Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 
@@ -551,7 +551,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         // increase trade resource
         if ( count_buy < max_buy
-             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isActiveForLongEnough() ) )
+             && ( ( buttonRight.isEnabled() && ( le.MouseClickLeft( buttonRight.area() ) || timedButtonRight.isDelayPassed() ) )
                   || le.MouseWheelUp( scrollbar.getArea() ) ) ) {
             count_buy += Resource::GOLD == resourceTo ? GetTradeCosts( kingdom, resourceFrom, resourceTo, fromTradingPost ) : 1;
 

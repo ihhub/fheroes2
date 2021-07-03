@@ -116,13 +116,13 @@ public:
         le.MousePressLeft( btnUp.area() ) ? btnUp.drawOnPress() : btnUp.drawOnRelease();
         le.MousePressLeft( btnDn.area() ) ? btnDn.drawOnPress() : btnDn.drawOnRelease();
 
-        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isActiveForLongEnough() ) && vcur < vmax ) {
+        if ( ( le.MouseWheelUp() || le.MouseClickLeft( btnUp.area() ) || timedBtnUp.isDelayPassed() ) && vcur < vmax ) {
             vcur += vcur + step <= vmax ? step : vmax - vcur;
             return true;
         }
         else
             // down
-            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isActiveForLongEnough() ) && vmin < vcur ) {
+            if ( ( le.MouseWheelDn() || le.MouseClickLeft( btnDn.area() ) || timedBtnDn.isDelayPassed() ) && vmin < vcur ) {
             vcur -= vmin + vcur >= step ? step : vcur;
             return true;
         }

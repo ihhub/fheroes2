@@ -161,16 +161,16 @@ namespace fheroes2
         return _isHidden;
     }
 
-    TimedEventValidator::TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBeforeFirstUpdate, const uint64_t delayBetweenUpdate )
-        : _comparator( comparator )
-        , _delayBetweenUpdate( delayBetweenUpdate )
-        , _delayBeforeFirstUpdate( delayBeforeFirstUpdate )
+    TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
+        : _verification( verification )
+        , _delayBetweenUpdateMs( delayBetweenUpdateMs )
+        , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
     {}
 
-    bool TimedEventValidator::isActiveForLongEnough()
+    bool TimedEventValidator::isDelayPassed()
     {
-        if ( _delayBeforeFirstUpdate.isPassed() && _delayBetweenUpdate.isPassed() && _comparator() ) {
-            _delayBetweenUpdate.reset();
+        if ( _delayBeforeFirstUpdateMs.isPassed() && _delayBetweenUpdateMs.isPassed() && _verification() ) {
+            _delayBetweenUpdateMs.reset();
             return true;
         }
         return false;
@@ -180,8 +180,8 @@ namespace fheroes2
     {
         if ( sender == nullptr )
             return;
-        _delayBeforeFirstUpdate.reset();
-        _delayBetweenUpdate.reset();
+        _delayBeforeFirstUpdateMs.reset();
+        _delayBetweenUpdateMs.reset();
     }
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()

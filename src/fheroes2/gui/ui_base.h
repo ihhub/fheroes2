@@ -40,5 +40,4 @@ namespace fheroes2
     private:
         ActionObject * _receiver;
     };
-
 }

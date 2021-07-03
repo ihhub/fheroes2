@@ -367,14 +367,14 @@ int Castle::OpenDialog( bool readonly )
 
             // prev castle
             if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isActiveForLongEnough() ) ) {
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = Dialog::PREV;
                 break;
             }
             else
                 // next castle
                 if ( buttonNextCastle.isEnabled()
-                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isActiveForLongEnough() ) ) {
+                     && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = Dialog::NEXT;
                 break;
             }

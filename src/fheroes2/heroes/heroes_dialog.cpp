@@ -43,6 +43,9 @@
 #include "ui_window.h"
 #include "world.h"
 
+static fheroes2::Button buttonPrevHero( 0, 0, ICN::HSBTNS, 4, 5 );
+static fheroes2::Button buttonNextHero( 0, 0, ICN::HSBTNS, 6, 7 );
+
 int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -185,12 +188,16 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // button prev
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
-    fheroes2::Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
+    buttonPrevHero.setPosition( dst_pt.x, dst_pt.y );
+    fheroes2::TimedEventValidator timedButtonPrevHero( []() { return buttonPrevHero.isPressed(); } );
+    buttonPrevHero.subscribe( &timedButtonPrevHero );
 
     // button next
     dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - 22;
     dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
-    fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
+    buttonNextHero.setPosition( dst_pt.x, dst_pt.y );
+    fheroes2::TimedEventValidator timedButtonNextHero( []() { return buttonNextHero.isPressed(); } );
+    buttonNextHero.subscribe( &timedButtonNextHero );
 
     // button dismiss
     dst_pt.x = cur_pt.x + 4;
@@ -278,12 +285,14 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
             le.MousePressLeft( buttonNextHero.area() ) ? buttonNextHero.drawOnPress() : buttonNextHero.drawOnRelease();
 
         // prev hero
-        if ( buttonPrevHero.isEnabled() && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) ) {
+        if ( buttonPrevHero.isEnabled()
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
-        if ( buttonNextHero.isEnabled() && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) ) ) {
+        if ( buttonNextHero.isEnabled()
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 

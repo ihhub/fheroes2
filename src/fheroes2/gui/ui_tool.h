@@ -28,8 +28,6 @@
 
 namespace fheroes2
 {
-    static constexpr uint64_t INITIAL_DELAY = 500;
-    static constexpr uint64_t DELAY_BETWEEN_UPDATES = 100;
     class MovableSprite : public Sprite
     {
     public:
@@ -56,19 +54,18 @@ namespace fheroes2
     class TimedEventValidator : public ActionObject
     {
     public:
-        explicit TimedEventValidator( std::function<bool()> comparator, const uint64_t delayBeforeFirstUpdate = INITIAL_DELAY,
-                                      const uint64_t delayBetweenUpdate = DELAY_BETWEEN_UPDATES );
+        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
         ~TimedEventValidator() override = default;
 
-        bool isActiveForLongEnough();
+        bool isDelayPassed();
 
     protected:
         void senderUpdate( const ActionObject * sender ) override;
 
     private:
-        std::function<bool()> _comparator;
-        fheroes2::TimeDelay _delayBetweenUpdate;
-        fheroes2::TimeDelay _delayBeforeFirstUpdate;
+        std::function<bool()> _verification;
+        fheroes2::TimeDelay _delayBetweenUpdateMs;
+        fheroes2::TimeDelay _delayBeforeFirstUpdateMs;
     };
 
     // This class is useful for cases of playing videos only

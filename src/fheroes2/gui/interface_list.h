@@ -329,7 +329,7 @@ namespace Interface
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
-                        || timedButtonPgUp.isActiveForLongEnough() )
+                        || timedButtonPgUp.isDelayPassed() )
                       && ( _topId > 0 ) ) {
                 needRedraw = true;
 
@@ -339,7 +339,7 @@ namespace Interface
                 return true;
             }
             else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
-                        || timedButtonPgDn.isActiveForLongEnough() )
+                        || timedButtonPgDn.isDelayPassed() )
                       && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
