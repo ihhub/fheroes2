@@ -20,7 +20,11 @@
 
 #pragma once
 
+#include <functional>
+
 #include "image.h"
+#include "timing.h"
+#include "ui_base.h"
 
 namespace fheroes2
 {
@@ -45,6 +49,23 @@ namespace fheroes2
     private:
         ImageRestorer _restorer;
         bool _isHidden;
+    };
+
+    class TimedEventValidator : public ActionObject
+    {
+    public:
+        explicit TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs = 500, const uint64_t delayBetweenUpdateMs = 100 );
+        ~TimedEventValidator() override = default;
+
+        bool isDelayPassed();
+
+    protected:
+        void senderUpdate( const ActionObject * sender ) override;
+
+    private:
+        std::function<bool()> _verification;
+        fheroes2::TimeDelay _delayBetweenUpdateMs;
+        fheroes2::TimeDelay _delayBeforeFirstUpdateMs;
     };
 
     // This class is useful for cases of playing videos only
