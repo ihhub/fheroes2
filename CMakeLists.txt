@@ -1,7 +1,7 @@
 # For descent FetchContent()
 cmake_minimum_required(VERSION 3.14)
 
-project(fheroes2 VERSION 0.9.4 LANGUAGES C CXX)
+project(fheroes2 VERSION 0.9.5 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 11)
 
 include(GNUInstallDirs)
