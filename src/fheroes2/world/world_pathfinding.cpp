@@ -448,12 +448,12 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = start + _mapOffset[i];
+            const int newIndex = start + Maps::GetDirectionIndex( 0, directions[i] );
             if ( newIndex == start )
                 continue;
 
             const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-            if ( monsters.empty() && world.getPath( hero, newIndex ).size() == 1 && world.GetTiles( newIndex ).isClearGround() ) {
+            if ( _cache[newIndex]._cost && monsters.empty() ) {
                 return newIndex;
             }
         }
