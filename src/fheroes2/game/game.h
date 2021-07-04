@@ -167,7 +167,7 @@ namespace Game
     fheroes2::GameMode LoadHotseat();
     fheroes2::GameMode LoadNetwork();
     fheroes2::GameMode ScenarioInfo();
-    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode );
+    fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario();
     fheroes2::GameMode StartGame();
     fheroes2::GameMode StartBattleOnly();

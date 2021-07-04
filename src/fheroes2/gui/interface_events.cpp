@@ -220,7 +220,23 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        EventGameInfo();
+        if ( Settings::Get().isCampaignGameType() ) {
+            fheroes2::Display & display = fheroes2::Display::instance();
+            fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
+
+            const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
+            if ( returnMode == fheroes2::GameMode::CANCEL ) {
+                saver.restore();
+            }
+            else {
+                saver.reset();
+            }
+
+            return returnMode;
+        }
+        else {
+            EventGameInfo();
+        }
         break;
 
     case Dialog::DIG:
