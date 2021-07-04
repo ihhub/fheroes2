@@ -1375,7 +1375,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                 continue;
 
             Monster monster( campaignAwards[i]._subType );
-            while ( 1 ) {
+            while ( true ) {
                 if ( troop.GetID() == monster.GetID() ) {
                     if ( isAlliance ) {
                         return { NeutralMonsterJoiningCondition::Reason::Alliance, troop.GetCount(),
