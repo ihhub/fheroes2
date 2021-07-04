@@ -27,7 +27,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Development
 
-See the [**fheroes2 build and contribution guide**](DEVELOPMENT.md) for guidance on building a project from source and contributing to the project.
+To build the project from source or contribute please follow [**this guide**](DEVELOPMENT.md).
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
