@@ -710,6 +710,11 @@ void World::MonthOfMonstersAction( const Monster & mons )
     std::set<int32_t> excludeTiles;
 
     for ( const Maps::Tiles & tile : vec_tiles ) {
+        if ( tile.isWater() ) {
+            // Monsters are not placed on water.
+            continue;
+        }
+
         const int32_t tileId = tile.GetIndex();
         const int objectId = tile.GetObject( true );
 
