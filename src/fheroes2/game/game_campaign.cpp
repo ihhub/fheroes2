@@ -73,7 +73,8 @@ namespace
         fheroes2::Blit( icon, fheroes2::Display::instance(), offset.x + posX, offset.y + posY );
     }
 
-    void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData & campaignData, const fheroes2::Point & top, const int chosenScenarioId )
+    void DrawCampaignScenarioIcons( fheroes2::ButtonGroup & buttonGroup, const Campaign::CampaignData & campaignData, const fheroes2::Point & top,
+                                    const int chosenScenarioId )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -143,8 +144,7 @@ namespace
             availableMaps.emplace_back( chosenScenarioId );
         }
         else {
-            availableMaps
-                = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
+            availableMaps = saveData.isStarting() ? campaignData.getStartingScenarios() : campaignData.getScenariosAfter( saveData.getLastCompletedScenarioID() );
         }
 
         assert( iconOffsets.size() == scenarios.size() );
