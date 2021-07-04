@@ -62,6 +62,13 @@ namespace AI
                {DWELLING_MONSTER2, 3}, {DWELLING_MONSTER1, 4}, {BUILD_MAGEGUILD1, 2},  {BUILD_WEL2, 10},       {BUILD_TAVERN, 5},      {BUILD_THIEVESGUILD, 10},
                {BUILD_MAGEGUILD2, 3},  {BUILD_MAGEGUILD3, 4},  {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},  {BUILD_SHIPYARD, 4},    {BUILD_MARKETPLACE, 10}};
 
+        static const std::vector<BuildOrder> barbarianBuildOrder
+            = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },      { DWELLING_MONSTER6, 1 }, { DWELLING_UPGRADE5, 1 }, { DWELLING_MONSTER5, 1 },
+                { DWELLING_UPGRADE4, 1 }, { DWELLING_MONSTER4, 1 }, { DWELLING_MONSTER3, 1 }, { DWELLING_UPGRADE2, 2 }, { DWELLING_MONSTER2, 2 },
+                { DWELLING_MONSTER1, 4 }, { BUILD_MAGEGUILD1, 3 },  { BUILD_WEL2, 10 },       { BUILD_TAVERN, 5 },      { BUILD_THIEVESGUILD, 10 },
+                { BUILD_MAGEGUILD2, 4 },  { BUILD_MAGEGUILD3, 5 },  { BUILD_MAGEGUILD4, 6 },  { BUILD_MAGEGUILD5, 7 },  { BUILD_SHIPYARD, 4 },
+                { BUILD_MARKETPLACE, 10 } };
+
         static const std::vector<BuildOrder> sorceressBuildOrder
             = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },      { DWELLING_MONSTER6, 1 }, { DWELLING_MONSTER5, 1 }, { DWELLING_MONSTER4, 1 },
                 { BUILD_MAGEGUILD1, 1 },  { DWELLING_MONSTER3, 1 }, { DWELLING_UPGRADE4, 1 }, { DWELLING_UPGRADE3, 2 }, { DWELLING_UPGRADE2, 5 },
@@ -101,6 +108,8 @@ namespace AI
             return wizardBuildOrder;
         case Race::SORC:
             return sorceressBuildOrder;
+        case Race::BARB:
+            return barbarianBuildOrder;
         default:
             break;
         }
