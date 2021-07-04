@@ -939,7 +939,7 @@ namespace AI
             _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
         }
 
-        const bool allHeroesMoves = availableHeroes.empty();
+        const bool allHeroesMoved = availableHeroes.empty();
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
             if ( !heroInfo.hero->MayStillMove() ) {
@@ -949,6 +949,6 @@ namespace AI
 
         _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
 
-        return allHeroesMoves;
+        return allHeroesMoved;
     }
 }
