@@ -772,8 +772,8 @@ void World::MonthOfMonstersAction( const Monster & mons )
         monstersToBePlaced = static_cast<uint32_t>( height );
     }
     else {
-        monstersToBePlaced = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ),
-                                                static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+        monstersToBePlaced
+            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
     }
 
     // 85% of positions are for primary targets
