@@ -56,11 +56,6 @@ namespace
         return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
     }
 
-    void SetVideoDriver( const std::string & driver )
-    {
-        System::SetEnvironment( "SDL_VIDEODRIVER", driver.c_str() );
-    }
-
     int PrintHelp( const char * basename )
     {
         COUT( "Usage: " << basename << " [OPTIONS]" );
@@ -117,15 +112,6 @@ namespace
 
         if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
             System::MakeDirectory( dataFilesSave );
-    }
-
-    void SetTimidityEnvPath()
-    {
-        const std::string prefix_timidity = System::ConcatePath( "files", "timidity" );
-        const std::string result = Settings::GetLastFile( prefix_timidity, "timidity.cfg" );
-
-        if ( System::IsFile( result ) )
-            System::SetEnvironment( "TIMIDITY_PATH", System::GetDirname( result ).c_str() );
     }
 
     void SetLangEnvPath( const Settings & conf )
@@ -190,25 +176,12 @@ int main( int argc, char ** argv )
             }
     }
 
-    if ( conf.SelectVideoDriver().size() )
-        SetVideoDriver( conf.SelectVideoDriver() );
-
-    // random init
-    if ( conf.Music() )
-        SetTimidityEnvPath();
-
-    u32 subsystem = INIT_VIDEO;
+    u32 subsystem = INIT_VIDEO | INIT_AUDIO;
 
 #if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
     subsystem |= INIT_GAMECONTROLLER;
 #endif
 
-    if ( conf.Sound() || conf.Music() )
-        subsystem |= INIT_AUDIO;
-#ifdef WITH_AUDIOCD
-    if ( conf.MusicCD() )
-        subsystem |= INIT_CDROM | INIT_AUDIO;
-#endif
     if ( SDL::Init( subsystem ) ) {
         try
         {
@@ -219,14 +192,9 @@ int main( int argc, char ** argv )
             if ( Mixer::isValid() ) {
                 Mixer::SetChannels( 16 );
                 Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+
                 Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-                if ( conf.Music() ) {
-                    Music::SetFadeIn( 900 );
-                }
-            }
-            else if ( conf.Sound() || conf.Music() ) {
-                conf.ResetSound();
-                conf.ResetMusic();
+                Music::SetFadeIn( 900 );
             }
 
             fheroes2::Display & display = fheroes2::Display::instance();

@@ -48,12 +48,6 @@ fheroes2::GameMode Game::LoadHotseat()
     return DisplayLoadGameDialog();
 }
 
-fheroes2::GameMode Game::LoadNetwork()
-{
-    Settings::Get().SetGameType( Game::TYPE_NETWORK );
-    return DisplayLoadGameDialog();
-}
-
 fheroes2::GameMode Game::LoadMulti()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -113,24 +107,6 @@ fheroes2::GameMode Game::LoadMulti()
         else if ( le.MousePressRight( buttonCancelGame.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Cancel back to the main menu." ), Font::BIG );
         }
-
-#ifdef NETWORK_ENABLE
-        if ( buttonNetwork.isEnabled() ) {
-            le.MousePressLeft( buttonNetwork.area() ) ? buttonNetwork.drawOnPress() : buttonNetwork.drawOnRelease();
-            if ( le.MouseClickLeft( buttonNetwork.area() ) || HotKeyPressEvent( EVENT_BUTTON_NETWORK ) ) {
-                if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_NETWORK ), false ) ) {
-                    Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
-                }
-                else {
-                    return fheroes2::GameMode::LOAD_NETWORK;
-                }
-            }
-            return fheroes2::GameMode::LOAD_NETWORK;
-            else if ( le.MousePressRight( buttonNetwork.area() ) )
-                Dialog::Message( _( "Network" ), _( "Play a network game, where 2 players use their own computers connected through a LAN (Local Area Network)." ),
-                                 Font::BIG );
-        }
-#endif
     }
 
     return fheroes2::GameMode::LOAD_GAME;

@@ -58,10 +58,10 @@ namespace Game
         TYPE_NETWORK = 0x08,
         TYPE_BATTLEONLY = 0x10,
 
-        // TYPE_LOADTYPE used in the Settings::LoadedGameVersion, if you change that value,
+        // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.
         TYPE_LOADFILE = 0x80,
-        TYPE_MULTI = TYPE_HOTSEAT | TYPE_NETWORK
+        TYPE_MULTI = TYPE_HOTSEAT
     };
     // distance_t
     enum
@@ -87,7 +87,6 @@ namespace Game
         EVENT_BUTTON_SETTINGS,
         EVENT_BUTTON_SELECT,
         EVENT_BUTTON_HOTSEAT,
-        EVENT_BUTTON_NETWORK,
         EVENT_BUTTON_HOST,
         EVENT_BUTTON_GUEST,
         EVENT_BUTTON_BATTLEONLY,
@@ -161,11 +160,11 @@ namespace Game
     fheroes2::GameMode NewMulti();
     fheroes2::GameMode NewHotSeat();
     fheroes2::GameMode NewBattleOnly();
+    fheroes2::GameMode NewNetwork();
     fheroes2::GameMode LoadStandard();
     fheroes2::GameMode LoadCampaign();
     fheroes2::GameMode LoadMulti();
     fheroes2::GameMode LoadHotseat();
-    fheroes2::GameMode LoadNetwork();
     fheroes2::GameMode ScenarioInfo();
     fheroes2::GameMode SelectCampaignScenario( const fheroes2::GameMode prevMode, const bool allowToRestart );
     fheroes2::GameMode SelectScenario();
