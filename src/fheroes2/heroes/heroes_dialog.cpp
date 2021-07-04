@@ -43,9 +43,6 @@
 #include "ui_window.h"
 #include "world.h"
 
-static fheroes2::Button buttonPrevHero( 0, 0, ICN::HSBTNS, 4, 5 );
-static fheroes2::Button buttonNextHero( 0, 0, ICN::HSBTNS, 6, 7 );
-
 int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
@@ -188,15 +185,15 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     // button prev
     dst_pt.x = cur_pt.x;
     dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
-    buttonPrevHero.setPosition( dst_pt.x, dst_pt.y );
-    fheroes2::TimedEventValidator timedButtonPrevHero( []() { return buttonPrevHero.isPressed(); } );
+    fheroes2::Button buttonPrevHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 4, 5 );
+    fheroes2::TimedEventValidator timedButtonPrevHero( [&buttonPrevHero]() { return buttonPrevHero.isPressed(); } );
     buttonPrevHero.subscribe( &timedButtonPrevHero );
 
     // button next
     dst_pt.x = cur_pt.x + fheroes2::Display::DEFAULT_WIDTH - 22;
     dst_pt.y = cur_pt.y + fheroes2::Display::DEFAULT_HEIGHT - 20;
-    buttonNextHero.setPosition( dst_pt.x, dst_pt.y );
-    fheroes2::TimedEventValidator timedButtonNextHero( []() { return buttonNextHero.isPressed(); } );
+    fheroes2::Button buttonNextHero( dst_pt.x, dst_pt.y, ICN::HSBTNS, 6, 7 );
+    fheroes2::TimedEventValidator timedButtonNextHero( [&buttonNextHero]() { return buttonNextHero.isPressed(); } );
     buttonNextHero.subscribe( &timedButtonNextHero );
 
     // button dismiss
@@ -210,7 +207,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     dst_pt.y = cur_pt.y + 318;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::HSBTNS, 2, 3 );
 
-    LocalEvent & le = LocalEvent::GetClean();
+    LocalEvent & le = LocalEvent::Get();
 
     if ( inCastle() || readonly || disableDismiss || Modes( NOTDISMISS ) ) {
         buttonDismiss.disable();

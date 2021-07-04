@@ -32,7 +32,6 @@
 #include "heroes_base.h"
 #include "pairs.h"
 #include "route.h"
-#include "ui_button.h"
 #include "visit.h"
 
 class Recruits;

@@ -509,10 +509,12 @@ u32 Castle::OpenTown( void )
         else if ( le.MousePressRight( rectGroupedArmyFormat ) && isCaptainBuilt )
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
+            LocalEvent::GetClean();
             hero1->OpenDialog( true );
             display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
+            LocalEvent::GetClean();
             hero2->OpenDialog( true );
             display.render();
         }
