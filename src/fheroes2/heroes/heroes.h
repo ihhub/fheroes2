@@ -403,6 +403,7 @@ private:
     ColorBase killer_color;
     u32 experience;
     s32 move_point_scale;
+
     Skill::SecSkills secondary_skills;
 
     Army army;
