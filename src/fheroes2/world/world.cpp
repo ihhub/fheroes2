@@ -42,6 +42,87 @@
 #include "settings.h"
 #include "world.h"
 
+namespace
+{
+    bool isTileBlockedForSettingMonster( const MapsTiles & mapTiles, const int32_t tileId, const int32_t radius, const std::set<int32_t> & excludeTiles )
+    {
+        const MapsIndexes & indexes = Maps::GetAroundIndexes( tileId, radius, false );
+        for ( const int32_t indexId : indexes ) {
+            if ( excludeTiles.count( indexId ) > 0 ) {
+                return true;
+            }
+
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            if ( indexedTile.isWater() ) {
+                continue;
+            }
+
+            const int indexedObjectId = indexedTile.GetObject( true );
+            if ( indexedObjectId == MP2::OBJ_CASTLE || indexedObjectId == MP2::OBJ_HEROES || indexedObjectId == MP2::OBJ_MONSTER ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    int32_t findSuitableNeighbouringTile( const MapsTiles & mapTiles, const int32_t tileId, const bool allDirections )
+    {
+        std::vector<int32_t> suitableIds;
+
+        if ( allDirections ) {
+            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            for ( const int32_t indexId : tiles ) {
+                const Maps::Tiles & indexedTile = mapTiles[indexId];
+                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                    continue;
+                }
+
+                suitableIds.emplace_back( indexId );
+            }
+        }
+        else {
+            const int32_t width = world.w();
+            const MapsIndexes & tiles = Maps::GetAroundIndexes( tileId );
+            for ( const int32_t indexId : tiles ) {
+                if ( indexId < tileId + width - 2 ) {
+                    // Only tiles which are lower than current object.
+                    continue;
+                }
+
+                const Maps::Tiles & indexedTile = mapTiles[indexId];
+                if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                    continue;
+                }
+
+                suitableIds.emplace_back( indexId );
+            }
+        }
+
+        if ( suitableIds.empty() ) {
+            return -1;
+        }
+
+        return Rand::Get( suitableIds );
+    }
+
+    int32_t getNeighbouringEmptyTileCount( const MapsTiles & mapTiles, const int32_t tileId )
+    {
+        int32_t count = 0;
+        const MapsIndexes & suitableIds = Maps::GetAroundIndexes( tileId );
+        for ( const int32_t indexId : suitableIds ) {
+            const Maps::Tiles & indexedTile = mapTiles[indexId];
+            if ( indexedTile.isWater() || !indexedTile.isClearGround() ) {
+                continue;
+            }
+
+            ++count;
+        }
+
+        return count;
+    }
+}
+
 namespace GameStatic
 {
     extern u32 uniq;
@@ -617,43 +698,113 @@ void World::MonthOfMonstersAction( const Monster & mons )
         return;
     }
 
-    MapsIndexes tiles, excld;
-    tiles.reserve( vec_tiles.size() / 2 );
-    excld.reserve( vec_tiles.size() / 2 );
+    // Find all tiles which are useful for monsters such as resources, artifacts, mines, other capture objects. Exclude heroes, monsters and castles.
+    std::vector<int32_t> primaryTargetTiles;
 
-    const int32_t dist = 2;
-    const std::vector<uint8_t> objs = { MP2::OBJ_MONSTER, MP2::OBJ_HEROES, MP2::OBJ_CASTLE, MP2::OBJN_CASTLE };
+    // Sometimes monsters appear on roads so find all road tiles.
+    std::vector<int32_t> secondaryTargetTiles;
 
-    // create exclude list
-    const MapsIndexes & objv = Maps::GetObjectsPositions( objs );
+    // Lastly monster occasionally appear on empty tiles.
+    std::vector<int32_t> tetriaryTargetTiles;
 
-    for ( MapsIndexes::const_iterator it = objv.begin(); it != objv.end(); ++it ) {
-        const MapsIndexes & obja = Maps::GetAroundIndexes( *it, dist );
-        excld.insert( excld.end(), obja.begin(), obja.end() );
-    }
+    std::set<int32_t> excludeTiles;
 
-    // create valid points
     for ( const Maps::Tiles & tile : vec_tiles ) {
-        if ( tile.isWater() || ( MP2::OBJ_ZERO != tile.GetObject() && tile.GetObject() != MP2::OBJ_COAST ) || !tile.isPassable( Direction::CENTER, false, true, 0 ) ) {
+        const int32_t tileId = tile.GetIndex();
+        const int objectId = tile.GetObject( true );
+
+        if ( objectId == MP2::OBJ_CASTLE || objectId == MP2::OBJ_HEROES || objectId == MP2::OBJ_MONSTER ) {
+            excludeTiles.emplace( tileId );
             continue;
         }
 
-        // Cell should have at least 2 empty neighbor cells
-        if ( Maps::ScanAroundObject( tile.GetIndex(), MP2::OBJ_ZERO ).size() > 2 && excld.end() == std::find( excld.begin(), excld.end(), tile.GetIndex() ) ) {
-            tiles.push_back( tile.GetIndex() );
-            const MapsIndexes & obja = Maps::GetAroundIndexes( tile.GetIndex(), dist );
-            excld.insert( excld.end(), obja.begin(), obja.end() );
+        if ( MP2::isActionObject( objectId ) ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 3, excludeTiles ) ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, ( tile.GetPassable() == DIRECTION_ALL ) );
+            if ( tileToSet >= 0 ) {
+                primaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
+        }
+        else if ( tile.isRoad() ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+                continue;
+            }
+
+            if ( getNeighbouringEmptyTileCount( vec_tiles, tileId ) < 2 ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            if ( tileToSet >= 0 ) {
+                secondaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
+        }
+        else if ( tile.isClearGround() ) {
+            if ( isTileBlockedForSettingMonster( vec_tiles, tileId, 4, excludeTiles ) ) {
+                continue;
+            }
+
+            if ( getNeighbouringEmptyTileCount( vec_tiles, tileId ) < 4 ) {
+                continue;
+            }
+
+            const int32_t tileToSet = findSuitableNeighbouringTile( vec_tiles, tileId, true );
+            if ( tileToSet >= 0 ) {
+                tetriaryTargetTiles.emplace_back( tileToSet );
+                excludeTiles.emplace( tileId );
+            }
         }
     }
 
-    const int32_t area = 12;
-    const int32_t maxc = ( width / area ) * ( height / area );
-    Rand::Shuffle( tiles );
-    if ( tiles.size() > static_cast<size_t>( maxc ) )
-        tiles.resize( maxc );
+    // Shuffle all found tile IDs.
+    Rand::Shuffle( primaryTargetTiles );
+    Rand::Shuffle( secondaryTargetTiles );
+    Rand::Shuffle( tetriaryTargetTiles );
 
-    for ( MapsIndexes::const_iterator it = tiles.begin(); it != tiles.end(); ++it )
-        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[*it], mons, 0 /* random */ );
+    // Calculate the number of monsters to be placed.
+    uint32_t monstersToBePlaced = 0;
+    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
+        monstersToBePlaced = static_cast<uint32_t>( height );
+    }
+    else {
+        monstersToBePlaced = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ),
+                                                static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+    }
+
+    // 85% of positions are for primary targets
+    // 10% of positions are for roads
+    // 5% of positions are for empty tiles
+    uint32_t primaryTileCount = monstersToBePlaced * 85 / 100;
+    if ( primaryTileCount > primaryTargetTiles.size() ) {
+        primaryTileCount = static_cast<uint32_t>( primaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < primaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[primaryTargetTiles[i]], mons, 0 /* random */ );
+    }
+
+    uint32_t secondaryTileCount = monstersToBePlaced * 10 / 100;
+    if ( secondaryTileCount > secondaryTargetTiles.size() ) {
+        secondaryTileCount = static_cast<uint32_t>( secondaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < secondaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[secondaryTargetTiles[i]], mons, 0 /* random */ );
+    }
+
+    uint32_t tetriaryTileCount = monstersToBePlaced * 5 / 100;
+    if ( tetriaryTileCount > tetriaryTargetTiles.size() ) {
+        tetriaryTileCount = static_cast<uint32_t>( tetriaryTargetTiles.size() );
+    }
+
+    for ( uint32_t i = 0; i < tetriaryTileCount; ++i ) {
+        Maps::Tiles::PlaceMonsterOnTile( vec_tiles[tetriaryTargetTiles[i]], mons, 0 /* random */ );
+    }
 }
 
 const std::string & World::GetRumors( void )
