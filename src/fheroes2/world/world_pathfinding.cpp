@@ -448,7 +448,7 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
 
     for ( size_t i = 0; i < directions.size(); ++i ) {
         if ( Maps::isValidDirection( start, directions[i] ) ) {
-            const int newIndex = start + Maps::GetDirectionIndex( 0, directions[i] );
+            const int newIndex = Maps::GetDirectionIndex( start, directions[i] );
             if ( newIndex == start )
                 continue;
 
