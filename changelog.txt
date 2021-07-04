@@ -19,7 +19,7 @@ version 0.9.5 (04 July 2021)
 - improve AI logic to capture defendless castles
 - fix black screen for loading a campaign map without files
 - allow AI hero to revisit a castle more than once
-- fix a case of splitting mosnter stack for 2 monsters in stack
+- fix a case of splitting monster stack for 2 monsters in stack
 - add monster descriptions
 - allow to visit Artesian Spring once a week
 - allow right click on captured artifact after battle
@@ -51,7 +51,7 @@ version 0.9.5 (04 July 2021)
 - fix number of choices when splitting a troop into multiple troops
 - fix incorrect trading rate during battle
 - fix missing shadow removal of objects under a boat
-- show Dwarf's resitance message in the log only after spell completion
+- show Dwarf's resistance message in the log only after spell completion
 - correct campaign bonuses' names
 - fix case when boat could be positioned over another boat over whirlpool
 - fix case of triggerring Genie's special ability for a stack of 1 monster
