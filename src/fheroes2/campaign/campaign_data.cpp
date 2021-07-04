@@ -38,7 +38,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF,  _( "Dwarven Alliance" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
@@ -710,7 +710,6 @@ namespace Campaign
         return std::vector<Campaign::CampaignAwardData>();
     }
 
-
     const char * CampaignAwardData::getAllianceJoiningMessage( const int monsterId )
     {
         switch ( monsterId ) {
@@ -726,7 +725,8 @@ namespace Campaign
             return _( "The dragons, snarling and growling, agree to join forces with you, their 'Ally'." );
         case Monster::ELF:
         case Monster::GRAND_ELF:
-            return _( "As you approach the group of elves, their leader calls them all to attention.  He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\"  The group explodes with cheers as they run to join your ranks." );
+            return _(
+                "As you approach the group of elves, their leader calls them all to attention.  He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\"  The group explodes with cheers as they run to join your ranks." );
         default:
             break;
         }
@@ -747,10 +747,12 @@ namespace Campaign
         case Monster::GREEN_DRAGON:
         case Monster::RED_DRAGON:
         case Monster::BLACK_DRAGON:
-            return _( "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
+            return _(
+                "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
         case Monster::ELF:
         case Monster::GRAND_ELF:
-            return _( "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
+            return _(
+                "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
         default:
             break;
         }
