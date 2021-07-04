@@ -1,4 +1,9 @@
 version 0.9.5 (04 July 2021)
+- all scrollbars support continuous scrolling
+- fix placement of creatures during Month of Monster event
+- add an option to restart Campaign scenario
+- do not show x marker for fully built castle icon
+- fix boat summoning logic in relation to some objects on a world map
 - do not show other types of save files on while saving or loading a save file on Windows
 - improve Sorceress castle building logic for AI
 - make AI to visit Lighthouse
