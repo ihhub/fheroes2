@@ -122,7 +122,7 @@ Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /*
 
 const char * Maps::SizeString( int s )
 {
-    const char * mapsize[] = {"Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" )};
+    const char * mapsize[] = { "Unknown", _( "maps|Small" ), _( "maps|Medium" ), _( "maps|Large" ), _( "maps|Extra Large" ), _( "maps|Custom Size" ) };
 
     switch ( s ) {
     case SMALL:
@@ -396,6 +396,13 @@ Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj, const
     return MapsIndexesFilteredObject( results, obj, ignoreHeroes );
 }
 
+Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
+{
+    Maps::Indexes results = Maps::GetAroundIndexes( center );
+    results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ) );
+    return results;
+}
+
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const int obj )
 {
     Maps::Indexes results = Maps::GetAroundIndexes( center );
@@ -608,10 +615,10 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
         const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
 
-        static const int castleCoordinates[16][2]
-            = {{0, -3}, {-2, -2}, {-1, -2}, {0, -2}, {1, -2}, {2, -2}, {-2, -1}, {-1, -1}, {0, -1}, {1, -1}, {2, -1}, {-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
-        static const int shadowCoordinates[16][2]
-            = {{-4, -2}, {-3, -2}, {-2, -2}, {-1, -2}, {-5, -1}, {-4, -1}, {-3, -1}, {-2, -1}, {-1, -1}, {-4, 0}, {-3, 0}, {-2, 0}, {-1, 0}, {-3, 1}, {-2, 1}, {-1, 1}};
+        static const int castleCoordinates[16][2] = { { 0, -3 }, { -2, -2 }, { -1, -2 }, { 0, -2 }, { 1, -2 }, { 2, -2 }, { -2, -1 }, { -1, -1 },
+                                                      { 0, -1 }, { 1, -1 },  { 2, -1 },  { -2, 0 }, { -1, 0 }, { 0, 0 },  { 1, 0 },   { 2, 0 } };
+        static const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
+                                                      { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {

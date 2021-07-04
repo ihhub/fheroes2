@@ -1006,7 +1006,6 @@ int Maps::Tiles::GetPassable( void ) const
 bool Maps::Tiles::isClearGround() const
 {
     const int objId = GetObject( true );
-
     switch ( objId ) {
     case MP2::OBJ_ZERO:
     case MP2::OBJ_COAST:

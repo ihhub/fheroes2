@@ -70,6 +70,7 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const int obj );
     Indexes ScanAroundObjectWithDistance( const int32_t center, const uint32_t dist, const int obj );
     Indexes ScanAroundObject( const int32_t center, const int obj, const bool ignoreHeroes );
+    Indexes GetFreeIndexesAroundTile( const int32_t center );
 
     Indexes GetTilesUnderProtection( int32_t center );
     bool TileIsUnderProtection( int32_t center );
