@@ -40,6 +40,7 @@ namespace Luck
 
     const std::string & String( int );
     const std::string & Description( int );
+    int Normalize( const int luck );
 }
 
 #endif

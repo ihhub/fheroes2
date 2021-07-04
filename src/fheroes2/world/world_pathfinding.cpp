@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cmath>
 #include <set>
 
@@ -85,26 +86,42 @@ bool World::isValidPath( const int index, const int direction, const int heroCol
     if ( fromWater ) {
         const int mapWidth = world.w();
         switch ( direction ) {
-        case Direction::TOP_LEFT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+        case Direction::TOP_LEFT: {
+            assert( index >= mapWidth + 1 );
+            if ( GetTiles( index - mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::TOP_RIGHT:
-            if ( !GetTiles( index - mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::TOP_RIGHT: {
+            assert( index >= mapWidth && index + 1 < mapWidth * world.h() );
+            if ( GetTiles( index - mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index - mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_RIGHT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index + 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_RIGHT: {
+            assert( index + mapWidth + 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth + 1 ).isWater() && ( !GetTiles( index + 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
-        case Direction::BOTTOM_LEFT:
-            if ( !GetTiles( index + mapWidth ).isWater() || !GetTiles( index - 1 ).isWater() )
+            break;
+        }
+        case Direction::BOTTOM_LEFT: {
+            assert( index >= 1 && index + mapWidth - 1 < mapWidth * world.h() );
+            if ( GetTiles( index + mapWidth - 1 ).isWater() && ( !GetTiles( index - 1 ).isWater() || !GetTiles( index + mapWidth ).isWater() ) ) {
+                // Cannot sail through the corner of land.
                 return false;
-            break;
+            }
 
+            break;
+        }
         default:
             break;
         }

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <numeric>
 #include <sstream>
 
 #include "army.h"
@@ -32,7 +33,8 @@
 #include "translations.h"
 #include "world.h"
 
-int ArtifactsModifiersResult( int type, const u8 * arts, u32 size, const HeroBase & base, std::string * strs )
+template <std::size_t size>
+int ArtifactsModifiersResult( int type, const uint8_t ( &arts )[size], const HeroBase & base, std::string * strs )
 {
     int result = 0;
 
@@ -92,7 +94,7 @@ int ArtifactsModifiersAttack( const HeroBase & base, std::string * strs )
                        Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
                        Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD};
 
-    return ArtifactsModifiersResult( MDF_ATTACK, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_ATTACK, arts, base, strs );
 }
 
 int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
@@ -101,7 +103,7 @@ int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
                        Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
                        Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK};
 
-    return ArtifactsModifiersResult( MDF_DEFENSE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_DEFENSE, arts, base, strs );
 }
 
 int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
@@ -110,7 +112,7 @@ int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
                        Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
                        Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING};
 
-    return ArtifactsModifiersResult( MDF_POWER, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_POWER, arts, base, strs );
 }
 
 int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
@@ -118,7 +120,7 @@ int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
                        Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK};
 
-    return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, base, strs );
 }
 
 int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
@@ -126,7 +128,7 @@ int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
     const u8 arts[] = {Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
                        Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE};
 
-    return ArtifactsModifiersResult( MDF_MORALE, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_MORALE, arts, base, strs );
 }
 
 int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
@@ -134,7 +136,7 @@ int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
     const u8 arts[]
         = {Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD};
 
-    return ArtifactsModifiersResult( MDF_LUCK, arts, ARRAY_COUNT( arts ), base, strs );
+    return ArtifactsModifiersResult( MDF_LUCK, arts, base, strs );
 }
 
 HeroBase::HeroBase( int type, int race )

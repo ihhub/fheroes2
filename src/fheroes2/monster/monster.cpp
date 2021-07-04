@@ -25,7 +25,6 @@
 #include "castle.h"
 #include "difficulty.h"
 #include "game.h"
-#include "game_static.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"

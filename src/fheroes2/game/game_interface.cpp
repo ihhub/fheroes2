@@ -261,7 +261,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             if ( valid ) {
                 const Maps::Tiles & tile = world.GetTiles( dst );
 
-                valid = ( ( spellROI & mp ) && MP2::isClearGroundObject( tile.GetObject() ) && water == world.GetTiles( dst ).isWater() );
+                valid = ( ( spellROI & mp ) && tile.isClearGround() && water == tile.isWater() );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )

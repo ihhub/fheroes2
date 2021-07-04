@@ -1137,12 +1137,19 @@ void World::resetPathfinder()
     AI::Get().resetPathfinder();
 }
 
-void World::PostLoad()
+void World::PostLoad( const bool setTilePassabilities )
 {
-    // update tile passable
-    for ( Maps::Tiles & tile : vec_tiles ) {
-        tile.updateEmpty();
-        tile.UpdatePassable();
+    if ( setTilePassabilities ) {
+        // update tile passable
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            tile.updateEmpty();
+            tile.setInitialPassability();
+        }
+
+        // Once the original passabilities are set we know all neighbours. Now we have to update passabilities based on neighbours.
+        for ( Maps::Tiles & tile : vec_tiles ) {
+            tile.updatePassability();
+        }
     }
 
     // cache data that's accessed often
@@ -1232,7 +1239,7 @@ StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
         case MP2::OBJ_RESOURCE:
         case MP2::OBJ_ARTIFACT:
         case MP2::OBJ_MONSTER:
-            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
+            static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_SECOND_PRE_095_RELEASE, "Remove this switch case, it's just for compatibility check" );
             assert( 0 );
             break;
 
@@ -1271,7 +1278,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
-    w.PostLoad();
+    w.PostLoad( false );
 
     return msg;
 }
