@@ -815,7 +815,7 @@ namespace AI
         }
     }
 
-    void Normal::HeroesTurn( VecHeroes & heroes )
+    bool Normal::HeroesTurn( VecHeroes & heroes )
     {
         std::vector<HeroToMove> availableHeroes;
 
@@ -843,18 +843,44 @@ namespace AI
             }
         }
 
+        const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+
+        const int monsterStrengthMultiplierCount = 2;
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
             double maxPriority = 0;
             int bestTargetIndex = -1;
 
-            for ( HeroToMove & heroInfo : availableHeroes ) {
-                double priority = -1;
-                const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
-                if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
-                    maxPriority = priority;
-                    bestTargetIndex = targetIndex;
-                    bestHero = heroInfo.hero;
+            while ( true ) {
+                for ( const HeroToMove & heroInfo : availableHeroes ) {
+                    double priority = -1;
+                    const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
+                    if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
+                        maxPriority = priority;
+                        bestTargetIndex = targetIndex;
+                        bestHero = heroInfo.hero;
+                    }
+                }
+
+                if ( bestTargetIndex != -1 ) {
+                    break;
+                }
+
+                // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
+                const double currentMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+                bool setNewMultipler = false;
+                for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
+                    if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
+                        _pathfinder.setArmyStrengthMultplier( monsterStrengthMultipliers[i] );
+                        setNewMultipler = true;
+                        break;
+                    }
+                }
+
+                if ( !setNewMultipler ) {
+                    break;
                 }
             }
 
@@ -882,6 +908,7 @@ namespace AI
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
+                    _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
                     break;
                 }
             }
@@ -908,12 +935,20 @@ namespace AI
 
                 ++i;
             }
+
+            _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
         }
+
+        const bool allHeroesMoves = availableHeroes.empty();
 
         for ( HeroToMove & heroInfo : availableHeroes ) {
             if ( !heroInfo.hero->MayStillMove() ) {
                 heroInfo.hero->SetModes( Heroes::MOVED );
             }
         }
+
+        _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+
+        return allHeroesMoves;
     }
 }

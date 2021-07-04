@@ -173,7 +173,7 @@ namespace AI
             heroLimit = 2;
 
         // Step 3. Do some hero stuff.
-        HeroesTurn( heroes );
+        const bool moreTasksForHeroes = HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 6 );
 
@@ -183,7 +183,7 @@ namespace AI
         VecCastles sortedCastleList( castles );
         sortedCastleList.SortByBuildingValue();
 
-        if ( heroes.size() < static_cast<size_t>( heroLimit ) ) { // safe to cast as heroLimit is > 0
+        if ( moreTasksForHeroes && heroes.size() < static_cast<size_t>( heroLimit ) ) { // safe to cast as heroLimit is > 0
             Recruits & rec = kingdom.GetRecruits();
             Castle * recruitmentCastle = nullptr;
             int lowestHeroCount = heroLimit;

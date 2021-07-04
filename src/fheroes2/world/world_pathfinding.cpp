@@ -453,7 +453,7 @@ int AIWorldPathfinder::getNeareastTileToMove( const Heroes & hero )
                 continue;
 
             const MapsIndexes & monsters = Maps::GetTilesUnderProtection( newIndex );
-            if ( _cache[newIndex]._cost && monsters.empty() ) {
+            if ( monsters.empty() && world.getPath( hero, newIndex ).size() == 1 && world.GetTiles( newIndex ).isClearGround() ) {
                 return newIndex;
             }
         }
@@ -575,4 +575,12 @@ uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, 
 {
     reEvaluateIfNeeded( start, color, armyStrength, skill );
     return _cache[targetIndex]._cost;
+}
+
+void AIWorldPathfinder::setArmyStrengthMultplier( const double multiplier )
+{
+    if ( multiplier > 0 && std::fabs( _advantage - multiplier ) > 0.001 ) {
+        _advantage = multiplier;
+        reset();
+    }
 }
