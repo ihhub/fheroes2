@@ -630,38 +630,46 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         Troop troop = tile.QuantityTroop();
 
-        JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+        const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
-        // free join
-        if ( JOIN_FREE == join.first ) {
-            // join if ranged or flying monsters present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
+        if ( join.reason == NeutralMonsterJoiningCondition::Reason::Alliance ) {
+            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << " as a part of alliance." );
                 hero.GetArmy().JoinTroop( troop );
                 destroy = true;
             }
-            else
-                join.first = JOIN_NONE;
-        }
-        else
-            // join with cost
-            if ( JOIN_COST == join.first ) {
-            // join if archers or fly or present
-            if ( hero.GetArmy().HasMonster( troop() ) || troop.isArchers() || troop.isFlying() ) {
-                u32 gold = troop.GetCost().gold;
-                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
-                hero.GetArmy().JoinTroop( troop(), join.second );
-                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
+            else {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " unblock way for " << hero.GetName() << " as a part of alliance." );
                 destroy = true;
             }
-            else
-                join.first = JOIN_NONE;
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() << " as a part of bane." );
+            destroy = true;
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
+            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." );
+                hero.GetArmy().JoinTroop( troop );
+                destroy = true;
+            }
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
+            const int32_t joiningCost = troop.GetCost().gold;
+            if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
+                hero.GetArmy().JoinTroop( troop(), join.monsterCount );
+                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
+                destroy = true;
+            }
+        }
+        else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away for " << hero.GetName() << "." );
+            destroy = true;
         }
 
-        // bool allow_move = false;
-
         // fight
-        if ( JOIN_NONE == join.first ) {
+        if ( !destroy ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attacked monster " << troop.GetName() );
             Army army( tile );
             Battle::Result res = Battle::Loader( hero.GetArmy(), army, dst_index );
@@ -669,7 +677,6 @@ namespace AI
             if ( res.AttackerWins() ) {
                 hero.IncreaseExperience( res.GetExperienceAttacker() );
                 destroy = true;
-                // allow_move = true;
             }
             else {
                 AIBattleLose( hero, res, true, Color::NONE );
@@ -678,9 +685,6 @@ namespace AI
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
         }
-        // unknown
-        else
-            destroy = true;
 
         if ( destroy ) {
             tile.RemoveObjectSprite();
