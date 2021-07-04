@@ -1,4 +1,4 @@
-# fheroes2 installation guide
+# [**fheroes2**](README.md) installation guide
 
 ## Requirements
 

@@ -1,4 +1,4 @@
-# fheroes2 build and contribution guide
+# [**fheroes2**](README.md) build and contribution guide
 
 ## Build
 
