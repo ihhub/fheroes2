@@ -299,15 +299,6 @@ bool Troops::HasMonster( const Monster & mons ) const
     return false;
 }
 
-bool Troops::AllTroopsIsRace( int race ) const
-{
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() && ( *it )->GetRace() != race )
-            return false;
-
-    return true;
-}
-
 bool Troops::AllTroopsAreUndead() const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -409,17 +400,21 @@ void Troops::MoveTroops( Troops & from )
     }
 }
 
-u32 Troops::GetUniqueCount( void ) const
+// Return true when all valid troops have the same ID, or when there are no troops
+bool Troops::AllTroopsAreTheSame( void ) const
 {
-    std::set<int> monsters;
-
-    for ( size_t idx = 0; idx < size(); ++idx ) {
-        const Troop * troop = operator[]( idx );
-        if ( troop && troop->isValid() )
-            monsters.insert( troop->GetID() );
+    const Troop * first_troop = nullptr;
+    for ( const Troop * troop : *this ) {
+        if ( troop->isValid() ) {
+            if ( first_troop == nullptr ) {
+                first_troop = troop;
+            }
+            else if ( troop->GetID() != first_troop->GetID() ) {
+                return false;
+            }
+        }
     }
-
-    return static_cast<uint32_t>( monsters.size() ); // safe to cast as usually the army has no more than 5 monsters
+    return true;
 }
 
 double Troops::GetStrength() const
@@ -1086,7 +1081,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         ++count;
         r = Race::NONE;
     }
-    const u32 uniq_count = GetUniqueCount();
+    const bool has_different_troops = !AllTroopsAreTheSame();
 
     switch ( count ) {
     case 2:
@@ -1094,7 +1089,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         break;
     case 1:
         if ( 0 == count_necr && !ghost_present ) {
-            if ( 1 < uniq_count ) {
+            if ( has_different_troops ) {
                 ++result;
                 if ( strs ) {
                     std::string str = _( "All %{race} troops +1" );
@@ -1132,7 +1127,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group
-    if ( ( 1 < uniq_count && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
+    if ( ( has_different_troops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
          // or artifact Arm Martyr
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
