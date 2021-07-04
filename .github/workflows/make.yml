@@ -73,7 +73,7 @@ jobs:
     - name: Create package
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
-        cp doc/README.txt script/demo/demo_unix.sh .
+        cp docs/README.txt script/demo/demo_unix.sh .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
@@ -137,8 +137,8 @@ jobs:
     - name: Create package
       if: ${{ github.event_name == 'push' }}
       run: |
-        cp doc/README.txt .
-        cp doc/README_PSV.md .
+        cp docs/README.txt .
+        cp docs/README_PSV.md .
         zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
