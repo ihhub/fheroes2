@@ -171,7 +171,6 @@
   <ItemGroup>
     <ClCompile Include="..\engine\agg_file.cpp" />
     <ClCompile Include="..\engine\audio.cpp" />
-    <ClCompile Include="..\engine\audio_cdrom.cpp" />
     <ClCompile Include="..\engine\audio_mixer.cpp" />
     <ClCompile Include="..\engine\audio_music.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
@@ -184,7 +183,6 @@
     <ClCompile Include="..\engine\pal.cpp" />
     <ClCompile Include="..\engine\rand.cpp" />
     <ClCompile Include="..\engine\screen.cpp" />
-    <ClCompile Include="..\engine\sdlnet.cpp" />
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\smk_decoder.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
@@ -203,7 +201,6 @@
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
     <ClInclude Include="..\engine\audio.h" />
-    <ClInclude Include="..\engine\audio_cdrom.h" />
     <ClInclude Include="..\engine\audio_mixer.h" />
     <ClInclude Include="..\engine\audio_music.h" />
     <ClInclude Include="..\engine\dir.h" />
@@ -219,7 +216,6 @@
     <ClInclude Include="..\engine\pathfinding.h" />
     <ClInclude Include="..\engine\rand.h" />
     <ClInclude Include="..\engine\screen.h" />
-    <ClInclude Include="..\engine\sdlnet.h" />
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\smk_decoder.h" />
     <ClInclude Include="..\engine\system.h" />

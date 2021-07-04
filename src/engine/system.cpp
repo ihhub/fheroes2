@@ -211,23 +211,6 @@ const char * System::GetEnvironment( const char * name )
 #endif
 }
 
-int System::SetEnvironment( const char * name, const char * value )
-{
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    std::string str( std::string( name ) + "=" + std::string( value ) );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return _putenv( str.c_str() );
-#else
-    // SDL 1.2.12 (char *)
-    return SDL_putenv( &str[0] );
-#endif
-#elif defined( __SWITCH__ ) || defined( FHEROES2_VITA )
-    return SDL_setenv( name, value, 1 );
-#else
-    return setenv( name, value, 1 );
-#endif
-}
-
 void System::SetLocale( int category, const char * locale )
 {
 #if defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )

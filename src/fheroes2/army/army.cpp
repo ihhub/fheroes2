@@ -1351,7 +1351,7 @@ void Army::DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, 
     }
 }
 
-JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
+NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, const Troop & troop )
 {
     const double ratios = troop.isValid() ? hero.GetArmy().GetStrength() / troop.GetStrength() : 0;
     const bool check_extra_condition = !hero.HasArtifact( Artifact::HIDEOUS_MASK );
@@ -1366,7 +1366,6 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
     // creature curse/bane -> same as above but all of them will flee even if you have just 1 peasant
     if ( Settings::Get().isCampaignGameType() ) {
         const std::vector<Campaign::CampaignAwardData> campaignAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
-        int forceJoinType = JOIN_NONE;
 
         for ( size_t i = 0; i < campaignAwards.size(); ++i ) {
             const bool isAlliance = campaignAwards[i]._type == Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE;
@@ -1376,13 +1375,17 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
                 continue;
 
             Monster monster( campaignAwards[i]._subType );
-            bool found = false;
-
-            while ( !found ) {
+            while ( true ) {
                 if ( troop.GetID() == monster.GetID() ) {
-                    forceJoinType = isAlliance ? JOIN_FREE : JOIN_FLEE;
-                    found = true;
-                    break;
+                    if ( isAlliance ) {
+                        return { NeutralMonsterJoiningCondition::Reason::Alliance, troop.GetCount(),
+                                 Campaign::CampaignAwardData::getAllianceJoiningMessage( monster.GetID() ),
+                                 Campaign::CampaignAwardData::getAllianceFleeingMessage( monster.GetID() ) };
+                    }
+                    else {
+                        return { NeutralMonsterJoiningCondition::Reason::Bane, troop.GetCount(), nullptr,
+                                 Campaign::CampaignAwardData::getBaneFleeingMessage( monster.GetID() ) };
+                    }
                 }
 
                 // try to cycle through the creature's upgrades
@@ -1391,34 +1394,29 @@ JoinCount Army::GetJoinSolution( const Heroes & hero, const Maps::Tiles & tile, 
 
                 monster = monster.GetUpgrade();
             }
-
-            if ( found )
-                break;
-        }
-
-        if ( forceJoinType != JOIN_NONE ) {
-            return JoinCount( forceJoinType, troop.GetCount() );
         }
     }
 
     if ( !join_skip && ( ( check_extra_condition && ratios >= 2 ) || join_force ) ) {
-        if ( join_free || join_force )
-            return JoinCount( JOIN_FREE, troop.GetCount() );
+        if ( join_free || join_force ) {
+            return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
+        }
         else if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             // skill diplomacy
             const u32 to_join = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
 
-            if ( to_join )
-                return JoinCount( JOIN_COST, to_join );
+            if ( to_join ) {
+                return { NeutralMonsterJoiningCondition::Reason::ForMoney, to_join, nullptr, nullptr };
+            }
         }
     }
 
     if ( ratios >= 5 && !hero.isControlAI() ) {
         // ... surely flee before us
-        return JoinCount( JOIN_FLEE, 0 );
+        return { NeutralMonsterJoiningCondition::Reason::RunAway, 0, nullptr, nullptr };
     }
 
-    return JoinCount( JOIN_NONE, 0 );
+    return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
 }
 
 bool Army::WeakestTroop( const Troop * t1, const Troop * t2 )

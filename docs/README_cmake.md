@@ -2,7 +2,7 @@ Building with CMake
 --------------------------------
 ### Linux and macOS
 
-fheroes2 can be built with CMake buildsystem. First, you need to install dependencies. For Linux and macOS follow to instructions as described above.
+[**fheroes2**](README.md) can be built with CMake buildsystem. First, you need to install dependencies. For Linux and macOS follow to instructions as described above.
 
 Next, you can build project with following commands:
 

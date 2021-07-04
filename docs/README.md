@@ -3,15 +3,15 @@
 Free implementation of **Heroes of Might and Magic II** game engine.
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410">
+    <img src="images/screenshots/screenshot_world_map.png?raw=true" width="410"> <img src="images/screenshots/screenshot_castle.png?raw=true" width="410">
 </p>
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="512">
+    <img src="images/screenshots/screenshot_battle.png?raw=true" width="512">
 </p>
 
 ## Download and install
 
-To download and install fheroes2 please follow the [**installation guide**](docs/INSTALL.md).
+To download and install fheroes2 please follow the [**installation guide**](INSTALL.md).
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
@@ -27,7 +27,7 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Development
 
-To build the project from source or contribute please follow [**this guide**](docs/DEVELOPMENT.md).
+To build the project from source or contribute please follow [**this guide**](DEVELOPMENT.md).
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)

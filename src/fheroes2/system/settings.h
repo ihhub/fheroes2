@@ -44,8 +44,7 @@ enum MusicSource
 {
     MUSIC_MIDI_ORIGINAL,
     MUSIC_MIDI_EXPANSION,
-    MUSIC_EXTERNAL,
-    MUSIC_CDROM
+    MUSIC_EXTERNAL
 };
 
 class Settings
@@ -128,8 +127,6 @@ public:
     int BattleSpeed() const;
     int ScrollSpeed() const;
 
-    const std::string & SelectVideoDriver() const;
-
     int GameDifficulty() const;
 
     const std::string & MapsCharset() const;
@@ -151,8 +148,6 @@ public:
     void SetPosStatus( const fheroes2::Point & );
 
     bool FullScreen() const;
-    bool Sound() const;
-    bool Music() const;
     bool ShowControlPanel() const;
     bool ShowRadar() const;
     bool ShowIcons() const;
@@ -164,12 +159,10 @@ public:
     bool BattleShowMoveShadow() const;
     bool BattleAutoResolve() const;
     bool BattleAutoSpellcast() const;
-    bool UseAltResource() const;
     bool isPriceOfLoyaltySupported() const;
     bool LoadedGameVersion() const;
     bool MusicExt() const;
     bool MusicMIDI() const;
-    bool MusicCD() const;
     bool isShowIntro() const;
 
     bool isFirstGameRun() const;
@@ -248,13 +241,10 @@ public:
     void setBattleAutoResolve( bool enable );
     void setBattleAutoSpellcast( bool enable );
     void setFullScreen( const bool enable );
-    void setShowIntro( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
     void SetMusicType( int v );
-    void ResetSound();
-    void ResetMusic();
 
     int SoundVolume() const;
     int MusicVolume() const;
@@ -353,8 +343,6 @@ private:
 
     int game_type;
     int preferably_count_players;
-
-    std::string video_driver;
 
     fheroes2::Point pos_radr;
     fheroes2::Point pos_bttn;

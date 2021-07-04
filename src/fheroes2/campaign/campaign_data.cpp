@@ -38,7 +38,7 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
@@ -509,29 +509,6 @@ namespace Campaign
         , _scenarios()
     {}
 
-    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const int campaignID, const int scenarioID )
-    {
-        assert( campaignID >= 0 && scenarioID >= 0 );
-
-        switch ( campaignID ) {
-        case ROLAND_CAMPAIGN:
-            return getRolandCampaignAwardData( scenarioID );
-        case ARCHIBALD_CAMPAIGN:
-            return getArchibaldCampaignAwardData( scenarioID );
-        case PRICE_OF_LOYALTY_CAMPAIGN:
-            return getPriceOfLoyaltyCampaignAwardData( scenarioID );
-        case DESCENDANTS_CAMPAIGN:
-            return getDescendantsCampaignAwardData( scenarioID );
-        case WIZARDS_ISLE_CAMPAIGN:
-            return getWizardsIsleCampaignAwardData( scenarioID );
-            // no campaign award for voyage home!
-        case VOYAGE_HOME_CAMPAIGN:
-            break;
-        }
-
-        return std::vector<Campaign::CampaignAwardData>();
-    }
-
     std::vector<int> CampaignData::getScenariosBefore( const int scenarioID ) const
     {
         std::vector<int> scenarioIDs;
@@ -708,5 +685,93 @@ namespace Campaign
             assert( 0 ); // some new/unhandled award
             return "";
         }
+    }
+
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const int campaignID, const int scenarioID )
+    {
+        assert( campaignID >= 0 && scenarioID >= 0 );
+
+        switch ( campaignID ) {
+        case ROLAND_CAMPAIGN:
+            return getRolandCampaignAwardData( scenarioID );
+        case ARCHIBALD_CAMPAIGN:
+            return getArchibaldCampaignAwardData( scenarioID );
+        case PRICE_OF_LOYALTY_CAMPAIGN:
+            return getPriceOfLoyaltyCampaignAwardData( scenarioID );
+        case DESCENDANTS_CAMPAIGN:
+            return getDescendantsCampaignAwardData( scenarioID );
+        case WIZARDS_ISLE_CAMPAIGN:
+            return getWizardsIsleCampaignAwardData( scenarioID );
+            // no campaign award for voyage home!
+        case VOYAGE_HOME_CAMPAIGN:
+            break;
+        }
+
+        return std::vector<Campaign::CampaignAwardData>();
+    }
+
+    const char * CampaignAwardData::getAllianceJoiningMessage( const int monsterId )
+    {
+        switch ( monsterId ) {
+        case Monster::DWARF:
+        case Monster::BATTLE_DWARF:
+            return _( "The dwarves recognize their allies and gladly join your forces." );
+        case Monster::OGRE:
+        case Monster::OGRE_LORD:
+            return _( "The ogres recognize you as the Dwarfbane and lumber over to join you." );
+        case Monster::GREEN_DRAGON:
+        case Monster::RED_DRAGON:
+        case Monster::BLACK_DRAGON:
+            return _( "The dragons, snarling and growling, agree to join forces with you, their 'Ally'." );
+        case Monster::ELF:
+        case Monster::GRAND_ELF:
+            return _(
+                "As you approach the group of elves, their leader calls them all to attention.  He shouts to them, \"Who of you is brave enough to join this fearless ally of ours?\"  The group explodes with cheers as they run to join your ranks." );
+        default:
+            break;
+        }
+
+        assert( 0 ); // Did you forget to add a new alliance type?
+        return nullptr;
+    }
+
+    const char * CampaignAwardData::getAllianceFleeingMessage( const int monsterId )
+    {
+        switch ( monsterId ) {
+        case Monster::DWARF:
+        case Monster::BATTLE_DWARF:
+            return _( "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may pass.\"" );
+        case Monster::OGRE:
+        case Monster::OGRE_LORD:
+            return _( "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\"" );
+        case Monster::GREEN_DRAGON:
+        case Monster::RED_DRAGON:
+        case Monster::BLACK_DRAGON:
+            return _(
+                "The dragons see you and call out.  \"Our alliance with Archibald compels us to join you.  Unfortunately you have no room.  A pity!\"  They quickly scatter." );
+        case Monster::ELF:
+        case Monster::GRAND_ELF:
+            return _(
+                "The elves stand at attention as you approach.  Their leader calls to you and says, \"Let us not impede your progress, ally!  Move on, and may victory be yours.\"" );
+        default:
+            break;
+        }
+
+        assert( 0 ); // Did you forget to add a new alliance type?
+        return nullptr;
+    }
+
+    const char * CampaignAwardData::getBaneFleeingMessage( const int monsterId )
+    {
+        switch ( monsterId ) {
+        case Monster::DWARF:
+        case Monster::BATTLE_DWARF:
+            return _( "\"The Dwarfbane!!!!, run for your lives.\"" );
+        default:
+            break;
+        }
+
+        assert( 0 ); // Did you forget to add a new bane type?
+        return nullptr;
     }
 }

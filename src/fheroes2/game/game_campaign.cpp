@@ -215,7 +215,12 @@ namespace
             else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
                 award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
 
-            award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            if ( award.w() > textAwardWidth ) {
+                award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            }
+            else {
+                award.Blit( top.x + 425 + ( textAwardWidth - award.w() ) / 2, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2 );
+            }
         }
     }
 
