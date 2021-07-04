@@ -1384,7 +1384,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
                     }
                     else {
                         return { NeutralMonsterJoiningCondition::Reason::Bane, troop.GetCount(), nullptr,
-                                  Campaign::CampaignAwardData::getBaneFleeingMessage( monster.GetID() ) };
+                                 Campaign::CampaignAwardData::getBaneFleeingMessage( monster.GetID() ) };
                     }
                 }
 
