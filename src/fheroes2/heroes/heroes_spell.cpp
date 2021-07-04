@@ -574,37 +574,38 @@ bool ActionSpellVisions( Heroes & hero )
         const Maps::Tiles & tile = world.GetTiles( *it );
 
         Troop troop = tile.QuantityTroop();
-        const JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+        const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
 
         std::string hdr;
         std::string msg;
 
-        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.second );
+        hdr = std::string( "%{count} " ) + troop.GetPluralName( join.monsterCount );
         StringReplace( hdr, "%{count}", troop.GetCount() );
 
-        switch ( join.first ) {
-        default:
-            msg = _( "I fear these creatures are in the mood for a fight." );
-            break;
-
-        case JOIN_FREE:
+        switch ( join.reason ) {
+        case NeutralMonsterJoiningCondition::Reason::Free:
+        case NeutralMonsterJoiningCondition::Reason::Alliance:
             msg = _( "The creatures are willing to join us!" );
             break;
 
-        case JOIN_COST:
-            if ( join.second == troop.GetCount() )
+        case NeutralMonsterJoiningCondition::Reason::ForMoney:
+            if ( join.monsterCount == troop.GetCount() )
                 msg = _( "All the creatures will join us..." );
             else {
-                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.second );
-                StringReplace( msg, "%{count}", join.second );
+                msg = _n( "The creature will join us...", "%{count} of the creatures will join us...", join.monsterCount );
+                StringReplace( msg, "%{count}", join.monsterCount );
             }
             msg.append( "\n" );
             msg.append( "\n for a fee of %{gold} gold." );
             StringReplace( msg, "%{gold}", troop.GetCost().gold );
             break;
 
-        case JOIN_FLEE:
+        case NeutralMonsterJoiningCondition::Reason::RunAway:
+        case NeutralMonsterJoiningCondition::Reason::Bane:
             msg = _( "These weak creatures will surely flee before us." );
+            break;
+        default:
+            msg = _( "I fear these creatures are in the mood for a fight." );
             break;
         }
 

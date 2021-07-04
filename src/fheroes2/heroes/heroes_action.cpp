@@ -699,55 +699,68 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
 
     Interface::Basic & I = Interface::Basic::Get();
 
-    JoinCount join = Army::GetJoinSolution( hero, tile, troop );
+    bool destroy = false;
 
-    // free join
-    if ( JOIN_FREE == join.first ) {
+    const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
+
+    if ( join.reason == NeutralMonsterJoiningCondition::Reason::Alliance ) {
+        if ( hero.GetArmy().CanJoinTroop( troop ) ) {
+            assert( join.joiningMessage != nullptr );
+            Dialog::Message( "", join.joiningMessage, Font::BIG, Dialog::OK );
+            hero.GetArmy().JoinTroop( troop );
+        }
+        else {
+            assert( join.fleeingMessage != nullptr );
+            Dialog::Message( "", join.fleeingMessage, Font::BIG, Dialog::OK );
+        }
+
+        destroy = true;
+    }
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
+        assert( join.fleeingMessage != nullptr );
+        Dialog::Message( "", join.fleeingMessage, Font::BIG, Dialog::OK );
+        destroy = true;
+    }
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() );
 
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
 
             I.GetStatusWindow().SetRedraw();
+            destroy = true;
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
-
-            join.first = JOIN_NONE;
         }
     }
-    // join with cost
-    else if ( JOIN_COST == join.first ) {
-        const u32 gold = troop.GetCost().gold;
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
+        const int32_t joiningCost = troop.GetCost().gold;
 
-        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.second, gold, hero ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() << ", count: " << join.second << ", cost: " << gold );
+        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost, hero ) ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );
 
-            hero.GetArmy().JoinTroop( troop(), join.second );
-            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, gold ) );
+            hero.GetArmy().JoinTroop( troop(), join.monsterCount );
+            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
             I.GetStatusWindow().SetRedraw();
+            destroy = true;
         }
         else {
             Dialog::Message( "", _( "Insulted by your refusal of their offer, the monsters attack!" ), Font::BIG, Dialog::OK );
-
-            join.first = JOIN_NONE;
         }
     }
-    // flee
-    else if ( JOIN_FLEE == join.first ) {
+    else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
         StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
 
-        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
-            join.first = JOIN_NONE;
+        if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
+            destroy = true;
         }
     }
 
-    bool destroy = false;
-
     // fight
-    if ( JOIN_NONE == join.first ) {
+    if ( !destroy ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack monster " << troop.GetName() );
 
         // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
@@ -775,10 +788,6 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
                 tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
             }
         }
-    }
-    // just remove group of monsters
-    else {
-        destroy = true;
     }
 
     if ( destroy ) {

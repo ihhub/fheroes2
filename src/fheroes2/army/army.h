@@ -106,19 +106,24 @@ public:
     void JoinAllTroopsOfType( const Troop & targetTroop );
 };
 
-enum
+struct NeutralMonsterJoiningCondition
 {
-    JOIN_NONE,
-    JOIN_FREE,
-    JOIN_COST,
-    JOIN_FLEE
-};
+    enum class Reason : int
+    {
+        None,
+        Free,
+        ForMoney,
+        RunAway,
+        Alliance,
+        Bane
+    };
 
-struct JoinCount : std::pair<int, u32>
-{
-    JoinCount( int reason, u32 count )
-        : std::pair<int, u32>( reason, count )
-    {}
+    Reason reason;
+    uint32_t monsterCount;
+
+    // These messages are used only for Alliance and Bane reasons.
+    const char * joiningMessage;
+    const char * fleeingMessage;
 };
 
 class Army : public Troops, public Control
@@ -134,8 +139,7 @@ public:
     static bool FastestTroop( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
 
-    // 0: fight, 1: free join, 2: join with gold, 3: flee
-    static JoinCount GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
+    static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
     static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
