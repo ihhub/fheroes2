@@ -11,7 +11,7 @@ Free implementation of **Heroes of Might and Magic II** game engine.
 
 ## Download and install
 
-See the [**fheroes2 installation guide**](docs/INSTALL.md) for a detailed guide on the download and installation process for the different platforms and operating systems.
+To download and install fheroes2 please follow the [**installation guide**](docs/INSTALL.md).
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
@@ -27,11 +27,10 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Development
 
-See the [**fheroes2 build and contribution guide**](docs/DEVELOPMENT.md) for guidance on building a project from source and contributing to the project.
+To build the project from source or contribute please follow [**this guide**](docs/DEVELOPMENT.md).
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
-
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
@@ -45,6 +44,8 @@ We accept donations via **Patreon** or **PayPal**. All donations will be used on
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/fheroes2)
 
 ## Contacts
+
+Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2). We also have a [**Discord**](https://discord.gg/xF85vbZ) channel to discuss the development of the project.
 
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2)
