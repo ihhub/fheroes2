@@ -21,6 +21,7 @@
 #ifndef H2BIN_FRM_H
 #define H2BIN_FRM_H
 
+#include <cstddef>
 #include <vector>
 
 #include "math_base.h"
