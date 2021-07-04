@@ -708,13 +708,13 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
             assert( join.joiningMessage != nullptr );
             Dialog::Message( "", join.joiningMessage, Font::BIG, Dialog::OK );
             hero.GetArmy().JoinTroop( troop );
-            destroy = true;
         }
         else {
             assert( join.fleeingMessage != nullptr );
             Dialog::Message( "", join.fleeingMessage, Font::BIG, Dialog::OK );
-            destroy = true;
         }
+
+        destroy = true;
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
         assert( join.fleeingMessage != nullptr );

@@ -636,12 +636,12 @@ namespace AI
             if ( hero.GetArmy().CanJoinTroop( troop ) ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << " as a part of alliance." );
                 hero.GetArmy().JoinTroop( troop );
-                destroy = true;
             }
             else {
                 DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " unblock way for " << hero.GetName() << " as a part of alliance." );
-                destroy = true;
             }
+
+            destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Bane ) {
             DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() << " as a part of bane." );
@@ -664,7 +664,8 @@ namespace AI
             }
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
-            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away for " << hero.GetName() << "." );
+            // TODO: AI should still chase monsters which it can defeat without losses to get extra experience.
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " run away from " << hero.GetName() << "." );
             destroy = true;
         }
 
