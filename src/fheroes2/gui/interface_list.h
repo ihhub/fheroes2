@@ -51,7 +51,12 @@ namespace Interface
             , maxItems( 0 )
             , ptRedraw( pt )
             , useHotkeys( true )
-        {}
+            , _timedButtonPgUp( [this]() { return buttonPgUp.isPressed(); } )
+            , _timedButtonPgDn( [this]() { return buttonPgDn.isPressed(); } )
+        {
+            buttonPgUp.subscribe( &_timedButtonPgUp );
+            buttonPgDn.subscribe( &_timedButtonPgDn );
+        }
         ~ListBox() override = default;
 
         virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
@@ -323,7 +328,9 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() ) ) && ( _topId > 0 ) ) {
+            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
+                        || _timedButtonPgUp.isDelayPassed() )
+                      && ( _topId > 0 ) ) {
                 needRedraw = true;
 
                 --_topId;
@@ -331,7 +338,8 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() ) )
+            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
+                        || _timedButtonPgDn.isDelayPassed() )
                       && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
@@ -411,6 +419,9 @@ namespace Interface
         fheroes2::Point ptRedraw;
 
         bool useHotkeys;
+
+        fheroes2::TimedEventValidator _timedButtonPgUp;
+        fheroes2::TimedEventValidator _timedButtonPgDn;
 
         void Verify()
         {

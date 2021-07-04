@@ -133,7 +133,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::StartGame();
             break;
         case fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO:
-            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME );
+            result = Game::SelectCampaignScenario( fheroes2::GameMode::NEW_GAME, false );
             break;
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO:
             result = Game::CompleteCampaignScenario();
@@ -141,7 +141,7 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE:
             result = Game::CompleteCampaignScenario();
             if ( result == fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO ) {
-                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN );
+                result = Game::SelectCampaignScenario( fheroes2::GameMode::LOAD_CAMPAIN, false );
             }
             break;
 

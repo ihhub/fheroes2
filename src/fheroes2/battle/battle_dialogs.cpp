@@ -797,6 +797,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
             // IMPORTANT!!! This is extremely dangerous but we have no choice with current code. Make sure that this trick doesn't allow user to modify the hero.
+            LocalEvent::GetClean();
             const_cast<Heroes *>( actionHero )->OpenDialog( true, false, true, true );
         }
 
