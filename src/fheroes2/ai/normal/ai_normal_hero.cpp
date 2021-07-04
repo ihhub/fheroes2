@@ -769,7 +769,7 @@ namespace AI
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
 
                 const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) && heroStrength < regionStats.highestThreat )
                     value -= dangerousTaskPenalty / 2;
 
                 else if ( heroStrength < regionStats.highestThreat )
