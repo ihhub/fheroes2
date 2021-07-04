@@ -45,6 +45,8 @@ We accept donations via **Patreon** or **PayPal**. All donations will be used on
 
 ## Contacts
 
+Follow us on social networks: [**Facebook**](https://www.facebook.com/groups/fheroes2) or [**VK**](https://vk.com/fheroes2). We also have a [**Discord**](https://discord.gg/xF85vbZ) channel to discuss the development of the project.
+
 [![Discord](https://img.shields.io/discord/733093692860137523.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xF85vbZ)
 [![Facebook](https://img.shields.io/badge/Facebook-blue.svg)](https://www.facebook.com/groups/fheroes2)
 [![VK](https://img.shields.io/badge/VK-blue.svg)](https://vk.com/fheroes2)
