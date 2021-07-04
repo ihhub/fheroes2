@@ -11,7 +11,7 @@ Free implementation of **Heroes of Might and Magic II** game engine.
 
 ## Download and install
 
-See the [**fheroes2 installation guide**](INSTALL.md) for a detailed guide on the download and installation process for the different platforms and operating systems.
+To download and install fheroes2 please follow the [**installation guide**](INSTALL.md).
 
 [![Github Downloads](https://img.shields.io/github/downloads/ihhub/fheroes2/total.svg)](https://github.com/ihhub/fheroes2/releases)
 
