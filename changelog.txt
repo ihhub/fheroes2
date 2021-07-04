@@ -1,4 +1,6 @@
 version 0.9.5 (04 July 2021)
+- do not hire AI heroes if no tasks exist for them
+- make AI be more aggressive if no tasks exist for them
 - all scrollbars support continuous scrolling
 - fix placement of creatures during Month of Monster event
 - add an option to restart Campaign scenario
