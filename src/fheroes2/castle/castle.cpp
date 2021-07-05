@@ -990,17 +990,14 @@ Heroes * Castle::RecruitHero( Heroes * hero )
         return nullptr;
 
     // actually update available heroes to recruit
-    const Colors colors( Color::ALL );
+    const Colors colors( Settings::Get().GetPlayers().GetActualColors() );
 
     for ( const int kingdomColor : colors ) {
-        Kingdom * kingdom = &world.GetKingdom( kingdomColor );
+        Kingdom & kingdom = world.GetKingdom( kingdomColor );
+        if ( kingdom.GetLastLostHero() == hero )
+            kingdom.ResetLastLostHero();
 
-        if ( kingdom ) {
-            if ( kingdom->GetLastLostHero() == hero )
-                kingdom->ResetLastLostHero();
-
-            kingdom->GetRecruits();
-        }
+        kingdom.GetRecruits();
     }
 
     Kingdom & currentKingdom = GetKingdom();
