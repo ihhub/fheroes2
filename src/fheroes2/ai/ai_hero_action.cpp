@@ -480,6 +480,7 @@ namespace AI
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
         case MP2::OBJ_SIRENS:
+        case MP2::OBJ_ALCHEMYTOWER:
             // AI has no advantage or knowledge to use this object.
             break;
         default:
