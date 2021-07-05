@@ -768,12 +768,14 @@ namespace AI
                 }
                 const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
 
-                const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
-                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                    value -= dangerousTaskPenalty / 2;
+                if ( heroStrength < regionStats.highestThreat ) {
+                    const Castle * castle = world.GetCastle( Maps::GetPoint( node.first ) );
 
-                else if ( heroStrength < regionStats.highestThreat )
-                    value -= dangerousTaskPenalty;
+                    if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                        value -= dangerousTaskPenalty / 2;
+                    else
+                        value -= dangerousTaskPenalty;
+                }
 
                 if ( dist > leftMovePoints ) {
                     // Distant object which is out of reach for the current turn must have lower priority.
