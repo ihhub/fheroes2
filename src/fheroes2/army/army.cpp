@@ -403,13 +403,13 @@ void Troops::MoveTroops( Troops & from )
 // Return true when all valid troops have the same ID, or when there are no troops
 bool Troops::AllTroopsAreTheSame( void ) const
 {
-    const Troop * first_troop = nullptr;
+    int firstMonsterId = Monster::UNKNOWN;
     for ( const Troop * troop : *this ) {
         if ( troop->isValid() ) {
-            if ( first_troop == nullptr ) {
-                first_troop = troop;
+            if ( firstMonsterId == Monster::UNKNOWN ) {
+                firstMonsterId = troop->GetID();
             }
-            else if ( troop->GetID() != first_troop->GetID() ) {
+            else if ( troop->GetID() != firstMonsterId ) {
                 return false;
             }
         }
@@ -1081,7 +1081,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         ++count;
         r = Race::NONE;
     }
-    const bool has_different_troops = !AllTroopsAreTheSame();
+    const bool hasDifferentTroops = !AllTroopsAreTheSame();
 
     switch ( count ) {
     case 2:
@@ -1089,7 +1089,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
         break;
     case 1:
         if ( 0 == count_necr && !ghost_present ) {
-            if ( has_different_troops ) {
+            if ( hasDifferentTroops ) {
                 ++result;
                 if ( strs ) {
                     std::string str = _( "All %{race} troops +1" );
@@ -1127,7 +1127,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     }
 
     // undead in life group
-    if ( ( has_different_troops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
+    if ( ( hasDifferentTroops && ( count_necr || ghost_present ) && ( count_kngt || count_barb || count_sorc || count_wrlk || count_wzrd || count_bomg ) ) ||
          // or artifact Arm Martyr
          ( GetCommander() && GetCommander()->HasArtifact( Artifact::ARM_MARTYR ) ) ) {
         result -= 1;
