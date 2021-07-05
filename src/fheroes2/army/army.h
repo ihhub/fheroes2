@@ -67,9 +67,8 @@ public:
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
 
-    bool AllTroopsIsRace( int ) const;
-    bool AllTroopsAreUndead() const;
-    u32 GetUniqueCount( void ) const;
+    bool AllTroopsAreUndead( void ) const;
+    bool AllTroopsAreTheSame( void ) const;
 
     bool JoinTroop( const Troop & );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
