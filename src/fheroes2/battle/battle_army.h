@@ -60,7 +60,7 @@ namespace Battle
         HeroBase * GetCommander( void );
         const HeroBase * GetCommander( void ) const;
 
-        bool isValid( bool considerBattlefieldArmy = true ) const;
+        bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
         u32 GetDeadHitPoints( void ) const;
         u32 GetDeadCounts( void ) const;

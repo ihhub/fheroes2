@@ -172,7 +172,7 @@ int Battle::Force::GetControl( void ) const
     return army.GetControl();
 }
 
-bool Battle::Force::isValid( bool considerBattlefieldArmy /* = true */ ) const
+bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) const
 {
     // Consider the state of the army on the battlefield (including resurrected units, summoned units, etc)
     if ( considerBattlefieldArmy ) {
@@ -180,8 +180,8 @@ bool Battle::Force::isValid( bool considerBattlefieldArmy /* = true */ ) const
     }
 
     // Consider only the state of the original army
-    for ( u32 index = 0; index < army.Size(); ++index ) {
-        Troop * troop = army.GetTroop( index );
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {
             const Unit * unit = FindUID( uids.at( index ) );
