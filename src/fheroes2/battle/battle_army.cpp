@@ -368,43 +368,8 @@ u32 Battle::Force::GetDeadHitPoints( void ) const
     return res;
 }
 
-void Battle::Force::SyncArmyCount( bool checkResurrected )
+void Battle::Force::SyncArmyCount()
 {
-    // A special case: when every creature was resurrected by Ressurection
-    // In this case we have to find the weakest troop and set it to 1
-    Troop * restoredTroop = nullptr;
-    if ( checkResurrected ) {
-        bool isAllDead = true;
-        std::vector<Troop *> armyMonsters;
-        for ( u32 index = 0; index < army.Size(); ++index ) {
-            Troop * troop = army.GetTroop( index );
-
-            if ( troop && troop->isValid() ) {
-                const Unit * unit = FindUID( uids.at( index ) );
-                if ( unit ) {
-                    if ( unit->GetDead() > 0 ) {
-                        if ( unit->GetDead() < troop->GetCount() ) {
-                            isAllDead = false;
-                            break;
-                        }
-                    }
-                    else {
-                        isAllDead = false;
-                        break;
-                    }
-                }
-
-                armyMonsters.push_back( troop );
-            }
-        }
-
-        if ( isAllDead && !armyMonsters.empty() ) {
-            std::sort( armyMonsters.begin(), armyMonsters.end(), []( const Troop * one, const Troop * two ) { return one->GetStrength() < two->GetStrength(); } );
-
-            restoredTroop = armyMonsters.front();
-        }
-    }
-
     for ( u32 index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
 
@@ -418,9 +383,5 @@ void Battle::Force::SyncArmyCount( bool checkResurrected )
                     troop->SetCount( unit->GetCount() );
             }
         }
-    }
-
-    if ( restoredTroop != nullptr ) {
-        restoredTroop->SetCount( 1 );
     }
 }
