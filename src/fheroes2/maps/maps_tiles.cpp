@@ -2030,9 +2030,7 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
     int attackerIndex = -1;
 
     // scan for a hero around
-    const MapsIndexes aroundIndexes = Maps::GetAroundIndexes( tileIndex );
-
-    for ( const int32_t idx : Maps::MapsIndexesFilteredObject( aroundIndexes, MP2::OBJ_HEROES, false ) ) {
+    for ( const int32_t idx : ScanAroundObject( tileIndex, MP2::OBJ_HEROES, false ) ) {
         const Heroes * hero = world.GetTiles( idx ).GetHeroes();
         assert( hero != nullptr );
 
