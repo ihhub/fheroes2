@@ -186,7 +186,7 @@ bool Battle::Force::isValid( bool considerBattlefieldArmy /* = true */ ) const
         if ( troop && troop->isValid() ) {
             const Unit * unit = FindUID( uids.at( index ) );
 
-            if ( unit && unit->GetDead() < troop->GetCount() ) {
+            if ( unit && unit->GetDead() < unit->GetInitialCount() ) {
                 return true;
             }
         }
@@ -395,10 +395,7 @@ void Battle::Force::SyncArmyCount()
             const Unit * unit = FindUID( uids.at( index ) );
 
             if ( unit ) {
-                if ( unit->GetDead() )
-                    troop->SetCount( unit->GetDead() > troop->GetCount() ? 0 : troop->GetCount() - unit->GetDead() );
-                else if ( unit->GetID() == Monster::GHOST )
-                    troop->SetCount( unit->GetCount() );
+                troop->SetCount( unit->GetDead() > unit->GetInitialCount() ? 0 : unit->GetInitialCount() - unit->GetDead() );
             }
         }
     }
