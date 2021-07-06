@@ -346,11 +346,12 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
         assert( activeHumanColors <= 1 );
 
         const Kingdom & myKingdom = world.GetKingdom( humanColors );
-        const Settings & conf = Settings::Get();
 
         if ( myKingdom.isControlHuman() ) {
             if ( !continueAfterVictory && GameOver::COND_NONE != ( result = world.CheckKingdomWins( myKingdom ) ) ) {
                 DialogWins( result );
+
+                const Settings & conf = Settings::Get();
 
                 if ( conf.isCampaignGameType() ) {
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
