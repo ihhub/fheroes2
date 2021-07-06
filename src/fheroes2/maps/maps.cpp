@@ -71,6 +71,29 @@ namespace
 
         return indicies;
     }
+
+    Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
+            if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( indexes[idx] );
+            }
+        }
+        return result;
+    }
+
+    Maps::Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true )
+    {
+        Maps::Indexes result;
+        const int32_t size = static_cast<int32_t>( world.getSize() );
+        for ( int32_t idx = 0; idx < size; ++idx ) {
+            if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
+                result.push_back( idx );
+            }
+        }
+        return result;
+    }
 }
 
 struct ComparsionDistance
@@ -96,29 +119,6 @@ struct ComparsionDistance
 
     const fheroes2::Point centerPoint;
 };
-
-Maps::Indexes Maps::MapsIndexesFilteredObject( const Maps::Indexes & indexes, const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    for ( size_t idx = 0; idx < indexes.size(); ++idx ) {
-        if ( world.GetTiles( indexes[idx] ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( indexes[idx] );
-        }
-    }
-    return result;
-}
-
-Maps::Indexes Maps::MapsIndexesObject( const int obj, const bool ignoreHeroes /* = true */ )
-{
-    Maps::Indexes result;
-    const int32_t size = static_cast<int32_t>( world.getSize() );
-    for ( int32_t idx = 0; idx < size; ++idx ) {
-        if ( world.GetTiles( idx ).GetObject( !ignoreHeroes ) == obj ) {
-            result.push_back( idx );
-        }
-    }
-    return result;
-}
 
 const char * Maps::SizeString( int s )
 {

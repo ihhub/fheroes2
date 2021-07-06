@@ -45,9 +45,6 @@ namespace Maps
 
     using Indexes = MapsIndexes;
 
-    Indexes MapsIndexesFilteredObject( const Indexes & indexes, const int obj, const bool ignoreHeroes = true );
-    Indexes MapsIndexesObject( const int obj, const bool ignoreHeroes = true );
-
     const char * SizeString( int size );
     const char * GetMinesName( int res );
 
